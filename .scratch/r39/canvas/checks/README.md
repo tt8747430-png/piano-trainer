@@ -1,11 +1,11 @@
 # Canvas checks
 
 Measurements run inside a board in the real Design runtime, so a review cites numbers and never guesses from the
-generator. Each is one expression that returns JSON; `../layout_check.js` is the gate before every publish.
+generator. Each is one expression that returns JSON; `layout_check.js` here is the gate before every publish.
 
 | File                 | Returns                                                                                   |
 | -------------------- | ----------------------------------------------------------------------------------------- |
-| `../layout_check.js` | `["layout ok"]`, or controls outside the margin, small targets, labels touching an edge   |
+| `layout_check.js`    | `["layout ok"]`, or controls outside the margin, small targets, labels touching an edge   |
 | `review_measure.js`  | targets under 44, controls with no name, clickable non-buttons, font sizes, low contrast, |
 |                      | `transition: all`, the focus ring, the open dialog's focus                                |
 | `spacing_measure.js` | every padding, gap and margin off the 4-step grid, with where it occurs                   |

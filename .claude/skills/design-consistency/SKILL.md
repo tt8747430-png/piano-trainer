@@ -26,12 +26,15 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
-- **Expected values that are settled here:** cards 16 round; spacing on 4/8 steps with 2 inside segmented rows; one
+- **Expected values that are settled here:** cards 14 round, as `DESIGN.md`; spacing on 4/8 steps with 2 inside segmented rows; one
   type scale per page; ink-tinted shadows; weights 400 to 700.
 - **A fix in one area's post-process is itself a drifted copy.** Say so, and offer the kit.
 
@@ -43,7 +46,8 @@ Analyse a canvas board, an app screen or a flow and answer one core question:
 
 The skill compares observed design values and component usage against the available design-system foundations and identifies inconsistencies that can reduce visual quality, maintainability, accessibility, and product coherence.
 
-Change nothing during the analysis unless the owner asks for fixes.
+The analysis changes nothing; the fixes follow in the same turn (`owner-way`: fix what you notice), unless the owner
+asked for an audit alone.
 
 ## Best used for
 
@@ -146,7 +150,7 @@ Report:
 - The kit helper it copies.
 - What differs now.
 - Why that is a problem (the next kit change will miss it; two boards of one area disagree).
-- Whether to move the fix into the kit, which changes every board built from it and is the owner's call.
+- Whether to move the fix into the kit: ours to decide (`owner-way`); do it, and name every board it changes.
 
 ### 6. Hardcoded values
 
@@ -333,7 +337,7 @@ Provide a summary table:
 
 ## Design-system health score
 
-Calculate:
+Calculate, only when there is a token source to weigh against (inspection rule 9):
 
 **Consistency % = 1 - weighted violations / weighted checks**
 
@@ -349,15 +353,13 @@ Explain that the score reflects the analyzed scope and is not a universal measur
 4. Compare against the kit's constants and helpers, then against the board's own habits.
 5. Keep to the scope the owner named.
 6. Separate what was measured from what is assumed.
-7. Change nothing during an audit.
+7. Change nothing while measuring; fix after, in the same turn, unless the owner asked for an audit alone.
 8. Never invent an expected value: when no token or habit fixes it, say so.
 9. Give no percentage unless there is a token source to weigh against; an invented score misleads.
 
 ## Important constraint
 
-This skill is a consistency analysis and QA tool.
-
-Do not automatically:
+The analysis comes first. Only when the owner asked for an audit alone, do not:
 
 - Change colors
 - Replace components
@@ -369,4 +371,5 @@ Do not automatically:
 - Change shadows
 - Rename parts
 
-Only make design changes when the user explicitly requests implementation or fixes.
+Otherwise every finding is fixed in the same turn; folding a copy into the kit or renaming a part is ours to decide,
+said in the report.

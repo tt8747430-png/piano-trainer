@@ -28,8 +28,11 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
@@ -40,7 +43,7 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 
 ## Canvas setup
 
-- Target width: **402px**, the phone frame every board uses (the app is tested at 393). If the owner names another width, use theirs.
+- Target width: **402px**, the phone frame every board uses (393 is the smaller check). If the owner names another width, use theirs.
 - Height: auto — grows with content. Never crop or hide content to fit an arbitrary height.
 - Name the boards as the canvas does: `<Name>` for the phone, `<Name>Laptop` for the laptop, both listed in `index.py`.
 - One generator writes both boards from the same parts and the same state, so they cannot drift.
@@ -78,12 +81,12 @@ Before creating anything:
 
 ### Touch targets
 - Every interactive element: minimum **44×44px** hit area.
-- Buttons: full-width (350px) for primary CTAs in stacked sections; height 48–56px. Secondary buttons may stay intrinsic width.
+- Buttons: full-width (370px) for primary CTAs in stacked sections; height 48–56px. Secondary buttons may stay intrinsic width.
 - Adjacent tap targets: minimum 8px between them.
 - Links inside body text: keep, but ensure surrounding line-height gives enough tap room.
 
 ### Imagery
-- Full-bleed images may extend edge-to-edge (390px); contained images stay within the 350px content area.
+- Full-bleed images may extend edge-to-edge (402px); contained images stay within the 370px content area.
 - Preserve aspect ratios; switch wide panoramic crops (e.g., 21:9 hero) to 4:3 or 1:1 crops focused on the subject.
 - Decorative background elements that would crowd a small screen: scale down or remove, and list every removal in the final report.
 
@@ -111,7 +114,8 @@ Before creating anything:
 - If plans share a long feature-comparison table → each plan card lists its own features; drop the comparison matrix and note it in the report.
 
 ### Data tables
-- Tables wider than 350px: transform each row into a card (label: value pairs stacked), or make the table horizontally scrollable with the first column pinned. Default: cards for ≤6 columns of simple data, scroll for dense numeric tables.
+- Tables wider than 370px: transform each row into a card (each value over its quiet label, never "label: value",
+  `owner-way/references/craft-details.md`), or make the table horizontally scrollable with the first column pinned. Default: cards for ≤6 columns of simple data, scroll for dense numeric tables.
 
 ### Forms
 - All fields full-width, stacked. Field height 48–56px. Labels above fields, never placeholder-only.
@@ -132,7 +136,7 @@ Mobile users scroll, but attention decays. Without deleting content:
 
 ## Step 5 — Finalize and report
 
-1. Verify: no horizontal overflow anywhere, all text legible (body ≥15px), all touch targets ≥44px (`layout_check.js` returns `["layout ok"]` in every state).
+1. Verify: no horizontal overflow anywhere, all text legible (body ≥15px), all touch targets ≥44px (`checks/layout_check.js` returns `["layout ok"]` in every state).
 2. Deliver both boards on the same canvas, every sheet, menu and state reachable by tapping.
 3. Report in chat:
    - Sections transformed and which pattern was used for each

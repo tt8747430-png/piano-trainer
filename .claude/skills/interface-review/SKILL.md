@@ -36,13 +36,19 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
 - **Two surfaces, one skill.** On app code, findings are file and line and the fix is in Tailwind and the kit. On a
   canvas board, findings are measured in the runtime and the fix is in the generator.
+- **Where this app's rules win** (`owner-way/references/craft-details.md`): no scale on press except the floating
+  actions (`DESIGN.md`); one curve, `--ease-out`, and sheets about 450ms. Plain Words (Writing 2) never replace a
+  musician's term, and an option carries no explanation line (`ux-writing`, owner canvas 158).
 - **The canvas is a drawing.** Keyboard and focus behaviour that the app's sheet and switch already provide is a
   port note, not a canvas defect, unless the owner will meet it while trying the board.
 
@@ -61,7 +67,7 @@ If the requested scope is too large to inspect credibly, narrow it to the highes
 
 ### Recon before judgment
 
-In the app: React 19, Tailwind and the kit in `shared/ui`, `DESIGN.md`'s tokens, phone 393 and laptop 1710, `owner-way/references/testing.md`. On a canvas: the generator and its kit, the phone and laptop boards, and the runtime checks. For copy, inspect nearby interface text, the product's terminology, localization conventions, and any voice or content style guide before proposing a change.
+In the app: React 19, Tailwind and the kit in `shared/ui`, `DESIGN.md`'s tokens, phone 402 (and the 393 check) and laptop 1710, `owner-way/references/testing.md`. On a canvas: the generator and its kit, the phone and laptop boards, and the runtime checks. For copy, inspect nearby interface text, the product's terminology, localization conventions, and any voice or content style guide before proposing a change.
 
 ### Review in this order
 
@@ -81,7 +87,7 @@ Every finding on app code cites `path/to/file:line` and shows the current implem
 
 ### Review without mutating by default
 
-Treat a review request as read-only. Do not edit source code unless the user also asks to implement the findings. When implementation is requested, preserve the consolidated report as the change scope and re-run the relevant verification afterward.
+A request for a review alone is read-only. Otherwise the findings are fixed in the same turn (`owner-way`: fix what you notice). When implementation is requested, preserve the consolidated report as the change scope and re-run the relevant verification afterward.
 
 ## Accessibility
 
@@ -380,7 +386,7 @@ next build. So:
 
 Record candidates considered but deliberately rejected. A candidate is rejected when the principle above permits the current implementation, evidence is insufficient, the project convention is intentional, or the proposed change would add complexity without user benefit.
 
-Include 1–3 candidates in `quick` mode and 2–5 in `full` mode:
+Include one to three candidates in either mode, as `redesigning-a-screen` asks:
 
 | Location | Candidate | Rejected because |
 | --- | --- | --- |
@@ -426,7 +432,7 @@ End with exactly one:
 | Inputs below `16px` zoom on iOS | `text-base sm:text-sm` |
 | Six disconnected domain reports | Consolidate into one ranked findings table |
 | Visual claim inferred only from source | Inspect the rendered state or mark it not verified |
-| Review silently edits code | Stay read-only unless implementation was requested |
+| Review silently edits code | Stay read-only when the owner asked for a review alone; otherwise fix and report each change |
 | "Approve" with pending actionable findings | Use `Needs changes` or `Block` |
 
 ---

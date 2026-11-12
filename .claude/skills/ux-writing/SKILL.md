@@ -30,8 +30,11 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
@@ -44,7 +47,7 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 
 - Treat the named board, sheet, drawer or flow as the edit boundary.
 - Inspect the whole board, its other size, its sheets and neighbouring boards, and the rulings when they provide necessary context. Do not edit them unless requested.
-- If the user asks for a review, make no canvas changes.
+- If the owner asked only for a review, make no canvas changes.
 - If the user asks to rewrite, edit only the requested copy.
 - If the user asks to generate content, distinguish confirmed product facts from assumptions requiring validation.
 - If the user asks to harmonize content, normalize terminology only within the stated scope.
@@ -67,7 +70,8 @@ Infer the requested mode:
 - **Generate**: create copy for specified screens or missing states.
 - **Harmonize**: align terminology and patterns across a selected flow.
 
-When edit intent is unclear, default to Review.
+When edit intent is unclear, rewrite: what is found is fixed (`owner-way`). Review alone only when the owner asked
+only for a review.
 
 ## Follow the Workflow
 

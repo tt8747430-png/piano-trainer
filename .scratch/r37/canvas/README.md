@@ -1,5 +1,8 @@
 # The R37 Player canvas generator
 
+History only: this canvas was merged into the one canvas (owner, v15). New work is drawn in `../../r39/canvas/`
+(`index.py`, the r39 kit), as `redesigning-a-screen` says.
+
 The Design artifact https://claude.ai/artifact/HezkVS2MXdwz7uJ14KDGgp is built from these files: `R3Phone.bak` and
 `R3Laptop.bak` are the base pages, and each Python file patches one part of both pages (`panels.py` the panels,
 `kb.py` the keyboard, `score.py` the sheet, `keys.py` the keys, `loop.py` the loop, `settings.py`, `views2.py` and

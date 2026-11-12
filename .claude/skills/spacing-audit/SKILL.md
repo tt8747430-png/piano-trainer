@@ -1,6 +1,6 @@
 ---
 name: spacing-audit
-description: Use in piano-trainer to check a canvas board's or a screen's padding, gaps and margins against the 4/8 scale, list every off-grid value with its nearest step, and snap them once the owner has seen the list; when spacing looks uneven or the owner mentions weird paddings.
+description: Use in piano-trainer to check a canvas board's or a screen's padding, gaps and margins against the 4/8 scale, list every off-grid value with its nearest step, and snap them, the list in the report; when spacing looks uneven or the owner mentions weird paddings.
 ---
 
 # Spacing Audit
@@ -28,8 +28,11 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
@@ -42,7 +45,7 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 
 Base unit is 8. Use 4 only as a half-step for tight, component-internal spacing.
 
-Allowed values: 0, 4, 8, 12, 16, 24, 32, 40, 48, 56, 64, 80, 96.
+Allowed values: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96.
 
 - 8, 16, 24, 32, 48, 64: structural spacing (section gaps, card padding, layout margins).
 - 4, 12, 20: fine spacing inside a component (icon-to-label, chip padding, tight stacks).
@@ -68,17 +71,17 @@ Measure the padding, gap and margin of every element on the board:
 
 - Do not change layout structure, sizing behavior (hug/fill), content, or styling. Only adjust spacing values.
 - Preserve intentional exceptions and do not flag them: 1px borders and hairlines, optical alignment offsets, values driven by the content's size, and spacing that comes from a kit constant.
-- If the value comes from the shared kit, say so: changing it there changes every board that uses the kit, which is the owner's call.
+- If the value comes from the shared kit, fix it there (ours to decide, `owner-way`) and say which boards it changes.
 - Round icon-to-label and other fine gaps to 4 or 8, not to larger steps.
-- When a whole group is uniformly off-grid on purpose (e.g. a deliberate 6pt system), flag it once and ask before mass-changing.
+- When a whole group is uniformly off-grid on purpose (e.g. a deliberate 6pt system), decide whether it is deliberate, change it or keep it, and say which in the report.
 
 ## Output
 
-1. Return an audit summary first, before changing anything:
+1. Write the audit summary first, before changing anything:
    - Total elements checked.
    - A before / after list of every off-grid value, grouped by board and part, in the form `Card padding: 14 -> 16`.
    - Any values you left untouched, with the reason (token, hairline, optical).
-2. Apply the fixes only after showing the summary.
+2. Apply the fixes in the same turn; the summary goes in the report, never a wait for an answer.
 3. End with a one-line rhythm note: the dominant step the layout now uses (e.g. "layout now on an 8pt rhythm, fine spacing on 4pt").
 
 ## Do not

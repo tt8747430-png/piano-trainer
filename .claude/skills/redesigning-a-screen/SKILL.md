@@ -24,6 +24,8 @@ care shows in a hundred small things done the same way.
   (a toolbar gone, settings regrouped, a library rebuilt), never a padding tweak dressed up as a round. Say it in one
   line at the top of the report.
 - **Ship a change every turn:** a reaction always ends with a published canvas, never only a plan or a question.
+  The one exception: after two rejections of the same part, numbered questions with a recommendation each come first
+  (owner, v80), and only the look that talk cannot settle is drawn, side by side.
 
 ## The loop
 
@@ -32,8 +34,8 @@ care shows in a hundred small things done the same way.
    the area (`grep -ril <area> .scratch/*/plan`), above all a **"The rulings as they stand"** section. A thing a
    ruling removed is never redrawn.
 2. **Audit today, in the code:** list every control on the screen and in its settings, with its file, exact label,
-   values and default (`grep` the area's `ui/` and its `en` strings). Shoot the screen at phone 393 and laptop 1710
-   wide, as `owner-way/references/testing.md` does. Never say where something lives, or that it exists, without the
+   values and default (`grep` the area's `ui/` and its `en` strings). Shoot the screen at phone 402 and laptop 1710
+   wide, with the 393 check, as `owner-way/references/testing.md` does. Never say where something lives, or that it exists, without the
    file in front of you. Then **look for the evidence of care** (Tim Gabe):
    - Walk the area's core flow. At each step, does the learner know what just happened, how to take it back, and
      what to do next? Note every dead end, the places where they get "nothing instead of anything".
@@ -46,18 +48,21 @@ care shows in a hundred small things done the same way.
    sheet-music and learning apps only (Flat, forScore, MuseScore, Soundslice, flowkey, Smart Pianist, Band-in-a-Box,
    Yamaha, Chordify), never recording software. First check whether the app already has the same thing elsewhere
    (a library, a filter sheet, a picker): reuse its shape, one implementation. Cite every source in the spec.
-4. **Spec:** `.scratch/<round>/plan/<area>.md`, the round being the next free `rN` after the newest in `.scratch`
-   and `git log`, unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
+4. **Spec:** the area's spec beside the one canvas, `.scratch/r39/plan/<area>.md` (Chords: `.scratch/r42/plan/chords.md`);
+   a new `.scratch/rN/plan/` only for a new brief, `rN` the next free round after the newest in `.scratch` and `git log`,
+   unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
    quoted, the decision, its references. Below: the history, newest last. When a later ruling replaces a line, fix or
    mark that line in the same edit.
-5. **Canvas:** one Design artifact per area (Artifact `quickstart`, intent `design`), phone and laptop, drawn from
+5. **Canvas:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
+   `.scratch/r39/canvas/index.py`, its rows the phone boards, their Night boards, the laptop boards and theirs (canvas
+   100–101). A place drawn elsewhere is merged in. Phone and laptop, drawn from
    the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working
    (taps, sounds, filters). It may leave the app's design system where the owner asks for the ideal design. Publish
-   to the same URL each time. A vague complaint ("cluttered", "the filters are weird") is answered by the audit and
+   to the canvas's one URL each time. A vague complaint ("cluttered", "the filters are weird") is answered by the audit and
    the research: draw the recommended fix, then ask about what is still open.
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
-   bullet into the feedback log; save the drawing to `.scratch/<round>/drawings/`; commit those files by path and
+   bullet into the feedback log and a line in `.scratch/r39/plan/loop.md`; save the drawing to `.scratch/<round>/drawings/`; commit those files by path and
    push (docs go at once); report.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
@@ -79,7 +84,7 @@ care shows in a hundred small things done the same way.
 | Two exclusive choices are radio cards, each holding its own control | Arrangement (Level) or Accompaniment (Pattern) |
 | A collection is a library in the app's library shape | search; place chips on top; a Sort and filter page with its count on the button, removable chips and Show n; folders that fold with counts; Recently used and Favourites first; a heart, not a star |
 | A drawing is the whole screen, never a control alone | `owner-way/references/ui-and-mockups.md` |
-| No finger numbers on or under keys | |
+| Finger numbers on the keys only when the learner picks Fingers in Labels, never by default | canvas 151 |
 | Undo, not a question, for what can be undone | delete a pattern: gone at once, "Pattern deleted · Undo"; Empty Trash still asks |
 | A loss named as one, always true | "Your 12 songs live only on this phone" · Keep on this phone only |
 
@@ -90,7 +95,7 @@ canvas against it before each publish.
 
 Before every publish, and again before a port is called done:
 
-0. **Check, then look.** Run the board's layout check (`.scratch/r39/canvas/layout_check.js`, in the runtime test) in
+0. **Check, then look.** Run the board's layout check (`.scratch/r39/canvas/checks/layout_check.js`, in the runtime test) in
    every state that changed, at phone and laptop: controls inside the screen's margin, a floating bar's gaps equal
    and its middle centred. Then open the whole-screen screenshots, never only a crop of the part changed, and look
    at the edges, the floating bar and each open menu. A publish without both is the mistake that sent a button off
@@ -148,7 +153,7 @@ source; installing one is the owner's decision.
 | jakubkrehel/make-interfaces-feel-better (MIT) | corners, optical alignment, icons, hit areas, 10% review, findings table |
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
-| benjitaylor/agentation (PolyForm Shield) | not adopted: the owner's screenshots do its job |
+| benjitaylor/agentation (PolyForm Shield) | installed at the owner's word, run only by name; its toolbar not in the app (the owner's screenshots do its job) |
 | Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |
@@ -175,10 +180,13 @@ the owner answers with a question gets the facts from the code, the choices, and
 
 ## The canvas tools
 
-The R37 Player canvas's generator is in `.scratch/r37/canvas/` (its `README.md` says how to run it): a base page per
-size, patched by one script per part, and a Playwright test that taps through it and shoots it. For a new area, copy
-the folder to `.scratch/<round>/canvas/`, keep the test and the helpers (`group`, `row`, `seg`, `link`, `valrow`,
-`backtitle`, `CARD`), and draw new base pages from that area's screenshots.
+The one canvas's generator is `.scratch/r39/canvas/`: `index.py` lists every page and board, one Python file per
+area writes its phone and laptop boards from the same parts and state, and the r39 kit (`r41_kit.py`: `GROUP`,
+`BSHEET`, `POPOVER`, `SEGC`, `TOGGLE`, `CARD`; `calm_kit.py`: `PAGE`, `SHEET`, `INK`, `SOFT`, `FILL`, `LINE`,
+`ACCENT`, `SHADOW`) holds the shared helpers and colours. `checks/` measures a board in the real runtime and
+`checks/run.mjs` taps through it and shoots it (`checks/README.md`). A new area is a new file and a new page in
+`index.py`, drawn from that area's screenshots with the kit; never a new canvas. `.scratch/r37/canvas/` is the R37
+Player canvas before it was merged (v15), kept for its history.
 
 ## Common mistakes
 

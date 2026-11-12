@@ -6,8 +6,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 1. **Read:** the area's section of `feedback-log.md`, its ADR, and the reference app's screens in `piano-data/reference-apps`.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
-3. **Load `impeccable`:** `scripts/impeccable context --target <path>` once a session, then the command's reference, and
-   `reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
+3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
+   reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
 4. **Use the kit.** Read `shared/ui/index.ts` first. Tokens only, never a raw value. A new kind of thing joins the kit only
    when it has a second user.
 5. **Write the test first,** then the screen.
@@ -78,19 +78,23 @@ question about a screen is always a drawing of that screen.
 
 ### What a mockup is
 
-One published artifact per area (the song page, the Player, the editor), with every page and option in it:
+One canvas holds every place (v15): The ideal Piano Trainer, built by `.scratch/r39/canvas/index.py` from the r39 kit
+(`r41_kit.py`, `calm_kit.py`). Each area is a page of it, every page and option of that area drawn on it; a place
+drawn elsewhere is merged in, never left in a canvas of its own. On each area's page, four rows (canvas 100–101): the
+flow's phone boards in order, their Night boards, the laptop boards, their Night boards.
 
 - **The whole screen, never the control alone:** bar, toolbar, content, floating actions, tab bar.
-- **Phone and laptop side by side** for every option: the owner's real iPhone 17 Pro frame (`.scratch/r30/mockups/iphone-17-pro.png`,
-  its screen at 24,23 in a 450×920 frame) at 402×874, a switch beside Light / dark redrawing every phone at the smaller
-  393×852 in the same frame, a third mode the iPhone 17 Pro in Safari (`iphone-safari.png`, its floating bottom bar
-  over the page), and the owner's MacBook Air with a macOS Safari window (`macbook-air.png`, `safari-light.png`,
-  `safari-dark.png`) around the 1710×904 page.
+- **Phone and laptop** for every option: the phone is the owner's iPhone 17 Pro, 402×874, the board's screen at 24,23
+  in its 450×920 frame (`.scratch/r30/mockups/iphone-17-pro.png`); the laptop the owner's MacBook Air, the 1710-wide
+  page (`macbook-air.png`, `safari-light.png`, `safari-dark.png`). The smaller 393×852 phone is a check, not a
+  board (`testing.md`); the iPhone 17 Pro in Safari (`iphone-safari.png`, its floating bottom bar over the page) is
+  drawn where a question depends on the browser's bars.
 - **Real parts:** `DESIGN.md`'s tokens copied in as CSS variables, Literata and Onest, the app's real 44px sizes, corners,
   icons and honey. It must read as our app.
 - **Real content:** a real song, real chords, the exact English label each control will carry, one Russian check of the
   longest string. No lorem ipsum, no "Hymn 1", no internal names.
-- **Both themes,** by a toggle. The options drawn side by side, labelled A and B.
+- **Both themes,** Night as its own boards in its own row, never a toggle. Options the owner settles by eye are drawn
+  side by side, labelled A and B.
 - **What does not change** is drawn too, so the owner sees the option in place.
 
 ### Each question
@@ -107,13 +111,13 @@ Numbered, so the owner can answer "1. yes 2. …", and in this order:
 
 1. Load `artifact-design`; load `artifact-capabilities` for the feedback boxes, which need saved state.
 2. Copy tokens from `src/styles/tokens.css`; shoot the real screen and redraw from it.
-3. Publish with the Artifact tool and give the link. Update the same artifact afterwards, keeping its URL.
+3. Publish to the one canvas with the Artifact tool and give the link; every later turn updates it, keeping its URL.
 
 ### Testing a mockup twice
 
 A broken drawing wastes the owner's time as much as a broken screen.
 
-**Check 1, the render:** open it at 393 and 1710 wide, in light and dark. Nothing overflows, every frame shows its whole
+**Check 1, the render:** open it at 402 and 1710 wide (and the 393 check), Day and Night. Nothing overflows, every frame shows its whole
 screen, every font loaded, every toggle and box works.
 
 **Check 2, as the owner:** read it from the top with no context from this session. Can each question be answered from the

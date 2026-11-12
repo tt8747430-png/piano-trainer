@@ -56,7 +56,8 @@ song, learn this lesson, write this bar) is the screen's first and largest thing
 - **In a list:** Recently used and Favourites first, then by the learner's level or the musician's order (the circle of
   fifths, the scale's degrees, learning order), never alphabetical when a musical order exists.
 - **In a sheet or settings page:** the setting most changed at the top; groups ordered by how often they are wanted.
-- **In a bar:** the primary action trailing (Apple HIG), the subject's own controls beside it, the gear last.
+- **In a bar:** the primary action trailing (Apple HIG), the subject's own controls beside it, then the gear, then
+  More, last (`DESIGN.md`'s bar).
 - **The same kind of list is ordered the same way on every screen.**
 
 ## One thing, one icon, everywhere

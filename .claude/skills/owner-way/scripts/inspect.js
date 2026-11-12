@@ -147,7 +147,7 @@
     for (const el of document.querySelectorAll('button, a[href], [role="button"], [role="tab"], [role="radio"]')) {
       if (!visible(el) || hidden(el) || isKey(el) || inScore(el)) continue
       const r = reach(el)
-      if (r.width < 40 || r.height < 40) found.push(`SMALL ${name(el)}: ${Math.round(r.width)}×${Math.round(r.height)}`)
+      if (r.width < 44 || r.height < 44) found.push(`SMALL ${name(el)}: ${Math.round(r.width)}×${Math.round(r.height)}`)
     }
   return [...new Set(found)]
 }

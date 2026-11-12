@@ -22,7 +22,7 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 
 ## 2. Is every gap on the scale, and does spacing show what belongs together?
 
-- Gaps of 4, 8, 12, 16, 24, 32 and little else (`spacing-audit`).
+- Gaps of 4, 8, 12, 16, 20, 24, 32 and little else (`spacing-audit`).
 - A label sits close to its field; items in a section are closer than the sections are to each other. Grouping
   then needs no line or box.
 - Not every element given the same padding: that spreads things evenly and nothing reads as a group.
@@ -52,9 +52,9 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 ## 6. Do radius, borders, shadows and icons match everywhere?
 
 - One radius per kind of surface; a nested element a little smaller, concentric with its container.
-- Borders 1px and subtle; shadows soft and layered, deeper by Night, never one heavy blur.
-- Icons one set, one size and stroke, sitting on the text's line (`make-interfaces-feel-better`). An icon is as tall as its
-  text's line height (24px beside 16px text), rarely larger.
+- Borders 1px and subtle; shadows, on what floats, soft and layered, deeper by Night, never one heavy blur.
+- Icons one set, one size and stroke, sitting on the text's line (`make-interfaces-feel-better`). An icon in a 44px button is
+  20px, a place's icon 24px (`DESIGN.md`), rarely larger.
 - By Night there are no shadows to lift a card: a card is lighter than the page, its line lower in contrast, and a
   chip's paint dimmed. If a shadow is the first thing you notice, it is too strong.
 
@@ -62,7 +62,7 @@ Source: a UI-design channel's video, "the seven things every good UI has" (trans
 
 - A menu grows from its button; a popover from the side it opens on; a sheet rises from the edge and follows the
   finger; a toast slides in from the edge and stacks.
-- Short (160 to 280ms), eased out; it opens a little slower than it closes, and closing gets out of the way at once.
+- Short (160 to 280ms for menus and popovers; a sheet about 450ms on the iOS sheet curve, `DESIGN.md`), eased out; it opens a little slower than it closes, and closing gets out of the way at once.
 - Nothing fades in from nowhere, nothing snaps with no motion, and nothing moves under reduced motion.
 
 ## Before the seven: what premium means here, and the one decision only we would make

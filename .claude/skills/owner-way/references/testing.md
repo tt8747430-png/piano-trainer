@@ -18,14 +18,15 @@ of about twice what it needs. A test that fails only under load is made robust, 
 
 ## The size matrix
 
-Sizes come from the device, never from what a browser's emulator reports. Measured 2026-11-05 unless marked.
+Sizes come from the device, never from what a browser's emulator reports. Measured 2026-11-05 unless marked. The phone
+is the owner's iPhone 17 Pro at 402×874, on the canvas and in the app; 393 is the smaller phone, checked every pass.
 
 | Name             | Size     | What it is                                       | Source                                                     |
 | ---------------- | -------- | ------------------------------------------------ | ---------------------------------------------------------- |
-| `iphone-app`     | 393×852  | iPhone 14 Pro, the installed app                 | published spec, the whole screen                           |
+| `iphone-17-pro`  | 402×874  | iPhone 17 Pro, the installed app: **the phone**  | the owner's frame (status bar 62, home indicator 34)       |
+| `iphone-app`     | 393×852  | iPhone 14 Pro, the installed app: the smaller check | published spec, the whole screen                        |
 | `iphone-safari`  | 393×695  | iPhone 14 Pro in Safari, bars showing            | measured in Safari on a simulated 393×852 phone            |
 | `iphone-side`    | 852×393  | on its side, the installed app                   | published spec; Safari's side size is **not measured**     |
-| `iphone-17-pro`  | 402×874  | iPhone 17 Pro, the installed app                 | the owner's frame (status bar 62, home indicator 34)       |
 | `macbook-safari` | 1710×904 | MacBook Air M3 15-inch, Safari filling the screen | measured in Safari on the owner's Mac                      |
 | `macbook-app`    | 1710×984 | the same Mac, the most an app window can take    | macOS's usable screen, measured; a title bar takes some    |
 
@@ -54,7 +55,7 @@ as the installed app: the status bar and the home indicator are emulated as safe
 - two controls or texts drawn over each other (`OVERLAP`);
 - a fixed or sticky layer over text that isn't its own (`COVERED`), never a popover, menu or tooltip a step opened;
 - a band of the page left bare beside an open dialog (`UNCOVERED`), never beside a popover, which keeps no backdrop;
-- a target under 40px on a touch screen (`SMALL`), measured to its reach (an ⓘ drawn 20px reaches 44px by its `::before`);
+- a target under 44px on a touch screen (`SMALL`), measured to its reach (an ⓘ drawn 20px reaches 44px by its `::before`);
 - a page wider than its screen, or a page error.
 
 **A page is shot only once fully loaded** (the owner's rule): every capture, the app's and a reference site's, waits on

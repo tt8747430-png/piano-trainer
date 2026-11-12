@@ -51,8 +51,10 @@ Each of these sent a round back. Screen-level rules are in [ui-and-mockups](refe
   and your own memory of finishing are all checked before they are trusted: re-read what the owner asked (their words
   and screenshots), read the code that does it, and see it working in the browser. Something asked and not there is
   reopened and built.
-- **Overdo, never underdo.** Do the whole of what was asked and what it obviously implies, then a second pass to
-  check and improve it. Two passes that are checked beat one that is not. Nothing is reported done that was not
+- **Overdo, never underdo.** Do the whole of what was asked and what it obviously implies (the same change everywhere
+  it occurs, every state, both sizes and languages), then a second pass to check and improve it. This is not a licence
+  for features nobody asked for (YAGNI, [practices](references/practices.md)): overdo is the asked task done
+  completely and checked twice. Two passes that are checked beat one that is not. Nothing is reported done that was not
   verified.
 - **No half measures.** No legacy, workarounds, duplication or unfinished work. Everything must be built and nothing left.
   If something is missing, build it.

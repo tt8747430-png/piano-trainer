@@ -12,7 +12,7 @@ beside `ui-and-mockups.md` and `impeccable`.
 - **Decide what premium means:** a shipped sheet-music app (Flat, forScore, Chordify), calm paper and ink, one honey
   control per screen.
 - **Name one decision** per round, and make it bold: a whole screen redesigned on a canvas, not a padding tweak.
-- **Look at the app first,** at 393 and 1710, both themes, before deciding anything (`testing.md`).
+- **Look at the app first,** at 402 and 1710 (and the 393 check), both themes, before deciding anything (`testing.md`).
 
 ## Details that compound
 
@@ -91,6 +91,7 @@ place, before, after, why.
 ## Not adopted
 
 - **Agentation** (benjitaylor/agentation, PolyForm Shield 1.0.0, not open source): a click-to-annotate overlay for giving
-  an agent feedback on a page. Installing it is the owner's decision; screenshots already do this job here.
+  an agent feedback on a page. Installed as a skill at the owner's word (`INSTALLED-FROM-VIDEOS.md`), run only by name;
+  its npm package and toolbar are not in the app, and adding them is the owner's decision. Screenshots do this job here.
 - **Stageshow's** faux product UI is for marketing illustrations; its "real words only where the story is" and "no empty
   corners" rules apply to the canvases.

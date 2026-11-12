@@ -65,9 +65,9 @@ and the running screen before it is trusted. Do the whole task, then a second pa
 2. Only the tests the change can reach: `npm run test:related -- <files>`, or `npm run test:changed`.
 3. Any screen: two full passes in a browser, as [`references/testing.md`](.claude/skills/owner-way/references/testing.md)
    sets out.
-4. Before a push that touches shared code (`shared/lib`, an entity's model, `app/`, test setup, config): the full
-   `npm run test`, once. After startup, routing, the PWA or config: `npm run build` too. CI runs only by hand, so these
-   local checks are the gate. A command over 10 seconds runs in the background.
+4. Before any push of code to `main`: the full `npm run test`, once, then `npm run build`. Docs, skills and settings
+   that touch no code may go at once. CI runs only by hand, so these local checks are the gate. A command over 10
+   seconds runs in the background.
 
 ## Commands
 
@@ -100,6 +100,9 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   kit; shadcn in `ui/primitives`; `ui/score`, Verovio, imported by that path only), `i18n`, `config`, `test`.
 
 ## The places
+
+This is the app as built. The canvas runs ahead: a ruling drawn but not yet ported is in its area's spec
+(`.scratch/<round>/plan/`) and the feedback log, and is built from there.
 
 **Learn · Songs · Practice · Profile**; `app/router.tsx` has every route.
 

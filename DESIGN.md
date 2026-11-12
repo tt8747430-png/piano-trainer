@@ -370,7 +370,8 @@ whole.
 ## Elevation & Depth
 
 Flat and grouped. A card separates by its lighter paper and a 1px soft line, never by a shadow; hover and press fill
-with sand. Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
+with sand. _Ruled 2026-11-07, not yet built: cards white on a darker sand panel with a small layered shadow (`craft-
+details.md`, "Depth"); this paragraph changes when it is._ Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
 
 ### Shadow Vocabulary
 
@@ -445,7 +446,8 @@ square at the top.
 - **Pop-up button** (`Dropdown`): 44px, card paper in the control line, label in soft ink, value in ink.
 - **Pickers** (`shared/ui/pickers`) open a popover, or a bottom sheet below 30rem. A pitch or a note is an octave grid
   drawn as keys. A key is the key-signature grid (`KeyPicker`, `KeySignaturePicker`): Major · Minor, sharps over flats,
-  the same grid as the score editor's and New song's. Time and tempo are one control each.
+  the same grid as the score editor's and New song's. Time and tempo are one control each. _Drawn on canvas 111, not
+  yet built: one Key drawer for every key and root (− +, the letters, ♭ ♮ ♯), replacing the grid here when ported._
 - **Picture choice** (`PictureChoice`): a setting that changes how something looks is drawn, a line drawing over a short
   name. A choice with no honest picture stays text.
 - **Only what applies is offered.** A row that nothing applies to stays in place, greyed, its tooltip saying why, so

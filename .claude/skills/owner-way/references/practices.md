@@ -35,7 +35,8 @@ The habits behind the best result at the least usage. Each is a condensed skill,
 ## Reviews
 
 - **Verify a review's claim before acting;** push back with the reason when it is wrong.
-- **YAGNI:** don't build what nobody asked for because it looks professional.
+- **YAGNI:** don't build a feature nobody asked for because it looks professional. This never shrinks the task asked:
+  that is done completely and checked twice (SKILL.md, Overdo); the two do not conflict.
 - Reviewing your own work is reading the diff with the owner's rules beside it. Ask a fresh reviewer only for a large or
   risky change, and give it the code, not your conclusion.
 
@@ -70,7 +71,8 @@ context, so load the one the task needs, and ask: would it change what I do next
 | Handing work on                             | `handoff`, `prompts/handoff.md`                                   |
 
 Superpowers' skills may appear with or without the `superpowers:` prefix. Plans run inline, never through
-`subagent-driven-development`, because a fresh context per task is what eats the usage. Not for this app unless asked:
+`subagent-driven-development`, because a fresh context per task is what eats the usage; `implement-spec` is the one
+exception, on SKILL.md's terms. Not for this app unless asked:
 `workflow`, `autoship`, `remotion-best-practices`, json-render's `core` and `react`.
 
 ## Impeccable
@@ -115,7 +117,8 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
 
 - **Which copy:** read every skill from `.claude/skills/<name>/`. A `superpowers:` or `anthropic-skills:` copy of the
   same name (`impeccable`, `owner-way`, the superpowers set) is ignored; the repo's copy is the current one.
-- **No pull requests, no worktrees:** never `finishing-a-development-branch`'s menu or `using-git-worktrees`. Work on
+- **No pull requests, no worktrees for your own work:** never `finishing-a-development-branch`'s menu or
+  `using-git-worktrees`; an agent started with `isolation: "worktree"` ([agent-brief](agent-brief.md)) is the one use. Work on
   the session's branch, commit each task, and push to `main` after the gate (SKILL.md, Merge). `executing-plans` and
   `writing-plans` run that way: plans beside the spec in `.scratch/<round>/plan/`, no execution question, no stop
   before a push, its final fresh reviewer only for a large or risky change.

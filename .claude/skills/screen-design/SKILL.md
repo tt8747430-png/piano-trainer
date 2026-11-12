@@ -30,8 +30,11 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 |                          | both sizes, publish to the same canvas                                                    |
 
 - **Read the rulings first** (the area's spec, "The rulings as they stand"). Nothing a ruling removed comes back.
-- **A review changes nothing.** A fix is one turn of the loop: canvas, checks, publish, the ruling in the spec, the
-  feedback log, the drawing, commit and push.
+- **What is found is fixed, the same turn** (`owner-way`: fix what you notice), as one turn of the loop: canvas,
+  checks, publish, the ruling in the spec, the feedback log, the drawing, commit and push. Only when the owner asked
+  for a review alone (a pasted skill with no words, `redesigning-a-screen`) does it change nothing.
+- **A change to the kit or a generator is ours** (`owner-way`, Whose decision): make it, then say in the report which
+  boards it changes.
 - **Measure, then say.** Every finding cites a number from the runtime or a line of the generator.
 - **The words are the owner's:** musician's terms, `avoid-words.test.ts`, every string in `en` and `ru` when ported.
 
@@ -65,13 +68,16 @@ Treat the product's design system as the **visual source of truth** and Apple HI
 
 Do not make the interface “more Apple-like” by copying Apple aesthetics, introducing glass, gradients, large titles, floating controls, SF Symbols, or native components that the product does not otherwise use. Apply Apple guidance through familiar behavior, hierarchy, touch ergonomics, accessibility, navigation, content clarity, and system integration.
 
+The owner's rulings stand over this paragraph and §7's materials rule: the grouped glass toolbar, the floating bar and
+the scroll-edge blur are this product's own language (`owner-way` feedback log: v20, v25, v54, canvas 116).
+
 ### Source-of-truth priority
 
 Use this order when making decisions:
 
 1. Explicit user request and product goal.
-2. Current production behavior, product requirements, and source code when available.
-3. The kit's helpers and constants, `DESIGN.md`'s tokens, and the area's rulings.
+2. The area's rulings, the kit's helpers and constants, and `DESIGN.md`'s tokens.
+3. Current production behavior, product requirements, and source code when available.
 4. The closest approved or shipped screens in the same product.
 5. Apple Human Interface Guidelines for the target platform and supported OS versions.
 6. General usability heuristics and design judgment.
@@ -84,7 +90,7 @@ An accessibility, safety, or platform-behavior problem must never be copied sile
 2. **Reuse before creating.** Prefer the kit's helpers and constants, the canvas's icons, and compositions the area already uses.
 3. **Never copy a kit helper's markup** to change it in one place; change the helper, or add one.
 4. **Never hardcode a value** when an appropriate design-system token or style exists.
-5. **Never overwrite an approved screen** unless the user explicitly asks for direct modification. Default to a duplicate or a new exploration frame.
+5. **Never overwrite an approved screen** with an experiment: a reaction changes the area's boards in place (D1); an alternative board only for a question the owner settles by eye.
 6. **Never introduce a new visual pattern** just because it appears more modern or attractive.
 7. **Never stop at the happy path.** Design all relevant states and edge cases.
 8. **Never use rasterized or AI-generated UI** for buttons, controls, cards, navigation, icons, or typography. Core UI is real markup the owner can tap, never a picture of a control.
@@ -302,7 +308,9 @@ Build the screen's frame before its sections.
 - Colours, the line, the shadow and the fonts come from the kit's constants, never a new literal beside them.
 - A canvas may leave the app's design system where the owner asked for the ideal design; say where it does, so the
   port can map each value to a token in `DESIGN.md`.
-- Icons are the canvas's own inline SVGs in `currentColor`, one stroke weight; never an icon font or an emoji.
+- Icons are inline SVGs in `currentColor`, one stroke weight: Lucide's shape for anything Lucide has, the app's own
+  glyph (`shared/ui/icons`) only where it has none, the same icon for the same thing on every board
+  (`owner-way/references/ux-principles.md`); never an icon font or an emoji.
 - A pattern used twice is a helper; a new helper that other areas need goes in the kit, and that is said in the
   report, since it changes every board built from it.
 - Real songs, real chord names and the app's exact labels where the eye goes.
@@ -372,7 +380,8 @@ The following are the defaults, for the installed app on a phone; on a laptop th
 - Use existing product text styles; do not create ad hoc sizes to make a layout fit.
 - Support Dynamic Type behavior and verify the screen at large accessibility sizes.
 - Maintain a clear hierarchy with the fewest necessary type levels.
-- Prefer concise, plain language.
+- Prefer concise wording in the musician's terms; a musician's term always wins over a plain paraphrase (`ux-writing`,
+  owner canvas 158).
 - Use sentence case unless the product's established content system specifies otherwise.
 - Avoid using color alone, font weight alone, or position alone to communicate a critical state.
 
@@ -380,7 +389,7 @@ The following are the defaults, for the installed app on a phone; on a laptop th
 
 - Use semantic product colors and appearance modes.
 - Verify contrast on the actual background and in every supported appearance.
-- Do not introduce glass, blur, gradient, shadow, or translucency unless the product already uses it or the task explicitly requires it.
+- Do not introduce glass, blur, gradient, shadow, or translucency unless the product already uses it or the task explicitly requires it (the owner's glass bars are the product's: §1).
 - Preserve image aspect ratios.
 - Prefer existing icons; otherwise draw one inline SVG in the canvas's stroke and size.
 - Match optical weight and size to neighboring icons, not merely the nominal bounding box.
@@ -459,7 +468,7 @@ Check:
 
 Check:
 
-- `layout_check.js` returns `["layout ok"]` in every changed state, at both sizes.
+- `checks/layout_check.js` returns `["layout ok"]` in every changed state, at both sizes.
 - Repeated patterns are helpers, and kit helpers are called, not copied.
 - No literal colour, radius or shadow beside a kit constant that already holds it.
 - Every control is a `button` or a link with an accessible name; a switch row is one control.
@@ -488,7 +497,7 @@ When a canvas turn is complete, provide:
 1. The boards published to the area's canvas, with the version number.
 2. Every relevant state reachable on them.
 3. The ruling in the area's spec, in the owner's words, with its sources.
-4. A bullet in the feedback log and a line in the loop file; the drawings saved to `.scratch/<round>/drawings/`.
+4. A bullet in the feedback log and a line in the round's loop file (`.scratch/r39/plan/loop.md`); the drawings saved to `.scratch/<round>/drawings/`.
 5. The commit, staged by path, pushed.
 6. A short report, answer first: what changed, the checks run, what was left and why, and the open questions
    numbered, each with a recommendation.

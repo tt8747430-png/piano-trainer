@@ -441,7 +441,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - **The bar:** Voicing · Play · Hands, the two side buttons the same width (68), each a symbol over its name, equal
     gaps (10 on a phone, 12 on a laptop), Play at the screen's centre, 16 from the edges. The page fades out under
     the bar so the staff never shows through it (the tab bar's rule, v24).
-  - **Before every publish** (now in `redesigning-a-screen`): run `.scratch/r39/canvas/layout_check.js` in the board
+  - **Before every publish** (now in `redesigning-a-screen`): run `.scratch/r39/canvas/checks/layout_check.js` in the board
     in every state changed (controls inside the screen's margin, tap targets, a toolbar's gaps equal and its middle
     centred), then open the screenshots and look at the bar, the edges and each open menu, phone and laptop.
 - **v81 (canvas Version 81): design A is the Chords page; the bar's left button reads "Voicing".** Owner: "I like the
