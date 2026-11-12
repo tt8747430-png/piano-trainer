@@ -136,8 +136,9 @@ sits a semitone from the note sung with it, or from the other hand within a nint
 the right hand stays above the left (the tune moves up an octave where it would sink into the left hand), and every
 move is within the hand's reach as Suggest fingering measures it. Under the tune the right hand puts the chord's 3rd
 first (else its 7th, else a 3rd or 6th below), two notes where the chord changes or the note is held, and one at most
-under a note faster than an eighth; a grace note is never also struck in the chord it leads into. Each section is
-fuller than the one before it, the bridge's first half the one step back. The piece writes only the fingers an
+under a note faster than an eighth; a grace note is never also struck in the chord it leads into. The arrangement
+builds: each verse fuller than the verse before and each chorus than the chorus before, the bridge stepping back
+before it builds again, the last chorus the fullest and the tag winding down. The piece writes only the fingers an
 edition prints (where a run starts, where the thumb passes under or a finger crosses over); the app finds the rest.
 
 ## Single staves and lyrics
