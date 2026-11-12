@@ -4,14 +4,18 @@ import { definePiece } from '../../model/types'
 // colours of the chords and the tune from a Songscription transcription of the same recording laid on those bars by its
 // chord changes, the form as melodia.ro lists it. The transcription misreads the tempo of the first ten bars: there the
 // first lines take the second verse's rhythm, an octave up as the first verse is sung, and the third line its own notes
-// set to that rhythm. The words are Revive's, all rights reserved, so the score carries no words.
+// set to that rhythm. The words are Revive's: the score carries none, and a learner adds them in the score editor.
 export default definePiece({
   id: 'voi-canta',
   kind: 'song',
   title: 'Voi cânta bunătatea Ta',
   titleEn: 'I Will Sing of Your Goodness',
   titleRu: 'Буду петь о Твоей благости',
-  credits: [{ role: 'music', names: 'Revive' }],
+  credits: [{ role: 'words-and-music', names: 'Revive' }],
+  note: {
+    en: '© Revive 2023. Used with permission.',
+    ru: '© Revive 2023. С разрешения авторов.',
+  },
   key: 'F',
   meter: '4/4',
   tempo: 90,

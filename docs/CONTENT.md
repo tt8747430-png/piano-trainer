@@ -127,8 +127,9 @@ printed there; a section sung twice with a different tune each time is written t
 from a transcription of the same recording (Songscription's MusicXML): lay the transcription on those bars by its chord
 changes, take the top note of the right hand at each onset with its ties joined, leave out the piano's fills, and copy a
 part it does not reach from where the song sings it again, saying so in a comment. Its chord colours (`Bbmaj7`,
-`C/E`) are kept where the tune and the bass agree with them. Words that are not free to print stay out
-(`worship/voi-canta`), and the exports themselves never enter the repository.
+`C/E`) are kept where the tune and the bass agree with them. The owner is named in `credits` and `note`
+(`worship/voi-canta`: "© Revive 2023. Used with permission."). Copyrighted words stay out of the repository even with
+permission; a learner types them in the score editor. The exports themselves never enter the repository.
 
 ## Single staves and lyrics
 
