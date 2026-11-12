@@ -116,11 +116,11 @@ utilities by `@theme inline` in `src/styles/theme.css`.
 - **Transpose by interval, keeping letters** (`transposeNote`): D in G is E♭ in A♭. A root that would need a double
   accidental takes its plain spelling. A root found from an interval goes through `spellBelow` or `spellAbove`, then
   `plainRoot`: the tritone sub of B♭7 is E7.
-- **One table each:** chord names in `chord-name.ts`, root spelling in `chordRootSpelling`, tensions in `tensions.ts`,
+- **One table each:** chord names in `chord-name.ts`, root spelling in `chordRootSpelling`, tensions in `colour-notes.ts`,
   numerals through the chord symbols' suffix reading (`numerals.ts`), played keys through `nameChords`.
 - **Placing tones:** `placeChord`, `placeScale`, `placeScaleChords`. A chord of `TWO_HANDS_FROM` notes or more takes two
   hands. A row of chords is voiced by `voiceLead`.
-- **Time is ticks** (`TICKS_PER_BEAT` = 24). Seconds appear only in `shared/lib/schedule` and the audio adapter. A take
+- **Time is ticks** (`TICKS_PER_BEAT` = 5040). Seconds appear only in `shared/lib/schedule` and the audio adapter. A take
   alone is kept in milliseconds; `quantise` snaps it to ticks.
 - **A Performance is what sounds and what is written.** `notate` writes it as a Score; a Score is never played.
 - Voice leading, fingering and inversions inside `arrangement` are tested through `arrange`.
@@ -185,7 +185,7 @@ utilities by `@theme inline` in `src/styles/theme.css`.
 
 - Animate `transform` and `opacity` only, on `--ease-out`. Motion shows a change of place or state, or it goes.
 - 150–300ms for feedback in the page; a sheet or the keys' fold travels further and takes longer.
-- **Reduced motion:** `theme.css` cuts CSS motion. Script-driven motion asks too: `useMediaQuery`, `useReducedMotion`;
-  `morph` changes at once; `useScrollMotion` scrolls instantly.
+- **Reduced motion:** `theme.css` cuts CSS motion. Script-driven motion asks too
+  (`useMediaQuery('(prefers-reduced-motion: reduce)')`); `morph` changes at once; `useScrollMotion` scrolls instantly.
 - A view transition goes through `morph`, never `document.startViewTransition`.
 - Finger-driven motion follows the finger and can be reversed mid-gesture.

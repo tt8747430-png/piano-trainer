@@ -1,4 +1,4 @@
-# ADR 0052 — Three places; Practice's pages hold their tools; the Metronome; Search finds everything
+# ADR 0052 — Four places; Practice's pages hold their tools; the Metronome; Search finds everything
 
 - **Status:** accepted · **Date:** 2026-09-27 · consolidated 2026-10-27
 
@@ -18,7 +18,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
 - **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
-  one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
+  one row of three figures (day streak, songs learned, practice time); rows to Settings and the Account; Activity
   (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
 - **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
   `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
@@ -54,26 +54,26 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
   `PitchPicker`), a quality, a voicing or a scale's kind a menu (`MenuPicker`), a key the circle of fifths
   (`KeyPicker`). The step strips with ‹ › and their 17 spellings are gone (round 29).
-- **A chord or a scale chosen plays as it is chosen** (a scale up its octave), unless Settings › Keyboard › Play
-  what you choose is off.
+- **A chord or a scale chosen plays as it is chosen** (a scale up its octave), unless Settings › On-screen piano ›
+  Play on selection is off.
 - **A thing's page shows it on the keys, read top to bottom**: the keys docked; what it is, with its one honey Play;
   its choices as labelled fields; its sections. **It holds the tools that work on it**, never a tab or a page of their
   own:
   - Chords: the builder (any chord from its parts, ADR 0046; its root, quality and voicing one row of pickers, the
     power chord among the qualities; a size, 7th, suspension, inversion or hands the chord cannot take not drawn, R30),
     its Colour notes (one panel, ADR 0046: Chord tones · Tensions · Avoid, a note the chord can take a toggle that
-    adds it to its keys, symbol and sound, `colour=b9,#11`; with `key=` from Harmony's or Progressions' chords the
+    adds it to its keys, symbol and sound, `colour=b9,#11`; with `key=` from Scales' Chords or Progressions' chords the
     groups follow its degree, "As ii7 in C major" under the heading), its voicing (a menu
     of the eight, ADR 0046, `voicing=`, one the chord cannot take left out, the chosen one's ⓘ saying what it is with its spelling in C and on this
     chord; a voicing other than close sets the hands, and the inversion where it is not made from a close chord),
     its Fingering (each hand drawn as Scales draws it, beside a row an inversion of each hand's block fingering, the
     keys' own marked; a voicing or a chord of five notes one row of what each hand holds), the fingers on the keys,
     its arpeggio and chromatic walk into the Player; Arpeggio and Play one floating capsule (R29);
-  - Scales and keys, its tabs saying what is in them, **Notes · Harmony · Key** (A32; the URL's `show=scale|chords|key`
-    kept): Notes (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
+  - Scales and keys, its views saying what is in them, **Scale · Chords · Key** (A32; the URL's `show=scale|chords|key`
+    kept): Scale (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
     on a staff, the music first, one layer of labels on it, **Fingers · Degrees · Steps** (`marks=`, fingers by
     default); its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
-    fingers; its exercises), Harmony (the scale's chords to 13ths on the seven-degree spine, a column a degree, each
+    fingers; its exercises), Chords (the scale's chords to 13ths on the seven-degree spine, a column a degree, each
     its symbol, numeral and, in a key, its degree's name (the degrees table gone into them), in an inversion, walked,
     each a tap to play and opening in Chords, in the key, from its card's corner: no second row of links) and Key
     (the circle of fifths, its signature, facts: relative (here alone, A32) and parallel keys, the keys beside it on the circle, its
@@ -128,10 +128,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **A Practice page has a Settings page only where it holds several settings of its own** (A24, R18, R32) at
   `/settings/<page>` (scales, progressions, chord-finder; the Chord player's its own): how the page sounds and looks
   every time, then rows to the on-screen piano and a connected piano. A single setting stays in place (the Tuner's A4,
-  a drill's Advance automatically in its setup); the piano's are the keyboard strip's ⚙; so Chords, Intervals,
+  a drill's Advance automatically in its setup); the piano's are a row to On-screen piano; so Chords, Intervals,
   Accompaniment, Exercises and the Quiz have no gear, and nothing redirects to the app's Settings. The page's gear opens it (`?from=` names the page, so Back returns
   there); Settings does not list them (R29). The page keeps what you look at.
-- **A key size chosen** says on the keys' rail for a moment what it shows ("Showing 36 keys (C3–B5)").
 - **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
   slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
   filled, a tap cycling accent · beat · silent), one honey Play. Every setting is in place, as Chordify's (R32; no
@@ -211,3 +210,6 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   sidebar as Claude's (2026-11-05; research, spec and mockup in `.scratch/r32/`).
 - r34 (R34-3) — Scales' staff carries one layer of labels, Fingers · Degrees · Steps, chosen over the music; the degrees and steps toggles leave Settings (2026-11-06).
 - r34 (R34-4) — A progression's row shows its chords as tiles tinted by role, in the library, a key's progressions and the editor's preview, in place of a list icon and a plain line (2026-11-06).
+- Instructions audit: four places in the title; the Profile's figures, Scales' Scale · Chords · Key and Play on
+  selection named as the app has them; the keyboard's rail, its ⚙ and its key-size caption gone (ADR 0062)
+  (2026-11-12).

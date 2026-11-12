@@ -24,12 +24,12 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   takes in milliseconds. **Tuplets are not written as such**: notation finds them from the notes' timing (a window
   of a quarter, a half, a beat, two or four beats split evenly into 3, 5, 6, 7 or 9 in simple time, 2, 4, 5, 7, 8 or 9
   in compound) and brackets them; the editor's tuplet key only chooses that length.
-- **Meters.** A meter is a count of 1 to 12 over 2, 4 or 8. Its kind (a quarter, or a dotted quarter in x/8) is what
-  the song's ticks count; its counted beats (2/2's two halves, 7/8's 2+2+3) are what the click and the count-in
-  follow, and its groups what the click accents, the beams join and a pattern's figure fills. A section may have its
-  own meter of the piece's kind and its own key (`Section.meter`, `Section.key`), each printed where it changes. A
-  4/4 or 2/2 may print as C or ¢ (`timeSymbol`). A tempo mark may count another note than the beat (`tempoUnit`);
-  the tempo stays the song's beats a minute.
+- **Meters.** A meter is a count of 1 to 16 over 1, 2, 4, 8 or 16. Its kind (a quarter, or a dotted quarter in x/8) is
+  what the song's ticks count; its counted beats (2/2's two halves, 7/8's 2+2+3) are what the click and the count-in
+  follow, and its groups what the click accents, the beams join and a pattern's figure fills. A section may have its own
+  meter of the piece's kind and its own key (`Section.meter`, `Section.key`), each printed where it changes. A 4/4 or
+  2/2 may print as C or ¢ (`timeSymbol`). A tempo mark may count another note than the beat (`tempoUnit`); the tempo
+  stays the song's beats a minute.
 - **A bar may have no chord symbol** (`_`, `_@2` where it is not the meter's length): nothing printed over it, nothing
   a pattern plays there.
 - **Marks belong to written notes** (`[acc,stacc]`): articulations (with portato, the breath mark and the
@@ -72,7 +72,7 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   staff. A new song chooses its staves as Flat chooses instruments (round 27): the piano, and voices (Voice,
   Soprano, Alto, Tenor, Baritone, Bass), each voice a staff named for it in its own clef, sounding as the piano does.
 - **Other instruments come later, not never** (the owner, 2026-11-01): Flat's families (woodwind, brass, strings,
-  percussion…), each instrument sounding as itself, from General MIDI soundfont samples played by `smplr`, loaded the
+  percussion…), each instrument sounding as itself, from sample sets played by our own sampler (ADR 0034), loaded the
   first time an instrument is used and kept by the service worker for offline play. Until then a score holds the piano
   and voices alone.
 - **Lyrics** are verses of syllables aligned to the notes of the staff they are written on (`lyricsOn`: a single staff
@@ -108,3 +108,5 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change), the
   Performance's `pedal`, `pt-pieces` version 9; no Melody source (2026-11-03).
 - r34 (R34-3) — An unnamed first staff is the Melody, the rest Staff 2, 3…; the piano is named only beside other staves, or alone in the editor (2026-11-06).
+- Instructions audit: meters of 1 to 16 over 1 to 16 (R31-E, ADR 0114); other instruments through our own sampler,
+  not `smplr` (ADR 0034) (2026-11-12).

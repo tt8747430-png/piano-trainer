@@ -13,38 +13,35 @@ edit, and a learner practising should not change the music by accident.
 
 ## Decision
 
-- **Two screens, one score, two modes.** Practise · Edit (`ModeSwitch`, one pop-up; an editor also sees Edit the
-  original) leads both bars. Switching replaces the
-  history entry, so Close still goes back where the learner came from. The bar carries over: both URLs take `bar`, the
-  bar as written (the Player's cursor read back through the repeats, `writtenBarAt`; a written bar opening on its
-  first time played, `beatGroupInBar`), read once and dropped from the URL. Only a piece has the switch, and every
-  piece can be edited: a song written in degrees opens as its chart in its key (`asChartPiece`). While a take records
-  the switch waits for Stop.
+- **Two screens, one score, two modes.** The Player's Edit (`ScoreEditToggle`, a pencil) and the editor's Done stand
+  in one place in both bars. Switching replaces the history entry, so Close still goes back where the learner came from.
+  The bar carries over: both URLs take `bar`, the bar as written (the Player's cursor read back through the repeats,
+  `writtenBarAt`; a written bar opening on its first time played, `beatGroupInBar`), read once and dropped from the URL.
+  Only a piece has the switch, and every piece can be edited: a song written in degrees opens as its chart in its key
+  (`asChartPiece`). While a take records the switch waits for Stop.
 - **One bar** (`ScoreBar`): one band of card paper to the screen's edges with one hairline under it. Its buttons are a
   toolbar's (the button's `tool` variant: round, no frame at rest, the muted fill on hover, while open and pressed,
-  44px). Close and Practise · Edit lead; each mode's buttons end it (the Player's Piano keys · MIDI · gear, the
-  editor's Piano keys · MIDI · Play · Undo · Redo · gear, R31-E; the editor's Piano keys at every size, R32-B). One row at every size, the same height in both
-  modes, and the screen's rows meet in both (`SCORE_SCREEN`), so the sheet never moves as the mode switches and
-  nothing is left between the editor's palette and the keys.
+  44px). Close and Edit or Done lead; each mode's buttons end it (the Player's Keyboard · MIDI · gear, the editor's
+  Keyboard · MIDI · Play · Undo · Redo · gear, R31-E; the editor's Keyboard at every size, R32-B). One row at every
+  size, the same height in both modes, and the screen's rows meet in both (`SCORE_SCREEN`), so the sheet never moves as
+  the mode switches and nothing is left between the editor's palette and the keys.
 - **No tools row** (R31-E): the Player's View is its Settings', Transpose its More's; the editor's View and
   Transpose are its gear's first page, Delete · Copy · Cut · Paste float by what is chosen.
 - **One Transpose** (`widgets/transpose`): its trigger the key as printed, in the accent once moved; inside, − the key
   it lands in +, how far in semitones, and Reset. The Player's moves the key it plays in at once (ADR 0105); the
   editor's, a page of its gear (`TransposeFields`), adds the first line moved as a preview, and Transpose, one Undo
   step.
-- **One transport** (`Transport`), one pill floating along the sheet's foot at every size: the tempo, ‹, Play, ›, then
-  the mode's three: the Player's loop, metronome and hands; the editor's Record, Takes and Sound (rows to the Player's
-  settings and to Sound and recording). Play
-  stands in the same spot in both modes. While a take records, its strip stands in the transport's place. Its
-  controls shrink step by step so they fit a 320px phone.
-- **What floats over the music takes no room.** The transport stands over the sheet, which has room past its last
-  line to scroll above it. It steps aside while the music is read (dragged, scrolled, pinched:
-  `useHiddenWhileReading`) and comes back at a tap. While Diagrams plays the whole bar steps aside. The editor's
-  palette no longer floats: it is docked beside or under the sheet, taking its own room (ADR 0114), so the bar, the
-  tools row, the transport and the keys stand where the Player's do and only the sheet's width or height changes as
-  Practise · Edit switches.
-- **One View menu** in both modes (ADR 0108) and one layout setting (ADR 0096). The keys fold from their rail and
-  come back from the View. Which staves show is the Player's Setup's (ADR 0105); the editor shows every staff.
+- **The Player's transport** (`Transport`) is docked at its foot over the foot bar (ADR 0105): Loop · Restart · ‹ ·
+  Play · › · Pace · Metronome. Its controls shrink step by step so they fit a 320px phone. The editor has no
+  transport: Play is its bar's, Record a take and Takes its gear's (ADR 0114); while a take records, its strip stands
+  at the sheet's foot.
+- **Nothing but the sheet's pill floats over the Player's music** (R31-P). In the editor Delete · Copy · Cut · Paste
+  float too, while something is chosen, stepping aside while the music is read (`useHiddenWhileReading`). The editor's
+  palette is docked beside or under the sheet, taking its own room (ADR 0114), so the bar and the keys stand where the
+  Player's do and only the sheet's width or height changes as Edit and Done switch.
+- **One layout setting** (ADR 0096) in both modes; the Player's views are Pick your view's (ADR 0108). The keys show
+  and hide by the bar's Keyboard (ADR 0062). Which staves show is the Player's Setup's (ADR 0105); the editor shows
+  every staff.
 - **Each mode a kind page** (B7): the Player's settings (ADR 0105) and the editor's gear (ADR 0114), which holds only
   what the score does not print: Instruments, Layout, Note input, Recording (R32-B).
 
@@ -83,3 +80,5 @@ own Play melody switch: it plays the tune under a take.
   gear holds only what the score does not print (2026-11-05).
 - r36 (R36-3) — The editor's rows meet as the Player's: the music under the bar at the same height in both modes, no
   band between the palette and the keys (2026-11-06).
+- Instructions audit: Edit and Done in place of the `ModeSwitch` pop-up; the Player's transport docked and the
+  editor's gone (ADR 0105, 0114); the bar's Keyboard named as the app names it; the keys' rail gone (2026-11-12).

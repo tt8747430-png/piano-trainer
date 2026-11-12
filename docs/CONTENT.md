@@ -41,7 +41,7 @@ export default definePiece({
 | `credits`                  | See [Credits](#credits)                                                               |
 | `source`                   | `{ book, number?, page? }`; books are in `entities/book`                              |
 | `key`                      | A letter, `#` or `b`, then `m` for minor (`G`, `F#`, `Ebm`)                           |
-| `meter`                    | The main meter: 1–12 over 2, 4 or 8 (`'4/4'`, `'6/8'`)                                |
+| `meter`                    | The main meter: 1–16 over 1, 2, 4, 8 or 16 (`'4/4'`, `'6/8'`)                         |
 | `timeSymbol`               | `true` prints 4/4 as C and 2/2 as ¢                                                   |
 | `tempo`, `tempoUnit`       | Beats per minute, 40–160; the note the mark counts where not the meter's beat (`'8'`) |
 | `pattern`                  | The accompaniment the Player starts with ([Patterns](#patterns-and-figures))          |

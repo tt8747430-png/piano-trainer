@@ -16,18 +16,16 @@ use one.
   idea, named, by style, with a line of numerals in each mode it has (`major`, `minor`), its note, the pattern its
   Player opens with and its chord size. The key's Major · Minor shows that mode's line. No two lines are the same loop
   in the same key or the relative one (a test holds it). No progression is a piece.
-- **The Progressions page** (`/practice/progressions`) is three tabs (`?tab=`), each keeping the progression:
-  **Progression** (the row on a staff, voiced as its Settings say, why it works drawn on its chords, its chords as the
-  Player's diagrams, its key, line, chord size and approach chords, then Practise in all 12 keys and its songs),
-  **Library** and **Passing chords**. It holds the tools that work on it:
-  - **a typed line**, numerals or a song's chords, read in its key (`?key=&p=`). Chords typed have their key found
-    from the chords alone (`keysOfChords`); a chord out of the key is named, not refused (`V/iv`, `♭VII`); playing
-    them in another key keeps their letters and basses;
-  - **Passing chords** (`?tab=passing&between=&inKey=`): the chords that lead from one chord of its row to the next.
-- **The library is a list** (`?tab=library&style=`), as musicca lists it: its styles as chips (All, Pop, Rock …), a
-  row a progression: its line as the Settings write it, its name, and its chords in the key shown in bar cells
-  (`| C | G | Am | F |`), so the key re-spells every row. ▷ plays it in place, the sounding bar lit; a tap elsewhere
-  opens it in the Progression tab. No pop-up chooses a progression.
+- **Progressions is a place of the practice library** (`/practice/progressions`, ADR 0052): each style a place, Mine
+  the learner's own, a row a progression with its chords as tiles tinted by role. A progression has its page
+  (`/practice/progressions/$id`, the library's or `mine-n`): the row on a staff, voiced as its Settings say, why it
+  works drawn on its chords, its chords as the Player's diagrams, its key, chord size and approach chords, then
+  Practise in all 12 keys and its songs. It holds the tools that work on it:
+  - **a typed line**, numerals or a song's chords, read in its key (`/practice/progressions/line?key=&p=`). Chords
+    typed have their key found from the chords alone (`keysOfChords`); a chord out of the key is named, not refused
+    (`V/iv`, `♭VII`); playing them in another key keeps their letters and basses;
+  - **Passing chords**, a section of its page (`between=&inKey=`): the chords that lead from one chord of its row to
+    the next.
 - **Why it works is drawn on the chords** (layout B, Decided 14), always, no switch: each chord a chip over its
   role in one word, **home · away · tension**, and the colour a chord brings (**sad** for the relative minor, **soft**
   for ii and iii, **bright** for a major chord in a minor key), in DESIGN.md's Harmony paints; between each two an
@@ -70,9 +68,9 @@ use one.
   minor). A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
   out, as the loop test holds. A modal vamp is heard in a song only where it comes back to its first chord
   (`heardLine`: I–II–I, never Aura Lee's I–II⁷ on to V), on the song page and in its songs alike.
-- **Both ways:** the Progression tab lists **Songs with this progression**, each at the bars it is first heard on, opening the
-  Player there looped; a song's page names the library's progressions it uses as chips, each opening Progressions in
-  the song's key, one heard only inside a longer one left out.
+- **Both ways:** a progression's page lists **Songs with this progression**, each at the bars it is first heard on,
+  opening the Player there looped; a song's page names the library's progressions it uses as chips, each opening
+  Progressions in the song's key, one heard only inside a longer one left out.
 
 - **The Chord player** (`/practice/chord-player`, R29 CP1–CP6, Decided 22): two pages, one engine. Progressions
   is the page to learn a progression; the Chord player plays a **chord sheet** along with a band, and each opens the
@@ -107,3 +105,5 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
   Progressions' Settings (2026-11-03).
 - r29 — The Chord player: chord sheets of sections, styles with a band, My chord sheets synced (2026-11-04).
 - r34 — The musician's terms: arrows name the root movement, not the bass; in Russian Отклонения with Побочные доминанты (2026-11-06).
+- Instructions audit: the three tabs replaced in the decision by the library's place and a progression's own page
+  (R30-4, ADR 0052) (2026-11-12).

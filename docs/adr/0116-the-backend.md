@@ -40,16 +40,15 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   downloads when opened: the Public library's items, and recordings once they move to storage (round 7). Until
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
-- **The Public library:** a learner's own song is private until they publish it (its More: Publish to the Public
-  library, a sheet as Noji's: a description of at least 20 characters, kept in `meta.description` (the item's JSON,
-  no column of its own), the row as others will see it, the rights in a line and why publish behind the ⓘ;
-  published, the page's card says so with View, Edit or Update, and Unpublish). A published
-  song is a snapshot held as a save holds an own song (`public_items`, one per author and song, 200 KB at most), read
-  by anyone, written by its author unless an editor has blocked them, at most 20 publishes an hour. Songs → Public
-  library lists them, newest or most saved, searched by title; a song's page plays it and saves an own copy (a save
-  counted once per signed-in learner, `save_public_item`) and takes a report (`public_reports`, a reason and a
-  note) to the editors, who hide an item (`hide_public_item`, never its author) or block a publisher. Patterns and
-  progressions follow on the same tables.
+- **The Public library:** a learner's own song is private until they publish it (its Settings › Publish…, the
+  Publish page `/songs/$pieceId/publish`, as Noji's: a description of at least 20 characters, kept in `meta.description`
+  (the item's JSON, no column of its own), the row as others will see it, the rights in a line and why publish behind
+  the ⓘ; published, its link, View, Versions and Unpublish, r30 below). A published song is a snapshot held as a save
+  holds an own song (`public_items`, one per author and song, 200 KB at most), read by anyone, written by its author
+  unless an editor has blocked them, at most 20 publishes an hour. Songs → Public library lists them, newest or most
+  saved, searched by title; a song's page plays it and saves an own copy (a save counted once per signed-in learner,
+  `save_public_item`) and takes a report (`public_reports`, a reason and a note) to the editors, who hide an item
+  (`hide_public_item`, never its author) or block a publisher. Patterns and progressions follow on the same tables.
 - **Admin** is a role set only by the server (`app_metadata.role`: admin or editor; anyone else a learner), read
   by row-level security, by Edge Functions and into the app's `Account`. The first admin is the owner: their
   address is listed in `admin_bootstrap` (in the database only, never the repo) and their account becomes an admin
@@ -246,3 +245,5 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   `/courses/manage` gone (2026-11-04).
 - r30-5 — The learner's own lessons and courses sync as a document table like the others (`own_lessons`, migration `20261105130000_own_lessons`: owner-only RLS, realtime, `push_documents` taking it; to be applied on the project). The lesson and course editors take a source (`LessonSource`, `CourseSource`): an editor's draft on the server, or the learner's own on the device (`LocalScreen`, `useRestingSave`, whose `REST_MS` the drafts share) (2026-11-05).
 - r32 — The Admin area became Administration: ten sections, each a Settings page (`/admin/$section`), in Settings' sidebar on a laptop and a list on a phone; Feedback apart from the Error log; the learner preview's second way (the Administration bar's button) gone, its home the Account; no database change (2026-11-05).
+- Instructions audit: the Public library's publishing reached from a song's Settings and the Publish page, as r30
+  has it, not a More's sheet (2026-11-12).

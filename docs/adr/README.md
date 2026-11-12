@@ -12,7 +12,7 @@ citation still leads to the right one (`git log -- docs/adr` reads the old recor
 | [0011](0011-the-look.md)                    | The look: a labelled picture book, printed quietly | colour, type, shape, the icon                 |
 | [0061](0061-controls-and-the-screen.md)     | Controls                                           | the Choosing Rule, floating actions, ⓘ, sizes |
 | [0034](0034-sound-and-midi.md)              | Sound and MIDI behind ports                        | audio, the live voice, MIDI, recordings       |
-| [0062](0062-the-keyboard.md)                | The keyboard                                       | the on-screen keys, the rail, shortcuts       |
+| [0062](0062-the-keyboard.md)                | The keyboard                                       | the on-screen keys, the divider, shortcuts    |
 | [0046](0046-the-theory-kernel.md)           | The theory kernel                                  | spelling, chords, two hands, numerals         |
 | [0047](0047-arrangement-and-patterns.md)    | The arrangement, patterns and method books         | Performances, patterns, positions, books      |
 | [0112](0112-progressions.md)                | Progressions                                       | the library, any key, walks, songs            |
@@ -30,4 +30,4 @@ citation still leads to the right one (`git log -- docs/adr` reads the old recor
 | [0106](0106-the-song-library.md)            | The song library                                   | folders, Move, the archive, search            |
 | [0107](0107-share-print-export.md)          | Share, print, export, import                       | links, Print, MIDI and MusicXML files         |
 | [0053](0053-learn.md)                       | Learn                                              | journeys, courses, lessons                    |
-| [0052](0052-practice-and-search.md)         | Three places, Practice and Search                  | navigation, Practice's pages, the Metronome   |
+| [0052](0052-practice-and-search.md)         | Four places, Practice and Search                   | navigation, Practice's pages, the Metronome   |

@@ -28,14 +28,13 @@ and Russian.
   so a missing key fails `tsc`. Content text is `LocalText { en, ru }`. Counts take plural forms (`_one`, `_other`,
   and Russian's `_few`, `_many`). Note and chord names are international in both (B, not H).
 - **Offline and installable.** The PWA precaches the app, its fonts and icons, the pieces' recordings and the Verovio
-  worker. Nothing at runtime needs the network. A waiting version is offered by the update prompt. No update state waits on the browser without an end: a look
+  worker. Nothing the learner plays needs the network. A waiting version is offered by the update prompt. No update state waits on the browser without an end: a look
   gives up after 15 s, a version still downloading says Downloading… instead of holding the look, and Update says
   Restarting… and reloads once the version takes over, or after 8 s if the browser never says so. Storage that is
   blocked or full falls back to memory (`safeLocalStorage`), and a failed save is said in a notice; nothing throws.
 - **Hosting:** Vercel, with a preview for each PR and production from `main`.
-- **Not for this app:** accounts, sync, a backend or cloud storage; YouTube or streamed audio; a sampled piano (it
-  would cost megabytes of precache); takes from a microphone; ChordPro and PDF export (Print makes the PDF, ADR 0107).
-  MusicXML import and export are planned, not built.
+- **Not for this app:** YouTube or streamed audio; takes from a microphone; ChordPro and PDF export (Print makes the
+  PDF, ADR 0107). Accounts and sync are ADR 0116's; recorded instruments ADR 0034's; MusicXML ADR 0107's.
 
 ## Consequences
 
@@ -51,3 +50,5 @@ and Russian.
   layers and scope are here and in `CLAUDE.md`.
 - r29 — The samples' own runtime cache (CacheFirst, 200 only, no expiration) outside the precache (decided 2026-11-02, being built in round 29; spec `.scratch/r29/piano-sampler/spec.md`).
 - r30 — The update never hangs: `lookFor` answers at once for a download, `takeOver` always reloads; checked with two real builds (2026-11-05).
+- Instructions audit: the Not-for list brought level with the backend (ADR 0116), the sampled instruments (ADR 0034)
+  and MusicXML (ADR 0107) (2026-11-12).

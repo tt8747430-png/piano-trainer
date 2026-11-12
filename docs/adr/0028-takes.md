@@ -23,8 +23,8 @@ back gets a score they did not ask for.
   late beyond that within half a beat (`feedbackOf`), so the windows need no setting of their own.
 - **MIDI only.** Record needs a connected MIDI keyboard; without one its popover says so and how to connect one. The
   on-screen keys and the computer's keys are not recorded: their timing is the input's lag.
-- **In the editor's transport** (ADR 0115): Record, Takes (greyed until the song has one) and the recording's
-  settings; while it records, the recording strip stands in the transport's place. The takes' sheet opens by itself on
+- **In the editor's gear** (ADR 0114): Record a take, Takes (greyed until the song has one) and Settings › Recording;
+  while it records, the recording strip stands at the sheet's foot. The takes' sheet opens by itself on
   a take just kept. A take has a page (`/edit/$pieceId/takes/$takeId`): its name, a piano roll, Play and Keep bars.
 - **Saved in `pt-takes`**, written compactly. Room for 60,000 notes in all keeps the takes inside every browser's
   quota; a take stops at the room or at 10 minutes. A take ends kept when the editor is left or the app hidden.
@@ -44,3 +44,4 @@ without Web MIDI, cannot record.
 - 0096 — Record is the transport's (2026-10-24).
 - 0110 — Record, Takes and the recording's settings in the one transport (2026-10-26).
 - r34 — A take is placed less the piano's calibrated lateness (Calibrate timing, ADR 0034).
+- Instructions audit: Record and Takes are the editor's gear's, the transport gone (ADR 0114) (2026-11-12).

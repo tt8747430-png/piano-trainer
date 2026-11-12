@@ -39,7 +39,7 @@ details.
     (`LibraryDnd`: one drag the sorted lists join);
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
     New folder at its foot;
-  - the song's page and the Player's More: the ♡, Move to…, Archive or Restore; a song's row and page also
+  - the song's Settings (ADR 0111): the ♡, Move to…, Archive or Restore; a song's row and page also
     Export…, one sheet of MusicXML, MIDI and Share link (ADR 0107).
 - **Every move, archive and favourite toasts with Undo**, which puts it back exactly where it stood.
 - **Deleting a folder deletes its songs and folders**, but the app's content is never destroyed: what the learner
@@ -50,7 +50,7 @@ details.
   Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`, `pt-library` version 6;
   `trashSongs`, `restoreTrashed`, `emptyTrash`). Home's bar holds one button for both, a menu of Archive · Trash, its
   count both; the laptop tree lists Trash under Archive.
-- **The archive is a place** (`/songs/archive`, its button with its count in Home's bar): archived songs and folders,
+- **The archive is a place** (`/songs/archive`, from the bar's Archive · Trash menu): archived songs and folders,
   newest first, each with Restore; Restore all; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
   it stood while that folder is in the library, else at Home, last; a folder back with everything under it. An
   archived song still opens by its link, from Learn and from Search, which says it is archived.
@@ -72,8 +72,7 @@ details.
   take's share right as meters in ink, the last take bar by bar, and one next step as a quiet button into the Player
   (`nextStep`: the weakest bar or pair under 80 % looped at 70 % speed, else the tempo climbed 50 → 75 → 100 %). Play
   stays the page's one honey control.
-- **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), tags, Recently played at
-  Home's top (Learn shows the songs played last).
+- **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), tags.
 
 ## Consequences
 
@@ -129,3 +128,5 @@ A study, practised on Practice, is in no library. A folder played song after son
 - r34 (R34) — Covers engraved from the song's first bars; Your practice says the last and best take, the bars one by one and one next step; the ♡ moves into the bar (2026-11-06).
 - r34 (R34-4) — The Trash beside the archive; Delete of an own song to it with Undo; a folder row opens on a tap anywhere with no chevron beside its More (2026-11-06).
 - r36 (R36-3) — The songs table fits its pane: the title cut short, the Chords only from 48rem (2026-11-06).
+- Instructions audit: a song's library acts on its Settings, not a More; the archive reached from Archive · Trash;
+  Recently played left out of Not taken, as Home's Continue has it (2026-11-12).

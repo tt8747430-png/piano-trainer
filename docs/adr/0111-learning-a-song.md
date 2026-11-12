@@ -12,8 +12,8 @@ no card on top.
 ## Decision
 
 - **The song's page** (`PieceView`; Apple Music's album page, MuseScore's score page): its bar (Back, the title with
-  ✎, which opens the score editor, Learned, Settings); the song (its cover, a tap changing its picture and paint, ♡ on
-  its corner; who wrote it and its book; one line of facts: key, time, tempo, level, genre, language; what is said of
+  ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing its picture and paint;
+  who wrote it and its book; one line of facts: key, time, tempo, level, genre, language; what is said of
   it, two lines and More); its music (its sections where it has more than one, the learner's practice, its chords
   and the library's progressions it uses); and **Details**. Play floats. From 64rem the song and its Details are the
   left column (24rem) and the music the right; on a phone Details follow the music.
@@ -27,8 +27,8 @@ no card on top.
   credits; nothing is edited in a mode of the page's own.
 - **The song's Settings** (`/songs/$pieceId/settings`, Noji's deck settings): the song at its head; Library (Folder,
   Favourite as a switch, Duplicate, Archive or Restore); Share (Publish with its state, a page of its own at
-  `/songs/$pieceId/publish`; Share link; Export…); and apart, Delete or Reset to the original, asked first. A study has
-  no library rows.
+  `/songs/$pieceId/publish`; Share link; Export…); and apart, Delete (to the Trash at once, with Undo, ADR 0106) or
+  Reset to the original, asked first. A study has no library rows.
 - **A section's page** (`…/sections/$section`) teaches it:
   - **Chords**, open: each learned by **three holds** in its sheet: its keys held together on a MIDI keyboard or the
     sheet's keys, every key let go since the last. Each hold is heard (an accented click) and seen ("1 of 3").
@@ -72,3 +72,5 @@ along is not built: it would need timing windows the Player does not keep.
   they stand (a popover on a laptop, a sheet on a phone), the credits among them, written into the score's lines; a
   tap on the cover changes it. The laptop's page is two full columns. Settings gain Favourite as a switch
   (2026-11-05).
+- Instructions audit: the ♡ in the bar beside Learned (ADR 0106, R34); Delete to the Trash with Undo, not asked
+  (2026-11-12).

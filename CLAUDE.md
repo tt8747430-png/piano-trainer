@@ -112,14 +112,15 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
   folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Up next, then Chords, Scales and keys, Intervals, Progressions, Accompaniment, the Chord
   player, Exercises and Quiz, the Tools last (Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
-  in place; the bar's Tools menu is `widgets/tools-sheet`. Exercises, Accompaniment (patterns only) and Progressions
-  are one library, `widgets/practice-library`, arranged by the learner; its favourites, arrangements and the learner's
-  progressions `entities/practice-library`; a progression's page is `pages/progression`.
+  in place (the Chord finder's on its own page); the bar's Tools menu is `widgets/tools-sheet`. Exercises,
+  Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
+  its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
+  `pages/progression`.
 - **The Player** (`/play/$pieceId`): one screen over any Performance. The transport's Pace: Listen at a speed, Wait
-  mode, Interpret; the foot's Hands, in every mode; versions Original · Simple · Easy; the hands at the keys, 3D, in
-  the keys' place. `pages/player`; `widgets/practice-player`, `piano-hands`, `chord-views`, `sheet-music`,
+  mode, Interpret; the foot's Hands, in every mode; versions Original · Simplified · Easy; the hands at the keys, 3D,
+  in the keys' place. `pages/player`; `widgets/practice-player`, `piano-hands`, `chord-views`, `sheet-music`,
   `player-setup`; `features/practice`.
-- **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar and transport. A docked panel
+- **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar. A docked panel
   from 48rem, a bottom sheet on a phone. `pages/score-editor`; `widgets/score-sheet`, `mode-switch`;
   `features/score-editor`, `edit-piece`, `record-take`.
 - **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications.
@@ -135,7 +136,8 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
 - **Settings:** each preference has one home (`entities/settings/model/registry.ts`, held by `settings-homes.test.ts`);
   elsewhere a link row to it, never a second control.
 - **A loss that can be undone** happens at once, with Undo in its toast (`say`); one that cannot, or that reaches
-  other people, asks first through `ConfirmDialog`. A loss is named as one, truly (R38). **A key or root** is one of `shared/ui/pickers`. **A bar** is `ScreenHeader`.
+  other people, asks first through `ConfirmDialog`. A loss is named as one, truly (R38). **A key or root** is one of
+  `shared/ui/pickers`. **A bar** is `ScreenHeader` (`ScoreBar` on the full-screen Player and editor).
 - **Keys:** a shortcut is one `useShortcuts` call beside what it drives. A letter alone is the piano's.
 - **Theme:** `index.html`'s `#theme-boot` paints before first paint and `theme-boot.test.ts` holds it to the store.
 - **Installed app:** `#standalone-boot` locks zoom when installed; `theme.css` keeps text unselectable outside fields.

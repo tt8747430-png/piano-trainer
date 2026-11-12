@@ -34,8 +34,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 
   No strip that hides its options behind ‹ ›, and no scrolling strip fades at its edges. A choice that has a picture
   is a tile wearing it (`PictureTiles`): a layout, a view, a swing feel, a sign; an inversion is its noteheads.
-  Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are tabs that are
-  links (`NavTabs`).
+  Settings changed less often are a sheet on a phone and a popover on a laptop. Views of one thing are a `Segmented` in
+  the page's content; a place's views are its title (`TitleTabs`).
 
 - **Four pickers for notes and keys** (`shared/ui/pickers`), one look: a value with ⌃⌄ opening a popover, a bottom
   sheet below 30rem.
@@ -68,8 +68,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   them: an `aria-label` only adds to its visible text, never replaces it (WCAG 2.5.3, axe in the e2e).
 - **Secondary sections fold** from their headings (`FoldSection` over `FoldBody`, sliding, inert while folded); what
   is folded is saved by section id (`foldedSections`) and stays folded on every visit.
-- **The screen's bar** (`ScreenHeader`) is a child of the page's root, a page's tabs its second row; it hides while
-  reading down and comes back on a scroll up. `src/app/screen-bar.test.tsx` holds every screen to it.
+- **The screen's bar** (`ScreenHeader`) is a child of the page's root, one row with no tabs under it; it hides
+  while reading down and comes back on a scroll up. `src/app/screen-bar.test.tsx` holds every screen to it.
 - **The shell takes the width it is given.** The sidebar collapses to its icons (saved), the gutter grows with the
   width, and a list is a grid of row cards (`grid-cards`), as many columns as fit. A reading page is one column in
   the middle.
@@ -95,9 +95,9 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 - **A menu, a sheet, a pop-up or a page** (round 26): a ⋯ is a real menu (`ActionMenu` on shadcn's `dropdown-menu`)
   of commands that act at once, grouped with a label, the destructive last after a separator, a choice ticked; a
   sheet is one focused task; a pop-up button chooses one value, shown in words; a page holds content or settings in
-  more than one group (a song's Settings, Publish in library, Settings › Keyboard). A switch row is a toggle. Edit is
-  a quiet pencil right after the title (`ScreenHeader`'s `edit`, an `EditAction`); editing, Done in its place, so it never moves between modes.
-  The score's toolbar keeps its own Edit · Done at its end (`EditToggle`, ADR 0115).
+  more than one group (a song's Settings, Publish in library, Settings › On-screen piano). A switch row is a toggle.
+  Edit is a quiet pencil right after the title (`ScreenHeader`'s `edit`, an `EditAction`); editing, Done in its place,
+  so it never moves between modes. The score's toolbar keeps its own Edit · Done at its end (`EditToggle`, ADR 0115).
 - **What floats keeps clear of the screen's edges:** a popover, a menu, a select's list and a tooltip open 5px
   inside the safe area (`useLayerPadding`), never under the notch or the status bar nor in the home indicator's
   strip, read again as the phone turns; one taller than the room left scrolls inside itself.
@@ -135,3 +135,5 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - r36 (R36-3) — Popovers, menus, a select's list and tooltips keep inside the safe area (2026-11-06).
 - r36 (R36-3) — A control's name holds its visible words: the sidebar's Profile, Continue, Up next's tiles,
   and Pace's metronome mark while it listens (2026-11-06).
+- Instructions audit: a page's views in its content and a place's in its title, never tabs under the bar
+  (`screen-bar.test.tsx`); Settings › On-screen piano named as the app has it (2026-11-12).

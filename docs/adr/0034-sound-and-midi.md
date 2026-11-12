@@ -32,7 +32,7 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   off at its written end (`held`), so the instrument's own pedal holds it on. A Stop lets the pedal up.
 - **A gain asked as each sound renders.** `play` takes a gain, so a volume moved while music plays is heard from the
   next sound (the Player's mix, ADR 0105).
-- **The MIDI keyboard is set up once, on its own screen** (Settings › MIDI keyboard, `/settings/midi`;
+- **The MIDI keyboard is set up once, on its own screen** (Settings › MIDI devices, `/settings/connect-piano`;
   `pt-settings`' `midi`). Settings keeps one row for it, its state at its right (Off, the keyboard's name, Not
   available). The screen holds, with nothing said twice:
   - **MIDI input** (`input`): on asks for the keyboards and reconnects to an allowed one as the app opens; off stops
@@ -45,8 +45,8 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   - **Playing**: the octave shift, the Touch, a reversed pedal.
   - **Bluetooth**: a page cannot pair a BLE-MIDI keyboard, so a row opens the steps (the keyboard's Bluetooth, the
     system's pairing on a Mac, Windows or Android; no iPhone browser has Web MIDI); paired, it shows in the list.
-  - **Troubleshooting › MIDI log** (`/settings/midi/log`): the port keeps the last 200 messages every keyboard sent,
-    the ones not heard too (`log()`, `onLog`, `clearLog`), read by `describeMidiData`; the log shows them newest
+  - **Troubleshooting › MIDI log** (`/settings/connect-piano/log`): the port keeps the last 200 messages every keyboard
+    sent, the ones not heard too (`log()`, `onLog`, `clearLog`), read by `describeMidiData`; the log shows them newest
     first, live (note on/off with the note's name, pedals, controllers, program, pitch bend, its velocity or value,
     channel and keyboard, to the millisecond), paused and cleared.
   - Where the browser has no Web MIDI or MIDI was blocked, a line over the switches says so, its ⓘ how to put it
@@ -58,7 +58,7 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - **Time is placed where it was heard.** A MIDI event carries its own time stamp, and the audio port answers which
   audio-clock time was heard at a moment (`audioTimeAt`: the context's time less its output latency).
   The piano's own lateness (its MIDI, a cable, Bluetooth most) is measured once by **Calibrate timing**
-  (Connect a piano › Playing, `/settings/connect-piano/timing`, R34): four clicks count in, then sixteen at 80 BPM
+  (MIDI devices › Playing, `/settings/connect-piano/timing`, R34): four clicks count in, then sixteen at 80 BPM
   are tapped with any key; the median of each tap's lateness against its nearest click within half a beat, from
   eight taps up, to 5 ms and at most 300 ms (`shared/lib/latency.ts`), is kept as `midi.latency` and taken off
   every take's keys and pedals (ADR 0028). Fewer taps say so and keep what was kept.
@@ -83,13 +83,13 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   `check-samples.test.ts` holds every folder to its manifest, its sources, a licence of CC0, public domain or
   CC BY, mono 44.1 kHz and its budget.
 
-  | Set                                                                                      | Folder          | Licence                                        | Kept                                                                                         |
-  | ---------------------------------------------------------------------------------------- | --------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------- |
-  | Salamander Grand Piano V3 (Alexander Holm, Yamaha C5)                                    | `piano`         | CC BY 3.0, credited in Settings' Help footnote | 30 roots every minor third A0–C8 × 4 layers (v4, v8, v12, v16), 10/6/3 s by register, 8.8 MB |
-  | The light piano (Salamander's v10 until Splendid Grand Piano, public domain, can be had) | `piano-light`   | CC BY 3.0                                      | 30 roots × 1 layer, 3 s, 1.1 MB                                                              |
-  | Growlybass (Karoryfer, Squier Jazz Bass, fingered)                                       | `bass-electric` | CC0                                            | 11 roots E1–A3 × 2 layers, 2.5 s, 0.7 MB                                                     |
-  | Meatbass (Karoryfer, 1958 double bass, pizzicato)                                        | `bass-upright`  | CC0                                            | 12 roots C1–A3 × 2 layers, 2.5 s, 0.7 MB                                                     |
-  | Virtuosity Drums (Versilian and Karoryfer, a jazz kit)                                   | `drums`         | CC0                                            | 12 pieces × 2 strokes (normal, accent), four microphones mixed, 0.7 MB                       |
+  | Set                                                                                      | Folder          | Licence                      | Kept                                                                                         |
+  | ---------------------------------------------------------------------------------------- | --------------- | ---------------------------- | -------------------------------------------------------------------------------------------- |
+  | Salamander Grand Piano V3 (Alexander Holm, Yamaha C5)                                    | `piano`         | CC BY 3.0, credited in About | 30 roots every minor third A0–C8 × 4 layers (v4, v8, v12, v16), 10/6/3 s by register, 8.8 MB |
+  | The light piano (Salamander's v10 until Splendid Grand Piano, public domain, can be had) | `piano-light`   | CC BY 3.0                    | 30 roots × 1 layer, 3 s, 1.1 MB                                                              |
+  | Growlybass (Karoryfer, Squier Jazz Bass, fingered)                                       | `bass-electric` | CC0                          | 11 roots E1–A3 × 2 layers, 2.5 s, 0.7 MB                                                     |
+  | Meatbass (Karoryfer, 1958 double bass, pizzicato)                                        | `bass-upright`  | CC0                          | 12 roots C1–A3 × 2 layers, 2.5 s, 0.7 MB                                                     |
+  | Virtuosity Drums (Versilian and Karoryfer, a jazz kit)                                   | `drums`         | CC0                          | 12 pieces × 2 strokes (normal, accent), four microphones mixed, 0.7 MB                       |
 
   CC-BY-SA, NC and unlicensed sets are never used; a set's licence is checked at its source before download.
 
@@ -142,3 +142,5 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - r34 — Recordings through signalsmith-stretch on the audio clock, in any key: the media element, its drift
   seeking and its priming gone.
 - r34 — A recording's Sync, nudged per song; the pieces store at version 12.
+- Instructions audit: the MIDI page's name and routes (MIDI devices, `/settings/connect-piano`) and the grand's credit
+  in About brought level with the app (2026-11-12).

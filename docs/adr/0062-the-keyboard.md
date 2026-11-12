@@ -44,7 +44,9 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
   small and on one line; a mark's note name goes, its degree stays.
 - **The sheet's one pill** (`SheetPill`, R34, Songscription's view pill): the score's layout (`SheetLayoutPicker`
   through `SheetLayoutTools`, its one control; the Layout tiles left Display and the editor's View) and, in Page
-  view, the canvas's zoom (`SheetToolsContext`), always in sight at the score's bottom-right. A trainer's keys have no bar tools: the chord is the question.
+  view, the canvas's zoom (`SheetToolsContext`), always in sight at the score's bottom-right (in the editor from
+  48rem; on a phone its gear's View chooses the layout, ADR 0096). A trainer's keys have no bar tools: the chord is the
+  question.
 - **A page's keys dock** where the settings say: at the foot over the tab bar (the default) or at the top, edge to
   edge.
 - **The computer's shortcuts have one listener** (`ShortcutsProvider`). A screen binds its keys with
@@ -107,3 +109,4 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
   pill; the editor's gear holds On-screen piano; the floating Keys button, Key depth and Collapse keyboard go
   (2026-11-05).
 - r34 (R34) — The left hand outlined, the right filled, so the hands part without colour (2026-11-06).
+- Instructions audit: the sheet's pill in the editor from 48rem, as R34-3 left it (ADR 0096) (2026-11-12).

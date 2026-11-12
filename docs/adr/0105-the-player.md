@@ -61,24 +61,23 @@ what they changed.
   are the Metronome's engine (A39): its sound (click, beep, the drums' kick, snare and hat) at its levels, its beat
   squares where they were set for the music's meter, on the meter's counted beats (the dotted beat in 6/8) at the
   tempo the music keeps there (`ClickVoicing`, `voicedClick`).
-- **The Player's settings page** (B7; `/settings/player` in Settings, and a song's gear in the bar opening the same
-  page in the Player's place, `/play/$pieceId/settings`, Back to the song as played): **Audio playback**, a volume
-  for each staff (by place, saved for every song, `sound.staves`), the recording and the metronome, and Only the
-  chords; a row to the **Metronome's** sound and beats; **Playback speed** (speed training's step, 2 · 5 · 10%);
-  the Count-in (None · Audible · Visual) with Playback; **Display** (Cursor None · Beats · Continuous, the
-  layout, the keys, finger numbers); **Hands** (the hands at the keys' Skin, the other hand Show · Dim · Hide);
-  **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is a gain of its share squared, asked as each
-  sound renders; a staff's Play off is a gain of 0. The View's chips for the layout, the keys and finger numbers stay
-  as quick toggles over the music, as the transport keeps the metronome's. Clef (the reference's "Original or
-  chosen") is not offered yet: the notation has no re-clefing of a staff.
+- **The Player's settings** (B7) are its gear's Settings sheet (below), their one home; `/settings/player` and
+  `/play/$pieceId/settings` are gone: **Audio playback**, a volume for each staff (by place, saved for every song,
+  `sound.staves`), the recording and the metronome, and Only the chords; a row to the **Metronome's** sound and beats;
+  **Playback speed** (speed training's step, 2 · 5 · 10%); the Count-in (None · Audible · Visual) with Playback;
+  **Display** (Cursor None · Beats · Continuous, the layout, the keys, finger numbers); **Hands** (the hands at the
+  keys' Skin, the other hand Show · Dim · Hide); **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is
+  a gain of its share squared, asked as each sound renders; a staff's Play off is a gain of 0. The View's chips for the
+  layout, the keys and finger numbers stay as quick toggles over the music, as the transport keeps the metronome's. Clef
+  (the reference's "Original or chosen") is not offered yet: the notation has no re-clefing of a staff.
 - **The pedal shown** (A27): the sheet draws the pedal as it plays; the Ped. mark the music plays under is lit in
   the playhead's ink while its pedal is down (an id selector, restyling that mark alone); the sustain on the piano's
   rail goes down while the score's pedal holds, keys sounding only under the pedal ringed, apart from a hand's, while
   playing alone.
-- **More:** the library's acts (ADR 0106), Song information (the chord summary, the key as played, time, tempo and
-  tuning as fact cards), Sections (each by name and its first bar, a tap taking the cursor there), Share, Print and
-  Export to MIDI (ADR 0107).
-- **The screen's frame (R31-P):** the bar (Close · title · Edit score | Piano keys · MIDI · Settings) over the score;
+- **More:** the music's acts, never the library's (those are the song's Settings, ADR 0111): Song information (the chord
+  summary, the key as played, time, tempo and tuning as fact cards), Sections (each by name and its first bar, a tap
+  taking the cursor there), Share, Print and Export… (ADR 0107).
+- **The screen's frame (R31-P):** the bar (Close · title · Edit score | Keyboard · MIDI · Settings) over the score;
   nothing floats over the music. At the foot a docked transport (Loop · Restart · ‹ · Play · › · Pace · Metronome)
   over a foot bar of fixed order: the View, the song tools (Transpose, Version), **Hands** where the music has both,
   and **More**. More holds the music's acts only (Sections, Song information | My recordings, How did I play?,
@@ -135,3 +134,5 @@ The score editor's Play and its recorder's click keep their own switches. A reco
   on a phone on its side, the transport's gutter 12px under 360px (2026-11-06).
 - r36 (R36-3) — The status row only while it speaks, as r32 has it: Share's word only while said, Wait mode's line
   taking no room before Play (2026-11-06).
+- Instructions audit: the settings' routes gone from the decision (the gear's sheet their home), More the music's
+  acts alone, the bar's Keyboard named as the app names it (2026-11-12).

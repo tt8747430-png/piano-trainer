@@ -12,20 +12,22 @@ and the Diagrams view scrolling and jumping under a finger.
 
 ## Decision
 
-- **Four views** (`scoreView.music`): **Sheet music**, **Chords over lyrics**, **Diagrams** and **Grid**, chosen as
-  tiles at the top of the View. A view the music cannot show is greyed with what it needs, and a saved one falls back.
-  "Ask each time a song opens" opens a piece's Player with the View. The editor shows the sheet music alone.
-- **One View menu** (`ScoreViewMenu`) in both modes, the first of the tools row, named by the view shown. Under the
-  tiles, the view shown's own section: the sheet music's Layout (ADR 0096) and what it shows as chips (each staff by
-  its name, Chord symbols, Chord positions, Lyrics, Finger numbers, Note names); Over lyrics' Diagrams pinned and Text
-  size; Diagrams' Mode (Animated · Summary) and Lyrics; the Grid's Lyrics. Last, Every view: the Keys. A chip is
-  pressed while shown; a greyed one says why (the last staff in sight, music of no words). The editor's View has no
-  tiles and none of what only practice has.
+- **Four views** (`scoreView.music`): **Sheet music**, **Chords over lyrics**, **Diagrams** and **Grid**, chosen in
+  **Pick your view** (`PickView`, Chordify's): the View in the Player's foot (ADR 0105), named by the view shown,
+  opening a panel of the four side by side, a picture of the one chosen, Show this when opening a song, and Done. A
+  view the music cannot show is greyed with what it needs, and a saved one falls back. Show this when opening a song
+  opens a piece's Player with the panel. The editor shows the sheet music alone.
+- **What each view shows** is the Player's Settings › Score view, the shown view's own: the sheet music's parts (each
+  staff by its name, Chord symbols, Chord positions, Lyrics, Finger numbers, Note names); Over lyrics' Diagrams pinned
+  and Text size; Diagrams' Mode (Animated · Summary) and Lyrics; the Grid's Lyrics. The layout is the sheet's pill
+  (ADR 0096), and the keys are the bar's Keyboard (ADR 0062). A greyed choice says why (the last staff in sight, music
+  of no words).
 - **Beats.** The chord views count a bar in beat cells as its meter counts, follow the cursor and Listen's clock, and
   a tap on any chord (a diagram, a card, a chip, a beat) takes the cursor there, sounding it while nothing plays. No
   chord view opens a chord's sheet; a laptop shows a chip's diagram on hover.
 - **The beat strip** names a chord only where it changes and a rest where the music turns to none; it follows the
-  clock frame by frame and is dragged, flicked or trackpad-scrolled to scrub, gliding to the beat at its mark.
+  clock beat by beat and stands still, turning a page (a line of the chart, split where the room is short) when the
+  box leaves it; it is not dragged to scrub.
 - **Diagrams on one keyboard.** Every chord diagram is drawn on F3–B4, its tones folded into F3–E4: a slash chord's
   bass lowest, or a ring where it is not a tone; a chord of five notes or more with its root not lowest. A chord of
   three or four notes is drawn in the inversion the learner chose on its sheet, kept for that chord in that song
@@ -56,3 +58,5 @@ a progression and an exercise keep no inversion choice.
 - 0108 — The chord views made even, still and tappable (2026-10-26).
 - 0115 — The View's parts as chips, the layouts as tiles (2026-10-27).
 - r29 — Pick your view (Chordify's): the tools row's chip names the view (Sheet, Grid, Diagrams, Lyrics) and opens a panel of the four side by side, a picture of the one chosen, Show this when opening a song and Done; what each view shows is the Player's Settings › Display, the shown view's own. The keys are the bar's Piano keys. The beat strip stands still and turns a page (a line of the chart, split where the room is short) when the box leaves it; no drag to scrub (2026-11-03).
+- Instructions audit: the decision brought level with r29 (Pick your view, Settings › Score view, the keys in the bar,
+  a still strip) (2026-11-12).

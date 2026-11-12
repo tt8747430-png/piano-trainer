@@ -11,7 +11,7 @@ seen on screen" with the diagrams on a last page.
 
 ## Decision
 
-- **Share, every song**, from its page's More and the Player's:
+- **Share, every song**, from its Settings' Share link and the Player's More:
   - an app's song (or a study) is a link to its Player in the key it is played and as simplified, both always said,
     so the link never takes the key its opener kept;
   - an own song carries its music: `/songs/shared?song=…`, its title and music deflated and written in base64url. The
@@ -31,18 +31,18 @@ seen on screen" with the diagrams on a last page.
   bar 1 begins, so the file lies under the recording in a DAW). A recording holds one steady tempo; one that drifts
   would need a beat map and would offer fixed tempo alone.
 - **Export to MusicXML**, beside Export to MIDI in the Player's More (a piece's, never a walk's or an exercise's) and
-  on the song page's More, which has Export to MIDI too: the music as written, in its own key whatever it is played
-  in, named `<title>.musicxml`. MusicXML 4.0 partwise (`shared/lib/musicxml`, our own small XML reader and writer,
-  no package): each single staff a part under its name, the piano one part of two staves under its printed name;
-  every bar of every staff (a lead sheet's piano kept with `staff-details print-object="no"`); values, dots,
-  triplets, ties, beams, accidentals, fingers, articulations, ornaments, arpeggios, grace notes and slurs; dynamics,
-  hairpins, octave lines, expressions and the tempo as directions; the pedal line (ADR 0097) a `<pedal>` direction
-  at each event on the lowest staff (start, stop, change), with an `<offset>` where it falls between notes; chord symbols as `<harmony>` (the
-  nearest kind and its degrees, our suffix as its text); lyrics with their syllables and extenders; key, time and
-  clef changes; repeats, endings, double and final barlines, the signs and jumps; each section's heading a rehearsal
-  mark and each chart line a system. What only the app reads (the pattern, the sections' headings and lines, method
-  codes) is a versioned `miscellaneous-field name="piano-trainer"`. Every catalog piece exports and imports back as
-  the same song, and every export validates against the MusicXML 4.0 XSD.
+  on the song's Settings (Export…), which has Export to MIDI too: the music as written, in its own key whatever it is
+  played in, named `<title>.musicxml`. MusicXML 4.0 partwise (`shared/lib/musicxml`, our own small XML reader and
+  writer, no package): each single staff a part under its name, the piano one part of two staves under its printed name;
+  every bar of every staff (a lead sheet's piano kept with `staff-details print-object="no"`); values, dots, triplets,
+  ties, beams, accidentals, fingers, articulations, ornaments, arpeggios, grace notes and slurs; dynamics, hairpins,
+  octave lines, expressions and the tempo as directions; the pedal line (ADR 0097) a `<pedal>` direction at each event
+  on the lowest staff (start, stop, change), with an `<offset>` where it falls between notes; chord symbols as
+  `<harmony>` (the nearest kind and its degrees, our suffix as its text); lyrics with their syllables and extenders;
+  key, time and clef changes; repeats, endings, double and final barlines, the signs and jumps; each section's heading a
+  rehearsal mark and each chart line a system. What only the app reads (the pattern, the sections' headings and lines,
+  method codes) is a versioned `miscellaneous-field name="piano-trainer"`. Every catalog piece exports and imports back
+  as the same song, and every export validates against the MusicXML 4.0 XSD.
 - **Import** (Flat's), from Songs' New and by a file dropped on the library on a laptop, made where the learner is
   (ADR 0106): MusicXML (`.musicxml`, `.xml`, compressed `.mxl`, unzipped with the platform's
   `DecompressionStream`) and Standard MIDI files, told apart by their first bytes. Read into ticks of the meter's
@@ -91,3 +91,5 @@ not its music.
 - r29 — Print and Export… moved from the Player's More to its Settings › Share; More is gone (2026-11-03).
 - r42 — A grace note before a chord is read onto every note of the chord, as a piece writes it on the chord's token, so a
   song with one exports and reads back the same (2026-11-12).
+- Instructions audit: a song's Share link and Export… on its Settings, its page having no More (ADR 0111)
+  (2026-11-12).

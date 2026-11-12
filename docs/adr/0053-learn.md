@@ -13,13 +13,12 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 ## Decision
 
 - **Learn** (`/?view=lessons|courses&journey=`, remembered) is its header's toggle between the **Lessons** and the
-  **Courses**, the days practised and the songs played last, and **Continue**, one honey button floating in the
-  thumb's reach, naming its step. Continue follows the track last learned on: after a course's lesson or song, that
-  course's next step; otherwise the journeys' next.
+  **Courses**, and **Continue**, its first row: one card naming its step. Continue follows the track last learned on:
+  after a course's lesson or song, that course's next step; otherwise the journeys' next.
 - **The Lessons** (`entities/lesson`): four journeys, one to a level (Foundations, Fluency, Musicianship, Mastery),
-  shown as tabs with how much of each is learned. A journey is chapters of lessons, then the chord families or scales
-  its chapter's Check asks; a chapter folds under its heading. A journey's lesson plays no piece, shows no pattern,
-  names no method book and links only Lessons and Practice.
+  chosen from one row of chips with how much of each is learned. A journey is chapters of lessons, then the chord
+  families or scales its chapter's Check asks; a chapter folds under its heading. A journey's lesson plays no piece,
+  shows no pattern, names no method book and links only Lessons and Practice.
 - **The Courses** (`entities/course`): self-contained, on five shelves (beginner, intermediate, technique, chords and
   improvising, method books). A course has a level, its weeks, its own lessons and its guided songs. A course's lesson
   links no other lesson, plays only its course's songs and shows only its own book's patterns (Called to Play 2 also
@@ -52,10 +51,10 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
 - **A lesson's page** is one column in the middle under one floating bar (‹ the section before, the count opening its
   contents and what it is part of, › the next). Its end is the lesson before and the way on; going on learns it.
-  It reads as **one page of its sections** for everyone, on every screen. A learner who wants it **a section at a
-  time** chooses so (the lesson's Settings, Lessons read as: One page · A section at a time; or Settings › General,
-  `pt-settings` `lessonReading`): then the bar holds ‹, the pages' dots (opening the contents) and Next, Done on the last page,
-  which goes on and learns it.
+  It reads as **one page of its sections** for everyone, on every screen. A learner who wants it **a section at a time**
+  chooses so (the lesson's Settings, Lessons read as: One page · A section at a time, `pt-settings` `lessonReading`, its
+  one home): then the bar holds ‹, the pages' dots (opening the contents) and Next, Done on the last page, which goes on
+  and learns it.
 - **A lesson's and a course's Settings** (`/lessons/$lessonId/settings`, `/courses/$courseId/settings`,
   `/courses/$courseId/$lessonId/settings`; `pages/lesson`, `pages/course`) open from a gear in its bar, as a song's
   do, and are the same kind of page: one list of grouped rows from the settings kit. A learner's lesson: how lessons
@@ -120,3 +119,5 @@ course.
 - r28 — An example of notes lays out as a sheet: its bars in rows as many as fit the card (`rowsOf`, by the notes struck), each row shrunk to fit, a later row printing its clef and bar number but not its time; Play marks the note sounding on its row; the note names and Play under the music on a phone (2026-11-02).
 - r30-5 — Learners make their own lessons and courses: Your lessons and Your courses, the same editors on the device, their Settings, Search (2026-11-05).
 - My Practice Plan — The owner's own course on the Chords shelf, fifteen lessons over sixteen weeks from what their saved piano videos teach most: the daily plan and tempo ladder, the week-by-week schedule, chord shapes and their fingering, inversion drills, arpeggios, chords by number, rhythm, the left hand, shells and rootless voicings, diminished chords, passing chords, arranging a hymn, improvising and playing by ear (2026-11-09).
+- Instructions audit: Continue Learn's first row, the journeys chosen from chips, the days practised and songs played
+  left to the Profile; how lessons read set on a lesson's Settings alone (2026-11-12).

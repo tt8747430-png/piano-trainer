@@ -352,14 +352,16 @@ on a phone, 24px from 640px, 40px beside the sidebar.
 - **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
   panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
   the page (44rem), which scrolls with the window. Never two columns of unequal groups.
-- **The editor's palette docks:** from 48rem a panel at the sheet's left with the note-entry toolbar over the sheet; on a
-  phone held upright a sheet at the foot, meeting the keys. The score's screen keeps no gap between its rows in either
-  mode: the music under the bar at one height as Practise · Edit switches, and a status row only while it speaks.
+- **The editor's palette docks:** from 48rem a panel at the sheet's side (left or right, as Note input's Palette
+  position says), every section in one scroll; on a phone held upright a sheet at the foot, meeting the keys. The
+  score's screen keeps no gap between its rows in either mode: the music under the bar at one height as Edit and Done
+  switch, and a status row only while it speaks.
 - **Equal columns:** a chart's lines are grids of equal beats; a score's lines are justified to their share of the
   longest line. Layouts are named Page view, Vertical scroll and Panorama.
 
-**The Floating Rule.** The transport, the floating actions and the zoom buttons take no layout room; the page gets
-scroll room under them, and over music they step aside while it is read.
+**The Floating Rule.** The floating actions and the sheet's pill take no layout room; the page gets scroll room under
+them, and over music the floating actions step aside while it is read. The Player's transport is docked at its foot,
+taking its own room.
 
 **The Still Screen Rule.** Nothing jumps. Controls hold their place between the Player and the editor and on entering
 Select; what floats is measured before first paint; a score being engraved keeps its old drawing until the new one is
@@ -414,8 +416,8 @@ square at the top.
   Settings holds what it is, not what the learner does with it.
 - **Creating** is the floating +, opening a dial of the ways to add. **Every New …** is one `NewSheet`: the name, a few
   properties, one Create pinned at the foot.
-- **Score screens have three layers:** the flat bar; the tools of what is shown, floating; what acts on the notes chosen,
-  a capsule over the transport only while something is chosen.
+- **Score screens have three layers:** the flat bar; the music, with the sheet's pill; the Player's docked transport and
+  foot. In the editor, what acts on the notes chosen is a capsule over the music only while something is chosen.
 
 ### Buttons
 
@@ -447,7 +449,7 @@ square at the top.
 - **Picture choice** (`PictureChoice`): a setting that changes how something looks is drawn, a line drawing over a short
   name. A choice with no honest picture stays text.
 - **Only what applies is offered.** A row that nothing applies to stays in place, greyed, its tooltip saying why, so
-  nothing under it moves.
+  nothing under it moves. The score editor's palette is the exception: a key that cannot act is not drawn (ADR 0114).
 
 ### Rows, cards and sheets
 
@@ -542,8 +544,9 @@ default; the bar's **Hands at the keys** shows the hands instead.
 
 ### The sheet's pill
 
-One small floating control at the score's bottom-right in the Player and the editor (Songscription's view pill): a
-card-paper capsule with a hairline ring and a soft shadow, 8px from the sheet's edges and clear of what floats there.
+One small floating control at the score's bottom-right (Songscription's view pill), in the Player and, from 48rem, in
+the editor (on a phone the editor's gear › View chooses the layout): a card-paper capsule with a hairline ring and a
+soft shadow, 8px from the sheet's edges and clear of what floats there.
 **Layout** as three 44px icon radios (Page view · Vertical scroll · Panorama, the chosen one in the chosen fill, each
 naming what it does when pointed at), then in Page view the canvas's zoom (− n % + Fit). Always in sight, so it never
 appears under a finger; the layout's one control.
