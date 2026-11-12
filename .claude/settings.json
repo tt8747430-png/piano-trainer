@@ -8,11 +8,11 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "compact",
+        "matcher": "startup|resume|clear|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/reread-after-compact.sh"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/read-instructions.sh"
           }
         ]
       }

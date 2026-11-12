@@ -15,8 +15,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 
 | Moment                                | Read                                                                   |
 | ------------------------------------- | ---------------------------------------------------------------------- |
-| Session start, and after a compaction | this file, [practices](references/practices.md)                        |
-| After a compaction, before any screen | read again, never from the summary: [ui-and-mockups](references/ui-and-mockups.md), [craft-details](references/craft-details.md), `ux-writing`, `seven-questions`, `scan-first`, the area's rulings. The SessionStart hook (`compact`) in `.claude/settings.json` reminds you |
+| Session start, resume, after a compaction | before any other work, in full, from the files: `CLAUDE.md`, this file, [practices](references/practices.md), [ui-and-mockups](references/ui-and-mockups.md), [craft-details](references/craft-details.md), [testing](references/testing.md), `ux-writing`, `seven-questions`, `scan-first`, the area's log section and rulings. Never a summary, recap or note in their place; say which were read. The SessionStart hook in `.claude/settings.json` reminds you |
 | Before touching any area              | that area's section of [feedback-log](references/feedback-log.md)      |
 | Any screen, or a question to draw     | [ui-and-mockups](references/ui-and-mockups.md), `impeccable`           |
 | Polish, motion, the small details     | [craft-details](references/craft-details.md)                           |
@@ -54,7 +53,7 @@ Each of these sent a round back. Screen-level rules are in [ui-and-mockups](refe
 - **Fix what you notice.** A flaw you saw is fixed to the obvious right behaviour before you report. Reporting it instead
   is not an option, unless fixing it is the owner's decision (below).
 - **One implementation, changed everywhere.** A changed pattern changes in every place it occurs, the score editor too.
-- **Check the code, not the claim.** `git log` before calling something missing; the code before trusting a progress
+- **Check the code, not the claim; trust nothing unchecked.** A compaction summary, a recap, a note saying something was read or done: each is a claim to check. `git log` before calling something missing; the code before trusting a progress
   file; an agent's diff before trusting its report.
 
 ## Whose decision is it

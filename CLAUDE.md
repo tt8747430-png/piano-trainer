@@ -2,6 +2,11 @@
 
 Answer first, concisely, with no preamble or recap.
 
+**Read before anything, every time.** On session start, resume and after every compaction, read this file and the
+`owner-way` skill with its references in full, from the files, before any other work, then say which were read. Trust
+no summary, recap or note in their place, and check every claim about the repo or earlier work against the code, `git
+log` or the artifact. The SessionStart hook (`.claude/hooks/read-instructions.sh`) reminds you.
+
 Piano Trainer is an offline-first PWA where a learner learns and writes music on one score. React 19, Vite, strict
 TypeScript, Feature-Sliced Design (lint-enforced), English and Russian, Supabase behind optional accounts, deployed on
 Vercel.
