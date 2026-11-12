@@ -1,7 +1,8 @@
 # Piano data
 
 The owner's source material for Piano Trainer: the books its courses follow, reference apps' screens, scores and
-links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`.
+links. Nothing here ships with the app; content is written from it into `src/entities/*/content/`. A push that changes only this folder
+builds nothing on Vercel (`vercel.ts`), and a CLI upload leaves it out (`.vercelignore`).
 
 | Folder                              | What it holds                                                                                                                                                               |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

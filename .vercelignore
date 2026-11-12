@@ -1,0 +1,3 @@
+# Kept out of a deployment uploaded with the Vercel CLI: the owner's source material, which the
+# app never reads (vercel.ts skips a Git build that changes only these).
+piano-data

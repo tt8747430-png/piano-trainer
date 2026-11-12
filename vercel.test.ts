@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { config } from './vercel'
+import { execFileSync } from 'node:child_process'
+import { config, IGNORED_FOLDERS } from './vercel'
 
 // Vercel's build reads the `config` export (`default`, else `config`). Our sources use only
 // path-to-regexp's regular-expression groups, so they read the same as a RegExp over the path.
@@ -52,4 +53,30 @@ describe('the Vercel config', () => {
       expect(value('Referrer-Policy')).toBe('strict-origin-when-cross-origin')
     },
   )
+
+  it('skips the build when a push changes only piano-data, and builds when anything else changes', () => {
+    const command = config.ignoreCommand ?? ''
+    expect(command).toContain('VERCEL_GIT_PREVIOUS_SHA')
+    for (const folder of IGNORED_FOLDERS) expect(command).toContain(`':(exclude)${folder}'`)
+    // The command as Vercel's shell runs it, between two trees: exit 0 skips the build.
+    const runs = (changed: string) =>
+      (() => {
+        try {
+          execFileSync('bash', [
+            '-c',
+            `set -e
+            dir=$(mktemp -d) && cd "$dir" && git init -q && git config user.email t@t && git config user.name t
+            mkdir -p piano-data src && echo a > piano-data/a && echo a > src/a && git add . && git commit -qm one
+            echo b > ${changed} && git add . && git commit -qm two
+            export VERCEL_GIT_PREVIOUS_SHA=$(git rev-parse HEAD^)
+            ${command}`,
+          ])
+          return 'skipped'
+        } catch {
+          return 'built'
+        }
+      })()
+    expect(runs('piano-data/a')).toBe('skipped')
+    expect(runs('src/a')).toBe('built')
+  })
 })
