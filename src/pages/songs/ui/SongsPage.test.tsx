@@ -113,6 +113,7 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
       'Called to Play 15 songs',
       'Called to Play, level 2 25 songs',
       'Hymns 5 songs',
+      'Worship songs 1 song',
       'Gorshkov’s songs 4 songs',
     ])
     await user.click(within(folders).getByRole('link', { name: /^Hymns/ }))
@@ -180,7 +181,7 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
     expect(found).toHaveAttribute('href', '/songs/bz5')
     expect(screen.getByRole('heading', { level: 2, name: '«Боже, спасибо»' })).toBeInTheDocument()
     // The filters hide songs: it says how many it shows, and clears them.
-    expect(screen.getByRole('status')).toHaveTextContent(/^Shown: \d+ of 92$/)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Shown: \d+ of 93$/)
   })
 
   it('keeps a key typed before the URL caught up with the one before it', async () => {

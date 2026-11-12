@@ -7,6 +7,7 @@ import gorshkov from './gorshkov'
 import hymns from './hymns'
 import learningSongs from './learning-songs'
 import studies from './studies'
+import worship from './worship'
 
 /** The collections Songs lists, in order. */
 export const SONG_COLLECTIONS: readonly Collection[] = [
@@ -15,6 +16,7 @@ export const SONG_COLLECTIONS: readonly Collection[] = [
   calledToPlay,
   calledToPlayTwo,
   hymns,
+  worship,
   gorshkov,
 ]
 

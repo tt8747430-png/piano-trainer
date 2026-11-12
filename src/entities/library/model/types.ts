@@ -122,5 +122,6 @@ export const COLLECTION_LOOKS: Readonly<Record<SongCollectionId, FolderLook>> = 
   'called-to-play': { picture: 'piano', paint: 'sky' },
   'called-to-play-2': { picture: 'book', paint: 'lilac' },
   hymns: { picture: 'church', paint: 'grass' },
+  worship: { picture: 'star', paint: 'sky' },
   gorshkov: { picture: 'mic', paint: 'sand' },
 }

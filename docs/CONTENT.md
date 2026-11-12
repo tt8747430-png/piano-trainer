@@ -118,6 +118,12 @@ flat-beamed notes `t4`, the chords `t5`); `Invers.` is `inv`, `3 chords` `3ch`, 
 `Октавы`, `Октавы (гамма)` and `Chords` are `oct`, `octs`, `ch`. A way printed once over a run of chords is the
 piece's `pattern`. What the codes cannot say (`3↑`, `(melody)`) goes in its `note`.
 
+**A chart from a recording** (Chordify's time-aligned MIDI): read each chord's notes and its start and length in
+beats, count bars of the meter from the first chord, and write the bars; a chord of two beats in 4/4 shares its bar
+(`F-C`), a shorter one gives its beats (`Gm@3-Am@1`). The form and the section names come from the song's published
+chart, the credits as printed there. Words that are not free to print stay out (`worship/voi-canta`), and the export
+itself never enters the repository.
+
 ## Single staves and lyrics
 
 `staves: [{ notes: 'E4/1 D4/.5 r/1 | C#5/1.5', name?, clef? }]` are the staves over the piano, top down. Notes are a

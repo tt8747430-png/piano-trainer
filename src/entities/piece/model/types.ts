@@ -235,6 +235,7 @@ export const COLLECTION_IDS = [
   'called-to-play',
   'called-to-play-2',
   'hymns',
+  'worship',
   'gorshkov',
   'studies',
 ] as const
@@ -250,6 +251,7 @@ const SONG_COLLECTION_IDS = [
   'called-to-play',
   'called-to-play-2',
   'hymns',
+  'worship',
   'gorshkov',
 ] as const satisfies readonly CollectionId[]
 /** A collection Songs lists: each is a folder of the library from the start (ADR 0106). */
