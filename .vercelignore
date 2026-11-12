@@ -1,3 +1,34 @@
-# Kept out of a deployment uploaded with the Vercel CLI: the owner's source material, which the
-# app never reads (vercel.ts skips a Git build that changes only these).
-piano-data
+# Left out of every deployment: the build reads only src, public, e2e, index.html, the root
+# configs and the package files. Each path is anchored to the root (a leading /), so a folder of
+# the same name inside src stays (src/shared/api/supabase). vercel.ts holds the same list
+# (NOT_DEPLOYED) and skips a build that changes nothing else; vercel.test.ts keeps the two the same.
+
+# Source material and design work
+/piano-data
+/.scratch
+/r10
+/.impeccable
+/DESIGN.md
+/PRODUCT.md
+
+# Agents, their skills and prompts
+/.claude
+/.agents
+/.codex
+/prompts
+/skills-lock.json
+/.mcp.json
+/CLAUDE.md
+
+# Docs, scripts, the backend and the tools around the code
+/docs
+/scripts
+/supabase
+/.github
+/README.md
+/renovate.json
+/components.json
+/eslint.config.js
+/.prettierrc.json
+/.prettierignore
+/.env.example

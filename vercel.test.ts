@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { execFileSync } from 'node:child_process'
-import { config, IGNORED_FOLDERS } from './vercel'
+import { readFileSync } from 'node:fs'
+import { config, NOT_DEPLOYED } from './vercel'
 
 // Vercel's build reads the `config` export (`default`, else `config`). Our sources use only
 // path-to-regexp's regular-expression groups, so they read the same as a RegExp over the path.
@@ -54,10 +55,24 @@ describe('the Vercel config', () => {
     },
   )
 
-  it('skips the build when a push changes only piano-data, and builds when anything else changes', () => {
+  it('leaves out of a deployment exactly the paths it builds nothing for, each at the root', () => {
+    const lines = readFileSync(new URL('.vercelignore', import.meta.url), 'utf8')
+      .split('\n')
+      .filter((line) => line.trim() !== '' && !line.startsWith('#'))
+    for (const line of lines) expect(line, line).toMatch(/^\//)
+    const ignored = readFileSync(new URL('.vercelignore', import.meta.url), 'utf8')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line !== '' && !line.startsWith('#'))
+      // Each anchored to the repo root, so a folder of the same name inside src stays.
+      .map((line) => line.replace(/^\//, ''))
+    expect(ignored.toSorted()).toEqual([...NOT_DEPLOYED].toSorted())
+  })
+
+  it('skips the build when a push changes only what is not deployed, and builds when anything else changes', () => {
     const command = config.ignoreCommand ?? ''
     expect(command).toContain('VERCEL_GIT_PREVIOUS_SHA')
-    for (const folder of IGNORED_FOLDERS) expect(command).toContain(`':(exclude)${folder}'`)
+    for (const path of NOT_DEPLOYED) expect(command).toContain(`':(exclude)${path}'`)
     // The command as Vercel's shell runs it, between two trees: exit 0 skips the build.
     const runs = (changed: string) =>
       (() => {
@@ -66,7 +81,7 @@ describe('the Vercel config', () => {
             '-c',
             `set -e
             dir=$(mktemp -d) && cd "$dir" && git init -q && git config user.email t@t && git config user.name t
-            mkdir -p piano-data src && echo a > piano-data/a && echo a > src/a && git add . && git commit -qm one
+            mkdir -p piano-data .scratch docs src && for f in piano-data/a .scratch/a docs/a CLAUDE.md src/a; do echo a > $f; done && git add . && git commit -qm one
             echo b > ${changed} && git add . && git commit -qm two
             export VERCEL_GIT_PREVIOUS_SHA=$(git rev-parse HEAD^)
             ${command}`,
@@ -76,7 +91,8 @@ describe('the Vercel config', () => {
           return 'built'
         }
       })()
-    expect(runs('piano-data/a')).toBe('skipped')
+    for (const path of ['piano-data/a', '.scratch/a', 'docs/a', 'CLAUDE.md'])
+      expect(runs(path), path).toBe('skipped')
     expect(runs('src/a')).toBe('built')
   })
 })
