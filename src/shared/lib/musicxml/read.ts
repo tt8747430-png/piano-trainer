@@ -612,9 +612,9 @@ export function readMusicXml(source: string): ReadScore {
               tieStop: read.tieStop,
             }
             if (read.chord && before) {
-              // A chord's marks are its first note's.
-              const { grace: _grace, ...shared } = before.marks
-              building.marks = { ...shared, ...building.marks }
+              // A chord's marks are its first note's, its grace notes too: one grace before the chord,
+              // as a piece writes it on the chord's token.
+              building.marks = { ...before.marks, ...building.marks }
             }
             if (!read.chord) last.set(voice, building)
             notes.push(building)

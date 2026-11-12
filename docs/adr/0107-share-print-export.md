@@ -89,3 +89,5 @@ not its music.
 - r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change;
   written back the same way, and MIDI's control 64 read and written as the pedal line (2026-11-03).
 - r29 — Print and Export… moved from the Player's More to its Settings › Share; More is gone (2026-11-03).
+- r42 — A grace note before a chord is read onto every note of the chord, as a piece writes it on the chord's token, so a
+  song with one exports and reads back the same (2026-11-12).

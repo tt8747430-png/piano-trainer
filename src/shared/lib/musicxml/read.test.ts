@@ -136,6 +136,12 @@ describe('readMusicXml', () => {
     expect(at(8 * B, 1)[0]).toMatchObject({ midi: 66, spelled: note('F', 1) })
   })
 
+  it('gives a grace note before a chord to every note of it, as a piece writes it on the chord', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?><score-partwise version="4.0"><part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list><part id="P1"><measure number="1"><attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes><note><grace slash="yes"/>${pitch('D', 5)}<voice>1</voice><type>eighth</type></note><note>${pitch('G', 4)}<duration>4</duration><voice>1</voice><type>whole</type></note><note><chord/>${pitch('C', 5)}<duration>4</duration><voice>1</voice><type>whole</type></note><note><chord/>${pitch('E', 5)}<duration>4</duration><voice>1</voice><type>whole</type></note></measure></part></score-partwise>`
+    const grace = [{ midi: 74, spelled: note('D') }]
+    expect(readMusicXml(xml).notes.map((n) => n.marks?.grace)).toEqual([grace, grace, grace])
+  })
+
   it('counts what it leaves out', () => {
     // Nothing: Allegro names the tempo, the quintuplet, the sfz and the detached legato are read
     // (ADR 0097).
