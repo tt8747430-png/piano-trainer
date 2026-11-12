@@ -39,10 +39,41 @@ song, learn this lesson, write this bar) is the screen's first and largest thing
 - **Active user:** nobody reads a manual; teach in place with empty states and ⓘ.
 - **Aesthetic-usability:** polish raises trust; craft details are not optional.
 
+## Perception: what the eye groups and orders (Gestalt)
+
+- **Proximity:** what sits close is read as one thing. Items of a group are closer to each other than the group is to
+  the next; a control sits beside what it changes, never across the screen from it.
+- **Common region:** a card, capsule or sheet says "these belong together"; never a card in a card.
+- **Similarity:** the same thing looks the same everywhere (shape, colour, icon, word); things that look alike are read
+  as alike, so two different acts never share a look.
+- **Continuity and alignment:** a row or column is followed by the eye; things on one edge are read as one list.
+- **Figure and ground:** the one thing the screen is for stands on a quiet ground (one honey control).
+- **Common fate:** what moves together is read as one (a chord's keys light together).
+
+## Order by relevance
+
+- **What the learner came for comes first,** then what they use most, then the rest; rare and dangerous last, apart.
+- **In a list:** Recently used and Favourites first, then by the learner's level or the musician's order (the circle of
+  fifths, the scale's degrees, learning order), never alphabetical when a musical order exists.
+- **In a sheet or settings page:** the setting most changed at the top; groups ordered by how often they are wanted.
+- **In a bar:** the primary action trailing (Apple HIG), the subject's own controls beside it, the gear last.
+- **The same kind of list is ordered the same way on every screen.**
+
+## One thing, one icon, everywhere
+
+- **One glyph per object or act across the whole app,** the canvas and both sizes: the same thing never wears two icons,
+  and one icon never means two things. Lucide only, one stroke weight; our own glyphs (`shared/ui/icons`) only where
+  Lucide has none.
+- **Before choosing an icon,** grep the code for what that thing already wears (`grep -rn "<Name>" src --include=*.tsx`
+  for its Lucide import) and use the same one; a change of icon changes it on every screen in the same commit.
+- **Same object, same word:** the label beside an icon is the same word on every screen (Settings, not Options here and
+  Preferences there).
+
 ## Checklist for a screen
 
 1. What is the learner here to do, and is that the first and largest thing?
 2. Is there one primary action, and does the bar hold only the screen's own actions?
-3. Is it grouped by meaning, on one grid, with the same components as every other screen?
+3. Is it grouped by meaning (close is related), ordered by relevance, on one grid, with the same components, icons and
+   words as every other screen?
 4. Does it have loading, empty, error and offline states, feedback for each act, and undo or confirm for each loss?
 5. Did it pass both browser passes at every size ([testing](testing.md))?

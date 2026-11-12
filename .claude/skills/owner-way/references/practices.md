@@ -20,6 +20,10 @@ The habits behind the best result at the least usage. Each is a condensed skill,
 
 ## Before saying done
 
+- **Trust no "done".** A task list, a summary or your own memory says what was meant, not what is there: check each
+  line of the request against the code and the running screen, every time, including tasks already marked done.
+- **A second pass, always.** After the first pass works, go over it again as the owner would and improve what you
+  find; better twice and checked than once and unverified.
 - **Evidence before claims.** Name the command, run it fresh, read the output, say what it showed: "6,249 tests pass", never
   "should pass". Run what the claim needs, and name what you did not run.
 - **Check the request line by line,** the owner's words and screenshots, not only the tests.

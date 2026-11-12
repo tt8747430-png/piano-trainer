@@ -58,6 +58,9 @@ Contradicting an ADR: say so, then amend it. This file is a map; a component's d
 
 ## Verify before claiming done
 
+Done is a claim to check: a task marked done, a summary or an agent's report is verified against the request, the code
+and the running screen before it is trusted. Do the whole task, then a second pass that checks and improves it.
+
 1. `npm run typecheck && npm run lint`.
 2. Only the tests the change can reach: `npm run test:related -- <files>`, or `npm run test:changed`.
 3. Any screen: two full passes in a browser, as [`references/testing.md`](.claude/skills/owner-way/references/testing.md)

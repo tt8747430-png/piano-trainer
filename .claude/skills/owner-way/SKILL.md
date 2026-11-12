@@ -15,7 +15,7 @@ sometimes German, and send phone screenshots of our app and of apps they admire.
 
 | Moment                                | Read                                                                   |
 | ------------------------------------- | ---------------------------------------------------------------------- |
-| Session start, resume, after a compaction | before any other work, in full, from the files: `CLAUDE.md`, this file, [practices](references/practices.md), [ui-and-mockups](references/ui-and-mockups.md), [craft-details](references/craft-details.md), [testing](references/testing.md), `ux-writing`, `seven-questions`, `scan-first`, the area's log section and rulings. Never a summary, recap or note in their place; say which were read. The SessionStart hook in `.claude/settings.json` reminds you |
+| Session start, resume, after a compaction | before any other work, in full, from the files: `CLAUDE.md`, this file, [practices](references/practices.md), [ui-and-mockups](references/ui-and-mockups.md), [craft-details](references/craft-details.md), [testing](references/testing.md), [ux-principles](references/ux-principles.md), `ux-writing`, `seven-questions`, `scan-first`, the area's log section and rulings. Never a summary, recap or note in their place; say which were read. The SessionStart hook in `.claude/settings.json` reminds you |
 | Before touching any area              | that area's section of [feedback-log](references/feedback-log.md)      |
 | Any screen, or a question to draw     | [ui-and-mockups](references/ui-and-mockups.md), `impeccable`           |
 | Polish, motion, the small details     | [craft-details](references/craft-details.md)                           |
@@ -47,6 +47,13 @@ reference shows what to add as well as what to copy. The brief and the owner's c
 
 Each of these sent a round back. Screen-level rules are in [ui-and-mockups](references/ui-and-mockups.md).
 
+- **Done is a claim, not a fact.** A task marked done, a ticked list, a progress file, a summary, an agent's report
+  and your own memory of finishing are all checked before they are trusted: re-read what the owner asked (their words
+  and screenshots), read the code that does it, and see it working in the browser. Something asked and not there is
+  reopened and built.
+- **Overdo, never underdo.** Do the whole of what was asked and what it obviously implies, then a second pass to
+  check and improve it. Two passes that are checked beat one that is not. Nothing is reported done that was not
+  verified.
 - **No half measures.** No legacy, workarounds, duplication or unfinished work. Everything must be built and nothing left.
   If something is missing, build it.
 - **Everything built is documented in the docs,** small fixes included.

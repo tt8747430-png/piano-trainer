@@ -27,7 +27,10 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - Menu items are short ("Remove"); the menu's label names the thing.
 - Undo instead of asking: a loss that can be undone happens at once with Undo in its toast; only what can't be undone, or
   reaches other people, asks first. A loss is named as one, truly.
-- One icon, one meaning. Two acts kept together get two buttons or two distinct icons.
+- One icon, one meaning, app-wide: the same thing wears the same icon and word on every screen; check what it wears
+  elsewhere before choosing ([ux-principles](ux-principles.md)). Two acts kept together get two distinct icons.
+- Close is related: a control sits beside what it changes; groups are closer inside than apart.
+- Ordered by relevance: what the learner came for first, the rarely used and the dangerous last and apart.
 - Show only what works here. A control that does nothing for what is shown goes.
 - If a control's effect cannot be seen or heard, it is wrong.
 
