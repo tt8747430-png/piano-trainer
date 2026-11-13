@@ -232,6 +232,13 @@ export const practice = {
     keyProgressions: 'Progressions in this key',
   },
   intervals: {
+    from: 'From',
+    // The chosen interval: its notes, what it sounds like, and its facts behind its ⓘ (canvas 170).
+    upTo: '{{low}} up to {{high}}',
+    soundsLike: 'Sounds like',
+    inverts: 'Inverts to',
+    chosen: 'Interval',
+    size: { label: 'Intervals', simple: 'Simple', compound: 'Compound' },
     written: 'The interval written',
     simple: 'Simple intervals',
     compound: 'Compound intervals',

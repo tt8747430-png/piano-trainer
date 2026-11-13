@@ -223,6 +223,12 @@ export const practice: LocaleResources['practice'] = {
     keyProgressions: 'Последовательности в этой тональности',
   },
   intervals: {
+    from: 'От ноты',
+    upTo: 'от {{low}} вверх до {{high}}',
+    soundsLike: 'Звучит как',
+    inverts: 'Обращается в',
+    chosen: 'Интервал',
+    size: { label: 'Интервалы', simple: 'Простые', compound: 'Составные' },
     written: 'Интервал на нотном стане',
     simple: 'Простые интервалы',
     compound: 'Составные интервалы',

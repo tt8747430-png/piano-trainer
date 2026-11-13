@@ -83,13 +83,13 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     (the circle of fifths, its signature, facts: relative (here alone, A32) and parallel keys, the keys beside it on the circle, its
     other spelling where the circle's ends meet, modes; borrowed chords, the books' names under them; the songs in it,
     and Harmonise: the chords that hold a melody note);
-  - Intervals: a row an interval over a root, as the reference lists them: a play mark, its short name, its name over
-    its size ("3 semitones"), a small keyboard with both keys, every row's drawn at one size; the simple ones (the
-    tritone twice, A4 and d5) and those a chord symbol names (♭9 to 13; no 12th; the augmented 9th). A tap plays it
-    the way the floating transport says, **Harmonic · Melodic, rising · Melodic, falling** (`way=`, three pictured
-    buttons), beside **Play all** (each interval in turn) and Stop (A22). Within the octave each row's ⓘ names songs
-    that open with it, rising and falling (the unison once, the tritone under both spellings), each language its own
-    list of titles. The cards with a staff are the lessons';
+  - Intervals (canvas 170): the interval chosen (`iv=`, the perfect 5th first) is the page's subject: its name, with
+    an ⓘ holding what it sounds like, songs it rises and falls in (each language its own titles) and what it inverts
+    to; its size and notes ("7 semitones · C up to G"); a card of its staff and the song it sounds like, with Hear it;
+    the page's pinned keys show it. Under it Simple · Compound and the intervals as tiles, seven a row, each its short
+    name and semitones (the tritone twice, A4 and d5; the compound ones a chord symbol names, ♭9 to 13); a tile chooses
+    and plays. Then From (the root) and Play as, **Ascending · Descending · Harmonic** (`way=`), in a column beside
+    the interval on a laptop; **Play all** floats. The cards with a staff are the lessons';
   - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
     library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
     `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;

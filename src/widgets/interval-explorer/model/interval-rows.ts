@@ -41,3 +41,33 @@ export function everyInterval(root: SpelledNote, way: IntervalWay): NoteSound[] 
       }))
     })
 }
+
+/** Every interval the page shows, in its order. */
+export const ROW_INTERVALS: readonly RowInterval[] = INTERVAL_GROUP_IDS.flatMap(
+  (group) => INTERVAL_ROWS[group],
+)
+
+export const isRowInterval = (raw: unknown): raw is RowInterval =>
+  ROW_INTERVALS.some((name) => name === raw)
+
+/** The group an interval is in: within the octave, or past it. */
+export const groupOf = (name: RowInterval): IntervalGroup =>
+  INTERVAL_ROWS.compound.some((each) => each === name) ? 'compound' : 'simple'
+
+/** What an interval within the octave turns into upside down (the 3rd into the 6th, 9 between them). */
+export const INVERSIONS: Readonly<Partial<Record<RowInterval, RowInterval>>> = {
+  r: 'P8',
+  m2: 'M7',
+  M2: 'm7',
+  m3: 'M6',
+  M3: 'm6',
+  P4: 'P5',
+  A4: 'd5',
+  d5: 'A4',
+  P5: 'P4',
+  m6: 'M3',
+  M6: 'm3',
+  m7: 'M2',
+  M7: 'm2',
+  P8: 'r',
+}

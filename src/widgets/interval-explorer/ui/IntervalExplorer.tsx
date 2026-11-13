@@ -1,13 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import {
-  intervalExample,
-  intervalRoot,
-  useShownKeys,
-  writesInterval,
-} from '@/features/play-example'
+import { intervalExample, writesInterval } from '@/features/play-example'
 import {
   INTERVAL_GROUP_IDS,
   noteFromParam,
@@ -16,33 +10,29 @@ import {
   type IntervalGroup,
 } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import type { IntervalWay } from '@/shared/lib/schedule'
+import { intervalSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
   FloatingActions,
   FloatingBar,
   FloatingBarPlay,
-  FoldGroup,
-  LazyScoreView,
   Labelled,
   PitchPicker,
   Segmented,
   usualName,
-  type ShownKeys,
 } from '@/shared/ui'
-import { INTERVAL_ROWS, everyInterval, type RowInterval } from '../model/interval-rows'
+import { INTERVAL_ROWS, everyInterval, groupOf, type RowInterval } from '../model/interval-rows'
 import { intervalMusic } from '../model/interval-music'
 import { INTERVAL_PLAY_WAYS, type IntervalView } from '../model/interval-view'
-import { IntervalRow } from './IntervalRow'
+import { IntervalHero } from './IntervalHero'
+import { IntervalTiles } from './IntervalTiles'
 import { WayPicture } from './WayPicture'
 
-type Playback = ReturnType<typeof usePlayback<RowInterval | 'all'>>
-
 /**
- * Every interval over a root as the reference app lists them (ADR 0052): the root, and a row an
- * interval, within the octave and past it, each group folding under its heading as the learner left
- * it. A row tapped plays and shows on the keys pinned over them. How it plays (harmonic, melodic
- * rising or falling, kept in the URL) is the floating transport's, beside Play all (A22).
+ * Intervals as the canvas draws them (canvas 170): the interval chosen is the page's subject, its
+ * name with its facts behind the ⓘ, its notes on the staff and the keys pinned below, what it sounds
+ * like with Hear it; under it the intervals as tiles, Simple · Compound; then From and Play as. The
+ * interval, the root and the way are the URL's. Play all is the floating transport's.
  */
 export function IntervalExplorer({
   view,
@@ -52,114 +42,88 @@ export function IntervalExplorer({
   onChange: (change: Partial<IntervalView>) => void
 }) {
   const { t } = useTranslation('practice')
-  const [shown, show] = useShownKeys(view.root, intervalRoot(noteFromParam(view.root)))
   const playback = usePlayback<RowInterval | 'all'>()
-  // The interval last played, written on a staff the way it plays (A22); a major third to start.
-  const [written, write] = useState<RowInterval>('M3')
   const root = noteFromParam(view.root)
-  const shownName = writesInterval(root, written) ? written : 'M3'
+  // An interval no letter writes over this root (the A9 over E♯) falls back to the 5th.
+  const chosen: RowInterval = writesInterval(root, view.iv) ? view.iv : 'P5'
+  const example = useMemo(() => intervalExample(root, chosen), [root, chosen])
   const score = useMemo(
-    () => notate(intervalMusic(intervalExample(root, shownName).music, view.way)),
-    [root, shownName, view.way],
+    () => notate(intervalMusic(example.music, view.way)),
+    [example.music, view.way],
   )
+  const group = groupOf(chosen)
+  const play = (name: RowInterval) => {
+    const { low, high } = intervalExample(root, name)
+    playback.toggle(name, () => intervalSounds(low, high, view.way))
+  }
   return (
     <div className="flex flex-col gap-6">
-      <PinnedKeyboard shown={shown} />
-      {/* The page's head: the root, and how every row plays (R29-P12): words, not icons alone. */}
-      <div className="flex flex-wrap items-end gap-x-6 gap-y-3">
-        <PitchPicker
-          label={t('root')}
-          value={pitchClassOf(noteFromParam(view.root))}
-          onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
-        />
-        {/* A choice of three stands under its label, full width on a phone (canvas 127). */}
-        <div className="min-w-0 basis-full sm:max-w-md sm:flex-1 sm:basis-auto">
-          <Labelled label={t('intervals.playAs')}>
-            <Segmented
-              label={t('intervals.playAs')}
-              value={view.way}
-              options={INTERVAL_PLAY_WAYS.map((way) => ({
-                value: way,
-                label: t(`intervals.way.${way}`),
-                icon: <WayPicture way={way} />,
+      <PinnedKeyboard shown={example.shown} />
+      {/* On a laptop From and Play as stand in a column beside the interval (canvas 170). */}
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8">
+        <div className="flex min-w-0 flex-col gap-6">
+          <IntervalHero
+            name={chosen}
+            root={root}
+            score={score}
+            playing={playback.playing === chosen}
+            onPlay={() => play(chosen)}
+          />
+          <div className="flex flex-col gap-3">
+            <Segmented<IntervalGroup>
+              label={t('intervals.size.label')}
+              value={group}
+              options={INTERVAL_GROUP_IDS.map((each) => ({
+                value: each,
+                label: t(`intervals.size.${each}`),
               }))}
-              onChange={(way) => onChange({ way })}
+              onChange={(each) => {
+                const first = INTERVAL_ROWS[each].find((name) => writesInterval(root, name))
+                if (first) onChange({ iv: first })
+              }}
             />
-          </Labelled>
+            <IntervalTiles
+              names={INTERVAL_ROWS[group].filter((name) => writesInterval(root, name))}
+              chosen={chosen}
+              onPick={(name) => {
+                onChange({ iv: name })
+                play(name)
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex flex-wrap items-end gap-x-6 gap-y-3 lg:sticky lg:top-24 lg:flex-col lg:items-stretch lg:card lg:p-4">
+          <PitchPicker
+            label={t('intervals.from')}
+            value={pitchClassOf(root)}
+            onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
+          />
+          <div className="min-w-0 basis-full sm:max-w-md sm:flex-1 sm:basis-auto lg:max-w-none">
+            <Labelled label={t('intervals.playAs')}>
+              <Segmented
+                label={t('intervals.playAs')}
+                value={view.way}
+                options={INTERVAL_PLAY_WAYS.map((way) => ({
+                  value: way,
+                  label: t(`intervals.way.${way}`),
+                  icon: <WayPicture way={way} />,
+                }))}
+                onChange={(way) => onChange({ way })}
+              />
+            </Labelled>
+          </div>
         </div>
       </div>
-      <section aria-label={t('intervals.written')} className="flex w-full min-w-40 justify-center">
-        <LazyScoreView score={score} />
-      </section>
       <FloatingActions>
         <FloatingBar label={t('transport')}>
           <FloatingBarPlay
             named
             label={t('intervals.playAll')}
             playing={playback.playing === 'all'}
-            onClick={() =>
-              playback.toggle('all', () => everyInterval(noteFromParam(view.root), view.way))
-            }
+            onClick={() => playback.toggle('all', () => everyInterval(root, view.way))}
           />
         </FloatingBar>
       </FloatingActions>
-      {INTERVAL_GROUP_IDS.map((group) => (
-        <IntervalGroupFold
-          key={group}
-          group={group}
-          view={view}
-          playback={playback}
-          onShow={show}
-          onWrite={write}
-        />
-      ))}
     </div>
-  )
-}
-
-/** One group's rows under its folding heading. */
-function IntervalGroupFold({
-  group,
-  view,
-  playback,
-  onShow,
-  onWrite,
-}: {
-  group: IntervalGroup
-  view: IntervalView
-  playback: Playback
-  onShow: (shown: ShownKeys) => void
-  /** The interval played, written on the page's staff. */
-  onWrite: (name: RowInterval) => void
-}) {
-  const { t } = useTranslation('practice')
-  const fold = useFold(`intervals.${group}`)
-  const way: IntervalWay = view.way
-  return (
-    <FoldGroup
-      title={t(`intervals.${group}`)}
-      open={fold.open}
-      onToggle={fold.toggle}
-      listClassName="grid grid-cols-[repeat(auto-fill,minmax(min(24rem,100%),1fr))] gap-2"
-    >
-      {/* An interval no letter writes over this root (the A9 over E♯) is left out. */}
-      {INTERVAL_ROWS[group]
-        .filter((name) => writesInterval(noteFromParam(view.root), name))
-        .map((name) => (
-          <li key={name}>
-            <IntervalRow
-              root={view.root}
-              name={name}
-              way={way}
-              playing={playback.playing === name}
-              onPlay={(sounds) => playback.toggle(name, sounds)}
-              onShow={(shown) => {
-                onShow(shown)
-                onWrite(name)
-              }}
-            />
-          </li>
-        ))}
-    </FoldGroup>
   )
 }
