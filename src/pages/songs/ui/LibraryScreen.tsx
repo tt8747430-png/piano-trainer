@@ -28,6 +28,7 @@ import { LibraryTree } from './LibraryTree'
 import { SharedWithMe } from './SharedWithMe'
 import { NewActions, NewMenu } from './NewActions'
 import { SelectionBar } from './SelectionBar'
+import { FolderHead } from '@/widgets/song-library'
 
 /**
  * A place of the library (ADR 0106, Mindscape's `DeckLibraryPage`): Home (`folder` null, My songs
@@ -87,6 +88,9 @@ export function LibraryScreen({
   // What the place shows under its bar: in the right pane on a laptop, the whole width on a phone.
   const body = (
     <>
+      {folder && !editing && !page.select.on && page.view.here ? (
+        <FolderHead folder={folder} holds={page.view.here} />
+      ) : null}
       {folder && editing ? (
         <FolderEditPanel
           value={editing}

@@ -34,6 +34,8 @@ export interface FolderView {
 /** What a place of the library shows: its folders, its songs, how many the filters hide. */
 export interface LibraryView {
   readonly folders: readonly FolderView[]
+  /** The place itself, a folder counted as its row shows it: its head (canvas 133); none at Home. */
+  readonly here: FolderView | null
   readonly groups: readonly SongGroup[]
   /** Every song the place holds, in it and in its folders, the filters aside: what Level and Key offer. */
   readonly scope: readonly Entry[]
@@ -227,6 +229,9 @@ export function libraryView(
           : []
         : byName(childFolders(layout.folders, place))
     ).map(folderView),
+    here: ((folder) => (folder ? folderView(folder) : null))(
+      place === null ? undefined : layout.folders.find((each) => each.id === place),
+    ),
     groups,
     scope,
     shown,

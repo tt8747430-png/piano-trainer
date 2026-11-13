@@ -77,6 +77,8 @@ export function LibraryHeader({
     <ScreenHeader
       title={name}
       {...place}
+      // A folder shows its name large in its head (canvas 133), until Edit takes its place.
+      titleOnPage={folder !== null && !edit?.editing}
       back={
         folder ? (
           <BackButton
