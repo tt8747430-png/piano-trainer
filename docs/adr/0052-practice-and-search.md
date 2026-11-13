@@ -19,7 +19,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   has Back.
 - **The Profile** is the learner at a glance (memory-palaces', canvas 128): their name as its title with the
   notifications' bell (and Settings on a phone); their picture with Edit photo, the year joined (or a guest's Sign
-  in); three figures (day streak, to Streak; songs learned; practice time); **This week**, the time and days of seven
+  in); three figures (day streak, to Streak; songs learned; practice time); **Last 7 days** (today last), the time and days of seven
   over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
   Streak's month; the next badge as a ring with its count; then the first badges and achievements, each with See
   all. One column on a phone; two on a laptop, the badges and achievements beside the rest.
@@ -155,7 +155,8 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
   folders, lessons, chord qualities, scale kinds, progressions, patterns, and exercises. It is one projection
-  of the registries, held to each by a test. A chord symbol typed is read as the chord, and a scale typed with its tonic ("D minor", "F♯ dorian") opens
+  of the registries, held to each by a test. Every name is found in either language (a Russian learner typing
+  "tuner" finds the Тюнер), the app's own pages as much as content. A chord symbol typed is read as the chord, and a scale typed with its tonic ("D minor", "F♯ dorian") opens
   that scale's page on it; symbols print engraved (♯, ♭). Nothing found is no dead
   end: it names what was missed, says how to search instead, and lists the Suggestions to go on from.
 - **Words:** a Place is the nav's; Practice has pages in groups; a thing's page is an Explorer; a Tool works something

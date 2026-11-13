@@ -5,24 +5,25 @@ import { selectOwnCourses, selectOwnLessons, useOwnLessons } from '@/entities/ow
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { selectOwnProgressions, usePracticeLibrary } from '@/entities/practice-library'
 import { allCollections, useRepertoire } from '@/entities/piece'
-import { useKeyName, useLocale } from '@/shared/i18n'
+import { LOCALES, useKeyName, useLocale } from '@/shared/i18n'
 import { usePageWords } from '@/widgets/practice-pages'
 import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
 
 /** The names the interface gives what content does not name itself, in the learner's language. */
 export function useIndexNames(): IndexNames {
-  const { t } = useTranslation(['music', 'songs'])
+  const { t, i18n } = useTranslation(['music', 'songs'])
   const page = usePageWords()
   const key = useKeyName()
   return useMemo(
     () => ({
       page,
+      pageNames: (id) => LOCALES.map((locale) => i18n.getFixedT(locale, 'practice')(`pages.${id}`)),
       quality: (quality) => t(`music:quality.${quality}`),
       scale: (kind) => t(`music:scaleKind.${kind}`),
       key,
       songCount: (count) => t('songs:folder.songCount', { count }),
     }),
-    [t, page, key],
+    [t, i18n, page, key],
   )
 }
 

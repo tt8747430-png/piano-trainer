@@ -9,7 +9,7 @@ import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 
 /**
- * The week as a picture (canvas 128): "This week", the time practised and the days of seven, then
+ * The last seven days as a picture (canvas 128): "Last 7 days", the time practised and the days of seven, then
  * one bar a day, its height the minutes played against the week's most (the value axis's one
  * line), today in the strong sand, a day not played a flat line, each day's letter under it. The
  * whole card opens Streak, the month's calendar.

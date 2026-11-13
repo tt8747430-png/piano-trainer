@@ -140,7 +140,7 @@ export const account: LocaleResources['account'] = {
       calendar: 'Дни занятий',
     },
     week: {
-      title: 'Эта неделя',
+      title: 'Последние 7 дней',
       summary: '{{time}} · {{days}} из 7 дней',
       day: '{{day}}: {{time}}',
       most: 'не больше {{time}}',

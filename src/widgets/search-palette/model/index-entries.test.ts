@@ -20,6 +20,7 @@ import {
 /** Names as a test reads them: each thing by its id, so an entry's title says where it came from. */
 const names: IndexNames = {
   page: (page) => ({ title: `page ${page}`, about: `about ${page}` }),
+  pageNames: (page) => [`page ${page}`],
   quality: (quality) => `quality ${quality}`,
   scale: (kind) => `scale ${kind}`,
   key: (key) => `key ${keySymbol(key)}`,

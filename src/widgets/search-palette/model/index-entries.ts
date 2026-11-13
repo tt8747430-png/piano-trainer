@@ -83,6 +83,8 @@ export interface IndexEntry {
 /** The names the interface gives what content does not name itself. */
 export interface IndexNames {
   readonly page: (page: PracticePageId) => { readonly title: string; readonly about: string }
+  /** A page's title in every language the app speaks: typed in either, it is found. */
+  readonly pageNames: (page: PracticePageId) => readonly string[]
   readonly quality: (quality: ChordQuality) => string
   readonly scale: (kind: ScaleKind) => string
   readonly key: (key: Key) => string
@@ -145,7 +147,7 @@ export function indexEntries({
         kind: 'pages',
         title,
         detail: about,
-        words: [],
+        words: names.pageNames(page),
         target: { opens: 'page', page },
       }
     }),

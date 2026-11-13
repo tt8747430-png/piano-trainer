@@ -122,9 +122,9 @@ export const account = {
       // Over the calendar, whichever month it shows: the month names itself.
       calendar: 'Days practised',
     },
-    // The week as a picture (canvas 128): one bar a day, today strong, an empty day a flat line.
+    // The last seven days as a picture (canvas 128), today last: one bar a day, an empty day a flat line.
     week: {
-      title: 'This week',
+      title: 'Last 7 days',
       summary: '{{time}} · {{days}} of 7 days',
       day: '{{day}}: {{time}}',
       most: '{{time}} at most',
