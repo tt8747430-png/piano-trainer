@@ -66,7 +66,8 @@ export const player: LocaleResources['player'] = {
     higher: 'Выше',
   },
   annotate: {
-    label: 'Пометки',
+    label: 'Добавить пометки',
+    bar: 'Пометки',
     staff: 'Нотоносец',
     upper: 'Верхний',
     lower: 'Нижний',

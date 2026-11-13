@@ -149,19 +149,7 @@ describe('the acts on the music in the foot’s More (R31-P)', () => {
     [
       'a song',
       '/play/bz5',
-      [
-        'Sections',
-        'Song information',
-        'My recordings',
-        'How did I play?',
-        'Annotations',
-        'Print',
-        'Tuner',
-        'Voice commands',
-        'Rhythm game',
-        'Share link',
-        'Export…',
-      ],
+      ['Sections', 'Annotate', 'Print', 'Share link', 'Export…'],
     ],
     // A study is in no library (ADR 0106).
     [
@@ -169,20 +157,14 @@ describe('the acts on the music in the foot’s More (R31-P)', () => {
       '/play/ex3',
       [
         'Sections',
-        'Study information',
-        'My recordings',
-        'How did I play?',
-        'Annotations',
+        'Annotate',
         'Print',
-        'Tuner',
-        'Voice commands',
-        'Rhythm game',
         'Share link',
         'Export…',
       ],
     ],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Tuner', 'Voice commands', 'Export…']],
-    ['an exercise', '/play/exercise/hanon', ['Print', 'Tuner', 'Voice commands', 'Export…']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export…']],
+    ['an exercise', '/play/exercise/hanon', ['Print', 'Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
@@ -227,14 +209,8 @@ describe('the acts on the music in the foot’s More (R31-P)', () => {
     await renderApp('/play/my-1', { storage: withSong() })
     expect(await moreActions(user)).toEqual([
       'Sections',
-      'Song information',
-      'My recordings',
-      'How did I play?',
-      'Annotations',
+      'Annotate',
       'Print',
-      'Tuner',
-      'Voice commands',
-      'Rhythm game',
       'Share link',
       'Export…',
     ])

@@ -75,7 +75,8 @@ export const player = {
     higher: 'Higher A4',
   },
   annotate: {
-    label: 'Annotations',
+    label: 'Annotate',
+    bar: 'Annotations',
     staff: 'Staff',
     upper: 'Upper',
     lower: 'Lower',

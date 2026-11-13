@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { ListTree, PenLine } from 'lucide-react'
+import { Highlighter, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -243,7 +243,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
           {
             key: 'annotations',
             label: t('player:annotate.label'),
-            icon: PenLine,
+            icon: Highlighter,
             onSelect: () => setAnnotating(true),
           },
         ]}
