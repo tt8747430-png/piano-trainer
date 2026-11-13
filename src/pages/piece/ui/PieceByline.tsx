@@ -12,8 +12,8 @@ import { useLocale } from '@/shared/i18n'
 
 /**
  * Under a song's title, as a byline (ADR 0111): what else it is called and Your version where the
- * learner has one, then who wrote it and where it is in its book. Its level is a chip beside its key
- * (R30 S5).
+ * learner has one, then who wrote it and where it is in its book: the one place its credits are read
+ * (its Details edit them, where the learner may). Its level, genre and language are its Details'.
  */
 export function PieceByline({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')

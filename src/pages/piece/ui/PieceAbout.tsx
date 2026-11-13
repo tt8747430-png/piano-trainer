@@ -50,7 +50,8 @@ export function ScaleLink({ entry, children }: { entry: Entry; children: ReactNo
       aria-label={t('scaleOf', { scale: scaleName(key.tonic, keyScale(key)) })}
       to="/practice/scales"
       search={{ root: noteParam(key.tonic), kind: keyScale(key), show: 'key' }}
-      className="after:absolute after:inset-0 after:rounded-pill focus-visible:outline-none"
+      // Its chip is 32px; the reach is 44px on touch.
+      className="after:absolute after:inset-x-0 after:inset-y-0 after:rounded-pill focus-visible:outline-none pointer-coarse:after:-inset-y-1.5"
     >
       {children}
     </Link>

@@ -22,7 +22,6 @@ import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 import { SongCoverPicker } from './SongCover'
-import { SongDetailChips } from './SongDetailChips'
 import { SongDetails } from './SongDetails'
 import { YourPractice } from './YourPractice'
 
@@ -76,13 +75,11 @@ export function PieceView({ piece }: { piece: Piece }) {
             <SongCoverPicker piece={piece} className="w-28 text-5xl lg:w-60 lg:text-8xl" />
             <PieceByline piece={piece} />
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <PieceFactLine
-              piece={piece}
-              keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
-            />
-            <SongDetailChips id={piece.id} />
-          </div>
+          {/* Key · Time · Tempo, one row; the level, genre and language are its Details'. */}
+          <PieceFactLine
+            piece={piece}
+            keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
+          />
           <PieceAbout entry={piece} />
           {laptop ? details : null}
         </section>

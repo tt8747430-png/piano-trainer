@@ -164,7 +164,8 @@ function DetailsCard({ piece, writes }: { piece: Piece; writes: SongWrites | nul
       {SONG_CREDITS.map((field) => {
         const name = t(CREDIT_NAME[field])
         const value = songCredit(shown, field)
-        if (!writes) return value ? <ReadRow key={field} title={name} value={said(value)} /> : null
+        // A song the learner cannot change has its credits once, in its byline under the cover.
+        if (!writes) return null
         return (
           <PropertyRow key={field} title={name} value={said(value)} empty={empty}>
             {(tools) => (
