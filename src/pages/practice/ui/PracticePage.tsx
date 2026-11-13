@@ -84,7 +84,7 @@ export function PracticePage() {
         tools={
           <>
             <span className="contents lg:hidden">
-              <ToolsButton />
+              <ToolsButton worded />
             </span>
             <PlaceActions />
           </>
