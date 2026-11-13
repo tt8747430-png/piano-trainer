@@ -23,7 +23,7 @@ export function PieceByline({ piece }: { piece: Piece }) {
   const lead = Boolean(secondary) || hasVersion
   if (!lead && !piece.credits && !piece.source) return null
   return (
-    <div className="-mt-3 flex flex-col gap-1.5 text-muted-foreground">
+    <div className="flex flex-col gap-1.5 text-muted-foreground">
       {lead ? (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-lg">
           {secondary ? <p>{secondary}</p> : null}

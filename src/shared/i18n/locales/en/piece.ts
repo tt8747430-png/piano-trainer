@@ -124,6 +124,7 @@ export const piece = {
   removeCover: 'Remove cover',
   changeCover: 'Change cover',
   cover: 'Cover',
+  firstPage: 'The song’s first bars',
   details: {
     label: 'Details',
     level: 'Level',

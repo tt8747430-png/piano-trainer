@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { keySymbol, printedSymbol, type Key } from '@/shared/lib/music'
+import { useKeyName } from '@/shared/i18n'
+import type { Key } from '@/shared/lib/music'
 import { STANDARD_TUNING, tuningOf } from '@/shared/lib/schedule'
 import { InfoTip } from '@/shared/ui'
 import { pieceKey, type Piece } from '../model/types'
@@ -26,12 +27,11 @@ export function PieceFactLine({
 }) {
   const { t } = useTranslation(['piece', 'music'])
   const tempo = useTempoText(piece)
+  const keyName = useKeyName()
   const facts: { name: string; value: ReactNode }[] = [
     {
       name: t('music:key.label'),
-      value: (
-        <span className="font-display">{printedSymbol(keySymbol(played ?? pieceKey(piece)))}</span>
-      ),
+      value: <span>{keyName(played ?? pieceKey(piece))}</span>,
     },
     { name: t('time'), value: piece.meter },
     { name: t('tempo'), value: tempo },
@@ -48,14 +48,14 @@ export function PieceFactLine({
       ),
     })
   return (
-    <dl className="flex flex-wrap items-center gap-2">
+    <dl className="flex items-stretch">
       {facts.map((fact, at) => (
         <div
           key={fact.name}
-          className="relative flex h-8 items-center gap-1.5 rounded-pill border border-border bg-card px-3 text-sm has-[a:hover]:bg-muted"
+          className="relative flex min-w-0 flex-1 flex-col gap-0.5 border-l border-border pl-4 first:border-l-0 first:pl-0 has-[a:hover]:[&_dd]:underline"
         >
-          <dt className="text-muted-foreground">{fact.name}</dt>
-          <dd className="font-semibold tabular-nums">
+          <dt className="text-[0.8125rem] text-muted-foreground">{fact.name}</dt>
+          <dd className="text-[1.0625rem] font-bold tabular-nums">
             {at === 0 && keyLink ? keyLink(fact.value) : fact.value}
           </dd>
         </div>

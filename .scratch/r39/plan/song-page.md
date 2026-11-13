@@ -46,3 +46,4 @@ credits opens as a dialog.
   "9 of 16 bars", so the learner sees where in the song they are, not a percentage.
 - **No explanation line:** "Tap one to hear it" goes from Chords; each chord card already says Hear G to a screen reader.
 - **Learned** is 44 high to tap, 34 to see.
+- Song page (loop round 10, built to canvas 125): the first page as its cover (the opening lines engraved on a card), the title large in sans with its pencil to the editor, the credits one line, Key · Time · Tempo as three columns, Chords headed in sans, progressions as rows in one card; Learned worded, the heart and the gear in the bar. The cover's picture is chosen at Settings' head. Not built: Continue from bar N with the bar map (the app keeps no place left in a song); Play stays floating.

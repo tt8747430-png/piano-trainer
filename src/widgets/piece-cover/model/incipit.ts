@@ -24,6 +24,20 @@ export function incipitScore(piece: Piece, bars: number = INCIPIT_BARS): Score {
   }
 }
 
+/**
+ * A song's opening as its page's first page prints it (canvas 125): its first bars as written, the
+ * tune's staff alone where it has one, with its chord symbols and words, without its tempo mark.
+ */
+export function openingScore(piece: Piece, bars: number): Score {
+  const score = notate(arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS))
+  const staff = score.staves[0]
+  return {
+    ...score,
+    staves: staff ? [staff] : score.staves,
+    measures: score.measures.slice(0, bars).map(({ tempo: _, ...measure }) => measure),
+  }
+}
+
 /** The heads a song's small cover draws: its first notes, enough to know the tune by. */
 export const MARK_NOTES = 5
 

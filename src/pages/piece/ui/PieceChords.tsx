@@ -25,7 +25,7 @@ export function PieceChords({
   if (chords.length === 0) return null
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t('chordSummary')}
       </h2>
       <ChordSummary chords={chords} />

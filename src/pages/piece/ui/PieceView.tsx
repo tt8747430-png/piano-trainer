@@ -1,7 +1,8 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Play, Settings } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { Pencil, Play, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
+  entryTitles,
   hasEditableOriginal,
   isDegreePiece,
   isOwnSongId,
@@ -13,7 +14,9 @@ import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { FabLink, FloatingActions, RoundLink } from '@/shared/ui'
+import { ButtonLink, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
+import { useLocale } from '@/shared/i18n'
+import { PieceFirstPage } from '@/widgets/piece-cover'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout, ScaleLink } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -21,7 +24,6 @@ import { PieceChords } from './PieceChords'
 import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
-import { SongCoverPicker } from './SongCover'
 import { SongDetails } from './SongDetails'
 import { YourPractice } from './YourPractice'
 
@@ -36,7 +38,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
   const { performance, headings, sections } = useSongLessons(piece)
   const { account } = useAccount()
-  const navigate = useNavigate()
+  const locale = useLocale()
   const step = pieceStepId(piece.id)
   // What the song says of itself is the learner's on an own song, an editor's on the app's original.
   const chart = isDegreePiece(piece) ? null : piece
@@ -50,10 +52,11 @@ export function PieceView({ piece }: { piece: Piece }) {
         entry={piece}
         tools={
           <>
+            <LearnedButton step={step} bar worded />
             {piece.kind === 'study' ? null : <FavouriteButton piece={piece.id} />}
-            <LearnedButton step={step} bar />
           </>
         }
+        titleOnPage
         settings={
           <RoundLink
             label={t('settings.open')}
@@ -61,17 +64,29 @@ export function PieceView({ piece }: { piece: Piece }) {
             render={<Link to="/songs/$pieceId/settings" params={{ pieceId: piece.id }} />}
           />
         }
-        edit={{
-          editing: false,
-          label: t('piece:editScore'),
-          onEdit: () => void navigate({ to: '/edit/$pieceId', params: { pieceId: piece.id } }),
-          onDone: () => undefined,
-        }}
       />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12">
         <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">
-          <div className="flex items-center gap-5 lg:flex-col lg:items-start">
-            <SongCoverPicker piece={piece} className="w-28 text-5xl lg:w-60 lg:text-8xl" />
+          <PieceFirstPage piece={piece} />
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-1">
+              <p
+                aria-hidden
+                className="min-w-0 font-sans text-[1.75rem]/tight font-bold tracking-[-0.02em] text-balance break-words"
+              >
+                {entryTitles(piece, locale).primary}
+              </p>
+              <ButtonLink
+                variant="ghost"
+                size="icon"
+                className="rounded-pill text-muted-foreground"
+                aria-label={t('piece:editScore')}
+                title={t('piece:editScore')}
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+              >
+                <Pencil aria-hidden />
+              </ButtonLink>
+            </div>
             <PieceByline piece={piece} />
           </div>
           {/* Key · Time · Tempo, one row; the level, genre and language are its Details'. */}

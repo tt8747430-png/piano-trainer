@@ -12,11 +12,14 @@ export function PieceHeader({
   tools,
   settings,
   edit,
+  titleOnPage = false,
 }: {
   entry: Entry
   tools?: ReactNode
   settings?: ReactNode
   edit?: EditAction
+  /** The page prints the title itself (a song's, under its first page). */
+  titleOnPage?: boolean
 }) {
   const locale = useLocale()
   return (
@@ -28,6 +31,7 @@ export function PieceHeader({
       tools={tools}
       settings={settings}
       edit={edit}
+      titleOnPage={titleOnPage}
     />
   )
 }

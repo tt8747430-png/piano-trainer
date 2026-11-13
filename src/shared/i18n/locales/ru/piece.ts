@@ -119,6 +119,7 @@ export const piece: LocaleResources['piece'] = {
   removeCover: 'Удалить обложку',
   changeCover: 'Изменить обложку',
   cover: 'Обложка',
+  firstPage: 'Первые такты песни',
   details: {
     label: 'Сведения',
     level: 'Уровень',
