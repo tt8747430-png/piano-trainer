@@ -111,7 +111,6 @@ LPOPS = POPOVER('pickOn', 'New', NEWPICK, 'right: 60px; top: 300px', 300) + POPO
 # structure and organization"): one overview in Practice's shape (Continue, Levels, Courses, your own), a page per
 # level, a page for all courses; the title in the bar (TITLEBAR), never a bar of two buttons over an empty row. ═════
 SEARCHB = IB('Search', SEARCH.replace('18', '22'), href='#')
-INFOI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>'
 RING = (f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {{{{p.ring}}}}; display: flex; align-items: center; justify-content: center">'
         f'<span style="width: 36px; height: 36px; border-radius: 18px; background: {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{p.i}}}}</span></span>')
 def LEVELLIST(lap=False):

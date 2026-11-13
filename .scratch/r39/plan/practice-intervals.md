@@ -14,6 +14,11 @@ sounds like and the songs that open with it, as musicca's interval pages and the
 - "No explanation line under a control": the line of what an interval sounds like belongs to the interval, in its
   card, not under a control; the rows keep only name and semitones.
 
+- **The interval chosen is the hero, its character behind an ⓘ** (canvas 170, loop, from "popups with meaningful
+  information … show more things with less UI"): its name over the keys showing it, Sounds like with Hear it, the 13
+  intervals as a grid of tiles (abbreviation and semitones), From, Play as and Intervals grouped under them. The ⓘ
+  beside the name opens a popover: what it sounds like in one line, a song Up, a song Down, what it Inverts to. No
+  list of cards, no explanation line on any row.
 ## Today
 
 `src/pages/intervals` → `widgets/interval-explorer` (the rows, `interval-songs.ts`); strings `practice.ts`
