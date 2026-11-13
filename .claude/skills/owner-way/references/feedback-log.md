@@ -656,6 +656,10 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Design first, then build to it (2026-11-13):** "why are you improving the current app and not first make design
+  and after that implement the design as close as possible. do like this": in a loop, each area is redrawn on the
+  canvas and published before any change to the app; the app is then built to the drawing as closely as it can and
+  checked against it at both sizes. Never a screen patched in the app with no drawing first.
 - **No questions in a loop** (2026-11-13): "in the autonomous mode you don't ask questions to me, you work
   autonomously": a loop's report ends with what was decided, never a question.
 - **No unintended shots of sign-in prompts, welcomes or tours** (2026-11-05): dismissed before every shot
