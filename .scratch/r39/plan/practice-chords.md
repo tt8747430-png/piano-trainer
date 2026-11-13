@@ -95,8 +95,10 @@ Still to port, in this order:
    tones' paints, names left and fingers right of the chord, the name at 17px over it, the staff at the board's size
    across the card; a single staff keeps no brace room). Left: the chord placed mid-bar, which comes with item 3's
    second bar.
-2. The Piano sheet's 3D card rows (Angle Seat · Above, Hands on the keys), Range (88-key strip, Fit the chord ·
-   2 octaves · 4 octaves), Labels (Note names · Degrees · Intervals · Fingers · None), Sound and MIDI keyboard rows.
+2. ~~The Piano sheet's rows~~ (ce3be88c, 969a2af9 and after): the 3D card's Angle (Seat · Above, the camera at 62° or
+   78°) and Hands on the keys; Range, the 88-key strip that drags (14 or 28 white keys from the C under the chord or
+   where it was dragged; a drag on Fit the chord shows two octaves); Labels in two rows; Sound (Grand piano, offline
+   a second line) and MIDI keyboard (the keyboard heard) as link rows, in the Player's sheet too.
 3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several.
 4. The drills Over the root and Diatonically.
 5. The serif: the board's Iowan is narrower than the app's Literata, so "root position" wraps at 402.
