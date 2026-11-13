@@ -83,13 +83,13 @@ export function FloatingPlaySplit({
     <div
       role="group"
       aria-label={label}
-      className="glass-honey flex h-14 w-44 shrink-0 items-center rounded-pill"
+      className="glass-honey flex h-14 w-44 shrink-0 items-center rounded-pill text-primary-foreground"
     >
       <button
         type="button"
         aria-pressed={playing}
         onClick={onPlay}
-        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-0.5 text-base font-bold whitespace-nowrap text-foreground"
+        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-0.5 text-base font-bold whitespace-nowrap"
       >
         {playing ? (
           <Square aria-hidden className="size-4.5 fill-current" />
@@ -98,11 +98,11 @@ export function FloatingPlaySplit({
         )}
         <span className="truncate">{name}</span>
       </button>
-      <span aria-hidden className="h-6.5 w-px shrink-0 bg-foreground/20" />
+      <span aria-hidden className="h-6.5 w-px shrink-0 bg-current opacity-20" />
       {menu(
         <button
           type="button"
-          className="flex h-14 w-11 shrink-0 items-center justify-center rounded-r-pill text-foreground"
+          className="flex h-14 w-11 shrink-0 items-center justify-center rounded-r-pill"
         >
           <ChevronDown aria-hidden className="size-5" />
         </button>,

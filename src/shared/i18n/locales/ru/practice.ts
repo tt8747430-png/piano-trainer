@@ -76,6 +76,16 @@ export const practice: LocaleResources['practice'] = {
         locked: 'Сцепленные руки',
         soWhat: 'So What',
       },
+      captions: {
+        close: 'Тесное',
+        drop2: 'Drop 2',
+        drop3: 'Drop 3',
+        shell: 'Каркас',
+        rootlessA: 'Без осн. A',
+        rootlessB: 'Без осн. B',
+        locked: 'Сцепленные',
+        soWhat: 'So What',
+      },
       about: {
         close:
           'Все звуки аккорда стоят как можно теснее, начиная с нижнего звука выбранного обращения. Cmaj7: C E G B.',

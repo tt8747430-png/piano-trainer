@@ -115,7 +115,7 @@ export function ChordExplorer({
             render={
               <FloatingPiece
                 label={`${t('practice:chords.voicing.label')}: ${t(`practice:chords.voicing.names.${chord.voicing}`)}`}
-                caption={t(`practice:chords.voicing.names.${chord.voicing}`)}
+                caption={t(`practice:chords.voicing.captions.${chord.voicing}`)}
               >
                 <VoicingPicture placed={placed} />
               </FloatingPiece>

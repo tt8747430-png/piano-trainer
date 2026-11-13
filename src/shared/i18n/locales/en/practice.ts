@@ -83,6 +83,17 @@ export const practice = {
         locked: 'Locked hands',
         soWhat: 'So What',
       },
+      // The voicing as the dock's piece says it under its picture, in two short lines at most.
+      captions: {
+        close: 'Close position',
+        drop2: 'Drop 2',
+        drop3: 'Drop 3',
+        shell: 'Shell',
+        rootlessA: 'Rootless A',
+        rootlessB: 'Rootless B',
+        locked: 'Locked hands',
+        soWhat: 'So What',
+      },
       about: {
         close:
           'Every note of the chord packed as close together as it goes, from the lowest note of the inversion chosen. Cmaj7: C E G B.',

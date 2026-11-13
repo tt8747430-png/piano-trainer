@@ -19,6 +19,7 @@ import type { PerformanceNote } from '@/shared/lib/arrangement'
 import type { Midi } from '@/shared/lib/music'
 import { keyFill, type KeyFill, type KeyMark } from '@/shared/ui'
 import { followed, frame, VIEW, type Framing } from '../../model/camera'
+import { KEY, keyX } from '../../model/keys'
 import {
   choreograph,
   handPose,
@@ -50,7 +51,15 @@ export interface StageInput {
   readonly faded: Side | null
   /** The music's lowest and highest keys, for the camera. */
   readonly range: { readonly low: Midi; readonly high: Midi } | null
+  /**
+   * What a pressed key is painted by: the hand pressing it (the Player's), or its chord tone, as its
+   * mark says (Chords' stage, its canvas).
+   */
+  readonly pressedPaint?: 'hand' | 'tone'
 }
+
+/** Where a key's far end stands on the canvas, from 0 to 1 across and down: what a tag is put over. */
+export type KeyPlace = (key: Midi, black: boolean) => readonly [number, number]
 
 export interface Stage {
   update(input: StageInput): void
@@ -194,7 +203,12 @@ async function loadHand(side: Side): Promise<DrawnHand> {
 export function createStage(
   canvas: HTMLCanvasElement,
   input: StageInput,
-  events: { readonly onLoaded: () => void; readonly onFailed: () => void },
+  events: {
+    readonly onLoaded: () => void
+    readonly onFailed: () => void
+    /** After each frame: where the keys stand now, for what is drawn over them. */
+    readonly onDrawn?: (place: KeyPlace) => void
+  },
 ): Stage {
   const renderer = new WebGLRenderer({
     canvas,
@@ -349,13 +363,14 @@ export function createStage(
       if (press !== target) moving = true
       const fill = keyFill(key, { marks: now.marks, ...(now.wrong ? { wrong: now.wrong } : {}) })
       const rest = paints.rest.get(fill) ?? paints.piano.white
+      const plain = fill === 'white' || fill === 'black'
+      const toned = now.pressedPaint === 'tone' && !plain ? (paints.down.get(fill) ?? rest) : null
       const paint = by
-        ? rest.clone().lerp(paints.hand[by.side], Math.min(1, press * 1.5))
+        ? rest.clone().lerp(toned ?? paints.hand[by.side], Math.min(1, press * 1.5))
         : held
           ? (paints.down.get(fill) ?? rest)
           : rest
       keyboard.set(key, press, paint)
-      const plain = fill === 'white' || fill === 'black'
       if (press === 0 && plain && !held) {
         painted.delete(key)
         keyPress.delete(key)
@@ -374,6 +389,10 @@ export function createStage(
     camera.position.set(cameraX, framing.y, framing.z)
     aim()
     renderer.render(scene, camera)
+    events.onDrawn?.((key, black) => {
+      const at = new Vector3(keyX(key), black ? KEY.blackHeight : 0, -KEY.length).project(camera)
+      return [(at.x + 1) / 2, (1 - at.y) / 2]
+    })
     return !moving
   }
 

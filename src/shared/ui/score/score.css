@@ -108,6 +108,10 @@
 }
 /* A finger that crosses (a scale's thumb passing under, a finger over it), typed so by the score:
    in the link's sky and bold, as the keys' finger row fills its circle. */
+/* A finger takes the ink (Verovio sets no fill on its text), so it reads by Night as by Day. */
+[data-slot='score'] g.fing text {
+  fill: currentColor;
+}
 [data-slot='score'] g.fing.crossing {
   color: var(--link);
 }

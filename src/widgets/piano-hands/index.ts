@@ -1,1 +1,1 @@
-export { PianoHands, type PianoHandsProps } from './ui/PianoHands'
+export { PianoHands, type KeyTag, type PianoHandsProps } from './ui/PianoHands'
