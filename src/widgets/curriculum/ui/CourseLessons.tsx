@@ -1,3 +1,4 @@
+import { BookOpenText } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +8,7 @@ import { courseLessonStepId, STAGE_PAINT, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { PAINT } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
+import { afterWorthSaying } from '../model/after'
 import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 
 /**
@@ -35,7 +37,10 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
           const done = learned[step] !== undefined
           const current = step === next
           const share = lessonShare(lesson.sections.length, read[step], done)
-          const after = (lesson.after ?? []).map(numberOf).filter((n) => n > 0)
+          const after = afterWorthSaying(
+            (lesson.after ?? []).map(numberOf).filter((n) => n > 0),
+            i + 1,
+          )
           return (
             <LessonStop key={lesson.id}>
               <LessonRow
@@ -45,14 +50,22 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                     params={{ courseId: course.id, lessonId: lesson.id }}
                   />
                 }
-                mark={i + 1}
+                // As a level's line: the next one its book, the rest their number, said once.
+                mark={current ? <BookOpenText className="size-5" strokeWidth={1.75} /> : i + 1}
                 paint={paint}
                 done={done}
                 share={share}
                 current={current}
                 said={t('lessonNumber', { n: i + 1 })}
                 title={localText(lesson.title, locale)}
-                detail={after.length > 0 ? t('after', { lessons: after.join(', ') }) : undefined}
+                detail={
+                  [
+                    current || done ? t('lessonNumber', { n: i + 1 }) : null,
+                    after.length > 0 ? t('after', { lessons: after.join(', ') }) : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ') || undefined
+                }
               />
             </LessonStop>
           )

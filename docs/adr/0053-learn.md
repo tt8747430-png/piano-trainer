@@ -22,7 +22,9 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   chosen from the chips (a phone) or the list (a laptop). A journey is chapters of lessons, then the chord families or
   scales its chapter's Check asks. A level's steps, like a course's lessons, are a **lesson line**
   (`LessonLine`): one spine through their tiles and no card round them; a tile is its number, a check's square, a
-  learned one grass with a check, the next one its book ringed in honey with Next. It shows the order and locks
+  learned one grass with a check, the next one its book ringed in honey with Next. A lesson's number is said once:
+  on its tile, or under its title where the tile shows the book or a check; "After 4, 5" only where it asks for more
+  than the lesson before it. It shows the order and locks
   nothing. A journey's lesson plays no piece,
   shows no pattern, names no method book and links only Lessons and Practice.
 - **The Courses** (`entities/course`): self-contained, on five shelves (beginner, intermediate, technique, chords and

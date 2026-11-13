@@ -29,6 +29,7 @@ import { ChoiceChips, PAINT } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { OWN_LESSONS, type LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
+import { afterWorthSaying } from '../model/after'
 import { useStepTitle } from '../model/use-step-title'
 import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 import { OwnLessons } from './OwnLessons'
@@ -69,15 +70,17 @@ function StepRow({
   const share = lesson ? lessonShare(lesson.sections.length, read[id], done) : 0
   const paint = PAINT[STAGE_PAINT[journey.stage]]
   const Icon = ICON[step.kind]
-  const after = (lesson?.after ?? []).flatMap((each) => {
+  const asked = (lesson?.after ?? []).flatMap((each) => {
     const n = numbers.get(lessonStepId(each))
     return n === undefined ? [] : [n]
   })
+  const after = number === undefined ? asked : afterWorthSaying(asked, number)
   const skills = skillsOfStep(step)
   const detail =
     step.kind === 'lesson'
       ? [
-          number === undefined ? null : t('lessonNumber', { n: number }),
+          // The number said once: on the tile, or here where the tile shows Next's book or a check.
+          number === undefined || !(next || done) ? null : t('lessonNumber', { n: number }),
           after.length > 0 ? t('after', { lessons: after.join(', ') }) : null,
         ]
       : [
