@@ -89,8 +89,9 @@ export function PieceView({ piece }: { piece: Piece }) {
           <PieceChords performance={performance}>
             <PieceProgressions piece={piece} />
           </PieceChords>
-          {/* Your practice and Details side by side on a wide screen (canvas, row 2). */}
-          <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
+          {/* Your practice and Details side by side on a wide screen (canvas, row 2); Details alone,
+              before any practice, takes the whole width. */}
+          <div className="grid gap-6 xl:items-start xl:has-[>:nth-child(2)]:grid-cols-2">
             <YourPractice piece={piece} performance={performance} />
             {details}
           </div>

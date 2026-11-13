@@ -68,7 +68,7 @@ details.
   bars engraved on the soft yellow (`incipitScore`: the tune's staff alone, plain, no tempo mark), so a song is known by
   its music; a listing with no chart its key letter. The song page, its Settings and Continue draw it. Its ♡ is the
   page's bar's, beside Learned, never over the cover.
-- **Your practice** on a song's page, once played: the day played last and the takes; with a take, the last and best
+- **Your practice** on a song's page, once played, beside Details on a wide screen (Details alone takes the width before then): the day played last and the takes; with a take, the last and best
   take's share right as meters in ink, the last take bar by bar, and one next step as a quiet button into the Player
   (`nextStep`: the weakest bar or pair under 80 % looped at 70 % speed, else the tempo climbed 50 → 75 → 100 %). Play
   stays the page's one honey control.
