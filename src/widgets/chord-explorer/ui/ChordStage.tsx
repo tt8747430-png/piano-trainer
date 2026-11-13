@@ -28,7 +28,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   const { hands } = useSettings(selectScoreView)
   const settings = useSettingsStoreApi()
   const notes = useMemo(() => chordPerformance(chord), [chord])
-  const { labels, range, angle, handsOnKeys } = useSettings(selectChords)
+  const { labels, range, rangeFrom, angle, handsOnKeys } = useSettings(selectChords)
   const { held, tags } = useMemo(() => {
     const { placed, fingers } = viewChord(chord)
     const keys = [...placed.lh, ...placed.rh]
@@ -49,7 +49,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   const { folded } = useFoldKeys()
   const laptop = useMediaQuery('(min-width: 48rem)')
   // The keys the Piano sheet's Range frames, on the hands' piano and the 2D keys alike.
-  const framed = framedChord(chord, range)
+  const framed = framedChord(chord, range, rangeFrom)
   // The Piano sheet's Show the piano off: neither the hands nor the keys.
   if (folded) return null
   if (!hands)

@@ -133,6 +133,18 @@ for (const size of SIZES) {
           } else if (kind === 'type') {
             await page.keyboard.type(act.slice('type='.length))
             await page.waitForTimeout(300)
+          } else if (kind === 'slide') {
+            // Drags the open sheet's first slider from its middle to `value` of its width (0 to 1).
+            const box = await page.getByRole('slider').first().boundingBox()
+            if (!box) problems.push(`${label}: no slider to drag`)
+            else {
+              const y = box.y + box.height / 2
+              await page.mouse.move(box.x + box.width / 2, y)
+              await page.mouse.down()
+              await page.mouse.move(box.x + box.width * Number(value), y, { steps: 8 })
+              await page.mouse.up()
+              await page.waitForTimeout(600)
+            }
           } else if (kind === 'wait') await page.waitForTimeout(Number(value))
           else if (kind === 'scroll') scrolls = true
         }

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Cable, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import {
   CAMERA_ANGLES,
@@ -8,6 +7,7 @@ import {
   type CameraAngle,
   type ChordLabels,
   type ChordRange,
+  useOnline,
 } from '@/shared/lib'
 import { printedKeyName, type Midi } from '@/shared/lib/music'
 import { KeyStrip } from './KeyStrip'
@@ -33,8 +33,8 @@ export type PianoShown = 'hands' | 'keys'
 /**
  * The canvas's Piano sheet, one for every screen with keys (the Player's transport, Chords' bar),
  * opened by the screen's own button (`trigger`): Show the piano, then the 3D piano (the hands at the
- * keys) or the 2D keys as two cards, choosing one shows it; then the rows to the piano's one home,
- * All piano settings (its range, labels, sound), and to Connect a piano.
+ * keys) or the 2D keys as two cards, choosing one shows it; then the Sound and the MIDI keyboard, each
+ * a row to its home with its value now.
  */
 export function PianoSheet({
   keys,
@@ -45,6 +45,7 @@ export function PianoSheet({
   labels,
   range,
   stage,
+  midi,
 }: {
   keys: boolean
   hands: boolean
@@ -60,6 +61,9 @@ export function PianoSheet({
     readonly low: Midi
     readonly high: Midi
     readonly onChange: (range: ChordRange) => void
+    /** The white keys the strip moves (two or four octaves), and where it was dragged to. */
+    readonly whites: number
+    readonly onMove: (from: Midi) => void
   }
   /** The 3D piano's own rows, under its card while it is chosen (Chords): Angle, Hands on the keys. */
   stage?: {
@@ -68,9 +72,12 @@ export function PianoSheet({
     readonly handsOnKeys: boolean
     readonly onHandsOnKeys: (shown: boolean) => void
   }
+  /** The MIDI keyboard heard, in a word or its name (`useMidiSummary`). */
+  midi: string
 }) {
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
+  const online = useOnline()
   const shown: PianoShown = hands ? 'hands' : 'keys'
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -129,7 +136,7 @@ export function PianoSheet({
               <div className="flex items-center justify-between gap-3">
                 <span className="text-base text-foreground">{t('pianoSheet.range')}</span>
                 <span className="text-sm text-muted-foreground tabular-nums">
-                  {printedKeyName(range.low)}–{printedKeyName(range.high)}
+                  {printedKeyName(range.low)} – {printedKeyName(range.high)}
                 </span>
               </div>
               <KeyStrip
@@ -139,6 +146,7 @@ export function PianoSheet({
                   from: printedKeyName(range.low),
                   to: printedKeyName(range.high),
                 })}
+                move={{ whites: range.whites, onMove: range.onMove }}
               />
               <Segmented
                 label={t('pianoSheet.range')}
@@ -167,15 +175,14 @@ export function PianoSheet({
           ) : null}
           <SettingsGroup flush>
             <RowLink
-              title={t('pianoSheet.all')}
-              icon={SlidersHorizontal}
-              paint="sand"
-              render={<Link to="/settings/on-screen-piano" />}
+              title={t('pianoSheet.sound')}
+              value={t('pianoSheet.grand')}
+              detail={online ? undefined : t('pianoSheet.offline')}
+              render={<Link to="/settings/storage" />}
             />
             <RowLink
-              title={t('pianoSheet.connect')}
-              icon={Cable}
-              paint="sky"
+              title={t('pianoSheet.midi')}
+              value={midi}
               render={<Link to="/settings/connect-piano" />}
             />
           </SettingsGroup>

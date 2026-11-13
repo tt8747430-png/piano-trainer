@@ -53,7 +53,7 @@ node .claude/skills/owner-way/scripts/shots.mjs http://localhost:5191 <scratchpa
 It shoots each step at all six sizes, both themes and both languages (24 shots a step) as a returning learner. The phones run
 as the installed app: the status bar and the home indicator are emulated as safe-area insets (59 and 34 on a 393×852), and
 `navigator.standalone` is true. It waits for a score to be engraved before shooting. A step can act first:
-`"/play/hot-cross-buns >> click=Version >> scroll"` taps by accessible name and then shoots the top, the middle and the end; `type=<text>` types into the field focused (a New sheet's name).
+`"/play/hot-cross-buns >> click=Version >> scroll"` taps by accessible name and then shoots the top, the middle and the end; `type=<text>` types into the field focused (a New sheet's name); `slide=<0 to 1>` drags the first slider from its middle to that part of its width (the Piano sheet's Range strip).
 `inspect.js` checks every shot and prints a `PROBLEM` line for:
 - text cut with no ellipsis (`CUT`);
 - two controls or texts drawn over each other (`OVERLAP`);

@@ -43,6 +43,7 @@ export {
   MIDDLE_C,
   MIDDLE_OCTAVES,
   PIANO,
+  WHITE_KEYS,
   isBlackKey,
   keyboardRange,
   octaveOf,

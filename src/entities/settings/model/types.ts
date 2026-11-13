@@ -496,6 +496,8 @@ export interface ChordsSettings {
   readonly labels: ChordLabels
   /** How many keys its piano shows. */
   readonly range: ChordRange
+  /** The white key the strip was dragged to, where two or four octaves start; null: the C under the chord. */
+  readonly rangeFrom: Midi | null
   /** Where its 3D piano is seen from. */
   readonly angle: CameraAngle
   /** Its 3D piano with the hands at the keys, or the keys alone. */
@@ -504,6 +506,7 @@ export interface ChordsSettings {
 export const DEFAULT_CHORDS: ChordsSettings = {
   labels: 'names',
   range: 'chord',
+  rangeFrom: null,
   angle: 'seat',
   handsOnKeys: true,
 }

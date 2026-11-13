@@ -11,7 +11,7 @@ import {
   savedObject,
   type SavingOptions,
 } from '@/shared/lib'
-import { isInversion, type Midi } from '@/shared/lib/music'
+import { isInversion, midi, type Midi } from '@/shared/lib/music'
 import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
@@ -93,7 +93,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 44
+export const SETTINGS_VERSION = 45
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -299,6 +299,13 @@ function chordsSettings(value: unknown): ChordsSettings {
   return {
     labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels,
     range: isChordRange(saved.range) ? saved.range : DEFAULT_CHORDS.range,
+    rangeFrom:
+      typeof saved.rangeFrom === 'number' &&
+      Number.isInteger(saved.rangeFrom) &&
+      saved.rangeFrom >= 21 &&
+      saved.rangeFrom <= 108
+        ? midi(saved.rangeFrom)
+        : DEFAULT_CHORDS.rangeFrom,
     angle: isCameraAngle(saved.angle) ? saved.angle : DEFAULT_CHORDS.angle,
     handsOnKeys:
       typeof saved.handsOnKeys === 'boolean' ? saved.handsOnKeys : DEFAULT_CHORDS.handsOnKeys,

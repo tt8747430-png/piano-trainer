@@ -23,6 +23,11 @@ export interface KeyRange {
 /** Every key of a piano, A0 to C8: what a keyboard scrolls through. */
 export const PIANO: KeyRange = { from: midi(21), to: midi(108) }
 
+/** The piano's 52 white keys, A0 to C8, low to high: what a strip of the 88 is measured in. */
+export const WHITE_KEYS: readonly Midi[] = Array.from({ length: 88 }, (_, at) =>
+  midi(21 + at),
+).filter((key) => !isBlackKey(key))
+
 /** Two octaves up from middle C: what the explorers show at least. */
 export const MIDDLE_OCTAVES: KeyRange = { from: MIDDLE_C, to: midi(83) }
 

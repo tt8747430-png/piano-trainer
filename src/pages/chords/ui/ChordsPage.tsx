@@ -7,11 +7,12 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
+import { useMidiSummary } from '@/features/connect-midi'
 import { PianoSheet, useFoldKeys } from '@/features/live-keyboard'
 import { setChords, setScoreView } from '@/features/set-preference'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
-import { ChordExplorer, framedChord, type ChordView } from '@/widgets/chord-explorer'
+import { ChordExplorer, framedChord, RANGE_WHITES, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
 
 /**
@@ -24,9 +25,10 @@ export function ChordsPage() {
   const onChange = useSetSearch<ChordView>()
   const { folded, fold } = useFoldKeys()
   const { hands } = useSettings(selectScoreView)
-  const { labels, range, angle, handsOnKeys } = useSettings(selectChords)
-  const framed = framedChord(chord, range)
+  const { labels, range, rangeFrom, angle, handsOnKeys } = useSettings(selectChords)
+  const framed = framedChord(chord, range, rangeFrom)
   const settings = useSettingsStoreApi()
+  const midi = useMidiSummary()
   return (
     <div className="flex flex-col gap-4">
       <ScreenHeader
@@ -34,6 +36,7 @@ export function ChordsPage() {
         back={<BackButton variant="glass" />}
         tools={
           <PianoSheet
+            midi={midi}
             keys={!folded}
             hands={hands}
             onKeys={(shown) => fold(!shown)}
@@ -49,7 +52,15 @@ export function ChordsPage() {
               value: range,
               low: framed.low,
               high: framed.high,
-              onChange: (next) => setChords(settings, { range: next }),
+              // Fit the chord forgets where the strip was dragged; a drag on it shows two octaves.
+              onChange: (next) =>
+                setChords(
+                  settings,
+                  next === 'chord' ? { range: next, rangeFrom: null } : { range: next },
+                ),
+              whites: RANGE_WHITES[range === 'chord' ? 'two' : range],
+              onMove: (from) =>
+                setChords(settings, { range: range === 'chord' ? 'two' : range, rangeFrom: from }),
             }}
             trigger={(open) => (
               <RoundButton
