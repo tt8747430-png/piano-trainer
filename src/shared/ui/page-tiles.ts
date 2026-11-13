@@ -14,7 +14,7 @@ import {
   Metronome,
   Folder,
   ScanSearch,
-  Ruler,
+  Spline,
   SquarePlay,
   type LucideIcon,
 } from 'lucide-react'
@@ -37,10 +37,11 @@ export const PAGE_TILES = {
   chords: { icon: KeyboardMusic, paint: 'sand' },
   scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky' },
   key: { icon: CircleDot, paint: 'lilac' },
-  intervals: { icon: Ruler, paint: 'yellow' },
+  // Two notes and the leap between them (the board's arc).
+  intervals: { icon: Spline, paint: 'grass' },
   tensions: { icon: Layers, paint: 'grass' },
-  patterns: { icon: AudioWaveform, paint: 'yellow' },
-  progressions: { icon: ListMusic, paint: 'grass' },
+  patterns: { icon: AudioWaveform, paint: 'lilac' },
+  progressions: { icon: ListMusic, paint: 'yellow' },
   // The Chord player (R29 CP1): a chord sheet played by a band.
   chordPlayer: { icon: SquarePlay, paint: 'lilac' },
   chordFinder: { icon: ScanSearch, paint: 'sky' },
