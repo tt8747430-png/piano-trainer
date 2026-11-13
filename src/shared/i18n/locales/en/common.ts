@@ -67,6 +67,8 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A sheet's way out (R42): what it set is already applied.
+  done: 'Done',
   // A picker's panel: the circle's Select, and the Keys sheet's (Chord Trainer's).
   picker: {
     select: 'Select: {{key}}',

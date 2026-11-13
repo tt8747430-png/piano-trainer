@@ -50,7 +50,7 @@ export function BeatSquares({
         data-muted={muted || undefined}
         className={cn(
           'flex w-full items-end justify-center',
-          small ? 'max-w-xs gap-1' : 'max-w-md gap-1.5 sm:gap-3',
+          small ? 'max-w-xs gap-1.5' : 'max-w-md gap-1.5 sm:gap-3',
         )}
       >
         {levels.map((level, beat) => (
@@ -58,8 +58,8 @@ export function BeatSquares({
             key={beat}
             className={cn(
               'flex flex-1',
-              small ? 'max-w-8' : 'max-w-12',
-              beat === 0 && (small ? 'max-w-11 grow-2' : 'max-w-16 grow-2'),
+              small ? 'max-w-11' : 'max-w-12',
+              beat === 0 && (small ? 'max-w-14 grow-2' : 'max-w-16 grow-2'),
             )}
           >
             <button

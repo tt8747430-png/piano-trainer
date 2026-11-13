@@ -1,5 +1,4 @@
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer'
-import { X } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
@@ -36,7 +35,7 @@ export function Sheet({
 }
 
 /**
- * The sheet's panel: its title beside its Close, under it what it acts on (`description`, whole,
+ * The sheet's panel (R42, the canvas's one sheet): its title centred, Done at its right, under it what it acts on (`description`, whole,
  * wrapping), a body that scrolls with room round it, and an optional footer parted from it by a
  * hairline, clear of the home indicator. What the body holds keeps its height, scrolling rather than
  * squeezed. Over the phone's keyboard the panel stands on it. On a phone on its side it takes nearly
@@ -74,7 +73,7 @@ export function SheetContent({
     <DrawerContent
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
-        'mx-auto w-full max-w-2xl rounded-t-sheet bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        'mx-auto w-full max-w-2xl rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // From the right (a laptop's panel beside what it sets): the screen's height, its own width.
         'data-[swipe-axis=x]:mx-0 data-[swipe-axis=x]:w-[min(28rem,100vw)] data-[swipe-axis=x]:max-w-none data-[swipe-axis=x]:rounded-t-none data-[swipe-axis=x]:rounded-l-sheet data-[swipe-axis=x]:pb-safe',
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
@@ -84,27 +83,30 @@ export function SheetContent({
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
       )}
     >
-      <DrawerHeader className="flex-row items-start justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">
-        <div className="flex min-w-0 flex-col gap-1 pt-1">
-          <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1">
-            <DrawerTitle className="font-display text-2xl leading-tight font-semibold text-pretty break-words">
+      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-3 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
+        <div className="col-start-2 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
+          <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
+            <DrawerTitle className="font-sans text-[1.0625rem] leading-snug font-semibold text-balance break-words">
               {title}
             </DrawerTitle>
             {info ? <InfoTip name={title}>{info}</InfoTip> : null}
             {status}
           </div>
           {description ? (
-            <DrawerDescription className="text-base leading-snug text-pretty break-words text-muted-foreground">
+            <DrawerDescription className="text-sm leading-snug text-pretty break-words text-muted-foreground">
               {description}
             </DrawerDescription>
           ) : null}
         </div>
         <DrawerClose
           render={
-            <Button variant="ghost" size="icon" className="shrink-0" aria-label={t('close')} />
+            <Button
+              variant="ghost"
+              className="col-start-3 justify-self-end px-2 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
+            />
           }
         >
-          <X aria-hidden />
+          {t('done')}
         </DrawerClose>
       </DrawerHeader>
       <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-5 pt-1 pb-6 *:shrink-0">

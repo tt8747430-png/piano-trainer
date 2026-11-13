@@ -465,7 +465,8 @@ square at the top.
   only for movement.
 - **One affordance a row** (R34): a library row with a More (a folder, a song, a practice item) opens on a tap
   anywhere and carries no ›; its row is picture, name, one line, ⋯.
-- **Sheet** (`Sheet`): card paper, the sheet corner on top, a grab handle, a Literata title with Close, an optional
+- **Sheet** (`Sheet`): the page's paper (its cards white on it), the sheet corner on top, a grab handle, the title
+  centred (sans, 17px, semibold) with Done at its right in the link's ink (R42), an optional
   footer. It stands on the phone's keyboard. Never a sheet over a sheet.
 - **Properties** (a song's Details): a `RowTrigger` per property, its name and value, the value "Not set" in soft ink
   where empty; a tap opens its editor beside it (a popover on a laptop, a sheet on a phone), titled with its name.

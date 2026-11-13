@@ -72,6 +72,7 @@ export const common: LocaleResources['common'] = {
     chosen: '{{count}} из {{total}}',
   },
   close: 'Закрыть',
+  done: 'Готово',
   notifications: 'Уведомления',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
