@@ -266,3 +266,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 9, Learn: a lesson question answered on the keys (dots per note, Show the answer): fine.
 - Loop round 9, Songs: a song's Settings: fine.
 - Loop round 9, Practice: the Chord player's tempo field, narrowed to 64px, kept 16px padding a side and cut "100"; 8px and centred now. Chord finder: fine.
+- Loop round 9, Player: the transport's ‹ › were named "Back" and "Next" (the app's Back is the bar's); they step a note or chord, so "Previous note" / "Next note" ("Предыдущая нота" / "Следующая нота"). Player tests naming the old labels are for the gate.

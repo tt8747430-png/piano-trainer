@@ -378,7 +378,9 @@ export const player = {
   },
   loop: 'Loop',
   back: 'Back',
-  next: 'Next',
+  /** The transport's ‹ and ›: a note (or chord) at a time. */
+  previousNote: 'Previous note',
+  nextNote: 'Next note',
   play: 'Play',
   stop: 'Stop',
   /** The transport (Loop, Restart, ‹ Play ›, Pace, the metronome), as a screen reader names it. */

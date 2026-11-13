@@ -44,8 +44,8 @@ export function PlayerDock({
       }
       playing={playing}
       play={{ label: t('play'), title: keyHint(action, PLAYER_KEYS.play) }}
-      back={{ label: t('back'), title: keyHint(t('back'), PLAYER_KEYS.back) }}
-      next={{ label: t('next'), title: keyHint(t('next'), PLAYER_KEYS.next) }}
+      back={{ label: t('previousNote'), title: keyHint(t('previousNote'), PLAYER_KEYS.back) }}
+      next={{ label: t('nextNote'), title: keyHint(t('nextNote'), PLAYER_KEYS.next) }}
       onPlay={playing ? practice.stop : practice.play}
       onBack={practice.prev}
       onNext={practice.next}
