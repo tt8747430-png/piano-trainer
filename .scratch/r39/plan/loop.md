@@ -263,3 +263,6 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 8, score editor and Player: one icon and one word per setting across both gears: the on-screen piano is the piano (the editor and Chord player wore KeyboardMusic, which now marks chords alone), note input a text cursor (it wore the piano), the score view the eye in both (the Player wore a monitor) and named "Score view" / "Вид нот" in both (the editor said "View").
 - Loop round 8, Profile (Streak, an achievement), Settings (General): nothing to change. Search: covered in round 7.
 - Loop round 8 (closing): the metronome wore three glyphs (Lucide Metronome on the tiles and nav, Timer in the Tools sheet and Player settings, a hand-drawn MetronomeIcon on the Player's click); Lucide's Metronome everywhere now, the hand-drawn copy deleted, and the Player settings row painted grass like every other metronome mark. Build passed (exit 0).
+- Loop round 9, Learn: a lesson question answered on the keys (dots per note, Show the answer): fine.
+- Loop round 9, Songs: a song's Settings: fine.
+- Loop round 9, Practice: the Chord player's tempo field, narrowed to 64px, kept 16px padding a side and cut "100"; 8px and centred now. Chord finder: fine.

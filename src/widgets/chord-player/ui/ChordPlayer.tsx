@@ -287,7 +287,7 @@ export function ChordPlayer({
           >
             {localText(style.name, locale)}
           </HeadButton>
-          <div className="flex items-center gap-2 [&_input]:w-16">
+          <div className="flex items-center gap-2 [&_input]:w-16 [&_input]:px-2 [&_input]:text-center">
             <span className="text-sm text-muted-foreground">{t('chordPlayer.tempo')}</span>
             <Stepper
               label={t('chordPlayer.tempo')}
