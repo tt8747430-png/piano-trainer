@@ -305,8 +305,8 @@ export const practice: LocaleResources['practice'] = {
       save: 'Сохранить',
       more: 'Ещё',
       delete: 'Удалить',
-      deleting: 'Удалить «{{name}}»?',
-      deletingBody: 'Она навсегда исчезнет из «Моих».',
+      deleted: '«{{name}}» удалена',
+      undo: 'Отменить',
     },
     mode: {
       label: 'Лад',

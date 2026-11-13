@@ -272,3 +272,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 9 closed: a sweep for controls without an accessible name on 12 routes found none (only Base UI's hidden inputs). Build passed (exit 0).
 - Loop round 10: a sweep for Russian strings left in English found only Italian marks and product names. The Chord player printed repeats as "× 2", the Player as "×2"; "×2" in both now.
 - Loop round 10 (R38): deleting your own pattern asked first, though the ruling reads "delete a pattern: gone at once, Pattern deleted · Undo"; now it goes at once, "“Slow hymn chords” deleted · Undo", and Undo puts it back in its place with its star (driven in the browser: create, delete, toast, Undo, back).
+- R10 Practice: an own progression is deleted from its More at once, "“Sunday opener” deleted · Undo" putting it back in its place with its favourite (R38); driven in the browser: keep, delete, toast, Undo, back in Mine.

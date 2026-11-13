@@ -318,8 +318,8 @@ export const practice = {
       save: 'Save',
       more: 'More',
       delete: 'Delete',
-      deleting: 'Delete “{{name}}”?',
-      deletingBody: 'It leaves Mine for good.',
+      deleted: '“{{name}}” deleted',
+      undo: 'Undo',
     },
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {

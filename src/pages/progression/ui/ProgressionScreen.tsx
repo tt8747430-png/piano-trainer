@@ -5,18 +5,15 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePracticeLibraryStoreApi, type OwnProgression } from '@/entities/practice-library'
 import type { LibraryProgression } from '@/entities/progression-library'
-import { deleteProgression, PracticeFavouriteButton } from '@/features/manage-practice-library'
+import {
+  deleteProgression,
+  PracticeFavouriteButton,
+  restoreProgression,
+} from '@/features/manage-practice-library'
 import { localText, useLocale } from '@/shared/i18n'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import {
-  BackButton,
-  ConfirmDialog,
-  MoreMenu,
-  RoundButton,
-  RoundLink,
-  ScreenHeader,
-} from '@/shared/ui'
+import { BackButton, MoreMenu, RoundButton, RoundLink, say, ScreenHeader } from '@/shared/ui'
 import { SettingsGear } from '@/widgets/practice-pages'
 import {
   KeepProgressionSheet,
@@ -30,13 +27,13 @@ export type ShownProgression =
   | { readonly kind: 'own'; readonly progression: OwnProgression }
   | { readonly kind: 'line'; readonly title: string; readonly named?: LibraryProgression }
 
-/** What is open over the page: nothing, the Keep or Edit sheet, or Delete's question. */
-type Open = 'none' | 'keep' | 'delete'
+/** What is open over the page: nothing, or the Keep or Edit sheet. */
+type Open = 'none' | 'keep'
 
 /**
  * A progression's own page (R30-4): its name in the bar, its ♡ (a library's or the learner's own),
  * its gear to Progressions' Settings; the learner's own with Edit (its name and line) and More
- * (Delete, asked first); a line typed with Keep in Mine; an editor's pencil to the library's editor.
+ * (Delete, at once with Undo); a line typed with Keep in Mine; an editor's pencil to the library's editor.
  * Under the bar what it is (how it sounds · its style), then the progression itself.
  */
 export function ProgressionScreen({
@@ -53,6 +50,23 @@ export function ProgressionScreen({
   const { account } = useAccount()
   const navigate = useNavigate()
   const forget = useForgetScreens()
+  // Gone at once, with Undo in its toast (R38): the Undo puts it back whole, so nothing is asked.
+  const remove = (progression: OwnProgression) => {
+    // Leave the page first: it has nothing to show once the progression is gone.
+    forget(`/practice/progressions/${progression.id}`)
+    void navigate({
+      to: '/practice/progressions',
+      search: { place: 'mine' },
+      replace: true,
+    }).then(() => {
+      const deleted = deleteProgression(store, progression.id)
+      if (!deleted) return
+      say(t('progressions.mine.deleted', { name: progression.name }), {
+        label: t('progressions.mine.undo'),
+        onClick: () => restoreProgression(store, deleted),
+      })
+    })
+  }
   const store = usePracticeLibraryStoreApi()
   const [open, setOpen] = useState<Open>('none')
   const library =
@@ -124,7 +138,7 @@ export function ProgressionScreen({
                   label: t('progressions.mine.delete'),
                   icon: Trash2,
                   destructive: true,
-                  onSelect: () => setOpen('delete'),
+                  onSelect: () => remove(own),
                 },
               ]}
             />
@@ -157,24 +171,6 @@ export function ProgressionScreen({
               replace: own !== undefined,
             })
           }
-        />
-      ) : null}
-      {own ? (
-        <ConfirmDialog
-          open={open === 'delete'}
-          onOpenChange={(next) => setOpen(next ? 'delete' : 'none')}
-          title={t('progressions.mine.deleting', { name: own.name })}
-          body={t('progressions.mine.deletingBody')}
-          action={t('progressions.mine.delete')}
-          onConfirm={() => {
-            // Leave the page first: it has nothing to show once the progression is gone.
-            forget(`/practice/progressions/${own.id}`)
-            void navigate({
-              to: '/practice/progressions',
-              search: { place: 'mine' },
-              replace: true,
-            }).then(() => deleteProgression(store, own.id))
-          }}
         />
       ) : null}
     </div>

@@ -17,7 +17,9 @@ use one.
   Player opens with and its chord size. The key's Major · Minor shows that mode's line. No two lines are the same loop
   in the same key or the relative one (a test holds it). No progression is a piece.
 - **Progressions is a place of the practice library** (`/practice/progressions`, ADR 0052): each style a place, Mine
-  the learner's own, a row a progression with its chords as tiles tinted by role. A progression has its page
+  the learner's own, a row a progression with its chords as tiles tinted by role. A line typed is kept in Mine from
+  its bar (Keep in Mine); one of Mine is edited from its bar and deleted from its More at once, the toast's Undo
+  putting it back in its place, favourite and all. A progression has its page
   (`/practice/progressions/$id`, the library's or `mine-n`): the row on a staff, voiced as its Settings say, why it
   works drawn on its chords, its chords as the Player's diagrams, its key, chord size and approach chords, then
   Practise in all 12 keys and its songs. It holds the tools that work on it:
