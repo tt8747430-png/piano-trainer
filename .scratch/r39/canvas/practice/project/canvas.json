@@ -965,9 +965,18 @@
       "is_interactive": true,
       "page": "places"
     },
-    "LearnLaptop.dc.html": {
+    "LearnNight.dc.html": {
       "x": 0,
       "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Learn, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLaptop.dc.html": {
+      "x": 0,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Learn, laptop",
@@ -976,7 +985,7 @@
     },
     "ProfileLaptop.dc.html": {
       "x": 2223,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Profile, laptop",
@@ -985,7 +994,7 @@
     },
     "PracticeResultLaptop.dc.html": {
       "x": 4446,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "A practice run’s results, from Profile, laptop",
@@ -994,7 +1003,7 @@
     },
     "SettingsLaptop.dc.html": {
       "x": 6669,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Settings, laptop",
@@ -1003,7 +1012,7 @@
     },
     "AdminLaptop.dc.html": {
       "x": 8892,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Administration, laptop",
@@ -1012,7 +1021,7 @@
     },
     "LessonLaptop.dc.html": {
       "x": 11115,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "A lesson, read and edited, laptop",
@@ -1021,7 +1030,7 @@
     },
     "CourseLaptop.dc.html": {
       "x": 13338,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "A course, read and edited, laptop",
@@ -1030,7 +1039,7 @@
     },
     "SignInLaptop.dc.html": {
       "x": 15561,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Sign in and the account pages, laptop",
@@ -1039,7 +1048,7 @@
     },
     "LegalLaptop.dc.html": {
       "x": 17784,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Privacy Policy and Terms, laptop",
@@ -1048,10 +1057,19 @@
     },
     "AppLayersLaptop.dc.html": {
       "x": 20007,
-      "y": 1720,
+      "y": 3140,
       "w": 2143,
       "h": 1299,
       "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLaptopNight.dc.html": {
+      "x": 0,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Learn, Night, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -1154,12 +1172,28 @@
       "maxW": 5220,
       "page": "places"
     },
-    "places-laptop": {
+    "places-phone-night": {
       "x": 0,
       "y": 1420,
+      "text": "Phone, Night",
+      "kind": "title1",
+      "maxW": 450,
+      "page": "places"
+    },
+    "places-laptop": {
+      "x": 0,
+      "y": 2840,
       "text": "Laptop",
       "kind": "title1",
       "maxW": 22150,
+      "page": "places"
+    },
+    "places-laptop-night": {
+      "x": 0,
+      "y": 4639,
+      "text": "Laptop, Night",
+      "kind": "title1",
+      "maxW": 2143,
       "page": "places"
     }
   },
@@ -1271,6 +1305,7 @@
     "SignIn.dc.html",
     "Legal.dc.html",
     "AppLayers.dc.html",
+    "LearnNight.dc.html",
     "LearnLaptop.dc.html",
     "ProfileLaptop.dc.html",
     "PracticeResultLaptop.dc.html",
@@ -1280,7 +1315,8 @@
     "CourseLaptop.dc.html",
     "SignInLaptop.dc.html",
     "LegalLaptop.dc.html",
-    "AppLayersLaptop.dc.html"
+    "AppLayersLaptop.dc.html",
+    "LearnLaptopNight.dc.html"
   ],
   "pages": [
     {

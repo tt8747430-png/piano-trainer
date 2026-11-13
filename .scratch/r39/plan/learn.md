@@ -27,6 +27,13 @@ are, what is next, and that every lesson can still be opened.
   its toast; Add lesson opens a New sheet. Learn's Courses take the same Edit mode, with New course (Name, Shelf,
   Level, Length, Create course). Settings and Publish are pages with Back, the same for a lesson and a course.
 
+- **A check is named as what it checks** (canvas 162, loop round 10): one scale ("Major", "Scale · Not known yet")
+  or one chord family ("Triads", "Chords · 0 of 7 known"), its square showing its kind's picture (bars for a scale,
+  the keys for chords); never an invented "Scales check · 5 of 12 known". Tiles still to learn are plain (white, a
+  hairline, the number in ink): colour only for learned (sage) and next (the honey ring).
+- **Learn by Night** (canvas 162): phone and laptop Night boards beside the Day ones.
+
 ## History
 
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.
+- Canvas 162 (2026-11-13, loop round 10, design first): checks named truly with their pictures; Learn's Night boards.

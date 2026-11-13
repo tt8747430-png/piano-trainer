@@ -12,9 +12,15 @@ NIGHT = {'#F7F3EE': '#191512', '#FEFDFB': '#24201C', '#EEE9E2': '#2E2924', '#EDE
          # the Player's own greys: staff lines, hairlines, the sheet, the second ink
          '#CFC6BB': '#5A524A', '#E9E2D8': '#3A332D', '#EFE9E1': '#2E2924', '#DDD5CA': '#453E38', '#A39A90': '#857B70',
          '#4A433C': '#D2CBC1', '#BDB3A7': '#5F574F', '#D9D1C6': '#453E38', '#E4DDD3': '#3A332D', '#E7E0D6': '#3A332D',
-         '#F2EDE6': '#2E2924', '#F3EEE7': '#24201C', '#ECE6DE': '#3A332D', '#9A9086': '#8A8178', '#2A1F18': '#14110E'}
+         '#F2EDE6': '#2E2924', '#F3EEE7': '#24201C', '#ECE6DE': '#3A332D', '#9A9086': '#8A8178', '#2A1F18': '#14110E',
+         # Learn (loop round 10): the learned sage, its spine and meter, the side bar's paper, a chosen row, the rust label
+         '#DCE9D6': '#2C3A2B', '#2F5A35': '#A9CFA0', '#44684A': '#7FAF78', '#FBF8F4': '#1F1B18',
+         '#FBF8F3': '#1F1B18', '#E8E1D8': '#3A332D', '#A8551F': '#E39A66', '#F6E7C8': '#3E3420', '#8A5A1C': '#E3C383',
+         '#6B6259': '#A39A90', '#8A7F76': '#8A8178', '#E2DACF': '#3A332D', '#EAE2D7': '#3A332D', '#E9D8C4': '#3A332D', '#1A1612': '#EDE9E1'}
 def night(h):
     for a, b in NIGHT_VARS: h = h.replace(a, b)
+    # white as a surface is the night's card, not its ink
+    h = re.sub(r'background: #(?:FFFFFF|ffffff|fff)\b', 'background: #24201C', h)
     h = re.sub(r'#[0-9A-Fa-f]{6}\b', lambda m: NIGHT.get(m.group(0).upper(), m.group(0)), h)
     h = re.sub(r'rgba\((?:51, ?41, ?33|26, ?22, ?18), ?([\d.]+)\)', lambda m: 'rgba(10,7,5,%s)' % min(0.9, round(float(m.group(1)) * 3, 2)), h)
     h = h.replace('rgba(254,253,251,.86)', 'rgba(36,32,28,.86)').replace('rgba(246,243,238,0)', 'rgba(25,21,18,0)').replace('rgba(247, 243, 238, 0)', 'rgba(25,21,18,0)').replace('rgba(255, 255, 255, 0.92)', 'rgba(36,32,28,.92)')

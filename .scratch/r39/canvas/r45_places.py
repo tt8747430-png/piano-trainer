@@ -3,6 +3,8 @@
 # content: the journeys from src/entities/lesson/content/journeys.ts, the app's en strings. Exec'd by r41.py.
 _J = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/journeys.json'))
 _KIND = {'scales': 'Scales', 'chords': 'Chords', 'intervals': 'Intervals', 'progressions': 'Progressions'}
+_SCALE = {'major': 'Major', 'natural': 'Natural minor', 'harmonic': 'Harmonic minor', 'melodic': 'Melodic minor', 'pent': 'Major pentatonic', 'mpent': 'Minor pentatonic', 'majorBlues': 'Major blues', 'blues': 'Blues', 'dorian': 'Dorian', 'phrygian': 'Phrygian', 'lydian': 'Lydian', 'mixolydian': 'Mixolydian', 'locrian': 'Locrian'}
+_FAMILY = {'tri': ('Triads', 7), 'six': ('6th & add', 7), 'sev': ('7th chords', 9), 'nin': ('9ths & more', 14), 'alt': ('Altered 7ths', 9)}
 _NAME = {"'major'": 'Major scales', "'tri'": 'Triads', "'minor'": 'Minor scales', "'seventh'": 'Seventh chords', "'sev'": 'Seventh chords'}
 LEVELS = []
 for li, j in enumerate(_J):
@@ -13,8 +15,14 @@ for li, j in enumerate(_J):
             n += 1
             if k == 'l': rows.append({'t': v, 'd': f'Lesson {n}', 'check': False})
             else:
-                kind, arg = v.split(':', 1); nm = _KIND[kind] + ' check'
-                rows.append({'t': nm, 'd': f'{_KIND[kind]} · {5 if li == 0 else 0} of 12 known', 'check': True})
+                # a check is one scale, or one chord family, by its musician's name (the app's music strings), with
+                # what of it is known: a scale is known or not yet; a family counts its qualities
+                kind, arg = v.split(':', 1)
+                for a in [x.strip().strip("'") for x in arg.split(',')]:
+                    n += 1
+                    if kind == 'scales': rows.append({'t': _SCALE[a], 'd': 'Scale · Not known yet', 'check': True, 'scale': True})
+                    else: rows.append({'t': _FAMILY[a][0], 'd': f'Chords · 0 of {_FAMILY[a][1]} known', 'check': True, 'scale': False})
+                n -= 1
         chs.append({'t': ct, 'rows': rows})
     LEVELS.append({'chip': ['Beginner', 'Intermediate', 'Advanced', 'Professional'][li], 't': j['t'], 'goal': j['goal'], 'ch': chs, 'n': n, 'done': 6 if li == 0 else 0})
 COURSES = [('Beginner courses', [('Introduction to the Piano', 'The keys, posture and your first tunes', 'done'), ('Intro to Music Reading', 'Notes on both staves, at sight', 'now'), ('Rhythm Basics', 'Count, clap and play in time', ''), ('Playing with Both Hands', 'Two hands, one piece', '')]),
@@ -29,7 +37,7 @@ LEARN_JS = js(PLACES_PRE + r'''
     const view = st.view ?? 'Lessons', lv = st.lv ?? 0, own = lv === 4, editing = !!st.editing, gone = st.gone ?? {};
     const L = LEVELS[Math.min(lv, 3)]; let idx = 0;
     const chapters = L.ch.map((c, ci) => { const rows = c.rows.filter((r) => !gone[r.t]).map((r, ri) => { const i = idx++; const done = i < L.done, next = i === L.done;
-        return { ...r, done, next, todo: !done && !next, num: String(i + 1), first: i === 0, last: i === L.n - 1,
+        return { ...r, done, next, todo: !done && !next && !r.check, tScale: !done && !next && !!r.check && !!r.scale, tChord: !done && !next && !!r.check && !r.scale, num: String(i + 1), first: i === 0, last: i === L.n - 1,
           tileBg: done ? '#DCE9D6' : '#FEFDFB', tileRing: next ? '0 0 0 2.5px #EDC684' : (done ? 'none' : '0 0 0 1px #DAD1C8'), tileFg: done ? '#2F5A35' : '#685E56', rad: r.check ? '11px' : '22px',
           spineTop: i === 0 ? 'transparent' : (i <= L.done ? '#9BC093' : '#DAD1C8'), spineBot: i === L.n - 1 ? 'transparent' : (i < L.done ? '#9BC093' : '#DAD1C8'), weight: next ? 700 : 600, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [r.t]: true }, toast: 'Removed: ' + r.t }); } }; });
       const got = rows.filter((r) => r.done).length; return { t: (ci + 1) + ' · ' + c.t, rows, count: got + '/' + rows.length, add: () => set({ toast: 'Lesson added: New lesson' }), menu: () => set({ toast: 'Chapter: Rename · Remove chapter' }) }; });
@@ -51,7 +59,7 @@ def PATHROW(laptop=False):
     return (f'<sc-for list="{{{{c.rows}}}}" as="r" hint-placeholder-count="3"><a href="{href}" style="position: relative; min-height: 68px; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 0; color: {INK}; text-decoration: none">'
             f'<span aria-hidden="true" style="position: absolute; left: 21px; top: 0; height: 50%; width: 2px; background: {{{{r.spineTop}}}}"></span><span aria-hidden="true" style="position: absolute; left: 21px; top: 50%; height: 50%; width: 2px; background: {{{{r.spineBot}}}}"></span>'
             f'<span style="position: relative; flex: none; width: 44px; height: 44px; border-radius: {{{{r.rad}}}}; background: {{{{r.tileBg}}}}; box-shadow: {{{{r.tileRing}}}}; color: {{{{r.tileFg}}}}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">'
-            f'<sc-if value="{{{{r.done}}}}" hint-placeholder-val="{{{{false}}}}">{CHECKI}</sc-if><sc-if value="{{{{r.todo}}}}" hint-placeholder-val="{{{{true}}}}">{{{{r.num}}}}</sc-if><sc-if value="{{{{r.next}}}}" hint-placeholder-val="{{{{false}}}}">{BOOKI.replace("22", "20")}</sc-if></span>'
+            f'<sc-if value="{{{{r.done}}}}" hint-placeholder-val="{{{{false}}}}">{CHECKI}</sc-if><sc-if value="{{{{r.todo}}}}" hint-placeholder-val="{{{{true}}}}">{{{{r.num}}}}</sc-if><sc-if value="{{{{r.tScale}}}}" hint-placeholder-val="{{{{false}}}}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 20v-4M12 20V10M18 20V4"></path></svg></sc-if><sc-if value="{{{{r.tChord}}}}" hint-placeholder-val="{{{{false}}}}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h4M14 8h.01M18 8h.01M2 12h20M6 12v4M10 12v4M14 12v4M18 12v4"></path></svg></sc-if><sc-if value="{{{{r.next}}}}" hint-placeholder-val="{{{{false}}}}">{BOOKI.replace("22", "20")}</sc-if></span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: {{{{r.weight}}}}">{{{{r.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{r.d}}}}</span></span>'
             f'<sc-if value="{{{{r.next}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; height: 26px; padding: 0 10px; border-radius: 13px; background: {ACCENT}; font-size: 13px; font-weight: 700; display: flex; align-items: center">Next</span></sc-if>'
             f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span></sc-if>'f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Remove: {{{{r.t}}}}" onClick="{{{{r.remove}}}}" style="flex: none; height: 44px; padding: 0 8px; border: 0; background: transparent; color: #B3261E; font: inherit; font-size: 15px; font-weight: 600">Remove</button><span aria-label="Move: {{{{r.t}}}}" role="button" style="flex: none; width: 44px; height: 44px; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: grab"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg></span></sc-if></a></sc-for>')
@@ -102,6 +110,9 @@ NCBODY = (f'{CAPS("Name")}<input placeholder="New course" aria-label="Name" styl
 LSHEETS = BSHEET('nlOn', 'New lesson', NLBODY) + BSHEET('ncOn', 'New course', NCBODY) + BSHEET('noOn', 'New course', NOBODY)
 LPOPS = POPOVER('nlOn', 'New lesson', NLBODY, 'right: 460px; top: 300px', 380) + POPOVER('ncOn', 'New course', NCBODY, 'left: 600px; top: 200px', 480) + POPOVER('noOn', 'New course', NOBODY, 'right: 60px; top: 340px', 380)
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
+# Learn by Night (loop round 10): every area has its Night boards beside its Day ones
+for _f in ('Learn', 'LearnLaptop'):
+    open(OUT + _f + 'Night.dc.html', 'w').write(night(open(OUT + _f + '.dc.html').read()))
 
 # ── Profile ──
 BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>'
