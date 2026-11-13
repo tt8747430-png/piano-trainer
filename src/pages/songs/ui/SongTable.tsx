@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { pieceStage } from '@/entities/course'
 import { selectSort, useLibrary, type LibrarySort } from '@/entities/library'
 import { entryTitles, PieceLink, pieceChords, pieceKey, type Entry } from '@/entities/piece'
-import { selectIsLearned, selectPractised, useProgress } from '@/entities/progress'
+import { selectIsLearned, selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import { pieceStepId, StageMark } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -50,7 +50,13 @@ function LastPlayed({ at }: { at: string | undefined }) {
   )
 }
 
-function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
+/** Which of the optional columns hold something for these songs (canvas R39-1): an empty one is left out. */
+interface Held {
+  readonly learned: boolean
+  readonly played: boolean
+}
+
+function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; held: Held }) {
   const { t } = useTranslation(['songs', 'common'])
   const locale = useLocale()
   const { show } = useCardLook()
@@ -96,14 +102,16 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
           ) : null}
         </td>
       ) : null}
-      {show.progress ? (
+      {show.progress && held.learned ? (
         <td className={CELL}>
           {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
         </td>
       ) : null}
-      <td className={cn(CELL, 'text-sm text-muted-foreground tabular-nums')}>
-        <LastPlayed at={at} />
-      </td>
+      {held.played ? (
+        <td className={cn(CELL, 'text-sm text-muted-foreground tabular-nums')}>
+          <LastPlayed at={at} />
+        </td>
+      ) : null}
       <td className={cn(CELL, 'w-0 pe-0')}>
         <span className="flex items-center justify-end gap-1">
           {favourite ? <FavouriteMark /> : null}
@@ -120,13 +128,19 @@ function SongTableRow({ entry, page }: { entry: Entry; page: LibraryPage }) {
 /**
  * A place's songs as a table, the laptop's right pane (R30 S2, Apple Music's songs list): the title
  * and its line, then the columns the place's Card style shows (key, chords, level and Learned), the
- * day it was played last, and its More. A heading sorts by its column; the sorted one again returns
+ * day it was played last, and its More; Learned and the day are left out while no song has one. A heading sorts by its column; the sorted one again returns
  * to the learner's own order. Narrower than 48rem, the pane leaves the chords out, so the table never
  * spills past it.
  */
 export function SongTable({ entries, page }: { entries: readonly Entry[]; page: LibraryPage }) {
   const { t } = useTranslation(['songs', 'common', 'music'])
   const { show } = useCardLook()
+  const learnedSteps = useProgress(selectLearned)
+  const practised = useProgress(selectPractised)
+  const held: Held = {
+    learned: entries.some((entry) => learnedSteps[pieceStepId(entry.id)] !== undefined),
+    played: entries.some((entry) => practised[entry.id] !== undefined),
+  }
   return (
     <div className="@container">
       <table className="w-full border-collapse">
@@ -147,12 +161,14 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
                 {t('songs:table.level')}
               </th>
             ) : null}
-            {show.progress ? (
+            {show.progress && held.learned ? (
               <th scope="col" className={cn(CELL, 'font-semibold')}>
                 {t('common:learned.done')}
               </th>
             ) : null}
-            <SongSortHeading column="played" label={t('songs:table.played')} page={page} />
+            {held.played ? (
+              <SongSortHeading column="played" label={t('songs:table.played')} page={page} />
+            ) : null}
             <th scope="col" className={CELL}>
               <span className="sr-only">{t('songs:table.actions')}</span>
             </th>
@@ -160,7 +176,7 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
         </thead>
         <tbody>
           {entries.map((entry) => (
-            <SongTableRow key={entry.id} entry={entry} page={page} />
+            <SongTableRow key={entry.id} entry={entry} page={page} held={held} />
           ))}
         </tbody>
       </table>

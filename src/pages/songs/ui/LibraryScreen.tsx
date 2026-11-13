@@ -26,7 +26,7 @@ import { LibraryHeader } from './LibraryHeader'
 import { LibrarySelect } from './LibrarySelect'
 import { LibraryTree } from './LibraryTree'
 import { SharedWithMe } from './SharedWithMe'
-import { NewActions } from './NewActions'
+import { NewActions, NewMenu } from './NewActions'
 import { SelectionBar } from './SelectionBar'
 
 /**
@@ -142,6 +142,11 @@ export function LibraryScreen({
       <LibraryHeader
         page={page}
         folder={folder}
+        add={
+          wide ? (
+            <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+          ) : undefined
+        }
         edit={
           folder && renames
             ? {
@@ -166,7 +171,9 @@ export function LibraryScreen({
         body
       )}
       {!page.select.on ? (
-        <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+        wide ? null : (
+          <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+        )
       ) : empty ? (
         <SelectionBar page={page} folder={folder} />
       ) : null}

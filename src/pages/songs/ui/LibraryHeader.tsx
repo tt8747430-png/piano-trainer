@@ -1,5 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { CheckCheck, ListChecks, ListX, Palette, Settings } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { useUp } from '@/shared/lib'
@@ -28,11 +29,14 @@ export function LibraryHeader({
   page,
   folder,
   edit,
+  add,
 }: {
   page: LibraryPage
   folder: ShelvedFolder | null
   /** The folder's Edit, where it may be renamed. */
   edit?: EditAction
+  /** New, on a laptop: the primary action, last of the tools (`NewMenu`). */
+  add?: ReactNode
 }) {
   const { t } = useTranslation('songs')
   const views = useSongsViews('mine')
@@ -89,6 +93,7 @@ export function LibraryHeader({
               onClick={() => page.select.start()}
             />
             {folder ? null : <ArchiveButton />}
+            {add}
           </>
         )
       }
