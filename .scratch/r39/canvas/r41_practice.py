@@ -30,12 +30,11 @@ TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.
          ('lens', 'Chord finder', 'Chord identification', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
 TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
 MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }) };")
-ph = f'''{TOP('', '', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}{LARGE('Practice')}
+ph = f'''{TITLEBAR('Practice', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 14px">
 {H2('Theory')}{PLIST(THEORY)}{H2('Exercises')}{PLIST(EXERCISES)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
 grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
-lm = f'''{LTOP('', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
-<h1 style="margin: 0; font-size: 34px; font-weight: 700">Practice</h1>
+lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span>{TOOLSBTN}{IB('Search', SEARCH.replace('18', '22'), href='#')}</header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
 {H2('Theory')}{grid(THEORY)}{H2('Exercises')}{grid(EXERCISES)}{H2('Tools')}{grid(TOOLS)}</main>'''
 TOOLSHEET = PLIST(TOOLS)
 detail('Main', 'Practice', MAIN, ph, lm, '', BSHEET('toolsOn', 'Tools', TOOLSHEET), POPOVER('toolsOn', 'Tools', PLIST([(p, t, s, v, L(h, True)) for p, t, s, v, h in TOOLS]), 'right: 40px; top: 60px', 400))

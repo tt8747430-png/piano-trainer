@@ -46,8 +46,7 @@ def library(stem, title, D, back='', back_l='', soft='', right_extra='', soft_hr
     addbody = GROUP(*[('link', a, '', h) for a, h in add_items]) if add_items else ''
     more = GROUP(*more_rows) if more_rows else ''
     sheets = BSHEET('sortOn', 'Sort and filter', SORTSHEET_BODY) + (BSHEET('addOn', 'Add', addbody) if add_items else '') + (BSHEET('moreOn', title, more) if more_rows else '')
-    body = f'''{TOP(back, '', right_extra + add + (DOTS() if more_rows else ''))}
-{LARGE(title, soft=(f'<a href="{soft_href}.dc.html" style="color: inherit; text-decoration: none">{soft}</a>' if soft_href else soft))}
+    body = f'''{TITLEBAR(title, right_extra + add + (DOTS() if more_rows else ''), back, soft=(f'<a href="{soft_href}.dc.html" style="color: inherit; text-decoration: none">{soft}</a>' if soft_href else soft))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px {130 if root else 40}px; display: flex; flex-direction: column; gap: 14px">
 {SEARCHROW()}{CHIPS('places')}{CHOSEN}{SECTIONS(shelf_phone)}
 </main>{TABBAR(root) if root else ''}'''

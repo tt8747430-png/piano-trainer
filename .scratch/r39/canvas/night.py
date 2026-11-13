@@ -16,7 +16,7 @@ NIGHT = {'#F7F3EE': '#191512', '#FEFDFB': '#24201C', '#EEE9E2': '#2E2924', '#EDE
          # Learn (loop round 10): the learned sage, its spine and meter, the side bar's paper, a chosen row, the rust label
          '#DCE9D6': '#2C3A2B', '#2F5A35': '#A9CFA0', '#44684A': '#7FAF78', '#FBF8F4': '#1F1B18',
          '#FBF8F3': '#1F1B18', '#E8E1D8': '#3A332D', '#A8551F': '#E39A66', '#F6E7C8': '#3E3420', '#8A5A1C': '#E3C383',
-         '#6B6259': '#A39A90', '#8A7F76': '#8A8178', '#E2DACF': '#3A332D', '#EAE2D7': '#3A332D', '#E9D8C4': '#3A332D', '#1A1612': '#EDE9E1'}
+         '#6B6259': '#A39A90', '#8A7F76': '#8A8178', '#E2DACF': '#3A332D', '#EAE2D7': '#3A332D', '#E9D8C4': '#3A332D', '#1A1612': '#EDE9E1', '#D3E5F2': '#24323D', '#E4DCF1': '#2F2A3A', '#F3D2C8': '#3D2A25'}
 def night(h):
     for a, b in NIGHT_VARS: h = h.replace(a, b)
     # white as a surface is the night's card, not its ink

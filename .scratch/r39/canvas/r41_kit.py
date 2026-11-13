@@ -38,6 +38,18 @@ DOTS = lambda: IB('More', MORE, 'openMore')
 def LARGE(title, right='', soft=''):
     s = f'<span style="font-size: 34px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}">{soft}</span>' if soft else ''
     return f'<div style="flex: none; display: flex; align-items: center; gap: 12px; padding: 2px 16px 10px"><h1 style="margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -0.01em">{title}</h1>{s}<span style="flex: 1"></span>{right}</div>'
+# A place's bar (owner, 2026-11-13: "I dont like that the header is occupied only by these two buttons no the right and the
+# rest is just empty"): the title sits in the bar itself, at its left, the actions at its right; never an empty bar
+# over a title on its own line. Back, where there is one, before the title.
+def TITLEBAR(title, right='', back='', backlabel='Back', soft=''):
+    b = f'<a href="{back}" aria-label="{backlabel}" style="flex: none; width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else ''
+    fs = 26 if soft else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
+    s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
+    return (f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 10px 4px 16px">{b}'
+            f'<h1 style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h1>{s}'
+            f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center">{right}</div></header>')
+def LTITLEBAR(title, right=''):
+    return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
 def SUBJECT(name, sub, size=40, align='left'):
     return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
 H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'

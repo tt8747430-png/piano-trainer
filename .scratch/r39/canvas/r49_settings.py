@@ -299,7 +299,7 @@ S9SHEETS = BSHEET('photoOn', 'Change photo', PHOTOBODY) + BSHEET('btOn', 'Connec
 S9POPS = (POPOVER('photoOn', 'Change photo', PHOTOBODY, 'left: 760px; top: 160px', 420) + POPOVER('btOn', 'Connect a Bluetooth MIDI keyboard', BTBODY, 'left: 760px; top: 300px', 460)
           + POPOVER('shortOn', 'Shortcuts', SHORTBODY, 'left: 760px; top: 420px', 420) + POPOVER('swOn', '{{swTitle}}', SWPICK, 'left: 760px; top: 260px', 380))
 
-s9ph = (f'<sc-if value="{{{{isList}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("Profile.dc.html", "", "", "Profile")}{LARGE("Settings")}'
+s9ph = (f'<sc-if value="{{{{isList}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Settings", "", "Profile.dc.html", "Profile")}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 40px; display: flex; flex-direction: column; gap: 16px">{ACCT2}{SLIST("groups")}{ADMINGRP("Admin.dc.html")}</main></sc-if>'
         f'<sc-if value="{{{{isPage}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{pageT}}", "", "Back", IB("Back", CHEV_L, "back"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 48px; display: flex; flex-direction: column; gap: 16px">{PAGEBODIES("p_")}</main></sc-if>'

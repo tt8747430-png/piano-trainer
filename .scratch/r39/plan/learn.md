@@ -5,6 +5,27 @@ are, what is next, and that every lesson can still be opened.
 
 ## The rulings as they stand
 
+- **Learn refactored: one overview, a page per level, a page for all courses** (canvas 163, owner 2026-11-13: "make
+  proper refactor of the lessons and cources and the header and the structure and organization"). Replaces the
+  "Lessons | Courses as the title", the level chips and the laptop's level column below.
+  - **The header is every place's:** the large title "Learn" with Search in the bar, as Practice and Songs; no
+    two-word switch, no Edit in a learner's bar (an editor's Edit is in a level's or Courses' More).
+  - **Learn** (`/`): Continue (the next lesson, "Lesson 7 · 6 of 13 learned", a meter, the honey button); **Levels**,
+    four rows, each a ring of its progress round its number, "Beginner", "Foundations · 13 lessons", "6 of 13";
+    **Courses**, a row of course cards (the one in progress first) with See all; **Your lessons and courses**, the
+    learner's own rows, then New lesson and New course.
+  - **A level** (`/levels/$level`, Back to Learn): its name large with its progress, its goal, then its chapters as
+    the line of lessons (the tiles of canvas 162). On a laptop its side holds the progress, Continue and the other
+    levels.
+  - **Courses** (`/courses`, Back to Learn): the shelves, each a list of courses with their covers; what courses are
+    in an ⓘ beside the title, never a box over the page.
+  - **The title is in the bar** (owner, same day: "I dont like that the header is occupied only by these two
+    buttons no the right and the rest is just empty"): every place's and page's bar holds its title at the left and
+    its actions at the right, one row (`TITLEBAR`); two titles side by side (My songs · Explore) step down to 26px so
+    neither is cut. Learn, Songs, Practice, Profile, Settings, Administration and the library pages changed with it.
+  - Never again: a title that switches the page, levels as chips that swap the page in place, Your lessons among the
+    levels, a second column that repeats the page's own switch.
+
 - **"A library, not a path"** (feedback log, Learn and the editors): the levels stay chips (Beginner, Intermediate,
   Advanced, Professional, Your lessons) and any lesson opens from any state. The word "journey" stays out of the
   interface.
@@ -37,3 +58,4 @@ are, what is next, and that every lesson can still be opened.
 
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.
 - Canvas 162 (2026-11-13, loop round 10, design first): checks named truly with their pictures; Learn's Night boards.
+- Canvas 163 (2026-11-13): Learn refactored to an overview (Continue, Levels, Courses, your own), a level's page and Courses' page; the header as every place's.

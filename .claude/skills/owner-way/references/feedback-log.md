@@ -581,6 +581,10 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **The title is in the bar, never an empty bar over it (2026-11-13):** "I dont like that the header is occupied only by
+  these two buttons no the right and the rest is just empty": the title sits at the bar's left, the actions at its
+  right, one row, on every place and page, phone and laptop.
+
 - **Compact bars:** "why the headers take like a half of the screen". One row.
 - **Nothing under the bar:** "i dont like how this published is under the header it looks awful".
 - **Titles are never cut;** two lines before an ellipsis.

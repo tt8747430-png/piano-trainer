@@ -884,8 +884,26 @@
       "is_interactive": true,
       "page": "places"
     },
-    "Profile.dc.html": {
+    "LearnLevel.dc.html": {
       "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A level, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCourses.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Courses, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Profile.dc.html": {
+      "x": 1590,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -894,7 +912,7 @@
       "page": "places"
     },
     "PracticeResult.dc.html": {
-      "x": 1060,
+      "x": 2120,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -903,7 +921,7 @@
       "page": "places"
     },
     "Settings.dc.html": {
-      "x": 1590,
+      "x": 2650,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -912,7 +930,7 @@
       "page": "places"
     },
     "Admin.dc.html": {
-      "x": 2120,
+      "x": 3180,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -921,7 +939,7 @@
       "page": "places"
     },
     "Lesson.dc.html": {
-      "x": 2650,
+      "x": 3710,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -930,7 +948,7 @@
       "page": "places"
     },
     "Course.dc.html": {
-      "x": 3180,
+      "x": 4240,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -939,7 +957,7 @@
       "page": "places"
     },
     "SignIn.dc.html": {
-      "x": 3710,
+      "x": 4770,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -948,7 +966,7 @@
       "page": "places"
     },
     "Legal.dc.html": {
-      "x": 4240,
+      "x": 5300,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -957,7 +975,7 @@
       "page": "places"
     },
     "AppLayers.dc.html": {
-      "x": 4770,
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -974,6 +992,24 @@
       "is_interactive": true,
       "page": "places"
     },
+    "LearnLevelNight.dc.html": {
+      "x": 530,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A level, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCoursesNight.dc.html": {
+      "x": 1060,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Courses, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LearnLaptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -983,8 +1019,26 @@
       "is_interactive": true,
       "page": "places"
     },
-    "ProfileLaptop.dc.html": {
+    "LearnLevelLaptop.dc.html": {
       "x": 2223,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "A level, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCoursesLaptop.dc.html": {
+      "x": 4446,
+      "y": 3140,
+      "w": 2143,
+      "h": 1299,
+      "title": "Courses, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "ProfileLaptop.dc.html": {
+      "x": 6669,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -993,7 +1047,7 @@
       "page": "places"
     },
     "PracticeResultLaptop.dc.html": {
-      "x": 4446,
+      "x": 8892,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1002,7 +1056,7 @@
       "page": "places"
     },
     "SettingsLaptop.dc.html": {
-      "x": 6669,
+      "x": 11115,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1011,7 +1065,7 @@
       "page": "places"
     },
     "AdminLaptop.dc.html": {
-      "x": 8892,
+      "x": 13338,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1020,7 +1074,7 @@
       "page": "places"
     },
     "LessonLaptop.dc.html": {
-      "x": 11115,
+      "x": 15561,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1029,7 +1083,7 @@
       "page": "places"
     },
     "CourseLaptop.dc.html": {
-      "x": 13338,
+      "x": 17784,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1038,7 +1092,7 @@
       "page": "places"
     },
     "SignInLaptop.dc.html": {
-      "x": 15561,
+      "x": 20007,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1047,7 +1101,7 @@
       "page": "places"
     },
     "LegalLaptop.dc.html": {
-      "x": 17784,
+      "x": 22230,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1056,7 +1110,7 @@
       "page": "places"
     },
     "AppLayersLaptop.dc.html": {
-      "x": 20007,
+      "x": 24453,
       "y": 3140,
       "w": 2143,
       "h": 1299,
@@ -1070,6 +1124,24 @@
       "w": 2143,
       "h": 1299,
       "title": "Learn, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLevelLaptopNight.dc.html": {
+      "x": 2223,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A level, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCoursesLaptopNight.dc.html": {
+      "x": 4446,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Courses, Night, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -1169,7 +1241,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 5220,
+      "maxW": 6280,
       "page": "places"
     },
     "places-phone-night": {
@@ -1177,7 +1249,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 450,
+      "maxW": 1510,
       "page": "places"
     },
     "places-laptop": {
@@ -1185,7 +1257,7 @@
       "y": 2840,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 22150,
+      "maxW": 26596,
       "page": "places"
     },
     "places-laptop-night": {
@@ -1193,7 +1265,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 2143,
+      "maxW": 6589,
       "page": "places"
     }
   },
@@ -1296,6 +1368,8 @@
     "CircleOfFifthsLaptop.dc.html",
     "ChordsLaptopNight.dc.html",
     "Learn.dc.html",
+    "LearnLevel.dc.html",
+    "LearnCourses.dc.html",
     "Profile.dc.html",
     "PracticeResult.dc.html",
     "Settings.dc.html",
@@ -1306,7 +1380,11 @@
     "Legal.dc.html",
     "AppLayers.dc.html",
     "LearnNight.dc.html",
+    "LearnLevelNight.dc.html",
+    "LearnCoursesNight.dc.html",
     "LearnLaptop.dc.html",
+    "LearnLevelLaptop.dc.html",
+    "LearnCoursesLaptop.dc.html",
     "ProfileLaptop.dc.html",
     "PracticeResultLaptop.dc.html",
     "SettingsLaptop.dc.html",
@@ -1316,7 +1394,9 @@
     "SignInLaptop.dc.html",
     "LegalLaptop.dc.html",
     "AppLayersLaptop.dc.html",
-    "LearnLaptopNight.dc.html"
+    "LearnLaptopNight.dc.html",
+    "LearnLevelLaptopNight.dc.html",
+    "LearnCoursesLaptopNight.dc.html"
   ],
   "pages": [
     {
