@@ -144,7 +144,7 @@ export function ShelfEditor({ bar }: { bar: (actions: ReactNode) => ReactNode })
             <DraftStatus draft={draft} className="me-1" />
             <DraftActions
               draft={draft}
-              title={t('learn:views.courses')}
+              title={t('learn:courses')}
               unreadable={t('learn:edit.courses.editorsOnly')}
               onReset={draft.reopen}
             />

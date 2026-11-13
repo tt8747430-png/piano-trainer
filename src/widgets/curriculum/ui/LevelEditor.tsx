@@ -3,7 +3,6 @@ import { ChartNoAxesColumnIncreasing, Ellipsis, KeyboardMusic, Trash2 } from 'lu
 import { Fragment, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  allJourneys,
   lessonById,
   lessonIds,
   type Chapter,
@@ -13,8 +12,8 @@ import {
 import { STAGE_PAINT } from '@/entities/step'
 import { DraftActions, DraftStatus, useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
-import { cn, slug, useSetSearch } from '@/shared/lib'
-import { ActionMenu, ChoiceChips, confirm, PAINT, say } from '@/shared/ui'
+import { cn, slug } from '@/shared/lib'
+import { ActionMenu, confirm, PAINT, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   AddRow,
@@ -24,7 +23,6 @@ import {
   RowGroups,
   type RowOrder,
 } from '@/widgets/content-editor'
-import type { LearnView } from '../model/learn-view'
 import { rowKey, withOrder } from '../model/journey-order'
 import { useStepTitle } from '../model/use-step-title'
 
@@ -227,7 +225,7 @@ function LevelDocument({
 }
 
 /**
- * A level of the Lessons in Edit mode (R29 B4, content as data ADR 0116), in place on Learn: the
+ * A level in Edit mode (R29 B4, content as data ADR 0116), in place on its page: the
  * level's draft as one document, one language at a time (chosen in the draft's menu); a new lesson
  * made on the server unpublished and opened in the lesson editor. Its bar (`bar`) carries where the
  * draft stands, Publish and the draft's menu before the page's Done; until the draft opens, why not.
@@ -247,7 +245,6 @@ export function LevelEditor({
   const draft = useJourneyDraft(journey)
   const addLesson = useAddLesson()
   const navigate = useNavigate()
-  const show = useSetSearch<LearnView>()
   // The last change, where the document opens again (another language): kept as it was written.
   const [written, setWritten] = useState<{ opened: number; journey: Journey } | null>(null)
   const { load } = draft
@@ -288,17 +285,6 @@ export function LevelEditor({
         ) : null,
       )}
       <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-6">
-        {/* The four levels, each its own lessons to edit. */}
-        <ChoiceChips
-          label={t('learn:journey.label')}
-          value={journey.id}
-          scroll
-          options={allJourneys().map((each) => ({
-            value: each.id,
-            label: t(`common:stage.${each.stage}`),
-          }))}
-          onChange={(id) => show({ view: 'lessons', journey: id })}
-        />
         {load.state === 'loading' ? (
           <NotOpen line={t('editor:original.opening')} />
         ) : load.state === 'failed' ? (

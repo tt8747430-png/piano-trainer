@@ -1,22 +1,13 @@
-import type { LearnView } from '@/widgets/curriculum'
-import { readText, valueOr } from '@/shared/lib'
+import type { LearnEdit } from '@/widgets/curriculum'
 import { routeSearch, type Raw } from './read-search'
 
-// Learn's view (ADR 0053): what its header's toggle shows, and the journey on the Lessons.
-const isShown = (value: unknown): value is LearnView['view'] =>
-  value === 'lessons' || value === 'courses'
-
-export const LEARN_DEFAULTS: LearnView = { view: 'lessons', journey: '', edit: false }
-export function readLearnSearch(raw: Raw): LearnView {
-  return {
-    view: valueOr(isShown, raw.view, LEARN_DEFAULTS.view),
-    journey: readText(raw.journey, LEARN_DEFAULTS.journey),
-    // Edit mode (R29 B4): `edit=1` as a link writes it, `true` as the page does.
-    edit: raw.edit === true || raw.edit === 1 || raw.edit === '1',
-  }
+// A level's page and the Courses' page (canvas 163): whether an editor has it in Edit mode.
+export function readLearnEdit(raw: Raw): LearnEdit {
+  // Edit mode (R29 B4): `edit=1` as a link writes it, `true` as the page does.
+  return { edit: raw.edit === true || raw.edit === 1 || raw.edit === '1' }
 }
-export const learnSearch = routeSearch(readLearnSearch, LEARN_DEFAULTS)
-export const LEARN_KEPT = ['view', 'journey'] as const satisfies readonly (keyof LearnView)[]
+const LEARN_EDIT_DEFAULTS: LearnEdit = { edit: false }
+export const learnEditSearch = routeSearch(readLearnEdit, LEARN_EDIT_DEFAULTS)
 
 /** A lesson's page (R30-5): the learner's course it is read in, where it is read in one. */
 export interface LessonSearch {

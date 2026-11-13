@@ -1,25 +1,32 @@
 # ADR 0053 — Learn: the Lessons and the Courses, apart; a lesson is a worksheet
 
-- **Status:** accepted · **Date:** 2026-09-29 · consolidated 2026-10-27
+- **Status:** accepted · **Date:** 2026-09-29 · rewritten 2026-11-13
 
 ## Context
 
 Learn drew its curriculum several ways in turn: a Path of four levels mixing lessons, chords, scales and songs;
 lessons by module and subject; one curriculum of stages and courses. Each time the method books' material leaked into
 the subject lessons (a theory lesson playing a Called to Play study, a lesson leading into another book's). The owner
-asked for two things kept apart, switched in Learn's header as the reference journey app switches its map: lessons
-laid out as journeys, and courses on shelves with pages of their own, as the reference courses app has them.
+asked for two things kept apart: lessons laid out as journeys, and courses on shelves with pages of their own, as the
+reference courses app has them; then (2026-11-13) for Learn to be one overview with a page per level and one for all
+the courses, its title in the bar.
 
 ## Decision
 
-- **Learn** (`/?view=lessons|courses&journey=`, remembered) is its header's toggle, in the title's place, between the
-  **Lessons** and the **Courses**, with **Continue**: one card naming its step, "6 of 13 learned" and its meter; beside the level it is on (Lessons with that level open) it leaves the count to the level's own line.
-  Continue follows the track last learned on: after a course's lesson or song, that course's next step; otherwise the
-  journeys' next. On a phone it follows the level's chips; on a laptop (`lg`) the page is three columns: the levels
-  as a list (each with its book's title and count, then Your lessons), the level, and Continue with Your courses. The
-  Courses span the first two columns, two shelves to a row.
+- **Learn** (`/`, canvas 163) is an overview under its title in the bar (Search beside it, as every place's): **Continue**,
+  one card naming its step, "6 of 13 learned" and its meter; the four **Levels**, one card of rows, each its number in
+  a ring of how much is learned, its stage, its book and "6 of 13"; **Courses**, the shelves' first five covers (the
+  one Continue is in first, with Next), a row that scrolls on a phone and five across on a laptop, with See all; and
+  **Your lessons and courses**, the learner's own then New lesson and New course. On a laptop (`lg`) Continue and the
+  Levels stand beside the learner's own, the covers across under them. Continue follows the track last learned on:
+  after a course's lesson or song, that course's next step; otherwise the journeys' next.
+- **A level's page** (`/levels/$levelId`, Back to Learn): its book's name in the bar, its stage and how much is
+  learned over its meter, its goal, then its chapters. On a laptop its side holds Continue and the other levels.
+  **The Courses' page** (`/courses`, Back to Learn): the shelves, two to a row on a laptop; the Courses' About in the
+  ⓘ beside the title. An editor's Edit is in either page's More (`?edit=1`) and edits the level or the shelves in
+  place, Done beside the title.
 - **The Lessons** (`entities/lesson`): four journeys, one to a level (Foundations, Fluency, Musicianship, Mastery),
-  chosen from the chips (a phone) or the list (a laptop). A journey is chapters of lessons, then the chord families or
+  each on its page. A journey is chapters of lessons, then the chord families or
   scales its chapter's Check asks. A level's steps, like a course's lessons, are a **lesson line**
   (`LessonLine`): one spine through their tiles and no card round them; a tile is its number, a check's square, a
   learned one grass with a check, the next one its book ringed in honey with Next. A lesson's number is said once:
@@ -38,10 +45,10 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   `chords:<family>`, `scale:<kind>`. A mark on one track never counts for another. A whole piece's Learned is the
   learner's own; lessons never set it (ADR 0111).
 - **The learner's own lessons and courses** (R30-5, `entities/own-lessons`, `pt-own-lessons`, version 1,
-  synced as `own_lessons`): the Lessons' fifth chip after the levels, **Your lessons** (`?journey=own`),
-  lists the lessons the learner wrote, each a row as a level's lesson is (learned, read so far), then New
-  lesson (a name, then the lesson editor). The Courses end on **Your courses**, each on its cover (a
-  Songs folder's picture and paint), then New course (a name, then the course editor). An own lesson is
+  synced as `own_lessons`): Learn's last group, **Your lessons and courses**, lists the lessons the
+  learner wrote, each a row as a level's lesson is (learned, read so far), then their courses, each on
+  its cover (a Songs folder's picture and paint), then New lesson and New course (a name, then the
+  editor). They go up to Learn. An own lesson is
   the app's lesson document under `own-lesson-n`, read at `/lessons/own-lesson-n` as any lesson, its
   progress the same step (`lesson:<id>`), never part of a level's journey or of Continue; it is written
   once in the learner's language and reads the same in the other (`inBothLanguages`). An own course
@@ -73,7 +80,7 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   `/courses/$courseId/$lessonId/settings`; `pages/lesson`, `pages/course`) open from a gear in its bar, as a song's
   do, and are the same kind of page: one list of grouped rows from the settings kit. A learner's lesson: how lessons
   read, Share link (the share sheet, else copied), and apart its progress reset after asking (`resetSteps`: not
-  learned, no section read; nothing else). A course: Share link and its lessons' and guided songs' progress reset.
+  learned, no section read; nothing else; Undo in its toast). A course: Share link and its lessons' and guided songs' progress reset.
   An editor's also say where it stands (a level and chapter, leading to Manage lessons; or its course), choose the
   lessons to read first (here only, not in the document: the document holds what the lesson shows), name the
   languages it is written in full, and hold its changes with Publish, Versions and Discard; a course's shelf leads

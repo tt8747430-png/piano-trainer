@@ -71,8 +71,7 @@ const practiceSettings: Parent = (from) =>
     ? PRACTICE_PAGES[from.search.from]
     : up({ to: '/practice' })
 const toSongs: Parent = () => up({ to: '/songs' })
-const toLessons: Parent = () => up({ to: '/', search: { view: 'lessons' } })
-const toCourses: Parent = () => up({ to: '/', search: { view: 'courses' } })
+const toLearn: Parent = () => up({ to: '/' })
 const toLesson: Parent = (from) =>
   up({ to: '/lessons/$lessonId', params: { lessonId: param(from, 'lessonId') } })
 const toCourse: Parent = (from) =>
@@ -231,22 +230,22 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     if (of.startsWith('chords:')) {
       return up({ to: '/practice/chords', search: readChordsSearch({ step: of }) })
     }
-    return toLessons(from)
+    return toLearn(from)
   },
 
-  // Learn: a lesson up to its level, a course's lesson up to the course, the course up to the
-  // Courses; Settings and Edit up to what they set or edit.
-  // A lesson read in a course of the learner's goes up to that course; one of their own to Your
-  // lessons (R30-5).
+  // Learn (canvas 163): a level's page and the Courses up to Learn; a lesson up to its level, a
+  // course's lesson up to the course, the course up to the Courses; Settings and Edit up to what
+  // they set or edit. A lesson read in a course of the learner's goes up to that course; the
+  // learner's own lessons and courses up to Learn, where they are listed (R30-5).
+  '/shell/levels/$levelId': toLearn,
+  '/shell/courses': toLearn,
   '/shell/lessons/$lessonId': async (from) => {
-    const { isOwnCourseId, isOwnLessonId, lessonPlace, OWN_LESSONS } =
-      await import('./learn-screens')
+    const { isOwnCourseId, lessonPlace } = await import('./learn-screens')
     const course = text(from.search.course)
     if (course && isOwnCourseId(course))
       return up({ to: '/courses/$courseId', params: { courseId: course } })
-    const lessonId = param(from, 'lessonId')
-    const journey = isOwnLessonId(lessonId) ? OWN_LESSONS : lessonPlace(lessonId)?.journey.id
-    return up({ to: '/', search: { view: 'lessons', ...(journey ? { journey } : {}) } })
+    const levelId = lessonPlace(param(from, 'lessonId'))?.journey.id
+    return levelId ? up({ to: '/levels/$levelId', params: { levelId } }) : up({ to: '/' })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
   '/shell/lessons/$lessonId/publish': (from) =>
@@ -259,7 +258,10 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       ? up({ to: '/courses/$courseId/$lessonId/edit', params: { courseId: course, lessonId } })
       : up({ to: '/lessons/$lessonId/edit', params: { lessonId } })
   },
-  '/shell/courses/$courseId': toCourses,
+  '/shell/courses/$courseId': async (from) => {
+    const { isOwnCourseId } = await import('./learn-screens')
+    return isOwnCourseId(param(from, 'courseId')) ? up({ to: '/' }) : up({ to: '/courses' })
+  },
   '/shell/courses/$courseId/settings': toCourse,
   '/shell/courses/$courseId/publish': (from) =>
     up({ to: '/courses/$courseId/settings', params: { courseId: param(from, 'courseId') } }),

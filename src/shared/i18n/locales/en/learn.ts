@@ -1,18 +1,14 @@
 export const learn = {
   title: 'Learn',
-  // The header's toggle (ADR 0053): the Lessons' journeys, or the Courses.
-  views: {
-    label: 'What Learn shows',
-    lessons: 'Lessons',
-    courses: 'Courses',
-  },
+  // Learn's overview (canvas 163): its Levels, its Courses' covers with See all, the learner's own.
+  levels: 'Levels',
+  courses: 'Courses',
+  seeAll: 'See all',
   // The Lessons: four journeys, beginner to professional, each in chapters.
   journey: {
-    label: 'Level',
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
-    // A journey's tab: its steps learned, lessons and checks alike (a lesson's line counts lessons).
-    steps: '{{learned}} of {{total}} learned',
+    of: '{{learned}} of {{total}}',
   },
   // The Courses, shelf by shelf.
   shelves: {
@@ -57,16 +53,14 @@ export const learn = {
   // The learner's own lessons and courses (R30-5): Learn's Your lessons and Your courses, their
   // Settings, and the course editor's on an own course.
   own: {
+    title: 'Your lessons and courses',
+    course: 'Course',
     lessons: 'Your lessons',
-    lessonsLearned: '{{learned}} of {{total}} learned',
-    noLessons: 'No lessons of your own yet.',
     newLesson: 'New lesson',
     createLesson: 'Create lesson',
     lessonFailed: 'A name needs 1 to 80 characters.',
     sectionCount_one: '{{count}} section',
     sectionCount_other: '{{count}} sections',
-    courses: 'Your courses',
-    noCourses: 'No courses of your own yet.',
     newCourse: 'New course',
     createCourse: 'Create course',
     learnedCount: '{{count}} learned',
@@ -89,7 +83,7 @@ export const learn = {
     deleteCourse: 'Delete course',
     deleteCourseBody: 'The course goes. Its lessons stay, yours in Your lessons.',
     deleted: '“{{title}}” deleted',
-    toOwn: 'Back to Your lessons',
+    toOwn: 'Back to Learn',
   },
   course: {
     start: 'Start course',

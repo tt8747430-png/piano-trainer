@@ -14,4 +14,3 @@ export {
   LessonPublishPage,
   LessonSettingsPage,
 } from '@/pages/lesson'
-export { OWN_LESSONS } from '@/widgets/curriculum'

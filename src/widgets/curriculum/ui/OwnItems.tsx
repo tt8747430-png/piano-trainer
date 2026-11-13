@@ -1,4 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
+import { BookOpenText } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -10,13 +11,16 @@ import {
   useOwnLessonsStoreApi,
   type OwnCourse,
 } from '@/entities/own-lessons'
-import { selectLearned, useProgress } from '@/entities/progress'
+import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import { createOwnCourse } from '@/features/manage-own-lessons'
+import { createOwnCourse, createOwnLesson } from '@/features/manage-own-lessons'
+import { localText, useLocale } from '@/shared/i18n'
 import { OpensMark } from '@/shared/ui'
+import { lessonShare } from '../model/progress'
+import { LessonRow } from './LessonRow'
 import { NewRow } from './NewRow'
 
-/** An own course as a row of the Courses: its cover, its name, its lessons and how many are learned. */
+/** A course of the learner's as a row: its cover, its name, its lessons and how many are learned. */
 function OwnCourseRow({ course }: { course: OwnCourse }) {
   const { t } = useTranslation('learn')
   const lessons = useOwnLessons(selectOwnLessons)
@@ -24,6 +28,7 @@ function OwnCourseRow({ course }: { course: OwnCourse }) {
   const listed = ownCourseLessons(course, lessons)
   const done = listed.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined).length
   const facts = [
+    t('own.course'),
     t('course.lessonCount', { count: listed.length }),
     ...(done > 0 ? [t('own.learnedCount', { count: done })] : []),
   ]
@@ -44,26 +49,52 @@ function OwnCourseRow({ course }: { course: OwnCourse }) {
 }
 
 /**
- * Your courses (R30-5), after the Courses' shelves: the courses the learner put together, then New
- * course, which names one and opens it in the course editor.
+ * Your lessons and courses (canvas 163), Learn's last group: the lessons the learner wrote, each a
+ * row as a level's lesson is (learned, read so far), the courses they put together, then New lesson
+ * and New course, each naming one and opening it in its editor. They count towards no level.
  */
-export function OwnCourses() {
+export function OwnItems() {
   const { t } = useTranslation('learn')
+  const locale = useLocale()
   const id = useId()
   const navigate = useNavigate()
   const store = useOwnLessonsStoreApi()
+  const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
-  const create = (name: string) => {
+  const learned = useProgress(selectLearned)
+  const read = useProgress(selectRead)
+  const newLesson = (name: string) => {
+    const made = createOwnLesson(store, name)
+    if (made) void navigate({ to: '/lessons/$lessonId/edit', params: { lessonId: made } })
+    return made !== null
+  }
+  const newCourse = (name: string) => {
     const made = createOwnCourse(store, name)
     if (made) void navigate({ to: '/courses/$courseId/edit', params: { courseId: made } })
     return made !== null
   }
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('own.courses')}
+    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-2">
+      <h2 id={id} className="px-1 text-lg font-semibold">
+        {t('own.title')}
       </h2>
       <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+        {lessons.map((lesson) => {
+          const step = lessonStepId(lesson.id)
+          const learnedIt = learned[step] !== undefined
+          return (
+            <li key={lesson.id}>
+              <LessonRow
+                render={<Link to="/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
+                mark={<BookOpenText className="size-5" strokeWidth={1.75} />}
+                done={learnedIt}
+                share={lessonShare(lesson.sections.length, read[step], learnedIt)}
+                title={localText(lesson.title, locale)}
+                detail={`${t('kind.lesson')} · ${t('own.sectionCount', { count: lesson.sections.length })}`}
+              />
+            </li>
+          )
+        })}
         {courses.map((course) => (
           <li key={course.id}>
             <OwnCourseRow course={course} />
@@ -71,9 +102,16 @@ export function OwnCourses() {
         ))}
         <li>
           <NewRow
+            label={t('own.newLesson')}
+            createLabel={t('own.createLesson')}
+            onCreate={newLesson}
+          />
+        </li>
+        <li>
+          <NewRow
             label={t('own.newCourse')}
             createLabel={t('own.createCourse')}
-            onCreate={create}
+            onCreate={newCourse}
           />
         </li>
       </ul>

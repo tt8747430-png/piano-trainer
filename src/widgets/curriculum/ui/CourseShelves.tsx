@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { coursesAbout, coursesOn, SHELVES, type Shelf } from '@/entities/course'
 import { hasAbout } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
+import { InfoTip } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { CourseCard } from './CourseCard'
-import { OwnCourses } from './OwnCourses'
 
 /** An About's view, its own chunk: most visits to the Courses have none to draw. */
 const AboutView = lazy(() =>
@@ -35,29 +35,36 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
 
 /**
  * The Courses (ADR 0053), as the courses-app shelves them: the beginner's, the intermediate's, the
- * technique courses, chords and improvising, then the method books; then Your courses (R30-5), the
- * learner's own. The course Continue is in ringed.
- * Over them the Courses' About, where an editor wrote one (R29 B9).
+ * technique courses, chords and improvising, then the method books, on the Courses' page (canvas
+ * 163). The course Continue is in ringed. The Courses' About is in the page's ⓘ (`CoursesAbout`).
  */
 export function CourseShelves() {
-  const { t } = useTranslation('learn')
-  const about = coursesAbout()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
   return (
     // On a laptop the shelves stand two a row across the page's width, never one long column.
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
-      {/* The Courses' About (R29 B9), an editor's, over the shelves. */}
-      {hasAbout(about) ? (
-        <Suspense fallback={null}>
-          <AboutView about={about} label={t('coursesAbout')} className="px-1 lg:col-span-2" />
-        </Suspense>
-      ) : null}
       {SHELVES.map((shelf) => (
         <ShelfSection key={shelf} shelf={shelf} current={current} />
       ))}
-      <OwnCourses />
     </div>
+  )
+}
+
+/**
+ * The Courses' About (R29 B9), an editor's document on what the courses are: in the ⓘ beside the
+ * Courses' title, never a box over the shelves. Nothing where none is written.
+ */
+export function CoursesAbout() {
+  const { t } = useTranslation('learn')
+  const about = coursesAbout()
+  if (!hasAbout(about)) return null
+  return (
+    <InfoTip name={t('coursesAbout')} bar>
+      <Suspense fallback={null}>
+        <AboutView about={about} label={t('coursesAbout')} />
+      </Suspense>
+    </InfoTip>
   )
 }

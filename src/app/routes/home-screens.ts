@@ -1,1 +1,1 @@
-export { LearnPage } from '@/pages/learn'
+export { CoursesPage, LearnPage, LevelPage } from '@/pages/learn'

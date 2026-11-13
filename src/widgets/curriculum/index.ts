@@ -4,13 +4,7 @@ export {
   openCourseStep,
   type ContinueStep,
 } from './model/continue-step'
-export {
-  LEARN_DEFAULTS,
-  LEARN_VIEWS,
-  OWN_LESSONS,
-  type LearnShows,
-  type LearnView,
-} from './model/learn-view'
+export type { LearnEdit } from './model/learn-view'
 export {
   courseProgress,
   isComplete,
@@ -23,11 +17,12 @@ export { useStepTitle, type StepTitle } from './model/use-step-title'
 export { CourseFacts } from './ui/CourseFacts'
 export { CourseLessons } from './ui/CourseLessons'
 export { LearnedMeter } from './ui/LearnedMeter'
-export { CourseShelves } from './ui/CourseShelves'
+export { CourseShelves, CoursesAbout } from './ui/CourseShelves'
+export { CourseCovers } from './ui/CourseCovers'
 export { GuidedSongs } from './ui/GuidedSongs'
-export { JourneyLibrary } from './ui/JourneyLibrary'
-export { LearnNav } from './ui/LearnNav'
-export { OwnCourses } from './ui/OwnCourses'
+export { LevelLessons } from './ui/LevelLessons'
+export { LevelNav, LevelRows } from './ui/LevelRows'
+export { OwnItems } from './ui/OwnItems'
 export { LevelEditor } from './ui/LevelEditor'
 export { ShelfEditor } from './ui/ShelfEditor'
 export { OwnDeleteGroup, OwnItemRows, type OwnItemWords } from './ui/OwnItemRows'

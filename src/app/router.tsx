@@ -64,7 +64,7 @@ import {
   WALK_KEPT,
   walkSearch,
 } from './routes/player-search'
-import { LEARN_KEPT, learnSearch, lessonSearch, readLearnSearch } from './routes/learn-search'
+import { learnEditSearch, lessonSearch } from './routes/learn-search'
 import {
   exercisePageSearch,
   PRACTICE_LIBRARY_KEPT,
@@ -157,13 +157,29 @@ const shellRoute = createRoute({
   id: 'shell',
   component: ShellLayout,
 })
-// Learn, the first place (ADR 0053): the Lessons' journeys or the Courses, as its toggle says.
+// Learn, the first place (ADR 0053, canvas 163): Continue, the Levels, the Courses, the learner's own.
 const learnRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/',
-  ...learnSearch,
-  ...remembered(readLearnSearch, LEARN_KEPT),
   component: lazyRouteComponent(homeScreens, 'LearnPage'),
+})
+// A level's page and the Courses' page, each with an editor's Edit mode in place.
+const levelRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/levels/$levelId',
+  notFoundComponent: notFoundIn('learn'),
+  ...learnEditSearch,
+  beforeLoad: async ({ params }) => {
+    const { journeyById } = await learnScreens()
+    if (!journeyById(params.levelId)) throw notFound()
+  },
+  component: lazyRouteComponent(homeScreens, 'LevelPage'),
+})
+const coursesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses',
+  ...learnEditSearch,
+  component: lazyRouteComponent(homeScreens, 'CoursesPage'),
 })
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1055,6 +1071,8 @@ const checkRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
+    levelRoute,
+    coursesRoute,
     profileRoute,
     streakRoute,
     badgesRoute,

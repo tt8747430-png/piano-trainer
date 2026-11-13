@@ -2,16 +2,13 @@ import type { LocaleResources } from '../../types'
 
 export const learn: LocaleResources['learn'] = {
   title: 'Обучение',
-  views: {
-    label: 'Что показать',
-    lessons: 'Уроки',
-    courses: 'Курсы',
-  },
+  levels: 'Уровни',
+  courses: 'Курсы',
+  seeAll: 'Все',
   journey: {
-    label: 'Уровень',
     chapter: 'Глава {{n}}. {{title}}',
     count: '{{learned}}/{{total}}',
-    steps: 'Изучено {{learned}} из {{total}}',
+    of: '{{learned}} из {{total}}',
   },
   shelves: {
     beginner: 'Курсы для начинающих',
@@ -47,9 +44,9 @@ export const learn: LocaleResources['learn'] = {
   // Документ над полками курсов (R29 B9), от редактора.
   coursesAbout: 'О курсах',
   own: {
+    title: 'Ваши уроки и курсы',
+    course: 'Курс',
     lessons: 'Ваши уроки',
-    lessonsLearned: 'Изучено {{learned}} из {{total}}',
-    noLessons: 'Своих уроков пока нет.',
     newLesson: 'Новый урок',
     createLesson: 'Создать урок',
     lessonFailed: 'В названии должно быть от 1 до 80 знаков.',
@@ -57,8 +54,6 @@ export const learn: LocaleResources['learn'] = {
     sectionCount_few: '{{count}} раздела',
     sectionCount_many: '{{count}} разделов',
     sectionCount_other: '{{count}} раздела',
-    courses: 'Ваши курсы',
-    noCourses: 'Своих курсов пока нет.',
     newCourse: 'Новый курс',
     createCourse: 'Создать курс',
     learnedCount: 'изучено: {{count}}',
@@ -81,7 +76,7 @@ export const learn: LocaleResources['learn'] = {
     deleteCourse: 'Удалить курс',
     deleteCourseBody: 'Курс будет удалён. Уроки останутся: ваши — в разделе «Ваши уроки».',
     deleted: '«{{title}}» удалён',
-    toOwn: 'К вашим урокам',
+    toOwn: 'К обучению',
   },
   course: {
     start: 'Начать курс',

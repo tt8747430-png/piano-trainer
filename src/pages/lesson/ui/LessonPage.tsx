@@ -21,7 +21,6 @@ import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, type EditAction } from '@/shared/ui'
-import { OWN_LESSONS } from '@/widgets/curriculum'
 import { LessonLayout, PlaceLink, type LessonTrack } from './LessonLayout'
 
 const ROUTE = '/shell/lessons/$lessonId'
@@ -113,7 +112,7 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
   const place = lessonPlace(lesson.id)
   // The route finds no lesson that no level has.
   if (!place) return null
-  const journey = { to: '/', search: { view: 'lessons', journey: place.journey.id } } as const
+  const journey = { to: '/levels/$levelId', params: { levelId: place.journey.id } } as const
   const lessonAt = (id: string | undefined) => (id === undefined ? undefined : lessonById(id))
   const next = lessonAt(nextLessonId(lesson.id))
   const previous = lessonAt(previousLessonId(lesson.id))
@@ -156,8 +155,8 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
 function OwnLesson({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('learn')
   const edit = useEdit(lesson.id)
-  const own = { to: '/', search: { view: 'lessons', journey: OWN_LESSONS } } as const
-  const title = t('own.lessons')
+  const own = { to: '/' } as const
+  const title = t('own.title')
   const back = { link: <Link {...own} />, label: t('own.toOwn'), title }
   return (
     <LessonScreen

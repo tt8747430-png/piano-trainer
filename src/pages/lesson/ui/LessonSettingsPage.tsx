@@ -45,6 +45,8 @@ import { OwnLessonSettings } from './OwnLessonSettings'
 type Where =
   | {
       readonly kind: 'level'
+      /** The level's id, its page where the lesson is listed. */
+      readonly levelId: string
       readonly level: string
       readonly chapter: string
       readonly manage: ReactElement
@@ -72,9 +74,16 @@ export function LessonSettingsPage() {
       readFirst
       where={{
         kind: 'level',
+        levelId: place.journey.id,
         level: localText(place.journey.title, locale),
         chapter: localText(place.chapter.title, locale),
-        manage: <Link to="/" search={{ view: 'lessons', journey: place.journey.id, edit: true }} />,
+        manage: (
+          <Link
+            to="/levels/$levelId"
+            params={{ levelId: place.journey.id }}
+            search={{ edit: true }}
+          />
+        ),
       }}
     />
   )
@@ -186,7 +195,13 @@ function LessonSettings({
             kind="lesson"
             id={id}
             title={title}
-            onDeleted={() => void navigate({ to: '/', search: { view: 'lessons' }, replace: true })}
+            onDeleted={() =>
+              void navigate({
+                to: '/levels/$levelId',
+                params: { levelId: where.levelId },
+                replace: true,
+              })
+            }
           />
         ) : null}
       </div>

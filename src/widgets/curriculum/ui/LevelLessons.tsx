@@ -1,13 +1,7 @@
 import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
-import { useId, type ReactNode } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  allJourneys,
-  lessonById,
-  type Chapter,
-  type Journey,
-  type JourneyStep,
-} from '@/entities/lesson'
+import { lessonById, type Chapter, type Journey, type JourneyStep } from '@/entities/lesson'
 import {
   knownCount,
   selectAllAnswers,
@@ -17,15 +11,12 @@ import {
 } from '@/entities/progress'
 import { lessonStepId, skillsOfStep, StepLink, stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { useSetSearch } from '@/shared/lib'
-import { ChoiceChips } from '@/shared/ui'
+import { ProgressMeter } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
-import { OWN_LESSONS, type LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { afterWorthSaying } from '../model/after'
 import { useStepTitle } from '../model/use-step-title'
 import { LessonLine, LessonRow, LessonStop } from './LessonRow'
-import { OwnLessons } from './OwnLessons'
 
 const ICON = {
   lesson: BookOpenText,
@@ -148,13 +139,16 @@ function ChapterGroup({
   )
 }
 
-/** A level's name, its goal, how far along the learner is, and its chapters as groups of rows. */
-function LevelLessons({ journey }: { journey: Journey }) {
-  const { t } = useTranslation('learn')
+/**
+ * A level's page's body (canvas 163): its stage and how much of it is learned over a meter, its goal,
+ * then its chapters, each a line of its steps. Its name is the page's title, in the bar. Every step
+ * opens; the order only suggests.
+ */
+export function LevelLessons({ journey }: { journey: Journey }) {
+  const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)?.id
-  const headingId = useId()
   const progress = journeyProgress(journey, learned)
   const numbers = new Map(
     journey.chapters
@@ -162,60 +156,24 @@ function LevelLessons({ journey }: { journey: Journey }) {
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
+  const counts = { learned: progress.done, total: progress.total }
   return (
-    <>
-      <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
-        <h2 id={headingId} className="text-2xl font-semibold text-balance">
-          {localText(journey.title, locale)}
-        </h2>
-        <p className="text-pretty text-muted-foreground">{localText(journey.goal, locale)}</p>
-        <p className="text-sm text-muted-foreground tabular-nums">
-          {t('journey.steps', { learned: progress.done, total: progress.total })}
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-3 px-1">
+        <ProgressMeter
+          done={progress.done}
+          total={progress.total}
+          count={`${t(`common:stage.${journey.stage}`)} · ${t('learn:progress', counts)}`}
+          said={t('learn:progress', counts)}
+          above
+        />
+        <p className="max-w-prose text-pretty text-muted-foreground">
+          {localText(journey.goal, locale)}
         </p>
-      </section>
+      </div>
       {journey.chapters.map((chapter, i) => (
         <ChapterGroup key={chapter.id} chapter={chapter} n={i + 1} numbers={numbers} next={next} />
       ))}
-    </>
-  )
-}
-
-/**
- * The Lessons as a library (ADR 0053, amended): the four levels as chips, then Your lessons (R30-5);
- * under them the level's name, what it makes of the learner and how far along they are, then its
- * chapters as groups of rows, each step a row that opens it; or the learner's own lessons. Every
- * step opens; the order only suggests.
- */
-export function JourneyLibrary({
-  journey,
-  lead,
-}: {
-  journey: Journey | typeof OWN_LESSONS
-  /** What comes after the chips and before the level (Continue, on a phone). */
-  lead?: ReactNode
-}) {
-  const { t } = useTranslation(['learn', 'common'])
-  const setSearch = useSetSearch<LearnView>()
-  return (
-    <div className="flex flex-col gap-6">
-      {/* A laptop chooses the level from its list (LearnNav). */}
-      <div className="lg:hidden">
-        <ChoiceChips
-          label={t('learn:journey.label')}
-          value={journey === OWN_LESSONS ? OWN_LESSONS : journey.id}
-          scroll
-          options={[
-            ...allJourneys().map((each) => ({
-              value: each.id,
-              label: t(`common:stage.${each.stage}`),
-            })),
-            { value: OWN_LESSONS, label: t('learn:own.lessons') },
-          ]}
-          onChange={(id) => setSearch({ view: 'lessons', journey: id })}
-        />
-      </div>
-      {lead}
-      {journey === OWN_LESSONS ? <OwnLessons /> : <LevelLessons journey={journey} />}
     </div>
   )
 }

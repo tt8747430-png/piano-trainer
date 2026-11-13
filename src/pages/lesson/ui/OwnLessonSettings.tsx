@@ -13,7 +13,7 @@ import {
 import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, say, ScreenHeader } from '@/shared/ui'
-import { OWN_LESSONS, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
  * A lesson of the learner's own's Settings (R30-5), the same page as a level's lesson's: how lessons
@@ -67,11 +67,7 @@ export function OwnLessonSettings({
             deleteBody: t('own.deleteLessonBody'),
           }}
           onDelete={() => {
-            void navigate({
-              to: '/',
-              search: { view: 'lessons', journey: OWN_LESSONS },
-              replace: true,
-            })
+            void navigate({ to: '/', replace: true })
             const deleted = deleteOwnLesson(store, lesson.id)
             if (!deleted) return
             const forgotten = resetSteps(progress, [step])

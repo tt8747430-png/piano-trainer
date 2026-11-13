@@ -111,7 +111,8 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
 
 **Learn · Songs · Practice · Profile**; `app/router.tsx` has every route.
 
-- **Learn** (`/`): Lessons by level and Courses; a lesson is one page of sections. Your lessons and Your courses are
+- **Learn** (`/`): an overview (Continue, Levels, Courses, the learner's own); a level's page (`/levels/$levelId`)
+  and the Courses' (`/courses`); a lesson is one page of sections. Your lessons and Your courses are
   the learner's own, in the same editors on the device. `pages/learn`, `course`, `lesson`, `lesson-editor`;
   `widgets/curriculum`, `lesson-view`; `features/manage-own-lessons`; `entities/own-lessons`.
 - **Songs** (`/songs`): My songs · Explore. One library of folders, favourites and an archive; a song's page, Settings and

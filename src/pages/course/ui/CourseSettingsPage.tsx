@@ -66,7 +66,7 @@ export function CourseSettingsPage() {
             kind="course"
             id={course.id}
             title={title}
-            onDeleted={() => void navigate({ to: '/', search: { view: 'courses' }, replace: true })}
+            onDeleted={() => void navigate({ to: '/courses', replace: true })}
           />
         ) : null}
       </div>
@@ -84,7 +84,7 @@ function EditorRows({ course }: { course: Course }) {
         value={t(`shelves.${course.shelf}`)}
         icon={Library}
         paint="sky"
-        render={<Link to="/" search={{ view: 'courses', edit: true }} />}
+        render={<Link to="/courses" search={{ edit: true }} />}
       />
     </SettingsGroup>
   )
