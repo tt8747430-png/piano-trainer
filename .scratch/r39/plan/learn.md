@@ -67,8 +67,8 @@ are, what is next, and that every lesson can still be opened.
     the far end, ivory keys lit from the player's side with a lip, ebony keys bevelled with a sheen, rounded feet, on
     the key bed; marks paint the key, its name at its foot. One pass (`keyface.py`) gives every board's keys their
     faces, Day and Night; the Player and Chords keep the 3D hands at the same keys.
-  - **New is a choice of two:** on a phone the + is New's dial, as Songs' (it turns to a close, the page dims, New
-    lesson and New course come up over it in words); from a row (Learn's "New lesson or course") or the laptop's
+  - **New is a choice of two:** on a phone the + is New's dial, the app's one `SpeedDial`, as Songs' (centred, it
+    turns to a close, the page dims, a card of New course over New lesson grows from it); from a row (Learn's "New lesson or course") or the laptop's
     New ▾ the same two as a menu. Each opens its own short sheet, titled New lesson or New course: a lesson's Name
     and In a course, a course's Name and Cover. No Lesson | Course switch in the sheet.
   - **Popovers carry facts, not prose:** a lesson's keys explain their colours in an ⓘ beside the example's title

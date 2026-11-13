@@ -1,5 +1,13 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, ChevronRight, Copy, Plus, Settings2, Trash2 } from 'lucide-react'
+import {
+  BookOpenText,
+  ChevronDown,
+  ChevronRight,
+  Copy,
+  Plus,
+  Settings2,
+  Trash2,
+} from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -26,19 +34,21 @@ import { resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
+  ActionMenu,
   ChoiceChips,
-  Fab,
   FloatingActions,
   RowMore,
   say,
   SearchField,
   SortChoice,
+  SpeedDial,
+  SpeedDialAction,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
-import { NewOwnSheet } from './NewOwnSheet'
+import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
 
 type Kind = 'all' | 'lessons' | 'courses'
 type Sort = 'recent' | 'name'
@@ -225,8 +235,8 @@ function OwnCourseItem({
 /**
  * Your lessons and courses (canvas 165), the learner's own as a library: search, All · Lessons ·
  * Courses, a sort, each course a row that folds open to its lessons, the lessons in no course below;
- * every row's More (Open, Duplicate, Settings, Delete with Undo); New, one sheet for both, floating on
- * a phone and beside the search on a laptop.
+ * every row's More (Open, Duplicate, Settings, Delete with Undo); New lesson and New course, the dial of
+ * the floating + on a phone and a menu beside the search on a laptop (canvas 167).
  */
 export function OwnLibrary() {
   const { t } = useTranslation('learn')
@@ -237,7 +247,8 @@ export function OwnLibrary() {
   const [kind, setKind] = useState<Kind>('all')
   const [sort, setSort] = useState<Sort>('recent')
   const [opened, setOpened] = useState<ReadonlySet<string>>(new Set())
-  const [making, setMaking] = useState(false)
+  const [making, setMaking] = useState<OwnKind | null>(null)
+  const newActions = useNewOwnActions(setMaking)
   const needle = query.trim().toLocaleLowerCase(locale)
   const matches = (name: string) => needle === '' || name.toLocaleLowerCase(locale).includes(needle)
   const order = <T,>(items: readonly T[], name: (item: T) => string): readonly T[] =>
@@ -290,10 +301,21 @@ export function OwnLibrary() {
                 }
               />
             </div>
-            <Button className="max-lg:hidden" onClick={() => setMaking(true)}>
-              <Plus data-icon="inline-start" aria-hidden />
-              {t('own.new')}
-            </Button>
+            <div className="max-lg:hidden">
+              <ActionMenu
+                label={t('own.new')}
+                align="end"
+                trigger={
+                  <>
+                    <Plus aria-hidden />
+                    {t('own.new')}
+                    <ChevronDown aria-hidden />
+                  </>
+                }
+                render={<Button />}
+                actions={newActions}
+              />
+            </div>
           </div>
           <ChoiceChips<Kind>
             label={t('own.show')}
@@ -310,10 +332,15 @@ export function OwnLibrary() {
       {none ? (
         <div className="flex flex-col items-start gap-4 card p-5">
           <p className="text-pretty">{t('own.empty')}</p>
-          <Button onClick={() => setMaking(true)}>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('own.newOwn')}
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={() => setMaking('lesson')}>
+              <BookOpenText data-icon="inline-start" aria-hidden />
+              {t('own.newLesson')}
+            </Button>
+            <Button variant="outline" onClick={() => setMaking('course')}>
+              {t('own.newCourse')}
+            </Button>
+          </div>
         </div>
       ) : nothing ? (
         <div className="flex flex-col items-start gap-3 card p-5">
@@ -341,9 +368,18 @@ export function OwnLibrary() {
         </ul>
       )}
       <FloatingActions className="lg:hidden">
-        <Fab label={t('own.newOwn')} icon={Plus} onClick={() => setMaking(true)} />
+        <SpeedDial label={t('own.new')} icon={Plus} main>
+          {newActions.toReversed().map((action) => (
+            <SpeedDialAction
+              key={action.key}
+              label={action.label}
+              icon={action.icon ?? Plus}
+              onClick={action.onSelect}
+            />
+          ))}
+        </SpeedDial>
       </FloatingActions>
-      <NewOwnSheet open={making} onOpenChange={setMaking} />
+      <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </div>
   )
 }

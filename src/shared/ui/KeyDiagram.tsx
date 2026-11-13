@@ -12,6 +12,8 @@ const DOT = { white: 3, black: 2.2 } as const
 const LIFT = { white: 6.5, black: 4 } as const
 /** A ring's line, drawn inside the dot's edge. */
 const RING = 1.2
+/** The felt along the keys' far end, as the keyboard's (`key-felt`): the same piano, drawn small. */
+const FELT = 1.2
 
 /** What a key held wears: a dot, or a ring (a bass the chord has not). */
 type Mark = 'dot' | 'ring'
@@ -62,7 +64,7 @@ function DiagramKey({ placed, mark }: { placed: PlacedKey; mark: Mark | null }) 
 
 /**
  * A chord drawn as a keyboard (ADR 0108), a picture beside its symbol: the keys its caller
- * gives (every chord diagram's F3 to B4) as the app's keys look, each key held marked by a dot near
+ * gives (every chord diagram's F3 to B4) as the app's keys look, under the keyboard's felt, each key held marked by a dot near
  * its foot, dark on a white key and light on a black one; the key `ring` names wears a ring instead
  * (a bass the chord has not). `muted` greys it whole (the next chord). It takes its container's
  * width, its keys a piano's proportion, and is named for a screen reader by `label`: its chord and
@@ -112,6 +114,7 @@ export function KeyDiagram({
       {placed.map((key) => (
         <DiagramKey key={key.midi} placed={key} mark={markOf(key.midi)} />
       ))}
+      <rect width={width} height={FELT} className="fill-key-felt" />
     </svg>
   )
 }

@@ -13,10 +13,10 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { OpensMark } from '@/shared/ui'
+import { ActionMenu, OpensMark } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
-import { NewOwnSheet } from './NewOwnSheet'
+import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
 
 /** A course of the learner's as a row: its cover, its name, its lessons and how many are learned. */
 function OwnCourseRow({ course }: { course: OwnCourse }) {
@@ -52,7 +52,7 @@ const SHOWN = 4
 /**
  * Your lessons and courses (canvas 165), Learn's last group: the newest of the learner's own, the
  * courses with their covers first, then the lessons as a level's are (learned, read so far), See all opening
- * their page, then one New row opening the one New sheet. They count towards no level.
+ * their page, then one New row whose menu holds New lesson and New course, each its own sheet (canvas 167). They count towards no level.
  */
 export function OwnItems() {
   const { t } = useTranslation('learn')
@@ -62,7 +62,8 @@ export function OwnItems() {
   const courses = useOwnLessons(selectOwnCourses)
   const learned = useProgress(selectLearned)
   const read = useProgress(selectRead)
-  const [making, setMaking] = useState(false)
+  const [making, setMaking] = useState<OwnKind | null>(null)
+  const newActions = useNewOwnActions(setMaking)
   const shownCourses = courses.toReversed().slice(0, SHOWN)
   const shownLessons = lessons.toReversed().slice(0, SHOWN - shownCourses.length)
   return (
@@ -103,19 +104,27 @@ export function OwnItems() {
           )
         })}
         <li>
-          <button
-            type="button"
-            onClick={() => setMaking(true)}
-            className="flex min-h-16 w-full items-center gap-4 px-3 py-2 text-left font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
-          >
-            <span aria-hidden className="grid size-10 shrink-0 place-items-center">
-              <Plus className="size-5" />
-            </span>
-            {t('own.newOwn')}
-          </button>
+          <ActionMenu
+            label={t('own.newOwn')}
+            trigger={
+              <>
+                <span aria-hidden className="grid size-10 shrink-0 place-items-center">
+                  <Plus className="size-5" />
+                </span>
+                {t('own.newOwn')}
+              </>
+            }
+            render={
+              <button
+                type="button"
+                className="flex min-h-16 w-full items-center gap-4 px-3 py-2 text-left font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+              />
+            }
+            actions={newActions}
+          />
         </li>
       </ul>
-      <NewOwnSheet open={making} onOpenChange={setMaking} />
+      <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </section>
   )
 }

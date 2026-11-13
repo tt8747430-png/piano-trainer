@@ -565,7 +565,7 @@ appears under a finger; the layout's one control.
   hand deep brick, the left deep lilac, a single staff deep grass (by Night, the full paints). Heads only; the rest of the
   engraving stays ink.
 - **Chord views:** beat cells on card paper, the beat sounding filled with ink; a chord diagram (`KeyDiagram`) draws a dot
-  on each key held.
+  on each key held, under the keyboard's felt: one piano, drawn small (canvas 167).
 
 ### Motion
 

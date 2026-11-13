@@ -53,18 +53,34 @@ export function CourseShelves() {
 }
 
 /**
- * The Courses' About (R29 B9), an editor's document on what the courses are: in the ⓘ beside the
- * Courses' title, never a box over the shelves. Nothing where none is written.
+ * The Courses' About (R29 B9, canvas 167), in the ⓘ beside the Courses' title, never a box over the
+ * shelves: the editor's document on what the courses are (else one line on what a course is), then the shelves themselves with how many
+ * courses each holds, the facts rather than more prose.
  */
 export function CoursesAbout() {
   const { t } = useTranslation('learn')
   const about = coursesAbout()
-  if (!hasAbout(about)) return null
   return (
-    <InfoTip name={t('coursesAbout')} bar>
-      <Suspense fallback={null}>
-        <AboutView about={about} label={t('coursesAbout')} />
-      </Suspense>
+    <InfoTip name={t('courses')} bar>
+      <div className="flex flex-col gap-3">
+        {hasAbout(about) ? (
+          <Suspense fallback={null}>
+            <AboutView about={about} label={t('coursesAbout')} />
+          </Suspense>
+        ) : (
+          <p>{t('coursesLine')}</p>
+        )}
+        <ul aria-label={t('shelvesLabel')} className="flex flex-col divide-y divide-hairline">
+          {SHELVES.map((shelf) => (
+            <li key={shelf} className="flex min-h-9 items-center justify-between gap-3">
+              <span>{t(`shelves.${shelf}`)}</span>
+              <span className="text-muted-foreground tabular-nums">
+                {t('courseCount', { count: coursesOn(shelf).length })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </InfoTip>
   )
 }

@@ -50,6 +50,11 @@ export const learn = {
   // A course's page: its facts, its one way in, its lessons and its guided songs.
   // The Courses' own document over their shelves (R29 B9), an editor's.
   coursesAbout: 'About the courses',
+  coursesLine:
+    'A course teaches one skill in a few weeks, with songs to read at its end. The levels keep going beside it.',
+  shelvesLabel: 'The shelves',
+  courseCount_one: '{{count}} course',
+  courseCount_other: '{{count}} courses',
   // The learner's own lessons and courses (R30-5): Learn's Your lessons and Your courses, their
   // Settings, and the course editor's on an own course.
   own: {
@@ -82,9 +87,8 @@ export const learn = {
     // Canvas 165: their own page, one New for both, a lesson's courses.
     newOwn: 'New lesson or course',
     new: 'New',
-    kindLabel: 'What to make',
-    kindLesson: 'Lesson',
-    kindCourse: 'Course',
+    newLesson: 'New lesson',
+    newCourse: 'New course',
     inCourse: 'In a course',
     noCourse: 'No course',
     inCourses: 'In courses',

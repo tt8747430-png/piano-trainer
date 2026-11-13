@@ -43,6 +43,13 @@ export const learn: LocaleResources['learn'] = {
   },
   // Документ над полками курсов (R29 B9), от редактора.
   coursesAbout: 'О курсах',
+  coursesLine:
+    'Курс за несколько недель учит одному навыку, а в конце — пьесы для чтения с листа. Уровни идут своим чередом рядом.',
+  shelvesLabel: 'Полки',
+  courseCount_one: '{{count}} курс',
+  courseCount_few: '{{count}} курса',
+  courseCount_many: '{{count}} курсов',
+  courseCount_other: '{{count}} курса',
   own: {
     title: 'Ваши уроки и курсы',
     course: 'Курс',
@@ -74,9 +81,8 @@ export const learn: LocaleResources['learn'] = {
     toOwn: 'Назад',
     newOwn: 'Новый урок или курс',
     new: 'Создать',
-    kindLabel: 'Что создать',
-    kindLesson: 'Урок',
-    kindCourse: 'Курс',
+    newLesson: 'Новый урок',
+    newCourse: 'Новый курс',
     inCourse: 'В курсе',
     noCourse: 'Без курса',
     inCourses: 'В курсах',

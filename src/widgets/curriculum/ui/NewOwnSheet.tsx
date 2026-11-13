@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { BookOpenText, Library } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderLook } from '@/entities/library'
@@ -17,35 +18,46 @@ import {
   saveOwnCourse,
   setInCourse,
 } from '@/features/manage-own-lessons'
-import { ChoiceChips, NewSheet, Segmented, SheetPart } from '@/shared/ui'
+import { ChoiceChips, NewSheet, SheetPart, type MenuAction } from '@/shared/ui'
 
-type Kind = 'lesson' | 'course'
+/** What the learner makes: a lesson or a course of their own. */
+export type OwnKind = 'lesson' | 'course'
 const NO_COURSE = 'none'
 
 /**
- * New (canvas 165): one sheet for a lesson or a course of the learner's own, as Flat's New score.
- * What it is, its name, then the one thing it needs: the course a lesson goes in, or a course's
- * cover; Create opens what was made in its editor.
+ * New's two (canvas 167): New lesson and New course, for the phone's dial and the menus of Learn's row
+ * and the laptop's New; each opens its own sheet.
  */
-export function NewOwnSheet({
-  open,
-  onOpenChange,
-}: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}) {
+export function useNewOwnActions(onPick: (kind: OwnKind) => void): readonly MenuAction[] {
+  const { t } = useTranslation('learn')
+  return [
+    {
+      key: 'lesson',
+      label: t('own.newLesson'),
+      icon: BookOpenText,
+      onSelect: () => onPick('lesson'),
+    },
+    { key: 'course', label: t('own.newCourse'), icon: Library, onSelect: () => onPick('course') },
+  ]
+}
+
+/**
+ * New lesson or New course (canvas 167), as Flat's New score: its name, then the one thing it needs,
+ * the course a lesson goes in or a course's cover; Create opens what was made in its editor. Open
+ * while `kind` is set.
+ */
+export function NewOwnSheet({ kind, onClose }: { kind: OwnKind | null; onClose: () => void }) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const store = useOwnLessonsStoreApi()
   const courses = useOwnLessons(selectOwnCourses)
-  const [kind, setKind] = useState<Kind>('lesson')
   const [name, setName] = useState('')
   const [into, setInto] = useState<OwnCourseId | typeof NO_COURSE>(NO_COURSE)
   const [look, setLook] = useState<FolderLook>(OWN_COURSE_LOOK)
   const [failed, setFailed] = useState(false)
   const close = (next: boolean) => {
-    onOpenChange(next)
     if (next) return
+    onClose()
     setName('')
     setInto(NO_COURSE)
     setLook(OWN_COURSE_LOOK)
@@ -69,9 +81,9 @@ export function NewOwnSheet({
   }
   return (
     <NewSheet
-      open={open}
+      open={kind !== null}
       onOpenChange={close}
-      title={t('own.new')}
+      title={kind === 'course' ? t('own.newCourse') : t('own.newLesson')}
       nameLabel={t('edit.order.name')}
       name={name}
       onName={setName}
@@ -79,17 +91,6 @@ export function NewOwnSheet({
       createLabel={kind === 'lesson' ? t('own.createLesson') : t('own.createCourse')}
       failed={failed ? t('own.lessonFailed') : null}
       onCreate={create}
-      lead={
-        <Segmented
-          label={t('own.kindLabel')}
-          value={kind}
-          options={[
-            { value: 'lesson', label: t('own.kindLesson') },
-            { value: 'course', label: t('own.kindCourse') },
-          ]}
-          onChange={setKind}
-        />
-      }
     >
       {kind === 'lesson' && courses.length > 0 ? (
         <SheetPart title={t('own.inCourse')}>

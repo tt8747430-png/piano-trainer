@@ -18,13 +18,13 @@ the courses, its title in the bar.
   a ring of how much is learned, its stage, its book and "6 of 13"; **Courses**, the shelves' first five covers (the
   one Continue is in first, with Next), a row that scrolls on a phone and five across on a laptop, with See all; and
   **Your lessons and courses**, the newest four of the learner's own with See all, then one row, New lesson or
-  course. On a laptop (`lg`) Continue and the
+  course, whose menu holds New lesson and New course. On a laptop (`lg`) Continue and the
   Levels stand beside the learner's own, the covers across under them. Continue follows the track last learned on:
   after a course's lesson or song, that course's next step; otherwise the journeys' next.
 - **A level's page** (`/levels/$levelId`, Back to Learn): its book's name in the bar, its stage and how much is
   learned over its meter, its goal, then its chapters. On a laptop its side holds Continue and the other levels.
   **The Courses' page** (`/courses`, Back to Learn): the shelves, two to a row on a laptop; the Courses' About in the
-  ⓘ beside the title. An editor's Edit is in either page's More (`?edit=1`) and edits the level or the shelves in
+  ⓘ beside the title, the editor's words and then the shelves with how many courses each holds. An editor's Edit is in either page's More (`?edit=1`) and edits the level or the shelves in
   place, Done beside the title.
 - **The Lessons** (`entities/lesson`): four journeys, one to a level (Foundations, Fluency, Musicianship, Mastery),
   each on its page. A journey is chapters of lessons, then the chord families or
@@ -51,9 +51,10 @@ the courses, its title in the bar.
   read so far); See all opens their page, `/your-lessons` (canvas 165, `OwnLibrary`), the app's library
   shape: search with its sort (Recent, Name), All · Lessons · Courses, each course a row that folds open
   to its own lessons, the lessons in no course below, every row's More (Open, Duplicate, Settings, Delete
-  with Undo), and New, floating on a phone and beside the search on a laptop. **New** is one sheet
-  (`NewOwnSheet`): Lesson | Course, the name, then the course a lesson goes in or a course's cover, and
-  Create opens what was made in its editor. They go up to their page, and it to Learn. An own lesson is
+  with Undo), and New: on a phone the floating + is a dial (Songs' `SpeedDial`) of New lesson and New
+  course, on a laptop a New menu beside the search (canvas 167). Each opens its own sheet (`NewOwnSheet`,
+  New lesson or New course): the name, then the course a lesson goes in or a course's cover, and Create
+  opens what was made in its editor. They go up to their page, and it to Learn. An own lesson is
   the app's lesson document under `own-lesson-n`, read at `/lessons/own-lesson-n` as any lesson, its
   progress the same step (`lesson:<id>`), never part of a level's journey or of Continue; it is written
   once in the learner's language and reads the same in the other (`inBothLanguages`). An own course
