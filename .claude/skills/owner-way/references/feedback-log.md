@@ -207,6 +207,9 @@ owner's, typos fixed.
 - **Every New … is a proper sheet:** "the new lessons and new courses still have the old ui with just the text".
 - **Imports keep everything:** tuplets, any tempo, tempo and meter changes; what cannot be held is listed, never dropped.
 - **Noji's way:** one Export… sheet (MusicXML, MIDI, Share link); Publish its own page; search, chips, shelves, the full list.
+- **New is one dial (canvas 169, loop, 2026-11-13):** "proper floating actions for the new lessons or courses or also
+  other things": every library creates from one centred honey + (a card of rows on a phone, New ▾ in the bar on a
+  laptop); Songs: New song, Record, New folder, Import, New group; a Practice library: its New and New folder.
 
 ## Learn and the editors
 

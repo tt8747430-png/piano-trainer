@@ -24,6 +24,11 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
   favourite) and Report. The Archive icon opens Archive, with the Trash inside it; a folder's gear opens its Settings,
   with Card style one level down. A song's ··· Settings opens its Settings page; the old "Song settings" sheet (Version,
   Hands, Count-in) went, as each has its home in the Player. A song's Sections open a section's page.
+- **New is one dial on every library** (canvas 169, loop, from "proper floating actions for the new lessons or
+  courses or also other things" and "consistency between the components across the app"): on a phone a centred honey +
+  that turns to × and opens a card of rows above it over a dimmed page; on a laptop a honey New ▾ in the bar opening the
+  same rows as a menu. Songs: New song, Record, New folder, Import, New group. A Practice library: its own New (a
+  pattern, a progression) and New folder, which no longer hides in Edit. The Add sheet and the bar's + are gone.
 
 ## Today (main b98aea88)
 

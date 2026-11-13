@@ -185,3 +185,38 @@ HINT = (f'<sc-if value="{{{{rootHint.on}}}}" hint-placeholder-val="{{{{true}}}}"
         f'<span style="position: absolute; top: 0; {{{{rootHint.tip}}}}; width: 12px; height: 12px; background: {INK}; transform: translateY(2px) rotate(45deg); border-radius: 2px"></span>'
         f'<span style="position: absolute; top: 6px; {{{{rootHint.box}}}}; height: 26px; padding: 0 10px; border-radius: 13px; background: {INK}; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 26px; white-space: nowrap">{{{{rootHint.t}}}}</span></div></sc-if>')
 NOTEPICK = '<div style="display: flex; flex-direction: column; gap: 4px">' + _track('a', 7, 'Root') + HINT + '</div>'
+
+# ── New: one dial on a phone's floating +, one menu from a laptop's New ▾ (canvas 169) ──
+# The app's SpeedDial and ActionMenu (src/shared/ui/FloatingActions.tsx, ActionMenu.tsx): the + is centred over the
+# tab bar, it turns to a close, the page dims, a card of the actions grows from it with the nearest the thumb last.
+_LI = lambda d: f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+NEWICON = {
+  'New song': _LI('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
+  'Record': _LI('<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>'),
+  'New folder': _LI('<path d="M12 10v6M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>'),
+  'Import': _LI('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6M15 15l-3-3-3 3"/>'),
+  'New group': _LI('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>'),
+  'New lesson': _LI('<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>'),
+  'New course': _LI('<path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/>'),
+}
+_NEWPLUS = _LI('<path d="M5 12h14M12 5v14"/>').replace('width="20" height="20"', 'width="26" height="26"')
+_NEWX = _LI('<path d="M18 6 6 18M6 6l12 12"/>').replace('width="20" height="20"', 'width="24" height="24"')
+def _newitem(label, go):
+    # go: an act's name, or an href ending .dc.html ('#' for a page not drawn)
+    face = (f'<span style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: {FILL}; display: flex; align-items: center; justify-content: center">{NEWICON.get(label, _NEWPLUS.replace("26", "20"))}</span>{label}')
+    st = f'width: 100%; min-height: 48px; box-sizing: border-box; padding: 0 16px 0 8px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; gap: 12px; font: inherit; font-size: 16px; font-weight: 500; color: {INK}; text-align: left; text-decoration: none'
+    if go.endswith('.dc.html') or go == '#':
+        return f'<li><a role="menuitem" href="{go}" style="{st}">{face}</a></li>'
+    return f'<li><button type="button" role="menuitem" onClick="{{{{{go}}}}}" style="{st}">{face}</button></li>'
+def NEWDIAL(items, bottom, on='dialOn', off='noDial', toggle='openDial', close='closeSheet'):
+    """The phone's floating New: items as (label, act or href), nearest the thumb last."""
+    card = (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.6)"></div>'
+            f'<ul role="menu" aria-label="New" style="position: absolute; left: 50%; translate: -50% 0; bottom: {bottom + 72}px; z-index: 31; min-width: 200px; margin: 0; padding: 6px; box-sizing: border-box; list-style: none; border-radius: 16px; background: {SHEET}; box-shadow: {SHADOW}, 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 2px">'
+            + ''.join(_newitem(l, g) for l, g in items) + '</ul></sc-if>')
+    return card + (f'<button type="button" aria-label="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; left: 50%; translate: -50% 0; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">'
+                   f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{_NEWX}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{_NEWPLUS}</sc-if></button>')
+def NEWMENU(items):
+    """The same New as a menu: from a laptop's New ▾, or a row."""
+    return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'
+NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">'
+                                f'{_NEWPLUS.replace("26", "20")}New{CHEV_D}</button>')

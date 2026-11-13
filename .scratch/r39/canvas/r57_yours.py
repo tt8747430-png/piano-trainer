@@ -62,15 +62,8 @@ SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items:
            f'<input aria-label="Search your lessons and courses" placeholder="Search your lessons and courses" value="{{{{q}}}}" onInput="{{{{typed}}}}" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">{SORTB}</label>')
 # canvas 167: the + is New's dial, as Songs' (the app's SpeedDial): it turns to a close, the page dims, and New lesson
 # and New course come up over it named in words, the nearest the thumb first; one chosen opens its own short sheet
-DIALITEM = lambda label, act, icon, last=False: (f'<li><button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 48px; padding: 0 16px 0 8px; border: 0; background: transparent; display: flex; align-items: center; gap: 12px; font: inherit; font-size: 16px; font-weight: 500; color: {INK}; text-align: left">'
-                                               f'<span style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: {FILL}; display: flex; align-items: center; justify-content: center">{icon}</span>{label}</button></li>')
-# canvas 167: the + is New's dial, the app's one SpeedDial (as Songs'): centred, it turns to a close, the page dims,
-# and a card of New course over New lesson grows from it, the nearest the thumb last
-DIAL = lambda bottom: (f'<sc-if value="{{{{dialOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.6)"></div>'
-                       f'<ul role="menu" aria-label="New" style="position: absolute; left: 50%; translate: -50% 0; bottom: {bottom + 72}px; z-index: 31; min-width: 184px; margin: 0; padding: 6px; box-sizing: border-box; list-style: none; border-radius: 16px; background: {SHEET}; box-shadow: {SHADOW}, 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 2px">'
-                       + DIALITEM('New course', 'newCourse', FOLDI) + DIALITEM('New lesson', 'newLesson', BOOKT) + '</ul></sc-if>')
-FAB = lambda bottom: (DIAL(bottom) + f'<button type="button" aria-label="New" aria-haspopup="menu" aria-expanded="{{{{dialOn}}}}" onClick="{{{{openDial}}}}" style="position: absolute; left: 50%; translate: -50% 0; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; '
-                      f'box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{dialOn}}}}" hint-placeholder-val="{{{{false}}}}">{CLOSE}</sc-if><sc-if value="{{{{noDial}}}}" hint-placeholder-val="{{{{true}}}}">{PLUSI.replace("20", "26")}</sc-if></button>')
+# canvas 169: the + is the kit's one New dial (NEWDIAL), as Songs' and the Practice libraries'
+FAB = lambda bottom: NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], bottom)
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 ROWBODY = (GROUP(('link', 'Open', '', '#'), ('action', 'Duplicate', 'closeSheet'), bg=SHEET)
            + GROUP(('link', 'Settings', '', '#'), bg=SHEET) + GROUP(('action', 'Delete', 'removeRow', '#B3261E'), bg=SHEET))
@@ -80,11 +73,11 @@ TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("ki
 yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SEARCHF}{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
 ylm = (f'{LTITLEBAR("Your lessons and courses", "", "LearnLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; flex-direction: column; gap: 14px"><div style="max-width: 900px; display: flex; flex-direction: column; gap: 14px">'
-       f'<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1">{SEARCHF}</div>{BTN(PLUSI + "New" + CHEV_D, "openNew", "", "primary", 44, False)}</div>{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(True)}</div></main>'
+       f'<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1">{SEARCHF}</div>{NEWBTN("openNew")}</div>{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(True)}</div></main>'
        f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
-       POPOVER('pickOn', 'New', NEWPICK, 'right: 506px; top: 140px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 300px; top: 210px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 300px; top: 280px', 320), 'Learn')
+       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 506px; top: 140px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 300px; top: 210px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 300px; top: 280px', 320), 'Learn')
 
 # ── Settings of the learner's own lesson and course: rows that say their value and open in place ──
 OSET_JS = js(r'''
