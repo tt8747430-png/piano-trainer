@@ -22,18 +22,20 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
   - **Auto-scroll:** the sheet follows the chord playing.
   - **Bugs:** the chord sheet is not saved (it must be, as a saved store); drag and drop breaks (port
     memory-palaces' fix, read in that repo); reordering changes other chords' timings (fixed by the rule above).
-  - **A MIDI arranger (Yamaha Genos), timing only** (owner, 2026-11-13: "I dont want my chords to be played. just to
-    sync the timing and the Yamaha genos plays just what I play on the keyboard"): the app sends no chords. It sends
-    the Genos Start and Stop (FA, FC), its tempo as MIDI clock (F8, 24 a beat; the Genos's style follows an external
-    clock), the count-in, and at each section of the sheet Yamaha's Section control (F0 43 7E 00 ss 7F F7; 08 Main
-    A, 09 B, 0A C, 0B D), so the Genos's style keeps the app's time and sections while its own chord detection
-    follows what the learner plays on its keys. Sources: Steinberg's forum ("[SOLVED] Having Cubase To Play PSR",
-    Section control and Start), psrtutorial.com's SysEx thread, the Data List's Section control table. The Genos's
-    MIDI receive takes these from USB TO HOST and its clock set to External (the menus to confirm in the Genos
-    manual). Web MIDI runs in Chrome and Edge on a Mac or PC, never in Safari on a Mac or any iPhone browser (MDN,
-    caniuse; an iPhone needs a third-party Web MIDI browser app): there the row says so and names Chrome or Edge.
-    Built as "Sync a MIDI arranger" in the Chord player's settings, beside Connect a piano. Not testable here without
-    the instrument.
+  - **Follow a MIDI arranger (Yamaha Genos): the Genos leads** (owner, 2026-11-13: "I dont want my chords to be
+    played. just to sync the timing", then "when I start on the genos it should sync with genos and understand that
+    it started and our app automatically starts"): the app sends nothing and plays no chords. It listens on the
+    Genos's USB TO HOST: MIDI Start (FA) starts the Chord player from its first bar (Continue, FB, from where it
+    stopped), Stop (FC) stops it, and its MIDI clock (F8, 24 a beat) sets the tempo and moves the beat, so the sheet
+    follows the Genos's style while the learner plays the chords on its keys. Where the Genos sends Yamaha's Section
+    control (F0 43 7E 00 ss 7F F7) as its Main A to D change, the sheet moves to the section of that letter. The
+    Genos must send clock and start/stop (its MIDI transmit settings, to confirm in the Genos manual). Web MIDI runs
+    in Chrome and Edge on a Mac or PC, never in Safari on a Mac or any iPhone browser (MDN, caniuse): there the row
+    says so and names Chrome or Edge. Built as "Follow a MIDI arranger" in the Chord player's settings, beside
+    Connect a piano, with a mark in the bar while it waits for Start. Not testable here without the instrument; a
+    fake MIDI port drives it in the browser checks.
+  - **The beats shown** (owner, 2026-11-13: "I want also to see the beats in the chords player"): each bar shows its
+    beats as Musicca's ticks, and while playing the beat sounding is lit, the count-in's too.
 
 ## Today
 
