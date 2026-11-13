@@ -224,6 +224,9 @@ owner's, typos fixed.
 - **Canvas 130:** a course is edited in place as a lesson is (Done · Publish…, properties as chips, lessons with a
   grip and Remove with Undo, Add lesson as a New sheet); Learn's Courses get the same Edit mode and New course; a
   lesson's and a course's Settings and Publish are pages with Back (2026-11-11).
+- **Canvas 164:** "refactor also their lessons pages and controls and features and the editing … and their
+  settings": a course's name in its bar and two columns on a laptop, its lessons the level's line; Learned a labelled
+  pill; Settings titled in the bar, Reset progress with Undo, Delete asking, no line under a row (2026-11-13).
 
 ## Practice
 

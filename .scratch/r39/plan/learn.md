@@ -26,6 +26,19 @@ are, what is next, and that every lesson can still be opened.
   - Never again: a title that switches the page, levels as chips that swap the page in place, Your lessons among the
     levels, a second column that repeats the page's own switch.
 
+- **The lesson and the course, their editors and Settings, refactored** (canvas 164, owner 2026-11-13: "and refactor
+  also their lessons pages and controls and features and the editing of the lessons and cources and their settings
+  and all of its controls"):
+  - **A course's page:** its name in the bar (Back to Courses, a second line before it is cut), Settings and Edit at
+    the bar's end; the cover, what it teaches, its facts, how much is learned with Next, Continue in honey, About.
+    Its lessons are the line a level's are (one spine, no card). A laptop holds the course's card in view on the
+    left and its lessons and guided songs on the right; never one narrow column in a wide screen.
+  - **A lesson's Learned says itself:** a pill with its word ("Learned"), grass once learned, never a bare check.
+  - **Settings, the lesson's and the course's:** the title "Settings" in the bar with Back, the item's name under it
+    small; groups as before, then Progress: Reset progress happens at once with Undo in its toast (R38), never
+    asked; Delete lesson / Delete course asks, as it reaches every learner, naming the loss in its dialog; no line of
+    explanation under any row.
+
 - **"A library, not a path"** (feedback log, Learn and the editors): the levels stay chips (Beginner, Intermediate,
   Advanced, Professional, Your lessons) and any lesson opens from any state. The word "journey" stays out of the
   interface.
