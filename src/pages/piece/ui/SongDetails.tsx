@@ -276,7 +276,7 @@ function ReadRow({ title, value, info }: { title: string; value: string; info?: 
       <RowFace
         title={title}
         value={value}
-        trailing={info ? <InfoTip name={title}>{info}</InfoTip> : undefined}
+        info={info ? <InfoTip name={title}>{info}</InfoTip> : undefined}
         end={<span aria-hidden className="size-5 shrink-0" />}
       />
     </div>

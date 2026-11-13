@@ -12,6 +12,8 @@ export type RowTile =
 /** What a row shows, a link's or a button's alike. */
 export type RowFaceProps = {
   title: string
+  /** Its ⓘ, beside its title as every ⓘ sits beside the name it explains. */
+  info?: ReactNode
   detail?: string | undefined
   /**
    * What the detail line counts (a song's chords): kept whole at its end, a long detail cut short on
@@ -36,6 +38,7 @@ export type RowFaceProps = {
  */
 export function RowFace({
   title,
+  info,
   detail,
   count,
   icon: Icon,
@@ -47,6 +50,9 @@ export function RowFace({
   mark,
   end,
 }: RowFaceProps & { end?: ReactNode }) {
+  const name = (
+    <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
+  )
   return (
     <>
       {mark}
@@ -61,7 +67,14 @@ export function RowFace({
           between its words under itself, never inside one, and a narrow row takes from the title, down
           to its longest word (round 28: never cut inside one at 320px). */}
       <span className={value ? 'max-w-[65%] min-w-min flex-[1_4_auto]' : 'min-w-0 flex-1'}>
-        <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
+        {info ? (
+          <span className="flex items-center gap-1">
+            {name}
+            {info}
+          </span>
+        ) : (
+          name
+        )}
         {count ? (
           <>
             {' '}
