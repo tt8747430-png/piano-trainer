@@ -132,8 +132,13 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
   const sumUp = (ended: RunState) => {
     const summary = runSummary(ended)
     if (options.runKey && ended.answered.length > 0 && !summary.cards) {
-      const { accuracy, bestStreak } = summary
-      recordRun(store, options.runKey, { accuracy, streak: bestStreak })
+      const { accuracy, bestStreak, answered, averageMs } = summary
+      recordRun(
+        store,
+        options.runKey,
+        { accuracy, streak: bestStreak, answered, averageMs },
+        new Date(),
+      )
     }
     setSummed(true)
   }

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, lastWeek, selectDays, useProgress } from '@/entities/progress'
@@ -9,9 +8,9 @@ import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 
 /**
- * The last seven days as a picture (canvas 128): "Last 7 days", the time practised and the days of seven, then
- * one bar a day, its height the minutes played against the week's most (the value axis's one
- * line), today in the strong sand, a day not played a flat line, each day's letter under it. The
+ * The last seven days as a picture (canvas 128): "Last 7 days" and, at the right, the time
+ * practised and the days of seven; then one bar a day, its height the minutes played against the
+ * week's most, today in the strong sand, a day not played a flat line, each day's letter under it. The
  * whole card opens Streak, the month's calendar.
  */
 export function WeekCard() {
@@ -40,22 +39,14 @@ export function WeekCard() {
       to="/profile/streak"
       className="group flex flex-col gap-4 card px-4 py-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
     >
-      <div className="flex items-start gap-3">
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <p className="text-sm font-semibold text-muted-foreground">{t('profile.week.title')}</p>
-          <p className="font-display text-xl font-semibold tabular-nums">
-            {t('profile.week.summary', { time: time(total), days: played })}
-          </p>
-        </div>
-        <ChevronRight aria-hidden className="mt-1 size-5 shrink-0 text-muted-foreground" />
+      <div className="flex items-baseline justify-between gap-3">
+        <p className="text-[0.9375rem] font-semibold">{t('profile.week.title')}</p>
+        <p className="text-sm text-muted-foreground tabular-nums">
+          {t('profile.week.summary', { time: time(total), days: played })}
+        </p>
       </div>
       <div className="flex flex-col gap-2">
-        {most > 0 ? (
-          <p className="text-xs text-muted-foreground tabular-nums">
-            {t('profile.week.most', { time: time(most) })}
-          </p>
-        ) : null}
-        <ol className="grid h-24 grid-cols-7 items-end gap-2 border-t border-dashed border-hairline">
+        <ol className="grid h-16 grid-cols-7 items-end gap-2">
           {week.map((day) => (
             <li
               key={day.day}
@@ -68,7 +59,7 @@ export function WeekCard() {
               <span
                 aria-hidden
                 className={cn(
-                  'w-full rounded-t-[3px]',
+                  'w-full rounded-control',
                   day.seconds > 0 ? 'min-h-1' : 'h-0.5 rounded-none bg-hairline',
                   day.seconds > 0 &&
                     (day.day === today ? 'bg-paint-full-sand' : 'bg-paint-full-sand/45'),

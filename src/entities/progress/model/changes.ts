@@ -1,7 +1,14 @@
 import { CHORD_HOLDS, keptHolds, keptLessons, type ChordLessonKey, type LessonKey } from './lessons'
 import { latestEvidence, stepCompletedBy } from './mastery'
 import { selectAnswers, selectIsLearned } from './selectors'
-import type { ProgressState, QuizAnswer, RunKey, RunResult } from './types'
+import {
+  HISTORY_KEPT,
+  type PracticeRun,
+  type ProgressState,
+  type QuizAnswer,
+  type RunKey,
+  type RunResult,
+} from './types'
 import type { StepId } from '@/entities/step'
 
 /** The progress with an exercise's last tempo kept: the same progress where it is kept already. */
@@ -28,10 +35,26 @@ export function withAnswer(state: ProgressState, answer: QuizAnswer, at: string)
 }
 
 /** The progress after a trainer's run at a level: one run more, its accuracy the last, the bests kept. */
-export function withRun(state: ProgressState, key: RunKey, run: RunResult): ProgressState {
+export function withRun(
+  state: ProgressState,
+  key: RunKey,
+  run: RunResult,
+  at: Date,
+): ProgressState {
   const before = state.trainers[key]
+  const when = at.toISOString()
+  const kept: PracticeRun = {
+    id: `${key}@${when}`,
+    key,
+    accuracy: run.accuracy,
+    answered: run.answered,
+    streak: run.streak,
+    averageMs: run.averageMs,
+    at: when,
+  }
   return {
     ...state,
+    history: [kept, ...state.history].slice(0, HISTORY_KEPT),
     trainers: {
       ...state.trainers,
       [key]: {

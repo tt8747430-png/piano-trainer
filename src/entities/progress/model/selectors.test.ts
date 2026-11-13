@@ -31,6 +31,7 @@ const state: ProgressState = {
   firsts: {},
   bestTake: 0,
   exercised: {},
+  history: [],
 }
 
 describe('selectTempo', () => {

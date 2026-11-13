@@ -5,6 +5,8 @@ export {
   type QuizAnswer,
   type RunKey,
   type RunResult,
+  type PracticeRun,
+  HISTORY_KEPT,
   type TrainerRecord,
 } from './model/types'
 export { isDue, knownCount, ratingOf, stillToKnow } from './model/mastery'
@@ -54,6 +56,8 @@ export {
   selectLessonDone,
   selectLessons,
   selectExercised,
+  selectHistory,
+  selectRun,
   selectPractised,
   selectRead,
   selectTempo,

@@ -6,6 +6,7 @@ import { useProfileFigures } from '@/features/track-achievements'
 import { ProgressMeter, ProgressRing, RowLink, SettingsGroup } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
+import { SectionHead } from './SectionHead'
 
 /** The badge as a row: its picture, its name, where the learner stands; a link to its page. */
 export function BadgeRow({ badge }: { badge: Badge }) {
@@ -57,12 +58,12 @@ export function NextMilestone() {
           </span>
         </span>
       </ProgressRing>
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-sm font-semibold text-muted-foreground">
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="text-[0.8125rem] font-semibold text-on-paint-sand">
           {t('profile.badges.next')}
         </span>
-        <span className="text-pretty">
-          {t(`profile.badges.names.${next.id}`)} ·{' '}
+        <span className="font-bold text-pretty">{t(`profile.badges.names.${next.id}`)}</span>
+        <span className="text-sm text-muted-foreground text-pretty">
           {t(`profile.badges.goals.${next.id}`, { count: next.goal })}
         </span>
       </span>
@@ -84,14 +85,11 @@ export function BadgesPreview() {
   )
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-2">
-      <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('profile.badges.title')}
-      </h2>
+      <SectionHead id={headingId} title={t('profile.badges.title')} to="/profile/badges" />
       <SettingsGroup flush>
         {badges.slice(0, 3).map((badge) => (
           <BadgeRow key={badge.id} badge={badge} />
         ))}
-        <RowLink title={t('profile.badges.seeAll')} render={<Link to="/profile/badges" />} />
       </SettingsGroup>
     </section>
   )

@@ -15,11 +15,27 @@ export interface QuizAnswer {
   readonly correct: boolean
 }
 
-/** How a trainer's run went: right answers out of 100, and the most in a row. */
+/** How a trainer's run went: right answers out of 100, and the most in a row; how many answered and how long each took. */
 export interface RunResult {
   readonly accuracy: number
   readonly streak: number
+  readonly answered: number
+  readonly averageMs: number
 }
+
+/** One practice run as the history keeps it (canvas 160): where, how it went, and when (ISO). */
+export interface PracticeRun {
+  readonly id: string
+  readonly key: RunKey
+  readonly accuracy: number
+  readonly answered: number
+  readonly streak: number
+  readonly averageMs: number
+  readonly at: string
+}
+
+/** How many runs the history keeps, the latest. */
+export const HISTORY_KEPT = 200
 
 /** A trainer's runs at one level (or Custom): how many, the last and best accuracy, the best streak. */
 export interface TrainerRecord {
@@ -70,6 +86,8 @@ export interface ProgressState {
   readonly bestTake: number
   /** The day each exercise was last played through (A41), by its id: its row ticked that day. */
   readonly exercised: Readonly<Partial<Record<string, string>>>
+  /** Every practice run, newest first, the latest HISTORY_KEPT (canvas 160): Profile's Practice history. */
+  readonly history: readonly PracticeRun[]
 }
 
 /** The firsts the progress keeps the day of, written where they happen. */
@@ -92,4 +110,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   firsts: {},
   bestTake: 0,
   exercised: {},
+  history: [],
 }

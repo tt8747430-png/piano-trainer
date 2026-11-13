@@ -3,6 +3,7 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { MilestoneId } from '@/entities/progress'
 import { RowLink, SettingsGroup } from '@/shared/ui'
+import { SectionHead } from './SectionHead'
 import { useDayName } from '../model/format'
 import { useMilestones } from '../model/use-milestones'
 import { MilestoneMark } from './marks'
@@ -33,9 +34,11 @@ export function AchievementsPreview() {
   const earned = milestones.filter((milestone) => milestone.day !== null)
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-2">
-      <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('profile.achievements.title')}
-      </h2>
+      <SectionHead
+        id={headingId}
+        title={t('profile.achievements.title')}
+        to="/profile/achievements"
+      />
       <SettingsGroup flush>
         {earned.length === 0 ? (
           <p className="px-4 py-3 text-pretty text-muted-foreground">
@@ -44,10 +47,6 @@ export function AchievementsPreview() {
         ) : (
           earned.slice(0, 3).map((milestone) => <MilestoneRow key={milestone.id} {...milestone} />)
         )}
-        <RowLink
-          title={t('profile.achievements.seeAll')}
-          render={<Link to="/profile/achievements" />}
-        />
       </SettingsGroup>
     </section>
   )

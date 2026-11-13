@@ -13,7 +13,7 @@ const SIZE = {
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
   /** The Profile's and the Account's, at their top. */
-  hero: 'size-24 text-5xl',
+  hero: 'size-20 text-4xl',
 } as const
 
 /** Whether a picture is an uploaded one's address, which an image shows. */
@@ -22,7 +22,7 @@ const isAddress = (picture: string) => /^(https?:|blob:|data:)/.test(picture)
 /**
  * The learner's picture: the one they uploaded or chose of the built-in ones, else the first letter
  * of their name on the yellow paint (memory-palaces', Noji's), or for a guest the figure of a
- * person. A picture: hidden from a screen reader, whatever stands beside it names the learner.
+ * person on grey. A picture: hidden from a screen reader, whatever stands beside it names the learner.
  */
 export function Avatar({
   name,
@@ -48,7 +48,10 @@ export function Avatar({
         'grid shrink-0 place-items-center overflow-hidden rounded-pill font-display leading-none font-semibold',
         builtIn
           ? cn(PAINT[builtIn.paint].fill, PAINT[builtIn.paint].ink)
-          : 'bg-paint-yellow text-on-paint-yellow',
+          : // A guest's plain figure on grey (canvas 136): nobody's colour yet.
+            initial
+            ? 'bg-paint-yellow text-on-paint-yellow'
+            : 'bg-muted text-muted-foreground',
         SIZE[size],
         className,
       )}

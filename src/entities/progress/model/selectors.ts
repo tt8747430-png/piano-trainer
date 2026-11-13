@@ -60,3 +60,12 @@ export const selectHolds =
   (key: ChordLessonKey) =>
   (state: ProgressState): number =>
     state.lessons[key] !== undefined ? CHORD_HOLDS : (state.holds[key] ?? 0)
+
+/** The practice history, newest first (canvas 160). */
+export const selectHistory = (state: ProgressState): ProgressState['history'] => state.history
+
+/** One run of the history by its id, or none. */
+export const selectRun =
+  (id: string) =>
+  (state: ProgressState): ProgressState['history'][number] | undefined =>
+    state.history.find((run) => run.id === id)

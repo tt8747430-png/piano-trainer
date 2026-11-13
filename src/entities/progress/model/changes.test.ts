@@ -73,8 +73,18 @@ describe('withLearned', () => {
 
 describe('withRun', () => {
   it('counts a run at a level, its accuracy the last, keeping the bests', () => {
-    const first = withRun(EMPTY_PROGRESS, 'intervals-by-ear:2', { accuracy: 90, streak: 7 })
-    const second = withRun(first, 'intervals-by-ear:2', { accuracy: 60, streak: 3 })
+    const first = withRun(
+      EMPTY_PROGRESS,
+      'intervals-by-ear:2',
+      { accuracy: 90, streak: 7, answered: 10, averageMs: 900 },
+      new Date(FRIDAY),
+    )
+    const second = withRun(
+      first,
+      'intervals-by-ear:2',
+      { accuracy: 60, streak: 3, answered: 10, averageMs: 900 },
+      new Date(FRIDAY),
+    )
     expect(second.trainers['intervals-by-ear:2']).toEqual({
       runs: 2,
       last: 60,
@@ -84,8 +94,20 @@ describe('withRun', () => {
   })
 
   it('keeps each level’s record apart', () => {
-    const state = withRun(EMPTY_PROGRESS, 'build-chord:1', { accuracy: 100, streak: 10 })
-    expect(withRun(state, 'build-chord:2', { accuracy: 50, streak: 2 }).trainers).toEqual({
+    const state = withRun(
+      EMPTY_PROGRESS,
+      'build-chord:1',
+      { accuracy: 100, streak: 10, answered: 10, averageMs: 900 },
+      new Date(FRIDAY),
+    )
+    expect(
+      withRun(
+        state,
+        'build-chord:2',
+        { accuracy: 50, streak: 2, answered: 10, averageMs: 900 },
+        new Date(FRIDAY),
+      ).trainers,
+    ).toEqual({
       'build-chord:1': { runs: 1, last: 100, best: 100, bestStreak: 10 },
       'build-chord:2': { runs: 1, last: 50, best: 50, bestStreak: 2 },
     })

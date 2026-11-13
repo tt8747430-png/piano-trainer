@@ -17,7 +17,9 @@ import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
   FIRSTS,
+  HISTORY_KEPT,
   type Answer,
+  type PracticeRun,
   type FirstId,
   type ProgressState,
   type RunKey,
@@ -25,7 +27,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 6
+export const PROGRESS_VERSION = 7
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -171,5 +173,22 @@ function sanitize(persisted: unknown): ProgressState {
     exercised: kept(saved.exercised, isExerciseKey, (value) =>
       typeof value === 'string' && isDayKey(value) ? value : undefined,
     ),
+    history: (Array.isArray(saved.history) ? saved.history : [])
+      .flatMap((value) => {
+        const run = practiceRun(value)
+        return run ? [run] : []
+      })
+      .toSorted((a, b) => b.at.localeCompare(a.at))
+      .slice(0, HISTORY_KEPT),
   }
+}
+
+/** A run the history can show: its place, its numbers in range and a real time; else none. */
+function practiceRun(value: unknown): PracticeRun | undefined {
+  const { key, accuracy, answered, streak, averageMs, at } = savedObject<PracticeRun>(value)
+  if (typeof key !== 'string' || !isRunKey(key) || !isPercent(accuracy)) return undefined
+  if (!isCount(answered) || answered < 1 || !isCount(streak) || !isCount(averageMs))
+    return undefined
+  if (typeof at !== 'string' || Number.isNaN(Date.parse(at))) return undefined
+  return { id: `${key}@${at}`, key, accuracy, answered, streak, averageMs, at }
 }

@@ -79,7 +79,7 @@ export function ProfilePage() {
       />
       {/* One column on a phone; on a laptop two (canvas 128): the learner, the week and the next
           badge, then the badges and achievements beside them. */}
-      <div className="mx-auto grid w-full max-w-2xl gap-7 lg:max-w-5xl lg:grid-cols-2 lg:items-start lg:gap-x-10">
+      <div className="mx-auto grid w-full max-w-2xl gap-7 lg:max-w-6xl lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex min-w-0 flex-col gap-7">
           <Hero />
           <WeekCard />
@@ -95,8 +95,9 @@ export function ProfilePage() {
 }
 
 /**
- * The learner: their picture with Edit photo, their name, handle and year joined; a guest's Sign
- * in; then the three tiles.
+ * The learner (canvas 128, memory-palaces'): their picture at the left, Edit photo on it, then their
+ * name and "@handle · Joined 2025"; a guest's plain figure, Exploring as a guest, what their practice
+ * stands to lose and Sign in, in the same place; then the three figures.
  */
 function Hero() {
   const { t } = useTranslation('account')
@@ -106,58 +107,57 @@ function Hero() {
   const name = profile?.name || account?.name || account?.email || null
   const year = profile ? new Date(profile.joined).getFullYear() : null
   return (
-    <section
-      aria-label={name ?? t('profile.guest')}
-      className="flex flex-col items-center gap-4 pt-2 text-center"
-    >
-      <div className="relative">
-        <Avatar name={name} size="hero" picture={profile?.avatar ?? null} />
-        {account ? (
-          // Edit photo on the picture's lower right (memory-palaces'): it opens Edit profile.
-          <span className="absolute -right-2 -bottom-2 rounded-pill bg-background p-0.5">
-            <RoundLink
-              label={t('profile.editPhoto')}
-              icon={Camera}
-              render={<Link to="/settings/account/profile" />}
-            />
-          </span>
-        ) : null}
-      </div>
-      {account ? (
-        state.kind === 'loading' ? (
-          <div aria-busy className="flex flex-col items-center gap-2">
-            <p role="status" className="sr-only">
-              {t('profile.loading')}
-            </p>
-            <span
-              aria-hidden
-              className="h-6 w-40 rounded-pill bg-muted motion-safe:animate-pulse"
-            />
-            <span
-              aria-hidden
-              className="h-4 w-32 rounded-pill bg-muted motion-safe:animate-pulse"
-            />
-          </div>
-        ) : (
-          <div className="flex max-w-full flex-col gap-1">
-            <p className="font-display text-2xl font-semibold text-balance break-words">{name}</p>
-            {year ? (
-              <p className="text-muted-foreground">
-                {profile?.handle
-                  ? t('profile.handleJoined', { handle: profile.handle, year })
-                  : t('profile.joined', { year })}
-              </p>
-            ) : null}
-          </div>
-        )
-      ) : (
-        <div className="flex max-w-sm flex-col items-center gap-3">
-          <p className="font-display text-xl font-semibold text-balance">{t('profile.guest')}</p>
-          {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
-          <p className="text-center text-muted-foreground text-pretty">{t('profile.guestKept')}</p>
-          <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
+    <section aria-label={name ?? t('profile.guest')} className="flex flex-col gap-4 pt-1">
+      <div className="flex items-center gap-4">
+        <div className="relative shrink-0 self-start">
+          <Avatar name={account ? name : null} size="hero" picture={profile?.avatar ?? null} />
+          {account ? (
+            // Edit photo on the picture's lower right (memory-palaces'): it opens Edit profile.
+            <span className="absolute -right-2 -bottom-2 rounded-pill bg-background p-0.5">
+              <RoundLink
+                label={t('profile.editPhoto')}
+                icon={Camera}
+                render={<Link to="/settings/account/profile" />}
+              />
+            </span>
+          ) : null}
         </div>
-      )}
+        {account ? (
+          state.kind === 'loading' ? (
+            <div aria-busy className="flex flex-col gap-2">
+              <p role="status" className="sr-only">
+                {t('profile.loading')}
+              </p>
+              <span
+                aria-hidden
+                className="h-6 w-40 rounded-pill bg-muted motion-safe:animate-pulse"
+              />
+              <span
+                aria-hidden
+                className="h-4 w-32 rounded-pill bg-muted motion-safe:animate-pulse"
+              />
+            </div>
+          ) : (
+            <div className="flex min-w-0 flex-col gap-1">
+              <p className="text-2xl leading-tight font-bold text-balance break-words">{name}</p>
+              {year ? (
+                <p className="text-sm text-muted-foreground">
+                  {profile?.handle
+                    ? t('profile.handleJoined', { handle: profile.handle, year })
+                    : t('profile.joined', { year })}
+                </p>
+              ) : null}
+            </div>
+          )
+        ) : (
+          <div className="flex min-w-0 flex-col items-start gap-2">
+            <p className="text-xl leading-tight font-bold text-balance">{t('profile.guest')}</p>
+            {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
+            <p className="text-sm text-muted-foreground text-pretty">{t('profile.guestKept')}</p>
+            <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
+          </div>
+        )}
+      </div>
       <Tiles />
     </section>
   )
@@ -202,9 +202,9 @@ function Tiles() {
   )
 }
 
-const TILE = 'card flex h-full flex-col items-center justify-start gap-1.5 px-2 py-3 text-center'
+const TILE = 'card flex h-full flex-col items-start justify-start gap-1 px-3 py-3'
 
-/** A tile's figure over its name, read as one: "3 Day streak". */
+/** A tile's figure over its name, the value first (canvas 128): "12", then "🔥 Day streak". */
 function TileFace({
   label,
   value,
@@ -216,11 +216,13 @@ function TileFace({
 }) {
   return (
     <>
-      <span className="flex flex-col items-center gap-1 font-display text-lg leading-tight font-semibold text-balance tabular-nums sm:text-2xl">
-        <Icon aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+      <span className="text-xl leading-tight font-bold text-balance tabular-nums sm:text-2xl">
         {value}
       </span>
-      <span className="text-xs text-pretty text-muted-foreground sm:text-sm">{label}</span>
+      <span className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground sm:text-sm">
+        <Icon aria-hidden className="size-3.5 shrink-0" />
+        <span className="min-w-0 text-pretty">{label}</span>
+      </span>
     </>
   )
 }
