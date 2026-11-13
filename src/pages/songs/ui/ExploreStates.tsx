@@ -23,7 +23,7 @@ export function ExploreFailed({ reason, onRetry }: { reason: NetFailure; onRetry
             {t('explore.views.mine')}
           </Button>
         ) : (
-          <Button className="rounded-pill px-6" onClick={onRetry}>
+          <Button onClick={onRetry}>
             {t('explore.again')}
           </Button>
         )
