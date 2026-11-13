@@ -1,7 +1,14 @@
 import { Link } from '@tanstack/react-router'
 import { Cable, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { CHORD_LABELS, CHORD_RANGES, type ChordLabels, type ChordRange } from '@/shared/lib'
+import {
+  CAMERA_ANGLES,
+  CHORD_LABELS,
+  CHORD_RANGES,
+  type CameraAngle,
+  type ChordLabels,
+  type ChordRange,
+} from '@/shared/lib'
 import { printedKeyName, type Midi } from '@/shared/lib/music'
 import { KeyStrip } from './KeyStrip'
 import { useTranslation } from 'react-i18next'
@@ -37,6 +44,7 @@ export function PianoSheet({
   trigger,
   labels,
   range,
+  stage,
 }: {
   keys: boolean
   hands: boolean
@@ -52,6 +60,13 @@ export function PianoSheet({
     readonly low: Midi
     readonly high: Midi
     readonly onChange: (range: ChordRange) => void
+  }
+  /** The 3D piano's own rows, under its card while it is chosen (Chords): Angle, Hands on the keys. */
+  stage?: {
+    readonly angle: CameraAngle
+    readonly onAngle: (angle: CameraAngle) => void
+    readonly handsOnKeys: boolean
+    readonly onHandsOnKeys: (shown: boolean) => void
   }
 }) {
   const { t } = useTranslation(['player', 'common'])
@@ -75,7 +90,36 @@ export function PianoSheet({
             value={shown}
             disabled={!keys}
             cards={[
-              { value: 'hands', label: t('pianoSheet.hands'), picture: <Piano3DPicture /> },
+              {
+                value: 'hands',
+                label: t('pianoSheet.hands'),
+                picture: <Piano3DPicture />,
+                children: stage ? (
+                  <>
+                    {/* The canvas's rows in the chosen card, a honey hairline over each. */}
+                    <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
+                      <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
+                      <div className="w-42 flex-none">
+                        <Segmented
+                          label={t('pianoSheet.angle')}
+                          value={stage.angle}
+                          options={CAMERA_ANGLES.map((each) => ({
+                            value: each,
+                            label: t(`pianoSheet.angles.${each}`),
+                          }))}
+                          onChange={stage.onAngle}
+                        />
+                      </div>
+                    </div>
+                    <SwitchRow
+                      label={t('pianoSheet.handsOnKeys')}
+                      checked={stage.handsOnKeys}
+                      onCheckedChange={stage.onHandsOnKeys}
+                      className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
+                    />
+                  </>
+                ) : undefined,
+              },
               { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
             ]}
             onChange={(next) => onHands(next === 'hands')}

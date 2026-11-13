@@ -12,6 +12,7 @@ export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
+  CAMERA_ANGLES,
   CHORD_LABELS,
   CHORD_RANGES,
   KEY_DOCKS,
@@ -19,6 +20,7 @@ export {
   NAMED_KEYS,
   PEDALS_SHOWN,
   SWIPES,
+  type CameraAngle,
   type ChordLabels,
   type ChordRange,
   type KeyDock,

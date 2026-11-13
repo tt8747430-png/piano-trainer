@@ -125,6 +125,8 @@ for (const size of SIZES) {
               .or(page.getByRole('tab', { name: value, exact: true }))
               .or(page.getByRole('radio', { name: value, exact: true }))
               .or(page.getByRole('menuitem', { name: value, exact: true }))
+              .or(page.getByRole('switch', { name: value, exact: true }))
+              .or(page.getByRole('checkbox', { name: value, exact: true }))
               .first()
             await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${value}” to tap (${error.message.split('\n')[0]})`))
             await page.waitForTimeout(600)

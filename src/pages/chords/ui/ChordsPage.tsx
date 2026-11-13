@@ -24,7 +24,7 @@ export function ChordsPage() {
   const onChange = useSetSearch<ChordView>()
   const { folded, fold } = useFoldKeys()
   const { hands } = useSettings(selectScoreView)
-  const { labels, range } = useSettings(selectChords)
+  const { labels, range, angle, handsOnKeys } = useSettings(selectChords)
   const framed = framedChord(chord, range)
   const settings = useSettingsStoreApi()
   return (
@@ -39,6 +39,12 @@ export function ChordsPage() {
             onKeys={(shown) => fold(!shown)}
             onHands={(shown) => setScoreView(settings, { hands: shown })}
             labels={{ value: labels, onChange: (next) => setChords(settings, { labels: next }) }}
+            stage={{
+              angle,
+              onAngle: (next) => setChords(settings, { angle: next }),
+              handsOnKeys,
+              onHandsOnKeys: (shown) => setChords(settings, { handsOnKeys: shown }),
+            }}
             range={{
               value: range,
               low: framed.low,

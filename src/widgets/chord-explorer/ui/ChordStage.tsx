@@ -28,7 +28,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   const { hands } = useSettings(selectScoreView)
   const settings = useSettingsStoreApi()
   const notes = useMemo(() => chordPerformance(chord), [chord])
-  const { labels, range } = useSettings(selectChords)
+  const { labels, range, angle, handsOnKeys } = useSettings(selectChords)
   const { held, tags } = useMemo(() => {
     const { placed, fingers } = viewChord(chord)
     const keys = [...placed.lh, ...placed.rh]
@@ -74,6 +74,8 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
         wrong={undefined}
         faded={null}
         range={framed}
+        angle={angle}
+        handsShown={handsOnKeys}
         onShowKeys={() => setScoreView(settings, { hands: false })}
       />
     </Pinned>

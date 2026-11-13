@@ -2,6 +2,7 @@ import type { Bars } from './bars'
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
+  CAMERA_ANGLES,
   CHORD_LABELS,
   CHORD_RANGES,
   isOneOf,
@@ -11,6 +12,7 @@ import {
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
   SWIPES,
+  type CameraAngle,
   type ChordLabels,
   type ChordRange,
   type KeyDock,
@@ -494,8 +496,18 @@ export interface ChordsSettings {
   readonly labels: ChordLabels
   /** How many keys its piano shows. */
   readonly range: ChordRange
+  /** Where its 3D piano is seen from. */
+  readonly angle: CameraAngle
+  /** Its 3D piano with the hands at the keys, or the keys alone. */
+  readonly handsOnKeys: boolean
 }
-export const DEFAULT_CHORDS: ChordsSettings = { labels: 'names', range: 'chord' }
+export const DEFAULT_CHORDS: ChordsSettings = {
+  labels: 'names',
+  range: 'chord',
+  angle: 'seat',
+  handsOnKeys: true,
+}
+export const isCameraAngle = isOneOf(CAMERA_ANGLES)
 export const isChordLabels = isOneOf(CHORD_LABELS)
 export const isChordRange = isOneOf(CHORD_RANGES)
 

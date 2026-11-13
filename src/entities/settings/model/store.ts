@@ -38,6 +38,7 @@ import {
   DEFAULT_CHORDS,
   isChordLabels,
   isChordRange,
+  isCameraAngle,
   type ChordsSettings,
   type ChordPlayerSettings,
   isProgressionNames,
@@ -298,6 +299,9 @@ function chordsSettings(value: unknown): ChordsSettings {
   return {
     labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels,
     range: isChordRange(saved.range) ? saved.range : DEFAULT_CHORDS.range,
+    angle: isCameraAngle(saved.angle) ? saved.angle : DEFAULT_CHORDS.angle,
+    handsOnKeys:
+      typeof saved.handsOnKeys === 'boolean' ? saved.handsOnKeys : DEFAULT_CHORDS.handsOnKeys,
   }
 }
 

@@ -1,3 +1,4 @@
+import type { CameraAngle } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import { KEY, keyX } from './keys'
 
@@ -6,9 +7,13 @@ import { KEY, keyX } from './keys'
  * looking steeply down at the keys' whole length, the hands coming in from the bottom edge. Narrow,
  * so the keys keep their shape from end to end.
  */
+/** How steeply each angle looks down, from the horizontal. */
+export const PITCH: Readonly<Record<CameraAngle, number>> = {
+  seat: (62 * Math.PI) / 180,
+  above: (78 * Math.PI) / 180,
+}
+
 export const VIEW = {
-  /** How steeply it looks down, from the horizontal. */
-  pitch: (62 * Math.PI) / 180,
   /** The field of view, top to bottom. */
   fov: (22 * Math.PI) / 180,
   /** The top edge shows at least the keys' back end, where the fallboard stands. */
@@ -53,29 +58,26 @@ export interface Framing {
 }
 
 const half = Math.tan(VIEW.fov / 2)
-const below = 1 / Math.tan(VIEW.pitch + VIEW.fov / 2)
-const above = 1 / Math.tan(VIEW.pitch - VIEW.fov / 2)
-
-/** The camera's distance in front of the keys' edge at height `y`, its bottom edge held. */
-const zAt = (y: number) => VIEW.bottom.z + (y - VIEW.bottom.y) * below
-
-/** How far the keys' front edge is from the camera at height `y`, along its gaze. */
-const depthAt = (y: number) => y * Math.sin(VIEW.pitch) + zAt(y) * Math.cos(VIEW.pitch)
-
-/** The height whose view reaches back to the top edge: the nearest the camera comes. */
-const NEAREST =
-  (VIEW.top.z - VIEW.bottom.z + VIEW.bottom.y * below - VIEW.top.y * above) / (below - above)
-
-/** The height at which the keys' front edge is `depth` from the camera. */
-const heightFor = (depth: number) =>
-  (depth - (VIEW.bottom.z - VIEW.bottom.y * below) * Math.cos(VIEW.pitch)) /
-  (Math.sin(VIEW.pitch) + below * Math.cos(VIEW.pitch))
-
 /**
- * How much further the keys' back end is from the camera than their front edge, along its gaze: the
- * view is widest there, at its top edge.
+ * What a camera at `pitch` sees, as heights and distances: its distance in front of the keys' edge
+ * at height `y`, its bottom edge held (`zAt`); how far the keys' front edge is from it along its gaze
+ * (`depthAt`); the height whose view reaches back to the top edge, the nearest it comes (`nearest`);
+ * the height at which the front edge is `depth` away (`heightFor`); and how much further the keys'
+ * back end is than their front edge, where the view is widest (`back`).
  */
-const BACK = -VIEW.top.z * Math.cos(VIEW.pitch) - VIEW.top.y * Math.sin(VIEW.pitch)
+function lens(pitch: number) {
+  const below = 1 / Math.tan(pitch + VIEW.fov / 2)
+  const above = 1 / Math.tan(pitch - VIEW.fov / 2)
+  const zAt = (y: number) => VIEW.bottom.z + (y - VIEW.bottom.y) * below
+  const depthAt = (y: number) => y * Math.sin(pitch) + zAt(y) * Math.cos(pitch)
+  const nearest =
+    (VIEW.top.z - VIEW.bottom.z + VIEW.bottom.y * below - VIEW.top.y * above) / (below - above)
+  const heightFor = (depth: number) =>
+    (depth - (VIEW.bottom.z - VIEW.bottom.y * below) * Math.cos(pitch)) /
+    (Math.sin(pitch) + below * Math.cos(pitch))
+  const back = -VIEW.top.z * Math.cos(pitch) - VIEW.top.y * Math.sin(pitch)
+  return { zAt, depthAt, nearest, heightFor, back }
+}
 
 /** The keyboard's ends: A0's and C8's outer edges. */
 const ENDS = {
@@ -106,13 +108,16 @@ const spanOf = ({ low, high }: { readonly low: Midi; readonly high: Midi }) => (
  * as the music's range needs, its bottom edge held across the hands; and where the range would leave
  * a white key smaller than `VIEW.minKey`, as far back as that, or further where two hands far apart
  * need it, and following the hands. Music it shows whole it stands over, moved toward the middle
- * where its view would run past the keyboard's end. Without music, middle C's octaves.
+ * where its view would run past the keyboard's end. Without music, middle C's octaves. From the
+ * seat unless `angle` says above.
  */
 export function frame(
   size: ViewSize,
   range: { low: Midi; high: Midi } | null,
   apart: number,
+  angle: CameraAngle = 'seat',
 ): Framing {
+  const { zAt, depthAt, nearest, heightFor, back } = lens(PITCH[angle])
   const aspect = size.width / Math.max(1, size.height)
   const span = spanOf(range ?? MIDDLE)
   const keyboard = spanOf(KEYBOARD)
@@ -123,13 +128,13 @@ export function frame(
   const hands = (size.width * KEY.width) / (apart + 2 * VIEW.hand)
   const least = Math.min(VIEW.minKey, Math.max(VIEW.leastKey, hands))
   const smallest = (KEY.width * size.height) / (2 * half * least)
-  const depth = Math.max(depthAt(NEAREST), Math.min(fits, smallest))
-  const y = Math.max(NEAREST, heightFor(depth))
+  const depth = Math.max(depthAt(nearest), Math.min(fits, smallest))
+  const y = Math.max(nearest, heightFor(depth))
   const shown = 2 * depthAt(y) * half * aspect
   const middle = (span.from + span.to) / 2
   if (shown >= span.to - span.from - 1e-9) {
     // The music's outer keys stay in view; the hands' room beside them gives way to the piano's end.
-    const top = 2 * (depthAt(y) + BACK) * half * aspect
+    const top = 2 * (depthAt(y) + back) * half * aspect
     const needed = {
       from: span.to - VIEW.margin - shown / 2,
       to: span.from + VIEW.margin + shown / 2,

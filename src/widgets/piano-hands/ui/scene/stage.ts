@@ -18,7 +18,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import type { Midi } from '@/shared/lib/music'
 import { keyFill, type KeyFill, type KeyMark } from '@/shared/ui'
-import { followed, frame, VIEW, type Framing } from '../../model/camera'
+import type { CameraAngle } from '@/shared/lib'
+import { followed, frame, PITCH, VIEW, type Framing } from '../../model/camera'
 import { KEY, keyX } from '../../model/keys'
 import {
   choreograph,
@@ -56,6 +57,10 @@ export interface StageInput {
    * mark says (Chords' stage, its canvas).
    */
   readonly pressedPaint?: 'hand' | 'tone'
+  /** Where the camera looks from: the seat, or above (the Piano sheet's Angle). */
+  readonly angle?: CameraAngle
+  /** The hands drawn at the keys; without them the keys alone, pressed where they are held. */
+  readonly handsShown?: boolean
 }
 
 /** Where a key's far end stands on the canvas, from 0 to 1 across and down: what a tag is put over. */
@@ -240,13 +245,13 @@ export function createStage(
   const keyboard: Keyboard = createKeyboard()
   scene.add(keyboard.group)
   const camera = new PerspectiveCamera((VIEW.fov * 180) / Math.PI, 1, 0.05, 5)
-  camera.rotation.x = -VIEW.pitch
+  camera.rotation.x = -PITCH[input.angle ?? 'seat']
 
   let now = input
   let size = { width: 1, height: 1 }
   let part: Choreography = choreograph(now.notes)
   let apart = handsApart(part)
-  let framing: Framing = frame(size, now.range, apart)
+  let framing: Framing = frame(size, now.range, apart, now.angle)
   let cameraX = framing.x
   let paints = readPaints(canvas.parentElement ?? document.body)
   const hands: Partial<Record<Side, DrawnHand>> = {}
@@ -292,7 +297,10 @@ export function createStage(
       const hand = hands[side]
       const music = part[side]
       if (!hand) continue
-      const target = music ? pressHeld(handPose(music, tick, now.perSecond), now.held) : null
+      const target =
+        music && now.handsShown !== false
+          ? pressHeld(handPose(music, tick, now.perSecond), now.held)
+          : null
       hand.rig.root.visible = target !== null
       const fadeTo = target === null ? 0 : now.faded === side ? 1 / 3 : 1
       const kFade = eased(dt, EASE.fade)
@@ -451,12 +459,15 @@ export function createStage(
       const notesChanged = next.notes !== now.notes
       const rangeChanged =
         next.range?.low !== now.range?.low || next.range?.high !== now.range?.high
+      const angleChanged = next.angle !== now.angle
       now = next
+      if (angleChanged) camera.rotation.x = -PITCH[next.angle ?? 'seat']
       if (notesChanged) {
         part = choreograph(next.notes)
         apart = handsApart(part)
       }
-      if (notesChanged || rangeChanged) framing = frame(size, next.range, apart)
+      if (notesChanged || rangeChanged || angleChanged)
+        framing = frame(size, next.range, apart, next.angle)
       wake()
     },
     resize: (width, height) => {
@@ -464,7 +475,7 @@ export function createStage(
       renderer.setSize(size.width, size.height, false)
       camera.aspect = size.width / size.height
       camera.updateProjectionMatrix()
-      framing = frame(size, now.range, apart)
+      framing = frame(size, now.range, apart, now.angle)
       wake()
     },
     dispose: () => {
