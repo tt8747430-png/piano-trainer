@@ -60,8 +60,7 @@ function StepRow({
   const detail =
     step.kind === 'lesson'
       ? [
-          // The number said once: on the tile, or here where the tile shows Next's book or a check.
-          number === undefined || !(next || done) ? null : t('lessonNumber', { n: number }),
+          number === undefined ? null : t('lessonNumber', { n: number }),
           after.length > 0 ? t('after', { lessons: after.join(', ') }) : null,
         ]
       : [

@@ -53,11 +53,10 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                 done={done}
                 share={share}
                 current={current}
-                said={t('lessonNumber', { n: i + 1 })}
                 title={localText(lesson.title, locale)}
                 detail={
                   [
-                    current || done ? t('lessonNumber', { n: i + 1 }) : null,
+                    t('lessonNumber', { n: i + 1 }),
                     after.length > 0 ? t('after', { lessons: after.join(', ') }) : null,
                   ]
                     .filter(Boolean)

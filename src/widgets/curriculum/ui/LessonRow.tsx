@@ -48,7 +48,7 @@ export function LessonRow({
         <span
           aria-hidden
           className={cn(
-            'grid size-10 shrink-0 place-items-center font-display text-lg font-semibold tabular-nums',
+            'grid size-10 shrink-0 place-items-center font-sans text-base font-semibold tabular-nums',
             square ? 'rounded-control' : 'rounded-pill',
             done
               ? cn(PAINT.grass.fill, PAINT.grass.ink)
@@ -60,7 +60,7 @@ export function LessonRow({
         </span>
       </ProgressRing>
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="font-semibold text-pretty">
+        <span className="text-base/snug font-semibold text-pretty">
           {said ? <span className="sr-only">{said}: </span> : null}
           {title}
           {/* The check and the arc say it to the eye alone. */}

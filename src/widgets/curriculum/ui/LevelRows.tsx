@@ -73,10 +73,7 @@ export function LevelNav({ current }: { current: string }) {
   const learned = useProgress(selectLearned)
   return (
     <nav aria-labelledby={id} className="flex flex-col gap-1">
-      <h2
-        id={id}
-        className="px-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase"
-      >
+      <h2 id={id} className="px-3 pb-1 font-sans text-xl font-bold">
         {t('learn:levels')}
       </h2>
       <ul className="flex flex-col gap-0.5">
