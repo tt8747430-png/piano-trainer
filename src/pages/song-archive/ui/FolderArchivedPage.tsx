@@ -2,7 +2,8 @@ import { Link, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { folderArchive, useFolderName, useLibraryLayout } from '@/entities/library'
 import { useLibraryActs } from '@/features/manage-library'
-import { BackButton, ButtonLink, NotFound, ScreenHeader } from '@/shared/ui'
+import { cn } from '@/shared/lib'
+import { BackButton, ButtonLink, GROUPED_LIST, NotFound, ScreenHeader } from '@/shared/ui'
 import { ArchiveEmpty } from './ArchiveEmpty'
 import { ArchivedRow } from './ArchivedRow'
 
@@ -36,7 +37,7 @@ export function FolderArchivedPage() {
       ) : (
         <ul
           aria-label={t('folder.archivedIn', { name: nameOf(folder) })}
-          className="grid-cards gap-2"
+          className={cn(GROUPED_LIST, 'mx-auto w-full max-w-2xl')}
         >
           {songs.map((entry) => (
             <ArchivedRow

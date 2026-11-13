@@ -1,30 +1,30 @@
-import { ArchiveRestore } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { RowFace } from '@/shared/ui'
+import { cn } from '@/shared/lib'
+import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE, RowFace } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEntryFace } from '@/widgets/piece-list'
+import { PieceMark } from '@/widgets/piece-cover'
 import { FolderFace } from '@/widgets/song-library'
 
 /** An archived song's face, a link to its page (an archived song still opens). */
 function SongFace({ entry }: { entry: Entry }) {
   const { face } = useEntryFace(entry)
   return (
-    <PieceLink
-      entry={entry}
-      className="group/row flex min-h-16 min-w-0 flex-1 items-center gap-3 rounded-card py-2 pl-3 focus-visible:-outline-offset-3"
-    >
+    <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE, 'pl-4')}>
+      <PieceMark entry={entry} />
       <RowFace {...face} />
     </PieceLink>
   )
 }
 
 /**
- * A row of the archive (Mindscape's): a folder on its tile with its songs counted, or a song as Songs
- * shows it; then Restore, and its More where it has one.
+ * A row of the archive (Mindscape's; canvas 133), in its list's one card: a folder on its tile with its
+ * songs counted, or a song on its small cover as Songs shows it; then Restore as a soft pill, and its
+ * More where it has one.
  */
 export function ArchivedRow({
   entry,
@@ -47,9 +47,9 @@ export function ArchivedRow({
     entry.kind === 'folder' ? nameOf(entry.folder) : song ? entryTitles(song, locale).primary : ''
   if (entry.kind === 'song' && !song) return null
   return (
-    <li className="card flex min-w-0 items-center gap-1 pr-2">
+    <li className={cn(ROW_FLAT, more ? 'pr-1' : 'pr-3')}>
       {entry.kind === 'folder' ? (
-        <div className="flex min-h-16 min-w-0 flex-1 items-center gap-3 py-2 pl-2">
+        <div className={cn(ROW_BODY, ROW_LIBRARY_FACE, 'pl-4')}>
           <FolderFace
             folder={entry.folder}
             holds={{
@@ -62,14 +62,13 @@ export function ArchivedRow({
         <SongFace entry={song} />
       ) : null}
       <Button
-        variant="soft"
+        variant="bar"
         aria-label={
           restore ? t('folder.unarchiveNamed', { name }) : t('archive.restoreNamed', { name })
         }
         onClick={onRestore}
-        className="shrink-0"
+        className="shrink-0 px-3 text-[0.9375rem]"
       >
-        <ArchiveRestore data-icon="inline-start" aria-hidden />
         {restore ?? t('library.restore')}
       </Button>
       {more}

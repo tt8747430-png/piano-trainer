@@ -336,6 +336,7 @@ export const songs = {
     restoreAll: 'Restore all',
     restoredAll: 'All items restored to the library',
     restoreNamed: 'Restore {{name}}',
+    deleted: 'Deleted songs',
     empty: {
       title: 'Nothing archived',
       description: 'Songs and folders you archive wait here, to be restored whenever you like.',
@@ -367,7 +368,6 @@ export const songs = {
     },
   },
   // Where the archive and the Trash are reached from Songs' bar.
-  stored: 'Archive and Trash',
   new: 'New',
   newSong: 'New song',
   recordSong: 'Record',

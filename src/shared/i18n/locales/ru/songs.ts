@@ -322,6 +322,7 @@ export const songs: LocaleResources['songs'] = {
     restoreAll: 'Восстановить всё',
     restoredAll: 'Все элементы восстановлены в библиотеке',
     restoreNamed: 'Восстановить: {{name}}',
+    deleted: 'Удалённые песни',
     empty: {
       title: 'В архиве пусто',
       description:
@@ -354,7 +355,6 @@ export const songs: LocaleResources['songs'] = {
     },
   },
   // Откуда в панели «Песен» открываются архив и корзина.
-  stored: 'Архив и корзина',
   new: 'Создать',
   newSong: 'Новая песня',
   recordSong: 'Записать',

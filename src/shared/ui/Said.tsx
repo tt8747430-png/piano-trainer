@@ -27,13 +27,11 @@ export function Said({
   return (
     <Empty>
       <EmptyHeader>
-        <EmptyMedia>
-          <span className="grid size-14 place-items-center rounded-full bg-muted text-muted-foreground">
-            <Icon aria-hidden className="size-6" />
-          </span>
+        <EmptyMedia variant="icon">
+          <Icon aria-hidden />
         </EmptyMedia>
         {/* A long query breaks rather than run off the screen. */}
-        <EmptyTitle role="status" className="text-[1.0625rem] font-bold break-words">
+        <EmptyTitle role="status" className="break-words">
           {title}
         </EmptyTitle>
         {description ? <EmptyDescription>{description}</EmptyDescription> : null}
