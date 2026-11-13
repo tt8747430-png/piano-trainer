@@ -312,6 +312,18 @@ export const player: LocaleResources['player'] = {
     medium: 'Средний',
     hard: 'Сильный',
   },
+  practiceSheet: {
+    title: 'Практика',
+    of: 'Практика: {{mode}}',
+    wait: 'Ждать',
+    play: 'Играть',
+    tempo: 'Темп',
+    scoreTempo: 'Темп нот: {{tempo}} уд/мин',
+    metronome: 'Метроном',
+    metronomeOff: 'Выкл.',
+    metronomeCountIn: 'Отсчёт',
+    metronomeOn: 'Вкл.',
+  },
   pace: {
     title: 'Темп',
     of: 'Темп: {{value}}',

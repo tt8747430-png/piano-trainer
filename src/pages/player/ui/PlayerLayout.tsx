@@ -6,7 +6,6 @@ import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } fro
 import {
   selectKeyboard,
   selectOtherHand,
-  selectPlayback,
   selectScoreView,
   selectTipSeen,
   useSettings,
@@ -32,7 +31,7 @@ import {
   CountInBeat,
   HandsSheet,
   LoopButton,
-  PaceButton,
+  PracticeSheet,
   PlayerArea,
   PlayerScreen,
   PlayerClose,
@@ -162,7 +161,6 @@ export function PlayerLayout({
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const keySize = useSettings((state) => selectKeyboard(state).keySize)
-  const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
   const otherHand = useSettings((state) => selectOtherHand(state).look)
   const held = useHeldKeys()
@@ -245,7 +243,6 @@ export function PlayerLayout({
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
-        value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
       },
       {
@@ -460,18 +457,17 @@ export function PlayerLayout({
             practice={practice}
             loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
             pace={
-              <PaceButton
+              <PracticeSheet
                 mode={view.mode}
                 tempo={player.tempo}
-                shownTempo={player.shownTempo}
                 ownTempo={player.ownTempo}
-                speedTraining={view.speedTraining}
                 piano={playable}
                 handsAtKeys={player.keys && scoreView.hands}
-                onMode={player.setMode}
-                onListen={player.listenAt}
-                onSpeedTraining={player.setSpeedTraining}
-                click={{ on: player.click, onChange: player.setClick }}
+                click={player.click}
+                onWait={() => player.setMode('wait')}
+                onPlay={player.listenAt}
+                onTempo={player.setTempo}
+                onClick={player.setClick}
               />
             }
             hands={

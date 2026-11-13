@@ -343,6 +343,19 @@ export const player = {
   },
   // The transport's Pace (R36, flowkey's Tempo menu): the modes at the learner's own pace, then the
   // speeds to listen and play along at.
+  // The transport's Practice (its canvas): how you play along, the tempo, the metronome.
+  practiceSheet: {
+    title: 'Practice',
+    of: 'Practice: {{mode}}',
+    wait: 'Wait',
+    play: 'Play',
+    tempo: 'Tempo',
+    scoreTempo: 'Score tempo: {{tempo}} BPM',
+    metronome: 'Metronome',
+    metronomeOff: 'Off',
+    metronomeCountIn: 'Count-in',
+    metronomeOn: 'On',
+  },
   pace: {
     title: 'Pace',
     of: 'Pace: {{value}}',

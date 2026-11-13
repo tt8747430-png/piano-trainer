@@ -3,7 +3,6 @@ import { Metronome } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  COUNTDOWNS,
   OTHER_HAND_LOOKS,
   SPEED_STEPS,
   selectOtherHand,
@@ -30,18 +29,6 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
   return (
     <>
       {children}
-      <ChoiceCard
-        title={t('settingsPage.countdown.label')}
-        description={t('settingsPage.countdown.detail')}
-        info={t('settingsPage.countdown.info')}
-        setting="playback.countdown"
-        value={playback.countdown}
-        options={COUNTDOWNS.map((value) => ({
-          value,
-          label: t(`settingsPage.countdown.${value}`),
-        }))}
-        onChange={(countdown) => setPlayback(settings, { countdown })}
-      />
       <SettingsGroup flush>
         <RowLink
           title={t('settingsPage.metronome')}

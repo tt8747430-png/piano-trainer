@@ -159,3 +159,4 @@ export {
 export { menuOf, swipeOf, type RowAction } from './row-actions'
 export { RowMore } from './RowMore'
 export { SortChoice, type SortOption } from './SortChoice'
+export { TempoSteps } from './TempoSteps'

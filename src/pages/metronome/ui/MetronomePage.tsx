@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
 import { MetronomeSettings } from './MetronomeSettings'
-import { TempoSteps } from './TempoSteps'
+import { TempoSteps } from '@/shared/ui'
 import { TempoWordTip } from './TempoWordTip'
 
 /**

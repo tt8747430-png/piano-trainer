@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from './primitives/button'
 
 /** The steps either side of the tempo, slower first. */
 const STEPS = [-10, -1, 1, 10] as const
