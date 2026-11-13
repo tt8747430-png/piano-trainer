@@ -113,7 +113,7 @@ export function ScreenHeader({
         scrolled ? 'border-hairline' : 'border-transparent',
       )}
     >
-      <div className="flex min-h-14 items-center gap-2 py-1">
+      <div className="flex min-h-14 items-center gap-1.5 py-1 sm:gap-2">
         {back ? <div className="shrink-0 print:hidden">{back}</div> : null}
         <div className="flex min-w-0 flex-1 items-center gap-0.5">
           <h1
@@ -122,8 +122,8 @@ export function ScreenHeader({
               'min-w-0 font-display font-semibold outline-none',
               // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
               // on a phone where two lines say it all.
-              'line-clamp-2 leading-tight text-balance wrap-break-word',
-              large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
+              'line-clamp-2 leading-tight tracking-tight text-balance wrap-break-word',
+              large ? 'text-[1.375rem] sm:text-2xl' : 'text-base sm:text-xl',
               titleOnPage && 'sr-only',
               // A place's views say where it is: its name stays the page's heading, unseen.
               views && 'sr-only',
@@ -141,7 +141,7 @@ export function ScreenHeader({
           ) : null}
         </div>
         {tools || settings || more ? (
-          <div className="ms-auto flex shrink-0 items-center gap-1.5 print:hidden">
+          <div className="ms-auto flex shrink-0 items-center gap-1 sm:gap-1.5 print:hidden">
             {tools}
             {settings}
             {more}
