@@ -137,8 +137,8 @@ export const account: LocaleResources['account'] = {
       days_other: 'Серия: {{count}} дня',
       longest: 'Самая длинная серия',
       month: 'Дней в этом месяце',
+      calendar: 'Дни занятий',
     },
-    month: 'Этот месяц',
     week: {
       title: 'Эта неделя',
       summary: '{{time}} · {{days}} из 7 дней',

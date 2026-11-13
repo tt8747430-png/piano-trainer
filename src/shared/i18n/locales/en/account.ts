@@ -119,8 +119,9 @@ export const account = {
       days_other: '{{count}} day streak',
       longest: 'Longest streak',
       month: 'Days this month',
+      // Over the calendar, whichever month it shows: the month names itself.
+      calendar: 'Days practised',
     },
-    month: 'This month',
     // The week as a picture (canvas 128): one bar a day, today strong, an empty day a flat line.
     week: {
       title: 'This week',

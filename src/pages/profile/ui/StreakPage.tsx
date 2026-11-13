@@ -38,7 +38,7 @@ export function StreakPage() {
             {run > 0 ? t('profile.streakPage.keep') : t('profile.streakPage.start')}
           </p>
         </section>
-        <PracticeCalendar title={t('profile.month')} browse />
+        <PracticeCalendar title={t('profile.streakPage.calendar')} browse />
         <dl className="grid grid-cols-2 gap-2">
           {[
             [t('profile.streakPage.longest'), record.bestStreak],

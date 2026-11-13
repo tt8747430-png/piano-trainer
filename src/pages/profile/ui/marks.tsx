@@ -1,4 +1,4 @@
-import { Award, Lock } from 'lucide-react'
+import { Award } from 'lucide-react'
 import type { BadgeId, MilestoneId, Tier } from '@/entities/progress'
 import { BADGE_ICON, MILESTONE_ICON } from '../model/icons'
 import { cn } from '@/shared/lib'
@@ -14,7 +14,7 @@ const TIER_PAINT: Readonly<Record<Tier, Paint>> = {
 
 const SIZE = { row: 'size-12 [&_svg]:size-6', hero: 'size-24 [&_svg]:size-11' } as const
 
-/** A badge's picture: its icon on its tier's paint, or greyed and locked before its first. */
+/** A badge's picture: its icon on its tier's paint, or greyed before its first (its meter says how far). */
 export function BadgeMark({
   id,
   tier,
@@ -37,7 +37,7 @@ export function BadgeMark({
           : 'bg-muted text-muted-foreground',
       )}
     >
-      {tier ? <Icon /> : <Lock />}
+      <Icon />
     </span>
   )
 }
