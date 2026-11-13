@@ -5,6 +5,30 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 ## The rulings as they stand
 
+- Next after the Chords page (owner, 2026-11-13: "after that continue with the chords player and make all of its
+  features … add to instructions to continue with the chords player after you finish with the chords page"), with
+  Musicca's chord player beside it (screenshots: sections of bars with beat ticks, + after the last bar, Add section,
+  Randomize chords; Play, 100, Pop 1, Settings, File; a chord's sheet: Chord root and quality, Bass note, Duration
+  − 4 beats +, Suggested chords, Delete and Done). Every feature it has, and:
+  - **Start from any chord:** tap a bar and play from it.
+  - **Count-in** before the song.
+  - **Duplicate a chord.**
+  - **A chord's timing is the learner's:** "if I set timing to these chords I want them to be so and not
+    automatically changed when I change a chord": reordering or changing a chord never retimes the others. A bar
+    whose beats no longer add up is kept as it is, marked with a ! that says its timing is wrong and opens that
+    chord's Duration; nothing else moves.
+  - **Easier timing:** Duration as Musicca's − n beats + in the chord's sheet, and the bar's beat ticks.
+  - **Easier adding:** + after the last bar of each section opens the chord's sheet on the next suggested chord.
+  - **Auto-scroll:** the sheet follows the chord playing.
+  - **Bugs:** the chord sheet is not saved (it must be, as a saved store); drag and drop breaks (port
+    memory-palaces' fix, read in that repo); reordering changes other chords' timings (fixed by the rule above).
+  - **A MIDI arranger (Yamaha Genos):** researched 2026-11-13. Possible over Web MIDI: Start and Stop (FA, FC),
+    the tempo as MIDI clock, each chord as Yamaha's Chord control (F0 43 7E 02 cr ct bn bt F7) and each section
+    as Section control (F0 43 7E 00 ss 7F F7; 08 Main A, 09 B, 0A C, 0B D; sources: psrtutorial.com's SysEx
+    thread, Steinberg's forum quoting the Data List, sandsoftwaresound.net's Chord Tracker notes), so the Genos
+    plays its own style to the app's chords and sections. Web MIDI runs in Chrome and Edge, not in Safari or an
+    iPhone's installed app: there the row says so. Built as a "Play on a MIDI arranger" choice in the Chord
+    player's settings, beside Connect a piano.
 - "Chord player: Musicca's controls and options, with the best free sounds."
 - "the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix)": sections move by their grip;
   on a laptop the key's chords drag into a bar.

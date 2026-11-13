@@ -266,6 +266,13 @@ owner's, typos fixed.
 
 ## Practice
 
+- **The Chord player next, every feature, timings the learner's (2026-11-13):** "continue with the chords player
+  … make all of its features … starting from whatever chord … count in … duplicating the chord … when I reorder
+  something and it has wrong timings accept the edit with this exclamation sign … and not change all the other
+  chords timing automatically … auto scroll … easier timing adjustment. look at the musicca … the chord sheet is
+  not being saved … the drag and drop bug, research the memory palaces drag and drop … connecting to the midi piano
+  Yamaha Genos". An edit never retimes other chords; a bar that no longer adds up is marked ! and kept. Spec
+  `.scratch/r39/plan/practice-chord-player.md`.
 - **No Quiz page (2026-11-13):** "no quiz page". The Quiz page, My gaps and every list of trainers go (Practice,
   Search, Intervals' Train your ear, Progressions' Test yourself); a trainer opens only from the lesson that practises
   it, at `/practice/trainer/$trainerId`, Back to Practice. Never a Quiz or trainer list beside a topic's page.
