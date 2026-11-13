@@ -99,6 +99,24 @@ Still to port, in this order:
    78°) and Hands on the keys; Range, the 88-key strip that drags (14 or 28 white keys from the C under the chord or
    where it was dragged; a drag on Fit the chord shows two octaves); Labels in two rows; Sound (Grand piano, offline
    a second line) and MIDI keyboard (the keyboard heard) as link rows, in the Player's sheet too.
-3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several.
+3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several. From the board
+   (r42_chords.py `addChord`, `nextList`, `chromList`, `editChord`, `pickChord`, `removeChord`, `playSeq`, B_NEXT):
+   - **The URL** holds the chords (`chords`, up to 8, each root, type and inversion) and the one chosen (`at`);
+     the pickers, the hands, the keys and the fingers show the chosen one; voicing and hands are the page's.
+   - **The staff** writes a bar per chord, each name over its bar: the chosen in sky at 700, the others in soft ink
+     at 600 (13px name when several); the chosen chord's heads ringed in sky. A tap on a bar chooses and plays it;
+     a tap on its name opens the Next chord sheet titled "Change Am7", which also holds "Remove Am7" (gone at once,
+     "Am7 removed · Undo"). The staff scrolls sideways to keep the chosen bar in view.
+   - **The +** sits after the last bar, a 36 dashed circle in a 44 target (honey-deep), up to 8 chords. It opens
+     **Next chord**: Diatonic · Chromatic. Diatonic, "In C major" (the first chord's key: its root, minor when the
+     chord is), six of the key's chords, the likeliest after the chosen one first then by degree, sevenths when the
+     chosen chord has a 7th, each a 72-high tile (symbol 22 serif bold, numeral 14 soft), two across; those on the
+     staff left out; none left: "Every chord of C major is on the staff" and Chromatic chords. Chromatic, "From
+     Cmaj7", the same type a half step, whole step and minor 3rd up and down ("half step up"). Then All chords ›
+     (the Chord type sheet, adding the chord it picks). A pick adds the chord in the inversion that moves least from
+     the one before, plays it, and keeps the sheet open; Done closes it.
+   - **Play** becomes Play all for several, its menu adding "All 3 chords, in order" and "Only Am7"; the chords
+     sound one after another, the sounding one chosen.
+   - **Practise** is headed "Practise these chords in the Player" for several.
 4. The drills Over the root and Diatonically.
 5. The serif: the board's Iowan is narrower than the app's Literata, so "root position" wraps at 402.
