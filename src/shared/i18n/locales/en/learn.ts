@@ -78,10 +78,7 @@ export const learn = {
     duplicate: 'Duplicate',
     duplicated: 'Duplicated',
     deleteLesson: 'Delete lesson',
-    deleteLessonBody:
-      'It leaves Your lessons and every course of yours that has it. Its progress goes too.',
     deleteCourse: 'Delete course',
-    deleteCourseBody: 'The course goes. Its lessons stay, yours in Your lessons.',
     deleted: '“{{title}}” deleted',
     toOwn: 'Back to Learn',
   },
@@ -160,11 +157,6 @@ export const learn = {
     shared: 'Link copied',
     shareFailed: 'The link could not be shared',
     reset: 'Reset progress',
-    resetLessonBody: 'It is marked not learned and its sections unread. Nothing else changes.',
-    resetCourseBody:
-      'Its lessons and guided songs are marked not learned and their sections unread. Nothing else changes.',
-    resetOwnCourseBody:
-      'Its lessons are marked not learned and their sections unread, wherever they are read. Nothing else changes.',
     resetDone: 'Progress reset',
     undo: 'Undo',
     lesson: 'The lesson',

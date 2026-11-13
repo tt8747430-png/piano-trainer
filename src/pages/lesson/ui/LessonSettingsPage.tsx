@@ -162,7 +162,7 @@ function LessonSettings({
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('settings.title')} back={back} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="px-1 font-display text-2xl font-semibold text-balance">{title}</p>
+        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{title}</p>
         <ReadingChoice />
         {editsContent(account) ? (
           <EditorRows
@@ -181,7 +181,6 @@ function LessonSettings({
           steps={[step]}
           words={{
             row: t('settings.reset'),
-            body: t('settings.resetLessonBody'),
             done: t('settings.resetDone'),
             undo: t('settings.undo'),
           }}

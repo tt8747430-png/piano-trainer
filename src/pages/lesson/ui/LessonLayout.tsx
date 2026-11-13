@@ -71,7 +71,7 @@ export function LessonLayout({
         back={back}
         tools={
           <>
-            <LearnedButton step={step} round />
+            <LearnedButton step={step} bar worded />
             <PageKeyboardTools />
             <ToolsButton />
           </>

@@ -7,22 +7,23 @@ import { useLearned } from './use-learned'
 
 /**
  * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the one
- * chosen fill (R15) and its check sits on the learned grass. `round`, it is the check alone in a screen's bar,
- * named by its tooltip, on the bar's soft round fill as every bar action.
+ * chosen fill (R15) and its check sits on the learned grass. In a screen's bar it says its word
+ * (canvas 164: a check alone left the learner guessing).
  */
 export function LearnedButton({
   step,
-  round = false,
   bar = false,
+  worded = false,
   className,
 }: {
   step: StepId
-  round?: boolean
   /**
-   * In a song's bar (R30 S4): the check and the word on the bar's soft fill, grass once learned; on a
-   * phone the check alone, so the title keeps its room.
+   * In a screen's bar (R30 S4, canvas 164): the check and the word on the bar's soft fill, grass once
+   * learned; on a phone the check alone, so a title in the bar keeps its room, unless `worded`.
    */
   bar?: boolean
+  /** The word on a phone too: a bar with no title in it (a lesson's). */
+  worded?: boolean
   /** Its size beside a larger button (a song's Practise), as that button's. */
   className?: string
 }) {
@@ -34,23 +35,14 @@ export function LearnedButton({
         pressed={learned}
         onPressedChange={toggle}
         title={t('learned.done')}
-        className="h-11 min-w-11 gap-1.5 rounded-pill border-transparent bg-muted/70 px-3.5 font-semibold text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground max-sm:px-0"
+        className={cn(
+          'h-11 min-w-11 gap-1.5 rounded-pill border-transparent bg-muted/70 px-3.5 font-semibold text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground',
+          !worded && 'max-sm:px-0',
+        )}
       >
         <Check aria-hidden className="size-4" strokeWidth={2.75} />
         {/* A phone's bar keeps its room for the title: the check alone, named still. */}
-        <span className="max-sm:sr-only">{t('learned.done')}</span>
-      </Toggle>
-    )
-  if (round)
-    return (
-      <Toggle
-        pressed={learned}
-        onPressedChange={toggle}
-        aria-label={t('learned.done')}
-        title={t('learned.done')}
-        className="size-11 rounded-pill border-transparent bg-muted/70 px-0 text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground"
-      >
-        <Check aria-hidden strokeWidth={2.5} />
+        <span className={cn(!worded && 'max-sm:sr-only')}>{t('learned.done')}</span>
       </Toggle>
     )
   return (

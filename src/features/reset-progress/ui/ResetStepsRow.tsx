@@ -6,8 +6,8 @@ import { RowButton, SettingsGroup, say } from '@/shared/ui'
 import { resetSteps, restoreSteps } from '../reset-steps'
 
 /**
- * A song's, a lesson's or a course's Progress (R31-S): its own group, one row, Reset progress, with
- * what it does on the row's line; at once forgetting these steps (not learned, no section read),
+ * A song's, a lesson's or a course's Progress (R31-S): its own group, one row, Reset progress, no
+ * line under it (canvas 164); at once forgetting these steps (not learned, no section read),
  * the toast's Undo putting back what it forgot (R38). It loses no music, so it is no red row: the page's Delete
  * stands apart after it.
  */
@@ -19,7 +19,6 @@ export function ResetStepsRow({
   /** What the row and the toast after it say. */
   words: {
     readonly row: string
-    readonly body: string
     readonly done: string
     readonly undo: string
   }
@@ -30,7 +29,6 @@ export function ResetStepsRow({
     <SettingsGroup flush title={t('progressGroup')}>
       <RowButton
         title={words.row}
-        detail={words.body}
         icon={RotateCcw}
         paint="sand"
         onClick={() => {

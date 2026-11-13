@@ -12,8 +12,6 @@ export interface OwnItemWords {
   readonly rename: string
   /** Delete's row: Delete lesson. */
   readonly delete: string
-  /** What goes with it, under the row: its lessons stay, its progress goes. */
-  readonly deleteBody: string
 }
 
 /**
@@ -74,11 +72,11 @@ export function OwnDeleteGroup({
   words,
   onDelete,
 }: {
-  words: Pick<OwnItemWords, 'delete' | 'deleteBody'>
+  words: Pick<OwnItemWords, 'delete'>
   onDelete: () => void
 }) {
   return (
-    <DangerGroup footnote={words.deleteBody}>
+    <DangerGroup>
       <DangerRow title={words.delete} onClick={onDelete} />
     </DangerGroup>
   )
