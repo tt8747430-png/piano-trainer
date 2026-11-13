@@ -155,7 +155,8 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
   folders, lessons, chord qualities, scale kinds, progressions, patterns, and exercises. It is one projection
-  of the registries, held to each by a test. A chord symbol typed is read as the chord. Nothing found is no dead
+  of the registries, held to each by a test. A chord symbol typed is read as the chord, and a scale typed with its tonic ("D minor", "F♯ dorian") opens
+  that scale's page on it; symbols print engraved (♯, ♭). Nothing found is no dead
   end: it names what was missed, says how to search instead, and lists the Suggestions to go on from.
 - **Words:** a Place is the nav's; Practice has pages in groups; a thing's page is an Explorer; a Tool works something
   out from what it is given.

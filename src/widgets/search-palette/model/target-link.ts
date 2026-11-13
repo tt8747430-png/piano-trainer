@@ -68,7 +68,13 @@ export function targetLink(target: IndexTarget): { readonly link: Up; readonly t
       }
     case 'scale':
       return {
-        link: opens({ to: '/practice/scales', search: { kind: target.scale } }),
+        link: opens({
+          to: '/practice/scales',
+          search: {
+            kind: target.scale,
+            ...(target.root ? { root: noteParam(target.root) } : {}),
+          },
+        }),
         tile: PAGE_TILES.scales,
       }
     case 'progression':

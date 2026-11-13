@@ -16,8 +16,11 @@ import {
   keyFromParam,
   note,
   numeralsLine,
+  parseNoteName,
   parseNumerals,
   pitchClassOf,
+  printedNote,
+  printedSymbol,
   qualitySpellings,
   readChordSymbol,
   SCALE_KINDS,
@@ -56,7 +59,8 @@ export type IndexTarget =
   | { readonly opens: 'course'; readonly course: string }
   | { readonly opens: 'course-lesson'; readonly course: string; readonly lesson: string }
   | { readonly opens: 'chord'; readonly root: SpelledNote; readonly quality: ChordQuality }
-  | { readonly opens: 'scale'; readonly scale: ScaleKind }
+  /** A scale kind's page, on a tonic where one was typed ("D minor"). */
+  | { readonly opens: 'scale'; readonly scale: ScaleKind; readonly root?: SpelledNote }
   /** A progression of the library or the learner's own, on its page (R30-4). */
   | { readonly opens: 'progression'; readonly id: string }
   | { readonly opens: 'pattern'; readonly ref: PatternRef }
@@ -217,7 +221,7 @@ export function indexEntries({
         id: `chords:${quality}`,
         kind: 'chords',
         title: names.quality(quality),
-        detail: symbol,
+        detail: printedSymbol(symbol),
         words: others,
         target: { opens: 'chord', root: C, quality },
       }
@@ -283,6 +287,8 @@ export function typedEntry(query: string, names: IndexNames): IndexEntry | undef
       target: { opens: 'chord', root, quality },
     }
   }
+  const scale = typedScale(query, names)
+  if (scale) return scale
   const line = chordsOfLine(query)
   const search = line ? typedSearch(query, { tonic: C, minor: false }) : null
   if (!line || !search) return undefined
@@ -293,6 +299,32 @@ export function typedEntry(query: string, names: IndexNames): IndexEntry | undef
     detail: `${names.page('progressions').title} · ${names.key(keyFromParam(search.key))}`,
     words: [],
     target: { opens: 'typed-line', ...search },
+  }
+}
+
+/**
+ * A scale typed with its tonic, as a musician says it ("D minor", "F# dorian", "Bb harmonic minor"):
+ * its page on that tonic. "minor" alone is the natural minor.
+ */
+function typedScale(query: string, names: IndexNames): IndexEntry | undefined {
+  const typed = /^([a-g])([#♯b♭]{0,2})\s+(.+)$/iu.exec(query.trim())
+  if (!typed) return undefined
+  const [, letter = '', accidental = '', said = ''] = typed
+  const root = parseNoteName(letter.toUpperCase() + accidental)
+  const wanted = foldText(said)
+  const kind =
+    wanted === foldText(names.scale('natural').split(' ').at(-1) ?? '')
+      ? 'natural'
+      : SCALE_KINDS.find((each) => each === wanted || foldText(names.scale(each)) === wanted)
+  if (!root || !kind) return undefined
+  const name = names.scale(kind)
+  return {
+    id: 'scales:typed',
+    kind: 'scales',
+    title: `${printedNote(root)} ${name.charAt(0).toLocaleLowerCase()}${name.slice(1)}`,
+    detail: names.page('scales').title,
+    words: [],
+    target: { opens: 'scale', scale: kind, root },
   }
 }
 
