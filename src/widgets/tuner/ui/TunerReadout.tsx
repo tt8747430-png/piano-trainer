@@ -4,6 +4,7 @@ import { selectTuner, useSettings } from '@/entities/settings'
 import { openBrowserMicrophone, type OpenMicrophone } from '@/shared/api/audio'
 import { cn } from '@/shared/lib'
 import { centsOff, detectPitch, nearestNote } from '@/shared/lib/music'
+import { Button } from '@/shared/ui/primitives/button'
 
 /** Each key's name, sharps for the black keys, as a tuner reads them. */
 const NAMES = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'] as const
@@ -44,6 +45,8 @@ export function TunerReadout({
   const { t } = useTranslation('player')
   const { a4 } = useSettings(selectTuner)
   const [heard, setHeard] = useState<Heard>({ kind: 'listening' })
+  // Each Try again asks for the microphone afresh.
+  const [attempt, setAttempt] = useState(0)
   useEffect(() => {
     if (!listening) return
     let closed = false
@@ -72,12 +75,15 @@ export function TunerReadout({
       release()
       setHeard({ kind: 'listening' })
     }
-  }, [listening, microphone, a4])
+  }, [listening, microphone, a4, attempt])
   if (heard.kind === 'denied')
     return (
-      <p role="alert" className="text-center text-muted-foreground">
-        {t('tuner.denied')}
-      </p>
+      <div role="alert" className="flex flex-col items-center gap-4 text-center">
+        <p className="text-pretty text-muted-foreground">{t('tuner.denied')}</p>
+        <Button variant="outline" onClick={() => setAttempt((count) => count + 1)}>
+          {t('tuner.retry')}
+        </Button>
+      </div>
     )
   const cents = heard.kind === 'pitch' ? Math.max(-50, Math.min(50, heard.cents)) : 0
   const tuned = heard.kind === 'pitch' && Math.abs(heard.cents) <= IN_TUNE

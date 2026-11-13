@@ -24,7 +24,7 @@ export function MetronomeSettings({ metronome }: { metronome: Metronome }) {
   return (
     <>
       <SettingsGroup title={t('metronome.group')}>
-        <div className="flex flex-col px-4 py-1">
+        <div className="flex flex-col">
           <MetronomeRow label={t('metronome.meter')} setting="metronome.meter">
             <Dropdown<MetronomeMeter>
               label={t('metronome.meter')}

@@ -76,7 +76,8 @@ export function IntervalExplorer({
           value={pitchClassOf(noteFromParam(view.root))}
           onChange={(pc) => onChange({ root: noteParam(usualName(pc)) })}
         />
-        <div className="min-w-0 flex-1 sm:max-w-md">
+        {/* A choice of three stands under its label, full width on a phone (canvas 127). */}
+        <div className="min-w-0 basis-full sm:max-w-md sm:flex-1 sm:basis-auto">
           <Labelled label={t('intervals.playAs')}>
             <Segmented
               label={t('intervals.playAs')}

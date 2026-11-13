@@ -23,7 +23,7 @@ export function TunerPage() {
         <SettingsGroup title={t('practice:tools.tuner.group')} className="mx-auto w-full max-w-lg">
           <div
             data-setting="tuner.a4"
-            className="flex min-h-12 flex-wrap items-center justify-between gap-3 px-4 py-2"
+            className="flex min-h-12 flex-wrap items-center justify-between gap-3"
           >
             <span className="flex items-center gap-1.5 text-lg">
               {label}

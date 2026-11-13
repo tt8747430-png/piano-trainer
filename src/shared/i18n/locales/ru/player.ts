@@ -67,6 +67,7 @@ export const player: LocaleResources['player'] = {
     listening: 'Сыграйте или спойте ноту',
     reading: '{{hz}} Гц · {{cents}} центов',
     denied: 'Микрофон недоступен. Разрешите его в браузере, чтобы пользоваться тюнером.',
+    retry: 'Повторить',
     a4: 'Ля первой октавы',
     hz: '{{hz}} Гц',
     reference: 'Ля = {{hz}} Гц',

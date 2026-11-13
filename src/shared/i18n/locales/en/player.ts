@@ -77,6 +77,7 @@ export const player = {
     listening: 'Play or sing a note',
     reading: '{{hz}} Hz · {{cents}} cents',
     denied: 'The microphone is not available. Allow it in the browser to use the tuner.',
+    retry: 'Try again',
     a4: 'A4',
     hz: '{{hz}} Hz',
     reference: 'A4 = {{hz}} Hz',
