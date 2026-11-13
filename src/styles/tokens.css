@@ -153,6 +153,9 @@
   --raised: var(--p-paper-card);
   /* The floating bars' glass: the card's paper at 86%, blurred over the page (the canvas's GLASS). */
   --glass: rgb(254 253 251 / 0.86);
+  /* The one primary that floats, tinted honey glass (the canvas's TINTGRP), its top edge lit. */
+  --glass-honey: rgb(237 198 132 / 0.82);
+  --glass-honey-lit: rgb(255 255 255 / 0.55);
   --shade: var(--p-ink);
   --shade-near: 12%;
   --shade-far: 14%;
@@ -288,6 +291,8 @@
     /* By night what floats is a step lighter than the cards, and its shade deeper. */
     --raised: var(--p-dusk-800);
     --glass: rgb(36 32 28 / 0.86);
+    --glass-honey: rgb(212 177 118 / 0.92);
+    --glass-honey-lit: rgb(255 255 255 / 0.25);
     --shade: var(--p-night-shade);
     --shade-near: 45%;
     --shade-far: 50%;

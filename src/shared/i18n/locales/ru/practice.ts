@@ -48,7 +48,13 @@ export const practice: LocaleResources['practice'] = {
   checkYourself: 'Проверить себя',
   chords: {
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
-    playAs: { label: 'Как играть', block: 'Аккордом', arpeggio: 'Арпеджио' },
+    playAs: {
+      label: 'Как играть',
+      block: 'Аккордом',
+      arpeggio: 'Арпеджио',
+      playChord: 'Аккорд',
+      arpeggiate: 'Арпеджио',
+    },
     written: 'Другие обозначения',
     builder: {
       // The row of pickers over a chord: its root, the chord by name and its voicing.
@@ -69,7 +75,7 @@ export const practice: LocaleResources['practice'] = {
     voicing: {
       label: 'Расположение',
       names: {
-        close: 'Тесное',
+        close: 'Тесное расположение',
         drop2: 'Drop 2',
         drop3: 'Drop 3',
         shell: 'Каркас',

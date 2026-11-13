@@ -701,6 +701,14 @@
     0 0 0 1px var(--border),
     var(--elevation-2);
 }
+@utility glass-honey {
+  background-color: var(--glass-honey);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    inset 0 1px 0 var(--glass-honey-lit),
+    0 0 0 1px rgb(176 122 42 / 0.28),
+    var(--elevation-2);
+}
 @utility elevation-2 {
   box-shadow: var(--elevation-2);
 }

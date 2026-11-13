@@ -50,7 +50,13 @@ export const practice = {
   // Chords: the chord built, its tensions, and its ways on.
   chords: {
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
-    playAs: { label: 'Play as', block: 'Block chord', arpeggio: 'Arpeggio' },
+    playAs: {
+      label: 'Play as',
+      block: 'Block chord',
+      arpeggio: 'Arpeggio',
+      playChord: 'Play chord',
+      arpeggiate: 'Arpeggiate',
+    },
     // The other ways a chord symbol is written on this root.
     written: 'Also written',
     // Chords builds a chord part by part.
@@ -75,7 +81,7 @@ export const practice = {
     voicing: {
       label: 'Voicing',
       names: {
-        close: 'Close',
+        close: 'Close position',
         drop2: 'Drop 2',
         drop3: 'Drop 3',
         shell: 'Shell',

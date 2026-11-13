@@ -57,6 +57,7 @@ export {
   note,
   noteFromParam,
   noteName,
+  letterIndex,
   noteParam,
   otherSpelling,
   parseNoteInOctave,

@@ -1,3 +1,4 @@
+import { Hand as HandIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import type { Hand } from '@/shared/lib/music'
@@ -25,16 +26,19 @@ export function HandSwatch({ hand, className }: { hand: Hand; className?: string
   )
 }
 
-/** Hands as a picture: a hand's swatch, or both side by side (the Player's foot, where its icon would be). */
+/**
+ * Hands as a picture, as the canvas draws them: a hand (the left one mirrored), or both side by side,
+ * smaller, a hand's own picture wherever hands are chosen (Chords' Hands, the Player's foot).
+ */
 export function HandsPicture({ hands }: { hands: Hands }) {
-  const shown: readonly Hand[] = hands === 'both' ? ['lh', 'rh'] : [hands]
-  return (
-    <span aria-hidden className="flex items-center gap-1">
-      {shown.map((hand) => (
-        <HandSwatch key={hand} hand={hand} className="size-3.5" />
-      ))}
-    </span>
-  )
+  if (hands === 'both')
+    return (
+      <span aria-hidden className="-mx-0.75 flex">
+        <HandIcon className="size-4.25 -scale-x-100" />
+        <HandIcon className="size-4.25" />
+      </span>
+    )
+  return <HandIcon aria-hidden className={cn('size-5.5', hands === 'lh' && '-scale-x-100')} />
 }
 
 /**

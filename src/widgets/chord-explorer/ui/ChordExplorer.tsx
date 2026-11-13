@@ -1,5 +1,4 @@
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { ChevronDown } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -19,15 +18,17 @@ import {
   type ChordQuality,
   type ColourNote,
   type Triad,
+  VOICINGS,
+  voicingBar,
 } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
   ActionMenu,
   FloatingActions,
-  FloatingBar,
-  FloatingBarButton,
-  FloatingBarPlay,
+  FloatingPiece,
+  FloatingPieces,
+  FloatingPlaySplit,
   HandsPicture,
   usePlayKey,
 } from '@/shared/ui'
@@ -45,6 +46,7 @@ import { ChordPractice } from './ChordPractice'
 import { ChordHead } from './ChordHead'
 import { ChordSheet } from './ChordSheet'
 import { ColourNotes } from './ColourNotes'
+import { VoicingPicture } from './VoicingPicture'
 
 /** A triad's quality, for a chord the table does not name: what its numeral is written from. */
 const TRIAD_QUALITY: Readonly<Record<Triad, ChordQuality>> = {
@@ -134,6 +136,9 @@ export function ChordExplorer({
   // How Play sounds the chord, chosen in its menu (R42): together, or one note after another.
   const [playAs, setPlayAs] = useState<'chord' | 'arpeggio'>('chord')
   usePlayKey(() => sound(playAs))
+  // The hands are a choice for a close chord one hand holds; any other is played as it says.
+  const handsChoice = chord.voicing === 'close' && !takesTwoHands(built.tones.length)
+  const handsShown = handsChoice ? chord.hands : 'both'
 
   return (
     <div className="flex flex-col gap-6">
@@ -176,47 +181,68 @@ export function ChordExplorer({
         />
       ) : null}
       <FloatingActions>
-        {/* Play, then its menu (R42): the chord together or as an arpeggio; then the hands. */}
-        <FloatingBar label={t('practice:transport')} className="gap-1.5 pr-1.5">
-          <FloatingBarPlay
-            named
-            label={playAs === 'chord' ? t('music:play') : t('practice:arpeggio')}
-            playing={playback.playing === playAs}
-            onClick={() => sound(playAs)}
-          />
+        {/* The canvas's three pieces of glass: the voicing, Play with how it plays, the hands. */}
+        <FloatingPieces label={t('practice:transport')}>
           <ActionMenu
-            label={t('practice:chords.playAs.label')}
-            align="end"
+            label={t('practice:chords.voicing.label')}
             render={
-              <FloatingBarButton
-                named
-                label={t(`practice:chords.playAs.${playAs === 'chord' ? 'block' : 'arpeggio'}`)}
-                title={t('practice:chords.playAs.label')}
+              <FloatingPiece
+                label={`${t('practice:chords.voicing.label')}: ${t(`practice:chords.voicing.names.${chord.voicing}`)}`}
+                caption={t(`practice:chords.voicing.names.${chord.voicing}`)}
               >
-                <ChevronDown aria-hidden />
-              </FloatingBarButton>
+                <VoicingPicture placed={placed} />
+              </FloatingPiece>
             }
             trigger={null}
-            actions={(['chord', 'arpeggio'] as const).map((each) => ({
+            actions={VOICINGS.filter((voicing) => !voicingBar(built.tones, voicing)).map(
+              (voicing) => ({
+                key: voicing,
+                label: t(`practice:chords.voicing.names.${voicing}`),
+                checked: chord.voicing === voicing,
+                onSelect: () => change({ voicing }),
+              }),
+            )}
+          />
+          <FloatingPlaySplit
+            label={t(`practice:chords.playAs.${playAs === 'chord' ? 'playChord' : 'arpeggiate'}`)}
+            playing={playback.playing === playAs}
+            onPlay={() => sound(playAs)}
+            menu={(trigger) => (
+              <ActionMenu
+                label={t('practice:chords.playAs.label')}
+                align="end"
+                render={trigger}
+                trigger={null}
+                actions={(['chord', 'arpeggio'] as const).map((each) => ({
+                  key: each,
+                  label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
+                  checked: playAs === each,
+                  onSelect: () => setPlayAs(each),
+                }))}
+              />
+            )}
+          />
+          <ActionMenu
+            label={t('practice:hands')}
+            align="end"
+            render={
+              <FloatingPiece
+                label={`${t('practice:hands')}: ${t(`common:hands.${handsShown}`)}`}
+                caption={t('practice:hands')}
+                disabled={!handsChoice}
+              >
+                <HandsPicture hands={handsShown} />
+              </FloatingPiece>
+            }
+            trigger={null}
+            actions={(['both', 'rh'] as const).map((each) => ({
               key: each,
-              label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
-              checked: playAs === each,
-              onSelect: () => setPlayAs(each),
+              label: t(`common:hands.${each}`),
+              checked: handsShown === each,
+              onSelect: () => change({ hands: each }),
             }))}
           />
-          {/* Its hands, as the Player's Hands (R42: by Play): one tap between the right hand and both. */}
-          {chord.voicing === 'close' && !takesTwoHands(built.tones.length) ? (
-            <FloatingBarButton
-              label={t('practice:hands')}
-              title={`${t('practice:hands')}: ${t(`common:handsShort.${chord.hands}`)}`}
-              caption={t(`common:handsShort.${chord.hands}`)}
-              aria-pressed={chord.hands === 'both'}
-              onClick={() => change({ hands: chord.hands === 'both' ? 'rh' : 'both' })}
-            >
-              <HandsPicture hands={chord.hands} />
-            </FloatingBarButton>
-          ) : null}
-        </FloatingBar>
+        </FloatingPieces>
       </FloatingActions>
     </div>
   )
