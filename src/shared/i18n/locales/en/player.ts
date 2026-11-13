@@ -353,6 +353,9 @@ export const player = {
     keys: '2D keys',
     all: 'All piano settings',
     connect: 'Connect a piano',
+    range: 'Range',
+    rangeShown: 'The keys shown: {{from}} to {{to}}',
+    ranges: { chord: 'Fit the chord', two: '2 octaves', four: '4 octaves' },
     labels: 'Labels',
     label: {
       names: 'Note names',

@@ -22,6 +22,10 @@ export const CHORD_LABELS = ['names', 'degrees', 'intervals', 'fingers', 'none']
  */
 export type ChordLabels = (typeof CHORD_LABELS)[number]
 
+export const CHORD_RANGES = ['chord', 'two', 'four'] as const
+/** How many keys a chord's piano shows (the canvas's Range): just the chord's, or two or four octaves round it. */
+export type ChordRange = (typeof CHORD_RANGES)[number]
+
 export const KEY_DOCKS = ['bottom', 'top'] as const
 /** Where a page's keys stay while it scrolls: over the tab bar, or under the screen's bar. */
 export type KeyDock = (typeof KEY_DOCKS)[number]

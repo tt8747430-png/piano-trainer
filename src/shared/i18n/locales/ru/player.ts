@@ -320,6 +320,9 @@ export const player: LocaleResources['player'] = {
     keys: '2D-клавиши',
     all: 'Все настройки фортепиано',
     connect: 'Подключить инструмент',
+    range: 'Диапазон',
+    rangeShown: 'Показаны клавиши: от {{from}} до {{to}}',
+    ranges: { chord: 'По аккорду', two: '2 октавы', four: '4 октавы' },
     labels: 'Подписи',
     label: {
       names: 'Ноты',

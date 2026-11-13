@@ -37,6 +37,7 @@ import {
   DEFAULT_CHORD_PLAYER,
   DEFAULT_CHORDS,
   isChordLabels,
+  isChordRange,
   type ChordsSettings,
   type ChordPlayerSettings,
   isProgressionNames,
@@ -294,7 +295,10 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
 
 function chordsSettings(value: unknown): ChordsSettings {
   const saved = savedObject<ChordsSettings>(value)
-  return { labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels }
+  return {
+    labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels,
+    range: isChordRange(saved.range) ? saved.range : DEFAULT_CHORDS.range,
+  }
 }
 
 const isSheetView = isOneOf(SHEET_VIEWS)

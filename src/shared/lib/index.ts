@@ -13,12 +13,14 @@ export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
   CHORD_LABELS,
+  CHORD_RANGES,
   KEY_DOCKS,
   KEY_SIZES,
   NAMED_KEYS,
   PEDALS_SHOWN,
   SWIPES,
   type ChordLabels,
+  type ChordRange,
   type KeyDock,
   type KeySize,
   type NamedKeys,

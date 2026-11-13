@@ -3,6 +3,7 @@ import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
   CHORD_LABELS,
+  CHORD_RANGES,
   isOneOf,
   KEY_DOCKS,
   KEY_SIZES,
@@ -11,6 +12,7 @@ import {
   PEDAL_WAYS,
   SWIPES,
   type ChordLabels,
+  type ChordRange,
   type KeyDock,
   type SheetView,
   type KeySize,
@@ -490,9 +492,12 @@ export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voic
 export interface ChordsSettings {
   /** What its keys and its staff's heads carry. */
   readonly labels: ChordLabels
+  /** How many keys its piano shows. */
+  readonly range: ChordRange
 }
-export const DEFAULT_CHORDS: ChordsSettings = { labels: 'names' }
+export const DEFAULT_CHORDS: ChordsSettings = { labels: 'names', range: 'chord' }
 export const isChordLabels = isOneOf(CHORD_LABELS)
+export const isChordRange = isOneOf(CHORD_RANGES)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

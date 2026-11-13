@@ -12,6 +12,7 @@ import { isBlackKey, type Midi } from '@/shared/lib/music'
 import { Pinned, type ShownKeys } from '@/shared/ui'
 import { PianoHands, type KeyTag } from '@/widgets/piano-hands'
 import { chordKeyLabels } from '../model/chord-labels'
+import { framedChord } from '../model/chord-range'
 import { chordPerformance, viewChord, type ChordView } from '../model/chord-view'
 
 /** The stage's height on the canvas: the hands at the keys, 220 under a phone's bar, 286 on a laptop. */
@@ -27,7 +28,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   const { hands } = useSettings(selectScoreView)
   const settings = useSettingsStoreApi()
   const notes = useMemo(() => chordPerformance(chord), [chord])
-  const { labels } = useSettings(selectChords)
+  const { labels, range } = useSettings(selectChords)
   const { held, tags } = useMemo(() => {
     const { placed, fingers } = viewChord(chord)
     const keys = [...placed.lh, ...placed.rh]
@@ -47,12 +48,17 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   }, [chord, labels])
   const { folded } = useFoldKeys()
   const laptop = useMediaQuery('(min-width: 48rem)')
+  // The keys the Piano sheet's Range frames, on the hands' piano and the 2D keys alike.
+  const framed = framedChord(chord, range)
   // The Piano sheet's Show the piano off: neither the hands nor the keys.
   if (folded) return null
-  if (!hands) return <PinnedKeyboard shown={shown} place="top" />
-  const midis = notes.map((note) => note.midi)
-  const low = midis.reduce((a, b) => (b < a ? b : a))
-  const high = midis.reduce((a, b) => (b > a ? b : a))
+  if (!hands)
+    return (
+      <PinnedKeyboard
+        shown={{ ...shown, keys: [...shown.keys, framed.low, framed.high] }}
+        place="top"
+      />
+    )
   return (
     <Pinned bleed className="vt-keys">
       <PianoHands
@@ -67,7 +73,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
         marks={shown.marks}
         wrong={undefined}
         faded={null}
-        range={{ low, high }}
+        range={framed}
         onShowKeys={() => setScoreView(settings, { hands: false })}
       />
     </Pinned>

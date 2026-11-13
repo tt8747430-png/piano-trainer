@@ -1,7 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { Cable, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { CHORD_LABELS, type ChordLabels } from '@/shared/lib'
+import { CHORD_LABELS, CHORD_RANGES, type ChordLabels, type ChordRange } from '@/shared/lib'
+import { printedKeyName, type Midi } from '@/shared/lib/music'
+import { KeyStrip } from './KeyStrip'
 import { useTranslation } from 'react-i18next'
 import {
   Piano2DPicture,
@@ -14,6 +16,9 @@ import {
   SheetContent,
   SwitchRow,
 } from '@/shared/ui'
+
+/** The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart. */
+const BLOCK = 'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-foreground/7'
 
 /** What stands in the keys' place, shown: the hands at the keys (3D) or the keys (2D). */
 export type PianoShown = 'hands' | 'keys'
@@ -31,6 +36,7 @@ export function PianoSheet({
   onHands,
   trigger,
   labels,
+  range,
 }: {
   keys: boolean
   hands: boolean
@@ -40,6 +46,13 @@ export function PianoSheet({
   trigger: (open: () => void) => ReactNode
   /** What the keys carry, where the screen offers a choice (Chords): the canvas's Labels. */
   labels?: { readonly value: ChordLabels; readonly onChange: (labels: ChordLabels) => void }
+  /** How many keys it shows and which, where the screen offers a choice (Chords): the canvas's Range. */
+  range?: {
+    readonly value: ChordRange
+    readonly low: Midi
+    readonly high: Midi
+    readonly onChange: (range: ChordRange) => void
+  }
 }) {
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
@@ -67,14 +80,35 @@ export function PianoSheet({
             ]}
             onChange={(next) => onHands(next === 'hands')}
           />
+          {range ? (
+            <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-base text-foreground">{t('pianoSheet.range')}</span>
+                <span className="text-sm text-muted-foreground tabular-nums">
+                  {printedKeyName(range.low)}–{printedKeyName(range.high)}
+                </span>
+              </div>
+              <KeyStrip
+                low={range.low}
+                high={range.high}
+                label={t('pianoSheet.rangeShown', {
+                  from: printedKeyName(range.low),
+                  to: printedKeyName(range.high),
+                })}
+              />
+              <Segmented
+                label={t('pianoSheet.range')}
+                value={range.value}
+                options={CHORD_RANGES.map((each) => ({
+                  value: each,
+                  label: t(`pianoSheet.ranges.${each}`),
+                }))}
+                onChange={range.onChange}
+              />
+            </div>
+          ) : null}
           {labels ? (
-            // The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart.
-            <div
-              className={
-                'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-foreground/7 ' +
-                (keys ? '' : 'pointer-events-none opacity-45')
-              }
-            >
+            <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
               <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
               <Segmented
                 label={t('pianoSheet.labels')}
