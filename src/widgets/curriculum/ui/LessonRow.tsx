@@ -22,6 +22,7 @@ export function LessonRow({
   title,
   said,
   detail,
+  opens = true,
 }: {
   /** A router `Link` to what the row opens. */
   render: ReactElement
@@ -37,6 +38,8 @@ export function LessonRow({
   /** Said before the title to a screen reader alone: its number in a course. */
   said?: string | undefined
   detail?: string | undefined
+  /** Its chevron; none where a More stands beside it (one affordance a row). */
+  opens?: boolean
 }) {
   const { t } = useTranslation('learn')
   const face = (
@@ -75,7 +78,7 @@ export function LessonRow({
           {t('upNext')}
         </span>
       ) : null}
-      <OpensMark />
+      {opens ? <OpensMark /> : null}
     </>
   )
   return useRender({

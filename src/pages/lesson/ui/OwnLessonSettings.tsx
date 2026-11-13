@@ -13,11 +13,11 @@ import {
 import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, say, ScreenHeader } from '@/shared/ui'
-import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
  * A lesson of the learner's own's Settings (R30-5), the same page as a level's lesson's: how lessons
- * read; The lesson, Rename and Duplicate (the copy opened); its Progress reset; and Delete last, at
+ * read; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
  * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
 export function OwnLessonSettings({
@@ -51,7 +51,9 @@ export function OwnLessonSettings({
             say(t('own.duplicated'))
             void navigate({ to: '/lessons/$lessonId', params: { lessonId: copy } })
           }}
-        />
+        >
+          <InCoursesRow lessonId={lesson.id} />
+        </OwnItemRows>
         <ResetStepsRow
           steps={[step]}
           words={{
@@ -65,7 +67,7 @@ export function OwnLessonSettings({
             delete: t('own.deleteLesson'),
           }}
           onDelete={() => {
-            void navigate({ to: '/', replace: true })
+            void navigate({ to: '/your-lessons', replace: true })
             const deleted = deleteOwnLesson(store, lesson.id)
             if (!deleted) return
             const forgotten = resetSteps(progress, [step])

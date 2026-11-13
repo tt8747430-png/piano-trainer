@@ -1,5 +1,5 @@
 import { Copy, PencilLine } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OWN_NAME_MAX } from '@/entities/own-lessons'
 import { DangerGroup, DangerRow, NewSheet, RowButton, say, SettingsGroup } from '@/shared/ui'
@@ -23,6 +23,7 @@ export function OwnItemRows({
   words,
   onRename,
   onDuplicate,
+  children,
 }: {
   /** The item's name now. */
   title: string
@@ -30,6 +31,8 @@ export function OwnItemRows({
   /** Renames it; false where the name is not kept. */
   onRename: (name: string) => boolean
   onDuplicate: () => void
+  /** Its other rows, between Rename and Duplicate (a lesson's In courses). */
+  children?: ReactNode
 }) {
   const { t } = useTranslation('learn')
   const [renaming, setRenaming] = useState(false)
@@ -42,7 +45,14 @@ export function OwnItemRows({
   }
   return (
     <SettingsGroup flush title={words.group}>
-      <RowButton title={t('own.rename')} icon={PencilLine} paint="sky" onClick={() => open(true)} />
+      <RowButton
+        title={t('edit.order.name')}
+        value={title}
+        icon={PencilLine}
+        paint="sky"
+        onClick={() => open(true)}
+      />
+      {children}
       <RowButton title={t('own.duplicate')} icon={Copy} paint="grass" onClick={onDuplicate} />
       <NewSheet
         open={renaming}

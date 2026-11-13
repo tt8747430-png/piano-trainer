@@ -155,7 +155,7 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
 function OwnLesson({ lesson }: { lesson: Lesson }) {
   const { t } = useTranslation('learn')
   const edit = useEdit(lesson.id)
-  const own = { to: '/' } as const
+  const own = { to: '/your-lessons' } as const
   const title = t('own.title')
   const back = { link: <Link {...own} />, label: t('own.toOwn'), title }
   return (

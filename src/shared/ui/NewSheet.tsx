@@ -51,6 +51,7 @@ export function NewSheet({
   onCreate,
   hint,
   createIcon,
+  lead,
   children,
 }: {
   open: boolean
@@ -71,6 +72,8 @@ export function NewSheet({
   hint?: string
   /** A picture before the button's name (Record's microphone). */
   createIcon?: ReactNode
+  /** What it makes, chosen before its name (New's Lesson | Course). */
+  lead?: ReactNode
   /** Its properties, each a `SheetPart`. */
   children?: ReactNode
 }) {
@@ -103,6 +106,7 @@ export function NewSheet({
             if (named && !creating) onCreate()
           }}
         >
+          {lead}
           <NameField
             id={nameId}
             label={nameLabel}

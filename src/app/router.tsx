@@ -181,6 +181,12 @@ const coursesRoute = createRoute({
   ...learnEditSearch,
   component: lazyRouteComponent(homeScreens, 'CoursesPage'),
 })
+// The learner's own lessons and courses as a library (canvas 165).
+const yoursRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/your-lessons',
+  component: lazyRouteComponent(homeScreens, 'YoursPage'),
+})
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
@@ -1073,6 +1079,7 @@ const routeTree = rootRoute.addChildren([
     learnRoute,
     levelRoute,
     coursesRoute,
+    yoursRoute,
     profileRoute,
     streakRoute,
     badgesRoute,

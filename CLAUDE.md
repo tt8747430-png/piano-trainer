@@ -113,7 +113,8 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
 
 - **Learn** (`/`): an overview (Continue, Levels, Courses, the learner's own); a level's page (`/levels/$levelId`)
   and the Courses' (`/courses`); a lesson is one page of sections. Your lessons and Your courses are
-  the learner's own, in the same editors on the device. `pages/learn`, `course`, `lesson`, `lesson-editor`;
+  the learner's own, in the same editors on the device, with a page of their own (`/your-lessons`).
+  `pages/learn`, `course`, `lesson`, `lesson-editor`;
   `widgets/curriculum`, `lesson-view`; `features/manage-own-lessons`; `entities/own-lessons`.
 - **Songs** (`/songs`): My songs · Explore. One library of folders, favourites and an archive; a song's page, Settings and
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`, `piece-cover`;

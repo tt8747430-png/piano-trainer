@@ -70,7 +70,7 @@ banners by their gentlest way out as each page loads, before any act (so a sheet
 the check is of them or the owner asks. The harness also seeds a returning learner from the served app's own settings
 version, so run it from the checkout that serves the app.
 
-`SIZES`, `THEMES` and `LANGUAGES` narrow it while iterating; a pass is the whole matrix. The Claude-in-Chrome tab is no substitute: it reports as hidden,
+`SEED=<file.json>` starts the learner with saved stores (`{ "pt-own-lessons": "…" }`, made once through the app's own screens and read from its storage), for a screen that lists what the learner made. `SIZES`, `THEMES` and `LANGUAGES` narrow it while iterating; a pass is the whole matrix. The Claude-in-Chrome tab is no substitute: it reports as hidden,
 so lazy staves stay blank and sheets never finish opening.
 
 ## Pass 1: as the builder

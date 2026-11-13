@@ -17,7 +17,8 @@ the courses, its title in the bar.
   one card naming its step, "6 of 13 learned" and its meter; the four **Levels**, one card of rows, each its number in
   a ring of how much is learned, its stage, its book and "6 of 13"; **Courses**, the shelves' first five covers (the
   one Continue is in first, with Next), a row that scrolls on a phone and five across on a laptop, with See all; and
-  **Your lessons and courses**, the learner's own then New lesson and New course. On a laptop (`lg`) Continue and the
+  **Your lessons and courses**, the newest four of the learner's own with See all, then one row, New lesson or
+  course. On a laptop (`lg`) Continue and the
   Levels stand beside the learner's own, the covers across under them. Continue follows the track last learned on:
   after a course's lesson or song, that course's next step; otherwise the journeys' next.
 - **A level's page** (`/levels/$levelId`, Back to Learn): its book's name in the bar, its stage and how much is
@@ -45,10 +46,14 @@ the courses, its title in the bar.
   `chords:<family>`, `scale:<kind>`. A mark on one track never counts for another. A whole piece's Learned is the
   learner's own; lessons never set it (ADR 0111).
 - **The learner's own lessons and courses** (R30-5, `entities/own-lessons`, `pt-own-lessons`, version 1,
-  synced as `own_lessons`): Learn's last group, **Your lessons and courses**, lists the lessons the
-  learner wrote, each a row as a level's lesson is (learned, read so far), then their courses, each on
-  its cover (a Songs folder's picture and paint), then New lesson and New course (a name, then the
-  editor). They go up to Learn. An own lesson is
+  synced as `own_lessons`): Learn's last group, **Your lessons and courses**, shows the newest four, the
+  courses on their covers (a Songs folder's picture and paint) and the lessons as a level's are (learned,
+  read so far); See all opens their page, `/your-lessons` (canvas 165, `OwnLibrary`), the app's library
+  shape: search with its sort (Recent, Name), All · Lessons · Courses, each course a row that folds open
+  to its own lessons, the lessons in no course below, every row's More (Open, Duplicate, Settings, Delete
+  with Undo), and New, floating on a phone and beside the search on a laptop. **New** is one sheet
+  (`NewOwnSheet`): Lesson | Course, the name, then the course a lesson goes in or a course's cover, and
+  Create opens what was made in its editor. They go up to their page, and it to Learn. An own lesson is
   the app's lesson document under `own-lesson-n`, read at `/lessons/own-lesson-n` as any lesson, its
   progress the same step (`lesson:<id>`), never part of a level's journey or of Continue; it is written
   once in the learner's language and reads the same in the other (`inBothLanguages`). An own course
@@ -58,7 +63,8 @@ the courses, its title in the bar.
   side. The editors are the app's `LessonEditor` and `CourseEditor` on a local source (`LessonSource`,
   `CourseSource` `own`: no draft, no Publish, kept as the editor rests, Done keeping what waits; an
   example of notes is written as text, the score's Edit music being the app's lessons'). Their Settings:
-  how lessons read, Rename, Duplicate (the copy opened), Reset progress, and Delete last, what goes named
+  how lessons read; Name (its value, opening Rename), a lesson's In courses (the courses it is in, a
+  checklist to put it in or take it out at once), Duplicate (the copy opened); Reset progress; and Delete last, what goes named
   under it (a lesson leaves every own course, its progress with it; a course's lessons stay). Reset and
   Delete happen at once, the toast's Undo putting back the progress, or the lesson in its place in Your
   lessons and in each course (R38); every lesson's and course's Reset progress works the same way. No Share link:

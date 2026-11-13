@@ -60,7 +60,7 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
             delete: t('own.deleteCourse'),
           }}
           onDelete={() => {
-            void navigate({ to: '/', replace: true })
+            void navigate({ to: '/your-lessons', replace: true })
             const deleted = deleteOwnCourse(store, course.id)
             if (!deleted) return
             say(t('own.deleted', { title: course.title }), {

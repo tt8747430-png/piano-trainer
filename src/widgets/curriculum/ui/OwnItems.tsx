@@ -1,6 +1,6 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText } from 'lucide-react'
-import { useId } from 'react'
+import { Link } from '@tanstack/react-router'
+import { BookOpenText, Plus } from 'lucide-react'
+import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
 import {
@@ -8,17 +8,15 @@ import {
   selectOwnCourses,
   selectOwnLessons,
   useOwnLessons,
-  useOwnLessonsStoreApi,
   type OwnCourse,
 } from '@/entities/own-lessons'
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import { createOwnCourse, createOwnLesson } from '@/features/manage-own-lessons'
 import { localText, useLocale } from '@/shared/i18n'
 import { OpensMark } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
-import { NewRow } from './NewRow'
+import { NewOwnSheet } from './NewOwnSheet'
 
 /** A course of the learner's as a row: its cover, its name, its lessons and how many are learned. */
 function OwnCourseRow({ course }: { course: OwnCourse }) {
@@ -48,38 +46,47 @@ function OwnCourseRow({ course }: { course: OwnCourse }) {
   )
 }
 
+/** How many of the learner's own Learn shows; the rest are on their page. */
+const SHOWN = 4
+
 /**
- * Your lessons and courses (canvas 163), Learn's last group: the lessons the learner wrote, each a
- * row as a level's lesson is (learned, read so far), the courses they put together, then New lesson
- * and New course, each naming one and opening it in its editor. They count towards no level.
+ * Your lessons and courses (canvas 165), Learn's last group: the newest of the learner's own, the
+ * courses with their covers first, then the lessons as a level's are (learned, read so far), See all opening
+ * their page, then one New row opening the one New sheet. They count towards no level.
  */
 export function OwnItems() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const id = useId()
-  const navigate = useNavigate()
-  const store = useOwnLessonsStoreApi()
   const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
   const learned = useProgress(selectLearned)
   const read = useProgress(selectRead)
-  const newLesson = (name: string) => {
-    const made = createOwnLesson(store, name)
-    if (made) void navigate({ to: '/lessons/$lessonId/edit', params: { lessonId: made } })
-    return made !== null
-  }
-  const newCourse = (name: string) => {
-    const made = createOwnCourse(store, name)
-    if (made) void navigate({ to: '/courses/$courseId/edit', params: { courseId: made } })
-    return made !== null
-  }
+  const [making, setMaking] = useState(false)
+  const shownCourses = courses.toReversed().slice(0, SHOWN)
+  const shownLessons = lessons.toReversed().slice(0, SHOWN - shownCourses.length)
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-2">
-      <h2 id={id} className="px-1 text-lg font-semibold">
-        {t('own.title')}
-      </h2>
+      <div className="flex items-center justify-between gap-4 px-1">
+        <h2 id={id} className="text-lg font-semibold">
+          {t('own.title')}
+        </h2>
+        {lessons.length + courses.length > 0 ? (
+          <Link
+            to="/your-lessons"
+            className="-mx-2 inline-flex min-h-11 items-center rounded-control px-2 font-semibold text-link hover:underline"
+          >
+            {t('seeAll')}
+          </Link>
+        ) : null}
+      </div>
       <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
-        {lessons.map((lesson) => {
+        {shownCourses.map((course) => (
+          <li key={course.id}>
+            <OwnCourseRow course={course} />
+          </li>
+        ))}
+        {shownLessons.map((lesson) => {
           const step = lessonStepId(lesson.id)
           const learnedIt = learned[step] !== undefined
           return (
@@ -95,26 +102,20 @@ export function OwnItems() {
             </li>
           )
         })}
-        {courses.map((course) => (
-          <li key={course.id}>
-            <OwnCourseRow course={course} />
-          </li>
-        ))}
         <li>
-          <NewRow
-            label={t('own.newLesson')}
-            createLabel={t('own.createLesson')}
-            onCreate={newLesson}
-          />
-        </li>
-        <li>
-          <NewRow
-            label={t('own.newCourse')}
-            createLabel={t('own.createCourse')}
-            onCreate={newCourse}
-          />
+          <button
+            type="button"
+            onClick={() => setMaking(true)}
+            className="flex min-h-16 w-full items-center gap-4 px-3 py-2 text-left font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+          >
+            <span aria-hidden className="grid size-10 shrink-0 place-items-center">
+              <Plus className="size-5" />
+            </span>
+            {t('own.newOwn')}
+          </button>
         </li>
       </ul>
+      <NewOwnSheet open={making} onOpenChange={setMaking} />
     </section>
   )
 }

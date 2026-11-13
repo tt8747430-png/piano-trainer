@@ -50,6 +50,8 @@ const settingsVersion = Number(
   /SETTINGS_VERSION = (\d+)/.exec(readFileSync('src/entities/settings/model/store.ts', 'utf8'))?.[1],
 )
 
+// SEED=<file.json>: saved stores ({ "pt-own-lessons": "<its saved text>" }) a returning learner starts with.
+const seed = process.env.SEED ? JSON.parse((await import('node:fs')).readFileSync(process.env.SEED, 'utf8')) : {}
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM ?? '/opt/pw-browsers/chromium'
 const browser = await chromium.launch({ executablePath })
 const problems = []
@@ -75,12 +77,13 @@ for (const size of SIZES) {
         locale: language.locale,
       })
       await context.addInitScript(
-        ([version, standalone]) => {
+        ([version, standalone, saved]) => {
+          for (const [key, value] of Object.entries(saved)) if (!localStorage.getItem(key)) localStorage.setItem(key, value)
           if (!localStorage.getItem('pt-settings'))
             localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version }))
           if (standalone) Object.defineProperty(navigator, 'standalone', { get: () => true })
         },
-        [settingsVersion, Boolean(size.standalone)],
+        [settingsVersion, Boolean(size.standalone), seed],
       )
       const page = await context.newPage()
       if (size.insets) {
