@@ -69,6 +69,8 @@ export interface EngraveOptions {
   readonly scale: number
   /** Laid out on pages of this height (a page view), else one line as tall as it is. */
   readonly pageHeight?: number | undefined
+  /** Its staves joined by a brace (the grand staff): room left of the line for it. */
+  readonly braced?: boolean | undefined
   /** A printed page as the score's Layout sets it (A40): the rest is then its. */
   readonly page?: PageSetup | undefined
 }
@@ -85,6 +87,7 @@ export function verovioOptions({
   width,
   scale,
   pageHeight,
+  braced = true,
 }: EngraveOptions): Record<string, unknown> {
   // Verovio takes a whole percentage: the page's units follow the scale it takes.
   const verovioScale = Math.max(1, Math.round(scale * SCALE_PER_ONE))
@@ -98,7 +101,7 @@ export function verovioOptions({
     breaks: pageHeight === undefined ? (width === undefined ? 'none' : 'encoded') : 'auto',
     // Every line justified to its width, the last too.
     minLastJustification: 0,
-    pageMarginLeft: BRACE_ROOM,
+    pageMarginLeft: braced ? BRACE_ROOM : 0,
     pageMarginRight: 0,
     pageMarginTop: 0,
     pageMarginBottom: 0,

@@ -14,8 +14,6 @@ import { layoutOf } from './svg-layout'
 export interface DrawOptions {
   readonly scale: number
   readonly fingers: boolean
-  /** The chord symbols over the top staff: a chord written alone, its name over it (Chords' staff). */
-  readonly chordSymbols?: boolean
   /** Each notehead carries its note's name. */
   readonly names: boolean
   /** The staves drawn, top down. */
@@ -52,7 +50,6 @@ export async function drawScore(
     scoreToMei(score, {
       staves: options.staves,
       fingers: options.fingers,
-      chordSymbols: options.chordSymbols ?? false,
       timeBefore: options.timeBefore,
       next,
       labels: options.labels,
@@ -63,7 +60,7 @@ export async function drawScore(
   // Its width said every time: `undefined` is the music's own width, never the line's.
   const drawn = async (scale: number, width: number | undefined) => {
     const mei = width === undefined ? natural : justified
-    const [svg = ''] = await engrave(mei, { width, scale })
+    const [svg = ''] = await engrave(mei, { width, scale, braced: options.staves.length > 1 })
     const sheet = host.ownerDocument.createElement('div')
     sheet.innerHTML = svg
     const element = sheet.querySelector('svg')

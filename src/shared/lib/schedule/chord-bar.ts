@@ -18,6 +18,7 @@ const held =
     return {
       midi,
       spelled: tone.note,
+      role: tone.role,
       ...(alone ? { hand: 'staff' as const, staff: 0 } : { hand }),
       startTick: 0,
       durationTicks: WHOLE_BAR,
@@ -28,12 +29,12 @@ const held =
 /**
  * A chord as the explorers place it, held for a bar with no key signature and no time signature
  * (every accidental on its note), as the canvas's Chords staff writes it: one treble staff where the
- * left hand rests, the grand staff where it plays; its name over it and each note's finger where
- * they are given.
+ * left hand rests, the grand staff where it plays; each note's finger where they are given, and
+ * its tone in the chord, which paints its head.
  */
 export function chordBar(
   placed: PlacedChord,
-  { symbol, fingers }: { symbol?: string; fingers?: ChordFingers } = {},
+  { fingers }: { fingers?: ChordFingers } = {},
 ): TimedMusic {
   const alone = placed.lh.length === 0
   return {
@@ -45,7 +46,7 @@ export function chordBar(
       ...placed.lh.map(held('lh', fingers?.lh, false)),
       ...placed.rh.map(held('rh', fingers?.rh, alone)),
     ],
-    chords: symbol ? [{ startTick: 0, symbol }] : [],
+    chords: [],
     ...(alone ? { staves: [{ clef: 'treble' as const }], piano: false } : {}),
   }
 }

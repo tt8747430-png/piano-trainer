@@ -1,6 +1,7 @@
 import type {
   Accidental,
   BarMarks,
+  ChordRole,
   Clef,
   Finger,
   Hand,
@@ -50,6 +51,8 @@ export interface TimedNote {
   readonly finger?: Finger
   /** Its finger crosses: the thumb passing under, or a finger over the thumb (a scale's). */
   readonly crossing?: true
+  /** Its tone in the chord it sounds in, where a page names it: its notehead takes the tone's paint. */
+  readonly role?: ChordRole
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
@@ -110,6 +113,8 @@ export interface WrittenNote {
   readonly finger?: Finger
   /** Its finger crosses (`TimedNote`): the finger printed in the accent colour. */
   readonly crossing?: true
+  /** Its tone in its chord (`TimedNote`): the engraving's class paints its notehead. */
+  readonly role?: ChordRole
 }
 
 /** Where a tuplet's bracket starts: the events of one tuplet share it. */

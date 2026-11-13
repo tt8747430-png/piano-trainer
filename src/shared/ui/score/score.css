@@ -89,9 +89,39 @@
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
   font-family: var(--font-display);
 }
-/* A chord written alone (Chords' staff, its canvas) carries its name over it in the link's sky. */
-[data-chord-sheet] [data-slot='score'] g.harm text {
-  fill: var(--link);
+/* A chord's heads in its tones' paints, outlined in ink, as the canvas's Chords staff fills them; the
+   stem and accidentals stay ink. */
+[data-slot='score'] g.note.role-root .notehead use,
+[data-slot='score'] g.note.role-3rd .notehead use,
+[data-slot='score'] g.note.role-5th .notehead use,
+[data-slot='score'] g.note.role-7th .notehead use,
+[data-slot='score'] g.note.role-9th .notehead use,
+[data-slot='score'] g.note.role-11th .notehead use,
+[data-slot='score'] g.note.role-13th .notehead use {
+  stroke: currentColor;
+  stroke-width: 22px;
+  paint-order: stroke;
+}
+[data-slot='score'] g.note.role-root .notehead use {
+  fill: var(--role-root);
+}
+[data-slot='score'] g.note.role-3rd .notehead use {
+  fill: var(--role-3rd);
+}
+[data-slot='score'] g.note.role-5th .notehead use {
+  fill: var(--role-5th);
+}
+[data-slot='score'] g.note.role-7th .notehead use {
+  fill: var(--role-7th);
+}
+[data-slot='score'] g.note.role-9th .notehead use {
+  fill: var(--role-9th);
+}
+[data-slot='score'] g.note.role-11th .notehead use {
+  fill: var(--role-11th);
+}
+[data-slot='score'] g.note.role-13th .notehead use {
+  fill: var(--role-13th);
 }
 /* The words under the tune (ADR 0097) stay in the face Verovio spaces them by (Times): in the app's
    wider serif, neighbours a word apart touch on a panorama's natural spacing. Verovio sets no fill on
