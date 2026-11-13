@@ -12,18 +12,41 @@ import {
   libraryLine,
   libraryNumerals,
   progressionMode,
+  type ProgressionStyle,
 } from '@/entities/progression-library'
 import { togglePracticeFavourite } from '@/features/manage-practice-library'
 import { localText, useLocale } from '@/shared/i18n'
-import { numeralsLine, parseNumerals } from '@/shared/lib/music'
-import { ProgressionTiles, type RowAction } from '@/shared/ui'
+import { numeralsLine, numeralText, parseNumerals, type Numeral } from '@/shared/lib/music'
+import type { Paint, RowAction } from '@/shared/ui'
 import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
 
+/** A style's paint on its rows' tiles (canvas, Progressions): one paint, one meaning on the page. */
+const STYLE_PAINT: Readonly<Record<ProgressionStyle, Paint>> = {
+  pop: 'yellow',
+  rock: 'sand',
+  jazz: 'sky',
+  blues: 'lilac',
+  classical: 'grass',
+  soul: 'lilac',
+  gospel: 'yellow',
+  modal: 'sky',
+  theory: 'sand',
+}
+
+/** A progression's tile: its first two numerals, as it opens ("I V"), its first alone where two would not fit. */
+const opening = (numerals: readonly Numeral[]): string => {
+  const [first, second] = numerals.map(numeralText)
+  const both = `${first ?? ''} ${second ?? ''}`.trim()
+  return both.length <= 4 ? both : (first ?? '')
+}
+
+/** Numerals as a row reads them, spaced: "I – V – vi – IV". */
+const spaced = (line: string): string => line.split('–').join(' – ')
+
 /**
- * The Progressions library's styles and rows (R30-4): each style of the library a place, each
- * progression its name, how it sounds and its chords as tiles tinted by role (R34; in its major line
- * where it has one); Mine the
- * progressions the learner keeps. The library has no levels, so it shows, sorts and filters by none.
+ * The Progressions library's styles and rows (canvas, Progressions): each style of the library a
+ * place, each progression its opening on its style's paint, its name over its numerals (in its major
+ * line where it has one), how it sounds found by the search; Mine the progressions the learner keeps. The library has no levels, so it shows, sorts and filters by none.
  */
 export function useProgressionLibrary(): {
   groups: readonly LibraryGroup[]
@@ -53,13 +76,16 @@ export function useProgressionLibrary(): {
       return {
         id: progression.id,
         name: localText(progression.name, locale),
-        detail: localText(progression.character, locale),
+        detail: spaced(numerals),
         extra: numerals,
         group: style,
-        words: [progression.name.en, progression.name.ru],
-        picture: {
-          chords: <ProgressionTiles numerals={libraryNumerals(progression, minor)} minor={minor} />,
-        },
+        words: [
+          progression.name.en,
+          progression.name.ru,
+          progression.character.en,
+          progression.character.ru,
+        ],
+        picture: { text: opening(libraryNumerals(progression, minor)), paint: STYLE_PAINT[style] },
         link: link(progression.id),
         favourite,
         actions: [favouriteAction(progression.id, favourite)],
@@ -72,12 +98,10 @@ export function useProgressionLibrary(): {
     return {
       id: progression.id,
       name: progression.name,
-      detail: progression.mode
-        ? t(`music:scaleKind.${progression.mode}`)
-        : t(progression.minor ? 'music:key.minorMode' : 'music:key.majorMode'),
+      detail: spaced(numeralsLine(parsed)),
       extra: numeralsLine(parsed),
       group: MINE,
-      picture: { chords: <ProgressionTiles numerals={parsed} minor={progression.minor} /> },
+      picture: { text: opening(parsed), paint: 'sand' },
       link: link(progression.id),
       favourite,
       actions: [favouriteAction(progression.id, favourite)],

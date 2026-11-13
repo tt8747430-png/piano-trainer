@@ -9,7 +9,7 @@ import {
   ROW_BODY,
   ROW_CARD,
   ROW_FLAT,
-  ROW_TITLE_STRONG,
+  ROW_LIBRARY_FACE,
   RowFace,
   RowMore,
   swipeOf,
@@ -55,7 +55,7 @@ export function SongRow({
         <div
           className={cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'has-[>a:hover]:bg-muted')}
         >
-          <PieceLink entry={entry} className={cn(ROW_BODY, ROW_TITLE_STRONG)} {...press}>
+          <PieceLink entry={entry} className={cn(ROW_BODY, ROW_LIBRARY_FACE)} {...press}>
             <PieceMark entry={entry} />
             <RowFace {...face} />
           </PieceLink>

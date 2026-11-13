@@ -2,7 +2,7 @@ import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useMediaQuery, useSetSearch } from '@/shared/lib'
-import { FilteredNotice, LIBRARY_PANES, RowGroup } from '@/shared/ui'
+import { FilteredNotice, FoldSection, GROUPED_LIST, LIBRARY_PANES } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   FAVOURITES,
@@ -27,7 +27,7 @@ import { LibraryTree } from './LibraryTree'
 /** How many rows a phone's run shows before Show all. */
 const FOLDED = 5
 
-/** A phone's run of rows under its name, folded after five with Show all n; a book's links over it. */
+/** A phone's run of rows under its name and count, folding away, after five Show all n; a book's links over it. */
 function Section({
   section,
   folds,
@@ -39,23 +39,26 @@ function Section({
 }) {
   const { t } = useTranslation('practice')
   const [open, setOpen] = useState(false)
+  const [shut, setShut] = useState(false)
   const folded = folds && !open && section.items.length > FOLDED
   return (
-    <RowGroup
+    <FoldSection
       title={section.name}
-      footer={
-        folded ? (
-          <Button variant="soft" className="self-start" onClick={() => setOpen(true)}>
-            {t('library.showAll', { count: section.items.length })}
-          </Button>
-        ) : null
-      }
+      count={section.items.length}
+      fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
     >
-      {links ? <li className="flex flex-wrap gap-2 px-1 pb-1">{links}</li> : null}
-      {(folded ? section.items.slice(0, FOLDED) : section.items).map((item) => (
-        <LibraryRow key={item.id} item={item} />
-      ))}
-    </RowGroup>
+      {links ? <div className="flex flex-wrap gap-2">{links}</div> : null}
+      <ul className={GROUPED_LIST}>
+        {(folded ? section.items.slice(0, FOLDED) : section.items).map((item) => (
+          <LibraryRow key={item.id} item={item} />
+        ))}
+      </ul>
+      {folded ? (
+        <Button variant="soft" className="self-start" onClick={() => setOpen(true)}>
+          {t('library.showAll', { count: section.items.length })}
+        </Button>
+      ) : null}
+    </FoldSection>
   )
 }
 
@@ -151,6 +154,7 @@ export function PracticeLibrary({
         wide={wide}
         screen={screen}
         names={names}
+        mine={mine !== undefined}
       />
       <FilteredNotice
         shown={shown.items.length}

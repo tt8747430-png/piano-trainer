@@ -1,7 +1,7 @@
 import { useRender } from '@base-ui/react/use-render'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/lib'
-import { ROW_BODY, ROW_FLAT, ROW_TITLE_STRONG, RowFace, TileMark, type Paint } from '@/shared/ui'
+import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE, RowFace, TileMark, type Paint } from '@/shared/ui'
 
 /**
  * A row among a place's folders that leads elsewhere (canvas 133: Shared with me at the foot of
@@ -25,7 +25,7 @@ export function PlaceRow({
     defaultTagName: 'a',
     render,
     props: {
-      className: cn(ROW_BODY, ROW_TITLE_STRONG),
+      className: cn(ROW_BODY, ROW_LIBRARY_FACE),
       children: (
         <>
           <TileMark large icon={icon} paint={paint} />

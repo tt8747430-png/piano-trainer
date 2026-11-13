@@ -1,3 +1,4 @@
+import { GROUPED_LIST } from '@/shared/ui'
 import { useCardLook } from './card-look'
 import type { DragCancelEvent, DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
@@ -61,12 +62,7 @@ export function SortableRows<Id extends string>({
   const grouped = useCardLook().style.layout === 'list'
   return (
     <SortableContext items={[...list.items]} strategy={rectSortingStrategy}>
-      <ul
-        aria-label={label}
-        className={
-          grouped ? 'card flex flex-col divide-y divide-border overflow-hidden' : 'grid-cards gap-2'
-        }
-      >
+      <ul aria-label={label} className={grouped ? GROUPED_LIST : 'grid-cards gap-2'}>
         {list.items.map((id) => row(id))}
       </ul>
     </SortableContext>

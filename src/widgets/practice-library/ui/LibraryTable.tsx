@@ -1,7 +1,8 @@
+import { LibraryTile } from './LibraryTile'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
 import { cn, useSetSearch } from '@/shared/lib'
-import { FavouriteMark, menuOf, RowMore, SortHeading, TABLE_CELL, TileMark } from '@/shared/ui'
+import { HeartToggle, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
 import type {
   LibraryGroup,
   LibraryItem,
@@ -20,9 +21,7 @@ function NameCell({ item }: { item: LibraryItem }) {
         'flex min-h-11 min-w-0 items-center gap-3 rounded-control py-1 focus-visible:-outline-offset-3',
       children: (
         <>
-          {'chords' in item.picture ? null : (
-            <TileMark icon={item.picture.icon} paint={item.picture.paint} />
-          )}
+          <LibraryTile picture={item.picture} />
           <span className="min-w-0">
             <span className="block font-semibold text-foreground">{item.name}</span>
             <span className="block truncate text-sm text-muted-foreground">{item.detail}</span>
@@ -102,14 +101,12 @@ export function LibraryTable({
               <td className={TABLE_CELL}>{item.stage ? <LevelMark stage={item.stage} /> : null}</td>
             ) : null}
             {extra ? (
-              <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>
-                {'chords' in item.picture ? item.picture.chords : item.extra}
-              </td>
+              <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>{item.extra}</td>
             ) : null}
             <td className={cn(TABLE_CELL, 'pe-0')}>
               <span className="flex items-center justify-end gap-1">
                 {item.trailing}
-                {item.favourite ? <FavouriteMark /> : null}
+                <FavouriteHeart item={item} />
                 <RowMore
                   label={t('common:library.moreOf', { name: item.name })}
                   actions={menuOf(item.actions)}
@@ -120,5 +117,18 @@ export function LibraryTable({
         ))}
       </tbody>
     </table>
+  )
+}
+
+/** A row's ♡ in the table, as on its phone row: one tap to change it. */
+function FavouriteHeart({ item }: { item: LibraryItem }) {
+  const favourite = item.actions.find((action) => action.key === 'favourite')
+  if (!favourite) return null
+  return (
+    <HeartToggle
+      pressed={item.favourite}
+      label={favourite.label}
+      onToggle={() => favourite.onSelect()}
+    />
   )
 }

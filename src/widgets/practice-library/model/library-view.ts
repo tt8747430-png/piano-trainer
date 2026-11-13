@@ -49,8 +49,10 @@ export interface LibrarySection {
  * A row's picture: its kind's icon on a painted tile, or a progression's chords as tiles tinted by
  * role (R34), under its name on a phone and in the table's column for them.
  */
+/** A row's picture: its book's or kind's icon, or a few words of its music (a progression's first numerals). */
 export type LibraryPicture =
-  { readonly icon: LucideIcon; readonly paint: Paint } | { readonly chords: ReactNode }
+  | { readonly icon: LucideIcon; readonly paint: Paint }
+  | { readonly text: string; readonly paint: Paint }
 
 /** One row of a practice library: an exercise, a pattern, a study, a progression. */
 export interface LibraryItem {

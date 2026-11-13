@@ -8,7 +8,7 @@ import {
   FilterGroup,
   FilterSheet,
   SearchField,
-  SortChoice,
+  ChoiceChips,
   type FilterChipOn,
 } from '@/shared/ui'
 import {
@@ -25,10 +25,11 @@ import {
 import type { GroupWord, LibraryKind } from '../model/library-words'
 
 /**
- * A practice library's search and filters (R30-4, Songs' own): one search box with the sort joined to
- * its end on a phone (the table's headings sort on a laptop); beside it Filter, its count on it,
- * opening Level (the levels the place holds) and, for a library of styles, Style; under them, each
- * filter on and a phone's place as a chip that takes it off.
+ * A practice library's search and filters (canvas, Songs' own): one search box and beside it Sort and
+ * filter, its count on it, opening the sort first on a phone (the table's headings sort on a laptop),
+ * then Level (the levels the place holds) and, for a library of styles, Style; under them on a phone
+ * the place chips (All · Favourites · Mine), then each filter on and a book's place as a chip that
+ * takes it off.
  */
 export function LibrarySearch({
   kind,
@@ -40,6 +41,7 @@ export function LibrarySearch({
   wide,
   screen,
   names,
+  mine,
 }: {
   kind: LibraryKind
   view: PracticeLibraryView
@@ -51,6 +53,8 @@ export function LibrarySearch({
   wide: boolean
   screen: string
   names: Readonly<Record<string, string>>
+  /** Whether the learner makes rows of their own here: Mine is a place chip. */
+  mine: boolean
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const set = useSetSearch<PracticeLibraryView>()
@@ -62,6 +66,9 @@ export function LibrarySearch({
     view.place === FAVOURITES || view.place === MINE || view.place === HIDDEN
       ? names[view.place]
       : groups.find((group) => group.id === view.place)?.name
+  // A phone's place chips (canvas): All, Favourites, and Mine where the learner makes their own.
+  const placeChips = [ALL, FAVOURITES, ...(mine ? [MINE] : [])]
+  const placeChip = placeChips.includes(shown.place) ? shown.place : ALL
   const stages = STAGES.filter((stage) => shown.stages.includes(stage) || stage === view.stage)
   const chips: (FilterChipOn | null)[] = [
     view.stage === 'any'
@@ -73,7 +80,10 @@ export function LibrarySearch({
           }),
           off: () => set({ stage: 'any' }),
         },
-    shown.place === ALL || placeName === undefined || (wide && !styles)
+    shown.place === ALL ||
+    placeName === undefined ||
+    (wide && !styles) ||
+    placeChips.includes(shown.place)
       ? null
       : { id: 'place', name: placeName, off: () => set({ place: ALL }) },
   ]
@@ -89,22 +99,10 @@ export function LibrarySearch({
             label={t(`practice:library.kinds.${kind}.search`)}
             hint={t('practice:library.searchHint')}
             screen={screen}
-            end={
-              wide ? undefined : (
-                <SortChoice
-                  value={view.sort}
-                  options={sorts.map((sort) => ({
-                    value: sort,
-                    label: sortName(sort),
-                    short: sortName(sort),
-                  }))}
-                  onChange={(sort) => set({ sort })}
-                />
-              )
-            }
           />
         </div>
         <FilterSheet
+          sorted={!wide}
           count={count}
           foot={(close) => (
             <FilterFoot
@@ -121,6 +119,15 @@ export function LibrarySearch({
             />
           )}
         >
+          {wide ? null : (
+            <FilterGroup title={t('practice:library.sortBy')}>
+              {sorts.map((sort) => (
+                <FilterChoice key={sort} pressed={view.sort === sort} onPress={() => set({ sort })}>
+                  {sortName(sort)}
+                </FilterChoice>
+              ))}
+            </FilterGroup>
+          )}
           {levels ? (
             <FilterGroup title={t('practice:library.table.level')}>
               <FilterChoice pressed={view.stage === 'any'} onPress={() => set({ stage: 'any' })}>
@@ -158,6 +165,18 @@ export function LibrarySearch({
           ) : null}
         </FilterSheet>
       </div>
+      {wide ? null : (
+        <ChoiceChips
+          label={t('practice:library.placesLabel')}
+          value={placeChip}
+          scroll
+          options={placeChips.map((value) => ({
+            value,
+            label: value === ALL ? t('practice:library.all') : (names[value] ?? ''),
+          }))}
+          onChange={(place) => set({ place })}
+        />
+      )}
       <FilterChips chips={chips.filter((chip) => chip !== null)} />
     </div>
   )

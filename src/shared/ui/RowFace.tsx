@@ -96,7 +96,12 @@ export function RowFace({
         ) : detail ? (
           <>
             {' '}
-            <span className="line-clamp-2 text-sm text-pretty text-muted-foreground">{detail}</span>
+            <span
+              data-slot="row-detail"
+              className="line-clamp-2 text-sm text-pretty text-muted-foreground"
+            >
+              {detail}
+            </span>
           </>
         ) : null}
         {children ? <> {children}</> : null}

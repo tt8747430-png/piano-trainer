@@ -648,6 +648,8 @@ export const practice = {
     // Where the rest of a method book's material is (R32): kept apart from its patterns.
     links: { course: 'Course in Learn', songs: 'Songs in Songs' },
     sortManual: 'Manual',
+    sortBy: 'Sort by',
+    placesLabel: 'Show',
     rows: 'The library',
     all: 'All',
     books: 'Books',

@@ -15,8 +15,15 @@ export const ROW_CARD =
 export const ROW_FLAT =
   'flex h-full min-w-0 items-center gap-1 pr-1 transition-colors duration-200 ease-out'
 
-/** A library row's title, heavier than a settings row's: the song or folder is what is hunted for. */
-export const ROW_TITLE_STRONG = '**:data-[slot=row-title]:font-semibold'
+/** A grouped list's card (canvas 133): its rows in one card, a hairline between them. */
+export const GROUPED_LIST = 'card flex flex-col divide-y divide-border overflow-hidden'
+
+/**
+ * A library row's face (canvas 133): its title heavier than a settings row's, since the song or folder
+ * is what is hunted for, and its line one line, cut with an ellipsis.
+ */
+export const ROW_LIBRARY_FACE =
+  '**:data-[slot=row-title]:font-semibold **:data-[slot=row-detail]:line-clamp-1'
 
 /** What only a mouse reaches (More on a library row): a finger has the swipe and the long press. */
 export const POINTER_ONLY = 'pointer-coarse:hidden'

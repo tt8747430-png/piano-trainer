@@ -1,3 +1,4 @@
+import { LibraryTile } from './LibraryTile'
 import {
   closestCenter,
   DndContext,
@@ -31,7 +32,7 @@ import {
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { ActionMenu, confirm, TileMark } from '@/shared/ui'
+import { ActionMenu, confirm } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   arrangeDrop,
@@ -328,7 +329,7 @@ function EditRowFace({ item }: { item: LibraryItem }) {
   const { picture } = item
   return (
     <div className="flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-card bg-card px-3">
-      {'chords' in picture ? null : <TileMark icon={picture.icon} paint={picture.paint} />}
+      <LibraryTile picture={picture} />
       <span className="min-w-0 flex-1 font-semibold">{item.name}</span>
     </div>
   )

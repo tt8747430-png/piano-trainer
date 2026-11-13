@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { DEFAULT_CARD_LOOK, type CardLook } from '@/entities/library'
 import { cn } from '@/shared/lib'
+import { GROUPED_LIST } from '@/shared/ui'
 import { cardLookProps } from './card-look'
 
 /**
@@ -28,9 +29,7 @@ export function LibraryRows({
   // The style's card is the list's own, read from the look round it.
   return (
     <div {...styled}>
-      <ul className={cn('card flex flex-col divide-y divide-border overflow-hidden', className)}>
-        {children}
-      </ul>
+      <ul className={cn(GROUPED_LIST, className)}>{children}</ul>
     </div>
   )
 }

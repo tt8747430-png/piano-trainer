@@ -144,13 +144,15 @@ export { FavouriteMark } from './FavouriteMark'
 export { FilterChips, type FilterChipOn } from './FilterChips'
 export { FilteredNotice } from './FilteredNotice'
 export { FilterChoice, FilterFoot, FilterGroup, FilterSheet, LIBRARY_PANES } from './FilterSheet'
+export { HeartToggle } from './HeartToggle'
 export {
+  GROUPED_LIST,
   POINTER_ONLY,
   ROW_BODY,
   ROW_CARD,
   ROW_CONTROL,
   ROW_FLAT,
-  ROW_TITLE_STRONG,
+  ROW_LIBRARY_FACE,
 } from './library-row-class'
 export { menuOf, swipeOf, type RowAction } from './row-actions'
 export { RowMore } from './RowMore'

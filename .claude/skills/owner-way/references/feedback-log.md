@@ -593,6 +593,13 @@ owner's, typos fixed.
 - Every control says what it belongs to; "Root B" says of which scale; octaves are a stepper; formulas are computed; hands
   drawn as real hands; no half-empty top.
 
+- **The libraries take Songs' row shape (loop, built to the Practice canvas):** Exercises, Accompaniment and
+  Progressions show one search with Sort and filter (the sort first on a phone), place chips All · Favourites · Mine,
+  each book or style a heading with its count that folds, its rows in one card with hairlines: a 44px tile (a
+  progression's opening, "I V", on its style's paint), the name bold over one line ("I – V – vi – IV"), the level, a ♡
+  one tap; More only under a mouse. The chord chips and the description line left the rows; a progression's
+  character is still found by the search. One `HeartToggle` for every library's ♡.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

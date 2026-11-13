@@ -617,6 +617,8 @@ export const practice: LocaleResources['practice'] = {
     },
     links: { course: 'Курс в «Обучении»', songs: 'Песни в «Песнях»' },
     sortManual: 'Вручную',
+    sortBy: 'Сортировка',
+    placesLabel: 'Показать',
     rows: 'Библиотека',
     all: 'Все',
     books: 'Книги',

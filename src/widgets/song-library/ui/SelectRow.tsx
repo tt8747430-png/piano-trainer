@@ -6,7 +6,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
-import { ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_TITLE_STRONG } from '@/shared/ui'
+import { ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_LIBRARY_FACE } from '@/shared/ui'
 import { useCardLook } from './card-look'
 
 /**
@@ -106,7 +106,7 @@ export function SelectRow({
           {...carrierListeners}
           className={cn(
             ROW_BODY,
-            ROW_TITLE_STRONG,
+            ROW_LIBRARY_FACE,
             'cursor-pointer touch-manipulation select-none',
           )}
         >

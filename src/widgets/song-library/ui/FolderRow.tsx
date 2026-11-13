@@ -10,7 +10,7 @@ import {
   ROW_BODY,
   ROW_CARD,
   ROW_FLAT,
-  ROW_TITLE_STRONG,
+  ROW_LIBRARY_FACE,
   RowMore,
   swipeOf,
   SwipeRow,
@@ -58,7 +58,7 @@ export function FolderRow({
           <Link
             to="/songs/folders/$folderId"
             params={{ folderId: folder.id }}
-            className={cn(ROW_BODY, ROW_TITLE_STRONG)}
+            className={cn(ROW_BODY, ROW_LIBRARY_FACE)}
             {...press}
           >
             <FolderFace folder={folder} holds={holds} />
