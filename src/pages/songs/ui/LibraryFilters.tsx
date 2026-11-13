@@ -1,10 +1,9 @@
 import { Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { LIBRARY_SORTS } from '@/entities/library'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
-import { FilterChips, SearchField, SortChoice, type FilterChipOn } from '@/shared/ui'
+import { ChoiceChips, FilterChips, SearchField, type FilterChipOn } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useSearchPalette } from '@/widgets/search-palette'
 import type { SongsFilter } from '../model/songs-filter'
@@ -12,25 +11,25 @@ import type { LibraryPage } from '../model/use-library-page'
 import { SongsFilterSheet } from './FilterSheet'
 
 /**
- * The library's search and filters (ADR 0106, the owner's examples): one search box with the sort
- * joined to its end, a pop-up of a word or two (Manual · Name · Recent · Key, the library's own,
- * kept); beside it the Filter button, its count on it while filters are on, opening the filters'
- * sheet (Key, Level, Favourites). Under them, while any is on, each as a chip that takes it off, in a
- * row that scrolls sideways; while something is typed, Search everywhere opens the palette on it. The
- * filters are the URL's; the sort is the library's.
+ * The library's search and filters (ADR 0106, canvas 133): one search box and beside it Sort and
+ * filter, its count on it while filters are on, opening the sheet whose first group is the sort
+ * (Manual · Name · Recently played · Key, the library's own, kept) on a phone, where a laptop's table
+ * headings sort. On a phone the place chips under them, All · Favourites · Learning · Learned, a row
+ * that scrolls sideways, where a laptop has its tree. While any filter is on, each as a chip that
+ * takes it off; while something is typed, Search everywhere opens the palette on it.
  */
 export function LibraryFilters({
   page,
   filter,
   screen,
-  sortInHeadings = false,
+  wide = false,
 }: {
   page: LibraryPage
   filter: SongsFilter
   /** The screen's name, for the search's. */
   screen: string
-  /** The table's headings sort (a laptop's two panes): no sort joined to the search. */
-  sortInHeadings?: boolean
+  /** A laptop's two panes: the table's headings sort and the tree holds the places. */
+  wide?: boolean
 }) {
   const { t } = useTranslation('songs')
   const set = useSetSearch<SongsFilter>()
@@ -44,26 +43,44 @@ export function LibraryFilters({
             label={t('search')}
             hint={t('searchHint')}
             screen={screen}
-            end={
-              sortInHeadings ? undefined : (
-                <SortChoice
-                  value={page.sort}
-                  options={LIBRARY_SORTS.map((sort) => ({
-                    value: sort,
-                    label: t(`sort.${sort}`),
-                    short: t(`sort.short.${sort}`),
-                  }))}
-                  onChange={page.setSort}
-                />
-              )
-            }
           />
         </div>
-        <SongsFilterSheet page={page} filter={filter} />
+        <SongsFilterSheet page={page} filter={filter} sorted={!wide} />
       </div>
-      <SongsFilterChips filter={filter} />
+      {wide ? null : <PlaceChips filter={filter} />}
+      <SongsFilterChips filter={filter} places={!wide} />
       {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
     </div>
+  )
+}
+
+type Place = 'all' | 'favourites' | 'learning' | 'learned'
+
+/** The place chips (canvas 133): what the list shows, each one tap, the filters' own in the URL. */
+function PlaceChips({ filter }: { filter: SongsFilter }) {
+  const { t } = useTranslation('songs')
+  const set = useSetSearch<SongsFilter>()
+  const place: Place = filter.favourites
+    ? 'favourites'
+    : filter.learned === 'yes'
+      ? 'learned'
+      : filter.learned === 'no'
+        ? 'learning'
+        : 'all'
+  const places: readonly Place[] = ['all', 'favourites', 'learning', 'learned']
+  return (
+    <ChoiceChips
+      label={t('places.label')}
+      value={place}
+      scroll
+      options={places.map((value) => ({ value, label: t(`places.${value}`) }))}
+      onChange={(next) =>
+        set({
+          favourites: next === 'favourites',
+          learned: next === 'learned' ? 'yes' : next === 'learning' ? 'no' : 'any',
+        })
+      }
+    />
   )
 }
 
@@ -80,7 +97,14 @@ function SearchEverywhere({ query }: { query: string }) {
 }
 
 /** The filters on, each a chip that takes it off, in a row that scrolls sideways (the search's own box says its text). */
-function SongsFilterChips({ filter }: { filter: SongsFilter }) {
+function SongsFilterChips({
+  filter,
+  places,
+}: {
+  filter: SongsFilter
+  /** The place chips show Favourites, Learning and Learned already (a phone). */
+  places: boolean
+}) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
@@ -100,7 +124,7 @@ function SongsFilterChips({ filter }: { filter: SongsFilter }) {
           name: t('filters.chipStage', { stage: common(`stage.${filter.stage}`) }),
           off: () => set({ stage: 'any' }),
         },
-    filter.favourites
+    filter.favourites && !places
       ? {
           id: 'favourites',
           name: common('library.favourites'),
@@ -110,7 +134,7 @@ function SongsFilterChips({ filter }: { filter: SongsFilter }) {
     filter.folder === 'none'
       ? { id: 'folder', name: t('filters.noFolder'), off: () => set({ folder: 'any' }) }
       : null,
-    filter.learned === 'any'
+    filter.learned === 'any' || places
       ? null
       : {
           id: 'learned',

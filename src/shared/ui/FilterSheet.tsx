@@ -1,4 +1,4 @@
-import { ListFilter } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMediaQuery } from '@/shared/lib'
@@ -22,18 +22,22 @@ export const LIBRARY_PANES = '(min-width: 64rem)'
  */
 export function FilterSheet({
   count,
+  sorted = false,
   foot,
   children,
 }: {
   /** How many filters are on. */
   count: number
+  /** Its first group is the sort: named Sort and filter (canvas 133). */
+  sorted?: boolean
   foot: (close: () => void) => ReactNode
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
   const laptop = useMediaQuery(LIBRARY_PANES)
   const [open, setOpen] = useState(false)
-  const label = count > 0 ? t('library.filters.on', { count }) : t('library.filters.title')
+  const title = t(sorted ? 'library.filters.sortTitle' : 'library.filters.title')
+  const label = count > 0 ? t('library.filters.on', { count }) : title
   const button = {
     variant: 'outline',
     size: 'icon',
@@ -43,7 +47,7 @@ export function FilterSheet({
   } as const
   const face = (
     <>
-      <ListFilter aria-hidden />
+      <SlidersHorizontal aria-hidden />
       {count > 0 ? (
         <span
           aria-hidden
@@ -61,7 +65,7 @@ export function FilterSheet({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger render={<Button {...button} />}>{face}</PopoverTrigger>
         <PopoverContent
-          aria-label={t('library.filters.title')}
+          aria-label={title}
           align="end"
           className="max-h-(--available-height) w-[min(26rem,calc(100vw-2rem))] gap-0 overflow-hidden p-0"
         >
@@ -78,7 +82,7 @@ export function FilterSheet({
         {face}
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent title={t('library.filters.title')} footer={foot(close)} tall>
+        <SheetContent title={title} footer={foot(close)} tall>
           <div className="flex flex-col gap-6">{children}</div>
         </SheetContent>
       </Sheet>

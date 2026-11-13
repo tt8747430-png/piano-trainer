@@ -49,6 +49,7 @@ export const common: LocaleResources['common'] = {
     filtered: 'Показано: {{shown}} из {{total}}',
     filters: {
       title: 'Фильтры',
+      sortTitle: 'Сортировка и фильтры',
       on: 'Фильтры: включено {{count}}',
       chips: 'Включённые фильтры',
       remove: 'Убрать: {{name}}',

@@ -46,6 +46,7 @@ export const common = {
     filtered: 'Shown: {{shown}} of {{total}}',
     filters: {
       title: 'Filters',
+      sortTitle: 'Sort and filter',
       on: 'Filters: {{count}} on',
       // What is on, as a removable chip under the search.
       chips: 'Filters on',

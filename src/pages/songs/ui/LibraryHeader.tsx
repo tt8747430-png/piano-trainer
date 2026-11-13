@@ -22,8 +22,8 @@ import { useSongsViews } from './SongsSwitch'
 /**
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home with its views
  * (My songs · Explore), the folder's name in one with its Edit beside it (its name and look, in place)
- * and Back, which goes up a level, named so; then Select, and at Home the Archive (its count) and More
- * (Card style), in a folder the gear to its Settings page (Share, Card style, Move to folder…, Archive
+ * and Back, which goes up a level, named so; at Home the Archive (its count) and More (Select, Card
+ * style), in a folder Select and in a folder the gear to its Settings page (Share, Card style, Move to folder…, Archive
  * folder, Delete folder). While Select is on, the count chosen is its title, with Select all and Done.
  */
 export function LibraryHeader({
@@ -89,11 +89,14 @@ export function LibraryHeader({
       tools={
         edit?.editing ? null : (
           <>
-            <RoundButton
-              label={t('select.start')}
-              icon={ListChecks}
-              onClick={() => page.select.start()}
-            />
+            {/* At Home Select is in More (canvas 133); a folder's bar has no More. */}
+            {folder ? (
+              <RoundButton
+                label={t('select.start')}
+                icon={ListChecks}
+                onClick={() => page.select.start()}
+              />
+            ) : null}
             {/* A laptop's tree holds Archive and Trash: one way to each (ui-and-mockups). */}
             {folder || wide ? null : <ArchiveButton />}
             {add}
@@ -105,6 +108,12 @@ export function LibraryHeader({
         folder ? null : (
           <MoreMenu
             actions={[
+              {
+                key: 'select',
+                label: t('select.start'),
+                icon: ListChecks,
+                onSelect: () => page.select.start(),
+              },
               {
                 key: 'card-style',
                 label: t('cardStyle.open'),

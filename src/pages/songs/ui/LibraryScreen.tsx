@@ -99,7 +99,7 @@ export function LibraryScreen({
         page={page}
         filter={filter}
         screen={folder ? nameOf(folder) : t('title')}
-        sortInHeadings={wide && !page.select.on}
+        wide={wide}
       />
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />

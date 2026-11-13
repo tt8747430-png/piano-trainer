@@ -38,7 +38,15 @@ export const songs: LocaleResources['songs'] = {
     chipKey: 'Тональность: {{key}}',
     chipStage: 'Уровень: {{stage}}',
   },
+  places: {
+    all: 'Все',
+    favourites: 'Избранное',
+    learning: 'Учу',
+    learned: 'Выучено',
+    label: 'Показать',
+  },
   sort: {
+    label: 'Сортировка',
     manual: 'Вручную',
     name: 'По названию',
     recent: 'Недавние',

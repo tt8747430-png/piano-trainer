@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { LIBRARY_SORTS } from '@/entities/library'
 import { STAGES, type Stage } from '@/entities/step'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
@@ -11,29 +12,62 @@ import {
   Segmented,
   SwitchRow,
 } from '@/shared/ui'
-import { filtersOn, keysIn, stagesIn } from '../model/library-view'
+import { filtersOn, keysIn, placesOn, stagesIn } from '../model/library-view'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * The Filter button and its filters (ADR 0106, the owner's example): the library's `FilterSheet` of
- * folding groups, Key (each key the songs here are in, with how many), Level (the levels they hold)
+ * The Sort and filter button and its sheet (ADR 0106, canvas 133): the library's `FilterSheet` of
+ * folding groups, on a phone the sort first, then Key (each key the songs here are in, with how many), Level (the levels they hold)
  * and Favourites, each change taken at once; at its foot Clear filters and Show, which counts the
  * songs the filters keep and closes.
  */
-export function SongsFilterSheet({ page, filter }: { page: LibraryPage; filter: SongsFilter }) {
+export function SongsFilterSheet({
+  page,
+  filter,
+  sorted,
+}: {
+  page: LibraryPage
+  filter: SongsFilter
+  /** Its first group the sort (a phone's; a laptop's table headings sort). */
+  sorted: boolean
+}) {
+  const { t } = useTranslation('songs')
   return (
     <FilterSheet
-      count={filtersOn(filter)}
+      count={filtersOn(filter) - (sorted ? placesOn(filter) : 0)}
+      sorted={sorted}
       foot={(close) => <SongsFilterFoot page={page} filter={filter} onShow={close} />}
     >
-      <FilterFields page={page} filter={filter} />
+      {sorted ? (
+        <FilterGroup title={t('sort.label')}>
+          {LIBRARY_SORTS.map((sort) => (
+            <FilterChoice
+              key={sort}
+              pressed={page.sort === sort}
+              onPress={() => page.setSort(sort)}
+            >
+              {t(`sort.${sort}`)}
+            </FilterChoice>
+          ))}
+        </FilterGroup>
+      ) : null}
+      <FilterFields page={page} filter={filter} chips={sorted} />
     </FilterSheet>
   )
 }
 
 /** The filters' groups, each folding under its name, open as they start. */
-function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter }) {
+function FilterFields({
+  page,
+  filter,
+  chips,
+}: {
+  page: LibraryPage
+  filter: SongsFilter
+  /** The place chips hold Favourites, Learning and Learned (a phone): one way to each. */
+  chips: boolean
+}) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
@@ -61,18 +95,20 @@ function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter
           />
         </FilterGroup>
       ) : null}
-      <FilterGroup title={t('filters.progress')} list={false}>
-        <Segmented
-          label={t('filters.progress')}
-          value={filter.learned}
-          options={[
-            { value: 'any', label: t('filters.any') },
-            { value: 'yes', label: t('filters.learned') },
-            { value: 'no', label: t('filters.notLearned') },
-          ]}
-          onChange={(learned) => set({ learned })}
-        />
-      </FilterGroup>
+      {chips ? null : (
+        <FilterGroup title={t('filters.progress')} list={false}>
+          <Segmented
+            label={t('filters.progress')}
+            value={filter.learned}
+            options={[
+              { value: 'any', label: t('filters.any') },
+              { value: 'yes', label: t('filters.learned') },
+              { value: 'no', label: t('filters.notLearned') },
+            ]}
+            onChange={(learned) => set({ learned })}
+          />
+        </FilterGroup>
+      )}
       <FilterGroup title={t('filters.key')}>
         <FilterChoice pressed={filter.key === ''} onPress={() => set({ key: '' })}>
           {t('filters.anyKey')}
@@ -99,13 +135,15 @@ function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter
           ))}
         </FilterGroup>
       ) : null}
-      <FilterGroup title={common('library.favourites')} list={false}>
-        <SwitchRow
-          label={t('filters.onlyFavourites')}
-          checked={filter.favourites}
-          onCheckedChange={(favourites) => set({ favourites })}
-        />
-      </FilterGroup>
+      {chips ? null : (
+        <FilterGroup title={common('library.favourites')} list={false}>
+          <SwitchRow
+            label={t('filters.onlyFavourites')}
+            checked={filter.favourites}
+            onCheckedChange={(favourites) => set({ favourites })}
+          />
+        </FilterGroup>
+      )}
     </>
   )
 }

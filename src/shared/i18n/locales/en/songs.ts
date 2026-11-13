@@ -40,7 +40,16 @@ export const songs = {
     chipStage: 'Level: {{stage}}',
   },
   // The library's sort, kept (ADR 0106).
+  // The place chips over the library (canvas 133).
+  places: {
+    all: 'All',
+    favourites: 'Favourites',
+    learning: 'Learning',
+    learned: 'Learned',
+    label: 'Show',
+  },
   sort: {
+    label: 'Sort by',
     manual: 'Manual',
     name: 'Name',
     recent: 'Recently played',
