@@ -167,7 +167,6 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
         <SettingsGroup flush title={t('scoreSettings.acts.settings')}>
           <RowTrigger
             title={t('scoreSettings.pages.instruments')}
-            detail={t('scoreSettings.details.instruments')}
             icon={Music2}
             paint="lilac"
             value={String(staffCount)}
@@ -175,21 +174,18 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           />
           <RowTrigger
             title={t('scoreSettings.pages.layout')}
-            detail={t('scoreSettings.details.layout')}
             icon={Ruler}
             paint="grass"
             onClick={() => view.setGear('layout')}
           />
           <RowTrigger
             title={t('scoreSettings.pages.input')}
-            detail={t('scoreSettings.details.input')}
             icon={Piano}
             paint="yellow"
             onClick={() => view.setGear('input')}
           />
           <RowTrigger
             title={t('scoreSettings.pages.recording')}
-            detail={t('scoreSettings.details.recording')}
             icon={Mic}
             paint="sand"
             onClick={() => view.setGear('recording')}
@@ -197,7 +193,6 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           {/* The keys' settings have one home, Settings › On-screen piano (2026-11-12): a row to it. */}
           <RowLink
             title={t('scoreSettings.pages.piano')}
-            detail={t('scoreSettings.details.piano')}
             icon={KeyboardMusic}
             paint="sky"
             render={<Link to="/settings/on-screen-piano" />}

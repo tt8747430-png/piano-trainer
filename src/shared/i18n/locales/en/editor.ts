@@ -785,14 +785,6 @@ export const editor = {
       recording: 'Recording',
       piano: 'On-screen piano',
     },
-    // What each setting does, one line under its name.
-    details: {
-      instruments: 'Add, remove and reorder staves',
-      layout: 'Staff size, measures per system, page format',
-      input: 'Note playback during editing, palette position',
-      recording: 'Metronome, melody playback, count-in',
-      piano: 'Key size, note names, volume, pedals',
-    },
     title: 'Score settings',
     score: 'Score',
     // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.

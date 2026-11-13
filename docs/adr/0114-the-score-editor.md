@@ -65,8 +65,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   keyboard button); from 40rem the title after Close and MIDI before Play. Play plays from the caret's bar (Stop while it sounds); no floating transport, no tools
   capsule. Every button is round, inside the bar; below 360px only the icon buttons narrow.
 - **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone, a panel at the right on
-  a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away with a
-  one-line description: Instruments, Layout, Note input, Recording; an original's Publish…, Versions and Discard
+  a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
+  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and
   the owner's captures of Flat's app and web editor): every category a titled section, all of them in one scroll;
