@@ -114,6 +114,7 @@ export const account: LocaleResources['account'] = {
     },
     title: 'Профиль',
     guest: 'Вы зашли как гость',
+    guestKept: 'Ваши занятия хранятся на этом устройстве. Войдите, чтобы они были на всех ваших устройствах.',
     signIn: 'Войти',
     figures: 'Ваши занятия',
     editPhoto: 'Изменить фото профиля',

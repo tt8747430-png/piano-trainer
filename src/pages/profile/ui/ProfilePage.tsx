@@ -153,6 +153,8 @@ function Hero() {
       ) : (
         <div className="flex max-w-sm flex-col items-center gap-3">
           <p className="font-display text-xl font-semibold text-balance">{t('profile.guest')}</p>
+          {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
+          <p className="text-center text-muted-foreground text-pretty">{t('profile.guestKept')}</p>
           <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
         </div>
       )}

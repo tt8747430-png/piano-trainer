@@ -99,6 +99,7 @@ export const account = {
     },
     title: 'Profile',
     guest: 'Exploring as a guest',
+    guestKept: 'Your practice is kept on this device. Sign in to keep it on every device.',
     signIn: 'Sign in',
     figures: 'Your practice',
     editPhoto: 'Edit profile photo',
