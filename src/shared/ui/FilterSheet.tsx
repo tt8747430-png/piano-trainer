@@ -39,11 +39,11 @@ export function FilterSheet({
   const title = t(sorted ? 'library.filters.sortTitle' : 'library.filters.title')
   const label = count > 0 ? t('library.filters.on', { count }) : title
   const button = {
-    variant: 'outline',
+    variant: 'ghost',
     size: 'icon',
     'aria-label': label,
     title: label,
-    className: 'relative size-12 shrink-0 rounded-control bg-card [&_svg]:size-5',
+    className: 'relative size-11 shrink-0 rounded-control bg-muted [&_svg]:size-5',
   } as const
   const face = (
     <>

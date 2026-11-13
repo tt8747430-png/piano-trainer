@@ -102,3 +102,4 @@ referenced". The one library shape (Songs, Progressions, Accompaniment, Exercise
 - **Laptop:** Places are quiet rows, only the chosen one tinted; the second list is the folders (a swatch, name, count),
   not a repeat of the table's sections.
 - **Targets:** place chips, search, Sort and filter and section headings 44 high; Back sits 12 from the edge.
+- Loop round 10 (built to the Songs board): the search is filled and borderless, 44 tall, the filter button beside it the same; place chips are pills on the muted fill, the chosen one keeps the one chosen fill (R15, kept over the canvas's solid ink); section heads (Folders, Practice's groups) in the bold sans; My songs · Explore two bold titles, the other faded, no underline. All are kit parts, so every library changed with them.

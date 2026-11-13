@@ -60,7 +60,7 @@ export function SearchField({
     enabled: screen !== undefined,
   })
   return (
-    <InputGroup className="h-12 rounded-control bg-card">
+    <InputGroup className="h-11 rounded-control border-transparent bg-muted dark:bg-muted">
       <InputGroupAddon>
         <Search aria-hidden className="size-5" />
       </InputGroupAddon>

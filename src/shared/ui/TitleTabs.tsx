@@ -29,13 +29,13 @@ export function TitleTabs<V extends OptionValue>({
         const picked = options.find((option) => option.value === next)
         if (picked && picked.value !== value) onChange(picked.value)
       }}
-      className="flex min-w-0 items-center gap-5"
+      className="flex min-w-0 items-center gap-3"
     >
       {options.map((option) => (
         <Radio.Root
           key={String(option.value)}
           value={option.value}
-          className="relative inline-flex min-h-11 shrink-0 cursor-default items-center text-[1.375rem] leading-tight font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 select-none hover:text-foreground focus-visible:outline-offset-2 data-checked:text-foreground data-checked:after:absolute data-checked:after:inset-x-0 data-checked:after:bottom-1 data-checked:after:h-0.5 data-checked:after:rounded-pill data-checked:after:bg-foreground data-checked:after:content-[''] sm:text-2xl"
+          className="relative inline-flex min-h-11 shrink-0 cursor-default items-center text-[1.625rem] leading-tight font-bold whitespace-nowrap text-muted-foreground/70 transition-colors duration-200 select-none hover:text-muted-foreground focus-visible:outline-offset-2 data-checked:text-foreground"
         >
           {option.label}
         </Radio.Root>

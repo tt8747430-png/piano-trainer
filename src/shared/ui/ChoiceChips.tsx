@@ -42,7 +42,7 @@ export function ChoiceChips<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={optionName(option)}
-          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-control border border-input bg-card px-3 text-base font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3"
+          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border border-transparent bg-muted px-4 text-[0.9375rem] font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3"
         >
           {option.label}
         </Radio.Root>

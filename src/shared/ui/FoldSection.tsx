@@ -27,7 +27,7 @@ export function FoldSection({
   detail,
   info,
   className,
-  headingClassName = 'text-2xl',
+  headingClassName = 'font-sans text-xl font-bold',
   level = 2,
   children,
 }: {

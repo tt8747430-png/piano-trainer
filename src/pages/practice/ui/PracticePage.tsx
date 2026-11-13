@@ -91,7 +91,11 @@ export function PracticePage() {
         }
       />
       {groups.map(({ id, places }) => (
-        <FoldSection key={id} title={t(`groups.${id}`)} headingClassName="px-1 text-2xl lg:text-xl">
+        <FoldSection
+          key={id}
+          title={t(`groups.${id}`)}
+          headingClassName="px-1 font-sans text-xl font-bold"
+        >
           <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
             {places.map(({ key, title, detail, tile, link }) => (
               <PlaceRow
