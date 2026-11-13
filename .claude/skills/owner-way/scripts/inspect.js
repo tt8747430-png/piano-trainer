@@ -128,18 +128,21 @@
     }
   }
   // 5. Touch targets, each as far as it reaches: its box, grown by a ::before or ::after placed round
-  // it (an ⓘ drawn 20px reaches 44px).
+  // it (an ⓘ drawn 20px reaches 44px), measured from the box it is placed in: the target itself when
+  // positioned, else its positioned parent (a link stretched over its chip).
   const reach = (el) => {
     const r = el.getBoundingClientRect()
     let { left, top, right, bottom } = r
+    const placedIn = getComputedStyle(el).position === 'static' ? el.offsetParent : el
+    const c = (placedIn ?? el).getBoundingClientRect()
     for (const part of ['::before', '::after']) {
       const cs = getComputedStyle(el, part)
       if (cs.content === 'none' || cs.position !== 'absolute') continue
       const px = (value) => (value.endsWith('px') ? parseFloat(value) : 0)
-      left = Math.min(left, r.left + px(cs.left))
-      top = Math.min(top, r.top + px(cs.top))
-      right = Math.max(right, r.right - px(cs.right))
-      bottom = Math.max(bottom, r.bottom - px(cs.bottom))
+      left = Math.min(left, c.left + px(cs.left))
+      top = Math.min(top, c.top + px(cs.top))
+      right = Math.max(right, c.right - px(cs.right))
+      bottom = Math.max(bottom, c.bottom - px(cs.bottom))
     }
     return { width: right - left, height: bottom - top }
   }
