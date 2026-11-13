@@ -26,7 +26,7 @@ import { SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
-  PianoSheet,
+  TransportPiano,
   CountInBeat,
   HandsSheet,
   LoopButton,
@@ -461,7 +461,7 @@ export function PlayerLayout({
               twoHands ? <HandsButton hands={view.hands} onOpen={() => setHandsOpen(true)} /> : null
             }
             keyboard={
-              <PianoSheet
+              <TransportPiano
                 keys={player.keys}
                 hands={scoreView.hands}
                 onKeys={player.setKeys}

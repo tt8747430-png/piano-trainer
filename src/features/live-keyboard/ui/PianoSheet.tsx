@@ -1,25 +1,16 @@
 import { Link } from '@tanstack/react-router'
-import { Cable, EyeOff, Hand, Piano, SlidersHorizontal } from 'lucide-react'
-import { useState } from 'react'
+import { Cable, Hand, Piano, SlidersHorizontal } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  FloatingBarButton,
-  RadioCards,
-  RowLink,
-  SettingsGroup,
-  Sheet,
-  SheetContent,
-  SwitchRow,
-} from '@/shared/ui'
-import { DOCK_CAPTIONED } from './dock-sizes'
+import { RadioCards, RowLink, SettingsGroup, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 
 /** What stands in the keys' place, shown: the hands at the keys (3D) or the keys (2D). */
-type Shown = 'hands' | 'keys'
+export type PianoShown = 'hands' | 'keys'
 
 /**
- * The transport's Keyboard (its canvas's Piano sheet): its button says what stands in the keys'
- * place (2D · 3D · Off) under its picture. The sheet: Show the piano, then the 3D piano (the hands at
- * the keys) or the 2D keys as two cards, choosing one shows it; then the rows to the piano's one home,
+ * The canvas's Piano sheet, one for every screen with keys (the Player's transport, Chords' bar),
+ * opened by the screen's own button (`trigger`): Show the piano, then the 3D piano (the hands at the
+ * keys) or the 2D keys as two cards, choosing one shows it; then the rows to the piano's one home,
  * All piano settings (its range, labels, sound), and to Connect a piano.
  */
 export function PianoSheet({
@@ -27,28 +18,21 @@ export function PianoSheet({
   hands,
   onKeys,
   onHands,
+  trigger,
 }: {
   keys: boolean
   hands: boolean
   onKeys: (shown: boolean) => void
   onHands: (shown: boolean) => void
+  /** The screen's button that opens it, given how to open it. */
+  trigger: (open: () => void) => ReactNode
 }) {
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
-  const shown: Shown = hands ? 'hands' : 'keys'
-  const Icon = !keys ? EyeOff : hands ? Hand : Piano
-  const label = t('common:keyboardTools.keyboard')
+  const shown: PianoShown = hands ? 'hands' : 'keys'
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <FloatingBarButton
-        label={label}
-        caption={t(`common:keyboardTools.short.${keys ? shown : 'off'}`)}
-        aria-haspopup="dialog"
-        className={DOCK_CAPTIONED}
-        onClick={() => setOpen(true)}
-      >
-        <Icon aria-hidden />
-      </FloatingBarButton>
+      {trigger(() => setOpen(true))}
       <SheetContent title={t('pianoSheet.title')}>
         <div className="flex flex-col gap-5">
           <SettingsGroup flush>
