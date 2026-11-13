@@ -400,7 +400,6 @@ export function ChordPlayer({
           <FloatingBarPlay
             label={transport.playing ? t('chordPlayer.stop') : t('chordPlayer.play')}
             playing={transport.playing}
-            named
             disabled={!hasChords}
             onClick={toggle}
           />

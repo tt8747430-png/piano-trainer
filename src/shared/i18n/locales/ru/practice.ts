@@ -47,6 +47,8 @@ export const practice: LocaleResources['practice'] = {
   inPlayer: 'Играть в плеере',
   checkYourself: 'Проверить себя',
   chords: {
+    // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
+    playAs: { label: 'Как играть', block: 'Аккордом', arpeggio: 'Арпеджио' },
     written: 'Другие обозначения',
     builder: {
       // The row of pickers over a chord: its root, the chord by name and its voicing.
@@ -119,6 +121,8 @@ export const practice: LocaleResources['practice'] = {
     fifths: 'По квинтовому кругу',
   },
   scales: {
+    // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
+    practise: 'Отработать гамму',
     compare: { label: 'Сравнить с', none: 'Ни с чем' },
     vamp: { label: 'Вамп', play: 'Сыграть вамп: {{chords}}' },
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },

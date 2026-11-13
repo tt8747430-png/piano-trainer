@@ -1,8 +1,15 @@
 import type { useRender } from '@base-ui/react/use-render'
-import { Play, Settings, Square, type LucideIcon } from 'lucide-react'
+import { Settings, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BackButton, Fab, FloatingActions, RoundLink, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  FloatingActions,
+  FloatingBar,
+  FloatingBarPlay,
+  RoundLink,
+  ScreenHeader,
+} from '@/shared/ui'
 
 /** A tool's one floating Start/Stop, where it has one: what it starts named, Stop while it runs. */
 export interface ToolPlay {
@@ -22,7 +29,7 @@ export interface ToolPlay {
  * name, its own act and ⚙ to its Settings page where it has several settings, A24); the readout or
  * picture in the middle, filling the height the page has (rule 28); what sets it under it, or beside
  * it from a laptop's width (`side`, R32: the Metronome's settings in place, as Chordify's); and the
- * tool's Start/Stop floating in the thumb's reach (rule 5).
+ * tool's floating bar at the foot: its acts (`bar`), then Start, the wide honey pill (its board).
  */
 export function ToolPage({
   title,
@@ -32,6 +39,7 @@ export function ToolPage({
   side,
   play,
   dial,
+  bar,
   keys,
   children,
 }: {
@@ -47,6 +55,8 @@ export function ToolPage({
   play?: ToolPlay
   /** The tool's other acts, folded in a `SpeedDial` beside its Start (the Chord finder's). */
   dial?: ReactNode
+  /** The bar's acts before Start, each a `FloatingBarButton` (the Metronome's Tap tempo). */
+  bar?: ReactNode
   /** The on-screen keys a tool is played on, pinned under the bar (the Chord finder's). */
   keys?: ReactNode
   /** The readout or the picture. */
@@ -95,13 +105,18 @@ export function ToolPage({
         <FloatingActions>
           {dial}
           {play ? (
-            <Fab
-              label={play.playing ? (play.stopLabel ?? t('common:stop')) : play.label}
-              icon={play.playing ? Square : (play.icon ?? Play)}
-              aria-pressed={play.playing}
-              disabled={play.disabled === true && !play.playing}
-              onClick={play.onToggle}
-            />
+            <FloatingBar label={title}>
+              {bar}
+              <FloatingBarPlay
+                named
+                label={play.label}
+                stopLabel={play.stopLabel}
+                icon={play.icon}
+                playing={play.playing}
+                disabled={play.disabled === true && !play.playing}
+                onClick={play.onToggle}
+              />
+            </FloatingBar>
           ) : null}
         </FloatingActions>
       ) : null}

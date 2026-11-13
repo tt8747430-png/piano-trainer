@@ -49,6 +49,8 @@ export const practice = {
   checkYourself: 'Check yourself',
   // Chords: the chord built, its tensions, and its ways on.
   chords: {
+    // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
+    playAs: { label: 'Play as', block: 'Block chord', arpeggio: 'Arpeggio' },
     // The other ways a chord symbol is written on this root.
     written: 'Also written',
     // Chords builds a chord part by part.
@@ -131,6 +133,8 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
+    practise: 'Practise this scale',
     compare: { label: 'Compare with', none: 'None' },
     vamp: { label: 'Vamp', play: 'Play the vamp: {{chords}}' },
     // The tabs say what is in them (A32): its notes, its key's harmony, the key itself.

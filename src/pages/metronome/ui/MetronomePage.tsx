@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { BeatSquares, useMetronome } from '@/features/metronome'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import { BPM_RANGE } from '@/shared/lib/schedule'
-import { InfoTip } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FloatingBarButton, InfoTip } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
 import { MetronomeSettings } from './MetronomeSettings'
@@ -14,9 +13,9 @@ import { TempoWordTip } from './TempoWordTip'
 /**
  * The Metronome (ADR 0052), a tool on Practice (R29 B11), on the tools' one layout, every setting in
  * place as Chordify's (R32): the tempo large between its steps and its word, the bar's beats as
- * squares to tap (accent · beat · silent), the slider with Tap tempo; then, under it on a phone and
+ * squares to tap (accent · beat · silent), the slider; then, under it on a phone and
  * beside it on a laptop, Sound (time signature, sound, subdivision) and Practice aids (the speed
- * trainer, silent bars); Start floating. No gear: nothing of it is anywhere else. Space starts and
+ * trainer, silent bars); Tap tempo and Start in the floating bar. No gear: nothing of it is anywhere else. Space starts and
  * stops it, ↑ ↓ change the tempo by 1, with Shift by 10. What it does is its bar's ⓘ.
  */
 export function MetronomePage() {
@@ -66,6 +65,11 @@ export function MetronomePage() {
         playing: metronome.playing,
         onToggle: metronome.toggle,
       }}
+      bar={
+        <FloatingBarButton named label={t('practice:metronome.tap')} onClick={metronome.tap}>
+          <Hand aria-hidden />
+        </FloatingBarButton>
+      }
       side={<MetronomeSettings metronome={metronome} />}
     >
       <div className="flex flex-col items-center gap-2">
@@ -88,10 +92,6 @@ export function MetronomePage() {
         >
           <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
         </Slider>
-        <Button variant="soft" onClick={metronome.tap} className="shrink-0 rounded-pill">
-          <Hand aria-hidden />
-          {t('practice:metronome.tap')}
-        </Button>
       </div>
     </ToolPage>
   )

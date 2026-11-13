@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useScaleName } from '@/shared/i18n'
@@ -25,7 +26,7 @@ import {
 } from '../model/scale-view'
 import { ModeVamp } from './ModeVamp'
 import { PlayUpDown } from './PlayUpDown'
-import { ScaleExercises } from './ScaleExercises'
+import { firstScaleExercise, ScaleExercises } from './ScaleExercises'
 import { ScaleFingering } from './ScaleFingering'
 import { ScaleLayout } from './ScaleLayout'
 import { ScaleSheet } from './ScaleSheet'
@@ -97,12 +98,26 @@ export function RunView({
       compared,
     )
   }, [music, placed, down, hands, marks, layers, t, root, kind, compare])
+  const practised = firstScaleExercise(kind)
   return (
     <ScaleLayout
       keyboard={<PinnedKeyboard shown={runShown(run, hands)} />}
       heading={choice}
       facts={facts}
-      action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}
+      action={
+        <PlayUpDown
+          sounds={runSounds(run.music, scale.tempo)}
+          practise={
+            practised ? (
+              <Link
+                to="/play/exercise/$exerciseId"
+                params={{ exerciseId: practised.id }}
+                search={{ root, kind }}
+              />
+            ) : undefined
+          }
+        />
+      }
       music={
         <div className="flex flex-col gap-3">
           {/* One layer of labels on the staff at a time, chosen in place (R34, D3). */}

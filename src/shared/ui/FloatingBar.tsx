@@ -1,5 +1,5 @@
 import type { useRender } from '@base-ui/react/use-render'
-import { Play, Square } from 'lucide-react'
+import { Play, Square, type LucideIcon } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
@@ -12,18 +12,19 @@ import { Button } from './primitives/button'
  * (`landscape-phone`, a full-screen layout's, which has no floating host).
  */
 const ORIENTATION = {
-  along: 'flex-row min-h-14 px-1',
-  column: 'flex-col min-w-14 py-1',
-  aside: 'flex-row min-h-14 px-1 aside:min-h-0 aside:min-w-14 aside:flex-col aside:px-0 aside:py-1',
+  along: 'flex-row w-full max-w-xl p-1.5',
+  column: 'flex-col p-1.5',
+  aside: 'flex-row w-full max-w-xl p-1.5 aside:w-auto aside:flex-col',
   'landscape-phone':
-    'flex-row min-h-14 px-1 landscape-phone:min-h-0 landscape-phone:min-w-14 landscape-phone:flex-col landscape-phone:px-0 landscape-phone:py-1',
+    'flex-row w-full max-w-xl p-1.5 landscape-phone:w-auto landscape-phone:flex-col',
 } as const satisfies Record<string, string>
 
 type Orientation = keyof typeof ORIENTATION
 
 /**
- * A run of controls used again and again (a lesson's ‹ n/m ›, the Player's ‹ ▶ ›) as one floating
- * pill: a toolbar named by its label. It renders where it is put: inside `FloatingActions`, or in a
+ * The screen's floating bar (the design's dock): one white capsule across the screen's foot, a gutter
+ * each side, its controls in a row, the honey primary last, at its right end; a toolbar named by its
+ * label. It renders where it is put: inside `FloatingActions`, or in a
  * layout's own grid area where a full-screen screen has no floating host.
  */
 export function FloatingBar({
@@ -46,7 +47,7 @@ export function FloatingBar({
       aria-label={label}
       aria-orientation={orientation === 'column' ? 'vertical' : 'horizontal'}
       className={cn(
-        'flex items-center gap-0.5',
+        'flex items-center gap-1.5',
         docked
           ? 'w-full justify-between'
           : 'rounded-pill border border-border bg-raised elevation-2',
@@ -61,15 +62,17 @@ export function FloatingBar({
 
 /** A bar's control gives under the finger as a floating button does. */
 const BAR_BUTTON =
-  'size-12 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
-/** A control that shows its name beside its icon (Chords' Play and Arpeggio, R29-P4): a pill. */
-const WITH_NAME = 'w-auto gap-2 px-4 text-base font-semibold'
+  'size-12 shrink-0 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
+/** A control that says its name (Practise this scale, Tap tempo): a grey pill taking the room left. */
+const WITH_NAME =
+  'w-auto min-w-0 flex-1 gap-2 bg-muted px-5 text-base font-semibold hover:brightness-95'
 /** A control with a short caption under its picture (the Player's transport, its canvas). */
 const WITH_CAPTION =
   'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-[0.6875rem] leading-none font-semibold [&_svg]:size-5'
-/** The bar's honey Play: the main floating button's size, lifted a little off the pill. */
+/** The bar's honey primary: a 48px circle at its right end, its name a wide pill (Start). */
 const BAR_PLAY =
-  'size-14 rounded-pill elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96'
+  'order-last size-12 shrink-0 rounded-pill hover:brightness-95 [&_svg:not([class*=size-])]:size-5 transition-[scale,filter] duration-150 ease-out active:scale-96'
+const PLAY_NAMED = 'w-auto min-w-0 flex-1 gap-2 px-5 text-base font-semibold'
 
 /**
  * One of a bar's controls: a round icon button named by its label (its `title` too, unless a hint
@@ -104,12 +107,13 @@ export function FloatingBarButton({
       <ButtonLink
         variant="ghost"
         size="icon"
-        aria-label={label}
+        aria-label={named ? undefined : label}
         title={title ?? label}
-        className={cn(BAR_BUTTON, className)}
+        className={cn(BAR_BUTTON, named && WITH_NAME, className)}
         render={render}
       >
         {children}
+        {named ? label : null}
       </ButtonLink>
     )
   return (
@@ -136,6 +140,8 @@ export function FloatingBarPlay({
   label,
   title,
   playing,
+  icon = Play,
+  stopLabel,
   named = false,
   disabled = false,
   className,
@@ -144,6 +150,10 @@ export function FloatingBarPlay({
   label: string
   title?: string
   playing: boolean
+  /** Its picture while stopped: Play's triangle, or the Recorder's circle. */
+  icon?: LucideIcon
+  /** What it says while running; Stop by default. */
+  stopLabel?: string | undefined
   /** Its name ("Play", "Stop") shown beside its icon. */
   named?: boolean
   /** Its size where a screen needs it smaller: the transport's 48px under 360px. */
@@ -153,8 +163,8 @@ export function FloatingBarPlay({
   onClick: () => void
 }) {
   const { t } = useTranslation('common')
-  const name = playing ? t('stop') : label
-  const Icon = playing ? Square : Play
+  const name = playing ? (stopLabel ?? t('stop')) : label
+  const Icon = playing ? Square : icon
   return (
     <Button
       size="icon"
@@ -163,7 +173,7 @@ export function FloatingBarPlay({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className={cn(BAR_PLAY, named && `${WITH_NAME} pr-5`, className)}
+      className={cn(BAR_PLAY, named && PLAY_NAMED, className)}
     >
       <Icon aria-hidden />
       {named ? name : null}

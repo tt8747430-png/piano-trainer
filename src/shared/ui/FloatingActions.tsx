@@ -104,7 +104,7 @@ export function FloatingHost({
         data-slot="floating-host"
         data-hidden={hidden || undefined}
         className={cn(
-          'pointer-events-none fixed inset-x-0 bottom-docked z-20 mb-3 flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-3 aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
           'justify-center aside:justify-end',
         )}
       >
@@ -112,7 +112,11 @@ export function FloatingHost({
           ref={setColumn}
           data-slot="floating-actions"
           inert={hidden}
-          className={cn('vt-floating flex gap-3', !hidden && '[&>*]:pointer-events-auto', ALIGN)}
+          className={cn(
+            'vt-floating flex w-full justify-center gap-3 aside:w-auto',
+            !hidden && '[&>*>*]:pointer-events-auto',
+            ALIGN,
+          )}
         />
       </div>
     </FloatingContext.Provider>
@@ -142,7 +146,16 @@ export function FloatingActions({
   const { column } = useContext(FloatingContext)
   if (!column) return null
   return createPortal(
-    <div className={cn('flex gap-3', ALIGN, last && 'order-last', className)}>{children}</div>,
+    <div
+      className={cn(
+        'flex w-full justify-center gap-3 aside:w-auto',
+        ALIGN,
+        last && 'order-last',
+        className,
+      )}
+    >
+      {children}
+    </div>,
     column,
   )
 }

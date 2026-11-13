@@ -1,11 +1,10 @@
 import { selectKeyboard, useSettings } from '@/entities/settings'
-import { Square } from 'lucide-react'
-import { useEffect, useMemo } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { recordKeyPractised } from '@/features/record-practised'
-import { ArpeggioIcon } from '@/shared/ui/icons/ArpeggioIcon'
 import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
 import { useKeyName } from '@/shared/i18n'
 import { partsFromParams, partsParams } from '@/shared/lib'
@@ -24,6 +23,7 @@ import {
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
+  ActionMenu,
   FloatingActions,
   FloatingBar,
   FloatingBarButton,
@@ -131,7 +131,9 @@ export function ChordExplorer({
   }
   const sound = (id: 'chord' | 'arpeggio') =>
     playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))
-  usePlayKey(() => sound('chord'))
+  // How Play sounds the chord, chosen in its menu (R42): together, or one note after another.
+  const [playAs, setPlayAs] = useState<'chord' | 'arpeggio'>('chord')
+  usePlayKey(() => sound(playAs))
 
   return (
     <div className="flex flex-col gap-6">
@@ -174,27 +176,34 @@ export function ChordExplorer({
         />
       ) : null}
       <FloatingActions>
-        {/* Two ways to hear one chord, each named (R29-P4): Play, the notes together; Arpeggio, one
-            after another from the bottom up. */}
+        {/* Play, then its menu (R42): the chord together or as an arpeggio; then the hands. */}
         <FloatingBar label={t('practice:transport')} className="gap-1.5 pr-1.5">
           <FloatingBarPlay
             named
-            label={t('music:play')}
-            playing={playback.playing === 'chord'}
-            onClick={() => sound('chord')}
+            label={playAs === 'chord' ? t('music:play') : t('practice:arpeggio')}
+            playing={playback.playing === playAs}
+            onClick={() => sound(playAs)}
           />
-          <FloatingBarButton
-            named
-            label={playback.playing === 'arpeggio' ? t('common:stop') : t('practice:arpeggio')}
-            aria-pressed={playback.playing === 'arpeggio'}
-            onClick={() => sound('arpeggio')}
-          >
-            {playback.playing === 'arpeggio' ? (
-              <Square aria-hidden />
-            ) : (
-              <ArpeggioIcon aria-hidden />
-            )}
-          </FloatingBarButton>
+          <ActionMenu
+            label={t('practice:chords.playAs.label')}
+            align="end"
+            render={
+              <FloatingBarButton
+                named
+                label={t(`practice:chords.playAs.${playAs === 'chord' ? 'block' : 'arpeggio'}`)}
+                title={t('practice:chords.playAs.label')}
+              >
+                <ChevronDown aria-hidden />
+              </FloatingBarButton>
+            }
+            trigger={null}
+            actions={(['chord', 'arpeggio'] as const).map((each) => ({
+              key: each,
+              label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
+              checked: playAs === each,
+              onSelect: () => setPlayAs(each),
+            }))}
+          />
           {/* Its hands, as the Player's Hands (R42: by Play): one tap between the right hand and both. */}
           {chord.voicing === 'close' && !takesTwoHands(built.tones.length) ? (
             <FloatingBarButton

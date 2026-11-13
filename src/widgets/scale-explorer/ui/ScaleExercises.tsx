@@ -1,6 +1,6 @@
 import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
-import { Spline } from 'lucide-react'
+import { Dumbbell } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import { exercisesIn } from '@/entities/exercise'
@@ -9,6 +9,10 @@ import { noteParam, type ScaleKind, type SpelledNote } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 
 const SCALE_EXERCISES = exercisesIn('scales')
+
+/** The scale's own first exercise, the one the floating bar's Practise this scale opens. */
+export const firstScaleExercise = (kind: ScaleKind) =>
+  SCALE_EXERCISES.find((exercise) => exercise.fields.kind?.includes(kind) !== false)
 
 /**
  * A scale's exercises in the Player, each opening on this scale: the scale itself over several
@@ -27,8 +31,8 @@ export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleK
             <RowLink
               title={localText(exercise.name, locale)}
               detail={localText(exercise.trains, locale)}
-              icon={Spline}
-              paint="sky"
+              icon={Dumbbell}
+              paint="sand"
               trailing={<StageMark stage={exercise.stage} />}
               render={
                 <Link

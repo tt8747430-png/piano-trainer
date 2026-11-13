@@ -133,6 +133,8 @@ export const learn = {
   // The lessons to read before this one, each a link.
   afterLinks: 'After:',
   contents: 'In this lesson',
+  inThisLesson: 'In this lesson',
+  sectionOf: 'Section {{at}} of {{of}}',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
   // A lesson's floating actions: its sections one by one, and its options.
   previousSection: 'Previous section',

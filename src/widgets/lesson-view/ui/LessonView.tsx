@@ -192,11 +192,7 @@ function LessonBar({
   )
   if (paged)
     return (
-      <FloatingBar
-        label={t('lessonBar')}
-        // As wide as the row leaves it beside the keys' round button: never past the screen's edge.
-        className="w-[min(22rem,calc(100vw-2*var(--gutter)-3.75rem))] gap-1 pr-1"
-      >
+      <FloatingBar label={t('lessonBar')}>
         {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
@@ -205,40 +201,36 @@ function LessonBar({
                 variant="ghost"
                 aria-label={t('contentsAt', { at: at + 1, of })}
                 title={t('contents')}
-                className="h-12 min-w-0 flex-1 gap-1.5 rounded-pill px-2"
+                className="h-12 min-w-0 flex-1 flex-col gap-0 rounded-pill px-2 leading-tight"
               />
             }
           >
-            {/* The pages as dots, the one read a wider capsule. */}
-            {lesson.sections.map((each, s) => (
-              <span
-                key={each.heading.en}
-                aria-hidden
-                className={cn(
-                  'h-2 shrink rounded-pill transition-[width,background-color] duration-200 ease-out',
-                  s === at ? 'w-5 bg-foreground' : 'w-2 bg-border',
-                )}
-              />
-            ))}
+            <span className="text-xs text-muted-foreground">{t('inThisLesson')}</span>
+            <span className="font-semibold tabular-nums">{t('sectionOf', { at: at + 1, of })}</span>
           </SheetTrigger>
           {contents}
         </Sheet>
+        {/* The bar's honey circle at its end: on to the next page, Done on the last. */}
         {at + 1 < of ? (
           <ButtonLink
-            className="h-12 shrink-0 rounded-pill px-4"
+            size="icon"
+            aria-label={t('nextPage')}
+            title={t('nextPage')}
+            className="size-12 shrink-0 rounded-pill [&_svg]:size-5"
             render={<Link to="." hash={sectionId(at + 1)} replace />}
           >
-            {t('nextPage')}
-            <ChevronRight aria-hidden data-icon="inline-end" />
+            <ChevronRight aria-hidden />
           </ButtonLink>
         ) : (
           <ButtonLink
-            className="h-12 shrink-0 rounded-pill px-4"
+            size="icon"
+            aria-label={t('done')}
+            title={t('done')}
+            className="size-12 shrink-0 rounded-pill [&_svg]:size-5"
             render={onward.link}
             onClick={onward.onGo}
           >
-            {t('done')}
-            <Check aria-hidden data-icon="inline-end" />
+            <Check aria-hidden />
           </ButtonLink>
         )}
       </FloatingBar>

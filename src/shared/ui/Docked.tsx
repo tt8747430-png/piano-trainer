@@ -43,7 +43,7 @@ export function Docked({
       ref={docked}
       data-slot="docked"
       className={cn(
-        "fixed inset-x-0 bottom-nav-bar z-20 bg-background print:hidden after:absolute after:inset-x-0 after:top-full after:h-(--nav-bar) after:bg-background after:content-[''] landscape-phone:left-rail lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed",
+        "fixed inset-x-0 bottom-over-floating z-20 bg-background print:hidden after:absolute after:inset-x-0 after:top-full after:h-[calc(var(--nav-bar)+var(--floating-foot))] after:bg-background after:content-[''] landscape-phone:left-rail lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed",
         bleed ? null : cn('border-t border-border', PADDING),
         className,
       )}

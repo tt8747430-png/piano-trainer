@@ -117,7 +117,6 @@ export function IntervalExplorer({
       <FloatingActions>
         <FloatingBar label={t('transport')}>
           <FloatingBarPlay
-            named
             label={t('intervals.playAll')}
             playing={playback.playing === 'all'}
             onClick={() => playback.toggle('all', () => everyInterval(root, view.way))}

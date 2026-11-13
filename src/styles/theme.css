@@ -743,6 +743,10 @@
 @utility bottom-nav-bar {
   bottom: var(--nav-bar);
 }
+/* Keys docked at the foot rest on the screen's floating bar (the design's stack): over it, never under. */
+@utility bottom-over-floating {
+  bottom: calc(var(--nav-bar) + var(--floating-foot));
+}
 @utility bottom-docked {
   bottom: calc(var(--nav-bar) + var(--docked, 0px));
 }
