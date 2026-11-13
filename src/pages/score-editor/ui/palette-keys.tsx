@@ -122,14 +122,15 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
       </div>
     )
   // Each cell draws its lines at its right and its foot; the last column's and the last row's
-  // fall under the table's own border, clipped.
+  // fall under the table's own border, clipped. A table of fewer keys than a row holds (Input
+  // mode's three) shares the row among them.
   return (
     <div
       {...group}
       data-slot="key-grid"
       className="overflow-hidden rounded-control border border-hairline bg-card"
     >
-      <div className="-me-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))]">
+      <div className="-me-px -mb-px grid grid-cols-[repeat(auto-fit,minmax(2.75rem,1fr))]">
         {children}
       </div>
     </div>

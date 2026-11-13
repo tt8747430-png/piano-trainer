@@ -88,7 +88,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     words, accel., rit., a tempo…, as Flat's Measure; swing) · Clef · Key signature · Time signature · Barlines &
     repeats · Text (lyrics, chord symbols, Roman numerals, free text, the character and technique words). In the
     row, a picker's signs alone (`PickerLayoutContext`: `row`; the sections' `palette`).
-  - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; pressed, a sky glyph on a sky wash. A
+  - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; a table of fewer keys than a row holds
+    (Input mode's three) shares the row among them; pressed, a sky glyph on a sky wash. A
     tooltip is the key's name then its shortcut, as Flat's. A key that cannot act is not drawn (R32-B).
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
