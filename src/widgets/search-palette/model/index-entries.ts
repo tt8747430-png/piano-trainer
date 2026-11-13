@@ -310,15 +310,41 @@ export function typedEntry(query: string, names: IndexNames): IndexEntry | undef
   }
 }
 
+/** The solfège syllables a Russian musician names a tonic by, and their letters. */
+const SOLFEGE: Readonly<Record<string, string>> = {
+  до: 'C',
+  ре: 'D',
+  ми: 'E',
+  фа: 'F',
+  соль: 'G',
+  ля: 'A',
+  си: 'B',
+}
+
+/** A tonic typed as a letter ("F#", "Bb") or as a Russian musician says it ("фа-диез", "си бемоль"). */
+function typedTonic(query: string): { readonly tonic: string; readonly said: string } | undefined {
+  const lettered = /^([a-g])([#♯b♭]{0,2})\s+(.+)$/iu.exec(query)
+  if (lettered) {
+    const [, letter = '', accidental = '', said = ''] = lettered
+    return { tonic: letter.toUpperCase() + accidental, said }
+  }
+  const sung = /^(до|ре|ми|фа|соль|ля|си)(?:[-\s](диез|бемоль))?\s+(.+)$/iu.exec(query)
+  if (!sung) return undefined
+  const [, syllable = '', accidental, said = ''] = sung
+  const letter = SOLFEGE[syllable.toLocaleLowerCase()] ?? ''
+  const sign = accidental === undefined ? '' : accidental.toLocaleLowerCase() === 'диез' ? '#' : 'b'
+  return { tonic: letter + sign, said }
+}
+
 /**
- * A scale typed with its tonic, as a musician says it ("D minor", "F# dorian", "Bb harmonic minor"):
- * its page on that tonic. "minor" alone is the natural minor.
+ * A scale typed with its tonic, as a musician says it ("D minor", "F# dorian", "Bb harmonic minor",
+ * "ре минор", "фа-диез мажор"): its page on that tonic. "minor" alone is the natural minor.
  */
 function typedScale(query: string, names: IndexNames): IndexEntry | undefined {
-  const typed = /^([a-g])([#♯b♭]{0,2})\s+(.+)$/iu.exec(query.trim())
+  const typed = typedTonic(query.trim())
   if (!typed) return undefined
-  const [, letter = '', accidental = '', said = ''] = typed
-  const root = parseNoteName(letter.toUpperCase() + accidental)
+  const { tonic, said } = typed
+  const root = parseNoteName(tonic)
   const wanted = foldText(said)
   const kind =
     wanted === foldText(names.scale('natural').split(' ').at(-1) ?? '')
