@@ -9,7 +9,7 @@ import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import { AboutView } from '@/widgets/lesson-view'
 import {
   CourseFacts,
@@ -23,8 +23,8 @@ import {
 import { OwnCoursePage } from './OwnCoursePage'
 
 /**
- * The course's one way in, its floating action: Start course, or Continue onto the step to take;
- * Review, onto its first lesson, once every one is learned.
+ * The course's one way in, the wide honey button along its card's foot (its board): Start course,
+ * or Continue onto the step to take; Review, onto its first lesson, once every one is learned.
  */
 function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
@@ -40,23 +40,24 @@ function CourseAction({ course }: { course: Course }) {
       : t('course.continue')
   const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : BookOpenText
   return (
-    <FloatingActions>
-      <FabLink
-        label={label}
-        icon={Icon}
-        render={
-          step.kind === 'piece' ? (
-            // A guided song's page, where it is played and marked learned.
-            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
-          ) : (
-            <Link
-              to="/courses/$courseId/$lessonId"
-              params={{ courseId: step.courseId, lessonId: step.lessonId }}
-            />
-          )
-        }
-      />
-    </FloatingActions>
+    <ButtonLink
+      size="lg"
+      className="h-12 w-full rounded-pill text-base font-semibold"
+      render={
+        step.kind === 'piece' ? (
+          // A guided song's page, where it is played and marked learned.
+          <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
+        ) : (
+          <Link
+            to="/courses/$courseId/$lessonId"
+            params={{ courseId: step.courseId, lessonId: step.lessonId }}
+          />
+        )
+      }
+    >
+      <Icon aria-hidden />
+      {label}
+    </ButtonLink>
   )
 }
 
@@ -64,7 +65,7 @@ function CourseAction({ course }: { course: Course }) {
  * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
  * and its facts in words, and along its foot how much is learned; its About, where an editor wrote
  * one (R29 B9); then its lessons numbered as taught, the next ringed, and its guided songs. Its one
- * way in floats. A course of the learner's own (R30-5) reads as `OwnCoursePage`.
+ * way in is its card's honey button. A course of the learner's own (R30-5) reads as `OwnCoursePage`.
  */
 export function CoursePage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })

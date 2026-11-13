@@ -151,6 +151,8 @@
    * over either (3). Ink by day; by night a deeper, stronger shade, since dark paper casts little.
    */
   --raised: var(--p-paper-card);
+  /* The floating bars' glass: the card's paper at 86%, blurred over the page (the canvas's GLASS). */
+  --glass: rgb(254 253 251 / 0.86);
   --shade: var(--p-ink);
   --shade-near: 12%;
   --shade-far: 14%;
@@ -285,6 +287,7 @@
     --thumb: var(--p-dusk-ink);
     /* By night what floats is a step lighter than the cards, and its shade deeper. */
     --raised: var(--p-dusk-800);
+    --glass: rgb(36 32 28 / 0.86);
     --shade: var(--p-night-shade);
     --shade-near: 45%;
     --shade-far: 50%;

@@ -5,14 +5,12 @@ import {
   ArrowUpRight,
   ChevronsDown,
   ChevronsUp,
-  Music,
   RotateCcw,
   RotateCw,
   type LucideIcon,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
-import { useKeyName } from '@/shared/i18n'
 import { KEY_WALKS, parseNumerals, type Key, type KeyWalk } from '@/shared/lib/music'
 import { RowGroup, RowLink } from '@/shared/ui'
 import type { InPlayer } from '../model/progressions-view'
@@ -32,44 +30,28 @@ const WALK_ICONS: Readonly<Record<KeyWalk, LucideIcon>> = {
 }
 
 /**
- * A progression practised in the Player, as Chords and Scales list theirs: in the key shown, and in
- * all 12 keys (A23), a row for each sequence the Player has, saying the chords it plays first. A
+ * A progression practised in the Player through the keys (A23): a row for each sequence the Player
+ * has, saying the chords it plays first; in the key shown it is the floating bar's Practise. A
  * progression of one chord has no sequence to practise, so none is offered (R30).
  */
 export function ProgressionPractice({ musicKey, inPlayer }: { musicKey: Key; inPlayer: InPlayer }) {
   const { t } = useTranslation(['practice', 'music', 'player'])
-  const keyName = useKeyName()
-  const inKey = useFold('progressions.practice')
   const walks = useFold('progressions.walks')
   const numerals = parseNumerals(inPlayer.p) ?? []
   const size = inPlayer.chordSize ?? 'triads'
-  return (
-    <>
-      <RowGroup title={t('practice:inPlayer')} fold={inKey}>
-        <li>
+  return new Set(numerals.map((numeral) => numeral.degree)).size < 2 ? null : (
+    <RowGroup title={t('practice:progressions.throughKeys')} fold={walks}>
+      {KEY_WALKS.map((walk) => (
+        <li key={walk}>
           <RowLink
-            title={t('music:key.in', { key: keyName(musicKey) })}
-            icon={Music}
-            paint="grass"
-            render={<Link to="/play/progression" search={inPlayer} />}
+            title={t(`player:keyWalk.${walk}`)}
+            detail={walkPreview(numerals, musicKey, walk, size)}
+            icon={WALK_ICONS[walk]}
+            paint="lilac"
+            render={<Link to="/play/progression" search={{ ...inPlayer, walk }} />}
           />
         </li>
-      </RowGroup>
-      {new Set(numerals.map((numeral) => numeral.degree)).size < 2 ? null : (
-        <RowGroup title={t('practice:progressions.throughKeys')} fold={walks}>
-          {KEY_WALKS.map((walk) => (
-            <li key={walk}>
-              <RowLink
-                title={t(`player:keyWalk.${walk}`)}
-                detail={walkPreview(numerals, musicKey, walk, size)}
-                icon={WALK_ICONS[walk]}
-                paint="lilac"
-                render={<Link to="/play/progression" search={{ ...inPlayer, walk }} />}
-              />
-            </li>
-          ))}
-        </RowGroup>
-      )}
-    </>
+      ))}
+    </RowGroup>
   )
 }

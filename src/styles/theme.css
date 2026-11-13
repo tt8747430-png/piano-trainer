@@ -77,6 +77,7 @@
   --color-on-paint-full: var(--on-paint-full);
   --color-thumb: var(--thumb);
   --color-raised: var(--raised);
+  --color-glass: var(--glass);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -224,6 +225,7 @@
   /* The room the screen's floating actions take (`FloatingHost` measures them, a gap included): at the
      foot, their height; standing `aside`, their width, at the side they stand. The page pads by it. */
   :root {
+    --floating-gap: --spacing(3);
     --floating-foot: var(--floating-block, 0px);
     --floating-left: 0px;
     --floating-right: 0px;
@@ -525,8 +527,10 @@
 @media (orientation: portrait) and (max-width: 63.99rem) {
   :root:has([data-slot='app-nav'][data-away]),
   :root:has([data-takes-tab-bar]) {
-    /* The foot is the home indicator's then: what floats keeps its gap above it. */
+    /* The foot is the home indicator's then: what floats stands on it, as the canvas's dock does (34
+       over a 34 indicator), or 12 from the screen's edge where there is none. */
     --nav-bar: env(safe-area-inset-bottom);
+    --floating-gap: max(0px, calc(--spacing(3) - env(safe-area-inset-bottom)));
   }
   /* The keyboard covers the foot: nothing to keep a gap above (it wins over the rule above). */
   :root[data-keyboard],
@@ -688,6 +692,14 @@
 
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
+}
+/* What floats over the page (the canvas's docks): the glass, its line ring and the three-layer shade. */
+@utility glass {
+  background-color: var(--glass);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(--elevation-2);
 }
 @utility elevation-2 {
   box-shadow: var(--elevation-2);

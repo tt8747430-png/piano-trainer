@@ -279,6 +279,7 @@ export const practice: LocaleResources['practice'] = {
     songs: 'Песни',
   },
   progressions: {
+    practise: 'Отработать',
     edit: {
       open: 'Править последовательность',
       new: 'Новая в библиотеке',
@@ -555,6 +556,8 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   exercisePage: {
+    // The floating bar's other way in (its board): the exercise played to you, in Listen mode.
+    listen: 'Слушать',
     target: 'Целевой темп',
     noTarget: 'Нет',
     lowerTarget: 'Понизить цель',

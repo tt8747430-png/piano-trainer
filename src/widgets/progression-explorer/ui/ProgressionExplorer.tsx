@@ -40,9 +40,10 @@ import { ProgressionSongs } from './ProgressionSongs'
  * A progression's page under its bar (ADR 0052, A23, R30-4): the keys pinned; `about` (what it is);
  * its choices, the key, the chord size where a chord grows, what leads into each chord and, for a
  * line typed or kept (`typed`), the numerals and the mode they are read in; its chords on the staff,
- * why they work drawn on them, as the Player's diagrams; Play it in the Chord player; practising it in
- * the Player, in all 12 keys; then, beside them on a laptop, Passing chords between two of its chords
- * and the songs it is heard in. Play floats, the honey one. How it is written and voiced is
+ * why they work drawn on them, as the Player's diagrams; Play it in the Chord player; practising it
+ * through the keys in the Player; then, beside them on a laptop, Passing chords between two of its
+ * chords and the songs it is heard in. Its floating bar loops it, practises it in the Player in this
+ * key and plays it, the honey one. How it is written and voiced is
  * Progressions' Settings (A24), read here.
  */
 export function ProgressionExplorer({
@@ -118,7 +119,13 @@ export function ProgressionExplorer({
             <RowRoles />
             <ProgressionDiagrams chords={row.map(({ chord }) => chord)} musicKey={key} />
             <RowStaff />
-            <RowPlay variant="default" />
+            <RowPlay
+              variant="default"
+              practise={{
+                label: t('practice:progressions.practise'),
+                render: <Link to="/play/progression" search={playerSearch(view, settings)} />,
+              }}
+            />
             {note ? <p className="max-w-prose text-muted-foreground">{note}</p> : null}
           </ChordRow>
           {/* The Chord player plays the same chords in a style (R29 CP1): each page opens the other. */}

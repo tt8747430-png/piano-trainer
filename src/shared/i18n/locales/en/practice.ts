@@ -292,6 +292,7 @@ export const practice = {
     songs: 'Songs',
   },
   progressions: {
+    practise: 'Practise',
     edit: {
       open: 'Edit the progression',
       new: 'New in the library',
@@ -583,6 +584,8 @@ export const practice = {
   },
   // An exercise's page (A41), before the Player.
   exercisePage: {
+    // The floating bar's other way in (its board): the exercise played to you, in Listen mode.
+    listen: 'Listen',
     target: 'Target tempo',
     noTarget: 'None',
     lowerTarget: 'Lower the target',

@@ -29,9 +29,6 @@ import { localText, useLocale } from '@/shared/i18n'
 import {
   BackButton,
   ButtonLink,
-  FabLink,
-  Fact,
-  FloatingActions,
   MoreMenu,
   NotFound,
   RoundButton,
@@ -154,8 +151,8 @@ function usePatternActions(pattern: BookPattern, name: string) {
 
 /**
  * A pattern explained: its idea, what each hand plays, the pattern on the staff and heard on the keys,
- * its source's explanation and the music that plays it. Its bar holds the star and More (its own
- * actions); Practise in the Player floats.
+ * its source's explanation and the music that plays it, in one column. Its bar holds the star and
+ * More (its own actions); Practise in the Player is the page's one honey act, at its end.
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
@@ -174,36 +171,36 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         more={<MoreMenu actions={more.actions} />}
       />
       <PinnedKeyboard shown={shown} />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
-        <div className="flex max-w-prose flex-col gap-5">
-          <p className="text-xl text-balance">{localText(pattern.idea, locale)}</p>
-          <dl className="flex flex-col gap-2">
-            <Fact term={t('patterns.rightHand')}>
-              {localText(RIGHT_FIGURES[pattern.rh].name, locale)}
-            </Fact>
-            <Fact term={t('patterns.leftHand')}>
-              {localText(LEFT_FIGURES[pattern.lh].name, locale)}
-            </Fact>
-          </dl>
-          <section className="flex flex-col gap-4 card p-4">
-            <PatternStaff sample={sample} />
-            <PatternPlay sample={sample} onShow={show} variant="default" />
-          </section>
-          {pattern.description ? (
-            <p className="text-lg leading-relaxed">{localText(pattern.description, locale)}</p>
-          ) : null}
-          {more.said}
-        </div>
+      <div className="flex max-w-xl flex-col gap-5">
+        <p className="text-xl text-balance">{localText(pattern.idea, locale)}</p>
+        <section className="flex flex-col gap-4 card p-4">
+          <PatternStaff sample={sample} />
+          <PatternPlay sample={sample} onShow={show} variant="default" />
+        </section>
+        <dl className="flex flex-col divide-y divide-border card">
+          {[
+            [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
+            [t('patterns.leftHand'), localText(LEFT_FIGURES[pattern.lh].name, locale)],
+          ].map(([term, value]) => (
+            <div key={term} className="flex min-h-12 items-center justify-between gap-4 px-4 py-3">
+              <dt>{term}</dt>
+              <dd className="text-right text-muted-foreground">{value}</dd>
+            </div>
+          ))}
+        </dl>
+        {pattern.description ? (
+          <p className="text-lg leading-relaxed text-pretty">
+            {localText(pattern.description, locale)}
+          </p>
+        ) : null}
+        {more.said}
         {pieces.length > 0 ? (
           <PieceList groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]} />
         ) : null}
-      </div>
-      {/* The way on: the pattern played in the Player, under its sample's music. */}
-      <FloatingActions>
-        <FabLink
-          label={t('inPlayer')}
-          icon={Play}
-          className="[&_svg]:fill-current"
+        {/* The way on, the page's one honey act at its end: the pattern played in the Player. */}
+        <ButtonLink
+          size="lg"
+          className="h-12 w-full rounded-pill text-base font-semibold [&_svg]:fill-current"
           render={
             sample.piece ? (
               <Link
@@ -215,8 +212,11 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
               <Link to="/play/progression" search={{ pattern: pattern.ref }} />
             )
           }
-        />
-      </FloatingActions>
+        >
+          <Play aria-hidden />
+          {t('inPlayer')}
+        </ButtonLink>
+      </div>
     </div>
   )
 }

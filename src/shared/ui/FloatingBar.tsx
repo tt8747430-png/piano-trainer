@@ -12,19 +12,21 @@ import { Button } from './primitives/button'
  * (`landscape-phone`, a full-screen layout's, which has no floating host).
  */
 const ORIENTATION = {
-  along: 'flex-row w-full max-w-xl p-1.5',
-  column: 'flex-col p-1.5',
-  aside: 'flex-row w-full max-w-xl p-1.5 aside:w-auto aside:flex-col',
+  along: 'mx-auto flex-row w-full max-w-[35rem] h-17 px-2',
+  column: 'flex-col py-2 px-2',
+  aside:
+    'mx-auto flex-row w-full max-w-[35rem] h-17 px-2 aside:mx-0 aside:h-auto aside:w-auto aside:flex-col aside:py-2',
   'landscape-phone':
-    'flex-row w-full max-w-xl p-1.5 landscape-phone:w-auto landscape-phone:flex-col',
+    'mx-auto flex-row w-full max-w-[35rem] h-17 px-2 landscape-phone:mx-0 landscape-phone:h-auto landscape-phone:w-auto landscape-phone:flex-col landscape-phone:py-2',
 } as const satisfies Record<string, string>
 
 type Orientation = keyof typeof ORIENTATION
 
 /**
- * The screen's floating bar (the design's dock): one white capsule across the screen's foot, a gutter
- * each side, its controls in a row, the honey primary last, at its right end; a toolbar named by its
- * label. It renders where it is put: inside `FloatingActions`, or in a
+ * The screen's floating bar, the canvas's DOCK value for value: a glass capsule 68 tall across the
+ * screen's foot (560 wide at most), 8 inside, its controls 8 apart in a row: 50px pills (a grey one
+ * for a named act, taking the room left unless the honey one is named and takes it) and the 52px
+ * honey circle last, at its right end; a toolbar named by its label. It renders where it is put: inside `FloatingActions`, or in a
  * layout's own grid area where a full-screen screen has no floating host.
  */
 export function FloatingBar({
@@ -47,10 +49,10 @@ export function FloatingBar({
       aria-label={label}
       aria-orientation={orientation === 'column' ? 'vertical' : 'horizontal'}
       className={cn(
-        'flex items-center gap-1.5',
+        'flex items-center gap-2',
         docked
           ? 'w-full justify-between'
-          : 'rounded-pill border border-border bg-raised elevation-2',
+          : 'glass rounded-pill [&:has(>[data-play-named])>[data-named]]:flex-none',
         ORIENTATION[orientation],
         className,
       )}
@@ -63,16 +65,23 @@ export function FloatingBar({
 /** A bar's control gives under the finger as a floating button does. */
 const BAR_BUTTON =
   'size-12 shrink-0 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
-/** A control that says its name (Practise this scale, Tap tempo): a grey pill taking the room left. */
+/**
+ * A control that says its name (Listen, Practise this scale, Tap tempo): the canvas's quiet BTN, a
+ * grey pill 50 tall, 20 inside, its name bold beside an 18px icon, taking the room left.
+ */
 const WITH_NAME =
-  'w-auto min-w-0 flex-1 gap-2 bg-muted px-5 text-base font-semibold hover:brightness-95'
+  'h-[3.125rem] w-auto min-w-0 flex-1 gap-2 bg-muted px-5 text-base font-bold whitespace-nowrap hover:brightness-95 [&_svg:not([class*=size-])]:size-[1.125rem]'
 /** A control with a short caption under its picture (the Player's transport, its canvas). */
 const WITH_CAPTION =
   'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-[0.6875rem] leading-none font-semibold [&_svg]:size-5'
-/** The bar's honey primary: a 48px circle at its right end, its name a wide pill (Start). */
+/**
+ * The bar's honey primary, the canvas's PLAYBTN: a 52px circle at its right end; named (Start), its
+ * primary BTN, a pill 50 tall taking the room left.
+ */
 const BAR_PLAY =
-  'order-last size-12 shrink-0 rounded-pill hover:brightness-95 [&_svg:not([class*=size-])]:size-5 transition-[scale,filter] duration-150 ease-out active:scale-96'
-const PLAY_NAMED = 'w-auto min-w-0 flex-1 gap-2 px-5 text-base font-semibold'
+  'order-last size-13 shrink-0 rounded-pill hover:brightness-95 [&_svg:not([class*=size-])]:size-5.5 [&_svg]:fill-current transition-[scale,filter] duration-150 ease-out active:scale-96'
+const PLAY_NAMED =
+  'h-[3.125rem] w-auto min-w-0 flex-1 gap-2 px-5 text-base font-bold whitespace-nowrap [&_svg:not([class*=size-])]:size-[1.125rem]'
 
 /**
  * One of a bar's controls: a round icon button named by its label (its `title` too, unless a hint
@@ -110,6 +119,7 @@ export function FloatingBarButton({
         aria-label={named ? undefined : label}
         title={title ?? label}
         className={cn(BAR_BUTTON, named && WITH_NAME, className)}
+        data-named={named || undefined}
         render={render}
       >
         {children}
@@ -123,6 +133,7 @@ export function FloatingBarButton({
       aria-label={named ? undefined : label}
       title={title ?? label}
       className={cn(BAR_BUTTON, named && WITH_NAME, caption && WITH_CAPTION, className)}
+      data-named={named || undefined}
       {...props}
     >
       {children}
@@ -144,12 +155,15 @@ export function FloatingBarPlay({
   stopLabel,
   named = false,
   disabled = false,
+  render,
   className,
   onClick,
 }: {
   label: string
   title?: string
   playing: boolean
+  /** A link in place of a button: the primary that opens the Player (an exercise's Start). */
+  render?: useRender.RenderProp
   /** Its picture while stopped: Play's triangle, or the Recorder's circle. */
   icon?: LucideIcon
   /** What it says while running; Stop by default. */
@@ -160,11 +174,25 @@ export function FloatingBarPlay({
   className?: string
   /** Waiting on something else first (the editor's Play while a take records). */
   disabled?: boolean
-  onClick: () => void
+  onClick?: () => void
 }) {
   const { t } = useTranslation('common')
   const name = playing ? (stopLabel ?? t('stop')) : label
   const Icon = playing ? Square : icon
+  if (render)
+    return (
+      <ButtonLink
+        size="icon"
+        aria-label={named ? undefined : name}
+        title={title ?? name}
+        render={render}
+        data-play-named={named || undefined}
+        className={cn(BAR_PLAY, named && PLAY_NAMED, className)}
+      >
+        <Icon aria-hidden />
+        {named ? name : null}
+      </ButtonLink>
+    )
   return (
     <Button
       size="icon"
@@ -173,6 +201,7 @@ export function FloatingBarPlay({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
+      data-play-named={named || undefined}
       className={cn(BAR_PLAY, named && PLAY_NAMED, className)}
     >
       <Icon aria-hidden />

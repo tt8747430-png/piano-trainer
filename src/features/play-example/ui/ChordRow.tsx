@@ -1,5 +1,14 @@
-import { Play } from 'lucide-react'
-import { createContext, use, useMemo, useRef, type ReactNode } from 'react'
+import { Play, Repeat } from 'lucide-react'
+import {
+  createContext,
+  use,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   chordSymbol,
@@ -15,11 +24,13 @@ import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { useFitZoom } from '@/shared/lib'
 import {
   FloatingActions,
+  FloatingBar,
+  FloatingBarButton,
+  FloatingBarPlay,
   MoveArrow,
   RoleChip,
   RoleChips,
   RoleLegend,
-  PlayFab,
   PlayButton,
   PlayLabel,
   type ShownKeys,
@@ -47,6 +58,9 @@ interface RowPlayback {
   readonly playing: 'row' | number | null
   /** The chord sounding, by its place: the row's as it walks, or one played alone. */
   readonly sounding: number | null
+  /** The row plays round again as it ends, until stopped. */
+  readonly looping: boolean
+  toggleLoop(): void
   playRow(): void
   /** One chord alone, as the row voices it, shown on the keys by its degrees. */
   playChord(place: number): void
@@ -92,6 +106,18 @@ export function ChordRow({
   )
   const onsets = useMemo(() => rowOnsets(voiced.length), [voiced.length])
   const walking = usePlayhead(playback.playing === 'row' ? playback.handle : null, onsets)
+  const [looping, setLooping] = useState(false)
+  // Looped, the row starts again as it ends by itself; never after Stop or a chord tapped alone.
+  const ended = useRef({ row: false, stopped: false })
+  const rowSounds = () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO })
+  const { playing, start } = playback
+  useEffect(() => {
+    const was = ended.current
+    if (playing === 'row') was.row = true
+    else if (playing === null && was.row && looping && !was.stopped)
+      start('row', walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
+    else was.row = false
+  }, [playing, looping, start, voiced])
   const row: RowPlayback = {
     chords,
     voiced,
@@ -99,9 +125,12 @@ export function ChordRow({
     playing: playback.playing,
     sounding:
       typeof playback.playing === 'number' && playback.playing >= 0 ? playback.playing : walking,
+    looping,
+    toggleLoop: () => setLooping((was) => !was),
     playRow: () => {
       onShow(unmarked(voiced.flat()))
-      playback.toggle('row', () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
+      ended.current.stopped = playback.playing === 'row'
+      playback.toggle('row', rowSounds)
     },
     playChord: (place) => {
       const chord = chords[place]?.chord
@@ -244,18 +273,43 @@ export function RowRoles() {
 }
 
 /**
- * Play for the whole row, turning into Stop: honey where it is the screen's one action (Progressions),
+ * Play for the whole row, turning into Stop: where it is the screen's one action (Progressions), the
+ * page's floating bar, Loop then the way into the Player (`practise`) then Play, the honey circle,
  * which Enter plays too; soft beside other examples, named as it is used there (Play the chain).
  */
-export function RowPlay({ variant, label }: { variant: 'default' | 'soft'; label?: string }) {
-  const { t } = useTranslation('music')
-  const { playing, playRow } = useRow()
+export function RowPlay({
+  variant,
+  label,
+  practise,
+}: {
+  variant: 'default' | 'soft'
+  label?: string
+  /** The Player with this row, a grey pill before Play (Progressions' Practise). */
+  practise?: { label: string; render: ReactElement } | undefined
+}) {
+  const { t } = useTranslation(['music', 'player', 'practice'])
+  const { playing, playRow, looping, toggleLoop } = useRow()
   usePlayKey(playRow, variant === 'default')
-  // The tool's row plays from a floating button; beside other examples, from the row.
   if (variant === 'default')
     return (
       <FloatingActions>
-        <PlayFab label={t('play')} playing={playing === 'row'} onClick={playRow} />
+        <FloatingBar label={t('practice:transport')}>
+          <FloatingBarButton
+            named
+            label={t('player:loop')}
+            aria-pressed={looping}
+            onClick={toggleLoop}
+            className="flex-none px-4 aria-pressed:bg-chosen"
+          >
+            <Repeat aria-hidden />
+          </FloatingBarButton>
+          {practise ? (
+            <FloatingBarButton named label={practise.label} render={practise.render}>
+              {null}
+            </FloatingBarButton>
+          ) : null}
+          <FloatingBarPlay label={t('music:play')} playing={playing === 'row'} onClick={playRow} />
+        </FloatingBar>
       </FloatingActions>
     )
   if (label)

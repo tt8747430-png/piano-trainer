@@ -18,7 +18,8 @@ import { FloatingContext } from './floating-context'
 import { Button } from './primitives/button'
 
 /**
- * The actions stand in a row along the foot, in its middle, so none climbs over the page; beside the
+ * The actions stand in a row along the foot at its trailing end, so none climbs over the page; a bar
+ * (`FloatingBar`) spans the foot and centres itself in it. Beside the
  * page (`aside`: keys docked at the foot of a phone on its side or of a laptop) in a column at its
  * right, over the keys.
  */
@@ -41,7 +42,7 @@ const CONTROLS =
 
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
- * and the keys docked there, the width of the screen beside a rail or a sidebar, in its middle, each
+ * and the keys docked there, the width of the screen beside a rail or a sidebar, at its trailing end, each
  * action its icon with its name as its tooltip (ADR 0061). Where keys
  * are docked on a screen wide for its height (`aside`), they stand in a column at its side instead,
  * so the little height left stays the page's. The page pads clear of them by the room they take,
@@ -104,8 +105,8 @@ export function FloatingHost({
         data-slot="floating-host"
         data-hidden={hidden || undefined}
         className={cn(
-          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-3 aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
-          'justify-center aside:justify-end',
+          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+          'justify-end',
         )}
       >
         <div
@@ -113,7 +114,7 @@ export function FloatingHost({
           data-slot="floating-actions"
           inert={hidden}
           className={cn(
-            'vt-floating flex w-full justify-center gap-3 aside:w-auto',
+            'vt-floating flex w-full justify-end gap-3 aside:w-auto',
             !hidden && '[&>*>*]:pointer-events-auto',
             ALIGN,
           )}
@@ -148,7 +149,7 @@ export function FloatingActions({
   return createPortal(
     <div
       className={cn(
-        'flex w-full justify-center gap-3 aside:w-auto',
+        'flex w-full justify-end gap-3 aside:w-auto',
         ALIGN,
         last && 'order-last',
         className,

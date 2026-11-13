@@ -55,6 +55,7 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
       {/* The whole section looped in the Player, the screen's floating action. */}
       <FloatingActions>
         <FabLink
+          extended
           label={t('practise')}
           icon={Play}
           className="[&_svg]:fill-current"

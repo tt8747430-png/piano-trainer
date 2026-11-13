@@ -1,6 +1,6 @@
 import { PracticeFavouriteButton } from '@/features/manage-practice-library'
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Play } from 'lucide-react'
+import { Volume2 } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -22,7 +22,9 @@ import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
   BackButton,
   Dropdown,
-  FabLink,
+  FloatingBar,
+  FloatingBarButton,
+  FloatingBarPlay,
   FloatingActions,
   HandCard,
   HandsSegmented,
@@ -73,6 +75,18 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     : localText(exercise.name, locale)
   const handName =
     shownHand === 'rh' ? t('practice:exercisePage.rh') : t('practice:exercisePage.lh')
+  // What the Player opens on, the same for Listen and Start.
+  const playSearch = {
+    root: noteParam(choice.root),
+    ...(exercise.fields.tonality ? { tonality: choice.tonality } : {}),
+    ...(exercise.fields.octaves ? { octaves: choice.octaves } : {}),
+    ...(exercise.fields.hanon ? { hanon: choice.hanon } : {}),
+    ...(exercise.fields.rhythm && choice.rhythm !== 'even' ? { rhythm: choice.rhythm } : {}),
+    ...(order ? { order } : {}),
+    hands,
+    tempo,
+    ...(target !== undefined && target > tempo ? { target, speedTraining: true } : {}),
+  }
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -218,30 +232,33 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         </Labelled>
       </section>
       <FloatingActions>
-        <FabLink
-          extended
-          label={t('practice:exercisePage.start')}
-          icon={Play}
-          render={
-            <Link
-              to="/play/exercise/$exerciseId"
-              params={{ exerciseId: exercise.id }}
-              search={{
-                root: noteParam(choice.root),
-                ...(exercise.fields.tonality ? { tonality: choice.tonality } : {}),
-                ...(exercise.fields.octaves ? { octaves: choice.octaves } : {}),
-                ...(exercise.fields.hanon ? { hanon: choice.hanon } : {}),
-                ...(exercise.fields.rhythm && choice.rhythm !== 'even'
-                  ? { rhythm: choice.rhythm }
-                  : {}),
-                ...(order ? { order } : {}),
-                hands,
-                tempo,
-                ...(target !== undefined && target > tempo ? { target, speedTraining: true } : {}),
-              }}
-            />
-          }
-        />
+        <FloatingBar label={t('practice:transport')}>
+          <FloatingBarButton
+            named
+            label={t('practice:exercisePage.listen')}
+            render={
+              <Link
+                to="/play/exercise/$exerciseId"
+                params={{ exerciseId: exercise.id }}
+                search={{ ...playSearch, mode: 'listen' }}
+              />
+            }
+          >
+            <Volume2 aria-hidden />
+          </FloatingBarButton>
+          <FloatingBarPlay
+            named
+            playing={false}
+            label={t('practice:exercisePage.start')}
+            render={
+              <Link
+                to="/play/exercise/$exerciseId"
+                params={{ exerciseId: exercise.id }}
+                search={{ ...playSearch, mode: 'wait' }}
+              />
+            }
+          />
+        </FloatingBar>
       </FloatingActions>
     </div>
   )
