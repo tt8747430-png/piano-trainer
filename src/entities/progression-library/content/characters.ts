@@ -57,7 +57,7 @@ export const CHARACTERS: Readonly<Record<ProgressionId, LocalText>> = {
     'Winding, each chord a step towards home',
     'Извилистая, каждый аккорд шаг к дому',
   ),
-  'fly-me-to-the-moon': line('Swinging round the circle of fifths', 'Качается по квинтовому кругу'),
+  'fly-me-to-the-moon': line('A swinging circle of fifths', 'Качается по квинтовому кругу'),
   'rhythm-changes': line('Quick and bouncy, the bebop loop', 'Быстрая и упругая, круг бибопа'),
   'full-turnaround': line(
     'Rolling, it brings the tune back round',

@@ -327,11 +327,11 @@ export const EXERCISES: readonly Exercise[] = [
     stage: 'professional',
     name: { en: 'Rapid switch', ru: 'Быстрая смена' },
     trains: {
-      en: 'One unbroken line through all twelve keys, moving round the circle of fifths',
+      en: 'One unbroken line through all twelve keys, following the circle of fifths',
       ru: 'Одна непрерывная линия через все двенадцать тональностей по квинтовому кругу',
     },
     how: {
-      en: 'Keep one unbroken line of 8ths going while the key moves round the circle of fifths: change to each new key’s notes without stopping.',
+      en: 'Keep one unbroken line of 8ths going while the key follows the circle of fifths: change to each new key’s notes without stopping.',
       ru: 'Ведите непрерывную линию восьмых, пока тональность движется по квинтовому кругу: переходите на ноты каждой новой тональности не останавливаясь.',
     },
     options: { oneKey: true },

@@ -24,6 +24,8 @@ import {
   qualitySpellings,
   readChordSymbol,
   SCALE_KINDS,
+  scaleIntervals,
+  spellAbove,
   writtenSymbol,
   type ChordQuality,
   type Key,
@@ -232,6 +234,10 @@ export function indexEntries({
       id: `scales:${scale}`,
       kind: 'scales',
       title: names.scale(scale),
+      // Its notes on C, as a chord's entry shows its symbol on C.
+      detail: scaleIntervals(scale)
+        .map((interval) => printedNote(spellAbove(C, interval)))
+        .join(' '),
       words: [],
       target: { opens: 'scale', scale },
     })),
