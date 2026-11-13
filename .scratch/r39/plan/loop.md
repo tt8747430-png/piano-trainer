@@ -270,3 +270,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 9, score editor: the key-signature palette's way back read "Switch to natural" in English (a natural is ♮); it sets no signature, so "No key signature", as the Russian already said.
 - Loop round 9, Profile, Settings, Search: names checked, nothing to change.
 - Loop round 9 closed: a sweep for controls without an accessible name on 12 routes found none (only Base UI's hidden inputs). Build passed (exit 0).
+- Loop round 10: a sweep for Russian strings left in English found only Italian marks and product names. The Chord player printed repeats as "× 2", the Player as "×2"; "×2" in both now.

@@ -872,7 +872,7 @@ export const practice = {
     },
     section: 'Section',
     repeat: 'Repeat',
-    times: '× {{count}}',
+    times: '×{{count}}',
     fewer: 'Fewer times',
     moreTimes: 'More times',
     variation: 'Variation',

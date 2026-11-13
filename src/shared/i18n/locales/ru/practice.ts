@@ -843,7 +843,7 @@ export const practice: LocaleResources['practice'] = {
     },
     section: 'Раздел',
     repeat: 'Повтор',
-    times: '× {{count}}',
+    times: '×{{count}}',
     fewer: 'Меньше раз',
     moreTimes: 'Больше раз',
     variation: 'Вариант',
