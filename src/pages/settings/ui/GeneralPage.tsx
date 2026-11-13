@@ -8,12 +8,13 @@ import {
 } from '@/entities/settings'
 import { setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES } from '@/shared/i18n'
-import { ChoiceCard } from '@/shared/ui'
+import { PictureChoice, Segmented, SettingField, SettingsGroup, ThemePicture } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
- * Settings › General: the app's appearance and language, each a card with every choice in sight (R29).
- * How a lesson reads is the lesson's own Settings'; the library's bars are Settings › Library's (R32).
+ * Settings › General (canvas 128, "these are very heavy to read"): Appearance as three small screens
+ * (Match system split light and dark, Light, Dark), then Language as English | Русский. How a lesson
+ * reads is the lesson's own Settings'; the library's bars are Settings › Library's (R32).
  */
 export function GeneralPage() {
   const { t } = useTranslation('settings')
@@ -22,20 +23,27 @@ export function GeneralPage() {
   const theme = useSettings(selectTheme)
   return (
     <SettingsScreen title={t('pages.general')}>
-      <ChoiceCard
-        title={t('theme.label')}
-        setting="theme"
-        value={theme}
-        options={THEMES.map((value) => ({ value, label: t(`theme.${value}`) }))}
-        onChange={(value) => setTheme(settings, value)}
-      />
-      <ChoiceCard
-        title={t('language.label')}
-        setting="locale"
-        value={locale}
-        options={LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))}
-        onChange={(value) => setLocale(settings, value)}
-      />
+      <SettingsGroup>
+        <PictureChoice
+          label={t('theme.label')}
+          setting="theme"
+          value={theme}
+          options={THEMES.map((value) => ({
+            value,
+            label: t(`theme.${value}`),
+            picture: <ThemePicture theme={value} />,
+          }))}
+          onChange={(value) => setTheme(settings, value)}
+        />
+        <SettingField label={t('language.label')} setting="locale">
+          <Segmented
+            label={t('language.label')}
+            value={locale}
+            options={LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))}
+            onChange={(value) => setLocale(settings, value)}
+          />
+        </SettingField>
+      </SettingsGroup>
     </SettingsScreen>
   )
 }

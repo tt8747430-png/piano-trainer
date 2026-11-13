@@ -26,7 +26,7 @@ export function SwitchRow({
   /** What it turns on, drawn: an icon or a glyph on a muted square, or a row's tile (`TileMark`) as it is. */
   icon?: ReactNode
   label: string
-  /** What it does, in one line under its name (R32): every option in Settings says what it does. */
+  /** What it does in plain words: its ⓘ where `info` is not given, and the switch's description. */
   description?: string | undefined
   /** What it does, opened from the ⓘ after the label. */
   info?: ReactNode
@@ -44,6 +44,16 @@ export function SwitchRow({
   const headId = `${id}-head`
   const lastId = `${id}-last`
   const why = disabled ? reason : undefined
+  // Both given: the plain words, then the longer help, in the one ⓘ.
+  const tip =
+    info && description ? (
+      <>
+        <p>{description}</p>
+        <p className="mt-2">{info}</p>
+      </>
+    ) : (
+      (info ?? description)
+    )
   const whyId = `${id}-why`
   const descriptionId = `${id}-description`
   const describedBy = [description ? descriptionId : null, why ? whyId : null]
@@ -79,14 +89,14 @@ export function SwitchRow({
         {head ? <span id={headId}>{head} </span> : null}
         <span className="whitespace-nowrap">
           <span id={lastId}>{last}</span>
-          {info ? (
+          {tip ? (
             <InfoTip name={label} className="z-10 ms-1.5 align-middle">
-              {info}
+              {tip}
             </InfoTip>
           ) : null}
         </span>
         {description ? (
-          <span id={descriptionId} className="block text-sm text-muted-foreground">
+          <span id={descriptionId} className="sr-only">
             {description}
           </span>
         ) : null}

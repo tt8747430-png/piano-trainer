@@ -13,8 +13,8 @@ const LAYOUT = {
 
 /**
  * One choice in Settings: its name as a row's text (the group around it has the heading), what it
- * does in one line under it (`description`, R32) or in an `InfoTip` beside it (ADR 0096), and its
- * control, under the name or at its right (`layout`).
+ * does in an `InfoTip` beside it (`info`, or `description` as plain words; ADR 0096, never a line
+ * under it, canvas 131), and its control, under the name or at its right (`layout`).
  */
 export function SettingField({
   label,
@@ -25,7 +25,7 @@ export function SettingField({
   children,
 }: {
   label: string
-  /** What it does, in one line under its name (R32): every option in Settings says what it does. */
+  /** What it does in plain words, opened from the ⓘ beside the name where `info` is not given. */
   description?: string | undefined
   /** What it does, opened from the ⓘ beside the name. */
   info?: ReactNode
@@ -35,6 +35,16 @@ export function SettingField({
   children: ReactNode
 }) {
   const { head, last } = lastWord(label)
+  // Both given: the plain words, then the longer help, in the one ⓘ.
+  const tip =
+    info && description ? (
+      <>
+        <p>{description}</p>
+        <p className="mt-2">{info}</p>
+      </>
+    ) : (
+      (info ?? description)
+    )
   return (
     <div data-slot="setting-field" data-setting={setting} className={LAYOUT[layout]}>
       {/* The ⓘ goes with the name's last word, never alone at a line's start. */}
@@ -43,14 +53,13 @@ export function SettingField({
           {head ? `${head} ` : null}
           <span className="whitespace-nowrap">
             {last}
-            {info ? (
+            {tip ? (
               <InfoTip name={label} className="ms-1.5 align-middle">
-                {info}
+                {tip}
               </InfoTip>
             ) : null}
           </span>
         </span>
-        {description ? <span className="text-sm text-muted-foreground">{description}</span> : null}
       </span>
       {children}
     </div>
