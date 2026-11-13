@@ -75,7 +75,10 @@ wins there.
   design and after that implement the design as close as possible. do like this"): each area is redrawn on the
   canvas first, as its ideal (every page, sheet and state, phone and laptop, Day and Night), published, and only
   then is the app built to match the drawing as closely as it can, checked against it shot by shot at both sizes.
-  No change to a screen's look or behaviour is made in the app before it is on the canvas.
+  No change to a screen's look or behaviour is made in the app before it is on the canvas. The build is the
+  drawing, with no backwards compatibility (owner, 2026-11-13: "you should refactor with no backwards compatibility,
+  you should do the design and ui as the design artifact says and as close as possible"): render the area's boards
+  beside the app's shots, list every difference, rebuild each, and delete the old shape.
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.
