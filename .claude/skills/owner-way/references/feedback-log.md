@@ -5,6 +5,9 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **The palette's tabs by name (loop, 2026-11-13, canvas 123's "seven named categories"):** a phone's strip reads
+  Notes · Pitch · Articulations · Ornaments · Dynamics · Measures · Clef · Key · Time · Repeats · Text, each its short
+  name; the section below keeps its full title. No category is a picture alone.
 - **One home for each thing; only what applies shown:** "we can at the same time edit the time signature from the
   settings and from the palette which is strange"; "show only the actions relevant at that time like the write as common
   in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano

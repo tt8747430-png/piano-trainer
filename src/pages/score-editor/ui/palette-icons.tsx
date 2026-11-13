@@ -1,13 +1,10 @@
-import { SmuflPath } from '@/shared/ui/smufl'
 import { OctaveLineGlyph } from './palette-glyph'
 import type { ReactNode } from 'react'
 import type { BarEdit } from '@/features/score-editor'
-import type { PaletteCategory } from '../model/palette-categories'
 
 /**
  * The palette's pictures, drawn as a score draws them: each on one 24-unit square, in one stroke's
- * weight, so every category's and every bar key's picture sits level in the same box. The clef is Bravura's own
- * outline (SMuFL U+E050, as Verovio engraves it).
+ * weight, so every bar key's picture sits level in the same box.
  */
 function Icon({ children, viewBox = '0 0 24 24' }: { children: ReactNode; viewBox?: string }) {
   return (
@@ -30,9 +27,6 @@ function Icon({ children, viewBox = '0 0 24 24' }: { children: ReactNode; viewBo
 const STAFF = (
   <path d="M2 6 H22 M2 9 H22 M2 12 H22 M2 15 H22 M2 18 H22" strokeWidth="0.9" opacity="0.45" />
 )
-
-/** The staff space that stands the treble clef (seven spaces, 1098 over its line and 658 under) 20 units tall. */
-const CLEF_SPACE = 20 / 7.024
 
 /** A word or numeral drawn in the box: a dynamic, a chord, a time signature's figures. */
 function Word({
@@ -61,130 +55,6 @@ function Word({
       {text}
     </text>
   )
-}
-
-/** A sharp, drawn as the staff draws it, filled. */
-const SHARP = (
-  <path
-    d="M8.5 3h1.4v18H8.5zM14.1 2h1.4v18h-1.4zM5 9.6 19 6.6v2.8L5 12.4zM5 15.6l14-3v2.8L5 18.4z"
-    fill="currentColor"
-    stroke="none"
-  />
-)
-
-/** Each category's picture in the palette's bar. */
-const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
-  // An eighth note.
-  notes: (
-    <Icon>
-      <g fill="currentColor" stroke="none">
-        <ellipse cx="9" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 9 17.5)" />
-        <rect x="12.1" y="3" width="1.6" height="14.5" />
-        <path d="M13.7 3c0 3 5 4 4.5 9-.5-2.5-2.5-3.6-4.5-3.8z" />
-      </g>
-    </Icon>
-  ),
-  // Flat's ♭•↕: a note moved up or down, its accidental beside it; a sharp alone would read as
-  // the accidentals, which are the Notes' (research 2026-10-flat-and-dorico §1).
-  pitch: (
-    <Icon>
-      <path d="M3.5 3.5V18.5c3.4-1.5 4.7-4 3.4-5.4-1-.9-2.5-.5-3.4.8" />
-      <ellipse
-        cx="12.6"
-        cy="14"
-        rx="3.2"
-        ry="2.3"
-        transform="rotate(-20 12.6 14)"
-        fill="currentColor"
-        stroke="none"
-      />
-      <path d="M19.5 3.5V20.5M17 6l2.5-2.5L22 6M17 18l2.5 2.5L22 18" />
-    </Icon>
-  ),
-  // An accent over a notehead.
-  articulations: (
-    <Icon>
-      <path d="M6 4 L18 8 L6 12" strokeWidth="2" />
-      <ellipse
-        cx="12"
-        cy="18"
-        rx="4.2"
-        ry="3"
-        transform="rotate(-20 12 18)"
-        fill="currentColor"
-        stroke="none"
-      />
-    </Icon>
-  ),
-  // A dynamic as printed: ppp, Flat's dynamics' picture.
-  dynamics: (
-    <Icon>
-      <Word text="ppp" y={16} size={11} italic />
-    </Icon>
-  ),
-  // A turn, Flat's ornaments' picture: the S on its side as a score prints it.
-  ornaments: (
-    <Icon>
-      <path
-        d="M3.5 14.5C3.5 10 8 8.5 10.5 11.5L13.5 15C16 18 20.5 16 20.5 11.5C20.5 8.5 17.5 7.5 16 9.5M3.5 14.5C3.5 16.5 6 17.5 8 14.5"
-        strokeWidth="2"
-      />
-    </Icon>
-  ),
-  // A bar between its barlines.
-  measures: (
-    <Icon>
-      {STAFF}
-      <path d="M5 6 V18 M19 6 V18" strokeWidth="2" />
-    </Icon>
-  ),
-  // The treble clef, Bravura's.
-  clef: (
-    <Icon>
-      <SmuflPath
-        name="gClef"
-        x={12 - 1.342 * CLEF_SPACE}
-        y={2 + 4.392 * CLEF_SPACE}
-        space={CLEF_SPACE}
-      />
-    </Icon>
-  ),
-  // A key signature: two sharps on the staff.
-  key: (
-    <Icon>
-      {STAFF}
-      <g transform="translate(1 1) scale(0.5)">{SHARP}</g>
-      <g transform="translate(10 5) scale(0.5)">{SHARP}</g>
-    </Icon>
-  ),
-  // A time signature's figures, one over the other.
-  time: (
-    <Icon>
-      <Word text="4" y={11} size={11} />
-      <Word text="4" y={22} size={11} />
-    </Icon>
-  ),
-  // An end-repeat barline: its dots, a thin line and a thick one.
-  repeats: (
-    <Icon>
-      {STAFF}
-      <path d="M14 6 V18" strokeWidth="1.5" />
-      <path d="M18.5 6 V18" strokeWidth="3" strokeLinecap="butt" />
-      <circle cx="10" cy="10.5" r="1.3" fill="currentColor" stroke="none" />
-      <circle cx="10" cy="13.5" r="1.3" fill="currentColor" stroke="none" />
-    </Icon>
-  ),
-  // Text, Flat's Aa: the chord symbols, the lyrics and the words over the notes.
-  text: (
-    <Icon>
-      <Word text="Aa" y={17} size={13} />
-    </Icon>
-  ),
-}
-
-/** A category's picture. */
-export function CategoryIcon({ category }: { category: PaletteCategory }) {
-  return CATEGORY_ICONS[category]
 }
 
 /** The pictures of the keys that open a field (ADR 0096), drawn as what they write prints. */

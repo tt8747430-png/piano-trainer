@@ -37,7 +37,6 @@ import {
 } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
 import { PaletteFormContext, type PaletteForm } from './palette-form'
-import { CategoryIcon } from './palette-icons'
 import { GroupName, KeyGrid, PaletteHint, PaletteSection } from './palette-keys'
 import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
 import { TimePicker } from './TimePicker'
@@ -277,7 +276,7 @@ const fadeOf = ({ before, after }: { before: boolean; after: boolean }) =>
   FADES[before && after ? 'both' : before ? 'before' : after ? 'after' : 'none']
 
 /**
- * The strip of categories (R31-E, R32-C, Flat's tab bar): a picture each in a sand pill, the one in
+ * The strip of categories (R31-E, R32-C, Flat's tab bar; canvas 123): each by its short name in a sand pill, the one in
  * sight on a card-paper thumb that slides to the one tapped; only those that act where the caret
  * writes (R32-B). It scrolls sideways in its own box, the lit one kept in view, fading only at an
  * edge with more past it.
@@ -317,17 +316,17 @@ function CategoryStrip({
     >
       {categories.map((category) => {
         const name = t(`palette.category.${category}`)
+        const tab = t(`palette.tab.${category}`)
         const chosen = current === category
         return (
           <button
             key={category}
             data-for={category}
             type="button"
-            aria-label={name}
-            title={name}
+            title={tab === name ? undefined : name}
             aria-current={chosen ? 'true' : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground [&_svg]:relative [&_svg]:size-6"
+            className="relative grid h-11 shrink-0 place-items-center rounded-control px-3.5 text-sm font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground"
           >
             {chosen ? (
               <motion.span
@@ -336,7 +335,7 @@ function CategoryStrip({
                 className="absolute inset-0 rounded-control bg-card shadow-sm"
               />
             ) : null}
-            <CategoryIcon category={category} />
+            <span className="relative">{tab}</span>
           </button>
         )
       })}

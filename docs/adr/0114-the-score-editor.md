@@ -77,7 +77,7 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     the safe area (the notch of a phone on its side).
   - **Docked** under the sheet on a phone held upright, edge to edge above the keys, the sheet scrolling above it
     (Flat's and forScore's input bar); never over the music.
-    Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories;
+    Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories, each tab its short name (Notes, Pitch, Dynamics…; canvas 123);
     unfolded: every section in one scroll, up to half the screen, the strip lighting the section in sight and
     scrolling to the one tapped; Flat's **Show as list** (`paletteList`) turns the cells into named rows, two to a
     line. The keys fold away for it. A field typed in swaps it for a slim bar over the phone's own keyboard

@@ -40,6 +40,20 @@ export const editor = {
       tuplets: 'Tuplets',
       bars: 'Bars',
     },
+    // The strip's tabs, each category by its short name (canvas 123); the section keeps its full title.
+    tab: {
+      notes: 'Notes',
+      pitch: 'Pitch',
+      articulations: 'Articulations',
+      ornaments: 'Ornaments',
+      dynamics: 'Dynamics',
+      measures: 'Measures',
+      clef: 'Clef',
+      key: 'Key',
+      time: 'Time',
+      repeats: 'Repeats',
+      text: 'Text',
+    },
     category: {
       notes: 'Note',
       pitch: 'Pitch and representation',
