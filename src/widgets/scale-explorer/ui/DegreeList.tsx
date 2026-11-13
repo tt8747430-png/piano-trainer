@@ -20,9 +20,9 @@ export function DegreeList({
 }) {
   const { t } = useTranslation('music')
   return (
-    <ol className="flex flex-wrap gap-1.5">
+    <ol className="flex flex-wrap gap-x-1 gap-y-2">
       {items.map(({ top, name, altered = false }, at) => (
-        <li key={at} className="flex flex-col items-center">
+        <li key={at} className="flex w-19 flex-col items-center">
           <span
             data-altered={altered || undefined}
             className="min-w-9 rounded-control border border-border px-2 py-0.5 text-center font-semibold tabular-nums data-altered:border-primary data-altered:bg-primary/20"
@@ -31,7 +31,9 @@ export function DegreeList({
             {altered && alteredLabel ? <span className="sr-only"> ({alteredLabel})</span> : null}
           </span>
           {name ? (
-            <span className="text-xs font-normal text-muted-foreground">{t(`degree.${name}`)}</span>
+            <span className="text-center text-xs leading-tight font-normal text-balance text-muted-foreground">
+              {t(`degree.${name}`)}
+            </span>
           ) : null}
         </li>
       ))}
