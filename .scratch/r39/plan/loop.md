@@ -251,3 +251,7 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 7, Learn: a lone chord on a lesson staff (The dominant 7th: G7) printed no name although Chord symbols was on: the bar band showed only for two bars or more; a lone chord now keeps its band.
 - Loop round 7, Songs: the song page's Details took half the column with nothing beside it before any practice; it now takes the width alone. The printed title under the English one ("Опять метель") is titles.ts' design, kept.
 - Loop round 7, Songs: the second method-book folder was "Called to Play, level 2" / "Призван играть, уровень 2" while its book is "Called to Play 2" / "Призван играть 2" everywhere else; one name now. SongsPage.test.tsx still names the old one (loop rule: tests untouched; fix at the gate).
+- Loop round 7, Practice: Intervals, Circle of fifths, Exercises: nothing to change.
+- Loop round 7, Player: nothing to change.
+- Loop round 7, score editor: nothing to change (pedal marks in the Player come from the arrangement, not the draft).
+- Loop round 7, Settings: Storage's Russian figures led with their label ("Занято на устройстве: 0,1 МБ"); now value first as in English ("0,1 МБ занято на устройстве", "0 МБ из 8,8 МБ загружено"). Computer keys, Report a problem: nothing.
