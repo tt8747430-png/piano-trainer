@@ -1,4 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { printedSymbol, type ChordFingers, type Midi, type PlacedChord } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
@@ -10,6 +11,16 @@ const SCALE = 1.5
 /** The least room a bar takes when several chords share the staff, and the clef's, in pixels. */
 const BAR = 132
 const CLEF = 64
+/** The empty bar after the last chord, where the + adds the next, as the canvas's. */
+const ADD = 64
+
+/** The empty bar drawn after the last chord: where it starts, each staff's lines, their paint. */
+interface EmptyBar {
+  readonly left: number
+  readonly staves: readonly (readonly number[])[]
+  readonly paint: string
+  readonly thickness: number
+}
 
 /** A chord on the staff: its keys, its fingers and its symbol. */
 export interface SheetChord {
@@ -47,6 +58,8 @@ export function ChordSheet({
   at,
   labels,
   onPick,
+  onName,
+  onAdd,
 }: {
   chords: readonly SheetChord[]
   at: number
@@ -54,8 +67,12 @@ export function ChordSheet({
   labels: ReadonlyMap<Midi, string>
   /** A bar tapped: its chord chosen (and played). */
   onPick: (at: number) => void
+  /** A chord's name tapped: the chord to change. */
+  onName: (at: number) => void
+  /** The empty bar's +, where the staff takes another chord. */
+  onAdd: (() => void) | undefined
 }) {
-  const { t } = useTranslation('music')
+  const { t } = useTranslation(['music', 'practice'])
   const score = useMemo(
     () => notate(chordBars(chords.map(({ placed, fingers }) => ({ placed, fingers })))),
     [chords],
@@ -66,7 +83,9 @@ export function ChordSheet({
   const [room, setRoom] = useState(0)
   const [marks, setMarks] = useState<readonly HeadMark[]>([])
   const [bars, setBars] = useState<readonly BarPlace[]>([])
-  const width = several ? Math.max(room, CLEF + chords.length * BAR) : room
+  const [empty, setEmpty] = useState<EmptyBar | null>(null)
+  const width = several ? Math.max(room, CLEF + chords.length * BAR + ADD) : room
+  const engraved = onAdd ? width - ADD : width
   useLayoutEffect(() => {
     const box = section.current
     const staff = scroller.current
@@ -75,6 +94,8 @@ export function ChordSheet({
       setRoom(box.clientWidth - 40)
       const measures = [...staff.querySelectorAll<SVGGElement>('g.measure')]
       measures.forEach((measure, i) => measure.toggleAttribute('data-chosen', several && i === at))
+      measures.forEach(centred)
+      setEmpty(emptyBar(staff, measures[measures.length - 1]))
       setBars(measures.map((measure) => barPlace(staff, measure)))
       setMarks(
         measures.flatMap((measure, i) => {
@@ -118,7 +139,54 @@ export function ChordSheet({
     >
       <div ref={scroller} className="relative overflow-x-auto overscroll-x-contain">
         <div className="relative px-5 pt-7" style={{ width: width + 40 }}>
-          {width > 0 ? <LazyScoreView score={score} scale={SCALE} fill={width} /> : null}
+          {engraved > 0 ? <LazyScoreView score={score} scale={SCALE} fill={engraved} /> : null}
+          {onAdd && empty ? (
+            <div
+              aria-hidden={false}
+              className="absolute inset-y-0"
+              style={{ left: empty.left, width: ADD }}
+            >
+              {empty.staves.map((lines, s) => (
+                <span key={s}>
+                  {lines.map((y, l) => (
+                    <span
+                      key={l}
+                      className="absolute inset-x-0"
+                      style={{
+                        top: y - empty.thickness / 2,
+                        height: empty.thickness,
+                        background: empty.paint,
+                      }}
+                    />
+                  ))}
+                  <span
+                    className="absolute right-0"
+                    style={{
+                      top: (lines[0] ?? 0) - empty.thickness / 2,
+                      height: (lines[lines.length - 1] ?? 0) - (lines[0] ?? 0) + empty.thickness,
+                      width: empty.thickness,
+                      background: empty.paint,
+                    }}
+                  />
+                </span>
+              ))}
+              <button
+                type="button"
+                aria-label={t('practice:chords.next.add')}
+                title={t('practice:chords.next.add')}
+                onClick={onAdd}
+                className="absolute flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-honey-ink outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-ring"
+                style={{
+                  left: ADD / 2,
+                  top: middleOf(empty.staves),
+                }}
+              >
+                <span className="flex size-9 items-center justify-center rounded-full border-[1.5px] border-dashed border-honey-ink/55 bg-card">
+                  <Plus aria-hidden className="size-4.5" />
+                </span>
+              </button>
+            </div>
+          ) : null}
           {bars.map((bar, i) => {
             const chord = chords[i]
             if (!chord) return null
@@ -129,8 +197,12 @@ export function ChordSheet({
                 className="absolute inset-y-0"
                 style={{ left: bar.left, width: bar.right - bar.left }}
               >
-                <span
-                  className={`absolute top-0 flex h-11 -translate-x-1/2 items-center font-display text-[1.0625rem] whitespace-nowrap ${
+                <button
+                  type="button"
+                  aria-label={t('practice:chords.next.change', { chord: name })}
+                  title={t('practice:chords.next.change', { chord: name })}
+                  onClick={() => onName(i)}
+                  className={`absolute top-0 flex h-11 -translate-x-1/2 items-center rounded-[10px] px-2 font-display text-[1.0625rem] whitespace-nowrap outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     i === at || !several
                       ? 'font-bold text-link'
                       : 'font-semibold text-muted-foreground'
@@ -138,7 +210,7 @@ export function ChordSheet({
                   style={{ left: bar.middle - bar.left }}
                 >
                   {name}
-                </span>
+                </button>
                 {several ? (
                   <button
                     type="button"
@@ -169,6 +241,60 @@ export function ChordSheet({
       </div>
     </section>
   )
+}
+
+/**
+ * A chord moved to its bar's middle, as the canvas writes it (Verovio sets a bar's one chord at its
+ * start): its layer and its ledger lines shifted together, by the room between the clef and
+ * signatures (or the bar's start) and its barline.
+ */
+function centred(measure: SVGGElement): void {
+  const moved = [...measure.querySelectorAll<SVGGElement>('g.layer, g.ledgerLines')]
+  moved.forEach((part) => (part.style.transform = ''))
+  const line = measure.querySelector<SVGPathElement>('g.staff > path')
+  const heads = [...measure.querySelectorAll('g.note .notehead, g.note g.accid')].map((part) =>
+    part.getBoundingClientRect(),
+  )
+  if (!line || heads.length === 0) return
+  const span = line.getBoundingClientRect()
+  const signs = [...measure.querySelectorAll('g.clef, g.keySig, g.meterSig')].map(
+    (part) => part.getBoundingClientRect().right,
+  )
+  const start = Math.max(span.left, ...signs)
+  const middle =
+    (Math.min(...heads.map((h) => h.left)) + Math.max(...heads.map((h) => h.right))) / 2
+  const units = line.getBBox().width / Math.max(1, span.width)
+  const shift = ((start + span.right) / 2 - middle) * units
+  moved.forEach((part) => (part.style.transform = `translateX(${shift}px)`))
+}
+
+/** The empty bar after the last one: its staves' lines carried on, in the staff's pixels. */
+function emptyBar(staff: HTMLElement, last: SVGGElement | undefined): EmptyBar | null {
+  if (!last) return null
+  const box = staff.getBoundingClientRect()
+  const staves = [...last.querySelectorAll<SVGGElement>('g.staff')].map((each) =>
+    [...each.querySelectorAll<SVGPathElement>(':scope > path')].map((line) => {
+      const at = line.getBoundingClientRect()
+      return at.top + at.height / 2 - box.top
+    }),
+  )
+  const line = last.querySelector<SVGPathElement>('g.staff > path')
+  if (!line) return null
+  const span = line.getBoundingClientRect()
+  const style = getComputedStyle(line)
+  const thickness = (parseFloat(style.strokeWidth) * span.width) / Math.max(1, line.getBBox().width)
+  return {
+    left: span.right - box.left + staff.scrollLeft,
+    staves,
+    paint: style.stroke,
+    thickness: Math.max(1, thickness),
+  }
+}
+
+/** The middle of the staves' lines, top to bottom: where the + stands. */
+function middleOf(staves: readonly (readonly number[])[]): number {
+  const all = staves.flat()
+  return all.length ? (Math.min(...all) + Math.max(...all)) / 2 : 0
 }
 
 /** A bar's edges (its staff lines') and the middle of its chord's heads, in the staff's pixels. */

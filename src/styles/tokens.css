@@ -45,6 +45,7 @@
   --p-honey: #edc684;
   --p-honey-night: #d4b176;
   --p-honey-deep: #b07a2a;
+  --p-honey-ink: #7a5418;
   --p-ochre: #a8742a;
   --p-crimson: #a34243;
   /* The shade cast by night: near black, warm. */
@@ -89,6 +90,8 @@
   --primary-foreground: var(--p-ink);
   /* A honey wash's edge: the Range strip's ring round the keys shown. */
   --honey-ring: var(--p-honey-deep);
+  /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
+  --honey-ink: var(--p-honey-ink);
   /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
   --selected: var(--p-umber);
   --selected-foreground: var(--p-paper-card);
@@ -261,6 +264,7 @@
     --primary: var(--p-honey-night);
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
+    --honey-ink: var(--p-honey-night);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);
     --hand-staff-ink: var(--p-grass-light);

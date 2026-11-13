@@ -49,6 +49,33 @@ export const practice = {
   checkYourself: 'Check yourself',
   // Chords: the chord built, its tensions, and its ways on.
   chords: {
+    // The staff's + and a chord's name open the next chord (R42, the canvas's B_NEXT).
+    next: {
+      add: 'Add a chord',
+      title: 'Next chord',
+      change: 'Change {{chord}}',
+      ways: { diatonic: 'Diatonic', chromatic: 'Chromatic' },
+      inKey: 'In {{key}}',
+      from: 'From {{chord}}',
+      moves: {
+        '1': 'half step up',
+        '-1': 'half step down',
+        '2': 'whole step up',
+        '-2': 'whole step down',
+        '3': 'minor 3rd up',
+        '-3': 'minor 3rd down',
+      },
+      addThis: 'Add {{chord}}, {{what}}',
+      changeTo: 'Change to {{chord}}, {{what}}',
+      allInKey: 'Every chord of {{key}} is on the staff',
+      allMoves: 'Each of these is on the staff already',
+      toChromatic: 'Chromatic chords',
+      toDiatonic: 'Diatonic chords',
+      all: 'All chords',
+      remove: 'Remove {{chord}}',
+      removed: '{{chord}} removed',
+      undo: 'Undo',
+    },
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
     playAs: {
       label: 'Play as',

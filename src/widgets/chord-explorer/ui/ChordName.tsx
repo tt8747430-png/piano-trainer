@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { partsFromParams, qualityParams } from '@/shared/lib'
 import {
-  CHORD_FAMILIES,
   buildChord,
   chordInversions,
   noteFromParam,
@@ -9,7 +8,6 @@ import {
   placeChord,
   printedNote,
   printedSymbol,
-  qualitiesIn,
   qualitySuffix,
   voicingTakesInversion,
   type ChordQuality,
@@ -17,6 +15,7 @@ import {
 } from '@/shared/lib/music'
 import { MenuPicker, NotePicker } from '@/shared/ui'
 import { takesTwoHands, type ChordView } from '../model/chord-view'
+import { useChordTypes } from './use-chord-types'
 
 /**
  * One part of the chord's name, the canvas's PART value for value: the serif at 44 (56 on a laptop)
@@ -54,6 +53,7 @@ export function ChordName({
   const bass = (inversion: number) =>
     placeChord(tones, { inversion, bothHands: false }).rh[0]?.tone.note ?? root
   const shown = buildChord(root, parts)
+  const types = useChordTypes(root)
   return (
     <div
       role="group"
@@ -71,14 +71,7 @@ export function ChordName({
         bare
         label={t('practice:chords.builder.chord')}
         value={quality ?? 'maj'}
-        groups={CHORD_FAMILIES.map((family) => ({
-          label: t(`music:family.${family}`),
-          options: qualitiesIn(family).map((each) => ({
-            value: each,
-            label: printedNote(root) + suffix(each),
-            detail: t(`music:quality.${each}`),
-          })),
-        }))}
+        groups={types}
         face={(each) =>
           qualitySuffix(each) ? (
             suffix(each)

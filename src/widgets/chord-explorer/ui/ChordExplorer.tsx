@@ -14,12 +14,19 @@ import {
   FloatingPieces,
   FloatingPlaySplit,
   HandsPicture,
+  say,
   usePlayKey,
 } from '@/shared/ui'
 import {
+  addedChord,
+  changedChord,
   changedView,
+  chordSteps,
   chordViews,
   choseChord,
+  MOST_CHORDS,
+  removedChord,
+  type ChordStep,
   takesTwoHands,
   chordKeys,
   viewChord,
@@ -30,6 +37,7 @@ import { ChordName } from './ChordName'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
 import { ChordStage } from './ChordStage'
+import { NextChordSheet } from './NextChordSheet'
 import { VoicingPicture } from './VoicingPicture'
 
 /**
@@ -70,6 +78,29 @@ export function ChordExplorer({
       }),
     [chord, chosenAt, placed, fingers, symbol],
   )
+  // The Next chord sheet: open from the + to add, or from a chord's name to change that chord.
+  const [next, setNext] = useState<{ readonly editing: number | null } | null>(null)
+  const sounded = (view: ChordView) => {
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    practised(view)
+  }
+  const nextPicked = (step: ChordStep) => {
+    const view =
+      next?.editing == null ? addedChord(chord, step) : changedChord(chord, next.editing, step)
+    onChange(view)
+    sounded(view)
+  }
+  const removed = () => {
+    if (next?.editing == null) return
+    const before = chord
+    const gone = sheet[next.editing]?.symbol ?? ''
+    setNext(null)
+    onChange(removedChord(chord, next.editing))
+    say(t('practice:chords.next.removed', { chord: printedSymbol(gone) }), {
+      label: t('practice:chords.next.undo'),
+      onClick: () => onChange(before),
+    })
+  }
   const pick = (i: number) => {
     const view = i === chosenAt ? chord : choseChord(chord, i)
     if (i !== chosenAt) onChange(view)
@@ -115,7 +146,16 @@ export function ChordExplorer({
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
         <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
-          <ChordSheet chords={sheet} at={chosenAt} labels={labels} onPick={pick} />
+          <ChordSheet
+            chords={sheet}
+            at={chosenAt}
+            labels={labels}
+            onPick={pick}
+            onName={(i) => setNext({ editing: i })}
+            onAdd={
+              chordSteps(chord).length < MOST_CHORDS ? () => setNext({ editing: null }) : undefined
+            }
+          />
           <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             {handFacts.map((side) => (
               <span key={side} className="whitespace-nowrap">
@@ -135,6 +175,14 @@ export function ChordExplorer({
           />
         ) : null}
       </div>
+      <NextChordSheet
+        open={next !== null}
+        onOpenChange={(open) => setNext(open ? (next ?? { editing: null }) : null)}
+        view={chord}
+        editing={next?.editing ?? null}
+        onPick={nextPicked}
+        onRemove={removed}
+      />
       <FloatingActions>
         {/* The canvas's three pieces of glass: the voicing, Play with how it plays, the hands. */}
         <FloatingPieces label={t('practice:transport')}>

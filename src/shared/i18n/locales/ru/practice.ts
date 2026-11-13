@@ -47,6 +47,32 @@ export const practice: LocaleResources['practice'] = {
   inPlayer: 'Играть в плеере',
   checkYourself: 'Проверить себя',
   chords: {
+    next: {
+      add: 'Добавить аккорд',
+      title: 'Следующий аккорд',
+      change: 'Изменить {{chord}}',
+      ways: { diatonic: 'Диатонически', chromatic: 'Хроматически' },
+      inKey: 'Тональность {{key}}',
+      from: 'От {{chord}}',
+      moves: {
+        '1': 'на полутон вверх',
+        '-1': 'на полутон вниз',
+        '2': 'на тон вверх',
+        '-2': 'на тон вниз',
+        '3': 'на малую терцию вверх',
+        '-3': 'на малую терцию вниз',
+      },
+      addThis: 'Добавить {{chord}}, {{what}}',
+      changeTo: 'Заменить на {{chord}}, {{what}}',
+      allInKey: 'Все аккорды тональности {{key}} уже на нотном стане',
+      allMoves: 'Все эти аккорды уже на нотном стане',
+      toChromatic: 'Хроматические аккорды',
+      toDiatonic: 'Диатонические аккорды',
+      all: 'Все аккорды',
+      remove: 'Убрать {{chord}}',
+      removed: '{{chord}} убран',
+      undo: 'Отменить',
+    },
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
     playAs: {
       label: 'Как играть',
