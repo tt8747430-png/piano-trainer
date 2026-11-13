@@ -83,6 +83,10 @@ export const practice = {
       arpeggio: 'Arpeggio',
       playChord: 'Play chord',
       arpeggiate: 'Arpeggiate',
+      playAll: 'Play all',
+      inOrder_one: 'All {{count}} chord, in order',
+      inOrder_other: 'All {{count}} chords, in order',
+      only: 'Only {{chord}}',
     },
     // Chords builds a chord part by part.
     builder: {
@@ -159,6 +163,8 @@ export const practice = {
     },
     // The heading over the chord's ways into the Player.
     practiseIn: 'Practise {{chord}} in the Player',
+    practiseThese: 'Practise these chords in the Player',
+    changes: 'Chord changes',
     chromatic: 'Chromatically',
     fifths: 'Circle of fifths',
     // Chords' row to the Chord finder, which opens on the chord's own keys.

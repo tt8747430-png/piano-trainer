@@ -11,6 +11,7 @@ import {
   qualitySuffix,
   spellChord,
   type ChordQuality,
+  type KeyParam,
   type SpelledNote,
 } from '@/shared/lib/music'
 import { PractiseRow, PractiseRows } from '@/shared/ui'
@@ -29,11 +30,14 @@ export function ChordPractice({
   root,
   quality,
   inversion,
+  changes,
 }: {
   root: SpelledNote
   quality: ChordQuality
   /** The inversion shown, where the Player's right hand plays it the same: a chord of up to four notes. */
   inversion: number
+  /** Several chords on the staff, as numerals in their key: played one after another, as written. */
+  changes?: { readonly numerals: string; readonly key: KeyParam; readonly line: string } | undefined
 }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
@@ -41,7 +45,18 @@ export function ChordPractice({
   const names = spellChord(root, quality).map((tone) => printedNote(tone.note))
   const symbol = printedNote(root) + printedSymbol(qualitySuffix(quality))
   return (
-    <PractiseRows title={t('chords.practiseIn', { chord: symbol })}>
+    <PractiseRows
+      title={changes ? t('chords.practiseThese') : t('chords.practiseIn', { chord: symbol })}
+    >
+      {changes ? (
+        <PractiseRow
+          title={t('chords.changes')}
+          detail={changes.line}
+          render={
+            <Link to="/play/progression" search={{ p: changes.numerals, key: changes.key }} />
+          }
+        />
+      ) : null}
       {isArpeggioQuality(quality) ? (
         <PractiseRow
           title={localText(INVERSIONS.name, locale)}

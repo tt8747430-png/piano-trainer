@@ -1,11 +1,19 @@
 import { selectChords, selectKeyboard, useSettings } from '@/entities/settings'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import { recordKeyPractised } from '@/features/record-practised'
 import { chordShown, useShownKeys } from '@/features/play-example'
-import { printedSymbol, writtenSymbol, VOICINGS, voicingBar } from '@/shared/lib/music'
-import { chordSounds } from '@/shared/lib/schedule'
+import {
+  keyParam,
+  numeralOf,
+  numeralsParam,
+  printedSymbol,
+  writtenSymbol,
+  VOICINGS,
+  voicingBar,
+} from '@/shared/lib/music'
+import { chordSounds, chordsInTurn, turnStarts } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
   ActionMenu,
@@ -38,6 +46,7 @@ import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
 import { ChordStage } from './ChordStage'
 import { NextChordSheet } from './NextChordSheet'
+import { staffKey } from '../model/next-chords'
 import { VoicingPicture } from './VoicingPicture'
 
 /**
@@ -78,6 +87,22 @@ export function ChordExplorer({
       }),
     [chord, chosenAt, placed, fingers, symbol],
   )
+  // Several chords practised as written: each a numeral in the staff's key, where each is one.
+  const changes = useMemo(() => {
+    const views = chordViews(chord)
+    if (views.length < 2) return undefined
+    const key = staffKey(chord)
+    const numerals = views.map((view) => {
+      const { root, quality } = viewChord(view).chord
+      return quality ? numeralOf({ root, quality }, key) : null
+    })
+    if (numerals.some((numeral) => numeral === null)) return undefined
+    return {
+      numerals: numeralsParam(numerals.filter((numeral) => numeral !== null)),
+      key: keyParam(key),
+      line: sheet.map((each) => printedSymbol(each.symbol)).join(' · '),
+    }
+  }, [chord, sheet])
   // The Next chord sheet: open from the + to add, or from a chord's name to change that chord.
   const [next, setNext] = useState<{ readonly editing: number | null } | null>(null)
   const sounded = (view: ChordView) => {
@@ -126,8 +151,34 @@ export function ChordExplorer({
     play(chordSounds(chordKeys(view), { arpeggio: false }))
     practised(view)
   }
-  const sound = (id: 'chord' | 'arpeggio') =>
-    playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))
+  // With several chords, Play plays them all in turn unless its menu says only the chosen one.
+  const [only, setOnly] = useState(false)
+  const several = chordSteps(chord).length > 1
+  const all = several && !only
+  // While Play all plays, the chord sounding is shown chosen and the staff follows it.
+  const [sounding, setSounding] = useState<number | null>(null)
+  const turns = useRef<ReturnType<typeof setTimeout>[]>([])
+  const stopTurns = () => {
+    turns.current.forEach(clearTimeout)
+    turns.current = []
+    setSounding(null)
+  }
+  useEffect(() => {
+    if (playback.playing === null) stopTurns()
+  }, [playback.playing])
+  useEffect(() => stopTurns, [])
+  const sound = (id: 'chord' | 'arpeggio') => {
+    const keys = chordViews(chord).map(chordKeys)
+    const arpeggio = id === 'arpeggio'
+    stopTurns()
+    playback.toggle(id, () =>
+      all ? chordsInTurn(keys, { arpeggio }) : chordSounds(chordKeys(chord), { arpeggio }),
+    )
+    if (all && playback.playing !== id)
+      turns.current = turnStarts(keys, { arpeggio }).map((start, i) =>
+        setTimeout(() => setSounding(i), start * 1000),
+      )
+  }
   // How Play sounds the chord, chosen in its menu (R42): together, or one note after another.
   const [playAs, setPlayAs] = useState<'chord' | 'arpeggio'>('chord')
   usePlayKey(() => sound(playAs))
@@ -148,7 +199,7 @@ export function ChordExplorer({
         <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
           <ChordSheet
             chords={sheet}
-            at={chosenAt}
+            at={sounding ?? chosenAt}
             labels={labels}
             onPick={pick}
             onName={(i) => setNext({ editing: i })}
@@ -172,6 +223,7 @@ export function ChordExplorer({
             root={built.root}
             quality={quality}
             inversion={built.tones.length <= 4 ? chord.inversion : 0}
+            changes={changes}
           />
         ) : null}
       </div>
@@ -207,7 +259,9 @@ export function ChordExplorer({
             )}
           />
           <FloatingPlaySplit
-            label={t(`practice:chords.playAs.${playAs === 'chord' ? 'playChord' : 'arpeggiate'}`)}
+            label={t(
+              `practice:chords.playAs.${all ? 'playAll' : playAs === 'chord' ? 'playChord' : 'arpeggiate'}`,
+            )}
             playing={playback.playing === playAs}
             onPlay={() => sound(playAs)}
             menu={(trigger) => (
@@ -216,12 +270,36 @@ export function ChordExplorer({
                 align="end"
                 render={trigger}
                 trigger={null}
-                actions={(['chord', 'arpeggio'] as const).map((each) => ({
-                  key: each,
-                  label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
-                  checked: playAs === each,
-                  onSelect: () => setPlayAs(each),
-                }))}
+                actions={[
+                  ...(['chord', 'arpeggio'] as const).map((each) => ({
+                    key: each,
+                    label: t(`practice:chords.playAs.${each === 'chord' ? 'block' : 'arpeggio'}`),
+                    checked: playAs === each,
+                    onSelect: () => setPlayAs(each),
+                  })),
+                  ...(several
+                    ? [
+                        {
+                          key: 'all',
+                          group: 'order',
+                          unnamed: true,
+                          label: t('practice:chords.playAs.inOrder', {
+                            count: chordSteps(chord).length,
+                          }),
+                          checked: !only,
+                          onSelect: () => setOnly(false),
+                        },
+                        {
+                          key: 'one',
+                          group: 'order',
+                          unnamed: true,
+                          label: t('practice:chords.playAs.only', { chord: printedSymbol(symbol) }),
+                          checked: only,
+                          onSelect: () => setOnly(true),
+                        },
+                      ]
+                    : []),
+                ]}
               />
             )}
           />

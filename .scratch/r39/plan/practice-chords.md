@@ -118,5 +118,10 @@ Still to port, in this order:
    - **Play** becomes Play all for several, its menu adding "All 3 chords, in order" and "Only Am7"; the chords
      sound one after another, the sounding one chosen.
    - **Practise** is headed "Practise these chords in the Player" for several.
+   Built (this round): the chords in the URL, a bar each, the chosen one ringed, the staff scrolling sideways;
+   each chord mid-bar and the empty bar's +; Next chord (Diatonic, Chromatic, All chords, Change and Remove with
+   Undo); Play all with "All 3 chords, in order" · "Only Dm7"; Practise these chords with Chord changes (the
+   progression Player, the chords as numerals in the staff's key). Left: the sounding chord chosen while Play all
+   plays; Shuffle and the several-chord drills come with item 4.
 4. The drills Over the root and Diatonically.
 5. The serif: the board's Iowan is narrower than the app's Literata, so "root position" wraps at 402.

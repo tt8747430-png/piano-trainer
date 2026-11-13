@@ -35,6 +35,8 @@ export {
 export {
   barSounds,
   chordSounds,
+  chordsInTurn,
+  turnStarts,
   INTERVAL_WAYS,
   intervalSounds,
   PRACTICE_RHYTHM_IDS,
