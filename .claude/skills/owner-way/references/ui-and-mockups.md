@@ -4,13 +4,14 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 ## Building a screen
 
-1. **Read:** the area's section of `feedback-log.md`, its ADR, and the reference app's screens in `piano-data/reference-apps`.
+1. **Read:** the area's section of `feedback-log.md`, its ADR (a refactor skips the ADR: `SKILL.md`, Loops and
+   refactors), and the reference app's screens in `piano-data/reference-apps`.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
 3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
    reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
 4. **Use the kit.** Read `shared/ui/index.ts` first. Tokens only, never a raw value. A new kind of thing joins the kit only
    when it has a second user.
-5. **Write the test first,** then the screen.
+5. **Write the test first,** then the screen; in a loop or a refactor, no tests (`SKILL.md`, Loops and refactors).
 6. **Every state:** loading, empty, error, offline; every control's hover, focus, disabled.
 7. **Both languages,** in the musician's terms, the Russian written rather than translated word for word.
 8. **Two passes** ([testing](testing.md)), each with an `impeccable` check of this page (`critique` or `audit`, then

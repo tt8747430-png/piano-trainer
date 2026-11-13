@@ -36,7 +36,7 @@ Design work on the canvas loads these, each when its moment comes ([`redesigning
 | [`design-consistency`](.claude/skills/design-consistency/SKILL.md)     | a screen against its own system; before a port          |
 | [`board-cleanup`](.claude/skills/board-cleanup/SKILL.md)               | a canvas generator grown hard to read                   |
 
-Contradicting an ADR: say so, then amend it. This file is a map; a component's detail belongs in its area's ADR.
+Contradicting an ADR: say so, then amend it. A refactor does not read the ADRs (`owner-way`, Loops and refactors). This file is a map; a component's detail belongs in its area's ADR.
 
 ## Change rules
 
@@ -68,6 +68,11 @@ and the running screen before it is trusted. Do the whole task, then a second pa
 4. Before any push of code to `main`: the full `npm run test`, once, then `npm run build`. Docs, skills and settings
    that touch no code may go at once. CI runs only by hand, so these local checks are the gate. A command over 10
    seconds runs in the background.
+
+**In a loop, or when the owner says so** (`owner-way`, Loops and refactors), steps 1, 2 and 4 give way: no tests
+written or run, no typecheck or lint; step 3's two visual passes stay in full; the build runs once at the end of a big
+feature (an area's refactor) and only what breaks it is fixed; work goes to the session branch, and to `main` only when
+the owner asks.
 
 ## Commands
 

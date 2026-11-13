@@ -13,6 +13,10 @@ learner sees. Passing tests say nothing about a clipped title.
 | Startup, routing, PWA, config     | `npm run build`, then `npm run preview`                                      |
 | Before pushing to `main`          | the full `npm run test` once, then `npm run build`; `npm run e2e` for a flow |
 
+**In a loop, or when the owner says so** (`SKILL.md`, Loops and refactors): the first two rows and the last are not
+run; the screen passes run in full; the build runs once at the end of a big feature, fixing only what breaks it; `main`
+only when the owner asks.
+
 A command over 10 seconds runs in the background. Never run two suites at once. Never `pgrep -f` or `pkill -f` a pattern your own command holds. Give a long command a limit
 of about twice what it needs. A test that fails only under load is made robust, and you say so.
 

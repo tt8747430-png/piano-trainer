@@ -11,6 +11,8 @@ The habits behind the best result at the least usage. Each is a condensed skill,
 
 ## Building
 
+- **In a loop or a refactor, no tests and no lint:** `SKILL.md`, Loops and refactors, which wins over the two
+  testing lines here and `tdd`.
 - **Test first and watch it fail.** A test that passes before the change tests nothing. A bug fix starts with the test that
   reproduces it. Then the smallest code that passes, then tidy.
 - **Root cause before a fix.** Read the error, reproduce it, trace the data, test one hypothesis. After three failed fixes,
@@ -120,7 +122,7 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
   finishing step, `writing-plans`' subagent header) is read without that step.
 - **No pull requests, no worktrees for your own work:** an agent started with `isolation: "worktree"`
   ([agent-brief](agent-brief.md)) is the one use. Work on
-  the session's branch, commit each task, and push to `main` after the gate (SKILL.md, Merge). `executing-plans` and
+  the session's branch, commit each task, and push to `main` after the gate (SKILL.md, Merge), or in a loop when the owner asks (SKILL.md, Loops and refactors). `executing-plans` and
   `writing-plans` run that way: plans beside the spec in `.scratch/<round>/plan/`, no execution question, no stop
   before a push, its final fresh reviewer only for a large or risky change.
 - **Every finding is fixed,** whatever its grade: no "deferred minors" (`executing-plans`, `requesting-code-review`).

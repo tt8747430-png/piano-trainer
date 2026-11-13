@@ -65,6 +65,33 @@ Each of these sent a round back. Screen-level rules are in [ui-and-mockups](refe
 - **Check the code, not the claim; trust nothing unchecked.** A compaction summary, a recap, a note saying something was read or done: each is a claim to check. `git log` before calling something missing; the code before trusting a progress
   file; an agent's diff before trusting its report.
 
+## Loops and refactors
+
+The owner's ruling of 2026-11-13. It applies in a loop ("continue", "improve", "review in a loop", `/loop`), whenever the
+owner asks to keep improving the app or its design, and whenever the owner says so; where another rule differs, this one
+wins there.
+
+- **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
+  freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
+  change; a ruling changes only when the owner changes it.
+- **Consistency:** a pattern the refactor changes (a sheet, a bar, a row, an icon, a word) changes on every screen that
+  uses it in the same feature: phone and laptop, `en` and `ru`, and the canvas.
+- **Docs:** where relevant, the area's ADR is rewritten in place to what was built, once, at the feature's end; nothing
+  stale or old is kept.
+- **No tests, no lint, no typecheck:** none written, none run.
+- **The visual pass stays in full:** two passes on every screen changed, the second a fresh look after the fixes, at 402
+  (and the 393 check) and 1710, Day and Night, `en` and `ru`; every shot checked against `seven-questions`, `scan-first`,
+  [craft-details](references/craft-details.md) (gaps on the scale, corners, 44px, icons),
+  [ux-principles](references/ux-principles.md), `DESIGN.md` and consistency with the screens that share its parts.
+  Everything found is fixed before moving on.
+- **The build** (it includes the typecheck) runs once, at the end of a big feature: an area's refactor. Only what breaks
+  it is fixed; a test file is touched only when it breaks the build, and red tests wait until the owner asks for a run.
+- **Push:** each change is committed and pushed to the session branch; code goes to `main` only when the owner asks,
+  after the loop.
+- **Never stop:** a finished area is not a stopping point. When everything seems done, start again from the beginning:
+  Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, improving each. Only
+  the word "stop" ends it.
+
 ## Whose decision is it
 
 | Kind                                                                              | Who          | How                                                     |
@@ -100,16 +127,18 @@ does not read first: write the spec, build it, and log it.
 - **Before starting:** fetch and check the branch is level with `main`.
 - **Don't stop at all until every task is finished.** A message is not a stop: take it in and carry on; stop only on the
   word "stop". A finished item, a pushed commit or a passing suite is not a stopping point; the next item is. End a turn
-  only when every task is done and nothing is left, then report what you did. On "continue", pick up exactly where the work
+  only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left: start again
+  from the beginning ([Loops and refactors](#loops-and-refactors)). On "continue", pick up exactly where the work
   stopped.
 - **Answer questions first,** in a line or two, then carry on. Asked to research and say what you will do: stop after
   saying it.
 - **"Continue with all" means autonomous mode:** every open task (the plan's rounds, the review findings), one round after
-  another, without asking anything: no AskUserQuestion, no "shall I…", no stopping to report between rounds. Keep the gate
-  and push each round. Stop only when everything is implemented and nothing is left, then report.
+  another, without asking anything: no AskUserQuestion, no "shall I…", no stopping to report between rounds. It runs as
+  a loop ([Loops and refactors](#loops-and-refactors)): the build at each area's end, each change pushed to the session
+  branch, `main` when the owner asks; when everything is implemented, start again from the beginning.
 - **A command over 10 seconds runs in the background,** so other work continues. That includes the suite and the build.
-- **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate, before the next
-  starts. Keep the brief's order.
+- **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
+  build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
   is used when the work is hours long, splits by files, briefs in under a page and parallel running saves the owner
   real time; two or three at most. A skill built on agents (`code-review`'s two reviewers; a research agent) may run without asking when its job fits:
@@ -119,7 +148,7 @@ does not read first: write the spec, build it, and log it.
   scratch.
 - **Commits:** one per finished task, saying what changed and why, staged by path, ending with the session's attribution.
   The owner's standing rule is to commit each task without being asked.
-- **Merge:** code reaches `main` only after the full suite and build pass: `git push -u origin <branch> && git push origin
+- **Merge** (in a loop, [Loops and refactors](#loops-and-refactors) instead): code reaches `main` only after the full suite and build pass: `git push -u origin <branch> && git push origin
   HEAD:main`. Docs, skills and settings that touch no code may go at once; say that you did. Ignore Vercel's status and CI.
 - **Docs each round:** rewrite the area's ADR to the decision as it stands (no History lines; what it replaced is deleted, git keeps it), `DESIGN.md` where the look
   changed, `CLAUDE.md`'s map when something is renamed or deleted.

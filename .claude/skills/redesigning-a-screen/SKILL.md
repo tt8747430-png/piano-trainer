@@ -30,9 +30,10 @@ care shows in a hundred small things done the same way.
 ## The loop
 
 1. **Read before touching anything:** the area's section of `owner-way/references/feedback-log.md` (find it by the
-   area's words; Songs is "Library, adding, publishing"), its ADR (`docs/adr/README.md`), and every earlier spec for
+   area's words; Songs is "Library, adding, publishing") and every earlier spec for
    the area (`grep -ril <area> .scratch/*/plan`), above all a **"The rulings as they stand"** section. A thing a
-   ruling removed is never redrawn.
+   ruling removed is never redrawn. The ADRs are not read: a redesign uses best practice and the UI skills freely
+   (`owner-way`, Loops and refactors), and the ADR is rewritten to what was built at the feature's end.
 2. **Audit today, in the code:** list every control on the screen and in its settings, with its file, exact label,
    values and default (`grep` the area's `ui/` and its `en` strings). Shoot the screen at phone 402 and laptop 1710
    wide, with the 393 check, as `owner-way/references/testing.md` does. Never say where something lives, or that it exists, without the
@@ -67,7 +68,7 @@ care shows in a hundred small things done the same way.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation. Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
-8. **Build** only after the owner's "ok": the port table's order, one item per commit, `owner-way`'s gate. In
+8. **Build** only after the owner's "ok": the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
    autonomous mode ("continue with all") the canvas and spec are still made first, then built without waiting, the
    open questions drawn at the end of the report.
 
