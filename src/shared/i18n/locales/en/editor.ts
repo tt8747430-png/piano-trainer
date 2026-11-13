@@ -184,8 +184,6 @@ export const editor = {
     change: 'Change instrument',
     delete: 'Delete…',
     new: 'New instrument',
-    full: 'A score can contain up to eight staves in addition to the piano.',
-    keepOne: 'At least one staff must remain visible.',
     deleteTitle: 'Delete {{staff}}?',
     deleteBody: 'The staff and all of its notes will be removed. You can undo this.',
     pianoBody:
@@ -561,7 +559,6 @@ export const editor = {
     // The takes' button beside Record, with how many there are.
     takes: 'Takes: {{count}}',
     // The takes' button while the song has none: greyed, its tooltip saying why.
-    noTakes: 'No takes yet. Your recordings will appear here.',
     full: 'Take storage is full. Delete a take to record another.',
     nothing: 'No notes were played.',
     none: 'No takes yet.',
@@ -679,7 +676,6 @@ export const editor = {
     addStaffOverPiano: 'Add staff above the piano',
     hidePiano: 'Hide piano',
     showPiano: 'Show piano',
-    lastInSight: 'At least one staff must remain visible.',
   },
   // An editor's draft of a built-in song's original (ADR 0116): what its strip says, Publish, the
   // draft's menu (Versions, Discard), and the dialogs they open.

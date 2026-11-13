@@ -61,7 +61,8 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   tap on the page's free room folds them away until the next. The full-screen routes (the Player, the editor, the
   Check) have no host: their bars stand in flow (ADR 0115).
 - **Explanations in a popover.** No line of explanation stands under a control. Its name carries an ⓘ (`InfoTip`)
-  that opens it; a greyed control says why in its tooltip; a term's meaning is its key's tooltip. No sentence repeats
+  that opens it; a term's meaning is its key's tooltip. A menu or a gear holds only what can be done here: an act
+  that cannot (no takes yet, the last staff in sight, no voice in this browser) is left out, never greyed with a reason. No sentence repeats
   what a label, an icon or the layout already says.
 - **The same at every size.** A control has the same name and does the same thing on a phone and a laptop. A size
   changes where it stands, never what it is or says. An icon button is named by its tooltip and its accessible name. A control with words is named by

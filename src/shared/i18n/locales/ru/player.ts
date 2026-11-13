@@ -12,7 +12,6 @@ export const player: LocaleResources['player'] = {
   },
   sections: {
     title: 'Разделы',
-    one: { song: 'В этой песне один раздел.', study: 'В этом этюде один раздел.' },
   },
   print: 'Печать',
   views: {
@@ -88,7 +87,6 @@ export const player: LocaleResources['player'] = {
     howDidIPlay: 'Как я сыграл?',
     label: 'Разбор',
     about: 'Ваш последний дубль, отмеченный в нотах',
-    none: 'Сначала запишите дубль',
     summary: 'Верно: {{percent}}',
     close: 'Скрыть разбор',
     count: {
@@ -125,7 +123,6 @@ export const player: LocaleResources['player'] = {
   },
   voice: {
     label: 'Голосовые команды',
-    unavailable: 'Недоступно в этом браузере',
   },
   modes: {
     wait: { name: 'Режим ожидания', line: 'Музыка ждёт верных нот.' },

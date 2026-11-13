@@ -127,7 +127,7 @@ export function DraftActions({
             label: t('original.discard'),
             icon: Trash2,
             destructive: true,
-            disabled: !draft.drafted,
+            hidden: !draft.drafted,
             onSelect: () => setAsked('discard'),
           },
         ]}

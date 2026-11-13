@@ -148,18 +148,18 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
               paint="sand"
               onClick={record}
             />
-            <RowButton
-              title={t('scoreSettings.acts.takes')}
-              icon={ListMusic}
-              paint="yellow"
-              value={String(count)}
-              disabled={count === 0}
-              reason={t('recorder.noTakes')}
-              onClick={() => {
-                view.setGear(null)
-                takes.show(TAKES_PAGE)
-              }}
-            />
+            {count > 0 ? (
+              <RowButton
+                title={t('scoreSettings.acts.takes')}
+                icon={ListMusic}
+                paint="yellow"
+                value={String(count)}
+                onClick={() => {
+                  view.setGear(null)
+                  takes.show(TAKES_PAGE)
+                }}
+              />
+            ) : null}
           </>
         )}
       </SettingsGroup>

@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { Fragment, useId, type ReactElement, type ReactNode, type Ref } from 'react'
+import { Fragment, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import {
@@ -18,9 +18,8 @@ export interface MenuAction {
   readonly key: string
   readonly label: string
   readonly onSelect: () => void
-  readonly disabled?: boolean
-  /** Why it is greyed, said while it is: the browser's tooltip, and to a screen reader. */
-  readonly reason?: string | undefined
+  /** Not doable here: the menu leaves it out, since a menu holds only what works (ui-and-mockups). */
+  readonly hidden?: boolean
   /** Its picture, before its name. */
   readonly icon?: LucideIcon
   /** A command that destroys (Delete): its item in the warning colour, after a separator, last. */
@@ -33,14 +32,13 @@ export interface MenuAction {
   readonly checked?: boolean
 }
 
-/** A menu's item: 44px tall, its icon, its name; a greyed one keeps the pointer so its reason shows. */
-const ITEM =
-  'min-h-11 gap-3 rounded-control px-3 text-base [&_svg:not([class*=size-])]:size-5 data-disabled:pointer-events-auto'
+/** A menu's item: 44px tall, its icon, its name. */
+const ITEM = 'min-h-11 gap-3 rounded-control px-3 text-base [&_svg:not([class*=size-])]:size-5'
 
 /**
  * A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): a button
- * that opens commands, moved through with the arrow keys and typed to; each a 44px item, a greyed one
- * saying why (`reason`); groups named small with a separator between, a checked item ticked, the
+ * that opens commands, moved through with the arrow keys and typed to; each a 44px item, none that
+ * cannot be done here (`hidden`); groups named small with a separator between, a checked item ticked, the
  * destructive ones last in the warning colour. Commands only: a setting is a row on a page, a choice
  * a pop-up (`Dropdown`). Its button is an outline one holding `trigger`, or `render` in its place (a
  * round icon named for a screen reader); `ref` is that button.
@@ -61,33 +59,20 @@ export function ActionMenu({
   actions?: readonly MenuAction[]
   ref?: Ref<HTMLButtonElement>
 }) {
-  const id = useId()
-  // The destructive commands last, set apart.
-  const kept = actions.filter((action) => !action.destructive)
-  const destructive = actions.filter((action) => action.destructive)
+  // Only what works here; the destructive commands last, set apart.
+  const shown = actions.filter((action) => !action.hidden)
+  const kept = shown.filter((action) => !action.destructive)
+  const destructive = shown.filter((action) => action.destructive)
   const item = (action: MenuAction) => {
-    const why = action.disabled ? action.reason : undefined
-    const whyId = `${id}-${action.key}-why`
     const face = (
       <>
         {action.icon ? <action.icon aria-hidden /> : null}
         <span className="min-w-0 flex-1 truncate">{action.label}</span>
-        {why ? (
-          <span id={whyId} hidden>
-            {why}
-          </span>
-        ) : null}
       </>
     )
-    const common = {
-      disabled: action.disabled ?? false,
-      title: why,
-      'aria-describedby': why ? whyId : undefined,
-    }
     return action.checked === undefined ? (
       <DropdownMenuItem
         key={action.key}
-        {...common}
         variant={action.destructive ? 'destructive' : 'default'}
         className={ITEM}
         onClick={action.onSelect}
@@ -97,7 +82,6 @@ export function ActionMenu({
     ) : (
       <DropdownMenuCheckboxItem
         key={action.key}
-        {...common}
         checked={action.checked}
         className={cn(ITEM, 'pr-10')}
         onClick={action.onSelect}

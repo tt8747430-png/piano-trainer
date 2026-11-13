@@ -23,7 +23,7 @@ back gets a score they did not ask for.
   late beyond that within half a beat (`feedbackOf`), so the windows need no setting of their own.
 - **MIDI only.** Record needs a connected MIDI keyboard; without one its popover says so and how to connect one. The
   on-screen keys and the computer's keys are not recorded: their timing is the input's lag.
-- **In the editor's gear** (ADR 0114): Record a take, Takes (greyed until the song has one) and Settings › Recording;
+- **In the editor's gear** (ADR 0114): Record a take, Takes (only once the song has one) and Settings › Recording;
   while it records, the recording strip stands at the sheet's foot. The takes' sheet opens by itself on
   a take just kept. A take has a page (`/edit/$pieceId/takes/$takeId`): its name, a piano roll, Play and Keep bars.
 - **Saved in `pt-takes`**, written compactly. Room for 60,000 notes in all keeps the takes inside every browser's

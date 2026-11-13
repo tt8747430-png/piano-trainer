@@ -15,7 +15,6 @@ export const player = {
   },
   sections: {
     title: 'Sections',
-    one: { song: 'This song has one section.', study: 'This study has one section.' },
   },
   print: 'Print',
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
@@ -98,7 +97,6 @@ export const player = {
     howDidIPlay: 'How did I play?',
     label: 'Feedback',
     about: 'Your last take, marked on the score',
-    none: 'Record a take first',
     summary: '{{percent}} right',
     close: 'Hide feedback',
     count: {
@@ -135,7 +133,6 @@ export const player = {
   },
   voice: {
     label: 'Voice commands',
-    unavailable: 'Not available in this browser',
   },
   // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {

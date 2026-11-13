@@ -607,6 +607,9 @@ are reference only, but progressions are facts.
   days, two at most), and the week shared in a group. Drawn, not built.
 - **Only what works here:** "only the relevant actions and ui should be shown and not ui that doesn't work". A choice never
   moves you to another tab.
+- **A menu leaves out what cannot be done** (loop, 2026-11-13, from "only the relevant actions"): no greyed item with a
+  reason in a menu or a gear (Feedback before a take, Voice commands without a voice, Sections with one, Hide on the
+  last staff in sight); an in-place control may still grey.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings

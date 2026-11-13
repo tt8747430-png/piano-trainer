@@ -148,7 +148,7 @@ export function blockActions(
       key: 'duplicate',
       label: t('edit.doc.duplicate'),
       icon: Copy,
-      disabled: fixed,
+      hidden: fixed,
       onSelect: () => actOnBlock(editor, index, 'duplicate'),
     },
     {
@@ -156,7 +156,7 @@ export function blockActions(
       label: t('edit.doc.remove'),
       icon: Trash2,
       destructive: true,
-      disabled: fixed,
+      hidden: fixed,
       onSelect: () => {
         const name = node ? nodeName(node, t) : ''
         if (!actOnBlock(editor, index, 'remove')) return

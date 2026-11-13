@@ -12,15 +12,28 @@ const ORDER: readonly Hands[] = ['lh', 'both', 'rh']
  * A hand's colour as the keys wear it (DESIGN.md, the Player's hands; R35): the right hand a brick
  * dot, the left a lilac one outlined, so they differ by fill as well as hue.
  */
-export function HandSwatch({ hand }: { hand: Hand }) {
+export function HandSwatch({ hand, className }: { hand: Hand; className?: string }) {
   return (
     <span
       aria-hidden
       className={cn(
         'inline-block size-2.5 shrink-0 rounded-key-black',
         hand === 'rh' ? 'bg-hand-rh' : 'border-2 border-hand-lh bg-hand-lh-wash',
+        className,
       )}
     />
+  )
+}
+
+/** Hands as a picture: a hand's swatch, or both side by side (the Player's foot, where its icon would be). */
+export function HandsPicture({ hands }: { hands: Hands }) {
+  const shown: readonly Hand[] = hands === 'both' ? ['lh', 'rh'] : [hands]
+  return (
+    <span aria-hidden className="flex items-center gap-1">
+      {shown.map((hand) => (
+        <HandSwatch key={hand} hand={hand} className="size-3.5" />
+      ))}
+    </span>
   )
 }
 

@@ -36,7 +36,6 @@ export function StaffMenu({
   const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null)
   const [renaming, setRenaming] = useState(false)
   const { dispatch } = actions
-  const kept = t('printed.lastInSight')
   if (staves === 'piano')
     return (
       <ActionMenu
@@ -54,8 +53,7 @@ export function StaffMenu({
             key: 'hide',
             label: t('printed.hidePiano'),
             icon: EyeOff,
-            disabled: !inSight.some(isSingleStaff),
-            reason: kept,
+            hidden: !inSight.some(isSingleStaff),
             onSelect: () => dispatch({ type: 'piano', hidden: true }),
           },
         ]}
@@ -103,8 +101,7 @@ export function StaffMenu({
             label: t('printed.removeStaff'),
             icon: Trash2,
             destructive: true,
-            disabled: inSight.length === 1 && inSight[0] === staves,
-            reason: kept,
+            hidden: inSight.length === 1 && inSight[0] === staves,
             onSelect: () => dispatch({ type: 'removeStaff', place }),
           },
         ]}

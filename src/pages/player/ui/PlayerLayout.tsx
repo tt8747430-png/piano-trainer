@@ -38,7 +38,13 @@ import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import { ActionMenu, SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
+import {
+  ActionMenu,
+  HandsPicture,
+  SheetPill,
+  SheetToolsContext,
+  type MenuAction,
+} from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   ClickButton,
@@ -326,15 +332,18 @@ export function PlayerLayout({
               icon: ListMusic,
               onSelect: () => setRecordingsOpen(true),
             },
-            {
-              key: 'feedback',
-              group: 'practice',
-              label: t('feedback.howDidIPlay'),
-              icon: MessageSquareText,
-              disabled: takes.list.length === 0,
-              ...(takes.list.length === 0 ? { reason: t('feedback.none') } : {}),
-              onSelect: () => takes.show(takes.list[0]?.id ?? null),
-            },
+            // How did I play? once there is a take to judge: a menu holds only what works here.
+            ...(takes.list.length === 0
+              ? []
+              : [
+                  {
+                    key: 'feedback',
+                    group: 'practice',
+                    label: t('feedback.howDidIPlay'),
+                    icon: MessageSquareText,
+                    onSelect: () => takes.show(takes.list[0]?.id ?? null),
+                  },
+                ]),
           ]
         : []),
       ...moreActs
@@ -355,16 +364,19 @@ export function PlayerLayout({
         onSelect: () => setTunerOpen(true),
       },
       ...moreActs.filter((act) => act.part === 'tools').map((act) => ({ ...act, group: 'tools' })),
-      {
-        key: 'voice',
-        group: 'listening',
-        label: t('voice.label'),
-        icon: Mic,
-        checked: voice,
-        disabled: !hasVoiceCommands(),
-        ...(hasVoiceCommands() ? {} : { reason: t('voice.unavailable') }),
-        onSelect: () => setVoice(!voice),
-      },
+      // Voice commands where the browser can hear them.
+      ...(hasVoiceCommands()
+        ? [
+            {
+              key: 'voice',
+              group: 'listening',
+              label: t('voice.label'),
+              icon: Mic,
+              checked: voice,
+              onSelect: () => setVoice(!voice),
+            },
+          ]
+        : []),
       ...moreActs
         .filter((act) => act.part === 'listening')
         .map((act) => ({ ...act, group: 'listening' })),
@@ -612,7 +624,7 @@ export function PlayerLayout({
         {tools}
         {twoHands ? (
           <FootTool
-            icon={Hand}
+            icon={{ picture: <HandsPicture hands={view.hands} /> }}
             label={t(`common:handsShort.${view.hands}`)}
             aria-label={t('handsOf', { hands: t(`common:handsShort.${view.hands}`) })}
             aria-haspopup="dialog"

@@ -1,20 +1,22 @@
 import type { LucideIcon } from 'lucide-react'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 
 /**
- * A tool of the Player's foot bar (R29 B8): its icon over its name, the reference's labelled bar. A
- * switch (`aria-pressed`) or an open menu wears the primary's ink while it is on.
+ * A tool of the Player's foot bar (R29 B8): its icon, or a picture of its own (the hands' swatches), over
+ * its name, the reference's labelled bar. A switch (`aria-pressed`) or an open menu wears the primary's ink while it is on.
  */
 export function FootTool({
-  icon: Icon,
+  icon,
   label,
   className,
   ...props
 }: {
-  icon: LucideIcon
+  /** A Lucide icon, or a picture drawn 20px square. */
+  icon: LucideIcon | { readonly picture: ReactNode }
   label: string
 } & Omit<ComponentProps<'button'>, 'children'>) {
+  const Icon = 'picture' in icon ? null : icon
   return (
     <button
       type="button"
@@ -24,7 +26,13 @@ export function FootTool({
       )}
       {...props}
     >
-      <Icon aria-hidden className="size-5 shrink-0" />
+      {Icon ? (
+        <Icon aria-hidden className="size-5 shrink-0" />
+      ) : (
+        <span aria-hidden className="grid size-5 shrink-0 place-items-center">
+          {'picture' in icon ? icon.picture : null}
+        </span>
+      )}
       <span className="max-w-full text-center leading-tight">{label}</span>
     </button>
   )

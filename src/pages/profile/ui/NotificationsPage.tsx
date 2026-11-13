@@ -76,7 +76,7 @@ export function NotificationsPage() {
                   key: 'read',
                   label: t('profile.notifications.markAll'),
                   icon: CheckCheck,
-                  disabled: notices.every((notice) => notice.read),
+                  hidden: notices.every((notice) => notice.read),
                   onSelect: () => set(notices.map((notice) => ({ ...notice, read: true }))),
                 },
                 {

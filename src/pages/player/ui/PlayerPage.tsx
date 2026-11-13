@@ -152,15 +152,18 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     : isDegreePiece(piece)
       ? null
       : { kind: 'own', song: { title, music: musicOf(piece) } }
+  // Only what works here (ui-and-mockups): Sections where the music has more than one.
   const more: MenuAction[] = [
-    {
-      key: 'sections',
-      label: t('player:sections.title'),
-      icon: ListTree,
-      onSelect: () => setShowing('sections'),
-      disabled: starts.length < 2,
-      reason: t(`player:sections.one.${piece.kind}`),
-    },
+    ...(starts.length < 2
+      ? []
+      : [
+          {
+            key: 'sections',
+            label: t('player:sections.title'),
+            icon: ListTree,
+            onSelect: () => setShowing('sections'),
+          },
+        ]),
     {
       key: 'info',
       label: t(`player:info.${piece.kind}`),

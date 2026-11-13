@@ -99,8 +99,7 @@ export function InstrumentsPanel() {
           label: t('instruments.delete'),
           icon: Trash2,
           destructive: true,
-          disabled: lastStaff,
-          reason: lastStaff ? t('instruments.keepOne') : undefined,
+          hidden: lastStaff,
           onSelect: () => setDeleting({ place, name }),
         },
       ],
@@ -118,8 +117,7 @@ export function InstrumentsPanel() {
               label: t('instruments.delete'),
               icon: Trash2,
               destructive: true,
-              disabled: heads.length === 0,
-              reason: heads.length === 0 ? t('instruments.keepOne') : undefined,
+              hidden: heads.length === 0,
               onSelect: () => setDeleting({ piano: t('songs:setup.piano') }),
             },
           ],
@@ -138,8 +136,7 @@ export function InstrumentsPanel() {
       {
         key: instrument,
         label: instrumentName(instrument),
-        disabled: !more,
-        reason: more ? undefined : t('instruments.full'),
+        hidden: !more,
         onSelect: () => {
           if (more) actions.dispatch(more)
         },
@@ -181,7 +178,7 @@ export function InstrumentsPanel() {
               {
                 key: 'score',
                 label: t('instruments.scoreOrder'),
-                disabled: heads.length < 2,
+                hidden: heads.length < 2,
                 onSelect: () => reorder(scoreOrder(heads)),
               },
             ]}
