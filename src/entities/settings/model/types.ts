@@ -279,7 +279,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   pinned: true,
   textSize: 100,
   keys: true,
-  hands: false,
+  hands: true,
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */

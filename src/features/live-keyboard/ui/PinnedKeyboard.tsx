@@ -33,6 +33,7 @@ export function PinnedKeyboard({
   wrong,
   onKeyPress,
   screen = 'reading',
+  place,
   className,
 }: {
   /** The keys to hold in view, each marked as the page shows it. */
@@ -50,10 +51,13 @@ export function PinnedKeyboard({
   onKeyPress?: ((key: Midi) => void) | undefined
   /** What the screen's keys are for: read beside, or played on (the Chord finder). */
   screen?: KeysScreen
+  /** Under the bar whatever the dock: a page whose keys are its stage (Chords, its canvas). */
+  place?: 'top' | undefined
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
-  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const docked = useSettings((state) => selectKeyboard(state).dock)
+  const dock = place ?? docked
   const { folded, fold } = useFoldKeys(screen)
   const { keys, marks } = shown
   const [opened] = useState(keys)

@@ -24,6 +24,7 @@ import {
   type Triad,
 } from '@/shared/lib/music'
 import { type PartsParams, partsFromParams, partsParams } from '@/shared/lib'
+import type { PerformanceNote } from '@/shared/lib/arrangement'
 
 /**
  * What the Chords explorer shows: a chord built part by part on a root, in a voicing, in an inversion,
@@ -138,4 +139,29 @@ export function fingeringRows(view: ChordView): FingeringRow[] {
       hands: { lh: { notes, keys, fingers: row.lh }, rh: { notes, keys, fingers: row.rh } },
     }
   })
+}
+
+/** How long the hands hold a chord on the stage: as long as the page shows it. */
+const HELD_TICKS = 1_000_000
+
+/**
+ * The chord as the hands play it on the stage (the 3D piano): each hand's keys held from the start,
+ * each pressed by its finger, as the Player's hands play a performance's notes.
+ */
+export function chordPerformance(view: ChordView): PerformanceNote[] {
+  const { placed, fingers } = viewChord(view)
+  return (['lh', 'rh'] as const).flatMap((side) =>
+    placed[side].map((key, at) => {
+      const finger = fingers[side][at]
+      return {
+        midi: key.midi,
+        spelled: key.tone.note,
+        hand: side,
+        startTick: 0,
+        durationTicks: HELD_TICKS,
+        velocity: 80,
+        ...(finger === undefined ? {} : { finger }),
+      }
+    }),
+  )
 }

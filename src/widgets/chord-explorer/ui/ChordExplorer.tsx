@@ -2,7 +2,6 @@ import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
-import { PinnedKeyboard } from '@/features/live-keyboard'
 import { recordKeyPractised } from '@/features/record-practised'
 import { chordShown, noteOnTop, useShownKeys } from '@/features/play-example'
 import { useKeyName } from '@/shared/i18n'
@@ -46,6 +45,7 @@ import { ChordPractice } from './ChordPractice'
 import { ChordHead } from './ChordHead'
 import { ChordSheet } from './ChordSheet'
 import { ColourNotes } from './ColourNotes'
+import { ChordStage } from './ChordStage'
 import { VoicingPicture } from './VoicingPicture'
 
 /** A triad's quality, for a chord the table does not name: what its numeral is written from. */
@@ -142,7 +142,7 @@ export function ChordExplorer({
 
   return (
     <div className="flex flex-col gap-6">
-      <PinnedKeyboard shown={shown} />
+      <ChordStage chord={chord} shown={shown} />
       <ChordHead
         name={
           <>
