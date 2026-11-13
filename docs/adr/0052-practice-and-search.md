@@ -42,14 +42,13 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   learner sees it for the session, its one home); Sync (where it stands, Sync now, what syncs: its one home); then
   Sign out and Delete account…, each red in a group of its own at the foot, a footnote under it, asking through the
   one confirm dialog (the email typed for Delete).
-- **Practice is ordered by relevance** (R32, as Yousician, Simply Piano, Flowkey and musictheory.net order a practice
-  home): its purpose in one line; **Up next**, up to three cards the learner's record proves are next (skills due in
-  My gaps, the exercise last played through, the Practice page last opened, however reached: the shell notes every
-  visit, `usePracticeVisits`), each saying why, or **Start here** (the first exercise, Chords) for a new learner; then
-  **Theory** (Chords, Scales and keys, Intervals, Progressions), **Playing** (Accompaniment, the Chord player) and
-  **Training** (Exercises, Quiz), each a card of rows (its tile, name and one line, the same in Search), Theory beside
-  Playing and Training on a laptop; the **Tools** last, four tiles each showing what it is set to (the Metronome's
-  tempo and meter, the Tuner's A4). A page's URL sits under its page's.
+- **Practice is three groups** (canvas 160): **Theory** (Chords, Scales and keys, Intervals, Progressions,
+  Accompaniment), the pages that explain a thing and practise it where it is explained; **Exercises**, its three books
+  (Finger technique, Barry Harris, Piano With Jonny, each with its count and the library's tile, `EXERCISE_BOOKS`),
+  each opening the Exercises library at its place; the **Tools** last (the Chord player, Metronome, Tuner, Chord
+  finder, Circle of fifths), the Metronome and Tuner showing what they are set to. One card of rows on a phone, cards
+  five across on a laptop. No Up next and no Quiz row: nothing the app cannot stand behind. A page's URL sits under
+  its page's.
 - **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (`PickerRow`, ADR 0061):
   the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
   `PitchPicker`), a quality, a voicing or a scale's kind a menu (`MenuPicker`), a key the circle of fifths
