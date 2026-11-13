@@ -9,10 +9,13 @@ import type { Progress } from '../model/progress'
 export function LearnedMeter({
   progress,
   above = false,
+  lead,
   className,
 }: {
   progress: Progress
   above?: boolean
+  /** Said before the count: where the learner is ("Lesson 7"). */
+  lead?: string | undefined
   className?: string
 }) {
   const { t } = useTranslation('learn')
@@ -21,7 +24,7 @@ export function LearnedMeter({
     <ProgressMeter
       done={progress.done}
       total={progress.total}
-      count={t('progress', counts)}
+      count={lead ? `${lead} · ${t('progress', counts)}` : t('progress', counts)}
       said={t('progress', counts)}
       above={above}
       className={className}

@@ -35,6 +35,16 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const track = 'course' in next ? next.course : next.journey
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
+  // Which lesson of its track it is, as the level's and the course's lines number them.
+  const n =
+    step.kind === 'course-lesson' && 'course' in next
+      ? next.course.lessons.findIndex((lesson) => lesson.id === step.lessonId) + 1
+      : step.kind === 'lesson' && 'journey' in next
+        ? next.journey.chapters
+            .flatMap((chapter) => chapter.steps)
+            .filter((each) => each.kind === 'lesson')
+            .findIndex((each) => each.lessonId === step.lessonId) + 1
+        : 0
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
@@ -52,7 +62,12 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
         <Icon className={read ? undefined : 'fill-current'} />
       </span>
       {track.id === shown ? null : (
-        <LearnedMeter progress={progress} above className="col-span-2" />
+        <LearnedMeter
+          progress={progress}
+          above
+          lead={n > 0 ? t('lessonNumber', { n }) : undefined}
+          className="col-span-2"
+        />
       )}
     </>
   )
