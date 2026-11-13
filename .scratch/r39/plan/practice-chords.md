@@ -123,5 +123,9 @@ Still to port, in this order:
    Undo); Play all with "All 3 chords, in order" · "Only Dm7"; Practise these chords with Chord changes (the
    progression Player, the chords as numerals in the staff's key). Left: the sounding chord chosen while Play all
    plays; Shuffle and the several-chord drills come with item 4.
-4. The drills Over the root and Diatonically.
-5. The serif: the board's Iowan is narrower than the app's Literata, so "root position" wraps at 402.
+4. ~~The drills Over the root and Diatonically~~ (d52f93a5): one chord adds Over the root (LH root · RH chord, the
+   Player's whole-note figures) and Diatonically, in the key it belongs to (a major key's I ii V7 vii, a °7 on vii
+   of harmonic minor), up to its octave and back; several chords Over the root, Chromatically and Circle of fifths
+   (the progression walked through the keys) and Shuffle.
+5. ~~The name's width~~: the parts' gaps were 8 where the board's are 6 (between parts and inside each), and the
+   chevron side 8 where the board's is 9; with the board's values Cmaj7 · root position fits one line at 402.
