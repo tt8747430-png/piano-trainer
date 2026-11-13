@@ -51,6 +51,8 @@ export const practice: LocaleResources['practice'] = {
     builder: {
       // The row of pickers over a chord: its root, the chord by name and its voicing.
       chord: 'Аккорд',
+      // A major triad's kind beside its root in the chord's name, where its symbol has none.
+      major: 'maj',
       topNote: 'Верхний звук',
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },

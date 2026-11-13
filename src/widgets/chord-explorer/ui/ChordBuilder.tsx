@@ -81,13 +81,6 @@ export function ChordBuilder({
 }) {
   const { t } = useTranslation(['practice', 'music', 'common'])
   const parts = partsFromParams(chord)
-  const root = noteFromParam(chord.root)
-  // Each chord of this size named as it is written on this root: C, Cm, C°, Cmaj7, Cm(maj9) …
-  const types = typesOf(parts.size)
-  const named = (type: ChordType) =>
-    printedNote(root) +
-    buildChord(root, { ...type, size: parts.size, added: [], alterations: [] }).suffix
-  const current = types.find((each) => each.triad === parts.triad && each.seventh === parts.seventh)
   const close = chord.voicing === 'close'
   const twoHands = close && takesTwoHands(tones.length)
   const inverts = voicingTakesInversion(chord.voicing)
@@ -95,21 +88,7 @@ export function ChordBuilder({
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
-        <PickerRow label={t('practice:chords.builder.chord')}>
-          <NotePicker
-            label={t('practice:root')}
-            value={noteFromParam(chord.root)}
-            onChange={(root) => onChange({ root: noteParam(root) })}
-          />
-          <MenuPicker
-            label={t('practice:chords.builder.chord')}
-            value={typeKey(current ?? types[0] ?? { triad: 'maj', seventh: 'minor' })}
-            options={types.map((type) => ({ value: typeKey(type), label: named(type) }))}
-            onChange={(key) => {
-              const type = types.find((each) => typeKey(each) === key)
-              if (type) onChange(type)
-            }}
-          />
+        <PickerRow label={t('practice:chords.voicing.label')}>
           <VoicingField
             tones={tones}
             placed={placed}
@@ -166,6 +145,63 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
+    </div>
+  )
+}
+
+/** The name's two pickers, large in the serif as the chord is written. */
+const NAME_PICKER =
+  'h-auto min-h-14 gap-1.5 rounded-card border-transparent bg-muted/60 px-3 py-1 font-display text-4xl font-semibold [&>span]:font-semibold'
+
+/**
+ * The chord's name, made of its pickers (R42): its root and its kind, each large in the serif with
+ * ⌃⌄, each opening its picker ("C ⌃ maj7 ⌃"). The Chord picker lists every chord of the size, by
+ * its symbol on the root chosen, and shows the kind alone beside the root.
+ */
+export function ChordName({
+  chord,
+  onChange,
+}: {
+  chord: ChordView
+  onChange: (change: Partial<ChordView>) => void
+}) {
+  const { t } = useTranslation(['practice'])
+  const parts = partsFromParams(chord)
+  const root = noteFromParam(chord.root)
+  // Each chord of this size named as it is written on this root: C, Cm, C°, Cmaj7, Cm(maj9) …
+  const types = typesOf(parts.size)
+  const suffix = (type: ChordType) =>
+    buildChord(root, { ...type, size: parts.size, added: [], alterations: [] }).suffix
+  const current = types.find((each) => each.triad === parts.triad && each.seventh === parts.seventh)
+  const byKey = new Map(types.map((type) => [typeKey(type), type]))
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <NotePicker
+        bare
+        label={t('practice:root')}
+        value={root}
+        onChange={(spelled) => onChange({ root: noteParam(spelled) })}
+        className={NAME_PICKER}
+      />
+      <MenuPicker
+        bare
+        label={t('practice:chords.builder.chord')}
+        value={typeKey(current ?? types[0] ?? { triad: 'maj', seventh: 'minor' })}
+        options={types.map((type) => ({
+          value: typeKey(type),
+          label: printedNote(root) + suffix(type),
+        }))}
+        // Beside the root the kind alone ("maj7"); a major triad, which has none, says "maj".
+        face={(key) => {
+          const type = byKey.get(key)
+          return (type ? suffix(type) : '') || t('practice:chords.builder.major')
+        }}
+        onChange={(key) => {
+          const type = byKey.get(key)
+          if (type) onChange(type)
+        }}
+        className={NAME_PICKER}
+      />
     </div>
   )
 }

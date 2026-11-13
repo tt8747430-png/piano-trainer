@@ -24,7 +24,6 @@ import {
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
-  ChordHeading,
   FloatingActions,
   FloatingBar,
   FloatingBarButton,
@@ -39,7 +38,7 @@ import {
   type ChordView,
 } from '../model/chord-view'
 import { ChordFingering } from './ChordFingering'
-import { ChordBuilder } from './ChordBuilder'
+import { ChordBuilder, ChordName } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
 import { ChordHead } from './ChordHead'
 import { ChordSheet } from './ChordSheet'
@@ -138,8 +137,10 @@ export function ChordExplorer({
       <ChordHead
         name={
           <>
-            <hgroup>
-              <ChordHeading symbol={symbol} />
+            <hgroup className="flex flex-col gap-2">
+              {/* The chord's name is said once to a screen reader; to the eye, its pickers are its name. */}
+              <h2 className="sr-only">{printedSymbol(symbol)}</h2>
+              <ChordName chord={chord} onChange={change} />
               {quality ? (
                 <p className="text-muted-foreground">{t(`music:quality.${quality}`)}</p>
               ) : null}

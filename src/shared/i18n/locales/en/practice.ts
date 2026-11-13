@@ -57,6 +57,8 @@ export const practice = {
       chord: 'Chord',
       // A chord of five notes or more, its root left to the bass: where its right hand starts.
       // A chord shared between the hands is named by the note on top of the right hand (R29-P3).
+      // A major triad's kind beside its root in the chord's name, where its symbol has none.
+      major: 'maj',
       topNote: 'Top note',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
