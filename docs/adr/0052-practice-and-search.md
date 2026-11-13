@@ -22,7 +22,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   in); three figures (day streak, to Streak; songs learned; practice time); **Last 7 days** (today last), the time and days of seven
   over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
   Streak's month; the next badge as a ring with its count; then the first badges and achievements, each with See
-  all. One column on a phone; two on a laptop, the badges and achievements beside the rest.
+  all. One column on a phone; two on a laptop, the badges and achievements beside the rest. **Achievements**' personal
+  records are a value over its label (the level its number alone, under "Level"); a record nothing has set yet, Best
+  accuracy before any take, shows "—", never "0 %".
 - **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
   `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
   then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer

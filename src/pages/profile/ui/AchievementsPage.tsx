@@ -21,10 +21,7 @@ export function AchievementsPage() {
   const time = usePracticeTime()
   const milestones = useMilestones()
   const records = [
-    [
-      t('profile.achievements.level'),
-      t('profile.achievements.levelValue', { level: levelOf(figures.practiceSeconds) }),
-    ],
+    [t('profile.achievements.level'), String(levelOf(figures.practiceSeconds))],
     [
       t('profile.achievements.longestStreak'),
       t('profile.achievements.days', { count: figures.bestStreak }),
@@ -32,7 +29,9 @@ export function AchievementsPage() {
     [t('profile.achievements.practiceTime'), time(figures.practiceSeconds)],
     [
       t('profile.achievements.bestAccuracy'),
-      t('profile.achievements.percent', { percent: figures.bestAccuracy }),
+      figures.bestAccuracy > 0
+        ? t('profile.achievements.percent', { percent: figures.bestAccuracy })
+        : '—',
     ],
     [t('profile.achievements.songsLearned'), String(figures.songsLearned)],
     [t('profile.achievements.daysPractised'), String(figures.daysPractised)],

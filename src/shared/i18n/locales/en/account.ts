@@ -90,7 +90,6 @@ export const account = {
         'perfect-take': 'Answer every question right in an Exercise or a Quiz run.',
       },
       level: 'Level',
-      levelValue: 'Level {{level}}',
       longestStreak: 'Longest streak',
       practiceTime: 'Practice time',
       bestAccuracy: 'Best accuracy',

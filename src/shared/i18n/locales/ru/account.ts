@@ -105,7 +105,6 @@ export const account: LocaleResources['account'] = {
         'perfect-take': 'Ответьте верно на все вопросы в упражнении или тесте.',
       },
       level: 'Уровень',
-      levelValue: 'Уровень {{level}}',
       longestStreak: 'Самая длинная серия',
       practiceTime: 'Время занятий',
       bestAccuracy: 'Лучшая точность',
