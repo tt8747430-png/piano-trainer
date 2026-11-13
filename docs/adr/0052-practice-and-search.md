@@ -112,7 +112,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     `pt-practice-library` version 2): each row's More has Rename…, Move to… (a book, a style, a folder of their own),
     Hide (Show under Hidden) and Restore original name; the pencil in the bar opens Edit, every place and row with
     its handle in one drag context (memory-palaces' engine and overlay), a place's More renaming, hiding or (their
-    own folder) deleting it, asking first, its rows going home; New folder. The sort's first choice is Manual;
+    own folder) deleting it, asking first, its rows going home. New makes what the page makes (a pattern, a
+    progression) and New folder, the kit's `NewDial` on a phone and `NewMenu` in the bar on a laptop
+    (`useLibraryNew`, canvas 169). The sort's first choice is Manual;
   - Progressions opens on its library (each style a place, Mine the learner's own). A progression's page
     (`/practice/progressions/$id`, the library's or `mine-n`) has its ♡, its Key and Chords (size), approach chords, its
     chords with their roles and bass moves, the Player's diagrams and staff, Play it in the Chord player, practising in

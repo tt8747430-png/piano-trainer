@@ -1,14 +1,7 @@
-import { FileUp, FolderPlus, Music, Plus, Mic, Users } from 'lucide-react'
+import { FileUp, FolderPlus, Music, Mic, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { FolderId } from '@/entities/library'
-import {
-  ActionMenu,
-  FloatingActions,
-  SpeedDial,
-  SpeedDialAction,
-  type MenuAction,
-} from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { NewDial, NewMenu as KitNewMenu, type MenuAction } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 
 interface Where {
@@ -65,50 +58,18 @@ function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[]
   ]
 }
 
-/**
- * New on a phone (Mindscape's `LibrarySpeedDial`): the floating +, its dial with the song nearest the
- * thumb. With nothing to add here, no +.
- */
+/** New on a phone: the kit's dial. With nothing to add here, no +. */
 export function NewActions(where: Where) {
   const { t } = useTranslation('songs')
   const actions = useNewActions(where)
   if (actions.length === 1) return null
-  return (
-    <FloatingActions>
-      <SpeedDial label={t('new')} icon={Plus} main>
-        {actions.toReversed().map((action) => (
-          <SpeedDialAction
-            key={action.key}
-            label={action.label}
-            icon={action.icon ?? Plus}
-            onClick={action.onSelect}
-          />
-        ))}
-      </SpeedDial>
-    </FloatingActions>
-  )
+  return <NewDial label={t('new')} actions={actions} />
 }
 
-/**
- * New on a laptop (canvas R39-1): the same actions as a menu at the bar's end, since a floating +
- * would cover the table's last rows.
- */
+/** New on a laptop: the kit's New ▾ at the bar's end. */
 export function NewMenu(where: Where) {
   const { t } = useTranslation('songs')
   const actions = useNewActions(where)
   if (actions.length === 1) return null
-  return (
-    <ActionMenu
-      label={t('new')}
-      align="end"
-      trigger={
-        <>
-          <Plus aria-hidden />
-          {t('new')}
-        </>
-      }
-      render={<Button />}
-      actions={actions}
-    />
-  )
+  return <KitNewMenu label={t('new')} actions={actions} />
 }

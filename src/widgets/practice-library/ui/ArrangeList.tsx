@@ -17,7 +17,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Ellipsis, Eye, EyeOff, FolderPlus, GripVertical, PencilLine, Trash2 } from 'lucide-react'
+import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -319,10 +319,6 @@ export function ArrangeList({
           ) : null}
         </DragOverlay>
       </DndContext>
-      <Button variant="soft" className="self-start" onClick={() => onSheet({ kind: 'newFolder' })}>
-        <FolderPlus aria-hidden data-icon="inline-start" />
-        {t('library.edit.newFolder')}
-      </Button>
     </div>
   )
 }

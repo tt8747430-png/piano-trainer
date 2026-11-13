@@ -605,6 +605,8 @@ export const practice = {
   // One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape.
   library: {
     // Arranging a library (R32): Edit, each row's More, and the sheets they open.
+    // New, on a phone's dial and a laptop's bar (canvas 169).
+    new: 'New',
     edit: {
       arrange: 'Arrange library',
       rename: 'Rename…',

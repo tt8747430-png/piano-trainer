@@ -1,13 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import {
-  BookOpenText,
-  ChevronDown,
-  ChevronRight,
-  Copy,
-  Plus,
-  Settings2,
-  Trash2,
-} from 'lucide-react'
+import { BookOpenText, ChevronRight, Copy, Settings2, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -34,15 +26,13 @@ import { resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
-  ActionMenu,
   ChoiceChips,
-  FloatingActions,
+  NewDial,
+  NewMenu,
   RowMore,
   say,
   SearchField,
   SortChoice,
-  SpeedDial,
-  SpeedDialAction,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -302,19 +292,7 @@ export function OwnLibrary() {
               />
             </div>
             <div className="max-lg:hidden">
-              <ActionMenu
-                label={t('own.new')}
-                align="end"
-                trigger={
-                  <>
-                    <Plus aria-hidden />
-                    {t('own.new')}
-                    <ChevronDown aria-hidden />
-                  </>
-                }
-                render={<Button />}
-                actions={newActions}
-              />
+              <NewMenu label={t('own.new')} actions={newActions} />
             </div>
           </div>
           <ChoiceChips<Kind>
@@ -367,18 +345,7 @@ export function OwnLibrary() {
           ))}
         </ul>
       )}
-      <FloatingActions className="lg:hidden">
-        <SpeedDial label={t('own.new')} icon={Plus} main>
-          {newActions.toReversed().map((action) => (
-            <SpeedDialAction
-              key={action.key}
-              label={action.label}
-              icon={action.icon ?? Plus}
-              onClick={action.onSelect}
-            />
-          ))}
-        </SpeedDial>
-      </FloatingActions>
+      <NewDial className="lg:hidden" label={t('own.new')} actions={newActions} />
       <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </div>
   )

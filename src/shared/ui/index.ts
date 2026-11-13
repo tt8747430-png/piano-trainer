@@ -42,6 +42,7 @@ export {
   SpeedDialAction,
 } from './FloatingActions'
 export { ActionMenu, type MenuAction } from './ActionMenu'
+export { NewDial, NewMenu } from './NewActions'
 export { ActionRow } from './ActionRow'
 export { DangerGroup, DangerRow } from './DangerGroup'
 export { MoreMenu } from './MoreMenu'

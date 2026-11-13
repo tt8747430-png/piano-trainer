@@ -576,6 +576,8 @@ export const practice: LocaleResources['practice'] = {
     count_other: '{{count}} упражнения',
   },
   library: {
+    // New, on a phone's dial and a laptop's bar (canvas 169).
+    new: 'Создать',
     edit: {
       arrange: 'Упорядочить библиотеку',
       rename: 'Переименовать…',

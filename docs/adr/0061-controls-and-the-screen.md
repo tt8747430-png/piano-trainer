@@ -57,7 +57,9 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   page.
 - **One action at the thumb.** A screen's job floats in the thumb's reach (`FloatingActions` in the shell's one
   `FloatingHost`): its main action a 56px round `Fab`, the rest in a `SpeedDial`, all in one row in the middle of the
-  foot, each its icon with its name as its tooltip (no setting: round 28). A
+  foot, each its icon with its name as its tooltip (no setting: round 28). Creating is one shape on every library
+  (canvas 169): `NewDial`, the honey + opening its card of rows, the most made nearest the thumb (one thing to make is
+  the + alone), and on a laptop `NewMenu`, the honey New ▾ at the bar's end (one thing is its own button). A
   tap on the page's free room folds them away until the next. The full-screen routes (the Player, the editor, the
   Check) have no host: their bars stand in flow (ADR 0115).
 - **Explanations in a popover.** No line of explanation stands under a control. Its name carries an ⓘ (`InfoTip`)

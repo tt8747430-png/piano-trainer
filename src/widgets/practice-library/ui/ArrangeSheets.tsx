@@ -14,7 +14,7 @@ import { useMoveItem, type ArrangeSheet } from '../model/use-arranged-library'
 import type { LibraryKind } from '../model/library-words'
 
 /** A name asked for in a sheet: the item's or place's new name, or a new folder's. */
-function NameSheet({
+export function NameSheet({
   sheet,
   onClose,
   kind,
