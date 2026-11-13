@@ -71,7 +71,7 @@ export const learn: LocaleResources['learn'] = {
     deleteLesson: 'Удалить урок',
     deleteCourse: 'Удалить курс',
     deleted: '«{{title}}» удалён',
-    toOwn: 'К вашим урокам и курсам',
+    toOwn: 'Назад',
     newOwn: 'Новый урок или курс',
     new: 'Создать',
     kindLabel: 'Что создать',

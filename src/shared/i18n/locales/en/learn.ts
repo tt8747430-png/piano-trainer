@@ -78,7 +78,7 @@ export const learn = {
     deleteLesson: 'Delete lesson',
     deleteCourse: 'Delete course',
     deleted: '“{{title}}” deleted',
-    toOwn: 'Back to your lessons and courses',
+    toOwn: 'Back',
     // Canvas 165: their own page, one New for both, a lesson's courses.
     newOwn: 'New lesson or course',
     new: 'New',
