@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Cable, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
+import { CHORD_LABELS, type ChordLabels } from '@/shared/lib'
 import { useTranslation } from 'react-i18next'
 import {
   Piano2DPicture,
@@ -9,6 +10,7 @@ import {
   RowLink,
   SettingsGroup,
   Sheet,
+  Segmented,
   SheetContent,
   SwitchRow,
 } from '@/shared/ui'
@@ -28,6 +30,7 @@ export function PianoSheet({
   onKeys,
   onHands,
   trigger,
+  labels,
 }: {
   keys: boolean
   hands: boolean
@@ -35,6 +38,8 @@ export function PianoSheet({
   onHands: (shown: boolean) => void
   /** The screen's button that opens it, given how to open it. */
   trigger: (open: () => void) => ReactNode
+  /** What the keys carry, where the screen offers a choice (Chords): the canvas's Labels. */
+  labels?: { readonly value: ChordLabels; readonly onChange: (labels: ChordLabels) => void }
 }) {
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
@@ -62,6 +67,26 @@ export function PianoSheet({
             ]}
             onChange={(next) => onHands(next === 'hands')}
           />
+          {labels ? (
+            // The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart.
+            <div
+              className={
+                'flex flex-col gap-2 rounded-xl bg-card px-4 pt-3 pb-4 ring-1 ring-foreground/7 ' +
+                (keys ? '' : 'pointer-events-none opacity-45')
+              }
+            >
+              <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
+              <Segmented
+                label={t('pianoSheet.labels')}
+                value={labels.value}
+                options={CHORD_LABELS.map((each) => ({
+                  value: each,
+                  label: t(`pianoSheet.label.${each}`),
+                }))}
+                onChange={labels.onChange}
+              />
+            </div>
+          ) : null}
           <SettingsGroup flush>
             <RowLink
               title={t('pianoSheet.all')}

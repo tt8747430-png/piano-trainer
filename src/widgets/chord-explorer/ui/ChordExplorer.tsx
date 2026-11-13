@@ -1,4 +1,4 @@
-import { selectKeyboard, useSettings } from '@/entities/settings'
+import { selectChords, selectKeyboard, useSettings } from '@/entities/settings'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -23,6 +23,7 @@ import {
   viewChord,
   type ChordView,
 } from '../model/chord-view'
+import { chordKeyLabels } from '../model/chord-labels'
 import { ChordName } from './ChordName'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
@@ -47,6 +48,11 @@ export function ChordExplorer({
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
   const { chord: built, placed, fingers } = useMemo(() => viewChord(chord), [chord])
+  const { labels: labelled } = useSettings(selectChords)
+  const labels = useMemo(
+    () => chordKeyLabels(placed, fingers, labelled),
+    [placed, fingers, labelled],
+  )
   const at = Object.values(chord).join(' ')
   // The keys by role, no finger numbers on them unless Labels says Fingers (canvas 151).
   const [shown] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
@@ -90,7 +96,7 @@ export function ChordExplorer({
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
         <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
-          <ChordSheet placed={placed} symbol={symbol} fingers={fingers} />
+          <ChordSheet placed={placed} symbol={symbol} fingers={fingers} labels={labels} />
           <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             {handFacts.map((side) => (
               <span key={side} className="whitespace-nowrap">

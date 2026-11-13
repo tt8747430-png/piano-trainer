@@ -1,9 +1,14 @@
 import { useSearch } from '@tanstack/react-router'
 import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import {
+  selectChords,
+  selectScoreView,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { PianoSheet, useFoldKeys } from '@/features/live-keyboard'
-import { setScoreView } from '@/features/set-preference'
+import { setChords, setScoreView } from '@/features/set-preference'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { ChordExplorer, type ChordView } from '@/widgets/chord-explorer'
@@ -19,6 +24,7 @@ export function ChordsPage() {
   const onChange = useSetSearch<ChordView>()
   const { folded, fold } = useFoldKeys()
   const { hands } = useSettings(selectScoreView)
+  const { labels } = useSettings(selectChords)
   const settings = useSettingsStoreApi()
   return (
     <div className="flex flex-col gap-4">
@@ -31,6 +37,7 @@ export function ChordsPage() {
             hands={hands}
             onKeys={(shown) => fold(!shown)}
             onHands={(shown) => setScoreView(settings, { hands: shown })}
+            labels={{ value: labels, onChange: (next) => setChords(settings, { labels: next }) }}
             trigger={(open) => (
               <RoundButton
                 variant="glass"

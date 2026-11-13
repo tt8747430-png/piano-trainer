@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { printedNote, printedSymbol, type ChordFingers, type PlacedChord } from '@/shared/lib/music'
+import { printedSymbol, type ChordFingers, type Midi, type PlacedChord } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordBar } from '@/shared/lib/schedule'
 import { LazyScoreView } from '@/shared/ui'
@@ -28,10 +28,13 @@ export function ChordSheet({
   placed,
   symbol,
   fingers,
+  labels,
 }: {
   placed: PlacedChord
   symbol: string
   fingers: ChordFingers
+  /** What each head carries left of the chord, as the Piano sheet's Labels says. */
+  labels: ReadonlyMap<Midi, string>
 }) {
   const { t } = useTranslation('music')
   const score = useMemo(() => notate(chordBar(placed, { fingers })), [placed, fingers])
@@ -52,7 +55,7 @@ export function ChordSheet({
       setMarks(
         headMarks(
           at,
-          staves.map((hand) => hand.map((tone) => printedNote(tone.tone.note))),
+          staves.map((hand) => hand.map((tone) => labels.get(tone.midi) ?? '')),
           hands,
         ),
       )
@@ -66,7 +69,7 @@ export function ChordSheet({
       watch.disconnect()
       resize.disconnect()
     }
-  }, [placed, fingers])
+  }, [placed, fingers, labels])
   return (
     <section
       ref={section}

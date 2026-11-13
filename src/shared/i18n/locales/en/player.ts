@@ -353,6 +353,14 @@ export const player = {
     keys: '2D keys',
     all: 'All piano settings',
     connect: 'Connect a piano',
+    labels: 'Labels',
+    label: {
+      names: 'Note names',
+      degrees: 'Degrees',
+      intervals: 'Intervals',
+      fingers: 'Fingers',
+      none: 'None',
+    },
   },
   practiceSheet: {
     title: 'Practice',

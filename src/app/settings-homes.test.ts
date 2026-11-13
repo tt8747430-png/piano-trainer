@@ -24,6 +24,7 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
   scales: ['pages/practice-settings/ui/ScalesSettingsPage.tsx'],
   progressions: ['pages/practice-settings/ui/ProgressionsSettingsPage.tsx'],
   'chord-player': ['pages/chord-player-settings/'],
+  chords: ['features/live-keyboard/ui/PianoSheet.tsx'],
   lessons: ['pages/lesson/ui/LessonSettingsPage.tsx'],
   'chord-finder': ['pages/practice-settings/ui/ChordFinderSettingsPage.tsx'],
   trainers: ['widgets/trainer-setup/'],

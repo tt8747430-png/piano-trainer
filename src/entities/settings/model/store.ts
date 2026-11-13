@@ -35,6 +35,9 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
+  DEFAULT_CHORDS,
+  isChordLabels,
+  type ChordsSettings,
   type ChordPlayerSettings,
   isProgressionNames,
   isProgressionVoicing,
@@ -88,7 +91,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 43
+export const SETTINGS_VERSION = 44
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -131,6 +134,7 @@ export function createSettingsStore({
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
+        chords: DEFAULT_CHORDS,
         bars: DEFAULT_BARS,
         tuner: DEFAULT_TUNER,
         scaleStaff: DEFAULT_SCALE_STAFF,
@@ -286,6 +290,11 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
   }
+}
+
+function chordsSettings(value: unknown): ChordsSettings {
+  const saved = savedObject<ChordsSettings>(value)
+  return { labels: isChordLabels(saved.labels) ? saved.labels : DEFAULT_CHORDS.labels }
 }
 
 const isSheetView = isOneOf(SHEET_VIEWS)
@@ -444,6 +453,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
+    chords: chordsSettings(saved.chords),
     bars: barsSettings(saved.bars),
     tuner: tunerSettings(saved.tuner),
     scaleStaff: scaleStaffSettings(saved.scaleStaff),

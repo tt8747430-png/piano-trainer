@@ -22,21 +22,18 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
   - **Auto-scroll:** the sheet follows the chord playing.
   - **Bugs:** the chord sheet is not saved (it must be, as a saved store); drag and drop breaks (port
     memory-palaces' fix, read in that repo); reordering changes other chords' timings (fixed by the rule above).
-  - **A MIDI arranger (Yamaha Genos):** researched 2026-11-13. Possible over Web MIDI: Start and Stop (FA, FC),
-    the tempo as MIDI clock, each chord as Yamaha's Chord control (F0 43 7E 02 cr ct bn bt F7) and each section
-    as Section control (F0 43 7E 00 ss 7F F7; 08 Main A, 09 B, 0A C, 0B D; sources: psrtutorial.com's SysEx
-    thread, Steinberg's forum quoting the Data List, sandsoftwaresound.net's Chord Tracker notes), so the Genos
-    plays its own style to the app's chords and sections. Web MIDI runs in Chrome and Edge, not in Safari or an
-    iPhone's installed app: there the row says so. Built as a "Play on a MIDI arranger" choice in the Chord
-    player's settings, beside Connect a piano.
-- "Chord player: Musicca's controls and options, with the best free sounds."
-- "the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix)": sections move by their grip;
-  on a laptop the key's chords drag into a bar.
-- Every Practice page has its own settings (a gear): Instruments (Piano, Bass, Drums, each on or off with a level) and
-  Chord names (Letters · Numerals), the homes `chordPlayer.names` and `chordPlayer.voicing` in `registry.ts`.
-- A key or root is one of the pickers (the root grid). Play controls sit in a bar above the keys, covering nothing.
-- A loss that can be undone happens at once with Undo (R38): Delete chord.
-- No finger numbers on the keys; no explanation line under a control.
+  - **A MIDI arranger (Yamaha Genos), timing only** (owner, 2026-11-13: "I dont want my chords to be played. just to
+    sync the timing and the Yamaha genos plays just what I play on the keyboard"): the app sends no chords. It sends
+    the Genos Start and Stop (FA, FC), its tempo as MIDI clock (F8, 24 a beat; the Genos's style follows an external
+    clock), the count-in, and at each section of the sheet Yamaha's Section control (F0 43 7E 00 ss 7F F7; 08 Main
+    A, 09 B, 0A C, 0B D), so the Genos's style keeps the app's time and sections while its own chord detection
+    follows what the learner plays on its keys. Sources: Steinberg's forum ("[SOLVED] Having Cubase To Play PSR",
+    Section control and Start), psrtutorial.com's SysEx thread, the Data List's Section control table. The Genos's
+    MIDI receive takes these from USB TO HOST and its clock set to External (the menus to confirm in the Genos
+    manual). Web MIDI runs in Chrome and Edge on a Mac or PC, never in Safari on a Mac or any iPhone browser (MDN,
+    caniuse; an iPhone needs a third-party Web MIDI browser app): there the row says so and names Chrome or Edge.
+    Built as "Sync a MIDI arranger" in the Chord player's settings, beside Connect a piano. Not testable here without
+    the instrument.
 
 ## Today
 

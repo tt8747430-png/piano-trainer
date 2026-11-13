@@ -12,11 +12,13 @@ export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
 export {
+  CHORD_LABELS,
   KEY_DOCKS,
   KEY_SIZES,
   NAMED_KEYS,
   PEDALS_SHOWN,
   SWIPES,
+  type ChordLabels,
   type KeyDock,
   type KeySize,
   type NamedKeys,

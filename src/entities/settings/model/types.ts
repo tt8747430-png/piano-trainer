@@ -2,6 +2,7 @@ import type { Bars } from './bars'
 import { isLocale, type Locale } from '@/shared/i18n/locale'
 import type { Inversion } from '@/shared/lib/music'
 import {
+  CHORD_LABELS,
   isOneOf,
   KEY_DOCKS,
   KEY_SIZES,
@@ -9,6 +10,7 @@ import {
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
   SWIPES,
+  type ChordLabels,
   type KeyDock,
   type SheetView,
   type KeySize,
@@ -361,6 +363,7 @@ export interface SettingsState {
   progressions: ProgressionsSettings
   /** How the Chord player writes its chords and voices its piano (R29 CP6). */
   chordPlayer: ChordPlayerSettings
+  chords: ChordsSettings
   /** The bars the learner arranged (R29 B10): a surface left out holds its default. */
   bars: Bars
   /** The Tuner's reference pitch (R29 B11). */
@@ -482,6 +485,14 @@ export interface ChordPlayerSettings {
   readonly voicing: ProgressionVoicing
 }
 export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
+
+/** The Chords page's own settings, in its Piano sheet. */
+export interface ChordsSettings {
+  /** What its keys and its staff's heads carry. */
+  readonly labels: ChordLabels
+}
+export const DEFAULT_CHORDS: ChordsSettings = { labels: 'names' }
+export const isChordLabels = isOneOf(CHORD_LABELS)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

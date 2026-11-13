@@ -15,6 +15,13 @@ export const NAMED_KEYS = ['c', 'all', 'none'] as const
 /** Which keys carry their note's name: every C, every key, or none. */
 export type NamedKeys = (typeof NAMED_KEYS)[number]
 
+export const CHORD_LABELS = ['names', 'degrees', 'intervals', 'fingers', 'none'] as const
+/**
+ * What a chord's keys and the heads on its staff carry (canvas 89, 151): each note's name, its degree
+ * in the chord, the interval up from the note below it, its finger, or nothing.
+ */
+export type ChordLabels = (typeof CHORD_LABELS)[number]
+
 export const KEY_DOCKS = ['bottom', 'top'] as const
 /** Where a page's keys stay while it scrolls: over the tab bar, or under the screen's bar. */
 export type KeyDock = (typeof KEY_DOCKS)[number]

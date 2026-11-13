@@ -41,9 +41,14 @@ export function Segmented<V extends OptionValue>({
         if (picked && picked.value !== value) onChange(picked.value)
       }}
       className={cn(
-        // Its segments side by side in its line, the chosen filled to the control's edges (R15).
-        'flex w-full border border-input bg-card',
-        compact ? 'rounded-pill' : 'rounded-control',
+        // The canvas's SEGC, one segmented control everywhere (canvas 127): its segments side by side
+        // on the fill, 2 in and 2 apart, 11 round; the chosen lifted on the sheet.
+        'w-full gap-0.5 bg-muted p-0.5',
+        // Five choices are three over two, so none is cut on a phone (canvas 151).
+        options.length === 5
+          ? 'grid grid-cols-6 *:col-span-2 *:nth-last-[-n+2]:col-span-3'
+          : 'flex',
+        compact ? 'rounded-pill' : 'rounded-[11px]',
       )}
     >
       {options.map((option, index) => {
@@ -62,12 +67,12 @@ export function Segmented<V extends OptionValue>({
             title={option.reason}
             disabled={option.reason !== undefined}
             className={cn(
-              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-manual wrap-break-word text-muted-foreground select-none choice border-s border-input first-of-type:border-s-0 focus-visible:-outline-offset-3 data-disabled:opacity-50',
-              // Crowded on a phone's width: the words a size down, to fit.
-              crowded && 'max-sm:px-1 max-sm:text-sm',
-              compact
-                ? 'first-of-type:rounded-s-pill last-of-type:rounded-e-pill'
-                : 'first-of-type:rounded-s-control last-of-type:rounded-e-control',
+              // Each 44 high, 9 round, 10 in, its word 14px and medium in ink; the chosen on the sheet,
+              // semibold, under a hairline shadow.
+              'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 px-2.5 py-1 text-center text-sm leading-tight font-medium hyphens-manual wrap-break-word text-foreground select-none transition-colors duration-200 ease-out focus-visible:-outline-offset-3 data-checked:bg-card data-checked:font-semibold data-checked:shadow-[0_1px_2px_rgb(51_41_33/0.18),0_0_0_0.5px_rgb(51_41_33/0.08)] data-disabled:opacity-50',
+              // Crowded on a phone's width: closer to the edges, to fit.
+              crowded && 'max-sm:px-1',
+              compact ? 'rounded-pill' : 'rounded-[9px]',
               compact &&
                 'relative min-h-8 py-0.5 text-sm whitespace-nowrap before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
             )}

@@ -4,6 +4,7 @@ import type {
   ChordFinderSettings,
   ProgressionsSettings,
   ChordPlayerSettings,
+  ChordsSettings,
   ScaleStaffSettings,
   TunerSettings,
   ScoreViewSettings,
@@ -72,3 +73,4 @@ export const selectProgressions = (state: SettingsState): ProgressionsSettings =
 export const selectTuner = (state: SettingsState): TunerSettings => state.tuner
 export const selectScaleStaff = (state: SettingsState): ScaleStaffSettings => state.scaleStaff
 export const selectChordPlayer = (state: SettingsState): ChordPlayerSettings => state.chordPlayer
+export const selectChords = (state: SettingsState): ChordsSettings => state.chords
