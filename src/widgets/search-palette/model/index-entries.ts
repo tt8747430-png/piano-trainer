@@ -77,6 +77,8 @@ export interface IndexEntry {
   /** Its name in the learner's language. */
   readonly title: string
   readonly detail?: string
+  /** The detail only illustrates it (a scale's notes on C): shown, never searched. */
+  readonly detailShownOnly?: true
   /** Every other name it answers to: its title in the other language, a symbol's other spellings. */
   readonly words: readonly string[]
   readonly target: IndexTarget
@@ -238,6 +240,7 @@ export function indexEntries({
       detail: scaleIntervals(scale)
         .map((interval) => printedNote(spellAbove(C, interval)))
         .join(' '),
+      detailShownOnly: true,
       words: [],
       target: { opens: 'scale', scale },
     })),
@@ -368,6 +371,10 @@ export interface IndexGroup {
   readonly entries: readonly IndexEntry[]
 }
 
+/** An entry's names besides its title that a query is matched against. */
+const searchedNames = (entry: IndexEntry): readonly string[] =>
+  entry.detailShownOnly ? entry.words : [entry.detail ?? '', ...entry.words]
+
 /**
  * How near an entry answers a folded query, lowest nearest: its title or another of its names itself
  * (a chord's symbol), a title starting with it, a word of its title, a word of another of its names,
@@ -375,7 +382,7 @@ export interface IndexGroup {
  */
 function nearness(entry: IndexEntry, wanted: string): number {
   const title = foldText(entry.title)
-  const others = [entry.detail ?? '', ...entry.words]
+  const others = searchedNames(entry)
   if (title === wanted || others.some((name) => foldText(name) === wanted)) return 0
   if (title.startsWith(wanted)) return 1
   const startsAWord = (field: string) =>
@@ -401,7 +408,7 @@ export function searchIndex(
 ): IndexGroup[] {
   const wanted = foldText(query.trim())
   const found = entries
-    .filter((entry) => matchesQuery([entry.title, entry.detail ?? '', ...entry.words], query))
+    .filter((entry) => matchesQuery([entry.title, ...searchedNames(entry)], query))
     .map((entry) => ({ entry, near: wanted === '' ? 0 : nearness(entry, wanted) }))
     .toSorted((a, b) => a.near - b.near)
   return INDEX_KINDS.map((kind) => {

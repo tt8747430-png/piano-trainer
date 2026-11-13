@@ -1,12 +1,15 @@
 /**
  * Text as search compares it: lower case, without accents, so ё reads as е. Russian й is a letter
- * of its own, not и with an accent, so the breve after и stays (and recomposes into й).
+ * of its own, not и with an accent, so the breve after и stays (and recomposes into й). Printed
+ * accidentals read as typed ones, so C7#9 finds C7♯9 and Bb finds B♭.
  */
 export const foldText = (text: string): string =>
   text
     .normalize('NFD')
     .replace(/(?<![иИ])̆|(?!̆)\p{M}/gu, '')
     .normalize('NFC')
+    .replaceAll('♯', '#')
+    .replaceAll('♭', 'b')
     .toLowerCase()
 
 /** Where a word of a name starts: after a space or a mark between words. */

@@ -255,3 +255,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 7, Player: nothing to change.
 - Loop round 7, score editor: nothing to change (pedal marks in the Player come from the arrangement, not the draft).
 - Loop round 7, Settings: Storage's Russian figures led with their label ("Занято на устройстве: 0,1 МБ"); now value first as in English ("0,1 МБ занято на устройстве", "0 МБ из 8,8 МБ загружено"). Computer keys, Report a problem: nothing.
+- Loop round 7, Search: "C7#9" found nothing (the C chord's entry held only "C7♯9"); search now folds ♯ and ♭ to # and b. The scale kinds' notes on C are shown but not searched, so "Bb" no longer lists Natural minor and Dorian. Achievements: nothing.
