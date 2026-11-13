@@ -129,7 +129,6 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'playback.cursor': 'player',
   'playback.follow': 'player',
   'playback.followReturn': 'player',
-  'playback.pedal': 'player',
   'playback.speedStep': 'player',
   'metronome.bpm': 'metronome',
   'metronome.meter': 'metronome',

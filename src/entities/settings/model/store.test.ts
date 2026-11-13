@@ -137,7 +137,6 @@ describe('createSettingsStore', () => {
       playback: {
         countdown: 'visual',
         cursor: 'beats',
-        pedal: 'automatic',
         speedStep: 10,
         follow: false,
         followReturn: 3,

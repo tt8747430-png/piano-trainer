@@ -2,13 +2,6 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { pedalLine, type PedalEvent, type Tick } from '@/shared/lib/music'
 
 /**
- * How the Player plays the sustain pedal (A27): as the music writes it, not at all, or
- * automatically (`autoPedal`) for music written without it.
- */
-export const PEDAL_PLAYS = ['written', 'off', 'automatic'] as const
-export type PedalPlay = (typeof PEDAL_PLAYS)[number]
-
-/**
  * A pedal for music written without one (A27): pressed with each new chord symbol and let up where
  * it ends (a change where the next follows at once, the pedal up through a bar of no chord); where
  * the music has no chord symbols, changed at each bar; let up where the music ends.
@@ -43,8 +36,12 @@ export function autoPedal(
   )
 }
 
-/** The performance with its pedal played as asked: as written, none, or `autoPedal`'s. */
-export function withPedal(performance: Performance, play: PedalPlay): Performance {
-  if (play === 'written') return performance
-  return { ...performance, pedal: play === 'off' ? [] : autoPedal(performance) }
+/**
+ * The performance with its pedal as it plays (R37, "remove it": no setting): as the score marks it,
+ * or `autoPedal`'s where it has no marks.
+ */
+export function withPedal(performance: Performance): Performance {
+  return performance.pedal.length > 0
+    ? performance
+    : { ...performance, pedal: autoPedal(performance) }
 }

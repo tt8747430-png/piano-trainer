@@ -22,7 +22,6 @@ import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import {
   METRONOME_SOUNDS,
-  PEDAL_PLAYS,
   SUBDIVISIONS,
   TOUCHES,
   TRAINER_BARS,
@@ -30,7 +29,6 @@ import {
   type BeatLevel,
   type MetronomeMeter,
   type MetronomeSound,
-  type PedalPlay,
   type SpeedTrainer,
   type Subdivision,
   type Touch,
@@ -100,24 +98,22 @@ export const SPEED_STEPS = [2, 5, 10] as const
 export type SpeedStep = (typeof SPEED_STEPS)[number]
 
 /**
- * How the Player always plays (B7, its settings page): its count-in, its cursor, the sustain pedal (as
- * written, none, or automatic, A27), and speed training's step.
+ * How the Player always plays (B7, its settings page): its count-in, its cursor and speed training's
+ * step. The sustain pedal has no setting (R37): it plays as marked, else automatically (`withPedal`).
  */
 export interface PlaybackSettings {
   readonly countdown: Countdown
   readonly cursor: Cursor
-  readonly pedal: PedalPlay
   readonly speedStep: SpeedStep
   /** The views keep the music playing in sight (A37); a scroll by hand pauses it. */
   readonly follow: boolean
   /** After a scroll by hand, back to the playhead after this many seconds; 0 waits for its pill. */
   readonly followReturn: FollowReturn
 }
-/** No count-in, the cursor gliding, the pedal as written, 5% a pass: the Player as it always was. */
+/** No count-in, the cursor gliding, 5% a pass: the Player as it always was. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
   countdown: 'none',
   cursor: 'continuous',
-  pedal: 'written',
   speedStep: 5,
   follow: true,
   followReturn: 5,
@@ -552,7 +548,6 @@ export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
 export const isSkinTone = isOneOf(SKIN_TONES)
 export const isCountdown = isOneOf(COUNTDOWNS)
 export const isCursor = isOneOf(CURSORS)
-export const isPedalPlay = isOneOf(PEDAL_PLAYS)
 export const isSpeedStep = isOneOf(SPEED_STEPS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
 export const isSubdivision = isOneOf(SUBDIVISIONS)

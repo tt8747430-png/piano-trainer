@@ -143,7 +143,7 @@ export function usePracticePlayer(
   // The click and count-in in the Metronome's sound and squares (A35, A39: one engine).
   const voicing = useSettings(useShallow(({ metronome }) => clickVoice(metronome, metronome.meter)))
   // The pedal played as the settings say (A27): as written, none, or with each chord.
-  const played = useMemo(() => withPedal(written, playback.pedal), [written, playback.pedal])
+  const played = useMemo(() => withPedal(written), [written])
   const performance = played
   // Each staff as loud as its volume, none where its Play is off (A35).
   const mix = useMemo<Mix>(

@@ -59,10 +59,10 @@ describe('autoPedal', () => {
 })
 
 describe('withPedal', () => {
-  it('plays the pedal as written, not at all, or automatically', () => {
-    const written = perform(['C@2', 'G@2'])
-    expect(withPedal(written, 'written')).toBe(written)
-    expect(withPedal(written, 'off').pedal).toEqual([])
-    expect(withPedal(written, 'automatic').pedal).toEqual(autoPedal(written))
+  it('plays the pedal as the score marks it, else automatically', () => {
+    const unmarked = perform(['C@2', 'G@2'])
+    expect(withPedal(unmarked).pedal).toEqual(autoPedal(unmarked))
+    const marked = { ...unmarked, pedal: autoPedal(perform(['C@4'])) }
+    expect(withPedal(marked)).toBe(marked)
   })
 })

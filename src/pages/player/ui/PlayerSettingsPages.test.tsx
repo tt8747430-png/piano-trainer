@@ -56,23 +56,14 @@ describe('the Player’s settings, its gear their one home (B7, R32)', () => {
 })
 
 describe('the Player as its settings say (B7, A27)', () => {
-  it('plays a pedal with each chord where the pedal is Automatic, none where Off', async () => {
+  it('pedals a song written without pedal marks with each chord (R37: no setting)', async () => {
     const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/play/bz5')
-    const pedals = (from = 0) =>
-      audio.played
-        .slice(from)
-        .flatMap((pass) => pass.sounds)
-        .filter((sound) => sound.kind === 'pedal')
-    act(() => setPlayback(settingsStore, { pedal: 'automatic' }))
+    const { audio } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
-    expect(pedals().length).toBeGreaterThan(0)
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
-    const before = audio.played.length
-    act(() => setPlayback(settingsStore, { pedal: 'off' }))
-    await user.click(screen.getByRole('button', { name: 'Play' }))
-    expect(audio.played.length).toBeGreaterThan(before)
-    expect(pedals(before)).toEqual([])
+    const pedals = audio.played
+      .flatMap((pass) => pass.sounds)
+      .filter((sound) => sound.kind === 'pedal')
+    expect(pedals.length).toBeGreaterThan(0)
   })
 
   it('counts in on the screen alone, unheard, where the count-in is Visual', async () => {
@@ -98,8 +89,7 @@ describe('the Player as its settings say (B7, A27)', () => {
   })
 
   it('marks the pedal it plays under; the drawn pedal stays up while stopped (A27, R31-P)', async () => {
-    const { settingsStore } = await renderApp('/play/bz5')
-    act(() => setPlayback(settingsStore, { pedal: 'automatic' }))
+    await renderApp('/play/bz5')
     await waitFor(() =>
       expect(document.querySelector('style[data-slot="pedal-marks"]')?.textContent).toContain(
         '#ped-0',

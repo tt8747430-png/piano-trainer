@@ -26,13 +26,12 @@ import {
   setSound,
 } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
-import { PEDAL_PLAYS } from '@/shared/lib/schedule'
 import { RowLink, ChoiceCard, SettingsGroup, SwitchRow, VolumeSlider } from '@/shared/ui'
 
 /**
  * How the Player plays, every song (the Player's Settings › Playback, R31-P, R32): the music's own
- * first (`children`: a score's Swing), then the count-in, the pedalling, the metronome (its page and
- * its level) and speed training's step; each choice a card with its line.
+ * first (`children`: a score's Swing), then the count-in, the metronome (its page and its level) and
+ * speed training's step; each choice a card. No pedalling: it plays as marked, else automatically (R37).
  */
 export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const { t } = useTranslation(['player', 'music'])
@@ -54,15 +53,6 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
           label: t(`settingsPage.countdown.${value}`),
         }))}
         onChange={(countdown) => setPlayback(settings, { countdown })}
-      />
-      <ChoiceCard
-        title={t('settingsPage.pedal.label')}
-        description={t('settingsPage.pedal.detail')}
-        info={t('settingsPage.pedal.info')}
-        setting="playback.pedal"
-        value={playback.pedal}
-        options={PEDAL_PLAYS.map((value) => ({ value, label: t(`settingsPage.pedal.${value}`) }))}
-        onChange={(pedal) => setPlayback(settings, { pedal })}
       />
       <SettingsGroup flush>
         <RowLink

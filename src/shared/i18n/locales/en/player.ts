@@ -264,7 +264,7 @@ export const player = {
     about: {
       display: 'Layout, cursor and what appears on the score',
       hands: 'The hands at the keys, and the hand you don’t play',
-      playback: 'Count-in, pedalling, metronome and practice tempo',
+      playback: 'Count-in, metronome and practice tempo',
       staves: 'Which staves sound and appear, and their levels',
       accompaniment: 'Pattern, chord voicing and swing',
       piano: 'Key size, note names and pedals',
@@ -296,14 +296,6 @@ export const player = {
     },
     playOther: 'Hear the other hand',
     playOtherInfo: 'The app plays the hand you don’t play, in every mode.',
-    pedal: {
-      label: 'Pedalling',
-      detail: 'How the sustain pedal is played back.',
-      info: 'As marked: the sustain pedal as the score marks it. Automatic: pedalled with each chord and changed with the harmony, for music written without pedal marks. Off: no pedal.',
-      written: 'As marked',
-      off: 'Off',
-      automatic: 'Automatic',
-    },
   },
   /** The hands at the keys (R36): a piano seen from the seat, two hands playing the music on it. */
   handsAtKeys: {

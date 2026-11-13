@@ -55,7 +55,6 @@ import {
   isSkinTone,
   isCountdown,
   isCursor,
-  isPedalPlay,
   isSpeedStep,
   isKeySize,
   isBeatLevel,
@@ -95,7 +94,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 37
+export const SETTINGS_VERSION = 38
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -187,7 +186,6 @@ function playbackSettings(value: unknown): PlaybackSettings {
   return {
     countdown: isCountdown(saved.countdown) ? saved.countdown : initial.countdown,
     cursor: isCursor(saved.cursor) ? saved.cursor : initial.cursor,
-    pedal: isPedalPlay(saved.pedal) ? saved.pedal : initial.pedal,
     speedStep: isSpeedStep(saved.speedStep) ? saved.speedStep : initial.speedStep,
     follow: typeof saved.follow === 'boolean' ? saved.follow : initial.follow,
     followReturn: (FOLLOW_RETURNS as readonly unknown[]).includes(saved.followReturn)

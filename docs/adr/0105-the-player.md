@@ -66,7 +66,8 @@ what they changed.
   `sound.staves`), the recording and the metronome, and Only the chords; a row to the **Metronome's** sound and beats;
   **Playback speed** (speed training's step, 2 · 5 · 10%); the Count-in (None · Audible · Visual) with Playback;
   **Display** (Cursor None · Beats · Continuous, the layout, the keys, finger numbers); **Hands** (the hands at the
-  keys' Skin, the other hand Show · Dim · Hide); **Pedal** As written · Off · Automatic (`withPedal`, A27). A volume is
+  keys' Skin, the other hand Show · Dim · Hide). The sustain pedal has no setting (R37, "remove it"): playback
+  pedals as the score marks it, else by `autoPedal` (`withPedal`). A volume is
   a gain of its share squared, asked as each sound renders; a staff's Play off is a gain of 0. The View's chips for the
   layout, the keys and finger numbers stay as quick toggles over the music, as the transport keeps the metronome's. Clef
   (the reference's "Original or chosen") is not offered yet: the notation has no re-clefing of a staff.
@@ -88,7 +89,7 @@ what they changed.
   customisable Tool bar is gone.
 - **The Settings sheet (R31-P, R32, R36)** is one list of rows ranked by what matters, each opening a subpage with
   Back: **Score view** (Pick your view on opening, annotations, the cursor, following), **Playback** (a score's
-  Swing, the pedal, the count-in, the Metronome's page and volume, speed training's step), **Hands** (the hands at
+  Swing, the count-in, the Metronome's page and volume, speed training's step), **Hands** (the hands at
   the keys' Skin, the other hand Show · Dim · Hide), **Staves** (each track's Play, Show and volume together; Only
   the chords where a recording plays), a chart's **Accompaniment** (chord size, the pattern and its hands, Swing) and
   **On-screen piano** (the app's own fields). A pattern or figure list closes back to the page it was opened from.
