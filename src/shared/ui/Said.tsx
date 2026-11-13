@@ -1,7 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { TileMark } from './TileMark'
-import type { Paint } from './paint'
 import {
   Empty,
   EmptyContent,
@@ -11,16 +9,17 @@ import {
   EmptyTitle,
 } from '@/shared/ui/primitives/empty'
 
-/** A state with nothing to list: its tile, one line (and a second where it teaches), one way on. */
+/**
+ * A state with nothing to list (the canvas's empty state): a round muted mark, one bold line (and a
+ * soft second where it teaches), one way on.
+ */
 export function Said({
-  icon,
-  paint,
+  icon: Icon,
   title,
   description,
   action,
 }: {
   icon: LucideIcon
-  paint: Paint
   title: string
   description?: string
   action: ReactNode
@@ -29,10 +28,12 @@ export function Said({
     <Empty>
       <EmptyHeader>
         <EmptyMedia>
-          <TileMark icon={icon} paint={paint} />
+          <span className="grid size-14 place-items-center rounded-full bg-muted text-muted-foreground">
+            <Icon aria-hidden className="size-6" />
+          </span>
         </EmptyMedia>
         {/* A long query breaks rather than run off the screen. */}
-        <EmptyTitle role="status" className="text-base break-words">
+        <EmptyTitle role="status" className="text-[1.0625rem] font-bold break-words">
           {title}
         </EmptyTitle>
         {description ? <EmptyDescription>{description}</EmptyDescription> : null}

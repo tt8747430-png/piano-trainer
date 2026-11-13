@@ -55,7 +55,6 @@ export function ExploreResults({
       ) : browse.entries.length === 0 && query ? (
         <Said
           icon={SearchX}
-          paint="sky"
           title={t(patterns ? 'explore.noMatchPatterns' : 'explore.noMatch', { query })}
           action={
             <Button variant="soft" onClick={onClear}>

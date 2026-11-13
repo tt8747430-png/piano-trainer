@@ -148,7 +148,6 @@ export function PublicSongPage() {
                   ? CloudOff
                   : TriangleAlert
             }
-            paint="sand"
             title={
               reading.kind === 'gone'
                 ? t('public.gone')
@@ -156,6 +155,9 @@ export function PublicSongPage() {
                   ? t('explore.offline')
                   : t('explore.failed')
             }
+            {...(reading.kind === 'failed' && reading.reason !== 'offline'
+              ? { description: t('explore.failedLine') }
+              : {})}
             action={
               <ButtonLink variant="soft" render={<Link to="/songs" search={{ view: 'explore' }} />}>
                 {t('explore.views.explore')}

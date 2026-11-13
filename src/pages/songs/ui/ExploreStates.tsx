@@ -15,16 +15,15 @@ export function ExploreFailed({ reason, onRetry }: { reason: NetFailure; onRetry
   return (
     <Said
       icon={offline ? CloudOff : TriangleAlert}
-      paint="sand"
       title={offline ? t('explore.offline') : t('explore.failed')}
-      description={offline ? t('explore.offlineLine') : undefined}
+      description={offline ? t('explore.offlineLine') : t('explore.failedLine')}
       action={
         offline ? (
           <Button variant="soft" onClick={() => show({ view: 'mine' })}>
             {t('explore.views.mine')}
           </Button>
         ) : (
-          <Button variant="soft" onClick={onRetry}>
+          <Button className="rounded-pill px-6" onClick={onRetry}>
             {t('explore.again')}
           </Button>
         )
@@ -39,7 +38,6 @@ export function ExploreEmpty() {
   return (
     <Said
       icon={Globe}
-      paint="grass"
       title={t('explore.empty')}
       description={t('explore.emptyHint')}
       action={null}

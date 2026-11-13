@@ -95,7 +95,6 @@ export function NotificationsPage() {
         {notices.length === 0 ? (
           <Said
             icon={BellOff}
-            paint="sky"
             title={t('profile.notifications.emptyTitle')}
             description={t('profile.notifications.empty')}
             action={null}
