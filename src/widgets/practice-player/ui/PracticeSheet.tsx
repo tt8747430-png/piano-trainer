@@ -1,20 +1,17 @@
-import { Radio } from '@base-ui/react/radio'
-import { RadioGroup } from '@base-ui/react/radio-group'
-import { Check, Hourglass, Metronome, type LucideIcon } from 'lucide-react'
+import { Hourglass, Metronome, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import type { PracticeMode } from '@/features/practice'
 import { setPlayback } from '@/features/set-preference'
-import { cn } from '@/shared/lib'
 import {
   FloatingBarButton,
   Labelled,
+  RadioCards,
   Segmented,
   Sheet,
   SheetContent,
   TempoSteps,
-  TileMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { DOCK_CAPTIONED } from './dock-sizes'
@@ -86,30 +83,16 @@ export function PracticeSheet({
       </FloatingBarButton>
       <SheetContent title={t('practiceSheet.title')}>
         <div className="flex flex-col gap-5">
-          <RadioGroup
-            aria-label={t('practiceSheet.title')}
+          <RadioCards
+            label={t('practiceSheet.title')}
             value={way}
-            onValueChange={(next) => (next === 'play' ? onPlay(tempo) : onWait())}
-            className="grid grid-cols-2 gap-3"
-          >
-            {WAYS.map((each) => (
-              <Radio.Root
-                key={each}
-                value={each}
-                className={cn(
-                  'card flex min-h-16 cursor-default items-center gap-3 p-3 text-left text-base font-semibold select-none',
-                  'data-checked:border-primary data-checked:bg-primary/10 data-checked:ring-1 data-checked:ring-primary',
-                  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                )}
-              >
-                <TileMark icon={WAY_ICON[each]} paint="sand" />
-                <span className="min-w-0 flex-1">{t(`practiceSheet.${each}`)}</span>
-                {each === way ? (
-                  <Check aria-hidden className="size-5 shrink-0 text-primary" />
-                ) : null}
-              </Radio.Root>
-            ))}
-          </RadioGroup>
+            cards={WAYS.map((each) => ({
+              value: each,
+              label: t(`practiceSheet.${each}`),
+              icon: WAY_ICON[each],
+            }))}
+            onChange={(next) => (next === 'play' ? onPlay(tempo) : onWait())}
+          />
           {way === 'wait' && !piano ? (
             <p className="-mt-2 text-sm text-pretty text-muted-foreground">
               {t(handsAtKeys ? 'pace.needsKeysNotHands' : 'pace.needsPiano')}

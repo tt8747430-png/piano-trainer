@@ -1,5 +1,4 @@
-import { Download, Eye, Hand, Piano, Printer, SlidersHorizontal } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
+import { Download, Eye, Hand, Printer, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
@@ -27,7 +26,7 @@ import { SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
-  KeyboardButton,
+  PianoSheet,
   CountInBeat,
   HandsSheet,
   LoopButton,
@@ -160,7 +159,6 @@ export function PlayerLayout({
   const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const keySize = useSettings((state) => selectKeyboard(state).keySize)
   const scoreView = useSettings(selectScoreView)
   const otherHand = useSettings((state) => selectOtherHand(state).look)
   const held = useHeldKeys()
@@ -263,17 +261,6 @@ export function PlayerLayout({
             {display}
           </>
         ),
-      },
-    ],
-    // The on-screen piano's settings have one home, Settings › On-screen piano (owner, 2026-11-12:
-    // "I dont want keyboard settings in three places"): a row to it, ranked among the pages.
-    links: [
-      {
-        id: 'piano',
-        label: t('settingsPage.onScreenPiano'),
-        icon: Piano,
-        value: t(`common:keyboardSettings.keySize.${keySize}`),
-        render: <Link to="/settings/on-screen-piano" />,
       },
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
@@ -474,7 +461,7 @@ export function PlayerLayout({
               twoHands ? <HandsButton hands={view.hands} onOpen={() => setHandsOpen(true)} /> : null
             }
             keyboard={
-              <KeyboardButton
+              <PianoSheet
                 keys={player.keys}
                 hands={scoreView.hands}
                 onKeys={player.setKeys}

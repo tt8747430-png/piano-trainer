@@ -312,6 +312,15 @@ export const player: LocaleResources['player'] = {
     medium: 'Средний',
     hard: 'Сильный',
   },
+  pianoSheet: {
+    title: 'Фортепиано',
+    show: 'Показать фортепиано',
+    view: 'Фортепиано',
+    hands: '3D-фортепиано',
+    keys: '2D-клавиши',
+    all: 'Все настройки фортепиано',
+    connect: 'Подключить инструмент',
+  },
   practiceSheet: {
     title: 'Практика',
     of: 'Практика: {{mode}}',

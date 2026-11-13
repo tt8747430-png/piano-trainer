@@ -344,6 +344,16 @@ export const player = {
   // The transport's Pace (R36, flowkey's Tempo menu): the modes at the learner's own pace, then the
   // speeds to listen and play along at.
   // The transport's Practice (its canvas): how you play along, the tempo, the metronome.
+  // The transport's Keyboard (its canvas's Piano sheet): what stands in the keys' place.
+  pianoSheet: {
+    title: 'Piano',
+    show: 'Show the piano',
+    view: 'The piano as',
+    hands: '3D piano',
+    keys: '2D keys',
+    all: 'All piano settings',
+    connect: 'Connect a piano',
+  },
   practiceSheet: {
     title: 'Practice',
     of: 'Practice: {{mode}}',
