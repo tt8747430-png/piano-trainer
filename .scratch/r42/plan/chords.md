@@ -1147,3 +1147,13 @@ background since v14. The function is now `BSHEET`; the cards are the sheet colo
 - 2026-11-09: Root, Chord type and In the bass open drawers; medium-light the default tone; the hand not built yet (Version 86).
 - 2026-11-09: the staff on the first screen (staves in use only, piano 220, facts folded in), larger, with note labels (Version 87).
 - 2026-11-09: the hands model fixed, a resting finger hangs between its neighbours (Version 88; app code, ADR 0117).
+
+## Port to the app (loop round 10, 2026-11-13)
+
+| # | canvas ruling | app today (files) | port |
+| - | ------------- | ----------------- | ---- |
+| 1 | The chord's name is its pickers: "C ⌃ maj7 ⌃" large in the serif, each opening its picker | a big "C" heading, then Root and Chord as labelled fields in the builder (`ChordExplorer`, `ChordBuilder`) | Root and Chord leave the builder's row and become the name (bare pickers, the Chord picker showing the suffix); the quality's full name and Also written under it |
+| 2 | Voicing, Play ▾ (Block · Arpeggio) and Hands in one floating bar at the foot | Voicing a field in the builder; Play and Arpeggio a floating bar; Hands a segmented row | Voicing and Hands join the floating bar as named buttons, Arpeggio a choice in Play's menu |
+| 3 | Fingering on the staff beside every chord's notes, "Right hand 1 2 3 5" under it | a Fingering table (`ChordFingering`) | fingers drawn on the staff, the table goes |
+| 4 | Several chords on the staff, + to add, Next chord suggestions, the Key drawer with Transpose with the key | one chord | the chord list on the staff, its + and sheet |
+| 5 | Keys on top with the hands, by the piano's settings | the keys docked by the app-wide Keyboard setting | none: the dock and 3D are the learner's settings, one piano |
