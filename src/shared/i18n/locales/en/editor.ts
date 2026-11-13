@@ -811,6 +811,7 @@ export const editor = {
       input: 'Note input',
       recording: 'Recording',
       piano: 'On-screen piano',
+      midi: 'MIDI keyboard',
     },
     title: 'Score settings',
     score: 'Score',

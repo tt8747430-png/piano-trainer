@@ -182,8 +182,8 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
               ? cn(
                   'grid min-h-0 gap-x-3',
                   right
-                    ? 'grid-cols-[minmax(0,1fr)_20rem] landscape-phone:grid-cols-[minmax(0,1fr)_17rem] xl:grid-cols-[minmax(0,1fr)_22.5rem]'
-                    : 'grid-cols-[20rem_minmax(0,1fr)] landscape-phone:grid-cols-[17rem_minmax(0,1fr)] xl:grid-cols-[22.5rem_minmax(0,1fr)]',
+                    ? 'grid-cols-[minmax(0,1fr)_20rem] landscape-phone:grid-cols-[minmax(0,1fr)_17rem] xl:grid-cols-[minmax(0,1fr)_23.75rem]'
+                    : 'grid-cols-[20rem_minmax(0,1fr)] landscape-phone:grid-cols-[17rem_minmax(0,1fr)] xl:grid-cols-[23.75rem_minmax(0,1fr)]',
                 )
               : 'flex min-h-0 flex-col'
           }

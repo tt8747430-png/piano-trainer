@@ -418,7 +418,7 @@ export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false, co
 /** A note heard as it is edited, as notation software does by default. */
 export const DEFAULT_EDITING: EditingSettings = {
   hearNotes: true,
-  paletteSide: 'left',
+  paletteSide: 'right',
 }
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */

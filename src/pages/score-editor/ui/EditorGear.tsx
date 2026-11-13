@@ -1,5 +1,6 @@
 import {
   ArrowUpDown,
+  Cable,
   Circle,
   Eye,
   ListMusic,
@@ -196,6 +197,13 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
             icon={Piano}
             paint="sky"
             render={<Link to="/settings/on-screen-piano" />}
+          />
+          {/* A MIDI keyboard has one home too, Settings › Connect a piano (its canvas's row). */}
+          <RowLink
+            title={t('scoreSettings.pages.midi')}
+            icon={Cable}
+            paint="grass"
+            render={<Link to="/settings/connect-piano" />}
           />
         </SettingsGroup>
       )}

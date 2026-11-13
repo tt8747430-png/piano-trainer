@@ -740,6 +740,7 @@ export const editor: LocaleResources['editor'] = {
       input: 'Ввод нот',
       recording: 'Запись',
       piano: 'Экранная клавиатура',
+      midi: 'MIDI-клавиатура',
     },
     title: 'Настройки партитуры',
     score: 'Партитура',
