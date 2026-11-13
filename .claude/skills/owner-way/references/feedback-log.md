@@ -636,6 +636,12 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Built as drawn, no old shapes kept (2026-11-13):** "you should refactor with no backwards compatibility, you should do
+  the design and ui as the design artifact says and as close as possible": each area's app is rebuilt to its canvas
+  boards, measured against them. Settings first: rows 52 tall with a 30px solid square and a regular 16px name, group
+  names in small capitals, the account card bold with its green sync line; on a laptop the same list is the pane, the
+  page open lit, the page's title over its own column; General's Appearance three ringed screens, Language two ringed
+  buttons. The laptop's tree of Settings is gone.
 - **Pressure to practise (2026-11-12):** "I want to put pressure on the user": the streak holds the learner to daily
   practice (PRODUCT.md, principle 6), always true, never locking or charging. Replaces "no streaks as pressure".
 - **One home for the keyboard's settings (2026-11-12):** "I dont want keyboard settings in three places": Settings ›

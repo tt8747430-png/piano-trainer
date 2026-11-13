@@ -124,6 +124,12 @@
   --paint-full-grass: var(--p-grass);
   --paint-full-sky: var(--p-sky);
   --paint-full-lilac: var(--p-lilac);
+  /* A row's tile (canvas 128): the paint solid under a white glyph, 3:1 against it, both themes. */
+  --paint-tile-sand: #b08a5b;
+  --paint-tile-yellow: #a8842f;
+  --paint-tile-grass: #5f8f62;
+  --paint-tile-sky: #5b8db8;
+  --paint-tile-lilac: #8c7ab8;
   --on-paint-full: var(--p-ink);
   /* Learned, known, on, connected: the book's grass. */
   --learned: var(--p-grass-deep);

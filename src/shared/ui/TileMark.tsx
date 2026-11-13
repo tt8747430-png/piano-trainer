@@ -3,8 +3,9 @@ import { cn } from '@/shared/lib'
 import { PAINT, type Paint } from './paint'
 
 /**
- * A row's tile on its paint's wash: its icon, or its number in a sequence (a lesson in its module, a
- * song in its book), in the paint's deep shade. A picture: hidden from a screen reader.
+ * A row's tile, its paint solid (canvas 128, iOS Settings' squares): its icon, or its number in a
+ * sequence (a lesson in its module, a song in its book), in white. A picture: hidden from a screen
+ * reader.
  */
 export function TileMark({
   icon: Icon,
@@ -18,12 +19,11 @@ export function TileMark({
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid size-12 shrink-0 place-items-center rounded-control font-display text-xl font-semibold tabular-nums',
-        PAINT[paint].fill,
-        PAINT[paint].ink,
+        'grid size-7.5 shrink-0 place-items-center rounded-tile text-base font-semibold text-white tabular-nums',
+        PAINT[paint].tile,
       )}
     >
-      {Icon ? <Icon className="size-5" /> : numeral}
+      {Icon ? <Icon className="size-4.5" /> : numeral}
     </span>
   )
 }

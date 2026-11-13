@@ -69,6 +69,11 @@
   --color-paint-full-grass: var(--paint-full-grass);
   --color-paint-full-sky: var(--paint-full-sky);
   --color-paint-full-lilac: var(--paint-full-lilac);
+  --color-paint-tile-sand: var(--paint-tile-sand);
+  --color-paint-tile-yellow: var(--paint-tile-yellow);
+  --color-paint-tile-grass: var(--paint-tile-grass);
+  --color-paint-tile-sky: var(--paint-tile-sky);
+  --color-paint-tile-lilac: var(--paint-tile-lilac);
   --color-on-paint-full: var(--on-paint-full);
   --color-thumb: var(--thumb);
   --color-raised: var(--raised);
@@ -135,8 +140,8 @@
 @theme {
   /*
    * One shape scale (R14, DESIGN.md Shapes): a control 12 · a card 14 · a sheet 20 · a pill round.
-   * The keys are drawings, not controls: a black key's foot 6, a white key's 9. Everything else
-   * takes `rounded-control`, `-card`, `-sheet` or `-pill`; Tailwind's own sizes, which the shadcn
+   * The keys are drawings, not controls: a black key's foot 6, a white key's 9; a row's 30px tile,
+   * a mark, 8 (canvas 128). Everything else takes `rounded-control`, `-card`, `-sheet` or `-pill`; Tailwind's own sizes, which the shadcn
    * primitives keep in their classes, resolve to the same scale (`src/styles/shapes.test.ts`). In
    * `@theme` proper, not inline, so plain CSS reads them too (`var(--radius-card)`).
    */
@@ -150,6 +155,7 @@
   --radius-pill: calc(infinity * 1px);
   --radius-key-black: calc(var(--radius) - 6px);
   --radius-key-white: calc(var(--radius) - 3px);
+  --radius-tile: calc(var(--radius) - 4px);
   --radius-xs: var(--radius-control);
   --radius-sm: var(--radius-control);
   --radius-md: var(--radius-control);

@@ -120,13 +120,7 @@ export { SheetPill } from './SheetPill'
 export { SheetToolsContext } from './sheet-tools'
 export { PictureChoice } from './PictureChoice'
 export { PictureTiles } from './PictureTiles'
-export {
-  DockPicture,
-  KeySizePicture,
-  NoteNamesPicture,
-  SwipePicture,
-  ThemePicture,
-} from './SettingPictures'
+export { DockPicture, KeySizePicture, NoteNamesPicture, SwipePicture } from './SettingPictures'
 export { Sheet, SheetContent, SheetTrigger } from './Sheet'
 export { SettingField } from './SettingField'
 export { SettingRows } from './SettingRows'

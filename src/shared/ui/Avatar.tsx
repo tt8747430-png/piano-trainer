@@ -11,7 +11,7 @@ const SIZE = {
   /** A byline's: beside a name. */
   byline: 'size-11 text-lg',
   /** A row's: its tile's size. */
-  row: 'size-12 text-xl',
+  row: 'size-13 text-2xl',
   /** The Profile's and the Account's, at their top. */
   hero: 'size-24 text-5xl',
 } as const

@@ -51,7 +51,9 @@ export function RowFace({
   end,
 }: RowFaceProps & { end?: ReactNode }) {
   const name = (
-    <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
+    <span className="line-clamp-2 text-base leading-snug font-normal text-pretty group-data-current/row:font-semibold">
+      {title}
+    </span>
   )
   return (
     <>

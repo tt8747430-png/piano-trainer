@@ -6,17 +6,23 @@ import { APP_VERSION } from '@/shared/config'
 import { useAccount } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
 import { RowLink, SettingsGroup } from '@/shared/ui'
-import { ADMIN_ENTRY, SETTINGS_GROUPS, type SettingsPageEntry } from '../model/sections'
+import {
+  ADMIN_ENTRY,
+  SETTINGS_GROUPS,
+  type SettingsPageEntry,
+  type SettingsPlace,
+} from '../model/sections'
 import { AccountCard } from './AccountCard'
 
 /**
- * Settings' list on a phone (R32, iOS's Settings): the account card first, then General, Piano,
- * Library and Support, each row its icon in a coloured square and, where it has one, its value
- * before the chevron (General's appearance, MIDI devices' connection, About's version or a waiting update); for an
- * administrator, Administration last. Each row pushes its page, whose Back comes here. Only what
+ * Settings' list (canvas 128, iOS's Settings): the account card first, then General, Piano, Library
+ * and Support, each row its icon in a solid square and, where it has one, its value in grey before
+ * the chevron (General's appearance, MIDI devices' connection, About's version or a waiting update);
+ * for an administrator, Administration last. On a phone it is the screen, each row pushing its page;
+ * on a laptop the same list is the pane beside the page, the page open lit (`place`). Only what
  * concerns the whole app: a screen's own settings are behind its gear (R29).
  */
-export function SettingsList() {
+export function SettingsList({ place = null }: { place?: SettingsPlace | null }) {
   const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
   const midi = useMidiSummary()
@@ -30,8 +36,8 @@ export function SettingsList() {
     return undefined
   }
   return (
-    <div className="flex flex-col gap-7">
-      <AccountCard />
+    <div className="flex flex-col gap-6">
+      <AccountCard current={place?.kind === 'account'} />
       {SETTINGS_GROUPS.map((group) => (
         <SettingsGroup key={group.title} flush title={t(`settings:${group.title}`)}>
           {group.pages.map((page) => (
@@ -41,7 +47,12 @@ export function SettingsList() {
               icon={page.icon}
               paint={page.paint}
               value={valueOf(page)}
-              render={<Link to={page.to} />}
+              render={
+                <Link
+                  to={page.to}
+                  data-current={place?.kind === 'page' && place.to === page.to ? '' : undefined}
+                />
+              }
             />
           ))}
         </SettingsGroup>
@@ -52,7 +63,7 @@ export function SettingsList() {
             title={t('admin:title')}
             icon={ADMIN_ENTRY.icon}
             paint={ADMIN_ENTRY.paint}
-            render={<Link to="/admin" />}
+            render={<Link to="/admin" data-current={place?.kind === 'admin' ? '' : undefined} />}
           />
         </SettingsGroup>
       ) : null}

@@ -23,3 +23,4 @@ one page per group.
 
 - Canvas 128 (2026-11-11): Settings drawn on the one canvas, the list, General, and each group's page.
 - Loop round 10 (2026-11-13): General's row shows the appearance chosen ("Match system", "Light", "Dark"), as the ruling's grey values; the laptop's tree shows none, its page beside it.
+- Built to canvas 128 (2026-11-13, "as the design artifact says and as close as possible"): the list's rows, tiles, small-capital headings and account card as drawn; the laptop's pane is the list itself, its tree removed; General's ringed screens and language buttons.

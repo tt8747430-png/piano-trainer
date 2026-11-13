@@ -34,8 +34,11 @@ export function SettingsGroup({
       className={cn('flex flex-col gap-2', className)}
     >
       {title ? (
-        <div className="flex items-center gap-1 px-3">
-          <h2 id={id} className="font-sans text-sm font-semibold text-muted-foreground">
+        <div className="flex items-center gap-1 px-1">
+          <h2
+            id={id}
+            className="font-sans text-sm font-semibold tracking-wider text-muted-foreground uppercase"
+          >
             {title}
           </h2>
           {info ? <InfoTip name={title}>{info}</InfoTip> : null}
