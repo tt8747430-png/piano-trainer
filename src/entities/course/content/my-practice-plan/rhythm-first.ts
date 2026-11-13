@@ -1,7 +1,7 @@
 import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 4: rhythm patterns before more chords, in 4/4 and 3/4. */
+/** Sixteen-Week Practice Plan, lesson 4: rhythm patterns before more chords, in 4/4 and 3/4. */
 const rhythmFirst: Lesson = {
   id: 'rhythm-first',
   title: { en: 'Rhythm before more chords', ru: 'Ритм прежде новых аккордов' },

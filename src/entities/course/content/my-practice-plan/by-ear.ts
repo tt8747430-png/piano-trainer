@@ -4,7 +4,7 @@ import type { Lesson } from '@/entities/lesson'
 const G_MAJOR = { tonic: note('G'), minor: false }
 const D_MAJOR = { tonic: note('D'), minor: false }
 
-/** My Practice Plan, lesson 10: finding a song by ear, learning real songs and borrowing phrases. */
+/** Sixteen-Week Practice Plan, lesson 10: finding a song by ear, learning real songs and borrowing phrases. */
 const byEar: Lesson = {
   id: 'by-ear',
   title: { en: 'Songs by ear', ru: 'Песни на слух' },

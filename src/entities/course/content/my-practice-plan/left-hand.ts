@@ -1,7 +1,7 @@
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 5: the left hand's ladder, from the root alone to tenths and walk-ups. */
+/** Sixteen-Week Practice Plan, lesson 5: the left hand's ladder, from the root alone to tenths and walk-ups. */
 const leftHand: Lesson = {
   id: 'left-hand',
   title: { en: 'The left hand’s ladder', ru: 'Лестница левой руки' },

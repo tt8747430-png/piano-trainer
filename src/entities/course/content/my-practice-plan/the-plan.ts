@@ -3,7 +3,7 @@ import type { Lesson } from '@/entities/lesson'
 
 const F_MAJOR = { tonic: note('F'), minor: false }
 
-/** My Practice Plan, lesson 1: the day, the week, the tempo ladder and one focus at a time. */
+/** Sixteen-Week Practice Plan, lesson 1: the day, the week, the tempo ladder and one focus at a time. */
 const thePlan: Lesson = {
   id: 'the-plan',
   title: { en: 'How the plan works', ru: 'Как устроен план' },

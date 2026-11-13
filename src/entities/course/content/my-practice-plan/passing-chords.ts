@@ -1,7 +1,7 @@
 import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 7: the passing-chord toolkit church and gospel players use. */
+/** Sixteen-Week Practice Plan, lesson 7: the passing-chord toolkit church and gospel players use. */
 const passingChords: Lesson = {
   id: 'passing-chords',
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },

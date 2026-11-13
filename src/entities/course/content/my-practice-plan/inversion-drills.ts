@@ -1,7 +1,7 @@
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan: six drills that make inversions automatic. */
+/** Sixteen-Week Practice Plan: six drills that make inversions automatic. */
 const inversionDrills: Lesson = {
   id: 'inversion-drills',
   title: { en: 'Inversion drills', ru: 'Упражнения на обращения' },

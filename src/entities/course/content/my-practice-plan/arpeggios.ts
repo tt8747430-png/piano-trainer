@@ -1,7 +1,7 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan: arpeggios over two octaves, their fingering, the thumb's pass and practice rhythms. */
+/** Sixteen-Week Practice Plan: arpeggios over two octaves, their fingering, the thumb's pass and practice rhythms. */
 const arpeggios: Lesson = {
   id: 'arpeggios',
   title: { en: 'Arpeggios and their fingering', ru: 'Арпеджио и аппликатура' },

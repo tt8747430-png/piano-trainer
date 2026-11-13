@@ -17,9 +17,10 @@ import {
  * What to do next (ADR 0053), Learn's first row: one card that is the link, Continue and the
  * journey or course it is on, the step it opens, how far that track is learned, and a round honey
  * mark at its end: the next lesson of the journey or of the course last worked in, read; its next
- * guided song, on its page. Nothing once everything is learned.
+ * guided song, on its page. Nothing once everything is learned. Beside the level it is on (`shown`,
+ * Learn's Lessons with that level open), the card leaves the meter to the level's own line.
  */
-export function ContinueAction() {
+export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const id = useId()
@@ -43,7 +44,7 @@ export function ContinueAction() {
         <h2 id={id} className="font-display text-xl leading-tight text-balance">
           {title}
         </h2>
-        <LearnedMeter progress={progress} />
+        {track.id === shown ? null : <LearnedMeter progress={progress} />}
       </span>
       <span
         aria-hidden

@@ -1,7 +1,7 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan: fingering triads, their inversions and 7th chords in both hands. */
+/** Sixteen-Week Practice Plan: fingering triads, their inversions and 7th chords in both hands. */
 const chordFingering: Lesson = {
   id: 'chord-fingering',
   title: { en: 'Fingering chords', ru: 'Аппликатура аккордов' },

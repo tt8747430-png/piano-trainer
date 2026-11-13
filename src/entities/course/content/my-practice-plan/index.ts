@@ -16,14 +16,14 @@ import thePlan from './the-plan'
 import voicings from './voicings'
 
 /**
- * The owner's practice plan: the advice their saved piano videos repeat most, as fifteen lessons in the
+ * A practice plan (the owner's): the advice their saved piano videos repeat most, as fifteen lessons in the
  * order a church and gospel player needs them.
  */
 const course: Course = {
   id: 'my-practice-plan',
   shelf: 'chords',
   stage: 'intermediate',
-  title: { en: 'My Practice Plan', ru: 'Мой план занятий' },
+  title: { en: 'Sixteen-Week Practice Plan', ru: 'План занятий на 16 недель' },
   summary: {
     en: 'A sixteen-week plan in fifteen lessons: chord shapes and their fingering in every key, inversion drills, arpeggios, rhythm and the left hand, shells and rootless voicings, diminished and passing chords, arranging a hymn, improvising and playing by ear.',
     ru: 'План на шестнадцать недель в пятнадцати уроках: аккорды и их аппликатура во всех тональностях, упражнения на обращения, арпеджио, ритм и левая рука, шеллы и аккорды без баса, уменьшённые и проходящие аккорды, обработка гимна, импровизация и игра на слух.',

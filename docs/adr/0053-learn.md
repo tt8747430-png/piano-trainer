@@ -13,7 +13,7 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 ## Decision
 
 - **Learn** (`/?view=lessons|courses&journey=`, remembered) is its header's toggle, in the title's place, between the
-  **Lessons** and the **Courses**, with **Continue**: one card naming its step, "6 of 13 learned" and its meter.
+  **Lessons** and the **Courses**, with **Continue**: one card naming its step, "6 of 13 learned" and its meter; beside the level it is on (Lessons with that level open) it leaves the count to the level's own line.
   Continue follows the track last learned on: after a course's lesson or song, that course's next step; otherwise the
   journeys' next. On a phone it follows the level's chips; on a laptop (`lg`) the page is three columns: the levels
   as a list (each with its book's title and count, then Your lessons), the level, and Continue with Your courses. The

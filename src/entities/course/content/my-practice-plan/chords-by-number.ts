@@ -3,7 +3,7 @@ import type { Lesson } from '@/entities/lesson'
 
 const G_MAJOR = { tonic: note('G'), minor: false }
 
-/** My Practice Plan, lesson 3: the key's chords by number, voice leading, four progressions to know. */
+/** Sixteen-Week Practice Plan, lesson 3: the key's chords by number, voice leading, four progressions to know. */
 const chordsByNumber: Lesson = {
   id: 'chords-by-number',
   title: { en: 'Chords by number', ru: 'Аккорды по ступеням' },

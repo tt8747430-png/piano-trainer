@@ -4,7 +4,7 @@ import type { Lesson } from '@/entities/lesson'
 const F_MAJOR = { tonic: note('F'), minor: false }
 const G_MAJOR = { tonic: note('G'), minor: false }
 
-/** My Practice Plan: the sixteen weeks in four blocks, the daily technique block, and the checkpoints. */
+/** Sixteen-Week Practice Plan: the sixteen weeks in four blocks, the daily technique block, and the checkpoints. */
 const sixteenWeeks: Lesson = {
   id: 'sixteen-weeks',
   title: { en: 'Sixteen weeks, week by week', ru: 'Шестнадцать недель по неделям' },

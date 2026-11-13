@@ -98,7 +98,7 @@ export function LearnPage() {
               journey={shown}
               lead={
                 <div className="lg:hidden">
-                  <ContinueAction />
+                  <ContinueAction shown={own ? undefined : journey.id} />
                 </div>
               }
             />
@@ -112,7 +112,7 @@ export function LearnPage() {
           )}
         </div>
         <aside className="hidden lg:sticky lg:top-4 lg:flex lg:flex-col lg:gap-8">
-          <ContinueAction />
+          <ContinueAction shown={view === 'lessons' && !own ? journey.id : undefined} />
           {view === 'lessons' ? <OwnCourses /> : null}
         </aside>
       </div>

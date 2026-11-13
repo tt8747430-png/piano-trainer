@@ -1,7 +1,7 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan: the diminished triad and 7th, the three diminished 7ths, and their uses. */
+/** Sixteen-Week Practice Plan: the diminished triad and 7th, the three diminished 7ths, and their uses. */
 const diminishedChords: Lesson = {
   id: 'diminished-chords',
   title: { en: 'Diminished chords', ru: 'Уменьшённые аккорды' },

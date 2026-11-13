@@ -3,7 +3,7 @@ import type { Lesson } from '@/entities/lesson'
 
 const F_MAJOR = { tonic: note('F'), minor: false }
 
-/** My Practice Plan, lesson 8: a hymn arranged in five steps, and playing under singers. */
+/** Sixteen-Week Practice Plan, lesson 8: a hymn arranged in five steps, and playing under singers. */
 const arrangingAHymn: Lesson = {
   id: 'arranging-a-hymn',
   title: { en: 'Arranging a hymn in five steps', ru: 'Обработка гимна в пять шагов' },

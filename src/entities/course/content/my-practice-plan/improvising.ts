@@ -1,7 +1,7 @@
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 9: improvising from chord tones, approach notes, motifs and space. */
+/** Sixteen-Week Practice Plan, lesson 9: improvising from chord tones, approach notes, motifs and space. */
 const improvising: Lesson = {
   id: 'improvising',
   title: { en: 'Improvising from chord tones', ru: 'Импровизация от звуков аккорда' },

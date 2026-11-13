@@ -1,7 +1,7 @@
 import { note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 2: triads, one-note changes, 7ths and inversions as shapes in every key. */
+/** Sixteen-Week Practice Plan, lesson 2: triads, one-note changes, 7ths and inversions as shapes in every key. */
 const chordShapes: Lesson = {
   id: 'chord-shapes',
   title: { en: 'Chords as shapes', ru: 'Аккорды как фигуры' },

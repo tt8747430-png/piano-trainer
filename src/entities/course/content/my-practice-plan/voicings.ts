@@ -1,7 +1,7 @@
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-/** My Practice Plan, lesson 6: shells, guide tones, rootless voicings and drop 2. */
+/** Sixteen-Week Practice Plan, lesson 6: shells, guide tones, rootless voicings and drop 2. */
 const voicings: Lesson = {
   id: 'voicings',
   title: { en: 'Shells and rootless voicings', ru: 'Шеллы и аккорды без баса' },
