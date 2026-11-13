@@ -31,7 +31,7 @@ import zemlya from './zemlya'
  */
 const calledToPlayTwo: Collection = {
   id: 'called-to-play-2',
-  name: { en: 'Called to Play, level 2', ru: 'Призван играть, уровень 2' },
+  name: { en: 'Called to Play 2', ru: 'Призван играть 2' },
   entries: [
     molitva,
     zemlya,
