@@ -135,3 +135,18 @@ mouse and keyboard.
 
 Sources: Musicca's chord player (sections, bars, chord picker, instruments); Chordify's chord grid; Band-in-a-Box's
 lead sheet (bars four to a row, chords split by beats); `practice.ts` `chordPlayer`.
+
+### Canvas 171 (2026-11-13): the board redrawn to the rulings
+
+`.scratch/r39/canvas/r58_chordplayer.py`, over r41_practice's ChordPlayer board. The chart: each bar's chords sized
+by their beats over a row of beat ticks (the sounding beat in ink while playing); the chorus's 4th bar holds F 4 and
+G7 2, so it is marked ! (44 target, "Bar 4 holds 6 beats, not 4", opening its chord); each section's head a grip, its
+letter, name and × n, and, with Follow a MIDI arranger on, its Genos tag ("Intro I · Main A, Main B · Fill in"),
+which opens the section's sheet: Intro (the first section), Main for each time through, Into the next section
+(None · Fill in · Break), Ending (the last); "None sends nothing: the Genos plays as its panel says." A chord opens
+Musicca's sheet titled "Bar 4 · F": Root, Chord, Bass note, Duration − n beats +, Suggested chords, Play from here,
+Duplicate, Delete chord. Every edit marks the sheet's name Draft; ··· holds Save and Discard draft over Share (View
+only · Can edit, Copy link). Settings add Follow a MIDI arranger and Arranger · Genos · USB. Over the keys, the
+Genos's strip as its panel names it: Style (Start/Stop, ACMP, Sync Start, Sync Stop), Intro I II III, Main A B C D,
+Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale red when next, white when off.
+

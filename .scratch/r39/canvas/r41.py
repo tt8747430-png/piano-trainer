@@ -21,3 +21,4 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r54_practice_more.py').r
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r55_editor_draft.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r56_results.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r57_yours.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r58_chordplayer.py').read())
