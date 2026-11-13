@@ -66,7 +66,8 @@ seen on screen" with the diagrams on a last page.
     that leaves nothing out opens the song's page at once. A file over 20 MB or 20,000 notes is too large, one that is
     no score says what Import opens, a damaged one (a .mxl garbled or cut short too) says so. Closing the sheet while
     a file is read makes nothing of it.
-- **The tuning** is a fact of Song information: A 440 Hz unless the recording says otherwise (`tuningOf`).
+- **The tuning** is a chip of the song page's fact line where the recording is not at A 440 Hz (`tuningOf`), its ⓘ
+  saying what it means.
 
 ## Consequences
 

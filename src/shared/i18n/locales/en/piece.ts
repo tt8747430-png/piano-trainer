@@ -43,6 +43,13 @@ export const piece = {
   },
   tempo: 'Tempo',
   time: 'Time',
+  // The recording's tuning (ADR 0107), on the song's page where it is not A 440.
+  tuning: {
+    label: 'Tuning',
+    value: 'A {{hz}} Hz',
+    about:
+      'The recording is tuned to A {{hz}} Hz, not the standard 440 Hz. Tune an instrument to it to play along in tune.',
+  },
   progression: 'Progression',
   // The library's progressions a song uses, under its chords (ADR 0112).
   progressions: 'Progressions',

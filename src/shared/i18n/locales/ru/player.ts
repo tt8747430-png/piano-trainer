@@ -3,13 +3,6 @@ import type { LocaleResources } from '../../types'
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
   more: 'Ещё',
-  info: { song: 'О песне', study: 'Об этюде' },
-  tuning: {
-    label: 'Строй',
-    value: 'Ля {{hz}} Гц',
-    about:
-      'Запись настроена на ля {{hz}} Гц, а не на стандартные 440 Гц. Настройте инструмент так же, чтобы играть с ней в лад.',
-  },
   sections: {
     title: 'Разделы',
   },
@@ -73,30 +66,6 @@ export const player: LocaleResources['player'] = {
     lower: 'Ниже',
     higher: 'Выше',
   },
-  recordings: {
-    title: 'Мои записи',
-    short: 'Записи',
-    recorder: 'Запись',
-    record: 'Записать',
-    stop: 'Остановить запись',
-    needsPiano: 'Подключите пианино, чтобы записать дубль.',
-    none: 'Записей этой песни пока нет.',
-    fromBar: 'С такта {{bar}}',
-  },
-  feedback: {
-    howDidIPlay: 'Как я сыграл?',
-    label: 'Разбор',
-    about: 'Ваш последний дубль, отмеченный в нотах',
-    summary: 'Верно: {{percent}}',
-    close: 'Скрыть разбор',
-    count: {
-      wrong: 'неверно: {{count}}',
-      missed: 'пропущено: {{count}}',
-      early: 'рано: {{count}}',
-      late: 'поздно: {{count}}',
-    },
-  },
-  rhythm: { label: 'Ритмическая игра' },
   annotate: {
     label: 'Пометки',
     staff: 'Нотоносец',
@@ -120,9 +89,6 @@ export const player: LocaleResources['player'] = {
     wait: 'Нажмите «Играть» и исполняйте каждую подсвеченную ноту.',
     follow: 'Играйте подсвеченные ноты — аккомпанемент следует за вашим темпом.',
     close: 'Закрыть подсказку',
-  },
-  voice: {
-    label: 'Голосовые команды',
   },
   modes: {
     wait: { name: 'Режим ожидания', line: 'Музыка ждёт верных нот.' },

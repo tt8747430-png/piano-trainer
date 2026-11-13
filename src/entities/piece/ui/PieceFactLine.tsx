@@ -1,50 +1,15 @@
-import { Clock, KeyRound, Metronome } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol, type Key } from '@/shared/lib/music'
-import { FactCard } from '@/shared/ui'
+import { STANDARD_TUNING, tuningOf } from '@/shared/lib/schedule'
+import { InfoTip } from '@/shared/ui'
 import { pieceKey, type Piece } from '../model/types'
 import { useTempoText } from './use-tempo-text'
 
 /**
- * A piece's facts as cards, three across (ADR 0111), on its song's page and in the Player's Song
- * information (ADR 0108): its key, time and tempo. The key is the one it is played in, where the
- * Player's Setup has moved it (`played`), else its own. A fact more after them (`children`: Song
- * information's tuning, ADR 0107) makes four, two by two on a phone held upright.
- */
-export function PieceFactCards({
-  piece,
-  played,
-  children,
-}: {
-  piece: Piece
-  played?: Key
-  children?: ReactNode
-}) {
-  const { t } = useTranslation(['piece', 'music'])
-  const tempo = useTempoText(piece)
-  return (
-    <dl className={cn('grid gap-2', children ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3')}>
-      <FactCard icon={KeyRound} name={t('music:key.label')}>
-        {/* The key is written as a chord is, in the serif and as the sheet prints it (`C♯m`); the
-            time and tempo are numbers. */}
-        <span className="font-display">{printedSymbol(keySymbol(played ?? pieceKey(piece)))}</span>
-      </FactCard>
-      <FactCard icon={Clock} name={t('time')}>
-        {piece.meter}
-      </FactCard>
-      <FactCard icon={Metronome} name={t('tempo')}>
-        {tempo}
-      </FactCard>
-      {children}
-    </dl>
-  )
-}
-
-/**
  * A piece's facts in one quiet line under its title (ADR 0111, amended): its key, time and tempo, as
  * a songbook's heading prints them. The key is the one it is played in (`played`), else its own.
+ * A recording tuned away from A 440 adds its Tuning, an ⓘ saying what it means (ADR 0107).
  */
 export function PieceFactLine({
   piece,
@@ -61,7 +26,7 @@ export function PieceFactLine({
 }) {
   const { t } = useTranslation(['piece', 'music'])
   const tempo = useTempoText(piece)
-  const facts = [
+  const facts: { name: string; value: ReactNode }[] = [
     {
       name: t('music:key.label'),
       value: (
@@ -71,6 +36,17 @@ export function PieceFactLine({
     { name: t('time'), value: piece.meter },
     { name: t('tempo'), value: tempo },
   ]
+  const tuning = tuningOf(piece.recording)
+  if (tuning !== STANDARD_TUNING)
+    facts.push({
+      name: t('tuning.label'),
+      value: (
+        <span className="inline-flex items-center gap-1">
+          {t('tuning.value', { hz: tuning })}
+          <InfoTip name={t('tuning.label')}>{t('tuning.about', { hz: tuning })}</InfoTip>
+        </span>
+      ),
+    })
   return (
     <dl className="flex flex-wrap items-center gap-2">
       {facts.map((fact, at) => (

@@ -16,7 +16,7 @@ import { ScaleLink } from './PieceAbout'
 /**
  * A listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not pressed:
  * its second title, then its key, meter and tempo, named for a screen reader, its stage's mark, and
- * Your version where the learner has one. A song's page has them as cards (`PieceFactCards`).
+ * Your version where the learner has one. A song's page has them as a line of chips (`PieceFactLine`).
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'music'])

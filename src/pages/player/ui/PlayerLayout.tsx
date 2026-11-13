@@ -1,13 +1,8 @@
-import { useLocale } from '@/shared/i18n'
 import {
   Download,
   Link2,
   Ellipsis,
-  Gauge,
   Hand,
-  ListMusic,
-  MessageSquareText,
-  Mic,
   MonitorCog,
   Piano,
   Printer,
@@ -61,8 +56,6 @@ import {
   PlayerDock,
   ScoreBar,
   usePlayerShortcuts,
-  hasVoiceCommands,
-  useVoiceCommands,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
@@ -78,11 +71,7 @@ import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView } from './PickView'
 import { CoachLine } from './CoachLine'
-import { FeedbackCard } from './FeedbackCard'
-import { RecordingsSheet } from './RecordingsSheet'
-import type { PlayerTakes } from '../model/use-player-takes'
-import { TunerSheet } from '@/widgets/tuner'
-import { notePlace, type ScoreAnnotation } from '@/shared/lib/notation'
+import type { ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -91,11 +80,7 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 /** A walk or a progression: no acts of its own. */
 const NO_ACTS: readonly MenuAction[] = []
 /** A walk or a progression: no tools of its own. */
-const NO_ACTS_MORE: readonly MoreAct[] = []
-
-/** A row of the Tools sheet a screen adds, and the group it joins. */
-/** One of the music's acts in the foot's More (R31-P), in its part: practice, tools or listening. */
-export type MoreAct = MenuAction & { readonly part: 'practice' | 'tools' | 'listening' }
+const NO_ACTS_MORE: readonly MenuAction[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -133,7 +118,6 @@ export function PlayerLayout({
   display,
   playback,
   moreActs = NO_ACTS_MORE,
-  takes,
   annotations,
   annotating,
 }: {
@@ -141,10 +125,8 @@ export function PlayerLayout({
   annotations?: readonly ScoreAnnotation[] | undefined
   /** The Annotate bar over the score while it is on (R29 B8). */
   annotating?: ReactNode
-  /** The music's own acts in the foot's More (R31-P): a piece's Annotate, the Rhythm game. */
-  moreActs?: readonly MoreAct[]
-  /** A song's takes (R29 B8): the Recorder, My recordings and Feedback; none for a walk. */
-  takes?: PlayerTakes | undefined
+  /** The music's own acts in the foot's More (R31-P): a piece's Annotate. */
+  moreActs?: readonly MenuAction[]
   /** The music's own on the Settings' Playback page (R31-P): a score's Swing. */
   playback?: ReactNode
   /**
@@ -225,7 +207,6 @@ export function PlayerLayout({
   const [exporting, setExporting] = useState(false)
   // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
   const [panel, setPanel] = useState(false)
-  const [tunerOpen, setTunerOpen] = useState(false)
   // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
   // Listen), remembered for good.
   const settingsStore = useSettingsStoreApi()
@@ -235,38 +216,8 @@ export function PlayerLayout({
   useEffect(() => {
     if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
   }, [playing, view.mode, settingsStore, tip])
-  // Voice commands (R29 B8), on for the visit where the browser hears speech.
-  const [voice, setVoice] = useState(false)
-  const locale = useLocale()
-  useVoiceCommands(voice, locale, (command) => {
-    const step = (share: number) =>
-      player.setTempo(
-        Math.round(
-          Math.min(player.ownTempo * 2, Math.max(player.ownTempo / 2, player.tempo * share)),
-        ),
-      )
-    if (command === 'play') practice.play()
-    else if (command === 'stop') practice.stop()
-    else if (command === 'again') {
-      practice.restart()
-      practice.play()
-    } else if (command === 'slower') step(0.9)
-    else if (command === 'faster') step(1.1)
-    else if (command === 'next') practice.next()
-    else practice.prev()
-  })
   const groups = performance.beatGroups.length
   const progress = groups > 1 ? practice.state.beatGroup / (groups - 1) : 0
-  const [recordingsOpen, setRecordingsOpen] = useState(false)
-  // A take's feedback on the score (R29 B8): the take shown, its verdicts by where each note plays.
-  const feedback = takes?.feedback ?? null
-  const verdicts = useMemo(
-    () =>
-      feedback
-        ? new Map(feedback.notes.map((note) => [notePlace(note.tick, note.midi), note.verdict]))
-        : undefined,
-    [feedback],
-  )
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
@@ -319,36 +270,11 @@ export function PlayerLayout({
     onPanel: setPanel,
   }
   // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
-  // listening, sharing. Every setting is the gear's.
+  // sharing. Every setting is the gear's.
   const moreMenu: MenuAction[] = (
     [
       ...more.map((act) => ({ ...act, group: 'song' })),
-      ...(takes
-        ? [
-            {
-              key: 'recordings',
-              group: 'practice',
-              label: t('recordings.title'),
-              icon: ListMusic,
-              onSelect: () => setRecordingsOpen(true),
-            },
-            // How did I play? once there is a take to judge: a menu holds only what works here.
-            ...(takes.list.length === 0
-              ? []
-              : [
-                  {
-                    key: 'feedback',
-                    group: 'practice',
-                    label: t('feedback.howDidIPlay'),
-                    icon: MessageSquareText,
-                    onSelect: () => takes.show(takes.list[0]?.id ?? null),
-                  },
-                ]),
-          ]
-        : []),
-      ...moreActs
-        .filter((act) => act.part === 'practice')
-        .map((act) => ({ ...act, group: 'practice' })),
+      ...moreActs.map((act) => ({ ...act, group: 'practice' })),
       {
         key: 'print',
         group: 'tools',
@@ -356,30 +282,6 @@ export function PlayerLayout({
         icon: Printer,
         onSelect: () => setPrinting(true),
       },
-      {
-        key: 'tuner',
-        group: 'tools',
-        label: t('tuner.title'),
-        icon: Gauge,
-        onSelect: () => setTunerOpen(true),
-      },
-      ...moreActs.filter((act) => act.part === 'tools').map((act) => ({ ...act, group: 'tools' })),
-      // Voice commands where the browser can hear them.
-      ...(hasVoiceCommands()
-        ? [
-            {
-              key: 'voice',
-              group: 'listening',
-              label: t('voice.label'),
-              icon: Mic,
-              checked: voice,
-              onSelect: () => setVoice(!voice),
-            },
-          ]
-        : []),
-      ...moreActs
-        .filter((act) => act.part === 'listening')
-        .map((act) => ({ ...act, group: 'listening' })),
       ...(share
         ? [
             {
@@ -504,7 +406,7 @@ export function PlayerLayout({
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
         {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
-        {!coached && !practice.state.playing && !annotating && !takes?.shown ? (
+        {!coached && !practice.state.playing && !annotating ? (
           <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
         ) : null}
         {/* How far through the music the cursor is: a thin line along the score's head. */}
@@ -519,9 +421,6 @@ export function PlayerLayout({
           <div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
         </div>
         {annotating}
-        {feedback && takes?.shown ? (
-          <FeedbackCard feedback={feedback} onClose={() => takes.show(null)} />
-        ) : null}
         {shown === 'sheet' ? (
           // The sheet's one pill at its foot (R34, Songscription's): the layout, and in Page view the
           // canvas's zoom beside it.
@@ -547,7 +446,6 @@ export function PlayerLayout({
               onJump={practice.jumpToBeatGroup}
               playing={practice.state.playing}
               onLoopChange={player.setLoop}
-              verdicts={verdicts}
               annotations={annotations}
             />
             {scoreView.layout === 'page' ? null : (
@@ -646,15 +544,6 @@ export function PlayerLayout({
         onHands={player.setHands}
       />
       <CountInBeat count={practice.counting} />
-      <TunerSheet open={tunerOpen} onOpenChange={setTunerOpen} />
-      {takes ? (
-        <RecordingsSheet
-          takes={takes}
-          piano={isMidiConnected(connection)}
-          open={recordingsOpen}
-          onOpenChange={setRecordingsOpen}
-        />
-      ) : null}
       <PlayerExport
         open={exporting}
         onOpenChange={setExporting}

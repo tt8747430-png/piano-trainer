@@ -109,7 +109,8 @@ owner's, typos fixed.
 - **The end of a run says what happened and what next** (2026-11-07, the redesign skill's evidence of care): Played
   through, the score with its comparison, each bar's slips, Practise bars n–m, Play again, the next step. Drawn (v149).
   At the end of the song only, not after a loop ("song only").
-- **No Song information and no Song page row in the Player** ("no song information", "no song page in the settings").
+- **No Song information and no Song page row in the Player** ("no song information", "no song page in the settings"). Built in loop round 1 (2026-11-13), with My recordings, How did I play, Voice commands, the Rhythm game and
+  the Tuner gone from the Player; the recording's Tuning is a chip on the song page's fact line.
 - **A settings drawer holds settings; its acts sit in its head** ("the first two three settings should be more
   distinctive", "feels like a bottom bar and not like settings drawer", "still not good. research more"): the song at
   the drawer's head with Share link and ··· (Print · Export), as Chordify's ⋮; settings under headers below.

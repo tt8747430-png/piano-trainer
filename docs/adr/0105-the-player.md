@@ -74,14 +74,17 @@ what they changed.
   the playhead's ink while its pedal is down (an id selector, restyling that mark alone); the sustain on the piano's
   rail goes down while the score's pedal holds, keys sounding only under the pedal ringed, apart from a hand's, while
   playing alone.
-- **More:** the music's acts, never the library's (those are the song's Settings, ADR 0111): Song information (the chord
-  summary, the key as played, time, tempo and tuning as fact cards), Sections (each by name and its first bar, a tap
-  taking the cursor there), Share, Print and Export… (ADR 0107).
+- **More:** the music's acts, never the library's (those are the song's Settings, ADR 0111): Sections where the music
+  has two or more (each by name and its first bar, a tap taking the cursor there), Annotate, Print, Share link and
+  Export… (ADR 0107). A menu holds only what works here (ADR 0061). The Player has no Song information (its facts are
+  the song's page), no takes of its own (My recordings, How did I play?, the Rhythm game), no Voice commands and no
+  Tuner (Practice › Tools has it): the owner's rulings of 2026-11-07.
 - **The screen's frame (R31-P):** the bar (Close · title · Edit score | Keyboard · MIDI · Settings) over the score;
   nothing floats over the music. At the foot a docked transport (Loop · Restart · ‹ · Play · › · Pace · Metronome)
-  over a foot bar of fixed order: the View, the song tools (Transpose, Version), **Hands** where the music has both,
-  and **More**. More holds the music's acts only (Sections, Song information | My recordings, How did I play?,
-  Annotate | Print, Tuner, Voice commands, the Rhythm game | Export, Share); every setting is the gear's. The
+  over a foot bar of fixed order: the View, the song tools (Transpose, Version), **Hands** where the music has both
+  (its two hands' swatches as its picture),
+  and **More**. More holds the music's acts only (Sections | Annotate | Print | Share link, Export…); every setting
+  is the gear's. The
   customisable Tool bar is gone.
 - **The Settings sheet (R31-P, R32, R36)** is one list of rows ranked by what matters, each opening a subpage with
   Back: **Score view** (Pick your view on opening, annotations, the cursor, following), **Playback** (a score's

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Drum, Info, ListTree, PenLine } from 'lucide-react'
+import { ListTree, PenLine } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -39,11 +39,9 @@ import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
-import { usePlayerTakes } from '../model/use-player-takes'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
-import { SongInfo } from './SongInfo'
 import { ClefChoice } from './ClefChoice'
 import { TransposeTool } from './TransposeTool'
 import { VersionSheet, type VersionChoice } from './VersionSheet'
@@ -82,8 +80,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   const marks = usePieces((state) => state.annotations[piece.id]) ?? NO_MARKS
   const marksShown = useSettings((state) => selectScoreView(state).annotations)
   const [annotating, setAnnotating] = useState(false)
-  // The Rhythm game (R29 B8): a take judged on its timing alone, any key counting.
-  const [rhythm, setRhythm] = useState(false)
   const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
   const solo =
     singles.length > 0 &&
@@ -121,8 +117,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     const group = beatGroupInBar(performance, written)
     if (group !== null) jumpToBeatGroup(group)
   }
-  // The song's takes (R29 B8): recorded from the bar the cursor is in, judged against the music.
-  const takes = usePlayerTakes(piece.id, performance, { bar, tempo: player.tempo, rhythm })
   // Opened at a bar (Practise from the editor's caret, ADR 0115): the cursor goes there, once, and
   // the URL forgets it, so the view remembered never holds it.
   const openAt = useEffectEvent((at: number) => {
@@ -132,13 +126,9 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // Its own acts in Settings (ADR 0108, 0107): the piece's information and its sections as sheets; Export…'s link
-  // shares as its page does, saying so where the status line is.
-  const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
-  const sheetOf = (sheet: 'info' | 'sections') => ({
-    open: showing === sheet,
-    onOpenChange: (open: boolean) => setShowing(open ? sheet : null),
-  })
+  // Its sections as a sheet (ADR 0107); Export…'s link shares as its page does, saying so where the
+  // status line is.
+  const [sectionsOpen, setSectionsOpen] = useState(false)
   const starts = useMemo(() => sectionStarts(performance), [performance])
   const shared = useShareSong()
   // An own song carries its music, one of the app's is a link to itself as it is played.
@@ -161,15 +151,9 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             key: 'sections',
             label: t('player:sections.title'),
             icon: ListTree,
-            onSelect: () => setShowing('sections'),
+            onSelect: () => setSectionsOpen(true),
           },
         ]),
-    {
-      key: 'info',
-      label: t(`player:info.${piece.kind}`),
-      icon: Info,
-      onSelect: () => setShowing('info'),
-    },
   ]
   // Its link, a way out in Export… as on its page (ADR 0107).
   const share = sharing
@@ -247,7 +231,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             <SwingField swing={search.swing} onSwing={player.setSwing} />
           ) : undefined
         }
-        takes={takes}
         annotations={marksShown || annotating ? marks : undefined}
         annotating={
           annotating ? (
@@ -260,26 +243,16 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             />
           ) : null
         }
-        // The music's own acts in the foot's More (R31-P): Annotate, and the Rhythm game.
+        // The music's own act in the foot's More (R31-P): Annotate.
         moreActs={[
           {
             key: 'annotations',
-            part: 'practice',
             label: t('player:annotate.label'),
             icon: PenLine,
             onSelect: () => setAnnotating(true),
           },
-          {
-            key: 'rhythm',
-            part: 'listening',
-            label: t('player:rhythm.label'),
-            icon: Drum,
-            checked: rhythm,
-            onSelect: () => setRhythm(!rhythm),
-          },
         ]}
       />
-      <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
       <VersionSheet
         open={versionOpen}
         onOpenChange={setVersionOpen}
@@ -294,7 +267,8 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
         headings={headings}
         current={sectionAt(performance, player.practice.state.beatGroup)}
         onGo={goToBar}
-        {...sheetOf('sections')}
+        open={sectionsOpen}
+        onOpenChange={setSectionsOpen}
       />
     </PieceInversions>
   )

@@ -5,14 +5,6 @@ export const player = {
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
   // to it).
   more: 'More',
-  info: { song: 'Song information', study: 'Study information' },
-  // Song information's tuning (ADR 0107): the A its recording is tuned to, said where it is not 440.
-  tuning: {
-    label: 'Tuning',
-    value: 'A {{hz}} Hz',
-    about:
-      'The recording is tuned to A {{hz}} Hz, not the standard 440 Hz. Tune an instrument to it to play along in tune.',
-  },
   sections: {
     title: 'Sections',
   },
@@ -83,30 +75,6 @@ export const player = {
     lower: 'Lower A4',
     higher: 'Higher A4',
   },
-  recordings: {
-    title: 'My recordings',
-    short: 'Recordings',
-    recorder: 'Recorder',
-    record: 'Record',
-    stop: 'Stop recording',
-    needsPiano: 'Connect a piano to record a take.',
-    none: 'No recordings of this song yet.',
-    fromBar: 'From bar {{bar}}',
-  },
-  feedback: {
-    howDidIPlay: 'How did I play?',
-    label: 'Feedback',
-    about: 'Your last take, marked on the score',
-    summary: '{{percent}} right',
-    close: 'Hide feedback',
-    count: {
-      wrong: '{{count}} wrong',
-      missed: '{{count}} missed',
-      early: '{{count}} early',
-      late: '{{count}} late',
-    },
-  },
-  rhythm: { label: 'Rhythm game' },
   annotate: {
     label: 'Annotations',
     staff: 'Staff',
@@ -130,9 +98,6 @@ export const player = {
     wait: 'Press Play, then play each highlighted note.',
     follow: 'Play the highlighted notes; the accompaniment follows your tempo.',
     close: 'Dismiss tip',
-  },
-  voice: {
-    label: 'Voice commands',
   },
   // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {
