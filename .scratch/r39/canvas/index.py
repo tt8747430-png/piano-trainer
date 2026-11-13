@@ -53,6 +53,12 @@ d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=note
          pages=[{'id': pid, 'name': pname} for pid, pname, _ in PAGES], launch={'view': 'canvas', 'page': 'practice'})
 d.pop('noteOrder', None)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
+# canvas 167: the one piano, every board's 2D keys in the app's faces (keyface.py)
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())
+for b in boards:
+    if os.path.exists(P + b):
+        h0 = open(P + b).read(); h1 = keyface(h0)
+        if h1 != h0: open(P + b, 'w').write(h1)
 missing = [b for b in boards if not os.path.exists(P + b)]
 links = {b: re.findall(r'href="([^"#{][^"]*\.dc\.html)"', open(P + b).read()) for b in boards if b not in missing}
 dead = sorted({(b, h) for b, hs in links.items() for h in hs if not os.path.exists(P + h)})

@@ -60,8 +60,16 @@ SORTB = (f'<button type="button" onClick="{{{{openSort}}}}" style="flex: none; h
          f'{{{{sortL}}}}{CHEV_D}</button>')
 SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 12px; border-radius: 12px; background: {FILL}; color: {SOFT}">{SEARCH}'
            f'<input aria-label="Search your lessons and courses" placeholder="Search your lessons and courses" value="{{{{q}}}}" onInput="{{{{typed}}}}" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">{SORTB}</label>')
-FAB = lambda bottom: (f'<button type="button" aria-label="New lesson or course" onClick="{{{{openNew}}}}" style="position: absolute; right: 20px; bottom: {bottom}px; z-index: 30; width: 60px; height: 60px; border: 0; border-radius: 30px; background: {ACCENT}; color: {INK}; '
-                      f'box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">{PLUSI.replace("20", "26")}</button>')
+# canvas 167: the + is New's dial, as Songs' (the app's SpeedDial): it turns to a close, the page dims, and New lesson
+# and New course come up over it named in words, the nearest the thumb first; one chosen opens its own short sheet
+DIALITEM = lambda label, act, chip: (f'<li style="display: flex"><button type="button" role="menuitem" onClick="{{{{{act}}}}}" style="height: 48px; padding: 0 18px 0 6px; border: 0; border-radius: 24px; background: {SHEET}; box-shadow: {SHADOW}; display: flex; align-items: center; gap: 10px; font: inherit; font-size: 16px; font-weight: 600; color: {INK}">{chip}{label}</button></li>')
+DIAL = lambda bottom: (f'<sc-if value="{{{{dialOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.78)"></div>'
+                       f'<ul role="menu" aria-label="New" class="dial" style="position: absolute; right: 20px; bottom: {bottom + 76}px; z-index: 31; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; align-items: flex-end; gap: 12px">'
+                       + DIALITEM('New course', 'newCourse', f'<span style="width: 36px; height: 36px; border-radius: 10px; background: #F6E7C8; color: #8A5A1C; display: flex; align-items: center; justify-content: center">{FOLDI}</span>')
+                       + DIALITEM('New lesson', 'newLesson', f'<span style="width: 36px; height: 36px; border-radius: 18px; background: #DCE9D6; color: #2F5A35; display: flex; align-items: center; justify-content: center">{BOOKT}</span>')
+                       + '</ul></sc-if>')
+FAB = lambda bottom: (DIAL(bottom) + f'<button type="button" aria-label="New" aria-haspopup="menu" aria-expanded="{{{{dialOn}}}}" onClick="{{{{openDial}}}}" style="position: absolute; right: 20px; bottom: {bottom}px; z-index: 31; width: 60px; height: 60px; border: 0; border-radius: 30px; background: {ACCENT}; color: {INK}; '
+                      f'box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{dialOn}}}}" hint-placeholder-val="{{{{false}}}}">{CLOSE}</sc-if><sc-if value="{{{{noDial}}}}" hint-placeholder-val="{{{{true}}}}">{PLUSI.replace("20", "26")}</sc-if></button>')
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 ROWBODY = (GROUP(('link', 'Open', '', '#'), ('action', 'Duplicate', 'closeSheet'), bg=SHEET)
            + GROUP(('link', 'Settings', '', '#'), bg=SHEET) + GROUP(('action', 'Delete', 'removeRow', '#B3261E'), bg=SHEET))
@@ -71,11 +79,11 @@ TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("ki
 yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SEARCHF}{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
 ylm = (f'{LTITLEBAR("Your lessons and courses", "", "LearnLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; flex-direction: column; gap: 14px"><div style="max-width: 900px; display: flex; flex-direction: column; gap: 14px">'
-       f'<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1">{SEARCHF}</div>{BTN(PLUSI + "New", "openNew", "", "primary", 44, False)}</div>{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(True)}</div></main>'
+       f'<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1">{SEARCHF}</div>{BTN(PLUSI + "New" + CHEV_D, "openNew", "", "primary", 44, False)}</div>{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(True)}</div></main>'
        f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
-       BSHEET('newOn', 'New', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
-       POPOVER('newOn', 'New', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 300px; top: 210px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 300px; top: 280px', 320), 'Learn')
+       BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
+       POPOVER('pickOn', 'New', NEWPICK, 'right: 506px; top: 140px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 300px; top: 210px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 300px; top: 280px', 320), 'Learn')
 
 # ── Settings of the learner's own lesson and course: rows that say their value and open in place ──
 OSET_JS = js(r'''

@@ -58,6 +58,23 @@ are, what is next, and that every lesson can still be opened.
     lessons keep their one home in its Edit mode (one home a setting). No Share link on either: the learner's
     own live on their devices, and a link would promise what the app cannot do.
 
+- **One piano; New as a choice of two; popovers that carry the facts** (canvas 167, owner 2026-11-13: "make proper ui
+  and refactoring also for the popups with meaningful information and how you can show more things with less ui. and
+  what about proper floating actions for the new lessons or courses … and we should have consistency between the
+  components across the app, like this piano doesn't look like the piano be design from the piano player or chords
+  play"):
+  - **One piano everywhere:** every 2D keyboard on every board wears the app's keys (`PianoKeyboard`): the felt along
+    the far end, ivory keys lit from the player's side with a lip, ebony keys bevelled with a sheen, rounded feet, on
+    the key bed; marks paint the key, its name at its foot. One pass (`keyface.py`) gives every board's keys their
+    faces, Day and Night; the Player and Chords keep the 3D hands at the same keys.
+  - **New is a choice of two:** on a phone the + is New's dial, as Songs' (it turns to a close, the page dims, New
+    lesson and New course come up over it in words); from a row (Learn's "New lesson or course") or the laptop's
+    New ▾ the same two as a menu. Each opens its own short sheet, titled New lesson or New course: a lesson's Name
+    and In a course, a course's Name and Cover. No Lesson | Course switch in the sheet.
+  - **Popovers carry facts, not prose:** a lesson's keys explain their colours in an ⓘ beside the example's title
+    (Whole step · W, two half steps: C–D; Half step · H, the very next key: E–F, B–C), never a line under the
+    keys; About the courses is one line, then the shelves with their counts.
+
 - **"A library, not a path"** (feedback log, Learn and the editors): the levels stay chips (Beginner, Intermediate,
   Advanced, Professional, Your lessons) and any lesson opens from any state. The word "journey" stays out of the
   interface.

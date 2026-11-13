@@ -230,6 +230,9 @@ owner's, typos fixed.
 - **Canvas 165:** "organizing my lessons and cources … the new lessons or new courses actions … their settings":
   the learner's own get a library page (search, kinds, sort, courses folding to their lessons, ⋯ per row, +), one
   New sheet for a lesson or a course, and Settings whose rows say their value and open in place (2026-11-13).
+- **Canvas 167:** "this piano doesn't look like the piano … from the piano player or chords play": one piano, the
+  app's keys, on every board; New a choice of two (the dial on a phone's +, a menu elsewhere), each its own short
+  sheet; popovers carry facts (a legend's swatches, shelves with counts), never a line under a control (2026-11-13).
 
 ## Practice
 
