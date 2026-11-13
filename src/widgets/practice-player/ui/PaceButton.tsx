@@ -43,6 +43,7 @@ export function PaceButton({
   ownTempo,
   speedTraining,
   piano,
+  handsAtKeys = false,
   onMode,
   onListen,
   onSpeedTraining,
@@ -54,6 +55,8 @@ export function PaceButton({
   speedTraining: boolean
   /** Whether a piano is there to play: a MIDI keyboard connected, or the keys on screen. */
   piano: boolean
+  /** The hands stand in the keys' place: the keys on screen are theirs, not to be played. */
+  handsAtKeys?: boolean
   /** Play at the learner's own pace. */
   onMode: (mode: OwnPaceMode) => void
   /** Listen and play along at this tempo. */
@@ -119,7 +122,9 @@ export function PaceButton({
                   <span className="flex min-w-0 flex-col py-1.5 landscape-phone:py-0.5">
                     <span>{t(`modes.${each}.name`)}</span>
                     <span className="text-sm break-words text-muted-foreground">
-                      {piano ? t(`modes.${each}.line`) : t('pace.needsPiano')}
+                      {piano
+                        ? t(`modes.${each}.line`)
+                        : t(handsAtKeys ? 'pace.needsKeysNotHands' : 'pace.needsPiano')}
                     </span>
                   </span>
                 ),

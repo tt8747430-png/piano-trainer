@@ -320,6 +320,7 @@ export const player: LocaleResources['player'] = {
     ownPace: 'В своём темпе',
     playAlong: 'Слушать и подыгрывать',
     needsPiano: 'Подключите пианино или включите клавиатуру.',
+    needsKeysNotHands: 'Подключите пианино или покажите клавиатуру вместо рук.',
     speed: 'Скорость {{percent}}',
     speedLabel: 'Скорость',
     own: 'Исходный темп',

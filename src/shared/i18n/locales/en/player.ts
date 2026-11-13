@@ -352,6 +352,8 @@ export const player = {
     ownPace: 'At your own pace',
     playAlong: 'Listen and play along',
     needsPiano: 'Connect a piano or show the Keyboard.',
+    // The hands at the keys stand in for them, and hands on screen cannot be played.
+    needsKeysNotHands: 'Connect a piano, or show the Keyboard instead of the hands.',
     speed: '{{percent}} speed',
     // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
     speedLabel: 'Speed',

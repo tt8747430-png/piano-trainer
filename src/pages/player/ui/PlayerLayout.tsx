@@ -495,6 +495,7 @@ export function PlayerLayout({
                 ownTempo={player.ownTempo}
                 speedTraining={view.speedTraining}
                 piano={playable}
+                handsAtKeys={player.keys && scoreView.hands}
                 onMode={player.setMode}
                 onListen={player.listenAt}
                 onSpeedTraining={player.setSpeedTraining}
