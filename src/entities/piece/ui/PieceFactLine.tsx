@@ -20,7 +20,7 @@ export function PieceFactLine({
   played?: Key
   /**
    * The key as a link (its key on Scales, A28): the value given, wrapped by the page in a link
-   * stretched over the chip (`after:absolute after:inset-0`).
+   * stretched over the chip (`before:absolute before:inset-0`).
    */
   keyLink?: (value: ReactNode) => ReactNode
 }) {

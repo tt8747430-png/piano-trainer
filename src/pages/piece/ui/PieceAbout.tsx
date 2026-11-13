@@ -51,7 +51,7 @@ export function ScaleLink({ entry, children }: { entry: Entry; children: ReactNo
       to="/practice/scales"
       search={{ root: noteParam(key.tonic), kind: keyScale(key), show: 'key' }}
       // Its chip is 32px; the reach is 44px on touch.
-      className="after:absolute after:inset-x-0 after:inset-y-0 after:rounded-pill focus-visible:outline-none pointer-coarse:after:-inset-y-1.5"
+      className="before:absolute before:inset-x-0 before:inset-y-0 before:rounded-pill focus-visible:outline-none pointer-coarse:before:-inset-y-1.5"
     >
       {children}
     </Link>

@@ -10,7 +10,7 @@ const PRESSED = 'aria-pressed:bg-chosen aria-pressed:text-foreground'
 
 /**
  * A key's face in each form (Flat's): in a section's grid an equal cell of its table, the table's
- * hairlines drawn inside the cells, at their right and their foot; in the row a 40px glyph with no box. Pressed, a sky
+ * hairlines drawn inside the cells, at their right and their foot; in the row a 44px glyph with no box. Pressed, a sky
  * glyph on a sky wash; greyed, faded.
  */
 const FACES = {
@@ -19,7 +19,7 @@ const FACES = {
     PRESSED,
   ),
   bar: cn(
-    'size-10 shrink-0 rounded-control border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 landscape-phone:size-9',
+    'size-11 shrink-0 rounded-control border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 landscape-phone:size-9',
     PRESSED,
   ),
   // Flat's list view: a bordered row, its picture then its name.
@@ -91,7 +91,7 @@ export function PaletteHint({ children }: { children: ReactNode }) {
       className={cn(
         'text-sm text-muted-foreground',
         bar
-          ? 'flex min-h-10 items-center px-2'
+          ? 'flex min-h-11 items-center px-2'
           : 'rounded-control border border-dashed border-hairline p-3',
       )}
     >
@@ -205,7 +205,7 @@ export function SignTile({
         'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
         form === 'grid' &&
           cn('h-12 bg-card shadow-[inset_-1px_-1px_0_var(--color-hairline)]', WIDE),
-        form === 'bar' && 'h-10 w-20 shrink-0 rounded-control',
+        form === 'bar' && 'h-11 w-20 shrink-0 rounded-control',
         form === 'list' &&
           'h-12 justify-start gap-2.5 rounded-control border border-hairline bg-card px-3',
         PRESSED,
