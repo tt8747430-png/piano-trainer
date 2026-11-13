@@ -172,11 +172,9 @@ function LessonSettings({
           steps={[step]}
           words={{
             row: t('settings.reset'),
-            title: t('settings.resetLesson'),
             body: t('settings.resetLessonBody'),
-            cancel: t('settings.cancel'),
-            confirm: t('settings.confirm'),
             done: t('settings.resetDone'),
+            undo: t('settings.undo'),
           }}
         />
         {editsContent(account) &&

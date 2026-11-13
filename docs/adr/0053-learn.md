@@ -51,8 +51,10 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   side. The editors are the app's `LessonEditor` and `CourseEditor` on a local source (`LessonSource`,
   `CourseSource` `own`: no draft, no Publish, kept as the editor rests, Done keeping what waits; an
   example of notes is written as text, the score's Edit music being the app's lessons'). Their Settings:
-  how lessons read, Rename, Duplicate (the copy opened), Reset progress, and Delete last, asked first
-  (a lesson leaves every own course, its progress with it; a course's lessons stay). No Share link:
+  how lessons read, Rename, Duplicate (the copy opened), Reset progress, and Delete last, what goes named
+  under it (a lesson leaves every own course, its progress with it; a course's lessons stay). Reset and
+  Delete happen at once, the toast's Undo putting back the progress, or the lesson in its place in Your
+  lessons and in each course (R38); every lesson's and course's Reset progress works the same way. No Share link:
   sharing them is drawn later. Search finds them.
 - **A lesson is a worksheet**: prose, steps and notes, and examples that play in place on the lesson's keys: chords
   as the lesson writes them (on a staff, each bar's band printing its chord's name, a lone chord's too), one quality on twelve roots, a scale, an interval's card, a line of notes on its staff,

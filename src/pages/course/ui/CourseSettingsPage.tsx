@@ -54,11 +54,9 @@ export function CourseSettingsPage() {
           steps={courseStepIds(course)}
           words={{
             row: t('settings.reset'),
-            title: t('settings.resetCourse'),
             body: t('settings.resetCourseBody'),
-            cancel: t('settings.cancel'),
-            confirm: t('settings.confirm'),
             done: t('settings.resetDone'),
+            undo: t('settings.undo'),
           }}
         />
         {editsContent(account) && !COURSES.some((each) => each.id === course.id) ? (

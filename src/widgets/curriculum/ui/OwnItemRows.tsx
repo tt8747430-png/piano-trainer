@@ -2,15 +2,7 @@ import { Copy, PencilLine } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OWN_NAME_MAX } from '@/entities/own-lessons'
-import {
-  ConfirmDialog,
-  DangerGroup,
-  DangerRow,
-  NewSheet,
-  RowButton,
-  say,
-  SettingsGroup,
-} from '@/shared/ui'
+import { DangerGroup, DangerRow, NewSheet, RowButton, say, SettingsGroup } from '@/shared/ui'
 
 /** What the rows say of the item: a lesson's words or a course's. */
 export interface OwnItemWords {
@@ -20,7 +12,7 @@ export interface OwnItemWords {
   readonly rename: string
   /** Delete's row: Delete lesson. */
   readonly delete: string
-  readonly deleteTitle: string
+  /** What goes with it, under the row: its lessons stay, its progress goes. */
   readonly deleteBody: string
 }
 
@@ -74,28 +66,20 @@ export function OwnItemRows({
   )
 }
 
-/** Its Delete, the Settings page's last group alone (R25), asked first. */
+/**
+ * Its Delete, the Settings page's last group alone (R25), what goes with it named under it; it is
+ * deleted at once, the page's toast offering Undo (R38).
+ */
 export function OwnDeleteGroup({
   words,
   onDelete,
 }: {
-  words: Pick<OwnItemWords, 'delete' | 'deleteTitle' | 'deleteBody'>
+  words: Pick<OwnItemWords, 'delete' | 'deleteBody'>
   onDelete: () => void
 }) {
-  const { t } = useTranslation('learn')
-  const [asked, setAsked] = useState(false)
   return (
-    <DangerGroup footnote={t('own.footnote')}>
-      <DangerRow title={words.delete} onClick={() => setAsked(true)} />
-      <ConfirmDialog
-        open={asked}
-        onOpenChange={setAsked}
-        title={words.deleteTitle}
-        body={words.deleteBody}
-        action={t('own.delete')}
-        cancel={t('settings.cancel')}
-        onConfirm={onDelete}
-      />
+    <DangerGroup footnote={words.deleteBody}>
+      <DangerRow title={words.delete} onClick={onDelete} />
     </DangerGroup>
   )
 }

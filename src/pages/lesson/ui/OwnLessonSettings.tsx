@@ -4,16 +4,21 @@ import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
-import { deleteOwnLesson, duplicateOwnLesson, renameOwnLesson } from '@/features/manage-own-lessons'
-import { ResetStepsRow, resetSteps } from '@/features/reset-progress'
+import {
+  deleteOwnLesson,
+  duplicateOwnLesson,
+  renameOwnLesson,
+  restoreOwnLesson,
+} from '@/features/manage-own-lessons'
+import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, say, ScreenHeader } from '@/shared/ui'
 import { OWN_LESSONS, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
  * A lesson of the learner's own's Settings (R30-5), the same page as a level's lesson's: how lessons
- * read; The lesson, Rename and Duplicate (the copy opened); its Progress reset; and Delete last, asked
- * first, its progress going with it. No Share link: the lesson lives on the learner's devices.
+ * read; The lesson, Rename and Duplicate (the copy opened); its Progress reset; and Delete last, at
+ * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
 export function OwnLessonSettings({
   lesson,
@@ -51,27 +56,31 @@ export function OwnLessonSettings({
           steps={[step]}
           words={{
             row: t('settings.reset'),
-            title: t('settings.resetLesson'),
             body: t('settings.resetLessonBody'),
-            cancel: t('settings.cancel'),
-            confirm: t('settings.confirm'),
             done: t('settings.resetDone'),
+            undo: t('settings.undo'),
           }}
         />
         <OwnDeleteGroup
           words={{
             delete: t('own.deleteLesson'),
-            deleteTitle: t('own.deleteLessonTitle', { title }),
             deleteBody: t('own.deleteLessonBody'),
           }}
           onDelete={() => {
-            deleteOwnLesson(store, lesson.id)
-            resetSteps(progress, [step])
-            say(t('own.deleted'))
             void navigate({
               to: '/',
               search: { view: 'lessons', journey: OWN_LESSONS },
               replace: true,
+            })
+            const deleted = deleteOwnLesson(store, lesson.id)
+            if (!deleted) return
+            const forgotten = resetSteps(progress, [step])
+            say(t('own.deleted', { title }), {
+              label: t('settings.undo'),
+              onClick: () => {
+                restoreOwnLesson(store, deleted)
+                restoreSteps(progress, forgotten)
+              },
             })
           }}
         />

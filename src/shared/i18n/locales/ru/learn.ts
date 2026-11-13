@@ -76,15 +76,11 @@ export const learn: LocaleResources['learn'] = {
     duplicate: 'Дублировать',
     duplicated: 'Создана копия',
     deleteLesson: 'Удалить урок',
-    deleteLessonTitle: 'Удалить «{{title}}»?',
     deleteLessonBody:
       'Урок исчезнет из ваших уроков и из всех ваших курсов, где он есть. Прогресс по нему тоже.',
     deleteCourse: 'Удалить курс',
-    deleteCourseTitle: 'Удалить «{{title}}»?',
     deleteCourseBody: 'Курс будет удалён. Уроки останутся: ваши — в разделе «Ваши уроки».',
-    delete: 'Удалить',
-    deleted: 'Удалено',
-    footnote: 'Удаление нельзя отменить.',
+    deleted: '«{{title}}» удалён',
     toOwn: 'К вашим урокам',
   },
   course: {
@@ -156,17 +152,14 @@ export const learn: LocaleResources['learn'] = {
     shared: 'Ссылка скопирована',
     shareFailed: 'Не удалось поделиться ссылкой',
     reset: 'Сбросить прогресс',
-    resetLesson: 'Сбросить прогресс урока?',
     resetLessonBody:
       'Урок станет неизученным, а его разделы — непрочитанными. Остальное не изменится.',
-    resetCourse: 'Сбросить прогресс курса?',
     resetCourseBody:
       'Его уроки и песни станут неизученными, а разделы — непрочитанными. Остальное не изменится.',
     resetOwnCourseBody:
       'Его уроки станут неизученными, а их разделы непрочитанными, где бы их ни читали. Больше ничего не изменится.',
     resetDone: 'Прогресс сброшен',
-    cancel: 'Отмена',
-    confirm: 'Сбросить',
+    undo: 'Отменить',
     lesson: 'Урок',
     course: 'Курс',
     level: 'Уровень',

@@ -8,14 +8,19 @@ import {
   type OwnCourse,
 } from '@/entities/own-lessons'
 import { lessonStepId } from '@/entities/step'
-import { deleteOwnCourse, duplicateOwnCourse, renameOwnCourse } from '@/features/manage-own-lessons'
+import {
+  deleteOwnCourse,
+  duplicateOwnCourse,
+  renameOwnCourse,
+  restoreOwnCourse,
+} from '@/features/manage-own-lessons'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { BackButton, say, ScreenHeader } from '@/shared/ui'
 import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
  * A course of the learner's own's Settings (R30-5), as a course's: The course, Rename and Duplicate
- * (the copy opened); its lessons' progress reset; and Delete last, asked first, its lessons kept.
+ * (the copy opened); its lessons' progress reset; and Delete last, at once with Undo, its lessons kept.
  */
 export function OwnCourseSettings({ course }: { course: OwnCourse }) {
   const { t } = useTranslation('learn')
@@ -46,23 +51,24 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
           steps={lessons.map(({ lesson }) => lessonStepId(lesson.id))}
           words={{
             row: t('settings.reset'),
-            title: t('settings.resetCourse'),
             body: t('settings.resetOwnCourseBody'),
-            cancel: t('settings.cancel'),
-            confirm: t('settings.confirm'),
             done: t('settings.resetDone'),
+            undo: t('settings.undo'),
           }}
         />
         <OwnDeleteGroup
           words={{
             delete: t('own.deleteCourse'),
-            deleteTitle: t('own.deleteCourseTitle', { title: course.title }),
             deleteBody: t('own.deleteCourseBody'),
           }}
           onDelete={() => {
-            deleteOwnCourse(store, course.id)
-            say(t('own.deleted'))
             void navigate({ to: '/', search: { view: 'courses' }, replace: true })
+            const deleted = deleteOwnCourse(store, course.id)
+            if (!deleted) return
+            say(t('own.deleted', { title: course.title }), {
+              label: t('settings.undo'),
+              onClick: () => restoreOwnCourse(store, deleted),
+            })
           }}
         />
       </div>
