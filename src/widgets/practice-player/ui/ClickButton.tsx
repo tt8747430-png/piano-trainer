@@ -1,4 +1,4 @@
-import { MetronomeIcon } from '@/shared/ui/icons/MetronomeIcon'
+import { Metronome } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { FloatingBarButton } from '@/shared/ui'
@@ -19,7 +19,7 @@ export function ClickButton({ on, onChange }: { on: boolean; onChange: (on: bool
       onClick={() => onChange(!on)}
       className={cn(DOCK_BUTTON, 'aria-pressed:bg-chosen')}
     >
-      <MetronomeIcon aria-hidden />
+      <Metronome aria-hidden />
     </FloatingBarButton>
   )
 }

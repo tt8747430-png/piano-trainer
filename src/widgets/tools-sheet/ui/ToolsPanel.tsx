@@ -1,5 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { Gauge, Minus, Play, Plus, Square, Timer, type LucideIcon } from 'lucide-react'
+import {
+  Gauge,
+  Metronome as MetronomeGlyph,
+  Minus,
+  Play,
+  Plus,
+  Square,
+  type LucideIcon,
+} from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatSquares, type Metronome } from '@/features/metronome'
@@ -73,7 +81,7 @@ export function ToolsPanel({ metronome, close }: { metronome: Metronome; close: 
   return (
     <div className="flex flex-col gap-3">
       <LiveTool
-        icon={Timer}
+        icon={MetronomeGlyph}
         paint="grass"
         label={t('tools.sheet.metronome')}
         detail={t('toolValue.metronome', { bpm: metronome.tempoNow, meter: metronome.meter })}

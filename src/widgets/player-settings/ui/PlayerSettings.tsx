@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Timer } from 'lucide-react'
+import { Metronome } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -45,8 +45,8 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
       <SettingsGroup flush>
         <RowLink
           title={t('settingsPage.metronome')}
-          icon={Timer}
-          paint="sand"
+          icon={Metronome}
+          paint="grass"
           render={<Link to="/practice/metronome" />}
         />
         <div className="px-4 pt-3">
