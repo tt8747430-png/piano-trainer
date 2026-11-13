@@ -98,7 +98,7 @@ export function KeySignaturePicker({
             onClick={() => onChange(value.minor ? signatureKey(0, true) : signatureKey(0, false))}
             className="flex min-h-11 items-center self-start rounded-control px-1 text-base font-semibold text-link hover:underline"
           >
-            {t('music:key.toNatural')}
+            {t('music:key.noSignature')}
           </button>
         )}
       </div>

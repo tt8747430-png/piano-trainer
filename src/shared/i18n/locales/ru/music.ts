@@ -187,7 +187,7 @@ export const music: LocaleResources['music'] = {
     minorMode: 'Минор',
     sharps: 'Диезы',
     flats: 'Бемоли',
-    toNatural: 'Без ключевых знаков',
+    noSignature: 'Без ключевых знаков',
   },
   interval: {
     r: { name: 'Прима', short: 'ч1' },

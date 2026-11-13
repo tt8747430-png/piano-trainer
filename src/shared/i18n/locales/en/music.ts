@@ -196,7 +196,7 @@ export const music = {
     // The palette's Key signature (R32-C, Flat's): its two rows, and its way back to no signature.
     sharps: 'Sharps',
     flats: 'Flats',
-    toNatural: 'Switch to natural',
+    noSignature: 'No key signature',
   },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {
