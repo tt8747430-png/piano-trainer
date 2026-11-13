@@ -75,8 +75,8 @@ const QUALITIES = {
   },
   maj7: {
     family: 'sev',
-    suffix: 'Maj7',
-    aliases: ['maj7', 'M7', 'Δ7', 'Δ'],
+    suffix: 'maj7',
+    aliases: ['Maj7', 'M7', 'Δ7', 'Δ'],
     intervals: ['r', 'M3', 'P5', 'M7'],
   },
   m7: {
@@ -112,14 +112,14 @@ const QUALITIES = {
   },
   M7s11: {
     family: 'sev',
-    suffix: 'Maj7#11',
-    aliases: ['Δ(+4)'],
+    suffix: 'maj7#11',
+    aliases: ['Maj7#11', 'Δ(+4)'],
     intervals: ['r', 'M3', 'P5', 'M7', 'A11'],
   },
   M7s5: {
     family: 'sev',
-    suffix: '+Maj7',
-    aliases: ['Δ(+5)', '+maj7'],
+    suffix: '+maj7',
+    aliases: ['Δ(+5)', '+Maj7'],
     intervals: ['r', 'M3', 'A5', 'M7'],
   },
   m9: {
@@ -130,8 +130,8 @@ const QUALITIES = {
   },
   maj9: {
     family: 'nin',
-    suffix: 'Maj9',
-    aliases: ['maj9', 'M9', 'Δ9'],
+    suffix: 'maj9',
+    aliases: ['Maj9', 'M9', 'Δ9'],
     intervals: ['r', 'M3', 'P5', 'M7', 'M9'],
   },
   n9: { family: 'nin', suffix: '9', aliases: [], intervals: ['r', 'M3', 'P5', 'm7', 'M9'] },
@@ -149,8 +149,8 @@ const QUALITIES = {
   },
   M9s5: {
     family: 'nin',
-    suffix: '+Maj9',
-    aliases: ['Δ9(+5)', '+maj9'],
+    suffix: '+maj9',
+    aliases: ['Δ9(+5)', '+Maj9'],
     intervals: ['r', 'M3', 'A5', 'M7', 'M9'],
   },
   hd9: {
@@ -173,8 +173,8 @@ const QUALITIES = {
   },
   maj11: {
     family: 'nin',
-    suffix: 'Maj11',
-    aliases: ['maj11', 'M11', 'Δ11'],
+    suffix: 'maj11',
+    aliases: ['Maj11', 'M11', 'Δ11'],
     intervals: ['r', 'M3', 'P5', 'M7', 'M9', 'P11'],
   },
   m13: {
@@ -191,8 +191,8 @@ const QUALITIES = {
   },
   maj13: {
     family: 'nin',
-    suffix: 'Maj13',
-    aliases: ['maj13', 'M13', 'Δ13'],
+    suffix: 'maj13',
+    aliases: ['Maj13', 'M13', 'Δ13'],
     intervals: ['r', 'M3', 'P5', 'M7', 'M9', 'M13'],
   },
   sus13: {

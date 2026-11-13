@@ -59,8 +59,8 @@ type ChordsSearch = ChordView & { readonly step?: ChordsStepId }
 export const CHORDS_DEFAULTS: ChordsSearch = {
   root: noteParam(note('C')),
   triad: 'maj',
-  size: 5,
-  seventh: 'minor',
+  size: 7,
+  seventh: 'major',
   colour: '',
   voicing: 'close',
   inversion: 0,

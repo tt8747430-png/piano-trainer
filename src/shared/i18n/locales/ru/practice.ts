@@ -55,22 +55,14 @@ export const practice: LocaleResources['practice'] = {
       playChord: 'Аккорд',
       arpeggiate: 'Арпеджио',
     },
-    written: 'Другие обозначения',
     builder: {
-      // The row of pickers over a chord: its root, the chord by name and its voicing.
-      chord: 'Аккорд',
-      // A major triad's kind beside its root in the chord's name, where its symbol has none.
-      major: 'maj',
-      topNote: 'Верхний звук',
-      // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
-      sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
-      sizeNames: {
-        triad: 'Трезвучие',
-        seventh: 'Септаккорд',
-        ninth: 'Нонаккорд',
-        eleventh: 'Ундецимаккорд',
-        thirteenth: 'Терцдецимаккорд',
-      },
+      chord: 'Вид аккорда',
+      major: 'мажор',
+    },
+    inTheBass: {
+      label: 'В басу',
+      root: 'основной вид',
+      inversion: '{{inversion}} · {{note}} в басу',
     },
     voicing: {
       label: 'Расположение',
@@ -117,12 +109,7 @@ export const practice: LocaleResources['practice'] = {
       voiced: 'В этом расположении',
       drawn: '{{hand}} на клавишах: {{notes}}',
     },
-    colour: {
-      title: 'Краски аккорда',
-      info: 'Нажмите на тенсию, чтобы добавить её в аккорд, и ещё раз, чтобы убрать. Избегаемый звук стоит на полутон выше звука аккорда и спорит с ним.',
-      inKey: 'Как {{numeral}} в {{key}}',
-      group: { chord: 'Звуки аккорда', tension: 'Тенсии', avoid: 'Избегаемые' },
-    },
+    practiseIn: 'Отработать {{chord}} в плеере',
     chromatic: 'Хроматически',
     fifths: 'По квинтовому кругу',
   },

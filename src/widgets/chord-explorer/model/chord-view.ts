@@ -1,7 +1,5 @@
 import {
-  blockFingering,
   buildChord,
-  chordInversions,
   fitChordInversion,
   fitParts,
   sizesOf,
@@ -12,9 +10,6 @@ import {
   voiceChord,
   voicingBar,
   type ChordFingers,
-  type Finger,
-  type Hand,
-  type SpelledNote,
   type Voicing,
   type BuiltChord,
   type Midi,
@@ -94,51 +89,6 @@ export function changedView(view: ChordView, change: Partial<ChordView>): ChordV
     voicing: voicingBar(tones, next.voicing) ? 'close' : next.voicing,
     inversion: fitChordInversion(next.inversion, tones),
   }
-}
-
-/** One hand's keys in a row of the fingering table: each note's name and the finger on it. */
-export interface HandRow {
-  readonly notes: readonly SpelledNote[]
-  /** The keys the notes are played on, the hand drawn over them (R29-P5). */
-  readonly keys: readonly Midi[]
-  readonly fingers: readonly Finger[]
-}
-
-/** A row of the fingering table: an inversion of the close chord, or the keys as voiced. */
-export interface FingeringRow {
-  readonly inversion: number | 'voiced'
-  /** The row the keys show. */
-  readonly current: boolean
-  readonly hands: Readonly<Record<Hand, HandRow>>
-}
-
-/**
- * The chord's fingering table. Close, up to four notes: a row an inversion, each hand fingering the
- * whole chord (`blockFingering`), as the books teach a chord. From five notes, or in another voicing:
- * one row, each hand's own keys as they are laid out.
- */
-export function fingeringRows(view: ChordView): FingeringRow[] {
-  const { chord, placed, fingers } = viewChord(view)
-  if (view.voicing !== 'close' || takesTwoHands(chord.tones.length)) {
-    const hand = (side: Hand): HandRow => ({
-      notes: placed[side].map((key) => key.tone.note),
-      keys: placed[side].map((key) => key.midi),
-      fingers: fingers[side],
-    })
-    return [{ inversion: 'voiced', current: true, hands: { lh: hand('lh'), rh: hand('rh') } }]
-  }
-  const rows = blockFingering(chord.tones)
-  return chordInversions(chord.tones).map((inversion, i) => {
-    const laid = placeChord(chord.tones, { inversion, bothHands: false }).rh
-    const notes = laid.map((key) => key.tone.note)
-    const keys = laid.map((key) => key.midi)
-    const row = rows[i] ?? { lh: [], rh: [] }
-    return {
-      inversion,
-      current: inversion === view.inversion,
-      hands: { lh: { notes, keys, fingers: row.lh }, rh: { notes, keys, fingers: row.rh } },
-    }
-  })
 }
 
 /** How long the hands hold a chord on the stage: as long as the page shows it. */

@@ -24,6 +24,7 @@ export function ScoreView({
   score,
   scale,
   fingers,
+  chordSymbols = false,
   names = false,
   muted,
   staff,
@@ -41,6 +42,8 @@ export function ScoreView({
   score: Score
   scale: number
   fingers: boolean
+  /** The chord symbols over the top staff: a chord written alone, its name over it (Chords' staff). */
+  chordSymbols?: boolean
   /** Each notehead carries its note's name (the Player's Named notes). */
   names?: boolean
   muted?: StaffId | undefined
@@ -103,6 +106,7 @@ export function ScoreView({
       {
         scale,
         fingers,
+        chordSymbols,
         names,
         staves: shownKey.split(' ') as StaffId[],
         timeBefore:
@@ -122,7 +126,19 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, nextKey, labelsKey, fill])
+  }, [
+    score,
+    scale,
+    fingers,
+    chordSymbols,
+    names,
+    shownKey,
+    beforeCount,
+    beforeUnit,
+    nextKey,
+    labelsKey,
+    fill,
+  ])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff

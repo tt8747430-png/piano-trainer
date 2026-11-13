@@ -89,6 +89,10 @@
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
   font-family: var(--font-display);
 }
+/* A chord written alone (Chords' staff, its canvas) carries its name over it in the link's sky. */
+[data-chord-sheet] [data-slot='score'] g.harm text {
+  fill: var(--link);
+}
 /* The words under the tune (ADR 0097) stay in the face Verovio spaces them by (Times): in the app's
    wider serif, neighbours a word apart touch on a panorama's natural spacing. Verovio sets no fill on
    their text either, so a verse takes the ink (dark mode is light), and stays in it under a chosen

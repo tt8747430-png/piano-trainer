@@ -44,9 +44,9 @@ export const music: LocaleResources['music'] = {
   chordSizeShort: { triads: '5', sevenths: '7', ninths: '9', elevenths: '11', thirteenths: '13' },
   family: {
     tri: 'Трезвучия',
-    six: 'Секста и add',
+    six: 'С добавленными звуками',
     sev: 'Септаккорды',
-    nin: 'Нонаккорды и выше',
+    nin: 'Расширенные',
     alt: 'Альтерированные',
   },
   quality: {

@@ -74,21 +74,21 @@ const jazzChordSymbols: Lesson = {
       ],
     },
     {
-      heading: { en: '7 and Maj7', ru: '7 и Maj7' },
+      heading: { en: '7 and maj7', ru: '7 и maj7' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A plain 7 adds the minor 7th: C7, Cm7. Maj7 adds the major 7th: CMaj7. Maj describes the 7th, not the triad.',
-            ru: 'Простая 7 добавляет малую септиму: C7, Cm7. Maj7 добавляет большую: CMaj7. Maj говорит о септиме, а не о трезвучии.',
+            en: 'A plain 7 adds the minor 7th: C7, Cm7. maj7 adds the major 7th: Cmaj7. The maj describes the 7th, not the triad.',
+            ru: 'Простая 7 добавляет малую септиму: C7, Cm7. maj7 добавляет большую: Cmaj7. maj говорит о септиме, а не о трезвучии.',
           },
         },
-        { kind: 'chords', symbols: ['C7', 'Cm7', 'CMaj7'], apart: true },
+        { kind: 'chords', symbols: ['C7', 'Cm7', 'Cmaj7'], apart: true },
         {
           kind: 'text',
           text: {
-            en: 'Play C7 and CMaj7. Only the top note moves, by one key.',
-            ru: 'Сыграйте C7 и CMaj7. Меняется только верхний звук, на одну клавишу.',
+            en: 'Play C7 and Cmaj7. Only the top note moves, by one key.',
+            ru: 'Сыграйте C7 и Cmaj7. Меняется только верхний звук, на одну клавишу.',
           },
         },
       ],
@@ -118,16 +118,16 @@ const jazzChordSymbols: Lesson = {
       ],
     },
     {
-      heading: { en: 'Maj7 on other triads', ru: 'Maj7 на других трезвучиях' },
+      heading: { en: 'maj7 on other triads', ru: 'maj7 на других трезвучиях' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Maj7 fits any triad. On a minor triad it makes the minor-major 7th, 1 ♭3 5 7. On an augmented triad, 1 3 ♯5 7.',
-            ru: 'Maj7 ставят на любое трезвучие. На минорном получается минорный с большой септимой, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
+            en: 'maj7 fits any triad. On a minor triad it makes the minor-major 7th, 1 ♭3 5 7. On an augmented triad, 1 3 ♯5 7.',
+            ru: 'maj7 ставят на любое трезвучие. На минорном получается минорный с большой септимой, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
           },
         },
-        { kind: 'chords', symbols: ['Cm(maj7)', 'C+Maj7'], apart: true },
+        { kind: 'chords', symbols: ['Cm(maj7)', 'C+maj7'], apart: true },
         {
           kind: 'text',
           text: {
@@ -163,8 +163,8 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Books also write Δ for Maj7, − for m, ø for m7♭5, sus for sus4 and (−9) for ♭9.',
-            ru: 'В нотах пишут и так: Δ вместо Maj7, «−» вместо m, ø вместо m7♭5, sus вместо sus4, (−9) вместо ♭9.',
+            en: 'Books also write Δ for maj7, − for m, ø for m7♭5, sus for sus4 and (−9) for ♭9.',
+            ru: 'В нотах пишут и так: Δ вместо maj7, «−» вместо m, ø вместо m7♭5, sus вместо sus4, (−9) вместо ♭9.',
           },
         },
         { kind: 'chords', symbols: ['CΔ7', 'C−7', 'Cø', 'Csus', 'C7(−9)'], apart: true },
@@ -193,7 +193,7 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'question',
           ask: { en: 'Play E♭Δ7.', ru: 'Сыграйте E♭Δ7.' },
-          answer: { chord: 'E♭Maj7' },
+          answer: { chord: 'E♭maj7' },
         },
         {
           kind: 'link',

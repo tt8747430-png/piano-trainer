@@ -25,18 +25,18 @@ const TRIADS = new Map<string, TriadName>([
 
 /** The 7th chords, by the semitones of their 3rd (or suspended tone), 5th and 7th. */
 const SEVENTHS = new Map<string, SeventhName>([
-  ['4 7 11', { lead: 'Maj', trail: '', mark: '' }],
+  ['4 7 11', { lead: 'maj', trail: '', mark: '' }],
   ['3 7 10', { lead: 'm', trail: '', mark: '' }],
   ['4 7 10', { lead: '', trail: '', mark: '' }],
   ['3 6 10', { lead: 'm', trail: '♭5', mark: 'ø' }],
   ['3 6 9', { lead: '°', trail: '', mark: '°' }],
   ['3 7 11', { lead: 'm(maj', trail: ')', mark: '' }],
-  ['4 8 11', { lead: '+Maj', trail: '', mark: '+' }],
+  ['4 8 11', { lead: '+maj', trail: '', mark: '+' }],
   ['4 8 10', { lead: '', trail: '#5', mark: '+' }],
   ['2 7 10', { lead: '', trail: 'sus2', mark: '' }],
-  ['2 7 11', { lead: 'Maj', trail: 'sus2', mark: '' }],
+  ['2 7 11', { lead: 'maj', trail: 'sus2', mark: '' }],
   ['5 7 10', { lead: '', trail: 'sus4', mark: '' }],
-  ['5 7 11', { lead: 'Maj', trail: 'sus4', mark: '' }],
+  ['5 7 11', { lead: 'maj', trail: 'sus4', mark: '' }],
 ])
 
 function named<V>(table: ReadonlyMap<string, V>, semitones: readonly number[]): V {

@@ -49,10 +49,10 @@ export const music = {
   },
   family: {
     tri: 'Triads',
-    six: '6th & add',
-    sev: '7th chords',
-    nin: '9ths & more',
-    alt: 'Altered 7ths',
+    six: 'Added notes',
+    sev: 'Sevenths',
+    nin: 'Extended',
+    alt: 'Altered',
   },
   quality: {
     maj: 'Major triad',

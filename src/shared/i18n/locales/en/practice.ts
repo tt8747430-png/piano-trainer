@@ -57,25 +57,18 @@ export const practice = {
       playChord: 'Play chord',
       arpeggiate: 'Arpeggiate',
     },
-    // The other ways a chord symbol is written on this root.
-    written: 'Also written',
     // Chords builds a chord part by part.
     builder: {
-      // The row of pickers over a chord: its root, the chord by name and its voicing.
-      chord: 'Chord',
-      // A chord of five notes or more, its root left to the bass: where its right hand starts.
-      // A chord shared between the hands is named by the note on top of the right hand (R29-P3).
-      // A major triad's kind beside its root in the chord's name, where its symbol has none.
-      major: 'maj',
-      topNote: 'Top note',
-      sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
-      sizeNames: {
-        triad: 'Triad',
-        seventh: 'Seventh chord',
-        ninth: 'Ninth chord',
-        eleventh: 'Eleventh chord',
-        thirteenth: 'Thirteenth chord',
-      },
+      // The chord's name as its pickers: its root, its type by symbol, the note in its bass.
+      chord: 'Chord type',
+      // A major triad's part in the chord's name, where its symbol has none.
+      major: 'major',
+    },
+    // The name's third picker: the note in the bass, as the inversion puts it there.
+    inTheBass: {
+      label: 'In the bass',
+      root: 'root position',
+      inversion: '{{inversion}} · {{note}} in the bass',
     },
     // How the chord is laid on the keys: the jazz pianist's voicings, each explained in its ⓘ.
     voicing: {
@@ -126,13 +119,8 @@ export const practice = {
       // The hand drawn over the chord's keys, to a screen reader: each note and the finger on it.
       drawn: '{{hand}} over the keys: {{notes}}',
     },
-    // The chord's colour notes (A33): its tones, the tensions it takes on top, the notes to avoid.
-    colour: {
-      title: 'Colour notes',
-      info: 'Tap a tension to add it to the chord, and again to take it off. An avoid note sits a half step over a chord tone and clashes with it.',
-      inKey: 'As {{numeral}} in {{key}}',
-      group: { chord: 'Chord tones', tension: 'Tensions', avoid: 'Avoid' },
-    },
+    // The heading over the chord's ways into the Player.
+    practiseIn: 'Practise {{chord}} in the Player',
     chromatic: 'Chromatically',
     fifths: 'Circle of fifths',
     // Chords' row to the Chord finder, which opens on the chord's own keys.

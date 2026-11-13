@@ -1,7 +1,6 @@
 export { chordShown, chordsRange, scaleShown } from './model/marks'
 export { useShownKeys } from './model/use-shown-keys'
 export { intervalExample, intervalRoot, writesInterval } from './model/interval-example'
-export { noteOnTop } from './model/note-on-top'
 export { IntervalCard } from './ui/IntervalCard'
 export { NotesExample } from './ui/NotesExample'
 export { progressionRow, rowMoves, symbolsRow } from './model/chord-row'

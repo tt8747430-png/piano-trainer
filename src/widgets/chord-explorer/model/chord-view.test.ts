@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { note, noteName, noteParam } from '@/shared/lib/music'
-import { changedView, fingeringRows, viewChord, type ChordView } from './chord-view'
+import { note, noteParam } from '@/shared/lib/music'
+import { changedView, viewChord, type ChordView } from './chord-view'
 
 const C: ChordView = {
   root: noteParam(note('C')),
@@ -83,28 +83,5 @@ describe('changedView', () => {
   it('keeps the inversion the smaller chord has', () => {
     expect(changedView({ ...C, size: 7, inversion: 3 }, { size: 5 }).inversion).toBe(2)
     expect(changedView({ ...C, size: 7, inversion: 1 }, { size: 5 }).inversion).toBe(1)
-  })
-})
-
-describe('fingeringRows', () => {
-  const read = (view: ChordView) =>
-    fingeringRows(view).map(
-      ({ inversion, current, hands }) =>
-        `${inversion}${current ? '*' : ''} ${hands.rh.notes.map(noteName).join(' ')}: ${hands.rh.fingers.join('')}/${hands.lh.fingers.join('')}`,
-    )
-
-  it('lists the close chord inversion by inversion, both hands fingering it whole', () => {
-    expect(read({ ...C, inversion: 1 })).toEqual([
-      '0 C E G: 135/531',
-      '1* E G C: 125/531',
-      '2 G C E: 135/521',
-    ])
-  })
-
-  it('gives a voicing one row, each hand its own keys', () => {
-    const [row] = fingeringRows({ ...C, size: 7, seventh: 'major', voicing: 'drop2' })
-    expect(row?.inversion).toBe('voiced')
-    expect(row?.hands.lh.notes.map(noteName)).toEqual(['G'])
-    expect(row?.hands.rh.notes.map(noteName)).toEqual(['C', 'E', 'B'])
   })
 })

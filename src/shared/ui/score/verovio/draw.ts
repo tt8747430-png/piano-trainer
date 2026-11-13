@@ -14,6 +14,8 @@ import { layoutOf } from './svg-layout'
 export interface DrawOptions {
   readonly scale: number
   readonly fingers: boolean
+  /** The chord symbols over the top staff: a chord written alone, its name over it (Chords' staff). */
+  readonly chordSymbols?: boolean
   /** Each notehead carries its note's name. */
   readonly names: boolean
   /** The staves drawn, top down. */
@@ -50,6 +52,7 @@ export async function drawScore(
     scoreToMei(score, {
       staves: options.staves,
       fingers: options.fingers,
+      chordSymbols: options.chordSymbols ?? false,
       timeBefore: options.timeBefore,
       next,
       labels: options.labels,

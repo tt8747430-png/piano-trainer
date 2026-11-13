@@ -80,9 +80,9 @@ const LOWER_TAILS: ReadonlyMap<ChordQuality, string> = new Map<ChordQuality, str
   ['m69', '6/9'],
   ['madd9', 'add9'],
   ['m7', '7'],
-  ['mM7', 'Maj7'],
+  ['mM7', 'maj7'],
   ['m9', '9'],
-  ['mM9', 'Maj9'],
+  ['mM9', 'maj9'],
   ['m11', '11'],
   ['m13', '13'],
   ['dim', '°'],
@@ -99,10 +99,10 @@ const TAIL_ALIASES: ReadonlyMap<string, string> = new Map([
   ['o', '°'],
   ['o7', '°7'],
   ['ø', 'ø7'],
-  ['maj7', 'Maj7'],
-  ['M7', 'Maj7'],
-  ['maj9', 'Maj9'],
-  ['M9', 'Maj9'],
+  ['Maj7', 'maj7'],
+  ['M7', 'maj7'],
+  ['Maj9', 'maj9'],
+  ['M9', 'maj9'],
 ])
 
 type PlainTriad = 'maj' | 'min' | 'dim' | 'aug'
@@ -153,8 +153,8 @@ export function readDegree(
 
 /**
  * One numeral: a degree, then what a chord symbol writes after its root. Upper case takes any chord
- * as the table spells it (`V7`, `IMaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
- * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `iMaj7`),
+ * as the table spells it (`V7`, `Imaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
+ * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `imaj7`),
  * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`). After a slash, the degree whose key it is
  * read in (`V/ii`, `ii°/vi`): an applied chord.
  */
@@ -202,7 +202,7 @@ export function parseNumerals(text: string): Numeral[] | null {
 
 /**
  * A numeral as it is written, one way: lower case for a chord with a minor 3rd (`ii7`, `viiø7`,
- * `i6`), upper case with the table's suffix for any other (`♭VII`, `IMaj7`, `V7♭9`, `Vsus4`).
+ * `i6`), upper case with the table's suffix for any other (`♭VII`, `Imaj7`, `V7♭9`, `Vsus4`).
  */
 export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
