@@ -6,7 +6,7 @@
 //
 //   node .claude/skills/owner-way/scripts/shots.mjs <base-url> <out-dir> <step> [step…]
 //
-// A step is a route, then any acts after " >> ": `click=<name>` taps the button, link, tab or
+// A step is a route, then any acts after " >> ": `click=<name>` (or `click=<en>|<ru>`) taps the button, link, tab or
 // option of that name; `type=<text>` types into the field focused (a sheet's name); `scroll` shoots
 // the page part way and at its end; `wait=<ms>`.
 //   "/play/hot-cross-buns >> click=Original"   "/songs/folders/f1/settings >> click=Card style >> scroll"
@@ -119,16 +119,19 @@ for (const size of SIZES) {
         for (const act of acts) {
           const [kind, value] = act.split('=')
           if (kind === 'click') {
+            // `click=Add a chord|Добавить аккорд`: the name in each language, by the shot's language.
+            const names = value.split('|')
+            const name = (language.name === 'ru' ? names[1] : names[0]) ?? names[0]
             const target = page
-              .getByRole('button', { name: value, exact: true })
-              .or(page.getByRole('link', { name: value, exact: true }))
-              .or(page.getByRole('tab', { name: value, exact: true }))
-              .or(page.getByRole('radio', { name: value, exact: true }))
-              .or(page.getByRole('menuitem', { name: value, exact: true }))
-              .or(page.getByRole('switch', { name: value, exact: true }))
-              .or(page.getByRole('checkbox', { name: value, exact: true }))
+              .getByRole('button', { name, exact: true })
+              .or(page.getByRole('link', { name, exact: true }))
+              .or(page.getByRole('tab', { name, exact: true }))
+              .or(page.getByRole('radio', { name, exact: true }))
+              .or(page.getByRole('menuitem', { name, exact: true }))
+              .or(page.getByRole('switch', { name, exact: true }))
+              .or(page.getByRole('checkbox', { name, exact: true }))
               .first()
-            await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${value}” to tap (${error.message.split('\n')[0]})`))
+            await target.click({ timeout: 5000 }).catch((error) => problems.push(`${label}: no “${name}” to tap (${error.message.split('\n')[0]})`))
             await page.waitForTimeout(600)
           } else if (kind === 'type') {
             await page.keyboard.type(act.slice('type='.length))
