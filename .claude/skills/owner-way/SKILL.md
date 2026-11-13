@@ -110,7 +110,10 @@ wins there.
   decided and built, and the report says what was decided.
 - **Next in the loop** (owner, 2026-11-13): when the Chords page is ported, the Chord player, built from the brief
   in `.scratch/r39/plan/practice-chord-player.md` (Musicca's features, timings kept, the ! for a bar that does not
-  add up, saving, drag and drop as memory-palaces fixed it, a MIDI arranger), then the rest of Practice.
+  add up, saving, drag and drop as memory-palaces fixed it, a MIDI arranger), then (owner, 2026-11-13: "after you
+  finish with the chords player you should continue with the other pages") every other Practice page, each to its
+  board's code: Scales and keys, Intervals, Progressions and a progression's page, Accompaniment, the exercise
+  libraries, Metronome, Tuner, Chord finder, Circle of fifths; then the next area, as Never stop says.
 - **Never stop:** a finished area is not a stopping point. When everything seems done, start again from the beginning:
   Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, each round the
   area's canvas improved first and the app then built to it. Only
