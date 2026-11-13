@@ -118,8 +118,8 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
   Publish; MusicXML and MIDI in and out. `pages/songs`, `piece`, `public-library`; `widgets/song-library`, `piece-cover`;
   `features/manage-library`, `song-files`, `publish`, `share-folder`; `entities/library`, `piece`. Groups and
   folders shared with them: `pages/groups`, `shared/api/groups`.
-- **Practice** (`/practice`): Up next, then Chords, Scales and keys, Intervals, Progressions, Accompaniment, the Chord
-  player, Exercises and Quiz, the Tools last (Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
+- **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises by
+  book, the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
   in place (the Chord finder's on its own page); the bar's Tools menu is `widgets/tools-sheet`. Exercises,
   Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
   its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
