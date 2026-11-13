@@ -21,7 +21,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   notifications' bell (and Settings on a phone); their picture with Edit photo, the year joined (or a guest's Sign
   in); three figures (day streak, to Streak; songs learned; practice time); **Last 7 days** (today last), the time and days of seven
   over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
-  Streak's month; the next badge as a ring with its count, under "Next badge" its name and what earns it (Repertoire · 1 song learned); then the first badges and achievements, each with See
+  Streak's month; the next badge as a ring with its count, under "Next badge" its name and what earns it as a goal (Repertoire · Learn 1 song; a badge's goals are targets, never a state that reads as reached); then the first badges and achievements, each with See
   all. One column on a phone; two on a laptop, the badges and achievements beside the rest. **Achievements**' personal
   records are a value over its label (the level its number alone, under "Level"); a record nothing has set yet, Best
   accuracy before any take, shows "—", never "0 %".
