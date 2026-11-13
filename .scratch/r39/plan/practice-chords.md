@@ -91,7 +91,10 @@ Ported, measured against `Chords.dc.html` / `ChordsLaptop.dc.html` (r42_chords.p
 
 Still to port, in this order:
 
-1. The staff's noteheads in their tone colours and each finger beside its note (Verovio prints them above).
+1. ~~The staff's noteheads in their tone colours and each finger beside its note~~ (5e3259be: heads solid in their
+   tones' paints, names left and fingers right of the chord, the name at 17px over it, the staff at the board's size
+   across the card; a single staff keeps no brace room). Left: the chord placed mid-bar, which comes with item 3's
+   second bar.
 2. The Piano sheet's 3D card rows (Angle Seat · Above, Hands on the keys), Range (88-key strip, Fit the chord ·
    2 octaves · 4 octaves), Labels (Note names · Degrees · Intervals · Fingers · None), Sound and MIDI keyboard rows.
 3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several.
