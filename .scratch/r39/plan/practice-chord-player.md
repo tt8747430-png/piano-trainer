@@ -22,6 +22,10 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
   - **Auto-scroll:** the sheet follows the chord playing.
   - **Bugs:** the chord sheet is not saved (it must be, as a saved store); drag and drop breaks (port
     memory-palaces' fix, read in that repo); reordering changes other chords' timings (fixed by the rule above).
+  - **Drag across sections** (owner, 2026-11-13: "and also dragggin into other sections should be possible"): a
+    chord dragged out of its section drops into any other, between any two chords or at a section's end, by finger,
+    mouse and keyboard; it keeps its own length, and neither section retimes (a bar that no longer adds up takes its !).
+    An empty section still takes a drop.
   - **Follow a MIDI arranger (Yamaha Genos): the Genos leads** (owner, 2026-11-13: "I dont want my chords to be
     played. just to sync the timing", then "when I start on the genos it should sync with genos and understand that
     it started and our app automatically starts"): the app sends nothing and plays no chords. It listens on the
