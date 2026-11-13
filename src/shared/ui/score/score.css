@@ -102,6 +102,11 @@
   stroke-width: 22px;
   paint-order: stroke;
 }
+/* The chosen chord where several share the Chords staff: its heads ringed in sky, as the canvas's. */
+[data-slot='score'] g.measure[data-chosen] g.note .notehead use {
+  stroke: var(--color-link);
+  stroke-width: 40px;
+}
 [data-slot='score'] g.note.role-root .notehead use {
   fill: var(--role-root);
 }

@@ -220,6 +220,8 @@ export const music: LocaleResources['music'] = {
   sheet: {
     label: 'Ноты',
     firstPage: 'Первая страница',
+    play: 'Сыграть {{chord}}',
+    pick: 'Показать и сыграть {{chord}}',
     layout: {
       label: 'Расположение',
       page: 'Страницы',

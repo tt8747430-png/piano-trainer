@@ -34,6 +34,93 @@ export interface ChordView extends PartsParams {
   readonly hands: 'rh' | 'both'
   /** The key the chord was opened in (Harmony's or Progressions' chords): its colour notes follow its degree. */
   readonly key?: KeyParam | undefined
+  /**
+   * The chords on the staff, where there are two or more (up to `MOST_CHORDS`), and the one chosen:
+   * the view's own parts are the chosen chord's, so its entry here is read from the view, never from
+   * the list.
+   */
+  readonly chords?: readonly ChordStep[] | undefined
+  readonly at?: number | undefined
+}
+
+/** One chord on the staff: its root, its type and its inversion; the voicing and hands are the page's. */
+export interface ChordStep extends PartsParams {
+  readonly root: NoteParam
+  readonly inversion: number
+}
+
+/** The most chords the staff holds, as the canvas's. */
+export const MOST_CHORDS = 8
+
+/** The chord a view shows, as a step on the staff. */
+export const stepOf = ({
+  root,
+  triad,
+  size,
+  seventh,
+  colour,
+  inversion,
+}: ChordView): ChordStep => ({
+  root,
+  triad,
+  size,
+  seventh,
+  colour,
+  inversion,
+})
+
+/** The chords on the staff as steps, the chosen one read from the view. */
+export function chordSteps(view: ChordView): ChordStep[] {
+  const at = view.at ?? 0
+  return view.chords && view.chords.length > 1
+    ? view.chords.map((step, i) => (i === at ? stepOf(view) : step))
+    : [stepOf(view)]
+}
+
+/** The page's own choices with a step's chord in them, fitted as a change is (`changedView`). */
+const stepView = (view: ChordView, step: ChordStep): ChordView => changedView(view, step)
+
+/** Each chord on the staff as a view of its own, in the page's voicing and hands. */
+export const chordViews = (view: ChordView): ChordView[] =>
+  chordSteps(view).map((step, i) => (i === (view.at ?? 0) ? view : stepView(view, step)))
+
+/** The view with the steps given and the one at `at` chosen: one chord drops the list. */
+function withSteps(view: ChordView, steps: readonly ChordStep[], at: number): ChordView {
+  const step = steps[at] ?? stepOf(view)
+  const chosen = stepView(view, step)
+  return steps.length > 1
+    ? { ...chosen, chords: steps.map((each, i) => (i === at ? stepOf(chosen) : each)), at }
+    : { ...chosen, chords: undefined, at: undefined }
+}
+
+/** The chord at `at` chosen. */
+export const choseChord = (view: ChordView, at: number): ChordView =>
+  withSteps(view, chordSteps(view), at)
+
+/** A chord added after the last, and chosen; none past `MOST_CHORDS`. */
+export function addedChord(view: ChordView, step: ChordStep): ChordView {
+  const steps = chordSteps(view)
+  if (steps.length >= MOST_CHORDS) return view
+  return withSteps(view, [...steps, step], steps.length)
+}
+
+/** The chord at `at` changed to another, and chosen. */
+export const changedChord = (view: ChordView, at: number, step: ChordStep): ChordView =>
+  withSteps(
+    view,
+    chordSteps(view).map((each, i) => (i === at ? step : each)),
+    at,
+  )
+
+/** The chord at `at` taken off the staff, the one before it chosen; the last chord stays. */
+export function removedChord(view: ChordView, at: number): ChordView {
+  const steps = chordSteps(view)
+  if (steps.length < 2) return view
+  return withSteps(
+    view,
+    steps.filter((_, i) => i !== at),
+    Math.max(0, at - 1),
+  )
 }
 
 /** Whether a chord of this many notes is shown in two hands only. */

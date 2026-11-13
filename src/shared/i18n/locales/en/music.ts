@@ -230,6 +230,9 @@ export const music = {
   sheet: {
     label: 'Sheet music',
     firstPage: 'The first page',
+    // A chord's bar on the Chords staff, where several share it.
+    play: 'Play {{chord}}',
+    pick: 'Show and play {{chord}}',
     // How a score is laid out (ADR 0096, 0108, 0115), the same words in the Player and the editor,
     // Dorico's and Sibelius's: A4 pages, lines down the screen, one line across.
     layout: {

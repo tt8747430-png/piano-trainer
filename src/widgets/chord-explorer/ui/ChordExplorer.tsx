@@ -18,6 +18,8 @@ import {
 } from '@/shared/ui'
 import {
   changedView,
+  chordViews,
+  choseChord,
   takesTwoHands,
   chordKeys,
   viewChord,
@@ -57,6 +59,23 @@ export function ChordExplorer({
   // The keys by role, no finger numbers on them unless Labels says Fingers (canvas 151).
   const [shown] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
   const symbol = writtenSymbol(built)
+  // Every chord on the staff, the chosen one as placed above.
+  const chosenAt = chord.at ?? 0
+  const sheet = useMemo(
+    () =>
+      chordViews(chord).map((view, i) => {
+        if (i === chosenAt) return { placed, fingers, symbol }
+        const each = viewChord(view)
+        return { placed: each.placed, fingers: each.fingers, symbol: writtenSymbol(each.chord) }
+      }),
+    [chord, chosenAt, placed, fingers, symbol],
+  )
+  const pick = (i: number) => {
+    const view = i === chosenAt ? chord : choseChord(chord, i)
+    if (i !== chosenAt) onChange(view)
+    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    practised(view)
+  }
   const { quality } = built
   // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
   // Stop, and it cuts off what played.
@@ -96,7 +115,7 @@ export function ChordExplorer({
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
         <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
-          <ChordSheet placed={placed} symbol={symbol} fingers={fingers} labels={labels} />
+          <ChordSheet chords={sheet} at={chosenAt} labels={labels} onPick={pick} />
           <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             {handFacts.map((side) => (
               <span key={side} className="whitespace-nowrap">

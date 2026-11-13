@@ -1,7 +1,15 @@
 import { type SearchMiddleware, stripSearchParams } from '@tanstack/react-router'
 import { isStepId } from '@/entities/step'
 import { PROGRESSION } from '@/features/practice'
-import { isOneOf, partsParams, readColour, readNote, valueOr, wholeIn } from '@/shared/lib'
+import {
+  isOneOf,
+  partsFromParams,
+  partsParams,
+  readColour,
+  readNote,
+  valueOr,
+  wholeIn,
+} from '@/shared/lib'
 import {
   buildChord,
   BUILT_SIZES,
@@ -21,6 +29,7 @@ import {
   type KeyParam,
   lastInversion,
   note,
+  noteFromParam,
   noteParam,
   ownFingering,
   scaleHasChords,
@@ -32,7 +41,7 @@ import {
   voicingBar,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
-import type { ChordView } from '@/widgets/chord-explorer'
+import { MOST_CHORDS, type ChordStep, type ChordView } from '@/widgets/chord-explorer'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import { isRowInterval, type IntervalView } from '@/widgets/interval-explorer'
 import type { ProgressionSearch, ProgressionsView } from '@/widgets/progression-explorer'
@@ -73,7 +82,8 @@ const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
 const isVoicing = isOneOf(VOICINGS)
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
-export function readChordsSearch(raw: Raw): ChordsSearch {
+/** One chord as a link writes it: its root, its type's parts and its inversion, each read leniently. */
+function readChordStep(raw: Raw): ChordStep {
   const size = valueOr(isBuiltSize, raw.size, CHORDS_DEFAULTS.size)
   const parts = fitParts({
     triad: valueOr(isTriad, raw.triad, CHORDS_DEFAULTS.triad),
@@ -81,20 +91,40 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
     seventh: valueOr(isSeventh, raw.seventh, CHORDS_DEFAULTS.seventh),
     ...readColour(raw.colour, size),
   })
-  const key = readKey(raw.key)
-  const read = readNote(raw.root)
-  const root = read ?? note('C')
+  const root = readNote(raw.root) ?? note('C')
   const asked = wholeIn(raw.inversion, 0, INVERSIONS.length - 1, CHORDS_DEFAULTS.inversion)
   const { tones } = buildChord(root, parts)
-  const voicing = valueOr(isVoicing, raw.voicing, CHORDS_DEFAULTS.voicing)
   return {
     root: noteParam(root),
     ...partsParams(parts),
-    voicing: voicingBar(tones, voicing) ? CHORDS_DEFAULTS.voicing : voicing,
     inversion: chordInversions(tones).includes(asked) ? asked : CHORDS_DEFAULTS.inversion,
+  }
+}
+
+/** The chords on the staff, where a link holds two or more: each read as a chord is, up to the most. */
+function readChordSteps(value: unknown): ChordStep[] | undefined {
+  if (!Array.isArray(value) || value.length < 2) return undefined
+  return value
+    .slice(0, MOST_CHORDS)
+    .map((each: unknown) =>
+      readChordStep(typeof each === 'object' && each !== null ? (each as Raw) : {}),
+    )
+}
+
+export function readChordsSearch(raw: Raw): ChordsSearch {
+  const step = readChordStep(raw)
+  const key = readKey(raw.key)
+  const { tones } = buildChord(noteFromParam(step.root), partsFromParams(step))
+  const voicing = valueOr(isVoicing, raw.voicing, CHORDS_DEFAULTS.voicing)
+  const chords = readChordSteps(raw.chords)
+  return {
+    ...step,
+    voicing: voicingBar(tones, voicing) ? CHORDS_DEFAULTS.voicing : voicing,
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     key: key ? keyParam(key) : undefined,
     step: isChordsStep(raw.step) ? raw.step : undefined,
+    chords,
+    at: chords ? wholeIn(raw.at, 0, chords.length - 1, 0) : undefined,
   }
 }
 export const chordsSearch = routeSearch(readChordsSearch, CHORDS_DEFAULTS)

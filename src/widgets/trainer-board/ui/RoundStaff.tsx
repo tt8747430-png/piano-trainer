@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { StaffQuestion } from './staff-question'
 import { C_MAJOR, placeChord, TICKS_PER_BEAT, writtenName } from '@/shared/lib/music'
 import { notate, type StaffId, type TimedMusic } from '@/shared/lib/notation'
-import { chordBar, noteLine } from '@/shared/lib/schedule'
+import { chordBars, noteLine } from '@/shared/lib/schedule'
 import { cn } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 
@@ -61,7 +61,7 @@ function staffOf(question: StaffQuestion): { clef: StaffId | undefined; music: T
         inversion: question.inversion ?? 0,
         bothHands: false,
       })
-      return { clef: 'treble', music: chordBar({ lh: [], rh }) }
+      return { clef: 'treble', music: chordBars([{ placed: { lh: [], rh } }]) }
     }
     case 'name-interval':
     case 'interval-card':
