@@ -73,3 +73,27 @@ pickers, the chord on staff and keys); Mark Levine, _The Jazz Piano Book_ (rootl
 ### Canvas 160 (2026-11-11)
 
 The grilling, answered q1 to q12 and confirmed ("q10d: ok q12: OK"). Built: the Chord trainer, Quiz, Quiz run, the Quiz's Trainer and Exercises boards removed (and from the published canvas); Finger technique and Jazz vocabulary libraries; the Chords practice list as ruled; PlayChord (the run in the Player and its results) and PracticeResult (the same from Profile); Profile's Practice history. Checked in the runtime at both sizes: the run, both result states, Profile and its history page, the overview, the libraries, Check and Intervals; 117 boards, no missing or dead links.
+
+## Port from the board's code (2026-11-13, owner: "follow the design artifact and read its code")
+
+Ported, measured against `Chords.dc.html` / `ChordsLaptop.dc.html` (r42_chords.py, piano_sheet.py, r41_kit.py):
+
+| Board part | App |
+| --- | --- |
+| PH_HEAD: glass Back, title, glass Piano | `ChordsPage`, button variant `glass`, `BackButton variant="glass"` |
+| STAGE3D 220 / 286, keys held in role colours, lettered tags | `ChordStage`, stage `pressedPaint: 'tone'`, `onDrawn`, `PianoHands tags` |
+| NAME_A: root · chord type · in the bass (54 high, 14 round, fill) | `ChordName` (type list in the board's five groups, symbol then name) |
+| STAFFCARD: treble alone, no time, name in sky, fingers; hands' fingers under | `ChordSheet`, `chordBar(placed, { symbol, fingers })`, ScoreView `chordSymbols` |
+| PRACTISE rows (honey 36 circle, 16/600, 13 soft, chevron) | `PractiseRows` / `PractiseRow` in the kit |
+| DOCK_A: Voicing · PlaySplit · Hands pieces, 148px fade | `FloatingPieces` (fade inside) |
+| Piano sheet: Show the piano, CARDV view cards, SWITCH | `features/live-keyboard/PianoSheet`, `RadioCards` (CARDV), `Switch` (51×31, #7FB685) |
+| Symbols read maj7 | the chord table's suffixes |
+
+Still to port, in this order:
+
+1. The staff's noteheads in their tone colours and each finger beside its note (Verovio prints them above).
+2. The Piano sheet's 3D card rows (Angle Seat · Above, Hands on the keys), Range (88-key strip, Fit the chord ·
+   2 octaves · 4 octaves), Labels (Note names · Degrees · Intervals · Fingers · None), Sound and MIDI keyboard rows.
+3. The staff's + (Add a chord: the Next chord sheet) and "Practise these chords" for several.
+4. The drills Over the root and Diatonically.
+5. The serif: the board's Iowan is narrower than the app's Literata, so "root position" wraps at 402.
