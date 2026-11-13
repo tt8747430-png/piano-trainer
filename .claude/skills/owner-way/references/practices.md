@@ -112,8 +112,8 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
 `DESIGN.md` or this skill, the owner's rule wins, always. Design and motion differences are in
 [craft-details](craft-details.md) ("Where the app's own rules differ"); the workflow ones are here.
 
-- **Which copy:** read every skill from `.claude/skills/<name>/`. An `anthropic-skills:` copy of the same name
-  (`impeccable`, `owner-way`) is an older one and is ignored; the superpowers plugin is off (2026-11-13).
+- **Which copy:** read every skill from `.claude/skills/<name>/`. The older `anthropic-skills:` copies of `impeccable` and
+  `owner-way` were removed by the owner (2026-11-13); if one reappears, ignore it. The superpowers plugin is off.
 - **Skills removed (2026-11-13, owner: "remove the duplicates and unneeded things"):** pull requests, worktrees and
   deploys; secrets; issue-tracker workflows; agent fan-out; files outside their home; duplicates (`review`,
   `test-driven-development`, `grilling`, `grill-me`). A skill that still names one of them (`executing-plans`'s
