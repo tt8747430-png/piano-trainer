@@ -27,7 +27,7 @@ export function SectionRows({
   const lessons = useProgress(selectLessons)
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t('learnSong.sections')}
       </h2>
       <ul className="flex flex-col gap-1 card p-2">
