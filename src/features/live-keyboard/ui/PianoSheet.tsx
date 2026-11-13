@@ -1,8 +1,17 @@
 import { Link } from '@tanstack/react-router'
-import { Cable, Hand, Piano, SlidersHorizontal } from 'lucide-react'
+import { Cable, SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RadioCards, RowLink, SettingsGroup, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import {
+  Piano2DPicture,
+  Piano3DPicture,
+  RadioCards,
+  RowLink,
+  SettingsGroup,
+  Sheet,
+  SheetContent,
+  SwitchRow,
+} from '@/shared/ui'
 
 /** What stands in the keys' place, shown: the hands at the keys (3D) or the keys (2D). */
 export type PianoShown = 'hands' | 'keys'
@@ -34,7 +43,7 @@ export function PianoSheet({
     <Sheet open={open} onOpenChange={setOpen}>
       {trigger(() => setOpen(true))}
       <SheetContent title={t('pianoSheet.title')}>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
           <SettingsGroup flush>
             <SwitchRow
               label={t('pianoSheet.show')}
@@ -46,14 +55,12 @@ export function PianoSheet({
           <RadioCards
             label={t('pianoSheet.view')}
             value={shown}
+            disabled={!keys}
             cards={[
-              { value: 'hands', label: t('pianoSheet.hands'), icon: Hand },
-              { value: 'keys', label: t('pianoSheet.keys'), icon: Piano },
+              { value: 'hands', label: t('pianoSheet.hands'), picture: <Piano3DPicture /> },
+              { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
             ]}
-            onChange={(next) => {
-              onHands(next === 'hands')
-              onKeys(true)
-            }}
+            onChange={(next) => onHands(next === 'hands')}
           />
           <SettingsGroup flush>
             <RowLink

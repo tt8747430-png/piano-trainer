@@ -6,14 +6,16 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
     <SwitchPrimitive.Root
       data-slot="switch"
       className={cn(
-        'peer group/switch relative inline-flex h-8 w-13 shrink-0 items-center rounded-full px-px border border-input transition-colors duration-200 ease-out group-has-[:focus-visible]/field-label:outline-none after:absolute after:-inset-x-3 after:-inset-y-2 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-learned data-checked:bg-learned data-unchecked:bg-muted data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        // The canvas's SWITCH value for value: 51 by 31, the chosen line's fill when off, sage when on.
+        'peer group/switch relative inline-flex h-[1.9375rem] w-[3.1875rem] shrink-0 items-center rounded-full px-0.5 transition-colors duration-200 ease-out group-has-[:focus-visible]/field-label:outline-none after:absolute after:-inset-x-3 after:-inset-y-2 aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-checked:bg-switch-on data-unchecked:bg-chosen data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className,
       )}
       {...props}
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        className="pointer-events-none block rounded-full bg-background ring-0 transition-transform size-6 ring-1 ring-input data-checked:translate-x-6 dark:data-checked:bg-learned-foreground data-unchecked:translate-x-0 dark:data-unchecked:bg-foreground"
+        // Its knob, 27 round, white, a soft ink shadow under it, 20 over when on.
+        className="pointer-events-none block size-[1.6875rem] rounded-full bg-switch-knob shadow-[0_2px_4px_rgb(51_41_33/0.2)] transition-transform data-checked:translate-x-5 data-unchecked:translate-x-0"
       />
     </SwitchPrimitive.Root>
   )

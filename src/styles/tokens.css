@@ -98,6 +98,9 @@
    * darker than the hover's muted sand, so hover never looks chosen; neutral, as the chosen is.
    */
   --chosen: var(--p-line);
+  /* A switch, the canvas's SWITCH: the sage track when on, the white knob over it. */
+  --switch-on: #7fb685;
+  --switch-knob: #ffffff;
   --accent: var(--p-sand-100);
   --accent-foreground: var(--p-ink);
   --link: var(--p-sky-deep);
@@ -265,6 +268,7 @@
     --muted-foreground: var(--p-dusk-muted);
     /* By night the chosen takes the lighter line, a step over the hover's dusk. */
     --chosen: var(--p-dusk-line);
+    --switch-knob: #ede9e1;
     --accent: var(--p-dusk-850);
     --accent-foreground: var(--p-dusk-ink);
     --link: var(--p-sky-light);

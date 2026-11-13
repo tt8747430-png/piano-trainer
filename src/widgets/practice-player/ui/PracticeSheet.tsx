@@ -89,7 +89,10 @@ export function PracticeSheet({
             cards={WAYS.map((each) => ({
               value: each,
               label: t(`practiceSheet.${each}`),
-              icon: WAY_ICON[each],
+              picture: (() => {
+                const Icon = WAY_ICON[each]
+                return <Icon className="size-6" />
+              })(),
             }))}
             onChange={(next) => (next === 'play' ? onPlay(tempo) : onWait())}
           />
