@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { groupTile, useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
-import { PlaceRow } from '@/widgets/song-library'
+import { PlaceRow } from '@/shared/ui'
 
 /**
  * Shared with me (R30 S6): the folders others share with the learner's groups, each a row to its page

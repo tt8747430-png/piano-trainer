@@ -599,6 +599,10 @@ owner's, typos fixed.
   progression's opening, "I V", on its style's paint), the name bold over one line ("I – V – vi – IV"), the level, a ♡
   one tap; More only under a mouse. The chord chips and the description line left the rows; a progression's
   character is still found by the search. One `HeartToggle` for every library's ♡.
+- **The overview takes the library's row shape (loop, built to the Practice canvas's Practice board):** each group a
+  heading over one card of rows on a phone (`PlaceRow`: a 44px wash tile, the name bold over one short line, "Chord
+  types, voicings, inversions"), large-tiled cards five across on a laptop; the bar's Tools (`ToolsButton`) beside
+  Search on a phone. The books stay three rows (the library's places), not the canvas's merged Jazz vocabulary.
 
 ## Sounds
 

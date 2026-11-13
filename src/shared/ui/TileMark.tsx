@@ -14,7 +14,7 @@ export function TileMark({
   large = false,
 }: {
   paint: Paint
-  /** At a library row's head (a folder, a song with its own picture): 44px, as a song's small cover. */
+  /** At a library row's head (a folder, a practice place, a song with its own picture): 44px, a wash, as a song's small cover. */
   large?: boolean
 } & ({ icon: LucideIcon; numeral?: undefined } | { icon?: undefined; numeral: number })) {
   return (
@@ -22,12 +22,14 @@ export function TileMark({
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid shrink-0 place-items-center font-semibold text-white tabular-nums',
-        large ? 'size-11 rounded-control text-lg' : 'size-7.5 rounded-tile text-base',
-        PAINT[paint].tile,
+        'grid shrink-0 place-items-center font-semibold tabular-nums',
+        // At a library row's head, its paint's wash under its ink (canvas 133); a settings row's solid.
+        large
+          ? cn('size-11 rounded-control text-lg', PAINT[paint].fill, PAINT[paint].ink)
+          : cn('size-7.5 rounded-tile text-base text-white', PAINT[paint].tile),
       )}
     >
-      {Icon ? <Icon className={large ? 'size-5.5' : 'size-4.5'} /> : numeral}
+      {Icon ? <Icon className={large ? 'size-6' : 'size-4.5'} /> : numeral}
     </span>
   )
 }

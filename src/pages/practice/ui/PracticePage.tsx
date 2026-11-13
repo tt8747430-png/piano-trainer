@@ -3,8 +3,8 @@ import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BOOK_IDS, EXERCISE_BOOKS, exercisesIn } from '@/entities/exercise'
 import { selectMetronome, selectTuner, useSettings } from '@/entities/settings'
-import { OPEN_PLAINLY } from '@/shared/lib'
-import { RowLink, ScreenHeader, SettingsGroup, type Tile } from '@/shared/ui'
+import { cn, OPEN_PLAINLY } from '@/shared/lib'
+import { FoldSection, GROUPED_LIST, PlaceRow, ScreenHeader, type Tile } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import {
   PRACTICE_GROUPS,
@@ -12,6 +12,7 @@ import {
   usePageWords,
   type PracticePageId,
 } from '@/widgets/practice-pages'
+import { ToolsButton } from '@/widgets/tools-sheet'
 import { PageCard } from './PageCard'
 
 /** One place Practice lists: a page, or a book of exercises opening the library at its place. */
@@ -67,23 +68,40 @@ function useGroups(): readonly {
 }
 
 /**
- * Practice (canvas 160): Theory, the pages that explain a thing and practise it there; Exercises, by
- * book; the Tools last. Each group is one card of rows on a phone and cards five across on a laptop,
- * each with its picture, name and line.
+ * Practice (the canvas's Practice board): Theory, the pages that explain a thing and practise it
+ * there; Exercises, by book; the Tools last, also a tap away from the bar's Tools on a phone. Each
+ * group is a heading over one card of rows on a phone (a 44px tile, the name over one line) and
+ * cards five across on a laptop.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')
   const groups = useGroups()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
+      <ScreenHeader
+        title={t('title')}
+        large
+        tools={
+          <>
+            <span className="contents lg:hidden">
+              <ToolsButton />
+            </span>
+            <PlaceActions />
+          </>
+        }
+      />
       {groups.map(({ id, places }) => (
-        <SettingsGroup key={id} title={t(`groups.${id}`)} bare>
-          <ul className="flex flex-col overflow-hidden card lg:hidden [&>li]:flex [&>li>*]:flex-1 [&>li:not(:first-child)>*]:rounded-t-none [&>li:not(:last-child)>*]:rounded-b-none">
+        <FoldSection key={id} title={t(`groups.${id}`)} headingClassName="px-1 text-2xl lg:text-xl">
+          <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
             {places.map(({ key, title, detail, tile, link }) => (
-              <li key={key}>
-                <RowLink title={title} detail={detail} {...tile} render={link} />
-              </li>
+              <PlaceRow
+                key={key}
+                icon={tile.icon}
+                paint={tile.paint}
+                title={title}
+                detail={detail}
+                render={link}
+              />
             ))}
           </ul>
           <ul className="hidden grid-cols-5 gap-3 lg:grid">
@@ -93,7 +111,7 @@ export function PracticePage() {
               </li>
             ))}
           </ul>
-        </SettingsGroup>
+        </FoldSection>
       ))}
     </div>
   )

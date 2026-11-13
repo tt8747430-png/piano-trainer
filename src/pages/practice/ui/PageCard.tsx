@@ -22,18 +22,18 @@ export function PageCard({
     render: link,
     props: {
       className:
-        'flex min-h-32 flex-col gap-3 card p-4 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'flex min-h-44 flex-col gap-4 card p-4 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       children: (
         <>
           <span
             aria-hidden
             className={cn(
-              'grid size-11 place-items-center rounded-control',
+              'grid size-20 place-items-center rounded-card',
               PAINT[tile.paint].fill,
               PAINT[tile.paint].ink,
             )}
           >
-            <Icon className="size-6" />
+            <Icon className="size-9" strokeWidth={1.75} />
           </span>
           <span className="flex flex-col gap-0.5">
             <span className="font-semibold text-balance">{title}</span>

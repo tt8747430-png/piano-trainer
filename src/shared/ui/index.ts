@@ -145,6 +145,7 @@ export { FilterChips, type FilterChipOn } from './FilterChips'
 export { FilteredNotice } from './FilteredNotice'
 export { FilterChoice, FilterFoot, FilterGroup, FilterSheet, LIBRARY_PANES } from './FilterSheet'
 export { HeartToggle } from './HeartToggle'
+export { PlaceRow } from './PlaceRow'
 export {
   GROUPED_LIST,
   POINTER_ONLY,

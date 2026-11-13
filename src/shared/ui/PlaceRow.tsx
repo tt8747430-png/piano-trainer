@@ -1,12 +1,15 @@
 import { useRender } from '@base-ui/react/use-render'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/lib'
-import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE, RowFace, TileMark, type Paint } from '@/shared/ui'
+import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE } from './library-row-class'
+import type { Paint } from './paint'
+import { RowFace } from './RowFace'
+import { TileMark } from './TileMark'
 
 /**
- * A row among a place's folders that leads elsewhere (canvas 133: Shared with me at the foot of
- * Folders): its tile, its name over what it is, a chevron; in the folders' card, as a folder's row.
- * `render` is the link (a router `Link`).
+ * A row of a grouped list that leads to a place (canvas 133 and Practice's): its 44px tile, its name
+ * over one line on what it is, a chevron; in its card, as a library's rows (Songs' Shared with me,
+ * Practice's pages). `render` is the link (a router `Link`).
  */
 export function PlaceRow({
   icon,
