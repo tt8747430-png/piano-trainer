@@ -89,7 +89,7 @@ def PIANO_SHEET(slider, ranges=4, labels=4):
 
 # the values both pages compute the same way (JS, inside the logic's value object)
 def CARD_JS(on, pick):
-    return (f"((on) => ({{ on, bg: on ? '#FBF1DD' : '#FEFDFB', ring: on ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#B07A2A' : 'transparent', "
+    return (f"((on) => ({{ on, bg: on ? '#DAD1C8' : '#FEFDFB', ring: on ? 'none' : '0 0 0 1px rgba(51,41,33,.07)', dot: on ? '#4B4038' : 'transparent', "
             f"dotRing: on ? 'none' : 'inset 0 0 0 2px #DAD1C8', mk: on ? 1 : 0, fw: on ? 600 : 500, pick: {pick} }}))({on})")
 def SW_JS(on, flip):
     return f"((on) => ({{ on, track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, flip: {flip} }}))({on})"

@@ -22,7 +22,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 **Actions**
 
 - One way to each action. Adding a direct way removes the old one.
-- A screen's own actions go in its bar; the floating + only creates. One gear per screen, Edit beside the title.
+- A screen's own actions go in its bar. What floats is the + that creates, or a page's one primary action at its foot
+  (Play on a detail page, `DESIGN.md`; owner 2026-11-13). One gear per screen, Edit beside the title.
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
 - Reorder by dragging a handle, by mouse and held finger, never Move up or Move down.
 - Menu items are short ("Remove"); the menu's label names the thing.

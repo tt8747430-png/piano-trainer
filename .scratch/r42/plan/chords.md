@@ -57,7 +57,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   the key. we need to find a way to take the chords as well, like a select section in this drawer or something else."
   - Selection as the app's score draws it (ADR 0096, `shared/ui/score/selection.ts`, `score.css` `.note-chosen`): no
     honey bar and no box. The chosen chord's noteheads and accidentals take the ring colour (sky-deep, Night sky-light)
-    over their chord-tone paints and its name is ring; _(replaced in v113: every chord keeps its paints)_ the other
+    over their chord-tone paints and its name is ring; the other
     chords are plain ink heads, so the painted chord is the one on the keys. Nothing washes on hover; the name underlines on a pointer. While Play all runs, what sounds is
     one thin ring line, apart from what is chosen.
   - No label over the clef: the clef and its signature open Key where they print ("Key: C major" as its tooltip and
@@ -66,13 +66,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     Key drawer. No "Key signature on the staff" switch, no "1 flat" words, no "Original key" line.
   - The Key drawer: − [the signature drawn, "D major"] + (half steps) · Major | Minor · the letters and ♭ ♮ ♯ ·
     **Chords to transpose**, every chord on the staff a tile with a check, all chosen at first, "Select all | Select
-    none" _(replaced in v113: "Transpose with the key", a kept chord marked "Stays", "Keep all | Transpose all")_. Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
+    none". Changing the key moves the chosen chords with it, as MuseScore's Transpose to key with "Transpose chord
     symbols" (handbook.musescore.org, Transposition); the others stay and are written against the new signature; with
     none chosen only the key changes.
-  - _(Replaced in v115: ♭ ♮ ♯ changes only the chosen letter.)_ ♭ ♮ ♯ is a switch that names the letters: ♭ reads C D♭ E♭ F G♭ A♭ B♭, ♯ reads C♯ D♯ E F♯ G♯ A♯ B, ♮ the white
-    keys. A letter whose ♭ or ♯ makes no root or key stays natural (F, E, D♯ major, G♭ minor), never greyed and never
-    C♭, F♭, E♯, B♯. Switching applies to the chosen letter. One picker, one implementation, for the chord's Root, Key
-    and Random chords' key.
 
 - **Canvas Version 111: a chord's name changes it, the bar plays it; one Key drawer; the same picker for every root and key.**
   Owner: "when I click on the chord name on the staff I will get this next chord drawer to change the chord but clicking
@@ -85,25 +81,12 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   "research how the choosing sharp of flat applied to other chords like the e should remain e and not e sharp
   disabled. make more meaningful choices"; "the keys should change chromatically like on the keyboard and not how it
   works now with this button going up the circle of fifth".
-  - _(Replaced in v112: the chosen chord is coloured in ring, no honey bar.)_ One chord and many are drawn alike: each
-    chord is a bar after the clef, its name on top, the shown one honey. The
-    name (underlined, "Change Cmaj7") opens the drawer titled "Change Cmaj7"; the rest of the bar plays the chord, or a
-    note where an arpeggio stands its notes apart. A lone chord no longer gets its own layout.
   - The drawer that changes a chord is Next chord's: Diatonic | Chromatic, a pick replaces that chord, All chords opens
     the whole picker for it, and "Remove Cmaj7" (crimson, the bin) is its last row, with Undo in the toast. Nothing
     sits in or under the bars any more.
-  - _(Replaced in v112: no name over the clef, no signature switch, the key its own with Chords to transpose.)_
-    Transpose and Key signature are one **Key** drawer, opened from the key's name over the clef ("C major") or the
-    clef: − / + move every chord a half step, chromatically as on the keyboard; the signature drawn; Major | Minor; the
-    same letters and ♭ ♮ ♯ as the Root picker (D♭ major and C♯ major are both reached: D then ♭, C then ♯); "Key
-    signature on the staff". The key is the first chord's. The card's foot keeps only the hand's fingers.
-  - _(Replaced in v112: ♭ ♮ ♯ names the letters.)_ Letters are never disabled: picking E keeps E (with ♭ if E♭ is a key, else ♮); only an accidental that makes no
-    key or root (F♭ major, E♯, B♯) is greyed. One picker in three places: the chord's Root, Key, Random chords' key.
   - The staff never scrolls when a chord is chosen; only when one is added, removed or played through. It runs the
     card's width (the laptop card is as wide as the list under it), a lone chord fits a phone, and its note names keep
     clear of the barline.
-  - _(Replaced in v112: the signature sits between − and +, without words.)_ The Key drawer's signature is drawn 100 units high, so a sharp at the top line is not cut (the layout check caught
-    it at F♯ minor).
 
 - **Canvas Version 110: each action beside what it acts on; keys by − / + and the keyboard; suggestions that
   leave.** Owner: "should be made more clear how this buttons in the bottom of the staff relate to the chords"; "I like
@@ -112,11 +95,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   from the list it disappears ... like filter chips"; "I would like such plus or minus buttons also in the key
   signature controls"; "I also dont like how this row with multiple chords looks"; "this first chord on is also not
   very understandable and clear".
-  - _(Replaced in v111: Remove is in the "Change" drawer, the foot holds only the fingers.)_ Remove is inside the chosen chord's own honey bar, under its notes ("Remove", the bin); the card's foot keeps what
-    is about every chord: the hand's fingers and "Transpose all".
-  - No "Written as" anywhere. A black key reads its usual name (D♭ major, C♯ minor); the other spelling is reached by
-    − / +: Key signature steps the circle of fifths (− one more flat, + one more sharp, to C♭ and C♯), Transpose steps
-    a half step and spells by the key. _(Replaced in v111: one Key drawer, − / + a half step, letters and ♭ ♮ ♯.)_
   - Key signature: − name and count + · the signature drawn · Major | Minor · the keyboard.
   - Transpose names the key it moves to ("D♭ major", "Up a half step"), the keyboard is "Key" (was "First chord on"),
     and the chords run as one line of a lead sheet between barlines, scrolling sideways, never wrapped.
@@ -740,7 +718,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - The header: Back · Chords · the keyboard button on the right (opens Keyboard: Off · 2D, Keys, Labels, Connect a
     piano ›, All piano settings ›; on the laptop a popover under it). The gear and its Settings sheet are gone; it
     held only Hand and Finger numbers, which now live in the Chord sheet.
-  - (Replaced by v63.) The bar: **Cmaj7 ⌃** · **[▶ Play chord | ⌄]**; the round keyboard button left it.
 - **v61 (canvas Version 61; the staffs and label removed in v62): each bass note shows the chord it makes, drawn as a textbook draws inversions.** Owner
   on v60: "better but still could be more creative and research more and improve it".
   - v60's still row stays (Bass note: C E G B in chord order, the bass filled, nothing moves). Above each note, a
@@ -764,54 +741,11 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     It asks the musician's own question, which note is in the bass, the one the slash chord answers.
   - Gone: v59's stack and its arc. Never redrawn for the inversion: tabs or a segmented track (v26, v57), a
     pull-down (v56), ‹ › (v22), a stepper pill (v52), a ring (v58), a moving stack (v59).
-- **v59 (replaced by v60) (canvas Version 59): the inversion is the notes stacked as they sound; the bass goes up an octave.** Owner
-  on v58's ring: "interesting but it is not understandable how it moves. can we think outside of the box and make
-  something new and understandable".
-  - The chord's notes stand in a column under the name, lowest at the bottom, as on the staff and the keys: each a
-    capsule in its key's colour, the note in bold and its role (root, 3rd, 5th, 7th). The bottom one is filled and
-    marked **Bass**. Beside the column, an arc runs from the bottom note to the top, labelled **Bass up an octave**:
-    tapping it lifts the bottom note to the top while the others step down (460 ms, straight up and down), which is
-    what an inversion is, how theory books teach it ("move the lowest note up an octave"). Tapping any note puts it
-    in the bass directly. The name and line follow: Cmaj7/E, "1st inversion".
-  - Gone: v58's ring (its motion was not readable). Never redrawn for the inversion: tabs or a segmented track
-    (v26, v57), a pull-down (v56), ‹ › (v22), a stepper pill (v52), a ring (v58).
-- **v58 (replaced by v59) (canvas Version 58): the inversion is a ring you turn.** Owner on v57: "I dont like this", then "I dont like
-  this tab switch, be more creative and think outside of the box and try to invent something new".
-  - An inversion is a rotation of the chord's notes, so the notes sit on a small ring under the name, in chord order
-    (C, E, G, B around it), each a disc in its key's colour. The slot at the bottom is the bass: its disc is filled
-    and larger, and the centre names the position (**Root** position, **1st** inversion). Tapping any note turns the
-    ring until that note sits at the bottom (420 ms, the labels stay upright), and the chord plays: tap E and the
-    name becomes Cmaj7/E, "E in the bass". Notes that cannot be a bass here (the 9th of a ninth chord) are dimmed.
-  - Gone: v57's track of positions (a tab switch, rejected), v57's note columns (the ring is the notes). Never
-    redrawn: a segmented or tab control, a pull-down, ‹ ›, a stepper pill for the inversion.
-- **v57 (replaced by v58) (canvas Version 57): every inversion one tap away; the notes as a theory table sets them.** Owner, with a
-  screenshot of v56's notes line: "make the inventions easier to switch and I dont like how this looks from the
-  image. and did you research more and looked at the examples and websites. not only ours piano data but also from
-  the internet. https://musictheorylessons.net https://worksheets.musictheorylessons.net/worksheets".
-  - The inversion: v56's pull-down took two taps and hid the choices. Now all of them sit under the name, side by
-    side on one track, each its position over its slash chord: **Root** Cmaj7 · **1st** Cmaj7/E · **2nd** Cmaj7/G ·
-    **3rd** Cmaj7/B (triads three). One tap plays and shows it; the current one raised. This amends v26's rejected
-    Root · 1st · 2nd · 3rd control: those were bare ordinals; here each choice names the chord it gives, so it reads
-    as this chord's shapes, never as the next chord (the slash chord is the musician's own name, v22).
-  - The notes: no dots, no inline role words. A row of columns, each note in bold over a short bar of its key colour
-    over its role (root, 3rd, 5th, 7th), in the order they sound from the bottom up, so an inversion visibly moves
-    the root: Cmaj7/E reads E G B C over 3rd 5th 7th root.
-  - Sources: musictheorylessons.net, Triads (a table of Triad, Formula "1 · 3 · 5", Notes "C–E–G") and Seventh
-    chords (Name, Symbol on C, Notes "C–E–G–B"; "the root, 3rd, 5th and 7th"); its worksheets FAQ names the
-    inversions as positions, "root position with 1st and 2nd inversions, and 3rd inversion for 7th chords". Apple
-    HIG, Segmented controls: equal widths, a few closely related choices, one tap.
 - **v56 (canvas Version 56): the heading reads as a lead sheet: name, what it is, its inversion, its notes.** Owner,
   with a screenshot of D♭maj7: "I dont like inversions and the chips how they look. I dont like how this section
   looks. improve and make it better. research and use all nedded guidelines and skills".
   - The name: the accidental drawn as music (Noto Music, raised, 0.78 of the letter), as a lead sheet sets D♭maj7;
     before, the serif had no ♭ and a fallback glyph stood apart from the D.
-  - (Replaced by v57: inversions one tap each.) The inversion: a pull-down (Apple's pop-up button: one choice among a few, its current value as the label),
-    **Root position ⌄**, a quiet outlined capsule. Its menu lists each inversion with its notes, Root position
-    D♭ F A♭ C · 1st inversion F A♭ C D♭ …, ✓ on the current; a pick plays it. No ‹ › anywhere (read as the next
-    chord), no Root · 1st · 2nd · 3rd control (v26, rejected), no pill.
-  - (Replaced by v57: note columns.) The notes: no filled chips. One line of text, each note in bold with its role beside it in grey and a small dot
-    of its key colour: **● D♭** root **● F** 3rd **● A♭** 5th **● C** 7th. The role words teach what the colours
-    mean (the keys use the same colours).
   - Skills applied: impeccable's craft floor (one type scale, no decoration without information), Apple's
     pop-up button and menus, Laws of UX (Proximity: the inversion sits with the name it changes; Jakob: the lead
     sheet's symbol).
@@ -867,13 +801,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     turn arrow names the next spelling: **C ↻ C♯**, then **C♯ ↻ C**; **G♯ ↻ G♭**. No chip on a letter with one
     spelling. The spoken name says it: "C. Tap again for C sharp".
   - Replaces v44's ♮ ♯ ♭ marks and v46's capsule.
-- **v46 (rejected: "no I don't like this"; replaced by v47): the chosen letter opens into its spellings.** Owner: "the chord root switch looks interesting but you could
-  improve it and make more clear".
-  - Still one row, C to B. The chosen letter widens into a raised capsule holding its spellings, flat to sharp, each
-    a button: **D♭ D D♯**, **G♭ G G♯**, **C C♯**, **E♭ E**, **F F♯**, **A♭ A A♯**, **B♭ B**; the one in use on honey.
-    Another letter is one tap (natural); its spellings open with it. Nothing hidden: no tap-again, no marks to decode.
-  - Widths: the capsule takes 1.1 a letter per spelling, so the other letters keep 37px on a 393 phone (48 tall).
-  - Replaces v43's tap-again and v44's ♮ ♯ ♭ marks.
 - **v45: every root starts in the octave from middle C.** Owner: "why some chords like the f sharp are shown one
   octave lower".
   - Before, roots F♯ to B started an octave down (F♯3 to B3) to keep the chord near the middle; the jump between F
@@ -890,21 +817,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     natural → sharp → flat → natural, skipping what no chart writes: C → C♯ → C; D → D♯ → D♭; E → E♭; F → F♯;
     G → G♯ → G♭; A → A♯ → A♭; B → B♭. The button reads the spelling (C♯), the chord is spelled from it and sounds.
   - Replaces v41's accidental row and v42's three tracks.
-- **v42 (replaced by v43's one row): the root is one of 17 written notes: naturals, sharps, flats.** Owner: "but some options are weird like c
-  flat or e sharp etc."
-  - Three tracks in the Chord sheet's Root: **C D E F G A B**, then **C♯ D♯ F♯ G♯ A♯**, then **D♭ E♭ G♭ A♭ B♭**. One
-    tap a root, one choice across the three. C♭, F♭, E♯ and B♯ are gone: no chord chart writes them as a root.
-  - Each black key keeps both its names (C♯ and D♭ …), the chord spelled from the one picked.
-- **v41 (replaced by v42's three tracks): a chord's root is a letter and an accidental, so D♭ and C♯ are both there.** Owner: "how can we though
-  get chords like d flat or sharp or g flat or a sharp etc".
-  - The Chord sheet's Root is two tracks: the letters **C D E F G A B**, then **♭ Flat · ♮ Natural · ♯ Sharp**.
-    Every written root is reachable (D♭, C♯, G♭, F♯, A♯, also E♯, C♭), and the chord is spelled from it:
-    A♯maj7 is A♯ C𝄪 E♯ G𝄪; G♭maj7 is G♭ B♭ D♭ F; D♭m7 is D♭ F♭ A♭ C♭. Letter and accidental keep each other.
-  - Why: two names for one black key are two different chords on paper, and a learner reading a song in F♯ meets
-    A♯m, in G♭ meets E♭m. The way a chord chart app takes a root is the letter, then ♭ or ♯ (iReal Pro's chord
-    keyboard).
-  - A key is not a root: Scales' Tonic, a progression's and an exercise's Key, Intervals' From keep v40's two rows
-    of six, the twelve keys.
 - **v40: the root picker is two rows of six, as GarageBand's Key Signature.** Owner (with a GarageBand screenshot):
   "look at these notes grid , but i dont think we need the major minor switch here and the follow songs key".
   - The 4 × 3 grid of boxed buttons becomes two segmented tracks, C to F and F♯ to B, the chosen note a raised
@@ -939,7 +851,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - Keyboard panel: **Labels** Names · Fingers · None, one label on a key at a time (replaces Note names and Finger
     numbers, two switches over one spot).
   - Gear: **Hand** Right · Left · Both, then **Staff › Finger numbers** (on).
-  - (v36's Fingering group and the Keyboard panel's two switches are replaced by this.)
 
 - **v36: the piano's settings as the Player's; the gear keeps the rest; finger numbers on the keys as Vita Piano's.**
   Owner: "but on the keys look how other do this. and also I dont like the keboard settings, this looks not good
@@ -953,7 +864,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
   - On the keys (Vita Piano's charts): the finger number on the coloured key, the note name under it. v37, owner:
     "why the fingers numbers look so big": one step above the name, 14px bold on a white key (12px on a black), the
     name 12px (10px).
-  - (v35's Keyboard sheet mixing the keys and the fingering is replaced by this.)
 
 - **v35: fingering settings; the numbers beside the notes, per inversion.** Owner: "i want fingering settings, and
   research more and look at the examples where the fingering should be".
@@ -969,7 +879,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     chords put adjacent fingers on the 2nd (Cmaj7/E right hand 1 2 4 5); five notes 1 2 3 4 5.
   - **On the keys** puts the number on the key in place of its name. The owner's earlier rule "No finger numbers on or
     under keys" stands as the default (off); this switch is the owner's to keep or remove.
-  - (v33-v34's "stacked above the chord" and "no settings" are replaced by this.)
 
 - **v34: checked in the canvas's own runtime.** Owner: "the settings arent working and the fingering still doesn't
   work and where are its settings". Two faults the local renderer hid:
@@ -989,7 +898,6 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     The chord is one hand's shape; the inversion is that shape. Voicing is the list alone.
   - The fingering is stacked as engraved, the top number for the top note: above the treble staff when the chord
     reaches it, under the bass staff when it sits low. The staff's height fits it.
-  - (v32's "Bass in the left hand" and v31's "Both clefs | Treble" are replaced by this.)
 
 - **v32: no gear; the keyboard's own button; Hands inside Voicing; the fingering on the staff.** Owner: "but you
   didn't remove the old settings. and do we need share, and the keyboard settings in the header to hide and show the
@@ -1001,13 +909,10 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     voicings. The Chord sheet's Voicing row reads "Close + bass".
   - **Fingering** as a view goes: the finger numbers stand beside the notes on the staff, as printed music does. The
     view switch goes with it; the page has one staff.
-  - (v31's line on Staff · Fingering views, and the gear's Practise and Staff, are replaced by this.)
 
 - **v31: Tensions go into the Chord sheet; the staff's choice sits on the staff; Practise is on the page; the bar
   per Apple.** Owner: "Shall I? yes and i don't like how the bottom bar looks. research more the apple guidelines. and
   also the staff settings are not very good. and the practice in the player are too hidden".
-  - Views: Staff · Fingering. The Chord sheet ends with **Add a note**: add 9 D, add ♯11 F♯, add 13 A; avoid notes
-    struck through. _(Replaced by v39: the Altered group of the Chord list.)_
   - The staff card holds its own small segmented control, **Both clefs | Treble**, top right. The gear no longer has
     Staff.
   - **Practise Cmaj7 in the Player**, a card of three rows under the view: Arpeggio, up and down · Inversions, one
@@ -1019,8 +924,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 - "now refactor the chords page from practice in the style of the songs player" (2026-11-08): the Chords page takes
   the Player's shape, as drawn in R37 and merged in v15:
-  - **At the top**, three glass controls: Back (to Practice) · the views · the gear (Chord settings). The views are
-    **Staff · Inversions · Fingering · Tones**, words on both sizes (v18). Staff's one setting is in the gear (v17).
+  - **At the top**, three glass controls: Back (to Practice) · the views · the gear (Chord settings). The views sit in
+    the title's place (`TitleTabs`, owner 2026-11-13) and are **Staff · Inversions · Fingering · Tones**, words on both
+    sizes (v18). Staff's one setting is in the gear (v17).
   - **The keys run edge to edge** under them, where the Player's keys are, the chord coloured by its role (root,
     3rd, 5th, 7th, tensions) and named on its keys; no finger numbers on the keys.
   - **The chord is the title**, as the song is: the symbol in serif, its full name, its inversion and voicing, its
