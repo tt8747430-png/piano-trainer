@@ -66,6 +66,12 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     taken from the Genos Data List and the Reference Manual before it is built, each cited with its page; a control
     the Genos does not take over MIDI is drawn as its panel lamp only, following what the Genos reports, or left
     out, and the report says which. Still never chords or notes. On the canvas first.
+    Found so far (PSR Tutorial forum, 2022, quoting the Data List's Section Control): F0 43 7E 00 ss dd F7, ss 00–02
+    Intro I–III (03 the fourth, which the Genos lacks), 08–0B Main A–D, 10–13 Fill-in A–D, 18 Break, 20–22 Ending I–III;
+    dd 7F on, 00 off. Start and Stop: MIDI Start (FA) and Stop (FC), which the Genos takes only with its clock set to
+    External, so the app sends Section Control and listens for Start and Stop; Yamaha's style start/stop SysEx and
+    ACMP, Sync Start, Sync Stop, Fade and OTS Link are still to be found in the Genos Data List (MIDI Data Format)
+    before the strip's buttons for them are built.
   - **Every change kept as a draft** (owner, 2026-11-13: "all the changes I do to the sheet should be automatically
     saved, either as draft and then I can save and change the current chords from the draft"): each edit is saved
     at once, on the device, as the sheet's draft; the sheet's saved chords stay as they were until Save, which makes
