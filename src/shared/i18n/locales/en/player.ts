@@ -93,7 +93,7 @@ export const player = {
   },
   progress: 'Progress',
   coach: {
-    listen: 'Press Play to listen.',
+    listen: 'Tap a note to start from there, then press Play.',
     wait: 'Press Play, then play each highlighted note.',
     follow: 'Play the highlighted notes; the accompaniment follows your tempo.',
     close: 'Dismiss tip',

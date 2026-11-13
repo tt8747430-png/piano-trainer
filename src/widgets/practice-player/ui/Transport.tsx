@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { cn } from '@/shared/lib'
 import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
 import { DOCK_STEP } from './dock-sizes'
 
@@ -8,9 +9,18 @@ import { DOCK_STEP } from './dock-sizes'
  * the tempo, ‹, Play or Stop (honey), ›, then three controls of the screen's own (`end`: the Player's
  * loop, Sound and hands; the editor's Record, takes and recording settings), each a transport
  * button's size (`DOCK_BUTTON`). The same seven in the same sizes in both modes of one score, so
- * Play stands in the same spot as Practise · Edit switches. Floating along the sheet's foot at every
+ * Play stands in the same spot as Practise · Edit switches. They stand in three groups (canvas 116),
+ * ‹ ▶ › the tinted one in the middle. Floating along the sheet's foot at every
  * size; on a phone held upright its controls stand shoulder to shoulder, so the seven fit from 320px.
  */
+/**
+ * One of the transport's three groups (canvas 116): the screen's own before, ‹ ▶ › tinted in the
+ * middle, the screen's own after, each a pill of its own; on the narrowest phone they stand bare,
+ * shoulder to shoulder, so the seven still fit.
+ */
+const GROUP =
+  'flex items-center gap-0.5 rounded-pill bg-muted/70 p-0.5 max-sm:gap-0 narrow-phone:bg-transparent narrow-phone:p-0'
+
 export function Transport({
   label,
   tempo,
@@ -55,33 +65,37 @@ export function Transport({
       docked={docked}
       className="gap-1 max-sm:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
     >
-      {start}
-      {tempo}
-      <FloatingBarButton
-        label={back.label}
-        title={back.title}
-        className={DOCK_STEP}
-        onClick={onBack}
-      >
-        <ChevronLeft aria-hidden />
-      </FloatingBarButton>
-      <FloatingBarPlay
-        label={play.label}
-        title={play.title}
-        playing={playing}
-        disabled={disabled}
-        className="narrow-phone:size-12"
-        onClick={onPlay}
-      />
-      <FloatingBarButton
-        label={next.label}
-        title={next.title}
-        className={DOCK_STEP}
-        onClick={onNext}
-      >
-        <ChevronRight aria-hidden />
-      </FloatingBarButton>
-      {end}
+      <div className={GROUP}>
+        {start}
+        {tempo}
+      </div>
+      <div className={cn(GROUP, 'bg-primary/15')}>
+        <FloatingBarButton
+          label={back.label}
+          title={back.title}
+          className={DOCK_STEP}
+          onClick={onBack}
+        >
+          <ChevronLeft aria-hidden />
+        </FloatingBarButton>
+        <FloatingBarPlay
+          label={play.label}
+          title={play.title}
+          playing={playing}
+          disabled={disabled}
+          className="narrow-phone:size-12"
+          onClick={onPlay}
+        />
+        <FloatingBarButton
+          label={next.label}
+          title={next.title}
+          className={DOCK_STEP}
+          onClick={onNext}
+        >
+          <ChevronRight aria-hidden />
+        </FloatingBarButton>
+      </div>
+      <div className={GROUP}>{end}</div>
     </FloatingBar>
   )
 }

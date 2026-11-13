@@ -78,6 +78,9 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **The docked transport in three groups, the tip that teaches (loop, 2026-11-13):** canvas 116's "three glass
+  groups, ‹ ▶ › the tinted one" built into the docked row (R31-P keeps it off the music); the first tip says what a
+  learner cannot guess ("Tap a note to start from there, then press Play"), never what the Play button already says.
 - **Songscription's score page is a Player reference (2026-11-11):** "will this help you", "ok document this": the owner's saved copy, read for its controls, is written up in `.scratch/r39/plan/player-reference-songscription.md` with five proposals for the Player canvas (Endless tall, tempo by dragging, the song's keys only, shortcuts beside their names, Reset in the Key sheet). The export itself never enters the repo: it shows the owner's account and carries a recorded song.
 - **Musicca's chord player page, read (2026-11-11):** the owner's export of musicca.com/chord-player is compared with our Chord player in `.scratch/r39/plan/practice-chord-player.md` (Reference): Variation per section, Time signature, Download as audio, beat ticks and edge-dragged lengths, typed chords, draggable chords. Exports stay out of the repo.
 - **A sheet's height is checked, not assumed; a tiny target the tap ignores becomes the real target (R43, canvas
