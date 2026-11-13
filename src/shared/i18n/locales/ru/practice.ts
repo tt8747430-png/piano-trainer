@@ -937,7 +937,7 @@ export const practice: LocaleResources['practice'] = {
       voicingInfo:
         'Плавное голосоведение ведёт каждый аккорд к ближайшим звукам предыдущего; в основном виде каждый аккорд звучит от основного тона.',
       relaid: 'Переписано в размере {{meter}}',
-      onScreenPiano: 'Клавиатура на экране',
+      onScreenPiano: 'Экранная клавиатура',
       connectPiano: 'Подключить пианино',
     },
   },
