@@ -9,3 +9,6 @@ export const DOCK_BUTTON = 'max-sm:size-11 small-phone:size-10 landscape-phone:s
 
 /** ‹ and ›: a transport button, narrower under 390px and narrower again under 360px. */
 export const DOCK_STEP = `${DOCK_BUTTON} small-phone:w-8 narrow-phone:w-7`
+
+/** A transport button with a caption under its picture (its canvas): as tall as `DOCK_BUTTON`, as wide as its word. */
+export const DOCK_CAPTIONED = 'max-sm:h-11 small-phone:h-10 landscape-phone:h-10'

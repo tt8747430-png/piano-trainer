@@ -114,6 +114,7 @@ export const common: LocaleResources['common'] = {
     soft: { name: 'Левая', label: 'Левая педаль (una corda) — смягчает звук, пока нажата' },
   },
   keyboardTools: {
+    short: { keys: '2D', hands: '3D', off: 'Выкл.' },
     keyboard: 'Клавиатура',
     hands: 'Руки на клавишах',
     show: 'Показать клавиатуру',

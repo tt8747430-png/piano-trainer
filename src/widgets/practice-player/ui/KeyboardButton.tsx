@@ -1,7 +1,7 @@
 import { EyeOff, Hand, Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ActionMenu, FloatingBarButton } from '@/shared/ui'
-import { DOCK_BUTTON } from './dock-sizes'
+import { DOCK_CAPTIONED } from './dock-sizes'
 
 /**
  * The transport's Keyboard (its canvas): what stands in the keys' place, chosen from a menu: the
@@ -29,7 +29,12 @@ export function KeyboardButton({
       align="end"
       trigger={null}
       render={
-        <FloatingBarButton label={label} title={label} className={DOCK_BUTTON}>
+        <FloatingBarButton
+          label={label}
+          title={label}
+          caption={t(`keyboardTools.short.${shown}`)}
+          className={DOCK_CAPTIONED}
+        >
           <Icon aria-hidden />
         </FloatingBarButton>
       }

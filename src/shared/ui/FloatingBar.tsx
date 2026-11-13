@@ -64,6 +64,9 @@ const BAR_BUTTON =
   'size-12 rounded-pill transition-[scale,background-color] duration-150 ease-out active:scale-96'
 /** A control that shows its name beside its icon (Chords' Play and Arpeggio, R29-P4): a pill. */
 const WITH_NAME = 'w-auto gap-2 px-4 text-base font-semibold'
+/** A control with a short caption under its picture (the Player's transport, its canvas). */
+const WITH_CAPTION =
+  'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-[0.6875rem] leading-none font-semibold [&_svg]:size-5'
 /** The bar's honey Play: the main floating button's size, lifted a little off the pill. */
 const BAR_PLAY =
   'size-14 rounded-pill elevation-1 hover:brightness-95 [&_svg:not([class*=size-])]:size-6 transition-[scale,filter] duration-150 ease-out active:scale-96'
@@ -78,6 +81,7 @@ export function FloatingBarButton({
   title,
   render,
   named = false,
+  caption,
   className,
   children,
   ...props
@@ -86,6 +90,8 @@ export function FloatingBarButton({
   title?: string
   /** Its name shown beside its icon, where an icon alone was not understood. */
   named?: boolean
+  /** A word under its picture: what it is set to (Wait, Both) or what it is (Loop). */
+  caption?: string | undefined
   /** A link in place of a button. */
   render?: useRender.RenderProp
   children: ReactNode
@@ -112,11 +118,12 @@ export function FloatingBarButton({
       size="icon"
       aria-label={named ? undefined : label}
       title={title ?? label}
-      className={cn(BAR_BUTTON, named && WITH_NAME, className)}
+      className={cn(BAR_BUTTON, named && WITH_NAME, caption && WITH_CAPTION, className)}
       {...props}
     >
       {children}
       {named ? label : null}
+      {caption ? <span aria-hidden>{caption}</span> : null}
     </Button>
   )
 }

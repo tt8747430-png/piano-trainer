@@ -128,6 +128,8 @@ export const common = {
   },
   // The on-screen keyboard's controls in the screen's bar (R34).
   keyboardTools: {
+    // The transport's Keyboard caption: what stands in the keys' place.
+    short: { keys: '2D', hands: '3D', off: 'Off' },
     keyboard: 'Keyboard',
     hands: 'Hands at the keys',
     show: 'Show the keyboard',

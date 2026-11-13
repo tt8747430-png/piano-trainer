@@ -190,13 +190,13 @@ export function PaceButton({
   )
 }
 
-/** A mode at the learner's own pace on the button: its picture; its name too from 640px. */
+/** A mode at the learner's own pace on the button: its picture over its name (its canvas). */
 function OwnPace({ mode, name }: { mode: OwnPaceMode; name: string }) {
   const Icon = OWN_PACE_ICON[mode]
   return (
-    <span aria-hidden className="flex items-center gap-2">
+    <span aria-hidden className="flex flex-col items-center gap-0.5">
       <Icon className="size-5" />
-      <span className="text-sm font-semibold max-sm:hidden">{name}</span>
+      <span className="text-[0.6875rem] leading-none font-semibold">{name}</span>
     </span>
   )
 }
