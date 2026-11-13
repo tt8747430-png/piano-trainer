@@ -1,71 +1,100 @@
+import { Link } from '@tanstack/react-router'
+import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
-import { EXERCISES } from '@/entities/exercise'
-import { selectExercised, useProgress } from '@/entities/progress'
-import { useSettings } from '@/entities/settings'
-import { ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { BOOK_IDS, EXERCISE_BOOKS, exercisesIn } from '@/entities/exercise'
+import { selectMetronome, selectTuner, useSettings } from '@/entities/settings'
+import { OPEN_PLAINLY } from '@/shared/lib'
+import { RowLink, ScreenHeader, SettingsGroup, type Tile } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import {
-  isPracticePageId,
-  PageRow,
   PRACTICE_GROUPS,
+  PRACTICE_PAGES,
+  usePageWords,
   type PracticePageId,
 } from '@/widgets/practice-pages'
-import { GapsBadge, useGapsCount } from '@/widgets/trainer-list'
-import { upNext } from '../model/up-next'
-import { ToolTiles } from './ToolTiles'
-import { UpNext } from './UpNext'
+import { PageCard } from './PageCard'
 
-/** The groups listed as rows, in two columns from a laptop's width: Theory, then Playing and Training. */
-const COLUMNS = [['theory'], ['playing', 'training']] as const
-const TOOLS = PRACTICE_GROUPS.find((group) => group.id === 'tools')?.pages ?? []
-/** The exercise a new learner starts with: the first of the finger technique book. */
-const FIRST_EXERCISE = EXERCISES.find((exercise) => exercise.group === 'technique')?.id
+/** One place Practice lists: a page, or a book of exercises opening the library at its place. */
+interface Place {
+  key: string
+  title: string
+  detail: string
+  tile: Tile
+  link: ReactElement
+}
+
+/** Practice's groups, each its places in order: Theory, Exercises by book, the Tools last. */
+function useGroups(): readonly {
+  id: 'theory' | 'exercises' | 'tools'
+  places: readonly Place[]
+}[] {
+  const { t } = useTranslation('practice')
+  const words = usePageWords()
+  const metronome = useSettings(selectMetronome)
+  const { a4 } = useSettings(selectTuner)
+  const page = (id: PracticePageId): Place => {
+    const { to, tile } = PRACTICE_PAGES[id]
+    const detail =
+      id === 'metronome'
+        ? t('toolValue.metronome', { bpm: metronome.bpm, meter: metronome.meter })
+        : id === 'tuner'
+          ? t('toolValue.tuner', { hz: a4 })
+          : words(id).about
+    return {
+      key: id,
+      title: words(id).title,
+      detail,
+      tile,
+      link: <Link to={to} state={OPEN_PLAINLY} />,
+    }
+  }
+  const pagesOf = (id: 'theory' | 'tools'): readonly Place[] =>
+    (PRACTICE_GROUPS.find((group) => group.id === id)?.pages ?? []).map(page)
+  return [
+    { id: 'theory', places: pagesOf('theory') },
+    {
+      id: 'exercises',
+      places: BOOK_IDS.map((book) => ({
+        key: book,
+        title: t(`exercises.groups.${book}`),
+        detail: t('exercises.count', { count: exercisesIn(book).length }),
+        tile: EXERCISE_BOOKS[book],
+        link: <Link to="/practice/exercises" search={{ place: book }} state={OPEN_PLAINLY} />,
+      })),
+    },
+    { id: 'tools', places: pagesOf('tools') },
+  ]
+}
 
 /**
- * Practice (ADR 0052, R32), ordered by relevance as a practice home is: its purpose in one line; Up
- * next, what the learner's own record says is next (skills due, the exercise to resume, the page last
- * opened), or Start here; then Theory, Playing and Training, each one card of rows (its tile, name and
- * one line), two columns on a laptop; the Tools last, as tiles showing what each is set to.
+ * Practice (canvas 160): Theory, the pages that explain a thing and practise it there; Exercises, by
+ * book; the Tools last. Each group is one card of rows on a phone and cards five across on a laptop,
+ * each with its picture, name and line.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')
-  const gaps = useGapsCount()
-  const exercised = useProgress(selectExercised)
-  const recent = useSettings((state) => state.practiceRecent).filter(isPracticePageId)
-  const cards = upNext({ gaps, exercised, recent, firstExercise: FIRST_EXERCISE })
+  const groups = useGroups()
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-      {/* What Practice is for, close under the title it explains. */}
-      <p className="-mt-5 px-1 text-pretty text-muted-foreground">{t('purpose')}</p>
-      <UpNext cards={cards} />
-      <div className="grid items-start gap-6 lg:grid-cols-2">
-        {COLUMNS.map((column) => (
-          <div key={column.join()} className="flex flex-col gap-6">
-            {column.map((id) => {
-              const group = PRACTICE_GROUPS.find((each) => each.id === id)
-              return group ? (
-                <SettingsGroup key={group.id} title={t(`groups.${group.id}`)} flush>
-                  <ul className="flex flex-col">
-                    {group.pages.map((page: PracticePageId) => (
-                      <li key={page}>
-                        {/* The Quiz row says how many skills wait to be checked, behind the gap's dot. */}
-                        <PageRow
-                          page={page}
-                          trailing={
-                            page === 'quiz' && gaps > 0 ? <GapsBadge count={gaps} /> : undefined
-                          }
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </SettingsGroup>
-              ) : null
-            })}
-          </div>
-        ))}
-      </div>
-      <ToolTiles pages={TOOLS} />
+      {groups.map(({ id, places }) => (
+        <SettingsGroup key={id} title={t(`groups.${id}`)} bare>
+          <ul className="flex flex-col overflow-hidden card lg:hidden [&>li]:flex [&>li>*]:flex-1 [&>li:not(:first-child)>*]:rounded-t-none [&>li:not(:last-child)>*]:rounded-b-none">
+            {places.map(({ key, title, detail, tile, link }) => (
+              <li key={key}>
+                <RowLink title={title} detail={detail} {...tile} render={link} />
+              </li>
+            ))}
+          </ul>
+          <ul className="hidden grid-cols-5 gap-3 lg:grid">
+            {places.map(({ key, ...place }) => (
+              <li key={key} className="flex [&>a]:flex-1">
+                <PageCard {...place} />
+              </li>
+            ))}
+          </ul>
+        </SettingsGroup>
+      ))}
     </div>
   )
 }

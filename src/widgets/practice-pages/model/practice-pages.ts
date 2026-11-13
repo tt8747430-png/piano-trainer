@@ -22,16 +22,16 @@ export const PRACTICE_PAGES = {
 export type PracticePageId = keyof typeof PRACTICE_PAGES
 
 /**
- * Practice's groups, each under its heading, by relevance (R32, as Yousician, Simply Piano and
- * musictheory.net order a practice home): Theory, the things a page shows on the keys; Playing, what
- * the hands play; Training, the drills; then Tools, last and compact, what a musician reaches for
- * while doing something else (also in the header's Tools menu).
+ * Practice's groups, each under its heading (canvas 160): Theory, the pages that explain a thing and
+ * practise it where it is explained; Exercises, named for what they train; Tools, the instruments a
+ * musician reaches for while doing something else (also in the header's Tools menu), the Chord player
+ * first.
  */
 export const PRACTICE_GROUPS = [
-  { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
-  { id: 'playing', pages: ['accompaniment', 'chordPlayer'] },
-  { id: 'training', pages: ['exercises', 'quiz'] },
-  { id: 'tools', pages: ['metronome', 'tuner', 'chordFinder', 'circleOfFifths'] },
+  { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions', 'accompaniment'] },
+  { id: 'exercises', pages: ['exercises'] },
+  { id: 'training', pages: ['quiz'] },
+  { id: 'tools', pages: ['chordPlayer', 'metronome', 'tuner', 'chordFinder', 'circleOfFifths'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
 /** Every page of Practice, in the order it lists them. */

@@ -1,25 +1,7 @@
 export const practice = {
   title: 'Practice',
-  // What Practice is for, under its title (R32).
-  purpose: 'Daily technique, theory and accompaniment, in one place.',
-  // What the learner's record says is next (R32), or where a new learner starts.
-  upNext: {
-    title: 'Up next',
-    start: 'Start here',
-    review: {
-      title: 'Quiz review',
-      why_one: '{{count}} skill due for review',
-      why_other: '{{count}} skills due for review',
-    },
-    exercise: 'Last practised {{when}}',
-    page: 'Last opened in Practice',
-    firstExercise: 'Recommended first step',
-    firstPage: 'Build any chord from its root',
-    today: 'today',
-    yesterday: 'yesterday',
-  },
   // Practice's groups of pages (ADR 0052), each under its heading.
-  groups: { tools: 'Tools', theory: 'Theory', playing: 'Playing', training: 'Training' },
+  groups: { theory: 'Theory', exercises: 'Exercises', training: 'Training', tools: 'Tools' },
   // Its pages, each by its name.
   pages: {
     chords: 'Chords',
@@ -624,6 +606,9 @@ export const practice = {
       barryHarris: 'Barry Harris',
       jonny: 'Piano With Jonny',
     },
+    // A book's line on Practice: how many exercises it holds.
+    count_one: '{{count}} exercise',
+    count_other: '{{count}} exercises',
   },
   // One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape.
   library: {

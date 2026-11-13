@@ -1,7 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpen, Check, Hand, Heart, HeartOff, type LucideIcon } from 'lucide-react'
+import { Check, Heart, HeartOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { EXERCISES, type ExerciseGroup } from '@/entities/exercise'
+import {
+  BOOK_IDS,
+  EXERCISE_BOOKS,
+  EXERCISES,
+  type ExerciseBook,
+  type ExerciseGroup,
+} from '@/entities/exercise'
 import {
   selectFavouritesOf,
   usePracticeLibrary,
@@ -10,22 +16,10 @@ import {
 import { localDay, selectExercised, useProgress } from '@/entities/progress'
 import { togglePracticeFavourite } from '@/features/manage-practice-library'
 import { localText, useLocale } from '@/shared/i18n'
-import type { Paint } from '@/shared/ui'
 import type { LibraryGroup, LibraryItem } from '@/widgets/practice-library'
 
-/**
- * The books the Exercises library lists, in its order (R30-4): a scale's and a chord's exercises
- * open from their own pages. Each book's tile: technique the hand, the masters' books a book.
- */
-const BOOKS = {
-  technique: { icon: Hand, paint: 'yellow' },
-  barryHarris: { icon: BookOpen, paint: 'lilac' },
-  jonny: { icon: BookOpen, paint: 'sky' },
-} as const satisfies Partial<Record<ExerciseGroup, { icon: LucideIcon; paint: Paint }>>
-type ListedBook = keyof typeof BOOKS
-const LISTED: readonly ListedBook[] = ['technique', 'barryHarris', 'jonny']
-const isListed = (group: ExerciseGroup): group is ListedBook =>
-  LISTED.some((book) => book === group)
+const isListed = (group: ExerciseGroup): group is ExerciseBook =>
+  BOOK_IDS.some((book) => book === group)
 
 /**
  * The Exercises library's books and rows (R30-4): each listed exercise its book's, its line what it
@@ -41,7 +35,10 @@ export function useExerciseLibrary(): {
   const store = usePracticeLibraryStoreApi()
   const exercised = useProgress(selectExercised)
   const today = localDay(new Date())
-  const groups = LISTED.map((book) => ({ id: book, name: t(`practice:exercises.groups.${book}`) }))
+  const groups = BOOK_IDS.map((book) => ({
+    id: book,
+    name: t(`practice:exercises.groups.${book}`),
+  }))
   const items = EXERCISES.flatMap((exercise): LibraryItem[] => {
     const { group } = exercise
     if (!isListed(group)) return []
@@ -53,7 +50,7 @@ export function useExerciseLibrary(): {
         detail: localText(exercise.trains, locale),
         group,
         stage: exercise.stage,
-        picture: BOOKS[group],
+        picture: EXERCISE_BOOKS[group],
         link: <Link to="/practice/exercises/$exerciseId" params={{ exerciseId: exercise.id }} />,
         favourite,
         actions: [

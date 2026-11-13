@@ -2,25 +2,12 @@ import type { LocaleResources } from '../../types'
 
 export const practice: LocaleResources['practice'] = {
   title: 'Практика',
-  purpose: 'Техника, теория и аккомпанемент для ежедневных занятий.',
-  upNext: {
-    title: 'Далее',
-    start: 'С чего начать',
-    review: {
-      title: 'Повторение в тестах',
-      why_one: '{{count}} навык ждёт повторения',
-      why_few: '{{count}} навыка ждут повторения',
-      why_many: '{{count}} навыков ждут повторения',
-      why_other: '{{count}} навыка ждут повторения',
-    },
-    exercise: 'Последнее занятие: {{when}}',
-    page: 'Последнее открытое в «Практике»',
-    firstExercise: 'Рекомендуемый первый шаг',
-    firstPage: 'Любой аккорд от основного тона',
-    today: 'сегодня',
-    yesterday: 'вчера',
+  groups: {
+    theory: 'Теория',
+    exercises: 'Упражнения',
+    training: 'Тренировка',
+    tools: 'Инструменты',
   },
-  groups: { tools: 'Инструменты', theory: 'Теория', playing: 'Игра', training: 'Тренировка' },
   pages: {
     chords: 'Аккорды',
     scales: 'Гаммы и тональности',
@@ -591,6 +578,10 @@ export const practice: LocaleResources['practice'] = {
       barryHarris: 'Барри Харрис',
       jonny: 'Piano With Jonny',
     },
+    count_one: '{{count}} упражнение',
+    count_few: '{{count}} упражнения',
+    count_many: '{{count}} упражнений',
+    count_other: '{{count}} упражнения',
   },
   library: {
     edit: {
