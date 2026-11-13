@@ -210,8 +210,8 @@ export function TappableStaff({
                       aria-pressed={playback.playing === id}
                       onClick={() => play(id, bar.from, bar.to, barShown?.(i))}
                       className={cn(
-                        // The band is 24px; its reach grows upward to 44px on touch, clear of the notes'.
-                        "absolute z-20 flex items-start rounded-control px-1 choice pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-top-5 pointer-coarse:before:bottom-0 pointer-coarse:before:content-['']",
+                        // The band is 24px; its reach grows upward to 44px on touch, clear of the notes', as it shows on screen.
+                        "absolute z-20 flex items-start rounded-control px-1 choice pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:top-[calc(100%-44px/var(--fit,1))] pointer-coarse:before:bottom-0 pointer-coarse:before:content-['']",
                         bar.symbol
                           ? 'font-display text-sm font-semibold text-foreground'
                           : 'text-xs font-semibold text-muted-foreground tabular-nums',

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementSize, useFitZoom } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
@@ -36,7 +36,12 @@ function FittedRow({ children }: { children: ReactNode }) {
   const zoom = useFitZoom(room, drawn)
   return (
     <div ref={room} className="min-w-0">
-      <div ref={drawn} className="w-max" style={zoom < 1 ? { zoom } : undefined}>
+      {/* Its zoom as `--fit` too, so a reach drawn inside it (a bar's band) holds 44px on screen. */}
+      <div
+        ref={drawn}
+        className="w-max"
+        style={zoom < 1 ? ({ zoom, '--fit': zoom } as CSSProperties) : undefined}
+      >
         {children}
       </div>
     </div>
