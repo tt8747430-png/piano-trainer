@@ -58,9 +58,13 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
   const wanted = useDeferredValue(query)
   const names = useIndexNames()
   const index = useIndex(names)
-  const sections = useMemo((): Section[] => {
+  const { sections, missed } = useMemo((): { sections: Section[]; missed: boolean } => {
+    const places: Section = {
+      heading: t('suggested'),
+      options: index.filter((entry) => entry.kind === 'pages').map(result),
+    }
     if (wanted.trim() === '') {
-      return [
+      const opening = [
         {
           heading: t('recent'),
           options: recent.map((each): Option => ({
@@ -69,16 +73,17 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
             query: each,
           })),
         },
-        {
-          heading: t('suggested'),
-          options: index.filter((entry) => entry.kind === 'pages').map(result),
-        },
+        places,
       ].filter((section) => section.options.length > 0)
+      return { sections: opening, missed: false }
     }
-    return paletteGroups(searchIndex(index, wanted, typedEntry(wanted, names))).map((group) => ({
-      heading: t(`groups.${group.id}`),
-      options: group.entries.map(result),
-    }))
+    const found = paletteGroups(searchIndex(index, wanted, typedEntry(wanted, names))).map(
+      (group) => ({ heading: t(`groups.${group.id}`), options: group.entries.map(result) }),
+    )
+    // Nothing found is never a dead end: the places to go on from, under what was missed.
+    return found.length > 0
+      ? { sections: found, missed: false }
+      : { sections: [places], missed: true }
   }, [wanted, recent, index, names, t])
   const options = sections.flatMap((section) => section.options)
   const [active, setActive] = useState(0)
@@ -142,20 +147,22 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
           />
         </div>
         <div id={listId} role="listbox" aria-label={t('title')} className="overflow-y-auto p-2">
-          {sections.length === 0 ? (
-            <p className="px-3 py-6 text-center text-muted-foreground">{t('none')}</p>
-          ) : (
-            sections.map((section) => (
-              <PaletteSection
-                key={section.heading}
-                section={section}
-                active={current}
-                optionId={optionId}
-                onHover={(option) => setActive(options.indexOf(option))}
-                onChoose={choose}
-              />
-            ))
-          )}
+          {missed ? (
+            <div role="status" className="flex flex-col gap-1 px-3 pt-4 pb-3">
+              <p className="font-semibold text-pretty">{t('none', { query: wanted.trim() })}</p>
+              <p className="text-sm text-pretty text-muted-foreground">{t('noneHint')}</p>
+            </div>
+          ) : null}
+          {sections.map((section) => (
+            <PaletteSection
+              key={section.heading}
+              section={section}
+              active={current}
+              optionId={optionId}
+              onHover={(option) => setActive(options.indexOf(option))}
+              onChoose={choose}
+            />
+          ))}
         </div>
       </DialogContent>
     </Dialog>

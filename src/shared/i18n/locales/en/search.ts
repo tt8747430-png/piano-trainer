@@ -3,7 +3,10 @@ export const search = {
   // The palette's field: what it searches, and its hint.
   field: 'Search everything',
   placeholder: 'Songs, chords, scales, lessons…',
-  none: 'Nothing found.',
+  // Nothing found: what was missed, how to search instead, and the places to go on from below.
+  none: 'No results for “{{query}}”',
+  noneHint:
+    'Check the spelling, or try a song’s title, a chord like Cmaj7 or a scale like D minor.',
   // A song the learner archived, said on its row (ADR 0106).
   archived: 'Archived',
   // What the palette shows before anything is typed.

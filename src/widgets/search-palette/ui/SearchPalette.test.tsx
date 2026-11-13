@@ -161,7 +161,7 @@ describe('the Search palette', () => {
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
     await user.keyboard('{Control>}k{/Control}')
     await user.type(await field(), 'zzzz')
-    expect(await screen.findByText('Nothing found.')).toBeInTheDocument()
+    expect(await screen.findByText(/^No results for/)).toBeInTheDocument()
   })
 
   it('opens from a /search?q= link over Learn, on what the link names', async () => {
