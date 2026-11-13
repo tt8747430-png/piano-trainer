@@ -609,6 +609,11 @@ are reference only, but progressions are facts.
 - **Tabs that make a header taller are rejected;** a page's views sit in its content or take the title's place.
 - **The Profile is a tab.** Settings opens from its gear on a phone and sits at the sidebar's foot under Search.
 - **One place current:** "not such things as two highlights, this is bad ui".
+- **Search built to the canvas (AppLayers, 2026-11-13):** on a phone the app's bottom sheet (Search, its Close), fitting
+  what it holds; on a laptop a panel over the screen with the keys said at its foot. A framed field with Clear; before
+  typing, Recent searches as chips and three Suggestions (Continue: the next lesson, Chords, Metronome) in a card;
+  results grouped in cards under small capitals, a bold title over a small grey line; Nothing found says so with
+  Clear search. The list of every Practice page with icons and descriptions is gone.
 - **Search is a palette,** never a page. **Back means up,** to where the learner came from, else the parent.
 - **The pencil means one thing:** edit what the screen shows.
 

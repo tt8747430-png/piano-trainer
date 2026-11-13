@@ -8,6 +8,7 @@ export const search = {
   noneHint:
     'Check the spelling, or try a song’s title, a chord like Cmaj7 or a scale like D minor.',
   // A song the learner archived, said on its row (ADR 0106).
+  clear: 'Clear search',
   archived: 'Archived',
   // What the palette shows before anything is typed.
   recent: 'Recent searches',

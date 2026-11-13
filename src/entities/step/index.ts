@@ -14,5 +14,6 @@ export {
 } from './model/types'
 export { skillsOfStep, stepOfSkill } from './model/skills'
 export { StageMark } from './ui/StageMark'
+export { stepLink, type LinkedStep } from './model/step-link'
 export { StepLink } from './ui/StepLink'
 export { STAGE_PAINT, STEP_PAINT, type StepKind } from './ui/step-paint'
