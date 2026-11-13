@@ -52,7 +52,9 @@ export function CourseCard({ course, current }: { course: Course; current: boole
         )}
       </span>
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="font-semibold text-pretty">{localText(course.title, locale)}</span>
+        <span className="text-base/snug font-semibold text-pretty">
+          {localText(course.title, locale)}
+        </span>
         <span className="text-sm text-muted-foreground tabular-nums">{facts.join(' · ')}</span>
         {progress.done > 0 && !complete ? (
           <LearnedMeter progress={progress} className="mt-1" />
