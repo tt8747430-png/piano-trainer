@@ -116,7 +116,8 @@ export const practice: LocaleResources['practice'] = {
       inKey: 'Как {{numeral}} в {{key}}',
       group: { chord: 'Звуки аккорда', tension: 'Тенсии', avoid: 'Избегаемые' },
     },
-    chromatic: 'По полутонам',
+    chromatic: 'Хроматически',
+    fifths: 'По квинтовому кругу',
   },
   scales: {
     compare: { label: 'Сравнить с', none: 'Ни с чем' },

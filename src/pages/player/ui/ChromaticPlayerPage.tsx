@@ -23,7 +23,7 @@ export function ChromaticPlayerPage() {
     .join(' · ')
   return (
     <PlayerLayout
-      title={t('chromatic.title', { chords })}
+      title={t(choice.direction === 'fifths' ? 'chromatic.fifths' : 'chromatic.title', { chords })}
       onClose={close}
       view={search}
       player={player}

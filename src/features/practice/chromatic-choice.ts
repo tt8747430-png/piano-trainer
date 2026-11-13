@@ -5,7 +5,7 @@ import { CHORD_QUALITIES, type ChordQuality, type SpelledNote } from '@/shared/l
 // What a chromatic walk is, as its URL holds it: its chords, root and direction, and the walk's own
 // choices. Apart from its chart, so the router's validators carry no arrangement into the first paint.
 
-export const CHROMATIC_DIRECTIONS = ['up', 'down', 'both'] as const
+export const CHROMATIC_DIRECTIONS = ['up', 'down', 'both', 'fifths'] as const
 export type ChromaticDirection = (typeof CHROMATIC_DIRECTIONS)[number]
 
 /** At least one chord quality: a chromatic walk always walks a chord. */

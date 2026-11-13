@@ -125,7 +125,8 @@ export const practice = {
       inKey: 'As {{numeral}} in {{key}}',
       group: { chord: 'Chord tones', tension: 'Tensions', avoid: 'Avoid' },
     },
-    chromatic: 'Chromatic walk',
+    chromatic: 'Chromatically',
+    fifths: 'Circle of fifths',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
   },
   // Scales and keys: the run, the chords, the key.
