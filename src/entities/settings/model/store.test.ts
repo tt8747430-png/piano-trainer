@@ -43,7 +43,6 @@ const DEFAULTS = {
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
   paletteFolded: true,
-  paletteList: false,
   paletteCategory: null,
   editorMode: 'replace',
   midi: DEFAULT_MIDI,
@@ -158,7 +157,6 @@ describe('createSettingsStore', () => {
       editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
       paletteFolded: false,
-      paletteList: true,
       paletteCategory: 'clef',
       editorMode: 'insert',
       midi: {

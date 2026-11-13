@@ -52,7 +52,6 @@ describe('settings selectors', () => {
       lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: true,
-      paletteList: false,
       paletteCategory: null,
       editorMode: 'replace',
       midi: DEFAULT_MIDI,

@@ -9,7 +9,6 @@ import { useUp } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { EditToggle } from '@/widgets/mode-switch'
 import { exampleTarget } from '../model/editor-target'
 import {
   exampleBlock,
@@ -96,6 +95,7 @@ function ExampleScore({
 }) {
   const { t } = useTranslation('editor')
   const locale = useLocale()
+  const { t: tc } = useTranslation('common')
   const [target] = useState(() => {
     // The lesson as last written here, each change replacing its example in it; and what the example
     // could not hold, said once until it changes.
@@ -122,7 +122,11 @@ function ExampleScore({
   return (
     <ScoreEditor
       target={target}
-      done={<EditToggle editing onEdit={() => undefined} onDone={back} />}
+      done={
+        <Button variant="tool" className="rounded-pill px-4 font-semibold" onClick={back}>
+          {tc('editMode.done')}
+        </Button>
+      }
     />
   )
 }

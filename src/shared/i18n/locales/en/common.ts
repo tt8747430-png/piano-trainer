@@ -4,7 +4,7 @@ export const common = {
   progressGroup: 'Progress',
   back: 'Back',
   // Edit mode (Noji's, iOS's): a pencil in the bar enters it, a check leaves it.
-  editMode: { edit: 'Edit', done: 'Done' },
+  editMode: { label: 'Mode', play: 'Play', editing: 'Edit', edit: 'Edit', done: 'Done' },
   nav: {
     label: 'Main navigation',
     songs: 'Songs',

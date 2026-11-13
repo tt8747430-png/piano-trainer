@@ -12,9 +12,7 @@ describe('ToolKey', () => {
         <ToolKey label="Quarter note" pressed onClick={onClick}>
           ♩
         </ToolKey>
-        <ToolKey label="Rest" span="wide">
-          𝄽
-        </ToolKey>
+        <ToolKey label="Rest">𝄽</ToolKey>
         <ToolKey label="Dotted" disabled>
           .
         </ToolKey>
@@ -23,7 +21,6 @@ describe('ToolKey', () => {
     const quarter = screen.getByRole('button', { name: 'Quarter note' })
     expect(quarter).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Rest' })).not.toHaveAttribute('aria-pressed')
-    expect(screen.getByRole('button', { name: 'Rest' })).toHaveClass('col-span-2')
     expect(screen.getByRole('button', { name: 'Dotted' })).toBeDisabled()
     await user.click(quarter)
     expect(onClick).toHaveBeenCalledOnce()

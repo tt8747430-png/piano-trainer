@@ -1,2 +1,1 @@
-export { EditToggle } from './ui/EditToggle'
-export { ScoreEditToggle } from './ui/ScoreEditToggle'
+export { ModeSwitch } from './ui/ModeSwitch'

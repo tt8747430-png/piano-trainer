@@ -1,4 +1,4 @@
-import { ClipboardPaste, Copy, Delete, Scissors } from 'lucide-react'
+import { ClipboardPaste, Copy, Scissors } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -74,8 +74,7 @@ function usePasteSaid(): { readonly hint?: string; readonly blocked?: string } {
 }
 
 /**
- * What is done to what is chosen (Flat's second toolbar), never a mark put on it: Delete (the notes
- * or chord chosen, else the ones before the caret, as Backspace), Copy, Cut and Paste of what is chosen
+ * What is done to what is chosen (Flat's second toolbar), never a mark put on it: Copy, Cut and Paste of what is chosen
  * (the bars in the chord row, the notes on a staff; Paste greyed with its reason where the clip cannot
  * go, ADR 0114). A capsule floating over the music above the transport, as iOS's edit menu stands by
  * a selection: there while notes are chosen (in the chord row, the caret's bar
@@ -86,7 +85,6 @@ export function SelectionActions() {
   const { t } = useTranslation('editor')
   const { actions, takes } = useScoreEditorContext()
   const dispatch = actions.dispatch
-  const chords = useEditorState((state) => state.layer === 'chords')
   // Something to act on: notes chosen, the chord row's bars (the caret's at least), or the clip.
   const shown = useEditorState(
     (state) => state.selection !== null || state.layer === 'chords' || state.clip !== null,
@@ -101,12 +99,6 @@ export function SelectionActions() {
       aria-label={t('selection')}
       className="pointer-events-auto flex items-center gap-0.5 rounded-pill border border-border bg-raised px-1.5 py-0.5 elevation-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1"
     >
-      <EditButton
-        label={t(chords ? 'chord.delete' : 'deleteNotes')}
-        onClick={() => dispatch({ type: 'delete', back: true })}
-      >
-        <Delete aria-hidden />
-      </EditButton>
       <EditButton label={t('copy')} hint={copySaid} onClick={clip('copy')}>
         <Copy aria-hidden />
       </EditButton>

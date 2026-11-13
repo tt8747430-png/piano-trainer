@@ -3,14 +3,6 @@ import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from './primitives/tooltip'
 
-/** How far a key reaches in the grid: a wide key two columns, a tall one two rows, a row the whole row. */
-const SPAN = {
-  one: '',
-  wide: 'col-span-2',
-  tall: 'row-span-2 h-auto landscape-phone:h-auto',
-  row: 'col-span-full',
-} as const satisfies Record<string, string>
-
 /**
  * A palette's key: a big square of its glyph or icon, named by `label` for a screen reader and in a
  * tooltip under a pointer; with `pressed` a toggle, filled while on. A key that cannot act is not
@@ -23,7 +15,6 @@ export function ToolKey({
   tip = label,
   description,
   pressed,
-  span = 'one',
   tipSide = 'top',
   disabled,
   className,
@@ -36,7 +27,6 @@ export function ToolKey({
   /** What the key's face means, where it prints a term. */
   description?: string | undefined
   pressed?: boolean
-  span?: keyof typeof SPAN
   /** Where its tooltip opens: over it, or under it where it stands at the screen's top. */
   tipSide?: 'top' | 'bottom'
 } & Omit<
@@ -57,7 +47,6 @@ export function ToolKey({
             disabled={disabled}
             className={cn(
               'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
-              SPAN[span],
               className,
             )}
             {...props}

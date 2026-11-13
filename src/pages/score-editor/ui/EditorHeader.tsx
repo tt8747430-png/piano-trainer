@@ -1,69 +1,52 @@
-import { Play, Redo2, Settings, Square, Undo2, X } from 'lucide-react'
+import { Ellipsis, Redo2, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MidiButton } from '@/features/connect-midi'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { barAt } from '@/features/score-editor'
 import { Button } from '@/shared/ui/primitives/button'
-import { ScoreEditToggle } from '@/widgets/mode-switch'
-import { BarTitle } from '@/widgets/practice-player'
+import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
-/**
- * The editor's bar's lead, as the Player's (ADR 0115, R31-E Flat's): Close, the score's title from
- * 40rem, and Done.
- */
-export function EditorLead({ done }: { done?: ReactNode }) {
+/** The editor's bar's lead (its canvas): Close, the one way out. */
+export function EditorLead() {
   const { t } = useTranslation('common')
-  const { actions, meta, takes } = useScoreEditorContext()
-  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
-  const recording = takes.stage !== 'idle'
-  return (
-    <>
-      <Button
-        variant="tool"
-        size="icon"
-        aria-label={t('close')}
-        title={t('close')}
-        onClick={actions.close}
-      >
-        <X aria-hidden />
-      </Button>
-      {/* The title prints at the head of the score: in the bar from 40rem, where it has the room. */}
-      <span className="hidden min-w-0 sm:contents">
-        <BarTitle title={meta.title} />
-      </span>
-      {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
-    </>
-  )
-}
-
-/**
- * Play, the bar's one honey control (R31-E, Flat's): from the caret's bar to the end, Stop while it
- * sounds; it waits while a take records.
- */
-function PlayButton() {
-  const { t } = useTranslation('editor')
-  const { actions, meta, takes } = useScoreEditorContext()
-  const label = meta.playing ? t('stop') : t('play')
+  const { actions } = useScoreEditorContext()
   return (
     <Button
+      variant="tool"
       size="icon"
-      aria-label={label}
-      title={label}
-      disabled={takes.stage !== 'idle'}
-      className="rounded-pill"
-      onClick={actions.togglePlay}
+      aria-label={t('close')}
+      title={t('close')}
+      onClick={actions.close}
     >
-      {meta.playing ? <Square aria-hidden className="fill-current" /> : <Play aria-hidden />}
+      <X aria-hidden />
     </Button>
   )
 }
 
 /**
- * The editor's bar's end (R31-E, R32-B, R34, Flat's): the keyboard's controls, from 40rem the MIDI keyboard
- * (hidden without Web MIDI), then Play, Undo, Redo and the one gear, the score's acts and its Settings
- * (`EditorGear`). While a take records they wait for Stop.
+ * The bar's middle (its canvas): Play · Edit, the way back to the Player at the caret's bar; a
+ * lesson's example has its own Done there (`done`), back to its lesson.
+ */
+export function EditorMode({ done }: { done?: ReactNode }) {
+  const { t } = useTranslation('editor')
+  const { meta, takes } = useScoreEditorContext()
+  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
+  const recording = takes.stage !== 'idle'
+  return (
+    done ?? (
+      <ModeSwitch
+        pieceId={meta.id}
+        bar={bar}
+        waiting={recording ? t('recordingBar.label') : undefined}
+      />
+    )
+  )
+}
+
+/**
+ * The bar's end (its canvas, Flat's): Undo, Redo and ···, the score's Settings (`EditorGear`):
+ * what the score does not print. Play, the keys and Delete are the selection strip's. While a
+ * take records they wait for Stop.
  */
 export function EditorActions() {
   const { t } = useTranslation('editor')
@@ -73,13 +56,6 @@ export function EditorActions() {
   const recording = takes.stage !== 'idle'
   return (
     <>
-      {/* The keyboard's controls at every size (R34, Songscription's): the chord held, Sustain and
-          Keyboard; a phone held upright has the MIDI keyboard in Settings › Connect a piano. */}
-      <PageKeyboardTools variant="tool" pedalsFromSm />
-      <span className="contents max-sm:hidden">
-        <MidiButton variant="tool" />
-      </span>
-      <PlayButton />
       <Button
         variant="tool"
         size="icon"
@@ -109,7 +85,7 @@ export function EditorActions() {
         disabled={recording}
         onClick={() => view.setGear(view.gear === null ? 'main' : null)}
       >
-        <Settings aria-hidden />
+        <Ellipsis aria-hidden />
       </Button>
     </>
   )

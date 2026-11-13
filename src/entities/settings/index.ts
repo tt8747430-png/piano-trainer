@@ -78,7 +78,6 @@ export {
   selectEditing,
   selectSectionFolded,
   selectPaletteFolded,
-  selectPaletteList,
   selectPaletteCategory,
   selectEditorMode,
   selectSidebar,

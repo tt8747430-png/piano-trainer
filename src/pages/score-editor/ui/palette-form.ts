@@ -3,12 +3,11 @@ import { modifierCaps, useShortcutsPlatform } from '@/shared/lib/shortcuts'
 import { toolCaps, type Tool } from '../model/shortcuts'
 
 /**
- * How the palette's keys are laid out where they stand (ADR 0114, R31-E, R32-C, Flat's): `grid`, a
- * section's table of equal bordered cells under its title, each key its picture alone, named in its
- * tooltip; `list`, Flat's list view, each key a bordered row of its picture and its name, two to a
- * line; `bar`, one row (the phone's folded palette), the sections' titles left out.
+ * How the palette's keys are laid out where they stand (its canvas, Flat's): `grid`, a section's
+ * tiles wrapping under its title, each key its picture alone, named in its tooltip; `bar`, one row
+ * (the phone's folded palette), the sections' titles left out.
  */
-export type PaletteForm = 'grid' | 'list' | 'bar'
+export type PaletteForm = 'grid' | 'bar'
 
 export const PaletteFormContext = createContext<PaletteForm>('grid')
 

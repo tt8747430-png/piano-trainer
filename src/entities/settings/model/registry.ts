@@ -28,7 +28,6 @@ export type SettingsPageId = (typeof SETTINGS_PAGES)[number]
 export const NOT_PREFERENCES = [
   'sidebar',
   'paletteFolded',
-  'paletteList',
   'paletteCategory',
   'editorMode',
   'foldedSections',

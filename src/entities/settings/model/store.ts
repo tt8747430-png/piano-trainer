@@ -88,7 +88,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 40
+export const SETTINGS_VERSION = 41
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -116,7 +116,6 @@ export function createSettingsStore({
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
         paletteFolded: true,
-        paletteList: false,
         paletteCategory: null,
         editorMode: 'replace',
         midi: DEFAULT_MIDI,
@@ -421,7 +420,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteFolded:
       typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
-    paletteList: typeof saved.paletteList === 'boolean' ? saved.paletteList : current.paletteList,
     paletteCategory: paletteCategory(saved.paletteCategory),
     editorMode: isStartMode(saved.editorMode) ? saved.editorMode : current.editorMode,
     midi: midiSettings(saved.midi),

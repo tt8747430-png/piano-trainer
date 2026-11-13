@@ -5,7 +5,7 @@ export const common: LocaleResources['common'] = {
   skipToContent: 'К содержимому',
   progressGroup: 'Прогресс',
   back: 'Назад',
-  editMode: { edit: 'Изменить', done: 'Готово' },
+  editMode: { label: 'Режим', play: 'Играть', editing: 'Правка', edit: 'Изменить', done: 'Готово' },
   nav: {
     label: 'Основная навигация',
     songs: 'Песни',

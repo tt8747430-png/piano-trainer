@@ -46,6 +46,10 @@ owner's, typos fixed.
 - **Recording:** the learner chooses what plays along and what shows. The pedal prints one mark per press.
 - **The Player in Edit (canvas 123, 2026-11-11):** the bar is the Player's (✕, Play · Edit, Undo, Redo, ···); a
   selection strip with Play from here heads the palette; seven named categories with drawn note icons; keys under it.
+- **The editor built to its canvas (loop, round 10):** the bar is ✕, Play · Edit in the middle, Undo, Redo and
+  ··· (Score settings); the palette's head is the selection strip (what the caret is on, Delete, Piano keys, Play
+  from here, the one honey control); the categories by name over the tools; every tool a 48px sand tile, the chosen
+  in ink. Flat's list view and the sections that folded on a laptop are gone (`.scratch/r39/plan/editor-port.md`).
 - **The editor's draft (canvas 135, 2026-11-11):** "no roles, no edit mode": a built-in song's original is edited by an editor as a draft under a Publishing pill with Publish…, Versions and Discard changes; what reaches every learner asks first.
 
 ## Pickers and tempo

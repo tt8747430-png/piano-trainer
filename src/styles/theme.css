@@ -1012,10 +1012,11 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
-  /* The Player's bar (its canvas): Close, the views' pill in the middle, the gear; bare over the
-     paper, no band and no hairline. */
+  /* The Player's and the editor's bar (their canvases): Close, a pill in the middle of the room the
+     ends leave (so a wider end never runs under it), the end's buttons; bare over the paper, no band
+     and no hairline. */
   &:has(> [data-area='middle']) {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: 'lead middle actions';
     &::before {
       border-bottom: 0;
@@ -1024,6 +1025,7 @@
   }
   & > [data-area='middle'] {
     grid-area: middle;
+    justify-self: center;
   }
   @variant max-sm {
     column-gap: --spacing(1);

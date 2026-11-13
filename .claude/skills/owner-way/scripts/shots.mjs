@@ -152,6 +152,9 @@ for (const size of SIZES) {
           () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
         )
         if (over > 0) problems.push(`${label}: ${over}px wider than the screen`)
+        // A build error shows Vite's overlay over the screen, which no other check sees.
+        if (await page.evaluate(() => document.querySelector('vite-error-overlay') !== null))
+          problems.push(`${label}: the dev server shows a build error`)
       }
       await context.close()
     }

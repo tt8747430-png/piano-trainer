@@ -7,7 +7,8 @@ import { cn } from '@/shared/lib'
 export interface PillView<V extends string> {
   readonly value: V
   readonly label: string
-  readonly icon: LucideIcon
+  /** Its picture on a phone; without one, its word at every size. */
+  readonly icon?: LucideIcon | undefined
   readonly reason?: string | undefined
 }
 
@@ -52,8 +53,8 @@ export function ViewPill<V extends string>({
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
           )}
         >
-          <Icon aria-hidden className="size-5 sm:hidden" />
-          <span className="max-sm:hidden">{name}</span>
+          {Icon ? <Icon aria-hidden className="size-5 sm:hidden" /> : null}
+          <span className={Icon ? 'max-sm:hidden' : 'px-1'}>{name}</span>
         </Radio.Root>
       ))}
     </RadioGroup>

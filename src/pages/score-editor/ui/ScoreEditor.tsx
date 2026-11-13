@@ -28,7 +28,7 @@ import { useAnswerRecord } from '../model/use-record-take'
 import { CaretLine } from './CaretLine'
 import { EditorGear, type EditorDraft } from './EditorGear'
 import { SelectionActions } from './SelectionActions'
-import { EditorActions, EditorLead } from './EditorHeader'
+import { EditorActions, EditorLead, EditorMode } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
 import { EditorPanel, PaletteSheet } from './EditorPalette'
 import { EditorSheet } from './EditorSheet'
@@ -168,7 +168,11 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
       {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
           places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <ScoreBar lead={<EditorLead done={done} />} actions={<EditorActions />} />
+        <ScoreBar
+          lead={<EditorLead />}
+          middle={<EditorMode done={done} />}
+          actions={<EditorActions />}
+        />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         <div
