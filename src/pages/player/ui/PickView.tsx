@@ -26,18 +26,15 @@ const PICKED: readonly MusicView[] = ['sheet', 'grid', 'diagrams', 'lyrics']
 export function PickView({
   shown,
   needs,
-  openAtStart,
 }: {
   /** The view shown: the one saved, or the one it falls back to where the music cannot show it. */
   shown: MusicView
   /** The views the music cannot show, with what each needs. */
   needs: ViewNeeds
-  /** Open as the screen opens: a piece's, where the learner asks for it. */
-  openAtStart: boolean
 }) {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
-  const [open, setOpen] = useState(openAtStart)
+  const [open, setOpen] = useState(false)
   const name = t(`views.short.${shown}`)
   // What a greyed view needs, said in the panel: a phone shows no tooltip.
   const greyed = PICKED.flatMap((view) => {

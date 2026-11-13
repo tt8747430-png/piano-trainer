@@ -13,36 +13,20 @@ async function openPage(user: ReturnType<typeof userEvent.setup>, row: RegExp) {
 }
 
 describe('the Player’s settings, its gear their one home (B7, R32)', () => {
-  it('sets how the Player always plays: count-in, cursor, the pedal; the hands’ skin and the other hand’s look', async () => {
+  it('sets how the Player always plays: the count-in, and the other hand’s look', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
     const playback = await openPage(user, /^Playback/)
     await user.click(within(playback).getByRole('radio', { name: 'Silent' }))
-    await user.click(within(playback).getByRole('radio', { name: 'Automatic' }))
     await user.click(within(playback).getByRole('button', { name: 'Back' }))
-    // The hands' own page (R36): the skin they are drawn in, and how the hand not practised shows.
+    // The hands' own page (R36): how the hand not practised shows.
     await user.click(
       within(await screen.findByRole('dialog')).getByRole('button', { name: /^Hands/ }),
     )
     const hands = await screen.findByRole('dialog')
-    await user.click(within(hands).getByRole('radio', { name: 'Dark' }))
     await user.click(within(hands).getByRole('radio', { name: 'Hide' }))
-    await user.click(within(hands).getByRole('button', { name: 'Back' }))
-    await user.click(
-      within(await screen.findByRole('dialog')).getByRole('button', { name: /^Score view/ }),
-    )
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Cursor' })).getByRole('radio', {
-        name: 'By note',
-      }),
-    )
-    expect(settingsStore.getState().playback).toMatchObject({
-      countdown: 'visual',
-      cursor: 'beats',
-      pedal: 'automatic',
-    })
+    expect(settingsStore.getState().playback).toMatchObject({ countdown: 'visual' })
     expect(settingsStore.getState().otherHand).toEqual({ look: 'hide', play: true })
-    expect(settingsStore.getState().handsView).toEqual({ skin: 'dark' })
   })
 
   it('links to the Metronome, whose sound and beats the Player’s click plays', async () => {

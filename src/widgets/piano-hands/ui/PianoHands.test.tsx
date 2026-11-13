@@ -12,7 +12,6 @@ const props = {
   marks: new Map(),
   wrong: undefined,
   faded: null,
-  skin: 'medium-light',
   range: null,
 } as const
 

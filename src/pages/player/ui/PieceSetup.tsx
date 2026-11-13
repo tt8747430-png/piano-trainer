@@ -63,7 +63,6 @@ export function PieceSetup({
       id: 'staves',
       label: t('staves.title'),
       icon: Rows3,
-      description: t('settingsPage.about.staves'),
       value:
         playing.length === 0
           ? t('staves.none')
@@ -78,7 +77,6 @@ export function PieceSetup({
       id: 'accompaniment',
       label: t('settingsPage.accompaniment'),
       icon: Music2,
-      description: t('settingsPage.about.accompaniment'),
       content: (
         <Accompaniment
           chordSize={chordSize}

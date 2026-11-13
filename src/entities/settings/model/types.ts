@@ -70,53 +70,29 @@ export interface OtherHandSettings {
 /** The other hand dimmed, and heard, as the Player always did. */
 export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
 
-/** The hands at the keys (R36): the skin they are drawn in, four tones from light to dark. */
-export const SKIN_TONES = ['light', 'medium-light', 'medium-dark', 'dark'] as const
-export type SkinTone = (typeof SKIN_TONES)[number]
-export interface HandsViewSettings {
-  readonly skin: SkinTone
-}
-export const DEFAULT_HANDS_VIEW: HandsViewSettings = { skin: 'medium-light' }
-
 /**
  * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
  * on the screen; or counted down on the screen alone, unheard.
  */
 export const COUNTDOWNS = ['none', 'audible', 'visual'] as const
 export type Countdown = (typeof COUNTDOWNS)[number]
-/**
- * How the Player's cursor moves (B7, the reference's Cursor): none drawn; a step at each beat its
- * notes start on; or gliding with the music (ADR 0096).
- */
-export const CURSORS = ['none', 'beats', 'continuous'] as const
-export type Cursor = (typeof CURSORS)[number]
-/** After how long a view scrolled by hand goes back to following the music, in seconds; 0 never. */
-export const FOLLOW_RETURNS = [0, 3, 5, 10] as const
-export type FollowReturn = (typeof FOLLOW_RETURNS)[number]
 /** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
 export const SPEED_STEPS = [2, 5, 10] as const
 export type SpeedStep = (typeof SPEED_STEPS)[number]
 
 /**
- * How the Player always plays (B7, its settings page): its count-in, its cursor and speed training's
- * step. The sustain pedal has no setting (R37): it plays as marked, else automatically (`withPedal`).
+ * How the Player always plays (B7, its settings page): its count-in and speed training's step. No
+ * pedal, cursor or scrolling settings (R37): the pedal plays as marked, else automatically; the cursor
+ * moves note by note; the views follow the music, a scroll by hand pausing them until Back to the music.
  */
 export interface PlaybackSettings {
   readonly countdown: Countdown
-  readonly cursor: Cursor
   readonly speedStep: SpeedStep
-  /** The views keep the music playing in sight (A37); a scroll by hand pauses it. */
-  readonly follow: boolean
-  /** After a scroll by hand, back to the playhead after this many seconds; 0 waits for its pill. */
-  readonly followReturn: FollowReturn
 }
-/** No count-in, the cursor gliding, 5% a pass: the Player as it always was. */
+/** No count-in, 5% a pass. */
 export const DEFAULT_PLAYBACK: PlaybackSettings = {
   countdown: 'none',
-  cursor: 'continuous',
   speedStep: 5,
-  follow: true,
-  followReturn: 5,
 }
 
 /** How every trainer goes, whatever it asks. */
@@ -273,8 +249,6 @@ export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly music: MusicView
   readonly diagrams: DiagramsMode
-  /** A piece's Player opens with its View menu open (Chordify's "Show this when opening a song"). */
-  readonly askOnOpen: boolean
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -289,8 +263,6 @@ export interface ScoreViewSettings {
    * the music on it; off, the keys, which a tap plays.
    */
   readonly hands: boolean
-  /** The learner's typed marks on the score (R29 B8). */
-  readonly annotations: boolean
 }
 
 /**
@@ -302,14 +274,12 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
-  askOnOpen: false,
   chordNames: true,
   lyrics: true,
   pinned: true,
   textSize: 100,
   keys: true,
   hands: false,
-  annotations: true,
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
@@ -376,7 +346,6 @@ export interface SettingsState {
   scoreView: ScoreViewSettings
   /** With one hand practised, how the other looks and whether it is heard (A35). */
   otherHand: OtherHandSettings
-  handsView: HandsViewSettings
   /** How the Player always plays: count-in, cursor, pedal, speed training's step (B7). */
   playback: PlaybackSettings
   metronome: MetronomeSettings
@@ -545,9 +514,7 @@ export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
-export const isSkinTone = isOneOf(SKIN_TONES)
 export const isCountdown = isOneOf(COUNTDOWNS)
-export const isCursor = isOneOf(CURSORS)
 export const isSpeedStep = isOneOf(SPEED_STEPS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
 export const isSubdivision = isOneOf(SUBDIVISIONS)

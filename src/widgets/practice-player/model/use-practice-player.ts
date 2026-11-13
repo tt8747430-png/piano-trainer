@@ -8,7 +8,6 @@ import {
   selectSound,
   useSettings,
   useSettingsStoreApi,
-  type Cursor,
 } from '@/entities/settings'
 import {
   hiddenStaves,
@@ -81,8 +80,6 @@ export interface PracticePlayer {
   readonly positions: boolean
   /** The click while the music plays: this visit's (ADR 0111), else the learner's saved one. */
   readonly click: boolean
-  /** How the cursor follows the music (B7): none, a step a beat group, or gliding. */
-  readonly cursor: Cursor
   /** The music as played: its pedal as the settings say (A27). */
   readonly performance: Performance
   /** The keys sounding only under the pedal at the cursor, drawn apart from a hand's (A27). */
@@ -248,7 +245,6 @@ export function usePracticePlayer(
     names: toggles.namedNotes,
     positions: toggles.positions,
     click,
-    cursor: playback.cursor,
     performance,
     pedalDown:
       pedalSpanAt(performance.pedal, performance.beatGroups[state.beatGroup]?.tick ?? 0) !== null,

@@ -152,25 +152,8 @@ describe('while Diagrams plays (ADR 0108)', () => {
   })
 })
 
-describe('Show this when opening a song (ADR 0108, R29)', () => {
-  it('opens a song’s Player with Pick your view open, once asked to, and a walk’s as it was', async () => {
-    const user = userEvent.setup()
-    const storage = createMemoryStorage()
-    const first = await renderApp('/play/silent', { storage })
-    // A setting, so on the Player's Settings › Display, never in the popover (A4).
-    await openView(user, 'Sheet')
-    expect(screen.queryByRole('checkbox', { name: 'Show this when opening a song' })).toBeNull()
-    act(() => setScoreView(first.settingsStore, { askOnOpen: true }))
-    first.unmount()
-    const song = await renderApp('/play/bz5', { storage })
-    expect(await screen.findByRole('dialog', { name: 'Pick your view' })).toBeInTheDocument()
-    song.unmount()
-    await renderApp('/play/walk', { storage })
-    await screen.findByRole('button', { name: 'View: Sheet' })
-    expect(screen.queryByRole('dialog', { name: 'Pick your view' })).not.toBeInTheDocument()
-  })
-
-  it('opens a song’s Player with Pick your view closed, as it is by default', async () => {
+describe('Pick your view as a song opens (ADR 0108)', () => {
+  it('opens a song’s Player with Pick your view closed', async () => {
     await renderApp('/play/bz5')
     await screen.findByRole('button', { name: 'View: Sheet' })
     expect(screen.queryByRole('dialog', { name: 'Pick your view' })).not.toBeInTheDocument()

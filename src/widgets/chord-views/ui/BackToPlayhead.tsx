@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import type { Follow } from '../model/use-follow'
 
 /**
- * "Back to the playhead" (A37): while a scroll by hand has paused following, a pill at the foot of
+ * "Back to the music" (A37): while a scroll by hand has paused following, a pill at the foot of
  * the view, above the transport, that brings the music playing back into sight.
  */
 export function BackToPlayhead({ follow }: { follow: Follow }) {

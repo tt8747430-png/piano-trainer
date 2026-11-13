@@ -14,9 +14,9 @@ and the Diagrams view scrolling and jumping under a finger.
 
 - **Four views** (`scoreView.music`): **Sheet music**, **Chords over lyrics**, **Diagrams** and **Grid**, chosen in
   **Pick your view** (`PickView`, Chordify's): the View in the Player's foot (ADR 0105), named by the view shown,
-  opening a panel of the four side by side, a picture of the one chosen, Show this when opening a song, and Done. A
-  view the music cannot show is greyed with what it needs, and a saved one falls back. Show this when opening a song
-  opens a piece's Player with the panel. The editor shows the sheet music alone.
+  opening a panel of the four side by side, a picture of the one chosen, and Done. A
+  view the music cannot show is greyed with what it needs, and a saved one falls back. A song opens in the view
+  saved, the panel closed (R37: no ask-on-open). The editor shows the sheet music alone.
 - **What each view shows** is the Player's Settings › Score view, the shown view's own: the sheet music's parts (each
   staff by its name, Chord symbols, Chord positions, Lyrics, Finger numbers, Note names); Over lyrics' Diagrams pinned
   and Text size; Diagrams' Mode (Animated · Summary) and Lyrics; the Grid's Lyrics. The layout is the sheet's pill

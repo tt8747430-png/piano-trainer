@@ -41,7 +41,6 @@ const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>
   setSound: ['sound.recording'],
   setStaffVolume: ['sound.staves'],
   setOtherHand: ['otherHand.look'],
-  setHandsView: ['handsView.skin'],
   setPlayback: ['playback.countdown'],
   setAutoNext: ['trainer.autoNext'],
   setKeyboard: ['keyboard.keySize', 'keyboard.typing'],

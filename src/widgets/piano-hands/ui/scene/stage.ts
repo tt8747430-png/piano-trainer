@@ -15,7 +15,6 @@ import {
 } from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import type { SkinTone } from '@/entities/settings'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import type { Midi } from '@/shared/lib/music'
 import { keyFill, type KeyFill, type KeyMark } from '@/shared/ui'
@@ -49,7 +48,6 @@ export interface StageInput {
   readonly wrong: ReadonlySet<Midi> | undefined
   /** The hand not practised, faded to a third. */
   readonly faded: Side | null
-  readonly skin: SkinTone
   /** The music's lowest and highest keys, for the camera. */
   readonly range: { readonly low: Midi; readonly high: Midi } | null
 }
@@ -60,16 +58,8 @@ export interface Stage {
   dispose(): void
 }
 
-/**
- * The skin tones (R36), as the model's material: four, light to dark, the choice the learner's
- * (Settings › Hands).
- */
-const SKIN: Readonly<Record<SkinTone, string>> = {
-  light: '#f1c9b0',
-  'medium-light': '#d9a77f',
-  'medium-dark': '#a8704a',
-  dark: '#6b4228',
-}
+/** The hands' one tone (R37: no skin tone, one neutral hand): a warm clay, read on either theme. */
+const SKIN = '#c7b8a8'
 
 /** A nail: the skin's tone toward a pale pink. */
 const NAIL = '#f2d8d2'
@@ -151,9 +141,9 @@ interface DrawnHand {
 const approach = (from: number, to: number, k: number) =>
   Math.abs(to - from) < 1e-5 ? to : from + (to - from) * k
 
-/** A skin tone's paints: the skin, and its nails toward a pale pink. */
-function dressing(tone: SkinTone): { readonly skin: Color; readonly nail: Color } {
-  const skin = new Color().setStyle(SKIN[tone], SRGBColorSpace)
+/** The hands' paints: the skin, and its nails toward a pale pink. */
+function dressing(): { readonly skin: Color; readonly nail: Color } {
+  const skin = new Color().setStyle(SKIN, SRGBColorSpace)
   return { skin, nail: skin.clone().lerp(new Color().setStyle(NAIL, SRGBColorSpace), 0.6) }
 }
 
@@ -252,9 +242,8 @@ export function createStage(
   let last = 0
   let disposed = false
 
-  let dressedIn = now.skin
   const dress = (hand: DrawnHand) => {
-    const { skin, nail } = dressing(dressedIn)
+    const { skin, nail } = dressing()
     hand.skin.color.copy(skin)
     hand.nail.color.copy(nail)
   }
@@ -449,10 +438,6 @@ export function createStage(
         apart = handsApart(part)
       }
       if (notesChanged || rangeChanged) framing = frame(size, next.range, apart)
-      if (next.skin !== dressedIn) {
-        dressedIn = next.skin
-        for (const hand of [hands.rh, hands.lh]) if (hand) dress(hand)
-      }
       wake()
     },
     resize: (width, height) => {

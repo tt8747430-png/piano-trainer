@@ -50,7 +50,7 @@ export interface InnerPage {
  * The Player's one Settings (R29, Flat's one menu): its gear and the sheet it opens. The first page
  * is `children`, the music's own choices, then one list of its pages (`music`, the screen's own, and
  * how the Player works, `SettingsExtrasContext`), ranked by what a pianist reaches for most, each
- * with a line on what it controls and what it is set to (R32), then the acts on this music. On a laptop it is a panel at the right. The screen's own inner pages
+ * with what it is set to and no line under it (an explanation is an ⓘ), then the acts on this music. On a laptop it is a panel at the right. The screen's own inner pages
  * (`inner`, by the page `page` names) open in the same sheet, so a sheet never opens over a sheet.
  */
 export function SettingsSheet({
@@ -126,13 +126,12 @@ export function SettingsSheet({
             {children}
             {rows.length > 0 || actsIn('play').length > 0 ? (
               <SettingsGroup flush>
-                {rows.map(({ id, label, icon, description, value, render }) =>
+                {rows.map(({ id, label, icon, value, render }) =>
                   // A row to a setting's home elsewhere is a link; the sheet's own pages turn in it.
                   render ? (
                     <RowLink
                       key={id}
                       title={label}
-                      detail={description}
                       value={value}
                       icon={icon}
                       paint={PAGE_PAINT[id] ?? 'sky'}
@@ -142,7 +141,6 @@ export function SettingsSheet({
                     <RowButton
                       key={id}
                       title={label}
-                      detail={description}
                       value={value}
                       icon={icon}
                       paint={PAGE_PAINT[id] ?? 'sky'}

@@ -12,10 +12,9 @@ export const player = {
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
   views: {
-    backToPlayhead: 'Back to the playhead',
+    backToPlayhead: 'Back to the music',
     pick: 'Pick your view',
     pickNote: 'How the song is shown while you play.',
-    showOnOpen: 'Show this when opening a song',
     done: 'Done',
     short: { sheet: 'Sheet', grid: 'Grid', diagrams: 'Diagrams', lyrics: 'Lyrics' },
     label: 'Show the music as',
@@ -228,17 +227,6 @@ export const player = {
     bar: 'Bar {{bar}}',
   },
   settingsPage: {
-    follow: {
-      label: 'Follow the music',
-      detail: 'Keeps the passage being played in view.',
-      info: 'Grid and Chords over lyrics keep the line being played in view. Scrolling by hand pauses following until you return to the playhead.',
-      return: 'Return to the playhead',
-      returnInfo: 'How long after a manual scroll the view resumes following the music.',
-      off: 'Never',
-      seconds: 'After {{count}} s',
-    },
-    annotations: 'Annotations',
-    annotationsDetail: 'Shows the text and circles you have added to the score.',
     open: 'Player settings',
     whilePlaying: 'While you play',
     songGroup: 'This song',
@@ -253,22 +241,6 @@ export const player = {
     playback: 'Playback',
     display: 'Score view',
     hands: 'Hands',
-    skin: {
-      label: 'Skin',
-      detail: 'The tone the hands at the keys are drawn in.',
-      light: 'Light',
-      'medium-light': 'Medium light',
-      'medium-dark': 'Medium dark',
-      dark: 'Dark',
-    },
-    about: {
-      display: 'Layout, cursor and what appears on the score',
-      hands: 'The hands at the keys, and the hand you don’t play',
-      playback: 'Count-in, metronome and practice tempo',
-      staves: 'Which staves sound and appear, and their levels',
-      accompaniment: 'Pattern, chord voicing and swing',
-      piano: 'Key size, note names and pedals',
-    },
     countdown: {
       label: 'Count-in',
       detail: 'A bar counted before the music begins.',
@@ -276,14 +248,6 @@ export const player = {
       none: 'Off',
       audible: 'Audible',
       visual: 'Silent',
-    },
-    cursor: {
-      label: 'Cursor',
-      detail: 'How the playhead moves with the music.',
-      info: 'Continuous: it glides with the beat. By note: it steps to each note as it sounds. Off: no playhead.',
-      none: 'Off',
-      beats: 'By note',
-      continuous: 'Continuous',
     },
     keys: 'Show the keyboard',
     otherHand: {

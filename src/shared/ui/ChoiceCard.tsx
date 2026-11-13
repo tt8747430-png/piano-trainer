@@ -78,7 +78,7 @@ export function ChoiceCard<V extends string>({
               <RadioGroupItem
                 id={optionId}
                 value={option.value}
-                className="relative before:absolute before:-inset-3 before:content-['']"
+                className="relative before:absolute before:-inset-3.5 before:content-['']"
               />
               <span className="flex min-w-0 flex-col">
                 <span className={cn('break-words')}>{option.label}</span>

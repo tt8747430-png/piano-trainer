@@ -29,7 +29,6 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
   DEFAULT_CHORD_PLAYER,
-  DEFAULT_HANDS_VIEW,
   defaultKeyboard,
   type SettingsState,
 } from './types'
@@ -60,7 +59,6 @@ describe('settings selectors', () => {
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
       otherHand: DEFAULT_OTHER_HAND,
-      handsView: DEFAULT_HANDS_VIEW,
       playback: DEFAULT_PLAYBACK,
       metronome: DEFAULT_METRONOME,
       progressions: DEFAULT_PROGRESSIONS,

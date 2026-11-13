@@ -17,7 +17,6 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { clearAnnotations, setAnnotation } from '@/features/annotate'
-import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import {
   beatGroupInBar,
@@ -78,7 +77,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   // Annotate (R29 B8): the learner's typed marks, shown as Display says; the bar while marking.
   const pieces = usePiecesStoreApi()
   const marks = usePieces((state) => state.annotations[piece.id]) ?? NO_MARKS
-  const marksShown = useSettings((state) => selectScoreView(state).annotations)
   const [annotating, setAnnotating] = useState(false)
   const singles = (performance.staves ?? []).map((_, place) => singleStaff(place))
   const solo =
@@ -161,7 +159,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
         onSelect: () => shared.share(sharing),
       }
     : undefined
-  const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   const files = useSongExport(piece)
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
@@ -219,8 +216,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
         musicXml={files.musicXml}
         share={share}
         status={shared.said ? <ShareSaid said={shared.said} /> : null}
-        // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
-        openView={askView}
         display={
           isSingleStaff(piece) ? (
             <ClefChoice value={choice.clef} onChange={(clef) => changeSetup({ clef })} />
@@ -231,7 +226,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             <SwingField swing={search.swing} onSwing={player.setSwing} />
           ) : undefined
         }
-        annotations={marksShown || annotating ? marks : undefined}
+        annotations={marks}
         annotating={
           annotating ? (
             <AnnotateBar

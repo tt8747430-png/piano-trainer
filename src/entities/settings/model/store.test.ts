@@ -13,7 +13,6 @@ import {
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_OTHER_HAND,
-  DEFAULT_HANDS_VIEW,
   DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
@@ -51,7 +50,6 @@ const DEFAULTS = {
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
   otherHand: DEFAULT_OTHER_HAND,
-  handsView: DEFAULT_HANDS_VIEW,
   playback: DEFAULT_PLAYBACK,
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
@@ -77,7 +75,7 @@ describe('createSettingsStore', () => {
     expect(
       restored({ playback: { countdown: 'loud', cursor: 'beats', pedal: 'down', speedStep: 3 } })
         .playback,
-    ).toEqual({ ...DEFAULT_PLAYBACK, cursor: 'beats' })
+    ).toEqual(DEFAULT_PLAYBACK)
   })
 
   it('keeps how the other hand looks and plays where still valid, dimmed and played otherwise (A35)', () => {
@@ -136,10 +134,7 @@ describe('createSettingsStore', () => {
       },
       playback: {
         countdown: 'visual',
-        cursor: 'beats',
         speedStep: 10,
-        follow: false,
-        followReturn: 3,
       },
       otherHand: { look: 'show', play: false },
       sound: { staves: { bass: 35, staff0: 0 }, recording: 60, click: 5 },
@@ -193,16 +188,13 @@ describe('createSettingsStore', () => {
         layout: 'vertical',
         music: 'grid',
         diagrams: 'summary',
-        askOnOpen: true,
         chordNames: false,
         lyrics: false,
         pinned: false,
         textSize: 130,
         keys: false,
         hands: true,
-        annotations: false,
       },
-      handsView: { skin: 'dark' },
       metronome: {
         bpm: 72,
         meter: '6/8',
@@ -264,7 +256,6 @@ describe('createSettingsStore', () => {
           layout: 'page',
           music: 'chart',
           diagrams: 'carousel',
-          askOnOpen: 'yes',
           chordNames: false,
           hidden: ['bass'],
         },
@@ -273,25 +264,19 @@ describe('createSettingsStore', () => {
       layout: 'page',
       music: 'sheet',
       diagrams: 'animated',
-      askOnOpen: false,
       chordNames: false,
       lyrics: true,
       pinned: true,
       textSize: 100,
       keys: true,
       hands: false,
-      annotations: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
   })
 
-  it('shows the keys, not the hands, until the learner turns the hands on, in a skin tone it knows (R36)', () => {
+  it('shows the keys, not the hands, until the learner turns the hands on (R36)', () => {
     expect(DEFAULT_SCORE_VIEW.hands).toBe(false)
-    expect(DEFAULT_HANDS_VIEW).toEqual({ skin: 'medium-light' })
     expect(restored({ scoreView: { hands: 'yes' } }).scoreView.hands).toBe(false)
-    expect(restored({ handsView: { skin: 'dark' } }).handsView).toEqual({ skin: 'dark' })
-    expect(restored({ handsView: { skin: 'green' } }).handsView).toEqual(DEFAULT_HANDS_VIEW)
-    expect(restored({ handsView: 'dark' }).handsView).toEqual(DEFAULT_HANDS_VIEW)
   })
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
@@ -338,7 +323,7 @@ describe('createSettingsStore', () => {
   })
 
   it('opens Diagrams animated, and a song in the view saved, asking nothing (ADR 0108)', () => {
-    expect(DEFAULT_SCORE_VIEW).toMatchObject({ diagrams: 'animated', askOnOpen: false })
+    expect(DEFAULT_SCORE_VIEW).toMatchObject({ diagrams: 'animated' })
     expect(restored({ scoreView: { diagrams: 'summary' } }).scoreView.diagrams).toBe('summary')
   })
 

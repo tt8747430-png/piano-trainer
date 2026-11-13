@@ -6,8 +6,6 @@ export interface SettingsRow {
   readonly id: string
   readonly label: string
   readonly icon: LucideIcon
-  /** What the page controls, in one line under its name. */
-  readonly description?: string | undefined
   /** What it is set to now, at the row's end. */
   readonly value?: string | undefined
 }

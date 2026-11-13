@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
-  selectHandsView,
+  selectOtherHand,
   selectPlayback,
   selectScoreView,
   selectTipSeen,
@@ -63,7 +63,7 @@ import {
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
-import { PlayerDisplay, PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
+import { PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
 import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
@@ -114,7 +114,6 @@ export function PlayerLayout({
   musicXml,
   share,
   status,
-  openView = false,
   display,
   playback,
   moreActs = NO_ACTS_MORE,
@@ -168,8 +167,6 @@ export function PlayerLayout({
   status?: ReactNode
   /** Display's own choices after the View's: a single-staff song's Clef (R29 B7). */
   display?: ReactNode
-  /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
-  openView?: boolean
 }) {
   const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
   const { practice } = player
@@ -177,7 +174,7 @@ export function PlayerLayout({
   const keySize = useSettings((state) => selectKeyboard(state).keySize)
   const countdown = useSettings((state) => selectPlayback(state).countdown)
   const scoreView = useSettings(selectScoreView)
-  const skin = useSettings((state) => selectHandsView(state).skin)
+  const otherHand = useSettings((state) => selectOtherHand(state).look)
   const held = useHeldKeys()
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
@@ -226,7 +223,6 @@ export function PlayerLayout({
         id: 'playback',
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
-        description: t('settingsPage.about.playback'),
         value: `${t('settingsPage.countdown.label')}: ${t(`settingsPage.countdown.${countdown}`)}`,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
       },
@@ -234,21 +230,18 @@ export function PlayerLayout({
         id: 'hands',
         label: t('settingsPage.hands'),
         icon: Hand,
-        description: t('settingsPage.about.hands'),
-        value: t(`settingsPage.skin.${skin}`),
+        value: t(`settingsPage.otherHand.${otherHand}`),
         content: <PlayerHands />,
       },
       {
         id: 'display',
         label: t('settingsPage.display'),
         icon: MonitorCog,
-        description: t('settingsPage.about.display'),
         value: shown === 'sheet' ? t(`music:sheet.layout.${scoreView.layout}`) : undefined,
         content: (
           <>
             <ViewSection view={shown} words={needs.lyrics !== 'words'} />
             {display}
-            <PlayerDisplay />
           </>
         ),
       },
@@ -260,7 +253,6 @@ export function PlayerLayout({
         id: 'piano',
         label: t('settingsPage.onScreenPiano'),
         icon: Piano,
-        description: t('settingsPage.about.piano'),
         value: t(`common:keyboardSettings.keySize.${keySize}`),
         render: <Link to="/settings/on-screen-piano" />,
       },
@@ -334,7 +326,6 @@ export function PlayerLayout({
             marks={player.marks}
             wrong={player.wrong}
             faded={player.practised === 'both' ? null : player.practised === 'rh' ? 'lh' : 'rh'}
-            skin={skin}
             range={{ low: player.range.from, high: player.range.to }}
             onShowKeys={() => setScoreView(settingsStore, { hands: false })}
           />
@@ -436,8 +427,6 @@ export function PlayerLayout({
               performance={player.performance}
               headings={headings}
               current={practice.state.beatGroup}
-              clock={player.cursor === 'continuous' ? practice.clock : null}
-              cursor={player.cursor !== 'none'}
               loop={player.loop}
               fingers={player.fingers}
               names={player.names}
@@ -518,7 +507,7 @@ export function PlayerLayout({
       {/* The song's tools (R31-P): View, the music's own (Key, Version), the Hands where the music
           has both (R36), then More. */}
       <PlayerFoot>
-        <PickView shown={shown} needs={needs} openAtStart={openView} />
+        <PickView shown={shown} needs={needs} />
         {tools}
         {twoHands ? (
           <FootTool
