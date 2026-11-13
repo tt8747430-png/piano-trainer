@@ -4,14 +4,7 @@ import { STAGES, type Stage } from '@/entities/step'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
-import {
-  FilterChoice,
-  FilterFoot,
-  FilterGroup,
-  FilterSheet,
-  Segmented,
-  SwitchRow,
-} from '@/shared/ui'
+import { FilterChoice, FilterFoot, FilterGroup, FilterSheet, Segmented } from '@/shared/ui'
 import { filtersOn, keysIn, placesOn, stagesIn } from '../model/library-view'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
@@ -35,7 +28,7 @@ export function SongsFilterSheet({
   const { t } = useTranslation('songs')
   return (
     <FilterSheet
-      count={filtersOn(filter) - (sorted ? placesOn(filter) : 0)}
+      count={filtersOn(filter) - placesOn(filter)}
       sorted={sorted}
       foot={(close) => <SongsFilterFoot page={page} filter={filter} onShow={close} />}
     >
@@ -52,22 +45,13 @@ export function SongsFilterSheet({
           ))}
         </FilterGroup>
       ) : null}
-      <FilterFields page={page} filter={filter} chips={sorted} />
+      <FilterFields page={page} filter={filter} />
     </FilterSheet>
   )
 }
 
 /** The filters' groups, each folding under its name, open as they start. */
-function FilterFields({
-  page,
-  filter,
-  chips,
-}: {
-  page: LibraryPage
-  filter: SongsFilter
-  /** The place chips hold Favourites, Learning and Learned (a phone): one way to each. */
-  chips: boolean
-}) {
+function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
@@ -95,20 +79,6 @@ function FilterFields({
           />
         </FilterGroup>
       ) : null}
-      {chips ? null : (
-        <FilterGroup title={t('filters.progress')} list={false}>
-          <Segmented
-            label={t('filters.progress')}
-            value={filter.learned}
-            options={[
-              { value: 'any', label: t('filters.any') },
-              { value: 'yes', label: t('filters.learned') },
-              { value: 'no', label: t('filters.notLearned') },
-            ]}
-            onChange={(learned) => set({ learned })}
-          />
-        </FilterGroup>
-      )}
       <FilterGroup title={t('filters.key')}>
         <FilterChoice pressed={filter.key === ''} onPress={() => set({ key: '' })}>
           {t('filters.anyKey')}
@@ -135,15 +105,6 @@ function FilterFields({
           ))}
         </FilterGroup>
       ) : null}
-      {chips ? null : (
-        <FilterGroup title={common('library.favourites')} list={false}>
-          <SwitchRow
-            label={t('filters.onlyFavourites')}
-            checked={filter.favourites}
-            onCheckedChange={(favourites) => set({ favourites })}
-          />
-        </FilterGroup>
-      )}
     </>
   )
 }

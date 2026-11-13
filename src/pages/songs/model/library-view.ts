@@ -67,7 +67,7 @@ export const filtersOn = (filter: SongsFilter): number =>
   Number(filter.folder !== 'any') +
   Number(filter.learned !== 'any')
 
-/** The filters the place chips hold (Favourites, Learning, Learned), on a phone not counted again on the sheet's button. */
+/** The filters the places hold (Favourites, Learning, Learned; a phone's chips, a laptop's tree), not counted again on the sheet's button. */
 export const placesOn = (filter: SongsFilter): number =>
   Number(filter.favourites) + Number(filter.learned !== 'any')
 

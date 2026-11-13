@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next'
-import { pieceStage } from '@/entities/course'
 import { selectSort, useLibrary, type LibrarySort } from '@/entities/library'
-import { entryTitles, PieceLink, pieceChords, pieceKey, type Entry } from '@/entities/piece'
+import { PieceLink, pieceChords, type Entry } from '@/entities/piece'
+import { FavouriteToggle } from '@/features/manage-library'
 import { selectIsLearned, selectLearned, selectPractised, useProgress } from '@/entities/progress'
-import { pieceStepId, StageMark } from '@/entities/step'
+import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { FavouriteMark, LearnedBadge, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
+import { printedSymbol } from '@/shared/lib/music'
+import { LearnedBadge, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
+import { PieceMark } from '@/widgets/piece-cover'
+import { useEntryFace } from '@/widgets/piece-list'
 import { useCardLook } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 import { songActions } from './row-actions'
@@ -58,53 +60,37 @@ interface Held {
 
 function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; held: Held }) {
   const { t } = useTranslation(['songs', 'common'])
-  const locale = useLocale()
   const { show } = useCardLook()
-  const { primary, secondary } = entryTitles(entry, locale)
+  const { face } = useEntryFace(entry, { ...show, progress: false })
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const at = useProgress((state) => selectPractised(state)[entry.id])
-  const stage = pieceStage(entry.id)
-  const chart = entry.kind !== 'listing'
-  const favourite = page.favourites.includes(entry.id)
   return (
     <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
-      <th scope="row" className={cn(CELL, 'w-full max-w-0 font-normal')}>
+      <th scope="row" className={cn(CELL, 'w-1/2 max-w-0 font-normal')}>
         <PieceLink
           entry={entry}
-          className="block min-w-0 rounded-control focus-visible:-outline-offset-3"
+          className="flex min-w-0 items-center gap-3 rounded-control focus-visible:-outline-offset-3"
         >
-          <span className="block truncate font-semibold text-foreground">{primary}</span>
-          {secondary ? (
-            <span className="block truncate text-sm text-muted-foreground">{secondary}</span>
-          ) : null}
+          <PieceMark entry={entry} />
+          <span className="truncate font-semibold text-foreground">{face.title}</span>
         </PieceLink>
       </th>
-      {show.key ? (
-        <td className={cn(CELL, 'font-display font-semibold tabular-nums')}>
-          {chart ? printedSymbol(keySymbol(pieceKey(entry))) : null}
-        </td>
-      ) : null}
+      <td className={cn(CELL, 'max-w-0 truncate text-sm text-muted-foreground')}>{face.detail}</td>
       {show.chords ? (
         <td
           className={cn(CHORDS, 'max-w-64 truncate font-display text-muted-foreground')}
           aria-hidden
         >
-          {pieceChords(entry).join('  ')}
+          {pieceChords(entry).map(printedSymbol).join('  ')}
         </td>
       ) : null}
-      {show.progress ? (
-        <td className={CELL}>
-          {stage ? (
-            <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-              <StageMark stage={stage} />
-              {t(`common:stage.${stage}`)}
-            </span>
+      {show.progress && (held.learned || held.played) ? (
+        <td className={cn(CELL, 'text-sm text-muted-foreground')}>
+          {learned ? (
+            <LearnedBadge label={t('common:learned.done')} />
+          ) : at ? (
+            t('songs:table.learning')
           ) : null}
-        </td>
-      ) : null}
-      {show.progress && held.learned ? (
-        <td className={CELL}>
-          {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
         </td>
       ) : null}
       {held.played ? (
@@ -113,10 +99,10 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
         </td>
       ) : null}
       <td className={cn(CELL, 'w-0 pe-0')}>
-        <span className="flex items-center justify-end gap-1">
-          {favourite ? <FavouriteMark /> : null}
+        <span className="flex items-center justify-end">
+          <FavouriteToggle piece={entry.id} />
           <RowMore
-            label={t('common:library.moreOf', { name: primary })}
+            label={t('common:library.moreOf', { name: face.title })}
             actions={menuOf(songActions(entry, page, t))}
           />
         </span>
@@ -126,11 +112,11 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
 }
 
 /**
- * A place's songs as a table, the laptop's right pane (R30 S2, Apple Music's songs list): the title
- * and its line, then the columns the place's Card style shows (key, chords, level and Learned), the
- * day it was played last, and its More; Learned and the day are left out while no song has one. A heading sorts by its column; the sorted one again returns
- * to the learner's own order. Narrower than 48rem, the pane leaves the chords out, so the table never
- * spills past it.
+ * A place's songs as a table, the laptop's right pane (canvas 133, Apple Music's songs list): each
+ * song's small cover and title, its composer and key, its progress (Learning, Learned) where any song
+ * has some, the day it was played last where any was, then its ♡ and More; its chords where its
+ * place's Card style shows them. A heading sorts by its column; the sorted one again returns to the
+ * learner's own order. Narrower than 48rem, the pane leaves the chords out.
  */
 export function SongTable({ entries, page }: { entries: readonly Entry[]; page: LibraryPage }) {
   const { t } = useTranslation(['songs', 'common', 'music'])
@@ -148,22 +134,15 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
         <thead className="border-b border-border text-sm text-muted-foreground">
           <tr>
             <SongSortHeading column="title" label={t('songs:table.title')} page={page} />
-            {show.key ? (
-              <SongSortHeading column="key" label={t('music:key.label')} page={page} />
-            ) : null}
+            <SongSortHeading column="key" label={t('songs:table.composerKey')} page={page} />
             {show.chords ? (
               <th scope="col" className={cn(CHORDS, 'font-semibold')}>
                 {t('songs:table.chords')}
               </th>
             ) : null}
-            {show.progress ? (
+            {show.progress && (held.learned || held.played) ? (
               <th scope="col" className={cn(CELL, 'font-semibold')}>
-                {t('songs:table.level')}
-              </th>
-            ) : null}
-            {show.progress && held.learned ? (
-              <th scope="col" className={cn(CELL, 'font-semibold')}>
-                {t('common:learned.done')}
+                {t('songs:table.progress')}
               </th>
             ) : null}
             {held.played ? (

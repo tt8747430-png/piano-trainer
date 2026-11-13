@@ -1,5 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { Archive, ChevronDown, Heart, Music, Trash2, type LucideIcon } from 'lucide-react'
+import {
+  Archive,
+  ChevronDown,
+  CircleCheck,
+  CircleDashed,
+  Heart,
+  Music,
+  Trash2,
+  type LucideIcon,
+} from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -12,11 +21,22 @@ import {
   type FolderId,
   type ShelvedFolder,
 } from '@/entities/library'
+import { selectLearned, useProgress } from '@/entities/progress'
+import { pieceStepId } from '@/entities/step'
 import { cn } from '@/shared/lib'
 import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList, TreeSwatch } from '@/shared/ui'
 
 /** Where the learner is in the library, as the tree marks it. */
-export type TreePlace = 'all' | 'favourites' | FolderId
+/** A place of the tree: All songs, a filter's own (Favourites, Learning, Learned), or a folder. */
+export type TreePlace = 'all' | 'favourites' | 'learning' | 'learned' | FolderId
+
+/** The places that filter All songs (canvas 133's Places), each its search. */
+const FILTERED = {
+  all: {},
+  favourites: { favourites: true },
+  learning: { learned: 'no' },
+  learned: { learned: 'yes' },
+} as const
 
 /** A small tile of a folder's picture on its paint, the tree's size. */
 const FolderSwatch = ({ folder }: { folder: ShelvedFolder }) => (
@@ -25,14 +45,15 @@ const FolderSwatch = ({ folder }: { folder: ShelvedFolder }) => (
 
 function Place({
   to,
-  favourites = false,
+  place = 'all',
   icon,
   label,
   count,
   current,
 }: {
   to: '/songs' | '/songs/archive' | '/songs/trash'
-  favourites?: boolean
+  /** On All songs: the filter it is. */
+  place?: keyof typeof FILTERED
   icon: LucideIcon
   label: string
   count: number
@@ -47,7 +68,7 @@ function Place({
       render={
         <Link
           to={to}
-          search={to === '/songs' ? (favourites ? { favourites: true } : {}) : undefined}
+          search={to === '/songs' ? FILTERED[place] : undefined}
           // The tree marks the place itself: the router's own mark would light All songs in a folder.
           activeOptions={{ exact: true, includeSearch: true }}
           activeProps={{}}
@@ -71,9 +92,11 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
   const favourites = useLibrary((state) => state.favourites.length)
   const songs = new Set(layout.folders.flatMap((folder) => folder.songs))
   for (const id of layout.home) songs.add(id)
+  const learnedSteps = useProgress(selectLearned)
+  const learned = [...songs].filter((id) => learnedSteps[pieceStepId(id)] !== undefined).length
   // The folders on the way to the one open stand unfolded.
   const path =
-    current === 'all' || current === 'favourites'
+    current === 'all' || current === 'favourites' || current === 'learning' || current === 'learned'
       ? []
       : folderPath(layout.folders, current).map((folder) => folder.id)
   const [open, setOpen] = useState<ReadonlySet<FolderId>>(() => new Set(path))
@@ -149,11 +172,27 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
         />
         <Place
           to="/songs"
-          favourites
+          place="favourites"
           icon={Heart}
           label={common('library.favourites')}
           count={favourites}
           current={current === 'favourites'}
+        />
+        <Place
+          to="/songs"
+          place="learning"
+          icon={CircleDashed}
+          label={t('places.learning')}
+          count={songs.size - learned}
+          current={current === 'learning'}
+        />
+        <Place
+          to="/songs"
+          place="learned"
+          icon={CircleCheck}
+          label={t('places.learned')}
+          count={learned}
+          current={current === 'learned'}
         />
       </TreeList>
       <TreeHeading>{t('tree.folders')}</TreeHeading>

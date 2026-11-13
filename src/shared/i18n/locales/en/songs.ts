@@ -16,23 +16,15 @@ export const songs = {
   emptyKey: 'No songs here in {{key}}.',
   emptyFilters: 'No songs here match these filters.',
   emptyQueryFilters: 'No songs match “{{query}}” with these filters.',
-  // A song's row counts its chords, each once over any bass (Chordify's 7 Tips: three to five for a
-  // beginner).
-  chordCount_one: '{{count}} chord',
-  chordCount_other: '{{count}} chords',
-  // The Filter button and its sheet (ADR 0106): Key, Level and Favourites, each folding.
+  // Sort and filter's sheet (ADR 0106): Folder, Key and Level, each folding.
   filters: {
     folder: 'Folder',
-    progress: 'Progress',
     any: 'Any',
     noFolder: 'Not in a folder',
-    learned: 'Learned',
-    notLearned: 'Not yet learned',
     key: 'Key',
     anyKey: 'Any key',
     // A key chosen, with how many songs here are in it.
     keyCount: '{{key}} · {{count}}',
-    onlyFavourites: 'Favourites only',
     show_one: 'Show {{count}} song',
     show_other: 'Show {{count}} songs',
     showNone: 'No songs to show',
@@ -323,7 +315,9 @@ export const songs = {
   table: {
     title: 'Title',
     chords: 'Chords',
-    level: 'Level',
+    composerKey: 'Composer and key',
+    progress: 'Progress',
+    learning: 'Learning',
     played: 'Last played',
     actions: 'Actions',
   },

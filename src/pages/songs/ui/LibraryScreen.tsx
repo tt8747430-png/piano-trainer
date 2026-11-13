@@ -161,7 +161,16 @@ export function LibraryScreen({
         <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
           <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
             <LibraryTree
-              current={folder?.id ?? (filter.favourites ? 'favourites' : 'all')}
+              current={
+                folder?.id ??
+                (filter.favourites
+                  ? 'favourites'
+                  : filter.learned === 'yes'
+                    ? 'learned'
+                    : filter.learned === 'no'
+                      ? 'learning'
+                      : 'all')
+              }
               extra={<SharedWithMe inTree />}
             />
           </aside>

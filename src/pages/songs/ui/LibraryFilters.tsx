@@ -48,7 +48,7 @@ export function LibraryFilters({
         <SongsFilterSheet page={page} filter={filter} sorted={!wide} />
       </div>
       {wide ? null : <PlaceChips filter={filter} />}
-      <SongsFilterChips filter={filter} places={!wide} />
+      <SongsFilterChips filter={filter} />
       {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
     </div>
   )
@@ -96,15 +96,8 @@ function SearchEverywhere({ query }: { query: string }) {
   )
 }
 
-/** The filters on, each a chip that takes it off, in a row that scrolls sideways (the search's own box says its text). */
-function SongsFilterChips({
-  filter,
-  places,
-}: {
-  filter: SongsFilter
-  /** The place chips show Favourites, Learning and Learned already (a phone). */
-  places: boolean
-}) {
+/** The filters on, besides the places' (their chips or the tree hold them), each a chip that takes it off, in a row that scrolls sideways (the search's own box says its text). */
+function SongsFilterChips({ filter }: { filter: SongsFilter }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
   const keyName = useKeyName()
@@ -124,23 +117,9 @@ function SongsFilterChips({
           name: t('filters.chipStage', { stage: common(`stage.${filter.stage}`) }),
           off: () => set({ stage: 'any' }),
         },
-    filter.favourites && !places
-      ? {
-          id: 'favourites',
-          name: common('library.favourites'),
-          off: () => set({ favourites: false }),
-        }
-      : null,
     filter.folder === 'none'
       ? { id: 'folder', name: t('filters.noFolder'), off: () => set({ folder: 'any' }) }
       : null,
-    filter.learned === 'any' || places
-      ? null
-      : {
-          id: 'learned',
-          name: t(filter.learned === 'yes' ? 'filters.learned' : 'filters.notLearned'),
-          off: () => set({ learned: 'any' }),
-        },
   ]
   return <FilterChips chips={chips.filter((chip) => chip !== null)} />
 }
