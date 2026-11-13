@@ -42,15 +42,30 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     the sections automatically like from the verse to chorus and also while playing two times the verse I want to be
     able to set that the Yamaha plays what types like a b c or d and when I dont set then it plays normally. and also
     the endings and the intro"): this replaces "the app sends nothing" for sections only; it still never sends chords
-    or notes. Each section of the sheet carries, in its own sheet, an **Intro** (A–D or none, before the first
+    or notes. Each section of the sheet carries, in its own sheet, an **Intro** (I–III or none, before the first
     section), its **Main** per pass (Main A–D, set apart for each repeat: the verse's 1st time A, 2nd time B), a
     **Fill-in into the next section** (on its last bar: Fill in, Break or none), and the last section an **Ending**
-    (A–D or none). Each is sent on the Genos's MIDI clock at the bar line it falls on, as Yamaha's Section Control
-    message (F0 43 7E 00 ss 7F F7; ss as the Genos Data List gives it: Intro A–D, Main A–D 08–0B, Fill in, Break,
-    Ending A–D; to be checked against the Data List before it ships). Anything left unset sends nothing, so the
+    (I–III or none). Each is sent on the Genos's MIDI clock at the bar line it falls on, as Yamaha's Section Control
+    message (F0 43 7E 00 ss 7F F7; ss as the Genos Data List gives it: Intro I–III, Main A–D 08–0B, Fill in, Break,
+    Ending I–III; to be checked against the Data List before it ships). Anything left unset sends nothing, so the
     Genos plays as its own panel says. Sending SysEx needs Web MIDI's SysEx permission, asked for when the learner
     turns Follow a MIDI arranger on. Shown on the sheet as a small tag on the section's head ("Main B · Fill in"),
     on the canvas first.
+  - **The Genos's style controls, from the Chord player** (owner, 2026-11-13, the Owner's Manual's "Operating
+    Style Playback", pp. 63–65: "the chords player should support these controls also … and if you need something
+    else search in the user manual and other resources"): with Follow a MIDI arranger on, the Chord player's bar
+    gets an arranger strip, laid out as the Genos's panel and named as it is: **Start/Stop**; **ACMP** (on: rhythm
+    and auto accompaniment; off: rhythm alone); **Sync Start** (standby until a key, or a left-hand chord with ACMP
+    on; pressed while playing it stops and waits again); **Sync Stop** (the style plays while the chord section is
+    held; needs ACMP, and not with Full Keyboard fingering); **Intro I–III**; **Main A–D**, the chosen one marked,
+    pressed again for its fill-in; **Auto Fill-in**; **Break** (one bar, back to the Main); **Ending I–III**,
+    pressed again for rit.; **Fade in/out**; **OTS Link**. Each lamp as the panel's: on (chosen), flashing (next),
+    available, off (no data). The sheet's own sections (above) still set Intro, Main per pass, Fill-in or Break and
+    Ending, now Intro I–III and Ending I–III as the Genos has them; a press on the strip overrides the sheet until
+    the next section. Every message (Start, Stop, Section Control, ACMP, Sync Start, Sync Stop, Fade, OTS Link) is
+    taken from the Genos Data List and the Reference Manual before it is built, each cited with its page; a control
+    the Genos does not take over MIDI is drawn as its panel lamp only, following what the Genos reports, or left
+    out, and the report says which. Still never chords or notes. On the canvas first.
   - **Every change kept as a draft** (owner, 2026-11-13: "all the changes I do to the sheet should be automatically
     saved, either as draft and then I can save and change the current chords from the draft"): each edit is saved
     at once, on the device, as the sheet's draft; the sheet's saved chords stay as they were until Save, which makes
