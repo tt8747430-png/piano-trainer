@@ -114,40 +114,45 @@ function AppCourse({ courseId }: { courseId: string }) {
             : undefined
         }
       />
-      {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
-      <section className="-mt-2 flex max-w-3xl flex-col overflow-hidden card">
-        <div className="flex items-start gap-4 p-5">
-          <span
-            className={cn(
-              'grid size-16 shrink-0 place-items-center rounded-control',
-              paint.fill,
-              paint.ink,
-            )}
-          >
-            <CourseIcon courseId={course.id} className="size-8" strokeWidth={1.5} />
-          </span>
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <p className="text-pretty">{localText(course.summary, locale)}</p>
-            <CourseFacts course={course} level className="text-sm" />
-          </div>
+      {/* A wide laptop: what the course is on the left, its lessons and songs on the right. */}
+      <div className="-mt-2 grid gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
+        <div className="flex min-w-0 flex-col gap-8 xl:sticky xl:top-4">
+          {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
+          <section className="flex max-w-3xl flex-col overflow-hidden card">
+            <div className="flex items-start gap-4 p-5">
+              <span
+                className={cn(
+                  'grid size-16 shrink-0 place-items-center rounded-control',
+                  paint.fill,
+                  paint.ink,
+                )}
+              >
+                <CourseIcon courseId={course.id} className="size-8" strokeWidth={1.5} />
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <p className="text-pretty">{localText(course.summary, locale)}</p>
+                <CourseFacts course={course} level className="text-sm" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
+              {isComplete(progress) ? (
+                <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
+                  <Check aria-hidden className="size-5" strokeWidth={3} />
+                  {t('course.done')}
+                </p>
+              ) : (
+                <LearnedMeter progress={progress} className="flex-1" />
+              )}
+              <CourseAction course={course} />
+            </div>
+          </section>
+          {/* Its About (R29 B9): the editor's document, each block in its own style. */}
+          <AboutView about={course.about} label={t('course.about')} />
         </div>
-        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
-          {isComplete(progress) ? (
-            <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
-              <Check aria-hidden className="size-5" strokeWidth={3} />
-              {t('course.done')}
-            </p>
-          ) : (
-            <LearnedMeter progress={progress} className="flex-1" />
-          )}
-          <CourseAction course={course} />
+        <div className="flex max-w-3xl min-w-0 flex-col gap-8">
+          <CourseLessons course={course} next={next} />
+          <GuidedSongs course={course} />
         </div>
-      </section>
-      {/* Its About (R29 B9): the editor's document, each block in its own style. */}
-      <AboutView about={course.about} label={t('course.about')} />
-      <div className="flex max-w-3xl flex-col gap-8">
-        <CourseLessons course={course} next={next} />
-        <GuidedSongs course={course} />
       </div>
     </div>
   )

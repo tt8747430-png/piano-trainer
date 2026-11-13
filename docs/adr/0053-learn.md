@@ -31,7 +31,9 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   improvising, method books). A course has a level, its weeks, its own lessons and its guided songs. A course's lesson
   links no other lesson, plays only its course's songs and shows only its own book's patterns (Called to Play 2 also
   level 1's). A piece is a guided song of one course at most, and its level is that course's stage, which Songs
-  filters by.
+  filters by. A course's page is its card (what it is, its facts, its meter) and About, then its lessons and guided
+  songs; on a wide laptop (from 80rem) the card and About stand on the left, held in view, the lessons and songs on
+  the right. The learner's own course has the same two columns.
 - **Steps and learned marks** (`entities/step`): `lesson:<id>`, `course:<course>/<lesson>`, `piece:<id>`,
   `chords:<family>`, `scale:<kind>`. A mark on one track never counts for another. A whole piece's Learned is the
   learner's own; lessons never set it (ADR 0111).

@@ -123,29 +123,35 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           onDone: () => undefined,
         }}
       />
-      <section className="-mt-2 flex max-w-3xl flex-col overflow-hidden card">
-        <div className="flex items-start gap-4 p-5">
-          <FolderTile look={course.look} />
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
-            {course.line ? <p className="text-pretty">{course.line}</p> : null}
-            <p className="text-sm text-muted-foreground">
-              {t('course.lessonCount', { count: lessons.length })}
-            </p>
-          </div>
-        </div>
-        {lessons.length > 0 ? (
-          <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
-            {isComplete(progress) ? (
-              <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
-                <Check aria-hidden className="size-5" strokeWidth={3} />
-                {t('course.done')}
+      {/* A wide laptop: the course's card on the left, its lessons on the right. */}
+      <div className="-mt-2 grid gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
+        <section className="flex max-w-3xl min-w-0 flex-col overflow-hidden card xl:sticky xl:top-4">
+          <div className="flex items-start gap-4 p-5">
+            <FolderTile look={course.look} />
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              {course.line ? <p className="text-pretty">{course.line}</p> : null}
+              <p className="text-sm text-muted-foreground">
+                {t('course.lessonCount', { count: lessons.length })}
               </p>
-            ) : (
-              <LearnedMeter progress={progress} className="flex-1" />
-            )}
+            </div>
           </div>
-        ) : null}
-      </section>
+          {lessons.length > 0 ? (
+            <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
+              {isComplete(progress) ? (
+                <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
+                  <Check aria-hidden className="size-5" strokeWidth={3} />
+                  {t('course.done')}
+                </p>
+              ) : (
+                <LearnedMeter progress={progress} className="flex-1" />
+              )}
+            </div>
+          ) : null}
+        </section>
+        <div className="flex max-w-3xl min-w-0 flex-col gap-8">
+          <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
+        </div>
+      </div>
       {way ? (
         <FloatingActions>
           <FabLink
@@ -155,9 +161,6 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           />
         </FloatingActions>
       ) : null}
-      <div className="flex max-w-3xl flex-col gap-8">
-        <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
-      </div>
     </div>
   )
 }
