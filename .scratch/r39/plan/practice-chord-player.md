@@ -34,6 +34,12 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     says so and names Chrome or Edge. Built as "Follow a MIDI arranger" in the Chord player's settings, beside
     Connect a piano, with a mark in the bar while it waits for Start. Not testable here without the instrument; a
     fake MIDI port drives it in the browser checks.
+  - **Every change kept as a draft** (owner, 2026-11-13: "all the changes I do to the sheet should be automatically
+    saved, either as draft and then I can save and change the current chords from the draft"): each edit is saved
+    at once, on the device, as the sheet's draft; the sheet's saved chords stay as they were until Save, which makes
+    the draft the current chords (Discard draft goes back to them, with Undo). A sheet with a draft says so beside
+    its name and opens on the draft; nothing is lost on leaving, reloading or going offline. A shared sheet sends
+    only what is saved to the open links.
   - **Shared live** (owner, 2026-11-13: "when I share the chords sheet it is online and automatically syncs with the
     other links that are opened"): Share makes the sheet an online sheet with a link; every open copy (the owner's
     and each link's) shows each change as it is made, through Supabase Realtime on the sheet's row (Postgres
