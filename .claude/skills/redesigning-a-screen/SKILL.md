@@ -153,7 +153,7 @@ source; installing one is the owner's decision.
 | jakubkrehel/make-interfaces-feel-better (MIT) | corners, optical alignment, icons, hit areas, 10% review, findings table |
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
-| benjitaylor/agentation (PolyForm Shield) | installed at the owner's word, run only by name; its toolbar not in the app (the owner's screenshots do its job) |
+| benjitaylor/agentation (PolyForm Shield) | removed 2026-11-13; the owner's screenshots do its job |
 | Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |

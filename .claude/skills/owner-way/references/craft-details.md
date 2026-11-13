@@ -91,7 +91,6 @@ place, before, after, why.
 ## Not adopted
 
 - **Agentation** (benjitaylor/agentation, PolyForm Shield 1.0.0, not open source): a click-to-annotate overlay for giving
-  an agent feedback on a page. Installed as a skill at the owner's word (`INSTALLED-FROM-VIDEOS.md`), run only by name;
-  its npm package and toolbar are not in the app, and adding them is the owner's decision. Screenshots do this job here.
+  an agent feedback on a page. Removed 2026-11-13 with the unneeded skills; screenshots do this job here.
 - **Stageshow's** faux product UI is for marketing illustrations; its "real words only where the story is" and "no empty
   corners" rules apply to the canvases.

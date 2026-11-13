@@ -58,7 +58,7 @@ context, so load the one the task needs, and ask: would it change what I do next
 | View transitions                            | `vercel-react-view-transitions`                                   |
 | Docs and any prose the app shows            | `humanizer`, `writing-guidelines`                                 |
 | A multi-task plan                           | `writing-plans`, run inline with `executing-plans`                |
-| A request with real choices left open       | `brainstorming`; `grilling` only when asked                       |
+| A request with real choices left open       | `brainstorming`; `grill-with-docs` only when asked                |
 | About to say done                           | `verification-before-completion`                                  |
 | A large change wanting fresh eyes           | `requesting-code-review` or `code-review`                         |
 | Findings from a reviewer                    | `receiving-code-review`                                           |
@@ -70,10 +70,7 @@ context, so load the one the task needs, and ask: would it change what I do next
 | Changing a skill                            | `writing-skills`                                                  |
 | Handing work on                             | `handoff`, `prompts/handoff.md`                                   |
 
-Superpowers' skills may appear with or without the `superpowers:` prefix. Plans run inline, never through
-`subagent-driven-development`, because a fresh context per task is what eats the usage; `implement-spec` is the one
-exception, on SKILL.md's terms. Not for this app unless asked:
-`workflow`, `autoship`, `remotion-best-practices`, json-render's `core` and `react`.
+Plans run inline (`executing-plans`), because a fresh context per task is what eats the usage.
 
 ## Impeccable
 
@@ -115,26 +112,27 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
 `DESIGN.md` or this skill, the owner's rule wins, always. Design and motion differences are in
 [craft-details](craft-details.md) ("Where the app's own rules differ"); the workflow ones are here.
 
-- **Which copy:** read every skill from `.claude/skills/<name>/`. A `superpowers:` or `anthropic-skills:` copy of the
-  same name (`impeccable`, `owner-way`, the superpowers set) is ignored; the repo's copy is the current one.
-- **No pull requests, no worktrees for your own work:** never `finishing-a-development-branch`'s menu or
-  `using-git-worktrees`; an agent started with `isolation: "worktree"` ([agent-brief](agent-brief.md)) is the one use. Work on
+- **Which copy:** read every skill from `.claude/skills/<name>/`. An `anthropic-skills:` copy of the same name
+  (`impeccable`, `owner-way`) is an older one and is ignored; the superpowers plugin is off (2026-11-13).
+- **Skills removed (2026-11-13, owner: "remove the duplicates and unneeded things"):** pull requests, worktrees and
+  deploys; secrets; issue-tracker workflows; agent fan-out; files outside their home; duplicates (`review`,
+  `test-driven-development`, `grilling`, `grill-me`). A skill that still names one of them (`executing-plans`'s
+  finishing step, `writing-plans`' subagent header) is read without that step.
+- **No pull requests, no worktrees for your own work:** an agent started with `isolation: "worktree"`
+  ([agent-brief](agent-brief.md)) is the one use. Work on
   the session's branch, commit each task, and push to `main` after the gate (SKILL.md, Merge). `executing-plans` and
   `writing-plans` run that way: plans beside the spec in `.scratch/<round>/plan/`, no execution question, no stop
   before a push, its final fresh reviewer only for a large or risky change.
 - **Every finding is fixed,** whatever its grade: no "deferred minors" (`executing-plans`, `requesting-code-review`).
 - **No questions in autonomous mode:** `brainstorming`, `tdd`'s seams, `receiving-code-review`'s clarifications and
   `systematic-debugging`'s "discuss before more fixes" take the recommendation and go, the question in the report.
-- **`tdd` is the one TDD skill;** `test-driven-development` only when another skill loads it, read as the same rule.
+- **`tdd` is the one TDD skill;** where another skill says `test-driven-development`, read `tdd`.
+- **`grill-with-docs` is the one grilling skill,** its rules in its own file.
 - **Skills load when they change what you do next,** not on a 1% chance; no "Using [skill]" announcement before the
-  answer (`using-superpowers` yields to "answer first").
-- **Never stage with `git add .`** or deploy (`deploy-to-vercel`); hosting is the owner's. Never read `.env` (`wizard`).
+  answer.
+- **Never stage with `git add .`** or deploy; hosting is the owner's. Never read `.env`.
 - **Nothing written outside its home:** no `docs/superpowers/`, `design-plans/`, `.ua/`, `MISSION.md`, questionnaires
   or a new `DESIGN.md` (`impeccable`'s redesign, `create-design-md`); `DESIGN.md` is amended in place.
-- **Not for this app:** `finishing-a-development-branch`, `using-git-worktrees`, `deploy-to-vercel`, `wizard`,
-  `before-and-after`, `understand` and `understand-*`, `review` (use `code-review`), `improve-ui`,
-  `setup-matt-pocock-skills`, `triage`, `wayfinder`, `to-spec`, `teach`, `to-questionnaire`, `diagnosing-superpowers`,
-  `dispatching-parallel-agents` and `design-an-interface`'s fan-out (agents as below).
 
 ## Agents
 

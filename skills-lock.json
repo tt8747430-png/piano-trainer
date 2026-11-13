@@ -7,18 +7,6 @@
       "skillPath": "skills/agent-browser/SKILL.md",
       "computedHash": "dd491d53824ad9286ec950aee667098446332429a6d41fe28b4ba11f1959264c"
     },
-    "autoship": {
-      "source": "vercel-labs/autoship",
-      "sourceType": "github",
-      "skillPath": "skills/autoship/SKILL.md",
-      "computedHash": "ab4b1a7a406ee8e864934ad98b81b1a2253d5b3bf4ab91f816cf7adf9323c32a"
-    },
-    "before-and-after": {
-      "source": "vercel-labs/before-and-after",
-      "sourceType": "github",
-      "skillPath": "skill/SKILL.md",
-      "computedHash": "554384eec6d2b42fd51cfa200e61a1b9a5c3a164c5334682eb5a307af0e601ad"
-    },
     "building-components": {
       "source": "vercel/components.build",
       "sourceType": "github",
@@ -37,24 +25,6 @@
       "skillPath": "skills/engineering/codebase-design/SKILL.md",
       "computedHash": "6d9d51d8caa01633fd00cf87089c5618c982321f942ac69f62565dc001c6b22f"
     },
-    "core": {
-      "source": "vercel-labs/json-render",
-      "sourceType": "github",
-      "skillPath": "skills/core/SKILL.md",
-      "computedHash": "91f99f5a19b925435f438a1b8f662bb86b49b79be280b6f9e770abeefcdc0339"
-    },
-    "deploy-to-vercel": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/deploy-to-vercel/SKILL.md",
-      "computedHash": "a024eac409b1bb2e072a19e7e0d7f194ac5482c87fb1a2ad6f62d041b454040c"
-    },
-    "design-an-interface": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/deprecated/design-an-interface/SKILL.md",
-      "computedHash": "aef348a9af675b771635623b5aa7790da4d40adc1ee88b58b6fd116eda2047d8"
-    },
     "diagnosing-bugs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -66,12 +36,6 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/domain-modeling/SKILL.md",
       "computedHash": "363cb0f53b0b431e7c00086ad1f823500b7e1b70b5616ee969c979f0934e9e6e"
-    },
-    "grilling": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/productivity/grilling/SKILL.md",
-      "computedHash": "368d3dd7251247c69f3656d93dc83c8f1577792eacac2111f1e7981db2ece49b"
     },
     "handoff": {
       "source": "mattpocock/skills",
@@ -103,18 +67,6 @@
       "skillPath": "skills/engineering/prototype/SKILL.md",
       "computedHash": "faba901c53a6ca245174c4ba5db3929d14253232b3050fdbd46539720adf1ab8"
     },
-    "react": {
-      "source": "vercel-labs/json-render",
-      "sourceType": "github",
-      "skillPath": "skills/react/SKILL.md",
-      "computedHash": "7d6d1fc6eb68610aae450ff37281f0898db5fdac6fbbcf301d46ac17b6c3acfc"
-    },
-    "remotion-best-practices": {
-      "source": "vercel-labs/json-render",
-      "sourceType": "github",
-      "skillPath": "skills/remotion-best-practices/SKILL.md",
-      "computedHash": "4756068d1b2f92ef4f6d1301094a9862ef275687d3dbf26fda5e52cae3fca4c1"
-    },
     "research": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -126,12 +78,6 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/resolving-merge-conflicts/SKILL.md",
       "computedHash": "28aad6f8b1b7025abc8892fa8890f68fe1533499b28a565f416b159131d22fad"
-    },
-    "review": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/in-progress/review/SKILL.md",
-      "computedHash": "8f98a68bf07ef9b80d5302d863efe896fbf7beb488f01904ad65c76fac394e82"
     },
     "shadcn": {
       "source": "shadcn/ui",
@@ -156,24 +102,6 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "81eca2a5b53a63f481c0849be7a663a8cd43d5cf53f32b644ec0a2f50cf91aa2"
-    },
-    "to-issues": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/engineering/to-issues/SKILL.md",
-      "computedHash": "4e2a11d35f018490d42a79234432f779d7131b9920373ef24cfbc68229bfef6c"
-    },
-    "to-spec": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/engineering/to-spec/SKILL.md",
-      "computedHash": "0f544cd0c099c06f0dd0b7b9ee98b4237218e7e95fd3d3c02e791efbaf74bacb"
-    },
-    "triage": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/engineering/triage/SKILL.md",
-      "computedHash": "7c923b6a677cfe689500721f08307e2a4c46797ff169dc55ef6c34a431a0d533"
     },
     "vercel-cli": {
       "source": "vercel/vercel",
@@ -210,12 +138,6 @@
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
       "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
-    },
-    "workflow": {
-      "source": "vercel/workflow",
-      "sourceType": "github",
-      "skillPath": "skills/workflow/SKILL.md",
-      "computedHash": "4cd5ce92d66f4ec1e57630a225a83604a5704c36c1a9bf94c49d667ade05b984"
     },
     "writing-guidelines": {
       "source": "vercel-labs/agent-skills",

@@ -48,3 +48,14 @@ canvas (the Figma mechanics replaced by the generator, the kit and the runtime c
 | `state-expander`     | UI State Expander                                   |
 | `screen-design`      | iOS app design                                      |
 | `design-consistency` | Design System Consistency, AI Design System Checker |
+
+## Removed (2026-11-13)
+
+At the owner's word ("remove the duplicates and unneeded things and old stale versions"): `agentation`,
+`agentation-self-driving`, `improve-ui`, `grill-me`, `grilling` (folded into `grill-with-docs`, the newest), `to-spec`,
+`to-tickets`, `to-issues`, `implement-spec`, `triage`, `wizard`, `ask-matt`, `wayfinder`, `setup-matt-pocock-skills`,
+`to-questionnaire`, `teach`. With them, from other sources: `finishing-a-development-branch`, `using-git-worktrees`,
+`subagent-driven-development`, `dispatching-parallel-agents`, `test-driven-development`, `using-superpowers`,
+`diagnosing-superpowers` (and the superpowers plugin turned off), `deploy-to-vercel`, `before-and-after`, `autoship`,
+`workflow`, `remotion-best-practices`, `core`, `react`, `review`, `design-an-interface`, `understand` and
+`understand-*`.
