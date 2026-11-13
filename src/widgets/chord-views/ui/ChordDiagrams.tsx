@@ -74,7 +74,14 @@ export function ChordDiagrams({
     ? sungPlace(performance, lines, { bar: beat.bar, played: span.played }, loop)
     : null
   const strip = (
-    <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} onLoop={onLoop} />
+    <BeatStrip
+      performance={performance}
+      bars={bars}
+      beat={beat}
+      loop={loop}
+      onBeat={onGo}
+      onLoop={onLoop}
+    />
   )
   const sung = place ? <SungLines place={place} written={span.written} /> : null
   if (mode === 'summary') {
