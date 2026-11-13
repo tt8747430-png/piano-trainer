@@ -98,7 +98,7 @@ export const settings = {
     songs: 'Songs and folders',
     selectFootnote: 'Up to four actions appear in the toolbar when you select songs or folders.',
     swipeFootnote:
-      'Up to two actions on each side. Archive and Delete always ask for confirmation.',
+      'Up to two actions on each side. An archived or deleted song comes back with Undo in the message.',
     songRows: 'Songs',
     folderRows: 'Folders',
     swipeRight: 'Leading swipe (right)',
@@ -244,7 +244,7 @@ export const settings = {
       select: 'Select, or a long press on a row, chooses several songs at once.',
       move: 'Move to… places the selected songs in a folder. Undo in the message reverses it.',
       archive:
-        'Archive puts songs away without deleting them. The Archive button at the top of Songs restores them.',
+        'Archive puts songs away without deleting them. They wait in the Archive, in Songs, to be restored.',
       favourite: 'The heart marks a song as a favourite.',
     },
     player: {

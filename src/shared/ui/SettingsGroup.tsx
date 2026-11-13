@@ -46,7 +46,8 @@ export function SettingsGroup({
       ) : (
         <div
           className={cn(
-            'flex flex-col card',
+            // A switch row draws its line beneath it; the card's edge stands for the last one's.
+            'flex flex-col card [&>[data-slot=switch-row]:last-child]:border-b-0',
             // A row's hover fills the card to its edges (R23), square between rows.
             flush
               ? 'overflow-hidden [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
