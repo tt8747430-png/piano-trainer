@@ -32,7 +32,13 @@ import {
   SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { CardLookProvider, cardLookProps, FolderRow, SongRow } from '@/widgets/song-library'
+import {
+  CardLookProvider,
+  cardLookProps,
+  FolderRow,
+  LibraryRows,
+  SongRow,
+} from '@/widgets/song-library'
 import { StyleEditor } from '@/widgets/style-editor'
 import { useLibraryPage, type LibraryPage } from '../model/use-library-page'
 import { SongTable } from './SongTable'
@@ -255,10 +261,7 @@ function StylePreview({
             </div>
           </div>
         ) : (
-          <ul
-            className={cn('grid-cards auto-rows-fr gap-2', device === 'laptop' && 'grid-cols-2')}
-            {...cardLookProps(look)}
-          >
+          <LibraryRows look={look} className={cn(device === 'laptop' && 'grid-cols-2')}>
             {folders.map(({ folder: each, ...holds }) => (
               <FolderRow
                 key={each.id}
@@ -269,15 +272,9 @@ function StylePreview({
               />
             ))}
             {songs.slice(0, device === 'laptop' ? 6 : 2 - folders.length).map((entry) => (
-              <SongRow
-                key={entry.id}
-                entry={entry}
-                favourite={page.favourites.includes(entry.id)}
-                actions={[]}
-                onSelect={() => undefined}
-              />
+              <SongRow key={entry.id} entry={entry} actions={[]} onSelect={() => undefined} />
             ))}
-          </ul>
+          </LibraryRows>
         )}
       </div>
     </CardLookProvider>

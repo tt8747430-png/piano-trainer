@@ -216,6 +216,11 @@ owner's, typos fixed.
 - **Two bar buttons, one Sort and filter (loop, built to canvas 133):** on a phone My songs' bar holds the Archive and
   ···, Select inside ···; one Sort and filter beside the search, the sort first in its sheet; the place chips All ·
   Favourites · Learning · Learned under it, never repeated as removable chips or in the button's count.
+- **Rows as the canvas draws them (loop, built to canvas 133):** a List place's rows in one card with hairlines, in
+  Select too; Folders and the songs headed with their count and folding; a folder "23 songs · 4 learned" with a
+  chevron; a song its small cover (its first notes on a printed staff), "Composer · Key", a ♡ one tap; More only under
+  a mouse, a finger has the swipe and the long press; Shared with me a row at the foot of Folders. The laptop's places
+  pane and one table are next.
 - **New is one dial (canvas 169, loop, 2026-11-13):** "proper floating actions for the new lessons or courses or also
   other things": every library creates from one centred honey + (a card of rows on a phone, New ▾ in the bar on a
   laptop); Songs: New song, Record, New folder, Import, New group; a Practice library: its New and New folder.

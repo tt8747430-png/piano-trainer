@@ -22,6 +22,7 @@ const HEADINGS = { 2: 'h2', 3: 'h3' } as const
  */
 export function FoldSection({
   title,
+  count,
   fold,
   detail,
   info,
@@ -31,6 +32,8 @@ export function FoldSection({
   children,
 }: {
   title: string
+  /** How many it holds, quiet after its name ("Folders 4"). */
+  count?: number | undefined
   fold?: Fold | undefined
   detail?: ReactNode
   /** What the section is for, opened from the ⓘ beside its name. */
@@ -57,6 +60,9 @@ export function FoldSection({
           className="-my-2 flex min-h-11 w-full items-center gap-2 rounded-control py-2 text-left"
         >
           {title}
+          {count === undefined ? null : (
+            <span className="font-sans text-base text-muted-foreground tabular-nums">{count}</span>
+          )}
           <ChevronDown
             aria-hidden
             className={cn(
@@ -66,7 +72,14 @@ export function FoldSection({
           />
         </button>
       ) : (
-        title
+        <>
+          {title}
+          {count === undefined ? null : (
+            <span className="ml-2 font-sans text-base text-muted-foreground tabular-nums">
+              {count}
+            </span>
+          )}
+        </>
       )}
     </Heading>
   )

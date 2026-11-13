@@ -1,12 +1,11 @@
 import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceStage } from '@/entities/course'
 import { entryTitles, pieceChords, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
-import { pieceStepId, StageMark } from '@/entities/step'
-import { useLocale } from '@/shared/i18n'
-import { keySymbol, printedSymbol } from '@/shared/lib/music'
+import { pieceStepId } from '@/entities/step'
+import { useKeyName, useLocale } from '@/shared/i18n'
+import { printedSymbol } from '@/shared/lib/music'
 import { LearnedBadge, type Paint } from '@/shared/ui'
 
 /** Between a row's chords: an en space, half the type's size, so each chord stands apart. */
@@ -32,47 +31,48 @@ export interface EntryFace {
   readonly kind: { readonly icon: LucideIcon; readonly paint: Paint }
 }
 
+/** The credit a row names as its author: who wrote the music, else who wrote it all. */
+const AUTHOR_ROLES = ['music', 'words-and-music', 'authors'] as const
+
 /**
- * A piece's or listing's row's face, wherever it is listed (the library, Search, the archive): its title over its
- * second one and how many chords it has, each once over any bass (a listing: "no chart yet"), its
- * first chords (Chordify's song cards), then its key (named for a screen reader, as `PieceFacts`
- * names it), its stage's mark and, once learned, the learned badge.
+ * A piece's or listing's row's face, wherever it is listed (the library, Search, the archive; canvas
+ * 133): its title over its second title or its composer and its key ("Beethoven · A minor"; a
+ * listing: "no chart yet"), its first chords under them where its place shows them (Chordify's song
+ * cards), and once learned, the learned badge at its end.
  */
 export function useEntryFace(
   entry: Entry,
-  /** What its end shows, both unless said (a place's Card style, R29 B9). */
-  show: { readonly key: boolean; readonly progress: boolean } = { key: true, progress: true },
+  /** What it shows, as its place's Card style says (R29 B9): its key, its chords, its progress. */
+  show: { readonly key: boolean; readonly chords: boolean; readonly progress: boolean } = {
+    key: true,
+    chords: false,
+    progress: true,
+  },
 ): EntryFace {
-  const { t } = useTranslation(['songs', 'common', 'music'])
+  const { t } = useTranslation(['songs', 'common'])
   const locale = useLocale()
+  const keyName = useKeyName()
   const { primary, secondary } = entryTitles(entry, locale)
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
-  const stage = pieceStage(entry.id)
   const chords = pieceChords(entry)
-  // Said, as the chords' line is not (ADR 0106).
-  const count = pieceChords(entry, Number.POSITIVE_INFINITY).length
+  const author = AUTHOR_ROLES.flatMap((role) =>
+    (entry.credits ?? []).flatMap((credit) =>
+      credit.role === role && 'names' in credit ? [credit.names] : [],
+    ),
+  )[0]
+  const said =
+    entry.kind === 'listing'
+      ? [t('noChart')]
+      : [secondary ?? author, show.key ? keyName(pieceKey(entry)) : undefined]
+  const detail = said.filter((part) => part !== undefined).join(' · ')
   return {
     face: {
       title: primary,
-      detail: entry.kind === 'listing' ? t('songs:noChart') : secondary,
-      count: entry.kind !== 'listing' && count > 0 ? t('songs:chordCount', { count }) : undefined,
-      trailing:
-        entry.kind === 'listing' || (!show.key && !show.progress) ? null : (
-          <>
-            {show.key ? (
-              <>
-                <span className="sr-only">{t('music:key.label')}</span>{' '}
-                <span className="shrink-0 font-display font-semibold tabular-nums">
-                  {printedSymbol(keySymbol(pieceKey(entry)))}
-                </span>
-              </>
-            ) : null}
-            {show.progress && stage ? <StageMark stage={stage} /> : null}
-            {show.progress && learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
-          </>
-        ),
+      detail: detail === '' ? undefined : detail,
+      count: undefined,
+      trailing: show.progress && learned ? <LearnedBadge label={t('common:learned.done')} /> : null,
       children:
-        chords.length > 0 ? (
+        show.chords && chords.length > 0 ? (
           // A screen reader passes them by: the row names the song, its page lists its chords, and
           // a symbol read aloud (`C♯m`) says little.
           <span

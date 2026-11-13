@@ -1,38 +1,38 @@
 import { barOf, useSettings } from '@/entities/settings'
 import { useTranslation } from 'react-i18next'
-import { FOLDER_PICTURE_ICONS, useLibrary } from '@/entities/library'
 import { PieceLink, type Entry } from '@/entities/piece'
+import { FavouriteToggle } from '@/features/manage-library'
 import { cn, useLongPress } from '@/shared/lib'
 import {
-  FavouriteMark,
   menuOf,
+  POINTER_ONLY,
   ROW_BODY,
   ROW_CARD,
+  ROW_FLAT,
+  ROW_TITLE_STRONG,
   RowFace,
   RowMore,
   swipeOf,
   SwipeRow,
   type RowAction,
 } from '@/shared/ui'
+import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
 import { useCardLook } from './card-look'
 
 /** A song's swipe (ADR 0106): to the right Favourite; to the left Move, then Archive at the edge. */
 
 /**
- * A song of the library as a row (Mindscape's deck row): its face as Songs shows it, a link to its
- * page; its More, every action at every size; a swipe for the same on a touch screen; a long press
- * starts Select with it chosen.
+ * A song of the library as a row (canvas 133, Mindscape's deck row): its small cover (its first
+ * notes), its title over its composer and key, a link to its page; the ♡ at its end, one tap; its
+ * More under a mouse, a swipe and a long press (Select with it chosen) under a finger.
  */
 export function SongRow({
   entry,
-  favourite,
   actions,
   onSelect,
 }: {
   entry: Entry
-  /** A favourite wears a small filled ♡ before its More. */
-  favourite: boolean
   actions: readonly RowAction[]
   /** Starts Select with this song chosen: a long press on it. */
   onSelect: () => void
@@ -41,30 +41,30 @@ export function SongRow({
   // What each swipe offers: the learner's (R29 B10, Settings › Swipe actions).
   const leading = useSettings((state) => barOf(state.bars, 'swipe.songs.leading'))
   const trailing = useSettings((state) => barOf(state.bars, 'swipe.songs.trailing'))
-  // What the place's look shows (R29 B9, Card style): the key and progress at its end, its chords.
-  const { show } = useCardLook()
+  // What the place's look shows (R29 B9, Card style), and whether its rows share one card.
+  const { show, style } = useCardLook()
   const { face } = useEntryFace(entry, show)
-  // Its own colour and picture where the learner gave it one (B9, Appearance).
-  const look = useLibrary((state) => state.songLooks[entry.id])
-  const plain = show.chords ? face : { ...face, children: null }
   const press = useLongPress({ onLongPress: onSelect })
   return (
-    <li>
+    <li className="min-w-0">
       <SwipeRow
         leading={swipeOf(actions, leading)}
         trailing={swipeOf(actions, trailing)}
         className="h-full"
       >
-        <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
-          <PieceLink entry={entry} className={ROW_BODY} {...press}>
-            {look ? (
-              <RowFace {...plain} icon={FOLDER_PICTURE_ICONS[look.picture]} paint={look.paint} />
-            ) : (
-              <RowFace {...plain} />
-            )}
+        <div
+          className={cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'has-[>a:hover]:bg-muted')}
+        >
+          <PieceLink entry={entry} className={cn(ROW_BODY, ROW_TITLE_STRONG)} {...press}>
+            <PieceMark entry={entry} />
+            <RowFace {...face} />
           </PieceLink>
-          {favourite ? <FavouriteMark /> : null}
-          <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />
+          <FavouriteToggle piece={entry.id} />
+          <RowMore
+            label={t('library.moreOf', { name: face.title })}
+            actions={menuOf(actions)}
+            className={POINTER_ONLY}
+          />
         </div>
       </SwipeRow>
     </li>

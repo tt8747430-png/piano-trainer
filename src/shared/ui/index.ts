@@ -144,7 +144,14 @@ export { FavouriteMark } from './FavouriteMark'
 export { FilterChips, type FilterChipOn } from './FilterChips'
 export { FilteredNotice } from './FilteredNotice'
 export { FilterChoice, FilterFoot, FilterGroup, FilterSheet, LIBRARY_PANES } from './FilterSheet'
-export { ROW_BODY, ROW_CARD, ROW_CONTROL } from './library-row-class'
+export {
+  POINTER_ONLY,
+  ROW_BODY,
+  ROW_CARD,
+  ROW_CONTROL,
+  ROW_FLAT,
+  ROW_TITLE_STRONG,
+} from './library-row-class'
 export { menuOf, swipeOf, type RowAction } from './row-actions'
 export { RowMore } from './RowMore'
 export { SortChoice, type SortOption } from './SortChoice'

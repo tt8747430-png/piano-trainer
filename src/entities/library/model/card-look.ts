@@ -17,7 +17,7 @@ export interface CardLook {
 
 export const DEFAULT_CARD_LOOK: CardLook = {
   style: DEFAULT_STYLE,
-  show: { key: true, chords: true, progress: true },
+  show: { key: true, chords: false, progress: true },
 }
 
 /** Any value read as a card look: what it says that is valid, the default for the rest. */

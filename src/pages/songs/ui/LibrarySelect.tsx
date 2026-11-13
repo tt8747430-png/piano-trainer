@@ -1,17 +1,33 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFolderName, type ShelvedFolder } from '@/entities/library'
+import {
+  DEFAULT_CARD_LOOK,
+  useFolderName,
+  useLibrary,
+  type ShelvedFolder,
+} from '@/entities/library'
 import type { Entry, PieceId } from '@/entities/piece'
 import { useEntryFace } from '@/widgets/piece-list'
 import { FavouriteMark, RowFace } from '@/shared/ui'
-import { FolderFace, LibraryDnd, RowInHand, SelectRow, SortableRows } from '@/widgets/song-library'
+import { PieceMark } from '@/widgets/piece-cover'
+import {
+  CardLookProvider,
+  FolderFace,
+  LibraryDnd,
+  RowInHand,
+  SelectRow,
+  SortableRows,
+  useCardLook,
+} from '@/widgets/song-library'
 import { folderKey, songKey, type Chosen, type LibraryPage } from '../model/use-library-page'
 
-/** A song's face in Select, as its row shows it, its ♡ where it is a favourite. */
+/** A song's face in Select, as its row shows it: its small cover, its title over its composer and key, its ♡ where it is a favourite. */
 function SongFace({ entry, favourite }: { entry: Entry; favourite: boolean }) {
-  const { face } = useEntryFace(entry)
+  const { show } = useCardLook()
+  const { face } = useEntryFace(entry, show)
   return (
     <>
+      <PieceMark entry={entry} />
       <RowFace {...face} />
       {favourite ? <FavouriteMark /> : null}
     </>
@@ -65,101 +81,105 @@ export function LibrarySelect({
     return found ? nameOf(found) : ''
   }
   const placeName = folder?.parent ? anyFolderName(folder.parent) : t('library.home')
+  // The place's look, as its rows wear it out of Select: nothing moves on entering it.
+  const look = useLibrary((state) => state.cardLooks[folder?.id ?? 'home'])
   return (
-    <LibraryDnd
-      carried={(key) => select.carried(key as Chosen)}
-      nameOf={keyName}
-      targetName={(target) =>
-        'into' in target
-          ? anyFolderName(target.into)
-          : target.zone === 'out'
-            ? placeName
-            : t('drag.archive')
-      }
-      inHand={(keys) => {
-        const [first] = keys
-        return first ? (
-          <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length} carried>
-            {face(first)}
-          </RowInHand>
-        ) : null
-      }}
-      onCarry={(keys, target) => select.carry(keys as Chosen[], target)}
-      accepts={(keys, target) => select.accepts(keys as Chosen[], target)}
-    >
-      <div className="flex flex-col gap-6">
-        {view.folders.length > 0 ? (
-          <SortableRows
-            label={t('folder.list')}
-            ids={view.folders.map((each) => each.folder.id)}
-            nameOf={folderName}
-            onMove={page.orderFolders}
-            row={(id) => {
-              const each = folders.get(id)
-              return each ? (
-                <SelectRow
-                  key={id}
-                  id={id}
-                  name={folderName(id)}
-                  checked={select.chosen.has(folderKey(id))}
-                  onToggle={() => select.toggle(folderKey(id))}
-                  sortable={sortable}
-                  carry={folderKey(id)}
-                  into={id}
-                >
-                  <FolderFace folder={each.folder} holds={each} />
-                </SelectRow>
-              ) : null
-            }}
-            inHand={(id) => {
-              const each = folders.get(id)
-              return each ? (
-                <RowInHand checked={select.chosen.has(folderKey(id))}>
-                  <FolderFace folder={each.folder} holds={each} />
-                </RowInHand>
-              ) : null
-            }}
-          />
-        ) : null}
-        {view.groups.map((group) =>
-          group.entries.length === 0 ? null : (
-            <section key={group.key} className="flex flex-col gap-3">
-              {group.heading ? <h2 className="text-2xl">{group.heading}</h2> : null}
-              <SortableRows
-                label={group.heading ?? t('title')}
-                ids={group.entries.map((entry) => entry.id)}
-                nameOf={songName}
-                onMove={page.orderSongs}
-                row={(id) => {
-                  const entry = entries.get(id)
-                  return entry ? (
-                    <SelectRow
-                      key={id}
-                      id={id}
-                      name={songName(id)}
-                      checked={select.chosen.has(songKey(id))}
-                      onToggle={() => select.toggle(songKey(id))}
-                      sortable={sortable}
-                      carry={songKey(id)}
-                    >
-                      <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
-                    </SelectRow>
-                  ) : null
-                }}
-                inHand={(id) => {
-                  const entry = entries.get(id)
-                  return entry ? (
-                    <RowInHand checked={select.chosen.has(songKey(id))}>
-                      <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
-                    </RowInHand>
-                  ) : null
-                }}
-              />
-            </section>
-          ),
-        )}
-      </div>
-      {children}
-    </LibraryDnd>
+    <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
+      <LibraryDnd
+        carried={(key) => select.carried(key as Chosen)}
+        nameOf={keyName}
+        targetName={(target) =>
+          'into' in target
+            ? anyFolderName(target.into)
+            : target.zone === 'out'
+              ? placeName
+              : t('drag.archive')
+        }
+        inHand={(keys) => {
+          const [first] = keys
+          return first ? (
+            <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length} carried>
+              {face(first)}
+            </RowInHand>
+          ) : null
+        }}
+        onCarry={(keys, target) => select.carry(keys as Chosen[], target)}
+        accepts={(keys, target) => select.accepts(keys as Chosen[], target)}
+      >
+        <div className="flex flex-col gap-6">
+          {view.folders.length > 0 ? (
+            <SortableRows
+              label={t('folder.list')}
+              ids={view.folders.map((each) => each.folder.id)}
+              nameOf={folderName}
+              onMove={page.orderFolders}
+              row={(id) => {
+                const each = folders.get(id)
+                return each ? (
+                  <SelectRow
+                    key={id}
+                    id={id}
+                    name={folderName(id)}
+                    checked={select.chosen.has(folderKey(id))}
+                    onToggle={() => select.toggle(folderKey(id))}
+                    sortable={sortable}
+                    carry={folderKey(id)}
+                    into={id}
+                  >
+                    <FolderFace folder={each.folder} holds={each} />
+                  </SelectRow>
+                ) : null
+              }}
+              inHand={(id) => {
+                const each = folders.get(id)
+                return each ? (
+                  <RowInHand checked={select.chosen.has(folderKey(id))}>
+                    <FolderFace folder={each.folder} holds={each} />
+                  </RowInHand>
+                ) : null
+              }}
+            />
+          ) : null}
+          {view.groups.map((group) =>
+            group.entries.length === 0 ? null : (
+              <section key={group.key} className="flex flex-col gap-3">
+                {group.heading ? <h2 className="text-2xl">{group.heading}</h2> : null}
+                <SortableRows
+                  label={group.heading ?? t('title')}
+                  ids={group.entries.map((entry) => entry.id)}
+                  nameOf={songName}
+                  onMove={page.orderSongs}
+                  row={(id) => {
+                    const entry = entries.get(id)
+                    return entry ? (
+                      <SelectRow
+                        key={id}
+                        id={id}
+                        name={songName(id)}
+                        checked={select.chosen.has(songKey(id))}
+                        onToggle={() => select.toggle(songKey(id))}
+                        sortable={sortable}
+                        carry={songKey(id)}
+                      >
+                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                      </SelectRow>
+                    ) : null
+                  }}
+                  inHand={(id) => {
+                    const entry = entries.get(id)
+                    return entry ? (
+                      <RowInHand checked={select.chosen.has(songKey(id))}>
+                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                      </RowInHand>
+                    ) : null
+                  }}
+                />
+              </section>
+            ),
+          )}
+        </div>
+        {children}
+      </LibraryDnd>
+    </CardLookProvider>
   )
 }

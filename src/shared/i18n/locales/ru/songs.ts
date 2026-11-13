@@ -233,6 +233,7 @@ export const songs: LocaleResources['songs'] = {
     songCount_few: '{{count}} песни',
     songCount_many: '{{count}} песен',
     songCount_other: '{{count}} песни',
+    learnedCount: 'выучено {{count}}',
     folderCount_one: '{{count}} папка',
     folderCount_few: '{{count}} папки',
     folderCount_many: '{{count}} папок',

@@ -8,6 +8,19 @@
 export const ROW_CARD =
   'card flex h-full min-w-0 items-center gap-1 pr-1 transition-colors duration-200 ease-out'
 
+/**
+ * A row of a grouped list (canvas 133: a library's rows in one card, a hairline between them): the
+ * card's own fill, its hover the link's, as `ROW_CARD`'s.
+ */
+export const ROW_FLAT =
+  'flex h-full min-w-0 items-center gap-1 pr-1 transition-colors duration-200 ease-out'
+
+/** A library row's title, heavier than a settings row's: the song or folder is what is hunted for. */
+export const ROW_TITLE_STRONG = '**:data-[slot=row-title]:font-semibold'
+
+/** What only a mouse reaches (More on a library row): a finger has the swipe and the long press. */
+export const POINTER_ONLY = 'pointer-coarse:hidden'
+
 /** A control at its end (More) or its start (the handle, the check): a 44px target, soft until pointed at. */
 export const ROW_CONTROL =
   'grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3 [&_svg]:size-5'

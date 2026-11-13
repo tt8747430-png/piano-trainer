@@ -2,12 +2,12 @@ import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { groupTile, useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { PlaceRow } from '@/widgets/song-library'
 
 /**
  * Shared with me (R30 S6): the folders others share with the learner's groups, each a row to its page
  * (who shared it, for which group), and the way to Groups. In the laptop's tree, its rows the tree's;
- * on a phone's Home, a section of rows. Signed out, Groups alone, which says groups need an account.
+ * on a phone's Home, rows at the foot of Folders. Signed out, Groups alone, which says groups need an account.
  */
 export function SharedWithMe({ inTree }: { inTree: boolean }) {
   const { t } = useTranslation('songs')
@@ -60,28 +60,28 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
         </ul>
       </>
     )
+  // A phone's Home: rows at the foot of Folders' card, as folders are (canvas 133).
   return (
-    <SettingsGroup flush title={t('groups.sharedWithMe')}>
-      {shared.map((folder) => {
-        return (
-          <RowLink
-            key={folder.id}
-            {...groupTile(folder)}
-            title={folder.name}
-            detail={t('groups.sharedBy', {
-              name: folder.ownerName,
-              group: groupName(folder.groupId),
-            })}
-            render={<Link to="/songs/shared-folders/$sharedId" params={{ sharedId: folder.id }} />}
-          />
-        )
-      })}
-      <RowLink
+    <>
+      {shared.map((folder) => (
+        <PlaceRow
+          key={folder.id}
+          {...groupTile(folder)}
+          title={folder.name}
+          detail={t('groups.sharedBy', {
+            name: folder.ownerName,
+            group: groupName(folder.groupId),
+          })}
+          render={<Link to="/songs/shared-folders/$sharedId" params={{ sharedId: folder.id }} />}
+        />
+      ))}
+      <PlaceRow
         icon={Users}
         paint="sky"
-        title={t('groups.title')}
+        title={t('groups.sharedWithMe')}
+        detail={t('groups.title')}
         render={<Link to="/songs/groups" />}
       />
-    </SettingsGroup>
+    </>
   )
 }

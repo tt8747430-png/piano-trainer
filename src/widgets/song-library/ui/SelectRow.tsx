@@ -6,7 +6,8 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
-import { ROW_BODY, ROW_CARD, ROW_CONTROL } from '@/shared/ui'
+import { ROW_BODY, ROW_CARD, ROW_CONTROL, ROW_FLAT, ROW_TITLE_STRONG } from '@/shared/ui'
+import { useCardLook } from './card-look'
 
 /**
  * The check a chosen row wears, umber while chosen (the neutral chosen), a ring while not. It comes
@@ -70,6 +71,7 @@ export function SelectRow({
   } = useSortable({ id, disabled: !sortable, attributes: { roleDescription: t('drag.role') } })
   const move = t('drag.move', { name })
   const { carrying } = useLibraryDnd()
+  const grouped = useCardLook().style.layout === 'list'
   const carried = carrying?.has(carry) === true
   const { setNodeRef: setCarrierRef, listeners: carrierListeners } = useDraggable({
     id: `${CARRY}${carry}`,
@@ -90,7 +92,7 @@ export function SelectRow({
       <div
         data-drop={lit ? '' : undefined}
         className={cn(
-          ROW_CARD,
+          grouped ? ROW_FLAT : ROW_CARD,
           'hover:bg-muted data-drop:bg-selected/15 data-drop:ring-2 data-drop:ring-selected data-drop:ring-inset',
           checked && 'ring-2 ring-selected ring-inset',
         )}
@@ -102,7 +104,11 @@ export function SelectRow({
           aria-hidden
           onClick={onToggle}
           {...carrierListeners}
-          className={cn(ROW_BODY, 'cursor-pointer touch-manipulation select-none')}
+          className={cn(
+            ROW_BODY,
+            ROW_TITLE_STRONG,
+            'cursor-pointer touch-manipulation select-none',
+          )}
         >
           {children}
         </div>

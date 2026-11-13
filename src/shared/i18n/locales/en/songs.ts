@@ -237,6 +237,7 @@ export const songs = {
     create: 'Create folder',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
+    learnedCount: '{{count}} learned',
     folderCount_one: '{{count}} folder',
     folderCount_other: '{{count}} folders',
     // Back up a level, to the folder this one stands in, or Home.

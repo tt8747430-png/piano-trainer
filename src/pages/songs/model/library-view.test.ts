@@ -115,11 +115,11 @@ describe('libraryView', () => {
     expect(home.hidden).toBe(0)
   })
 
-  it('counts a folder’s songs and folders, and names its first songs', () => {
+  it('counts a folder’s songs, folders and learned songs', () => {
     const [first] = view().folders
     const songs = songsOf('learning-songs')
     expect(first).toMatchObject({ folders: 0, songs: songs.length })
-    expect(first?.first).toEqual(songs.slice(0, 3).map((entry) => entry.title))
+    expect(first?.learned).toBe(0)
     const hymns = view({}, 'called-to-play', nestedLayout).folders
     expect(hymns.map((each) => [each.folder.id, each.folders])).toEqual([['hymns', 1]])
   })

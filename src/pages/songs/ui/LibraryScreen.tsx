@@ -116,7 +116,7 @@ export function LibraryScreen({
             page={page}
             place={folder?.id ?? 'home'}
             table={wide}
-            afterFolders={
+            moreFolders={
               folder === null && !wide && !view.filtering ? <SharedWithMe inTree={false} /> : null
             }
             onClear={clear}

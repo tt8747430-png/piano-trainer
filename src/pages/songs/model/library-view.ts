@@ -23,13 +23,12 @@ export interface SongGroup {
   readonly entries: readonly Entry[]
 }
 
-/** A folder as a row shows it: its songs and the folders in it counted, and its first songs' titles. */
+/** A folder as a row shows it: the folders and songs in it counted, and how many of its songs are learned. */
 export interface FolderView {
   readonly folder: ShelvedFolder
   readonly folders: number
   readonly songs: number
-  /** The titles of its first few songs, as it lists them. */
-  readonly first: readonly string[]
+  readonly learned: number
 }
 
 /** What a place of the library shows: its folders, its songs, how many the filters hide. */
@@ -59,9 +58,6 @@ export interface ViewLookups {
   /** Every song's heading at Home, under the folders (a phone's All songs). */
   readonly allSongs: string
 }
-
-/** How many first songs a folder's row names. */
-const FIRST_TITLES = 3
 
 /** The filters that narrow, besides the search: what the Filter button counts and its chips name. */
 export const filtersOn = (filter: SongsFilter): number =>
@@ -219,7 +215,7 @@ export function libraryView(
     folder,
     folders: childFolders(layout.folders, folder.id).length,
     songs: folder.songs.length,
-    first: entries(folder.songs.slice(0, FIRST_TITLES)).map(lookups.titleOf),
+    learned: folder.songs.filter((id) => lookups.learned.has(id)).length,
   })
   const searched = filter.q.trim() !== ''
   return {
