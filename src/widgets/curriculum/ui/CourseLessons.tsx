@@ -4,16 +4,15 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type Course } from '@/entities/course'
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
-import { courseLessonStepId, STAGE_PAINT, type StepId } from '@/entities/step'
+import { courseLessonStepId, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { PAINT } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { afterWorthSaying } from '../model/after'
 import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 
 /**
- * A course's lessons, numbered as taught, in one card: each row its number on a tile in the course's
- * paint (grass with a check once learned; ringed in honey where Continue leads; an arc round it as
+ * A course's lessons, numbered as taught, in one card: each row its number on a plain tile (grass
+ * with a check once learned; ringed in honey where Continue leads; an arc round it as
  * its sections are read), its title and the lessons to read before it. Every lesson opens; the order
  * only suggests.
  */
@@ -25,7 +24,6 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
   const read = useProgress(selectRead)
   const numberOf = (lessonId: string) =>
     course.lessons.findIndex((each) => each.id === lessonId) + 1
-  const paint = PAINT[STAGE_PAINT[course.stage]]
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
       <h2 id={id} className="text-2xl">
@@ -52,7 +50,6 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                 }
                 // As a level's line: the next one its book, the rest their number, said once.
                 mark={current ? <BookOpenText className="size-5" strokeWidth={1.75} /> : i + 1}
-                paint={paint}
                 done={done}
                 share={share}
                 current={current}

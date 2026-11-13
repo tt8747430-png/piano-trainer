@@ -3,19 +3,19 @@ import { Check } from 'lucide-react'
 import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { OpensMark, ProgressRing } from '@/shared/ui'
+import { OpensMark, PAINT, ProgressRing } from '@/shared/ui'
 
 /**
  * A lesson as a library's row, wherever Learn lists one (a level's chapter, a course, Your lessons,
- * Your course): its tile in its paint (grass with a check once learned, an arc round it as it is read,
- * ringed in honey where Continue leads), its title and one detail line, Next where Continue leads, a
+ * Your course): its tile plain until learned (white, a hairline, its number or picture in ink; canvas
+ * 162), grass with a check once learned, a grass arc round it as it is read, ringed in honey where
+ * Continue leads; its title and one detail line, Next where Continue leads, a
  * chevron. The whole row is the link it is given (`render`), and opens it.
  */
 export function LessonRow({
   render,
   mark,
   square = false,
-  paint,
   done,
   share,
   current = false,
@@ -29,8 +29,6 @@ export function LessonRow({
   mark: ReactNode
   /** A check (a chord family, a scale) wears a square tile; a lesson a round one. */
   square?: boolean
-  /** The tile's fill and ink (`PAINT[…]`'s). */
-  paint: { readonly fill: string; readonly ink: string }
   done: boolean
   /** How much of it is read, 0 to 1. */
   share: number
@@ -43,13 +41,15 @@ export function LessonRow({
   const { t } = useTranslation('learn')
   const face = (
     <>
-      <ProgressRing share={done || current ? 0 : share} className={paint.ink}>
+      <ProgressRing share={done || current ? 0 : share} className={PAINT.grass.ink}>
         <span
           aria-hidden
           className={cn(
             'grid size-10 shrink-0 place-items-center font-display text-lg font-semibold tabular-nums',
             square ? 'rounded-control' : 'rounded-pill',
-            done ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
+            done
+              ? cn(PAINT.grass.fill, PAINT.grass.ink)
+              : 'bg-card text-foreground ring-1 ring-border ring-inset',
             current && 'ring-2 ring-primary ring-offset-2 ring-offset-card',
           )}
         >

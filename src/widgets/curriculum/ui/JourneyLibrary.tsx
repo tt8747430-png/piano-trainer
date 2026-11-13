@@ -15,17 +15,10 @@ import {
   selectRead,
   useProgress,
 } from '@/entities/progress'
-import {
-  lessonStepId,
-  skillsOfStep,
-  STAGE_PAINT,
-  StepLink,
-  stepIdOf,
-  type StepId,
-} from '@/entities/step'
+import { lessonStepId, skillsOfStep, StepLink, stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
-import { ChoiceChips, PAINT } from '@/shared/ui'
+import { ChoiceChips } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { OWN_LESSONS, type LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
@@ -41,20 +34,18 @@ const ICON = {
 } as const
 
 /**
- * A step of a chapter as a library's row: its tile in its journey's paint (a lesson's number, a
+ * A step of a chapter as a library's row: its tile plain until learned (a lesson's number, a
  * check's picture; grass with a check once learned, an arc round it as a lesson is read, ringed in honey where Continue leads), its title and
  * one detail line (a lesson's number and the lessons to read first; a check's kind and how much of it
  * is known), Next where Continue leads, a chevron. The whole row opens it.
  */
 function StepRow({
   step,
-  journey,
   number,
   numbers,
   next,
 }: {
   step: JourneyStep
-  journey: Journey
   number: number | undefined
   numbers: ReadonlyMap<StepId, number>
   next: boolean
@@ -68,7 +59,6 @@ function StepRow({
   const done = learned[id] !== undefined
   const lesson = step.kind === 'lesson' ? lessonById(step.lessonId) : undefined
   const share = lesson ? lessonShare(lesson.sections.length, read[id], done) : 0
-  const paint = PAINT[STAGE_PAINT[journey.stage]]
   const Icon = ICON[step.kind]
   const asked = (lesson?.after ?? []).flatMap((each) => {
     const n = numbers.get(lessonStepId(each))
@@ -98,7 +88,6 @@ function StepRow({
           next || number === undefined ? <Icon className="size-5" strokeWidth={1.75} /> : number
         }
         square={step.kind !== 'lesson'}
-        paint={paint}
         done={done}
         share={share}
         current={next}
@@ -113,13 +102,11 @@ function StepRow({
 function ChapterGroup({
   chapter,
   n,
-  journey,
   numbers,
   next,
 }: {
   chapter: Chapter
   n: number
-  journey: Journey
   numbers: ReadonlyMap<StepId, number>
   next: StepId | undefined
 }) {
@@ -150,7 +137,6 @@ function ChapterGroup({
             <StepRow
               key={stepId}
               step={step}
-              journey={journey}
               number={numbers.get(stepId)}
               numbers={numbers}
               next={stepId === next}
@@ -188,14 +174,7 @@ function LevelLessons({ journey }: { journey: Journey }) {
         </p>
       </section>
       {journey.chapters.map((chapter, i) => (
-        <ChapterGroup
-          key={chapter.id}
-          chapter={chapter}
-          n={i + 1}
-          journey={journey}
-          numbers={numbers}
-          next={next}
-        />
+        <ChapterGroup key={chapter.id} chapter={chapter} n={i + 1} numbers={numbers} next={next} />
       ))}
     </>
   )

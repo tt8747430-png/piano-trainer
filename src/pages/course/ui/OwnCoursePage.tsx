@@ -14,7 +14,7 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, FabLink, FloatingActions, RoundLink, ScreenHeader } from '@/shared/ui'
 import {
   isComplete,
   LearnedMeter,
@@ -44,7 +44,6 @@ function Lessons({
   const id = useId()
   const learned = useProgress(selectLearned)
   const read = useProgress(selectRead)
-  const paint = PAINT[course.look.paint]
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
       <h2 id={id} className="text-2xl">
@@ -63,7 +62,6 @@ function Lessons({
                 <LessonRow
                   render={inCourse(course, lesson.id)}
                   mark={i + 1}
-                  paint={paint}
                   done={done}
                   share={lessonShare(lesson.sections.length, read[step], done)}
                   current={lesson.id === next}

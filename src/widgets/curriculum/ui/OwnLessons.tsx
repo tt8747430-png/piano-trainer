@@ -7,7 +7,6 @@ import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { createOwnLesson } from '@/features/manage-own-lessons'
 import { localText, useLocale } from '@/shared/i18n'
-import { PAINT } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
 import { NewRow } from './NewRow'
@@ -53,7 +52,6 @@ export function OwnLessons() {
               <LessonRow
                 render={<Link to="/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
                 mark={<BookOpenText className="size-5" strokeWidth={1.75} />}
-                paint={PAINT.sand}
                 done={learnedIt}
                 share={lessonShare(lesson.sections.length, read[step], learnedIt)}
                 title={localText(lesson.title, locale)}
