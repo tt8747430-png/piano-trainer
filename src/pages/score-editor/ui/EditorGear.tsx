@@ -2,12 +2,12 @@ import {
   ArrowUpDown,
   Circle,
   Eye,
-  KeyboardMusic,
   ListMusic,
   Mic,
   Music2,
   Piano,
   Ruler,
+  TextCursorInput,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
@@ -180,7 +180,7 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           />
           <RowTrigger
             title={t('scoreSettings.pages.input')}
-            icon={Piano}
+            icon={TextCursorInput}
             paint="yellow"
             onClick={() => view.setGear('input')}
           />
@@ -193,7 +193,7 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           {/* The keys' settings have one home, Settings › On-screen piano (2026-11-12): a row to it. */}
           <RowLink
             title={t('scoreSettings.pages.piano')}
-            icon={KeyboardMusic}
+            icon={Piano}
             paint="sky"
             render={<Link to="/settings/on-screen-piano" />}
           />

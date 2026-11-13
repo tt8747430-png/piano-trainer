@@ -260,3 +260,4 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 8, Learn: Your lessons (empty) fine. Songs: a folder page (Called to Play 2) fine.
 - Loop round 8, Practice: Scales and keys, Progressions: nothing to change.
 - Loop round 8, Player: the settings sheet named the on-screen piano "Экранное фортепиано" while its Settings page is "Экранная клавиатура" (and a Practice row "Клавиатура на экране"); one Russian name now, as English has one.
+- Loop round 8, score editor and Player: one icon and one word per setting across both gears: the on-screen piano is the piano (the editor and Chord player wore KeyboardMusic, which now marks chords alone), note input a text cursor (it wore the piano), the score view the eye in both (the Player wore a monitor) and named "Score view" / "Вид нот" in both (the editor said "View").

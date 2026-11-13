@@ -718,7 +718,7 @@ export const editor: LocaleResources['editor'] = {
     title: 'Настройки партитуры',
     score: 'Партитура',
     acts: {
-      view: 'Вид',
+      view: 'Вид нот',
       transpose: 'Транспонировать',
       record: 'Записать дубль',
       takes: 'Дубли',

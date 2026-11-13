@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Cable, Drum, Guitar, KeyboardMusic, Minus, Piano, Plus } from 'lucide-react'
+import { Cable, Drum, Guitar, Minus, Piano, Plus } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BAND_PARTS, TRANSPOSE_RANGE, type BandPart } from '@/entities/chord-sheet'
@@ -235,7 +235,7 @@ export function ChordPlayerSettingsPage() {
           <SettingsGroup flush>
             <RowLink
               title={t('chordPlayer.settings.onScreenPiano')}
-              icon={KeyboardMusic}
+              icon={Piano}
               paint="sand"
               render={<Link to="/settings/on-screen-piano" />}
             />

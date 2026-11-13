@@ -789,7 +789,7 @@ export const editor = {
     score: 'Score',
     // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
     acts: {
-      view: 'View',
+      view: 'Score view',
       transpose: 'Transpose',
       record: 'Record a take',
       takes: 'Takes',

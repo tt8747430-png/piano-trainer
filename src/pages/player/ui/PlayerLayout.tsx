@@ -2,8 +2,8 @@ import {
   Download,
   Link2,
   Ellipsis,
+  Eye,
   Hand,
-  MonitorCog,
   Piano,
   Printer,
   SlidersHorizontal,
@@ -236,7 +236,7 @@ export function PlayerLayout({
       {
         id: 'display',
         label: t('settingsPage.display'),
-        icon: MonitorCog,
+        icon: Eye,
         value: shown === 'sheet' ? t(`music:sheet.layout.${scoreView.layout}`) : undefined,
         content: (
           <>
