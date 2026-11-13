@@ -97,8 +97,9 @@ export function DraftScreen<T>({
             </>
           ) : null
         }
-        settings={settings}
-        edit={edit}
+        // Settings and Done only where the draft is open: to one who cannot edit, nothing is in Edit.
+        settings={open ? settings : undefined}
+        edit={open ? edit : undefined}
       />
       {!editor ? (
         <NotOpen line={editorsOnly}>

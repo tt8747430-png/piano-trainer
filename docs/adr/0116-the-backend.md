@@ -50,7 +50,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   `save_public_item`) and takes a report (`public_reports`, a reason and a note) to the editors, who hide an item
   (`hide_public_item`, never its author) or block a publisher. Patterns and progressions follow on the same tables.
 - **Admin** is a role set only by the server (`app_metadata.role`: admin or editor; anyone else a learner), read
-  by row-level security, by Edge Functions and into the app's `Account`. The first admin is the owner: their
+  by row-level security, by Edge Functions and into the app's `Account`. A learner who reaches an edit page sees "Only an editor edits…" and a way back, with no Done or gear in its bar. The first admin is the owner: their
   address is listed in `admin_bootstrap` (in the database only, never the repo) and their account becomes an admin
   when it is made. Accounts are listed and their roles changed through the `admin` Edge Function, which checks the
   caller's role itself; never by a client query on `auth.users`. Groups, their members and feature switches are
