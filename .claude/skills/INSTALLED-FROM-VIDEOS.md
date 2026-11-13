@@ -58,4 +58,4 @@ At the owner's word ("remove the duplicates and unneeded things and old stale ve
 `subagent-driven-development`, `dispatching-parallel-agents`, `test-driven-development`, `using-superpowers`,
 `diagnosing-superpowers` (and the superpowers plugin turned off), `deploy-to-vercel`, `before-and-after`, `autoship`,
 `workflow`, `remotion-best-practices`, `core`, `react`, `review`, `design-an-interface`, `understand` and
-`understand-*`.
+`understand-*`, and `fixing-motion-performance` (a duplicate of `animation-performance`).

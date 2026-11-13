@@ -22,7 +22,7 @@ beside `ui-and-mockups.md` and `impeccable`.
 | Text | Headings `text-balance`, body `text-pretty`, running text at most about 65ch; truncate or clamp in dense rows. |
 | Plurals | Counts go through ICU plural rules in en and ru, never "1 songs" or a hand-made suffix. |
 | Dates | Relative for a week ("3 days ago"), then the absolute date. |
-| Corners | Nested surfaces are concentric: outer radius = inner radius + the padding between. |
+| Corners | Nested surfaces look concentric (v19: "a pill in a pill is a pill"), on `DESIGN.md`'s four-step scale: the inner corner is the step nearest the outer radius less the inset; never a new value. |
 | Alignment | Optical over geometric: a play triangle and a lone icon in a circle are nudged until they look centred. |
 | Icons | One set (Lucide), stroke matched to the text beside it, `currentColor`; outline by default, filled only for the active state (the heart). |
 | Hit area | 44px on touch, 40px at least in a dense laptop row, widened by a pseudo-element when the mark is smaller; two never overlap. |
@@ -86,6 +86,8 @@ place, before, after, why.
   do not apply; the one curve does.
 - **Destructive actions:** `baseline-ui`'s AlertDialog for every destructive act and `emil-design-eng`'s
   hold-to-delete do not apply: what can be undone happens at once with Undo; only what cannot asks (`CLAUDE.md`).
+- **Defaults:** `baseline-ui`'s "no animation unless asked", Tailwind's default shadows and Base UI give way to
+  `DESIGN.md`'s motion, the `elevation-*` tokens and shadcn (`practices.md`).
 - **Zoom:** `mobile-native`'s "never disable zoom" yields to the installed app's zoom lock (`#standalone-boot`).
 
 ## Not adopted

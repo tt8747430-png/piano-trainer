@@ -60,13 +60,13 @@ context, so load the one the task needs, and ask: would it change what I do next
 | A multi-task plan                           | `writing-plans`, run inline with `executing-plans`                |
 | A request with real choices left open       | `brainstorming`; `grill-with-docs` only when asked                |
 | About to say done                           | `verification-before-completion`                                  |
-| A large change wanting fresh eyes           | `requesting-code-review` or `code-review`                         |
+| A large or risky change wanting fresh eyes  | `code-review` or `requesting-code-review`, never as a gate on every push |
 | Findings from a reviewer                    | `receiving-code-review`                                           |
 | A merge conflict                            | `resolving-merge-conflicts`                                       |
 | A question needing primary sources          | `research`                                                        |
-| A throwaway try-out                         | `prototype`                                                       |
+| A throwaway try-out                         | `prototype`, kept out of `src/` and never pushed; a screen question is a canvas |
 | The database                                | `supabase`, then `supabase-postgres-best-practices`               |
-| Vercel config                               | `knowledge-update` before touching `vercel.ts`; `vercel-cli`      |
+| Vercel config                               | `knowledge-update` before touching `vercel.ts`, the one config (never a `vercel.json`); `vercel-cli` |
 | Changing a skill                            | `writing-skills`                                                  |
 | Handing work on                             | `handoff`, `prompts/handoff.md`                                   |
 
@@ -127,7 +127,11 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
 - **No questions in autonomous mode:** `brainstorming`, `tdd`'s seams, `receiving-code-review`'s clarifications and
   `systematic-debugging`'s "discuss before more fixes" take the recommendation and go, the question in the report.
 - **`tdd` is the one TDD skill;** where another skill says `test-driven-development`, read `tdd`.
-- **`grill-with-docs` is the one grilling skill,** its rules in its own file.
+- **`grill-with-docs` is the one grilling skill,** its rules in its own file. Its glossary is `CLAUDE.md`'s "Words in
+  code", and its ADRs are amended per area, never superseded by a new numbered one (`domain-modeling`'s format yields).
+- **Screens are shot through [testing](testing.md)'s harness;** `agent-browser` only for reference sites.
+- **Outside skills are read for their rules;** a scripted opening (`emil-design-eng`'s "I'm ready to help") is skipped.
+- **One motion-performance skill:** `animation-performance`; `fixing-motion-performance` was its duplicate.
 - **Skills load when they change what you do next,** not on a 1% chance; no "Using [skill]" announcement before the
   answer.
 - **Never stage with `git add .`** or deploy; hosting is the owner's. Never read `.env`.
