@@ -38,6 +38,19 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     says so and names Chrome or Edge. Built as "Follow a MIDI arranger" in the Chord player's settings, beside
     Connect a piano, with a mark in the bar while it waits for Start. Not testable here without the instrument; a
     fake MIDI port drives it in the browser checks.
+  - **The sheet sets the Genos's sections** (owner, 2026-11-13: "I want to be able though to set the transitions for
+    the sections automatically like from the verse to chorus and also while playing two times the verse I want to be
+    able to set that the Yamaha plays what types like a b c or d and when I dont set then it plays normally. and also
+    the endings and the intro"): this replaces "the app sends nothing" for sections only; it still never sends chords
+    or notes. Each section of the sheet carries, in its own sheet, an **Intro** (A–D or none, before the first
+    section), its **Main** per pass (Main A–D, set apart for each repeat: the verse's 1st time A, 2nd time B), a
+    **Fill-in into the next section** (on its last bar: Fill in, Break or none), and the last section an **Ending**
+    (A–D or none). Each is sent on the Genos's MIDI clock at the bar line it falls on, as Yamaha's Section Control
+    message (F0 43 7E 00 ss 7F F7; ss as the Genos Data List gives it: Intro A–D, Main A–D 08–0B, Fill in, Break,
+    Ending A–D; to be checked against the Data List before it ships). Anything left unset sends nothing, so the
+    Genos plays as its own panel says. Sending SysEx needs Web MIDI's SysEx permission, asked for when the learner
+    turns Follow a MIDI arranger on. Shown on the sheet as a small tag on the section's head ("Main B · Fill in"),
+    on the canvas first.
   - **Every change kept as a draft** (owner, 2026-11-13: "all the changes I do to the sheet should be automatically
     saved, either as draft and then I can save and change the current chords from the draft"): each edit is saved
     at once, on the device, as the sheet's draft; the sheet's saved chords stay as they were until Save, which makes

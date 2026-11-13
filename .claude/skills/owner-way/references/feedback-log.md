@@ -271,7 +271,7 @@ owner's, typos fixed.
   something and it has wrong timings accept the edit with this exclamation sign … and not change all the other
   chords timing automatically … auto scroll … easier timing adjustment. look at the musicca … the chord sheet is
   not being saved … the drag and drop bug, research the memory palaces drag and drop … connecting to the midi piano
-  Yamaha Genos". An edit never retimes other chords; a bar that no longer adds up is marked ! and kept. "and also dragggin into other sections should be possible": a chord drags into any section, empty ones too. Spec
+  Yamaha Genos". An edit never retimes other chords; a bar that no longer adds up is marked ! and kept. "and also dragggin into other sections should be possible": a chord drags into any section, empty ones too. "set the transitions for the sections … two times the verse … a b c or d … the endings and the intro": the sheet sets the Genos's Intro, Main per pass, Fill-in and Ending by Section Control; unset sends nothing; never chords. Spec
   `.scratch/r39/plan/practice-chord-player.md`.
 - **No Quiz page (2026-11-13):** "no quiz page". The Quiz page, My gaps and every list of trainers go (Practice,
   Search, Intervals' Train your ear, Progressions' Test yourself); a trainer opens only from the lesson that practises
