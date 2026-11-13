@@ -59,13 +59,11 @@ export function NextMilestone() {
       </ProgressRing>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-sm font-semibold text-muted-foreground">
-          {t('profile.badges.almost')}
+          {t('profile.badges.next')}
         </span>
         <span className="text-pretty">
-          {t('profile.badges.left', {
-            count: next.left,
-            badge: t(`profile.badges.names.${next.id}`),
-          })}
+          {t(`profile.badges.names.${next.id}`)} ·{' '}
+          {t(`profile.badges.goals.${next.id}`, { count: next.goal })}
         </span>
       </span>
     </Link>
