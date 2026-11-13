@@ -19,7 +19,7 @@ sounds like and the songs that open with it, as musicca's interval pages and the
 `src/pages/intervals` → `widgets/interval-explorer` (the rows, `interval-songs.ts`); strings `practice.ts`
 `intervals.*`. Three icons in the bar, Root C, Play as with icons, a grand staff, folding Simple and Compound lists of
 cards with a play button, a meaning, semitones and an ⓘ for songs, a floating Play all over the rows
-(`drawings/today-intervals-*.png`).
+.
 
 ## Will build (canvas row 4)
 

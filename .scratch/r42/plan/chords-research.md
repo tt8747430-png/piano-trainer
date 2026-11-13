@@ -68,7 +68,7 @@ pop-up. No source was blocked by a bot check.
 
 ## The hand comparison (rendered 2026-11-09)
 
-`.scratch/r42/drawings/v80-hand-comparison.png`: the current hand beside MakeHuman's (MPFB 2.0.18, `bpy` 5.2.3,
+the v80-hand-comparison.png drawing (in git history): the current hand beside MakeHuman's (MPFB 2.0.18, `bpy` 5.2.3,
 headless), from above and from the seat.
 
 - MakeHuman's hand: 3,374 triangles (current 2,314); 128 KB without its texture, 3.8 MB with the 2048² skin. The skin
@@ -81,7 +81,7 @@ headless), from above and from the seat.
 
 ## Skin variants for the MakeHuman hand (rendered 2026-11-09)
 
-`.scratch/r42/drawings/v82-hand-skin-variants.png`. All skins are from `makehuman_system_assets_cc0.zip`; each
+the v82-hand-skin-variants.png drawing (in git history). All skins are from `makehuman_system_assets_cc0.zip`; each
 `.mhmat` says "explicitly released as CC0 in september 2020".
 
 - A the young male skin unchanged; B the same cleaned (blotches and veins reduced, even tone); C is B with a relief
@@ -93,7 +93,7 @@ headless), from above and from the seat.
 
 ## Smooth, non-photographic hand variants (rendered 2026-11-09)
 
-`.scratch/r42/drawings/v84-hand-smooth-variants.png`, after the owner's "I dont want such realistic hand texture but
+the v84-hand-smooth-variants.png drawing (in git history), after the owner's "I dont want such realistic hand texture but
 it should feel real and have as many triangles as possible".
 
 - Subdivision levels of the MakeHuman hand, weights and UVs kept: level 0 is 3,374 triangles (129 KB), level 1

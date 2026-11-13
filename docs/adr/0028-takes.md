@@ -36,12 +36,3 @@ back gets a score they did not ask for.
 
 Time is placed where it was heard: the ports stamp MIDI events and answer the heard audio time (ADR 0034). Safari,
 without Web MIDI, cannot record.
-
-## History
-
-- 0028 — A take is kept as played (2026-10-05; its barlines added 2026-10-11).
-- 0034 — A take keeps all three pedals and its first bar, and may be named and cut to its bars (2026-10-09).
-- 0096 — Record is the transport's (2026-10-24).
-- 0110 — Record, Takes and the recording's settings in the one transport (2026-10-26).
-- r34 — A take is placed less the piano's calibrated lateness (Calibrate timing, ADR 0034).
-- Instructions audit: Record and Takes are the editor's gear's, the transport gone (ADR 0114) (2026-11-12).

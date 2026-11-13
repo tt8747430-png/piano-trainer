@@ -51,8 +51,8 @@ care shows in a hundred small things done the same way.
 4. **Spec:** the area's spec beside the one canvas, `.scratch/r39/plan/<area>.md` (Chords: `.scratch/r42/plan/chords.md`);
    a new `.scratch/rN/plan/` only for a new brief, `rN` the next free round after the newest in `.scratch` and `git log`,
    unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
-   quoted, the decision, its references. Below: the history, newest last. When a later ruling replaces a line, fix or
-   mark that line in the same edit.
+   quoted, the decision, its references. No history below it: when a later ruling replaces a line, the old line is deleted in the
+   same edit (git keeps it).
 5. **Canvas:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
    `.scratch/r39/canvas/index.py`, its rows the phone boards, their Night boards, the laptop boards and theirs (canvas
    100–101). A place drawn elsewhere is merged in. Phone and laptop, drawn from
@@ -62,7 +62,7 @@ care shows in a hundred small things done the same way.
    the research: draw the recommended fix, then ask about what is still open.
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
-   bullet into the feedback log and a line in `.scratch/r39/plan/loop.md`; save the drawing to `.scratch/<round>/drawings/`; commit those files by path and
+   bullet into the feedback log and a line in `.scratch/r39/plan/loop.md`; commit those files by path and
    push (docs go at once); report.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
@@ -185,8 +185,7 @@ area writes its phone and laptop boards from the same parts and state, and the r
 `BSHEET`, `POPOVER`, `SEGC`, `TOGGLE`, `CARD`; `calm_kit.py`: `PAGE`, `SHEET`, `INK`, `SOFT`, `FILL`, `LINE`,
 `ACCENT`, `SHADOW`) holds the shared helpers and colours. `checks/` measures a board in the real runtime and
 `checks/run.mjs` taps through it and shoots it (`checks/README.md`). A new area is a new file and a new page in
-`index.py`, drawn from that area's screenshots with the kit; never a new canvas. `.scratch/r37/canvas/` is the R37
-Player canvas before it was merged (v15), kept for its history.
+`index.py`, drawn from that area's screenshots with the kit; never a new canvas.
 
 ## Common mistakes
 

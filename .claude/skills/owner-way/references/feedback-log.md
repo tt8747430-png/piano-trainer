@@ -1,7 +1,7 @@
 # What the owner has asked for, by area
 
 Standing rulings, latest words first where they changed. Read the area before changing it, then check the code: a point here
-was either built or is still open. Add a ruling here the same day it is given, replacing what it overrules. Quotes are the
+was either built or is still open. Add a ruling here the same day it is given and delete what it overrules (git keeps it; nothing is struck through). Quotes are the
 owner's, typos fixed.
 
 ## Score editor
@@ -14,7 +14,7 @@ owner's, typos fixed.
   the palette which is strange". The time signature, key and clef are set in the palette's category, which their
   printed signs open; the title opens Title and credits; the gear holds only what the score does not print.
 - **Only what applies (2026-11-05):** "show only the actions relevant at that time like the write as common in the 5/4
-  is not relevant and is weird that it is shown but is disabled". ~~Hidden, never greyed.~~ (replaced by canvas 108: a section that does not apply now is dimmed in place, never hidden)
+  is not relevant and is weird that it is shown but is disabled".
 - **The palette as Flat's, its menus too (2026-11-05):** "this menu in the palette doesn't follow how the flat editor
   does this … as close as possible as the flat editor and its ui and its management and features". Every section in
   one scroll; Time signature as Flat's tiles with Customize; Key signature and Clef bare tables; Tempo in Measure.
@@ -43,9 +43,6 @@ owner's, typos fixed.
 - **Recording:** the learner chooses what plays along and what shows. The pedal prints one mark per press.
 - **The Player in Edit (canvas 123, 2026-11-11):** the bar is the Player's (✕, Play · Edit, Undo, Redo, ···); a
   selection strip with Play from here heads the palette; seven named categories with drawn note icons; keys under it.
-- ~~Replaced by canvas 123.~~ **Drawn (R39-3, 2026-11-08):** one quiet bar (Done, Undo, Redo, Piano keys, Play, ··· for what the score does not
-  print), no ✕; the palette's categories named, folded to one row, opened to every section in one scroll; docked on a
-  laptop. Waiting for the owner's word.
 - **The editor's draft (canvas 135, 2026-11-11):** "no roles, no edit mode": a built-in song's original is edited by an editor as a draft under a Publishing pill with Publish…, Versions and Discard changes; what reaches every learner asks first.
 
 ## Pickers and tempo
@@ -63,7 +60,7 @@ owner's, typos fixed.
 
 - **One score in two modes:** "I don't like how the header looks with this bar under the header". One designed header, the
   same transport at the foot, Edit straight from the Player, nothing jumping.
-- **One gear per screen** (Flat's), Edit beside the title, ~~no ⋯ menu button~~ (replaced by canvas 123: the bar keeps ···). Settings never scattered over four menus.
+- **One gear per screen** (Flat's), Edit beside the title,. Settings never scattered over four menus.
 - **Transpose** works exactly the same in both: semitones, the key it lands in, Apply to key or chords, a preview. No circle
   of fifths.
 - **Floating controls** hide when the learner taps elsewhere, reliably. Nothing traps a click.
@@ -115,7 +112,7 @@ owner's, typos fixed.
 - **No Song information and no Song page row in the Player** ("no song information", "no song page in the settings").
 - **A settings drawer holds settings; its acts sit in its head** ("the first two three settings should be more
   distinctive", "feels like a bottom bar and not like settings drawer", "still not good. research more"): the song at
-  the drawer's head with Share link and ··· (~~Edit score ·~~ Print · Export), as Chordify's ⋮; settings under headers below.
+  the drawer's head with Share link and ··· (Print · Export), as Chordify's ⋮; settings under headers below.
   Never a row of icon buttons in a drawer, never acts listed among settings.
   Edit score takes the whole row under the song's name, Share link and ··· beside the name, never Edit inside ···
   ("the edit button is too hidden", "the edit button takes the whole row"); no section
@@ -123,24 +120,22 @@ owner's, typos fixed.
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
-  Built in R32-A: pedals centred beneath the keys on the piano's rail; ~~the On-screen piano's page the one home of the
-  keys' settings, the Player's gear a link to it;~~ (replaced by canvas 121) `/settings/player` gone, the gear the Player's settings' home.
+  Built in R32-A: pedals centred beneath the keys on the piano's rail; `/settings/player` gone, the gear the Player's settings' home.
 - **Proper pianos, proper pedals (2026-11-05):** "i need proper pianos with proper pedal and implementations" (musicca,
   piano.org). Built in R33: ivory and ebony keys with felt and depth everywhere; the sustain held, latched (a lit
   indicator) or the score's, every key under it released together with a real damper; soft quieter and darker,
-  sostenuto as a piano's; ~~the rail's ⚙ a Piano sheet in place (Key size, Note names, Volume, Pedals);~~ (replaced by R34 and canvas 121) the Player's
+  sostenuto as a piano's; the Player's
   piano settings stay in its sheet. Record and Mark not repeated on the keys (the editor's Record, the Chord finder).
 - **Songscription's keyboard (2026-11-05):** "it doesn't still look good with these, and this rail at the bottom, look
   at the songscription piano implementation"; "i don't want finger number under the keyboard and no piano roll yet".
   Built in R34: the rail gone, the keys slim and edge to edge (All keys the default), the chord held, Sustain and
   Keyboard in the bar, a divider resizing the keys, hidden keys a "Keyboard" strip, the sheet's layout and zoom in one
-  pill; ~~no finger numbers on or under the keys~~ (replaced by canvas 151); no piano roll.
+  pill;; no piano roll.
 
 - **The Player's Pace and metronome (2026-11-07, canvas R37):**
   - Modes are Wait and Play only, no Follow, no group titles.
   - Sheet settings have no Your marks switch: the learner's own marks always show, and are removed by deleting them.
-  - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, ~~the accompaniment (Pattern,
-    Voicing, Swing)~~ (replaced by the later R37 line: no Voicing or Swing, the accompaniment not in Practice) and the loop. A song's recording has no settings anywhere in the Player: it
+  - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, and the loop. A song's recording has no settings anywhere in the Player: it
     plays along, and a wrong start is fixed in the content.
   - The Song gear has two radio cards: Arrangement (Level Beginner · Intermediate · Advanced) and Accompaniment
     (Pattern ›). Versions and accompaniment are separate, one plays. Rejected: "As written", a switch over version
@@ -159,12 +154,12 @@ owner's, typos fixed.
     note and the score scrolls when needed; a scroll by hand shows a Back to the music pill.
   - No ask-on-open, no skin tone (one neutral hand), no resume-following setting.
   - The tempo belongs to the metronome, in BPM with − + Tap and its marking, Score tempo to go back.
-  - ~~Play metronome and Count-in (bars) are plain controls.~~ (replaced by the Off · Count-in · On choice above) One setting never disables another.
+  - One setting never disables another.
   - The meter and accents come from the score: no beat squares, no subdivision in the Player.
   - Sounds named for what they are, and every one plays.
   - References are sheet-music players, never recording software.
   - No pedal setting: "remove it". Playback pedals as marked or automatically.
-  - ~~Versions are tiles like the modes.~~ (replaced by the radio cards above) The sheet's Show chips are the app's names. No cursor setting.
+  - The sheet's Show chips are the app's names. No cursor setting.
   - The full list is in `.scratch/r37/plan/pace-and-settings.md`, "The rulings as they stand".
 - Every Chordify feature but guitar. Plain which view a setting belongs to; Layout is the sheet music's alone.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the
@@ -232,25 +227,21 @@ owner's, typos fixed.
 ## Practice
 
 - **Practice lives on its topic's page; results after a run; history in Profile (canvas 160, 2026-11-11):** a grilling settled it: "remove the quiz page completely", no Chord trainer, "i dont want this from c to am, i dont understand what this is", "I like shuffle better than random order", "i want this history but not in the practices page". A page studies a thing and practises it in the Player; a run ends in a full-screen results page (every chord marked right, wrong, early or late by its ms, your best beside it); every run is kept in Profile › Practice history. Exercises is a group (Finger technique, Jazz vocabulary), never a page called Exercises under a heading that does not fit it. Never a separate trainer or quiz beside the topic's page.
-- ~~Replaced by canvas 160.~~ **Each trainer drills one kind of thing, the learner's own choice (canvas 159, 2026-11-11):** "we need only to practices the chords selected by the user… progressions… belongs to the progressions trainer… accompaniment in the accompaniment trainer… reading… in the exercises or quizez. we should not mix such thing": the Chord trainer takes the chords the learner chooses and offers only ways to play them (block, inversions, arpeggio, over the root); progressions, accompaniment patterns, reading and ear work live in their own places. Never preset content of another kind inside a trainer.
 - **Every board opened before a publish (canvas 157, 2026-11-11):** "the progressions page is broken": its phone list, and Accompaniment's and Exercises', had been empty since a generator reused a helper's name. Before each publish, every board the change can reach is opened in the runtime, not only the ones drawn this turn; generator helpers carry their file's prefix.
-- **Real exercises, named as the books name them (canvas 156, 2026-11-11):** "see a chord and play it doesnt make any sense… the names are very bad… real practices that do make sense": a trainer's exercises come from the owner's books (Piano Chords Practice, 400 Piano Chord Progressions), each named for what is played ("Major seventh chords in all inversions", "The I–IV–V–I cadence") and shown engraved; never invented drill names, "Start here", "Find more" or options a pianist would not say ("inversions up and back"). ~~A trainer is a tool, in Tools;~~ (replaced by canvas 160) the theory pages are Theory, never Harmony; no Up next, recent practice or progress the app cannot stand behind; a sheet's groups never shrink to fit. Replaces the canvas 154 line below.
-- ~~Replaced by canvas 156.~~ **A trainer is a library of drills, each a recipe (canvas 154, 2026-11-11):** "random chords to be removed… a tool for training chords… some defaults and like find more… research… be creative": Start here (five, in learning order) and Find more by kind; a drill card shows its picture, its first chords and its pace; one shared setup of plain questions behind every drill. One feature asked for (random chords) becomes one drill among many, never deleted.
+- **Real exercises, named as the books name them (canvas 156, 2026-11-11):** "see a chord and play it doesnt make any sense… the names are very bad… real practices that do make sense": a trainer's exercises come from the owner's books (Piano Chords Practice, 400 Piano Chord Progressions), each named for what is played ("Major seventh chords in all inversions", "The I–IV–V–I cadence") and shown engraved; never invented drill names, "Start here", "Find more" or options a pianist would not say ("inversions up and back"). the theory pages are Theory, never Harmony; no Up next, recent practice or progress the app cannot stand behind; a sheet's groups never shrink to fit. Replaces the canvas 154 line below.
 - **Chosen is coloured, not chosen is white (R42, canvas 153):** "when It is white its means not selected and when selected it should change color": every chosen chip or tile is the honey wash with a honey ring and tick; an unchosen one is plain white. Never mark the unchosen with a word ("Stays") or a fainter look.
 - **Fingers are a label the learner can pick (R42, canvas 151):** "I want to have a fingerings option in the piano labels": finger numbers on the keys are allowed when chosen in Labels, never by default. "keep all, transpose all is not clear": a list of checkboxes says what ticking means in its heading ("Chords to transpose"), counts "n of m" and offers Select all / Clear all; never a verb pair that reads as two actions.
 - **A drill names the chords it plays (R42, canvas 150):** "practice it chromatically or diatonically. how can I do this": a row with "or" in it hides a choice; each way of moving a chord through the keys is its own row, showing its first chords. Diatonic means the key's own chords, from the key the chord belongs to.
 - **Chords checked against the owner's books (R42, canvas 149):** "read this whether our chords are correct", "fix all": a chord's notes are checked against Chord Theory for Piano and Piano Chords Practice before it is drawn; ♯11 chords sit with the alterations; a chord is drawn as played, the app's table keeps it stacked in full. The theory book's interval table counts semitones from 1 (a minor 3rd as 4); never copy its numbers.
 - **A chord list reads like the chord finder (R42, canvas 148):** "make better the sheets consistent with the chords finder so that first the chord names and then the their full name. and make also the chords in the chord finder filterable": everywhere a chord is chosen from a list, the symbol comes first, then the full name, then the mark; a long chord list has the group chips on top. Never a name before its symbol.
 - **Roots: not a circle either (R42, canvas 147):** "no circle": the twelve roots sit on the page as two rows of six toggles with Select all, one tap each, no drawer. Never for roots: a circle, a keyboard, named sets, twelve rows.
-- **One way to choose on a page (R42, canvas 145):** "we also dont have consistency in the page. different controls for selecting": every list of options on a screen is the same row (checkbox for several, radio for one, name, ~~meaning,~~ example; the meaning line replaced by canvas 158) with the same group heading; and the result of the choices is shown where the learner looks first (your deck: count and chords).
+- **One way to choose on a page (R42, canvas 145):** "we also dont have consistency in the page. different controls for selecting": every list of options on a screen is the same row (checkbox for several, radio for one, name,example; the meaning line replaced by canvas 158) with the same group heading; and the result of the choices is shown where the learner looks first (your deck: count and chords).
 - **No invented presets (R42, canvas 144):** "what is the meaning of easy roots or white keys or all roots. I dont like this": a list the learner can tick needs only Select all; named shortcuts that need explaining go.
 - **Roots are picked like keys are learnt (R42, canvas 143):** "I dont like the roots choosing control": not a toy keyboard; the same checkboxes as the chord types, one spelling per root.
 - **A bar carries only what works on its page (R42, canvas 142):** "what Is the meaning on the piano settings in the header in this page": a header copied from a sibling page keeps nothing that does nothing here; Random chords shows no keys, so no piano button.
 - **Chords for a drill are types times roots (R42, canvas 141):** "I dont like this selected. look at the examples of the chords choosing": as in musictheory.net, ToneDear and pianochord.org, the learner ticks chord types in a named checklist and taps roots on a keyboard; never 444 chords to tick one by one.
 - **A multiple choice looks like one (R42, canvas 140):** "what is this chose chords… what is with this show another… in a key is also not very understandable": several things picked from a list are checkboxes with "Select all" and "n selected", never coloured tiles; no button that only demonstrates (Show another); no filter that needs a second choice to mean anything (In a key).
 - **Choosing chords is choosing chords (R42, canvas 139):** "make proper chords choosing… select all the chords and also filter them by type like these scrollable chips on top of the drawer": a set of chords is picked from one list of every chord, filtered by chips, with Choose all per type, never through modes ("From a key or Chord types") or a Triads/Sevenths switch. An inversion is named by the note at the bottom and shown.
-- ~~Replaced by canvas 160.~~ **Random chords is a drill's setup (R42, canvas 138):** "it looks like the same page… what is the most important on this page": a page that sets up a drill must not look like the page that explains a chord. Show the drill first (the flashcard the learner will see), ask its choices as plain questions in rows, make Start the one big thing. Never: hands at the keys before the drill, invented words like "In the draw", a voicing named without saying what it does.
-- ~~Replaced by canvas 160.~~ **Random chords takes the Chords page's shape (R42, canvas 137):** "I dont like the chords selection for praticing page": three pickers in the chord's type open drawers; the draw is a card of chord buttons; sessions are rows; the bar is Voicings · Start · Hands. Never: walls of chips or segmented rows for choosing what is drawn.
 - **One segmented control and stepper, 44 high (canvas 127, 2026-11-11):** a choice of two or three in a settings
   group stands under its label, full width; the Player's segmented control everywhere.
 - **Overview five across (canvas 126, 2026-11-11):** on a laptop the cards run five across with Search beside Tools;
@@ -296,21 +287,16 @@ owner's, typos fixed.
 - **A chord's root is a letter and ♭ ♮ ♯; a keyboard only for moving to a key (R42, canvas 107):** "it is interesting
   for transpose but not for picking a chords"; "I dont like the split note between the C sharp and d flat"; the key
   signature "like the transpose": a ♭/♯ stepper. Never: a black key split into two names.
-- **~~A root is picked on an octave, both spellings on each black key~~ (replaced by canvas 107) (R42, canvas 106):** "there is not possibility to
+- ** (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles
   that repeats the chord ("move cmaj7 to cmaj7").
-- ~~Replaced by canvas 160.~~ **Random chords is a practice page, not part of the chord finder (R42, canvas 105):** "I do want a random chord to
-  practice the chords, but maybe in the player or somewhere else and not in the chords finder". Set up on its own
-  page (a key or chord types, voicings, inversions, hands, a session goal), played in the Player's Wait mode. Never:
-  ties between chords; a key signature the learner did not pick ("the staf is always in c"); Transpose that changes
-  only the key name ("transpose is means to transpose the chords").
 - **Both hands follow pianochord.org's recipe (R42, canvas 104):** four of its pages sent without words. Left hand
   root and 5th from C2 to B2; right hand the 3rd and 7th in close position, starting on the note that moves least
   between chords; the bass of a slash chord in the left hand.
 - **A chord in two hands is split, never doubled (R42, canvas 103):** "the two hands still dont work like it should
   like the cm11 chords are not correct". One hand stays inside a ninth (5th, then 9th left out; pianochord.org's Cm11
-  is C E♭ F B♭); ~~Both is the bass below and the chord above.~~ (replaced by canvas 104) Voicings are grouped by source (Music theory, Jazz
+  is C E♭ F B♭); Voicings are grouped by source (Music theory, Jazz
   piano, Gorshkov's course), the Voicing button names the chosen one ("Close position", never "Close"), and the
   staff carries its own Add (an empty place) and Transpose (the key over the clef), with no buttons above it.
 - **No explanation line under a chord's name (R42, canvas 102):** "is it good that this text is there. I dont know if
@@ -364,7 +350,7 @@ owner's, typos fixed.
   segments do not fit beside its label puts the label above.
 - **A setting works in every view, and a tappable thing looks tappable (R42, canvas 84):** "I dont like the labels
   settings and that they are only available in 2d": Labels (Note names · Degrees · None) now draw on the 3D piano
-  too; ~~hiding the hands is a view (3D with hands · 3D keys · 2D keys · Off), not a switch that only works in 3D.~~ (replaced by canvas 85)
+  too;
   "make the chord that it is editable more clear": the name's parts are filled pills with chevrons.
 - **Look at it before it is sent (R42, v82):** "can you look at the websites before you send them … paddings and
   voicing button placed weirdly": a bar's button ran off the screen's edge because only the changed part was
@@ -405,25 +391,19 @@ owner's, typos fixed.
   (G + B♭maj7); the left hand's choice is Chord | Root, the pianist's words.
 - **Transpose is one tap away and moves everything (R42, v73):** "transpose chords easier": the key in the staff's
   header opens half steps and twelve keys; every chord on the staff moves, spelled for the new key.
-- ~~Replaced by v79.~~ **Hand settings are the hands themselves (R42, v72):** "I dont like the hand settings. make proper creative
-  controls, invent something new": a drawn left and right hand, each finger lit in its note's colour with the name
-  and finger number; tap a hand to use it; Bass only under the left. Never toolbars, cards or chips for the hands.
 - **A floating group is centred as one (R42, v72):** "why this is looking so not centered": a button beside a
   centred button pulls the pair off centre; centre the group.
 - **Hands play the whole chord; Split is the bass and the upper chord (R42, v71):** "when I select the left hand I
   want all the notes … both then … c e g and c e g in both hands … gm9 the g in the left hand and the BbMaj7 in the
-  right". ~~Never thin a chord for a hand setting;~~ (replaced by canvas 103) the learner's courses (Gorshkov) before the web. ~~Hands are a toolbar
-  under the staff, not cards on top.~~ (replaced by v79)
-- **Several chords, every action covers them (R42, v71):** the chord list is a checklist of what the staff shows;
+  right". the learner's courses (Gorshkov) before the web. - **Several chords, every action covers them (R42, v71):** the chord list is a checklist of what the staff shows;
   Play plays them all in the chosen mode.
 - **A control shows what it does (R42, v70):** "be more creative and clear … ux ui best principles": R.H./L.H.
-  chips and a 123 toggle were not understood; ~~each hand is a card naming the notes it plays and their fingers,
-  left hand on the left.~~ (replaced by v79) No abbreviation or bare icon where a word and the result fit.
+  chips and a 123 toggle were not understood; No abbreviation or bare icon where a word and the result fit.
 - **A hand alone plays the chord, fingered (R42, v69):** "I want to play the c major chord in left hand with its
   fingerings and not c g c". A setting named for a hand plays the chord in that hand; reduce only past what a hand
   holds. The hands sit beside their staves (R.H., L.H.); a setting lives where its effect shows.
 - **One home for fingering (R42, v69):** "set the fingerings in two places … make this more clear": the 123 toggle on
-  the staff; ~~never finger numbers on keys~~ (replaced by canvas 151).
+  the staff;.
 - **Adding a chord suggests the next one (R42, v69):** "you could improve it. be creative": the key's chords, likeliest
   first, voice-led.
 - **Voicings checked against the owner's transcripts (R42, v68):** "check that our current are correct are match
@@ -431,9 +411,7 @@ owner's, typos fixed.
   Spread, So What, Kenny Barron, Upper structure, greyed where the chord does not take them. "leave out the alt".
 - **Scales in every key with a key signature (R42, v68):** 15 per scale, spelled for the key, never D♯ major.
 - **The hand setting changes the voicing, as pianists do (R42, v67):** "what relevance have the hands settings in
-  … nineth chords and bigger … research the transcriptions". ~~Right alone for 9ths and up is rootless (no root, the
-  5th first out); Left alone is a low shell (1-7, 1-3-7 from F up), never close thirds below F3; Both is the shell
-  low and the rest above.~~ (replaced by v71 and canvas 103–104) Research the owner's transcripts before the web.
+  … nineth chords and bigger … research the transcriptions". Research the owner's transcripts before the web.
 - **Several chords on one staff (R42, v67):** "select more than one chord to be shown on the staff": names over the
   staff, + to add, × with Undo, All chords in order in the Play menu.
 - **Play centred, alone, honey kept (R42, v63–v64):** "the play button is too appealing … centered", then "no
@@ -441,7 +419,7 @@ owner's, typos fixed.
   left of the centred Play, and the chord is chosen from the name and the bar.
   v66: "now the names get cut off": a bar label is never truncated; measure the longest name in the runtime.
 - **Chords' settings live where they act (R42, v62):** Hand and Fingering in the Chord sheet after Voicing; the
-  keyboard button at the header's right; ~~no gear on Chords~~ (replaced by canvas 134: every Practice gear opens full settings).
+  keyboard button at the header's right;.
 - **No tab switch for the inversion; invent from the music (R42, v58):** "I dont like this tab switch, be more
   creative and think outside of the box". An inversion is a rotation, so it is a ring of the notes turned by tapping
   a note into the bass slot. Rejected for it so far: segmented track (v26, v57), ‹ › (v22), stepper pill (v52),
@@ -453,15 +431,13 @@ owner's, typos fixed.
   that hides a few related choices is two taps too many: show them side by side, each with its result (Root Cmaj7 ·
   1st Cmaj7/E). Notes are set as a theory table sets them (note over role), not dots with words. Research outside
   sites too (musictheorylessons.net), not only piano-data.
-- **A heading is text, not chips and pills (R42, v56):** "I dont like inversions and the chips how they look". ~~The
-  inversion a pull-down with its value as the label;~~ (replaced by v58–v60) the notes a line of text with their roles; the ♭ in a chord
+- **A heading is text, not chips and pills (R42, v56):** "I dont like inversions and the chips how they look". the notes a line of text with their roles; the ♭ in a chord
   name set as music. Never ‹ › for the inversion, never filled note chips.
 - **No filled button inside a bar; groups of glass, one tinted primary (R42, v54):** "I dont like how this yellow
   button looks inside this toolbar. research the apple guidelines". Apple iOS 26: grouped glass items, the one
   primary action prominent in its own group, trailing.
 - **Arrows sit beside the words they change; one action with a choice of how is one split button (R42, v52):** "the
-  inversions can be interpreted as go to next chord … I'd put the play together with the arpeggiate". ~~‹ 1st
-  inversion › as a pill;~~ (replaced by v56–v60) [▶ Play chord | ⌄] with Block chord · Arpeggio.
+  inversions can be interpreted as go to next chord … I'd put the play together with the arpeggiate". [▶ Play chord | ⌄] with Block chord · Arpeggio.
   v53: "the keyboard settings should be like separate from this play chord": the bar is the sound only; Keyboard
   is its own round button beside it.
 - **The title is the button, without a ⌄ (R42, v51):** "remove the arrow on the big chord. it just works but without
@@ -476,14 +452,10 @@ owner's, typos fixed.
   v50: "is this a permanent or just a tooltip": a tip, gone for good once the gesture is used.
 - **A chord sits where a chart puts it (R42, v45):** "why some chords like the f sharp are shown one octave lower".
   Root position starts in the octave from middle C for every root; no hidden register rule.
-- ~~Replaced by v49.~~ **A hidden gesture shows itself on the control (R42, v44):** "make it more clear for the user that such thing
-  exist". The chosen root letter carries its ♮ ♯ ♭ marks, the current one dotted; never a line of instructions.
 - **A chord root is spelled, a key is one of twelve (R42, v41):** "how can we though get chords like d flat or sharp
   or g flat or a sharp". The chord is spelled from the written root. v42: "some options are weird like c flat or e
   sharp". v43: "make just one row and when clicking multiple time on one note it will change": one row C to B;
   tapping the chosen letter again steps ♮ → ♯ → ♭, only the spellings a chart writes. Never extra rows for ♯ and ♭.
-- ~~Replaced by canvas 111.~~ **A note picker is two rows of six on a track, the chosen note raised (R42, v40):** GarageBand's Key Signature,
-  "but i dont think we need the major minor switch here and the follow songs key". The picker only picks the note.
 - **An extra note is a chord with a name, picked from the one list (R42, v39):** "I dont like this add a note how
   this looks, and is not understandable". No add-on chips beside the chord list, no avoid notes struck through; C7♭9
   is a row in Altered, as iReal Pro lists qualities.
@@ -495,34 +467,31 @@ owner's, typos fixed.
   look so big". 14px on a white key over a 12px name.
 - **A keyboard's settings are the Player's Keyboard panel, everywhere (R42, v36):** "I want like a piano settings like
   the player does. and in the header remain all other settings". The keyboard's button at the bar's end opens the
-  tiles, Keys, ~~Note names, Finger numbers~~ (replaced by v38's one Labels choice) and the piano's links; the gear keeps the page's own settings. Never mix the
+  tiles, Keys, and the piano's links; the gear keeps the page's own settings. Never mix the
   two in one sheet.
 - **Fingering as printed charts set it (R42, v35):** "look at the examples where the fingering should be". Vita
   Piano: a number beside each note, right of the chord, the left hand on the bass staff; fingering changes with the
-  inversion. ~~Its settings: Show fingering, Hand Right · Left · Both, On the keys.~~ (replaced by v38)
+  inversion.
 - **Test a canvas in its own runtime, not a look-alike (R42, v34):** "the settings arent working and the fingering
   still doesn't work". A local renderer showed both working; the canvas did not. Tap every control in
   `.scratch/r39/canvas/realrt.mjs` before saying it works.
 - **A setting must earn its place; draw notation as engravers do (R42, v33):** "why do we need them … this setting
   is also weird". Piano gets the grand staff with no clef choice. A switch whose effect contradicts the page (a left-hand
-  root under a slash chord) goes. ~~Fingering is a stacked column over the chord (under it when low), never a loose
-  column beside it.~~ (replaced by v35)
-- **Moved means removed from the old place too; a control lives on what it controls (R42, v32):** "you didn't
+  root under a slash chord) goes. - **Moved means removed from the old place too; a control lives on what it controls (R42, v32):** "you didn't
   remove the old settings". The keyboard's settings sit behind a keyboard button over the keys; a gear left with one
   group goes. Musicians' terms over app switches: "Bass in the left hand", not Hands Both · Right · Left. Fingering
   belongs on the staff beside the notes, not in its own view.
 - **A setting sits on what it changes; practice sits on the page (R42, v31):** "the staff settings are not very good
-  … the practice in the player are too hidden". ~~The staff's clefs are a small control on the staff card, not in the gear;~~ (replaced by v33)
+  … the practice in the player are too hidden".
   the ways to practise a chord are rows on its page. A bar holds one prominent action, trailing (Apple HIG).
 - **The owner keeps some doubles (R42, v29):** "the chords choosing in both places was pretty good". Choosing the
-  chord from its name and from the bar's first button stays; ~~the inversion is ‹ › on the name plus the Inversions
-  view's cards, never a Root · 1st · 2nd · 3rd segmented control.~~ (replaced by v58–v60) Ask before removing a double the owner liked.
+  chord from its name and from the bar's first button stays; Ask before removing a double the owner liked.
 - **Never: a practice page turned into a long builder of chip rows (R42, v27 undone):** "no, the previous layout
   directions were better". Chords keeps the keys, the chord, the views and a bar at the foot.
 - **A page's bar holds its actions, not its settings (R42, v26):** "i dont like the bottom bar of the chords page …
-  remove all the redundant things". ~~Chords' bar is Play chord and Arpeggio only.~~ (replaced by v52–v65) What you choose sits on the thing
-  it changes (the chord's name opens the chord; ~~the inversion is a segmented control under it~~ (replaced by v58–v60)); what changes the
-  display is behind the gear. ~~Two ways of hearing are two buttons, not a mode setting.~~ (replaced by v52) One control per choice.
+  remove all the redundant things". What you choose sits on the thing
+  it changes (the chord's name opens the chord;); what changes the
+  display is behind the gear. One control per choice.
 - **The app's tab bar is a symbol over a word (R42, v24):** "i don't like the bottom bar … of the app", after a
   words-only pill. Each tab the app's own icon over its name, the current place in a lens; a fade under the bar so
   content never shows below it. Corrected in v25 after reading the whole HIG page ("did you research the apple
@@ -531,12 +500,12 @@ owner's, typos fixed.
 - **Group by what a control changes (R42, v22):** "block chords or arpeggios change the player but they are in
   separate groups". A bar's capsules are subjects (the chord · its sound · the keyboard); a choice sits in the same
   capsule as the action it changes (Play beside Block or Arpeggio). Proximity, common region, similarity. A chord's
-  inversion is written in its name as a slash chord (Cmaj7/E), ~~stepped by arrows on either side~~ (replaced by v58–v60).
+  inversion is written in its name as a slash chord (Cmaj7/E),.
 - **Words beat symbols (R42, v21):** "make more clear", after a symbols-only bar. Every control shows a symbol and
   its current value in words (Block, Both hands), never a symbol alone except Play and Back. A stepper sits beside
   the thing it steps and names the step (‹ Root position ›), never in the transport where it reads as previous song.
 - **A bar follows Apple's toolbar (R42, v20):** "apple guidelines provide more guides to toolbars". At most three
-  groups, each a capsule with concentric items; ~~symbols without captions on a phone, symbol and name on a laptop;~~ (replaced by v21)
+  groups, each a capsule with concentric items;
   text only where no symbol can say it (a chord's name); one tinted primary action. A switch of views is an
   equal-width segmented control of nouns, placed above what it switches.
 - **Corners nest; a chosen tab contrasts (R42, v19):** "the inner corners doesn't match the roundness of the outer
@@ -550,7 +519,7 @@ owner's, typos fixed.
   choice, the piano's settings only behind Keyboard).
 - **A practice page can take the Player's shape (R42, v16):** "refactor the chords page from practice in the style of
   the songs player": Back · views · gear at the top, the keys edge to edge, the subject as the title, one floating bar
-  ~~(Chord ▴, Arpeggio, ‹ Play ›, Hands, Keyboard)~~ (replaced by v65), sheets like the Player's. Spec `.scratch/r42/plan/chords.md`.
+, sheets like the Player's. Spec `.scratch/r42/plan/chords.md`.
 - **One canvas holds every place (v15):** "did you merge also the song player". The Player is a section of The ideal
   Piano Trainer, brought in whole with its R37 rulings, in the calm colours, opened by the song page's Continue and
   From the start; its Close goes back to the song. A place drawn elsewhere is merged, not left in its own canvas.
@@ -559,7 +528,7 @@ owner's, typos fixed.
   rows and the floating bar; each page keeps its own layout from its reference (iReal Pro's chart, Tenuto's answers,
   Soundbrenner's beats, Cleartune's needle, muted.io's circle, Flat's palette). Never one layout for every page.
   Spec `.scratch/r41/plan/songs-and-practice.md`.
-- **Overview drawn (R39-4, 2026-11-08):** ~~Up next first, then Harmony, Playing and the Tools last;~~ (replaced by canvas 156 and 160) each picture shows
+- **Overview drawn (R39-4, 2026-11-08):** each picture shows
   its content (a chord on keys, a scale on a staff, a tuner's needle), never a pastel icon. Waiting for the owner's word.
 - **Chords:** every chord type, fingering by hand and inversion, voicings to choose. Add, add2, add9 named as chords are.
   **Drawn (R39-5, 2026-11-08):** the chord first, Root · Chord · Voicing as pickers, Inversion and Hands, Fingering by
@@ -572,10 +541,6 @@ owner's, typos fixed.
   and Play as, Simple · Compound, rows to tap, Play and Play all over the keys, Train your ear to the Quiz. Waiting.
 - **Accompaniment drawn (R39-9, 2026-11-08):** the Pattern library itself (books as places, folders, rolls, Listen,
   heart), a pattern opening in a sheet with its roll, hands and Practise in the Player. Waiting for the owner's word.
-- ~~Replaced by canvas 160.~~ **Quiz:** one setup and four drills for every trainer; a cadence trainer.
-  **Drawn (R39-11, 2026-11-08):** Quiz with My gaps first and each trainer's best score ringed, one setup per
-  trainer (Drill, Level, Options, Rounds, Timing), a run with four answers and the verdict; Exercises as the shared
-  library and an exercise's page with its bars engraved, Listen and Start above the keys. Waiting.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
   **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role
   with the root's move between them, in any key, voice-led or block. Waiting for the owner's word.
@@ -691,7 +656,7 @@ are reference only, but progressions are facts.
   with a macOS Safari window; inspired by the example apps and sites the owner sends (2026-11-05).
 - **A signed-in learner is never asked to sign in again** after an update (2026-11-05).
 
-- **Mockups and questions:** ~~text questions failed;~~ (replaced by v80: numbered questions with a recommendation each settle what talk can; the look is drawn) whole-page mockups with a feedback box each worked.
+- **Mockups and questions:** whole-page mockups with a feedback box each worked.
 - **Test every UI at least twice** (2026-11-05).
 - **Impeccable twice on each page and each mockup,** as it is made, never only at the round's end: "each page and each
   mockup and not only at the end" (2026-11-05).

@@ -87,26 +87,3 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 ## Consequences
 
 `docs/CONTENT.md` holds the full syntax. A shape change of the saved music bumps `pt-pieces` (ADR 0038).
-
-## History
-
-- 0027 — A version is the piece's music in its own format (2026-10-01). Its editor is ADR 0114's.
-- 0060 — Twenty-four ticks a beat; a section in its own key (2026-10-19).
-- 0063 — Notes carry marks (2026-10-20).
-- 0066, 0070 — Voices sung with the tune and their instruments (removed 2026-10-23 by 0091).
-- 0067, 0068, 0069 — Barlines and repeats; expressions, tempo, pedal and jumps; clef changes (2026-10-21).
-- 0093 — Lyrics under the tune (2026-10-24).
-- 0095 — A section's meter (2026-10-24); every meter and the beat type by 0114 (2026-10-27).
-- 0097 — A score's staves are staves (2026-10-24).
-- r13 — Flat's notation: 5040 ticks a beat, the 64th and tuplets of 2 to 9; portato, breath, caesura, inverted turn,
-  tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free text; repeat ×N,
-  endings to the 4th, page breaks, bar repeats and multi-bar rests; the two-note tremolo; a bar of no chord kept
-  through MusicXML as N.C (2026-10-28).
-- r27 — New song chooses its staves as Flat's instruments (piano and voices); other instruments decided for later,
-  sampled and cached offline, not left out (2026-11-01).
-- r28 — The music's `header` (credits under the title) and `layout` (staff size, bars per line) (2026-11-01).
-- r29 — The sustain pedal leaves the note marks: a piece's pedal line of events at beats (down, up, change), the
-  Performance's `pedal`, `pt-pieces` version 9; no Melody source (2026-11-03).
-- r34 (R34-3) — An unnamed first staff is the Melody, the rest Staff 2, 3…; the piano is named only beside other staves, or alone in the editor (2026-11-06).
-- Instructions audit: meters of 1 to 16 over 1 to 16 (R31-E, ADR 0114); other instruments through our own sampler,
-  not `smplr` (ADR 0034) (2026-11-12).

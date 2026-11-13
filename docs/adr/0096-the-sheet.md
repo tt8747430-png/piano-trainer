@@ -47,18 +47,3 @@ editor each had their own cursor, box and gestures, different again in each layo
 
 The selection and the playhead read the same in every layout of both screens; a change to their look is one place
 (`shared/ui/score`).
-
-## History
-
-- 0064 — The tune's own staff; a score laid out three ways (2026-10-20). Its staves are ADR 0097's.
-- 0075 — Pages float on a canvas at their print size (2026-10-21).
-- 0076, 0082, 0088 — Bars chosen with Shift; one selection in both screens; heads hugged, one note of a chord
-  (2026-10-22 to 10-23).
-- 0096 — Sheets that show as notation software does (2026-10-24): the playhead line and the colouring replaced the
-  boxes. Its fields are ADR 0114's, its explanations ADR 0061's, its recording ADR 0028's.
-- 0115 — The layouts renamed Page view · Vertical scroll · Panorama (2026-10-27).
-- r29 (P16) — A selection's band runs by the bar's beats, from a bar line or a beat to the next (`beatGrid`, `snapRange`, `beatsBand`); no padding round the notes (2026-11-04).
-- r34 (R34) — The layout and the page view's zoom in one pill at the score's corner, always in sight (Songscription's view pill); the Layout tiles leave Display and the editor's View (2026-11-05).
-- r34 (R34) — A shape beside each judged head, one table for the sheet, the summary and the keys (2026-11-06).
-- r34 (R34-3) — On a phone the layout pill gives way to the gear's View page in the editor; the Player keeps the pill (2026-11-06).
-- r35 (R35-1) — The heads sounding lit in their hand's colour, in step with the keys (2026-11-06).

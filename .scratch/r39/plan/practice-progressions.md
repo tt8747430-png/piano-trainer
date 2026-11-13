@@ -24,7 +24,7 @@ harmony itself: what each chord does and how the root moves, in any key, heard a
 
 `src/pages/progressions` → `widgets/practice-library` (tree, rows, search, sort, filter), `pages/progression`
 (`ProgressionScreen`, `ProgressionLinePage`), content `entities/progression-library/content/library.ts`. Rows are cards
-with ··· and role chips; the page has a pencil in the bar and a gear (`drawings/today-progressions-*.png`).
+with ··· and role chips; the page has a pencil in the bar and a gear.
 
 ## Will build (canvas rows 5 and 6)
 

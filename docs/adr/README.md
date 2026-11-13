@@ -1,7 +1,7 @@
 # Decision records
 
-One record per area, each the decision as it stands now, its History naming what it replaced. A change to an area
-amends its record; a new record is for a new area. Each keeps the number of an earlier record of its area, so an old
+One record per area, each the decision as it stands now, with no history: what a change replaces is deleted, and
+`git log -- docs/adr` reads every earlier version. A change to an area rewrites its record; a new record is for a new area. Each keeps the number of an earlier record of its area, so an old
 citation still leads to the right one (`git log -- docs/adr` reads the old records).
 
 | ADR                                         | Title                                              | Decides                                       |

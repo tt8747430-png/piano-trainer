@@ -18,7 +18,7 @@ settings behind its own gear, as Soundbrenner's metronome and a hardware tuner a
 `chordFinder`. Metronome: the tempo between round buttons, squares, a slider, Rhythm selects, Practice aids as toggles
 with ⓘ, a floating Play over them. Tuner: one line saying the microphone is unavailable, the reference pitch below.
 Chord finder: four icons in the bar, a card with Try a chord. Circle: the wheel with tiny labels, a line under it
-(`drawings/today-tools-*.png`).
+.
 
 ## Will build (canvas rows 11 to 14)
 

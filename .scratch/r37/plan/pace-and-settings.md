@@ -205,7 +205,6 @@ accompaniment", "use professional names", "one cancels another"; v137's switch a
   Arpeggio, Dotted bass). The card played has its radio filled and an orange outline; choosing a level picks the
   Arrangement, a pattern or the Accompaniment's radio picks the Accompaniment. Each keeps its own choice while the
   other plays. The Accompaniment card shows only for a song with chord symbols; a chord chart alone has only it.
-  Drawings: `.scratch/r37/drawings/song-arrangement.png`, `song-accompaniment.png`, `song-pattern-page.png`.
   **The Pattern page is the app's accompaniment library** (owner: "from where are they taken, like from our own
   patterns in our app, and how should they be organized like a library"; the two-a-row cards were rejected).
 - Source: the app's own patterns, one implementation with Practice › Accompaniment: `entities/pattern` (53 built-in
@@ -246,7 +245,7 @@ accompaniment", "use professional names", "one cancels another"; v137's switch a
   back to Song. Nothing matches: **No patterns match**. Last **Manage patterns ›** to Practice › Accompaniment, where
   patterns are made, renamed and hidden. A pattern that cannot play the song's meter or chords is left out
   (`fit.ts`). The app's Filter sheet gains Texture and Feel, so both read alike. Drawings:
-  `.scratch/r37/drawings/pattern-library.png`, `pattern-library-folder-open.png`, `pattern-library-filter.png`,
+  the canvas.,
   `pattern-library-filtered.png`.
 - **No Voicing and no Swing** ("what are these swings and chords options"). Voicing (Close · Drop 2) is how far the
   chord's notes are spread, Drop 2 a jazz spacing; Swing plays pairs of 8ths long-short. Both are arranger's
@@ -296,7 +295,7 @@ honey; no red or green), the weakest four outlined, a tap on a bar loops its fou
 (honey, the main act), **Play again**, and the next step: **Try it in Play** from Wait, **Play at 85 BPM** from Play;
 last "4 min added to today's practice · 23 days in a row ›" to the practice record. × closes it. It shows at the end of the song only, never after a loop's repeats (owner, 2026-11-07: "song only"). Flowkey and Simply
 Piano end a song on a result screen too; ours leads to practice, not a grade. Drawings:
-`.scratch/r37/drawings/played-through-*.png`. Canvas v149.
+the canvas. Canvas v149.
 
 **No Song information and no Song page row** (owner, 2026-11-07: "no song information", then "no song page in the
 settings"): the Player's `SongInfo` sheet goes, and the gear has no link to the song's page (it is reached from Songs).
@@ -524,7 +523,7 @@ Stale lines in the rulings above, superseded later and to be read so: Song setti
 "Accompaniment goes in Practice" gave way to the Arrangement · Accompaniment cards (row 8).
 
 Ruled (owner, 2026-11-07: "i want the sections, the print, and share links to be ported. what else", then "remove
-my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›** · ~~Song page ›~~ (removed, see the rulings), then **Edit score ›** ·
+my recordings, my how did i do, voice commands"): the Song gear ends with **Sections ›** ·(removed, see the rulings), then **Edit score ›** ·
 **Print ›** · **Share link ›** · **Export ›**. R37-1 removes from the Player, code and strings with them: My
 recordings (`RecordingsSheet`, the Player's takes), How did I play (`FeedbackCard`, the take's verdicts on the score)
 and Voice commands (`useVoiceCommands`, its act), with no home elsewhere. The score editor's Record (`record-take`) is
@@ -535,7 +534,7 @@ song overview page, should we refactor this?"): the Player's sheet (`SongInfo`: 
 recording's tuning, credits) repeats the song's page, so it goes, and the gear's first group is **Sections ›** ·
 **Song page ›** (`/songs/$pieceId`). The song's page gains the one fact only the sheet had, **Tuning** (A n Hz, with
 its tip), among its fact cards while the recording is not at 440 Hz. Confirmed (owner, 2026-11-07: "no song information"): `SongInfo` goes from the Player; the gear keeps **Song page ›**. Keyboard shortcuts stay on `?`. Drawings:
-`.scratch/r37/drawings/song-settings-acts.png`, `sheet-show-annotations.png`.
+the canvas.
 
 ## Simple Pace, supersedes the three sections above (owner, 2026-11-07: "i don't like the mods titles and the tempo
 

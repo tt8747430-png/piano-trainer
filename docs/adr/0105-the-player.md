@@ -101,38 +101,3 @@ what they changed.
 ## Consequences
 
 The score editor's Play and its recorder's click keep their own switches. A recording plays in Listen only (ADR 0034).
-
-## History
-
-- 0013 — The Player in Flowkey's shape (2026-09-27). Its engraver is ADR 0087's.
-- 0104 — Transpose and Simplify in the tools row (2026-10-26).
-- 0105 — The transport's Sound: the count-in, the click and each part's volume (2026-10-26).
-- 0115 — A plain Setup: Starting position, Move smoothly, swing feels, the Melody's source (2026-10-27).
-- r13 — A scale run's practice: hands, each hand's start octave, tempo, metronome, ticks between loops (2026-10-28).
-- r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
-- r29 — A score plays its staves (Play and Show per staff, the recording a track); only a chart gets an accompaniment; Melody gone; the Player's settings page; the click from the one metronome engine; the pedal shown (2026-11-03).
-- r29 (Player plan) — One gear: the bar is Close · title · Edit | Piano keys · MIDI · Settings, no Setup and no More. The Player's Settings is one sheet (Flat's one menu; a panel at the right on a laptop): in the owner's order: the music's own choices; While you play (Audio playback, Playback, Display as pages inside it, Metronome); This song (Sections, Song information); Share (Export…, Print, for any music). The library's acts are the song page's, Score settings the editor's gear. On a laptop the panel stays open beside the music; a one-hand song plays both hands, a hand chosen before forgotten. `/play/$pieceId/settings` is gone. Hear the other hand sits in the transport's hands popover; music of one hand has no hands button (2026-11-03).
-- r29 (T) — Transpose is one control in the Player and the editor: − key +, Reset, Transpose key signature, Transpose chord symbols. The Player keeps an offset from the written key (`transpose`, −5 to +6; `tkey`, `tchords` when off), so a song the editor rewrites in another key still plays moved by the learner's choice; it never writes the song. Shared links carry the offset (2026-11-04).
-- r31 (P) — The docked transport over a foot bar with More; the Tool bar setting gone; the Settings sheet as subpages (Staves with each track's volume, Accompaniment, Playback, On-screen piano, Display); Version with Arrangement and plain lines; Transpose with a preview applied by its button (2026-11-05).
-- r32 (R32-A) — Performance: the sheet's lines memoised (`SheetLine`), a line rendering only as the music enters or
-  leaves it, lines out of sight skipped by the browser (`drawn-in-sight`); the keys' looks memoised; the lookahead
-  reads only its due head (Fantaisie-Impromptu, 10 s: 2.25 s blocked → 0.6 s). Nothing reserved: the Player's rows
-  meet, the status row only while it speaks, the tip a capsule over the music's foot. Settings one ranked list —
-  Score view, Playback, Staves, Accompaniment, then a link to the On-screen piano's page, the one home of every
-  keyboard's settings — each row with its line and value, each option with its line. `/settings/player` is gone: the
-  Player's gear is its settings' home. MIDI shows only while connected; the tempo reads ♩ = 92; a laptop's dock is one
-  row from 80rem (2026-11-05).
-- r34 — The recording plays in any key, shifted with Transpose; its own-key ⓘ and the Staves row's reason gone.
-- r34 — Staves › Recording has Sync under its volume: Earlier and Later in 10 ms steps, kept with the song.
-- r34 — The switch is Smooth voice leading, the term for the nearest inversion (2026-11-06).
-- r35 — Count-in, the noun, names the Player's row and the calibration's count, as it does the editor's (2026-11-06).
-- r36 (R36-2) — Pace, flowkey's Tempo menu, in the transport: Wait mode (Sight-read renamed, flowkey's term) and
-  Interpret at your own pace, then Listen and play along at 50 % · 75 % · Original tempo or the slider. Practice mode
-  and the Modes sheet go: the foot's Hands chooses the hands for every mode, Hear the other hand its one home; Settings
-  › Hands (Skin, the other hand) between Playback and Staves (2026-11-06).
-- r36 (R36-3) — Pace fits every phone: a 44px target under 390px, its menu as wide as the screen allows and tighter
-  on a phone on its side, the transport's gutter 12px under 360px (2026-11-06).
-- r36 (R36-3) — The status row only while it speaks, as r32 has it: Share's word only while said, Wait mode's line
-  taking no room before Play (2026-11-06).
-- Instructions audit: the settings' routes gone from the decision (the gear's sheet their home), More the music's
-  acts alone, the bar's Keyboard named as the app names it (2026-11-12).

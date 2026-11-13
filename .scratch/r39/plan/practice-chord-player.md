@@ -18,7 +18,7 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
 
 `src/pages/chord-player`, strings `practice.ts` `chordPlayer`. A bar with four icons and ···; New chord sheet ▾,
 Pop 1 ▾, Tempo 100 − +, Key C major ›; one Verse with Repeat ×1, bars 1–4, "0 bars" and a + tile; Add section and
-Randomize chords; a floating Play and loop button over the keys (`drawings/today-chord-player-*.png`).
+Randomize chords; a floating Play and loop button over the keys.
 
 ## Will build (canvas row 10)
 

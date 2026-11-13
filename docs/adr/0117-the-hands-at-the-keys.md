@@ -44,13 +44,3 @@ floating over the music, the keys edge to edge.
 
 The Player's bundle grows only for a learner who shows the hands: three.js and the models load with them. A new
 key-size or keyboard setting reaches the keys alone; the hands frame by their own camera.
-
-## History
-
-- r36 (R36-1a) — The rig, the pose table, the part's fingering, the choreography and the camera, pure and tested
-  (2026-11-06).
-- r36 (R36-1) — The hands at the keys in the Player: the scene, the bar's two toggles, Settings › Hands (Skin, the
-  other hand), the credits; the settings store's version 37 (2026-11-06).
-- r42 — A finger with nothing to play hangs between the fingers either side of it that hold keys (half as far out
-  beside one only), not at a fixed five-finger place: F♯maj7 with 1 2 3 5 stood the 4th beside the 3rd's C♯
-  (`hanging`, `handPose`) (2026-11-09).

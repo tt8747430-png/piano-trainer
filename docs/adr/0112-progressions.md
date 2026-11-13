@@ -89,21 +89,3 @@ use one.
 
 A new progression is one entry with its lines; its other mode is never a second entry. Nothing about a progression
 is saved: views remember numerals, and the Player's `bar` and `loop` open a piece at its bars.
-
-## History
-
-- 0020 — Numerals in any key; a progression is a Player source (2026-09-29). Its numerals are ADR 0046's.
-- 0031 — A cadence's version in the other mode (2026-10-08), superseded by 0041.
-- 0041 — One idea in both modes; a lead-in is a way to play it (2026-10-13).
-- 0045 — Transpose reads a song's chords in their key (2026-10-14), now the page's typed line.
-- 0112 — A progression's songs, and a song's progressions (2026-10-27).
-- r13 — The library as cards that play in place, each with its character (2026-10-28).
-- r13 — Function and root-motion chips under the row (2026-10-28).
-- r14 — Modes, Numerals · Nashville · Chords, voice-led or block; 17 more named progressions and a Modal style
-  (2026-10-28), from Musicca's and piano.org's progression pages.
-- r29 — Three tabs; the roles and moves drawn on the chords; the library a list; Written as and Voicing on
-  Progressions' Settings (2026-11-03).
-- r29 — The Chord player: chord sheets of sections, styles with a band, My chord sheets synced (2026-11-04).
-- r34 — The musician's terms: arrows name the root movement, not the bass; in Russian Отклонения with Побочные доминанты (2026-11-06).
-- Instructions audit: the three tabs replaced in the decision by the library's place and a progression's own page
-  (R30-4, ADR 0052) (2026-11-12).

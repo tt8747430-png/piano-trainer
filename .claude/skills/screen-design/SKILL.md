@@ -497,7 +497,7 @@ When a canvas turn is complete, provide:
 1. The boards published to the area's canvas, with the version number.
 2. Every relevant state reachable on them.
 3. The ruling in the area's spec, in the owner's words, with its sources.
-4. A bullet in the feedback log and a line in the round's loop file (`.scratch/r39/plan/loop.md`); the drawings saved to `.scratch/<round>/drawings/`.
+4. A bullet in the feedback log and a line in the round's loop file (`.scratch/r39/plan/loop.md`).
 5. The commit, staged by path, pushed.
 6. A short report, answer first: what changed, the checks run, what was left and why, and the open questions
    numbered, each with a recommendation.

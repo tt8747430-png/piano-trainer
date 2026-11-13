@@ -77,16 +77,3 @@ ways, with a time limit and a Next that waits for the answer.
 
 A new trainer is a ladder, an entry in `trainers.ts`, its words and its sentence in the setup; a new exercise a generator, a catalogue row and
 a case in `arrangeExercise`, whose test writes every exercise in every root on the piano's keys.
-
-## History
-
-- 0006 — Theory gaps come from quiz answers only (2026-09-24; Due added 2026-10-11).
-- 0024 — An exercise is a rule that writes a Performance (2026-10-01).
-- 0025 — A trainer is a round machine with a ladder (2026-10-01).
-- 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).
-- r14 — Cadences, a trainer in the four drills, its cards naming their faces; Hanon's Nos. 1 to 20, the tempo
-  ladder with each exercise's last tempo kept, the daily scale routine (2026-10-28).
-- r15 — The setup's groups named small over their cards; Start held at a phone's foot; the drill's sentence moved from a
-  card under the controls to the bar's ⓘ (2026-10-30).
-- r29 — Drills named Flashcards · Name it · Play it · By ear, Start in words, no time signature on a question's
-  staff; Go on automatically on Exercises and Quiz's Settings (2026-11-03).

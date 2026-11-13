@@ -11,7 +11,7 @@ cover), one clear next act (Continue from where you stopped), and everything els
 - No "Learn the song step by step" card; a song with no sections must not look odd; descriptions short or behind ⓘ.
 - Details are edited as properties. A loss that can be undone happens at once with Undo (R38).
 
-## Today (shots `.scratch/r39/drawings/today-song-*.png`)
+## Today
 
 - Phone: the title wraps in two lines beside four round buttons (Edit, heart, Learned, gear); the credits show twice
   (Words/Music beside the cover, then Composer/Lyricist in Details); Key, Time, Tempo and Level as chips; Progressions

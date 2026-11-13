@@ -40,16 +40,3 @@ over colourful content; few typefaces in fixed text styles.
 
 `DESIGN.md` records the system from the built screens and `docs/CODE_STYLE.md` §5 holds its rules. A change of
 colour changes `tokens.css`, `theme.css` and `THEME_COLORS` together.
-
-## History
-
-- 0007 — The sage world from the reference apps (2026-09-25). Its colours were replaced; its one kit and one action per
-  screen stay.
-- 0010 — The labelled picture book (2026-09-27): paper, a line, seven paints, labelled keys.
-- 0011 — The book, printed quietly (2026-09-27): the paints faded, honey the action, Literata and Onest.
-- Round 29 (2026-11-03): one shape scale (control, card, sheet, pill), one selected fill, one focus ring, and
-  nothing that moves unless touched (DESIGN.md Shapes, Choices, Motion).
-- Instructions audit: the chosen segment and the nav's current place in the one chosen fill, the rail gone, as
-  DESIGN.md has them (2026-11-12).
-- Streaks as pressure leave the refused list (owner, "I want to put pressure on the user"): PRODUCT.md's sixth
-  principle holds the streak to the learner, always true (2026-11-12).

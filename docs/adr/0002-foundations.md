@@ -41,14 +41,3 @@ and Russian.
 - Adding a piece is one file and one line in its collection's index. Content ships in the bundle, so it is there
   offline, and changing it takes a pull request.
 - Musical correctness rests on tests written from theory.
-
-## History
-
-- 0001 — A clean rewrite, not a migration (2026-09-24).
-- 0002 — Content is code, one file per piece (2026-09-24).
-- The rewrite's design spec (2026-09-24) and the features roadmap (2026-09-25), deleted 2026-10-27: their stack,
-  layers and scope are here and in `CLAUDE.md`.
-- r29 — The samples' own runtime cache (CacheFirst, 200 only, no expiration) outside the precache (decided 2026-11-02, being built in round 29; spec `.scratch/r29/piano-sampler/spec.md`).
-- r30 — The update never hangs: `lookFor` answers at once for a download, `takeOver` always reloads; checked with two real builds (2026-11-05).
-- Instructions audit: the Not-for list brought level with the backend (ADR 0116), the sampled instruments (ADR 0034)
-  and MusicXML (ADR 0107) (2026-11-12).

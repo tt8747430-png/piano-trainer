@@ -82,33 +82,3 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
 `PianoKeyboard` stays presentational and is its keys alone; `LiveKeyboard` reads the store and the port; the bar's
 `KeyboardTools` and the `KeysDivider` are the keyboard's only controls. jsdom lays nothing out, so tests
 give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
-
-## History
-
-- 0009 — The keyboard is an instrument (2026-09-26).
-- 0036 — One listener for the shortcuts, a rail of pictures, a bar that holds (2026-10-09).
-- 0037 — The rail names the chord a hand holds (2026-10-09).
-- 0055, 0056 — A page's keys dock and fold; the keys say their notes; the learner chooses the rail (2026-10-16).
-- 0059 — Keys that hold still (2026-10-16).
-- 0062 — A reading page folds its keys on a phone on its side (2026-10-20).
-- r29 — Fingering on the keys one way (one circle, right hand above the name, left below; a crossing the accent colour with an arc), never two rows of numbers (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).
-- r31 (R31-P) — The rail's box and its buttons (names, chord names, glissando, MIDI sound, the sustain latch) go: the
-  strip holds the chord, − +, ⚙ and the pedals drawn from the bench (hold, or tap to lock the sustain); `railControls`
-  becomes `pedals` (sustain or all three). The bar under the keys goes (2026-11-05).
-- r32 (R32-A) — Nothing above the keys: the strip becomes the rail beneath them, the pedals centred on a lyre as a
-  piano's (soft · sostenuto · sustain, or the sustain alone), the chord held at its start, ‹ › − + ⚙ at its end; a
-  latched sustain carries a honey dot. The On-screen piano's page is the one home of the keys' settings, the
-  Player's gear a link to it; its options ordered Keys · While you play · Placement, each with its line (2026-11-05).
-- r33 (R33) — A real piano's keys (ivory, ebony, felt, depth); the Piano sheet in place from the rail's ⚙, with a
-  Volume; the rail's end never scrolled away; the latch's light; the soft pedal quieter and darker, the sostenuto
-  catching every raised damper (2026-11-05).
-- r34 (R34) — Songscription's keyboard: the rail and everything on it go (chord caption, − +, ‹ ›, ⚙, the pedal
-  paddles), and the finger row (no finger numbers on or under the keys); the keys slim and edge to edge; All keys the
-  default size; the chord held, Sustain (soft and sostenuto in its menu) and Keyboard in the screen's bar; a divider
-  resizes the keys, kept per screen size; hidden keys fold into a Keyboard strip; the sheet's layout and zoom in one
-  pill; the editor's gear holds On-screen piano; the floating Keys button, Key depth and Collapse keyboard go
-  (2026-11-05).
-- r34 (R34) — The left hand outlined, the right filled, so the hands part without colour (2026-11-06).
-- Instructions audit: the sheet's pill in the editor from 48rem, as R34-3 left it (ADR 0096) (2026-11-12).
-- One home for the keyboard's settings ("I dont want keyboard settings in three places"): the Player's sheet and the
-  editor's gear lose their copy of the page for a row to Settings › On-screen piano (2026-11-12).

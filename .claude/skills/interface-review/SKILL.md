@@ -374,8 +374,6 @@ next build. So:
 
 - The findings table goes in the report, most severe first, each naming the board and the control by its visible
   label.
-- Save one screenshot per board reviewed to `.scratch/<round>/drawings/` (`v<version>-review-<board>.png`), so the
-  table can be read against what was looked at.
 - When the owner says to fix a finding, it becomes a ruling in the area's spec, quoted, and is built in the same
   turn. A finding that belongs to the app's own components (focus in a sheet, a switch's name) is written into the
   spec's port notes.

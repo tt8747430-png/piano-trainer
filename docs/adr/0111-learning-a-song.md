@@ -46,33 +46,3 @@ no card on top.
 
 The visit's `click` and `keys` are never remembered (ADR 0038). Judging a pass in Listen by what a MIDI keyboard plays
 along is not built: it would need timing windows the Player does not keep.
-
-## History
-
-- 0098 — A song's page introduces it (2026-10-24).
-- 0100 — A song is learned by its sections (2026-10-25; the learning card removed 2026-10-26).
-- 0111 — Song lessons by Chordify's rules: three holds, in time with the click, one change in Wait mode (2026-10-27).
-- r21 — The title in the bar's row; Edit a pull-down (your version, an editor's original); Learned in the bar;
-  Favourite in More; Practise the floating action; key, time and tempo one line of chips (2026-10-30).
-- r26 — The page's bar Edit and Settings; Practise, Learned and ♡ in the song's card; More and the floating Practise
-  gone; everything done to a song on its Settings page, publishing on a page of its own (2026-11-01).
-- r27 — New song in Flat's three steps (its name; its instruments: the piano and voices by family, counted with
-  − n +, found by Search; Fine-tune: the tempo's note and number, bars, key, time with C, ¢ or your own). Publish in
-  library one screen for songs and patterns, Noji's: its link with Copy, View in library, its saves, Unpublish and
-  Publish new version at the foot, why publish in a sheet (2026-11-01).
-- r28 — The song's page in Edit, where its words are the learner's (an own song) or an editor's (the app's): its title in the language shown, who wrote its music and words (properties), what is said of it, and Edit the music; Settings, then Edit at the bar's end. Elsewhere the pencil opens the learner's version of the score (2026-11-01).
-- r28 — Who wrote a song lives in one place: its score's composer and lyricist (`header`), written from the page's Edit or the score's Settings, printed under its title and shown in place of the content's music and words credits (`shownCredits`) (2026-11-02).
-- r30 (S4, S5) — The song's page: its ✎ beside the title puts the page in Edit in place (`?edit=true`), Learned (named;
-  the check alone on a phone) and Settings in the bar, ♡ on its cover (its picture and paint, or its key), Play floating.
-  Song details are never printed: level, genre, language and tags (the library's `songDetails`), cover; its title and
-  about are an own song's or an editor's. Who wrote it is the score's alone (`SongFacts` lost Music and Words); Edit says
-  so and links to the score. Settings › Details and Colour and picture go. Your practice: the day played last and the
-  takes (2026-11-05).
-- r32 (R32-C) — The page's Edit mode and Settings › Edit song page go: Details is a list of properties edited where
-  they stand (a popover on a laptop, a sheet on a phone), the credits among them, written into the score's lines; a
-  tap on the cover changes it. The laptop's page is two full columns. Settings gain Favourite as a switch
-  (2026-11-05).
-- Instructions audit: the ♡ in the bar beside Learned (ADR 0106, R34); Delete to the Trash with Undo, not asked
-  (2026-11-12).
-- Favourite's switch leaves the song's Settings (owner, "remove the switch"): the ♡ in the bar is its one control
-  (2026-11-12).

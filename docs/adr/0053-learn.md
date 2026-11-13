@@ -91,33 +91,3 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 
 A method book is taught by its own course (ADR 0047), never by a journey. Moving a lesson is one line in its journey or
 course.
-
-## History
-
-- 0005 — Levels live on the Path (2026-09-24); the Path gave way to the Courses.
-- 0018, 0021 — A lesson is a worksheet; a pattern is heard over its piece (2026-09-29 to 09-30).
-- 0042, 0048, 0049, 0051 — Subjects and courses with folding modules; the Path reads the lessons; a Journey and
-  Courses; one curriculum of stages (2026-10-13 to 10-14), each superseded.
-- 0053 — Lessons and Courses, apart (2026-10-15).
-- 0057, 0058 — Learn at a glance, Continue floating, a lesson's one bar and one column (2026-10-16).
-- r13 — Function and root-motion chips, variants, takeaways, rules, S A T B, a page a section on a phone,
-  rings and prerequisites in the contents, after the reference theory book (2026-10-28).
-- r14 — Slash chords, modulation, rootless voicings, locked hands, the cadences split, How to Practise (2026-10-28).
-- The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.
-- r21 — The Lessons a library: a journey chosen from a pop-up, its chapters groups of rows, no zigzag path;
-  Continue one compact row; an editor's Edit the journey and New course floating (2026-10-30).
-- r23 — The Courses as library rows (a tile, the facts on one line, how much is learned, Next), grouped by shelf in
-  one card each; a paged lesson's bar narrowed to sit beside the floating button (2026-10-30).
-- r24 — The journeys named for what they are, the four levels: chosen from one row of chips, the level's name,
-  goal and steps learned under them; the days practised and the songs played last are the Profile's (2026-10-30).
-- r25 — The phone's tab bar fades and slides from the foot as it comes and goes (memory-palaces'), at once under reduced motion (2026-10-30).
-- r26 — A lesson one page by default everywhere, a section at a time the learner's choice (the lesson's ⋯ and
-  Settings); the Profile's figures are days in a row, songs played and steps learned, with **Activity** a page of its
-  own (`/profile/activity`: the run, the best run, the days practised, this month's calendar), as Noji's (2026-11-01).
-- r28 — A lesson's and a course's Settings pages, from a gear in their bar: reading, Share link, Reset progress;
-  an editor's place, Read first, languages and changes. The lesson's ⋯ removed (2026-11-01).
-- r28 — An example of notes lays out as a sheet: its bars in rows as many as fit the card (`rowsOf`, by the notes struck), each row shrunk to fit, a later row printing its clef and bar number but not its time; Play marks the note sounding on its row; the note names and Play under the music on a phone (2026-11-02).
-- r30-5 — Learners make their own lessons and courses: Your lessons and Your courses, the same editors on the device, their Settings, Search (2026-11-05).
-- My Practice Plan — The owner's own course on the Chords shelf, fifteen lessons over sixteen weeks from what their saved piano videos teach most: the daily plan and tempo ladder, the week-by-week schedule, chord shapes and their fingering, inversion drills, arpeggios, chords by number, rhythm, the left hand, shells and rootless voicings, diminished chords, passing chords, arranging a hymn, improvising and playing by ear (2026-11-09).
-- Instructions audit: Continue Learn's first row, the journeys chosen from chips, the days practised and songs played
-  left to the Profile; how lessons read set on a lesson's Settings alone (2026-11-12).

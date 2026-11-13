@@ -25,7 +25,7 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
   with Card style one level down. A song's ··· Settings opens its Settings page; the old "Song settings" sheet (Version,
   Hands, Count-in) went, as each has its home in the Player. A song's Sections open a section's page.
 
-## Today (main b98aea88; shots `.scratch/r39/drawings/today-songs-*.png`)
+## Today (main b98aea88)
 
 - Phone: My songs · Explore as large tabs, then three round buttons (Select, Archive, ···); Search with the sort's
   button (Manual ⇅) and a Filter button; **Folders** as tall cards (icon, name, count, a preview line of titles, ···);
@@ -83,7 +83,6 @@ the table's last row.
 - Changed from the plan on looking: on the laptop the **+ became an Add button in the bar**, beside ···, because a floating
   - sat on the hearts column (the fault today's phone has over the last folder). The phone keeps the floating +, above
     the tab bar, with the list ending clear of it. The laptop drops the bar's Archive, since the tree holds it.
-- Drawings: `.scratch/r39/drawings/songs-*.png`, beside `today-songs-*.png`.
 
 ## Canvas 124 (2026-11-11): every row shows its music; one library shape, 44 targets
 

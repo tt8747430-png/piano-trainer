@@ -17,7 +17,7 @@ line) and a quiz shows how far you have come at a glance, as Tenuto's and Functi
 `src/pages/exercises` (the library, `widgets/practice-library`), `src/pages/exercise` (an exercise's page),
 `src/pages/quiz` (`widgets/trainer-list`), `src/pages/trainer`; strings `practice.ts` `exercisePage`, `quiz.ts`.
 Exercises: rows with a book icon, a long line and ···, a pencil in the bar. Quiz: rows with coloured icons and an
-explanation line, My gaps behind a target icon in the bar (`drawings/today-exercises-*.png`, `today-quiz-*.png`).
+explanation line, My gaps behind a target icon in the bar.
 
 ## Will build (canvas rows 9 and 10)
 

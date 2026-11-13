@@ -45,15 +45,3 @@ scale's chords, a chromatic walk, a progression, an exercise.
 
 A new pattern figure that plays the chord as voiced follows the position with no change. A new method book is a book
 id, its group's book, its pieces and its course: the tabs, the picker and Learn follow.
-
-## History
-
-- 0015 — Progressions in sections; the chromatic walk (2026-09-29). Sectioned progressions went into the library
-  (ADR 0112).
-- 0023 — An inversion and a walk of keys play any chart (2026-10-01). Its walks are ADR 0112's.
-- 0026 — The pattern book; the learner's own pattern (2026-10-01).
-- 0033, 0043, 0047 — The method books: Called to Play and Боброва; Gorshkov's course; Called to Play 2 in compound
-  time (2026-10-09 to 10-14).
-- 0039 — The first chord's position, then Nearest (2026-10-13), renamed Starting position and Move smoothly by 0115.
-- Instructions audit: Inversion and Smooth voice leading named as the app names them; Accompaniment a place of
-  the practice library, not tabs (2026-11-12).

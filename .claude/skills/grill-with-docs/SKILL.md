@@ -30,5 +30,5 @@ Finding _facts_ is your job, never the user's. When a frontier question needs a 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
 
 As decisions settle, record them: load the `domain-modeling` skill for the formats, then write each settled decision
-as an ADR (`docs/adr/`, amended in place, one History line) and each new term in the glossary. In this repo the owner's
+as an ADR (`docs/adr/`, the decision as it stands, rewritten in place, no History lines) and each new term in the glossary. In this repo the owner's
 rules still bind (`CLAUDE.md`, `owner-way`): facts are looked up, decisions are the owner's.

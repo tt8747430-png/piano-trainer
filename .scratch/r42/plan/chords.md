@@ -396,7 +396,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     symbols got a wider column (96) so "E♭m(add9)" no longer runs into its name.
   - **The hand:** S3; **medium-light (#d9a77f) is the default skin tone**; 53,774 triangles a hand is enough, with a
     lighter level for slow phones; **not to be built yet**: no app code for the hand until the owner says so.
-- **The hand's look is chosen (2026-11-09):** owner, of `drawings/v84-hand-smooth-variants.png`: "I like the s3 medium
+- **The hand's look is chosen (2026-11-09):** owner, of the v84 hand-smooth drawing: "I like the s3 medium
   light". S3: the MakeHuman hand (CC0) smoothed to 53,774 triangles, a painted skin with no photo (rosier tips and
   knuckles, plain lighter glossy nails), shown in the medium-light tone (#d9a77f). S4 and the photographic skins are
   not to be drawn again. **Open:** whether medium-light becomes the default tone, whether 53,774 triangles a hand is

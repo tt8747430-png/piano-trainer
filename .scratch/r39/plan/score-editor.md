@@ -14,7 +14,7 @@ printed time and key signatures open their categories); the gear holds only what
 
 - The editor's draft of a built-in song (canvas 135, ADR 0116, from "no roles, no edit mode for the pages"): an editor opens it from the song's ··· Edit the original. Under the bar, a Publishing pill and the save state (Saved · not published, Saving…, Offline: not saved yet, Not saved). Publishing holds Publish… (asks, as it reaches every learner), Versions (each published one, Restore asks) and Discard changes (asks; cannot be undone). Opening, opening offline, can't open and not an editor are full-screen states.
 
-## Today (shot `.scratch/r39/drawings/today-editor-phone.png`)
+## Today
 
 Phone: ✕ and Done both, then a filled piano circle, a filled honey Play, Undo, Redo and the gear, all in one row with
 two filled circles; the score; a palette with durations over a row of icon-only category tabs; the piano.

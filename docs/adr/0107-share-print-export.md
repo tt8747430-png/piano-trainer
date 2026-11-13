@@ -72,24 +72,3 @@ seen on screen" with the diagrams on a last page.
 
 Takes are not shared: they are too large for a link. A version of a catalog song is shared as the link to its Player,
 not its music.
-
-## History
-
-- The share-a-song spec (2026-10-11), deleted: its link format is here.
-- 0107 — Share, Print, MIDI time aligned, the tuning and Sections (2026-10-26). Its Sections are ADR 0105's.
-- r13 — Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
-- r14 — A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
-  (2026-10-28).
-- r24 — A song's page and its library row export from one Export… sheet: MusicXML, MIDI and Share link, each with
-  what it is for (2026-10-30).
-- r25 — The Player's More exports from the same Export… sheet (MusicXML, MIDI, MIDI time aligned where a recording
-  plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).
-- r25 — Select's bar exports the songs chosen from the same Export… sheet, a file each (2026-10-30).
-- r26 — A song's Export…, Share link and Publish in library stand on its Settings page; Publish in library is a page of its own (2026-11-01).
-- r29 — Pedal events read from MusicXML at their own positions and offsets, a stop and a start at one place a change;
-  written back the same way, and MIDI's control 64 read and written as the pedal line (2026-11-03).
-- r29 — Print and Export… moved from the Player's More to its Settings › Share; More is gone (2026-11-03).
-- r42 — A grace note before a chord is read onto every note of the chord, as a piece writes it on the chord's token, so a
-  song with one exports and reads back the same (2026-11-12).
-- Instructions audit: a song's Share link and Export… on its Settings, its page having no More (ADR 0111)
-  (2026-11-12).

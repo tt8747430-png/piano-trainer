@@ -19,7 +19,7 @@ seen (its roll) and heard (Listen) before it is chosen, as Smart Pianist's style
 
 `src/pages/accompaniment` → `widgets/practice-library`; content `entities/pattern/content/patterns.ts`. Rows with an
 icon, a long description, a level and ···; "Course in Learn" and "Songs in Songs" chips at the top; Show all 17; a
-pencil in the bar (`drawings/today-accompaniment-*.png`).
+pencil in the bar.
 
 ## Will build (canvas row 7)
 

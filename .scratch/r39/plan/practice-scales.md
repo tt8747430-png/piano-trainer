@@ -22,7 +22,7 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
 `ScaleFingering`, `TempoSlider`, `PlayUpDown`, …); strings `practice.ts` `scales.*`, kinds `music.ts` `scaleKind`.
 Four icon buttons in the bar, the tabs, C ▾ Major ▾, a Formula of degree names, Structure, Fingers · Degrees · Steps,
 the run on a grand staff with the left hand resting, Hands, a floating Play over the content, fingers under the keys
-(`drawings/today-scales-*.png`).
+.
 
 ## Will build (canvas row 3)
 
@@ -38,5 +38,5 @@ lit; Fingering by hand; Practise this scale (Hands together, Tempo ladder, Hanon
 
 - 2026-11-08: drawn (canvas v4); waiting for the owner.
 
-Sources: the ABRSM scale books' fingerings; Hanon, *The Virtuoso Pianist*; Piano Companion's scale page; musicca's
+Sources: the ABRSM scale books' fingerings; Hanon, _The Virtuoso Pianist_; Piano Companion's scale page; musicca's
 scale and key-signature pages.

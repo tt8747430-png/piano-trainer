@@ -43,12 +43,3 @@ preview and has no users, so every reader of an old save's shape was cost with n
 - Shipping a shape change resets that store for anyone who has used the preview. The store's version is in its
   `store.ts`, never in a doc.
 - A new link that opens a remembered screen plainly carries `OPEN_PLAINLY`; one that names what to show does not.
-
-## History
-
-- 0003 — View state in the URL, saved state in versioned stores with migrations (2026-09-24). Its migrations went
-  with 0038.
-- 0022 — A screen opened plainly comes back as it was left (2026-10-01).
-- 0038 — Saved stores read one version until release (2026-10-10).
-- r29 — A view, tab, mode or step written into the URL replaces the entry; every setting declared once in a registry with its one home page; `staves=` in the Player's URL (decided 2026-11-02, being built in round 29; spec `.scratch/r29/settings-registry/spec.md`).
-- r29 — Built: `useSetSearch` replaces the entry for a view, tab, filter or mode; the settings registry gives each preference one home, checked by `settings-homes.test.ts` (2026-11-02).

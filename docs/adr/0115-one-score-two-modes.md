@@ -50,35 +50,3 @@ edit, and a learner practising should not change the music by accident.
 The two screens are learned once, and a new control has one home: the sheet's look (View), how the music plays
 (Setup), the song itself (edited where it is printed, ADR 0114), the device (MIDI). The editor's recorder keeps its
 own Play melody switch: it plays the tune under a take.
-
-## History
-
-- 0061 — The Player's transport a floating bar (2026-10-19).
-- 0079, 0081 — The editor floats its tools; what floats over the music takes no room (2026-10-22).
-- 0085 — The Player and the editor: one bar, one View (2026-10-23).
-- 0090 — Practise · Edit: one score in two modes (2026-10-23).
-- 0110 — One bar, one tools row, one transport (2026-10-26).
-- 0115 — One band for the bar, one Transpose, a plain Setup (2026-10-27). Its Setup is ADR 0105's, its View ADR
-  0108's.
-- r29 — The View hides no staff (Staves are the Setup's); each mode's settings a kind page; the transport's metronome a quick toggle (2026-11-03).
-- r13 — The editor's palette docked, not floating (ADR 0114) (2026-10-28).
-- r21 — Practise · Edit · Edit the original one pop-up (`ModeSwitch`), its face the mode's icon and name; the
-  editor's Mine / The original tabs gone; the editor's Replace · Insert · Chord a pop-up too (2026-10-30).
-- r21 — The bar flat and alone (Close, the mode, the screen's own three); the tools (View, Transpose, Simplify)
-  a capsule floating under it over the music on a phone held upright and a tablet, in the bar's row where it is
-  one row; Delete · Copy · Cut · Paste a selection capsule floating over the transport while notes are chosen,
-  the chord row is written or the clip holds some (Apple's layers: navigation, content tools, the edit menu by
-  the selection) (2026-10-30).
-- r26 — Practise · Edit is no longer a pop-up: the Player's pencil at the bar's end opens the editor, the editor's Done in the same place returns; Edit the original is the Player's More's, an editor's (2026-11-01).
-- r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
-- r27 — The tools capsule floats centred over the music on a phone held upright, never pinned left; from a tablet up (48rem) the tools sit in the bar's row, so the editor's note toolbar has the music's head to itself (2026-11-01).
-- r28 — The editor's bar ends MIDI · Undo · Redo · Settings · Done; the Player's More has Settings… (the score's
-  Settings, ADR 0114); under 360px the bar's buttons are 40px with no gaps, so a 320px phone holds them
-  (2026-11-01).
-- r29 (editor plan) — The editor's bar is the Player's in shape: Close · Done | Piano keys · MIDI · Undo · Redo · gear; the dock has no Sound popover. The score's Settings is a list of pages (Title and credits; Music: Staves, Key signature, Time signature, Tempo, Bars; How the editor works: Layout, Note input, Recording); Settings › Sound and recording and Settings › Score editor are gone, their switches homed here (2026-11-03). Kept as they are for now: Key and Time change from the start or a section's first bar (keys and meters are a section's; a change mid-section starts a section there); a take always counts in a bar (no Count-in switch); Tempo's word follows its speed (free words such as a tempo text wait for the tempo marking's text in the model, rounds 3–4); the editor's Piano keys fold the keys (`keyboard.folded`), the Player's show or hide them (`scoreView.keys`), since expanding the palette folds the keys and must not hide the Player's.
-- R32-B — The editor's bar carries Piano keys on a phone too (Flat's keyboard button); the View has no keys chip; the
-  gear holds only what the score does not print (2026-11-05).
-- r36 (R36-3) — The editor's rows meet as the Player's: the music under the bar at the same height in both modes, no
-  band between the palette and the keys (2026-11-06).
-- Instructions audit: Edit and Done in place of the `ModeSwitch` pop-up; the Player's transport docked and the
-  editor's gone (ADR 0105, 0114); the bar's Keyboard named as the app names it; the keys' rail gone (2026-11-12).

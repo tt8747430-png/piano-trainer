@@ -105,35 +105,3 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 ## Consequences
 
 A new option has one obvious form by this rule. A test reaches a folded action by opening its dial first.
-
-## History
-
-- 0012 — Four places, choices as pop-up buttons and segments: the Choosing Rule (2026-09-27).
-- 0029 — Pictures in the Choosing Rule, one focus ring, the shell taking its width (2026-10-05).
-- 0055 — A page's actions float; secondary sections fold (2026-10-16).
-- 0057, 0058, 0059 — The speed dial's small icons; floating buttons where the learner says; one row of one size
-  (2026-10-16).
-- 0061 — A song's page, the Player and the editor float their actions (2026-10-19); the full-screen routes' bars are
-  ADR 0115's now.
-- 0094, 0096 — The same at every size; explanations in a popover (2026-10-24).
-- 0106 — The phone's keyboard and one toast at a time (2026-10-26).
-- r14 — The keyboard reserved as a field is focused, the field lifted by the page, the bar held still: Mindscape's
-  whole mechanism (2026-10-28).
-- r26 — Menus, sheets, pop-ups and pages told apart; real menus; Edit ⇄ Done; the keyboard's bars on its top edge as
-  iOS pans the page (2026-11-01).
-- r28 — The floating buttons' place and names are no longer settings (a developer's words in General): they stand in the middle, icons named by their tooltips; the settings store's version 17 (2026-11-01).
-- r29 — The Choosing Rule's table (menu, segmented, switch, stepper, chips for filters) and four shared pickers: pitch, spelled note, key (the circle of fifths), keys checklist; the step strips go (decided 2026-11-02, built in round 29; spec `.scratch/r29/key-picker/spec.md`).
-- r29 — A Settings page's choices are `ChoiceCard`s, every choice in sight with its example (the owner's answer, part 2 of the mockups, 2026-11-03).
-- r30 — Edit sits beside the title on every screen; `ScreenHeader` draws the pencil and, in its place, Done from one
-  `EditAction`; Select's Done takes the More slot (2026-11-05).
-- r31 (R31-P) — Nothing floats over the Player's music: the transport is docked in its own row (Loop, Restart, ‹ ▶ ›,
-  Tempo, Click) over the foot (View, Key, Version, Mode, More). The Tools sheet and the tools capsule leave the Player;
-  More holds the music's acts, the gear its settings; tips are remembered once put away (2026-11-05).
-- r35 (R35-2) — One Hands control, `HandsSegmented`, in the keys' order, with each hand's dot where the keys wear
-  the hands' colours (2026-11-06).
-- r36 (R36-2) — The Player's Hands is the foot's, for every mode; its transport's Tempo is Pace (2026-11-06).
-- r36 (R36-3) — Popovers, menus, a select's list and tooltips keep inside the safe area (2026-11-06).
-- r36 (R36-3) — A control's name holds its visible words: the sidebar's Profile, Continue, Up next's tiles,
-  and Pace's metronome mark while it listens (2026-11-06).
-- Instructions audit: a page's views in its content and a place's in its title, never tabs under the bar
-  (`screen-bar.test.tsx`); Settings › On-screen piano named as the app has it (2026-11-12).

@@ -101,18 +101,3 @@ something to play, and the root goes to the left hand.
 A new chord in the table is a numeral, a Skill and a trainer's chord at once. Left for the owner: whether a dominant
 11th keeps its major 3rd under the 11th as the builder stacks it (players leave it out: C9sus4), and whether Scales'
 Chords view should hold its big chords in two hands too.
-
-## History
-
-- 0014 — A scale stacks its own chords, a chord is built from its parts (2026-09-27). Its Key page is ADR 0052's.
-- 0017, 0019 — One source of tensions; the tools' naming, reharmonising and passing chords (2026-09-29).
-- 0020, 0032, 0040 — Numerals in any key; a numeral carries its chord; applied numerals (2026-09-29 to 10-13).
-- 0035 — A chord of five notes takes two hands (2026-10-09), from the research note on chord hands, deleted.
-- 0046 — The table writes m(add9) and 13♭9 (2026-10-14).
-- r14 — The power chord, Maj11, m13, Maj13, 13sus4; block fingering by rule; eight voicings; scale and arpeggio
-  fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings marked
-  (2026-10-28), from Musicca, Vita Piano, piano.org and ABRSM's books.
-- r29 — One fingering service (chord, run, arpeggio, passage, progression) and a chord's colour notes (tensions, added tones, alterations as one panel, following the chord's degree in a key) (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).
-- r29 — Built: the colour notes (`colour-notes.ts` replacing `tensions.ts`; a ii's 13th a tension, as the spec has it,
-  where the old in-key rule avoided it); a minor key borrows only the Picardy I and the Neapolitan (2026-11-03,
-  `.scratch/r29/colour-notes/spec.md`, A33, A43).

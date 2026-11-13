@@ -57,18 +57,3 @@ were the measure (line breaking, beams, courtesy signatures, page filling).
 The engraving reads as print in the Player, the editor, the lessons, the explorers and the Chord finder. The first
 staff after the app opens waits for the WASM; each line after takes tens of milliseconds off the page's thread.
 LilyPond's cautionary accidentals at a line's start are not written: each line is notated alone.
-
-## History
-
-- 0013 — Sheet music is our Score, engraved by VexFlow (2026-09-27). Its engraver was replaced by 0078; its Player is
-  ADR 0105's.
-- 0074 — Lines cut by width, pressed before shrunk (2026-10-21).
-- 0077 — LilyPond's spacing over VexFlow (2026-10-22), superseded by 0078.
-- 0078 — Verovio engraves every score (2026-10-22).
-- 0084 — Beams by the meter; chord names print ♯ and ♭ (2026-10-23).
-- 0087 — Courtesy signatures, line-start bar numbers, pages filled (2026-10-23), from the research note comparing
-  the engraving with LilyPond, deleted.
-- r13 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn as
-  their signs, page breaks (2026-10-28).
-- r14 — An octave line written in its first measure, not the one after its last note (2026-10-28).
-- r29 — Fingering above for the right hand and below for the left, no collision at bar lines; pedal marks at their own positions (decided 2026-11-02, being built in round 29; spec `.scratch/r29/fingering-service/spec.md`).

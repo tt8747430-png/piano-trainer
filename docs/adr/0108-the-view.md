@@ -48,15 +48,3 @@ and the Diagrams view scrolling and jumping under a finger.
 
 The View's choices are saved in `pt-settings`' `scoreView`; the inversions in their own store, in the backup. A walk,
 a progression and an exercise keep no inversion choice.
-
-## History
-
-- 0098 — A song's page introduces it; its chord chart is the Player's (2026-10-24). The page is ADR 0111's.
-- 0099 — Four views: Sheet music, Chords over lyrics, Diagrams, Grid (2026-10-25).
-- 0101 — Chord diagrams on one keyboard, an inversion per chord (2026-10-26).
-- 0102 — The tools row's View, the menu by view (2026-10-26).
-- 0108 — The chord views made even, still and tappable (2026-10-26).
-- 0115 — The View's parts as chips, the layouts as tiles (2026-10-27).
-- r29 — Pick your view (Chordify's): the tools row's chip names the view (Sheet, Grid, Diagrams, Lyrics) and opens a panel of the four side by side, a picture of the one chosen, Show this when opening a song and Done; what each view shows is the Player's Settings › Display, the shown view's own. The keys are the bar's Piano keys. The beat strip stands still and turns a page (a line of the chart, split where the room is short) when the box leaves it; no drag to scrub (2026-11-03).
-- Instructions audit: the decision brought level with r29 (Pick your view, Settings › Score view, the keys in the bar,
-  a still strip) (2026-11-12).

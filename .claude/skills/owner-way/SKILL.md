@@ -121,7 +121,7 @@ does not read first: write the spec, build it, and log it.
   The owner's standing rule is to commit each task without being asked.
 - **Merge:** code reaches `main` only after the full suite and build pass: `git push -u origin <branch> && git push origin
   HEAD:main`. Docs, skills and settings that touch no code may go at once; say that you did. Ignore Vercel's status and CI.
-- **Docs each round:** amend the area's ADR (the decision as it stands, one History line), `DESIGN.md` where the look
+- **Docs each round:** rewrite the area's ADR to the decision as it stands (no History lines; what it replaced is deleted, git keeps it), `DESIGN.md` where the look
   changed, `CLAUDE.md`'s map when something is renamed or deleted.
 - **Context:** stay under about 450k tokens: read the part of a file you need, filter output to its summary.
 - **Usage limit:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped, never from

@@ -21,34 +21,35 @@ for moving, archiving, favouriting and Delete to the Trash.
 
 ## Will build: each confirmation, classified
 
-| # | Where (file) | Asks today | Becomes |
-| - | ------------ | ---------- | ------- |
-| 1 | `pages/songs/ui/DeleteAsk.tsx`, `features/edit-original/ui/RemoveGroup.tsx` | Delete song(s) to the Trash | at once, toast "Moved to the Trash" · Undo |
-| 2 | `features/manage-library/ui/DeleteFolderAsk.tsx` | Delete folder (own: for good) | at once; the folder and its songs kept for Undo; toast · Undo |
-| 3 | `features/manage-library/ui/use-library-acts.ts` (3) | Hide, remove from folder, archive folder | at once, toast · Undo |
-| 4 | `pages/score-editor/ui/InstrumentsPanel.tsx` | Delete a staff ("You can undo this") | at once, toast · Undo (the editor's undo) |
-| 5 | `pages/score-editor/ui/LayoutPanel.tsx` | Reset layout | at once, toast · Undo |
-| 6 | `pages/pattern/ui/PatternPage.tsx` | Delete own pattern | at once, toast · Undo (songs get it back too) |
-| 7 | `pages/progression/ui/ProgressionScreen.tsx` | Delete own progression | at once, toast · Undo |
-| 8 | `widgets/curriculum/ui/OwnItemRows.tsx`, `LevelEditor.tsx` | Delete own lesson or course | at once, toast · Undo |
-| 9 | `pages/profile/ui/NotificationsPage.tsx` | Clear notifications | at once, toast · Undo |
-| 10 | `pages/songs/ui/CardStylePage.tsx` | Apply a style to every folder | at once, toast · Undo (each folder's old style) |
-| 11 | `pages/piece/ui/SongSettingsPage.tsx` | Duplicate | at once, no question: nothing is lost; toast · Undo removes the copy |
-| 12 | `pages/score-editor/ui/DeleteTakeDialog.tsx`, `RecordReview.tsx` | Delete or discard a take | at once; the take is kept until the toast goes; Undo |
-| 13 | `features/reset-progress/ui/ResetStepsRow.tsx` | Reset a lesson's steps | at once, toast · Undo |
-| 14 | the Song settings Revert, the editor's Discard changes | Revert to the published version | at once, the draft kept for Undo |
-| 15 | `widgets/chord-player/*`, `pages/chord-player/model/*`, `widgets/practice-library/ui/ArrangeList.tsx` | New progression over unsaved chords, remove from the library | at once, toast · Undo |
-| — | `pages/song-archive/ui/DeleteSongAsk.tsx` | Delete for good, Empty Trash | **asks**, listing what goes by name and count |
-| — | `features/publish/ui/PublishScreen.tsx`, `widgets/content-editor/ui/DraftPublishScreen.tsx` | Unpublish, republish a version | **asks** (reaches other learners) |
-| — | `pages/groups/*` | Remove member, leave, delete group, stop sharing | **asks** (reaches other people) |
-| — | `pages/admin/*` | Block, demote, delete a switch or group | **asks** |
-| — | `pages/settings/ui/StoragePage.tsx`, `AccountSettingsPage.tsx` | Erase this device, sign out | **asks**, naming what stays only on this phone |
+| #   | Where (file)                                                                                          | Asks today                                                   | Becomes                                                              |
+| --- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------- |
+| 1   | `pages/songs/ui/DeleteAsk.tsx`, `features/edit-original/ui/RemoveGroup.tsx`                           | Delete song(s) to the Trash                                  | at once, toast "Moved to the Trash" · Undo                           |
+| 2   | `features/manage-library/ui/DeleteFolderAsk.tsx`                                                      | Delete folder (own: for good)                                | at once; the folder and its songs kept for Undo; toast · Undo        |
+| 3   | `features/manage-library/ui/use-library-acts.ts` (3)                                                  | Hide, remove from folder, archive folder                     | at once, toast · Undo                                                |
+| 4   | `pages/score-editor/ui/InstrumentsPanel.tsx`                                                          | Delete a staff ("You can undo this")                         | at once, toast · Undo (the editor's undo)                            |
+| 5   | `pages/score-editor/ui/LayoutPanel.tsx`                                                               | Reset layout                                                 | at once, toast · Undo                                                |
+| 6   | `pages/pattern/ui/PatternPage.tsx`                                                                    | Delete own pattern                                           | at once, toast · Undo (songs get it back too)                        |
+| 7   | `pages/progression/ui/ProgressionScreen.tsx`                                                          | Delete own progression                                       | at once, toast · Undo                                                |
+| 8   | `widgets/curriculum/ui/OwnItemRows.tsx`, `LevelEditor.tsx`                                            | Delete own lesson or course                                  | at once, toast · Undo                                                |
+| 9   | `pages/profile/ui/NotificationsPage.tsx`                                                              | Clear notifications                                          | at once, toast · Undo                                                |
+| 10  | `pages/songs/ui/CardStylePage.tsx`                                                                    | Apply a style to every folder                                | at once, toast · Undo (each folder's old style)                      |
+| 11  | `pages/piece/ui/SongSettingsPage.tsx`                                                                 | Duplicate                                                    | at once, no question: nothing is lost; toast · Undo removes the copy |
+| 12  | `pages/score-editor/ui/DeleteTakeDialog.tsx`, `RecordReview.tsx`                                      | Delete or discard a take                                     | at once; the take is kept until the toast goes; Undo                 |
+| 13  | `features/reset-progress/ui/ResetStepsRow.tsx`                                                        | Reset a lesson's steps                                       | at once, toast · Undo                                                |
+| 14  | the Song settings Revert, the editor's Discard changes                                                | Revert to the published version                              | at once, the draft kept for Undo                                     |
+| 15  | `widgets/chord-player/*`, `pages/chord-player/model/*`, `widgets/practice-library/ui/ArrangeList.tsx` | New progression over unsaved chords, remove from the library | at once, toast · Undo                                                |
+| —   | `pages/song-archive/ui/DeleteSongAsk.tsx`                                                             | Delete for good, Empty Trash                                 | **asks**, listing what goes by name and count                        |
+| —   | `features/publish/ui/PublishScreen.tsx`, `widgets/content-editor/ui/DraftPublishScreen.tsx`           | Unpublish, republish a version                               | **asks** (reaches other learners)                                    |
+| —   | `pages/groups/*`                                                                                      | Remove member, leave, delete group, stop sharing             | **asks** (reaches other people)                                      |
+| —   | `pages/admin/*`                                                                                       | Block, demote, delete a switch or group                      | **asks**                                                             |
+| —   | `pages/settings/ui/StoragePage.tsx`, `AccountSettingsPage.tsx`                                        | Erase this device, sign out                                  | **asks**, naming what stays only on this phone                       |
 
 Undo holds exactly what it needs to restore and lets it go when the toast closes; nothing is deleted for good until then.
 Where a write reaches the server, the server write waits for the toast to close (as Gmail's Undo Send does), so Undo
 never needs a second round trip.
 
 **Losses shown as losses**, in the same round:
+
 - the backup prompt and Storage: "Your {{count}} songs live only on this phone";
 - the streak: "Practise today to keep your {{count}}-day streak";
 - Delete for good and Empty Trash: the songs listed by name;
@@ -73,7 +74,7 @@ Strings in en and ru, each with its plural forms.
 
 ## Drawn (2026-11-07)
 
-The design https://claude.ai/artifact/Mjgkmv51aAdGadFAP6KB9j (files in `.scratch/r38/design/`):
+The design https://claude.ai/artifact/Mjgkmv51aAdGadFAP6KB9j:
 
 - **Undo, not a question:** a song goes at once; the toast names it, "“Für Elise” moved to Trash", with Undo.
 - **A loss named as one:** Erase asks, in numbers ("Your 12 songs, 4 lessons and 41 days of practice go for good"),

@@ -20,7 +20,7 @@ after compacting"
 4. Spec `.scratch/r39/plan/<page>.md`: premium for the area, research cited, rulings as they stand, will build.
 5. Canvas: one Design artifact per area, in the Player canvas's frames (phone in its bezel, laptop in its browser
    window), real songs and labels, working taps; the polish pass; Playwright shots at both sizes.
-6. Publish, save drawings to `.scratch/r39/drawings/`, feedback-log bullet, commit by path, push.
+6. Publish, feedback-log bullet, commit by path, push.
 
 ## Order and state
 
