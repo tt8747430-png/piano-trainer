@@ -13,12 +13,14 @@ import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { AchievementsPreview } from './AchievementsPreview'
 import { BadgesPreview, NextMilestone } from './BadgesPreview'
+import { WeekCard } from './WeekCard'
 
 /**
  * The Profile, a place of its own (B1, memory-palaces'): the learner's name in its bar with their
  * notifications' bell and, on a phone, Settings; their picture (Edit photo on it), name, handle and
  * year joined, and three tiles: the day streak (to Streak), the songs learned, the time practised;
- * the badge nearest; the first badges and achievements, each with See all. A guest sees the
+ * the week as a bar a day; the badge nearest as a ring; the first badges and achievements, each with
+ * See all, beside the rest on a laptop. A guest sees the
  * device's figures and Sign in; while the server's profile is read, its lines are grey.
  */
 export function ProfilePage() {
@@ -75,11 +77,18 @@ export function ProfilePage() {
           </span>
         }
       />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <Hero />
-        <NextMilestone />
-        <BadgesPreview />
-        <AchievementsPreview />
+      {/* One column on a phone; on a laptop two (canvas 128): the learner, the week and the next
+          badge, then the badges and achievements beside them. */}
+      <div className="mx-auto grid w-full max-w-2xl gap-7 lg:max-w-5xl lg:grid-cols-2 lg:items-start lg:gap-x-10">
+        <div className="flex min-w-0 flex-col gap-7">
+          <Hero />
+          <WeekCard />
+          <NextMilestone />
+        </div>
+        <div className="flex min-w-0 flex-col gap-7 lg:pt-2">
+          <BadgesPreview />
+          <AchievementsPreview />
+        </div>
       </div>
     </div>
   )

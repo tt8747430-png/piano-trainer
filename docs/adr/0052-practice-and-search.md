@@ -17,9 +17,12 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
-- **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
-  one row of three figures (day streak, songs learned, practice time); rows to Settings and the Account; Activity
-  (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
+- **The Profile** is the learner at a glance (memory-palaces', canvas 128): their name as its title with the
+  notifications' bell (and Settings on a phone); their picture with Edit photo, the year joined (or a guest's Sign
+  in); three figures (day streak, to Streak; songs learned; practice time); **This week**, the time and days of seven
+  over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
+  Streak's month; the next badge as a ring with its count; then the first badges and achievements, each with See
+  all. One column on a phone; two on a laptop, the badges and achievements beside the rest.
 - **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
   `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
   then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer

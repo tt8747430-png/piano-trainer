@@ -139,6 +139,12 @@ export const account: LocaleResources['account'] = {
       month: 'Дней в этом месяце',
     },
     month: 'Этот месяц',
+    week: {
+      title: 'Эта неделя',
+      summary: '{{time}} · {{days}} из 7 дней',
+      day: '{{day}}: {{time}}',
+      most: 'не больше {{time}}',
+    },
     notifications: {
       title: 'Уведомления',
       open: 'Уведомления',

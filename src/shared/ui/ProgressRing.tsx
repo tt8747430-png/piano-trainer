@@ -4,15 +4,18 @@ import { cn } from '@/shared/lib'
 /**
  * A round mark with how much of it is done drawn as an arc round its edge, from the top clockwise
  * (a lesson's sections read round its node): nothing at none, a hairline track under the arc
- * otherwise. The arc takes the colour `className` gives it; the mark inside is its children.
+ * otherwise; with `track`, the track at none too (a goal not yet begun, the Profile's next badge). The arc takes the colour `className` gives it; the mark inside is its children.
  */
 export function ProgressRing({
   share,
+  track = false,
   className,
   children,
 }: {
   /** How much is done, 0 to 1. */
   share: number
+  /** Draw the track even at none. */
+  track?: boolean
   className?: string
   children: ReactNode
 }) {
@@ -20,7 +23,7 @@ export function ProgressRing({
   return (
     <span className="relative inline-grid place-items-center">
       {children}
-      {done > 0 ? (
+      {done > 0 || track ? (
         <svg
           aria-hidden
           viewBox="0 0 40 40"
@@ -37,17 +40,19 @@ export function ProgressRing({
             strokeWidth="2.5"
             className="stroke-hairline"
           />
-          <circle
-            cx="20"
-            cy="20"
-            r="18.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            pathLength={100}
-            strokeDasharray={`${done * 100} 100`}
-          />
+          {done > 0 ? (
+            <circle
+              cx="20"
+              cy="20"
+              r="18.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              pathLength={100}
+              strokeDasharray={`${done * 100} 100`}
+            />
+          ) : null}
         </svg>
       ) : null}
     </span>

@@ -3,7 +3,7 @@ import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { badgesOf, nextMilestone, type Badge } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
-import { ProgressMeter, RowLink, SettingsGroup } from '@/shared/ui'
+import { ProgressMeter, ProgressRing, RowLink, SettingsGroup } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
 
@@ -40,21 +40,34 @@ export function NextMilestone() {
     <Link
       to="/profile/badges/$badgeId"
       params={{ badgeId: next.id }}
-      className="flex flex-col gap-2 card p-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
+      className="flex items-center gap-4 card px-4 py-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
     >
-      <span className="text-sm font-semibold">{t('profile.badges.almost')}</span>
-      <span className="text-pretty">
-        {t('profile.badges.left', {
-          count: next.left,
-          badge: t(`profile.badges.names.${next.id}`),
-        })}
+      {/* The goal as a ring (canvas 128): how far along, the count in its middle. */}
+      <ProgressRing
+        share={(next.goal - next.left) / next.goal}
+        track
+        className="text-paint-full-sand"
+      >
+        <span className="grid size-12 place-items-center font-display text-sm font-semibold tabular-nums">
+          <span className="sr-only">
+            {t('profile.badges.locked', { have: next.goal - next.left, goal: next.goal })}
+          </span>
+          <span aria-hidden>
+            {next.goal - next.left}/{next.goal}
+          </span>
+        </span>
+      </ProgressRing>
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="text-sm font-semibold text-muted-foreground">
+          {t('profile.badges.almost')}
+        </span>
+        <span className="text-pretty">
+          {t('profile.badges.left', {
+            count: next.left,
+            badge: t(`profile.badges.names.${next.id}`),
+          })}
+        </span>
       </span>
-      <ProgressMeter
-        done={next.goal - next.left}
-        total={next.goal}
-        count={t('profile.badges.locked', { have: next.goal - next.left, goal: next.goal })}
-        said={t(`profile.badges.names.${next.id}`)}
-      />
     </Link>
   )
 }

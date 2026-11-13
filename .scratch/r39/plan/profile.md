@@ -22,3 +22,4 @@ Premium for Profile means memory-palaces' ProfilePage and Noji: the learner, thr
 ## History
 
 - Canvas 128 (2026-11-11): Profile drawn on the one canvas, phone and laptop.
+- Loop round 1 (2026-11-13): the week, the next badge as a ring and the laptop's two columns built in the app (`WeekCard`, `NextMilestone` on `ProgressRing`'s new `track`).

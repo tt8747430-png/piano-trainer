@@ -121,6 +121,13 @@ export const account = {
       month: 'Days this month',
     },
     month: 'This month',
+    // The week as a picture (canvas 128): one bar a day, today strong, an empty day a flat line.
+    week: {
+      title: 'This week',
+      summary: '{{time}} · {{days}} of 7 days',
+      day: '{{day}}: {{time}}',
+      most: '{{time}} at most',
+    },
     // Notifications (B1): what was reached, in the order it came.
     notifications: {
       title: 'Notifications',
