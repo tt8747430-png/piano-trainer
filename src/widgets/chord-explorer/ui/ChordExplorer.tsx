@@ -28,10 +28,12 @@ import {
   FloatingBar,
   FloatingBarButton,
   FloatingBarPlay,
+  HandsPicture,
   usePlayKey,
 } from '@/shared/ui'
 import {
   changedView,
+  takesTwoHands,
   chordKeys,
   fingeringRows,
   viewChord,
@@ -193,6 +195,18 @@ export function ChordExplorer({
               <ArpeggioIcon aria-hidden />
             )}
           </FloatingBarButton>
+          {/* Its hands, as the Player's Hands (R42: by Play): one tap between the right hand and both. */}
+          {chord.voicing === 'close' && !takesTwoHands(built.tones.length) ? (
+            <FloatingBarButton
+              label={t('practice:hands')}
+              title={`${t('practice:hands')}: ${t(`common:handsShort.${chord.hands}`)}`}
+              caption={t(`common:handsShort.${chord.hands}`)}
+              aria-pressed={chord.hands === 'both'}
+              onClick={() => change({ hands: chord.hands === 'both' ? 'rh' : 'both' })}
+            >
+              <HandsPicture hands={chord.hands} />
+            </FloatingBarButton>
+          ) : null}
         </FloatingBar>
       </FloatingActions>
     </div>

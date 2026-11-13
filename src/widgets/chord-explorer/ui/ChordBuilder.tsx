@@ -18,7 +18,6 @@ import { partsFromParams } from '@/shared/lib'
 import { noteFromParam, noteParam } from '@/shared/lib/music'
 import {
   InversionChoice,
-  HandsSegmented,
   Labelled,
   MenuPicker,
   NotePicker,
@@ -132,16 +131,6 @@ export function ChordBuilder({
             notes={tones.length}
             value={chord.inversion}
             onChange={(inversion) => onChange({ inversion })}
-          />
-        </Labelled>
-      ) : null}
-      {close && !twoHands ? (
-        <Labelled label={t('practice:hands')}>
-          <HandsSegmented
-            label={t('practice:hands')}
-            value={chord.hands}
-            hands={['rh', 'both']}
-            onChange={(hands) => onChange({ hands })}
           />
         </Labelled>
       ) : null}
