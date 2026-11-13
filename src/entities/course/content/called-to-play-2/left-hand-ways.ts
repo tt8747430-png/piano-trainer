@@ -80,7 +80,7 @@ const leftHandWays: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Бог посылает всё для нас” in the Player',
+            en: '“God sends everything for us” in the Player',
             ru: '«Бог посылает всё для нас» в плеере',
           },
           target: { opens: 'piece', piece: 'posylaet' },
@@ -88,7 +88,7 @@ const leftHandWays: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Дерзновение, упование” in the Player',
+            en: '“Boldness and hope” in the Player',
             ru: '«Дерзновение, упование» в плеере',
           },
           target: { opens: 'piece', piece: 'derznovenie' },
@@ -96,7 +96,7 @@ const leftHandWays: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Один построил свой дом на скале” in the Player',
+            en: '“The Wise Man Built His House upon the Rock” in the Player',
             ru: '«Один построил свой дом на скале» в плеере',
           },
           target: { opens: 'piece', piece: 'skala' },

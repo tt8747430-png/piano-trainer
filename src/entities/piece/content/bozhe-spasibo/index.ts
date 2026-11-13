@@ -22,7 +22,7 @@ import bz20 from './bz20'
 
 const bozheSpasibo: Collection = {
   id: 'bozhe-spasibo',
-  name: { en: '«Боже, спасибо»', ru: '«Боже, спасибо»' },
+  name: { en: 'Bozhe, spasibo', ru: 'Боже, спасибо' },
   entries: [
     bz1,
     bz2,

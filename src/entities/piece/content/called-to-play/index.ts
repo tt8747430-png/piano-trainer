@@ -17,7 +17,7 @@ import wander from './wander'
 
 const calledToPlay: Collection = {
   id: 'called-to-play',
-  name: { en: 'Called to Play', ru: 'Called to Play' },
+  name: { en: 'Called to Play', ru: 'Призван играть' },
   entries: [
     hgta,
     nojs,

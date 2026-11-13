@@ -11,7 +11,7 @@ export default definePiece({
   tempo: 72,
   pattern: 'r1',
   note: {
-    en: 'Боброва uses this hymn to show all seven accompaniment types. Try them in order. Then mix them, as the practicum suggests: figuration in the verse, chord pulse in the chorus.',
+    en: 'Bobrova uses this hymn to show all seven accompaniment types. Try them in order. Then mix them, as the practicum suggests: figuration in the verse, chord pulse in the chorus.',
     ru: 'На этом гимне Боброва показывает все семь видов аккомпанемента. Попробуйте их по порядку. Затем смешивайте их, как советует практикум: фигурация в куплете, аккордовая пульсация в припеве.',
   },
   sections: [

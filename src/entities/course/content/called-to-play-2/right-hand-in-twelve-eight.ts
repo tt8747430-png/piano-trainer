@@ -91,7 +91,7 @@ const rightHandInTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Там, в вышине бесконечной” in the Player',
+            en: '“There, in the endless heights” in the Player',
             ru: '«Там, в вышине бесконечной» в плеере',
           },
           target: { opens: 'piece', piece: 'vyshina' },
@@ -99,7 +99,7 @@ const rightHandInTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Христос, для многих Ты людей – легенда” in the Player',
+            en: '“Christ, to many You are a legend” in the Player',
             ru: '«Христос, для многих Ты людей – легенда» в плеере',
           },
           target: { opens: 'piece', piece: 'legenda' },

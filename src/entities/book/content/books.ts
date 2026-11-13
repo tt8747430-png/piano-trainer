@@ -15,8 +15,8 @@ export const BOOKS: Readonly<Record<BookId, Book>> = {
  * and in Cyrillic in Russian (A25), never two scripts in one interface.
  */
 export const METHOD_BOOK_NAMES: Readonly<Record<MethodBookId, LocalText>> = {
-  'called-to-play': { en: 'Called to Play', ru: 'Called to Play' },
-  'called-to-play-2': { en: 'Called to Play 2', ru: 'Called to Play 2' },
+  'called-to-play': { en: 'Called to Play', ru: 'Призван играть' },
+  'called-to-play-2': { en: 'Called to Play 2', ru: 'Призван играть 2' },
   'seven-types': { en: 'Bobrova', ru: 'Боброва' },
   gorshkov: { en: 'Gorshkov', ru: 'Горшков' },
 }

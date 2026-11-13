@@ -91,7 +91,7 @@ const seventhByTheKey: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“О молитва, о молитва!” in the Player',
+            en: '“O prayer, O prayer!” in the Player',
             ru: '«О молитва, о молитва!» в плеере',
           },
           target: { opens: 'piece', piece: 'molitva' },

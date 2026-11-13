@@ -87,7 +87,7 @@ const melodicFiguration: Lesson = {
         { kind: 'chords', symbols: ['Cm7', 'Dsus4', 'D', 'Gm9', 'Gm/F', 'E♭Maj7'] },
         {
           kind: 'link',
-          title: { en: '“Опять метель” in the Player', ru: '«Опять метель» в плеере' },
+          title: { en: '“A blizzard again” in the Player', ru: '«Опять метель» в плеере' },
           target: { opens: 'piece', piece: 'metel' },
         },
         {

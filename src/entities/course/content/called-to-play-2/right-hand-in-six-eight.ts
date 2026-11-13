@@ -85,7 +85,7 @@ const rightHandInSixEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Я хочу за Тобою идти” in the Player',
+            en: '“I want to follow You” in the Player',
             ru: '«Я хочу за Тобою идти» в плеере',
           },
           target: { opens: 'piece', piece: 'idti' },
@@ -93,7 +93,7 @@ const rightHandInSixEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Посмотри ты на Христа” in the Player',
+            en: '“Look to Christ” in the Player',
             ru: '«Посмотри ты на Христа» в плеере',
           },
           target: { opens: 'piece', piece: 'posmotri' },
@@ -101,7 +101,7 @@ const rightHandInSixEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“В Боге одном лишь душа найдет” in the Player',
+            en: '“In God alone the soul will find” in the Player',
             ru: '«В Боге одном лишь душа найдет» в плеере',
           },
           target: { opens: 'piece', piece: 'vboge' },

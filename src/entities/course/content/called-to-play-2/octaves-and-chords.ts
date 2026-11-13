@@ -76,7 +76,7 @@ const octavesAndChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Пусть земля вся утверждает” in the Player',
+            en: '“Let all the earth declare” in the Player',
             ru: '«Пусть земля вся утверждает» в плеере',
           },
           target: { opens: 'piece', piece: 'zemlya' },
@@ -84,7 +84,7 @@ const octavesAndChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“В небесах моя отчизна” in the Player',
+            en: '“My homeland is in heaven” in the Player',
             ru: '«В небесах моя отчизна» в плеере',
           },
           target: { opens: 'piece', piece: 'otchizna' },

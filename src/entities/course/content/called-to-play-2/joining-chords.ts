@@ -113,7 +113,7 @@ const joiningChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Буду жить под защитой Твоих крыл” in the Player',
+            en: '“I will live under the shelter of Your wings” in the Player',
             ru: '«Буду жить под защитой Твоих крыл» в плеере',
           },
           target: { opens: 'piece', piece: 'kryl' },
@@ -121,7 +121,7 @@ const joiningChords: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Благословений потоки” in the Player',
+            en: '“Showers of Blessing” in the Player',
             ru: '«Благословений потоки» в плеере',
           },
           target: { opens: 'piece', piece: 'potoki' },

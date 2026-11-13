@@ -85,7 +85,7 @@ const sixEightAndTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“В двери закрытые” in the Player',
+            en: '“At the closed door” in the Player',
             ru: '«В двери закрытые» в плеере',
           },
           target: { opens: 'piece', piece: 'dveri' },
@@ -93,7 +93,7 @@ const sixEightAndTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '“Ангелы в небе Господа славят” in the Player',
+            en: '“Angels in heaven praise the Lord” in the Player',
             ru: '«Ангелы в небе Господа славят» в плеере',
           },
           target: { opens: 'piece', piece: 'angely' },

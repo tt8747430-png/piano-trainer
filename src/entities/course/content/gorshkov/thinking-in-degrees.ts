@@ -53,7 +53,7 @@ const thinkingInDegrees: Lesson = {
           kind: 'text',
           lead: { en: 'A degree', ru: 'Ступень' },
           text: {
-            en: 'is a note’s place in the key’s scale, numbered I to VII. “Ромашковые поля” is in D minor, and each degree carries a chord. V uses the raised 7th, C♯.',
+            en: 'is a note’s place in the key’s scale, numbered I to VII. “Daisy fields” is in D minor, and each degree carries a chord. V uses the raised 7th, C♯.',
             ru: '— место звука в гамме тональности, от I до VII. «Ромашковые поля» — в ре миноре, и на каждой ступени стоит аккорд. На V — с повышенной VII ступенью, до-диезом.',
           },
         },
@@ -134,13 +134,13 @@ const thinkingInDegrees: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '“Ромашковые поля” in the Player', ru: '«Ромашковые поля» в плеере' },
+          title: { en: '“Daisy fields” in the Player', ru: '«Ромашковые поля» в плеере' },
           target: { opens: 'piece', piece: 'romashki' },
         },
         {
           kind: 'link',
           title: {
-            en: '“Ромашковые поля”’s chords in any key',
+            en: 'The chords of “Daisy fields” in any key',
             ru: 'Аккорды «Ромашковых полей» в любой тональности',
           },
           target: {
