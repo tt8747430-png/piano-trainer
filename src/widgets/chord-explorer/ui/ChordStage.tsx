@@ -2,13 +2,14 @@ import { useMemo } from 'react'
 import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { useMediaQuery } from '@/shared/lib'
 import { isBlackKey, printedNote, type Midi } from '@/shared/lib/music'
 import { Pinned, type ShownKeys } from '@/shared/ui'
 import { PianoHands, type KeyTag } from '@/widgets/piano-hands'
 import { chordPerformance, viewChord, type ChordView } from '../model/chord-view'
 
-/** The stage's height on the canvas: the hands at the keys, 220 under the bar. */
-const STAGE_HEIGHT = 220
+/** The stage's height on the canvas: the hands at the keys, 220 under a phone's bar, 286 on a laptop. */
+const STAGE_HEIGHT = { phone: 220, laptop: 286 } as const
 
 /**
  * The chord's stage under the bar, as the canvas's Chords page has it: the hands at a 3D piano
@@ -36,6 +37,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
     }
   }, [chord])
   const { folded } = useFoldKeys()
+  const laptop = useMediaQuery('(min-width: 48rem)')
   // The Piano sheet's Show the piano off: neither the hands nor the keys.
   if (folded) return null
   if (!hands) return <PinnedKeyboard shown={shown} place="top" />
@@ -45,7 +47,7 @@ export function ChordStage({ chord, shown }: { chord: ChordView; shown: ShownKey
   return (
     <Pinned bleed className="vt-keys">
       <PianoHands
-        height={STAGE_HEIGHT}
+        height={laptop ? STAGE_HEIGHT.laptop : STAGE_HEIGHT.phone}
         notes={notes}
         perSecond={1}
         now={() => 0}

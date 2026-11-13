@@ -83,30 +83,33 @@ export function ChordExplorer({
   const handFacts = (['rh', 'lh'] as const).filter((side) => fingers[side].length > 0)
 
   return (
-    <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[51.25rem]">
+    <div className="flex flex-col gap-4">
       <ChordStage chord={chord} shown={shown} />
-      <h2 className="sr-only">{printedSymbol(symbol)}</h2>
-      <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
-      <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
-        <ChordSheet placed={placed} symbol={symbol} fingers={fingers} />
-        <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-          {handFacts.map((side) => (
-            <span key={side} className="whitespace-nowrap">
-              {t(`common:hands.${side}`)}
-              <b className="ms-1.5 font-bold whitespace-pre text-foreground tabular-nums">
-                {fingers[side].join(' ')}
-              </b>
-            </span>
-          ))}
-        </p>
-      </section>
-      {quality ? (
-        <ChordPractice
-          root={built.root}
-          quality={quality}
-          inversion={built.tones.length <= 4 ? chord.inversion : 0}
-        />
-      ) : null}
+      {/* The body under the stage, 820 wide at most on a laptop, as the board's column. */}
+      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[51.25rem]">
+        <h2 className="sr-only">{printedSymbol(symbol)}</h2>
+        <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
+        <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+          <ChordSheet placed={placed} symbol={symbol} fingers={fingers} />
+          <p className="flex min-h-11 flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            {handFacts.map((side) => (
+              <span key={side} className="whitespace-nowrap">
+                {t(`common:hands.${side}`)}
+                <b className="ms-1.5 font-bold whitespace-pre text-foreground tabular-nums">
+                  {fingers[side].join(' ')}
+                </b>
+              </span>
+            ))}
+          </p>
+        </section>
+        {quality ? (
+          <ChordPractice
+            root={built.root}
+            quality={quality}
+            inversion={built.tones.length <= 4 ? chord.inversion : 0}
+          />
+        ) : null}
+      </div>
       <FloatingActions>
         {/* The canvas's three pieces of glass: the voicing, Play with how it plays, the hands. */}
         <FloatingPieces label={t('practice:transport')}>
