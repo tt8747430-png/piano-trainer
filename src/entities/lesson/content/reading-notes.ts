@@ -124,7 +124,7 @@ const readingNotes: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Reading notes', ru: 'Чтение нот' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],

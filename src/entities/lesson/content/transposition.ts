@@ -136,7 +136,7 @@ const transposition: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Degrees of a key in the Quiz', ru: 'Ступени тональности в тестах' },
+          title: { en: 'Degrees of a key', ru: 'Ступени тональности' },
           target: { opens: 'quiz', trainer: 'key-degrees' },
         },
       ],

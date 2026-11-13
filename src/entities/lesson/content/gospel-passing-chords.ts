@@ -115,7 +115,7 @@ const gospelPassingChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Hear chords in the Quiz', ru: 'Аккорды на слух в тестах' },
+          title: { en: 'Hear chords', ru: 'Аккорды на слух' },
           target: { opens: 'quiz', trainer: 'chords', drill: 'ear' },
         },
       ],

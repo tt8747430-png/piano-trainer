@@ -125,7 +125,7 @@ const accidentals: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes', ru: 'Чтение нот' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {

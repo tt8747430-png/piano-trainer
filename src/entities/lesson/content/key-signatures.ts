@@ -125,7 +125,7 @@ const keySignatures: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Key signatures in the Quiz', ru: 'Ключевые знаки в тестах' },
+          title: { en: 'Key signatures', ru: 'Ключевые знаки' },
           target: { opens: 'quiz', trainer: 'key-signatures' },
         },
       ],

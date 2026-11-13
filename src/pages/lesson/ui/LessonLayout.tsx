@@ -78,6 +78,9 @@ export function LessonLayout({
         }
         settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
         edit={edit}
+        // A document: its title large on the page, as the lesson editor shows it (Edit looks as it
+        // reads); the bar keeps it for a screen reader and its room for the tools.
+        titleOnPage
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}
@@ -93,6 +96,9 @@ export function LessonLayout({
           </span>
         ) : null}
       </nav>
+      <p aria-hidden className="pb-2 font-display text-3xl font-semibold text-balance sm:text-4xl">
+        {localText(lesson.title, locale)}
+      </p>
       <LessonView
         key={lesson.id}
         lesson={lesson}

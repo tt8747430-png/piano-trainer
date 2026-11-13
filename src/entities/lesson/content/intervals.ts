@@ -81,7 +81,7 @@ const intervals: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Hear intervals in the Quiz', ru: 'Интервалы на слух в тестах' },
+          title: { en: 'Hear intervals', ru: 'Интервалы на слух' },
           target: { opens: 'quiz', trainer: 'intervals', drill: 'ear' },
         },
         {

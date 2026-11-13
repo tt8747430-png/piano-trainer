@@ -124,7 +124,7 @@ const guideTones: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
+          title: { en: 'Name chords', ru: 'Названия аккордов' },
           target: { opens: 'quiz', trainer: 'chords', drill: 'quiz' },
         },
       ],

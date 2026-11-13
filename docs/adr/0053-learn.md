@@ -17,7 +17,7 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   Continue follows the track last learned on: after a course's lesson or song, that course's next step; otherwise the
   journeys' next. On a phone it follows the level's chips; on a laptop (`lg`) the page is three columns: the levels
   as a list (each with its book's title and count, then Your lessons), the level, and Continue with Your courses. The
-  Courses span the first two columns.
+  Courses span the first two columns, two shelves to a row.
 - **The Lessons** (`entities/lesson`): four journeys, one to a level (Foundations, Fluency, Musicianship, Mastery),
   chosen from the chips (a phone) or the list (a laptop). A journey is chapters of lessons, then the chord families or
   scales its chapter's Check asks. A level's steps, like a course's lessons, are a **lesson line**
@@ -55,7 +55,9 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   voicings written hand by hand, a progression's row, and a pattern heard over its piece's first line (a pattern is
   only ever heard on chords). A question is answered on the keys, a chord's notes in any octave. Links name what they
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
-- **A lesson's page** is one column in the middle under one floating bar (‹ the section before, the count opening its
+- **A lesson's page** is a document, as its editor shows it: where it stands (its level or course, its chapter, "Lesson
+  3 of 11"), then its title large on the page and only there (the bar keeps its room for Learned, the keys and the
+  gear), as the lesson editor shows it. It is one column in the middle under one floating bar (‹ the section before, the count opening its
   contents and what it is part of, › the next). Its end is the lesson before and the way on; going on learns it.
   It reads as **one page of its sections** for everyone, on every screen. A learner who wants it **a section at a time**
   chooses so (the lesson's Settings, Lessons read as: One page · A section at a time, `pt-settings` `lessonReading`, its

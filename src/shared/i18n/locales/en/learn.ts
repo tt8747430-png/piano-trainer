@@ -113,7 +113,7 @@ export const learn = {
     about: 'About',
   },
   // Where a lesson is: a journey's chapter, or a course.
-  place: 'Lesson {{n}} of {{total}}',
+  place: 'Lesson\u00a0{{n}}\u00a0of\u00a0{{total}}',
   placeLabel: 'Where this lesson is',
   // The lessons to read before this one, each a link.
   afterLinks: 'After:',

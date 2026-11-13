@@ -116,7 +116,7 @@ const passingChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Chords by ear in the Quiz', ru: 'Аккорды на слух в тестах' },
+          title: { en: 'Chords by ear', ru: 'Аккорды на слух' },
           target: { opens: 'quiz', trainer: 'chords', drill: 'ear' },
         },
       ],

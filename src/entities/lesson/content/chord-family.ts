@@ -81,7 +81,7 @@ const chordFamily: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Practise a key’s degrees in the Quiz', ru: 'Ступени тональности в тестах' },
+          title: { en: 'Practise a key’s degrees', ru: 'Ступени тональности' },
           target: { opens: 'quiz', trainer: 'key-degrees' },
         },
         {

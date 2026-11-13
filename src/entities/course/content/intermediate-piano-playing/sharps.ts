@@ -129,7 +129,7 @@ const sharps: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Name key signatures in the Quiz', ru: 'Ключевые знаки в тестах' },
+          title: { en: 'Name key signatures', ru: 'Ключевые знаки' },
           target: { opens: 'quiz', trainer: 'key-signatures' },
         },
         {

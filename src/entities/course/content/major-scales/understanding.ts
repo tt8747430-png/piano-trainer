@@ -134,7 +134,7 @@ const understanding: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Build scales in the Quiz', ru: 'Построение гамм в тестах' },
+          title: { en: 'Build scales', ru: 'Построение гамм' },
           target: { opens: 'quiz', trainer: 'build-scale' },
         },
       ],

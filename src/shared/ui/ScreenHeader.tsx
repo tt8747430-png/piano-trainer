@@ -35,8 +35,8 @@ type ScreenHeaderProps = {
   more?: ReactNode
   /** The screen's Edit: its pencil beside the title, Done in its place while editing. */
   edit?: EditAction
-  /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
-   * keeps it for a screen reader alone and leaves its room to the bar's tools. */
+  /** The page shows its title itself, large under the bar (a document, read or in Edit): the bar
+   * keeps it for a screen reader alone, never saying it twice, and leaves its room to the tools. */
   titleOnPage?: boolean
 } & (
   | {
@@ -124,7 +124,7 @@ export function ScreenHeader({
               // on a phone where two lines say it all.
               'line-clamp-2 leading-tight text-balance wrap-break-word',
               large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
-              titleOnPage && 'max-sm:sr-only',
+              titleOnPage && 'sr-only',
               // A place's views say where it is: its name stays the page's heading, unseen.
               views && 'sr-only',
             )}

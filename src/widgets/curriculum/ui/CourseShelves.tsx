@@ -46,11 +46,12 @@ export function CourseShelves() {
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+    // On a laptop the shelves stand two a row across the page's width, never one long column.
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
       {/* The Courses' About (R29 B9), an editor's, over the shelves. */}
       {hasAbout(about) ? (
         <Suspense fallback={null}>
-          <AboutView about={about} label={t('coursesAbout')} className="px-1" />
+          <AboutView about={about} label={t('coursesAbout')} className="px-1 lg:col-span-2" />
         </Suspense>
       ) : null}
       {SHELVES.map((shelf) => (

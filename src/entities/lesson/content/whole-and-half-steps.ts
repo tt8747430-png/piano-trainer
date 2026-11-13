@@ -115,7 +115,7 @@ const wholeAndHalfSteps: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Build a scale in the Quiz', ru: 'Построение гамм в тестах' },
+          title: { en: 'Build a scale', ru: 'Построение гамм' },
           target: { opens: 'quiz', trainer: 'build-scale' },
         },
         {

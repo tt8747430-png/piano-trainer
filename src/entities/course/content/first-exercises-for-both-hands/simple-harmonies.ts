@@ -143,7 +143,7 @@ const simpleHarmonies: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'A chord’s role in the Quiz', ru: 'Функция аккорда в тестах' },
+          title: { en: 'A chord’s role', ru: 'Функция аккорда' },
           target: { opens: 'quiz', trainer: 'chord-role' },
         },
       ],

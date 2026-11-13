@@ -324,7 +324,7 @@ const cadences: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Name cadences by ear in the Quiz', ru: 'Каденции на слух в тестах' },
+          title: { en: 'Name cadences by ear', ru: 'Каденции на слух' },
           target: { opens: 'quiz', trainer: 'cadences', drill: 'ear' },
         },
         {
@@ -335,8 +335,8 @@ const cadences: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'Hear progressions in the Quiz',
-            ru: 'Последовательности на слух в тестах',
+            en: 'Hear progressions',
+            ru: 'Последовательности на слух',
           },
           target: { opens: 'quiz', trainer: 'progressions-by-ear' },
         },

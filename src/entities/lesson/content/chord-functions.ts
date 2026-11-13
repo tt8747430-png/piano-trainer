@@ -159,7 +159,7 @@ const chordFunctions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Name a chord’s function in the Quiz', ru: 'Функция аккорда в тестах' },
+          title: { en: 'Name a chord’s function', ru: 'Функция аккорда' },
           target: { opens: 'quiz', trainer: 'chord-role' },
         },
         {

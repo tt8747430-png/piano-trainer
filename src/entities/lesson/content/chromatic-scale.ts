@@ -100,7 +100,7 @@ const chromaticScale: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Hear scales in the Quiz', ru: 'Гаммы на слух в тестах' },
+          title: { en: 'Hear scales', ru: 'Гаммы на слух' },
           target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],

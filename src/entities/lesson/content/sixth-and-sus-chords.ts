@@ -205,7 +205,7 @@ const sixthAndSusChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
+          title: { en: 'Build chords', ru: 'Построение аккордов' },
           target: { opens: 'quiz', trainer: 'chords', drill: 'entry' },
         },
       ],

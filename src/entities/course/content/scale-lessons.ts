@@ -421,7 +421,7 @@ export function majorScaleLesson(tonic: SpelledNote): Lesson {
           },
           {
             kind: 'link',
-            title: { en: 'Build scales in the Quiz', ru: 'Построение гамм в тестах' },
+            title: { en: 'Build scales', ru: 'Построение гамм' },
             target: { opens: 'quiz', trainer: 'build-scale' },
           },
         ],
@@ -640,7 +640,7 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
           })),
           {
             kind: 'link',
-            title: { en: 'Build scales in the Quiz', ru: 'Построение гамм в тестах' },
+            title: { en: 'Build scales', ru: 'Построение гамм' },
             target: { opens: 'quiz', trainer: 'build-scale' },
           },
         ],
@@ -804,7 +804,7 @@ export function arpeggioLesson(key: Key): Lesson {
           },
           {
             kind: 'link',
-            title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
+            title: { en: 'Build chords', ru: 'Построение аккордов' },
             target: { opens: 'quiz', trainer: 'chords', drill: 'entry' },
           },
         ],

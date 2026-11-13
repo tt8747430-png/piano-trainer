@@ -119,7 +119,7 @@ const twoNotesOneHand: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Intervals by ear in the Quiz', ru: 'Интервалы на слух в тестах' },
+          title: { en: 'Intervals by ear', ru: 'Интервалы на слух' },
           target: { opens: 'quiz', trainer: 'intervals', drill: 'ear' },
         },
       ],

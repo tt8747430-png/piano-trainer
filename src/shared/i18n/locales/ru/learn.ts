@@ -110,7 +110,7 @@ export const learn: LocaleResources['learn'] = {
     about: 'Описание',
     facts: 'О курсе',
   },
-  place: 'Урок {{n}} из {{total}}',
+  place: 'Урок\u00a0{{n}}\u00a0из\u00a0{{total}}',
   afterLinks: 'Сначала:',
   placeLabel: 'Где этот урок',
   contents: 'В этом уроке',

@@ -90,7 +90,7 @@ export function LearnPage() {
         <div
           className={cn(
             'mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-8',
-            view === 'courses' && 'lg:col-span-2 lg:mx-0',
+            view === 'courses' && 'lg:col-span-2 lg:mx-0 lg:max-w-none',
           )}
         >
           {view === 'lessons' ? (

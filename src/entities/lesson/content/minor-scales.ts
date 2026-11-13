@@ -113,7 +113,7 @@ const minorScales: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Scales by ear in the Quiz', ru: 'Гаммы на слух в тестах' },
+          title: { en: 'Scales by ear', ru: 'Гаммы на слух' },
           target: { opens: 'quiz', trainer: 'scales-by-ear' },
         },
       ],

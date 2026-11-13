@@ -262,8 +262,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'link',
           title: {
-            en: 'Progressions by ear in the Quiz',
-            ru: 'Последовательности на слух в тестах',
+            en: 'Progressions by ear',
+            ru: 'Последовательности на слух',
           },
           target: { opens: 'quiz', trainer: 'progressions-by-ear' },
         },

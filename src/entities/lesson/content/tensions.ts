@@ -122,7 +122,7 @@ const tensions: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Build a chord in the Quiz', ru: 'Построение аккордов в тестах' },
+          title: { en: 'Build a chord', ru: 'Построение аккордов' },
           target: { opens: 'quiz', trainer: 'chords', drill: 'entry' },
         },
         {
