@@ -127,7 +127,14 @@ export function ChordsOverLyrics({
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
-        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} onLoop={onLoop} />
+        <BeatStrip
+          performance={performance}
+          bars={bars}
+          beat={beat}
+          loop={loop}
+          onBeat={onGo}
+          onLoop={onLoop}
+        />
         {pinned ? (
           <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />
