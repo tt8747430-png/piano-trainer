@@ -88,3 +88,20 @@ export function LessonRow({
     },
   })
 }
+
+/**
+ * Lessons in their order (canvas 128): one spine runs through their tiles, with no card round them.
+ * A level's chapters and a course's lessons are drawn this way; it shows the order, it locks nothing.
+ */
+export function LessonLine({ children }: { children: ReactNode }) {
+  return <ol className="flex flex-col">{children}</ol>
+}
+
+/** One lesson on a `LessonLine`: the spine passes behind its tile. */
+export function LessonStop({ children }: { children: ReactNode }) {
+  return (
+    <li className="relative before:absolute before:inset-y-0 before:start-8 before:w-0.5 before:-translate-x-1/2 before:bg-learned/60 rtl:before:translate-x-1/2">
+      {children}
+    </li>
+  )
+}

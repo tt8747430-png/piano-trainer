@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 import { useLayerPadding } from '@/shared/lib/safe-area'
 
 function Popover({ ...props }: PopoverPrimitive.Root.Props) {

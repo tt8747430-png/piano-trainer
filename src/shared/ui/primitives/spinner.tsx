@@ -1,4 +1,4 @@
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 import { Loader2Icon } from 'lucide-react'
 
 /** Decorative: whatever waits names itself (a status region, a button's text), in the learner's language. */

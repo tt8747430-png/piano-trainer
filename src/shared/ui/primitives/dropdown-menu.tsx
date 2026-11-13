@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Menu as MenuPrimitive } from '@base-ui/react/menu'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 import { useLayerPadding } from '@/shared/lib/safe-area'
 import { ChevronRightIcon, CheckIcon } from 'lucide-react'
 

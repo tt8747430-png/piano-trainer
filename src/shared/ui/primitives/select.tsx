@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Select as SelectPrimitive } from '@base-ui/react/select'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 import { useLayerPadding } from '@/shared/lib/safe-area'
 import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from 'lucide-react'
 

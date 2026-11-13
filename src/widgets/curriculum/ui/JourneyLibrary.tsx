@@ -30,7 +30,7 @@ import { continueStep } from '../model/continue-step'
 import { OWN_LESSONS, type LearnView } from '../model/learn-view'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { useStepTitle } from '../model/use-step-title'
-import { LessonRow } from './LessonRow'
+import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 import { OwnLessons } from './OwnLessons'
 
 const ICON = {
@@ -89,7 +89,7 @@ function StepRow({
             : null,
         ]
   return (
-    <li className="relative before:absolute before:inset-y-0 before:start-8 before:w-0.5 before:-translate-x-1/2 before:bg-learned/60 rtl:before:translate-x-1/2">
+    <LessonStop>
       <LessonRow
         render={<StepLink step={step} />}
         mark={next ? <Icon className="size-5" strokeWidth={1.75} /> : place}
@@ -101,7 +101,7 @@ function StepRow({
         title={title}
         detail={detail.filter(Boolean).join(' · ')}
       />
-    </li>
+    </LessonStop>
   )
 }
 
@@ -141,8 +141,7 @@ function ChapterGroup({
           {t('journey.count', { learned: done, total: ids.length })}
         </span>
       </h3>
-      {/* One spine joins the level's lessons in order (canvas 128); it locks nothing. */}
-      <ol className="flex flex-col">
+      <LessonLine>
         {chapter.steps.map((step) => {
           const stepId = stepIdOf(step)
           return (
@@ -157,7 +156,7 @@ function ChapterGroup({
             />
           )
         })}
-      </ol>
+      </LessonLine>
     </section>
   )
 }

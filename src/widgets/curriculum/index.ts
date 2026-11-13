@@ -18,7 +18,7 @@ export {
   lessonShare,
   type Progress,
 } from './model/progress'
-export { LessonRow } from './ui/LessonRow'
+export { LessonLine, LessonRow, LessonStop } from './ui/LessonRow'
 export { useStepTitle, type StepTitle } from './model/use-step-title'
 export { CourseFacts } from './ui/CourseFacts'
 export { CourseLessons } from './ui/CourseLessons'

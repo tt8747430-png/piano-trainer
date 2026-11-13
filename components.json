@@ -16,7 +16,7 @@
     "components": "@/shared/ui",
     "ui": "@/shared/ui/primitives",
     "lib": "@/shared/lib",
-    "utils": "@/shared/lib/cn",
+    "utils": "@/shared/lib",
     "hooks": "@/shared/lib"
   },
   "menuColor": "default",

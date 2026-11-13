@@ -1,6 +1,6 @@
 import { Toggle as TogglePrimitive } from '@base-ui/react/toggle'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 
 const toggleVariants = cva(
   "group/toggle inline-flex shrink-0 items-center justify-center border border-input bg-card text-base font-semibold whitespace-nowrap text-foreground select-none choice disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",

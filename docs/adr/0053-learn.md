@@ -12,12 +12,18 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
 
 ## Decision
 
-- **Learn** (`/?view=lessons|courses&journey=`, remembered) is its header's toggle between the **Lessons** and the
-  **Courses**, and **Continue**, its first row: one card naming its step. Continue follows the track last learned on:
-  after a course's lesson or song, that course's next step; otherwise the journeys' next.
+- **Learn** (`/?view=lessons|courses&journey=`, remembered) is its header's toggle, in the title's place, between the
+  **Lessons** and the **Courses**, with **Continue**: one card naming its step, "6 of 13 learned" and its meter.
+  Continue follows the track last learned on: after a course's lesson or song, that course's next step; otherwise the
+  journeys' next. On a phone it follows the level's chips; on a laptop (`lg`) the page is three columns: the levels
+  as a list (each with its book's title and count, then Your lessons), the level, and Continue with Your courses. The
+  Courses span the first two columns.
 - **The Lessons** (`entities/lesson`): four journeys, one to a level (Foundations, Fluency, Musicianship, Mastery),
-  chosen from one row of chips with how much of each is learned. A journey is chapters of lessons, then the chord
-  families or scales its chapter's Check asks; a chapter folds under its heading. A journey's lesson plays no piece,
+  chosen from the chips (a phone) or the list (a laptop). A journey is chapters of lessons, then the chord families or
+  scales its chapter's Check asks. A level's steps, like a course's lessons, are a **lesson line**
+  (`LessonLine`): one spine through their tiles and no card round them; a tile is its number, a check's square, a
+  learned one grass with a check, the next one its book ringed in honey with Next. It shows the order and locks
+  nothing. A journey's lesson plays no piece,
   shows no pattern, names no method book and links only Lessons and Practice.
 - **The Courses** (`entities/course`): self-contained, on five shelves (beginner, intermediate, technique, chords and
   improvising, method books). A course has a level, its weeks, its own lessons and its guided songs. A course's lesson

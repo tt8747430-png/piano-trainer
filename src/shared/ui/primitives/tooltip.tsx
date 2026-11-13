@@ -1,5 +1,5 @@
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 import { useLayerPadding } from '@/shared/lib/safe-area'
 
 function TooltipProvider({ delay = 300, ...props }: TooltipPrimitive.Provider.Props) {

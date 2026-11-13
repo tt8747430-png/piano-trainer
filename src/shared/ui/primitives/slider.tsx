@@ -1,5 +1,5 @@
 import { Slider as SliderPrimitive } from '@base-ui/react/slider'
-import { cn } from 'cn'
+import { cn } from '@/shared/lib'
 
 /**
  * One number draws one thumb; an array draws a thumb per value. Children (a `SliderLabel`, the

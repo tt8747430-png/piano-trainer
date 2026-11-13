@@ -1,6 +1,6 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { PageKeyboardTools } from '@/features/live-keyboard'
-import { ArrowRight, ChevronsLeft, Settings } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Settings } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
@@ -118,7 +118,7 @@ function EndLink({ way, onGo, primary }: { way: WayLink; onGo?: () => void; prim
           : 'h-auto min-h-16 justify-start gap-3 rounded-control px-4 py-3 text-left whitespace-normal'
       }
     >
-      {primary ? null : <ChevronsLeft aria-hidden className="shrink-0" />}
+      {primary ? null : <ArrowLeft aria-hidden className="shrink-0" />}
       <span className="flex min-w-0 flex-col">
         <span className="text-xs font-medium opacity-80">{way.label}</span>
         <span className="font-display text-lg text-balance">{way.title ?? way.label}</span>

@@ -7,7 +7,7 @@ import { courseLessonStepId, STAGE_PAINT, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { PAINT } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
-import { LessonRow } from './LessonRow'
+import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 
 /**
  * A course's lessons, numbered as taught, in one card: each row its number on a tile in the course's
@@ -29,7 +29,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
       <h2 id={id} className="text-2xl">
         {t('course.lessons')}
       </h2>
-      <ol className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      <LessonLine>
         {course.lessons.map((lesson, i) => {
           const step = courseLessonStepId(course.id, lesson.id)
           const done = learned[step] !== undefined
@@ -37,7 +37,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
           const share = lessonShare(lesson.sections.length, read[step], done)
           const after = (lesson.after ?? []).map(numberOf).filter((n) => n > 0)
           return (
-            <li key={lesson.id}>
+            <LessonStop key={lesson.id}>
               <LessonRow
                 render={
                   <Link
@@ -54,10 +54,10 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                 title={localText(lesson.title, locale)}
                 detail={after.length > 0 ? t('after', { lessons: after.join(', ') }) : undefined}
               />
-            </li>
+            </LessonStop>
           )
         })}
-      </ol>
+      </LessonLine>
     </section>
   )
 }

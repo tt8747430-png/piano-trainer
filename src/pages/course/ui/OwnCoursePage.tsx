@@ -15,7 +15,14 @@ import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
-import { isComplete, LearnedMeter, lessonShare, LessonRow } from '@/widgets/curriculum'
+import {
+  isComplete,
+  LearnedMeter,
+  LessonLine,
+  lessonShare,
+  LessonRow,
+  LessonStop,
+} from '@/widgets/curriculum'
 
 /** A lesson read in the course: its page, carrying the course on. */
 const inCourse = (course: OwnCourse, lessonId: string) => (
@@ -46,13 +53,13 @@ function Lessons({
       {lessons.length === 0 ? (
         <p className="px-1 text-muted-foreground">{t('own.noCourseLessons')}</p>
       ) : (
-        <ol className="flex flex-col divide-y divide-hairline overflow-hidden card">
+        <LessonLine>
           {lessons.map(({ lesson, own }, i) => {
             const step = lessonStepId(lesson.id)
             const done = learned[step] !== undefined
             const place = own ? undefined : lessonPlace(lesson.id)
             return (
-              <li key={lesson.id}>
+              <LessonStop key={lesson.id}>
                 <LessonRow
                   render={inCourse(course, lesson.id)}
                   mark={i + 1}
@@ -64,10 +71,10 @@ function Lessons({
                   title={localText(lesson.title, locale)}
                   detail={place ? localText(place.journey.title, locale) : t('own.yourLesson')}
                 />
-              </li>
+              </LessonStop>
             )
           })}
-        </ol>
+        </LessonLine>
       )}
     </section>
   )
