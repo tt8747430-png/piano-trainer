@@ -10,7 +10,7 @@ import {
 } from '@/shared/ui/primitives/empty'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
-import { filtersOn } from '../model/library-view'
+import { filtersOn, placesOn } from '../model/library-view'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
@@ -36,6 +36,8 @@ export function LibraryEmpty({
   if (page.view.filtering) {
     const searched = filter.q.trim()
     const on = filtersOn(filter)
+    // A place alone (Favourites, Learning, Learned) found nothing: said as the place, its way out All songs.
+    const placeAlone = !searched && on === placesOn(filter)
     // What found nothing, said as plainly as it was asked: the one filter by its own words.
     const said = searched
       ? on === 0
@@ -51,7 +53,11 @@ export function LibraryEmpty({
             ? t('emptyKey', { key: keyName(keyFromParam(filter.key)) })
             : filter.favourites
               ? t('emptyFavourites')
-              : t('empty')
+              : filter.learned === 'yes'
+                ? t('emptyLearned')
+                : filter.learned === 'no'
+                  ? t('emptyLearning')
+                  : t('empty')
     return (
       <Empty>
         <EmptyHeader>
@@ -60,7 +66,7 @@ export function LibraryEmpty({
         </EmptyHeader>
         <EmptyContent>
           <Button variant="soft" onClick={onClear}>
-            {common('library.clearFilters')}
+            {placeAlone ? t('tree.all') : common('library.clearFilters')}
           </Button>
         </EmptyContent>
       </Empty>
