@@ -185,6 +185,7 @@ export const piece = {
     },
   },
   settings: {
+    yourSong: 'Your song',
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Delete song',
     duplicate: 'Duplicate',

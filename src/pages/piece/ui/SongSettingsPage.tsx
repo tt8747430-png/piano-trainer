@@ -12,6 +12,7 @@ import {
   usePiecesStoreApi,
   useRepertoire,
   entryTitles,
+  shownCredits,
   type ChartPiece,
   type Piece,
   type PieceId,
@@ -71,6 +72,7 @@ function SongSettings({ piece }: { piece: Piece }) {
   const { item, title, publishing } = useSongPublish(piece)
   // Its other name (as the other language writes it), in a line under the title.
   const subtitle = entryTitles(piece, useLocale()).secondary
+  const [writer] = shownCredits(piece)
   const shared = useShareSong()
   const router = useRouter()
   const layout = useLibraryLayout()
@@ -116,6 +118,13 @@ function SongSettings({ piece }: { piece: Piece }) {
     )
     if (what) shared.share(what)
   }
+  // Under the title (canvas 133): its other name or who wrote it, and Your song where it is the learner's.
+  const byline = [
+    subtitle ?? (writer && 'names' in writer ? writer.names : undefined),
+    own ? t('settings.yourSong') : undefined,
+  ]
+    .filter(Boolean)
+    .join(' · ')
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -130,20 +139,14 @@ function SongSettings({ piece }: { piece: Piece }) {
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         {/* The song at the head: what these settings are for (R32-C). */}
-        <SettingsGroup flush>
-          <div className="flex min-h-20 items-center gap-4 px-4 py-3">
-            {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
-            <SongCoverPicker piece={piece} className="w-14 text-xl" />
-            <div className="flex min-w-0 flex-col gap-0.5">
-              <p className="font-display text-lg leading-tight font-semibold text-balance">
-                {title}
-              </p>
-              {subtitle ? (
-                <p className="truncate text-sm text-muted-foreground">{subtitle}</p>
-              ) : null}
-            </div>
+        <div className="flex items-center gap-4">
+          {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
+          <SongCoverPicker piece={piece} className="w-14 text-xl" />
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <p className="font-sans text-xl/tight font-bold text-balance">{title}</p>
+            {byline ? <p className="truncate text-sm text-muted-foreground">{byline}</p> : null}
           </div>
-        </SettingsGroup>
+        </div>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
             {/* Where it may leave its folder (R29 B4): one of the app's songs in its folder stays. */}

@@ -182,6 +182,7 @@ export const piece: LocaleResources['piece'] = {
     },
   },
   settings: {
+    yourSong: 'Ваша песня',
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Удалить песню',
     duplicate: 'Создать копию',
