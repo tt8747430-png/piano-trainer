@@ -13,16 +13,16 @@ edit, and a learner practising should not change the music by accident.
 
 ## Decision
 
-- **Two screens, one score, two modes.** The Player's Edit (`ScoreEditToggle`, a pencil) and the editor's Done stand
-  in one place in both bars. Switching replaces the history entry, so Close still goes back where the learner came from.
+- **Two screens, one score, two modes.** The Player's Edit score (its Settings sheet's head) opens the editor; the
+  editor's Play · Edit pill (`ModeSwitch`, the bar's middle) goes back. Switching replaces the history entry, so Close still goes back where the learner came from.
   The bar carries over: both URLs take `bar`, the bar as written (the Player's cursor read back through the repeats,
   `writtenBarAt`; a written bar opening on its first time played, `beatGroupInBar`), read once and dropped from the URL.
   Only a piece has the switch, and every piece can be edited: a song written in degrees opens as its chart in its key
   (`asChartPiece`). While a take records the switch waits for Stop.
-- **One bar** (`ScoreBar`): one band of card paper to the screen's edges with one hairline under it. Its buttons are a
-  toolbar's (the button's `tool` variant: round, no frame at rest, the muted fill on hover, while open and pressed,
-  44px). Close and Edit or Done lead; each mode's buttons end it (the Player's Keyboard · MIDI · gear, the editor's
-  Keyboard · MIDI · Play · Undo · Redo · gear, R31-E; the editor's Keyboard at every size, R32-B). One row at every
+- **One bar** (`ScoreBar`): bare over the paper, Close leading, a pill in the middle of the room the ends leave
+  (the Player's views, the editor's Play · Edit), each mode's buttons at the end (the Player's MIDI · Settings, the
+  editor's Undo · Redo · ···). Its buttons are a toolbar's (the button's `tool` variant: round, no frame at rest,
+  the muted fill on hover, while open and pressed, 44px). One row at every
   size, the same height in both modes, and the screen's rows meet in both (`SCORE_SCREEN`), so the sheet never moves as
   the mode switches and nothing is left between the editor's palette and the keys.
 - **No tools row** (R31-E): the Player's View is its Settings', Transpose its More's; the editor's View and
@@ -38,7 +38,7 @@ edit, and a learner practising should not change the music by accident.
 - **Nothing but the sheet's pill floats over the Player's music** (R31-P). In the editor Delete · Copy · Cut · Paste
   float too, while something is chosen, stepping aside while the music is read (`useHiddenWhileReading`). The editor's
   palette is docked beside or under the sheet, taking its own room (ADR 0114), so the bar and the keys stand where the
-  Player's do and only the sheet's width or height changes as Edit and Done switch.
+  Player's do and only the sheet's width or height changes as the modes switch.
 - **One layout setting** (ADR 0096) in both modes; the Player's views are Pick your view's (ADR 0108). The keys show
   and hide by the bar's Keyboard (ADR 0062). Which staves show is the Player's Setup's (ADR 0105); the editor shows
   every staff.

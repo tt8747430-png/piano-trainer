@@ -61,9 +61,13 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     beat on; a syllable under the note (Cmd or Ctrl with L), Space or Enter
     going on, `-` and `_` their marks, ↓ ↑ the verses; the fingers over the note (Shift with F), a chord's bottom up.
     A field is greyed while the View hides what it writes.
-- **The bar** (R31-E, R32-B, Flat's): Close · Done | Piano keys · Play · Undo · Redo · ⚙ at every size (Flat's
-  keyboard button); from 40rem the title after Close and MIDI before Play. Play plays from the caret's bar (Stop while it sounds); no floating transport, no tools
-  capsule. Every button is round, inside the bar; below 360px only the icon buttons narrow.
+- **The bar** (its canvas, the Player's in Edit): Close · Play · Edit (`ModeSwitch`, a pill in the middle; Play
+  opens the Player at the caret's bar) · Undo · Redo · ··· (the score's Settings) at every size; a lesson's example
+  has its own Done in the middle. No title, Play, keys or MIDI in the bar: Play from here and the keys are the
+  selection strip's, MIDI is ··· › MIDI keyboard.
+- **The selection strip** (`SelectionStrip`) heads the palette at every size: what the caret is on ("E4 · quarter
+  note") over where ("Bar 1 · beat 1 · Melody"), then Delete (the notes chosen, else the ones before the caret),
+  Piano keys (filled while shown) and Play from here, the screen's one honey control, Stop while it sounds.
 - **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone, a panel at the right on
   a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
   alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
@@ -72,15 +76,16 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   the owner's captures of Flat's app and web editor): every category a titled section, all of them in one scroll;
   the category chosen (`paletteCategory`, kept) is the section kept in sight:
   - **A panel** at the sheet's side from 48rem (`usePalettePanel`), left or right as Note input says, as Flat's web
-    panel: every section stacked, each folding by its title (`foldedSections`); no strip. A sign tapped on the score
-    unfolds its section and scrolls to it. It reaches the screen's edge under the bar's hairline, its tools clear of
+    panel: the selection strip, then every section stacked under its title; no categories strip. A sign tapped on
+    the score scrolls to its section. It reaches the screen's edge under the bar's hairline, its tools clear of
     the safe area (the notch of a phone on its side).
   - **Docked** under the sheet on a phone held upright, edge to edge above the keys, the sheet scrolling above it
     (Flat's and forScore's input bar); never over the music.
-    Folded (`paletteFolded`, as it opens): the chosen category's tools in one row over the strip of categories, each tab its short name (Notes, Pitch, Dynamics…; canvas 123);
-    unfolded: every section in one scroll, up to half the screen, the strip lighting the section in sight and
-    scrolling to the one tapped; Flat's **Show as list** (`paletteList`) turns the cells into named rows, two to a
-    line. The keys fold away for it. A field typed in swaps it for a slim bar over the phone's own keyboard
+    A sheet with a grip (a button: tapped or dragged, it folds and unfolds), the selection strip, then the
+    categories by their short names (Notes, Pitch, Dynamics…; canvas 123). Folded (`paletteFolded`, as it opens):
+    the chosen category's tools in one row under them; unfolded: every section in one scroll, up to half the
+    screen, the categories lighting the section in sight and scrolling to the one tapped. The keys fold away for
+    it. Every tool is a 48px sand tile, the chosen in ink, wrapping 8px apart in a section. A field typed in swaps it for a slim bar over the phone's own keyboard
     (`FieldDocked`).
   - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord; Notation: Add note, whole to 64th,
     dot, double dot, tie, Tuplets ⌄, rest, ♮ ♯ ♭, respell) · Pitch · Articulations · Ornaments · Dynamics ·
