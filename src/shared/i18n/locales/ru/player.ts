@@ -10,7 +10,6 @@ export const player: LocaleResources['player'] = {
   views: {
     backToPlayhead: 'К месту игры',
     pick: 'Выберите вид',
-    pickNote: 'Как песня показана, пока вы играете.',
     done: 'Готово',
     short: { sheet: 'Ноты', grid: 'Сетка', diagrams: 'Схемы', lyrics: 'Текст' },
     label: 'Как показывать музыку',

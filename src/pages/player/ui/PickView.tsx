@@ -61,7 +61,6 @@ export function PickView({
         <PopoverTitle className="font-display text-lg font-semibold">
           {t('views.pick')}
         </PopoverTitle>
-        <p className="text-sm text-muted-foreground">{t('views.pickNote')}</p>
         <Segmented
           label={t('views.label')}
           value={shown}

@@ -14,7 +14,6 @@ export const player = {
   views: {
     backToPlayhead: 'Back to the music',
     pick: 'Pick your view',
-    pickNote: 'How the song is shown while you play.',
     done: 'Done',
     short: { sheet: 'Sheet', grid: 'Grid', diagrams: 'Diagrams', lyrics: 'Lyrics' },
     label: 'Show the music as',
