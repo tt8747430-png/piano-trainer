@@ -85,6 +85,10 @@ owner's, typos fixed.
   (pictures on a phone, words from 640px) and the gear, bare over the paper; the title is the score's; Edit score,
   Share link and ··· (Print, Export) head the Settings; the transport is [Pace · Loop] [‹ ▶ ›] [Hands · Keyboard],
   the metronome a switch in Pace, Restart only the Home key. Port table `.scratch/r39/plan/player-port.md`.
+  Then: Transpose and Version are the Settings' first rows, opening in the sheet (the foot row is gone); a caption
+  under each transport picture; Pace is the Practice sheet (Wait · Play cards, the Metronome's tempo face, Metronome
+  Off · Count-in · On); Keyboard opens the Piano sheet (Show the piano, 3D piano · 2D keys, All piano settings,
+  Connect a piano). Two choices as cards are `RadioCards`, one component.
 - **The docked transport in three groups, the tip that teaches (loop, 2026-11-13):** canvas 116's "three glass
   groups, ‹ ▶ › the tinted one" built into the docked row (R31-P keeps it off the music); the first tip says what a
   learner cannot guess ("Tap a note to start from there, then press Play"), never what the Play button already says.
