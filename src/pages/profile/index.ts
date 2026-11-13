@@ -1,5 +1,7 @@
 export { AchievementPage, AchievementsPage } from './ui/AchievementsPage'
 export { BadgePage, BadgesPage } from './ui/BadgesPage'
+export { HistoryPage } from './ui/HistoryPage'
 export { NotificationsPage } from './ui/NotificationsPage'
 export { ProfilePage } from './ui/ProfilePage'
+export { RunPage } from './ui/RunPage'
 export { StreakPage } from './ui/StreakPage'

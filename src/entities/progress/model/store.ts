@@ -85,8 +85,8 @@ function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
   return answers.length > 0 ? latestEvidence(answers) : undefined
 }
 
-/** A trainer and its level, as a record is kept under: `name-chord:3`. */
-const isRunKey = (key: string): key is RunKey => /^[a-z][a-z0-9-]*:[a-z0-9-]+$/.test(key)
+/** A trainer and its level, and its drill where it has them: `build-scale:major`, `chords:quiz:c-main`. */
+const isRunKey = (key: string): key is RunKey => /^[a-z][a-z0-9-]*(:[a-z0-9-]+){1,2}$/.test(key)
 
 /**
  * What an exercise's tempo is kept under: its id, a number where it has several, and its key

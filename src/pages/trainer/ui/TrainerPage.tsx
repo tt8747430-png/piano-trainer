@@ -3,14 +3,19 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { CUSTOM, isTrainerId, type TrainerId, type TrainerView } from '@/features/trainer'
+import {
+  CUSTOM,
+  isTrainerId,
+  useLevelName,
+  type TrainerId,
+  type TrainerView,
+} from '@/features/trainer'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, InfoTip, RoundButton, ScreenHeader } from '@/shared/ui'
 import { TrainerSetup, useTrainerHow } from '@/widgets/trainer-setup'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
 import { TrainerRunView } from './TrainerRunView'
-import { useLevelName } from './use-level-name'
 
 /** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {

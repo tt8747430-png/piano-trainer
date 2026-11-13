@@ -1,6 +1,7 @@
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { CUSTOM, LADDERS, ladderOf, type TrainerId } from '@/features/trainer'
+import { CUSTOM, runPlaceOf, type TrainerId } from './trainer-view'
+import { LADDERS, ladderOf } from './trainers'
 import { isOneOf } from '@/shared/lib'
 
 type Ladder = keyof typeof LADDERS
@@ -41,5 +42,20 @@ export function useLevelName(): (id: TrainerId, level: string) => string {
     if (level === CUSTOM) return t('custom')
     const ladder = ladderOf(id)
     return (ladder && NAMES[ladder](level, t)) ?? level
+  }
+}
+
+/**
+ * A run's place as the history names it (canvas 160): the trainer's name, then its level's,
+ * read from where its record is kept (`chords:quiz:c-main`); none for a key no trainer has now.
+ */
+export function useRunName(): (key: string) => string | null {
+  const { t } = useTranslation('quiz')
+  const levelName = useLevelName()
+  return (key) => {
+    const place = runPlaceOf(key)
+    if (!place) return null
+    const name = t(`trainers.${place.trainerId}`)
+    return place.level === 'all' ? name : `${name} · ${levelName(place.trainerId, place.level)}`
   }
 }

@@ -23,18 +23,23 @@ Premium for Profile means memory-palaces' ProfilePage and Noji: the learner, thr
   ("Cmaj7 · Inversions"), its tempo and time ("72 BPM · 14:20"); each row opens its results (PracticeResult: a
   verdict, "11 of 12 correct · 72 BPM", Accuracy, Timing, Tempo, the run on the staff, Practise mistakes and Retry).
 
-## Practice history, to build (loop round 10)
+## Practice history, built (loop round 10)
 
-- **Today:** a trainer's run (`features/trainer`, `useTrainer`) is kept only as bests per level
-  (`entities/progress` `trainers`, `recordRun`); nothing keeps each run, and Profile has no history.
-- **Will build:** a saved store of runs (`entities/practice-runs`, `createSavedStore`, capped at the last 200):
-  each run its trainer and level key, title, accuracy, the count right of all, tempo where it has one, and when.
-  `useTrainer` appends one as it records the bests. Profile's right column gets a Practice history section
-  (SectionHead, See all to `/profile/history`) of the last three; `/profile/history` lists them by day; a row opens
-  `/profile/history/$runId`, the results page drawn on PracticeResult (Accuracy · the count · Tempo; Retry opens
-  the trainer at that level). The run on the staff and Practise mistakes wait for the trainer to keep each
-  answer, noted in the port table.
-
+- **Built:** every trainer run is kept in the progress store (`history`, the latest 200, `withRun`), its
+  key, accuracy, count answered, best run in a row, time per answer and when. Profile's right column
+  (the phone's foot) has Practice history: the last three runs (`HistoryPreview`, `RunRow`: the trainer
+  and level, "7:20 PM · 12 answered", the accuracy bold at the end), See all to `/profile/history`.
+  `/profile/history` (`HistoryPage`): the last 30 days as a bar chart (the total, the change on the 30
+  days before, a minutes scale with its half line, today in the strong sand), then the runs by day
+  (Today, Yesterday, then the date), and where it is kept, truly, for a guest and for an account.
+  `/profile/history/$runId` (`RunPage`, PracticeResult): the mark (a check, a star for a perfect run),
+  the name, "11 of 12 correct · date", three tiles (Accuracy, In a row, Per answer), the personal best,
+  and Retry, docked at the foot on a phone, opening the trainer at that level and drill.
+- **Differs from the canvas, kept:** the canvas's Timing and Tempo tiles need a run's timing and tempo,
+  which a trainer's answer does not have: In a row and Per answer take their places. The run on the staff
+  and Practise mistakes wait for the trainer to keep each answer.
+- **Fixed on the way:** a drill's record key (`chords:quiz:c-main`) failed the saved store's check and was
+  dropped on reload; the check now allows the drill.
 
 - Canvas 128 (2026-11-11): Profile drawn on the one canvas, phone and laptop.
 - Loop round 1 (2026-11-13): the week, the next badge as a ring and the laptop's two columns built in the app (`WeekCard`, `NextMilestone` on `ProgressRing`'s new `track`).

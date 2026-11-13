@@ -252,6 +252,17 @@ const achievementRoute = createRoute({
   },
   component: lazyRouteComponent(settingsScreens, 'AchievementPage'),
 })
+// Practice history (canvas 160): every run kept, by day; one run's results.
+const historyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/history',
+  component: lazyRouteComponent(settingsScreens, 'HistoryPage'),
+})
+const runRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/history/$runId',
+  component: lazyRouteComponent(settingsScreens, 'RunPage'),
+})
 const notificationsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/profile/notifications',
@@ -1081,6 +1092,8 @@ const routeTree = rootRoute.addChildren([
     coursesRoute,
     yoursRoute,
     profileRoute,
+    historyRoute,
+    runRoute,
     streakRoute,
     badgesRoute,
     badgeRoute,

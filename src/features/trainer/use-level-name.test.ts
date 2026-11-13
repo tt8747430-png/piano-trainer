@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { LADDERS, ladderOf, TRAINER_IDS } from '@/features/trainer'
+import { TRAINER_IDS } from './trainer-view'
+import { LADDERS, ladderOf } from './trainers'
 import { useLevelName } from './use-level-name'
 
 describe('useLevelName', () => {

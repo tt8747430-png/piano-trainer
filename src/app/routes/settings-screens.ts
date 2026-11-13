@@ -32,8 +32,10 @@ export {
   AchievementsPage,
   BadgePage,
   BadgesPage,
+  HistoryPage,
   NotificationsPage,
   ProfilePage,
+  RunPage,
   StreakPage,
 } from '@/pages/profile'
 export { PrivacyPage, TermsPage } from '@/pages/legal'

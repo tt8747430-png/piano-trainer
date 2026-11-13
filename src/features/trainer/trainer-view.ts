@@ -34,6 +34,21 @@ export const DRILLS = ['flashcards', 'quiz', 'entry', 'ear'] as const
 export type Drill = (typeof DRILLS)[number]
 export const isDrill = isOneOf(DRILLS)
 
+/**
+ * Where a run was kept, read back from its key (`chords:quiz:c-main`, `build-scale:major`): its
+ * trainer, its drill where it has one, its level (`all` for a trainer without levels); none for a
+ * trainer the app no longer has.
+ */
+export function runPlaceOf(
+  key: string,
+): { readonly trainerId: TrainerId; readonly drill?: Drill; readonly level: string } | null {
+  const [id = '', ...rest] = key.split(':')
+  if (!isTrainerId(id)) return null
+  const level = rest.at(-1) ?? 'all'
+  const drill = rest.length === 2 ? rest[0] : undefined
+  return isDrill(drill) ? { trainerId: id, drill, level } : { trainerId: id, level }
+}
+
 /** What a flashcard shows of its chord or interval, the rest turned over: its name, keys or staff. */
 export const CARD_SIDES = ['name', 'keys', 'staff'] as const
 export type CardSide = (typeof CARD_SIDES)[number]

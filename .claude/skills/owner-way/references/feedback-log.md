@@ -673,6 +673,10 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Practice history built (loop round 10, canvas 160):** every practice run kept on Profile: the last three on
+  Profile, all of them by day under a 30-day chart, each opening its results (Accuracy, In a row, Per answer, the
+  personal best, Retry at that level). Timing, Tempo, the run on the staff and Practise mistakes wait for the
+  trainer to keep each answer.
 - **Built as drawn, no old shapes kept (2026-11-13):** "you should refactor with no backwards compatibility, you should do
   the design and ui as the design artifact says and as close as possible": each area's app is rebuilt to its canvas
   boards, measured against them. Settings first: rows 52 tall with a 30px solid square and a regular 16px name, group

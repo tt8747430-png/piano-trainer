@@ -12,7 +12,7 @@ export function SectionHead({
 }: {
   id: string
   title: string
-  to: '/profile/badges' | '/profile/achievements'
+  to: '/profile/badges' | '/profile/achievements' | '/profile/history'
 }) {
   const { t } = useTranslation('account')
   return (

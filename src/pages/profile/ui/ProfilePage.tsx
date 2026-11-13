@@ -13,6 +13,7 @@ import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { AchievementsPreview } from './AchievementsPreview'
 import { BadgesPreview, NextMilestone } from './BadgesPreview'
+import { HistoryPreview } from './HistoryPreview'
 import { WeekCard } from './WeekCard'
 
 /**
@@ -88,6 +89,7 @@ export function ProfilePage() {
         <div className="flex min-w-0 flex-col gap-7 lg:pt-2">
           <BadgesPreview />
           <AchievementsPreview />
+          <HistoryPreview />
         </div>
       </div>
     </div>

@@ -31,6 +31,7 @@ export {
   DRILLS,
   isCardSide,
   isDrill,
+  runPlaceOf,
   isLevelParam,
   isTimeLimit,
   isRounds,
@@ -47,5 +48,6 @@ export {
   type TrainerView,
 } from './trainer-view'
 export { useTrainer, type TrainerRun } from './use-trainer'
+export { useLevelName, useRunName } from './use-level-name'
 export { NOTE_RANGE } from './ladders/notes'
 export { whyAnswer, type LocalizedWhy, type WhyKey } from './why'
