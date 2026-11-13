@@ -450,8 +450,8 @@ function Flat() {
 function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
   const Arrow = up ? ArrowUp : ArrowDown
   return (
-    <span aria-hidden className="flex items-center gap-0.5 leading-none">
-      <Arrow className="size-4" strokeWidth={2.5} />
+    <span aria-hidden className="flex items-center gap-px leading-none">
+      <Arrow className={by === 'octave' ? 'size-3.5' : 'size-4'} strokeWidth={2.5} />
       {by === 'half' ? (
         up ? (
           <Sharp />
@@ -476,7 +476,7 @@ function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
           />
         </svg>
       ) : (
-        <span className="font-display text-base leading-none font-bold italic">8ve</span>
+        <span className="font-display text-sm leading-none font-bold italic">8ve</span>
       )}
     </span>
   )
