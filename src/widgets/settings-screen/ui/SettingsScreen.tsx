@@ -10,7 +10,7 @@ import { SettingsList } from './SettingsList'
  * A page of Settings (canvas 128), as iOS's Settings and macOS's System Settings lay one out. On a
  * phone, one column under the page's bar with Back (to Settings, or to the page it is under). On a
  * laptop, the bar says Settings, with Back only on a page under a page (`sub`: Edit profile, a legal
- * page, the MIDI log); under it Settings' own list (23.25rem, under the bar, scrolling on its own),
+ * page, the MIDI log); under it Settings' own list (23.25rem and its divider, under the bar, scrolling on its own),
  * the page open lit, beside the page with its title over its 44rem column, which scrolls with the
  * window. A page Settings does not list (a Practice page's Settings, opened from its gear) stands
  * alone in one column with its Back on every screen.
@@ -43,11 +43,11 @@ export function SettingsScreen({
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('title')} back={sub ? <BackButton /> : undefined} tools={actions} />
-      <div className="grid grid-cols-[23.25rem_minmax(0,1fr)] items-start gap-14">
+      <div className="grid grid-cols-[25.25rem_minmax(0,1fr)] items-start gap-14">
         <aside
           aria-label={t('title')}
           data-slot="settings-nav"
-          className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain pb-4"
+          className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain border-r border-border pr-8 pb-4"
         >
           <SettingsList place={place} />
         </aside>

@@ -156,6 +156,8 @@ export const settings = {
     update: {
       label: 'Software update',
       current: 'Up to date',
+      // About's row in Settings' list: the status in a word or two.
+      row: 'Up to date',
       checking: 'Checking…',
       downloading: 'Downloading…',
       ready: 'Update available',

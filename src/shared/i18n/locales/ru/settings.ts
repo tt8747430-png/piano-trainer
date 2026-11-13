@@ -153,6 +153,7 @@ export const settings: LocaleResources['settings'] = {
     update: {
       label: 'Обновления',
       current: 'Актуальная версия',
+      row: 'Актуальна',
       checking: 'Проверка…',
       downloading: 'Загрузка…',
       ready: 'Доступно обновление',

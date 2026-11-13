@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { selectTheme, useSettings } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
-import { APP_VERSION } from '@/shared/config'
 import { useAccount } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
 import { RowLink, SettingsGroup } from '@/shared/ui'
@@ -17,7 +16,7 @@ import { AccountCard } from './AccountCard'
 /**
  * Settings' list (canvas 128, iOS's Settings): the account card first, then General, Piano, Library
  * and Support, each row its icon in a solid square and, where it has one, its value in grey before
- * the chevron (General's appearance, MIDI devices' connection, About's version or a waiting update);
+ * the chevron (General's appearance, MIDI devices' connection, About's Up to date or Update available);
  * for an administrator, Administration last. On a phone it is the screen, each row pushing its page;
  * on a laptop the same list is the pane beside the page, the page open lit (`place`). Only what
  * concerns the whole app: a screen's own settings are behind its gear (R29).
@@ -32,7 +31,7 @@ export function SettingsList({ place = null }: { place?: SettingsPlace | null })
     if (page.to === '/settings/general') return t(`settings:theme.${theme}`)
     if (page.to === '/settings/connect-piano') return midi
     if (page.to === '/settings/about')
-      return status === 'ready' ? t('settings:about.update.ready') : APP_VERSION
+      return t(`settings:about.update.${status === 'ready' ? 'ready' : 'row'}`)
     return undefined
   }
   return (
