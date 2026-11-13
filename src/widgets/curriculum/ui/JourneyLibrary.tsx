@@ -40,8 +40,8 @@ const ICON = {
 } as const
 
 /**
- * A step of a chapter as a library's row: its tile in its journey's paint (grass with a check once
- * learned, an arc round it as a lesson is read, ringed in honey where Continue leads), its title and
+ * A step of a chapter as a library's row: its tile in its journey's paint (a lesson's number, a
+ * check's picture; grass with a check once learned, an arc round it as a lesson is read, ringed in honey where Continue leads), its title and
  * one detail line (a lesson's number and the lessons to read first; a check's kind and how much of it
  * is known), Next where Continue leads, a chevron. The whole row opens it.
  */
@@ -50,14 +50,12 @@ function StepRow({
   journey,
   number,
   numbers,
-  place,
   next,
 }: {
   step: JourneyStep
   journey: Journey
   number: number | undefined
   numbers: ReadonlyMap<StepId, number>
-  place: number
   next: boolean
 }) {
   const { t } = useTranslation('learn')
@@ -84,7 +82,7 @@ function StepRow({
         ]
       : [
           t(`kind.${step.kind}`),
-          step.kind === 'chords'
+          skills.length > 0
             ? t('known', { known: knownCount(skills, answers), total: skills.length })
             : null,
         ]
@@ -92,7 +90,10 @@ function StepRow({
     <LessonStop>
       <LessonRow
         render={<StepLink step={step} />}
-        mark={next ? <Icon className="size-5" strokeWidth={1.75} /> : place}
+        // A lesson's tile its number, the same as its line's; a check's square its kind's picture.
+        mark={
+          next || number === undefined ? <Icon className="size-5" strokeWidth={1.75} /> : number
+        }
         square={step.kind !== 'lesson'}
         paint={paint}
         done={done}
@@ -111,14 +112,12 @@ function ChapterGroup({
   n,
   journey,
   numbers,
-  places,
   next,
 }: {
   chapter: Chapter
   n: number
   journey: Journey
   numbers: ReadonlyMap<StepId, number>
-  places: ReadonlyMap<StepId, number>
   next: StepId | undefined
 }) {
   const { t } = useTranslation('learn')
@@ -151,7 +150,6 @@ function ChapterGroup({
               journey={journey}
               number={numbers.get(stepId)}
               numbers={numbers}
-              place={places.get(stepId) ?? 0}
               next={stepId === next}
             />
           )
@@ -175,11 +173,6 @@ function LevelLessons({ journey }: { journey: Journey }) {
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
-  const places = new Map(
-    journey.chapters
-      .flatMap((chapter) => chapter.steps)
-      .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
-  )
   return (
     <>
       <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
@@ -198,7 +191,6 @@ function LevelLessons({ journey }: { journey: Journey }) {
           n={i + 1}
           journey={journey}
           numbers={numbers}
-          places={places}
           next={next}
         />
       ))}

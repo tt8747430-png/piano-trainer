@@ -11,7 +11,7 @@ export const learn: LocaleResources['learn'] = {
     label: 'Уровень',
     chapter: 'Глава {{n}}. {{title}}',
     count: '{{learned}}/{{total}}',
-    steps: 'Пройдено {{learned}} из {{total}}',
+    steps: 'Изучено {{learned}} из {{total}}',
   },
   shelves: {
     beginner: 'Курсы для начинающих',
