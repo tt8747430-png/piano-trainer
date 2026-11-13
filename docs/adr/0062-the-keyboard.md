@@ -58,8 +58,8 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
   (`usePlayKey`). Two screens mounted together never bind one key.
 - **The keyboard settings are saved** and the same on every keyboard, set on Settings › On-screen piano
   (`KeyboardSettingsFields`: Key size, Note names, Volume, Pedals, computer keys; Chord symbol, names on highlighted
-  keys; Swipe, Play on selection; Position). The screen's gear holds the same page: the Player's sheet (the owner's
-  ruling) and the editor's gear show `KeyboardSettingsFields`, a Practice page's Settings end with its row. Key depth
+  keys; Swipe, Play on selection; Position), their one home. The Player's sheet, the editor's gear and a Practice
+  page's Settings each hold a row to it, never the fields (owner, 2026-11-12). Key depth
   and Collapse keyboard went in R34: the divider and Keyboard do their jobs.
 - **A real piano's keys** (R33): ivory and ebony drawn as light and shade over each key's fill (`key-face-*`), a lip and
   a slope, the key slip's felt; a key down sinks. Every mark keeps its colour.
@@ -110,3 +110,5 @@ give the keys a box (`stubBox`) and the scroller its metrics (`stubScrolling`).
   (2026-11-05).
 - r34 (R34) — The left hand outlined, the right filled, so the hands part without colour (2026-11-06).
 - Instructions audit: the sheet's pill in the editor from 48rem, as R34-3 left it (ADR 0096) (2026-11-12).
+- One home for the keyboard's settings ("I dont want keyboard settings in three places"): the Player's sheet and the
+  editor's gear lose their copy of the page for a row to Settings › On-screen piano (2026-11-12).

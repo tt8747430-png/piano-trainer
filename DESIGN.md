@@ -502,8 +502,8 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   a MIDI foot, the score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey
   control. Held it holds; a tap latches it until the next. With Pedals: All three, a ⌄ beside it opens Soft and
   Sostenuto, worked the same way; a dot on the ⌄ while either is down.
-- **Settings:** the screen's gear: the Player's sheet and the editor's gear each hold the On-screen piano page;
-  a Practice page's Settings end with its row.
+- **Settings:** one home, Settings › On-screen piano; the Player's sheet, the editor's gear and a Practice page's
+  Settings each hold a row to it, never its controls.
 - **Hidden** (the bar's Keyboard), the keys fold into a 44px strip where they stood, the screen's width, in the
   sunken fill with a hairline on its music side: the piano icon, **Keyboard**, ↗; a tap brings them back
   (Songscription's Score only). Nothing floats.

@@ -26,7 +26,7 @@ no card on top.
   library's other tags offered as one types, Create for a new one). On one of the app's songs a learner reads its
   credits; nothing is edited in a mode of the page's own.
 - **The song's Settings** (`/songs/$pieceId/settings`, Noji's deck settings): the song at its head; Library (Folder,
-  Favourite as a switch, Duplicate, Archive or Restore); Share (Publish with its state, a page of its own at
+  Duplicate, Archive or Restore); Share (Publish with its state, a page of its own at
   `/songs/$pieceId/publish`; Share link; Export…); and apart, Delete (to the Trash at once, with Undo, ADR 0106) or
   Reset to the original, asked first. A study has no library rows.
 - **A section's page** (`…/sections/$section`) teaches it:
@@ -73,4 +73,6 @@ along is not built: it would need timing windows the Player does not keep.
   tap on the cover changes it. The laptop's page is two full columns. Settings gain Favourite as a switch
   (2026-11-05).
 - Instructions audit: the ♡ in the bar beside Learned (ADR 0106, R34); Delete to the Trash with Undo, not asked
+  (2026-11-12).
+- Favourite's switch leaves the song's Settings (owner, "remove the switch"): the ♡ in the bar is its one control
   (2026-11-12).

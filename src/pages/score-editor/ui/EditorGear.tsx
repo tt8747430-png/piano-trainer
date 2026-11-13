@@ -9,15 +9,23 @@ import {
   Piano,
   Ruler,
 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
 import { MidiControl } from '@/features/connect-midi'
-import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
-import { BackButton, RowButton, RowTrigger, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
+import {
+  BackButton,
+  RowButton,
+  RowLink,
+  RowTrigger,
+  SettingsGroup,
+  Sheet,
+  SheetContent,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PRINTED_PARTS, SheetLayoutTools, SheetViewFields } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -186,13 +194,13 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
             paint="sand"
             onClick={() => view.setGear('recording')}
           />
-          {/* The keys' own settings in the editor's gear, as the Player's sheet holds them (R34). */}
-          <RowTrigger
+          {/* The keys' settings have one home, Settings › On-screen piano (2026-11-12): a row to it. */}
+          <RowLink
             title={t('scoreSettings.pages.piano')}
             detail={t('scoreSettings.details.piano')}
             icon={KeyboardMusic}
             paint="sky"
-            onClick={() => view.setGear('piano')}
+            render={<Link to="/settings/on-screen-piano" />}
           />
         </SettingsGroup>
       )}
@@ -218,8 +226,6 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
       return <RecordPage />
     case 'credits':
       return <CreditsPage />
-    case 'piano':
-      return <KeyboardSettingsFields />
     default:
       return <ScorePageBody page={page} />
   }

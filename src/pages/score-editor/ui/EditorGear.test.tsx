@@ -44,7 +44,6 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
       'Layout',
       'Note input',
       'Recording',
-      'On-screen piano',
     ])
       expect(rows.some((row) => row?.startsWith(name))).toBe(true)
     // What the score prints is set where it prints: no title, key, time, tempo or bars here.
@@ -68,13 +67,14 @@ describe('the editor’s gear (R32-B, Flat’s document menu)', () => {
     ).toBeInTheDocument()
   })
 
-  it('holds the on-screen piano’s settings, as the Player’s sheet does (R34)', async () => {
+  it('leads to the on-screen piano’s one home, Settings › On-screen piano (2026-11-12)', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const sheet = await openGear(user, /^On-screen piano/)
-    const sizes = within(sheet).getByRole('radiogroup', { name: 'Key size' })
-    await user.click(within(sizes).getByRole('radio', { name: 'Large' }))
-    expect(settingsStore.getState().keyboard.keySize).toBe('large')
+    const { router } = await renderApp('/edit/my-1', { storage: withSong() })
+    const sheet = await openGear(user)
+    // A row to its home, never the fields themselves.
+    expect(within(sheet).queryByRole('radiogroup', { name: 'Key size' })).not.toBeInTheDocument()
+    await user.click(within(sheet).getByRole('link', { name: /^On-screen piano/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/on-screen-piano'))
   })
 
   it('opens Title and credits from the title printed on the score, the one place it is typed', async () => {

@@ -1,6 +1,6 @@
 /**
  * The pages of the editor's one gear (R32-B, Flat's document menu): its first page (`main`) with the
- * score's acts and its Settings, each a row to its page (the on-screen piano's too, R34); Title and credits, opened from the title
+ * score's acts and its Settings, each a row to its page (the on-screen piano's a row to its one home in Settings); Title and credits, opened from the title
  * printed on the score alone (Flat's credits). The gear holds nothing the score prints and sets
  * where it prints it: no key, time, tempo or bars.
  */
@@ -14,7 +14,6 @@ export const GEAR_PAGES = [
   'layout',
   'input',
   'recording',
-  'piano',
 ] as const
 export type GearPage = (typeof GEAR_PAGES)[number]
 

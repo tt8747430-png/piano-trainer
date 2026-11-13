@@ -13,6 +13,7 @@ import {
   Printer,
   SlidersHorizontal,
 } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
@@ -32,13 +33,7 @@ import {
   useHeldKeys,
   useMidiConnection,
 } from '@/features/connect-midi'
-import {
-  KeyboardSettingsFields,
-  KeyboardStrip,
-  KeyboardTools,
-  KeysPlace,
-  LiveKeyboard,
-} from '@/features/live-keyboard'
+import { KeyboardStrip, KeyboardTools, KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
@@ -300,15 +295,17 @@ export function PlayerLayout({
           </>
         ),
       },
-      // The on-screen piano's page in the Player's own sheet (the owner's ruling, R31-P: the
-      // piano's ⚙ never leaves the Player): the app's On-screen piano fields, one implementation.
+    ],
+    // The on-screen piano's settings have one home, Settings › On-screen piano (owner, 2026-11-12:
+    // "I dont want keyboard settings in three places"): a row to it, ranked among the pages.
+    links: [
       {
         id: 'piano',
         label: t('settingsPage.onScreenPiano'),
         icon: Piano,
         description: t('settingsPage.about.piano'),
         value: t(`common:keyboardSettings.keySize.${keySize}`),
-        content: <KeyboardSettingsFields />,
+        render: <Link to="/settings/on-screen-piano" />,
       },
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.

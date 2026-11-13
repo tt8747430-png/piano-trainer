@@ -642,6 +642,12 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+- **Pressure to practise (2026-11-12):** "I want to put pressure on the user": the streak holds the learner to daily
+  practice (PRODUCT.md, principle 6), always true, never locking or charging. Replaces "no streaks as pressure".
+- **One home for the keyboard's settings (2026-11-12):** "I dont want keyboard settings in three places": Settings ›
+  On-screen piano; the Player's sheet and the editor's gear hold a row to it. Replaces R34's copy in both gears.
+- **Favourite has one control (2026-11-12):** "remove the switch": the ♡ in the song page's bar; no switch on its
+  Settings.
 - **Canvas 129 ("there are admin controls, no roles, no edit mode for the pages"):** Administration drawn in full in
   Settings; three roles; Edit mode is the page itself (Done · English | Русский · Publish…), Learn's level edited in
   place; Preview as learner (2026-11-11).

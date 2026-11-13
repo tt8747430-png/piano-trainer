@@ -2,14 +2,7 @@ import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
 import { Archive, ArchiveRestore, Copy, Download, FolderInput, Globe, Link2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  placeIn,
-  selectIsFavourite,
-  useFolderName,
-  useLibrary,
-  useLibraryLayout,
-  useLibraryStoreApi,
-} from '@/entities/library'
+import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
 import {
   hasEditableOriginal,
   isDegreePiece,
@@ -26,7 +19,7 @@ import {
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { toggleFavourite, useLibraryActs, useSongActions } from '@/features/manage-library'
+import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -43,7 +36,6 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
-  SwitchRow,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { PieceCover } from '@/widgets/piece-cover'
@@ -84,8 +76,6 @@ function SongSettings({ piece }: { piece: Piece }) {
   const layout = useLibraryLayout()
   const folderName = useFolderName()
   const library = useSongActions(piece)
-  const libraryStore = useLibraryStoreApi()
-  const favourite = useLibrary(selectIsFavourite(piece.id))
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
   const [copying, setCopying] = useState(false)
@@ -165,12 +155,6 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
-            <SwitchRow
-              label={t('settings.favourite')}
-              className="min-h-16 border-b-0 pr-3 pl-4"
-              checked={favourite}
-              onCheckedChange={() => toggleFavourite(libraryStore, piece.id)}
-            />
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
             {copyable ? (
               <RowButton

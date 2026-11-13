@@ -198,8 +198,8 @@ describe('Piece', () => {
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
     ).toEqual(['Library', 'Share'])
-    // Its place in the library: Favourite a switch beside its folder (R32-C).
-    expect(screen.getByRole('switch', { name: 'Favourite' })).not.toBeChecked()
+    // Favourite is the bar's ♡ alone (owner, 2026-11-12): no switch here.
+    expect(screen.queryByRole('switch', { name: 'Favourite' })).toBeNull()
     // One of the app's songs stays in its folder (D8): Archive, no Folder.
     expect(screen.queryByRole('button', { name: /^Folder/ })).toBeNull()
     expect(screen.getByRole('button', { name: 'Archive' })).toBeInTheDocument()

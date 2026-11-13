@@ -189,14 +189,13 @@ describe('the acts on the music in the foot’s More (R31-P)', () => {
     expect(await moreActions(user)).toEqual(actions)
   })
 
-  it('opens the On-screen piano’s settings in its own sheet, never leaving the Player (R31-P)', async () => {
+  it('leads to the On-screen piano’s one home in Settings (2026-11-12)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Player settings' }))
     const settings = await screen.findByRole('dialog', { name: 'Player settings' })
-    await user.click(within(settings).getByRole('button', { name: /^On-screen piano/ }))
-    expect(await screen.findByRole('dialog', { name: 'On-screen piano' })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/play/bz5')
+    await user.click(within(settings).getByRole('link', { name: /^On-screen piano/ }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/settings/on-screen-piano'))
   })
 
   it.each([

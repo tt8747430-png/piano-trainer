@@ -31,7 +31,7 @@ over colourful content; few typefaces in fixed text styles.
 - **Shape:** soft rounded rectangles: buttons 12px, cards 14px, sheets 20px.
 - **Increased contrast:** under `prefers-contrast: more`, secondary text, lines and dividers step up in both themes.
 - **Colour is never the only cue:** a coloured key carries its label.
-- **Refused:** streaks as pressure, mascots, upsells, locked content, stock photos, a kicker over a heading, progress
+- **Refused:** mascots, upsells, locked content, stock photos, a kicker over a heading, progress
   rings standing in for content.
 - **The app icon:** three outlined keys seen from above, E played in honey, on warm charcoal (`public/favicon.svg`),
   its corners filled with the ground for home screens (`pwa-assets.config.ts`).
@@ -51,3 +51,5 @@ colour changes `tokens.css`, `theme.css` and `THEME_COLORS` together.
   nothing that moves unless touched (DESIGN.md Shapes, Choices, Motion).
 - Instructions audit: the chosen segment and the nav's current place in the one chosen fill, the rail gone, as
   DESIGN.md has them (2026-11-12).
+- Streaks as pressure leave the refused list (owner, "I want to put pressure on the user"): PRODUCT.md's sixth
+  principle holds the streak to the learner, always true (2026-11-12).

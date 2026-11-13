@@ -16,7 +16,7 @@ web
 ## Product Purpose
 
 Piano Trainer teaches a learner to play songs at the piano. Success: a learner opens it, sees what to play next, and
-is at the keys in one tap.
+is at the keys in one tap, and comes back to practise every day because the app holds them to it.
 
 ## Positioning
 
@@ -72,8 +72,9 @@ Constraints:
 
 ## Brand Commitments
 
-The name is **Piano Trainer**. The app has no characters, animals or mascots, no streaks as pressure and no stock
-photos. The look is recorded in [DESIGN.md](DESIGN.md).
+The name is **Piano Trainer**. The app has no characters, animals or mascots and no stock photos. It does push: a
+learner who stops practising is told so, by the streak, by name, every day. The look is recorded in
+[DESIGN.md](DESIGN.md).
 
 **Reference products,** for structure and craft (the owner's list, kept in `.claude/skills/owner-way`): Flat and Dorico
 for the editor, Chordify for the Player's views and song lessons, Mindscape and memory-palaces for the library and
@@ -95,6 +96,12 @@ Profile, Noji for publishing and the Public library. Their craft level is the ba
    stand.
 4. **Calm screens.** Explanations sit behind an ⓘ, never in a paragraph under a control.
 5. **Nothing locked.** Levels suggest an order; the learner may open anything, and it costs nothing.
+6. **Practice every day, and feel it when you don't.** Daily practice is what makes a pianist, so the app puts
+   pressure on it (the owner's ruling, 2026-11-12): the streak is the Profile's first figure and names what is at
+   stake ("Keep the flame alive: practise today to extend your streak"); a day not yet practised says so wherever the
+   learner looks; a streak about to break warns before it does, and a broken one is shown as lost. The pressure is
+   always true: it counts real practice, never invents urgency, never locks or charges, and the learner can turn its
+   reminders off.
 
 ## Accessibility & Inclusion
 
