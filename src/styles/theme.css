@@ -1084,6 +1084,19 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
+  /* The Player's bar (its canvas): Close, the views' pill in the middle, the gear; bare over the
+     paper, no band and no hairline. */
+  &:has(> [data-area='middle']) {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas: 'lead middle actions';
+    &::before {
+      border-bottom: 0;
+      background: var(--color-background);
+    }
+  }
+  & > [data-area='middle'] {
+    grid-area: middle;
+  }
   @variant max-sm {
     column-gap: --spacing(1);
   }
@@ -1114,6 +1127,10 @@
     }
     & > [data-area='actions'] {
       grid-area: 1 / 4;
+    }
+    & > [data-area='middle'] {
+      grid-area: 1 / 2 / 1 / 4;
+      justify-self: center;
     }
   }
 }

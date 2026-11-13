@@ -131,6 +131,7 @@ export const common = {
     keyboard: 'Keyboard',
     hands: 'Hands at the keys',
     show: 'Show the keyboard',
+    hide: 'Hide the keyboard',
     chord: 'Chord held',
     morePedals: 'Soft and sostenuto pedals',
     latched: 'Latched',

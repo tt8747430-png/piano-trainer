@@ -41,6 +41,8 @@ export interface SettingsAct {
  * Player always works, and the acts on this music. The screen provides them; the sheet draws them.
  */
 export interface SettingsExtras {
+  /** The sheet's head: the song with its acts and Edit score (the Player's canvas). */
+  readonly head?: ReactNode
   readonly pages: readonly SettingsPageRow[]
   /** Rows to a setting's home elsewhere, ranked among the pages. */
   readonly links?: readonly SettingsLinkRow[]

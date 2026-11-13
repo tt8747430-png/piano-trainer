@@ -47,6 +47,7 @@ export function PaceButton({
   onMode,
   onListen,
   onSpeedTraining,
+  click,
 }: {
   mode: PracticeMode
   tempo: number
@@ -62,6 +63,8 @@ export function PaceButton({
   /** Listen and play along at this tempo. */
   onListen: (tempo: number) => void
   onSpeedTraining: (on: boolean) => void
+  /** The metronome's click with the music (B7, A35), a switch at the foot of the menu. */
+  click: { readonly on: boolean; readonly onChange: (on: boolean) => void }
 }) {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
@@ -175,6 +178,13 @@ export function PaceButton({
             className="min-h-11 border-b-0 py-0 text-base"
           />
         ) : null}
+        <SwitchRow
+          label={t('sound.click')}
+          info={t('sound.clickInfo')}
+          checked={click.on}
+          onCheckedChange={click.onChange}
+          className="min-h-11 border-b-0 py-0 text-base"
+        />
       </PopoverContent>
     </Popover>
   )

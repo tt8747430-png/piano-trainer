@@ -1,28 +1,28 @@
-import { RotateCcw } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Practice } from '@/features/practice'
 import { keyHint } from '@/shared/lib/shortcuts'
-import { FloatingBarButton } from '@/shared/ui'
 import { PLAYER_KEYS } from '../model/player-keys'
-import { DOCK_BUTTON } from './dock-sizes'
 import { Transport } from './Transport'
 
 /**
- * The Player's transport (ADR 0061, 0108, R31-P): Loop, Restart (to bar 1, or the loop's start), ‹,
- * the big Play or Stop (honey), ›, the tempo and the metronome's click, the score editor's pill
- * (`Transport`, ADR 0115) docked in its own row at the foot, never floating over the music.
+ * The Player's transport (its canvas): three groups in its own row at the foot (R31-P, never over
+ * the music): how you practise (Pace: Wait, Interpret or a speed, with the metronome) and the Loop;
+ * ‹, the big Play or Stop (honey), › tinted in the middle; the Hands and the Keyboard.
  */
 export function PlayerDock({
   practice,
+  pace,
   loop,
-  tempo,
-  sound,
+  hands,
+  keyboard,
 }: {
   practice: Practice
+  pace: ReactNode
   loop: ReactNode
-  tempo: ReactNode
-  sound: ReactNode
+  /** The Hands, where the music has both. */
+  hands: ReactNode
+  keyboard: ReactNode
 }) {
   const { t } = useTranslation('player')
   const { playing } = practice.state
@@ -31,17 +31,8 @@ export function PlayerDock({
     <Transport
       label={t('transport')}
       docked
-      start={loop}
-      tempo={
-        <FloatingBarButton
-          label={t('restart')}
-          title={keyHint(t('restart'), PLAYER_KEYS.start)}
-          className={DOCK_BUTTON}
-          onClick={practice.restart}
-        >
-          <RotateCcw aria-hidden />
-        </FloatingBarButton>
-      }
+      start={pace}
+      tempo={loop}
       playing={playing}
       play={{ label: t('play'), title: keyHint(action, PLAYER_KEYS.play) }}
       back={{ label: t('previousNote'), title: keyHint(t('previousNote'), PLAYER_KEYS.back) }}
@@ -51,8 +42,8 @@ export function PlayerDock({
       onNext={practice.next}
       end={
         <>
-          {tempo}
-          {sound}
+          {hands}
+          {keyboard}
         </>
       }
     />

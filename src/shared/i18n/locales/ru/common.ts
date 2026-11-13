@@ -117,6 +117,7 @@ export const common: LocaleResources['common'] = {
     keyboard: 'Клавиатура',
     hands: 'Руки на клавишах',
     show: 'Показать клавиатуру',
+    hide: 'Скрыть клавиатуру',
     chord: 'Взятый аккорд',
     morePedals: 'Левая и средняя педали',
     latched: 'Зафиксирована',

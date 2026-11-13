@@ -381,6 +381,8 @@ export const player = {
   /** The transport's ‹ and ›: a note (or chord) at a time. */
   previousNote: 'Previous note',
   nextNote: 'Next note',
+  // The Settings' head (its canvas): Edit score, the whole row under the song's name.
+  editScore: 'Edit score',
   play: 'Play',
   stop: 'Stop',
   /** The transport (Loop, Restart, ‹ Play ›, Pace, the metronome), as a screen reader names it. */

@@ -1,13 +1,4 @@
-import {
-  Download,
-  Link2,
-  Ellipsis,
-  Eye,
-  Hand,
-  Piano,
-  Printer,
-  SlidersHorizontal,
-} from 'lucide-react'
+import { Download, Eye, Hand, Piano, Printer, SlidersHorizontal } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -28,30 +19,23 @@ import {
   useHeldKeys,
   useMidiConnection,
 } from '@/features/connect-midi'
-import { KeyboardStrip, KeyboardTools, KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
+import { KeyboardStrip, KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import {
-  ActionMenu,
-  HandsPicture,
-  SheetPill,
-  SheetToolsContext,
-  type MenuAction,
-} from '@/shared/ui'
+import { SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
-  ClickButton,
+  HandsButton,
+  KeyboardButton,
   CountInBeat,
-  FootTool,
   HandsSheet,
   LoopButton,
   PaceButton,
   PlayerFoot,
   PlayerArea,
   PlayerScreen,
-  BarTitle,
   PlayerClose,
   PlayerDock,
   ScoreBar,
@@ -70,6 +54,7 @@ import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView } from './PickView'
+import { SongHead } from './SongHead'
 import { CoachLine } from './CoachLine'
 import type { ScoreAnnotation } from '@/shared/lib/notation'
 
@@ -106,7 +91,7 @@ export function PlayerLayout({
   headings = NO_HEADINGS,
   setup,
   tools,
-  modes,
+  onEdit,
   piano = true,
   staves = NO_STAVES,
   recording,
@@ -155,8 +140,8 @@ export function PlayerLayout({
   setup: ReactNode
   /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
   tools?: ReactNode
-  /** Edit (ADR 0115, round 26), at the bar's end: a piece's own, none for a walk. */
-  modes?: ReactNode
+  /** Edit score, in the Settings' head under the song (its canvas): a piece's own, none for a walk. */
+  onEdit?: (() => void) | undefined
   /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
   /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
@@ -215,9 +200,40 @@ export function PlayerLayout({
   }, [playing, view.mode, settingsStore, tip])
   const groups = performance.beatGroups.length
   const progress = groups > 1 ? practice.state.beatGroup / (groups - 1) : 0
+  // The Settings' head's ··· (its canvas): the music's acts only, in parts: the song's, practice's,
+  // the tools, sharing. Every setting is the gear's; Share link is the head's own button.
+  const moreMenu: MenuAction[] = (
+    [
+      ...more.map((act) => ({ ...act, group: 'song' })),
+      ...moreActs.map((act) => ({ ...act, group: 'practice' })),
+      {
+        key: 'print',
+        group: 'tools',
+        label: t('print'),
+        icon: Printer,
+        onSelect: () => setPrinting(true),
+      },
+      {
+        key: 'export',
+        group: 'share',
+        label: t('songs:export.action'),
+        icon: Download,
+        onSelect: () => setExporting(true),
+      },
+    ] satisfies MenuAction[]
+  ).map((act): MenuAction => ({ ...act, unnamed: true }))
   // The Player's one Settings (R29, Flat's one menu): how the Player works, then the acts on this
   // music: its own (a piece's Sections and Song information), Export… and Print.
   const extras: SettingsExtras = {
+    head: (
+      <SongHead
+        title={title}
+        detail={t('music:bpm', { tempo: player.tempo })}
+        share={share?.onSelect}
+        acts={moreMenu}
+        onEdit={onEdit}
+      />
+    ),
     pages: [
       {
         id: 'playback',
@@ -261,39 +277,6 @@ export function PlayerLayout({
     acts: [],
     onPanel: setPanel,
   }
-  // The foot's More (R31-P): the music's acts only, in parts: the song's, practice's, the tools,
-  // sharing. Every setting is the gear's.
-  const moreMenu: MenuAction[] = (
-    [
-      ...more.map((act) => ({ ...act, group: 'song' })),
-      ...moreActs.map((act) => ({ ...act, group: 'practice' })),
-      {
-        key: 'print',
-        group: 'tools',
-        label: t('print'),
-        icon: Printer,
-        onSelect: () => setPrinting(true),
-      },
-      ...(share
-        ? [
-            {
-              key: 'share-link',
-              group: 'share',
-              label: t('songs:library.shareLink'),
-              icon: Link2,
-              onSelect: share.onSelect,
-            },
-          ]
-        : []),
-      {
-        key: 'export',
-        group: 'share',
-        label: t('songs:export.action'),
-        icon: Download,
-        onSelect: () => setExporting(true),
-      },
-    ] satisfies MenuAction[]
-  ).map((act): MenuAction => ({ ...act, unnamed: true }))
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
   const chordKeys = useChordKeys(
@@ -364,27 +347,10 @@ export function PlayerLayout({
           Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={
-          <>
-            <PlayerClose onClose={onClose} />
-            <BarTitle title={title} />
-            {modes}
-          </>
-        }
+        lead={<PlayerClose onClose={onClose} />}
+        middle={<PickView shown={shown} needs={needs} />}
         actions={
           <>
-            {/* The keyboard's controls (R34, Songscription's): the chord held, Sustain, lit with
-                the score's pedal while the music plays, and Keyboard. */}
-            <KeyboardTools
-              variant="tool"
-              shown={player.keys}
-              onShow={player.setKeys}
-              sustained={playing && player.pedalDown}
-              hands={{
-                shown: scoreView.hands,
-                onShow: (hands) => setScoreView(settingsStore, { hands }),
-              }}
-            />
             {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
                 connected from Settings › Connect a piano. */}
             {isMidiConnected(connection) || connection.kind === 'connecting' ? (
@@ -487,7 +453,7 @@ export function PlayerLayout({
           <PlayerDock
             practice={practice}
             loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
-            tempo={
+            pace={
               <PaceButton
                 mode={view.mode}
                 tempo={player.tempo}
@@ -499,34 +465,25 @@ export function PlayerLayout({
                 onMode={player.setMode}
                 onListen={player.listenAt}
                 onSpeedTraining={player.setSpeedTraining}
+                click={{ on: player.click, onChange: player.setClick }}
               />
             }
-            sound={<ClickButton on={player.click} onChange={player.setClick} />}
+            hands={
+              twoHands ? <HandsButton hands={view.hands} onOpen={() => setHandsOpen(true)} /> : null
+            }
+            keyboard={
+              <KeyboardButton
+                keys={player.keys}
+                hands={scoreView.hands}
+                onKeys={player.setKeys}
+                onHands={(hands: boolean) => setScoreView(settingsStore, { hands })}
+              />
+            }
           />
         </div>
       </PlayerArea>
-      {/* The song's tools (R31-P): View, the music's own (Key, Version), the Hands where the music
-          has both (R36), then More. */}
-      <PlayerFoot>
-        <PickView shown={shown} needs={needs} />
-        {tools}
-        {twoHands ? (
-          <FootTool
-            icon={{ picture: <HandsPicture hands={view.hands} /> }}
-            label={t(`common:handsShort.${view.hands}`)}
-            aria-label={t('handsOf', { hands: t(`common:handsShort.${view.hands}`) })}
-            aria-haspopup="dialog"
-            onClick={() => setHandsOpen(true)}
-          />
-        ) : null}
-        <ActionMenu
-          label={t('settings:bars.more')}
-          align="end"
-          trigger={null}
-          render={<FootTool icon={Ellipsis} label={t('settings:bars.more')} />}
-          actions={moreMenu}
-        />
-      </PlayerFoot>
+      {/* The music's own tools (a piece's Key and Version) until they join the Settings. */}
+      {tools ? <PlayerFoot>{tools}</PlayerFoot> : null}
       <HandsSheet
         open={handsOpen}
         onOpenChange={setHandsOpen}

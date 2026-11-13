@@ -70,7 +70,7 @@ export function SettingsSheet({
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
-  const { pages, links = [], acts, onPanel } = useSettingsExtras()
+  const { head, pages, links = [], acts, onPanel } = useSettingsExtras()
   const [open, setOpen] = useState(false)
   // On a laptop a panel at the right, the music in sight beside it (R29, screen 4.1).
   const laptop = useMediaQuery(LAPTOP)
@@ -123,6 +123,7 @@ export function SettingsSheet({
       <SheetContent title={title}>
         {page === 'main' ? (
           <div className="flex flex-col gap-5">
+            {head}
             {children}
             {rows.length > 0 || actsIn('play').length > 0 ? (
               <SettingsGroup flush>

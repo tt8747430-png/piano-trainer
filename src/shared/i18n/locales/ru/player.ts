@@ -345,6 +345,7 @@ export const player: LocaleResources['player'] = {
   back: 'Назад',
   previousNote: 'Предыдущая нота',
   nextNote: 'Следующая нота',
+  editScore: 'Редактировать ноты',
   play: 'Играть',
   stop: 'Стоп',
   transport: 'Воспроизведение',

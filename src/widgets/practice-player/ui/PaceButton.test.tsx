@@ -15,6 +15,7 @@ function renderPace(props: Partial<Parameters<typeof PaceButton>[0]> = {}) {
       ownTempo={72}
       speedTraining={false}
       piano
+      click={{ on: false, onChange: vi.fn() }}
       {...handlers}
       {...props}
     />,

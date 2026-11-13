@@ -1,4 +1,4 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { Link, useParams, useSearch, useNavigate } from '@tanstack/react-router'
 import { Highlighter, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +33,6 @@ import { useLocale } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
-import { ScoreEditToggle } from '@/widgets/mode-switch'
 import { SwingField, useScoreTracks } from '@/widgets/practice-player'
 import type { PlayerSearch } from '../model/player-search'
 import { sectionAt, sectionStarts } from '../model/section-starts'
@@ -109,6 +108,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   })
   const title = entryTitles(piece, locale).primary
   // The bar as written the cursor is in, and the cursor taken to one (ADR 0115).
+  const navigate = useNavigate()
   const bar = writtenBarAt(performance, player.practice.state.beatGroup)
   const { jumpToBeatGroup } = player.practice
   const goToBar = (written: number) => {
@@ -178,7 +178,14 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
         staves={isDegreePiece(piece) ? undefined : piece.staves}
         recording={piece.recording}
         // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
-        modes={<ScoreEditToggle pieceId={piece.id} editing={false} bar={bar + 1} />}
+        onEdit={() =>
+          void navigate({
+            to: '/edit/$pieceId',
+            params: { pieceId: piece.id },
+            search: bar > 0 ? { bar: bar + 1 } : {},
+            replace: true,
+          })
+        }
         setup={
           <PieceSetup
             piece={piece}

@@ -81,6 +81,10 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **The Player's bar and transport built to the canvas (loop, round 10):** the bar is Close, the views as one pill
+  (pictures on a phone, words from 640px) and the gear, bare over the paper; the title is the score's; Edit score,
+  Share link and ··· (Print, Export) head the Settings; the transport is [Pace · Loop] [‹ ▶ ›] [Hands · Keyboard],
+  the metronome a switch in Pace, Restart only the Home key. Port table `.scratch/r39/plan/player-port.md`.
 - **The docked transport in three groups, the tip that teaches (loop, 2026-11-13):** canvas 116's "three glass
   groups, ‹ ▶ › the tinted one" built into the docked row (R31-P keeps it off the music); the first tip says what a
   learner cannot guess ("Tap a note to start from there, then press Play"), never what the Play button already says.

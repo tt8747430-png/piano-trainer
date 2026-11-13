@@ -12,7 +12,16 @@ const GROUP = 'flex min-w-0 items-center gap-1 sm:gap-2'
  * (`variant="tool"`), so the two modes' bars are the same height and switching moves nothing. While
  * the music is read in Diagrams it steps aside whole (ADR 0108), its room kept.
  */
-export function ScoreBar({ lead, actions }: { lead: ReactNode; actions: ReactNode }) {
+export function ScoreBar({
+  lead,
+  middle,
+  actions,
+}: {
+  lead: ReactNode
+  /** The Player's views, a pill in the bar's middle (its canvas); the bar then bare over the paper. */
+  middle?: ReactNode
+  actions: ReactNode
+}) {
   const { bar } = use(ChromeShownContext)
   return (
     <header
@@ -24,6 +33,7 @@ export function ScoreBar({ lead, actions }: { lead: ReactNode; actions: ReactNod
       <div data-area="lead" className={GROUP}>
         {lead}
       </div>
+      {middle ? <div data-area="middle">{middle}</div> : null}
       <div data-area="actions" className={`${GROUP} justify-end`}>
         {actions}
       </div>
