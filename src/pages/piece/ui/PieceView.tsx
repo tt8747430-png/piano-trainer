@@ -12,8 +12,8 @@ import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
-import { FabLink, FloatingActions, LIBRARY_PANES, RoundLink } from '@/shared/ui'
+import { OPEN_PLAINLY } from '@/shared/lib'
+import { FabLink, FloatingActions, RoundLink } from '@/shared/ui'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout, ScaleLink } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -29,15 +29,14 @@ import { YourPractice } from './YourPractice'
  * A song's page (R32-C; Apple Music's album page, MuseScore's score page): its bar (Back, the title
  * with ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing it; who wrote it; one line of facts; what is said of it); its music (its sections, the
  * learner's practice, its chords and progressions); and its Details, every property a row edited
- * where it stands (Notion's). From a laptop's width the song and its Details are the left column and
- * the music the right; on a phone Details follow the music. Play floats, the Player as it was left.
+ * where it stands (Notion's). From a laptop's width the song is the left column and its music, then
+ * its practice and Details, the right; a phone reads them in the same order. Play floats, the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
   const { performance, headings, sections } = useSongLessons(piece)
   const { account } = useAccount()
   const navigate = useNavigate()
-  const laptop = useMediaQuery(LIBRARY_PANES)
   const step = pieceStepId(piece.id)
   // What the song says of itself is the learner's on an own song, an editor's on the app's original.
   const chart = isDegreePiece(piece) ? null : piece
@@ -81,20 +80,20 @@ export function PieceView({ piece }: { piece: Piece }) {
             keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
           />
           <PieceAbout entry={piece} />
-          {laptop ? details : null}
         </section>
         <div className="flex min-w-0 flex-col gap-8">
-          <div className="grid gap-6 empty:hidden xl:grid-cols-2 xl:items-start">
-            {/* A song of one section has no section machinery: its chords are all it needs. */}
-            {sections.length > 1 ? (
-              <SectionRows piece={piece} headings={headings} sections={sections} />
-            ) : null}
-            <YourPractice piece={piece} performance={performance} />
-          </div>
+          {/* A song of one section has no section machinery: its chords are all it needs. */}
+          {sections.length > 1 ? (
+            <SectionRows piece={piece} headings={headings} sections={sections} />
+          ) : null}
           <PieceChords performance={performance}>
             <PieceProgressions piece={piece} />
           </PieceChords>
-          {laptop ? null : details}
+          {/* Your practice and Details side by side on a wide screen (canvas, row 2). */}
+          <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
+            <YourPractice piece={piece} performance={performance} />
+            {details}
+          </div>
         </div>
       </div>
       {/* The one thing to do first: play it (ADR 0111), the Player as it was left. */}

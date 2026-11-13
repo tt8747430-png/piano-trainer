@@ -48,9 +48,9 @@ details.
 - **The Trash** (`/songs/trash`, R34, StemDeck's): Delete on the learner's own song moves it there with no ask and a
   toast with Undo, as nothing is lost yet; it is gone, with its recordings, only once deleted permanently from the
   Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`, `pt-library` version 6;
-  `trashSongs`, `restoreTrashed`, `emptyTrash`). Home's bar holds one button for both, a menu of Archive · Trash, its
-  count both; the laptop tree lists Trash under Archive.
-- **The archive is a place** (`/songs/archive`, from the bar's Archive · Trash menu): archived songs and folders,
+  `trashSongs`, `restoreTrashed`, `emptyTrash`). On a phone Home's bar holds one button for both, a menu of Archive · Trash,
+  its count both; on a laptop the tree lists Archive and Trash and the bar has no such button (one way to each).
+- **The archive is a place** (`/songs/archive`, from the phone bar's Archive · Trash menu or the laptop tree): archived songs and folders,
   newest first, each with Restore; Restore all; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
   it stood while that folder is in the library, else at Home, last; a folder back with everything under it. An
   archived song still opens by its link, from Learn and from Search, which says it is archived.

@@ -14,9 +14,9 @@ no card on top.
 - **The song's page** (`PieceView`; Apple Music's album page, MuseScore's score page): its bar (Back, the title with
   ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing its picture and paint;
   who wrote it and its book; one line of facts: key, time, tempo, level, genre, language; what is said of
-  it, two lines and More); its music (its sections where it has more than one, the learner's practice, its chords
-  and the library's progressions it uses); and **Details**. Play floats. From 64rem the song and its Details are the
-  left column (24rem) and the music the right; on a phone Details follow the music.
+  it, two lines and More); its music (its sections where it has more than one, its chords and the library's
+  progressions it uses); then the learner's practice and **Details**, side by side from 80rem. Play floats. From 64rem
+  the song is the left column (24rem) and the rest the right, in the phone's order.
 - **Details** (`SongDetails`, Notion's properties): each property a row of its name and value, a tap editing that one
   in a popover beside it on a laptop or a sheet on a phone (`Picker`), each change kept at once. Title and
   Description, an own song's or an editor's (the editor's into the song's draft); Composer, Lyricist and Arranger,
