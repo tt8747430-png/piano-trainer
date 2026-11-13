@@ -1,5 +1,0 @@
-export { QUIZ_GROUPS, QUIZ_TRAINERS } from './model/quiz-groups'
-export { useGapsCount } from './model/use-gaps-count'
-export { GapsBadge } from './ui/GapsBadge'
-export { GapsLink } from './ui/GapsLink'
-export { TrainerList } from './ui/TrainerList'

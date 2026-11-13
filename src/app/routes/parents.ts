@@ -268,7 +268,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,
   '/shell/courses/$courseId/$lessonId/edit': toCourseLesson,
 
-  // Practice: each page up to Practice; a trainer up to the Quiz; a pattern up to Accompaniment,
+  // Practice: each page and a trainer up to Practice; a pattern up to Accompaniment,
   // its Edit and Publish up to it; a study and its sections the same.
   '/shell/practice/chords': toPractice,
   '/shell/practice/scales': toPractice,
@@ -307,8 +307,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     const sheet = text(search.sheet)
     return up({ to: '/practice/chord-player', search: sheet === undefined ? {} : { sheet } })
   },
-  '/shell/practice/quiz': toPractice,
-  '/shell/practice/quiz/$trainerId': () => up({ to: '/practice/quiz' }),
+  '/shell/practice/trainer/$trainerId': toPractice,
   '/shell/practice/exercises': toPractice,
   '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
   '/shell/practice/accompaniment': toPractice,

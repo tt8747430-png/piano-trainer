@@ -291,7 +291,6 @@ export const quiz: LocaleResources['quiz'] = {
       all: 'Все, в мажоре и миноре',
     },
   },
-  gaps: { none: 'Пробелов пока нет.', toBuildChord: 'Строить аккорды' },
   checkTitle: 'Проверка: {{title}}',
   progress: 'Раунд {{n}} из {{total}}',
   score: '{{correct}} из {{total}}',

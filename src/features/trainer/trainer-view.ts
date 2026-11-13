@@ -7,7 +7,6 @@ export const TRAINER_IDS = [
   'chords',
   'intervals',
   'build-scale',
-  'gaps',
   'scales-by-ear',
   'progressions-by-ear',
   'cadences',

@@ -12,7 +12,6 @@ const GROUP_OF: Readonly<Record<IndexKind, PaletteGroupId>> = {
   progressions: 'practice',
   patterns: 'practice',
   exercises: 'practice',
-  quiz: 'practice',
   songs: 'songs',
   folders: 'folders',
   lessons: 'lessons',

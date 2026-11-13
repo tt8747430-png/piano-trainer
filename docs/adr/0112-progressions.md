@@ -31,7 +31,7 @@ use one.
   for ii and iii, **bright** for a major chord in a minor key), in DESIGN.md's Harmony paints; between each two an
   arrow with the root movement (`↓5 ↓3 ↑2`, the strong moves bold, the ones that step back soft), its meaning in its
   name, a tap playing the two chords. One legend line, the terms (tonic, subdominant, dominant, relative minor, each
-  move) behind its ⓘ, and Test yourself to the Quiz's Chord roles. The kernel reads both (`chordRole` over
+  move) behind its ⓘ. The kernel reads both (`chordRole` over
   `harmonicFunction`, `rootMove`): a chord's role by its degree in the key (borrowed and applied chords as their
   family), a move by letters; every library line has its roles (a test). The same row stands under a lesson's
   progression (`RowRoles`).

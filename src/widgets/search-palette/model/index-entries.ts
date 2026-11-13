@@ -7,7 +7,6 @@ import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import type { OwnProgression } from '@/entities/practice-library'
 import { libraryByStyle, libraryLine, progressionMode } from '@/entities/progression-library'
-import { TRAINER_IDS, type TrainerId } from '@/features/trainer'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
 import { foldText, matchesQuery, WORD_BREAK } from '@/shared/lib'
 import {
@@ -44,7 +43,6 @@ export const INDEX_KINDS = [
   'progressions',
   'patterns',
   'exercises',
-  'quiz',
 ] as const
 export type IndexKind = (typeof INDEX_KINDS)[number]
 
@@ -63,7 +61,6 @@ export type IndexTarget =
   | { readonly opens: 'progression'; readonly id: string }
   | { readonly opens: 'pattern'; readonly ref: PatternRef }
   | { readonly opens: 'exercise'; readonly exercise: ExerciseId }
-  | { readonly opens: 'trainer'; readonly trainer: TrainerId }
   /** A line of chords typed, on Progressions: its numerals in the key it is read in (ADR 0052). */
   | { readonly opens: 'typed-line'; readonly key: KeyParam; readonly p: string }
 
@@ -84,7 +81,6 @@ export interface IndexNames {
   readonly page: (page: PracticePageId) => { readonly title: string; readonly about: string }
   readonly quality: (quality: ChordQuality) => string
   readonly scale: (kind: ScaleKind) => string
-  readonly trainer: (trainer: TrainerId) => { readonly title: string; readonly about: string }
   readonly key: (key: Key) => string
   /** How many songs a folder holds: "Songs: 3". */
   readonly songCount: (count: number) => string
@@ -265,17 +261,6 @@ export function indexEntries({
       detail: localText(exercise.trains, locale),
       target: { opens: 'exercise', exercise: exercise.id },
     })),
-    ...TRAINER_IDS.map((trainer): IndexEntry => {
-      const { title, about } = names.trainer(trainer)
-      return {
-        id: `quiz:${trainer}`,
-        kind: 'quiz',
-        title,
-        detail: about,
-        words: [],
-        target: { opens: 'trainer', trainer },
-      }
-    }),
   ]
 }
 

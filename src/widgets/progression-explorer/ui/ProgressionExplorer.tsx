@@ -115,17 +115,7 @@ export function ProgressionExplorer({
             {typed ? <ProgressionReading view={view} onChange={change} /> : null}
           </div>
           <ChordRow chords={row} position={rowPosition(settings)} onShow={setShown}>
-            <RowRoles
-              action={
-                <Link
-                  to="/practice/quiz/$trainerId"
-                  params={{ trainerId: 'chord-role' }}
-                  className="font-semibold text-foreground underline underline-offset-4"
-                >
-                  {t('music:harmony.legend.test')}
-                </Link>
-              }
-            />
+            <RowRoles />
             <ProgressionDiagrams chords={row.map(({ chord }) => chord)} musicKey={key} />
             <RowStaff />
             <RowPlay variant="default" />

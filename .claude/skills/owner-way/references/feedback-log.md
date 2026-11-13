@@ -226,6 +226,9 @@ owner's, typos fixed.
 
 ## Practice
 
+- **No Quiz page (2026-11-13):** "no quiz page". The Quiz page, My gaps and every list of trainers go (Practice,
+  Search, Intervals' Train your ear, Progressions' Test yourself); a trainer opens only from the lesson that practises
+  it, at `/practice/trainer/$trainerId`, Back to Practice. Never a Quiz or trainer list beside a topic's page.
 - **Practice lives on its topic's page; results after a run; history in Profile (canvas 160, 2026-11-11):** a grilling settled it: "remove the quiz page completely", no Chord trainer, "i dont want this from c to am, i dont understand what this is", "I like shuffle better than random order", "i want this history but not in the practices page". A page studies a thing and practises it in the Player; a run ends in a full-screen results page (every chord marked right, wrong, early or late by its ms, your best beside it); every run is kept in Profile › Practice history. Exercises is a group (Finger technique, Jazz vocabulary), never a page called Exercises under a heading that does not fit it. Never a separate trainer or quiz beside the topic's page.
 - **Every board opened before a publish (canvas 157, 2026-11-11):** "the progressions page is broken": its phone list, and Accompaniment's and Exercises', had been empty since a generator reused a helper's name. Before each publish, every board the change can reach is opened in the runtime, not only the ones drawn this turn; generator helpers carry their file's prefix.
 - **Real exercises, named as the books name them (canvas 156, 2026-11-11):** "see a chord and play it doesnt make any sense… the names are very bad… real practices that do make sense": a trainer's exercises come from the owner's books (Piano Chords Practice, 400 Piano Chord Progressions), each named for what is played ("Major seventh chords in all inversions", "The I–IV–V–I cadence") and shown engraved; never invented drill names, "Start here", "Find more" or options a pianist would not say ("inversions up and back"). the theory pages are Theory, never Harmony; no Up next, recent practice or progress the app cannot stand behind; a sheet's groups never shrink to fit. Replaces the canvas 154 line below.
@@ -649,6 +652,8 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **No questions in a loop** (2026-11-13): "in the autonomous mode you don't ask questions to me, you work
+  autonomously": a loop's report ends with what was decided, never a question.
 - **No unintended shots of sign-in prompts, welcomes or tours** (2026-11-05): dismissed before every shot
   (`clearOnboarding`), shot only when needed or asked for (`ONBOARDING=1`).
 - **Never a screenshot before the page has fully loaded** (2026-11-05): `scripts/settle.mjs` before every shot.

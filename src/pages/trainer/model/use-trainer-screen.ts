@@ -1,14 +1,8 @@
-import { useMemo, useState } from 'react'
-import {
-  selectTrainerRecord,
-  useProgress,
-  useProgressStoreApi,
-  type TrainerRecord,
-} from '@/entities/progress'
+import { useMemo } from 'react'
+import { selectTrainerRecord, useProgress, type TrainerRecord } from '@/entities/progress'
 import {
   drillOf,
   levelOf,
-  myGaps,
   runKeyOf,
   trainerOf,
   type Asks,
@@ -24,34 +18,25 @@ interface TrainerScreen {
   readonly level: string
   /** How a drill asks; none for a trainer of one way. */
   readonly drill: Drill | undefined
-  /** What a run asks; null for My gaps with no gaps to ask. */
-  readonly asks: Asks | null
+  /** What a run asks. */
+  readonly asks: Asks
   readonly runKey: ReturnType<typeof runKeyOf>
   /** Changes whenever what the run asks does: a run starts again under a new one. */
   readonly runId: string
   readonly record: TrainerRecord | undefined
 }
 
-/**
- * A trainer as its URL asks it. My gaps reads the learner's gaps once, as the screen opens: an answer
- * that turns a gap known must not restart the run under the learner.
- */
+/** A trainer as its URL asks it. */
 export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScreen {
   const trainer = trainerOf(id)
-  const progress = useProgressStoreApi()
-  const [gaps] = useState(() => {
-    const { answers, practised } = progress.getState()
-    return myGaps(answers, practised)
-  })
   const level = levelOf(trainer, view)
   const drill = drillOf(trainer, view)
   const { rounds, show, chords, roots, inversions, scales, intervals, ways, arpeggio } = view
   const { kinds, descending, from, to, accidentals } = view
   const asks = useMemo(() => {
-    if (trainer.id === 'gaps' && gaps.length === 0) return null
     const asked = { rounds, drill, show, chords, roots, inversions, scales, intervals, ways }
     const more = { arpeggio, kinds, descending, from, to, accidentals }
-    return trainer.asks(level, { ...asked, ...more }, gaps)
+    return trainer.asks(level, { ...asked, ...more })
   }, [
     trainer,
     level,
@@ -70,7 +55,6 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
     from,
     to,
     accidentals,
-    gaps,
   ])
   // A new run under each new ask, or a new number of rounds.
   const runId = [

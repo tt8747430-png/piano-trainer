@@ -15,7 +15,6 @@ import {
   type ChordQuality,
   type NoteParam,
   type ReferenceInterval,
-  type SkillId,
 } from '@/shared/lib/music'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { Asks, ChordItem } from './draw'
@@ -82,7 +81,7 @@ export interface Trainer {
   readonly drills: readonly Drill[]
   /** What a card can show on its face, where it asks in cards: a cadence has no one set of keys. */
   readonly sides: readonly CardSide[]
-  asks(level: string, view: TrainerView, gaps: readonly SkillId[]): Asks
+  asks(level: string, view: TrainerView): Asks
 }
 
 /**
@@ -224,18 +223,6 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
       ).map(scaleSkill),
     }),
   },
-  gaps: {
-    id: 'gaps',
-    levels: [],
-    custom: [],
-    drills: [],
-    sides: [],
-    asks: (_level, _view, gaps) => ({
-      kind: 'skills',
-      skills: gaps,
-      ordered: true,
-    }),
-  },
   'scales-by-ear': {
     id: 'scales-by-ear',
     levels: SCALE_EAR_LEVELS,
@@ -335,12 +322,12 @@ export function ownTrainerView(trainer: Trainer, view: TrainerView): TrainerView
 
 /**
  * Where a trainer keeps a level's record: `build-scale:major`; a drill's under its way too,
- * `chords:quiz:c-main`; My gaps, with no ladder, `gaps:all`.
+ * `chords:quiz:c-main`.
  */
 export const runKeyOf = (trainer: Trainer, level: string, drill?: Drill) =>
   `${trainer.id}:${drill && trainer.drills.length > 0 ? `${drill}:` : ''}${level || 'all'}` as const
 
-/** Each trainer's ladder by the name its levels are kept under; My gaps has none. */
+/** Each trainer's ladder by the name its levels are kept under. */
 export const LADDERS = {
   chords: CHORD_LEVELS,
   scales: SCALE_LEVELS,
@@ -355,11 +342,10 @@ export const LADDERS = {
 } as const
 type Ladder = keyof typeof LADDERS
 
-const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
+const LADDER_OF: Readonly<Record<TrainerId, Ladder>> = {
   chords: 'chords',
   intervals: 'intervals',
   'build-scale': 'scales',
-  gaps: null,
   'scales-by-ear': 'scalesByEar',
   'reading-notes': 'notes',
   'key-signatures': 'signatures',
@@ -369,5 +355,5 @@ const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
   cadences: 'cadences',
 }
 
-/** The ladder a trainer climbs; null for My gaps. */
-export const ladderOf = (id: TrainerId): Ladder | null => LADDER_OF[id]
+/** The ladder a trainer climbs. */
+export const ladderOf = (id: TrainerId): Ladder => LADDER_OF[id]

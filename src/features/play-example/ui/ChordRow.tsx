@@ -187,11 +187,10 @@ export function RowStaff() {
 /**
  * Why the row works, drawn on its chords (A23, layout B): each chord a chip, its numeral (or symbol)
  * over its role in its key and the colour it brings, an arrow between each two with how the bass
- * moves; under it one line saying what the words and arrows mean, and `action` beside it (Test
- * yourself). A tap on a chip plays its chord, on an arrow the two chords it joins; the chip sounding
+ * moves; under it one line saying what the words and arrows mean. A tap on a chip plays its chord, on an arrow the two chords it joins; the chip sounding
  * follows the row as it plays. Only a progression's row, its chords read in a key, has it.
  */
-export function RowRoles({ action }: { action?: ReactNode }) {
+export function RowRoles() {
   const { t } = useTranslation('music')
   const { chords, sounding, playChord, playMove } = useRow()
   const moves = useMemo(() => rowMoves(chords), [chords])
@@ -239,7 +238,7 @@ export function RowRoles({ action }: { action?: ReactNode }) {
           )
         })}
       </RoleChips>
-      <RoleLegend action={action} />
+      <RoleLegend />
     </div>
   )
 }

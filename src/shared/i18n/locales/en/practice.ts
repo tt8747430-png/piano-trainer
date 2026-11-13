@@ -1,7 +1,7 @@
 export const practice = {
   title: 'Practice',
   // Practice's groups of pages (ADR 0052), each under its heading.
-  groups: { theory: 'Theory', exercises: 'Exercises', training: 'Training', tools: 'Tools' },
+  groups: { theory: 'Theory', exercises: 'Exercises', tools: 'Tools' },
   // Its pages, each by its name.
   pages: {
     chords: 'Chords',
@@ -15,7 +15,6 @@ export const practice = {
     circleOfFifths: 'Circle of fifths',
     tuner: 'Tuner',
     exercises: 'Exercises',
-    quiz: 'Quiz',
   },
   // What a page says of itself in one short line, on Practice and in Search.
   about: {
@@ -27,7 +26,6 @@ export const practice = {
     chordPlayer: 'Chord charts played by a backing band',
     chordFinder: 'Names any chord you play',
     exercises: 'Technique, book by book',
-    quiz: 'Chords, keys, intervals and sight-reading',
     metronome: 'Tempo, meter and subdivision',
     circleOfFifths: 'Keys, signatures and related keys',
     tuner: 'Pitch measured against A4',
@@ -267,9 +265,6 @@ export const practice = {
     },
 
     playAll: 'Play all',
-    // Ear training is the Quiz's: the page links there.
-    ear: 'Train your ear',
-    earQuiz: 'Intervals by ear',
     semitones_one: '{{count}} semitone',
     semitones_other: '{{count}} semitones',
     // The songs an interval opens, rising and falling.
@@ -702,19 +697,7 @@ export const practice = {
         mineEmpty: 'Progressions you keep are here.',
       },
     },
-  },
-  quiz: {
-    // The Quiz page's groups of trainers.
-    groups: {
-      chords: 'Chords and intervals',
-      scales: 'Scales and keys',
-      ear: 'By ear',
-      reading: 'Reading',
-    },
-    // The count after a colon reads right for any number, in both languages.
-    gaps: 'To check: {{count}}',
-  },
-  // The Metronome (ADR 0052): its tempo, sound, time signature and beats.
+  }, // The Metronome (ADR 0052): its tempo, sound, time signature and beats.
   // The tools (R29 B11): each on its own page, and the quick ones over any screen.
   tools: {
     circle: {

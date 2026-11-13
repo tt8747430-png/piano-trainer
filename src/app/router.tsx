@@ -553,16 +553,11 @@ const sectionRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'SectionPage'),
 })
 
-// Practice (ADR 0052): its list, then its training, Exercises and Quiz with its trainers.
+// Practice (ADR 0052): its list, then Exercises, and the trainers a lesson's practice opens.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
   component: lazyRouteComponent(practiceScreens, 'PracticePage'),
-})
-const quizRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/quiz',
-  component: lazyRouteComponent(practiceScreens, 'QuizPage'),
 })
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -588,8 +583,8 @@ const exerciseInfoRoute = createRoute({
 const restoreTrainer = restoreView(readTrainerSearch, [])
 const trainerRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/practice/quiz/$trainerId',
-  notFoundComponent: notFoundIn('quiz'),
+  path: '/practice/trainer/$trainerId',
+  notFoundComponent: notFoundIn('learn'),
   ...trainerSearch,
   staticData: { remembered: true },
   beforeLoad: async (context) => {
@@ -600,7 +595,7 @@ const trainerRoute = createRoute({
     const own = ownTrainerView(trainerOf(trainerId), context.search)
     if (own !== context.search) {
       throw redirect({
-        to: '/practice/quiz/$trainerId',
+        to: '/practice/trainer/$trainerId',
         params: { trainerId },
         search: own,
         replace: true,
@@ -1141,7 +1136,6 @@ const routeTree = rootRoute.addChildren([
     courseLessonEditRoute,
     courseEditRoute,
     practiceRoute,
-    quizRoute,
     exercisesRoute,
     exerciseInfoRoute,
     chordFinderRoute,

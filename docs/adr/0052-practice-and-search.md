@@ -47,7 +47,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   (Finger technique, Barry Harris, Piano With Jonny, each with its count and the library's tile, `EXERCISE_BOOKS`),
   each opening the Exercises library at its place; the **Tools** last (the Chord player, Metronome, Tuner, Chord
   finder, Circle of fifths), the Metronome and Tuner showing what they are set to. One card of rows on a phone, cards
-  five across on a laptop. No Up next and no Quiz row: nothing the app cannot stand behind. A page's URL sits under
+  five across on a laptop. No Up next and no Quiz: nothing the app cannot stand behind, and no trainer beside a topic's page. A page's URL sits under
   its page's.
 - **Choosing a root, a quality or a scale** is one row of pickers at the top of the page (`PickerRow`, ADR 0061):
   the root's value with ⌃⌄ opening an octave of twelve keys (`NotePicker`, a black key split "C♯ | D♭"; a pitch alone
@@ -84,7 +84,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     the way the floating transport says, **Harmonic · Melodic, rising · Melodic, falling** (`way=`, three pictured
     buttons), beside **Play all** (each interval in turn) and Stop (A22). Within the octave each row's ⓘ names songs
     that open with it, rising and falling (the unison once, the tritone under both spellings), each language its own
-    list of titles; ear training a row into the Quiz, which owns it. The cards with a staff are the lessons';
+    list of titles. The cards with a staff are the lessons';
   - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
     library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
     `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;
@@ -128,7 +128,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   `/settings/<page>` (scales, progressions, chord-finder; the Chord player's its own): how the page sounds and looks
   every time, then rows to the on-screen piano and a connected piano. A single setting stays in place (the Tuner's A4,
   a drill's Advance automatically in its setup); the piano's are a row to On-screen piano; so Chords, Intervals,
-  Accompaniment, Exercises and the Quiz have no gear, and nothing redirects to the app's Settings. The page's gear opens it (`?from=` names the page, so Back returns
+  Accompaniment and Exercises have no gear, and nothing redirects to the app's Settings. The page's gear opens it (`?from=` names the page, so Back returns
   there); Settings does not list them (R29). The page keeps what you look at.
 - **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
   slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
@@ -151,7 +151,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **User guide** is Settings' Support: six folding parts in the order a learner meets them, each step beside the icon
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
-  folders, lessons, chord qualities, scale kinds, progressions, patterns, exercises and trainers. It is one projection
+  folders, lessons, chord qualities, scale kinds, progressions, patterns, and exercises. It is one projection
   of the registries, held to each by a test. A chord symbol typed is read as the chord.
 - **Words:** a Place is the nav's; Practice has pages in groups; a thing's page is an Explorer; a Tool works something
   out from what it is given.

@@ -88,6 +88,9 @@ wins there.
   it is fixed; a test file is touched only when it breaks the build, and red tests wait until the owner asks for a run.
 - **Push:** each change is committed and pushed to the session branch; code goes to `main` only when the owner asks,
   after the loop.
+- **No questions** (owner, 2026-11-13: "in the autonomous mode you don't ask questions to me, you work
+  autonomously"): nothing is put to the owner, not even at the end of a report. Every open choice is researched,
+  decided and built, and the report says what was decided.
 - **Never stop:** a finished area is not a stopping point. When everything seems done, start again from the beginning:
   Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, improving each. Only
   the word "stop" ends it.
@@ -104,7 +107,7 @@ wins there.
 | Installing a skill or plugin from outside the repo                                | the owner    | say what it is, its licence and source                  |
 
 An unanswered question never stops the work: take your recommendation, build it, and put the question at the end of the
-report, drawn. The drawing is made in the same turn, even when the owner has gone to bed. When the owner says "use proper decision" or "what is the best option", research and decide.
+report, drawn; in a loop or autonomous mode there is no question at all ([Loops and refactors](#loops-and-refactors)). The drawing is made in the same turn, even when the owner has gone to bed. When the owner says "use proper decision" or "what is the best option", research and decide.
 
 ## Plan before building
 
@@ -181,7 +184,8 @@ Short, answer first, in the owner's words for things (screens, controls), not fi
 
 1. What was built or fixed.
 2. What was left and why.
-3. Any decisions that are the owner's, numbered, each with its drawing's link.
+3. Any decisions that are the owner's, numbered, each with its drawing's link; in a loop or autonomous mode, none:
+   what was decided instead.
 4. The evidence: both test passes, the suite and build results, and the push state.
 
 In a review loop everything must be implemented and nothing left.

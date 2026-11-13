@@ -7,7 +7,6 @@ export { CheckPage } from '@/pages/check'
 export { ExercisePage } from '@/pages/exercise'
 export { ExercisesPage } from '@/pages/exercises'
 export { PracticePage } from '@/pages/practice'
-export { QuizPage } from '@/pages/quiz'
 export { TrainerPage } from '@/pages/trainer'
 
 /** Whether a Check has questions: a journey's chapter's chord family or scale. */

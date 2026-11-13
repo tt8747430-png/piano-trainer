@@ -213,7 +213,7 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
           {...linkTile(target)}
           render={
             <Link
-              to="/practice/quiz/$trainerId"
+              to="/practice/trainer/$trainerId"
               params={{ trainerId: target.trainer }}
               search={isDrill(target.drill) ? { drill: target.drill } : {}}
             />

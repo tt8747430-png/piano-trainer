@@ -1,7 +1,6 @@
 export { signatureOption, type Asks } from './draw'
 export { CADENCES, cadenceNumerals, type Cadence } from './ladders/cadences'
 export { checkPlan, type CheckPlan } from './check-plan'
-export { myGaps } from './my-gaps'
 export { answerKeys, answerMarks, checkedKeys, roundRange, targetKeys } from './round-keys'
 export {
   choiceAnswer,

@@ -6,7 +6,6 @@ import { ButtonLink, NotFound } from '@/shared/ui'
 const WAYS = {
   songs: { to: '/songs', label: 'notFound.toSongs' },
   learn: { to: '/', label: 'notFound.toLearn' },
-  quiz: { to: '/practice/quiz', label: 'notFound.toQuiz' },
   scales: { to: '/practice/scales', label: 'notFound.toScales' },
   accompaniment: { to: '/practice/accompaniment', label: 'notFound.toAccompaniment' },
   exercises: { to: '/practice/exercises', label: 'notFound.toExercises' },

@@ -104,14 +104,5 @@ export function targetLink(target: IndexTarget): { readonly link: Up; readonly t
         }),
         tile: PAGE_TILES.exercises,
       }
-    case 'trainer':
-      return {
-        link: opens({
-          to: '/practice/quiz/$trainerId',
-          params: { trainerId: target.trainer },
-          state: OPEN_PLAINLY,
-        }),
-        tile: PAGE_TILES.quiz,
-      }
   }
 }

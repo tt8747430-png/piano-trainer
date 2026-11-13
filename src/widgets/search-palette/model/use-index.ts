@@ -11,7 +11,7 @@ import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
 
 /** The names the interface gives what content does not name itself, in the learner's language. */
 export function useIndexNames(): IndexNames {
-  const { t } = useTranslation(['music', 'quiz', 'songs'])
+  const { t } = useTranslation(['music', 'songs'])
   const page = usePageWords()
   const key = useKeyName()
   return useMemo(
@@ -19,10 +19,6 @@ export function useIndexNames(): IndexNames {
       page,
       quality: (quality) => t(`music:quality.${quality}`),
       scale: (kind) => t(`music:scaleKind.${kind}`),
-      trainer: (trainer) => ({
-        title: t(`quiz:trainers.${trainer}`),
-        about: t(`quiz:about.${trainer}`),
-      }),
       key,
       songCount: (count) => t('songs:folder.songCount', { count }),
     }),

@@ -343,7 +343,6 @@ export const music = {
         second: { name: '↑2', text: 'Up a 2nd: fresh, the two chords share no note.' },
         back: { name: '↑5 ↑3 ↓2', text: 'The same moves the other way: they step back.' },
       },
-      test: 'Test yourself',
     },
     playChain: 'Play the chain',
   },

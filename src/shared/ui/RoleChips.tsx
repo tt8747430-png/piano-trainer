@@ -110,9 +110,9 @@ export function MoveArrow({
 
 /**
  * What the row's words and arrows mean, in one line under it, its colours as the chips': the terms
- * theory books use, and what each move does, behind its ⓘ; and a way to test oneself, where given.
+ * theory books use, and what each move does, behind its ⓘ.
  */
-export function RoleLegend({ action }: { action?: ReactNode }) {
+export function RoleLegend() {
   const { t } = useTranslation('music')
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
@@ -139,7 +139,6 @@ export function RoleLegend({ action }: { action?: ReactNode }) {
           </dl>
         </InfoTip>
       </span>
-      {action}
     </div>
   )
 }

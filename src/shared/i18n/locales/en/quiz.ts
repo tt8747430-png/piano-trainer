@@ -297,7 +297,6 @@ export const quiz = {
       all: 'All, major and minor',
     },
   },
-  gaps: { none: 'No gaps found yet.', toBuildChord: 'Build chords' },
   // The Check.
   checkTitle: 'Check: {{title}}',
   progress: 'Round {{n}} of {{total}}',

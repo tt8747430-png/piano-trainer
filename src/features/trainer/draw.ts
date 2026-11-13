@@ -57,7 +57,7 @@ export interface ReadNote {
 
 /** What a run asks, worked out from its trainer and level: each round is drawn from it. */
 export type Asks =
-  /** Skills on any root, each built on the keys (My gaps, the Check, Scale building), in order or drawn. */
+  /** Skills on any root, each built on the keys (the Check, Scale building), in order or drawn. */
   | {
       readonly kind: 'skills'
       readonly skills: readonly SkillId[]
@@ -285,7 +285,7 @@ function intervalRound(asks: Extract<Asks, { kind: 'intervals' }>, random: () =>
   }
 }
 
-/** A round from a skill on a root, built on the keys (My gaps, the Check, Scale building). */
+/** A round from a skill on a root, built on the keys (the Check, Scale building). */
 function skillRound(asks: Extract<Asks, { kind: 'skills' }>, index: number, random: () => number) {
   const skill = asks.ordered
     ? itemAt(asks.skills, index % asks.skills.length)

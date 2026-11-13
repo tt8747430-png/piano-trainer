@@ -19,7 +19,7 @@ ways, with a time limit and a Next that waits for the answer.
   (ADR 0062).
 - **Where gaps are found and filled:** a song's Check these chords (its own chords in turn, six questions or one
   each); a journey chapter's Check, which marks its step learned once its family is Known, asking each skill as often
-  as it still needs; and My gaps in Quiz's bar (the gaps, then the due, then the unknowns of pieces opened).
+  as it still needs.
 - **One round machine** (`features/trainer`): a round is answered by keys chosen and checked, by keys pressed and
   judged at once, or by a choice; a card is revealed, never right or wrong; any other round's answer can be shown
   unanswered (Show answer, or its **time limit** running out), counted missed. What a run asks is one value
@@ -69,7 +69,9 @@ ways, with a time limit and a Next that waits for the answer.
   parts, each from a bar of its own: the right hand, the left hand, hands together, together staccato, together
   from piano up to forte and back. Its tempo is the ladder's; the routine's minute of improvising is left out, as
   nothing is written for it.
-- **One home each:** the Quiz page holds every trainer by group; the Exercises page holds the drills of no other
+- **One home each:** there is no Quiz page (owner, 2026-11-13: "no quiz page"); a trainer opens only from the lesson
+  that practises it (`/practice/trainer/$trainerId`, Back to Practice), never from a list, Search or a topic page; the
+  Exercises page holds the drills of no other
   page (a scale's exercises open from Scales, a chord's arpeggio from Chords); a drill another Player already plays is
   not repeated.
 

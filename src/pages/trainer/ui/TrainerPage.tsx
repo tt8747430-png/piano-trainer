@@ -1,12 +1,11 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { useParams, useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { CUSTOM, isTrainerId, type TrainerId, type TrainerView } from '@/features/trainer'
 import { useSetSearch } from '@/shared/lib'
-import { BackButton, ButtonLink, InfoTip, RoundButton, ScreenHeader } from '@/shared/ui'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import { BackButton, InfoTip, RoundButton, ScreenHeader } from '@/shared/ui'
 import { TrainerSetup, useTrainerHow } from '@/widgets/trainer-setup'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
@@ -15,7 +14,7 @@ import { useLevelName } from './use-level-name'
 
 /** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {
-  const { trainerId } = useParams({ from: '/shell/practice/quiz/$trainerId' })
+  const { trainerId } = useParams({ from: '/shell/practice/trainer/$trainerId' })
   return isTrainerId(trainerId) ? <TrainerScreenView key={trainerId} id={trainerId} /> : null
 }
 
@@ -25,7 +24,7 @@ export function TrainerPage() {
  */
 function TrainerScreenView({ id }: { id: TrainerId }) {
   const { t } = useTranslation(['quiz', 'common'])
-  const view = useSearch({ from: '/shell/practice/quiz/$trainerId' })
+  const view = useSearch({ from: '/shell/practice/trainer/$trainerId' })
   const setView = useSetSearch<TrainerView>()
   const [running, setRunning] = useState(false)
   const { trainer, level, asks, runKey, runId, record } = useTrainerScreen(id, view)
@@ -50,7 +49,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
         tools={
           <>
             {/* How the drill asks, out of the way on the setup: gone once a run starts. */}
-            {asks && !running ? (
+            {!running ? (
               <InfoTip name={title} bar>
                 {how}
               </InfoTip>
@@ -59,28 +58,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           </>
         }
       />
-      {!asks ? (
-        // Nothing to ask yet: said as every empty screen says it, with a way to a trainer.
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>{t('gaps.none')}</EmptyTitle>
-          </EmptyHeader>
-          <EmptyContent>
-            <ButtonLink
-              variant="soft"
-              render={
-                <Link
-                  to="/practice/quiz/$trainerId"
-                  params={{ trainerId: 'chords' }}
-                  search={{ drill: 'entry' }}
-                />
-              }
-            >
-              {t('gaps.toBuildChord')}
-            </ButtonLink>
-          </EmptyContent>
-        </Empty>
-      ) : running ? (
+      {running ? (
         <TrainerRunView
           key={runId}
           asks={asks}

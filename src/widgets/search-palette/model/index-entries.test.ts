@@ -5,7 +5,6 @@ import { blankLesson, LESSONS } from '@/entities/lesson'
 import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
 import { libraryByStyle } from '@/entities/progression-library'
-import { TRAINER_IDS } from '@/features/trainer'
 import { CHORD_QUALITIES, keySymbol, SCALE_KINDS } from '@/shared/lib/music'
 import { PRACTICE_PAGE_IDS } from '@/widgets/practice-pages'
 import {
@@ -23,7 +22,6 @@ const names: IndexNames = {
   page: (page) => ({ title: `page ${page}`, about: `about ${page}` }),
   quality: (quality) => `quality ${quality}`,
   scale: (kind) => `scale ${kind}`,
-  trainer: (trainer) => ({ title: `trainer ${trainer}`, about: `asks ${trainer}` }),
   key: (key) => `key ${keySymbol(key)}`,
   songCount: (count) => `${count} songs`,
 }
@@ -85,7 +83,6 @@ describe('indexEntries', () => {
     )
     expect(ofKind('patterns')).toHaveLength(PATTERN_IDS.length)
     expect(ofKind('exercises')).toHaveLength(EXERCISES.length)
-    expect(ofKind('quiz')).toHaveLength(TRAINER_IDS.length)
     expect(all).toHaveLength(INDEX_KINDS.reduce((sum, kind) => sum + ofKind(kind).length, 0))
     expect(new Set(all.map((entry) => entry.id)).size).toBe(all.length)
   })

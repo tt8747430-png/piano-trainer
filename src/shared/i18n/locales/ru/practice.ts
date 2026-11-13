@@ -5,7 +5,6 @@ export const practice: LocaleResources['practice'] = {
   groups: {
     theory: 'Теория',
     exercises: 'Упражнения',
-    training: 'Тренировка',
     tools: 'Инструменты',
   },
   pages: {
@@ -20,7 +19,6 @@ export const practice: LocaleResources['practice'] = {
     circleOfFifths: 'Квинтовый круг',
     tuner: 'Тюнер',
     exercises: 'Упражнения',
-    quiz: 'Тесты',
   },
   settings: {
     open: '{{page}}: настройки',
@@ -34,7 +32,6 @@ export const practice: LocaleResources['practice'] = {
     chordPlayer: 'Гармоническую сетку исполняет аккомпанирующий ансамбль',
     chordFinder: 'Называет любой сыгранный аккорд',
     exercises: 'Техника по методическим пособиям',
-    quiz: 'Аккорды, тональности, интервалы и чтение с листа',
     metronome: 'Темп, размер и деление доли',
     circleOfFifths: 'Тональности, ключевые знаки и родство',
     tuner: 'Высота звука относительно ля первой октавы',
@@ -257,8 +254,6 @@ export const practice: LocaleResources['practice'] = {
     },
 
     playAll: 'Сыграть все',
-    ear: 'Тренировка слуха',
-    earQuiz: 'Интервалы на слух',
     semitones_one: '{{count}} полутон',
     semitones_few: '{{count}} полутона',
     semitones_many: '{{count}} полутонов',
@@ -671,15 +666,6 @@ export const practice: LocaleResources['practice'] = {
         mineEmpty: 'Здесь хранятся ваши последовательности.',
       },
     },
-  },
-  quiz: {
-    groups: {
-      chords: 'Аккорды и интервалы',
-      scales: 'Гаммы и тональности',
-      ear: 'На слух',
-      reading: 'Чтение',
-    },
-    gaps: 'На проверку: {{count}}',
   },
   tools: {
     circle: {

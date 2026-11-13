@@ -1,5 +1,3 @@
-import { Link } from '@tanstack/react-router'
-import { Ear } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
@@ -28,8 +26,6 @@ import {
   LazyScoreView,
   Labelled,
   PitchPicker,
-  RowGroup,
-  RowLink,
   Segmented,
   usualName,
   type ShownKeys,
@@ -117,26 +113,7 @@ export function IntervalExplorer({
           onWrite={write}
         />
       ))}
-      <EarTraining />
     </div>
-  )
-}
-
-/** Ear training is the Quiz's (A32): Intervals links there, never a drill of its own. */
-function EarTraining() {
-  const { t } = useTranslation('practice')
-  const fold = useFold('intervals.ear')
-  return (
-    <RowGroup title={t('intervals.ear')} fold={fold}>
-      <li>
-        <RowLink
-          title={t('intervals.earQuiz')}
-          icon={Ear}
-          paint="lilac"
-          render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'intervals' }} />}
-        />
-      </li>
-    </RowGroup>
   )
 }
 

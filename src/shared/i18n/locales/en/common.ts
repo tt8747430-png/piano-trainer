@@ -27,7 +27,6 @@ export const common = {
     title: 'Page not found',
     toSongs: 'Go to Songs',
     toLearn: 'Go to Learn',
-    toQuiz: 'Go to Quiz',
     toScales: 'Go to Scales and keys',
     toAccompaniment: 'Go to Accompaniment',
     toExercises: 'Go to Exercises',
