@@ -8,26 +8,15 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
-import { courseProgress, isComplete } from '../model/progress'
 
 /** How many covers Learn shows before See all. */
 const SHOWN = 5
 
-/** A course as a cover: its level's paint, its shelf (or Next) over its name, its facts under it. */
+/** A course as a cover (canvas 163): its level's paint, its shelf (or Next) over its name, what it teaches under it. */
 function CourseCover({ course, current }: { course: Course; current: boolean }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const learned = useProgress(selectLearned)
-  const progress = courseProgress(course, learned)
   const paint = PAINT[STAGE_PAINT[course.stage]]
-  const facts = [
-    t('course.lessonCount', { count: course.lessons.length }),
-    isComplete(progress)
-      ? t('course.done')
-      : progress.done > 0
-        ? t('progress', { learned: progress.done, total: progress.total })
-        : t('course.weekCount', { count: course.weeks }),
-  ]
   return (
     <Link
       to="/courses/$courseId"
@@ -55,7 +44,9 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
           {localText(course.title, locale)}
         </span>
       </span>
-      <span className="px-0.5 text-sm text-muted-foreground tabular-nums">{facts.join(' · ')}</span>
+      <span className="line-clamp-2 px-0.5 text-sm text-pretty text-muted-foreground">
+        {localText(course.summary, locale)}
+      </span>
     </Link>
   )
 }

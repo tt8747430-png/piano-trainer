@@ -38,13 +38,12 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm font-semibold text-on-paint-yellow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
         <h2 id={id} className="font-display text-xl leading-tight text-balance">
           {title}
         </h2>
-        {track.id === shown ? null : <LearnedMeter progress={progress} />}
       </span>
       <span
         aria-hidden
@@ -52,10 +51,13 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
       >
         <Icon className={read ? undefined : 'fill-current'} />
       </span>
+      {track.id === shown ? null : (
+        <LearnedMeter progress={progress} above className="col-span-2" />
+      )}
     </>
   )
   const className =
-    'group flex items-center gap-4 card bg-gradient-to-b from-secondary/60 to-card p-4 transition-colors duration-200 ease-out hover:border-input'
+    'group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 card p-4 transition-colors duration-200 ease-out hover:border-input'
   return (
     <section aria-labelledby={id}>
       {step.kind === 'piece' ? (

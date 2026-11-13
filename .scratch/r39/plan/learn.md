@@ -108,3 +108,4 @@ are, what is next, and that every lesson can still be opened.
 - Canvas 128 (2026-11-11): Learn drawn for the first time on the one canvas: phone and laptop, Lessons and Courses.
 - Canvas 162 (2026-11-13, loop round 10, design first): checks named truly with their pictures; Learn's Night boards.
 - Canvas 163 (2026-11-13): Learn refactored to an overview (Continue, Levels, Courses, your own), a level's page and Courses' page; the header as every place's.
+- Built to canvas 163 (2026-11-13, "as close as possible"): Continue a plain card, "Continue · Foundations" in honey ink, the count over a meter the card's width; each level "Foundations · 13 lessons" beside a smaller ring with a plain number; each course cover its summary under it, Next on the one in progress. The serif titles stay (DESIGN.md), as the canvas draws its own names.

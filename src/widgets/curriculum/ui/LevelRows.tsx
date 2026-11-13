@@ -10,7 +10,8 @@ import { journeyProgress } from '../model/progress'
 
 /**
  * Learn's Levels (canvas 163): the four levels as one card of rows, each its number in a ring of how
- * much of it is learned, its stage ("Beginner"), its book, how many of its steps are learned, and a chevron. A row opens the level's page.
+ * much of it is learned, its stage ("Beginner"), its book and how many lessons, how many are learned, and
+ * a chevron. A row opens the level's page.
  */
 export function LevelRows() {
   const { t } = useTranslation(['learn', 'common'])
@@ -31,12 +32,12 @@ export function LevelRows() {
               <Link
                 to="/levels/$levelId"
                 params={{ levelId: journey.id }}
-                className="group flex min-h-16 items-center gap-4 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+                className="group flex min-h-20 items-center gap-4 px-4 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
               >
                 <ProgressRing share={share} track className={PAINT.grass.ink}>
                   <span
                     aria-hidden
-                    className="grid size-10 place-items-center rounded-pill bg-card font-display text-lg font-semibold tabular-nums"
+                    className="grid size-8 place-items-center rounded-pill bg-card text-base font-semibold tabular-nums"
                   >
                     {i + 1}
                   </span>
@@ -44,7 +45,8 @@ export function LevelRows() {
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span className="font-semibold">{t(`common:stage.${journey.stage}`)}</span>
                   <span className="text-sm text-pretty text-muted-foreground">
-                    {localText(journey.title, locale)}
+                    {localText(journey.title, locale)} ·{' '}
+                    {t('learn:course.lessonCount', { count: progress.total })}
                   </span>
                 </span>
                 <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
