@@ -26,7 +26,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
     course.lessons.findIndex((each) => each.id === lessonId) + 1
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t('course.lessons')}
       </h2>
       <LessonLine>

@@ -31,7 +31,7 @@ export function FoldGroup({
   const listId = useId()
   return (
     <section aria-label={title} className="flex flex-col gap-2">
-      <h2 className="text-2xl">
+      <h2 className="font-sans text-xl font-bold">
         <button
           type="button"
           aria-expanded={open}

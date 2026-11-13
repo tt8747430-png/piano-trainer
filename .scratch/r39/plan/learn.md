@@ -109,3 +109,4 @@ are, what is next, and that every lesson can still be opened.
 - Canvas 162 (2026-11-13, loop round 10, design first): checks named truly with their pictures; Learn's Night boards.
 - Canvas 163 (2026-11-13): Learn refactored to an overview (Continue, Levels, Courses, your own), a level's page and Courses' page; the header as every place's.
 - Built to canvas 163 (2026-11-13, "as close as possible"): Continue a plain card, "Continue · Foundations" in honey ink, the count over a meter the card's width; each level "Foundations · 13 lessons" beside a smaller ring with a plain number; each course cover its summary under it, Next on the one in progress. The serif titles stay (DESIGN.md), as the canvas draws its own names.
+- Loop round 10, Learn: every bar's title and every section head in Onest as all the boards draw them (a place's bold 26, a page's semibold 17, a section's bold 20), app-wide in one pass; Literata kept for music's names, lesson text and the score.

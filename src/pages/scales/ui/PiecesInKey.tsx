@@ -22,7 +22,7 @@ export function PiecesInKey({ musicKey }: { musicKey: Key }) {
     <>
       {songs.length > 0 ? null : (
         <section aria-labelledby={songsId} className="flex flex-col gap-2">
-          <h2 id={songsId} className="text-2xl">
+          <h2 id={songsId} className="font-sans text-xl font-bold">
             {t('scales.key.songs')}
           </h2>
           <p className="text-muted-foreground">{t('scales.key.noSongs')}</p>

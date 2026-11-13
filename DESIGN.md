@@ -404,7 +404,9 @@ square at the top.
 - **A detail page** reads title, facts, sections; its one primary action floats at the foot.
 - **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
   Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
-  Settings (the gear), More. A plain title is set slightly tight, at 1rem on a phone (1.25rem from 40rem), its
+  Settings (the gear), More. Its title is Onest, as every board draws it (canvas 133): a plain title semibold at 1.0625rem on a phone (1.125rem
+  from 40rem), a place's bold at 1.625rem; a section's head in a page is Onest bold at 1.25rem (Literata stays for
+  names of music, lesson text and the score). A plain title's
   actions 4px apart there, so a tool's name fits whole on two lines beside its tools ("Определитель аккордов"); a
   word is never split. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's

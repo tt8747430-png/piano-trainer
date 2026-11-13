@@ -120,7 +120,7 @@ function CourseDocument({
       </Properties>
       {/* Its About (R29 B9): the lesson's document under the course's head, written in place. */}
       <section aria-labelledby="course-about" className="flex flex-col gap-2">
-        <h2 id="course-about" className="font-display text-2xl">
+        <h2 id="course-about" className="font-sans text-xl font-bold">
           {t('learn:course.about')}
         </h2>
         <AboutDocument

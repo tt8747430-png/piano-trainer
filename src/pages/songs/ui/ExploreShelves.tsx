@@ -73,7 +73,7 @@ function Shelf({
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-2">
       <div className="flex min-h-9 items-center justify-between gap-2">
-        <h2 id={id} className="text-xl">
+        <h2 id={id} className="font-sans text-xl font-bold">
           {t(`explore.shelves.${sort}`)}
         </h2>
         <Button variant="ghost" onClick={onSeeAll}>

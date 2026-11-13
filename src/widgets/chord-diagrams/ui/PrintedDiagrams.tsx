@@ -14,7 +14,7 @@ export function PrintedDiagrams({ chords }: { chords: readonly DiagramChord[] })
   if (chords.length === 0) return null
   return (
     <section className="flex flex-col gap-6 break-before-page">
-      <h2 className="text-2xl">{t('chordSummary')}</h2>
+      <h2 className="font-sans text-xl font-bold">{t('chordSummary')}</h2>
       <div className="grid grid-cols-4 gap-x-6 gap-y-8">
         {chords.map((chord) => (
           <figure

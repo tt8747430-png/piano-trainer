@@ -15,7 +15,7 @@ export function GuidedSongs({ course }: { course: Course }) {
   if (songs.length === 0) return null
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-2xl">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t('course.songs')}
       </h2>
       <ul className="grid gap-1 card p-2 lg:grid-cols-2">

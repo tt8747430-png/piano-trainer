@@ -81,13 +81,13 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         tools={<PracticeFavouriteButton kind="exercises" id={exercise.id} />}
       />
       <section aria-labelledby="exercise-trains" className="flex flex-col gap-2">
-        <h2 id="exercise-trains" className="text-xl">
+        <h2 id="exercise-trains" className="font-sans text-xl font-bold">
           {t('practice:exercisePage.trains')}
         </h2>
         <p className="max-w-prose text-pretty">{localText(exercise.trains, locale)}</p>
       </section>
       <section aria-labelledby="exercise-how" className="flex flex-col gap-3">
-        <h2 id="exercise-how" className="text-xl">
+        <h2 id="exercise-how" className="font-sans text-xl font-bold">
           {t('practice:exercisePage.how')}
         </h2>
         <p className="max-w-prose text-pretty">{localText(exercise.how, locale)}</p>
@@ -106,7 +106,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         ) : null}
       </section>
       <section aria-labelledby="exercise-options" className="flex flex-col gap-4">
-        <h2 id="exercise-options" className="text-xl">
+        <h2 id="exercise-options" className="font-sans text-xl font-bold">
           {t('practice:exercisePage.options')}
         </h2>
         {exercise.fields.hanon ? (

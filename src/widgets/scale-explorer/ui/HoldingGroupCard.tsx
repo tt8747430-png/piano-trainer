@@ -44,7 +44,7 @@ export function HoldingGroupCard({
   }
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-xl">
+      <h2 id={id} className="font-sans text-xl font-bold">
         {t(`reharmonise.group.${group}`)}
       </h2>
       <CardGrid min="chord">

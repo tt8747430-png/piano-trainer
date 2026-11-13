@@ -59,7 +59,7 @@ function ShelvesDocument({
     <>
       {/* The Courses' About (R29 B9): the lesson's document over the shelves, written in place. */}
       <section aria-labelledby="courses-about" className="flex flex-col gap-2">
-        <h2 id="courses-about" className="px-3 font-display text-xl font-semibold">
+        <h2 id="courses-about" className="px-3 font-sans text-xl font-bold">
           {t('coursesAbout')}
         </h2>
         <Suspense fallback={null}>
@@ -85,7 +85,7 @@ function ShelvesDocument({
           label: t(`shelves.${shelf}`),
           empty: t('edit.courses.empty'),
           head: (
-            <h2 className="mt-4 px-3 font-display text-xl font-semibold">
+            <h2 className="mt-4 px-3 font-sans text-xl font-bold">
               {t(`shelves.${shelf}`)}
             </h2>
           ),

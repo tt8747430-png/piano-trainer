@@ -82,7 +82,7 @@ function ProgressionDocument({
       </Properties>
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-1">
-          <h2 className="font-display text-2xl">{t('progressions.edit.lines')}</h2>
+          <h2 className="font-sans text-xl font-bold">{t('progressions.edit.lines')}</h2>
           <InfoTip name={t('progressions.edit.lines')}>{t('progressions.edit.info')}</InfoTip>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">

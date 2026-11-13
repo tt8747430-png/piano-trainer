@@ -47,7 +47,7 @@ export function ContinueShelf() {
   if (recent.length === 0) return null
   return (
     <section aria-labelledby="songs-continue" className="flex flex-col gap-3">
-      <h2 id="songs-continue" className="text-2xl">
+      <h2 id="songs-continue" className="font-sans text-xl font-bold">
         {t('continue.title')}
       </h2>
       <ul className="grid grid-cols-2 gap-3">

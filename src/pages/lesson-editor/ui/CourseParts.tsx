@@ -68,7 +68,7 @@ export function CourseParts({
           {
             key: 'lessons',
             label: t('edit.course.lessonList'),
-            head: <h2 className="font-display text-2xl">{t('edit.course.lessonList')}</h2>,
+            head: <h2 className="font-sans text-xl font-bold">{t('edit.course.lessonList')}</h2>,
             empty: t('edit.course.noLessons'),
             rows,
             foot: (

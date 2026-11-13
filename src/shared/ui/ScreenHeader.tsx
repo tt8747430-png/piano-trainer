@@ -119,11 +119,12 @@ export function ScreenHeader({
           <h1
             {...pageHeading}
             className={cn(
-              'min-w-0 font-display font-semibold outline-none',
+              'min-w-0 font-sans outline-none',
               // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
               // on a phone where two lines say it all.
               'line-clamp-2 leading-tight tracking-tight text-balance wrap-break-word',
-              large ? 'text-[1.375rem] sm:text-2xl' : 'text-base sm:text-xl',
+              // The boards' bar (canvas 133): a place's name large and bold, a page's semibold.
+              large ? 'text-[1.625rem] font-bold' : 'text-[1.0625rem] font-semibold sm:text-lg',
               titleOnPage && 'sr-only',
               // A place's views say where it is: its name stays the page's heading, unseen.
               views && 'sr-only',

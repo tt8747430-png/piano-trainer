@@ -143,7 +143,7 @@ export function LibrarySelect({
           {view.groups.map((group) =>
             group.entries.length === 0 ? null : (
               <section key={group.key} className="flex flex-col gap-3">
-                {group.heading ? <h2 className="text-2xl">{group.heading}</h2> : null}
+                {group.heading ? <h2 className="font-sans text-xl font-bold">{group.heading}</h2> : null}
                 <SortableRows
                   label={group.heading ?? t('title')}
                   ids={group.entries.map((entry) => entry.id)}
