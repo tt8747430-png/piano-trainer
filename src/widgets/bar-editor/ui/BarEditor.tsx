@@ -1,7 +1,8 @@
 import { DndContext } from '@dnd-kit/core'
-import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Minus, Plus, type LucideIcon } from 'lucide-react'
+import { GripVertical, Minus, Plus, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   barAvailable,
@@ -11,14 +12,70 @@ import {
   type BarSurface,
 } from '@/entities/settings'
 import { cn, useSortableList } from '@/shared/lib'
-import { ActionRow } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { ActionRow, SettingsGroup } from '@/shared/ui'
 import { BAR_ICONS } from '../model/bar-icons'
 
-/** A tile on the bar: dragged by itself to reorder, its − badge taking it off. */
-function Tile({
-  act,
+/** The round mark at a row's start: a red − takes the act off, a green + puts it on (iOS's edit list). */
+function EditMark({
+  kind,
+  label,
+  disabled,
+  title,
+  onClick,
+}: {
+  kind: 'remove' | 'add'
+  label: string
+  disabled: boolean
+  title?: string | undefined
+  onClick: () => void
+}) {
+  const Icon = kind === 'remove' ? Minus : Plus
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={title}
+      disabled={disabled}
+      onClick={onClick}
+      className="grid size-11 flex-none place-items-center disabled:opacity-40"
+    >
+      <span
+        aria-hidden
+        className={cn(
+          'grid size-5.5 place-items-center rounded-pill text-white',
+          kind === 'remove' ? 'bg-destructive' : 'bg-paint-full-grass',
+        )}
+      >
+        <Icon className="size-3.5" strokeWidth={3} />
+      </span>
+    </button>
+  )
+}
+
+/** An act's icon and name, the row's middle. */
+function ActName({
   icon: Icon,
+  label,
+  muted,
+}: {
+  icon: LucideIcon
+  label: string
+  muted?: boolean
+}) {
+  return (
+    <span
+      className={cn('flex min-w-0 flex-1 items-center gap-3', muted && 'text-muted-foreground')}
+    >
+      <Icon aria-hidden className="size-5 flex-none" />
+      <span className="truncate">{label}</span>
+    </span>
+  )
+}
+
+/** An act on the bar: its − at the start, its name, its handle at the end to drag it in order. */
+function OnRow({
+  act,
+  icon,
   label,
   canRemove,
   onRemove,
@@ -37,37 +94,37 @@ function Tile({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={cn('relative', isDragging && 'z-10 opacity-80')}
+      className={cn(
+        'relative flex min-h-13 items-center gap-1 bg-card py-1 pl-1 not-last:border-b not-last:border-hairline',
+        isDragging && 'z-10 shadow-md',
+      )}
     >
-      <button
-        type="button"
-        aria-label={t('bars.move', { act: label })}
-        className="flex min-h-16 min-w-18 touch-none flex-col items-center justify-center gap-1 rounded-control border border-hairline bg-card px-2 text-xs"
-        {...attributes}
-        {...listeners}
-      >
-        <Icon aria-hidden className="size-5" />
-        <span className="whitespace-nowrap">{label}</span>
-      </button>
-      <button
-        type="button"
-        aria-label={t('bars.remove', { act: label })}
+      <EditMark
+        kind="remove"
+        label={t('bars.remove', { act: label })}
         title={canRemove ? undefined : t('bars.keepOne')}
         disabled={!canRemove}
         onClick={onRemove}
-        className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-pill bg-destructive text-destructive-foreground after:absolute after:-inset-2.5 disabled:opacity-40"
+      />
+      <ActName icon={icon} label={label} />
+      <button
+        type="button"
+        aria-label={t('bars.move', { act: label })}
+        className="grid size-11 flex-none touch-none place-items-center text-muted-foreground"
+        {...attributes}
+        {...listeners}
       >
-        <Minus aria-hidden className="size-3.5" />
+        <GripVertical aria-hidden className="size-5" />
       </button>
     </li>
   )
 }
 
 /**
- * The bar editor (R29 B10, memory-palaces' Select toolbar): the bar live at the top as tiles, dragged
- * to reorder, each − badge taking one off (the last kept where the bar needs one); under it Available,
- * every act not on the bar, a tap adding it, or saying the bar is full; Restore defaults, the card's
- * last row. Each − badge reaches 44px beyond its drawn circle.
+ * The bar editor (R29 B10; the canvas's Selection toolbar, iOS's edit list): the acts on the bar as
+ * rows, each its red − at the start (the last kept where the bar needs one) and its handle at the
+ * end, dragged to reorder; under them Available, every act not on the bar with its green +, or
+ * saying the bar is full; Restore defaults on its own. Every mark is its own 44px target.
  */
 export function BarEditor({
   surface,
@@ -77,7 +134,7 @@ export function BarEditor({
 }: {
   surface: BarSurface
   bar: readonly BarAct[]
-  /** The bar's name: what a screen reader calls the tiles. */
+  /** The bar's name: what a screen reader calls the rows. */
   label: string
   /** A new arrangement; null for the defaults. */
   onChange: (acts: readonly BarAct[] | null) => void
@@ -88,56 +145,54 @@ export function BarEditor({
   const room = barHasRoom(surface, bar)
   const name = (act: BarAct) => t(`bars.act.${act}`)
   return (
-    <div data-setting={`bars.${surface}`} className="card flex flex-col gap-4 px-4 py-4">
-      <DndContext {...sortable.dnd}>
-        <SortableContext items={[...sortable.items]} strategy={horizontalListSortingStrategy}>
-          <ul aria-label={label} className="flex min-h-16 flex-wrap gap-3 pt-2">
-            {sortable.items.map((act) => (
-              <Tile
-                key={act}
-                act={act}
-                icon={BAR_ICONS[act]}
-                label={name(act)}
-                canRemove={barCanShrink(surface, bar)}
-                onRemove={() => onChange(bar.filter((each) => each !== act))}
-              />
-            ))}
-            {sortable.items.length === 0 ? (
-              <li className="text-sm text-muted-foreground">{t('bars.none')}</li>
-            ) : null}
-          </ul>
-        </SortableContext>
-      </DndContext>
-      {available.length > 0 ? (
-        <section aria-label={t('bars.available')} className="flex flex-col gap-2">
-          <h3 className="font-sans text-sm font-semibold text-muted-foreground">
-            {t('bars.available')}
-          </h3>
-          {room ? null : <p className="text-sm text-muted-foreground">{t('bars.full')}</p>}
-          <ul className="flex flex-wrap gap-2">
-            {available.map((act) => {
-              const Icon = BAR_ICONS[act]
-              return (
-                <li key={act}>
-                  <Button
-                    variant="outline"
-                    disabled={!room}
-                    aria-label={t('bars.add', { act: name(act) })}
-                    onClick={() => onChange([...bar, act])}
-                  >
-                    <Plus data-icon="inline-start" />
-                    <Icon aria-hidden />
-                    {name(act)}
-                  </Button>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
-      ) : null}
-      <div className="-mx-4 -mb-4 overflow-hidden rounded-b-card border-t border-hairline [&>button]:rounded-none">
-        <ActionRow title={t('bars.reset')} onClick={() => onChange(null)} />
+    <div data-setting={`bars.${surface}`} className="flex flex-col gap-6">
+      <div className="card overflow-hidden">
+        <DndContext {...sortable.dnd} modifiers={[restrictToVerticalAxis]}>
+          <SortableContext items={[...sortable.items]} strategy={verticalListSortingStrategy}>
+            <ul aria-label={label}>
+              {sortable.items.map((act) => (
+                <OnRow
+                  key={act}
+                  act={act}
+                  icon={BAR_ICONS[act]}
+                  label={name(act)}
+                  canRemove={barCanShrink(surface, bar)}
+                  onRemove={() => onChange(bar.filter((each) => each !== act))}
+                />
+              ))}
+              {sortable.items.length === 0 ? (
+                <li className="px-4 py-3 text-muted-foreground">{t('bars.none')}</li>
+              ) : null}
+            </ul>
+          </SortableContext>
+        </DndContext>
       </div>
+      {available.length > 0 ? (
+        <SettingsGroup flush title={t('bars.available')}>
+          {room ? null : (
+            <p className="px-4 pt-3 text-sm text-pretty text-muted-foreground">{t('bars.full')}</p>
+          )}
+          <ul>
+            {available.map((act) => (
+              <li
+                key={act}
+                className="flex min-h-13 items-center gap-1 py-1 pr-4 pl-1 not-last:border-b not-last:border-hairline"
+              >
+                <EditMark
+                  kind="add"
+                  label={t('bars.add', { act: name(act) })}
+                  disabled={!room}
+                  onClick={() => onChange([...bar, act])}
+                />
+                <ActName icon={BAR_ICONS[act]} label={name(act)} muted={!room} />
+              </li>
+            ))}
+          </ul>
+        </SettingsGroup>
+      ) : null}
+      <SettingsGroup flush>
+        <ActionRow title={t('bars.reset')} onClick={() => onChange(null)} />
+      </SettingsGroup>
     </div>
   )
 }
