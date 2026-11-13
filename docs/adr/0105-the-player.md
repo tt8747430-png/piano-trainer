@@ -18,7 +18,8 @@ what they changed.
   played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111).
 - **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
   right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the
-  Keyboard." where none is there to play; then **Listen and play along**, 50 % · 75 % · Original tempo and the
+  Keyboard." where none is there to play ("…show the Keyboard instead of the hands." where the hands stand in the
+  keys' place); then **Listen and play along**, 50 % · 75 % · Original tempo and the
   slider (50 % to 200 % of the piece's tempo in 5 % steps, with the beats a minute), each choosing Listen at that
   speed; Speed training below the piece's tempo, in Listen. The button reads ♩ = 92 in Listen (the pass's tempo
   while speed training climbs), else the mode's picture, its name beside it from 640px; its name says the pace.
