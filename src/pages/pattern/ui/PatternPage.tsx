@@ -1,6 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Play, Star, Trash2 } from 'lucide-react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
@@ -19,7 +18,12 @@ import {
 } from '@/entities/pattern'
 import { piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
+import {
+  deleteOwnPattern,
+  restoreOwnPattern,
+  toggleFavourite,
+  toggleHidden,
+} from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import {
@@ -31,9 +35,9 @@ import {
   MoreMenu,
   NotFound,
   RoundButton,
+  say,
   ScreenHeader,
   type MenuAction,
-  ConfirmDialog,
 } from '@/shared/ui'
 import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { PieceList } from '@/widgets/piece-list'
@@ -58,8 +62,8 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
 /**
  * A pattern's actions for its bar's More: for a built-in one, a pattern of the learner's own from it
  * and hiding it from the Player; for the learner's own, Edit, Publish in library (a page of its own,
- * round 27) and Delete, asked first, last. What they
- * open (the dialogs) and what was done (a line) come with them.
+ * round 27) and Delete, last, done at once with Undo in its toast. What was done (a line) comes
+ * with them.
  */
 function usePatternActions(pattern: BookPattern, name: string) {
   const { t } = useTranslation(['practice', 'songs', 'editor'])
@@ -69,7 +73,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const own = isOwnPatternId(pattern.ref) ? pattern.ref : null
   const builtIn = isPatternId(pattern.ref) ? pattern.ref : null
   const hidden = usePatterns((state) => builtIn !== null && selectIsHidden(builtIn)(state))
-  const [deleteAsked, setDeleteAsked] = useState(false)
+  // Gone at once, with Undo in its toast (R38): nothing to ask, since the Undo puts it back whole.
   const remove = (id: OwnPatternId) => {
     // Leave the page first: it has nothing to show once the pattern is gone, nor Back its screens.
     forget(`/practice/accompaniment/patterns/${id}`)
@@ -77,7 +81,14 @@ function usePatternActions(pattern: BookPattern, name: string) {
       to: '/practice/accompaniment',
       search: { place: 'mine' },
       replace: true,
-    }).then(() => deleteOwnPattern(store, id))
+    }).then(() => {
+      const deleted = deleteOwnPattern(store, id)
+      if (!deleted) return
+      say(t('patterns.deleted', { name }), {
+        label: t('patterns.undo'),
+        onClick: () => restoreOwnPattern(store, deleted),
+      })
+    })
   }
   const actions: MenuAction[] =
     own === null
@@ -130,29 +141,15 @@ function usePatternActions(pattern: BookPattern, name: string) {
             label: t('patterns.delete'),
             icon: Trash2,
             destructive: true,
-            onSelect: () => setDeleteAsked(true),
+            onSelect: () => remove(own),
           },
         ]
-  const dialogs =
-    own === null ? null : (
-      <>
-        <ConfirmDialog
-          open={deleteAsked}
-          onOpenChange={setDeleteAsked}
-          title={t('patterns.deleting.title', { name })}
-          body={t('patterns.deleting.says')}
-          action={t('patterns.deleting.confirm')}
-          cancel={t('patterns.deleting.cancel')}
-          onConfirm={() => remove(own)}
-        />
-      </>
-    )
   const said = (
     <>
       {hidden ? <p className="text-sm text-muted-foreground">{t('patterns.hiddenNote')}</p> : null}
     </>
   )
-  return { actions, dialogs, said }
+  return { actions, said }
 }
 
 /**
@@ -201,7 +198,6 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
           <PieceList groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]} />
         ) : null}
       </div>
-      {more.dialogs}
       {/* The way on: the pattern played in the Player, under its sample's music. */}
       <FloatingActions>
         <FabLink

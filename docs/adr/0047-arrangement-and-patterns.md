@@ -33,7 +33,7 @@ scale's chords, a chromatic walk, a progression, an exercise.
 - **Swing** is a feel: Straight, Light (3:2), Medium (2:1) or Hard (3:1).
 - **The pattern book** holds the built-in patterns and the learner's own (`my-<n>`, never given twice), looked up by
   a ref. Every reader takes the book; a ref it no longer holds plays the music's own pattern. `pt-patterns` keeps the
-  favourites, the hidden and the learner's own. Every built-in pattern has its idea in one line; its source's
+  favourites, the hidden and the learner's own. Deleting one of the learner's own happens at once, with Undo in its toast putting it back in its place with its star (R38). Every built-in pattern has its idea in one line; its source's
   description is its page.
 - **A method book is a book with its own patterns, pieces and course.** `entities/book` holds the books a source
   cites; the method books are Called to Play, Called to Play 2, Боброва and Горшков. Each has its pattern group, its

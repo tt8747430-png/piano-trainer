@@ -392,12 +392,8 @@ export const practice = {
       'Hidden from the Player’s list and from its book. You can still find it under Hidden.',
     edit: 'Edit',
     delete: 'Delete',
-    deleting: {
-      title: 'Delete {{name}}?',
-      says: 'It leaves your patterns and the Player’s list. Songs that used it go back to their own pattern.',
-      confirm: 'Delete',
-      cancel: 'Keep it',
-    },
+    deleted: '“{{name}}” deleted',
+    undo: 'Undo',
     editor: {
       newTitle: 'New pattern',
       editTitle: 'Edit pattern',
