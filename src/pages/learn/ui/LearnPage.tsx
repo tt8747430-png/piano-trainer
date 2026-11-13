@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useCan } from '@/entities/library'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { useSetSearch } from '@/shared/lib'
+import { cn, useSetSearch } from '@/shared/lib'
 import { ScreenHeader, TitleTabs } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
@@ -12,7 +12,9 @@ import {
   CourseShelves,
   currentJourney,
   JourneyLibrary,
+  LearnNav,
   LevelEditor,
+  OwnCourses,
   OWN_LESSONS,
   ShelfEditor,
   type LearnView,
@@ -73,18 +75,46 @@ export function LearnPage() {
         )}
       </div>
     )
+  const shown = own ? OWN_LESSONS : journey
   return (
     <div className="flex flex-col">
       {bar(null)}
-      {/* What to do next first; then the Lessons or the Courses. The days practised are the
-          Profile's. */}
-      <div className="mx-auto mt-4 flex w-full max-w-2xl min-w-0 flex-col gap-8">
-        <ContinueAction />
+      {/* Canvas 128. A phone: the level's chips, Continue, then the level. A laptop: the level list,
+          the level, then Continue and Your courses. The days practised are the Profile's. */}
+      <div className="mt-4 grid min-w-0 gap-8 lg:grid-cols-[15rem_minmax(0,1fr)_18rem] lg:items-start xl:grid-cols-[16rem_minmax(0,1fr)_20rem]">
         {view === 'lessons' ? (
-          <JourneyLibrary journey={own ? OWN_LESSONS : journey} />
-        ) : (
-          <CourseShelves />
-        )}
+          <aside className="hidden lg:sticky lg:top-4 lg:block">
+            <LearnNav view={view} journey={shown} />
+          </aside>
+        ) : null}
+        <div
+          className={cn(
+            'mx-auto flex w-full max-w-2xl min-w-0 flex-col gap-8',
+            view === 'courses' && 'lg:col-span-2 lg:mx-0',
+          )}
+        >
+          {view === 'lessons' ? (
+            <JourneyLibrary
+              journey={shown}
+              lead={
+                <div className="lg:hidden">
+                  <ContinueAction />
+                </div>
+              }
+            />
+          ) : (
+            <>
+              <div className="lg:hidden">
+                <ContinueAction />
+              </div>
+              <CourseShelves />
+            </>
+          )}
+        </div>
+        <aside className="hidden lg:sticky lg:top-4 lg:flex lg:flex-col lg:gap-8">
+          <ContinueAction />
+          {view === 'lessons' ? <OwnCourses /> : null}
+        </aside>
       </div>
     </div>
   )

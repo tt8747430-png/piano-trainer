@@ -1,5 +1,5 @@
 import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
-import { useId } from 'react'
+import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   allJourneys,
@@ -50,12 +50,14 @@ function StepRow({
   journey,
   number,
   numbers,
+  place,
   next,
 }: {
   step: JourneyStep
   journey: Journey
   number: number | undefined
   numbers: ReadonlyMap<StepId, number>
+  place: number
   next: boolean
 }) {
   const { t } = useTranslation('learn')
@@ -87,10 +89,10 @@ function StepRow({
             : null,
         ]
   return (
-    <li>
+    <li className="relative before:absolute before:inset-y-0 before:start-8 before:w-0.5 before:-translate-x-1/2 before:bg-learned/60 rtl:before:translate-x-1/2">
       <LessonRow
         render={<StepLink step={step} />}
-        mark={<Icon className="size-5" strokeWidth={1.75} />}
+        mark={next ? <Icon className="size-5" strokeWidth={1.75} /> : place}
         square={step.kind !== 'lesson'}
         paint={paint}
         done={done}
@@ -109,12 +111,14 @@ function ChapterGroup({
   n,
   journey,
   numbers,
+  places,
   next,
 }: {
   chapter: Chapter
   n: number
   journey: Journey
   numbers: ReadonlyMap<StepId, number>
+  places: ReadonlyMap<StepId, number>
   next: StepId | undefined
 }) {
   const { t } = useTranslation('learn')
@@ -137,7 +141,8 @@ function ChapterGroup({
           {t('journey.count', { learned: done, total: ids.length })}
         </span>
       </h3>
-      <ol className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      {/* One spine joins the level's lessons in order (canvas 128); it locks nothing. */}
+      <ol className="flex flex-col">
         {chapter.steps.map((step) => {
           const stepId = stepIdOf(step)
           return (
@@ -147,6 +152,7 @@ function ChapterGroup({
               journey={journey}
               number={numbers.get(stepId)}
               numbers={numbers}
+              place={places.get(stepId) ?? 0}
               next={stepId === next}
             />
           )
@@ -170,6 +176,11 @@ function LevelLessons({ journey }: { journey: Journey }) {
       .filter((step) => step.kind === 'lesson')
       .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
   )
+  const places = new Map(
+    journey.chapters
+      .flatMap((chapter) => chapter.steps)
+      .map((step, i): [StepId, number] => [stepIdOf(step), i + 1]),
+  )
   return (
     <>
       <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
@@ -188,6 +199,7 @@ function LevelLessons({ journey }: { journey: Journey }) {
           n={i + 1}
           journey={journey}
           numbers={numbers}
+          places={places}
           next={next}
         />
       ))}
@@ -201,24 +213,35 @@ function LevelLessons({ journey }: { journey: Journey }) {
  * chapters as groups of rows, each step a row that opens it; or the learner's own lessons. Every
  * step opens; the order only suggests.
  */
-export function JourneyLibrary({ journey }: { journey: Journey | typeof OWN_LESSONS }) {
+export function JourneyLibrary({
+  journey,
+  lead,
+}: {
+  journey: Journey | typeof OWN_LESSONS
+  /** What comes after the chips and before the level (Continue, on a phone). */
+  lead?: ReactNode
+}) {
   const { t } = useTranslation(['learn', 'common'])
   const setSearch = useSetSearch<LearnView>()
   return (
     <div className="flex flex-col gap-6">
-      <ChoiceChips
-        label={t('learn:journey.label')}
-        value={journey === OWN_LESSONS ? OWN_LESSONS : journey.id}
-        scroll
-        options={[
-          ...allJourneys().map((each) => ({
-            value: each.id,
-            label: t(`common:stage.${each.stage}`),
-          })),
-          { value: OWN_LESSONS, label: t('learn:own.lessons') },
-        ]}
-        onChange={(id) => setSearch({ view: 'lessons', journey: id })}
-      />
+      {/* A laptop chooses the level from its list (LearnNav). */}
+      <div className="lg:hidden">
+        <ChoiceChips
+          label={t('learn:journey.label')}
+          value={journey === OWN_LESSONS ? OWN_LESSONS : journey.id}
+          scroll
+          options={[
+            ...allJourneys().map((each) => ({
+              value: each.id,
+              label: t(`common:stage.${each.stage}`),
+            })),
+            { value: OWN_LESSONS, label: t('learn:own.lessons') },
+          ]}
+          onChange={(id) => setSearch({ view: 'lessons', journey: id })}
+        />
+      </div>
+      {lead}
       {journey === OWN_LESSONS ? <OwnLessons /> : <LevelLessons journey={journey} />}
     </div>
   )
