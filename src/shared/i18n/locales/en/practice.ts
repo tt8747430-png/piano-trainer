@@ -167,6 +167,9 @@ export const practice = {
     changes: 'Chord changes',
     chromatic: 'Chromatically',
     fifths: 'Circle of fifths',
+    overRoot: 'Over the root',
+    diatonically: 'Diatonically, in {{key}}',
+    shuffle: 'Shuffle',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
   },
   // Scales and keys: the run, the chords, the key.

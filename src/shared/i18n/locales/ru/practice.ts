@@ -152,10 +152,13 @@ export const practice: LocaleResources['practice'] = {
       drawn: '{{hand}} на клавишах: {{notes}}',
     },
     practiseIn: 'Отработать {{chord}} в плеере',
-    practiseThese: 'Практиковать эти аккорды в плеере',
+    practiseThese: 'Отработать эти аккорды в плеере',
     changes: 'Смена аккордов',
     chromatic: 'Хроматически',
     fifths: 'По квинтовому кругу',
+    overRoot: 'Над басом',
+    diatonically: 'Диатонически: {{key}}',
+    shuffle: 'Вперемешку',
   },
   scales: {
     // The floating bar's way into the Player with this scale (its board): the scale's first exercise.

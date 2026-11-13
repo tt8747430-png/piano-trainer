@@ -4,15 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import { recordKeyPractised } from '@/features/record-practised'
 import { chordShown, useShownKeys } from '@/features/play-example'
-import {
-  keyParam,
-  numeralOf,
-  numeralsParam,
-  printedSymbol,
-  writtenSymbol,
-  VOICINGS,
-  voicingBar,
-} from '@/shared/lib/music'
+import { printedSymbol, writtenSymbol, VOICINGS, voicingBar } from '@/shared/lib/music'
 import { chordSounds, chordsInTurn, turnStarts } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import {
@@ -87,22 +79,15 @@ export function ChordExplorer({
       }),
     [chord, chosenAt, placed, fingers, symbol],
   )
-  // Several chords practised as written: each a numeral in the staff's key, where each is one.
-  const changes = useMemo(() => {
-    const views = chordViews(chord)
-    if (views.length < 2) return undefined
-    const key = staffKey(chord)
-    const numerals = views.map((view) => {
-      const { root, quality } = viewChord(view).chord
-      return quality ? numeralOf({ root, quality }, key) : null
-    })
-    if (numerals.some((numeral) => numeral === null)) return undefined
-    return {
-      numerals: numeralsParam(numerals.filter((numeral) => numeral !== null)),
-      key: keyParam(key),
-      line: sheet.map((each) => printedSymbol(each.symbol)).join(' · '),
-    }
-  }, [chord, sheet])
+  // The staff's chords, practised as written: each in the staff's key.
+  const staffChords = useMemo(
+    () =>
+      chordViews(chord).flatMap((view) => {
+        const { root, quality } = viewChord(view).chord
+        return quality ? [{ root, quality }] : []
+      }),
+    [chord],
+  )
   // The Next chord sheet: open from the + to add, or from a chord's name to change that chord.
   const [next, setNext] = useState<{ readonly editing: number | null } | null>(null)
   const sounded = (view: ChordView) => {
@@ -220,10 +205,10 @@ export function ChordExplorer({
         </section>
         {quality ? (
           <ChordPractice
-            root={built.root}
-            quality={quality}
+            chord={{ root: built.root, quality }}
             inversion={built.tones.length <= 4 ? chord.inversion : 0}
-            changes={changes}
+            chords={staffChords}
+            staffKey={staffKey(chord)}
           />
         ) : null}
       </div>
