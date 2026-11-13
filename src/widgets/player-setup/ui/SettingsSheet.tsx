@@ -19,6 +19,8 @@ import { useSettingsExtras, type SettingsAct, type SettingsRow } from './setup-e
  * piano. A page unlisted goes last.
  */
 const PAGE_ORDER: readonly string[] = [
+  'transpose',
+  'version',
   'display',
   'playback',
   'hands',
@@ -28,6 +30,8 @@ const PAGE_ORDER: readonly string[] = [
 ]
 /** Each page's tile, one colour a page; the hands at the keys in the piano's sand. */
 const PAGE_PAINT: Readonly<Record<string, Paint>> = {
+  transpose: 'yellow',
+  version: 'lilac',
   display: 'lilac',
   playback: 'grass',
   hands: 'sand',

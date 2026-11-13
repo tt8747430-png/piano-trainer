@@ -1,13 +1,10 @@
-import { ArrowUpDown, Minus, Plus, RotateCcw } from 'lucide-react'
+import { Minus, Plus, RotateCcw } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
-import { keySymbol, printedSymbol, TRANSPOSITION_RANGE, type Key } from '@/shared/lib/music'
-import { Glyph, MenuSection, SwitchRow } from '@/shared/ui'
+import { TRANSPOSITION_RANGE, type Key } from '@/shared/lib/music'
+import { MenuSection, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import { PlayerTool } from '@/widgets/practice-player'
 
 /** How far the music moves, signed as Chordify writes it: `+2`, `−1` with a minus sign. */
 const signed = (semitones: number): string =>
@@ -100,64 +97,5 @@ export function TransposeFields({
         />
       </div>
     </MenuSection>
-  )
-}
-
-/**
- * Transpose (ADR 0105, 0115), the Player's tool: its arrows and the key the music is in (`current`,
- * as printed: `B♭m`), in the accent once moved (`moved` semitones); its popover holds the one control
- * (`TransposeFields`), then what applies it (`children`: the Preview and Transpose).
- */
-export function TransposeTool({
-  current,
-  moved,
-  open,
-  onOpenChange,
-  children,
-  ...fields
-}: TransposeProps & {
-  /** The key the music is in now: the trigger's value. */
-  current: Key
-  /** How far it is played from its own key, in semitones: the trigger's value in the accent where not 0. */
-  moved: number
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  /** Under the control: the Preview and the Transpose button that applies it (R31-P). */
-  children?: ReactNode
-}) {
-  const { t } = useTranslation('player')
-  const keyName = useKeyName()
-  const name = keyName(current)
-  return (
-    <Popover {...(open === undefined ? {} : { open })} onOpenChange={onOpenChange}>
-      <PopoverTrigger
-        render={
-          <PlayerTool
-            icon={ArrowUpDown}
-            label={
-              moved !== 0
-                ? t('transpose.moved', { key: name, by: signed(moved) })
-                : t('transpose.of', { key: name })
-            }
-            name={t('transpose.name')}
-            // The key in its symbol: the label says it in words.
-            value={
-              <Glyph
-                text={printedSymbol(keySymbol(current))}
-                className={cn('font-display', moved !== 0 && 'text-link')}
-              />
-            }
-          />
-        }
-      />
-      <PopoverContent
-        aria-label={t('transpose.title')}
-        align="start"
-        className="max-h-[80dvh] w-88 max-w-[calc(100vw-2rem)] gap-4 overflow-y-auto overscroll-contain p-4"
-      >
-        <TransposeFields {...fields} />
-        {children}
-      </PopoverContent>
-    </Popover>
   )
 }

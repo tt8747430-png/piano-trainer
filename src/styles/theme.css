@@ -911,81 +911,27 @@
       'sheet'
       'status';
   }
-  /* The Player's foot bar (R29 B8) at the screen's foot, under the keys: a row only where it is. */
-  & > [data-area='foot'] {
-    grid-area: foot;
+  /* The Player's transport in its own row at the foot (R31-P): nothing floats over the music. */
+  & > [data-area='transport'] {
+    grid-area: transport;
   }
-  &:has(> [data-area='foot']) {
+  &:has(> [data-area='transport']) {
     grid-template-rows: auto minmax(0, 1fr) auto auto auto;
     grid-template-areas:
       'bar'
       'sheet'
       'status'
       'keys'
-      'foot';
+      'transport';
   }
-  &[data-keys='top']:has(> [data-area='foot']) {
+  &[data-keys='top']:has(> [data-area='transport']) {
     grid-template-rows: auto auto minmax(0, 1fr) auto auto;
     grid-template-areas:
       'bar'
       'keys'
       'sheet'
       'status'
-      'foot';
-  }
-  /* The Player's transport in its own row (R31-P), over the foot: nothing floats over the music. */
-  & > [data-area='transport'] {
-    grid-area: transport;
-  }
-  &:has(> [data-area='transport']) {
-    grid-template-rows: auto minmax(0, 1fr) auto auto auto auto;
-    grid-template-areas:
-      'bar'
-      'sheet'
-      'status'
-      'keys'
-      'transport'
-      'foot';
-  }
-  &[data-keys='top']:has(> [data-area='transport']) {
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
-    grid-template-areas:
-      'bar'
-      'keys'
-      'sheet'
-      'status'
-      'transport'
-      'foot';
-  }
-  /* A laptop's dock is one row (R32): the song tools at its start, the transport centred over it,
-     More at its end. */
-  @media (width >= 80rem) {
-    &:has(> [data-area='transport']):has(> [data-area='foot']) {
-      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
-      grid-template-areas:
-        'bar'
-        'sheet'
-        'status'
-        'keys'
-        'dock';
-    }
-    &[data-keys='top']:has(> [data-area='transport']):has(> [data-area='foot']) {
-      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-      grid-template-areas:
-        'bar'
-        'keys'
-        'sheet'
-        'status'
-        'dock';
-    }
-    &:has(> [data-area='foot']) > :is([data-area='transport'], [data-area='foot']) {
-      grid-area: dock;
-    }
-    &:has(> [data-area='foot']) > [data-area='transport'] {
-      z-index: 1;
-      justify-self: center;
-      align-self: center;
-    }
+      'transport';
   }
   /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group, keeping
      its words (ADR 0108, 0105, 0115). The bar's columns are the screen's, so the line stands in its
@@ -1015,39 +961,21 @@
         'keys keys keys keys'
         'sheet sheet sheet sheet';
     }
-    &:has(> [data-area='foot']) {
+    &:has(> [data-area='transport']) {
       grid-template-rows: auto minmax(0, 1fr) auto auto;
       grid-template-areas:
         'bar bar bar bar'
         'sheet sheet sheet sheet'
         'keys keys keys keys'
-        'foot foot foot foot';
+        'transport transport transport transport';
     }
-    &[data-keys='top']:has(> [data-area='foot']) {
+    &[data-keys='top']:has(> [data-area='transport']) {
       grid-template-rows: auto auto minmax(0, 1fr) auto;
       grid-template-areas:
         'bar bar bar bar'
         'keys keys keys keys'
         'sheet sheet sheet sheet'
-        'foot foot foot foot';
-    }
-    &:has(> [data-area='transport']) {
-      grid-template-rows: auto minmax(0, 1fr) auto auto auto;
-      grid-template-areas:
-        'bar bar bar bar'
-        'sheet sheet sheet sheet'
-        'keys keys keys keys'
-        'transport transport transport transport'
-        'foot foot foot foot';
-    }
-    &[data-keys='top']:has(> [data-area='transport']) {
-      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-      grid-template-areas:
-        'bar bar bar bar'
-        'keys keys keys keys'
-        'sheet sheet sheet sheet'
-        'transport transport transport transport'
-        'foot foot foot foot';
+        'transport transport transport transport';
     }
   }
 }

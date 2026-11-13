@@ -33,7 +33,6 @@ import {
   HandsSheet,
   LoopButton,
   PaceButton,
-  PlayerFoot,
   PlayerArea,
   PlayerScreen,
   PlayerClose,
@@ -49,7 +48,11 @@ import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
 import { PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
 import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
-import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
+import {
+  SettingsExtrasContext,
+  type SettingsExtras,
+  type SettingsPageRow,
+} from '@/widgets/player-setup'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
@@ -66,6 +69,8 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 const NO_ACTS: readonly MenuAction[] = []
 /** A walk or a progression: no tools of its own. */
 const NO_ACTS_MORE: readonly MenuAction[] = []
+/** A walk or a progression: no pages of its own in the Settings. */
+const NO_PAGES: readonly SettingsPageRow[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -90,7 +95,7 @@ export function PlayerLayout({
   performance,
   headings = NO_HEADINGS,
   setup,
-  tools,
+  pages: musicPages = NO_PAGES,
   onEdit,
   piano = true,
   staves = NO_STAVES,
@@ -138,8 +143,8 @@ export function PlayerLayout({
   headings?: readonly string[]
   /** The Settings: its gear, in the bar, and the sheet it opens (`SettingsSheet`). */
   setup: ReactNode
-  /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
-  tools?: ReactNode
+  /** The music's own pages of the Settings: a piece's Transpose and Version; none for a walk. */
+  pages?: readonly SettingsPageRow[]
   /** Edit score, in the Settings' head under the song (its canvas): a piece's own, none for a walk. */
   onEdit?: (() => void) | undefined
   /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
@@ -235,6 +240,7 @@ export function PlayerLayout({
       />
     ),
     pages: [
+      ...musicPages,
       {
         id: 'playback',
         label: t('settingsPage.playback'),
@@ -449,7 +455,7 @@ export function PlayerLayout({
         area="transport"
         className="-mx-gutter border-t border-hairline px-gutter narrow-phone:px-3 xl:border-t-0"
       >
-        <div className="mx-auto w-full max-w-xl">
+        <div className="mx-auto w-full max-w-xl lg:w-fit">
           <PlayerDock
             practice={practice}
             loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
@@ -482,8 +488,6 @@ export function PlayerLayout({
           />
         </div>
       </PlayerArea>
-      {/* The music's own tools (a piece's Key and Version) until they join the Settings. */}
-      {tools ? <PlayerFoot>{tools}</PlayerFoot> : null}
       <HandsSheet
         open={handsOpen}
         onOpenChange={setHandsOpen}

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch, useNavigate } from '@tanstack/react-router'
-import { Highlighter, ListTree } from 'lucide-react'
+import { ArrowUpDown, Highlighter, Layers, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -15,6 +15,7 @@ import {
   useRepertoire,
   type Annotation,
   type Piece,
+  pieceKey,
 } from '@/entities/piece'
 import { clearAnnotations, setAnnotation } from '@/features/annotate'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
@@ -29,7 +30,7 @@ import {
 import { singleStaff } from '@/shared/lib/notation'
 import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
-import { useLocale } from '@/shared/i18n'
+import { useLocale, useKeyName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
 import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
@@ -41,9 +42,8 @@ import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
 import { ClefChoice } from './ClefChoice'
-import { TransposeTool } from './TransposeTool'
-import { VersionSheet, type VersionChoice } from './VersionSheet'
-import { VersionTool } from './VersionTool'
+import { TransposePage } from './TransposePage'
+import { VersionPage, type VersionChoice } from './VersionPage'
 import { AnnotateBar } from './AnnotateBar'
 
 /** A song with no typed marks. */
@@ -71,8 +71,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
   } = usePlayer(piece, search, setSearch)
   // The Version sheet (R29 B8): the learner's version or the app's, the voice's staves heard and
   // shown or not, at a level.
-  const [versionOpen, setVersionOpen] = useState(false)
-  const [transposing, setTransposing] = useState(false)
+  const keyName = useKeyName()
   // Annotate (R29 B8): the learner's typed marks, shown as Display says; the bar while marking.
   const pieces = usePiecesStoreApi()
   const marks = usePieces((state) => state.annotations[piece.id]) ?? NO_MARKS
@@ -202,23 +201,44 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             onSwing={player.setSwing}
           />
         }
-        // Chordify's toolbar after the View (ADR 0105): the key the piece is played in, and Simplify.
-        tools={
-          <>
-            <TransposeTool
-              piece={piece}
-              tonic={choice.tonic}
-              signature={choice.signature}
-              chordSymbols={choice.chordSymbols}
-              onChange={changeSetup}
-              open={transposing}
-              onOpenChange={setTransposing}
-            />
-            {controls.has('simplify') ? (
-              <VersionTool version={choice.version} onOpen={() => setVersionOpen(true)} />
-            ) : null}
-          </>
-        }
+        // The music's own pages of the Settings (its canvas's Song settings): the key it is played
+        // in, and the version, each its row with what it is set to.
+        pages={[
+          {
+            id: 'transpose',
+            label: t('player:transpose.title'),
+            icon: ArrowUpDown,
+            value: keyName({ tonic: choice.tonic, minor: pieceKey(piece).minor }),
+            content: (
+              <TransposePage
+                piece={piece}
+                tonic={choice.tonic}
+                signature={choice.signature}
+                chordSymbols={choice.chordSymbols}
+                onChange={changeSetup}
+              />
+            ),
+          },
+          ...(controls.has('simplify')
+            ? [
+                {
+                  id: 'version',
+                  label: t('player:version.title'),
+                  icon: Layers,
+                  value: t(`player:version.level.${choice.version}`),
+                  content: (
+                    <VersionPage
+                      chosen={chosenVersion}
+                      own={own}
+                      voice={singles.length > 0}
+                      simplifies={simplifies}
+                      onChoose={chooseVersion}
+                    />
+                  ),
+                },
+              ]
+            : []),
+        ]}
         more={more}
         musicXml={files.musicXml}
         share={share}
@@ -254,15 +274,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             onSelect: () => setAnnotating(true),
           },
         ]}
-      />
-      <VersionSheet
-        open={versionOpen}
-        onOpenChange={setVersionOpen}
-        chosen={chosenVersion}
-        own={own}
-        voice={singles.length > 0}
-        simplifies={simplifies}
-        onChoose={chooseVersion}
       />
       <SectionsSheet
         starts={starts}
