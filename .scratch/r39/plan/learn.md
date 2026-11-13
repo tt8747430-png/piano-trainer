@@ -39,6 +39,24 @@ are, what is next, and that every lesson can still be opened.
     asked; Delete lesson / Delete course asks, as it reaches every learner, naming the loss in its dialog; no line of
     explanation under any row.
 
+- **Your lessons and courses, organised; one New; their Settings** (canvas 165, owner 2026-11-13: "refactor further
+  the settings and what bout the new lessons or new courses actions and such things and organizing my lessons and
+  cources. and refactor the courses settings and lessons settings and their overviews pages properly"):
+  - **A page of their own** (`/learn/yours`, from See all beside Learn's "Your lessons and courses", Back to Learn),
+    in the app's library shape: search; All · Lessons · Courses; Sort (Recent, Name, Your order); each course a row
+    that folds open to its lessons; lessons in no course below; every row's ⋯ (Open, Rename, Duplicate, In courses
+    for a lesson, Settings, Delete); Delete at once with Undo. The + floats on a phone; New beside the search on a
+    laptop.
+  - **One tile per kind, everywhere:** a lesson a peach square with a book, sage with a check once learned; a course
+    its cover's paint with the library glyph. Learn's own rows wear the same.
+  - **One New sheet** for both (Flat's New score): Lesson | Course, Name, then In a course (a lesson) or Cover (a
+    course), one Create at its foot; Cancel at its top. Learn keeps one row, "New lesson or course"; the two New rows
+    and their two sheets are gone.
+  - **Own lesson's Settings:** Read as (One page · A section at a time, radio cards); The lesson: Name, In courses
+    (a checklist), Duplicate; Share link; Progress: Reset progress (Undo); Delete lesson apart.
+  - **Own course's Settings:** The course: Name, What it is for, Cover, Lessons, Duplicate; Share link; Progress;
+    Delete course apart. Each row says its value and opens in place (a sheet on a phone, a dialog on a laptop).
+
 - **"A library, not a path"** (feedback log, Learn and the editors): the levels stay chips (Beginner, Intermediate,
   Advanced, Professional, Your lessons) and any lesson opens from any state. The word "journey" stays out of the
   interface.

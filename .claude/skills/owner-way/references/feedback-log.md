@@ -227,6 +227,9 @@ owner's, typos fixed.
 - **Canvas 164:** "refactor also their lessons pages and controls and features and the editing … and their
   settings": a course's name in its bar and two columns on a laptop, its lessons the level's line; Learned a labelled
   pill; Settings titled in the bar, Reset progress with Undo, Delete asking, no line under a row (2026-11-13).
+- **Canvas 165:** "organizing my lessons and cources … the new lessons or new courses actions … their settings":
+  the learner's own get a library page (search, kinds, sort, courses folding to their lessons, ⋯ per row, +), one
+  New sheet for a lesson or a course, and Settings whose rows say their value and open in place (2026-11-13).
 
 ## Practice
 

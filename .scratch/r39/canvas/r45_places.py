@@ -33,6 +33,11 @@ PLACES_PRE = 'const LEVELS = ' + json.dumps(LEVELS, ensure_ascii=False) + ';\nco
 
 CHECKI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"></path></svg>'
 BOOKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>'
+FOLDI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 6 4 14"></path><path d="M12 6v14"></path><path d="M8 8v12"></path><path d="M4 4v16"></path></svg>'  # Lucide library: a course
+NEWJS = r'''newOn: st.sheet === 'new', openNew: () => set({ sheet: 'new' }), nkinds: seg(['Lesson', 'Course'], st.nk ?? 'Lesson', (x) => set({ nk: x })), isNL: (st.nk ?? 'Lesson') === 'Lesson', isNC: st.nk === 'Course', namePh: st.nk === 'Course' ? 'New course' : 'New lesson',
+      intos: chipsOf(['No course', 'Sunday service set', 'Jazz on the side'], st.into ?? 'No course', (x) => set({ into: x })),
+      covers: ['Sage', 'Sky', 'Honey', 'Lilac', 'Peach'].map((c, i) => ({ c, bg: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1', '#F3D2C8'][i], ring: c === (st.cover ?? 'Sage') ? '0 0 0 2.5px #332921' : 'inset 0 0 0 1px rgba(51,41,33,.08)', pick: () => set({ cover: c }) })),
+      createL: st.nk === 'Course' ? 'Create course' : 'Create lesson', create: () => set({ sheet: null, toast: st.nk === 'Course' ? 'Course created' : 'Lesson created' }),'''
 LEARN_JS = js(PLACES_PRE + r'''
     const view = st.view ?? 'Lessons', lv = st.lv ?? 0, own = lv === 4, editing = !!st.editing, gone = st.gone ?? {};
     const L = LEVELS[Math.min(lv, 3)]; let idx = 0;
@@ -43,7 +48,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       const got = rows.filter((r) => r.done).length; return { t: (ci + 1) + ' · ' + c.t, rows, count: got + '/' + rows.length, add: () => set({ toast: 'Lesson added: New lesson' }), menu: () => set({ toast: 'Chapter: Rename · Remove chapter' }) }; });
     const nxt = chapters.flatMap((c) => c.rows).find((r) => r.next);
     const sh = st.sheet ?? null, wk = st.wk ?? 4;
-    return { ...common(st, set), nlOn: sh === 'newLesson', openNewLesson: () => set({ sheet: 'newLesson' }), ncOn: sh === 'newCourse', openNewCourse: () => set({ sheet: 'newCourse' }), noOn: sh === 'newOwn', openNewOwn: () => set({ sheet: 'newOwn' }),
+    return { ...common(st, set), ncOn: sh === 'newCourse', openNewCourse: () => set({ sheet: 'newCourse' }), ''' + NEWJS + r'''
       created: (w) => () => set({ sheet: null, toast: w }), mkLesson: () => set({ sheet: null, toast: 'Created: New lesson' }), mkCourse: () => set({ sheet: null, toast: 'Created: New course' }),
       ncShelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], st.ncShelf ?? 'Beginner courses', (x) => set({ ncShelf: x })), ncLevels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], st.ncLevel ?? 'Beginner', (x) => set({ ncLevel: x })),
       wkL: wk + ' weeks', fewerW: () => set({ wk: Math.max(1, wk - 1) }), moreW: () => set({ wk: wk + 1 }), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false }), addChapter: () => set({ toast: 'Chapter added: Chapter 6' }), status: 'Saved · not published', toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), isLessons: view === 'Lessons', isCourses: view === 'Courses', toLessons: () => set({ view: 'Lessons' }), toCourses: () => set({ view: 'Courses' }),
@@ -88,13 +93,18 @@ COURSEROWS = (f'<div style="display: flex; flex-direction: column; gap: 4px; pad
               f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openNewCourse}}}}" style="height: 52px; border: 0; border-radius: 14px; background: transparent; box-shadow: inset 0 0 0 1.5px {LINE}; color: {INK}; font: inherit; font-size: 16px; font-weight: 600">New course</button></sc-if>')
 LEDITH = (f'<header style="flex: none; min-height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 16px"><button type="button" onClick="{{{{done}}}}" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 700">Done</button><span style="flex: 1; text-align: center; font-size: 13px; color: {SOFT}">{{{{status}}}}</span><button type="button" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish…</button></header>')
 LTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 112px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px"><span style="flex: 1">{{{{toastT}}}}</span><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>')
-NLBODY = f'{CAPS("Name")}<input placeholder="New lesson" aria-label="Name" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"><span style="font-size: 13px; color: {SOFT}">A name needs 1 to 80 characters.</span><div style="display: flex">{BTN("Create lesson", "mkLesson", "", "primary", 50)}</div>'
-NOBODY = f'{CAPS("Name")}<input placeholder="New course" aria-label="Name" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"><div style="display: flex">{BTN("Create course", "mkCourse", "", "primary", 50)}</div>'
+# One New sheet for both: what it is, its name, then the one thing it needs (Flat's New score; ruling "Creating anything is a New sheet")
+NEWBODY = (f'<div style="display: flex">{SEGC("nkinds", 44, 15).replace("flex: none; display: flex", "flex: 1; display: flex", 1)}</div>{CAPS("Name")}'
+           f'<input aria-label="Name" placeholder="{{{{namePh}}}}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
+           f'<sc-if value="{{{{isNL}}}}" hint-placeholder-val="{{{{true}}}}">{CAPS("In a course")}{CHIPS("intos")}</sc-if>'
+           f'<sc-if value="{{{{isNC}}}}" hint-placeholder-val="{{{{false}}}}">{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 10px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
+           f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div></sc-if>'
+           f'<div style="display: flex; margin-top: 6px">{BTN("{{createL}}", "create", "", "primary", 50)}</div>')
 NCBODY = (f'{CAPS("Name")}<input placeholder="New course" aria-label="Name" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">{CAPS("Shelf")}{KCHIPS("ncShelves")}{CAPS("Level")}{KCHIPS("ncLevels")}{CAPS("Length")}'
           f'<div style="display: flex; align-items: center; gap: 8px"><button type="button" aria-label="Fewer weeks" onClick="{{{{fewerW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">−</button><span style="min-width: 80px; text-align: center; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{wkL}}}}</span><button type="button" aria-label="More weeks" onClick="{{{{moreW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">+</button></div>'
           f'<div style="display: flex">{BTN("Create course", "mkCourse", "", "primary", 50)}</div>')
-LSHEETS = BSHEET('nlOn', 'New lesson', NLBODY) + BSHEET('ncOn', 'New course', NCBODY) + BSHEET('noOn', 'New course', NOBODY)
-LPOPS = POPOVER('nlOn', 'New lesson', NLBODY, 'right: 460px; top: 300px', 380) + POPOVER('ncOn', 'New course', NCBODY, 'left: 600px; top: 200px', 480) + POPOVER('noOn', 'New course', NOBODY, 'right: 60px; top: 340px', 380)
+LSHEETS = BSHEET('newOn', 'New', NEWBODY, 'Cancel') + BSHEET('ncOn', 'New course', NCBODY)
+LPOPS = POPOVER('newOn', 'New', NEWBODY, 'right: 60px; top: 300px', 440) + POPOVER('ncOn', 'New course', NCBODY, 'left: 600px; top: 200px', 480)
 
 # ═════ Learn, refactored (canvas 163; owner: "make proper refactor of the lessons and cources and the header and the
 # structure and organization"): one overview in Practice's shape (Continue, Levels, Courses, your own), a page per
@@ -126,15 +136,16 @@ COURSESTRIP = (f'<div class="nos" style="flex: none; display: flex; gap: 12px; o
 COURSEGRID = (f'<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="5">{COURSECARD("auto", "CourseLaptop.dc.html")}</sc-for></div>')
 SEEALL = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none">See all</a>'
 PLUSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
-def OWNROW(t, sub, href):
-    return (f'<a href="{href}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {PEACH}; display: flex; align-items: center; justify-content: center">{BOOKI.replace("22", "20")}</span>'
+def OWNROW(t, sub, href, kind='lesson'):
+    bg, fg, ic = {'lesson': (PEACH, INK, BOOKI.replace("22", "20")), 'learned': (SAGE, '#2F5A35', CHECKI), 'course': (SAGE, INK, FOLDI)}[kind]
+    return (f'<a href="{href}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {bg}; color: {fg}; display: flex; align-items: center; justify-content: center">{ic}</span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 NEWROW = lambda t, act: f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; box-shadow: inset 0 -1px 0 {FILL}"><span style="flex: none; width: 44px; display: flex; justify-content: center">{PLUSI}</span>{t}</button>'
 def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
-    head = H2("Your lessons and courses") if lap else ''
-    return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("The ii–V–I in my hymns", "Lesson · 3 sections", lh)}{OWNROW("Warm-up before church", "Lesson · 2 sections · learned", lh)}'
-            f'{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch)}{NEWROW("New lesson", "openNewLesson")}{NEWROW("New course", "openNewOwn")}</div>')
+    head = H2("Your lessons and courses", SEEALL("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
+    return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("The ii–V–I in my hymns", "Lesson · 3 sections", lh)}{OWNROW("Warm-up before church", "Lesson · 2 sections · learned", lh, "learned")}'
+            f'{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course")}{NEWROW("New lesson or course", "openNew")}</div>')
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 INFOBODY = f'<p style="margin: 0; font-size: 16px; line-height: 1.5">Each course is a few weeks of lessons with songs to read at the end. Start with one on your shelf; the levels keep going beside it.</p>'
 MOREL = GROUP(('action', 'Edit', 'editOn'), bg=SHEET)
@@ -142,7 +153,7 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 
 # Learn: the overview
 lph = (f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 14px">'
-       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{H2("Your lessons and courses")}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
+       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
 llm = (f'{LTITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 18px">'
        f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{CONT}{H2("Levels")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 14px">{OWNGROUP(True)}</div></div>'
        f'{H2("Courses", SEEALL("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
