@@ -38,7 +38,7 @@ const ITEM = 'min-h-11 gap-3 rounded-control px-3 text-base [&_svg:not([class*=s
 /**
  * A pull-down button (Apple's), a real menu (Base UI's Menu, memory-palaces' `FlyoutMenu`): a button
  * that opens commands, moved through with the arrow keys and typed to; each a 44px item, none that
- * cannot be done here (`hidden`); groups named small with a separator between, a checked item ticked, the
+ * cannot be done here (`hidden`), and no button when none is left; groups named small with a separator between, a checked item ticked, the
  * destructive ones last in the warning colour. Commands only: a setting is a row on a page, a choice
  * a pop-up (`Dropdown`). Its button is an outline one holding `trigger`, or `render` in its place (a
  * round icon named for a screen reader); `ref` is that button.
@@ -97,6 +97,8 @@ export function ActionMenu({
     if (last && last.name === action.group) last.actions.push(action)
     else groups.push({ name: action.group, actions: [action] })
   }
+  // A menu with nothing doable here is no menu: its button goes too.
+  if (shown.length === 0) return null
   return (
     <DropdownMenu
       // Not modal (memory-palaces' `FlyoutMenu`): the page is not locked behind it.

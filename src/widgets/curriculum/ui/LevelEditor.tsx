@@ -84,7 +84,7 @@ function ChapterHead({
             label: t('edit.journey.removeChapter'),
             icon: Trash2,
             destructive: true,
-            disabled: count === 1,
+            hidden: count === 1,
             onSelect: onRemove,
           },
         ]}
