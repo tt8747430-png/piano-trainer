@@ -1,8 +1,18 @@
 import { Link, useNavigate } from '@tanstack/react-router'
+import { Link2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { groupTile, NewGroupSheet, useGroupsData } from '@/features/share-folder'
-import { BackButton, MoreMenu, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import {
+  BackButton,
+  NewDial,
+  NewMenu,
+  RoundButton,
+  RowLink,
+  ScreenHeader,
+  SettingsGroup,
+  type MenuAction,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { GroupsState, RowsLoading } from './GroupsState'
 import { JoinLinkSheet } from './JoinLinkSheet'
@@ -11,10 +21,10 @@ import { JoinLinkSheet } from './JoinLinkSheet'
 type Open = 'new' | 'join' | null
 
 /**
- * Groups (R30 S6, R32-C): the learner's groups and those they belong to, each a row with its picture
- * on its paint, its members and folders counted, Owner where it is theirs; New group under them; More
- * holds Join with a link. Signed out it says groups need an account, with Sign in; loading, failed
- * and offline each say so.
+ * Groups (R30 S6, R32-C; canvas 133): Your groups, each a row with its picture on its paint, its
+ * members and folders counted, Owner where it is theirs; then the folders shared with the learner by
+ * others; Join with a link the bar's link; New group the one honey + (New on a laptop's bar). Signed
+ * out it says groups need an account, with Sign in; loading, failed and offline each say so.
  */
 export function GroupsPage() {
   const { t } = useTranslation('songs')
@@ -22,18 +32,30 @@ export function GroupsPage() {
   const { data, reload } = useGroupsData()
   const [open, setOpen] = useState<Open>(null)
   const signedIn = data.kind !== 'guest'
+  const making: readonly MenuAction[] = [
+    { key: 'new', label: t('groups.new'), icon: Plus, onSelect: () => setOpen('new') },
+  ]
+  const ready = data.kind === 'ready' && data.groups.length > 0
+  const sharedWithMe = data.kind === 'ready' ? data.shared.filter((each) => !each.mine) : []
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
       <ScreenHeader
         title={t('groups.title')}
         back={<BackButton />}
-        more={
+        tools={
           signedIn ? (
-            <MoreMenu
-              actions={[
-                { key: 'join', label: t('groups.joinLink'), onSelect: () => setOpen('join') },
-              ]}
-            />
+            <>
+              <RoundButton
+                label={t('groups.joinLink')}
+                icon={Link2}
+                onClick={() => setOpen('join')}
+              />
+              {ready ? (
+                <span className="max-lg:hidden">
+                  <NewMenu label={t('groups.new')} actions={making} />
+                </span>
+              ) : null}
+            </>
           ) : null
         }
       />
@@ -58,7 +80,7 @@ export function GroupsPage() {
         />
       ) : (
         <>
-          <SettingsGroup flush title={t('groups.title')} info={t('groups.about')}>
+          <SettingsGroup flush title={t('groups.yourGroups')} info={t('groups.about')}>
             {data.groups.map((group) => {
               const folders = data.shared.filter((each) => each.groupId === group.id).length
               return (
@@ -76,9 +98,28 @@ export function GroupsPage() {
               )
             })}
           </SettingsGroup>
-          <Button variant="soft" size="lg" className="self-start" onClick={() => setOpen('new')}>
-            {t('groups.new')}
-          </Button>
+          {sharedWithMe.length > 0 ? (
+            <SettingsGroup flush title={t('groups.sharedWithMe')}>
+              {sharedWithMe.map((folder) => (
+                <RowLink
+                  key={folder.id}
+                  {...groupTile(folder)}
+                  title={folder.name}
+                  detail={[
+                    t('folder.songCount', { count: folder.songs.length }),
+                    t('groups.sharedBy', {
+                      name: folder.ownerName,
+                      group: data.groups.find((each) => each.id === folder.groupId)?.name ?? '',
+                    }),
+                  ].join(' · ')}
+                  render={
+                    <Link to="/songs/shared-folders/$sharedId" params={{ sharedId: folder.id }} />
+                  }
+                />
+              ))}
+            </SettingsGroup>
+          ) : null}
+          <NewDial className="lg:hidden" label={t('groups.new')} actions={making} />
         </>
       )}
       <NewGroupSheet

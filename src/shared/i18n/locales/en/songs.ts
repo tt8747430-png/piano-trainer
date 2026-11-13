@@ -129,6 +129,7 @@ export const songs = {
     joinLinkOpen: 'Open',
     joinLinkWrong: 'This isn’t a Piano Trainer invite link.',
     sharedWithMe: 'Shared with me',
+    yourGroups: 'Your groups',
     sharedBy: 'Shared by {{name}} · {{group}}',
     yours: 'Shared by you · {{group}}',
     viewOnly: 'View only',

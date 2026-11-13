@@ -129,6 +129,7 @@ export const songs: LocaleResources['songs'] = {
     joinLinkOpen: 'Открыть',
     joinLinkWrong: 'Это не ссылка-приглашение Piano Trainer.',
     sharedWithMe: 'Доступно мне',
+    yourGroups: 'Ваши группы',
     sharedBy: 'Поделился(-ась) {{name}} · {{group}}',
     yours: 'Вы поделились · {{group}}',
     viewOnly: 'Только просмотр',
