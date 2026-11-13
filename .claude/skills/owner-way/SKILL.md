@@ -74,11 +74,20 @@ wins there.
 - **Design first, then build to it** (owner, 2026-11-13: "why are you improving the current app and not first make
   design and after that implement the design as close as possible. do like this"): each area is redrawn on the
   canvas first, as its ideal (every page, sheet and state, phone and laptop, Day and Night), published, and only
-  then is the app built to match the drawing as closely as it can, checked against it shot by shot at both sizes.
-  No change to a screen's look or behaviour is made in the app before it is on the canvas. The build is the
-  drawing, with no backwards compatibility (owner, 2026-11-13: "you should refactor with no backwards compatibility,
-  you should do the design and ui as the design artifact says and as close as possible"): render the area's boards
-  beside the app's shots, list every difference, rebuild each, and delete the old shape.
+  then is the app built to it. No change to a screen's look or behaviour is made in the app before it is on the
+  canvas. The build is the drawing, with no backwards compatibility (owner, 2026-11-13: "you should refactor with no
+  backwards compatibility, you should do the design and ui as the design artifact says").
+- **Port from the board's code, exactly** (owner, 2026-11-13: "why dont you follow the design artifact and dont read
+  its code how it implements and does things to create accurate redesign of our app … what is with this white border
+  around the actions"): before writing a line, open the board's generator in `.scratch/r39/canvas/` and every kit
+  helper it calls (`r41_kit.py`: `DOCK`, `GROUP`, `SEGC`, `STEPPER`, `BTN`, `PLAYBTN`, `CARD`, `BSHEET`; `calm_kit.py`'s
+  colours; `keyface.py` for the piano), and copy its structure, order, words, sizes, paddings, gaps, radii, colours,
+  shadows, blur and fonts value for value. The app's kit and tokens change to the board's values; the board is never
+  bent to fit an existing component, and "the kit already has one" is no reason to keep a part that looks different.
+  What the board draws and the app lacks is built; what the app shows and the board does not is deleted. Done is
+  measured, not glanced at: the board and the app screen are both measured in the browser (computed size, padding,
+  radius, colour of each part) and every number matches; a screenshot side by side is the last check, not the only
+  one.
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.

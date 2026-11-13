@@ -107,7 +107,8 @@ a Performance becomes a Score (`notation`) or sounds (`schedule`).
 ## The places
 
 This is the app as built. The canvas runs ahead: a ruling drawn but not yet ported is in its area's spec
-(`.scratch/<round>/plan/`) and the feedback log, and is built from there.
+(`.scratch/<round>/plan/`) and the feedback log, and is built from there, from the board's code value for value
+(`owner-way`, Port from the board's code): the kit changes to the board, never the board to the kit.
 
 **Learn · Songs · Practice · Profile**; `app/router.tsx` has every route.
 

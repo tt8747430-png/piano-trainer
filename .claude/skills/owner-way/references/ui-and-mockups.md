@@ -9,8 +9,10 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
 3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
    reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
-4. **Use the kit.** Read `shared/ui/index.ts` first. Tokens only, never a raw value. A new kind of thing joins the kit only
-   when it has a second user.
+4. **Build what the board's code draws** (`SKILL.md`, Port from the board's code): read the board's generator and
+   its kit helpers first, then `shared/ui/index.ts`. Where a kit part or token differs from the board, the kit part
+   or token changes to the board's values, everywhere it is used; a part the board draws that the kit lacks is
+   built. Never keep an app part because it exists.
 5. **Write the test first,** then the screen; in a loop or a refactor, no tests (`SKILL.md`, Loops and refactors).
 6. **Every state:** loading, empty, error, offline; every control's hover, focus, disabled.
 7. **Both languages,** in the musician's terms, the Russian written rather than translated word for word.
@@ -112,7 +114,8 @@ Numbered, so the owner can answer "1. yes 2. …", and in this order:
 ### Making it
 
 1. Load `artifact-design`; load `artifact-capabilities` for the feedback boxes, which need saved state.
-2. Copy tokens from `src/styles/tokens.css`; shoot the real screen and redraw from it.
+2. Copy tokens from `src/styles/tokens.css`; shoot the real screen to know what it does today. A port runs the
+   other way: from the board's code to the app, never from the app's look to the board.
 3. Publish to the one canvas with the Artifact tool and give the link; every later turn updates it, keeping its URL.
 
 ### Testing a mockup twice

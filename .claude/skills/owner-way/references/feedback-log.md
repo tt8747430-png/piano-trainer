@@ -631,6 +631,12 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Ports copy the board's code, not its picture (2026-11-13):** "why dont you follow the design artifact and dont
+  read its code how it implements and does things to create accurate redign of our app. the chords page doesnt look
+  like the design at all, and the same with other components like the piano or the floating actions what is with
+  this white border around the actions": every port reads the board's generator and its kit helpers and copies their
+  values; the dock is the board's glass capsule (68 tall, 8 inside, 50px pills, the 52px honey circle), never an
+  opaque white rim round grey pills.
 - **The title is in the bar, never an empty bar over it (2026-11-13):** "I dont like that the header is occupied only by
   these two buttons no the right and the rest is just empty": the title sits at the bar's left, the actions at its
   right, one row, on every place and page, phone and laptop.
