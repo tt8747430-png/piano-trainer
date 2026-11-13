@@ -113,42 +113,76 @@ export function ScreenHeader({
         scrolled ? 'border-hairline' : 'border-transparent',
       )}
     >
-      <div className="flex min-h-14 items-center gap-1.5 py-1 sm:gap-2">
-        {back ? <div className="shrink-0 print:hidden">{back}</div> : null}
-        <div className="flex min-w-0 flex-1 items-center gap-0.5">
-          <h1
-            {...pageHeading}
-            className={cn(
-              'min-w-0 font-sans outline-none',
-              // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
-              // on a phone where two lines say it all.
-              'line-clamp-2 leading-tight tracking-tight text-balance wrap-break-word',
-              // The boards' bar (canvas 133): a place's name large and bold, a page's semibold.
-              large ? 'text-[1.625rem] font-bold' : 'text-[1.0625rem] font-semibold sm:text-lg',
-              titleOnPage && 'sr-only',
-              // A place's views say where it is: its name stays the page's heading, unseen.
-              views && 'sr-only',
-            )}
-          >
-            {title}
-          </h1>
-          {views}
-          {edit ? (
-            edit.editing ? (
-              <EditDone action={edit} />
-            ) : (
-              <EditPencil onEdit={edit.onEdit} label={edit.label} />
-            )
+      {large ? (
+        <div className="flex min-h-14 items-center gap-1.5 py-1 sm:gap-2">
+          {back ? <div className="-ms-1 shrink-0 print:hidden">{back}</div> : null}
+          <div className="flex min-w-0 flex-1 items-center gap-0.5">
+            <h1
+              {...pageHeading}
+              className={cn(
+                'min-w-0 font-sans outline-none',
+                large
+                  ? 'line-clamp-2 text-[1.625rem] leading-tight font-bold tracking-tight text-balance wrap-break-word'
+                  : 'truncate text-[1.0625rem] font-semibold',
+                titleOnPage && 'sr-only',
+                // A place's views say where it is: its name stays the page's heading, unseen.
+                views && 'sr-only',
+              )}
+            >
+              {title}
+            </h1>
+            {views}
+            {edit ? (
+              edit.editing ? (
+                <EditDone action={edit} />
+              ) : (
+                <EditPencil onEdit={edit.onEdit} label={edit.label} />
+              )
+            ) : null}
+          </div>
+          {tools || settings || more ? (
+            <div className="-me-1.5 ms-auto flex shrink-0 items-center print:hidden">
+              {tools}
+              {settings}
+              {more}
+            </div>
           ) : null}
         </div>
-        {tools || settings || more ? (
-          <div className="ms-auto flex shrink-0 items-center gap-1 sm:gap-1.5 print:hidden">
+      ) : (
+        // The canvas's TOP: Back at the start, the title centred on the screen, the acts at the end.
+        <div className="grid min-h-11 grid-cols-[minmax(max-content,1fr)_minmax(0,auto)_minmax(max-content,1fr)] items-center">
+          <div className="-ms-1 flex justify-self-start print:hidden">{back}</div>
+          <div className="flex min-w-0 items-center justify-center gap-0.5 px-1">
+            <h1
+              {...pageHeading}
+              className={cn(
+                'min-w-0 font-sans outline-none',
+                large
+                  ? 'line-clamp-2 text-[1.625rem] leading-tight font-bold tracking-tight text-balance wrap-break-word'
+                  : 'truncate text-[1.0625rem] font-semibold',
+                titleOnPage && 'sr-only',
+                // A place's views say where it is: its name stays the page's heading, unseen.
+                views && 'sr-only',
+              )}
+            >
+              {title}
+            </h1>
+            {views}
+            {edit ? (
+              edit.editing ? (
+                <EditDone action={edit} />
+              ) : (
+                <EditPencil onEdit={edit.onEdit} label={edit.label} />
+              )
+            ) : null}
+          </div>
+          <div className="-me-1.5 flex items-center justify-self-end print:hidden">
             {tools}
             {settings}
             {more}
           </div>
-        ) : null}
-      </div>
+        </div>
+      )}
     </header>
   )
   return header

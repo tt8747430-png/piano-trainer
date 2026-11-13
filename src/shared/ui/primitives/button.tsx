@@ -21,8 +21,8 @@ const buttonVariants = cva(
         soft: 'border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
         surface:
           'rounded-full border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
-        // A screen's bar's round button: a soft fill, no frame, the fill deepening under the pointer.
-        bar: 'rounded-full bg-muted/70 text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen',
+        // A screen's bar's button, the canvas's IB: bare, its 22px icon in ink, the muted fill under the pointer.
+        bar: 'rounded-full bg-transparent text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen [&_svg:not([class*=size-])]:size-5.5',
         link: 'text-base font-semibold text-link underline-offset-4 hover:underline',
         // A toolbar's round button, the score's bar's every one (ADR 0115, R31-E): no frame of its own on the
         // bar's band, the muted fill while it is hovered, open or pressed.
