@@ -183,9 +183,10 @@ export function TappableStaff({
                   </span>
                 ))
               : null}
-            {/* A passage's last line keeps its bar however short. Fingerings take the band's place
-                over the staff, so a fingered line plays whole or a note at a time. */}
-            {!fingers && (bars.length > 1 || firstBar > 1)
+            {/* A passage's last line keeps its bar however short, and a lone chord its band, which
+                prints its name. Fingerings take the band's place over the staff, so a fingered line
+                plays whole or a note at a time. */}
+            {!fingers && (bars.length > 1 || firstBar > 1 || bars[0]?.symbol !== undefined)
               ? layout.measures.map((measure, i) => {
                   const bar = bars[i]
                   if (!bar) return null

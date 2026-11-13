@@ -247,3 +247,5 @@ boards in and adds the links; run it after any generator. The old Songs canvas s
 - Loop round 6, Player (2026-11-13): a long Russian title (a study) and the foot menus shot at 402 and 1710. The View panel said under its title "How the song is shown while you play", an explanation line the owner rules out; it is gone, en and ru.
 
 - Loop round 6, Profile: badge goals read as targets (Learn 1 song / Выучите 1 песню), since "Not started · 1 song learned" read as reached; scales and library goals named truly (Play in n keys; Make n songs or folders). Create account, Sign in, Notifications: nothing to change (Google sign-in is the owner's accounts decision).
+- Loop round 6, Search: F#m7, Bbmaj7 (shown in the app's one spelling, B♭Maj7), no results with suggestions, empty: nothing to change.
+- Loop round 7, Learn: a lone chord on a lesson staff (The dominant 7th: G7) printed no name although Chord symbols was on: the bar band showed only for two bars or more; a lone chord now keeps its band.

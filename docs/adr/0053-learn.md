@@ -55,7 +55,7 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   (a lesson leaves every own course, its progress with it; a course's lessons stay). No Share link:
   sharing them is drawn later. Search finds them.
 - **A lesson is a worksheet**: prose, steps and notes, and examples that play in place on the lesson's keys: chords
-  as the lesson writes them, one quality on twelve roots, a scale, an interval's card, a line of notes on its staff,
+  as the lesson writes them (on a staff, each bar's band printing its chord's name, a lone chord's too), one quality on twelve roots, a scale, an interval's card, a line of notes on its staff,
   voicings written hand by hand, a progression's row, and a pattern heard over its piece's first line (a pattern is
   only ever heard on chords). A question is answered on the keys, a chord's notes in any octave. Links name what they
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
