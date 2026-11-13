@@ -485,7 +485,7 @@ export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voic
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'piano',
+  keySize: 'fit',
   swipe: 'scroll',
   namedKeys: 'c',
   markNotes: true,

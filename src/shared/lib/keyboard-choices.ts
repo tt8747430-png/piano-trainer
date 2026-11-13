@@ -1,9 +1,9 @@
 /** The keyboard settings' choices, as the presentational keyboard takes them; the settings entity saves them. */
 export const KEY_SIZES = ['piano', 'fit', 'large'] as const
 /**
- * How wide the white keys are, smallest first (R34): all 88 keys fill the width and never scroll (the
- * default, Songscription's), the music's range fills it, or large keys; the last two scroll to follow
- * the music.
+ * How wide the white keys are, smallest first (R34): all 88 keys fill the width and never scroll
+ * (Songscription's), the music's range fills it (the default, as the canvas's Piano sheet's Range),
+ * or large keys; the last two scroll to follow the music.
  */
 export type KeySize = (typeof KEY_SIZES)[number]
 
