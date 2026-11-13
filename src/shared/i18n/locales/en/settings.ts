@@ -39,7 +39,7 @@ export const settings = {
   progress: {
     reset: 'Reset progress',
     title: 'Reset progress?',
-    body: 'Learned steps, practised songs and quiz results on this device will be cleared.',
+    body: 'Your lessons, practised songs, practice results, streak and badges on this device will be cleared.',
     cancel: 'Cancel',
     confirm: 'Reset',
   },
@@ -70,7 +70,7 @@ export const settings = {
     cancel: 'Cancel',
     confirm: 'Remove',
     footnote:
-      'Resetting clears learned steps, practised songs and quiz results on this device. Removing the samples frees their space; they download again as you play.',
+      'Resetting clears your lessons, practised songs, practice results, streak and badges on this device. Removing the samples frees their space; they download again as you play.',
   },
   backup: {
     label: 'Backup',
