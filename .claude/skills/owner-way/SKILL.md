@@ -71,6 +71,11 @@ The owner's ruling of 2026-11-13. It applies in a loop ("continue", "improve", "
 owner asks to keep improving the app or its design, and whenever the owner says so; where another rule differs, this one
 wins there.
 
+- **Design first, then build to it** (owner, 2026-11-13: "why are you improving the current app and not first make
+  design and after that implement the design as close as possible. do like this"): each area is redrawn on the
+  canvas first, as its ideal (every page, sheet and state, phone and laptop, Day and Night), published, and only
+  then is the app built to match the drawing as closely as it can, checked against it shot by shot at both sizes.
+  No change to a screen's look or behaviour is made in the app before it is on the canvas.
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.
@@ -92,7 +97,8 @@ wins there.
   autonomously"): nothing is put to the owner, not even at the end of a report. Every open choice is researched,
   decided and built, and the report says what was decided.
 - **Never stop:** a finished area is not a stopping point. When everything seems done, start again from the beginning:
-  Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, improving each. Only
+  Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, each round the
+  area's canvas improved first and the app then built to it. Only
   the word "stop" ends it.
 
 ## Whose decision is it
