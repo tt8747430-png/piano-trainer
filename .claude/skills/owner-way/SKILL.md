@@ -149,6 +149,11 @@ does not read first: write the spec, build it, and log it.
   a loop ([Loops and refactors](#loops-and-refactors)): the build at each area's end, each change pushed to the session
   branch, `main` when the owner asks; when everything is implemented, start again from the beginning.
 - **A command over 10 seconds runs in the background,** so other work continues. That includes the suite and the build.
+- **Nothing waiting ends a turn** (owner, 2026-11-13: "check the instructions that make you stop even if i told you to
+  not stop"): a background command, shots, a build or a wakeup is never a reason to end the turn; start the next item
+  while it runs and read its output when it lands. In a loop, `ScheduleWakeup` is only a safety net for a container
+  restart: set it and keep working, never end the turn after it. The `/loop` skill's "then end the turn" yields to this.
+  A turn ends only on "stop", or when the context must be compacted.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
   build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one

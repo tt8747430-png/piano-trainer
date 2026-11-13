@@ -40,7 +40,8 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 
 - **Source of truth here:** the owner's latest words and screenshots, then the rulings, then the app's code, then
   the reference apps in `owner-way`'s table, then Apple's guidelines for behaviour.
-- **No app code while the design is open:** the canvas until the owner says "ok", then the port, one item a commit.
+- **No app code while the design is open:** the canvas until the owner says "ok", then the port, one item a commit; in a
+  loop or autonomous mode the canvas first, then the port at once, no "ok" awaited.
 
 ## 0. Required companion skills
 

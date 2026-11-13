@@ -7,7 +7,8 @@ description: Use in piano-trainer when the owner asks to refactor, redesign, sim
 
 ## Overview
 
-A screen is redesigned on a published canvas first and built only after the owner says "ok". The canvas changes
+A screen is redesigned on a published canvas first and built only after the owner says "ok" (in a loop or autonomous
+mode, built at once with no "ok" awaited and nothing asked: `owner-way`, Loops and refactors). The canvas changes
 with every reaction; a spec records each ruling in the owner's words, so nothing removed comes back. Then the app is
 audited against the canvas and ported one item per commit. Read `owner-way` first; this skill is its loop for a
 whole screen. `CLAUDE.md` still binds every change.
@@ -60,17 +61,17 @@ care shows in a hundred small things done the same way.
    the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working
    (taps, sounds, filters). It may leave the app's design system where the owner asks for the ideal design. Publish
    to the canvas's one URL each time. A vague complaint ("cluttered", "the filters are weird") is answered by the audit and
-   the research: draw the recommended fix, then ask about what is still open.
+   the research: draw the recommended fix, then ask about what is still open (in a loop: decide it, ask nothing).
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
    bullet into the feedback log and a line in `.scratch/r39/plan/loop.md`; commit those files by path and
    push (docs go at once); report.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
-   your recommendation. Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
+   your recommendation (in a loop: decide each, ask nothing). Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
 8. **Build** only after the owner's "ok": the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
-   autonomous mode ("continue with all") the canvas and spec are still made first, then built without waiting, the
-   open questions drawn at the end of the report.
+   autonomous mode ("continue with all") or a loop the canvas and spec are still made first, then built without waiting;
+   every open choice is decided, and no question is put to the owner.
 
 ## The owner's taste, held across screens
 
@@ -176,7 +177,8 @@ all" builds every finding in one turn.
 ## Reporting
 
 Answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
-version, the push state, and the open questions numbered, each with your recommendation, already drawn. A question
+version, the push state, and the open questions numbered, each with your recommendation, already drawn; in a loop or
+autonomous mode no questions, only what was decided. A question
 the owner answers with a question gets the facts from the code, the choices, and one recommendation.
 
 ## The canvas tools

@@ -126,8 +126,10 @@ The skills in `.claude/skills/` and the plugins carry their authors' workflow. W
   `writing-plans` run that way: plans beside the spec in `.scratch/<round>/plan/`, no execution question, no stop
   before a push, its final fresh reviewer only for a large or risky change.
 - **Every finding is fixed,** whatever its grade: no "deferred minors" (`executing-plans`, `requesting-code-review`).
-- **No questions in autonomous mode:** `brainstorming`, `tdd`'s seams, `receiving-code-review`'s clarifications and
-  `systematic-debugging`'s "discuss before more fixes" take the recommendation and go, the question in the report.
+- **No questions in autonomous mode or a loop:** `brainstorming`, `tdd`'s seams, `receiving-code-review`'s clarifications,
+  `systematic-debugging`'s "discuss before more fixes" and every `impeccable` reference's "Ask with the AskUserQuestion
+  tool and wait" (`critique`, `distill`, `quieter`, `init`, `extract`, `overdrive`, `document`) take the recommendation
+  and go; nothing is asked and nothing waits.
 - **`tdd` is the one TDD skill;** where another skill says `test-driven-development`, read `tdd`.
 - **`grill-with-docs` is the one grilling skill,** its rules in its own file. Its glossary is `CLAUDE.md`'s "Words in
   code", and its ADRs are amended per area, never superseded by a new numbered one (`domain-modeling`'s format yields).

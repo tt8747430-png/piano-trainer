@@ -59,7 +59,7 @@ loop `redesigning-a-screen` sets out; `owner-way` and `CLAUDE.md` still bind eve
 - Never invent features, prices, limits, timelines, policies, guarantees, research, analytics, testimonials, or legal claims.
 - Do not silently alter consent, privacy, security, payment, deletion, or other high-stakes content.
 - Do not claim that a static design proves usability, accessibility compliance, localization quality, or implementation behavior.
-- Use visible evidence first. Ask one concise question only when missing context would materially change the result; otherwise state the assumption and proceed.
+- Use visible evidence first. Ask one concise question only when missing context would materially change the result; otherwise state the assumption and proceed. In a loop or autonomous mode, never ask: decide and proceed.
 
 ## Determine the Mode
 
