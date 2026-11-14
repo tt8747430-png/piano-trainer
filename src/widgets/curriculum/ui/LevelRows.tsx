@@ -32,24 +32,24 @@ export function LevelRows() {
               <Link
                 to="/levels/$levelId"
                 params={{ levelId: journey.id }}
-                className="group flex min-h-20 items-center gap-4 px-4 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+                className="group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
               >
                 <ProgressRing share={share} track className={PAINT.grass.ink}>
                   <span
                     aria-hidden
-                    className="grid size-8 place-items-center rounded-pill bg-card text-base font-semibold tabular-nums"
+                    className="grid size-8 place-items-center rounded-pill bg-card text-[0.9375rem] font-bold tabular-nums"
                   >
                     {i + 1}
                   </span>
                 </ProgressRing>
-                <span className="flex min-w-0 flex-1 flex-col">
+                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="font-semibold">{t(`common:stage.${journey.stage}`)}</span>
                   <span className="text-sm text-pretty text-muted-foreground">
                     {localText(journey.title, locale)} ·{' '}
                     {t('learn:course.lessonCount', { count: progress.total })}
                   </span>
                 </span>
-                <span className="shrink-0 text-sm text-muted-foreground">
+                <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground tabular-nums">
                   {t('learn:journey.of', { learned: progress.done, total: progress.total })}
                 </span>
                 <OpensMark />

@@ -47,7 +47,7 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
         <span className="text-[0.8125rem] font-semibold text-eyebrow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
-        <h2 id={id} className="font-display text-[1.375rem] leading-tight text-balance">
+        <h2 id={id} className="font-display text-[1.375rem] leading-tight font-normal text-balance">
           {title}
         </h2>
         {meter ? (
