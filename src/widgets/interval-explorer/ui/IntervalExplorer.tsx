@@ -95,7 +95,7 @@ export function IntervalExplorer({
   const fromName = printedNote(usualName(pitchClassOf(root)))
   return (
     <div className="flex flex-col gap-4">
-      <PinnedKeyboard shown={example.shown} place="top" />
+      <PinnedKeyboard shown={example.shown} place="top" fitInView />
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_26.25rem] lg:items-start lg:gap-10">
         <div className="flex min-w-0 flex-col gap-4">
           <IntervalHero
