@@ -15,6 +15,16 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
 - "Every Practice page has its own Settings page": the gear opens Scale settings (Fingering: As the scale · From the
   thumb; Rhythm; Count-in; All piano settings ›).
 - Today's bar of four icons goes; the gear is the only control at the right of the bar.
+- **The Chords page's shape** (loop, 2026-11-14; owner: "components consistent across the app (one piano, one dial,
+  one sheet shape)"; canvas v174, `r60_scales.py`): the keys edge to edge under a bar of glass buttons (Back ·
+  Scales and keys · Settings · Piano); the scale's name as its two pickers, tonic ⌄ and scale ⌄, as the chord's
+  are, with its signature and notes under them; Scale · Chords · Key as one segmented control; the run engraved
+  with its fingers over the notes and "Right hand 1 2 3 1 2 3 4 5", "Left hand …" under it (or "No standard
+  fingering for this scale"); Practise G major in the Player as rows (Up and down hands together, Hands
+  separately, Tempo ladder, Contrary motion, Hanon 1–20); one floating bar as Chords': Tempo (72 BPM, − +) ·
+  Play scale ⌄ (Up, Up and down, Down; Octaves − n +) · Hands (Both, Right, Left). Replaces the Tonic, Scale,
+  Hands and Octaves rows and the Practise this scale bar. No Formula chips, no Structure, no Fingers · Degrees ·
+  Steps switch, no finger numbers on the keys.
 
 ## Today
 
