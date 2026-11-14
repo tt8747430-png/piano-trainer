@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Cable, Piano } from 'lucide-react'
+import { Plug, Piano } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
@@ -33,7 +33,7 @@ export function PracticeSettingsScreen({
         />
         <RowLink
           title={t('pages.connectPiano')}
-          icon={Cable}
+          icon={Plug}
           paint="sky"
           value={midi}
           render={<Link to="/settings/connect-piano" />}

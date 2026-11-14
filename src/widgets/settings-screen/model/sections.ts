@@ -1,6 +1,6 @@
 import {
   Bug,
-  Cable,
+  Plug,
   ChartColumn,
   FileText,
   Flag,
@@ -8,8 +8,8 @@ import {
   History,
   Info,
   LayoutGrid,
-  LifeBuoy,
-  MessageSquareWarning,
+  Book,
+  TriangleAlert,
   MessagesSquare,
   ArrowRightToLine,
   Piano,
@@ -81,7 +81,7 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
       {
         to: '/settings/connect-piano',
         title: 'pages.connectPiano',
-        icon: Cable,
+        icon: Plug,
         paint: 'sky',
         under: ['/settings/connect-piano/'],
       },
@@ -107,11 +107,11 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
   {
     title: 'groups.support.label',
     pages: [
-      { to: '/settings/how-to-use', title: 'pages.guide', icon: LifeBuoy, paint: 'sky' },
+      { to: '/settings/how-to-use', title: 'pages.guide', icon: Book, paint: 'sky' },
       {
         to: '/settings/feedback',
         title: 'pages.feedback',
-        icon: MessageSquareWarning,
+        icon: TriangleAlert,
         paint: 'lilac',
       },
       {

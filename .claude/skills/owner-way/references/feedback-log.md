@@ -765,6 +765,9 @@ are reference only, but progressions are facts.
 - **Loop round 13, Profile to its board's colours:** the week's bars and the next badge's ring in the board's copper
   (today full, the other days at half), "Next badge" in the eyebrow's rust, the week card's 15px bold title and
   14/12 padding; a tile's figures outrank their units ("2 h 45 min" in a third of a phone) (2026-11-14).
+- **Loop round 13, Settings' pictures:** as the board draws them: MIDI devices a plug (and so wherever MIDI is, the
+  bar's MIDI button and Practice settings), User guide a closed book (an open book is a course), Report a problem a
+  warning triangle (2026-11-14).
 ## Words
 - **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
   plain words. write professional wording and sentences and not plain like you did before" — labels, settings, tips and

@@ -1,4 +1,4 @@
-import { Cable } from 'lucide-react'
+import { Plug } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import {
@@ -35,7 +35,7 @@ export function MidiButton({ variant = 'bar' }: { variant?: 'bar' | 'tool' }) {
           />
         }
       >
-        <Cable aria-hidden />
+        <Plug aria-hidden />
         <span
           aria-hidden
           className={cn(
