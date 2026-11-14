@@ -249,6 +249,7 @@ owner's, typos fixed.
   page then shows the canvas's Continue from bar N (honey) and From the start (sand), the bar map in copper with the
   next bar ringed, "Bar 1 · Played n times · m minutes · Bar N"; Play floats only before the first play. Chords are
   the board's white cards (2026-11-14).
+- **Loop round 15, the laptop's table as the board's:** Progress says where a song stopped part way, "Bar 9 of 16" as Continue says it, before Learning and Learned; the column shows once any song has one of the three (2026-11-14).
 - **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
 
 ## Learn and the editors

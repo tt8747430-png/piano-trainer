@@ -2,7 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { selectSort, useLibrary, type LibrarySort } from '@/entities/library'
 import { PieceLink, pieceChords, type Entry } from '@/entities/piece'
 import { FavouriteToggle } from '@/features/manage-library'
-import { selectIsLearned, selectLearned, selectPractised, useProgress } from '@/entities/progress'
+import {
+  selectIsLearned,
+  selectLearned,
+  selectPractised,
+  selectSongPlay,
+  useProgress,
+  type SongPlay,
+} from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
@@ -56,7 +63,13 @@ function LastPlayed({ at }: { at: string | undefined }) {
 interface Held {
   readonly learned: boolean
   readonly played: boolean
+  /** Some song stopped part way, the bar it stopped at to show. */
+  readonly underway: boolean
 }
+
+/** Where a song stopped part way through, as Continue says it; none where it has not or is done. */
+const stoppedAt = (play: SongPlay | undefined) =>
+  play && play.at > 0 && play.at < play.bars ? play : undefined
 
 function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; held: Held }) {
   const { t } = useTranslation(['songs', 'common'])
@@ -64,6 +77,7 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
   const { face } = useEntryFace(entry, { ...show, progress: false })
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const at = useProgress((state) => selectPractised(state)[entry.id])
+  const stopped = stoppedAt(useProgress(selectSongPlay(entry.id)))
   return (
     <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
       <th scope="row" className={cn(CELL, 'w-1/2 max-w-0 font-normal')}>
@@ -84,10 +98,12 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
           {pieceChords(entry).map(printedSymbol).join('  ')}
         </td>
       ) : null}
-      {show.progress && (held.learned || held.played) ? (
-        <td className={cn(CELL, 'text-sm text-muted-foreground')}>
+      {show.progress && (held.learned || held.played || held.underway) ? (
+        <td className={cn(CELL, 'text-sm whitespace-nowrap text-muted-foreground tabular-nums')}>
           {learned ? (
             <LearnedBadge label={t('common:learned.done')} />
+          ) : stopped ? (
+            t('songs:continue.bar', { bar: stopped.at + 1, total: stopped.bars })
           ) : at ? (
             t('songs:table.learning')
           ) : null}
@@ -113,8 +129,8 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
 
 /**
  * A place's songs as a table, the laptop's right pane (canvas 133, Apple Music's songs list): each
- * song's small cover and title, its composer and key, its progress (Learning, Learned) where any song
- * has some, the day it was played last where any was, then its ♡ and More; its chords where its
+ * song's small cover and title, its composer and key, its progress where any song
+ * has some (the bar it stopped at, Learning, Learned), the day it was played last where any was, then its ♡ and More; its chords where its
  * place's Card style shows them. A heading sorts by its column; the sorted one again returns to the
  * learner's own order. Narrower than 48rem, the pane leaves the chords out.
  */
@@ -123,9 +139,11 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
   const { show } = useCardLook()
   const learnedSteps = useProgress(selectLearned)
   const practised = useProgress(selectPractised)
+  const plays = useProgress((state) => state.songs)
   const held: Held = {
     learned: entries.some((entry) => learnedSteps[pieceStepId(entry.id)] !== undefined),
     played: entries.some((entry) => practised[entry.id] !== undefined),
+    underway: entries.some((entry) => stoppedAt(plays[entry.id]) !== undefined),
   }
   return (
     <div className="@container">
@@ -140,7 +158,7 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
                 {t('songs:table.chords')}
               </th>
             ) : null}
-            {show.progress && (held.learned || held.played) ? (
+            {show.progress && (held.learned || held.played || held.underway) ? (
               <th scope="col" className={cn(CELL, 'font-semibold')}>
                 {t('songs:table.progress')}
               </th>
