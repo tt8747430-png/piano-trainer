@@ -799,10 +799,7 @@ export const practice = {
       info: 'Each step clockwise adds a sharp or removes a flat. Adjacent keys differ by a single note, which makes them the closest for modulation. Each major key shares its signature with its relative minor, shown on the inner ring.',
     },
     tuner: {
-      group: 'Tuning',
       settings: 'Reference pitch',
-      a4About:
-        'The pitch of A above middle C. 440 Hz is the standard; some orchestras tune to 442 Hz, Baroque ensembles to 415 Hz.',
     },
     // The Tools sheet over any screen.
     sheet: {
