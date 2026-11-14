@@ -345,7 +345,8 @@ export function OwnLibrary() {
           ))}
         </ul>
       )}
-      <NewDial className="lg:hidden" label={t('own.new')} actions={newActions} />
+      {/* Before the first, the empty card's New lesson is the one way in; the + comes with the list. */}
+      {none ? null : <NewDial className="lg:hidden" label={t('own.new')} actions={newActions} />}
       <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </div>
   )
