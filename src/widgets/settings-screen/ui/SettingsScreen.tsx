@@ -36,7 +36,12 @@ export function SettingsScreen({
   if (!panes)
     return (
       <div className="flex flex-col gap-6">
-        <ScreenHeader title={title} back={<BackButton />} tools={actions} />
+        {sub ? (
+          <ScreenHeader title={title} back={<BackButton />} tools={actions} />
+        ) : (
+          // Settings itself takes a place's large title, as its board sets it.
+          <ScreenHeader title={title} back={<BackButton />} tools={actions} large />
+        )}
         <div className="mx-auto w-full max-w-2xl">{page}</div>
       </div>
     )

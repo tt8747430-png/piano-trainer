@@ -48,6 +48,7 @@ export function ProgressionsPage() {
   return (
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader
+        large
         title={t('pages.progressions')}
         back={<BackButton />}
         edit={edit}

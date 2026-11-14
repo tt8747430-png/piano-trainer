@@ -29,6 +29,7 @@ export function AccompanimentPage() {
   return (
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader
+        large
         title={t('pages.accompaniment')}
         back={<BackButton />}
         edit={edit}
