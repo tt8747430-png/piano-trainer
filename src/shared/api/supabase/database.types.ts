@@ -427,6 +427,40 @@ export type Database = {
           },
         ]
       }
+      shared_chord_sheets: {
+        Row: {
+          body: string
+          can_edit: boolean
+          id: string
+          name: string
+          owner: string
+          revision: number
+          sheet_key: string
+          style: string
+          tempo: number
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          can_edit?: boolean
+          id?: string
+          name: string
+          owner?: string
+          revision?: number
+          sheet_key: string
+          style: string
+          tempo: number
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          can_edit?: boolean
+          name?: string
+          style?: string
+          tempo?: number
+        }
+        Relationships: []
+      }
       chord_sheets: DocumentTable
       notifications: DocumentTable
       practice_library: DocumentTable
@@ -482,6 +516,22 @@ export type Database = {
         Returns: { id: string; members: number; name: string }[]
       }
       join_learner_group: { Args: { p_code: string }; Returns: string }
+      read_shared_chord_sheet: {
+        Args: { p_id: string }
+        Returns: {
+          body: string
+          can_edit: boolean
+          mine: boolean
+          name: string
+          revision: number
+          style: string
+          tempo: number
+        }[]
+      }
+      write_shared_chord_sheet: {
+        Args: { p_body: string; p_id: string; p_style: string; p_tempo: number }
+        Returns: number
+      }
     }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }
