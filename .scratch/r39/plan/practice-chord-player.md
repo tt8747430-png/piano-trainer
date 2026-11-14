@@ -203,3 +203,9 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   in Yamaha's data (the brief's condition): ACMP, Sync Start, Sync Stop, Auto Fill, Fade and OTS Link. Decided:
   the strip floats in the dock's column as a card, since the app's dock floats over the keys where the board's
   sits in the page.
+- 8 the laptop's columns (done): from 1024 wide the sheet's column holds the chart, the Genos strip and the dock
+  (sticky at its foot, no longer floating beside the page, which had squeezed it to 800px); the 420px side
+  column holds "C major chords · Drag one into a bar." (I to vii and V7, 56 tall, serif 20; drag into a bar, or
+  tap to add after the last chord) and the Style list, the Style sheet's body. The phone keeps the floating dock.
+- 7 Share live: not built this round. It needs a migration (an online sheet's row, its RLS, Realtime) applied
+  and its access tests run, and the Supabase server is not authorised in this session.
