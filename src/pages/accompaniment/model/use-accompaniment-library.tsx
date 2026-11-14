@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { AudioWaveform, Heart, HeartOff, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId, METHOD_BOOK_IDS } from '@/entities/book'
