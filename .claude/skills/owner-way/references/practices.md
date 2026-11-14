@@ -32,7 +32,7 @@ The habits behind the best result at the least usage. Each is a condensed skill,
 - **Two passes for any screen or mockup** ([testing](testing.md)).
 - **Verify what you write about.** A doc naming a component, a token or a size is checked against the code before it is
   committed.
-- **Leave nothing running.**
+- **Leave nothing running** when the work ends; in a loop it never ends, so the dev server stays up (`SKILL.md`, How work runs).
 
 ## Reviews
 

@@ -139,5 +139,5 @@ Use Playwright's `page` (real Chrome) for what a still image hides:
 ## Reporting a pass
 
 State it as evidence: "Pass 2: 24 shots each of `/songs` and `/practice/metronome`, 0 problems; tap-through after the key
-picker works; suite 6,249 passed; build clean." Say which part was not run, and why. Then list what is running and stop what
-is yours by PID.
+picker works; suite 6,249 passed; build clean." Say which part was not run, and why. When the work ends (on "stop"), list what is running and stop what
+is yours by PID; in a loop the report is one line and the next item follows in the same turn.

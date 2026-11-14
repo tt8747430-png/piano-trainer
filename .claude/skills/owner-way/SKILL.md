@@ -95,7 +95,7 @@ wins there.
   uses it in the same feature: phone and laptop, `en` and `ru`, and the canvas.
 - **Docs:** where relevant, the area's ADR is rewritten in place to what was built, once, at the feature's end; nothing
   stale or old is kept.
-- **No tests, no lint, no typecheck:** none written, none run.
+- **No tests, no lint, no typecheck:** none written, none run (owner, 2026-11-14: "dont run the tests, no test").
 - **The visual pass stays in full:** two passes on every screen changed, the second a fresh look after the fixes, at 402
   (and the 393 check) and 1710, Day and Night, `en` and `ru`; every shot checked against `seven-questions`, `scan-first`,
   [craft-details](references/craft-details.md) (gaps on the scale, corners, 44px, icons),
@@ -168,7 +168,11 @@ does not read first: write the spec, build it, and log it.
   not stop"): a background command, shots, a build or a wakeup is never a reason to end the turn; start the next item
   while it runs and read its output when it lands. In a loop, `ScheduleWakeup` is only a safety net for a container
   restart: set it and keep working, never end the turn after it. The `/loop` skill's "then end the turn" yields to this.
-  A turn ends only on "stop", or when the context must be compacted.
+  A turn ends only on "stop". A full context is never a reason to stop or to write a closing report: the
+  session compacts itself and the work carries on from the summary (owner, 2026-11-14: "continue in loop
+  and don't stop and fix all the instructions that make you stop"). In a loop there is no final report:
+  each finished item gets one line saying what changed, then the next item starts in the same turn; the
+  dev server stays up for the next screen.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
   build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
@@ -187,7 +191,8 @@ does not read first: write the spec, build it, and log it.
 - **Context:** stay under about 450k tokens: read the part of a file you need, filter output to its summary.
 - **Usage limit:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped, never from
   scratch.
-- **Leave nothing running:** list processes before reporting and stop yours by PID.
+- **Leave nothing running** when the work ends (on "stop"): list processes and stop yours by PID. In a loop the
+  work never ends, so the dev server keeps running between items; only a stray or finished process is stopped.
 
 ## Secrets and data
 
@@ -209,7 +214,8 @@ does not read first: write the spec, build it, and log it.
 
 ## Reporting
 
-Short, answer first, in the owner's words for things (screens, controls), not file names:
+Only when the owner says "stop" or asks a question; in a loop, one line per item and never a closing report. Short,
+answer first, in the owner's words for things (screens, controls), not file names:
 
 1. What was built or fixed.
 2. What was left and why.
