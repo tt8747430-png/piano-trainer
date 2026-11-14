@@ -5,13 +5,8 @@ import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import {
-  continueStep,
-  courseProgress,
-  journeyProgress,
-  LearnedMeter,
-  useStepTitle,
-} from '@/widgets/curriculum'
+import { ProgressBar } from '@/shared/ui'
+import { continueStep, courseProgress, journeyProgress, useStepTitle } from '@/widgets/curriculum'
 
 /**
  * What to do next (ADR 0053), Learn's first row: one card that is the link, Continue and the
@@ -45,34 +40,39 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
             .filter((each) => each.kind === 'lesson')
             .findIndex((each) => each.lessonId === step.lessonId) + 1
         : 0
+  const meter = track.id !== shown
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-sm font-semibold text-on-paint-yellow">
+        <span className="text-[0.8125rem] font-semibold text-on-paint-yellow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
-        <h2 id={id} className="font-display text-xl leading-tight text-balance">
+        <h2 id={id} className="font-display text-[1.375rem] leading-tight text-balance">
           {title}
         </h2>
+        {meter ? (
+          <span className="text-[0.8125rem] text-muted-foreground">
+            {n > 0
+              ? `${t('lessonNumber', { n })} · ${t('progress', { learned: progress.done, total: progress.total })}`
+              : t('progress', { learned: progress.done, total: progress.total })}
+          </span>
+        ) : null}
       </span>
       <span
         aria-hidden
-        className="grid size-12 shrink-0 place-items-center rounded-pill bg-primary text-primary-foreground transition-[filter] duration-200 ease-out group-hover:brightness-95 [&_svg]:size-5"
+        className="grid size-14 shrink-0 place-items-center rounded-pill bg-primary text-primary-foreground transition-[filter] duration-200 ease-out group-hover:brightness-95 [&_svg]:size-5"
       >
         <Icon className={read ? undefined : 'fill-current'} />
       </span>
-      {track.id === shown ? null : (
-        <LearnedMeter
-          progress={progress}
-          above
-          lead={n > 0 ? t('lessonNumber', { n }) : undefined}
-          className="col-span-2"
-        />
-      )}
+      {meter ? (
+        <span className="col-span-2 flex">
+          <ProgressBar done={progress.done} total={progress.total} />
+        </span>
+      ) : null}
     </>
   )
   const className =
-    'group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 card p-4 transition-colors duration-200 ease-out hover:border-input'
+    'group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 card px-4 py-3.5 transition-colors duration-200 ease-out hover:border-input'
   return (
     <section aria-labelledby={id}>
       {step.kind === 'piece' ? (
