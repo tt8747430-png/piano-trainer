@@ -10,13 +10,17 @@ export interface PartLevel {
   readonly level: number
 }
 
+/** The bars a sheet may be counted in by (Musicca's count-in, the recorder's choices). */
+export const COUNT_INS = [0, 1, 2] as const
+export type CountIn = (typeof COUNT_INS)[number]
+
 /** How a sheet is played (R29 CP6): saved with it. */
 export interface ChordSheetSettings {
   readonly piano: PartLevel
   readonly bass: PartLevel
   readonly drums: PartLevel
-  /** A bar counted in before the music. */
-  readonly countIn: boolean
+  /** Bars counted in before the music: none, one or two. */
+  readonly countIn: CountIn
   /** How many times the sheet plays through, 1 to 8; 0 again and again until Stop. */
   readonly plays: number
   /** 0 to 100 %. */
@@ -29,7 +33,7 @@ export const DEFAULT_SHEET_SETTINGS: ChordSheetSettings = {
   piano: { on: true, level: 80 },
   bass: { on: true, level: 70 },
   drums: { on: true, level: 70 },
-  countIn: false,
+  countIn: 0,
   plays: 0,
   volume: 80,
   transpose: 0,

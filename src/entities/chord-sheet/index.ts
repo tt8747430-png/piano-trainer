@@ -1,5 +1,6 @@
 export {
   BAND_PARTS,
+  COUNT_INS,
   DEFAULT_SHEET_SETTINGS,
   MOST_SHEETS,
   SHEET_NAME_MAX,
@@ -10,6 +11,7 @@ export {
   type BandPart,
   type ChordSheetEntry,
   type ChordSheetSettings,
+  type CountIn,
   type PartLevel,
   type SavedChordSheet,
 } from './model/types'

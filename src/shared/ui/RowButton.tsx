@@ -1,5 +1,6 @@
 import { useId, type Ref } from 'react'
 import { cn } from '@/shared/lib'
+import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
 import { rowClass } from './row-class'
 
@@ -16,6 +17,7 @@ export function RowButton({
   reason,
   current = false,
   destructive = false,
+  opens = false,
   ref,
   ...face
 }: RowFaceProps & {
@@ -24,6 +26,8 @@ export function RowButton({
   reason?: string | undefined
   current?: boolean
   destructive?: boolean
+  /** It opens a sheet of its own choices (Count-in › 1 bar): a chevron at its end, as a link row's. */
+  opens?: boolean
   ref?: Ref<HTMLButtonElement>
 }) {
   const id = useId()
@@ -44,7 +48,7 @@ export function RowButton({
           'text-destructive [&_[data-slot=row-tile]]:bg-destructive/10 [&_[data-slot=row-tile]]:text-destructive',
       )}
     >
-      <RowFace {...face} />
+      <RowFace {...face} end={opens ? <OpensMark /> : undefined} />
       {why ? (
         <span id={id} hidden>
           {why}

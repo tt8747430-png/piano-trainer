@@ -103,7 +103,7 @@ describe('the chord player’s transport', () => {
     expect(bass && play?.gain?.(bass)).toBeCloseTo(0.25)
   })
   it('counts a bar in on the metronome’s click, its first accented', () => {
-    const { audio, engine, at } = setUp('C 3/4; verse: C', { countIn: true })
+    const { audio, engine, at } = setUp('C 3/4; verse: C', { countIn: 1 })
     engine.play()
     at(1.55)
     const clicks = heard(audio).filter((s) => s.kind === 'click')

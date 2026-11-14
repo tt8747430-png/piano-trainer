@@ -356,13 +356,12 @@ export function createChordEngine({
       if (current.settings.countIn) {
         const beats = beatsPerBar(current.sheet.meter)
         const bar = (barTicks(current.sheet.meter) * 60) / (current.tempo * TICKS_PER_BEAT)
-        const clicks: Sound[] = Array.from({ length: beats }, (_, i) => ({
-          kind: 'click',
-          at: (i * bar) / beats,
-          accent: i === 0,
-        }))
+        const clicks: Sound[] = Array.from(
+          { length: beats * current.settings.countIn },
+          (_, i) => ({ kind: 'click', at: (i * bar) / beats, accent: i % beats === 0 }),
+        )
         audio.play(clicks, at, gain)
-        nextAt = at + bar
+        nextAt = at + bar * current.settings.countIn
       }
       fading = null
       ending = null

@@ -3,6 +3,7 @@ import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/s
 import { emptySheet, sheetToText, textToSheet } from '@/shared/lib/arrangement'
 import {
   BAND_PARTS,
+  COUNT_INS,
   DEFAULT_SHEET_SETTINGS,
   MOST_SHEETS,
   SHEET_PLAYS,
@@ -11,6 +12,7 @@ import {
   TRANSPOSE_RANGE,
   type ChordSheetEntry,
   type ChordSheetSettings,
+  type CountIn,
   type PartLevel,
   type SavedChordSheet,
 } from './types'
@@ -67,6 +69,10 @@ function partLevel(saved: unknown, otherwise: PartLevel): PartLevel {
   return { on: flag(part.on, otherwise.on), level: between(part.level, 0, 100, otherwise.level) }
 }
 
+/** A count-in in bars; a sheet saved when it was on or off counts one bar or none. */
+const countIn = (saved: unknown): CountIn =>
+  saved === true ? 1 : (COUNT_INS.find((bars) => bars === saved) ?? DEFAULT_SHEET_SETTINGS.countIn)
+
 /** Saved settings read field by field; at least one instrument stays on (the piano where none is). */
 export function readSettings(saved: unknown): ChordSheetSettings {
   const settings = isRecord(saved) ? saved : {}
@@ -74,7 +80,7 @@ export function readSettings(saved: unknown): ChordSheetSettings {
     piano: partLevel(settings.piano, DEFAULT_SHEET_SETTINGS.piano),
     bass: partLevel(settings.bass, DEFAULT_SHEET_SETTINGS.bass),
     drums: partLevel(settings.drums, DEFAULT_SHEET_SETTINGS.drums),
-    countIn: flag(settings.countIn, DEFAULT_SHEET_SETTINGS.countIn),
+    countIn: countIn(settings.countIn),
     plays: between(settings.plays, 0, SHEET_PLAYS, DEFAULT_SHEET_SETTINGS.plays),
     volume: between(settings.volume, 0, 100, DEFAULT_SHEET_SETTINGS.volume),
     transpose: between(settings.transpose, TRANSPOSE_RANGE.min, TRANSPOSE_RANGE.max, 0),

@@ -53,7 +53,7 @@ export function SettingsGroup({
             'flex flex-col card [&>[data-slot=switch-row]:last-child]:border-b-0',
             // A row's hover fills the card to its edges (R23), square between rows.
             flush
-              ? 'overflow-hidden [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
+              ? 'overflow-hidden [&>:is(a,button)+:is(a,button)]:border-t [&>:is(a,button)+:is(a,button)]:border-hairline [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
               : 'gap-3 px-5 py-4',
           )}
         >
