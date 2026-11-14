@@ -8,7 +8,7 @@ import type { PagePicture } from './PagePictures'
 import { TileMark } from './TileMark'
 
 /**
- * A row of a grouped list that leads to a place (canvas 133 and Practice's): its 44px tile, its name
+ * A row of a grouped list that leads to a place (canvas 133 and Practice's), 80 tall: its 44px tile, its name
  * over one line on what it is, a chevron; in its card, as a library's rows (Songs' Shared with me,
  * Practice's pages). `render` is the link (a router `Link`).
  */
@@ -31,7 +31,8 @@ export function PlaceRow({
     defaultTagName: 'a',
     render,
     props: {
-      className: cn(ROW_BODY, ROW_LIBRARY_FACE),
+      // The canvas's PROW measures 80 tall: 64 inside, 8 above and below.
+      className: cn(ROW_BODY, ROW_LIBRARY_FACE, '[--row-min:5rem]'),
       children: (
         <>
           <TileMark large icon={icon} picture={picture} paint={paint} />

@@ -32,6 +32,7 @@ const state: ProgressState = {
   bestTake: 0,
   exercised: {},
   history: [],
+  songs: {},
 }
 
 describe('selectTempo', () => {
