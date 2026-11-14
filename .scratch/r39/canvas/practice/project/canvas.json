@@ -686,6 +686,24 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ScalesNight.dc.html": {
+      "x": 530,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Scales and keys, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "IntervalsNight.dc.html": {
+      "x": 1060,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Intervals, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "Laptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -872,6 +890,24 @@
       "w": 2143,
       "h": 1299,
       "title": "Chords, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ScalesLaptopNight.dc.html": {
+      "x": 2223,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Scales and keys, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "IntervalsLaptopNight.dc.html": {
+      "x": 4446,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Intervals, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1289,7 +1325,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 450,
+      "maxW": 1510,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1305,7 +1341,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 2143,
+      "maxW": 6589,
       "page": "practice"
     },
     "places-phone": {
@@ -1418,6 +1454,8 @@
     "ChordFinder.dc.html",
     "CircleOfFifths.dc.html",
     "ChordsNight.dc.html",
+    "ScalesNight.dc.html",
+    "IntervalsNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1439,6 +1477,8 @@
     "ChordFinderLaptop.dc.html",
     "CircleOfFifthsLaptop.dc.html",
     "ChordsLaptopNight.dc.html",
+    "ScalesLaptopNight.dc.html",
+    "IntervalsLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",

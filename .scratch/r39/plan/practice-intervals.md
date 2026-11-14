@@ -19,6 +19,15 @@ sounds like and the songs that open with it, as musicca's interval pages and the
   intervals as a grid of tiles (abbreviation and semitones), From, Play as and Intervals grouped under them. The ⓘ
   beside the name opens a popover: what it sounds like in one line, a song Up, a song Down, what it Inverts to. No
   list of cards, no explanation line on any row.
+- **Intervals in the Chords page's shape (canvas 176, loop, 2026-11-14):** one piano, one bar, one shape across
+  Practice, as Scales. The keys edge to edge at the top under Back · Intervals · Settings · Piano (glass); the name
+  (serif, its ⓘ) and "7 semitones · C up to G"; one card of its two notes on the staff, Sounds like and Hear it;
+  Simple · Compound over the tiles, the chosen tile filled in ink (honey is Play's alone). One floating bar as Scales':
+  From (the root, a value over its caption, opening the root grid) · Play P5 ⌄ (Play as: Ascending · Descending ·
+  Harmonic, as Scales' Up · Up and down · Down) · Play all. From and Play as stay named: From is the piece's caption,
+  Play as the menu's heading. The gear opens Interval settings (Play all: In order · Shuffled; Speed); the piano's
+  own button its Piano sheet. Never a From · Play as group under the tiles, a keyboard pinned at the foot, or honey
+  on a chosen tile.
 ## Today
 
 `src/pages/intervals` → `widgets/interval-explorer` (the rows, `interval-songs.ts`); strings `practice.ts`
