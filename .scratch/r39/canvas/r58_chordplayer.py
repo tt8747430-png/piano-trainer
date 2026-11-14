@@ -104,6 +104,74 @@ CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Everyone 
 # ── settings: Follow a MIDI arranger beside Connect a piano ──
 CP_SET58 = CP_SET + GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), ('val', 'Arranger', 'Genos · USB'))
 
+# ── R59 (owner, 2026-11-14, Musicca's chord player beside it: "make the ui of the chords like the musicca does";
+# "one tap on the chord selects it and plays from there when I play and double click opens this chord settings";
+# "the floating bar … doesnt stand above the content like pinned above the keyboard"): each chord a white box as
+# wide as its beats, its beats ticked along its foot, its name large with the extension raised; a + box ends each
+# section; the section's head Musicca's (name, × n, Variation n, delete, grip); one tap selects a chord, Play starts
+# there, a double tap opens its sheet, Musicca's dialog (Chord root ⌄ quality ⌄, Bass note ⌄, Duration, Suggested
+# chords four across, Delete · Duplicate · Play from here); the dock floats pinned just above the keys.
+CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const SUP = (c) => { const m = c.match(/^([A-G][♭♯]?)((?:m(?!aj))?)([^/]*)(\/.*)?$/); return m ? { r: m[1] + m[2], x: m[3] || '', b: m[4] || '' } : { r: c, x: '', b: '' }; };
+    const VARS = st.vars || [2, 2, 3], sb = st.selB59 || null;
+    const sec59 = SECS.map(([m, name, rep, bars], si) => { const boxes = [];
+      bars.forEach((cs, bi) => { const ls = lens(si, bi, cs), sum = ls.reduce((a, b) => a + b, 0), wrong = sum !== 4, nowBar = play[0] === si && play[1] === bi; let from = 0;
+        cs.forEach((c, ci) => { const L = ls[ci], now = nowBar && beatNow >= from && beatNow < from + L, picked = !!sb && sb[0] === si && sb[1] === bi && sb[2] === ci, f0 = from;
+          boxes.push({ ...SUP(c), span: 'span ' + L, label: c + ', ' + L + (L === 1 ? ' beat' : ' beats'),
+            ticks: Array.from({ length: L }, (_, k) => ({ bg: now && f0 + k === beatNow ? '#332921' : '#C9BFB5', h: now && f0 + k === beatNow ? '10px' : '6px' })),
+            picked, bg: now ? '#F6E7C8' : '#FEFDFB', ring: now || picked ? '0 0 0 2px #B98A32' : '0 0 0 1px #DAD1C8',
+            wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
+            tap: () => { const t = Date.now(), k = si + ':' + bi + ':' + ci, l = this._tap59;
+              if (l && l.k === k && t - l.t < 400) { this._tap59 = null; set({ sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null }); }
+              else { this._tap59 = { k, t }; set({ sel: [si, bi], selC: ci, selB59: [si, bi, ci] }); } } });
+          from += L; }); });
+      return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? tagLine(TAGS[si] || { mains: [] }) : '', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), boxes,
+        repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),
+        del: () => editSecs((x) => { x.splice(si, 1); }), add: () => set({ sheet: 'chord', sel: [si, bars.length - 1], selC: 0, pop: null }) }; });
+    const QN = { '': 'major', m: 'minor', '7': '7', maj7: 'maj7', m7: 'm7', sus4: 'sus4', sus2: 'sus2', dim: 'dim', add9: 'add9', '6': '6', '°': 'dim' };
+    const selParts = SUP(selSym), selRoot = (selSym.match(/^[A-G][♭♯]?/) || ['C'])[0], selQ = selSym.split('/')[0].replace(/^[A-G][♭♯]?/, ''), selBass = selSym.includes('/') ? selSym.split('/')[1] : '';
+    const pops = (k) => () => set({ pop: st.pop === k ? null : k });
+    const ord = SLOTS.findIndex((x) => sb && x.si === sb[0] && x.bi === sb[1]);
+    return { ...common(st, set), sec59, togglePlay: () => set(st.playing ? { playing: false } : { playing: true, pos: ord < 0 ? 0 : ord }),
+      rootPopL: selRoot, qualPopL: QN[selQ] ?? selQ, bassPopL: selBass ? selBass : selRoot + ' (root)', openRootPop: pops('root'), openQualPop: pops('qual'), openBassPop: pops('bass'),
+      rootPopOn: st.pop === 'root', qualPopOn: st.pop === 'qual', bassPopOn: st.pop === 'bass',
+      bassChips: chipsOf(['Root', 'C', 'D', 'E', 'F', 'G', 'A', 'B'], selBass || 'Root', () => {}),
+      suggest59: ['C/E', 'Dm', 'F/C', 'B♭', 'C', 'C7', 'Am', 'Gm'].map((c) => ({ ...SUP(c), pick: () => editSecs((x) => { x[st.sel ? st.sel[0] : 0][3][st.sel ? st.sel[1] : 0][selCi] = c; }) })), draftOn:""", 1)
+assert CP58.count('sec59') == 2, 'R59 patch missed'
+
+def CHART59(cols, gap, bh, bf, plus):
+    sup = f'<sup style="font-size: .58em; vertical-align: .6em; margin-left: 1px">{{{{b.x}}}}</sup>'
+    box = (f'<sc-for list="{{{{x.boxes}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.tap}}}}" aria-label="{{{{b.label}}}}" style="grid-column: {{{{b.span}}}}; position: relative; min-width: 0; height: {bh}px; padding: 4px 8px 0; border: 0; border-radius: 6px; background: {{{{b.bg}}}}; box-shadow: {{{{b.ring}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: flex-start">'
+           f'<span style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: {bf}px; font-weight: 500; line-height: 1.25">{{{{b.r}}}}{sup}{{{{b.b}}}}</span>'
+           f'<span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 10px; display: flex"><sc-for list="{{{{b.ticks}}}}" as="t" hint-placeholder-count="4"><span style="flex: 1; display: flex; justify-content: center; align-items: flex-end"><span style="width: 1.5px; height: {{{{t.h}}}}; background: {{{{t.bg}}}}"></span></span></sc-for></span>'
+           f'<sc-if value="{{{{b.picked}}}}" hint-placeholder-val="{{{{false}}}}"><span role="separator" aria-orientation="vertical" aria-label="Drag to change its length" data-tip="Drag to change its length" style="position: absolute; top: 0; right: -10px; bottom: 0; width: 24px; display: flex; align-items: center; justify-content: center; cursor: ew-resize; z-index: 2"><span style="width: 4px; height: 55%; border-radius: 2px; background: {INK}"></span></span></sc-if><sc-if value="{{{{b.wrong}}}}" hint-placeholder-val="{{{{false}}}}"><span role="img" aria-label="{{{{b.wrongTip}}}}" data-tip="{{{{b.wrongTip}}}}" style="position: absolute; top: -7px; right: -7px; display: flex">{BANG}</span></sc-if></button></sc-for>')
+    plusb = f'<button type="button" onClick="{{{{x.add}}}}" aria-label="Add a chord to {{{{x.name}}}}" style="grid-column: span {plus}; min-width: 0; height: {bh}px; border: 0; border-radius: 6px; background: transparent; box-shadow: 0 0 0 1px {LINE}; color: {SOFT}; font: inherit; font-size: 24px">+</button>'
+    pill = lambda inner, act, label, extra='': f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{label}" style="flex: none; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; {extra}"><span style="height: 36px; box-sizing: border-box; padding: 0 12px; border-radius: 8px; background: {FILL}; display: flex; align-items: center; font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums">{inner}</span></button>'
+    head = (f'<div style="display: flex; align-items: center; gap: 6px; min-height: 44px">'
+            + pill('<span style="overflow: hidden; text-overflow: ellipsis; font-weight: 600">{{x.name}}</span>', 'x.openTag', 'Section: {{x.name}}', 'flex: 0 1 160px; min-width: 0').replace('height: 36px; box-sizing', 'width: 100%; height: 36px; box-sizing')
+            + pill('{{x.rep}}', 'x.repUp', 'Plays {{x.rep}}') + pill('{{x.vari}}', 'x.varUp', '{{x.vari}}')
+            + f'<button type="button" onClick="{{{{x.del}}}}" aria-label="Delete {{{{x.name}}}}" data-tip="Delete section" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
+            + f'<span style="flex: 1"></span><span aria-label="Move {{{{x.name}}}}" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {SOFT}; cursor: grab">{GRIP}</span></div>')
+    tag = f'<sc-if value="{{{{x.tagOn}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{x.openTag}}}}" aria-label="On the Genos: {{{{x.tag}}}}" style="align-self: flex-start; max-width: 100%; height: 44px; margin: -6px 0 -2px; padding: 0; border: 0; background: transparent; font: inherit; color: {INK}"><span style="height: 30px; padding: 0 10px; border-radius: 8px; box-shadow: inset 0 0 0 1px {LINE}; display: flex; align-items: center; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.tag}}}}</span></button></sc-if>'
+    return (f'<div style="display: flex; flex-direction: column; gap: 18px">'
+            f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if></div>'
+            f'<sc-for list="{{{{sec59}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{head}{tag}'
+            f'<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gap}px">{box}{plusb}</div></section></sc-for>'
+            f'<button type="button" style="align-self: flex-start; height: 44px; padding: 0 8px; margin: -4px 0 -4px -8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
+
+POP59 = lambda lbl, act, w, name: f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{name}: {{{{{lbl}}}}}" style="flex: none; min-width: {w}px; height: 44px; padding: 0 10px 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px">{{{{{lbl}}}}}<span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>'
+ROW59 = lambda label, inner: ('raw', f'<div style="min-height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 16px"><span style="flex: 1; font-size: 16px">{label}</span>{inner}</div>')
+SUGG59 = f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{suggest59}}}}" as="s" hint-placeholder-count="8"><button type="button" onClick="{{{{s.pick}}}}" style="height: 44px; min-width: 0; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 17px; font-weight: 500">{{{{s.r}}}}<sup style="font-size: .6em; vertical-align: .55em">{{{{s.x}}}}</sup>{{{{s.b}}}}</button></sc-for></div>'
+QBTN = lambda svg, label, act: f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
+CP_CHORD59 = (GROUP(ROW59('Chord', POP59('rootPopL', 'openRootPop', 72, 'Root') + POP59('qualPopL', 'openQualPop', 120, 'Quality')),
+                    ROW59('Bass note', POP59('bassPopL', 'openBassPop', 136, 'Bass note')), ('step', 'Duration', 'selLen', 'lenDn', 'lenUp'))
+              + f'<sc-if value="{{{{rootPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{ROOTGRID("chordRoots")}</sc-if>'
+              + f'<sc-if value="{{{{qualPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("qualChips")}</sc-if>'
+              + f'<sc-if value="{{{{bassPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("bassChips")}</sc-if>'
+              + CAPS('Suggested chords') + SUGG59
+              + f'<div style="display: flex; gap: 8px"><button type="button" onClick="{{{{removeChord}}}}" aria-label="Delete chord" data-tip="Delete chord" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 10px; background: #F4DCD6; color: #B3261E; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
+              + QBTN(DUPI, 'Duplicate', 'duplicate') + QBTN(PLAYS, 'Play from here', 'playFrom') + '</div>')
+
+
 # ── the Genos's style strip, over the dock while Follow a MIDI arranger is on ──
 LAMP = lambda key, label, act, w='auto': f'<button type="button" onClick="{{{{{act}}}}}" style="flex: none; min-width: 44px; width: {w}; height: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap">{label}</button>'
 LAMPS = lambda lst, pre: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" style="flex: none; min-width: 44px; height: 36px; padding: 0 9px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap">{pre}{{{{l.n}}}}</button></sc-for>'
@@ -118,9 +186,33 @@ STRIP = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div 
          + GRPL('More', LAMP('arFade', 'Fade', 'tFade') + LAMP('arOts', 'OTS Link', 'tOts'))
          + '</div></div></sc-if>')
 
-ph58 = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTSB), CHART58.replace('{{CH}}', '54').replace('{{CF}}', '17'), CP_DOCK, 118).replace('padding: 4px 16px 118px', 'padding: 4px 16px {{cpPad}}px', 1)
-        .replace('</main>', '</main>' + STRIP + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 110px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>', 1))
-lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB, 'Chord player'), f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto">{CHART58.replace("{{CH}}", "68").replace("{{CF}}", "22")}</div>' + STRIP.replace('padding: 0 16px', 'padding: 0') + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]), CP_DOCK)
-SH58 = lambda B, P: (B('chordOn58', '{{selTitle}}', CP_CHORD58) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + B('styleOn', 'Style', WHEEL([('wStyle', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
+# R59 (owner, 2026-11-14: "improve the genos actions bar and make better … better ui"): the strip as a card that
+# shows every control at once, none scrolled out of sight: its state and Start/Stop on its head; Main A–D and Break,
+# then Intro I–III and Ending/rit. I–III (a phone's two rows; one row of groups on a laptop), each group named over it.
+# Only what the Genos takes over MIDI (the brief: ACMP, Sync, Auto Fill, Fade and OTS Link have no message).
+LAMP59 = lambda key, label, act, spoken='': f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{key}.on}}}}" aria-label="{spoken or label}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap">{label}</button>'
+LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" aria-pressed="{{{{l.on}}}}" aria-label="{spoken} {{{{l.n}}}}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 14px; font-weight: 700">{{{{l.n}}}}</button></sc-for>'
+CAP59 = lambda t: f'<span style="font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">{t}</span>'
+GRP59 = lambda label, cols, inner, grow='1': f'<div role="group" aria-label="{label}" style="flex: {grow} 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">{CAP59(label)}<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 4px">{inner}</div></div>'
+HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 40px"><span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
+          f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{arTitle}}}}</span>'
+          + LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 96px') + '</div>')
+MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
+INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
+END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
+STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="{pos} z-index: 40; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
+    + HEAD59 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
+CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
+CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
+# R59: the keys pinned at the foot; the dock floats just above them, over the chart, and the Genos strip over the dock
+STRIP_CARD = lambda pos: STRIP.replace('style="flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px"', f'style="{pos} z-index: 40; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}"', 1)
+ph58 = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 21, 2), '', 300)
+        .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 34px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>'
+                 + STRIP59('position: absolute; left: 16px; right: 16px; bottom: 234px;', False) + DOCK(CP_DOCK, 158), 1))
+lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB, 'Chord player'),
+               '<div style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column"><div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + CHART59(16, 6, 76, 28, 1) + '</div>'
+               + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + STRIP59('position: relative; width: 100%; max-width: 760px;', True) + DOCK_L(CP_DOCK) + '</div></div>'
+               + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]))
+SH58 = lambda B, P: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + B('styleOn', 'Style', WHEEL([('wStyle', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
 detail('ChordPlayer', 'Chord player', CP58, ph58, lm58, '', SH58(BSHEET, CP_PSHEET),
        SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 140px; top: 160px', 460), CP_PPOP).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html'))

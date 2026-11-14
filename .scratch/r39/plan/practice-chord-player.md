@@ -93,6 +93,24 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
   - **The beats shown** (owner, 2026-11-13: "I want also to see the beats in the chords player"): each bar shows its
     beats as Musicca's ticks, and while playing the beat sounding is lit, the count-in's too.
 
+- **Musicca's chart and dialog, tap to select, the dock over the keys** (owner, 2026-11-14, Musicca's chord player
+  beside it: "make the ui of the chords like the musicca does"; "one tap on the chord selects it and plays from there
+  when I play and double click opens this chord settings"; "the currently played chord should be selected like this
+  when playing"; "the drag so change the timing like the musicca does also should be supported"; "the floating bar …
+  doesnt stand above the content like pinned above the keyboard but sits under the chords sheet"; "improve the genos
+  actions bar … better ui"). Canvas v173, `r58_chordplayer.py` (R59). Each chord a white box as wide as its beats
+  (two bars a row on a phone, four on a laptop), its beats ticked along its foot, its name large with its extension
+  raised (Cm⁷, B♭sus2, F⁷/A); a + box ends each section; no paper card, no bar lines. A section's head is Musicca's:
+  its name (opening its sheet), × n, Variation n, delete (Undo), grip; its Genos tag under it while following. One tap
+  selects a chord (ringed); Play starts from it; a double tap opens its sheet. The chord sounding wears the same ring
+  on its honey wash, its beat's tick in ink. The selected chord's right edge carries Musicca's handle: dragged, it
+  sets the chord's length in beats, nothing else retimed. The chord's sheet is Musicca's dialog: Chord (root ⌄,
+  quality ⌄), Bass note ⌄, Duration − n beats +, Suggested chords four across, then Delete · Duplicate · Play from
+  here. The keys are pinned at the foot; the dock floats just above them, over the chart, on a phone and a laptop
+  alike; the Genos strip floats over the dock as a card showing every control at once: its state and Start/Stop,
+  Main A–D and Break, Intro I–III and Ending/rit. I–III (two rows on a phone, one on a laptop), only what the Genos
+  takes over MIDI.
+
 ## Today
 
 `src/pages/chord-player`, strings `practice.ts` `chordPlayer`. A bar with four icons and ···; New chord sheet ▾,
