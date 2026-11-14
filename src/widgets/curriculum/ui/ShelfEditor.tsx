@@ -84,11 +84,7 @@ function ShelvesDocument({
           region: t(`shelves.${shelf}`),
           label: t(`shelves.${shelf}`),
           empty: t('edit.courses.empty'),
-          head: (
-            <h2 className="mt-4 px-3 font-sans text-xl font-bold">
-              {t(`shelves.${shelf}`)}
-            </h2>
-          ),
+          head: <h2 className="mt-4 px-3 font-sans text-xl font-bold">{t(`shelves.${shelf}`)}</h2>,
           rows: courses.map((course) => {
             const paint = PAINT[STAGE_PAINT[course.stage]]
             return {

@@ -69,9 +69,7 @@ export function LessonRow({
             <span className="sr-only">, {t('read', { percent: Math.round(share * 100) })}</span>
           ) : null}
         </span>
-        {detail ? (
-          <span className="text-sm text-muted-foreground tabular-nums">{detail}</span>
-        ) : null}
+        {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
       </span>
       {current ? (
         <span className="shrink-0 rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">

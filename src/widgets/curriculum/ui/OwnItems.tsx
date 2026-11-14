@@ -39,7 +39,7 @@ function OwnCourseRow({ course }: { course: OwnCourse }) {
       <FolderTile look={course.look} />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="font-semibold text-pretty">{course.title}</span>
-        <span className="text-sm text-muted-foreground tabular-nums">{facts.join(' · ')}</span>
+        <span className="text-sm text-muted-foreground">{facts.join(' · ')}</span>
       </span>
       <OpensMark />
     </Link>

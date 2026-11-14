@@ -49,7 +49,7 @@ export function LevelRows() {
                     {t('learn:course.lessonCount', { count: progress.total })}
                   </span>
                 </span>
-                <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
+                <span className="shrink-0 text-sm text-muted-foreground">
                   {t('learn:journey.of', { learned: progress.done, total: progress.total })}
                 </span>
                 <OpensMark />
@@ -100,7 +100,7 @@ export function LevelNav({ current }: { current: string }) {
                     {localText(journey.title, locale)}
                   </span>
                 </span>
-                <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
+                <span className="shrink-0 text-sm text-muted-foreground">
                   {t('learn:journey.count', { learned: progress.done, total: progress.total })}
                 </span>
               </Link>

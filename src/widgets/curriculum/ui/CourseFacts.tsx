@@ -37,7 +37,7 @@ export function CourseFacts({
         <li className="font-medium text-foreground">{t(`common:stage.${course.stage}`)}</li>
       ) : null}
       {facts.map(({ icon: Icon, label }) => (
-        <li key={label} className="inline-flex items-center gap-1.5 tabular-nums">
+        <li key={label} className="inline-flex items-center gap-1.5">
           <Icon aria-hidden className="size-4 shrink-0" />
           {label}
         </li>

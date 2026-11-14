@@ -218,10 +218,11 @@
       --keys-most: 22dvh;
     }
   }
-  /* The phone's tab bar, docked at the bottom (its border, its top padding, its 56px places, the
-     home indicator): what sits at the screen's foot stays above it. Beside a rail or a sidebar, nothing. */
+  /* The phone's tab bar, a glass capsule 64 high floating over the home indicator (the canvas's
+     TABBAR): what sits at the screen's foot stays above it. Beside a rail or a sidebar, nothing. */
   :root {
-    --nav-bar: calc(1px + --spacing(1.5) + --spacing(14) + env(safe-area-inset-bottom));
+    --tab-bar-foot: max(--spacing(3), calc(env(safe-area-inset-bottom) - --spacing(1)));
+    --nav-bar: calc(--spacing(16) + var(--tab-bar-foot));
     @variant landscape-phone {
       --nav-bar: 0px;
     }

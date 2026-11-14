@@ -74,7 +74,7 @@ export function CoursesAbout() {
           {SHELVES.map((shelf) => (
             <li key={shelf} className="flex min-h-9 items-center justify-between gap-3">
               <span>{t(`shelves.${shelf}`)}</span>
-              <span className="text-muted-foreground tabular-nums">
+              <span className="text-muted-foreground">
                 {t('courseCount', { count: coursesOn(shelf).length })}
               </span>
             </li>
