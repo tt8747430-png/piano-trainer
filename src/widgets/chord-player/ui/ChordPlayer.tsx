@@ -69,7 +69,6 @@ import {
   FloatingBarPlay,
   FloatingBarValue,
   MoreMenu,
-  NO_KEYS,
   RoundButton,
   say,
   ScreenHeader,
@@ -82,6 +81,7 @@ import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-shee
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
+import { CHORD_PLAYER_KEYS, litKeys } from '../model/lit-keys'
 import { useArrangerFollow } from '../model/use-arranger-follow'
 import { useChordTransport } from '../model/use-chord-transport'
 import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd'
@@ -563,7 +563,11 @@ export function ChordPlayer({
         </DragOverlay>
       </DndContext>
 
-      <PinnedKeyboard shown={NO_KEYS} />
+      <PinnedKeyboard
+        shown={litKeys(lit ? chordAt(lit)?.chord : undefined)}
+        range={CHORD_PLAYER_KEYS}
+        fitInView
+      />
 
       <FloatingActions className="lg:hidden">
         {/* Following an arranger, its panel's strip stands over the dock, as wide. */}

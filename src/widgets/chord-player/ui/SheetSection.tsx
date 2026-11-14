@@ -105,7 +105,7 @@ export function SheetSection({
           onClick={onOpen}
           aria-label={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
           title={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
-          className="-ml-2 flex min-h-11 min-w-0 items-center gap-2 rounded-control px-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+          className="-ml-2 flex min-h-11 max-w-full shrink-0 items-center gap-2 rounded-control px-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
         >
           <span
             aria-hidden
@@ -114,7 +114,7 @@ export function SheetSection({
             {sectionLetter(index)}
           </span>
           <span className="truncate text-[15px] font-semibold">{name}</span>
-          <span className="text-[13px] text-muted-foreground tabular-nums">
+          <span className="text-[13px] whitespace-nowrap text-muted-foreground tabular-nums">
             {t('chordPlayer.times', { count: section.repeats })}
           </span>
         </button>
@@ -131,7 +131,7 @@ export function SheetSection({
               marks: tag || t('chordPlayer.arranger.unset'),
             })}
             className={cn(
-              'relative ml-auto h-8 max-w-[62%] min-w-0 truncate rounded-[8px] bg-muted px-2.5 text-[13px] font-semibold transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[""] hover:brightness-95',
+              'relative ml-auto h-8 min-w-0 truncate rounded-[8px] bg-muted px-2.5 text-[13px] font-semibold transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[""] hover:brightness-95',
               !tag && 'text-muted-foreground',
             )}
           >

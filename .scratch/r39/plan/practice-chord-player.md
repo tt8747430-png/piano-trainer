@@ -209,3 +209,8 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   tap to add after the last chord) and the Style list, the Style sheet's body. The phone keeps the floating dock.
 - 7 Share live: not built this round. It needs a migration (an online sheet's row, its RLS, Realtime) applied
   and its access tests run, and the Supabase server is not authorised in this session.
+- The keys show the chord (loop, 2026-11-14; the brief's "The keys show the chord, left hand violet, right hand
+  orange", never built): while the sheet plays, or follows the Genos, the sounding chord lights on the keys, its
+  root or slash bass in the left hand (G2 to F♯3) and its tones in the octave just above in the right, each key
+  named: a chord spans an octave, so both hands stay in view on the smallest phone. The section's head keeps its
+  name and × n whole beside a long Genos tag, the tag shrinking instead.

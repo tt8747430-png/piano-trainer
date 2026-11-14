@@ -34,6 +34,7 @@ export function PinnedKeyboard({
   onKeyPress,
   screen = 'reading',
   place,
+  fitInView = false,
   className,
 }: {
   /** The keys to hold in view, each marked as the page shows it. */
@@ -53,6 +54,8 @@ export function PinnedKeyboard({
   screen?: KeysScreen
   /** Under the bar whatever the dock: a page whose keys are its stage (Chords, its canvas). */
   place?: 'top' | undefined
+  /** Narrows its keys until the keys shown fit its width, both hands of a chord (the Chord player). */
+  fitInView?: boolean
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
@@ -77,6 +80,7 @@ export function PinnedKeyboard({
       keyPlays={keyPlays}
       onKeyPress={onKeyPress}
       spotlight
+      fitInView={fitInView}
       divider={edge}
     />
   )
