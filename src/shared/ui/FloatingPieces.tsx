@@ -1,4 +1,4 @@
-import { ChevronDown, Play, Square } from 'lucide-react'
+import { ChevronDown, Play, Square, type LucideIcon } from 'lucide-react'
 import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
@@ -78,6 +78,44 @@ export function FloatingPieceLink({
       <span className="flex h-5.5 items-center">{children}</span>
       <span className={CAPTION}>{caption}</span>
     </ButtonLink>
+  )
+}
+
+/**
+ * The floating primary of a tool with nothing to choose about how it plays (the Metronome's Start),
+ * tinted honey glass, 176 wide: its picture and its word, Stop while it runs.
+ */
+export function FloatingPlayPiece({
+  label,
+  stopLabel,
+  icon: Icon = Play,
+  playing,
+  disabled = false,
+  onClick,
+}: {
+  label: string
+  stopLabel?: string | undefined
+  icon?: LucideIcon | undefined
+  playing: boolean
+  disabled?: boolean
+  onClick: () => void
+}) {
+  const { t } = useTranslation('common')
+  return (
+    <button
+      type="button"
+      aria-pressed={playing}
+      disabled={disabled}
+      onClick={onClick}
+      className="glass-honey flex h-14 w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
+    >
+      {playing ? (
+        <Square aria-hidden className="size-4.5 fill-current" />
+      ) : (
+        <Icon aria-hidden className="size-4.5 fill-current" />
+      )}
+      <span>{playing ? (stopLabel ?? t('stop')) : label}</span>
+    </button>
   )
 }
 

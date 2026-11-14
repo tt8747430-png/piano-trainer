@@ -11,6 +11,14 @@ const FILL: Readonly<Record<BeatLevel, string>> = {
   silent: 'h-0',
 }
 
+/** How high a tall tile fills for its level: a downbeat and an accent full, a beat 58%, silence empty. */
+const TALL: Readonly<Record<BeatLevel, string>> = {
+  downbeat: 'h-full',
+  accent: 'h-full',
+  normal: 'h-[58%]',
+  silent: 'h-0',
+}
+
 /**
  * The beats of the bar (A39, as Soundbrenner's): a square for each, the first larger, filled as
  * high as its level (an accent full, a beat half, a silent beat empty); a tap moves it on to the
@@ -23,6 +31,7 @@ export function BeatSquares({
   muted,
   onTap,
   small = false,
+  tall = false,
 }: {
   levels: readonly BeatLevel[]
   sounding: number | null
@@ -30,8 +39,66 @@ export function BeatSquares({
   onTap: (beat: number) => void
   /** The quick Metronome's in the Tools sheet (B11): the same squares, a row the sheet's width. */
   small?: boolean
+  /** The Metronome page's (canvas 179): equal tiles 110 high (220 on a laptop), filled from the foot to their level. */
+  tall?: boolean
 }) {
   const { t } = useTranslation('practice')
+  if (tall)
+    return (
+      <div className="flex w-full flex-col gap-2">
+        <ol
+          aria-label={t('metronome.beats')}
+          data-muted={muted || undefined}
+          className="flex h-27.5 w-full gap-2 lg:h-55"
+        >
+          {levels.map((level, beat) => (
+            <li key={beat} className="flex min-w-0 flex-1">
+              <button
+                type="button"
+                aria-current={beat === sounding ? 'true' : undefined}
+                aria-label={`${t('metronome.beat', { beat: beat + 1 })}: ${t(`metronome.levels.${level}`)}`}
+                title={t('metronome.levels.tap')}
+                onClick={() => onTap(beat)}
+                className={cn(
+                  'relative flex w-full items-end overflow-hidden rounded-xl bg-card ring-1 ring-border',
+                  beat === sounding && !muted && 'ring-3 ring-primary',
+                )}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    'w-full transition-[height] duration-100',
+                    TALL[level],
+                    level === 'normal' ? 'bg-muted-foreground/60' : 'bg-foreground',
+                  )}
+                />
+                <span
+                  aria-hidden
+                  className={cn(
+                    'absolute start-2 top-1.5 text-xs tabular-nums',
+                    level === 'normal' || level === 'silent'
+                      ? 'text-muted-foreground'
+                      : 'text-background',
+                  )}
+                >
+                  {beat + 1}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <p
+          aria-hidden={!muted}
+          className={cn(
+            'flex items-center justify-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-150 ease-out',
+            !muted && 'opacity-0',
+          )}
+        >
+          <VolumeX aria-hidden className="size-4" />
+          {t('metronome.muted')}
+        </p>
+      </div>
+    )
   return (
     <div className={cn('flex w-full flex-col items-center', small ? 'gap-1' : 'gap-2')}>
       {/* Kept in its place while heard, so the squares never move. */}

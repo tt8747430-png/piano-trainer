@@ -42,3 +42,12 @@ key, its signature, relative minor, its neighbours, the diatonic chords marked b
 
 Sources: Soundbrenner Metronome (beats you set, subdivisions), Chordify's metronome; a chromatic tuner's cents gauge
 (Peterson, TonalEnergy); the app's chord finder strings; `circle-of-fifths` in `practice.ts`.
+
+## Ported: the Metronome (canvas 179, loop 2026-11-14)
+
+- Back · Metronome as glass; no gear (Flash, Count-in and Volume have no engine or home here; the click's volume lives in the Player's sound).
+- `TempoSteps` as the board's `TEMPO`: "Allegro · BPM" over the number (72px, 120 on a laptop, bold, −3%), −10 −1 +1 +10 as filled pills 52×44; the old ⓘ tip went.
+- The kit's slider as the board's: a 4px track in the line colour, the ink fill, a 28px white thumb with a soft shadow, app-wide.
+- The kit's `Stepper` as the board's `STEPPER`: − value + in one white capsule with a hairline ring, app-wide.
+- `GroupRows`, `GroupRow`, `GroupLink`, `ChoiceList` (new, the board's `GROUP` and lists): Time signature stepped in place; Subdivision, Sound, Speed trainer and Silent bars each a value and › opening its sheet.
+- Tool pages' phone grid sized `minmax(0, 1fr)`, so a wide row no longer widens the page.

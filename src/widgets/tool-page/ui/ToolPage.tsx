@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import {
   BackButton,
   FloatingActions,
-  FloatingBar,
-  FloatingBarPlay,
+  FloatingPieces,
+  FloatingPlayPiece,
   RoundLink,
   ScreenHeader,
 } from '@/shared/ui'
@@ -29,7 +29,7 @@ export interface ToolPlay {
  * name, its own act and ⚙ to its Settings page where it has several settings, A24); the readout or
  * picture in the middle, filling the height the page has (rule 28); what sets it under it, or beside
  * it from a laptop's width (`side`, R32: the Metronome's settings in place, as Chordify's); and the
- * tool's floating bar at the foot: its acts (`bar`), then Start, the wide honey pill (its board).
+ * tool's floating pieces at the foot (canvas 179): its acts (`bar`), then Start, the honey one.
  */
 export function ToolPage({
   title,
@@ -55,7 +55,7 @@ export function ToolPage({
   play?: ToolPlay
   /** The tool's other acts, folded in a `SpeedDial` beside its Start (the Chord finder's). */
   dial?: ReactNode
-  /** The bar's acts before Start, each a `FloatingBarButton` (the Metronome's Tap tempo). */
+  /** The floating acts before Start, each a `FloatingPiece` (the Metronome's Tap). */
   bar?: ReactNode
   /** The on-screen keys a tool is played on, pinned under the bar (the Chord finder's). */
   keys?: ReactNode
@@ -67,7 +67,7 @@ export function ToolPage({
     <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
         title={title}
-        back={<BackButton />}
+        back={<BackButton variant="glass" />}
         tools={actions}
         settings={
           settings ? (
@@ -81,7 +81,7 @@ export function ToolPage({
       />
       {keys}
       {side ? (
-        <div className="mx-auto grid w-full max-w-6xl flex-1 items-start gap-6 pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-10">
+        <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-10">
           <section
             aria-label={title}
             className="flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24"
@@ -105,10 +105,9 @@ export function ToolPage({
         <FloatingActions>
           {dial}
           {play ? (
-            <FloatingBar label={title}>
+            <FloatingPieces label={title}>
               {bar}
-              <FloatingBarPlay
-                named
+              <FloatingPlayPiece
                 label={play.label}
                 stopLabel={play.stopLabel}
                 icon={play.icon}
@@ -116,7 +115,7 @@ export function ToolPage({
                 disabled={play.disabled === true && !play.playing}
                 onClick={play.onToggle}
               />
-            </FloatingBar>
+            </FloatingPieces>
           ) : null}
         </FloatingActions>
       ) : null}
