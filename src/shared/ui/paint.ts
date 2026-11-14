@@ -48,10 +48,10 @@ export const PAINT: Readonly<
 
 /**
  * What each role is painted, on every chord of a progression and its legend (A23, DESIGN.md,
- * Harmony): home grass, away sand, tension lilac.
+ * Harmony; canvas 177): the tonic peach (sand), the predominant sky, the dominant sage (grass).
  */
 export const ROLE_PAINT: Readonly<Record<KeyRole, Paint>> = {
-  home: 'grass',
-  away: 'sand',
-  tension: 'lilac',
+  home: 'sand',
+  away: 'sky',
+  tension: 'grass',
 }

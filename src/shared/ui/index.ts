@@ -47,7 +47,12 @@ export { ActionRow } from './ActionRow'
 export { DangerGroup, DangerRow } from './DangerGroup'
 export { MoreMenu } from './MoreMenu'
 export { FloatingBar, FloatingBarButton, FloatingBarPlay, FloatingBarValue } from './FloatingBar'
-export { FloatingPiece, FloatingPieces, FloatingPlaySplit } from './FloatingPieces'
+export {
+  FloatingPiece,
+  FloatingPieceLink,
+  FloatingPieces,
+  FloatingPlaySplit,
+} from './FloatingPieces'
 export { PractiseRow, PractiseRows } from './PractiseRows'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
@@ -71,7 +76,7 @@ export { usualName } from './pickers/usual-name'
 
 export { PAINT, ROLE_PAINT, type Paint } from './paint'
 export { ProgressionTiles } from './ProgressionTiles'
-export { MoveArrow, RoleChip, RoleChips, RoleLegend } from './RoleChips'
+export { RoleLegend, RoleTile, RoleTiles } from './RoleChips'
 export { Docked } from './Docked'
 export { Pinned } from './Pinned'
 export { VERDICT_INK, VERDICT_SHAPE, type VerdictMark } from './verdict-shape'

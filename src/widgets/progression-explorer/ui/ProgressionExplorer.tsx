@@ -20,8 +20,9 @@ import {
   numeralGrows,
   printedSymbol,
   LEAD_INS,
+  CHORD_SIZES,
 } from '@/shared/lib/music'
-import { ChordSizeField, KeyPicker, Labelled, NO_KEYS, RowLink, Segmented } from '@/shared/ui'
+import { ActionMenu, KeyPicker, NO_KEYS, RowLink } from '@/shared/ui'
 import {
   changedView,
   playedNumerals,
@@ -30,26 +31,27 @@ import {
   type ProgressionsView,
 } from '../model/progressions-view'
 import { ProgressionBetween } from './ProgressionBetween'
-import { ProgressionDiagrams } from './ProgressionDiagrams'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionPractice } from './ProgressionPractice'
 import { ProgressionReading } from './ProgressionReading'
 import { ProgressionSongs } from './ProgressionSongs'
 
 /**
- * A progression's page under its bar (ADR 0052, A23, R30-4): the keys pinned; `about` (what it is);
- * its choices, the key, the chord size where a chord grows, what leads into each chord and, for a
- * line typed or kept (`typed`), the numerals and the mode they are read in; its chords on the staff,
- * why they work drawn on them, as the Player's diagrams; Play it in the Chord player; practising it
- * through the keys in the Player; then, beside them on a laptop, Passing chords between two of its
- * chords and the songs it is heard in. Its floating bar loops it, practises it in the Player in this
- * key and plays it, the honey one. How it is written and voiced is
- * Progressions' Settings (A24), read here.
+ * A progression's page in the Chords page's shape (canvas 177): the keys at the top; its name in the
+ * serif with its ♡ (`favourite`), how it sounds and its style (`about`), and Key; for a line typed or
+ * kept (`typed`), its numerals and the mode they are read in; its chords as tiles by role with each
+ * root's move, then one card of the chords on the staff with what it teaches (`note`); practising it
+ * through the keys in the Player, Passing chords, and the songs it is heard in with Open in the Chord
+ * player. One floating bar: Loop, Play with what it plays (Chords, Approach chords), Practise. On a
+ * laptop the keys run across the top over the progression and, beside it, the rest. How it is written
+ * and voiced is Progressions' Settings, read here.
  */
 export function ProgressionExplorer({
   view,
   onChange,
   typed,
+  name,
+  favourite,
   about,
   note,
 }: {
@@ -57,8 +59,11 @@ export function ProgressionExplorer({
   onChange: (view: ProgressionsView) => void
   /** A line the learner typed or keeps: its numerals and their mode are its choices. */
   typed: boolean
-  /** What it is, under the bar: how it sounds and its style. */
-  about?: ReactNode
+  name: string
+  /** Its ♡, beside its name. */
+  favourite?: ReactNode
+  /** How it sounds and its style, under its name. */
+  about?: string | undefined
   /** What it teaches, in a line, under its chords. */
   note?: string | undefined
 }) {
@@ -73,74 +78,96 @@ export function ProgressionExplorer({
   const played = playedNumerals(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
   const row = progressionRow(played, key, view.size, { mode: view.mode, names: settings.names })
+  const lead = view.lead ?? 'none'
   return (
-    <div className="flex flex-col gap-6">
-      <PinnedKeyboard shown={shown} />
-      <div className="grid items-start gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <div className="flex min-w-0 flex-col gap-6">
-          {about}
-          {view.mode ? (
-            <p className="text-lg font-semibold">
-              {printedSymbol(scaleName(key.tonic, view.mode))}
-            </p>
-          ) : null}
-          <div className="grid-fields gap-x-10 gap-y-5">
-            <div className="col-span-full">
-              <KeyPicker value={key} onChange={(next) => change({ key: keyParam(next) })} />
+    <div className="flex flex-col gap-4">
+      <PinnedKeyboard shown={shown} place="top" />
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start lg:gap-10">
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-0.5">
+                <h2 className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
+                  {name}
+                </h2>
+                {favourite}
+              </div>
+              {about ? (
+                <p className="ms-0.5 text-[0.9375rem] text-pretty text-muted-foreground">{about}</p>
+              ) : null}
             </div>
-            {typed ? (
+            {view.mode ? (
+              <p className="text-lg font-semibold">
+                {printedSymbol(scaleName(key.tonic, view.mode))}
+              </p>
+            ) : null}
+            <KeyPicker
+              value={key}
+              onChange={(next) => change({ key: keyParam(next) })}
+              className="self-start"
+            />
+          </div>
+          {typed ? (
+            <div className="grid-fields gap-x-10 gap-y-5">
               <ProgressionField
                 progression={view.p}
                 musicKey={key}
                 inMode={view.mode !== undefined}
                 onChange={(p, read) => change({ p, key: keyParam(read) })}
               />
-            ) : null}
-            {/* A chord size changes only a line with a chord that grows (R30). */}
-            {played.some(numeralGrows) ? (
-              <Labelled label={t('music:chordSize.label')}>
-                <ChordSizeField value={view.size} onChange={(size) => change({ size })} />
-              </Labelled>
-            ) : null}
-            <Labelled label={t('practice:progressions.lead.label')}>
-              <Segmented
-                label={t('practice:progressions.lead.label')}
-                value={view.lead ?? 'none'}
-                options={(['none', ...LEAD_INS] as const).map((lead) => ({
-                  value: lead,
-                  label: t(`practice:progressions.lead.${lead}`),
-                }))}
-                onChange={(lead) => change({ lead: lead === 'none' ? undefined : lead })}
-              />
-            </Labelled>
-            {typed ? <ProgressionReading view={view} onChange={change} /> : null}
-          </div>
+              <ProgressionReading view={view} onChange={change} />
+            </div>
+          ) : null}
           <ChordRow chords={row} position={rowPosition(settings)} onShow={setShown}>
             <RowRoles />
-            <ProgressionDiagrams chords={row.map(({ chord }) => chord)} musicKey={key} />
-            <RowStaff />
+            <div className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+              <RowStaff />
+              {note ? (
+                <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
+                  {note}
+                </p>
+              ) : null}
+            </div>
             <RowPlay
-              variant="default"
+              variant="pieces"
               practise={{
-                label: t('practice:progressions.practise'),
+                label: t('practice:progressions.inPlayer'),
+                caption: t('practice:progressions.practise'),
                 render: <Link to="/play/progression" search={playerSearch(view, settings)} />,
               }}
+              menuLabel={t('practice:progressions.plays')}
+              menu={(trigger) => (
+                <ActionMenu
+                  label={t('practice:progressions.plays')}
+                  align="end"
+                  render={trigger}
+                  trigger={null}
+                  actions={[
+                    // A chord size changes only a line with a chord that grows.
+                    ...(played.some(numeralGrows)
+                      ? CHORD_SIZES.map((size) => ({
+                          key: size,
+                          group: t('practice:progressions.chords'),
+                          label: t(`music:chordSize.${size}`),
+                          checked: view.size === size,
+                          onSelect: () => change({ size }),
+                        }))
+                      : []),
+                    ...(['none', ...LEAD_INS] as const).map((each) => ({
+                      key: `lead-${each}`,
+                      group: t('practice:progressions.lead.label'),
+                      label: t(`practice:progressions.lead.${each}`),
+                      checked: lead === each,
+                      onSelect: () => change({ lead: each === 'none' ? undefined : each }),
+                    })),
+                  ]}
+                />
+              )}
             />
-            {note ? <p className="max-w-prose text-muted-foreground">{note}</p> : null}
           </ChordRow>
-          {/* The Chord player plays the same chords in a style (R29 CP1): each page opens the other. */}
-          <div className="card">
-            <RowLink
-              title={t('practice:progressions.inChordPlayer')}
-              detail={t('practice:progressions.inChordPlayerLine')}
-              icon={Play}
-              paint="lilac"
-              render={<Link to="/practice/chord-player" search={{ p: view.p, key: view.key }} />}
-            />
-          </div>
-          <ProgressionPractice musicKey={key} inPlayer={playerSearch(view, settings)} />
         </div>
-        <div className="flex min-w-0 flex-col gap-8">
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
+          <ProgressionPractice musicKey={key} inPlayer={playerSearch(view, settings)} />
           <ProgressionBetween
             chords={played.map((numeral) => numeralChord(numeral, key, view.size))}
             musicKey={key}
@@ -149,7 +176,18 @@ export function ProgressionExplorer({
             onChange={(next) => onChange({ ...view, ...next })}
             onShow={setShown}
           />
-          <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined} />
+          <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined}>
+            {/* The Chord player plays the same chords in a style: each page opens the other. */}
+            <li>
+              <RowLink
+                title={t('practice:progressions.inChordPlayer')}
+                detail={t('practice:progressions.inChordPlayerLine')}
+                icon={Play}
+                paint="lilac"
+                render={<Link to="/practice/chord-player" search={{ p: view.p, key: view.key }} />}
+              />
+            </li>
+          </ProgressionSongs>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECES, useRepertoire, type Piece } from '@/entities/piece'
 import { heardLine, songsWith, type SongPlace } from '@/entities/progression-library'
@@ -19,17 +19,21 @@ const CHORD_SPACE = ' '
 /**
  * The songs a line of numerals (as a URL holds it) is heard in (ADR 0112, Chordify's "songs using
  * it"), each in its own key, wherever it is written in a key of `minor`'s mode: the learner's own
- * songs after the catalog's. Nothing for a line of one chord, or one no song uses.
+ * songs after the catalog's, then `children` (canvas 177: Open in the Chord player); those alone for a
+ * line of one chord, or one no song uses.
  */
 export function ProgressionSongs({
   line,
   minor,
   modal,
+  children,
 }: {
   line: string
   minor: boolean
   /** Read in a mode: heard only where it comes back round (`heardLine`). */
   modal: boolean
+  /** The rows after the songs (Open in the Chord player), shown alone where no song has it. */
+  children: ReactNode
 }) {
   const { t } = useTranslation('practice')
   const repertoire = useRepertoire()
@@ -43,7 +47,8 @@ export function ProgressionSongs({
   }, [repertoire, numerals, minor])
   const [all, setAll] = useState(false)
   // A line of one chord, or one no song uses, has no section (A23): nothing to show.
-  if (new Set(numerals.map(numeralText)).size < 2 || songs.length === 0) return null
+  if (new Set(numerals.map(numeralText)).size < 2 || songs.length === 0)
+    return <ul className="card p-1.5">{children}</ul>
   const title = t('progressions.songs.title')
   const shown = all ? songs : songs.slice(0, FIRST_ROWS)
   return (
@@ -60,6 +65,7 @@ export function ProgressionSongs({
       {shown.map(({ piece, places }) =>
         places[0] ? <SongRow key={piece.id} piece={piece} place={places[0]} /> : null,
       )}
+      {children}
     </RowGroup>
   )
 }

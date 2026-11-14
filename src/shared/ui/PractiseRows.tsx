@@ -45,7 +45,7 @@ export function PractiseRow({
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="text-base font-semibold">{title}</span>
-              <span className="text-[0.8125rem] text-muted-foreground">{detail}</span>
+              <span className="truncate text-[0.8125rem] text-muted-foreground">{detail}</span>
             </span>
             <ChevronRight aria-hidden className="size-5 flex-none text-muted-foreground" />
           </>

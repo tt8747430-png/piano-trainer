@@ -331,6 +331,11 @@ export const practice: LocaleResources['practice'] = {
   },
   progressions: {
     practise: 'Отработать',
+    // A progression's page (canvas 177): its bar's title, Play's menu, Practise's piece.
+    title: 'Последовательность',
+    plays: 'Что играть',
+    chords: 'Аккорды',
+    inPlayer: 'Отработать в плеере',
     edit: {
       open: 'Править последовательность',
       new: 'Новая в библиотеке',
@@ -356,8 +361,8 @@ export const practice: LocaleResources['practice'] = {
     majorLine: 'Эти ступени — мажорной тональности.',
     minorLine: 'Эти ступени — минорной тональности.',
     playIn: 'Сыграть в тональности {{key}}',
-    throughKeys: 'Во всех 12 тональностях',
-    inChordPlayer: 'Сыграть в плеере аккордов',
+    throughKeys: 'Отработать по тональностям в плеере',
+    inChordPlayer: 'Открыть в плеере аккордов',
     inChordPlayerLine: 'С группой, в любом стиле',
     mine: {
       new: 'Новая последовательность',
@@ -517,6 +522,7 @@ export const practice: LocaleResources['practice'] = {
       'Отмечает гамму тональности на каждой октаве клавиатуры, на клавише — её нота.',
   },
   passingChords: {
+    into: '{{chords}} в {{to}}',
     inKey: 'В тональности',
     onlyInKey: 'Только в тональности',
     noneInKey: 'Между этими аккордами нет пути внутри тональности.',

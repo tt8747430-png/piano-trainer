@@ -2,6 +2,7 @@ import { ChevronDown, Play, Square } from 'lucide-react'
 import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { ButtonLink } from './ButtonLink'
 import { Button } from './primitives/button'
 
 /**
@@ -26,6 +27,11 @@ export function FloatingPieces({ label, children }: { label: string; children: R
   )
 }
 
+const PIECE =
+  'glass h-14 w-18 shrink-0 flex-col gap-0.5 rounded-pill px-1 text-foreground hover:bg-glass active:scale-96 [&_svg:not([class*=size-])]:size-5.5'
+const CAPTION =
+  'max-w-16 text-center text-[0.6875rem] leading-[1.05] font-semibold whitespace-normal'
+
 /**
  * A glass piece with its picture over a short word (Voicing's name, Hands): 72 wide, 56 tall, the
  * picture 22, the word 11px semibold.
@@ -46,17 +52,32 @@ export function FloatingPiece({
       variant="ghost"
       aria-label={label}
       title={label}
-      className={cn(
-        'glass h-14 w-18 shrink-0 flex-col gap-0.5 rounded-pill px-1 text-foreground hover:bg-glass active:scale-96 [&_svg:not([class*=size-])]:size-5.5',
-        className,
-      )}
+      className={cn(PIECE, className)}
       {...props}
     >
       <span className="flex h-5.5 items-center">{children}</span>
-      <span className="max-w-16 text-center text-[0.6875rem] leading-[1.05] font-semibold whitespace-normal">
-        {caption}
-      </span>
+      <span className={CAPTION}>{caption}</span>
     </Button>
+  )
+}
+
+/** A glass piece that goes somewhere (Practise opens the Player): `render` is the link. */
+export function FloatingPieceLink({
+  label,
+  caption,
+  render,
+  children,
+}: {
+  label: string
+  caption: string
+  render: ReactElement
+  children: ReactNode
+}) {
+  return (
+    <ButtonLink variant="ghost" aria-label={label} title={label} className={PIECE} render={render}>
+      <span className="flex h-5.5 items-center">{children}</span>
+      <span className={CAPTION}>{caption}</span>
+    </ButtonLink>
   )
 }
 

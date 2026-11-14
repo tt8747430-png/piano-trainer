@@ -1,4 +1,4 @@
-import { Play, Repeat } from 'lucide-react'
+import { Dumbbell, Play, Repeat } from 'lucide-react'
 import {
   createContext,
   use,
@@ -6,14 +6,15 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactElement,
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   chordSymbol,
-  isStrongMove,
   printedSymbol,
+  rootMove,
   voiceLead,
   type Midi,
   type RowPosition,
@@ -24,13 +25,13 @@ import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { useFitZoom } from '@/shared/lib'
 import {
   FloatingActions,
-  FloatingBar,
-  FloatingBarButton,
-  FloatingBarPlay,
-  MoveArrow,
-  RoleChip,
-  RoleChips,
+  FloatingPiece,
+  FloatingPieces,
+  FloatingPieceLink,
+  FloatingPlaySplit,
   RoleLegend,
+  RoleTile,
+  RoleTiles,
   PlayButton,
   PlayLabel,
   type ShownKeys,
@@ -38,7 +39,7 @@ import {
   usePlayKey,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { rowMoves, type RowChord } from '../model/chord-row'
+import type { RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
 import { TappableStaff } from './TappableStaff'
@@ -64,8 +65,6 @@ interface RowPlayback {
   playRow(): void
   /** One chord alone, as the row voices it, shown on the keys by its degrees. */
   playChord(place: number): void
-  /** The chord before `place` and the chord at it, one after the other: the move between them. */
-  playMove(place: number): void
 }
 
 const RowContext = createContext<RowPlayback | null>(null)
@@ -138,11 +137,6 @@ export function ChordRow({
       onShow(chord ? voicedShown(chord, keys) : unmarked(keys))
       playback.toggle(place, () => chordSounds(keys, { arpeggio: false }))
     },
-    playMove: (place) => {
-      const pair = [voiced[place - 1] ?? [], voiced[place] ?? []]
-      onShow(unmarked(pair.flat()))
-      playback.toggle(-place, () => walkSounds(pair, { arpeggio: false, tempo: ROW_TEMPO }))
-    },
   }
   return (
     <RowContext value={row}>
@@ -192,7 +186,7 @@ export function RowStaff() {
           key={line}
           ref={line === 0 ? first : undefined}
           className="w-max max-w-none"
-          style={zoom < 1 ? { zoom } : undefined}
+          style={zoom < 1 ? ({ zoom, '--fit': zoom } as CSSProperties) : undefined}
         >
           <TappableStaff
             music={music}
@@ -221,95 +215,96 @@ export function RowStaff() {
  */
 export function RowRoles() {
   const { t } = useTranslation('music')
-  const { chords, sounding, playChord, playMove } = useRow()
-  const moves = useMemo(() => rowMoves(chords), [chords])
-  const names = chords.map(
-    (chord) => chord.caption ?? printedSymbol(chord.symbol ?? chordSymbol(chord.chord)),
-  )
+  const { chords, sounding, playChord } = useRow()
   return (
-    <div className="flex flex-col gap-2">
-      <RoleChips label={t('harmony.roles')}>
-        {chords.map(({ role }, place) => {
+    <div className="flex flex-col gap-3">
+      <RoleTiles label={t('harmony.roles')}>
+        {chords.map(({ chord, caption, symbol, role }, place) => {
           if (!role) return null
-          const name = names[place] ?? ''
-          const move = moves[place] ?? null
+          const name = printedSymbol(symbol ?? chordSymbol(chord))
+          const next = chords[(place + 1) % chords.length]?.chord ?? chord
+          const move = rootMove(chord.root, next.root)
           const said = [
             t(`harmony.role.${role.role}`),
             ...(role.colour ? [t(`harmony.colour.${role.colour}`)] : []),
           ].join(', ')
           return (
-            <RoleChip
+            <RoleTile
               key={place}
-              name={name}
+              numeral={caption}
+              chord={name}
               role={role}
-              label={t('harmony.chip', { numeral: name, what: said })}
+              label={t('harmony.chip', { numeral: caption ?? name, what: said })}
               sounding={sounding === place}
               onClick={() => playChord(place)}
               move={
-                place > 0 ? (
-                  <MoveArrow
-                    move={move}
-                    label={t('harmony.playMove', {
-                      from: names[place - 1] ?? '',
-                      to: name,
-                      move: move
-                        ? [
-                            t(`harmony.move.${move.by}.${move.down ? 'down' : 'up'}`),
-                            t(`harmony.meaning.${isStrongMove(move) ? move.by : 'back'}`),
-                          ].join(', ')
-                        : t('harmony.meaning.same'),
-                    })}
-                    onClick={() => playMove(place)}
-                  />
-                ) : undefined
+                move
+                  ? t(`harmony.move.${move.by}.${move.down ? 'down' : 'up'}`)
+                  : t('harmony.move.same')
               }
             />
           )
         })}
-      </RoleChips>
+      </RoleTiles>
       <RoleLegend />
     </div>
   )
 }
 
 /**
- * Play for the whole row, turning into Stop: where it is the screen's one action (Progressions), the
- * page's floating bar, Loop then the way into the Player (`practise`) then Play, the honey circle,
- * which Enter plays too; soft beside other examples, named as it is used there (Play the chain).
+ * Play for the whole row, turning into Stop: where it is the screen's one action (a progression's
+ * page, canvas 177), the page's floating pieces, Loop (ink while it loops), Play with its menu (what
+ * it plays), the honey one Enter plays too, and the way into the Player (`practise`); soft beside other
+ * examples, named as it is used there (Play the chain).
  */
 export function RowPlay({
   variant,
   label,
   practise,
+  menuLabel,
+  menu,
 }: {
-  variant: 'default' | 'soft'
+  variant: 'pieces' | 'soft'
   label?: string
-  /** The Player with this row, a grey pill before Play (Progressions' Practise). */
-  practise?: { label: string; render: ReactElement } | undefined
+  /** The Player with this row, the piece after Play (a progression's Practise). */
+  practise?: { label: string; caption: string; render: ReactElement } | undefined
+  /** Play's chevron's name and its menu, on the floating pieces. */
+  menuLabel?: string
+  menu?: (trigger: ReactElement) => ReactNode
 }) {
   const { t } = useTranslation(['music', 'player', 'practice'])
   const { playing, playRow, looping, toggleLoop } = useRow()
-  usePlayKey(playRow, variant === 'default')
-  if (variant === 'default')
+  usePlayKey(playRow, variant === 'pieces')
+  if (variant === 'pieces' && menu && menuLabel)
     return (
       <FloatingActions>
-        <FloatingBar label={t('practice:transport')}>
-          <FloatingBarButton
-            named
+        <FloatingPieces label={t('practice:transport')}>
+          <FloatingPiece
             label={t('player:loop')}
+            caption={t('player:loop')}
             aria-pressed={looping}
             onClick={toggleLoop}
-            className="flex-none px-4 aria-pressed:bg-chosen"
+            className="aria-pressed:bg-foreground aria-pressed:text-background aria-pressed:hover:bg-foreground"
           >
             <Repeat aria-hidden />
-          </FloatingBarButton>
+          </FloatingPiece>
+          <FloatingPlaySplit
+            label={label ?? t('music:play')}
+            playing={playing === 'row'}
+            onPlay={playRow}
+            menuLabel={menuLabel}
+            menu={menu}
+          />
           {practise ? (
-            <FloatingBarButton named label={practise.label} render={practise.render}>
-              {null}
-            </FloatingBarButton>
+            <FloatingPieceLink
+              label={practise.label}
+              caption={practise.caption}
+              render={practise.render}
+            >
+              <Dumbbell aria-hidden />
+            </FloatingPieceLink>
           ) : null}
-          <FloatingBarPlay label={t('music:play')} playing={playing === 'row'} onClick={playRow} />
-        </FloatingBar>
+        </FloatingPieces>
       </FloatingActions>
     )
   if (label)

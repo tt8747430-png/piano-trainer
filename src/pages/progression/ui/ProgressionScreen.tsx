@@ -1,7 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { PageKeyboardTools } from '@/features/live-keyboard'
 import { BookmarkPlus, PencilLine, Trash2 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePracticeLibraryStoreApi, type OwnProgression } from '@/entities/practice-library'
 import type { LibraryProgression } from '@/entities/progression-library'
@@ -31,10 +31,10 @@ export type ShownProgression =
 type Open = 'none' | 'keep'
 
 /**
- * A progression's own page (R30-4): its name in the bar, its ♡ (a library's or the learner's own),
- * its gear to Progressions' Settings; the learner's own with Edit (its name and line) and More
- * (Delete, at once with Undo); a line typed with Keep in Mine; an editor's pencil to the library's editor.
- * Under the bar what it is (how it sounds · its style), then the progression itself.
+ * A progression's own page (canvas 177): Back · Progression · the keys' tools and the gear to
+ * Progressions' Settings, as Scales and Intervals; the learner's own with Edit (its name and line) and
+ * More (Delete, at once with Undo); a line typed with Keep in Mine; an editor's pencil to the library's
+ * editor. Under the bar the progression itself, its name with its ♡ (a library's or the learner's own).
  */
 export function ProgressionScreen({
   shown,
@@ -79,17 +79,14 @@ export function ProgressionScreen({
       : shown.kind === 'line'
         ? shown.title
         : ''
-  const about: ReactNode = library ? (
-    <p className="text-lg text-muted-foreground">
-      {localText(library.character, locale)} · {t(`progressions.style.${library.style}`)}
-    </p>
-  ) : null
+  const about = library
+    ? `${localText(library.character, locale)} · ${t(`progressions.style.${library.style}`)}`
+    : undefined
+  const listed = library ?? own
   const tools = (
     <>
       <PageKeyboardTools />
-      {library || own ? (
-        <PracticeFavouriteButton kind="progressions" id={(library ?? own)?.id ?? ''} />
-      ) : (
+      {listed ? null : (
         <RoundButton
           label={t('progressions.mine.keep')}
           icon={BookmarkPlus}
@@ -111,11 +108,10 @@ export function ProgressionScreen({
     </>
   )
   return (
-    <div className="flex flex-col gap-4 pb-4">
+    <div className="flex flex-col gap-4">
       <ScreenHeader
-        title={title}
-        large
-        back={<BackButton />}
+        title={t('progressions.title')}
+        back={<BackButton variant="glass" />}
         tools={tools}
         {...(own
           ? {
@@ -149,6 +145,10 @@ export function ProgressionScreen({
         view={view}
         onChange={onChange}
         typed={shown.kind !== 'library'}
+        name={title}
+        favourite={
+          listed ? <PracticeFavouriteButton kind="progressions" id={listed.id} /> : undefined
+        }
         about={about}
         note={library?.note ? localText(library.note, locale) : undefined}
       />

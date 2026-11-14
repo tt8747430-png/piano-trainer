@@ -314,37 +314,39 @@ export const music = {
   harmony: {
     // A progression's row with why it works drawn on it (A23): each chord's role, each move's arrow.
     roles: 'What each chord does',
-    role: { home: 'home', away: 'away', tension: 'tension' },
+    role: { home: 'Tonic', away: 'Predominant', tension: 'Dominant' },
     colour: { sad: 'sad', soft: 'soft', bright: 'bright' },
     chip: '{{numeral}}, {{what}}',
+    // Under each chord, how its root moves to the next (the last back to the first).
     move: {
-      fifth: { down: 'down a 5th', up: 'up a 5th' },
-      third: { down: 'down a 3rd', up: 'up a 3rd' },
-      second: { down: 'down a 2nd', up: 'up a 2nd' },
+      fifth: { down: '5th down →', up: '5th up →' },
+      third: { down: '3rd down →', up: '3rd up →' },
+      second: { down: '2nd down →', up: '2nd up →' },
+      same: 'Root stays →',
     },
-    meaning: {
-      fifth: 'the strongest pull',
-      third: 'two notes shared',
-      second: 'fresh, no note shared',
-      back: 'a step back',
-      same: 'the root stays',
-    },
-    playMove: 'Play {{from}} to {{to}}: the root moves {{move}}',
     legend: {
-      name: 'Home, away, tension',
-      arrows: 'Arrows: root movement',
+      name: 'Tonic, predominant, dominant',
       terms: {
-        home: { name: 'Home', text: 'The tonic and the chords that stand in for it: at rest.' },
-        away: { name: 'Away', text: 'The subdominant family (IV, ii): moving off from home.' },
-        tension: { name: 'Tension', text: 'The dominant family (V, vii°): pulling back home.' },
+        home: { name: 'Tonic', text: 'The tonic and the chords that stand in for it: at rest.' },
+        away: {
+          name: 'Predominant',
+          text: 'The subdominant family (IV, ii): moving off from the tonic.',
+        },
+        tension: {
+          name: 'Dominant',
+          text: 'The dominant family (V, vii°): pulling back to the tonic.',
+        },
         sad: {
           name: 'Sad, soft, bright',
           text: 'A minor chord in a major key (vi, the relative minor, sad; ii and iii soft), or a major chord in a minor key (bright).',
         },
-        fifth: { name: '↓5', text: 'Down a 5th: the strongest pull, how most cadences close.' },
-        third: { name: '↓3', text: 'Down a 3rd: mild, the two chords share two notes.' },
-        second: { name: '↑2', text: 'Up a 2nd: fresh, the two chords share no note.' },
-        back: { name: '↑5 ↑3 ↓2', text: 'The same moves the other way: they step back.' },
+        fifth: { name: '5th down', text: 'The strongest pull, how most cadences close.' },
+        third: { name: '3rd down', text: 'Mild: the two chords share two notes.' },
+        second: { name: '2nd up', text: 'Fresh: the two chords share no note.' },
+        back: {
+          name: '5th up, 3rd up, 2nd down',
+          text: 'The same moves the other way: they step back.',
+        },
       },
     },
     playChain: 'Play the chain',

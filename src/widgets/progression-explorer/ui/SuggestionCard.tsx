@@ -1,13 +1,13 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ChordRow, RowStaff, RowPlay } from '@/features/play-example'
+import { ChordRow, RowPlay } from '@/features/play-example'
 import { printedChord, type Chord, type PassingChords } from '@/shared/lib/music'
 import type { ShownKeys } from '@/shared/ui'
 
 /**
- * One way from a chord to another: its name, the row From → … → To voiced smoothly (each chord
- * playing as the row voices it), in the key or chromatic, why it works (its chords printed as the
- * sheets print them), and Play, which plays the row.
+ * One way from a chord to another (canvas 177): its chords into the next ("D7 into G") with what kind
+ * of way it is, why it works (its chords printed as the sheets print them), and Play, which plays
+ * From → … → To voiced smoothly on the keys.
  */
 export function SuggestionCard({
   way,
@@ -26,18 +26,24 @@ export function SuggestionCard({
   const titleId = useId()
   const [first, second] = way.chords
   return (
-    <article aria-labelledby={titleId} className="card p-4">
+    <article
+      aria-labelledby={titleId}
+      className="rounded-2xl bg-card px-4 py-3.5 ring-1 ring-border"
+    >
       <ChordRow chords={[from, ...way.chords, to].map((chord) => ({ chord }))} onShow={onShow}>
-        <header className="flex items-baseline justify-between gap-3">
-          <h4 id={titleId} className="text-lg font-semibold">
-            {t(`passingChords.kind.${way.kind}.name`)}
+        <header className="flex items-baseline gap-2">
+          <h4 id={titleId} className="flex-1 text-base font-bold">
+            {t('passingChords.into', {
+              chords: way.chords.map(printedChord).join(' '),
+              to: printedChord(to),
+            })}
           </h4>
           <span className="shrink-0 text-sm text-muted-foreground">
-            {t(inKey ? 'passingChords.inKey' : 'passingChords.chromatic')}
+            {t(`passingChords.kind.${way.kind}.name`)}
+            {inKey ? ` · ${t('passingChords.inKey')}` : ''}
           </span>
         </header>
-        <RowStaff />
-        <p className="text-muted-foreground">
+        <p className="text-[0.9375rem] leading-snug text-muted-foreground">
           {t(`passingChords.kind.${way.kind}.why`, {
             chord: first ? printedChord(first) : '',
             next: second ? printedChord(second) : '',
