@@ -84,8 +84,8 @@ function LessonScreen({
 }
 
 /**
- * A lesson's page (ADR 0053), `/lessons/$lessonId`: a level's lesson, with its level and chapter over
- * it and its number along the level; or one of the learner's own (R30-5), read the same, under Your
+ * A lesson's page (ADR 0053), `/lessons/$lessonId`: a level's lesson, with its number along the level
+ * and the level over it; or one of the learner's own (R30-5), read the same, under Your
  * lessons. Either, read in a course of the learner's (`?course=`), has that course over it and its
  * lessons either side. Its progress is the lesson's own wherever it is read.
  */
@@ -123,9 +123,8 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
       edit={editsContent(account) ? edit : undefined}
       place={
         <>
-          <PlaceLink {...journey}>{journeyTitle}</PlaceLink> ·{' '}
-          {localText(place.chapter.title, locale)} ·{' '}
-          {t('place', { n: place.n, total: place.total })}
+          {t('place', { n: place.n, total: place.total })} ·{' '}
+          <PlaceLink {...journey}>{journeyTitle}</PlaceLink>
         </>
       }
       track={{
@@ -194,8 +193,8 @@ function InOwnCourse({ lesson, course }: { lesson: Lesson; course: OwnCourse }) 
       edit={isOwnLessonId(lesson.id) || editsContent(account) ? edit : undefined}
       place={
         <>
-          <PlaceLink {...home}>{course.title}</PlaceLink> ·{' '}
-          {t('place', { n: at + 1, total: lessons.length })}
+          {t('place', { n: at + 1, total: lessons.length })} ·{' '}
+          <PlaceLink {...home}>{course.title}</PlaceLink>
         </>
       }
       track={{

@@ -64,8 +64,9 @@ export function LessonLayout({
   const locale = useLocale()
   const { learn } = useLearned(step)
   const progress = useProgressStoreApi()
+  const summary = localText(lesson.summary, locale)
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 lg:max-w-[64.75rem]">
       <ScreenHeader
         title={localText(lesson.title, locale)}
         back={back}
@@ -82,23 +83,6 @@ export function LessonLayout({
         // reads); the bar keeps it for a screen reader and its room for the tools.
         titleOnPage
       />
-      <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
-        {place}
-        {after.length > 0 ? (
-          <span className="block">
-            {t('afterLinks')}{' '}
-            {after.map(({ title, link }, i) => (
-              <Fragment key={title}>
-                {i > 0 ? ', ' : null}
-                <PlaceLink {...link}>{title}</PlaceLink>
-              </Fragment>
-            ))}
-          </span>
-        ) : null}
-      </nav>
-      <p aria-hidden className="pb-2 font-display text-3xl font-semibold text-balance sm:text-4xl">
-        {localText(lesson.title, locale)}
-      </p>
       <LessonView
         key={lesson.id}
         lesson={lesson}
@@ -106,6 +90,45 @@ export function LessonLayout({
         onward={{ link: track.next.link, onGo: learn }}
         end={(paged) => <LessonEnd track={track} onGo={learn} paged={paged} />}
         onRead={(section) => recordSectionRead(progress, step, section)}
+        head={
+          // The canvas's head: where it is (Lesson 7 of 13 · Foundations), its title, what it
+          // teaches, and the lessons to read first.
+          <div className="flex flex-col gap-1.5">
+            <nav
+              aria-label={t('placeLabel')}
+              className="text-[0.875rem] font-semibold text-eyebrow print:hidden"
+            >
+              {place}
+            </nav>
+            <p
+              aria-hidden
+              className="font-display text-3xl leading-[1.15] font-semibold text-balance sm:text-4xl"
+            >
+              {localText(lesson.title, locale)}
+            </p>
+            {summary ? (
+              <p className="text-[1.0625rem] leading-normal text-pretty text-muted-foreground">
+                {summary}
+              </p>
+            ) : null}
+            {after.length > 0 ? (
+              <p className="text-[0.875rem] text-muted-foreground print:hidden">
+                {t('afterLinks')}{' '}
+                {after.map(({ title, link }, i) => (
+                  <Fragment key={title}>
+                    {i > 0 ? ', ' : null}
+                    <Link
+                      {...link}
+                      className="inline-flex min-h-11 items-center font-semibold text-link hover:underline"
+                    >
+                      {title}
+                    </Link>
+                  </Fragment>
+                ))}
+              </p>
+            ) : null}
+          </div>
+        }
       />
     </div>
   )
@@ -165,7 +188,7 @@ export function PlaceLink({ children, ...link }: LinkProps & { children: ReactNo
   return (
     <Link
       {...link}
-      className="relative rounded-control font-semibold text-foreground underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
+      className="relative rounded-control font-semibold text-inherit underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
     >
       {children}
     </Link>

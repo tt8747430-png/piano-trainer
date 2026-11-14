@@ -1,9 +1,8 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, Check, RotateCcw, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { lessonPlace } from '@/entities/lesson'
-import { FolderTile } from '@/entities/library'
 import {
   ownCourseLessons,
   selectOwnLessons,
@@ -14,10 +13,10 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, FabLink, FloatingActions, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import {
-  isComplete,
-  LearnedMeter,
+  CourseBanner,
+  CourseOverview,
   LessonLine,
   lessonShare,
   LessonRow,
@@ -79,9 +78,9 @@ function Lessons({
 }
 
 /**
- * A course of the learner's own (R30-5), `/courses/own-course-n`, as a course's page reads: one card
- * with its cover, its line, how much is learned and its one way in floating (Start course, Continue,
- * Review); then its lessons. Its gear opens its Settings, its pencil the course editor.
+ * A course of the learner's own (R30-5), `/courses/own-course-n`, as a course's page reads (its
+ * board's): its cover in its paint, its line, its count, how much is learned and what is next, its
+ * one way in in honey (Start course, Continue, Review); then its lessons. Its gear opens its Settings, its pencil the course editor.
  */
 export function OwnCoursePage({ course }: { course: OwnCourse }) {
   const { t } = useTranslation('learn')
@@ -92,6 +91,8 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
   const done = lessons.filter(({ lesson }) => learned[lessonStepId(lesson.id)] !== undefined)
   const progress = { done: done.length, total: lessons.length }
   const way = open ?? lessons[0]
+  const paint = PAINT[course.look.paint]
+  const locale = useLocale()
   const label = !open
     ? t('course.review')
     : progress.done === 0
@@ -121,44 +122,31 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
           onDone: () => undefined,
         }}
       />
-      {/* A wide laptop: the course's card on the left, its lessons on the right. */}
-      <div className="-mt-2 grid gap-8 xl:grid-cols-2 xl:items-start xl:gap-10">
-        <section className="flex max-w-3xl min-w-0 flex-col overflow-hidden card xl:sticky xl:top-4">
-          <div className="flex items-start gap-4 p-5">
-            <FolderTile look={course.look} />
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              {course.line ? <p className="text-pretty">{course.line}</p> : null}
-              <p className="text-sm text-muted-foreground">
-                {t('course.lessonCount', { count: lessons.length })}
-              </p>
-            </div>
-          </div>
-          {lessons.length > 0 ? (
-            <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
-              {isComplete(progress) ? (
-                <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
-                  <Check aria-hidden className="size-5" strokeWidth={3} />
-                  {t('course.done')}
-                </p>
-              ) : (
-                <LearnedMeter progress={progress} className="flex-1" />
-              )}
-            </div>
-          ) : null}
-        </section>
-        <div className="flex max-w-3xl min-w-0 flex-col gap-8">
+      {/* A laptop: the course held in view on the left, its lessons beside it. */}
+      <div className="-mt-4 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+        <CourseOverview
+          className="min-w-0 lg:sticky lg:top-4 lg:w-100 lg:flex-none"
+          cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
+          summary={course.line || undefined}
+          facts={[t('course.lessonCount', { count: lessons.length })]}
+          progress={progress}
+          next={open ? localText(open.lesson.title, locale) : undefined}
+          action={
+            way ? (
+              <ButtonLink
+                size="lg"
+                className="h-13 w-full rounded-pill px-5 text-base font-bold"
+                render={inCourse(course, way.lesson.id)}
+              >
+                {label}
+              </ButtonLink>
+            ) : undefined
+          }
+        />
+        <div className="flex min-w-0 flex-1 flex-col gap-8">
           <Lessons course={course} lessons={lessons} next={open?.lesson.id} />
         </div>
       </div>
-      {way ? (
-        <FloatingActions>
-          <FabLink
-            label={label}
-            icon={open ? BookOpenText : RotateCcw}
-            render={inCourse(course, way.lesson.id)}
-          />
-        </FloatingActions>
-      ) : null}
     </div>
   )
 }

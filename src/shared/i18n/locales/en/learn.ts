@@ -123,6 +123,8 @@ export const learn = {
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
     done: 'Course complete',
+    // What Continue leads to, beside how much is learned.
+    nextUp: 'Next: {{title}}',
     facts: 'About this course',
     // The course's own document under its head (R29 B9), an editor's.
     about: 'About',
@@ -144,7 +146,6 @@ export const learn = {
   variants: 'Versions',
   takeaway: 'In short',
   // A lesson read a page at a time on a phone: on to its next page, and on past its last.
-  nextPage: 'Next',
   done: 'Done',
   fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.

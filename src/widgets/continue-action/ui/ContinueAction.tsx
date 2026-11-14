@@ -44,7 +44,7 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-[0.8125rem] font-semibold text-on-paint-yellow">
+        <span className="text-[0.8125rem] font-semibold text-eyebrow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
         <h2 id={id} className="font-display text-[1.375rem] leading-tight text-balance">

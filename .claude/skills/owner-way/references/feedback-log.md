@@ -269,6 +269,13 @@ owner's, typos fixed.
   app's keys, on every board; New a choice of two (the dial on a phone's +, a menu elsewhere), each its own short
   sheet; popovers carry facts (a legend's swatches, shelves with counts), never a line under a control (2026-11-13).
 
+- **Loop round 13, the lesson's foot and contents:** one bar for both ways of reading, the canvas's SECBAR (‹ a
+  clear 52px circle, "In this lesson · Section n of N" opening the contents, the honey › and Done on the last); on a
+  laptop no bar: "In this lesson" stands at the lesson's left in view as it scrolls, each section's number in a
+  24px circle; its head the canvas's: "Lesson 3 of 11 · Foundations" in the eyebrow's rust, the title, what it
+  teaches, After: its links. A course's page is its board's: the cover band in its level's paint, what it teaches,
+  its facts as chips, "0 of 9 learned · Next: …" over a meter, the honey Start course; no card (2026-11-14).
+
 ## Practice
 
 - **Rows show what they hold (loop round 11, the Practice board's `pic`):** each place of Practice wears a small

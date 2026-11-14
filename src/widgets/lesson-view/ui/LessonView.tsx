@@ -99,11 +99,11 @@ function SectionLinks({
             activeOptions={{ includeHash: true }}
             data-reading={reading === sectionId(s) || undefined}
             onClick={onGo}
-            className="flex min-h-11 items-center gap-3 rounded-control px-2 transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
+            className="flex min-h-11 items-center gap-2.5 rounded-[10px] px-2 text-[0.9375rem] transition-colors hover:bg-muted data-reading:bg-muted data-reading:font-semibold"
           >
             <span
               aria-hidden
-              className="w-5 shrink-0 text-right text-muted-foreground tabular-nums"
+              className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-[0.8125rem] font-bold tabular-nums in-data-reading:bg-card"
             >
               {s + 1}
             </span>
@@ -139,47 +139,50 @@ export interface Onward {
   readonly onGo: () => void
 }
 
+/** The bar's controls: 52px circles, the canvas's SECBAR. */
+const CIRCLE = 'size-13 shrink-0 rounded-pill [&_svg]:size-6'
+
 /**
- * The lesson's bar, floating in the thumb's reach: ‹ the section before, which one is being read of
- * how many (opening the contents, and what the lesson is part of), › the next. A jump between
- * sections replaces the page's entry, as a contents link does: Back still leaves the lesson. Standing
- * at the side of a wide screen, the bar stands upright, its arrows up and down. Paged (a phone), the
- * count is the pages' dots and › is Next, honey, Done on the last page, which goes on.
+ * The lesson's bar, the canvas's SECBAR, floating in the thumb's reach on a phone or a tablet: ‹ the
+ * section before; "In this lesson, Section n of N", opening the contents and what the lesson is part
+ * of; and the honey › to the next, Done on the last, which goes on. A jump between sections replaces
+ * the page's entry, as a contents link does: Back still leaves the lesson. On a phone on its side
+ * it stands upright at the side, its arrows up and down and the contents an icon.
  */
 function LessonBar({
   lesson,
   at,
   up,
-  paged,
   onward,
 }: {
   lesson: Lesson
   /** The section being read, by its place. */
   at: number
   up: UpLink
-  paged: boolean
   onward: Onward
 }) {
   const { t } = useTranslation('learn')
   const [open, setOpen] = useState(false)
   const of = lesson.sections.length
-  // Its arrows point the way the bar reads: along it at the foot, up and down standing at the side.
-  const arrows = (Along: LucideIcon, Aside: LucideIcon) =>
-    paged ? (
-      <Along aria-hidden />
-    ) : (
-      <>
-        <Along aria-hidden className="aside:hidden" />
-        <Aside aria-hidden className="hidden aside:block" />
-      </>
-    )
+  // Its arrows point the way the bar reads: along it at the foot, up and down standing at the side
+  // of a phone on its side.
+  const arrows = (Along: LucideIcon, Aside: LucideIcon) => (
+    <>
+      <Along aria-hidden className="landscape-phone:hidden" />
+      <Aside aria-hidden className="hidden landscape-phone:block" />
+    </>
+  )
   const section = (to: number, label: string, icons: ReactNode) =>
     to >= 0 && to < of ? (
-      <FloatingBarButton label={label} render={<Link to="." hash={sectionId(to)} replace />}>
+      <FloatingBarButton
+        label={label}
+        className={CIRCLE}
+        render={<Link to="." hash={sectionId(to)} replace />}
+      >
         {icons}
       </FloatingBarButton>
     ) : (
-      <FloatingBarButton label={label} disabled>
+      <FloatingBarButton label={label} className={CIRCLE} disabled>
         {icons}
       </FloatingBarButton>
     )
@@ -190,53 +193,10 @@ function LessonBar({
       </nav>
     </SheetContent>
   )
-  if (paged)
-    return (
-      <FloatingBar label={t('lessonBar')}>
-        {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            render={
-              <Button
-                variant="ghost"
-                aria-label={t('contentsAt', { at: at + 1, of })}
-                title={t('contents')}
-                className="h-12 min-w-0 flex-1 flex-col gap-0 rounded-pill px-2 leading-tight"
-              />
-            }
-          >
-            <span className="text-xs text-muted-foreground">{t('inThisLesson')}</span>
-            <span className="font-semibold tabular-nums">{t('sectionOf', { at: at + 1, of })}</span>
-          </SheetTrigger>
-          {contents}
-        </Sheet>
-        {/* The bar's honey circle at its end: on to the next page, Done on the last. */}
-        {at + 1 < of ? (
-          <ButtonLink
-            size="icon"
-            aria-label={t('nextPage')}
-            title={t('nextPage')}
-            className="size-12 shrink-0 rounded-pill [&_svg]:size-5"
-            render={<Link to="." hash={sectionId(at + 1)} replace />}
-          >
-            <ChevronRight aria-hidden />
-          </ButtonLink>
-        ) : (
-          <ButtonLink
-            size="icon"
-            aria-label={t('done')}
-            title={t('done')}
-            className="size-12 shrink-0 rounded-pill [&_svg]:size-5"
-            render={onward.link}
-            onClick={onward.onGo}
-          >
-            <Check aria-hidden />
-          </ButtonLink>
-        )}
-      </FloatingBar>
-    )
   return (
-    <FloatingBar label={t('lessonBar')} orientation="aside">
+    // On a laptop the contents stand beside the lesson (`LessonView`): the bar is the phone's and
+    // the tablet's.
+    <FloatingBar label={t('lessonBar')} orientation="landscape-phone" className="lg:hidden">
       {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger
@@ -245,16 +205,43 @@ function LessonBar({
               variant="ghost"
               aria-label={t('contentsAt', { at: at + 1, of })}
               title={t('contents')}
-              className="h-12 rounded-pill px-3 aside:h-auto aside:w-12 aside:flex-col aside:gap-0.5 aside:px-0 aside:py-2 aside:text-xs"
+              className="h-13 min-w-0 flex-1 flex-col gap-0 rounded-pill px-2 leading-tight landscape-phone:size-13 landscape-phone:flex-none"
             />
           }
         >
-          <ListOrdered aria-hidden />
-          <Glyph text={`${at + 1}/${of}`} className="font-semibold tabular-nums" />
+          <ListOrdered aria-hidden className="hidden size-6 landscape-phone:block" />
+          <span className="text-[0.8125rem] font-normal text-muted-foreground landscape-phone:hidden">
+            {t('inThisLesson')}
+          </span>
+          <span className="text-[0.9375rem] font-bold tabular-nums landscape-phone:hidden">
+            {t('sectionOf', { at: at + 1, of })}
+          </span>
         </SheetTrigger>
         {contents}
       </Sheet>
-      {section(at + 1, t('nextSection'), arrows(ChevronRight, ChevronDown))}
+      {/* The bar's honey circle at its end: on to the next section, Done on the last. */}
+      {at + 1 < of ? (
+        <ButtonLink
+          size="icon"
+          aria-label={t('nextSection')}
+          title={t('nextSection')}
+          className={CIRCLE}
+          render={<Link to="." hash={sectionId(at + 1)} replace />}
+        >
+          {arrows(ChevronRight, ChevronDown)}
+        </ButtonLink>
+      ) : (
+        <ButtonLink
+          size="icon"
+          aria-label={t('done')}
+          title={t('done')}
+          className={CIRCLE}
+          render={onward.link}
+          onClick={onward.onGo}
+        >
+          <Check aria-hidden />
+        </ButtonLink>
+      )}
     </FloatingBar>
   )
 }
@@ -280,8 +267,11 @@ export function LessonView({
   onward,
   end,
   onRead,
+  head,
 }: {
   lesson: Lesson
+  /** What leads the lesson's column: where it is and its title. */
+  head?: ReactNode
   up: UpLink
   onward: Onward
   /** A section read, by its place: its page shown, or scrolled to the reading line. */
@@ -328,66 +318,85 @@ export function LessonView({
     dispatch({ type: 'close' })
     setShown(next)
   }
+  const { t } = useTranslation('learn')
   return (
-    <div className="flex flex-col gap-10">
-      <PinnedKeyboard
-        shown={keys}
-        selected={keys.selected}
-        wrong={keys.wrong}
-        onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
-      />
-      <div className="flex flex-col gap-10">
-        {lesson.sections.map((section, s) =>
-          // A page at a time on a phone: only the page read is drawn.
-          paged && s !== page ? null : (
-            <section
-              key={section.heading.en}
-              id={sectionId(s)}
-              // Sections apart by a line and room; a section's text and its examples close together.
-              className={cn(
-                'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
-                s > 0 && !paged && 'border-t border-border pt-8',
-              )}
-            >
-              <SectionHeading text={section.heading} style={section.style} />
-              {section.blocks.map((block, b) => {
-                const id = `${s}.${b}`
-                if (block.kind !== 'question')
-                  return <LessonBlock key={id} block={block} onShow={show} onFollow={setShown} />
-                const open = question?.id === id ? question : null
-                const answerKeys = answers.get(id) ?? { ...NO_KEYS, inOrder: false }
-                const asked = (
-                  <QuestionBlock
-                    key={id}
-                    ask={block.ask}
-                    stage={open ? open.stage : 'closed'}
-                    count={chosenOf(open?.chosen ?? [], answerKeys)}
-                    onOpen={() => dispatch({ type: 'open', id })}
-                    onReveal={() => {
-                      dispatch({ type: 'reveal' })
-                      play(answerSounds(block.answer, answerKeys.keys))
-                    }}
-                    onRetry={() => dispatch({ type: 'retry' })}
-                  />
-                )
-                return block.style ? (
-                  <StyledBlock key={id} style={block.style}>
-                    {asked}
-                  </StyledBlock>
-                ) : (
-                  asked
-                )
-              })}
-              {section.takeaway ? (
-                <Takeaway text={section.takeaway} style={section.takeawayStyle} />
-              ) : null}
-            </section>
-          ),
-        )}
-        {end && (!paged || page === lesson.sections.length - 1) ? end(paged) : null}
+    // On a laptop the contents stand at the lesson's left, in view as it scrolls (the canvas's 260
+    // and 704 columns, 72 apart); a phone and a tablet reach them from the bar.
+    <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[16.25rem_minmax(0,44rem)] lg:items-start lg:justify-center lg:gap-x-18">
+      <nav
+        aria-label={t('inThisLesson')}
+        className="sticky top-4 hidden flex-col gap-1 lg:flex print:hidden"
+      >
+        <h2 className="ml-1 font-sans text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+          {t('inThisLesson')}
+        </h2>
+        <SectionLinks lesson={lesson} reading={read === null ? null : sectionId(read)} />
+      </nav>
+      <div className="flex min-w-0 flex-col gap-4">
+        {head}
+        <div className="flex flex-col gap-10">
+          <PinnedKeyboard
+            shown={keys}
+            selected={keys.selected}
+            wrong={keys.wrong}
+            onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
+          />
+          <div className="flex flex-col gap-10">
+            {lesson.sections.map((section, s) =>
+              // A page at a time on a phone: only the page read is drawn.
+              paged && s !== page ? null : (
+                <section
+                  key={section.heading.en}
+                  id={sectionId(s)}
+                  // Sections apart by a line and room; a section's text and its examples close together.
+                  className={cn(
+                    'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+                    s > 0 && !paged && 'border-t border-border pt-8',
+                  )}
+                >
+                  <SectionHeading text={section.heading} style={section.style} />
+                  {section.blocks.map((block, b) => {
+                    const id = `${s}.${b}`
+                    if (block.kind !== 'question')
+                      return (
+                        <LessonBlock key={id} block={block} onShow={show} onFollow={setShown} />
+                      )
+                    const open = question?.id === id ? question : null
+                    const answerKeys = answers.get(id) ?? { ...NO_KEYS, inOrder: false }
+                    const asked = (
+                      <QuestionBlock
+                        key={id}
+                        ask={block.ask}
+                        stage={open ? open.stage : 'closed'}
+                        count={chosenOf(open?.chosen ?? [], answerKeys)}
+                        onOpen={() => dispatch({ type: 'open', id })}
+                        onReveal={() => {
+                          dispatch({ type: 'reveal' })
+                          play(answerSounds(block.answer, answerKeys.keys))
+                        }}
+                        onRetry={() => dispatch({ type: 'retry' })}
+                      />
+                    )
+                    return block.style ? (
+                      <StyledBlock key={id} style={block.style}>
+                        {asked}
+                      </StyledBlock>
+                    ) : (
+                      asked
+                    )
+                  })}
+                  {section.takeaway ? (
+                    <Takeaway text={section.takeaway} style={section.takeawayStyle} />
+                  ) : null}
+                </section>
+              ),
+            )}
+            {end && (!paged || page === lesson.sections.length - 1) ? end(paged) : null}
+          </div>
+        </div>
       </div>
       <FloatingActions>
-        <LessonBar lesson={lesson} at={at} up={up} paged={paged} onward={onward} />
+        <LessonBar lesson={lesson} at={at} up={up} onward={onward} />
       </FloatingActions>
     </div>
   )

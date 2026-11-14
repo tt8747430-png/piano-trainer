@@ -71,8 +71,8 @@ export function CourseLessonPage() {
       })}
       place={
         <>
-          <PlaceLink {...course}>{courseTitle}</PlaceLink> ·{' '}
-          {t('place', { n: place.n, total: place.total })}
+          {t('place', { n: place.n, total: place.total })} ·{' '}
+          <PlaceLink {...course}>{courseTitle}</PlaceLink>
         </>
       }
       track={{

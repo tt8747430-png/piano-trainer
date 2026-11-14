@@ -123,6 +123,7 @@ export const learn: LocaleResources['learn'] = {
     songCount_many: '{{count}} песен',
     songCount_other: '{{count}} песни',
     done: 'Курс пройден',
+    nextUp: 'Далее: {{title}}',
     // Документ курса под его шапкой (R29 B9), от редактора.
     about: 'Описание',
     facts: 'О курсе',
@@ -139,7 +140,6 @@ export const learn: LocaleResources['learn'] = {
   lessonBar: 'Урок',
   variants: 'Варианты',
   takeaway: 'Коротко',
-  nextPage: 'Дальше',
   done: 'Готово',
   fingers: 'Аппликатура в гаммах',
   example: {

@@ -47,6 +47,9 @@
   --p-honey-deep: #b07a2a;
   --p-honey-ink: #7a5418;
   --p-ochre: #a8742a;
+  /* The canvas's eyebrow: a small line naming where something is (Continue, Lesson 7 of 13). */
+  --p-rust: #a8551f;
+  --p-rust-night: #e39a66;
   --p-crimson: #a34243;
   /* The shade cast by night: near black, warm. */
   --p-night-shade: #0a0705;
@@ -92,6 +95,7 @@
   --honey-ring: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
+  --eyebrow: var(--p-rust);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
      its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
      follow the theme. */
@@ -271,6 +275,7 @@
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
+    --eyebrow: var(--p-rust-night);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);
     --hand-staff-ink: var(--p-grass-light);
