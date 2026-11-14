@@ -21,7 +21,7 @@ import { Check, Dices, ListMusic, Piano, Plus, Redo2, Route, Undo, Undo2 } from 
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useChordSheetsStoreApi } from '@/entities/chord-sheet'
-import { styleBook, styleVariations, usePatternBook } from '@/entities/pattern'
+import { styleBook, styleVariations, usePatternBook, type Style } from '@/entities/pattern'
 import { discardDraft, restoreDraft, saveDraft } from '@/features/manage-chord-sheets'
 import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
@@ -36,6 +36,7 @@ import {
   moveChordAcross,
   moveSection,
   MOST_SECTIONS,
+  NO_MARKS,
   relayMeter,
   removeChord,
   removeSection,
@@ -80,14 +81,19 @@ import {
 import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-sheet'
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
+import { keyChords } from '../model/key-chords'
+import { useArrangerFollow } from '../model/use-arranger-follow'
 import { useChordTransport } from '../model/use-chord-transport'
 import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd'
+import { ArrangerSheet, marksLine } from './ArrangerSheet'
+import { ArrangerStrip } from './ArrangerStrip'
 import { ChordDialog } from './ChordDialog'
 import { ChordFace, type TileActs } from './ChordTile'
 import { LibrarySheet } from './LibrarySheet'
 import { SectionSheet } from './SectionSheet'
 import { SheetSection } from './SheetSection'
-import { StyleSheet } from './StyleSheet'
+import { KeyChords } from './KeyChords'
+import { StyleList, StyleSheet } from './StyleSheet'
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 /** How a dropped tile settles into its place: the app's one ease-out (DESIGN.md, Motion). */
@@ -177,6 +183,14 @@ export function ChordPlayer({
     settings: entry.settings,
     block: prefs.voicing === 'block',
   })
+  // Following a MIDI arranger (a Genos): its clock lights the sheet, its Start/Stop is Play.
+  const follow = useArrangerFollow(shown, prefs.follow)
+  const device = follow.status?.state === 'connected' ? follow.status.device : 'Genos'
+  const lit = prefs.follow ? follow.lit : transport.lit
+  const beat = prefs.follow ? follow.beat : transport.beat
+  const playing = prefs.follow ? follow.running : transport.playing
+  /** The section whose arranger sheet is open. */
+  const [tagged, setTagged] = useState<number | null>(null)
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
   const [inHand, setInHand] = useState<string | null>(null)
   const reduced = useMediaQuery(REDUCED_MOTION)
@@ -245,7 +259,8 @@ export function ChordPlayer({
 
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.bars.length > 0)
-  const toggle = () => (transport.playing ? transport.stop() : transport.play())
+  const toggle = () =>
+    prefs.follow ? follow.toggle() : transport.playing ? transport.stop() : transport.play()
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
     { label: t('chordPlayer.shortcuts.playStop'), combo: { key: ' ' }, run: toggle },
@@ -266,17 +281,37 @@ export function ChordPlayer({
     }),
   )
   const sectionIds = shown.sections.map((_, i) => sectionDragId(i))
+  const tiles = keyChords(shown.key)
+  /** A style chosen: its tempo with it, the sheet laid out again in its time where that differs. */
+  const chooseStyle = (chosen: Style) => {
+    hand.setEntry({ style: chosen.id, tempo: chosen.tempo })
+    if (chosen.meter !== hand.sheet.meter) {
+      hand.edit((sheet) => relayMeter(sheet, chosen.meter))
+      say(t('chordPlayer.laidOut', { meter: chosen.meter }), {
+        label: t('chordPlayer.undo'),
+        onClick: hand.undo,
+      })
+    }
+  }
   const onDrop = ({ active, over }: DragEndEvent) => {
     setInHand(null)
     const move = dropMove(active.id, over?.id)
     if (move?.kind === 'section') hand.edit((sheet) => moveSection(sheet, move.from, move.to))
     else if (move?.kind === 'chord')
       hand.editShown((sheet) => moveChordAcross(sheet, move.from, move.to))
+    else if (move?.kind === 'key') {
+      const chord = tiles[move.key]
+      if (chord)
+        inSection(move.to.section, (each) =>
+          insertChord(each, Math.min(move.to.index, sectionChords(each).length), chord, meter),
+        )
+    }
   }
   const held = readDragId(inHand)
   const heldChord =
     held?.kind === 'chord' ? chordAt({ section: held.section, index: held.index }) : undefined
   const heldSection = held?.kind === 'section' ? shown.sections[held.section] : undefined
+  const heldKey = held?.kind === 'key' ? tiles[held.index] : undefined
   /** A section deleted at once, Undo in its toast (a loss that can be undone, CLAUDE.md). */
   const deleteSection = (index: number) => {
     const section = shown.sections[index]
@@ -303,6 +338,42 @@ export function ChordPlayer({
   const plays = entry.settings.plays
   const transpose = entry.settings.transpose
   const shortKey = `${printedNote(shown.key.tonic)}${shown.key.minor ? 'm' : ''}`
+  /** The dock: Style, Key, Tempo, Repeats and Play; floating on a phone, at the sheet's foot on a laptop. */
+  const dockBar = (
+    <FloatingBar label={t('chordPlayer.transport')} className="md:w-[35rem]">
+      <FloatingBarValue
+        label={t('chordPlayer.style')}
+        value={localText(style.name, locale)}
+        onClick={() => setStyles(true)}
+      />
+      <FloatingBarValue
+        label={t('chordPlayer.dock.key')}
+        value={shortKey}
+        spoken={keyName(shown.key)}
+        onClick={() => setDock('key')}
+      />
+      <FloatingBarValue
+        label={t('chordPlayer.tempo')}
+        value={String(follow.tempo ?? entry.tempo)}
+        spoken={t('chordPlayer.bpm', { count: follow.tempo ?? entry.tempo })}
+        onClick={() => setDock('tempo')}
+      />
+      <FloatingBarValue
+        label={t('chordPlayer.dock.plays')}
+        value={plays === 0 ? '∞' : t('chordPlayer.times', { count: plays })}
+        spoken={
+          plays === 0 ? t('chordPlayer.dock.untilStop') : t('chordPlayer.times', { count: plays })
+        }
+        onClick={() => setDock('plays')}
+      />
+      <FloatingBarPlay
+        label={playing ? t('chordPlayer.stop') : t('chordPlayer.play')}
+        playing={playing}
+        disabled={!hasChords}
+        onClick={toggle}
+      />
+    </FloatingBar>
+  )
   return (
     <div className="flex flex-col gap-4 pb-28">
       <ScreenHeader
@@ -406,47 +477,80 @@ export function ChordPlayer({
         onDragEnd={onDrop}
         onDragCancel={() => setInHand(null)}
       >
-        {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
-        <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
-          <div className="flex items-baseline justify-center gap-2">
-            <h2 className="font-display text-xl font-normal text-balance">{name}</h2>
-            {hand.draft ? (
-              <span className="text-[13px] font-semibold text-honey-ink">
-                {t('chordPlayer.draft.label')}
-              </span>
+        {/* On a laptop the sheet's column and, beside it, the key's chords and the styles (canvas 171). */}
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-10">
+          <div className="flex min-w-0 flex-col gap-4">
+            {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
+            <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
+              <div className="flex items-baseline justify-center gap-2">
+                <h2 className="font-display text-xl font-normal text-balance">{name}</h2>
+                {hand.draft ? (
+                  <span className="text-[13px] font-semibold text-honey-ink">
+                    {t('chordPlayer.draft.label')}
+                  </span>
+                ) : null}
+              </div>
+              <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+                {shown.sections.map((section, index) => (
+                  <SheetSection
+                    key={sectionIds[index]}
+                    section={section}
+                    index={index}
+                    musicKey={shown.key}
+                    meter={meter}
+                    names={prefs.names}
+                    lit={lit}
+                    beat={beat}
+                    tag={prefs.follow ? marksLine(section.marks, t) : null}
+                    onTag={() => setTagged(index)}
+                    chosen={dialog?.place ?? null}
+                    acts={acts}
+                    onOpen={() => setOpened(index)}
+                  />
+                ))}
+              </SortableContext>
+              {shown.sections.length < MOST_SECTIONS ? (
+                <button
+                  type="button"
+                  onClick={() => hand.edit((sheet) => addSection(sheet))}
+                  className="-my-1 -ml-2 flex h-11 items-center gap-1 self-start rounded-control px-2 text-[15px] font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted"
+                >
+                  <Plus aria-hidden className="size-4" />
+                  {t('chordPlayer.addSection')}
+                </button>
+              ) : null}
+            </div>
+            {/* The thing in hand, drawn as itself and lifted (memory-palaces' cause 3). */}
+            {prefs.follow ? (
+              <div className="hidden lg:block">
+                <ArrangerStrip follow={follow} device={device} />
+              </div>
             ) : null}
+            <div className="sticky bottom-4 z-10 hidden justify-center lg:flex">{dockBar}</div>
           </div>
-          <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
-            {shown.sections.map((section, index) => (
-              <SheetSection
-                key={sectionIds[index]}
-                section={section}
-                index={index}
-                musicKey={shown.key}
-                meter={meter}
-                names={prefs.names}
-                lit={transport.lit}
-                beat={transport.beat}
-                chosen={dialog?.place ?? null}
-                acts={acts}
-                onOpen={() => setOpened(index)}
-              />
-            ))}
-          </SortableContext>
-          {shown.sections.length < MOST_SECTIONS ? (
-            <button
-              type="button"
-              onClick={() => hand.edit((sheet) => addSection(sheet))}
-              className="-my-1 -ml-2 flex h-11 items-center gap-1 self-start rounded-control px-2 text-[15px] font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted"
-            >
-              <Plus aria-hidden className="size-4" />
-              {t('chordPlayer.addSection')}
-            </button>
-          ) : null}
+          <aside className="hidden flex-col gap-8 lg:flex">
+            <KeyChords
+              musicKey={shown.key}
+              chords={tiles}
+              onAdd={(chord) => {
+                const last = shown.sections.length - 1
+                const held = shown.sections[last]
+                if (!held) return
+                inSection(last, (each) =>
+                  insertChord(each, sectionChords(each).length, chord, meter),
+                )
+              }}
+            />
+            <section className="flex flex-col gap-3">
+              <h2 className="px-1 text-xl font-bold">{t('chordPlayer.style')}</h2>
+              <StyleList book={book} value={style.id} onChoose={chooseStyle} />
+            </section>
+          </aside>
         </div>
-        {/* The thing in hand, drawn as itself and lifted (memory-palaces' cause 3). */}
         <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
-          {heldChord ? (
+          {heldKey ? (
+            <ChordFace chord={heldKey} musicKey={shown.key} names={prefs.names} />
+          ) : heldChord ? (
             <ChordFace chord={heldChord.chord} musicKey={shown.key} names={prefs.names} />
           ) : heldSection ? (
             <div className="flex min-h-14 items-center gap-3 card px-4 elevation-3">
@@ -461,42 +565,16 @@ export function ChordPlayer({
 
       <PinnedKeyboard shown={NO_KEYS} />
 
-      <FloatingActions>
-        <FloatingBar label={t('chordPlayer.transport')} className="md:w-[35rem]">
-          <FloatingBarValue
-            label={t('chordPlayer.style')}
-            value={localText(style.name, locale)}
-            onClick={() => setStyles(true)}
-          />
-          <FloatingBarValue
-            label={t('chordPlayer.dock.key')}
-            value={shortKey}
-            spoken={keyName(shown.key)}
-            onClick={() => setDock('key')}
-          />
-          <FloatingBarValue
-            label={t('chordPlayer.tempo')}
-            value={String(entry.tempo)}
-            spoken={t('chordPlayer.bpm', { count: entry.tempo })}
-            onClick={() => setDock('tempo')}
-          />
-          <FloatingBarValue
-            label={t('chordPlayer.dock.plays')}
-            value={plays === 0 ? '∞' : t('chordPlayer.times', { count: plays })}
-            spoken={
-              plays === 0
-                ? t('chordPlayer.dock.untilStop')
-                : t('chordPlayer.times', { count: plays })
-            }
-            onClick={() => setDock('plays')}
-          />
-          <FloatingBarPlay
-            label={transport.playing ? t('chordPlayer.stop') : t('chordPlayer.play')}
-            playing={transport.playing}
-            disabled={!hasChords}
-            onClick={toggle}
-          />
-        </FloatingBar>
+      <FloatingActions className="lg:hidden">
+        {/* Following an arranger, its panel's strip stands over the dock, as wide. */}
+        <div className="flex w-full min-w-0 flex-col items-center gap-2 md:w-auto">
+          {prefs.follow ? (
+            <div className="w-full md:w-[35rem] lg:hidden">
+              <ArrangerStrip follow={follow} device={device} />
+            </div>
+          ) : null}
+          {dockBar}
+        </div>
       </FloatingActions>
 
       <Sheet open={dock !== null} onOpenChange={(open) => (open ? null : setDock(null))}>
@@ -598,6 +676,18 @@ export function ChordPlayer({
           onLoop={(on) => transport.setLoop(on ? opened : null)}
         />
       ) : null}
+      {tagged !== null && shown.sections[tagged] ? (
+        <ArrangerSheet
+          open
+          onOpenChange={(open) => (open ? null : setTagged(null))}
+          name={t(`chordPlayer.sections.${shown.sections[tagged]?.kind ?? 'verse'}`)}
+          marks={shown.sections[tagged]?.marks ?? NO_MARKS}
+          repeats={shown.sections[tagged]?.repeats ?? 1}
+          first={tagged === 0}
+          last={tagged === shown.sections.length - 1}
+          onChange={(marks) => inSection(tagged, (each) => ({ ...each, marks }))}
+        />
+      ) : null}
       <LibrarySheet
         open={library}
         onOpenChange={setLibrary}
@@ -624,14 +714,7 @@ export function ChordPlayer({
         value={style.id}
         onChoose={(chosen) => {
           setStyles(false)
-          hand.setEntry({ style: chosen.id, tempo: chosen.tempo })
-          if (chosen.meter !== hand.sheet.meter) {
-            hand.edit((sheet) => relayMeter(sheet, chosen.meter))
-            say(t('chordPlayer.laidOut', { meter: chosen.meter }), {
-              label: t('chordPlayer.undo'),
-              onClick: hand.undo,
-            })
-          }
+          chooseStyle(chosen)
         }}
       />
     </div>

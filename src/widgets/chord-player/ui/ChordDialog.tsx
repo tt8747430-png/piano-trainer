@@ -12,7 +12,6 @@ import {
   qualitySuffix,
   readChordSymbol,
   sameNote,
-  scaleChordAt,
   spellChord,
   type Chord,
   type ChordQuality,
@@ -28,6 +27,7 @@ import {
   Stepper,
   TypedField,
 } from '@/shared/ui'
+import { likeliestChords } from '../model/key-chords'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
@@ -47,20 +47,6 @@ const QUALITIES: readonly ChordQuality[] = [
 /** The key's chords suggested, its own seven triads and V7, the chord in hand left out. */
 const SUGGESTED = 6
 
-/** The key's chords, I to vii and V7, likeliest first: I, IV, V, vi, ii, V7, iii. */
-function keyChords(key: Key): Chord[] {
-  const kind = key.minor ? 'harmonic' : 'major'
-  const triad = (degree: number) => scaleChordAt(key.tonic, kind, degree, 3)
-  return [
-    triad(0),
-    triad(3),
-    triad(4),
-    triad(5),
-    triad(1),
-    scaleChordAt(key.tonic, kind, 4, 4),
-    triad(2),
-  ]
-}
 const sameChord = (a: Chord, b: Chord) =>
   sameNote(a.root, b.root) && a.quality === b.quality && a.bass === undefined
 
@@ -108,7 +94,7 @@ export function ChordDialog({
       ? 'root'
       : (tones.find((tone) => tone.note.letter === chord.bass?.letter)?.role ?? 'root')
   const qualities = QUALITIES.includes(chord.quality) ? QUALITIES : [...QUALITIES, chord.quality]
-  const suggested = keyChords(musicKey)
+  const suggested = likeliestChords(musicKey)
     .filter((each) => !sameChord(each, chord))
     .slice(0, SUGGESTED)
   /** The chord changed: its bass kept where the new chord holds it. */

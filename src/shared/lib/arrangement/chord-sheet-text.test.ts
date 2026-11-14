@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { C_MAJOR, parseChordSymbol, parseKey } from '@/shared/lib/music'
-import type { ChordSheet } from './chord-sheet'
+import { NO_MARKS, type ChordSheet } from './chord-sheet'
 import { sheetToText, textToSheet } from './chord-sheet-text'
 
 const chord = (symbol: string, beats = 4) => ({ chord: parseChordSymbol(symbol), beats })
@@ -10,23 +10,32 @@ describe('a chord sheet as text', () => {
     key: parseKey('Am') ?? C_MAJOR,
     meter: '3/4',
     sections: [
-      { kind: 'intro', repeats: 1, variation: 4, bars: [{ chords: [chord('Am', 3)] }] },
+      {
+        kind: 'intro',
+        repeats: 1,
+        variation: 4,
+        marks: { ...NO_MARKS, intro: 2 },
+        bars: [{ chords: [chord('Am', 3)] }],
+      },
       {
         kind: 'verse',
         repeats: 2,
         variation: 1,
+        marks: { ...NO_MARKS, mains: ['A', null], into: 'fill' },
         bars: [
           { chords: [chord('Am', 2), chord('G/B', 1)] },
           { chords: [chord('C', 3)] },
           { chords: [chord('F#m7b5', 6)] },
         ],
       },
-      { kind: 'preChorus', repeats: 1, variation: 2, bars: [] },
+      { kind: 'preChorus', repeats: 1, variation: 2, marks: { ...NO_MARKS, ending: 3 }, bars: [] },
     ],
   }
   it('sheetToText and textToSheet round-trip three sections with repeats and lengths', () => {
     const text = sheetToText(sheet)
-    expect(text).toBe('Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 | C | F#m7♭5:6; preChorus v2:')
+    expect(text).toBe(
+      'Am 3/4; intro v4 i2: Am; verse x2 mA- fill: Am:2 G/B:1 | C | F#m7♭5:6; preChorus v2 e3:',
+    )
     expect(textToSheet(text)).toEqual(sheet)
   })
   it('reads what it can (Postel): any case, ♭ and ♯, a word it cannot read left out', () => {

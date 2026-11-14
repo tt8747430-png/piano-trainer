@@ -1,6 +1,6 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { Cable, Drum, Guitar, Piano } from 'lucide-react'
-import { useMemo, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BAND_PARTS, type BandPart } from '@/entities/chord-sheet'
 import { styleBook, usePatternBook } from '@/entities/pattern'
@@ -12,8 +12,10 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setChordPlayer } from '@/features/set-preference'
+import type { ArrangerStatus } from '@/shared/api/midi'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
+import { useServices } from '@/shared/lib/services'
 import {
   BackButton,
   ChoiceCard,
@@ -66,6 +68,23 @@ function Level({
   )
 }
 
+/** The arranger followed, asked for when Follow a MIDI arranger is on (the browser's MIDI prompt, with SysEx). */
+function useArrangerStatus(on: boolean): ArrangerStatus | null {
+  const { arranger } = useServices()
+  const [status, setStatus] = useState<ArrangerStatus | null>(null)
+  useEffect(() => {
+    if (!on) return
+    const off = arranger.onStatus(setStatus)
+    void arranger.connect().then(setStatus)
+    return () => {
+      off()
+      arranger.disconnect()
+      setStatus(null)
+    }
+  }, [on, arranger])
+  return on ? status : null
+}
+
 /**
  * The Chord player's Settings (`/practice/chord-player/settings`, R29 CP6), a lesson's page's shape:
  * Instruments (each on or off and its level, at least one on, a part the style has none of not
@@ -81,6 +100,7 @@ export function ChordPlayerSettingsPage() {
   const book = useMemo(() => styleBook(patterns), [patterns])
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
+  const arranger = useArrangerStatus(prefs.follow)
   if (!hand) return null
   const { settings } = hand.entry
   const style = book.get(hand.entry.style)
@@ -100,6 +120,7 @@ export function ChordPlayerSettingsPage() {
               return (
                 <div key={part} className="flex flex-col">
                   <SwitchRow
+                    className="px-4"
                     icon={ICONS[part]}
                     label={name}
                     checked={settings[part].on}
@@ -125,6 +146,7 @@ export function ChordPlayerSettingsPage() {
           </SettingsGroup>
           <SettingsGroup flush title={t('chordPlayer.settings.playing')}>
             <SwitchRow
+              className="px-4"
               label={t('chordPlayer.settings.countIn')}
               info={t('chordPlayer.settings.countInInfo')}
               checked={settings.countIn}
@@ -195,6 +217,30 @@ export function ChordPlayerSettingsPage() {
               paint="sky"
               render={<Link to="/settings/connect-piano" />}
             />
+          </SettingsGroup>
+          <SettingsGroup flush>
+            <SwitchRow
+              className="px-4"
+              label={t('chordPlayer.settings.follow')}
+              info={t('chordPlayer.settings.followInfo')}
+              setting="chordPlayer.follow"
+              checked={prefs.follow}
+              onCheckedChange={(follow) => setChordPlayer(settingsStore, { follow })}
+            />
+            <div className="flex min-h-12 items-center justify-between gap-3 px-4 text-base">
+              <span>{t('chordPlayer.settings.arranger')}</span>
+              <span className="truncate text-muted-foreground" aria-live="polite">
+                {!prefs.follow
+                  ? t('chordPlayer.settings.arrangerState.off')
+                  : arranger?.state === 'connected'
+                    ? t('chordPlayer.settings.arrangerState.connected', { device: arranger.device })
+                    : arranger?.state === 'denied'
+                      ? t('chordPlayer.settings.arrangerState.denied')
+                      : arranger?.state === 'unsupported'
+                        ? t('chordPlayer.settings.arrangerState.unsupported')
+                        : t('chordPlayer.settings.arrangerState.noDevice')}
+              </span>
+            </div>
           </SettingsGroup>
         </div>
       </div>

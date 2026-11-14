@@ -42,9 +42,78 @@ function RhythmPicture({ grid }: { grid: DrumGrid }) {
 }
 
 /**
- * The Style sheet (R29 CP3): the styles by family, Pop first, Accompaniment's patterns last; each row
- * its name and its groove in a bar, ▷ playing a bar of it over C, a tap choosing it.
+ * The styles by family, each with its rhythm drawn and a one-bar Listen; the chosen ticked. The
+ * Style sheet's body on a phone, the laptop's side column under the key's chords.
  */
+export function StyleList({
+  book,
+  value,
+  onChoose,
+}: {
+  book: StyleBook
+  value: string
+  onChoose(style: Style): void
+}) {
+  const { t } = useTranslation('practice')
+  const locale = useLocale()
+  const shelfName = useShelfName()
+  const playback = usePlayback<string>()
+  return (
+    <div className="flex flex-col gap-5">
+      {book.families.map(({ family, styles }) => (
+        <section key={family} className="flex flex-col gap-1">
+          <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
+            {t(`chordPlayer.families.${family}`)}
+          </h3>
+          <ul className="flex flex-col">
+            {styles.map((style) => {
+              const name = localText(style.name, locale)
+              const chosen = style.id === value
+              const grid = style.variations[0]?.drums
+              return (
+                <li key={style.id} className="flex min-h-12 items-center gap-1">
+                  <button
+                    type="button"
+                    aria-pressed={chosen}
+                    onClick={() => onChoose(style)}
+                    className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-control px-2 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+                  >
+                    <Check
+                      aria-hidden
+                      className={cn('size-5 shrink-0', chosen ? 'opacity-100' : 'opacity-0')}
+                    />
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="font-semibold text-pretty">{name}</span>
+                      {style.shelf ? (
+                        <span className="text-sm text-muted-foreground">
+                          {shelfName({ shelf: style.shelf, patterns: [] })}
+                        </span>
+                      ) : null}
+                    </span>
+                    {grid ? <RhythmPicture grid={grid} /> : null}
+                  </button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-11 shrink-0"
+                    aria-label={t('chordPlayer.hear', { style: name })}
+                    title={t('chordPlayer.hear', { style: name })}
+                    aria-pressed={playback.playing === style.id}
+                    onClick={() => playback.toggle(style.id, () => styleBar(style))}
+                  >
+                    {playback.playing === style.id ? <Square aria-hidden /> : <Play aria-hidden />}
+                  </Button>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+/** The Style sheet, opened from the dock's Style. */
 export function StyleSheet({
   open,
   onOpenChange,
@@ -59,67 +128,10 @@ export function StyleSheet({
   onChoose(style: Style): void
 }) {
   const { t } = useTranslation('practice')
-  const locale = useLocale()
-  const shelfName = useShelfName()
-  const playback = usePlayback<string>()
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('chordPlayer.style')} tall>
-        <div className="flex flex-col gap-5">
-          {book.families.map(({ family, styles }) => (
-            <section key={family} className="flex flex-col gap-1">
-              <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
-                {t(`chordPlayer.families.${family}`)}
-              </h3>
-              <ul className="flex flex-col">
-                {styles.map((style) => {
-                  const name = localText(style.name, locale)
-                  const chosen = style.id === value
-                  const grid = style.variations[0]?.drums
-                  return (
-                    <li key={style.id} className="flex min-h-12 items-center gap-1">
-                      <button
-                        type="button"
-                        aria-pressed={chosen}
-                        onClick={() => onChoose(style)}
-                        className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-control px-2 text-left hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
-                      >
-                        <Check
-                          aria-hidden
-                          className={cn('size-5 shrink-0', chosen ? 'opacity-100' : 'opacity-0')}
-                        />
-                        <span className="flex min-w-0 flex-1 flex-col">
-                          <span className="font-semibold text-pretty">{name}</span>
-                          {style.shelf ? (
-                            <span className="text-sm text-muted-foreground">
-                              {shelfName({ shelf: style.shelf, patterns: [] })}
-                            </span>
-                          ) : null}
-                        </span>
-                        {grid ? <RhythmPicture grid={grid} /> : null}
-                      </button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-11 shrink-0"
-                        aria-label={t('chordPlayer.hear', { style: name })}
-                        title={t('chordPlayer.hear', { style: name })}
-                        aria-pressed={playback.playing === style.id}
-                        onClick={() => playback.toggle(style.id, () => styleBar(style))}
-                      >
-                        {playback.playing === style.id ? (
-                          <Square aria-hidden />
-                        ) : (
-                          <Play aria-hidden />
-                        )}
-                      </Button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </section>
-          ))}
-        </div>
+        <StyleList book={book} value={value} onChoose={onChoose} />
       </SheetContent>
     </Sheet>
   )

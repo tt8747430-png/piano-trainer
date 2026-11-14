@@ -3,7 +3,11 @@ import {
   CHORD_BEATS,
   isSectionKind,
   isSheetMeter,
+  isArrangerNumber,
+  isInto,
+  isMain,
   isVariation,
+  NO_MARKS,
   SECTION_KINDS,
   SECTION_REPEATS,
   type ChordSheet,
@@ -15,8 +19,9 @@ import {
 /**
  * A chord sheet as one line of text (R29 CP5), what a Share link carries and a saved sheet keeps:
  * `Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 | C`. The key and the time, then each section: its
- * kind, `xN` its repeats and `vN` its variation where not 1, and its bars between `|`, `:N` a
- * chord's beats where it does not last a bar.
+ * kind, `xN` its repeats and `vN` its variation where not 1, its arranger marks where set (`i1` its
+ * Intro, `mAB` its Main each time through, `-` for one unset, `fill` or `break` into the next, `e2` its
+ * Ending), and its bars between `|`, `:N` a chord's beats where it does not last a bar.
  */
 export function sheetToText(sheet: ChordSheet): string {
   const bar = beatsPerBar(sheet.meter)
@@ -25,6 +30,7 @@ export function sheetToText(sheet: ChordSheet): string {
       section.kind,
       ...(section.repeats === 1 ? [] : [`x${section.repeats}`]),
       ...(section.variation === 1 ? [] : [`v${section.variation}`]),
+      ...marksText(section.marks),
     ].join(' ')
     const bars = section.bars.map((each) =>
       each.chords
@@ -34,6 +40,38 @@ export function sheetToText(sheet: ChordSheet): string {
     return `${head}: ${bars.join(' | ')}`.trimEnd()
   })
   return [`${keySymbol(sheet.key)} ${sheet.meter}`, ...sections].join('; ')
+}
+
+/** A section's arranger marks as head words: none for what is unset. */
+function marksText(marks: SheetSection['marks']): string[] {
+  const mains = marks.mains.map((main) => main ?? '-').join('')
+  return [
+    ...(marks.intro === null ? [] : [`i${marks.intro}`]),
+    ...(mains.replaceAll('-', '') === '' ? [] : [`m${mains}`]),
+    ...(marks.into === null ? [] : [marks.into]),
+    ...(marks.ending === null ? [] : [`e${marks.ending}`]),
+  ]
+}
+
+/** A section's arranger marks read from its head words, what does not read left unset. */
+function readMarks(head: readonly string[]): SheetSection['marks'] {
+  const numbered = (letter: string) => {
+    const value = Number(
+      head.find((word) => new RegExp(`^${letter}\\d$`, 'i').test(word))?.slice(1),
+    )
+    return isArrangerNumber(value) ? value : null
+  }
+  const mains = head.find((word) => /^m[a-d-]+$/i.test(word))
+  const into = head.map((word) => word.toLowerCase()).find(isInto)
+  return {
+    ...NO_MARKS,
+    intro: numbered('i'),
+    mains: mains
+      ? [...mains.slice(1).toUpperCase()].map((letter) => (isMain(letter) ? letter : null))
+      : [],
+    into: into ?? null,
+    ending: numbered('e'),
+  }
 }
 
 const KINDS = new Map<string, SectionKind>(SECTION_KINDS.map((kind) => [kind.toLowerCase(), kind]))
@@ -91,6 +129,7 @@ function readSection(text: string, bar: number): SheetSection | null {
     kind,
     repeats: bounded(repeats, SECTION_REPEATS.min, SECTION_REPEATS.max, 1),
     variation: isVariation(v) ? v : 1,
+    marks: readMarks(head),
     bars: laid,
   }
 }

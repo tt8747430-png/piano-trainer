@@ -291,6 +291,7 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
   return {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
+    follow: typeof saved.follow === 'boolean' ? saved.follow : DEFAULT_CHORD_PLAYER.follow,
   }
 }
 

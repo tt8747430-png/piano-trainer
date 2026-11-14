@@ -11,6 +11,7 @@ import {
   removeChord,
   resizeChord,
   sectionBars,
+  NO_MARKS,
   sectionChords,
   sheetToChart,
   transposeSheet,
@@ -21,6 +22,7 @@ import {
 const section = (line: string, more: Partial<SheetSection> = {}): SheetSection => ({
   kind: 'verse',
   repeats: 1,
+  marks: NO_MARKS,
   variation: 1,
   // "C:2 G:2 | Am" is two bars; a line with no bar lines is a bar per chord.
   bars: (line.includes('|') ? line.split(' | ') : line.split(' ')).map((bar) => ({

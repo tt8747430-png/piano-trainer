@@ -1,11 +1,16 @@
 import { createListeners } from './listeners'
 
-/** What an arranger's transport says: its style started, went on from where it stopped, stopped, or ticked. */
-export interface ArrangerEvent {
-  readonly kind: 'start' | 'continue' | 'stop' | 'clock'
-  /** When it came, in milliseconds on the page's clock. */
-  readonly time: number
-}
+/**
+ * What an arranger says: its style started, went on from where it stopped, stopped, or ticked its
+ * clock; or its section changed (Yamaha's Section Control, `ss` the section's number).
+ */
+export type ArrangerEvent =
+  | {
+      readonly kind: 'start' | 'continue' | 'stop' | 'clock'
+      /** When it came, in milliseconds on the page's clock. */
+      readonly time: number
+    }
+  | { readonly kind: 'section'; readonly section: number; readonly time: number }
 
 /**
  * The arranger followed: connected by its name, none plugged in, MIDI or its SysEx refused, or a
@@ -34,7 +39,7 @@ export interface ArrangerPort {
 }
 
 /** MIDI's real-time bytes an arranger's transport sends. */
-const REALTIME: Readonly<Record<number, ArrangerEvent['kind']>> = {
+const REALTIME: Readonly<Record<number, 'start' | 'continue' | 'stop' | 'clock'>> = {
   0xf8: 'clock',
   0xfa: 'start',
   0xfb: 'continue',
@@ -76,8 +81,22 @@ export function createWebArranger(
   }
   const hear = (event: Event) => {
     const data = (event as MIDIMessageEvent).data
-    const kind = data && data.length === 1 ? REALTIME[data[0] ?? 0] : undefined
+    if (!data) return
+    const kind = data.length === 1 ? REALTIME[data[0] ?? 0] : undefined
     if (kind) transport.emit({ kind, time: event.timeStamp })
+    // Section Control, F0 43 7E 00 ss 7F F7: the arranger's section changed on its panel.
+    const [f0, maker, device, model, ss, on, end] = data
+    if (
+      data.length === 7 &&
+      f0 === 0xf0 &&
+      maker === 0x43 &&
+      device === 0x7e &&
+      model === 0x00 &&
+      on === 0x7f &&
+      end === 0xf7 &&
+      ss !== undefined
+    )
+      transport.emit({ kind: 'section', section: ss, time: event.timeStamp })
   }
   const link = () => {
     linked?.input.removeEventListener('midimessage', hear)
@@ -121,8 +140,10 @@ export function createWebArranger(
 
 /** The arranger as a test drives it: its transport played by hand, what was sent to it kept. */
 export interface FakeArranger extends ArrangerPort {
-  /** Plays its transport: Start, Continue, Stop, or `clocks` ticks of its clock. */
-  play(kind: ArrangerEvent['kind'], time?: number): void
+  /** Plays its transport: Start, Continue, Stop, a tick of its clock. */
+  play(kind: 'start' | 'continue' | 'stop' | 'clock', time?: number): void
+  /** Its panel switched to section `ss`. */
+  section(ss: number, time?: number): void
   readonly sent: readonly (readonly number[])[]
 }
 
@@ -150,6 +171,9 @@ export function createFakeArranger(
     },
     play(kind, time = performance.now()) {
       transport.emit({ kind, time })
+    },
+    section(section, time = performance.now()) {
+      transport.emit({ kind: 'section', section, time })
     },
     sent,
   }

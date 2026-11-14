@@ -56,10 +56,38 @@ export interface SheetChord {
 export interface WrittenBar {
   readonly chords: readonly SheetChord[]
 }
+/** An arranger's numbered Intros and Endings (a Genos has three of each). */
+export const ARRANGER_NUMBERS = [1, 2, 3] as const
+export type ArrangerNumber = (typeof ARRANGER_NUMBERS)[number]
+/** An arranger's Main sections. */
+export const MAINS = ['A', 'B', 'C', 'D'] as const
+export type Main = (typeof MAINS)[number]
+/** What leads into the next section on the arranger: a Fill-in or a one-bar Break. */
+export const INTOS = ['fill', 'break'] as const
+export type Into = (typeof INTOS)[number]
+/**
+ * What a section has a followed arranger play (the Genos's panel sections): an Intro before the
+ * sheet, the Main for each time through, a Fill-in or Break into the next section, an Ending after
+ * the sheet. Unset (null) sends nothing, so the arranger plays as its panel says.
+ */
+export interface SectionMarks {
+  readonly intro: ArrangerNumber | null
+  /** The Main for each time through, by its pass; a pass past the list is unset. */
+  readonly mains: readonly (Main | null)[]
+  readonly into: Into | null
+  readonly ending: ArrangerNumber | null
+}
+export const NO_MARKS: SectionMarks = { intro: null, mains: [], into: null, ending: null }
+export const isArrangerNumber = (value: unknown): value is ArrangerNumber =>
+  ARRANGER_NUMBERS.some((number) => number === value)
+export const isMain = (value: unknown): value is Main => MAINS.some((main) => main === value)
+export const isInto = (value: unknown): value is Into => INTOS.some((into) => into === value)
+
 export interface SheetSection {
   readonly kind: SectionKind
   readonly repeats: number
   readonly variation: Variation
+  readonly marks: SectionMarks
   readonly bars: readonly WrittenBar[]
 }
 
@@ -84,6 +112,7 @@ export const emptySection = (kind: SectionKind = 'verse'): SheetSection => ({
   kind,
   repeats: 1,
   variation: 1,
+  marks: NO_MARKS,
   bars: [],
 })
 

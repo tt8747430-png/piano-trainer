@@ -106,6 +106,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'progressions.inversion': 'progressions',
   'chordPlayer.names': 'chord-player',
   'chordPlayer.voicing': 'chord-player',
+  'chordPlayer.follow': 'chord-player',
   'chords.labels': 'chords',
   'chords.range': 'chords',
   'chords.rangeFrom': 'chords',

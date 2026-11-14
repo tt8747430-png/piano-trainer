@@ -3,6 +3,7 @@ import { variationParts, type Style } from '@/entities/pattern'
 import { PLAY_DELAY, type AudioOutput, type PlayHandle } from '@/shared/api/audio'
 import {
   arrangeStyle,
+  NO_MARKS,
   type Band,
   type ChordSheet,
   type DrumVoice,
@@ -407,6 +408,7 @@ export function styleBar(style: Style): Sound[] {
         kind: 'verse',
         repeats: 1,
         variation: 1,
+        marks: NO_MARKS,
         bars: [
           {
             chords: [

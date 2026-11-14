@@ -487,8 +487,14 @@ export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
 export interface ChordPlayerSettings {
   readonly names: ProgressionNames
   readonly voicing: ProgressionVoicing
+  /** Follow a MIDI arranger (a Genos): its Start, Stop and clock lead the sheet, which sends it its sections. */
+  readonly follow: boolean
 }
-export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = { names: 'chords', voicing: 'led' }
+export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = {
+  names: 'chords',
+  voicing: 'led',
+  follow: false,
+}
 
 /** The Chords page's own settings, in its Piano sheet. */
 export interface ChordsSettings {

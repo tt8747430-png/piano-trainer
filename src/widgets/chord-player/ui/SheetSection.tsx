@@ -40,6 +40,8 @@ export function SheetSection({
   chosen,
   acts,
   onOpen,
+  tag,
+  onTag,
 }: {
   section: Section
   index: number
@@ -54,6 +56,10 @@ export function SheetSection({
   acts: TileActs & { add(section: number): void }
   /** Its sheet opened: name, times, variation, duplicate, delete. */
   onOpen(): void
+  /** What it has a followed arranger play, in a line (empty: nothing set), or null when none is followed. */
+  tag: string | null
+  /** Its arranger sheet opened. */
+  onTag(): void
 }) {
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
@@ -112,6 +118,26 @@ export function SheetSection({
             {t('chordPlayer.times', { count: section.repeats })}
           </span>
         </button>
+        {tag !== null ? (
+          <button
+            type="button"
+            onClick={onTag}
+            aria-label={t('chordPlayer.arranger.tag', {
+              name,
+              marks: tag || t('chordPlayer.arranger.unset'),
+            })}
+            title={t('chordPlayer.arranger.tag', {
+              name,
+              marks: tag || t('chordPlayer.arranger.unset'),
+            })}
+            className={cn(
+              'relative ml-auto h-8 max-w-[62%] min-w-0 truncate rounded-[8px] bg-muted px-2.5 text-[13px] font-semibold transition-colors duration-150 ease-out before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[""] hover:brightness-95',
+              !tag && 'text-muted-foreground',
+            )}
+          >
+            {tag || t('chordPlayer.arranger.unset')}
+          </button>
+        ) : null}
       </div>
       <SortableContext items={ids} strategy={STILL}>
         <ol aria-label={t('chordPlayer.chordsOf', { name })} className="grid grid-cols-4">

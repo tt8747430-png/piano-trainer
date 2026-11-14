@@ -180,3 +180,26 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   · Repeats · Play. Decided, one home each: the dock's Key opens the transpose stepper (Settings' Transpose row
   gone); its Repeats is how many times the sheet plays, Until Stop or 1 to 8 (Settings' "Repeat the sheet" gone).
   The head card, the button row and the floating Loop are gone (Loop is in the section's sheet).
+- 5 the section's Genos marks (done): a section carries Intro I–III (the first), its Main for each time
+  through (A–D or None), Fill in or Break into the next, Ending I–III (the last), saved in the sheet's text as
+  head words (`verse x2 i1 mAB fill e2`, `-` for a time left unset), so older sheets read with none. With
+  Follow on, the head's tag ("Intro I · Main A, Main B · Fill in", or "Genos" when nothing is set) opens
+  "Verse on the Genos": Intro, Main each time through ("1st time", "2nd time": the musician's words, where the
+  board wrote Pass 1), Ending, Into the next section. The board's line "None sends nothing…" is the ⓘ beside
+  "Main, each time through" (no explanation line under a control). Five letters (None A B C D) keep the
+  segmented control in one row; five words still go three over two.
+- 6 Follow a MIDI arranger (done): Settings has Follow a MIDI arranger (ⓘ) and an Arranger row naming the port
+  (Genos · USB), or Not connected, MIDI not allowed, Needs Chrome or Edge; one preference, `chordPlayer.follow`.
+  Turning it on asks for Web MIDI with SysEx. The Genos leads: its Start (FA) plays the sheet from bar 1 in
+  silence, its clock (F8, 24 a beat) moves the lit bar and beat, Stop (FC) stops, Continue (FB) goes on; the
+  dock's Tempo shows the clock's tempo while it plays, and Play is the Genos's Start/Stop (Yamaha's Rhythm Start
+  F0 43 60 7A F7 and Stop F0 43 60 7D F7). The sheet's marks go out as Section Control (F0 43 7E 00 ss 7F F7):
+  the first Main and the Intro while the Genos waits for Start, so its panel holds them; each later one as the
+  bar before it begins, taken at the next bar line: the next time through's Main, a Fill-in into the Main it
+  leads to, a Break, or the last section's Ending; a Main already playing is never sent again (it would play its
+  Fill-in). With an Intro and a Genos that reports its section changes, the sheet waits for the first Main.
+  The strip over the dock, as the panel names it: Start/Stop, Intro I II III, Main A B C D (pressed again, its
+  Fill-in) and Break, Ending/rit. I II III, each lamp red when on. Left out, as no MIDI message for them was found
+  in Yamaha's data (the brief's condition): ACMP, Sync Start, Sync Stop, Auto Fill, Fade and OTS Link. Decided:
+  the strip floats in the dock's column as a card, since the app's dock floats over the keys where the board's
+  sits in the page.
