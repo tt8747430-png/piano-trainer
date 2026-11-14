@@ -31,9 +31,9 @@ export function ChoiceChips<V extends OptionValue>({
         if (picked && picked.value !== value) onChange(picked.value)
       }}
       className={cn(
-        'flex gap-2',
+        '-my-[5px] flex gap-1.5',
         scroll
-          ? '-mx-(--gutter) scrollbar-none overflow-x-auto overscroll-x-contain px-(--gutter) py-0.5'
+          ? '-mx-(--gutter) scrollbar-none overflow-x-auto overscroll-x-contain px-(--gutter)'
           : 'flex-wrap',
       )}
     >
@@ -42,7 +42,7 @@ export function ChoiceChips<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={optionName(option)}
-          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border border-transparent bg-muted px-4 text-[0.9375rem] font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3 data-checked:bg-foreground! data-checked:text-background!"
+          className="inline-flex h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border-x-0 border-y-[5px] border-transparent bg-muted bg-clip-padding px-3.5 text-sm font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3 data-checked:bg-foreground! data-checked:text-background!"
         >
           {option.label}
         </Radio.Root>
