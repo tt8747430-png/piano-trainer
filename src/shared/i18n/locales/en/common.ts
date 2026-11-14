@@ -382,4 +382,12 @@ export const common = {
     },
     reset: 'Reset to default',
   },
+  sheetCredits: {
+    words: 'Words: {{names}}',
+    music: 'Music: {{names}}',
+    wordsAndMusic: 'Words and music: {{names}}',
+    translator: 'Translation: {{names}}',
+    tune: 'Tune: {{names}}',
+    arranger: 'Arranged by {{names}}',
+  },
 } as const

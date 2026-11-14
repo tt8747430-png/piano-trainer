@@ -185,7 +185,7 @@ export function SheetLines({
       >
         <div>
           <SheetTitle title={title} place="lines" />
-          {hasCredits(credits) ? <SheetCredits credits={credits} /> : null}
+          {hasCredits(credits) ? <SheetCredits credits={credits} align="center" /> : null}
         </div>
         {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),

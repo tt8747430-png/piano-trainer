@@ -369,4 +369,12 @@ export const common: LocaleResources['common'] = {
     },
     reset: 'Сбросить',
   },
+  sheetCredits: {
+    words: 'Слова: {{names}}',
+    music: 'Музыка: {{names}}',
+    wordsAndMusic: 'Слова и музыка: {{names}}',
+    translator: 'Перевод: {{names}}',
+    tune: 'Напев: {{names}}',
+    arranger: 'Аранжировка: {{names}}',
+  },
 }

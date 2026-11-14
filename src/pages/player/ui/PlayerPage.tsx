@@ -9,6 +9,7 @@ import {
   isOwnSongId,
   isPiece,
   musicOf,
+  printedHeader,
   selectHasVersion,
   usePieces,
   usePiecesStoreApi,
@@ -164,7 +165,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     <PieceInversions pieceId={piece.id}>
       <PlayerLayout
         title={title}
-        credits={isDegreePiece(piece) ? undefined : piece.header}
+        credits={isDegreePiece(piece) ? undefined : printedHeader(piece)}
         layout={isDegreePiece(piece) ? undefined : piece.layout}
         onClose={close}
         view={search}

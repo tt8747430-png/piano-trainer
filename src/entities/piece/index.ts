@@ -89,6 +89,7 @@ export {
 } from './model/own'
 export {
   SONG_CREDITS,
+  printedHeader,
   shownCredits,
   songCredit,
   songFacts,

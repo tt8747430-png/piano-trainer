@@ -141,3 +141,19 @@ export function readNote(value: unknown): LocalText | undefined {
     ? { en: value.en.slice(0, 2000), ru: value.ru.slice(0, 2000) }
     : undefined
 }
+
+/**
+ * What a score prints under its title (canvas, the Player's TITLE_BLOCK: "Words: John Newton · Music:
+ * New Britain"): the lines its score has, and where it has none, who wrote it as the song's credits
+ * name them. None where nothing is to be printed.
+ */
+export function printedHeader(piece: FactsOf): ScoreHeader | undefined {
+  const named = Object.fromEntries(
+    SONG_CREDITS.flatMap((field) => {
+      const names = songCredit(piece, field)
+      return names === '' ? [] : [[field, names]]
+    }),
+  )
+  const header: ScoreHeader = { ...named, ...piece.header }
+  return Object.keys(header).length > 0 ? header : undefined
+}

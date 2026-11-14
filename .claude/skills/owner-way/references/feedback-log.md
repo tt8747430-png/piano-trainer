@@ -86,6 +86,8 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 14, who wrote it under the title, as the boards print it:** one quiet line, "Words: John Newton · Music: New Britain" in 13px, centred under the Player's title and at the right of the editor's and a printed page; a built-in song's credits fill the score's lines where it has none, so every song prints them (2026-11-14).
+
 - **Layout's one home in the Player is its view's settings (loop round 11, the Player board's view sheet):** the
   board draws Layout as the Sheet section's first row, before Show; the floating pill over the score is gone from the
   Player. The three layouts stay (Songscription's Endless tall). The editor keeps its gear's View on a phone and the

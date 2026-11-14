@@ -1,42 +1,54 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { CREDITS_GAP, type SheetCreditLines } from './sheet-credits'
 
 /**
- * A score's credits printed under its title as a printed score has them (Flat's, MuseScore's): the
- * subtitle centred with the hymn tune's name under it in capitals, the lyricist over the translator
- * at the left, the composer over the arranger at the right; nothing the learner did not write.
+ * A score's credits printed under its title, as the canvas prints them (the Player's and the
+ * editor's title block): its subtitle centred where it has one, then one quiet line naming who wrote
+ * it, "Words: John Newton · Music: New Britain", centred over lines down the screen and at the right
+ * over a page; nothing the learner did not write.
  */
 export function SheetCredits({
   credits,
+  align = 'end',
   className,
 }: {
   credits: SheetCreditLines
+  align?: 'center' | 'end'
   className?: string
 }): ReactNode {
+  const { t } = useTranslation('common')
   const { subtitle, composer, lyricist, arranger, translator, tune } = credits
-  const row = 'min-h-6 leading-6 wrap-break-word'
+  const both = lyricist !== undefined && lyricist === composer
+  const parts = [
+    both ? t('sheetCredits.wordsAndMusic', { names: lyricist }) : null,
+    !both && lyricist ? t('sheetCredits.words', { names: lyricist }) : null,
+    translator ? t('sheetCredits.translator', { names: translator }) : null,
+    !both && composer ? t('sheetCredits.music', { names: composer }) : null,
+    tune ? t('sheetCredits.tune', { names: tune }) : null,
+    arranger ? t('sheetCredits.arranger', { names: arranger }) : null,
+  ].filter((part) => part !== null)
   return (
     <div
       data-slot="sheet-credits"
       style={{ paddingTop: CREDITS_GAP }}
-      className={cn('flex flex-col font-display', className)}
+      className={cn('flex flex-col gap-0.5', className)}
     >
-      {subtitle ? <p className={cn(row, 'text-center text-lg')}>{subtitle}</p> : null}
-      {tune ? (
-        <p className={cn(row, 'text-center text-sm uppercase tracking-wide')}>{tune}</p>
+      {subtitle ? (
+        <p className="text-center font-display text-lg leading-6 text-balance wrap-break-word">
+          {subtitle}
+        </p>
       ) : null}
-      {lyricist || translator || composer || arranger ? (
-        <div className="flex items-start justify-between gap-4 text-sm">
-          <div className="flex min-w-0 flex-1 flex-col items-start text-start">
-            {lyricist ? <p className={row}>{lyricist}</p> : null}
-            {translator ? <p className={row}>{translator}</p> : null}
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col items-end text-end">
-            {composer ? <p className={row}>{composer}</p> : null}
-            {arranger ? <p className={row}>{arranger}</p> : null}
-          </div>
-        </div>
+      {parts.length > 0 ? (
+        <p
+          className={cn(
+            'font-sans text-[0.8125rem] leading-6 text-pretty wrap-break-word text-muted-foreground',
+            align === 'center' ? 'text-center' : 'text-end',
+          )}
+        >
+          {parts.join(' · ')}
+        </p>
       ) : null}
     </div>
   )
