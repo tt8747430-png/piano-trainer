@@ -749,6 +749,15 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "CircleOfFifthsNight.dc.html": {
+      "x": 4240,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Circle of fifths, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "Laptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -998,6 +1007,15 @@
       "w": 2143,
       "h": 1299,
       "title": "Chord finder, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "CircleOfFifthsLaptopNight.dc.html": {
+      "x": 17784,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Circle of fifths, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1415,7 +1433,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 4160,
+      "maxW": 4690,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1431,7 +1449,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 17704,
+      "maxW": 19927,
       "page": "practice"
     },
     "places-phone": {
@@ -1551,6 +1569,7 @@
     "MetronomeNight.dc.html",
     "TunerNight.dc.html",
     "ChordFinderNight.dc.html",
+    "CircleOfFifthsNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1579,6 +1598,7 @@
     "MetronomeLaptopNight.dc.html",
     "TunerLaptopNight.dc.html",
     "ChordFinderLaptopNight.dc.html",
+    "CircleOfFifthsLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",
