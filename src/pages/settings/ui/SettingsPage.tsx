@@ -14,7 +14,7 @@ export function SettingsPage() {
   if (wide) return <Navigate to="/settings/general" replace />
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('title')} back={<BackButton />} />
+      <ScreenHeader title={t('title')} back={<BackButton />} large />
       <div className="mx-auto w-full max-w-2xl">
         <SettingsList />
       </div>
