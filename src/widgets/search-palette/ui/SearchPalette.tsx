@@ -137,7 +137,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
 
   const content = (
     <div className="flex flex-col gap-3">
-      <label className="flex h-12 items-center gap-2 rounded-control bg-card pr-1 pl-3 text-muted-foreground ring-1 ring-border focus-within:ring-2 focus-within:ring-ring">
+      <label className="flex h-12 items-center gap-2 rounded-control bg-card pr-1 pl-3 text-muted-foreground ring-1 ring-border focus-within:ring-foreground/35">
         <Search aria-hidden className="size-4.5 shrink-0" />
         <input
           ref={fieldRef}
