@@ -33,11 +33,11 @@ export function CourseCard({ course, current }: { course: Course; current: boole
       to="/courses/$courseId"
       params={{ courseId: course.id }}
       aria-current={current ? 'step' : undefined}
-      className="group flex min-h-16 items-center gap-4 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+      className="group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
     >
       <span
         className={cn(
-          'grid size-10 shrink-0 place-items-center rounded-control',
+          'grid size-11 shrink-0 place-items-center rounded-[11px]',
           complete ? 'bg-learned text-learned-foreground' : cn(paint.fill, paint.ink),
           current && 'ring-2 ring-primary ring-offset-2 ring-offset-card',
         )}
@@ -51,7 +51,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
           <CourseIcon courseId={course.id} className="size-5" strokeWidth={1.75} />
         )}
       </span>
-      <span className="flex min-w-0 flex-1 flex-col">
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-base/snug font-semibold text-pretty">
           {localText(course.title, locale)}
         </span>
@@ -61,7 +61,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
         ) : null}
       </span>
       {current ? (
-        <span className="shrink-0 rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
+        <span className="flex h-6.5 shrink-0 items-center rounded-pill bg-primary px-2.5 text-[0.8125rem] font-bold text-primary-foreground">
           {t('upNext')}
         </span>
       ) : null}
