@@ -8,8 +8,9 @@ import {
   type ChordSheetEntry,
 } from '@/entities/chord-sheet'
 import { holdSheet, saveAsMine, startNew } from '@/features/manage-chord-sheets'
-import { shareLink } from '@/shared/lib'
-import { lineSheet, sheetToText, textToSheet } from '@/shared/lib/arrangement'
+import { openLink } from '@/features/share-chord-sheet'
+import { useChordShare } from '@/shared/lib/chord-share'
+import { lineSheet, sheetToText } from '@/shared/lib/arrangement'
 import {
   C_MAJOR,
   keyFromParam,
@@ -23,8 +24,8 @@ import { useChordSheet, type ChordPlayerRoutes } from '@/widgets/chord-player'
 
 /**
  * The Chord player page's acts (R29 CP4, CP5): the sheet open (one of My chord sheets, or the sheet in
- * hand), a progression or a shared sheet put in hand on arrival with Undo, New, Save as my chord
- * sheet, Share link, and the links that open another sheet.
+ * hand), a progression put in hand on arrival with Undo, a shared sheet's link opened among My chord
+ * sheets (R39-10), New, Save as my chord sheet, Share, and the links that open another sheet.
  */
 export function useChordPlayerPage() {
   const { t } = useTranslation('practice')
@@ -34,6 +35,10 @@ export function useChordPlayerPage() {
   const hand = useChordSheet(view.sheet)
   const saved = useChordSheets(selectSaved(view.sheet))
   const [saving, setSaving] = useState<string | null>(null)
+  /** Share open: on a saved sheet; for the sheet in hand, once Save as my chord sheet has named it. */
+  const [sharing, setSharing] = useState(false)
+  const [shareAfterSave, setShareAfterSave] = useState(false)
+  const chordShare = useChordShare()
   const name = saved?.name ?? t('chordPlayer.untitled')
 
   const openSheet = (sheet: string | undefined) =>
@@ -53,16 +58,20 @@ export function useChordPlayerPage() {
     })
   }
 
-  // A progression or a shared sheet in the URL is put in hand once, then dropped from it.
+  // A progression in the URL is put in hand once; a shared sheet's link opens it among My chord sheets.
   const arrived = useRef(false)
   useEffect(() => {
-    if (arrived.current || (view.p === undefined && view.share === undefined)) return
+    if (arrived.current || (view.p === undefined && view.link === undefined)) return
     arrived.current = true
     const current = store.getState().scratch
-    if (view.share !== undefined) {
-      const sheet = textToSheet(view.share)
-      if (sheet) hold({ ...current, text: sheetToText(sheet) }, t('chordPlayer.untitled'))
-      else openSheet(undefined)
+    if (view.link !== undefined) {
+      const linkId = view.link
+      say(t('chordPlayer.online.opening'))
+      void openLink(chordShare, store, linkId).then((opened) => {
+        if (opened.ok && opened.value) return openSheet(opened.value)
+        openSheet(undefined)
+        say(t(opened.ok ? 'chordPlayer.online.notFound' : 'chordPlayer.online.openFailed'))
+      })
       return
     }
     const numerals = parseNumerals(view.p ?? '') ?? []
@@ -75,7 +84,7 @@ export function useChordPlayerPage() {
     hold({ ...current, text: sheetToText(sheet) }, numeralsLine(numerals))
     // Once, on arrival: the page's own acts change the sheet from here.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view.p, view.share])
+  }, [view.p, view.link])
 
   // An id that names none of My chord sheets (deleted, or another device's) opens the sheet in hand.
   useEffect(() => {
@@ -127,13 +136,23 @@ export function useChordPlayerPage() {
       setSaving(null)
       openSheet(id)
       say(t('chordPlayer.save.saved', { name: named.trim() }))
+      if (shareAfterSave) {
+        setShareAfterSave(false)
+        setSharing(true)
+      }
     },
-    async share() {
-      if (!hand) return
-      const path = `/practice/chord-player?share=${encodeURIComponent(sheetToText(hand.sheet))}`
-      const shared = await shareLink({ title: name, path })
-      if (shared === 'copied') say(t('chordPlayer.shared'))
-      if (shared === 'failed') say(t('chordPlayer.shareFailed'))
+    /** Share: a saved sheet's sheet at once; the sheet in hand is named first (it is shared as one of mine). */
+    share() {
+      if (saved) return setSharing(true)
+      setShareAfterSave(true)
+      setSaving('')
+    },
+    saved,
+    sharing,
+    setSharing,
+    closeSaving() {
+      setSaving(null)
+      setShareAfterSave(false)
     },
   }
 }

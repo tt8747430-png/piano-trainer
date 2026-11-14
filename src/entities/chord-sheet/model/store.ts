@@ -14,6 +14,7 @@ import {
   type ChordSheetSettings,
   type CountIn,
   type PartLevel,
+  type OnlineLink,
   type SavedChordSheet,
 } from './types'
 
@@ -106,6 +107,19 @@ function readEntry(saved: unknown): ChordSheetEntry | null {
 }
 
 const SHEET_ID = /^sheet-(\d+)$/
+const LINK_ID = /^[0-9a-f-]{36}$/
+
+/** A shared sheet's link as kept; none where it does not read. */
+function readOnline(saved: unknown): OnlineLink | null {
+  if (!isRecord(saved) || typeof saved.id !== 'string' || !LINK_ID.test(saved.id)) return null
+  return {
+    id: saved.id,
+    canEdit: flag(saved.canEdit, false),
+    mine: flag(saved.mine, false),
+    revision: between(saved.revision, 0, Number.MAX_SAFE_INTEGER, 0),
+    unsent: flag(saved.unsent, false),
+  }
+}
 
 /** Stored JSON is untrusted: what reads is kept, field by field. */
 function sanitize(persisted: unknown): ChordSheetsState {
@@ -118,7 +132,7 @@ function sanitize(persisted: unknown): ChordSheetsState {
       const entry = readEntry(value)
       if (!name || !entry || seen.has(value.id)) return []
       seen.add(value.id)
-      return [{ id: value.id, name, ...entry }]
+      return [{ id: value.id, name, ...entry, online: readOnline(value.online) }]
     },
   )
   const past = Math.max(0, ...mine.map(({ id }) => Number(SHEET_ID.exec(id)?.[1] ?? 0))) + 1

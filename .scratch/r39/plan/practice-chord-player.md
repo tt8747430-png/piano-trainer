@@ -84,6 +84,10 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     changes, or a broadcast channel per sheet), the last edit winning bar by bar. Sharing asks for an account (it
     reaches other people, ADR 0116: the server must answer); the sheet stays saved on the device too and catches up
     when back online. Who may edit through the link (view only, or edit) is a choice in Share, view only by default.
+    **The chord playing is live too** (owner, 2026-11-14: "I also mean live updates meaning the chords being played
+    online. like while playing the chords that are being played are also online with what chords is currently
+    played"): every open copy lights the chord, its beat and the keys of whichever copy is playing; its own Play takes
+    over while it plays. The sheet's name carries a Live mark (a grass dot, honey while another copy plays).
   - **Saved, synced and migrated** (owner, 2026-11-13: "I want to be able to save the like this as chord sheets
     and sync to my account and also the older ones should be able to migrate to this new structure effortlessly"):
     a sheet of bars is saved as text in the `chord_sheets` store, synced to the account like every saved store; a
@@ -225,8 +229,19 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   (sticky at its foot, no longer floating beside the page, which had squeezed it to 800px); the 420px side
   column holds "C major chords · Drag one into a bar." (I to vii and V7, 56 tall, serif 20; drag into a bar, or
   tap to add after the last chord) and the Style list, the Style sheet's body. The phone keeps the floating dock.
-- 7 Share live: not built this round. It needs a migration (an online sheet's row, its RLS, Realtime) applied
-  and its access tests run, and the Supabase server is not authorised in this session.
+- 7 Share live (done, canvas v175): `shared_chord_sheets` (migration `20261114100000`, applied; its access test
+  `supabase/tests/chord-sheets-access.sql` reports every rule as expected): the owner's row under their policy, the
+  link read and written by `read_shared_chord_sheet` and `write_shared_chord_sheet` (anyone with the link; writing
+  only while Can edit), each write a new revision pinging the public Realtime topic `chord-sheet:<id>`, which carries
+  only the revision so a forged ping only makes a copy read again. The app: `shared/api/chord-share` (port, Supabase,
+  fake), `features/share-chord-sheet` (Share sheet as CP_SHARE draws it, share, open a link, save online merged bar by
+  bar with `mergeSheets`, a save made offline sent when back), `widgets/chord-player/model/use-online-sheet.ts` (the
+  line: changes taken in, the draft rebased on them; the chord playing sent and shown). The sheet in hand is named
+  (Save as my chord sheet) before it is shared; a view-only link keeps its draft on the device (Save hidden; Save as
+  my chord sheet keeps it). The old Share link that carried the sheet's text in the URL (`?share=`) is gone; a link
+  is `?link=<id>`. Checked against the project with two browsers on one link: the second lit C, F, G beat by beat as
+  the first played and went dark when it stopped; a change saved on the server appeared in the open copy without a
+  reload.
 - The keys show the chord (loop, 2026-11-14; the brief's "The keys show the chord, left hand violet, right hand
   orange", never built): while the sheet plays, or follows the Genos, the sounding chord lights on the keys, its
   root or slash bass in the left hand (G2 to F♯3) and its tones in the octave just above in the right, each key

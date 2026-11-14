@@ -2,13 +2,14 @@ import { Link } from '@tanstack/react-router'
 import { FilePlus2, Link2, Save, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
+import { ShareChordSheet } from '@/features/share-chord-sheet'
 import { NewSheet, RoundLink } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
 
 /**
  * The Chord player (`/practice/chord-player`, canvas 171): the widget's bar, chart and dock, given
- * the page's acts on the sheet's file (New, Save as my chord sheet…, Share link) and its gear.
+ * the page's acts on the sheet's file (New, Save as my chord sheet…, Share) and its gear.
  */
 export function ChordPlayerPage() {
   const { t } = useTranslation('practice')
@@ -40,9 +41,9 @@ export function ChordPlayerPage() {
             {
               key: 'share',
               group: t('chordPlayer.file'),
-              label: t('chordPlayer.share'),
+              label: t('chordPlayer.online.share'),
               icon: Link2,
-              onSelect: () => void page.share(),
+              onSelect: page.share,
             },
           ]}
           settings={
@@ -59,9 +60,12 @@ export function ChordPlayerPage() {
           }
         />
       ) : null}
+      {page.saved ? (
+        <ShareChordSheet open={page.sharing} onOpenChange={page.setSharing} sheet={page.saved} />
+      ) : null}
       <NewSheet
         open={page.saving !== null}
-        onOpenChange={(open) => page.setSaving(open ? '' : null)}
+        onOpenChange={(open) => (open ? page.setSaving('') : page.closeSaving())}
         title={t('chordPlayer.save.title')}
         nameLabel={t('chordPlayer.save.name')}
         name={page.saving ?? ''}

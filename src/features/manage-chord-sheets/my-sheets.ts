@@ -22,7 +22,10 @@ export function saveAsMine(
   const { text, draft, style, tempo, settings } = entry
   store.setState({
     // Saved as it is shown: a draft brought along becomes its chords.
-    mine: [{ id, name: kept, text: draft ?? text, draft: null, style, tempo, settings }, ...mine],
+    mine: [
+      { id, name: kept, text: draft ?? text, draft: null, style, tempo, settings, online: null },
+      ...mine,
+    ],
     nextId: nextId + 1,
   })
   return id
@@ -46,7 +49,8 @@ export function duplicateSheet(store: ChordSheetsStore, id: string, name: string
   const original = mine[at]
   const kept = sheetName(name)
   if (!original || !kept || mine.length >= MOST_SHEETS) return null
-  const copy = { ...original, id: `sheet-${nextId}`, name: kept }
+  // A copy is the learner's own, never the shared sheet.
+  const copy = { ...original, id: `sheet-${nextId}`, name: kept, online: null }
   store.setState({
     mine: [...mine.slice(0, at + 1), copy, ...mine.slice(at + 1)],
     nextId: nextId + 1,

@@ -13,6 +13,7 @@ import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createFakeContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
 import { createFakeErrorReporter, type ErrorReporter } from '@/shared/api/errors'
+import { createFakeChordShare } from '@/shared/api/chord-share'
 import { createFakeGroups, type GroupsPort } from '@/shared/api/groups'
 import { createFakeProfile, type ProfilePort } from '@/shared/api/profile'
 import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
@@ -96,6 +97,7 @@ export async function renderApp(
       publicLibrary={publicLibrary}
       profile={profile}
       groups={groups}
+      chordShare={createFakeChordShare()}
       admin={admin}
       features={features}
       contentEditing={contentEditing}

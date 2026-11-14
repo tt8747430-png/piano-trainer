@@ -9,7 +9,8 @@ export interface ChordPlayerView {
   readonly sheet?: string | undefined
   readonly p?: string | undefined
   readonly key?: KeyParam | undefined
-  readonly share?: string | undefined
+  /** A shared sheet's link (R39-10): opened among My chord sheets on arrival. */
+  readonly link?: string | undefined
 }
 
 /** The Chord player's Settings: whose sheet it sets. */

@@ -51,6 +51,7 @@ import {
 import { createWebArranger, createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { lazyBackend, type Backend } from '@/shared/api/supabase'
 import { createSupabaseGroups, type GroupsPort } from '@/shared/api/groups'
+import { createSupabaseChordShare, type ChordSharePort } from '@/shared/api/chord-share'
 import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
@@ -176,6 +177,10 @@ export const createPublicLibrary = (backend: Backend): PublicLibrary =>
 export const createProfile = (backend: Backend): ProfilePort => createSupabaseProfile(backend)
 /** The learner's groups and shared folders: the project's `learner_groups` and `shared_folders` (R30 S6). */
 export const createGroups = (backend: Backend): GroupsPort => createSupabaseGroups(backend)
+
+/** Chord sheets shared live: the project's `shared_chord_sheets` and their Realtime topics (R39-10). */
+export const createChordShare = (backend: Backend): ChordSharePort =>
+  createSupabaseChordShare(backend)
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
 export const createAdmin = (backend: Backend): AdminPort => createSupabaseAdmin(backend)

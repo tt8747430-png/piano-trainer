@@ -14,8 +14,10 @@ import type { AdminPort, FeaturesPort } from '@/shared/api/admin'
 import type { AuthGateway } from '@/shared/api/auth'
 import type { ContentEditingPort } from '@/shared/api/content-editing'
 import type { ErrorReporter } from '@/shared/api/errors'
+import type { ChordSharePort } from '@/shared/api/chord-share'
 import type { GroupsPort } from '@/shared/api/groups'
 import type { ProfilePort } from '@/shared/api/profile'
+import { ChordShareProvider } from '@/shared/lib/chord-share'
 import { GroupsProvider } from '@/shared/lib/groups'
 import type { PublicLibrary } from '@/shared/api/public-library'
 import { AccountProvider, ProfileProvider } from '@/shared/lib/account'
@@ -46,6 +48,7 @@ export function App({
   publicLibrary,
   profile,
   groups,
+  chordShare,
   admin,
   features,
   contentEditing,
@@ -59,6 +62,7 @@ export function App({
   publicLibrary: PublicLibrary
   profile: ProfilePort
   groups: GroupsPort
+  chordShare: ChordSharePort
   admin: AdminPort
   features: FeaturesPort
   contentEditing: ContentEditingPort
@@ -71,52 +75,54 @@ export function App({
       <AccountProvider auth={auth} sync={sync}>
         <ProfileProvider port={profile}>
           <GroupsProvider groups={groups}>
-            <PublicLibraryProvider library={publicLibrary}>
-              <AdminProvider admin={admin}>
-                <FeaturesProvider features={features}>
-                  <ContentEditingProvider editing={contentEditing}>
-                    <SettingsStoreProvider store={stores.settings}>
-                      <ProgressStoreProvider store={stores.progress}>
-                        <PatternsStoreProvider store={stores.patterns}>
-                          <PracticeLibraryStoreProvider store={stores.practiceLibrary}>
-                            <OwnLessonsStoreProvider store={stores.ownLessons}>
-                              <PiecesStoreProvider store={stores.pieces}>
-                                <TakesStoreProvider store={stores.takes}>
-                                  <LibraryStoreProvider store={stores.library}>
-                                    <DiagramInversionsStoreProvider
-                                      store={stores.diagramInversions}
-                                    >
-                                      <ChordSheetsStoreProvider store={stores.chordSheets}>
-                                        <NotificationsStoreProvider store={stores.notifications}>
-                                          <ServicesProvider services={services}>
-                                            <LocaleSync />
-                                            <AudioUnlock />
-                                            <MidiReconnect />
-                                            <MidiSync />
-                                            <PianoVolume />
-                                            <ThemeProvider>
-                                              <ShortcutsProvider>
-                                                <RouterProvider router={router} />
-                                                <Toaster />
-                                                <Confirmer />
-                                              </ShortcutsProvider>
-                                            </ThemeProvider>
-                                          </ServicesProvider>
-                                        </NotificationsStoreProvider>
-                                      </ChordSheetsStoreProvider>
-                                    </DiagramInversionsStoreProvider>
-                                  </LibraryStoreProvider>
-                                </TakesStoreProvider>
-                              </PiecesStoreProvider>
-                            </OwnLessonsStoreProvider>
-                          </PracticeLibraryStoreProvider>
-                        </PatternsStoreProvider>
-                      </ProgressStoreProvider>
-                    </SettingsStoreProvider>
-                  </ContentEditingProvider>
-                </FeaturesProvider>
-              </AdminProvider>
-            </PublicLibraryProvider>
+            <ChordShareProvider share={chordShare}>
+              <PublicLibraryProvider library={publicLibrary}>
+                <AdminProvider admin={admin}>
+                  <FeaturesProvider features={features}>
+                    <ContentEditingProvider editing={contentEditing}>
+                      <SettingsStoreProvider store={stores.settings}>
+                        <ProgressStoreProvider store={stores.progress}>
+                          <PatternsStoreProvider store={stores.patterns}>
+                            <PracticeLibraryStoreProvider store={stores.practiceLibrary}>
+                              <OwnLessonsStoreProvider store={stores.ownLessons}>
+                                <PiecesStoreProvider store={stores.pieces}>
+                                  <TakesStoreProvider store={stores.takes}>
+                                    <LibraryStoreProvider store={stores.library}>
+                                      <DiagramInversionsStoreProvider
+                                        store={stores.diagramInversions}
+                                      >
+                                        <ChordSheetsStoreProvider store={stores.chordSheets}>
+                                          <NotificationsStoreProvider store={stores.notifications}>
+                                            <ServicesProvider services={services}>
+                                              <LocaleSync />
+                                              <AudioUnlock />
+                                              <MidiReconnect />
+                                              <MidiSync />
+                                              <PianoVolume />
+                                              <ThemeProvider>
+                                                <ShortcutsProvider>
+                                                  <RouterProvider router={router} />
+                                                  <Toaster />
+                                                  <Confirmer />
+                                                </ShortcutsProvider>
+                                              </ThemeProvider>
+                                            </ServicesProvider>
+                                          </NotificationsStoreProvider>
+                                        </ChordSheetsStoreProvider>
+                                      </DiagramInversionsStoreProvider>
+                                    </LibraryStoreProvider>
+                                  </TakesStoreProvider>
+                                </PiecesStoreProvider>
+                              </OwnLessonsStoreProvider>
+                            </PracticeLibraryStoreProvider>
+                          </PatternsStoreProvider>
+                        </ProgressStoreProvider>
+                      </SettingsStoreProvider>
+                    </ContentEditingProvider>
+                  </FeaturesProvider>
+                </AdminProvider>
+              </PublicLibraryProvider>
+            </ChordShareProvider>
           </GroupsProvider>
         </ProfileProvider>
       </AccountProvider>

@@ -61,6 +61,7 @@ export {
   type SheetSection,
   type Variation,
 } from './chord-sheet'
+export { mergeSheets, mergeSheetTexts } from './merge-sheets'
 export { sheetToText, textToSheet } from './chord-sheet-text'
 export {
   arrangeStyle,

@@ -20,9 +20,11 @@ import { useNavigate } from '@tanstack/react-router'
 import { Check, Dices, ListMusic, Piano, Plus, Redo2, Route, Undo, Undo2 } from 'lucide-react'
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useChordSheetsStoreApi } from '@/entities/chord-sheet'
+import { selectSaved, useChordSheets, useChordSheetsStoreApi } from '@/entities/chord-sheet'
 import { styleBook, styleVariations, usePatternBook, type Style } from '@/entities/pattern'
 import { discardDraft, restoreDraft, saveDraft } from '@/features/manage-chord-sheets'
+import { saveOnline } from '@/features/share-chord-sheet'
+import { useChordShare } from '@/shared/lib/chord-share'
 import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
@@ -83,6 +85,7 @@ import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
 import { CHORD_PLAYER_KEYS, litKeys } from '../model/lit-keys'
 import { useArrangerFollow } from '../model/use-arranger-follow'
+import { useOnlineSheet } from '../model/use-online-sheet'
 import { useChordTransport } from '../model/use-chord-transport'
 import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd'
 import { ArrangerSheet, marksLine } from './ArrangerSheet'
@@ -190,9 +193,16 @@ export function ChordPlayer({
   // Following a MIDI arranger (a Genos): its clock lights the sheet, its Start/Stop is Play.
   const follow = useArrangerFollow(shown, prefs.follow)
   const device = follow.status?.state === 'connected' ? follow.status.device : 'Genos'
-  const lit = prefs.follow ? follow.lit : transport.lit
-  const beat = prefs.follow ? follow.beat : transport.beat
   const playing = prefs.follow ? follow.running : transport.playing
+  const ownLit = prefs.follow ? follow.lit : transport.lit
+  const ownBeat = prefs.follow ? follow.beat : transport.beat
+  // Shared live: what this copy plays goes out; while it is stopped, the chord another copy plays lights.
+  const online = useOnlineSheet(sheetId, playing ? ownLit : null, playing ? ownBeat : null)
+  const theirs = playing ? null : online.remote
+  const lit = theirs ? { section: theirs.section, index: theirs.index } : ownLit
+  const beat = theirs ? theirs.beat : ownBeat
+  const link = useChordSheets(selectSaved(sheetId))?.online ?? null
+  const chordShare = useChordShare()
   /** The section whose arranger sheet is open. */
   const [tagged, setTagged] = useState<number | null>(null)
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
@@ -446,11 +456,21 @@ export function ChordPlayer({
                 label: t('chordPlayer.draft.save'),
                 icon: Check,
                 group: t('chordPlayer.draft.label'),
-                hidden: !hand.draft || sheetId === undefined,
+                // A view-only link's draft stays here: Save as my chord sheet keeps it.
+                hidden:
+                  !hand.draft ||
+                  sheetId === undefined ||
+                  (link !== null && !link.mine && !link.canEdit),
                 onSelect: () => {
                   if (sheetId === undefined) return
-                  saveDraft(sheets, sheetId)
-                  say(t('chordPlayer.draft.saved', { name }))
+                  if (!link) {
+                    saveDraft(sheets, sheetId)
+                    say(t('chordPlayer.draft.saved', { name }))
+                    return
+                  }
+                  void saveOnline(chordShare, sheets, sheetId).then((sent) =>
+                    say(t(sent.ok ? 'chordPlayer.online.sent' : 'chordPlayer.online.unsent')),
+                  )
                 },
               },
               {
@@ -539,6 +559,21 @@ export function ChordPlayer({
                 {hand.draft ? (
                   <span className="text-[13px] font-semibold text-honey-ink">
                     {t('chordPlayer.draft.label')}
+                  </span>
+                ) : null}
+                {online.live ? (
+                  <span
+                    className="inline-flex items-center gap-1.5 self-center text-[13px] font-semibold text-muted-foreground"
+                    title={t('chordPlayer.online.liveLabel')}
+                  >
+                    <span
+                      aria-hidden
+                      className={cn('size-2 rounded-full', theirs ? 'bg-primary' : 'bg-learned')}
+                    />
+                    {t('chordPlayer.online.live')}
+                    {link && !link.mine && !link.canEdit ? (
+                      <span className="sr-only">{t('chordPlayer.online.viewOnlyNote')}</span>
+                    ) : null}
                   </span>
                 ) : null}
               </div>

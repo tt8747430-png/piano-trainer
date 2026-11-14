@@ -12,6 +12,7 @@ export {
   type ChordSheetEntry,
   type ChordSheetSettings,
   type CountIn,
+  type OnlineLink,
   type PartLevel,
   type SavedChordSheet,
 } from './model/types'

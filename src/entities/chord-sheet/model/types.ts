@@ -58,10 +58,24 @@ export interface ChordSheetEntry {
   readonly settings: ChordSheetSettings
 }
 
-/** One of My chord sheets: an entry with its id and its name. */
+/**
+ * A sheet shared live (R39-10): its link's id, whether this copy may change it (its owner, or a link
+ * that can edit), whether it is the learner's own, and the revision this copy last took.
+ */
+export interface OnlineLink {
+  readonly id: string
+  readonly canEdit: boolean
+  readonly mine: boolean
+  readonly revision: number
+  /** A save made here not yet written online (offline): written when the connection is back. */
+  readonly unsent: boolean
+}
+
+/** One of My chord sheets: an entry with its id and its name, and its online link where it is shared. */
 export interface SavedChordSheet extends ChordSheetEntry {
   readonly id: string
   readonly name: string
+  readonly online: OnlineLink | null
 }
 
 /** At most this many of the learner's own sheets are kept. */

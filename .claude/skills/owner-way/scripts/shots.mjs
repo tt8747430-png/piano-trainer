@@ -53,7 +53,9 @@ const settingsVersion = Number(
 // SEED=<file.json>: saved stores ({ "pt-own-lessons": "<its saved text>" }) a returning learner starts with.
 const seed = process.env.SEED ? JSON.parse((await import('node:fs')).readFileSync(process.env.SEED, 'utf8')) : {}
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM ?? '/opt/pw-browsers/chromium'
-const browser = await chromium.launch({ executablePath })
+// Through the session's proxy where there is one, so a page that reads the project's database can reach it.
+const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: 'localhost,127.0.0.1' } : undefined
+const browser = await chromium.launch({ executablePath, ...(proxy ? { proxy } : {}) })
 const problems = []
 let shots = 0
 
