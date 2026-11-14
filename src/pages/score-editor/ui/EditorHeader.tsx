@@ -13,6 +13,7 @@ export function EditorLead() {
   return (
     <Button
       variant="tool"
+      className="glass"
       size="icon"
       aria-label={t('close')}
       title={t('close')}

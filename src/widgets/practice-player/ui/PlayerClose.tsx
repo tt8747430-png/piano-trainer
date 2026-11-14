@@ -14,6 +14,7 @@ export function PlayerClose({ onClose }: { onClose: () => void }) {
     <Button
       variant="tool"
       size="icon"
+      className="glass"
       aria-label={t('close')}
       title={keyHint(t('close'), PLAYER_KEYS.close)}
       onClick={onClose}
