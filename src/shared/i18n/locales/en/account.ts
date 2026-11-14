@@ -136,7 +136,7 @@ export const account = {
     handleJoined: '@{{handle}} · Joined {{year}}',
     loading: 'Loading your profile…',
     tiles: { streak: 'Day streak', songs: 'Songs learned', time: 'Practice time' },
-    time: { hm: '{{h}} h {{m}} min', m: '{{m}} min' },
+    time: { h: '{{h}} h', hm: '{{h}} h {{m}} min', m: '{{m}} min' },
     // Streak (B1): the flame, the month's calendar.
     streakPage: {
       title: 'Streak',

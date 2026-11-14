@@ -240,7 +240,7 @@ function TileFace({
             /^\d+$/.test(part) || part.trim() === '' ? (
               part
             ) : (
-              <span key={i} className="text-[0.9375rem] font-semibold tracking-normal">
+              <span key={i} className="text-[0.8125rem] font-semibold tracking-normal">
                 {part}
               </span>
             ),

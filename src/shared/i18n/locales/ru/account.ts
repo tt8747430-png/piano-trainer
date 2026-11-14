@@ -151,7 +151,7 @@ export const account: LocaleResources['account'] = {
     handleJoined: '@{{handle}} · С нами с {{year}}',
     loading: 'Загружаем профиль…',
     tiles: { streak: 'Дней подряд', songs: 'Выучено песен', time: 'Время занятий' },
-    time: { hm: '{{h}} ч {{m}} мин', m: '{{m}} мин' },
+    time: { h: '{{h}} ч', hm: '{{h}} ч {{m}} мин', m: '{{m}} мин' },
     streakPage: {
       title: 'Серия',
       keep: 'Не дайте огоньку погаснуть: позанимайтесь сегодня, чтобы продлить серию.',
