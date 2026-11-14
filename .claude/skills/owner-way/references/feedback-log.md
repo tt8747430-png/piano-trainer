@@ -273,6 +273,10 @@ owner's, typos fixed.
   not being saved … the drag and drop bug, research the memory palaces drag and drop … connecting to the midi piano
   Yamaha Genos". An edit never retimes other chords; a bar that no longer adds up is marked ! and kept. "and also dragggin into other sections should be possible": a chord drags into any section, empty ones too. "set the transitions for the sections … two times the verse … a b c or d … the endings and the intro": the sheet sets the Genos's Intro, Main per pass, Fill-in and Ending by Section Control; unset sends nothing; never chords. "the chords player should support these controls also of the Operating Style Playback": Start/Stop, ACMP, Sync Start, Sync Stop, Intro I–III, Main A–D with fill-ins, Auto Fill-in, Break, Ending I–III with rit., Fade in/out, OTS Link, as the Genos panel names and lights them, each message from the Data List. Spec
   `.scratch/r39/plan/practice-chord-player.md`.
+- **Chord sheets saved, synced and migrated (2026-11-13):** "I want to be able to save the like this as chord sheets
+  and sync to my account and also the older ones should be able to migrate to this new structure effortlessly". A
+  section is bars of chords, saved as text (`kind xN vN: C | F:2 G:2`) and synced; old sheets read into bars. The one
+  exception to "no migration": a learner's chord sheets are never dropped by a shape change.
 - **No Quiz page (2026-11-13):** "no quiz page". The Quiz page, My gaps and every list of trainers go (Practice,
   Search, Intervals' Train your ear, Progressions' Test yourself); a trainer opens only from the lesson that practises
   it, at `/practice/trainer/$trainerId`, Back to Practice. Never a Quiz or trainer list beside a topic's page.

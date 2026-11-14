@@ -84,6 +84,12 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     changes, or a broadcast channel per sheet), the last edit winning bar by bar. Sharing asks for an account (it
     reaches other people, ADR 0116: the server must answer); the sheet stays saved on the device too and catches up
     when back online. Who may edit through the link (view only, or edit) is a choice in Share, view only by default.
+  - **Saved, synced and migrated** (owner, 2026-11-13: "I want to be able to save the like this as chord sheets
+    and sync to my account and also the older ones should be able to migrate to this new structure effortlessly"):
+    a sheet of bars is saved as text in the `chord_sheets` store, synced to the account like every saved store; a
+    sheet written before bars (no `|`) is laid into bars as it is read, a bar per meter's beats, a chord that crossed
+    a bar line kept whole in its bar (which takes the !). This overrides "no migration" for chord sheets only: the
+    store's version stays, nothing is lost.
   - **The beats shown** (owner, 2026-11-13: "I want also to see the beats in the chords player"): each bar shows its
     beats as Musicca's ticks, and while playing the beat sounding is lit, the count-in's too.
 
@@ -154,7 +160,7 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
 
 | # | Board | App today | Port |
 | - | ----- | --------- | ---- |
-| 1 | A bar holds its own chords; an edit never retimes another; a bar that does not add up is kept and marked ! | `shared/lib/arrangement/chord-sheet.ts`: a section is one run of chords laid across the bar lines; `resizeChord` takes beats from the next chord, `moveChord` leaves the lengths in place, `removeChord` and `moveChordAcross` hand beats to a neighbour | a section is bars of chords (`bars: { chords }[]`); resize, move, remove, duplicate and drag across sections touch only the chord moved; `playOrder` plays each bar as long as its chords; the text form writes bars with `|`; the saved store's version bumped |
+| 1 | A bar holds its own chords; an edit never retimes another; a bar that does not add up is kept and marked ! | `shared/lib/arrangement/chord-sheet.ts`: a section is one run of chords laid across the bar lines; `resizeChord` takes beats from the next chord, `moveChord` leaves the lengths in place, `removeChord` and `moveChordAcross` hand beats to a neighbour | a section is bars of chords (`bars: { chords }[]`); resize, move, remove, duplicate and drag across sections touch only the chord moved; `playOrder` plays each bar as long as its chords; the text form writes bars with `|`; older text is read into bars, the store's version kept (done) |
 | 2 | Beat ticks under each bar, the sounding beat lit; the ! on a bar that does not add up | `SheetSection.tsx`, `ChordTile.tsx` | ticks and the ! from the bar's beats |
 | 3 | Musicca's chord sheet: Root, Chord, Bass note, Duration, Suggested chords, Play from here, Duplicate, Delete chord | `ChordDialog.tsx` | rebuilt to the board |
 | 4 | The draft: Draft beside the name, Save and Discard draft in ··· | `use-chord-sheet.ts` saves each edit | a draft per sheet in the saved store |
