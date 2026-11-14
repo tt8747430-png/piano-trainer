@@ -1,5 +1,5 @@
 import { BookOpen, Hand } from 'lucide-react'
-import type { Tile } from '@/shared/ui'
+import { PAGE_PICTURES, type Tile } from '@/shared/ui'
 import type { ExerciseGroup } from '../model/types'
 
 /**
@@ -8,9 +8,9 @@ import type { ExerciseGroup } from '../model/types'
  * the hand, the masters' books a book.
  */
 export const EXERCISE_BOOKS = {
-  technique: { icon: Hand, paint: 'yellow' },
-  barryHarris: { icon: BookOpen, paint: 'lilac' },
-  jonny: { icon: BookOpen, paint: 'sky' },
+  technique: { icon: Hand, paint: 'yellow', picture: PAGE_PICTURES.drill },
+  barryHarris: { icon: BookOpen, paint: 'lilac', picture: PAGE_PICTURES.swing },
+  jonny: { icon: BookOpen, paint: 'sky', picture: PAGE_PICTURES.swing },
 } as const satisfies Partial<Record<ExerciseGroup, Tile>>
 export type ExerciseBook = keyof typeof EXERCISE_BOOKS
 export const BOOK_IDS: readonly ExerciseBook[] = ['technique', 'barryHarris', 'jonny']

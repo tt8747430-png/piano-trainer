@@ -27,7 +27,13 @@ export function ToolsButton({ worded = false }: { worded?: boolean }) {
   const trigger = (
     <Button
       variant="bar"
-      className={cn('h-11 min-w-11 gap-1.5 rounded-pill px-4', !worded && 'max-sm:px-0')}
+      className={cn(
+        'h-11 min-w-11 gap-1.5 rounded-pill px-4',
+        // Worded, the board's TOOLSBTN: a filled pill 36 tall inside its 44px reach.
+        worded
+          ? 'border-y-4 border-transparent bg-muted bg-clip-padding px-3.5 text-[0.9375rem] font-semibold hover:bg-accent'
+          : 'max-sm:px-0',
+      )}
       title={label}
     />
   )

@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/shared/lib'
+import type { PagePicture } from './PagePictures'
 import { PAINT, type Paint } from './paint'
 
 /**
@@ -9,6 +10,7 @@ import { PAINT, type Paint } from './paint'
  */
 export function TileMark({
   icon: Icon,
+  picture: Picture,
   numeral,
   paint,
   large = false,
@@ -19,6 +21,8 @@ export function TileMark({
   paint: Paint
   /** At a library row's head (a folder, a practice place, a song with its own picture): 44px, a wash, as a song's small cover. */
   large?: boolean
+  /** A page's picture, drawn over the whole of a large tile in its icon's place (the canvas's `pic`). */
+  picture?: PagePicture | undefined
 } & ({ icon: LucideIcon; numeral?: undefined } | { icon?: undefined; numeral: number })) {
   return (
     <span
@@ -33,7 +37,13 @@ export function TileMark({
         className,
       )}
     >
-      {Icon ? <Icon className={large ? 'size-6' : 'size-4.5'} /> : numeral}
+      {large && Picture ? (
+        <Picture className="size-full" />
+      ) : Icon ? (
+        <Icon className={large ? 'size-6' : 'size-4.5'} />
+      ) : (
+        numeral
+      )}
     </span>
   )
 }

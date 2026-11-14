@@ -17,6 +17,7 @@ export function PageCard({
   link: ReactElement
 }) {
   const Icon = tile.icon
+  const Picture = tile.picture
   return useRender({
     defaultTagName: 'a',
     render: link,
@@ -33,7 +34,11 @@ export function PageCard({
               PAINT[tile.paint].ink,
             )}
           >
-            <Icon className="size-9" strokeWidth={1.75} />
+            {Picture ? (
+              <Picture className="size-full" />
+            ) : (
+              <Icon className="size-9" strokeWidth={1.75} />
+            )}
           </span>
           <span className="flex flex-col gap-0.5">
             <span className="font-semibold text-balance">{title}</span>

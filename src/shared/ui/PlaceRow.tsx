@@ -4,6 +4,7 @@ import { cn } from '@/shared/lib'
 import { ROW_BODY, ROW_FLAT, ROW_LIBRARY_FACE } from './library-row-class'
 import type { Paint } from './paint'
 import { RowFace } from './RowFace'
+import type { PagePicture } from './PagePictures'
 import { TileMark } from './TileMark'
 
 /**
@@ -13,12 +14,14 @@ import { TileMark } from './TileMark'
  */
 export function PlaceRow({
   icon,
+  picture,
   paint,
   title,
   detail,
   render,
 }: {
   icon: LucideIcon
+  picture?: PagePicture | undefined
   paint: Paint
   title: string
   detail?: string | undefined
@@ -31,7 +34,7 @@ export function PlaceRow({
       className: cn(ROW_BODY, ROW_LIBRARY_FACE),
       children: (
         <>
-          <TileMark large icon={icon} paint={paint} />
+          <TileMark large icon={icon} picture={picture} paint={paint} />
           <RowFace title={title} detail={detail} />
           <ChevronRight aria-hidden className="mr-3 size-5 shrink-0 text-muted-foreground" />
         </>

@@ -101,6 +101,7 @@ export function PracticePage() {
               <PlaceRow
                 key={key}
                 icon={tile.icon}
+                picture={tile.picture}
                 paint={tile.paint}
                 title={title}
                 detail={detail}

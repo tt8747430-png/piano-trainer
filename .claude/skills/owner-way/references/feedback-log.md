@@ -266,6 +266,11 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Rows show what they hold (loop round 11, the Practice board's `pic`):** each place of Practice wears a small
+  picture of its music instead of a glyph: the chord's keys lit, a scale on a staff, a leap, I IV V, a bass under its
+  pattern, a Hanon bar, swung eighths, a chord sheet, the Metronome, the Tuner's needle, the finder's lens, the circle.
+  Tools in the bar is a filled pill (`PAGE_PICTURES`, one set, on the rows and the laptop's cards).
+
 - **The Chord player next, every feature, timings the learner's (2026-11-13):** "continue with the chords player
   … make all of its features … starting from whatever chord … count in … duplicating the chord … when I reorder
   something and it has wrong timings accept the edit with this exclamation sign … and not change all the other
