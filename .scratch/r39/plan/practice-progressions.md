@@ -19,6 +19,16 @@ harmony itself: what each chord does and how the root moves, in any key, heard a
 - The edit form stays the owner's (editors only); a learner edits a copy (··· Edit a copy).
 - A progression's own pages drawn (canvas 134, from "no edit mode for the pages … you missed so many features"): ··· Edit the progression opens its editor (Name, How it sounds, The progression, Style, Lines) with a Draft pill, Settings, Publish and Discard; a built-in one offers Edit a copy instead. Practise in the Player opens the Player with a setup sheet.
 - A progression's keys take the colour of the chord's function, the legend's colour, not three chord-tone colours (canvas 136); each move under a tile is named truly, the last one back to I; the phone's dock reads Loop · Practise · Play, so nothing is cut off.
+- **A progression's page in the Chords page's shape (canvas 177, loop, 2026-11-14):** one piano, one bar, one shape
+  across Practice, as Scales and Intervals. The keys edge to edge at the top under Back · Progression · Settings ·
+  Piano (glass); the name (serif, its ♡ beside it), how it sounds · its style, and Key as a picker; the chords as
+  tiles coloured by role with each root's move, the legend, and one card of the chords on the staff with what it
+  teaches; Practise through the keys in the Player as the Scales page's Practise rows; Passing chords; Songs with this
+  progression and Open in the Chord player. One floating bar: Loop (lit while it loops) · Play ⌄ (Chords: Triads ·
+  7ths · 9ths, where a chord grows; Approach chords: None · Secondary dominants · ii–V) · Practise (the Player). On a
+  laptop the keys run across the top, the progression on the left, the practice and its passing chords and songs on
+  the right. Never Chord size or Approach chords as fields on the page, the keys docked at the foot, or the name in
+  the bar.
 
 ## Today
 

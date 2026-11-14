@@ -704,6 +704,15 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ProgressionNight.dc.html": {
+      "x": 1590,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A progression, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "Laptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -908,6 +917,15 @@
       "w": 2143,
       "h": 1299,
       "title": "Intervals, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionLaptopNight.dc.html": {
+      "x": 6669,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A progression, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1325,7 +1343,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 1510,
+      "maxW": 2040,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1341,7 +1359,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 6589,
+      "maxW": 8812,
       "page": "practice"
     },
     "places-phone": {
@@ -1456,6 +1474,7 @@
     "ChordsNight.dc.html",
     "ScalesNight.dc.html",
     "IntervalsNight.dc.html",
+    "ProgressionNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1479,6 +1498,7 @@
     "ChordsLaptopNight.dc.html",
     "ScalesLaptopNight.dc.html",
     "IntervalsLaptopNight.dc.html",
+    "ProgressionLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",
