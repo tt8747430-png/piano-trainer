@@ -653,6 +653,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **The tab bar floats, as the board's TABBAR (loop, 2026-11-14):** a glass capsule 64 high, 16 in from the phone's edges, over the home indicator, the current place on the chosen fill; a soft fade under it. The rail and the sidebar unchanged. A chosen chip is filled in ink (canvas 153), every `ChoiceChips`.
 - **Ports copy the board's code, not its picture (2026-11-13):** "why dont you follow the design artifact and dont
   read its code how it implements and does things to create accurate redign of our app. the chords page doesnt look
   like the design at all, and the same with other components like the piano or the floating actions what is with
