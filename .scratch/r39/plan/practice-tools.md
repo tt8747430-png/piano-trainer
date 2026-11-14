@@ -12,6 +12,8 @@ settings behind its own gear, as Soundbrenner's metronome and a hardware tuner a
   (Speed trainer ›, Silent bars ›); no explanation line under a control (an ⓘ at most).
 - The Tools menu in the bar stays (`widgets/tools-sheet`); these are the tools' own pages.
 
+- Tuner (canvas 180): Back · Tuner, no gear; the note, its distance in words and Hz over an arc gauge ±50 cents; Reference pitch stepped in one group; no floating bar.
+
 ## Today
 
 `src/pages/metronome`, `tuner`, `chord-finder`, `circle-of-fifths`; strings `practice.ts` `metronome`, `tools`,

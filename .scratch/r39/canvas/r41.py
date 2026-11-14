@@ -27,3 +27,4 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r61_intervals.py').read(
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r62_progression.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r63_pattern.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r64_metronome.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r65_tuner.py').read())
