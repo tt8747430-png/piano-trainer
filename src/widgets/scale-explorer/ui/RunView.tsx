@@ -120,7 +120,7 @@ export function RunView({
       keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" />}
       heading={choice}
       music={
-        <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+        <section className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
           <ScaleSheet music={written} hands={hands} fingers />
           {/* Each hand's fingers in a line under the run (canvas 174), as the Chords page's. */}
           <p className="flex min-h-11 flex-col items-center justify-center gap-1 text-sm text-muted-foreground">
