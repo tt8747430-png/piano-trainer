@@ -69,3 +69,6 @@ export const selectRun =
   (id: string) =>
   (state: ProgressState): ProgressState['history'][number] | undefined =>
     state.history.find((run) => run.id === id)
+
+/** A song as the learner has played it in the Player; none before its first play. */
+export const selectSongPlay = (pieceId: PieceId) => (state: ProgressState) => state.songs[pieceId]

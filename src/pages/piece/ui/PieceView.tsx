@@ -9,6 +9,7 @@ import {
   PieceFactLine,
   type Piece,
 } from '@/entities/piece'
+import { selectSongPlay, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
@@ -25,6 +26,7 @@ import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 import { SongDetails } from './SongDetails'
+import { SongPlace } from './SongPlace'
 import { YourPractice } from './YourPractice'
 
 /**
@@ -32,7 +34,8 @@ import { YourPractice } from './YourPractice'
  * with ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing it; who wrote it; one line of facts; what is said of it); its music (its sections, the
  * learner's practice, its chords and progressions); and its Details, every property a row edited
  * where it stands (Notion's). From a laptop's width the song is the left column and its music, then
- * its practice and Details, the right; a phone reads them in the same order. Play floats, the Player as it was left.
+ * its practice and Details, the right; a phone reads them in the same order. Play floats, the Player as it was
+ * left, until the song has been played: then Continue from bar n and From the start stand under its facts.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['piece', 'songs'])
@@ -46,6 +49,12 @@ export function PieceView({ piece }: { piece: Piece }) {
   const original =
     chart && !own && editsContent(account) && hasEditableOriginal(piece.id) ? chart : null
   const details = <SongDetails piece={piece} own={own} original={original} />
+  const played = useProgress(selectSongPlay(piece.id)) !== undefined
+  // The bars as written: the Player keeps its place by them.
+  const writtenBars = performance.bars.reduce(
+    (most, bar, i) => Math.max(most, (bar.written ?? i) + 1),
+    0,
+  )
   return (
     <div className="flex flex-col gap-6 pb-24">
       <PieceHeader
@@ -94,6 +103,7 @@ export function PieceView({ piece }: { piece: Piece }) {
             piece={piece}
             keyLink={(key) => <ScaleLink entry={piece}>{key}</ScaleLink>}
           />
+          <SongPlace piece={piece} bars={writtenBars} />
           <PieceAbout entry={piece} />
         </section>
         <div className="flex min-w-0 flex-col gap-8">
@@ -112,14 +122,19 @@ export function PieceView({ piece }: { piece: Piece }) {
           </div>
         </div>
       </div>
-      {/* The one thing to do first: play it (ADR 0111), the Player as it was left. */}
-      <FloatingActions>
-        <FabLink
-          label={t('practise')}
-          icon={Play}
-          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
-        />
-      </FloatingActions>
+      {/* The one thing to do first: play it (ADR 0111), the Player as it was left; once it has
+          been played, its place under the facts says where to go on from instead. */}
+      {played ? null : (
+        <FloatingActions>
+          <FabLink
+            label={t('practise')}
+            icon={Play}
+            render={
+              <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
+            }
+          />
+        </FloatingActions>
+      )}
     </div>
   )
 }

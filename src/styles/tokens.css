@@ -50,6 +50,9 @@
   /* The canvas's eyebrow: a small line naming where something is (Continue, Lesson 7 of 13). */
   --p-rust: #a8551f;
   --p-rust-night: #e39a66;
+  /* A song's bars played through (canvas 125's bar map). */
+  --p-copper: #c26a2e;
+  --p-copper-night: #d98a52;
   --p-crimson: #a34243;
   /* The shade cast by night: near black, warm. */
   --p-night-shade: #0a0705;
@@ -96,6 +99,7 @@
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
   --eyebrow: var(--p-rust);
+  --played: var(--p-copper);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
      its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
      follow the theme. */
@@ -276,6 +280,7 @@
     --honey-ring: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
     --eyebrow: var(--p-rust-night);
+    --played: var(--p-copper-night);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);
     --hand-staff-ink: var(--p-grass-light);

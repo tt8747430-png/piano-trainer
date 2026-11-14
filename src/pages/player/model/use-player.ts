@@ -19,6 +19,8 @@ import {
   type SongVersion,
   trackOf,
   withTrack,
+  writtenBarAt,
+  writtenBarOf,
   type PlayerStaves,
   type PracticeChoice,
   type TrackChoice,
@@ -26,7 +28,7 @@ import {
 } from '@/features/practice'
 import { syncRecording } from '@/features/edit-piece'
 import { recordPass } from '@/features/record-lesson'
-import { recordPractised, usePracticeClock } from '@/features/record-practised'
+import { recordPractised, usePracticeClock, useSongPlayRecord } from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
 import { controlsFor, usePracticePlayer, type PlayerControl } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
@@ -128,6 +130,14 @@ export function usePlayer(
   const { passes } = player.practice.state
   // The time practised (B1): while the transport runs or waits for the learner's notes.
   usePracticeClock(player.practice.state.playing)
+  // The song's place (canvas 125): the bars played through and where Continue opens next.
+  const lastBar = writtenBarOf(performance, performance.bars.length - 1)
+  useSongPlayRecord(
+    piece.id,
+    player.practice.state.playing,
+    writtenBarAt(performance, player.practice.state.beatGroup),
+    lastBar,
+  )
   const recordFinished = useEffectEvent(() => {
     const whole = { first: 0, last: performance.bars.length - 1 }
     recordPass(progress, piece.id, player.loop ?? whole, new Date())

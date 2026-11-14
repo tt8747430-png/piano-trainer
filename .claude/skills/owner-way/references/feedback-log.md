@@ -243,6 +243,10 @@ owner's, typos fixed.
   other things": every library creates from one centred honey + (a card of rows on a phone, New ▾ in the bar on a
   laptop); Songs: New song, Record, New folder, Import, New group; a Practice library: its New and New folder.
 
+- **Loop round 13, a song's place:** the Player keeps where each song stopped and the bars played through; the song
+  page then shows the canvas's Continue from bar N (honey) and From the start (sand), the bar map in copper with the
+  next bar ringed, "Bar 1 · Played n times · m minutes · Bar N"; Play floats only before the first play. Chords are
+  the board's white cards (2026-11-14).
 ## Learn and the editors
 
 - **"A library, not a path":** levels as chips ("why is it called a journey when it is not a journey anymore"). No days

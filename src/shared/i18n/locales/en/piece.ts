@@ -166,6 +166,19 @@ export const piece = {
       other: 'Another language',
     },
   },
+  // A song's place, as the Player left it (canvas 125): where to go on from, and the bars played.
+  place: {
+    continue: 'Continue from bar {{bar}}',
+    start: 'From the start',
+    first: 'Bar 1',
+    last: 'Bar {{bar}}',
+    played_one: 'Played {{count}} time',
+    played_other: 'Played {{count}} times',
+    minutes_one: '{{count}} minute',
+    minutes_other: '{{count}} minutes',
+    said: '{{played}} of {{total}} bars played; bar {{next}} is next',
+    saidAll: '{{played}} of {{total}} bars played',
+  },
   practice: {
     title: 'Your practice',
     last: 'Played last',

@@ -1,5 +1,6 @@
 import type { StepId } from '@/entities/step'
 import type { PieceId } from '@/entities/piece'
+import type { SongPlay } from './songs'
 import type { SkillId } from '@/shared/lib/music'
 import type { ChordLessonKey, LessonKey } from './lessons'
 
@@ -88,6 +89,8 @@ export interface ProgressState {
   readonly exercised: Readonly<Partial<Record<string, string>>>
   /** Every practice run, newest first, the latest HISTORY_KEPT (canvas 160): Profile's Practice history. */
   readonly history: readonly PracticeRun[]
+  /** Each song as played in the Player (canvas 125), the latest SONGS_KEPT, last played last. */
+  readonly songs: Readonly<Partial<Record<PieceId, SongPlay>>>
 }
 
 /** The firsts the progress keeps the day of, written where they happen. */
@@ -111,4 +114,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   bestTake: 0,
   exercised: {},
   history: [],
+  songs: {},
 }

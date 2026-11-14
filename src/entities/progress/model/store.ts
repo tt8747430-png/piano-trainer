@@ -25,9 +25,10 @@ import {
   type RunKey,
   type TrainerRecord,
 } from './types'
+import { songPlay, SONGS_KEPT } from './songs'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 7
+export const PROGRESS_VERSION = 8
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -180,6 +181,9 @@ function sanitize(persisted: unknown): ProgressState {
       })
       .toSorted((a, b) => b.at.localeCompare(a.at))
       .slice(0, HISTORY_KEPT),
+    songs: Object.fromEntries(
+      Object.entries(kept(saved.songs, isPieceKey, songPlay)).slice(-SONGS_KEPT),
+    ),
   }
 }
 
