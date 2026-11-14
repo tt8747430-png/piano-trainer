@@ -36,6 +36,7 @@ export function useSongPlayRecord(
         at: end ? 0 : at,
         started: true,
         seconds: (Date.now() - now.since) / 1000,
+        bars: lastBar + 1,
       })
       if (songs !== state.songs) store.setState({ songs })
     },

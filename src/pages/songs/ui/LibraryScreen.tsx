@@ -114,8 +114,8 @@ export function LibraryScreen({
         </LibrarySelect>
       ) : (
         <>
-          {/* A phone's Home opens with what was played last (R30 S3); a laptop's tree has its place. */}
-          {folder === null && !wide && view.shown === view.scope.length ? <ContinueShelf /> : null}
+          {/* Home opens with the songs left part way (canvas 133), a phone's and a laptop's. */}
+          {folder === null && view.shown === view.scope.length ? <ContinueShelf /> : null}
           <LibraryBrowse
             page={page}
             place={folder?.id ?? 'home'}

@@ -58,7 +58,7 @@ export const songs = {
   },
   // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   // Songs' Continue (R30 S3): the last songs played.
-  continue: { title: 'Continue', today: 'Today', yesterday: 'Yesterday' },
+  continue: { title: 'Continue', bar: 'Bar {{bar}} of {{total}}' },
   // Groups and the folders shared with them (R30 S6).
   groups: {
     title: 'Groups',

@@ -67,7 +67,7 @@ export {
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'
 export { practiceRecord, type PracticeRecord } from './model/record'
-export { withSongStretch, type SongPlay, type SongStretch } from './model/songs'
+export { songsToContinue, withSongStretch, type SongPlay, type SongStretch } from './model/songs'
 export {
   BADGES,
   badgesOf,

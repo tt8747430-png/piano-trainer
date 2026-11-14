@@ -246,7 +246,8 @@ owner's, typos fixed.
 - **Loop round 13, a song's place:** the Player keeps where each song stopped and the bars played through; the song
   page then shows the canvas's Continue from bar N (honey) and From the start (sand), the bar map in copper with the
   next bar ringed, "Bar 1 · Played n times · m minutes · Bar N"; Play floats only before the first play. Chords are
-  the board's white cards (2026-11-14).
+  the board's white cards (2026-11-14).- **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
+
 ## Learn and the editors
 
 - **"A library, not a path":** levels as chips ("why is it called a journey when it is not a journey anymore"). No days

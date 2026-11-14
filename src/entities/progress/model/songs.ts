@@ -10,6 +10,8 @@ export interface SongPlay {
   readonly at: number
   readonly times: number
   readonly seconds: number
+  /** How many bars the song has as written, when it was last played. */
+  readonly bars: number
 }
 
 /** How many songs keep their place: the latest played. */
@@ -21,10 +23,11 @@ const isPlace = (value: unknown): value is number =>
 /** A saved song's play as it can be read; nothing where it cannot. */
 export function songPlay(value: unknown): SongPlay | undefined {
   if (typeof value !== 'object' || value === null) return undefined
-  const { played, at, times, seconds } = value as Partial<Record<keyof SongPlay, unknown>>
-  if (!Array.isArray(played) || !isPlace(at) || !isPlace(times)) return undefined
+  const { played, at, times, seconds, bars } = value as Partial<Record<keyof SongPlay, unknown>>
+  if (!Array.isArray(played) || !isPlace(at) || !isPlace(times) || !isPlace(bars)) return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
-  return { played: [...new Set(played.filter(isPlace))].sort((a, b) => a - b), at, times, seconds }
+  const sorted = [...new Set(played.filter(isPlace))].sort((a, b) => a - b)
+  return { played: sorted, at, times, seconds, bars }
 }
 
 /** What a stretch in the Player adds to a song's play. */
@@ -36,6 +39,8 @@ export interface SongStretch {
   /** It was a start (Play pressed), counted once. */
   readonly started: boolean
   readonly seconds: number
+  /** How many bars the song has as written. */
+  readonly bars: number
 }
 
 /**
@@ -55,9 +60,24 @@ export function withSongStretch(
     at: stretch.at,
     times: (was?.times ?? 0) + (stretch.started ? 1 : 0),
     seconds: (was?.seconds ?? 0) + Math.max(0, stretch.seconds),
+    bars: stretch.bars,
   }
   const kept = Object.entries(songs)
     .filter(([id]) => id !== pieceId)
     .slice(-(SONGS_KEPT - 1))
   return { ...Object.fromEntries(kept), [pieceId]: next }
+}
+
+/**
+ * The songs to go on with (canvas 133, Songs' Continue): each stopped part way, the latest played
+ * first, with its place.
+ */
+export function songsToContinue(
+  songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
+): readonly (readonly [PieceId, SongPlay])[] {
+  return Object.entries(songs)
+    .flatMap(([id, play]): (readonly [PieceId, SongPlay])[] =>
+      play && play.at > 0 && play.at < play.bars ? [[id, play]] : [],
+    )
+    .reverse()
 }

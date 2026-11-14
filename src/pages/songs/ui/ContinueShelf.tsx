@@ -1,77 +1,61 @@
 import { useTranslation } from 'react-i18next'
 import { useLibrary } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire } from '@/entities/piece'
-import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
+import { songsToContinue, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { PieceCover } from '@/widgets/piece-cover'
+import { PieceShelfCover } from '@/widgets/piece-cover'
 
-/** How many songs Continue shows: two whole cards across a phone. */
-const SHOWN = 2
-
-/** A day as the learner's language says it near today: Today, Yesterday, else its date. */
-function useDayWords(): (at: string) => string {
-  const { t } = useTranslation('songs')
-  const locale = useLocale()
-  return (at) => {
-    const day = new Date(at)
-    const today = new Date()
-    const days = Math.round(
-      (new Date(today.toDateString()).getTime() - new Date(day.toDateString()).getTime()) /
-        86_400_000,
-    )
-    if (days === 0) return t('continue.today')
-    if (days === 1) return t('continue.yesterday')
-    return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }).format(day)
-  }
-}
+/** How many songs Continue holds: the latest few, the rest scroll in from the edge. */
+const SHOWN = 8
 
 /**
- * Songs' Continue (R30 S3, Apple Music's Recently played): the last songs played, as whole cards (each
- * its cover and title, and the day it was played), a tap back into the song. Nothing before the first.
+ * Songs' Continue (canvas 133, Apple Music's Recently played): the songs stopped part way, the latest
+ * first, each a card of its first page, its title, a copper meter of how far it got and "Bar 9 of 16";
+ * a tap opens the song, where Continue from bar 9 waits. A shelf that scrolls sideways; nothing before
+ * the first song is left part way.
  */
 export function ContinueShelf() {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const repertoire = useRepertoire()
-  const practised = useProgress(selectPractised)
+  const songs = useProgress((state) => state.songs)
   const archived = useLibrary((state) => state.archive)
-  const dayOf = useDayWords()
   const gone = new Set(archived.flatMap((entry) => (entry.kind === 'song' ? [entry.id] : [])))
-  const recent = byLastOpened(practised)
-    .filter((id) => !gone.has(id))
-    .flatMap((id) => {
-      const entry = repertoire.entry(id)
-      return entry && entry.kind !== 'listing' ? [entry] : []
+  const shown = songsToContinue(songs)
+    .flatMap(([id, play]) => {
+      const entry = gone.has(id) ? undefined : repertoire.entry(id)
+      return entry && entry.kind !== 'listing' ? [{ entry, play }] : []
     })
     .slice(0, SHOWN)
-  if (recent.length === 0) return null
+  if (shown.length === 0) return null
   return (
-    <section aria-labelledby="songs-continue" className="flex flex-col gap-3">
-      <h2 id="songs-continue" className="font-sans text-xl font-bold">
+    <section aria-labelledby="songs-continue" className="flex flex-col gap-2">
+      <h2 id="songs-continue" className="mx-1 font-sans text-xl font-bold">
         {t('continue.title')}
       </h2>
-      <ul className="grid grid-cols-2 gap-3">
-        {recent.map((entry) => {
-          const at = practised[entry.id]
-          return (
-            <li key={entry.id}>
-              <PieceLink
-                entry={entry}
-                className="flex h-full flex-col gap-2 card p-3 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
-              >
-                <PieceCover
-                  entry={entry}
-                  decorative
-                  className="aspect-auto h-20 w-full rounded-control text-3xl"
+      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
+        {shown.map(({ entry, play }) => (
+          <li key={entry.id} className="w-33 flex-none snap-start lg:w-42.5">
+            <PieceLink
+              entry={entry}
+              className="flex flex-col gap-1.5 rounded-[10px] text-foreground focus-visible:outline-offset-2"
+            >
+              <PieceShelfCover entry={entry} />
+              <span className="truncate text-[0.9375rem] font-semibold">
+                {entryTitles(entry, locale).primary}
+              </span>
+              <span aria-hidden className="block h-0.75 rounded-[2px] bg-muted">
+                <span
+                  className="block h-full rounded-[2px] bg-played"
+                  style={{ width: `${Math.round((play.at / play.bars) * 100)}%` }}
                 />
-                <span className="line-clamp-2 font-semibold text-balance">
-                  {entryTitles(entry, locale).primary}
-                </span>
-                {at ? <span className="text-sm text-muted-foreground">{dayOf(at)}</span> : null}
-              </PieceLink>
-            </li>
-          )
-        })}
+              </span>
+              <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
+                {t('continue.bar', { bar: play.at + 1, total: play.bars })}
+              </span>
+            </PieceLink>
+          </li>
+        ))}
       </ul>
     </section>
   )
