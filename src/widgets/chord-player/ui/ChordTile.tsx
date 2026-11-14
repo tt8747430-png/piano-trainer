@@ -4,16 +4,7 @@ import type { KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn } from '@/shared/lib'
-import {
-  chordRole,
-  chordSymbol,
-  numeralOf,
-  numeralText,
-  printedSymbol,
-  type Chord,
-  type Key,
-} from '@/shared/lib/music'
-import { PAINT, ROLE_PAINT } from '@/shared/ui'
+import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
 import { boxName } from '../model/box-name'
 import type { BoxPlace } from '../model/engine'
 
@@ -26,64 +17,29 @@ export interface TileActs {
 }
 
 /**
- * A chord's face: its name large, its numeral and role under it in its role's paint (D14), its beats
- * as dots. Drawn on the tile and, while it is dragged, as the tile in hand (memory-palaces': the
- * overlay is the row itself, lifted by a shadow).
+ * A chord as the board writes it in its bar: its name in the book serif, bold. Drawn lifted, on a
+ * card with a shadow, while it is in hand (memory-palaces': the overlay is the thing itself).
  */
 export function ChordFace({
   chord,
-  beats,
   musicKey,
   names,
-  lit = false,
-  lifted = false,
 }: {
   chord: Chord
-  beats: number
   musicKey: Key
   names: ProgressionNames
-  lit?: boolean
-  lifted?: boolean
 }) {
-  const { t } = useTranslation('music')
-  const numeral = numeralOf(chord, musicKey)
-  const role = numeral ? chordRole(numeral, musicKey.minor) : null
-  const look = role ? PAINT[ROLE_PAINT[role.role]] : null
   return (
-    <span
-      className={cn(
-        'flex min-h-21 w-full flex-col items-center justify-center gap-0.5 rounded-control px-1 py-2 text-center leading-tight transition-colors duration-150 ease-out',
-        lit && look
-          ? cn(look.full, 'text-on-paint-full')
-          : look
-            ? cn(look.fill, look.ink)
-            : 'bg-raised',
-        lit && 'ring-3 ring-primary',
-        lifted && 'elevation-3',
-      )}
-    >
-      <span className="max-w-full font-display text-xl font-semibold break-all">
-        {boxName(chord, musicKey, names)}
-      </span>
-      {role ? (
-        <span className="max-w-full text-xs font-semibold text-balance">
-          {names === 'chords' && numeral ? `${numeralText(numeral)} · ` : ''}
-          {t(`harmony.role.${role.role}`)}
-        </span>
-      ) : null}
-      <span aria-hidden className="flex gap-1 pt-0.5">
-        {Array.from({ length: beats }, (_, beat) => (
-          <span key={beat} className="size-1.5 rounded-pill bg-current opacity-60" />
-        ))}
-      </span>
+    <span className="grid min-h-11 min-w-14 place-items-center rounded-control bg-card px-3 font-display text-[17px] font-bold whitespace-nowrap text-foreground elevation-3">
+      {boxName(chord, musicKey, names)}
     </span>
   )
 }
 
 /**
- * A chord's tile (R32, Apple's way): a tap opens its chord sheet (symbol, length, bass, passing
- * chords); held a quarter of a second by a finger, or dragged by a mouse, it lifts and moves among its
- * section's tiles; from the keys, Space picks it up and the arrows move it, Enter opens it, a letter
+ * A chord in its bar (canvas 171), as wide as its beats: a tap opens its chord sheet; held a quarter
+ * of a second by a finger, or dragged by a mouse, it lifts and lands before any chord of any section,
+ * or at a section's end; from the keys, Space picks it up and the arrows move it, Enter opens it, a letter
  * starts a new symbol in its sheet, Backspace deletes it, Shift and the arrows change its length.
  */
 export function ChordTile({
@@ -140,13 +96,13 @@ export function ChordTile({
       title={t('chordPlayer.boxHint')}
       onClick={() => acts.open(place)}
       onKeyDown={onKeyDown}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        'flex flex-1 cursor-grab touch-manipulation rounded-control select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing',
-        isDragging && 'opacity-0',
+        'flex min-w-10 cursor-grab touch-manipulation items-center justify-center px-0.5 font-display text-[17px] font-bold whitespace-nowrap select-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring active:cursor-grabbing md:text-[22px]',
+        isDragging && 'opacity-30',
       )}
+      style={{ flex: `${beats} 1 0`, transform: CSS.Translate.toString(transform), transition }}
     >
-      <ChordFace chord={chord} beats={beats} musicKey={musicKey} names={names} lit={lit} />
+      {boxName(chord, musicKey, names)}
     </div>
   )
 }

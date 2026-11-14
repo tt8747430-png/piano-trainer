@@ -40,6 +40,8 @@ export interface TransportState {
   readonly playing: boolean
   /** The box sounding now (lit), while it plays. */
   readonly lit: BoxPlace | null
+  /** The beat of its bar sounding now, from 0, while it plays: the bar's tick lit. */
+  readonly beat: number | null
 }
 
 /** How far ahead a chord is queued. */
@@ -206,20 +208,27 @@ export function createChordEngine({
   plan: () => PlayPlan
   onChange?: () => void
 }) {
-  let state: TransportState = { playing: false, lit: null }
+  let state: TransportState = { playing: false, lit: null, beat: null }
   let cache: Arranged | null = null
   let stopTicker: (() => void) | null = null
   /** The next window to queue, by its bar in play order and its start in that bar, in beats. */
   let next: { bar: number; beat: number } | null = null
   let nextAt = 0
   let loop: number | null = null
-  let queued: { at: number; box: BoxPlace; handle: PlayHandle }[] = []
+  /** Each window queued: when it sounds, its box, its first beat in its bar and a beat's seconds. */
+  let queued: { at: number; box: BoxPlace; beat: number; perBeat: number; handle: PlayHandle }[] =
+    []
   let fading: { from: number; seconds: number } | null = null
   let ending: number | null = null
 
   const set = (change: Partial<TransportState>) => {
     const changed = { ...state, ...change }
-    if (changed.playing === state.playing && sameBox(changed.lit, state.lit)) return
+    if (
+      changed.playing === state.playing &&
+      sameBox(changed.lit, state.lit) &&
+      changed.beat === state.beat
+    )
+      return
     state = changed
     onChange()
   }
@@ -237,7 +246,7 @@ export function createChordEngine({
     queued = []
     fading = null
     ending = null
-    set({ playing: false, lit: null })
+    set({ playing: false, lit: null, beat: null })
   }
 
   /** The bars a pass may play: the whole sheet's, or the looped section's. */
@@ -273,7 +282,13 @@ export function createChordEngine({
       const handle = audio.play(sounds, nextAt, gain)
       queued = [
         ...queued.filter((each) => each.at > audio.now() - 10),
-        { at: nextAt, box: window.box, handle },
+        {
+          at: nextAt,
+          box: window.box,
+          beat: (window.from - (band.bars[window.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
+          perBeat: seconds(TICKS_PER_BEAT),
+          handle,
+        },
       ]
       const length = seconds(window.to - window.from)
       const following = windows[windows.indexOf(window) + 1]
@@ -304,7 +319,12 @@ export function createChordEngine({
     if (ending !== null && now >= ending) return finish()
     queue()
     const sounding = queued.findLast((each) => each.at <= now + 1e-9) ?? queued[0]
-    set({ lit: sounding?.box ?? null })
+    set({
+      lit: sounding?.box ?? null,
+      beat: sounding
+        ? sounding.beat + Math.floor(Math.max(0, now - sounding.at) / sounding.perBeat)
+        : null,
+    })
   }
 
   return {
@@ -334,9 +354,9 @@ export function createChordEngine({
       fading = null
       ending = null
       queued = []
-      state = { playing: true, lit: null }
+      state = { playing: true, lit: null, beat: null }
       queue()
-      set({ playing: true, lit: queued[0]?.box ?? null })
+      set({ playing: true, lit: queued[0]?.box ?? null, beat: queued[0]?.beat ?? null })
       stopTicker = ticker(tick)
     },
     /** Stops: the sound fades over two beats, then is silenced. */
@@ -345,7 +365,7 @@ export function createChordEngine({
       const tempo = plan().tempo
       fading = { from: audio.now(), seconds: (FADE_BEATS * 60) / tempo }
       next = null
-      set({ playing: false, lit: null })
+      set({ playing: false, lit: null, beat: null })
     },
     /** Loops a section (its index), or the whole sheet again (null), from the next chord on. */
     loop(section: number | null) {

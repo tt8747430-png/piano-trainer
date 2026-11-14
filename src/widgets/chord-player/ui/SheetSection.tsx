@@ -1,37 +1,33 @@
-import { rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable'
+import { useDroppable } from '@dnd-kit/core'
+import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Copy, Ellipsis, GripVertical, Plus, Trash2 } from 'lucide-react'
+import { GripVertical, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn } from '@/shared/lib'
 import {
-  SECTION_KINDS,
-  SECTION_REPEATS,
   sectionBars,
   sectionChords,
   type SheetMeter,
   type SheetSection as Section,
-  type Variation,
 } from '@/shared/lib/arrangement'
-import type { Key } from '@/shared/lib/music'
-import { ActionMenu, MenuPicker, Segmented } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { beatsPerBar, type Key } from '@/shared/lib/music'
 import type { BoxPlace } from '../model/engine'
-import { chordDragId, sectionDragId } from '../model/sheet-dnd'
+import { chordDragId, endDragId, sectionDragId } from '../model/sheet-dnd'
 import { ChordTile, type TileActs } from './ChordTile'
 
-/** Every repeat a section takes, as its pop-up lists them. */
-const REPEATS = Array.from(
-  { length: SECTION_REPEATS.max - SECTION_REPEATS.min + 1 },
-  (_, at) => SECTION_REPEATS.min + at,
-)
+/** Holds every chord's drop in place: chords of different lengths never slide under the finger. */
+const STILL = () => null
+
+/** A section's letter on its head, as a lead sheet marks it: A, B, C. */
+export const sectionLetter = (index: number) => String.fromCharCode(65 + (index % 26))
 
 /**
- * A section of the chord sheet (R29 CP2, R32) as a card: its head (its handle, its name, Repeat,
- * Variation where the style has more than one, ⋯), then its chords as equal tiles in a row that
- * wraps, Apple's way: a tap opens a chord's sheet, a held finger or a mouse dragged moves it among
- * its section's tiles, + adds one. The sheet's one drag context (`ChordPlayer`) holds both the
- * sections and the chords, so a section's handle and a chord never answer the same pointer.
+ * A section of the chord sheet (canvas 171), as a lead sheet writes it: its head (a grip, its
+ * letter boxed, its name and × times, opening its sheet), then its bars four to a row between bar
+ * lines (the last closing its row), each bar's chords as wide as their beats over a tick per beat, the beat sounding in ink
+ * while it plays. A bar whose beats are not the meter's is kept as written and marked !, opening
+ * its first chord. A + after the last bar adds a chord, and takes a chord dropped at the end.
  */
 export function SheetSection({
   section,
@@ -39,31 +35,31 @@ export function SheetSection({
   musicKey,
   meter,
   names,
-  variations,
   lit,
+  beat,
+  chosen,
   acts,
-  onChange,
-  onDuplicate,
-  onDelete,
-  canDuplicate,
+  onOpen,
 }: {
   section: Section
   index: number
   musicKey: Key
   meter: SheetMeter
   names: ProgressionNames
-  /** The style's variations: none drawn but one. */
-  variations: readonly Variation[]
   lit: BoxPlace | null
+  /** The beat of the lit chord's bar sounding now. */
+  beat: number | null
+  /** The chord whose sheet is open: its bar shaded. */
+  chosen: BoxPlace | null
   acts: TileActs & { add(section: number): void }
-  onChange(change: Partial<Section>): void
-  onDuplicate(): void
-  onDelete(): void
-  canDuplicate: boolean
+  /** Its sheet opened: name, times, variation, duplicate, delete. */
+  onOpen(): void
 }) {
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
-  const bars = sectionBars(section, meter).length
+  const bars = sectionBars(section, meter)
+  const perBar = beatsPerBar(meter)
+  const chords = sectionChords(section)
   const {
     attributes,
     listeners,
@@ -73,126 +69,142 @@ export function SheetSection({
     transition,
     isDragging,
   } = useSortable({ id: sectionDragId(index) })
-  const ids = sectionChords(section).map((_, at) => chordDragId(index, at))
+  const end = useDroppable({ id: endDragId(index) })
+  const ids = chords.map((_, at) => chordDragId(index, at))
+  const holds = (place: BoxPlace | null, bar: (typeof bars)[number]) =>
+    place !== null &&
+    place.section === index &&
+    bar.pieces.some((piece) => piece.chord === place.index)
   return (
     <section
       ref={setNodeRef}
       aria-label={name}
-      style={{
-        transform: CSS.Translate.toString(transform),
-        transition: transition,
-      }}
-      className={cn('flex min-w-0 flex-col gap-3 card p-3', isDragging && 'opacity-0')}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={cn('flex min-w-0 flex-col gap-1', isDragging && 'opacity-0')}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex min-h-11 items-center gap-2">
         <button
           ref={setActivatorNodeRef}
           type="button"
           aria-label={t('chordPlayer.drag', { name })}
           title={t('chordPlayer.drag', { name })}
-          className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
+          className="-ml-3.5 grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
-          <GripVertical aria-hidden className="size-5" />
+          <GripVertical aria-hidden className="size-4" />
         </button>
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-          <MenuPicker
-            label={t('chordPlayer.section')}
-            bare
-            value={section.kind}
-            options={SECTION_KINDS.map((kind) => ({
-              value: kind,
-              label: t(`chordPlayer.sections.${kind}`),
-            }))}
-            onChange={(kind) => onChange({ kind })}
-          />
-          <MenuPicker
-            label={t('chordPlayer.repeat')}
-            value={section.repeats}
-            options={REPEATS.map((count) => ({
-              value: count,
-              label: t('chordPlayer.times', { count }),
-            }))}
-            onChange={(repeats) => onChange({ repeats })}
-          />
-          {variations.length > 1 ? (
-            <div className="w-44 shrink-0">
-              <Segmented
-                label={t('chordPlayer.variation')}
-                value={Math.min(section.variation, variations.length) as Variation}
-                options={variations.map((value) => ({ value, label: String(value) }))}
-                onChange={(variation) => onChange({ variation })}
-              />
-            </div>
-          ) : null}
-          <span className="text-sm text-muted-foreground tabular-nums">
-            {t('chordPlayer.bars', { count: bars })}
+        <button
+          type="button"
+          onClick={onOpen}
+          aria-label={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
+          title={t('chordPlayer.sectionOpen', { name, count: section.repeats })}
+          className="-ml-2 flex min-h-11 min-w-0 items-center gap-2 rounded-control px-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring"
+        >
+          <span
+            aria-hidden
+            className="grid size-[22px] shrink-0 place-items-center border-[1.5px] border-foreground text-[13px] font-bold"
+          >
+            {sectionLetter(index)}
           </span>
-        </div>
-        <ActionMenu
-          label={t('chordPlayer.sectionMenu', { name })}
-          align="end"
-          trigger={<Ellipsis aria-hidden />}
-          render={
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-11 shrink-0"
-              aria-label={t('chordPlayer.sectionMenu', { name })}
-              title={t('chordPlayer.sectionMenu', { name })}
-            />
-          }
-          actions={[
-            ...(canDuplicate
-              ? [
-                  {
-                    key: 'duplicate',
-                    label: t('chordPlayer.duplicate'),
-                    icon: Copy,
-                    onSelect: onDuplicate,
-                  },
-                ]
-              : []),
-            {
-              key: 'delete',
-              label: t('chordPlayer.delete'),
-              icon: Trash2,
-              destructive: true,
-              onSelect: onDelete,
-            },
-          ]}
-        />
+          <span className="truncate text-[15px] font-semibold">{name}</span>
+          <span className="text-[13px] text-muted-foreground tabular-nums">
+            {t('chordPlayer.times', { count: section.repeats })}
+          </span>
+        </button>
       </div>
-      <SortableContext items={ids} strategy={rectSortingStrategy}>
+      <SortableContext items={ids} strategy={STILL}>
         <ol
           aria-label={t('chordPlayer.chordsOf', { name })}
-          className="grid grid-cols-[repeat(auto-fill,minmax(5.5rem,1fr))] gap-2"
+          className="grid grid-cols-4 border-l-2 border-foreground"
         >
-          {sectionChords(section).map((chord, at) => {
-            const place = { section: index, index: at }
+          {bars.map((bar, at) => {
+            const now = holds(lit, bar)
             return (
-              <li key={ids[at]} className="flex">
-                <ChordTile
-                  id={ids[at] ?? ''}
-                  chord={chord.chord}
-                  beats={chord.beats}
-                  musicKey={musicKey}
-                  names={names}
-                  lit={lit !== null && lit.section === index && lit.index === at}
-                  place={place}
-                  acts={acts}
-                />
+              <li
+                key={`bar-${at}`}
+                aria-label={t('chordPlayer.bar', { count: at + 1 })}
+                className={cn(
+                  'relative flex h-[54px] min-w-0 flex-col border-r border-foreground md:h-[68px]',
+                  (at % 4 === 3 || at === bars.length - 1) && 'border-r-2',
+                  now
+                    ? 'bg-primary text-primary-foreground'
+                    : holds(chosen, bar) && 'bg-primary/35',
+                )}
+              >
+                <div className="flex min-h-0 flex-1 items-stretch">
+                  {bar.pieces.map((piece) => {
+                    const chord = chords[piece.chord]
+                    if (!chord) return null
+                    return (
+                      <ChordTile
+                        key={ids[piece.chord]}
+                        id={ids[piece.chord] ?? ''}
+                        chord={chord.chord}
+                        beats={chord.beats}
+                        musicKey={musicKey}
+                        names={names}
+                        lit={lit?.section === index && lit.index === piece.chord}
+                        place={{ section: index, index: piece.chord }}
+                        acts={acts}
+                      />
+                    )
+                  })}
+                </div>
+                <div aria-hidden className="flex h-[9px] flex-none items-center gap-[3px] px-1.5">
+                  {Array.from({ length: Math.max(bar.beats, 1) }, (_, tick) => (
+                    <span
+                      key={tick}
+                      className={cn(
+                        'h-[3px] flex-1 rounded-[2px]',
+                        now && tick === beat ? 'bg-foreground' : 'bg-muted-foreground/45',
+                      )}
+                    />
+                  ))}
+                </div>
+                {bar.wrong ? (
+                  <button
+                    type="button"
+                    aria-label={t('chordPlayer.wrongBar', {
+                      bar: at + 1,
+                      count: bar.beats,
+                      beats: perBar,
+                    })}
+                    title={t('chordPlayer.wrongBar', {
+                      bar: at + 1,
+                      count: bar.beats,
+                      beats: perBar,
+                    })}
+                    onClick={() => {
+                      const first = bar.pieces[0]
+                      if (first) acts.open({ section: index, index: first.chord })
+                    }}
+                    className="absolute -top-[18px] -right-[22px] z-10 grid size-11 place-items-center"
+                  >
+                    <svg viewBox="0 0 24 24" className="size-3.5" aria-hidden>
+                      <circle cx="12" cy="12" r="11" className="fill-destructive" />
+                      <path
+                        d="M12 6.5v7M12 17.2v.3"
+                        className="stroke-white"
+                        strokeWidth="2.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                ) : null}
               </li>
             )
           })}
-          <li className="flex">
+          <li ref={end.setNodeRef} className="flex">
             <button
               type="button"
               aria-label={t('chordPlayer.addChord', { name })}
               title={t('chordPlayer.addChord', { name })}
               onClick={() => acts.add(index)}
-              className="grid min-h-21 flex-1 place-items-center rounded-control border border-dashed border-input text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted"
+              className={cn(
+                'grid h-[54px] flex-1 place-items-center text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted md:h-[68px]',
+                end.isOver && 'bg-primary/35',
+              )}
             >
               <Plus aria-hidden className="size-5" />
             </button>

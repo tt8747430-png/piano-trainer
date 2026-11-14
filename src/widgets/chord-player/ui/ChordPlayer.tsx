@@ -30,7 +30,7 @@ import {
   barCount,
   duplicateSection,
   insertChord,
-  moveChord,
+  moveChordAcross,
   moveSection,
   MOST_SECTIONS,
   relayMeter,
@@ -60,7 +60,6 @@ import {
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
   ButtonLink,
-  confirm,
   FloatingActions,
   FloatingBar,
   FloatingBarButton,
@@ -79,6 +78,7 @@ import { dropMove, readDragId, sectionDragId, landsOn } from '../model/sheet-dnd
 import { ChordDialog } from './ChordDialog'
 import { ChordFace, type TileActs } from './ChordTile'
 import { LibrarySheet } from './LibrarySheet'
+import { SectionSheet } from './SectionSheet'
 import { SheetSection } from './SheetSection'
 import { StyleSheet } from './StyleSheet'
 
@@ -164,6 +164,8 @@ export function ChordPlayer({
   const reduced = useMediaQuery(REDUCED_MOTION)
   const [library, setLibrary] = useState(false)
   const [styles, setStyles] = useState(false)
+  /** The section whose sheet is open. */
+  const [opened, setOpened] = useState<number | null>(null)
   const meter = shown.meter
 
   const inSection = (section: number, change: (each: Section) => Section) =>
@@ -252,26 +254,24 @@ export function ChordPlayer({
     const move = dropMove(active.id, over?.id)
     if (move?.kind === 'section') hand.edit((sheet) => moveSection(sheet, move.from, move.to))
     else if (move?.kind === 'chord')
-      inSection(move.section, (each) => moveChord(each, move.from, move.to))
+      hand.editShown((sheet) => moveChordAcross(sheet, move.from, move.to))
   }
   const held = readDragId(inHand)
   const heldChord =
     held?.kind === 'chord' ? chordAt({ section: held.section, index: held.index }) : undefined
   const heldSection = held?.kind === 'section' ? shown.sections[held.section] : undefined
-  const askDelete = async (index: number) => {
+  /** A section deleted at once, Undo in its toast (a loss that can be undone, CLAUDE.md). */
+  const deleteSection = (index: number) => {
     const section = shown.sections[index]
     if (!section) return
-    const named = t(`chordPlayer.sections.${section.kind}`)
-    const yes =
-      section.bars.length === 0 ||
-      (await confirm({
-        title: t('chordPlayer.deleteSection.title', { name: named }),
-        body: t('chordPlayer.deleteSection.body'),
-        action: t('chordPlayer.deleteSection.action'),
-        destructive: true,
-      }))
-    if (yes) hand.edit((sheet) => removeSection(sheet, index))
+    setOpened(null)
+    hand.edit((sheet) => removeSection(sheet, index))
+    say(t('chordPlayer.sectionDeleted', { name: t(`chordPlayer.sections.${section.kind}`) }), {
+      label: t('chordPlayer.undo'),
+      onClick: hand.undo,
+    })
   }
+  const openedSection = opened === null ? undefined : shown.sections[opened]
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
   const dialogNext = dialog
     ? (chordAt({ section: dialog.place.section, index: dialog.place.index + 1 })?.chord ?? null)
@@ -329,8 +329,18 @@ export function ChordPlayer({
         onDragEnd={onDrop}
         onDragCancel={() => setInHand(null)}
       >
-        <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-col gap-4">
+        {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
+        <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
+          <button
+            type="button"
+            onClick={() => setLibrary(true)}
+            aria-label={t('chordPlayer.libraryOf', { name })}
+            title={t('chordPlayer.libraryOf', { name })}
+            className="mx-auto min-h-11 max-w-full rounded-control px-2 text-center font-display text-xl text-balance transition-colors duration-200 ease-out hover:bg-muted"
+          >
+            {name}
+          </button>
+          <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
             {shown.sections.map((section, index) => (
               <SheetSection
                 key={sectionIds[index]}
@@ -339,27 +349,29 @@ export function ChordPlayer({
                 musicKey={shown.key}
                 meter={meter}
                 names={prefs.names}
-                variations={variations}
                 lit={transport.lit}
+                beat={transport.beat}
+                chosen={dialog?.place ?? null}
                 acts={acts}
-                onChange={(change) => inSection(index, (each) => ({ ...each, ...change }))}
-                onDuplicate={() => hand.edit((sheet) => duplicateSection(sheet, index))}
-                onDelete={() => void askDelete(index)}
-                canDuplicate={shown.sections.length < MOST_SECTIONS}
+                onOpen={() => setOpened(index)}
               />
             ))}
-          </div>
-        </SortableContext>
+          </SortableContext>
+          {shown.sections.length < MOST_SECTIONS ? (
+            <button
+              type="button"
+              onClick={() => hand.edit((sheet) => addSection(sheet))}
+              className="-my-1 -ml-2 flex h-11 items-center gap-1 self-start rounded-control px-2 text-[15px] font-semibold text-link transition-colors duration-200 ease-out hover:bg-muted"
+            >
+              <Plus aria-hidden className="size-4" />
+              {t('chordPlayer.addSection')}
+            </button>
+          ) : null}
+        </div>
         {/* The thing in hand, drawn as itself and lifted (memory-palaces' cause 3). */}
         <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
           {heldChord ? (
-            <ChordFace
-              chord={heldChord.chord}
-              beats={heldChord.beats}
-              musicKey={shown.key}
-              names={prefs.names}
-              lifted
-            />
+            <ChordFace chord={heldChord.chord} musicKey={shown.key} names={prefs.names} />
           ) : heldSection ? (
             <div className="flex min-h-14 items-center gap-3 card px-4 elevation-3">
               <span className="font-semibold">{t(`chordPlayer.sections.${heldSection.kind}`)}</span>
@@ -372,16 +384,6 @@ export function ChordPlayer({
       </DndContext>
 
       <div className="flex flex-wrap gap-2">
-        {shown.sections.length < MOST_SECTIONS ? (
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => hand.edit((sheet) => addSection(sheet))}
-          >
-            <Plus aria-hidden />
-            {t('chordPlayer.addSection')}
-          </Button>
-        ) : null}
         <Button variant="outline" size="lg" onClick={randomize}>
           <Dices aria-hidden />
           {t('chordPlayer.randomize')}
@@ -468,6 +470,21 @@ export function ChordPlayer({
             setDialog(null)
           }}
           onRemove={() => acts.remove(dialog.place)}
+        />
+      ) : null}
+      {opened !== null && openedSection ? (
+        <SectionSheet
+          open
+          onOpenChange={(open) => (open ? null : setOpened(null))}
+          section={openedSection}
+          variations={variations}
+          canDuplicate={shown.sections.length < MOST_SECTIONS}
+          onChange={(change) => inSection(opened, (each) => ({ ...each, ...change }))}
+          onDuplicate={() => {
+            hand.edit((sheet) => duplicateSection(sheet, opened))
+            setOpened(null)
+          }}
+          onDelete={() => deleteSection(opened)}
         />
       ) : null}
       <LibrarySheet

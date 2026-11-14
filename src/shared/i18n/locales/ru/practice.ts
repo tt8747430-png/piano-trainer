@@ -902,14 +902,22 @@ export const practice: LocaleResources['practice'] = {
     fewer: 'Меньше раз',
     moreTimes: 'Больше раз',
     variation: 'Вариант',
-    sectionMenu: '{{name}}: ещё',
-    duplicate: 'Дублировать',
-    delete: 'Удалить',
-    deleteSection: {
-      title: 'Удалить «{{name}}»?',
-      body: 'Его аккорды удалятся вместе с ним.',
-      action: 'Удалить',
-    },
+    sectionOpen_one: '{{name}}, ×{{count}}: настройки',
+    sectionOpen_few: '{{name}}, ×{{count}}: настройки',
+    sectionOpen_many: '{{name}}, ×{{count}}: настройки',
+    sectionOpen_other: '{{name}}, ×{{count}}: настройки',
+    duplicateSection: 'Дублировать раздел',
+    deleteSection: 'Удалить раздел',
+    sectionDeleted: 'Удалено: {{name}}',
+    bar: 'Такт {{count}}',
+    wrongBar_one:
+      'В такте {{bar}} {{count}} доля, а не {{beats}}: нажмите, чтобы задать длительности',
+    wrongBar_few:
+      'В такте {{bar}} {{count}} доли, а не {{beats}}: нажмите, чтобы задать длительности',
+    wrongBar_many:
+      'В такте {{bar}} {{count}} долей, а не {{beats}}: нажмите, чтобы задать длительности',
+    wrongBar_other:
+      'В такте {{bar}} {{count}} доли, а не {{beats}}: нажмите, чтобы задать длительности',
     addSection: 'Добавить раздел',
     drag: 'Переместить «{{name}}»',
     bars_one: '{{count}} такт',
