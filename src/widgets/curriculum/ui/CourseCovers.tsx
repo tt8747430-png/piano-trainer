@@ -68,7 +68,7 @@ export function CourseCovers() {
     SHOWN,
   )
   return (
-    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-2">
+    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3.5">
       <div className="flex items-center justify-between gap-4 px-1">
         <h2 id={id} className="font-sans text-xl font-bold">
           {t('courses')}

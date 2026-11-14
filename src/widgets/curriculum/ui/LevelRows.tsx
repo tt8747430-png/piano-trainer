@@ -19,7 +19,7 @@ export function LevelRows() {
   const id = useId()
   const learned = useProgress(selectLearned)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
+    <section aria-labelledby={id} className="flex flex-col gap-3.5">
       <h2 id={id} className="px-1 font-sans text-xl font-bold">
         {t('learn:levels')}
       </h2>
