@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
 import { Check, Dices, ListMusic, Piano, Plus, Redo2, Route, Undo, Undo2 } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useChordSheetsStoreApi } from '@/entities/chord-sheet'
 import { styleBook, styleVariations, usePatternBook, type Style } from '@/entities/pattern'
@@ -27,7 +27,7 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -64,7 +64,6 @@ import {
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
   BackButton,
-  FloatingActions,
   FloatingBar,
   FloatingBarPlay,
   FloatingBarValue,
@@ -192,8 +191,11 @@ export function ChordPlayer({
   /** The section whose arranger sheet is open. */
   const [tagged, setTagged] = useState<number | null>(null)
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
+  /** The chord selected by a tap: Play starts from it (Musicca's). */
+  const [picked, setPicked] = useState<BoxPlace | null>(null)
   const [inHand, setInHand] = useState<string | null>(null)
   const reduced = useMediaQuery(REDUCED_MOTION)
+  const wide = useMediaQuery('(min-width: 64rem)')
   const [library, setLibrary] = useState(false)
   const [styles, setStyles] = useState(false)
   const [dock, setDock] = useState<DockSheet | null>(null)
@@ -208,12 +210,17 @@ export function ChordPlayer({
     return section ? sectionChords(section)[place.index] : undefined
   }
   const acts: TileActs & { add(section: number): void } = {
-    open: (place, typed) => setDialog(typed === undefined ? { place } : { place, typed }),
+    open: (place, typed) => {
+      setPicked(place)
+      setDialog(typed === undefined ? { place } : { place, typed })
+    },
+    select: setPicked,
     remove(place) {
       const gone = chordAt(place)
       if (!gone) return
       inSection(place.section, (section) => removeChord(section, place.index))
       setDialog(null)
+      setPicked(null)
       say(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }), {
         label: t('chordPlayer.undo'),
         onClick: hand.undo,
@@ -260,7 +267,11 @@ export function ChordPlayer({
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.bars.length > 0)
   const toggle = () =>
-    prefs.follow ? follow.toggle() : transport.playing ? transport.stop() : transport.play()
+    prefs.follow
+      ? follow.toggle()
+      : transport.playing
+        ? transport.stop()
+        : transport.play(transport.looped, picked && chordAt(picked) ? picked : undefined)
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
     { label: t('chordPlayer.shortcuts.playStop'), combo: { key: ' ' }, run: toggle },
@@ -325,16 +336,26 @@ export function ChordPlayer({
   }
   const openedSection = opened === null ? undefined : shown.sections[opened]
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
-  /** The bar the chord in the sheet stands in, from 1. */
-  const dialogBar = (() => {
-    const section = dialog ? shown.sections[dialog.place.section] : undefined
-    if (!dialog || !section) return 1
-    const at = sectionBars(section, meter).findIndex((bar) =>
-      bar.pieces.some((piece) => piece.chord === dialog.place.index),
-    )
-    return at + 1
-  })()
 
+  /** The sheet's column, measured: the laptop's dock floats centred over it. */
+  const column = useRef<HTMLDivElement>(null)
+  const [over, setOver] = useState<{ left: number; width: number } | null>(null)
+  useLayoutEffect(() => {
+    const element = column.current
+    if (!element) return
+    const measure = () => {
+      const box = element.getBoundingClientRect()
+      setOver({ left: box.left, width: box.width })
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(element)
+    window.addEventListener('resize', measure)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
   const plays = entry.settings.plays
   const transpose = entry.settings.transpose
   const shortKey = `${printedNote(shown.key.tonic)}${shown.key.minor ? 'm' : ''}`
@@ -375,7 +396,7 @@ export function ChordPlayer({
     </FloatingBar>
   )
   return (
-    <div className="flex flex-col gap-4 pb-28">
+    <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('pages.chordPlayer')}
         back={<BackButton />}
@@ -479,11 +500,14 @@ export function ChordPlayer({
       >
         {/* On a laptop the sheet's column and, beside it, the key's chords and the styles (canvas 171). */}
         <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
+          <div
+            ref={column}
+            className={cn('flex min-w-0 flex-col gap-4', prefs.follow ? 'pb-72 lg:pb-60' : 'pb-24')}
+          >
             {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
-            <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
-              <div className="flex items-baseline justify-center gap-2">
-                <h2 className="font-display text-xl font-normal text-balance">{name}</h2>
+            <div className="flex flex-col gap-[18px]">
+              <div className="flex items-baseline gap-2">
+                <h2 className="font-sans text-[22px] font-semibold text-balance">{name}</h2>
                 {hand.draft ? (
                   <span className="text-[13px] font-semibold text-honey-ink">
                     {t('chordPlayer.draft.label')}
@@ -503,9 +527,12 @@ export function ChordPlayer({
                     beat={beat}
                     tag={prefs.follow ? marksLine(section.marks, t) : null}
                     onTag={() => setTagged(index)}
-                    chosen={dialog?.place ?? null}
+                    selected={picked}
+                    variations={variations.length}
                     acts={acts}
                     onOpen={() => setOpened(index)}
+                    onChange={(change) => inSection(index, (each) => ({ ...each, ...change }))}
+                    onDelete={() => deleteSection(index)}
                   />
                 ))}
               </SortableContext>
@@ -520,13 +547,6 @@ export function ChordPlayer({
                 </button>
               ) : null}
             </div>
-            {/* The thing in hand, drawn as itself and lifted (memory-palaces' cause 3). */}
-            {prefs.follow ? (
-              <div className="hidden lg:block">
-                <ArrangerStrip follow={follow} device={device} />
-              </div>
-            ) : null}
-            <div className="sticky bottom-4 z-10 hidden justify-center lg:flex">{dockBar}</div>
           </div>
           <aside className="hidden flex-col gap-8 lg:flex">
             <KeyChords
@@ -569,17 +589,21 @@ export function ChordPlayer({
         fitInView
       />
 
-      <FloatingActions className="lg:hidden">
-        {/* Following an arranger, its panel's strip stands over the dock, as wide. */}
-        <div className="flex w-full min-w-0 flex-col items-center gap-2 md:w-auto">
+      {/* The dock floats over the sheet's column just above the keys, the Genos strip over it, on a
+          phone and a laptop alike (canvas 173). */}
+      {over ? (
+        <div
+          className="pointer-events-none fixed z-30 flex flex-col items-center gap-2"
+          style={{ left: over.left, width: over.width, bottom: 'calc(var(--docked, 0px) + 12px)' }}
+        >
           {prefs.follow ? (
-            <div className="w-full md:w-[35rem] lg:hidden">
-              <ArrangerStrip follow={follow} device={device} />
+            <div className="pointer-events-auto w-full max-w-[47.5rem]">
+              <ArrangerStrip follow={follow} device={device} wide={wide} />
             </div>
           ) : null}
-          {dockBar}
+          <div className="pointer-events-auto">{dockBar}</div>
         </div>
-      </FloatingActions>
+      ) : null}
 
       <Sheet open={dock !== null} onOpenChange={(open) => (open ? null : setDock(null))}>
         {dock === 'key' ? (
@@ -643,7 +667,6 @@ export function ChordPlayer({
         <ChordDialog
           open
           onOpenChange={(open) => (open ? null : setDialog(null))}
-          bar={dialogBar}
           chord={dialogChord.chord}
           beats={dialogChord.beats}
           musicKey={shown.key}

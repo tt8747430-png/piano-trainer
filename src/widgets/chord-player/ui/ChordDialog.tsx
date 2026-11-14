@@ -17,17 +17,9 @@ import {
   type ChordQuality,
   type Key,
 } from '@/shared/lib/music'
-import {
-  ChoiceChips,
-  Labelled,
-  MenuPicker,
-  NotePicker,
-  Sheet,
-  SheetContent,
-  Stepper,
-  TypedField,
-} from '@/shared/ui'
+import { MenuPicker, NotePicker, Sheet, SheetContent, Stepper, TypedField } from '@/shared/ui'
 import { likeliestChords } from '../model/key-chords'
+import { ChordName } from './ChordName'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
@@ -45,21 +37,20 @@ const QUALITIES: readonly ChordQuality[] = [
   'six',
 ]
 /** The key's chords suggested, its own seven triads and V7, the chord in hand left out. */
-const SUGGESTED = 6
+const SUGGESTED = 8
 
 const sameChord = (a: Chord, b: Chord) =>
   sameNote(a.root, b.root) && a.quality === b.quality && a.bass === undefined
 
 /**
- * A chord's sheet as Musicca's (canvas 171), opened by a tap on it, its bar's !, or a letter typed on
- * it (the symbol then typed): titled by its bar and name; Root, Chord, Bass note, Duration − n beats
- * +, Suggested chords (the key's, a tap takes one); then Play from here and Duplicate, and Delete
- * chord apart.
+ * A chord's sheet as Musicca's dialog (canvas 173), opened by a double tap on it, its bar's !, or a
+ * letter typed on it (the symbol then typed): titled by its name; Chord (its root ⌄ and quality ⌄),
+ * Bass note ⌄, Duration − n beats +; Suggested chords four across (the key's, a tap takes one); then
+ * Delete, Duplicate and Play from here at its foot.
  */
 export function ChordDialog({
   open,
   onOpenChange,
-  bar,
   chord,
   beats,
   musicKey,
@@ -72,8 +63,6 @@ export function ChordDialog({
 }: {
   open: boolean
   onOpenChange(open: boolean): void
-  /** Its bar in its section, from 1. */
-  bar: number
   chord: Chord
   beats: number
   musicKey: Key
@@ -104,8 +93,8 @@ export function ChordDialog({
   }
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title={t('chordPlayer.chord.title', { bar, chord: printedChord(chord) })}>
-        <div className="flex flex-col gap-5">
+      <SheetContent title={printedChord(chord)}>
+        <div className="flex flex-col gap-4">
           {typed !== null ? (
             <TypedField
               label={t('chordPlayer.chord.symbol')}
@@ -118,106 +107,112 @@ export function ChordDialog({
               }}
             />
           ) : null}
-          <Labelled label={t('chordPlayer.chord.root')}>
-            <NotePicker
-              label={t('chordPlayer.chord.root')}
-              bare
-              value={chord.root}
-              onChange={(root) => take({ root, quality: chord.quality })}
-            />
-          </Labelled>
-          <Labelled label={t('chordPlayer.chord.quality')}>
-            <ChoiceChips
-              label={t('chordPlayer.chord.quality')}
-              value={chord.quality}
-              options={qualities.map((quality) => ({
-                value: quality,
-                label:
-                  quality === 'maj'
-                    ? t('chordPlayer.chord.major')
-                    : printedSymbol(qualitySuffix(quality)),
-              }))}
-              onChange={(quality) => take({ root: chord.root, quality })}
-            />
-          </Labelled>
-          <Labelled label={t('chordPlayer.chord.bass')}>
-            <MenuPicker
-              label={t('chordPlayer.chord.bass')}
-              bare
-              value={bassRole}
-              options={BASS_ROLES.flatMap((role) => {
-                const tone = tones.find((each) => each.role === role)
-                if (!tone && role !== 'root') return []
-                return [
-                  {
-                    value: role,
-                    label:
-                      role === 'root' || !tone
-                        ? t('chordPlayer.chord.bassRoot')
-                        : printedNote(tone.note),
-                  },
-                ]
-              })}
-              onChange={(role) => {
-                const tone = tones.find((each) => each.role === role)
-                const { bass: _bass, ...plain } = chord
-                take(
-                  role === 'root' || !tone
-                    ? plain
-                    : { ...plain, bass: chordBass(chord.root, chord.quality, tone.note) },
-                )
-              }}
-            />
-          </Labelled>
-          <Labelled label={t('chordPlayer.chord.length')}>
-            <Stepper
-              label={t('chordPlayer.chord.length')}
-              value={beats}
-              min={CHORD_BEATS.min}
-              max={CHORD_BEATS.max}
-              format={(count) => t('chordPlayer.chord.beats', { count })}
-              decrease={t('chordPlayer.chord.shorter')}
-              increase={t('chordPlayer.chord.longer')}
-              onChange={onBeats}
-            />
-          </Labelled>
+          {/* Musicca's rows (canvas 173): Chord root ⌄ quality ⌄, Bass note ⌄, Duration − n beats +. */}
+          <div className="flex flex-col overflow-hidden rounded-[12px] bg-muted">
+            <DialogRow label={t('chordPlayer.chord.quality')}>
+              <NotePicker
+                label={t('chordPlayer.chord.root')}
+                bare
+                className={POP}
+                value={chord.root}
+                onChange={(root) => take({ root, quality: chord.quality })}
+              />
+              <MenuPicker
+                label={t('chordPlayer.chord.quality')}
+                bare
+                className={cn(POP, 'min-w-28')}
+                value={chord.quality}
+                options={qualities.map((quality) => ({
+                  value: quality,
+                  label:
+                    quality === 'maj'
+                      ? t('chordPlayer.chord.major')
+                      : quality === 'min'
+                        ? t('chordPlayer.chord.minor')
+                        : printedSymbol(qualitySuffix(quality)),
+                }))}
+                onChange={(quality) => take({ root: chord.root, quality })}
+              />
+            </DialogRow>
+            <DialogRow label={t('chordPlayer.chord.bass')}>
+              <MenuPicker
+                label={t('chordPlayer.chord.bass')}
+                bare
+                className={cn(POP, 'min-w-32')}
+                value={bassRole}
+                options={BASS_ROLES.flatMap((role) => {
+                  const tone = tones.find((each) => each.role === role)
+                  if (!tone && role !== 'root') return []
+                  return [
+                    {
+                      value: role,
+                      label:
+                        role === 'root' || !tone
+                          ? t('chordPlayer.chord.bassRoot', { note: printedNote(chord.root) })
+                          : printedNote(tone.note),
+                    },
+                  ]
+                })}
+                onChange={(role) => {
+                  const tone = tones.find((each) => each.role === role)
+                  const { bass: _bass, ...plain } = chord
+                  take(
+                    role === 'root' || !tone
+                      ? plain
+                      : { ...plain, bass: chordBass(chord.root, chord.quality, tone.note) },
+                  )
+                }}
+              />
+            </DialogRow>
+            <DialogRow label={t('chordPlayer.chord.length')}>
+              <Stepper
+                label={t('chordPlayer.chord.length')}
+                value={beats}
+                min={CHORD_BEATS.min}
+                max={CHORD_BEATS.max}
+                format={(count) => t('chordPlayer.chord.beats', { count })}
+                decrease={t('chordPlayer.chord.shorter')}
+                increase={t('chordPlayer.chord.longer')}
+                onChange={onBeats}
+              />
+            </DialogRow>
+          </div>
           <section className="flex flex-col gap-2">
-            <h3 className="font-sans text-sm text-muted-foreground">
+            <h3 className="px-1 font-sans text-[13px] font-semibold tracking-[.04em] text-muted-foreground uppercase">
               {t('chordPlayer.chord.suggested')}
             </h3>
-            <ul className="grid grid-cols-3 gap-2">
+            <ul className="grid grid-cols-4 gap-2">
               {suggested.map((each) => (
-                <li key={chordSymbol(each)} className="flex">
+                <li key={chordSymbol(each)} className="flex min-w-0">
                   <button
                     type="button"
                     onClick={() => take(each)}
-                    className="h-13 flex-1 rounded-[12px] bg-card font-display text-xl font-bold shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
+                    className="h-11 min-w-0 flex-1 rounded-[10px] bg-card text-[17px] font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
                   >
-                    {printedChord(each)}
+                    <ChordName text={printedChord(each)} />
                   </button>
                 </li>
               ))}
             </ul>
           </section>
-          <div className="overflow-hidden rounded-[12px] bg-muted">
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={onRemove}
+              aria-label={t('chordPlayer.chord.remove')}
+              title={t('chordPlayer.chord.remove')}
+              className="grid size-11 shrink-0 place-items-center rounded-[10px] bg-destructive/12 text-destructive transition-colors duration-150 ease-out hover:bg-destructive/20"
+            >
+              <Trash2 aria-hidden className="size-5" />
+            </button>
+            <SheetAct icon={<Copy aria-hidden className="size-5" />} onClick={onDuplicate}>
+              {t('chordPlayer.chord.duplicate')}
+            </SheetAct>
             <SheetAct
               icon={<Play aria-hidden className="size-5 fill-current" />}
               onClick={onPlayFrom}
             >
               {t('chordPlayer.chord.playFrom')}
-            </SheetAct>
-            <div className="ml-12 h-px bg-border" />
-            <SheetAct icon={<Copy aria-hidden className="size-5" />} onClick={onDuplicate}>
-              {t('chordPlayer.chord.duplicate')}
-            </SheetAct>
-          </div>
-          <div className="overflow-hidden rounded-[12px] bg-muted">
-            <SheetAct
-              icon={<Trash2 aria-hidden className="size-5" />}
-              onClick={onRemove}
-              destructive
-            >
-              {t('chordPlayer.chord.remove')}
             </SheetAct>
           </div>
         </div>
@@ -226,15 +221,27 @@ export function ChordDialog({
   )
 }
 
-/** One of the sheet's acts, the board's ACTROW: its icon and name, 48 tall, in a grouped card. */
+/** A pop-up's look in the sheet's rows, Musicca's select: white, ringed, its value and ⌄. */
+const POP =
+  'h-11 rounded-[10px] border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
+
+/** One of the sheet's rows (canvas 173): its name, its controls at its end. */
+function DialogRow({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex min-h-14 items-center gap-2 py-1.5 pr-3 pl-4 not-last:shadow-[inset_0_-1px_0_var(--color-border)]">
+      <span className="min-w-0 flex-1 text-base">{label}</span>
+      {children}
+    </div>
+  )
+}
+
+/** One of the sheet's acts at its foot (canvas 173): its icon and name on the quiet fill, sharing the row. */
 function SheetAct({
   icon,
-  destructive = false,
   onClick,
   children,
 }: {
   icon: ReactNode
-  destructive?: boolean
   onClick(): void
   children: ReactNode
 }) {
@@ -242,13 +249,10 @@ function SheetAct({
     <button
       type="button"
       onClick={onClick}
-      className={cn(
-        'flex min-h-12 w-full items-center gap-3 px-4 text-left text-base font-semibold transition-colors duration-150 ease-out hover:brightness-95',
-        destructive ? 'text-destructive' : 'text-foreground',
-      )}
+      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-[10px] bg-muted px-3 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
     >
       {icon}
-      {children}
+      <span className="truncate">{children}</span>
     </button>
   )
 }
