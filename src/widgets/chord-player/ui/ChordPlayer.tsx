@@ -339,6 +339,22 @@ export function ChordPlayer({
 
   /** The sheet's column, measured: the laptop's dock floats centred over it. */
   const column = useRef<HTMLDivElement>(null)
+  /** What floats over the keys (the dock, the Genos strip): its height is `--over-foot`, which the
+      chord sounding keeps clear of as the sheet follows it. */
+  const floating = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const element = floating.current
+    if (!element) return
+    const root = document.documentElement
+    const observer = new ResizeObserver(([entry]) =>
+      root.style.setProperty('--over-foot', `${entry?.borderBoxSize[0]?.blockSize ?? 0}px`),
+    )
+    observer.observe(element)
+    return () => {
+      observer.disconnect()
+      root.style.removeProperty('--over-foot')
+    }
+  })
   const [over, setOver] = useState<{ left: number; width: number } | null>(null)
   useLayoutEffect(() => {
     const element = column.current
@@ -593,6 +609,7 @@ export function ChordPlayer({
           phone and a laptop alike (canvas 173). */}
       {over ? (
         <div
+          ref={floating}
           className="pointer-events-none fixed z-30 flex flex-col items-center gap-2"
           style={{
             left: over.left,

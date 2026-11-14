@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProgressionNames } from '@/entities/settings'
 import { cn } from '@/shared/lib'
@@ -90,6 +90,14 @@ export function ChordTile({
   })
   const symbol = printedSymbol(chordSymbol(chord))
   const lastTap = useRef(0)
+  // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above and
+  // of the keys and what floats over them below; instant under reduced motion.
+  const box = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!lit) return
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    box.current?.scrollIntoView({ block: 'nearest', behavior: still ? 'instant' : 'smooth' })
+  }, [lit])
   /** Its length while its handle is dragged: shown at once, saved on letting go. */
   const [stretch, setStretch] = useState<number | null>(null)
   const shown = stretch ?? beats
@@ -160,6 +168,7 @@ export function ChordTile({
       }}
     >
       <div
+        ref={box}
         {...attributes}
         {...listeners}
         role="button"
@@ -172,7 +181,7 @@ export function ChordTile({
         onClick={onTap}
         onKeyDown={onKeyDown}
         className={cn(
-          'relative flex h-[60px] min-w-0 flex-1 cursor-grab touch-manipulation items-start overflow-hidden rounded-[6px] px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
+          'relative flex h-[60px] min-w-0 flex-1 scroll-mt-[calc(env(safe-area-inset-top)+5rem)] scroll-mb-[calc(var(--nav-bar)+var(--docked,0px)+var(--over-foot,0px)+1.5rem)] cursor-grab touch-manipulation items-start overflow-hidden rounded-[6px] px-2 pt-1 select-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring active:cursor-grabbing lg:h-[76px]',
           lit ? 'bg-primary/35' : 'bg-card',
           lit || selected
             ? 'shadow-[0_0_0_2px_var(--color-honey-ring)]'
