@@ -17,6 +17,9 @@ import { ButtonLink } from './ButtonLink'
 import { FloatingContext } from './floating-context'
 import { Button } from './primitives/button'
 
+/** The transport's glyphs, filled wherever they stand (the boards' Play and Stop). */
+const filled = (Icon: LucideIcon) => (Icon === Play || Icon === Square ? 'fill-current' : undefined)
+
 /**
  * The actions stand in a row along the foot at its trailing end, so none climbs over the page; a bar
  * (`FloatingBar`) spans the foot and centres itself in it. Beside the
@@ -193,13 +196,13 @@ export function Fab({
   if (extended)
     return (
       <Button size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
-        <Icon data-icon="inline-start" aria-hidden />
+        <Icon data-icon="inline-start" aria-hidden className={filled(Icon)} />
         {label}
       </Button>
     )
   return (
     <Button size="icon" aria-label={label} title={label} className={cn(FAB, className)} {...props}>
-      <Icon aria-hidden />
+      <Icon aria-hidden className={filled(Icon)} />
     </Button>
   )
 }
@@ -221,7 +224,7 @@ export function FabLink({
   if (extended)
     return (
       <ButtonLink size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
-        <Icon data-icon="inline-start" aria-hidden />
+        <Icon data-icon="inline-start" aria-hidden className={filled(Icon)} />
         {label}
       </ButtonLink>
     )
@@ -233,7 +236,7 @@ export function FabLink({
       className={cn(FAB, className)}
       {...props}
     >
-      <Icon aria-hidden />
+      <Icon aria-hidden className={filled(Icon)} />
     </ButtonLink>
   )
 }
@@ -284,7 +287,7 @@ export function FabPill({
       className={cn(MINI_FAB, className)}
       {...props}
     >
-      <Icon aria-hidden />
+      <Icon aria-hidden className={filled(Icon)} />
     </Button>
   )
 }

@@ -94,7 +94,11 @@ export function MidiLog() {
           aria-pressed={held !== null}
           onClick={() => setHeld(held ? null : entries)}
         >
-          {held ? <Play data-icon="inline-start" /> : <Pause data-icon="inline-start" />}
+          {held ? (
+            <Play data-icon="inline-start" className="fill-current" />
+          ) : (
+            <Pause data-icon="inline-start" />
+          )}
           {held ? t('midiSettings.log.resume') : t('midiSettings.log.pause')}
         </Button>
         <Button
