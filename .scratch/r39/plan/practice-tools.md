@@ -13,6 +13,7 @@ settings behind its own gear, as Soundbrenner's metronome and a hardware tuner a
 - The Tools menu in the bar stays (`widgets/tools-sheet`); these are the tools' own pages.
 
 - Tuner (canvas 180, ported): Back · Tuner, no gear; the note, its distance in words and Hz over an arc gauge ±50 cents; Reference pitch stepped in one group; no floating bar.
+- Chord finder (canvas 181): keys at the top; the name, Spelled in, the notes as tiles with degrees; Also read as · Played · In these keys; floating Clear · Play · Chords; settings behind the gear (Connect a piano among them).
 
 ## Today
 

@@ -740,6 +740,15 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ChordFinderNight.dc.html": {
+      "x": 3710,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Chord finder, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "Laptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -980,6 +989,15 @@
       "w": 2143,
       "h": 1299,
       "title": "Tuner, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordFinderLaptopNight.dc.html": {
+      "x": 15561,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord finder, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1397,7 +1415,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 3630,
+      "maxW": 4160,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1413,7 +1431,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 15481,
+      "maxW": 17704,
       "page": "practice"
     },
     "places-phone": {
@@ -1532,6 +1550,7 @@
     "PatternNight.dc.html",
     "MetronomeNight.dc.html",
     "TunerNight.dc.html",
+    "ChordFinderNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1559,6 +1578,7 @@
     "PatternLaptopNight.dc.html",
     "MetronomeLaptopNight.dc.html",
     "TunerLaptopNight.dc.html",
+    "ChordFinderLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",
