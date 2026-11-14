@@ -244,7 +244,10 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   my chord sheet keeps it). The old Share link that carried the sheet's text in the URL (`?share=`) is gone; a link
   is `?link=<id>`. Checked against the project with two browsers on one link: the second lit C, F, G beat by beat as
   the first played and went dark when it stopped; a change saved on the server appeared in the open copy without a
-  reload.
+  reload. Kept on the project for later live checks (owner, 2026-11-14: "without the test user deleted, save for
+  you"): the test user `00000000-0000-0000-0000-00000000e2e1` (live-check@rls.test, no password, no sign-in) and its
+  sheet "Live check", link `7f3c2a10-1b2c-4d5e-8f90-a1b2c3d4e5f6`, Can edit; run
+  `.claude/skills/owner-way/scripts/live-check.mjs` and `live-edit-check.mjs` against a dev server on the project.
 - The keys show the chord (loop, 2026-11-14; the brief's "The keys show the chord, left hand violet, right hand
   orange", never built): while the sheet plays, or follows the Genos, the sounding chord lights on the keys, its
   root or slash bass in the left hand (G2 to F♯3) and its tones in the octave just above in the right, each key
