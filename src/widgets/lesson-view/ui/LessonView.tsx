@@ -44,7 +44,6 @@ import {
   FloatingActions,
   FloatingBar,
   FloatingBarButton,
-  Glyph,
   NO_KEYS,
   Sheet,
   SheetContent,

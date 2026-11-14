@@ -52,7 +52,10 @@ export function ChordSummary({
       <ul
         ref={row}
         aria-label={t('chordSummary')}
-        className="relative flex gap-2 overflow-x-auto overscroll-x-contain scrollbar-none"
+        className={cn(
+          'relative flex overflow-x-auto overscroll-x-contain scrollbar-none',
+          follows ? 'gap-2' : '-mx-4 gap-2.5 px-4 pt-0.5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0.5',
+        )}
       >
         {chords.map((each) => {
           const now = each.symbol === sounding
@@ -65,21 +68,26 @@ export function ChordSummary({
                   onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
                 }
                 className={cn(
-                  'flex flex-col items-center rounded-control border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
-                  follows ? 'gap-0.5 px-1.5 py-1' : 'gap-1.5 p-2',
+                  'flex flex-col items-center focus-visible:-outline-offset-3',
+                  // Following the music, a quiet cell; on a song's page, the canvas's chord card.
+                  follows
+                    ? 'gap-0.5 rounded-control border border-transparent px-1.5 py-1 transition-colors duration-200 ease-out hover:bg-muted'
+                    : 'gap-1.5 rounded-[14px] bg-card p-2.5 shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
                   now && 'border-foreground',
                 )}
               >
                 {/* Every chord on the same keys, the same size. */}
                 <ChordDiagram
                   chord={each}
-                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-10 w-auto'}
+                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-[2.875rem] w-auto'}
                 />
                 <span
                   aria-hidden
                   className={cn(
-                    'font-display leading-tight font-semibold',
-                    follows ? 'text-base landscape-phone:text-sm' : 'text-lg',
+                    'leading-tight',
+                    follows
+                      ? 'font-display text-base font-semibold landscape-phone:text-sm'
+                      : 'font-sans text-base font-bold',
                     follows && !now && 'text-muted-foreground',
                   )}
                 >
