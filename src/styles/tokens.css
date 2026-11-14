@@ -100,6 +100,8 @@
   --honey-ink: var(--p-honey-ink);
   --eyebrow: var(--p-rust);
   --played: var(--p-copper);
+  /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
+  --scrim: rgb(51 41 33 / 0.28);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
      its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
      follow the theme. */
@@ -281,6 +283,7 @@
     --honey-ink: var(--p-honey-night);
     --eyebrow: var(--p-rust-night);
     --played: var(--p-copper-night);
+    --scrim: rgb(10 7 5 / 0.84);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);
     --hand-staff-ink: var(--p-grass-light);

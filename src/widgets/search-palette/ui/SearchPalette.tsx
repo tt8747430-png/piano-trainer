@@ -219,7 +219,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
         showCloseButton={false}
         // The field has the focus as it opens: the palette is typed into.
         initialFocus={fieldRef}
-        className="top-24 flex max-h-[min(42.5rem,calc(100dvh-8rem))] -translate-y-0 flex-col overflow-y-auto rounded-sheet bg-background p-4 sm:max-w-160"
+        className="top-24 flex max-h-[min(42.5rem,calc(100dvh-8rem))] -translate-y-0 flex-col overflow-y-auto rounded-sheet bg-background p-4 shadow-[0_0_0_1px_var(--color-border),var(--elevation-2)] ring-0 sm:max-w-160"
       >
         <DialogTitle className="sr-only">{t('title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('hint')}</DialogDescription>
