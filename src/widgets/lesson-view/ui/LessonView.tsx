@@ -349,7 +349,7 @@ export function LessonView({
                   id={sectionId(s)}
                   // Sections apart by a line and room; a section's text and its examples close together.
                   className={cn(
-                    'flex max-w-prose flex-col gap-4 text-lg leading-relaxed',
+                    'flex max-w-prose flex-col gap-3 text-lg/[1.55]',
                     s > 0 && !paged && 'border-t border-border pt-8',
                   )}
                 >

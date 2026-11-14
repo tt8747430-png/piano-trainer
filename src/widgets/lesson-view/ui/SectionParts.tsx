@@ -7,7 +7,11 @@ import { StyledBlock } from './LessonBlock'
 /** A section's heading, on a card of its own style where it has one (R29 B9). */
 export function SectionHeading({ text, style }: { text: LocalText; style?: BlockStyle }) {
   const locale = useLocale()
-  const heading = <h2 className="text-2xl text-balance">{localText(text, locale)}</h2>
+  const heading = (
+    <h2 className="font-sans text-2xl/tight font-bold tracking-[-0.01em] text-balance">
+      {localText(text, locale)}
+    </h2>
+  )
   return style ? <StyledBlock style={style}>{heading}</StyledBlock> : heading
 }
 

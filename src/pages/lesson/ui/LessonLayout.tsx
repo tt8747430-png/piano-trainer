@@ -102,7 +102,7 @@ export function LessonLayout({
             </nav>
             <p
               aria-hidden
-              className="font-display text-3xl leading-[1.15] font-semibold text-balance sm:text-4xl"
+              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance sm:text-4xl"
             >
               {localText(lesson.title, locale)}
             </p>

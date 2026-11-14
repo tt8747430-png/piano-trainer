@@ -248,7 +248,8 @@ owner's, typos fixed.
 - **Loop round 13, a song's place:** the Player keeps where each song stopped and the bars played through; the song
   page then shows the canvas's Continue from bar N (honey) and From the start (sand), the bar map in copper with the
   next bar ringed, "Bar 1 · Played n times · m minutes · Bar N"; Play floats only before the first play. Chords are
-  the board's white cards (2026-11-14).- **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
+  the board's white cards (2026-11-14).
+- **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
 
 ## Learn and the editors
 
@@ -283,6 +284,7 @@ owner's, typos fixed.
   teaches, After: its links. A course's page is its board's: the cover band in its level's paint, what it teaches,
   its facts as chips, "0 of 9 learned · Next: …" over a meter, the honey Start course; no card (2026-11-14).
 - **Loop round 14, a level's line as the board's PATHROW:** each lesson a 68-tall row, its tile 44 round with its number in 15px bold, 4 in from the gutter, the title 16 over its detail, Next a 26-tall honey pill; a chapter's name on the gutter with its count in 13px; the goal 15px; 16 between chapters. Courses and Your lessons wear the same row (2026-11-14).
+- **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
 ## Practice
 
