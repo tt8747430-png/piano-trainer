@@ -3,8 +3,9 @@ import { setScoreView } from '@/features/set-preference'
 import { SheetLayoutPicker } from '@/shared/ui'
 
 /**
- * The score's layout in the sheet's pill (R34, Songscription's view pill), saved for every score: the
- * Player's and the editor's one place to choose it, beside the page view's zoom.
+ * The score's layout, saved for every score: in the Player, the first row of its Sheet music
+ * settings (the Player board); in the editor, its gear's View on a phone and the sheet's pill beside
+ * the docked panel.
  */
 export function SheetLayoutTools() {
   const store = useSettingsStoreApi()
