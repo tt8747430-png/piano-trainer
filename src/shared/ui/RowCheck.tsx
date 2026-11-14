@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { cn } from '@/shared/lib'
 import { RowFace, type RowFaceProps } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A list row that is on or off (a song ticked to move into a folder, Apple Music's Add Music): a `RowLink`'s face,
@@ -22,7 +22,7 @@ export function RowCheck({
       role="checkbox"
       aria-checked={checked}
       onClick={() => onCheckedChange(!checked)}
-      className={cn(rowClass(face.paint !== undefined), 'w-full text-left')}
+      className={cn(ROW_CLASS, 'w-full text-left')}
     >
       <RowFace
         {...face}

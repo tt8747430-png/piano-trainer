@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { Paint } from './paint'
 import { cn } from '@/shared/lib'
 import { RowFace } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A settings row whose value is chosen in place: its tile, its name, and at its end the choice (a
@@ -28,7 +28,7 @@ export function ChoiceRow({
     <div
       data-setting={setting}
       className={cn(
-        rowClass(true),
+        ROW_CLASS,
         'hover:bg-transparent',
         // The choice as a phone's settings show it: the value in soft ink and its chevron, no box,
         // the muted fill only under the pointer.

@@ -1,6 +1,6 @@
 import { useId } from 'react'
 import { cn } from '@/shared/lib'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A row that does something (R24), as iOS's "Sign Out" and Settings' "Sync now" read: its label in
@@ -36,7 +36,7 @@ export function ActionRow({
       title={why}
       aria-describedby={why ? id : undefined}
       className={cn(
-        rowClass(false),
+        ROW_CLASS,
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent',
       )}
     >

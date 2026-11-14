@@ -2,7 +2,7 @@ import { useId, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 /**
  * A list row that acts in place, over its page (a chord's sheet, a lesson played in the Player):
@@ -42,7 +42,7 @@ export function RowButton({
       aria-describedby={why ? id : undefined}
       aria-current={current ? 'true' : undefined}
       className={cn(
-        rowClass(face.paint !== undefined || face.mark !== undefined),
+        ROW_CLASS,
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent aria-[current=true]:bg-muted',
         destructive &&
           'text-destructive [&_[data-slot=row-tile]]:bg-destructive/10 [&_[data-slot=row-tile]]:text-destructive',

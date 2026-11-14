@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react'
 import { cn } from '@/shared/lib'
 import { OpensMark } from './NavMarks'
 import { RowFace, type RowFaceProps } from './RowFace'
-import { rowClass } from './row-class'
+import { ROW_CLASS } from './row-class'
 
 type FaceProps = Omit<RowFaceProps, 'children' | 'mark'>
 
@@ -36,7 +36,7 @@ export function RowTrigger({
       type="button"
       {...button}
       className={cn(
-        rowClass(paint !== undefined),
+        ROW_CLASS,
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent',
         className,
       )}
