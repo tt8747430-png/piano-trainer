@@ -95,7 +95,7 @@ export function BarButton({
         playing={playing}
         looped={looped}
       />
-      {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3" /> : null}
+      {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" /> : null}
     </button>
   )
 }
