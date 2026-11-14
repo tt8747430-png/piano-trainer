@@ -183,12 +183,22 @@ function Tiles() {
             'transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3',
           )}
         >
-          <TileFace label={t('profile.tiles.streak')} value={run} icon={Flame} />
+          <TileFace
+            label={t('profile.tiles.streak')}
+            value={run}
+            icon={Flame}
+            tone="text-paint-full-sand"
+          />
         </Link>
       </li>
       <li className="min-w-0">
         <div className={TILE}>
-          <TileFace label={t('profile.tiles.songs')} value={figures.songsLearned} icon={Music} />
+          <TileFace
+            label={t('profile.tiles.songs')}
+            value={figures.songsLearned}
+            icon={Music}
+            tone="text-on-paint-sky"
+          />
         </div>
       </li>
       <li className="min-w-0">
@@ -197,6 +207,7 @@ function Tiles() {
             label={t('profile.tiles.time')}
             value={time(figures.practiceSeconds)}
             icon={Clock}
+            tone="text-on-paint-grass"
           />
         </div>
       </li>
@@ -204,25 +215,28 @@ function Tiles() {
   )
 }
 
-const TILE = 'card flex h-full flex-col items-start justify-start gap-1 px-3 py-3'
+const TILE = 'card flex h-full flex-col items-start justify-start gap-1 px-3 pt-3 pb-2.5'
 
 /** A tile's figure over its name, the value first (canvas 128): "12", then "🔥 Day streak". */
 function TileFace({
   label,
   value,
   icon: Icon,
+  tone,
 }: {
   label: string
   value: number | string
   icon: LucideIcon
+  /** The icon's paint, as the board colours each figure's mark. */
+  tone: string
 }) {
   return (
     <>
-      <span className="text-xl leading-tight font-bold text-balance tabular-nums sm:text-2xl">
+      <span className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
         {value}
       </span>
-      <span className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground sm:text-sm">
-        <Icon aria-hidden className="size-3.5 shrink-0" />
+      <span className="flex min-w-0 items-start gap-[5px] text-[0.8125rem] leading-snug text-muted-foreground">
+        <Icon aria-hidden className={cn('mt-0.5 size-[15px] shrink-0', tone)} />
         <span className="min-w-0 text-pretty">{label}</span>
       </span>
     </>
