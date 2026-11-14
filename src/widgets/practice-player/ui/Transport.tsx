@@ -15,11 +15,12 @@ import { DOCK_STEP } from './dock-sizes'
  */
 /**
  * One of the transport's three groups (canvas 116): the screen's own before, ‹ ▶ › tinted in the
- * middle, the screen's own after, each a pill of its own; on the narrowest phone they stand bare,
+ * middle, the screen's own after, each a pill of its own, glass, the middle honey glass with Play bare
+ * in it (the canvas's GLASSGRP and TINTGRP); on the narrowest phone they stand bare,
  * shoulder to shoulder, so the seven still fit.
  */
 const GROUP =
-  'flex items-center gap-0.5 rounded-pill bg-muted/70 p-0.5 max-sm:gap-0 narrow-phone:bg-transparent narrow-phone:p-0'
+  'flex items-center gap-0.5 rounded-pill glass p-0.5 max-sm:gap-0 narrow-phone:bg-transparent narrow-phone:p-0 narrow-phone:shadow-none narrow-phone:backdrop-filter-none'
 
 export function Transport({
   label,
@@ -69,11 +70,11 @@ export function Transport({
         {start}
         {tempo}
       </div>
-      <div className={cn(GROUP, 'bg-primary/15')}>
+      <div className={cn(GROUP, 'glass-honey')}>
         <FloatingBarButton
           label={back.label}
           title={back.title}
-          className={DOCK_STEP}
+          className={cn(DOCK_STEP, 'text-primary-foreground')}
           onClick={onBack}
         >
           <ChevronLeft aria-hidden />
@@ -83,13 +84,13 @@ export function Transport({
           title={play.title}
           playing={playing}
           disabled={disabled}
-          className="narrow-phone:size-12"
+          className="order-none bg-transparent text-primary-foreground shadow-none hover:bg-foreground/10 narrow-phone:size-12"
           onClick={onPlay}
         />
         <FloatingBarButton
           label={next.label}
           title={next.title}
-          className={DOCK_STEP}
+          className={cn(DOCK_STEP, 'text-primary-foreground')}
           onClick={onNext}
         >
           <ChevronRight aria-hidden />
