@@ -88,6 +88,9 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     online. like while playing the chords that are being played are also online with what chords is currently
     played"): every open copy lights the chord, its beat and the keys of whichever copy is playing; its own Play takes
     over while it plays. The sheet's name carries a Live mark (a grass dot, honey while another copy plays).
+    **The selection follows the chord playing** (owner, 2026-11-14: "the chord from where it began didn't get
+    deselected"): Play lets go of the chord it started from; while a chord sounds its ring is the only one; on Stop
+    the selection stays on the last chord played, where Play goes on from (Musicca's).
   - **Saved, synced and migrated** (owner, 2026-11-13: "I want to be able to save the like this as chord sheets
     and sync to my account and also the older ones should be able to migrate to this new structure effortlessly"):
     a sheet of bars is saved as text in the `chord_sheets` store, synced to the account like every saved store; a

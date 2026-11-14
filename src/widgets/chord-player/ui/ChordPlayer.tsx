@@ -208,6 +208,10 @@ export function ChordPlayer({
   const [dialog, setDialog] = useState<{ place: BoxPlace; typed?: string } | null>(null)
   /** The chord selected by a tap: Play starts from it (Musicca's). */
   const [picked, setPicked] = useState<BoxPlace | null>(null)
+  // The selection follows the chord this copy plays (Musicca's): the chord Play started from lets go
+  // of it, and on Stop it stays on the last chord played, where Play goes on from.
+  if (playing && ownLit && (ownLit.section !== picked?.section || ownLit.index !== picked.index))
+    setPicked(ownLit)
   const [inHand, setInHand] = useState<string | null>(null)
   const reduced = useMediaQuery(REDUCED_MOTION)
   const wide = wideSide
@@ -590,7 +594,8 @@ export function ChordPlayer({
                     beat={beat}
                     tag={prefs.follow ? marksLine(section.marks, t) : null}
                     onTag={() => setTagged(index)}
-                    selected={picked}
+                    // While a chord sounds, its ring is the only one.
+                    selected={lit ? null : picked}
                     variations={variations.length}
                     acts={acts}
                     onOpen={() => setOpened(index)}
