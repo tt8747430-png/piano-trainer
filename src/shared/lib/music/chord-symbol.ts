@@ -30,6 +30,32 @@ const normalise = (suffix: string): string =>
 export const printedSymbol = (symbol: string): string =>
   symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
 
+/** A chord's symbol as a chord sheet sets it: its root, its quality's letters, the numbers and alterations raised, its bass. */
+export interface SymbolParts {
+  /** `C`, `F♯`, `B♭`. */
+  readonly root: string
+  /** The quality's letters, on the line: `m`, `maj`, `dim`. */
+  readonly letters: string
+  /** Its numbers and alterations, raised: `7`, `7♭5`, `sus4`, `add9`; empty for none. */
+  readonly raised: string
+  /** The bass after its slash, `/G`; empty for none. */
+  readonly bass: string
+}
+
+/**
+ * A symbol in its parts as printed (`printedSymbol`), the reference apps' and the Real Book's
+ * setting: `C♯m7♭5/G` is C♯ · m · 7♭5 · /G, raised from the first number or alteration on.
+ */
+export function symbolParts(symbol: string): SymbolParts {
+  const [chord = '', bass = ''] = printedSymbol(symbol).split('/')
+  const root = /^[A-G][♯♭𝄪𝄫]*/u.exec(chord)?.[0] ?? ''
+  const quality = chord.slice(root.length)
+  const [, letters = '', raised = ''] = /^([a-zA-Z°ø+]*?)((?:[♯♭]?\d|\(|sus|add|alt).*)?$/u.exec(
+    quality,
+  ) ?? [quality, quality, '']
+  return { root, letters, raised, bass: bass ? `/${bass}` : '' }
+}
+
 /** A note's name as it is printed (`printedSymbol` of `noteName`): `C♯`, `B♭`. */
 export const printedNote = (spelled: SpelledNote): string => printedSymbol(noteName(spelled))
 

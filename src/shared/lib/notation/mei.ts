@@ -17,6 +17,7 @@ import {
   CLEF_FORMS,
   tempoMark,
   SWING_TEXT,
+  symbolParts,
   tremoloStrokes,
   unitNote,
 } from '@/shared/lib/music'
@@ -181,6 +182,16 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
   ds: 'D.S.',
   'ds-fine': 'D.S. al Fine',
   'ds-coda': 'D.S. al Coda',
+}
+
+/**
+ * A chord symbol as the score prints it, as `ChordText` sets one in a line: its accidentals as
+ * signs, its numbers and alterations raised (`G⁷`, `C♯m⁷♭⁵`), its bass after the slash on the line.
+ */
+const harmText = (symbol: string): string => {
+  const { root, letters, raised, bass } = symbolParts(symbol)
+  const up = raised ? `<rend rend="sup">${escape(raised)}</rend>` : ''
+  return `${escape(root + letters)}${up}${escape(bass)}`
 }
 
 const escape = (text: string) =>
@@ -392,7 +403,7 @@ class Writer {
     if (this.options.chordSymbols)
       for (const chord of measure.chords)
         controls.push(
-          `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
+          `<harm staff="${top}" tstamp="${at(chord.tick)}">${harmText(chord.symbol)}</harm>`,
         )
     // The pedal on the lowest staff (ADR 0097), each event where it stands: between notes, over a
     // rest, after the last note; named by its tick, so the Player marks the one it plays under (A27).

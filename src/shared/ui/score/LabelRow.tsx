@@ -1,5 +1,12 @@
 import { Fragment, type ReactNode } from 'react'
-import { beatUnit, tempoMark, unitNote, type Meter, type TempoUnit } from '@/shared/lib/music'
+import {
+  beatUnit,
+  symbolParts,
+  tempoMark,
+  unitNote,
+  type Meter,
+  type TempoUnit,
+} from '@/shared/lib/music'
 import type { BarLabel } from './bar-labels'
 import { LABEL_INSET_PX } from './label-row'
 import type { ScoreLayout } from './layout'
@@ -18,6 +25,22 @@ export type PrintLabel = (part: PrintedPart, content: ReactNode) => ReactNode
  * bars' buttons.
  */
 const plain: PrintLabel = (_part, content) => <span aria-hidden>{content}</span>
+
+/**
+ * A chord's symbol as a lead sheet sets it over the staff, as `ChordText` does in a line: its numbers
+ * and alterations raised (`G⁷`, `C♯m⁷♭⁵`), the bass after its slash on the line.
+ */
+function RowSymbol({ symbol }: { symbol: string }) {
+  const { root, letters, raised, bass } = symbolParts(symbol)
+  return (
+    <>
+      {root}
+      {letters}
+      {raised ? <sup className="text-[0.7em]">{raised}</sup> : null}
+      {bass}
+    </>
+  )
+}
 
 /** What a bar's label says, in the order it is printed, each part as the sheet prints it. */
 function partsOf(
@@ -135,7 +158,7 @@ export function LabelRow({
           className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
           style={{ left: x, fontSize: px }}
         >
-          {symbol}
+          <RowSymbol symbol={symbol} />
           {detail ? (
             <span className="ml-1 font-sans text-[0.7em] font-normal text-muted-foreground">
               {detail}

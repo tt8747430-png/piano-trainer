@@ -159,6 +159,8 @@ export {
   printedChord,
   printedNote,
   printedSymbol,
+  symbolParts,
+  type SymbolParts,
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './voicing-kind'
