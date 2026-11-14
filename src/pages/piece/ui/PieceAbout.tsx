@@ -32,7 +32,11 @@ export function PieceAbout({ entry }: { entry: Entry }) {
     <div className="-mt-2 flex max-w-prose flex-col items-start gap-1 print:hidden">
       <p className={cn('text-pretty text-muted-foreground', !open && 'line-clamp-2')}>{text}</p>
       {open ? null : (
-        <Button variant="link" className="h-auto min-h-11 px-0" onClick={() => setOpen(true)}>
+        <Button
+          variant="link"
+          className="h-auto min-h-11 min-w-11 justify-start px-0"
+          onClick={() => setOpen(true)}
+        >
           {t('aboutMore')}
         </Button>
       )}
