@@ -35,7 +35,7 @@ export function SettingsList({ place = null }: { place?: SettingsPlace | null })
     return undefined
   }
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <AccountCard current={place?.kind === 'account'} />
       {SETTINGS_GROUPS.map((group) => (
         <SettingsGroup key={group.title} flush title={t(`settings:${group.title}`)}>

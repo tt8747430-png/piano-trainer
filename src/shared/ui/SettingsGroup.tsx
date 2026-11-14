@@ -31,13 +31,13 @@ export function SettingsGroup({
   return (
     <section
       aria-labelledby={title ? id : undefined}
-      className={cn('flex flex-col gap-2', className)}
+      className={cn('flex flex-col gap-1.5', className)}
     >
       {title ? (
         <div className="flex items-center gap-1 px-1">
           <h2
             id={id}
-            className="font-sans text-sm font-semibold tracking-wider text-muted-foreground uppercase"
+            className="font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
           >
             {title}
           </h2>

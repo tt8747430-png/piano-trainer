@@ -234,7 +234,7 @@ function Caps({ id, children }: { id?: string; children: ReactNode }) {
   return (
     <p
       id={id}
-      className="px-1 text-sm font-semibold tracking-wider text-muted-foreground uppercase"
+      className="px-1 text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
     >
       {children}
     </p>
