@@ -23,13 +23,13 @@ export function PageCard({
     render: link,
     props: {
       className:
-        'flex min-h-44 flex-col gap-4 card p-4 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'flex min-h-44 flex-col gap-2.5 card rounded-[16px] p-3.5 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       children: (
         <>
           <span
             aria-hidden
             className={cn(
-              'grid size-20 place-items-center rounded-card',
+              'grid size-24 place-items-center overflow-hidden rounded-[22px]',
               PAINT[tile.paint].fill,
               PAINT[tile.paint].ink,
             )}
@@ -41,7 +41,7 @@ export function PageCard({
             )}
           </span>
           <span className="flex flex-col gap-0.5">
-            <span className="font-semibold text-balance">{title}</span>
+            <span className="text-[1.0625rem] font-bold text-balance">{title}</span>
             <span className="text-sm text-pretty text-muted-foreground tabular-nums">{detail}</span>
           </span>
         </>

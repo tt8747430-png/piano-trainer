@@ -77,7 +77,7 @@ export function PracticePage() {
   const { t } = useTranslation('practice')
   const groups = useGroups()
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3.5">
       <ScreenHeader
         title={t('title')}
         large
