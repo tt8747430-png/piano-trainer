@@ -48,7 +48,7 @@ export function LessonRow({
         <span
           aria-hidden
           className={cn(
-            'grid size-10 shrink-0 place-items-center font-sans text-base font-semibold tabular-nums',
+            'grid size-11 shrink-0 place-items-center font-sans text-[0.9375rem] font-bold tabular-nums',
             square ? 'rounded-control' : 'rounded-pill',
             done
               ? cn(PAINT.grass.fill, PAINT.grass.ink)
@@ -59,7 +59,7 @@ export function LessonRow({
           {done ? <Check className="size-5" strokeWidth={3} /> : mark}
         </span>
       </ProgressRing>
-      <span className="flex min-w-0 flex-1 flex-col">
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-base/snug font-semibold text-pretty">
           {said ? <span className="sr-only">{said}: </span> : null}
           {title}
@@ -72,7 +72,7 @@ export function LessonRow({
         {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
       </span>
       {current ? (
-        <span className="shrink-0 rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
+        <span className="flex h-6.5 shrink-0 items-center rounded-pill bg-primary px-2.5 text-[0.8125rem] font-bold text-primary-foreground">
           {t('upNext')}
         </span>
       ) : null}
@@ -84,7 +84,7 @@ export function LessonRow({
     props: {
       'aria-current': current ? 'step' : undefined,
       className:
-        'group flex min-h-16 items-center gap-4 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+        'group flex min-h-17 items-center gap-4 py-1 pr-2 pl-1 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
       children: face,
     },
   })
@@ -101,7 +101,7 @@ export function LessonLine({ children }: { children: ReactNode }) {
 /** One lesson on a `LessonLine`: the spine passes behind its tile. */
 export function LessonStop({ children }: { children: ReactNode }) {
   return (
-    <li className="relative before:absolute before:inset-y-0 before:start-8 before:w-0.5 before:-translate-x-1/2 before:bg-learned/60 rtl:before:translate-x-1/2">
+    <li className="relative before:absolute before:inset-y-0 before:start-6.5 before:w-0.5 before:-translate-x-1/2 before:bg-learned/60 rtl:before:translate-x-1/2">
       {children}
     </li>
   )

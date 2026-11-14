@@ -279,6 +279,7 @@ owner's, typos fixed.
   24px circle; its head the canvas's: "Lesson 3 of 11 · Foundations" in the eyebrow's rust, the title, what it
   teaches, After: its links. A course's page is its board's: the cover band in its level's paint, what it teaches,
   its facts as chips, "0 of 9 learned · Next: …" over a meter, the honey Start course; no card (2026-11-14).
+- **Loop round 14, a level's line as the board's PATHROW:** each lesson a 68-tall row, its tile 44 round with its number in 15px bold, 4 in from the gutter, the title 16 over its detail, Next a 26-tall honey pill; a chapter's name on the gutter with its count in 13px; the goal 15px; 16 between chapters. Courses and Your lessons wear the same row (2026-11-14).
 
 ## Practice
 

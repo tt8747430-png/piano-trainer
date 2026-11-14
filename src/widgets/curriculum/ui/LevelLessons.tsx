@@ -108,15 +108,15 @@ function ChapterGroup({
   const done = ids.filter((each) => learned[each] !== undefined).length
   const title = localText(chapter.title, locale)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h3 className="flex items-baseline gap-2 px-3 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-0.5">
+      <h3 className="mx-1 flex min-h-7 items-center gap-2 font-sans text-sm font-semibold text-muted-foreground">
         <span id={id} className="sr-only">
           {t('journey.chapter', { n, title })}
         </span>
         <span aria-hidden className="min-w-0 flex-1">
           {n} · {title}
         </span>
-        <span className="shrink-0 font-normal">
+        <span className="shrink-0 text-[0.8125rem] font-normal tabular-nums">
           {t('journey.count', { learned: done, total: ids.length })}
         </span>
       </h3>
@@ -157,8 +157,8 @@ export function LevelLessons({ journey }: { journey: Journey }) {
   )
   const counts = { learned: progress.done, total: progress.total }
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3 px-1">
+    <div className="flex flex-col gap-4">
+      <div className="mx-1 flex flex-col gap-3">
         <ProgressMeter
           done={progress.done}
           total={progress.total}
@@ -166,7 +166,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
           said={t('learn:progress', counts)}
           above
         />
-        <p className="max-w-prose text-pretty text-muted-foreground">
+        <p className="max-w-prose text-[0.9375rem]/[1.45] text-pretty text-muted-foreground">
           {localText(journey.goal, locale)}
         </p>
       </div>
