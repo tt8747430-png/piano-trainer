@@ -594,7 +594,11 @@ export function ChordPlayer({
       {over ? (
         <div
           className="pointer-events-none fixed z-30 flex flex-col items-center gap-2"
-          style={{ left: over.left, width: over.width, bottom: 'calc(var(--docked, 0px) + 12px)' }}
+          style={{
+            left: over.left,
+            width: over.width,
+            bottom: 'calc(var(--nav-bar) + var(--docked, 0px) + 12px)',
+          }}
         >
           {prefs.follow ? (
             <div className="pointer-events-auto w-full max-w-[47.5rem]">

@@ -232,3 +232,11 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   root or slash bass in the left hand (G2 to F♯3) and its tones in the octave just above in the right, each key
   named: a chord spans an octave, so both hands stay in view on the smallest phone. The section's head keeps its
   name and × n whole beside a long Genos tag, the tag shrinking instead.
+- Musicca's chart and dialog, from canvas 173 (done): each chord a box as wide as its beats (two bars a row on a
+  phone, four on a laptop), its ticks, its extension raised (`ChordName`, also on the key's chords beside the
+  chart); a tap selects, Play starts there; a double tap opens the dialog (Chord root and quality, Bass note,
+  Duration, Suggested chords four across, Delete · Duplicate · Play from here); the selected box's right edge
+  drags its length; the sounding chord wears the ring on its honey wash. The section's head: name pill (its
+  sheet), × n, Variation n and delete in place, grip last. The paper card, the sticky dock and the floating
+  actions are gone: the dock and the Genos card float over the keys on every size (`--nav-bar` + `--docked` +
+  12), the Genos card with every control in view (two rows on a phone, one on a laptop).
