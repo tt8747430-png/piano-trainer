@@ -101,7 +101,11 @@ export function StyleList({
                     aria-pressed={playback.playing === style.id}
                     onClick={() => playback.toggle(style.id, () => styleBar(style))}
                   >
-                    {playback.playing === style.id ? <Square aria-hidden /> : <Play aria-hidden />}
+                    {playback.playing === style.id ? (
+                      <Square aria-hidden className="fill-current" />
+                    ) : (
+                      <Play aria-hidden className="fill-current" />
+                    )}
                   </Button>
                 </li>
               )

@@ -65,7 +65,11 @@ function TakeView({ take }: { take: Take }) {
           onClick={() => (playing ? play.stop() : play.playFrom(0))}
           className="size-12 shrink-0 rounded-pill hover:brightness-95 [&_svg]:size-5 [&_svg]:fill-current"
         >
-          {playing ? <Square aria-hidden /> : <Play aria-hidden />}
+          {playing ? (
+            <Square aria-hidden className="fill-current" />
+          ) : (
+            <Play aria-hidden className="fill-current" />
+          )}
         </Button>
         <div className="flex min-w-0 flex-col">
           <p className="text-lg font-semibold tabular-nums">

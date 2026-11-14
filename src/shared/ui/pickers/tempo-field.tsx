@@ -181,7 +181,7 @@ export function TempoField({
             className="size-11 shrink-0 rounded-pill text-link"
             onClick={hear}
           >
-            <Play aria-hidden />
+            <Play aria-hidden className="fill-current" />
           </Button>
         </div>
       </Row>

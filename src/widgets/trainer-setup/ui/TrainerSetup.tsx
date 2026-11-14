@@ -378,7 +378,7 @@ export function TrainerSetup({
           className="min-h-14 rounded-pill px-7 text-base elevation-2 [&_svg]:fill-current"
           onClick={onStart}
         >
-          <Play aria-hidden data-icon="inline-start" />
+          <Play aria-hidden data-icon="inline-start" className="fill-current" />
           {t('quiz:setup.start')}
         </Button>
       </FloatingActions>

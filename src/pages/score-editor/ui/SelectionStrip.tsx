@@ -96,7 +96,11 @@ export function SelectionStrip({ className }: { className?: string }) {
         className={ROUND}
         onClick={actions.togglePlay}
       >
-        {meta.playing ? <Square aria-hidden className="fill-current" /> : <Play aria-hidden />}
+        {meta.playing ? (
+          <Square aria-hidden className="fill-current" />
+        ) : (
+          <Play aria-hidden className="fill-current" />
+        )}
       </Button>
     </div>
   )
