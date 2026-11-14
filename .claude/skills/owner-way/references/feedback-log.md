@@ -762,6 +762,9 @@ are reference only, but progressions are facts.
 - **Canvas 128:** Profile shows the week as one bar a day and the next badge as a ring; Settings rows carry coloured
   squares and grey values, Appearance is three small screens (2026-11-11).
 
+- **Loop round 13, Profile to its board's colours:** the week's bars and the next badge's ring in the board's copper
+  (today full, the other days at half), "Next badge" in the eyebrow's rust, the week card's 15px bold title and
+  14/12 padding; a tile's figures outrank their units ("2 h 45 min" in a third of a phone) (2026-11-14).
 ## Words
 - **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
   plain words. write professional wording and sentences and not plain like you did before" — labels, settings, tips and

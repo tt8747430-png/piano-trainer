@@ -233,7 +233,18 @@ function TileFace({
   return (
     <>
       <span className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
-        {value}
+        {/* The figures outrank their units: "2 h 45 min" keeps to a third of a phone. */}
+        {String(value)
+          .split(/(\d+)/)
+          .map((part, i) =>
+            /^\d+$/.test(part) || part.trim() === '' ? (
+              part
+            ) : (
+              <span key={i} className="text-[0.9375rem] font-semibold tracking-normal">
+                {part}
+              </span>
+            ),
+          )}
       </span>
       <span className="flex min-w-0 items-start gap-[5px] text-[0.8125rem] leading-snug text-muted-foreground">
         <Icon aria-hidden className={cn('mt-0.5 size-[15px] shrink-0', tone)} />

@@ -57,7 +57,7 @@ export function NextMilestone() {
             pathLength={100}
             strokeDasharray={`${((next.goal - next.left) / next.goal) * 100} 100`}
             transform="rotate(-90 24 24)"
-            className="stroke-paint-full-sand"
+            className="stroke-played"
           />
         ) : null}
         <text
@@ -75,7 +75,7 @@ export function NextMilestone() {
         {t('profile.badges.locked', { have: next.goal - next.left, goal: next.goal })}
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="text-[0.8125rem] font-semibold text-on-paint-sand">
+        <span className="text-[0.8125rem] font-semibold text-eyebrow">
           {t('profile.badges.next')}
         </span>
         <span className="font-semibold text-pretty">{t(`profile.badges.names.${next.id}`)}</span>

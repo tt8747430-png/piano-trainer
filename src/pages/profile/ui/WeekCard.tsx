@@ -10,7 +10,7 @@ import { usePracticeTime } from '../model/format'
 /**
  * The last seven days as a picture (canvas 128): "Last 7 days" and, at the right, the time
  * practised and the days of seven; then one bar a day, its height the minutes played against the
- * week's most, today in the strong sand, a day not played a flat line, each day's letter under it. The
+ * week's most, today in copper, a day not played a flat line, each day's letter under it. The
  * whole card opens Streak, the month's calendar.
  */
 export function WeekCard() {
@@ -37,16 +37,16 @@ export function WeekCard() {
   return (
     <Link
       to="/profile/streak"
-      className="group flex flex-col gap-4 card px-4 py-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
+      className="group flex flex-col gap-2.5 card px-4 pt-3.5 pb-3 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
     >
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-[0.9375rem] font-semibold">{t('profile.week.title')}</p>
-        <p className="text-sm text-muted-foreground tabular-nums">
+        <p className="text-[0.9375rem] font-bold">{t('profile.week.title')}</p>
+        <p className="text-[0.8125rem] text-muted-foreground tabular-nums">
           {t('profile.week.summary', { time: time(total), days: played })}
         </p>
       </div>
-      <div className="flex flex-col gap-2">
-        <ol className="grid h-16 grid-cols-7 items-end gap-2">
+      <div className="flex flex-col gap-1.5">
+        <ol className="grid h-18 grid-cols-7 items-end gap-2">
           {week.map((day) => (
             <li
               key={day.day}
@@ -59,10 +59,9 @@ export function WeekCard() {
               <span
                 aria-hidden
                 className={cn(
-                  'w-full rounded-control',
-                  day.seconds > 0 ? 'min-h-1' : 'h-0.5 rounded-none bg-hairline',
-                  day.seconds > 0 &&
-                    (day.day === today ? 'bg-paint-full-sand' : 'bg-paint-full-sand/45'),
+                  'w-full rounded-[6px]',
+                  day.seconds > 0 ? 'min-h-1' : 'h-1 bg-muted',
+                  day.seconds > 0 && (day.day === today ? 'bg-played' : 'bg-played/50'),
                 )}
                 style={day.seconds > 0 ? { height: `${(day.seconds / most) * 100}%` } : undefined}
               />
