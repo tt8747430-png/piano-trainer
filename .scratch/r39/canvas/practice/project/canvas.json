@@ -722,6 +722,15 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "MetronomeNight.dc.html": {
+      "x": 2650,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Metronome, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "Laptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -944,6 +953,15 @@
       "w": 2143,
       "h": 1299,
       "title": "A pattern, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "MetronomeLaptopNight.dc.html": {
+      "x": 11115,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Metronome, Night, laptop",
       "is_interactive": true,
       "page": "practice"
     },
@@ -1361,7 +1379,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 2570,
+      "maxW": 3100,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1377,7 +1395,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 11035,
+      "maxW": 13258,
       "page": "practice"
     },
     "places-phone": {
@@ -1494,6 +1512,7 @@
     "IntervalsNight.dc.html",
     "ProgressionNight.dc.html",
     "PatternNight.dc.html",
+    "MetronomeNight.dc.html",
     "Laptop.dc.html",
     "ChordsLaptop.dc.html",
     "PlayChordLaptop.dc.html",
@@ -1519,6 +1538,7 @@
     "IntervalsLaptopNight.dc.html",
     "ProgressionLaptopNight.dc.html",
     "PatternLaptopNight.dc.html",
+    "MetronomeLaptopNight.dc.html",
     "Learn.dc.html",
     "LearnLevel.dc.html",
     "LearnCourses.dc.html",
