@@ -5,6 +5,9 @@ import type { LivePlace, SheetLine } from '@/shared/api/chord-share'
 import { useChordShare } from '@/shared/lib/chord-share'
 import type { BoxPlace } from './engine'
 
+/** How long a copy may say nothing while playing before its chord stops being shown. */
+const SILENT_MS = 4000
+
 /** A shared sheet's live side (R39-10): whether it is shared, and the chord another copy plays now. */
 export interface OnlineSheetState {
   /** Whether the sheet in hand is shared live. */
@@ -35,8 +38,13 @@ export function useOnlineSheet(
     const revision = () =>
       store.getState().mine.find((sheet) => sheet.id === sheetId)?.online?.revision ?? 0
     let reading = false
-    const catchUp = async () => {
-      if (reading) return
+    let again = false
+    const catchUp = async (): Promise<void> => {
+      // A change told while reading is read straight after.
+      if (reading) {
+        again = true
+        return
+      }
       reading = true
       // A save made offline goes first, merged with what others saved meanwhile.
       await sendUnsent(port, store, sheetId)
@@ -44,18 +52,29 @@ export function useOnlineSheet(
       reading = false
       if (read.ok && read.value && read.value.revision > revision())
         takeOnline(store, sheetId, read.value)
+      if (again) {
+        again = false
+        return catchUp()
+      }
     }
+    // A copy that went away mid-play stops being shown: a playing copy speaks at least every beat.
+    let quiet: ReturnType<typeof setTimeout> | undefined
     line.current = port.open(linkId, {
       onChanged: (next) => {
         if (next > revision()) void catchUp()
       },
-      onPlaying: setRemote,
+      onPlaying: (place) => {
+        clearTimeout(quiet)
+        setRemote(place)
+        if (place) quiet = setTimeout(() => setRemote(null), SILENT_MS)
+      },
     })
     void catchUp()
     const back = () => void catchUp()
     window.addEventListener('online', back)
     return () => {
       window.removeEventListener('online', back)
+      clearTimeout(quiet)
       line.current?.close()
       line.current = null
       setRemote(null)

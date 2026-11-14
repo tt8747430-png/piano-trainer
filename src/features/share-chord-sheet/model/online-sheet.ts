@@ -52,6 +52,21 @@ export async function shareSheet(
   return shared
 }
 
+/** View only or Can edit, on a sheet the learner shared already: the link's id. */
+export async function setSheetAccess(
+  port: ChordSharePort,
+  store: ChordSheetsStore,
+  id: string,
+  canEdit: boolean,
+): Promise<NetResult<string>> {
+  const link = sheetOf(store, id)?.online
+  if (!link?.mine) return { ok: false, reason: 'refused' }
+  const set = await port.setAccess(link.id, canEdit)
+  if (!set.ok) return set
+  withSheet(store, id, (sheet) => ({ online: sheet.online && { ...sheet.online, canEdit } }))
+  return { ok: true, value: link.id }
+}
+
 /** The sheet as the link has it now taken in: its chords, and a draft rebased on them bar by bar. */
 export function takeOnline(store: ChordSheetsStore, id: string, online: OnlineSheet): void {
   withSheet(store, id, (sheet) => {

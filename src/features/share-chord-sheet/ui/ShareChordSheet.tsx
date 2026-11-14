@@ -14,7 +14,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/shared/ui/primitives/empty'
-import { shareSheet } from '../model/online-sheet'
+import { setSheetAccess, shareSheet } from '../model/online-sheet'
 
 type Access = 'view' | 'edit'
 
@@ -55,7 +55,10 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
   const share = async (chosen: Access) => {
     setBusy(true)
     setProblem(null)
-    const shared = await shareSheet(port, store, sheet.id, chosen === 'edit')
+    // Shared already: only its access changes; its chords online are everyone's, never overwritten here.
+    const shared = sheet.online
+      ? await setSheetAccess(port, store, sheet.id, chosen === 'edit')
+      : await shareSheet(port, store, sheet.id, chosen === 'edit')
     setBusy(false)
     if (!shared.ok) {
       setProblem(
@@ -66,7 +69,7 @@ function ShareForm({ sheet, onDone }: { sheet: SavedChordSheet; onDone: () => vo
     return shared.value
   }
   const copy = async () => {
-    const id = theirs ? (sheet.online?.id ?? null) : await share(access)
+    const id = sheet.online?.id ?? (await share(access))
     if (!id) return
     const done = await shareLink({ title: sheet.name, path: onlineSheetPath(id) })
     if (done === 'copied') say(t('chordPlayer.shared'))
