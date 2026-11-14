@@ -1,3 +1,4 @@
+// FOLLOW=1: with Follow a MIDI arranger on and no instrument there, Play still plays the sheet.
 // The chord Play started from lets go of its ring; the selection follows the sounding chord and stays on the last on Stop.
 import { readFileSync } from 'node:fs'
 import { chromium } from 'playwright'
@@ -7,7 +8,7 @@ const seed = JSON.parse(readFileSync(seedFile, 'utf8'))
 const version = Number(/SETTINGS_VERSION = (\d+)/.exec(readFileSync('/home/user/piano-trainer/src/entities/settings/model/store.ts', 'utf8'))[1])
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--autoplay-policy=no-user-gesture-required'] })
 const ctx = await browser.newContext({ viewport: { width: 402, height: 874 } })
-await ctx.addInitScript(([s, v]) => { for (const [k, val] of Object.entries(s)) localStorage.setItem(k, val); localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true }, version: v })) }, [seed, version])
+await ctx.addInitScript(([s, v, f]) => { for (const [k, val] of Object.entries(s)) localStorage.setItem(k, val); localStorage.setItem('pt-settings', JSON.stringify({ state: { welcomed: true, ...(f ? { chordPlayer: { follow: true } } : {}) }, version: v })) }, [seed, version, Boolean(process.env.FOLLOW)])
 const page = await ctx.newPage()
 await page.goto(`${base}/practice/chord-player?sheet=sheet-1`)
 await settle(page); await clearOnboarding(page)

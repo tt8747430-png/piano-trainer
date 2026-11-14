@@ -14,26 +14,30 @@ function Lamp({
   label,
   spoken,
   className,
+  disabled = false,
   onClick,
 }: {
   on: boolean
   label: string
   spoken?: string
   className?: string
+  /** No arranger connected: nothing to press. */
+  disabled?: boolean
   onClick(): void
 }) {
   return (
     <button
       type="button"
+      disabled={disabled}
       aria-pressed={on}
       aria-label={spoken}
       title={spoken}
       onClick={onClick}
       className={cn(
-        'h-11 min-w-11 rounded-[9px] px-1.5 text-sm font-bold whitespace-nowrap transition-colors duration-150 ease-out',
+        'h-11 min-w-11 rounded-[9px] px-1.5 text-sm font-bold whitespace-nowrap transition-colors duration-150 ease-out disabled:opacity-45',
         on
           ? 'bg-destructive text-destructive-foreground'
-          : 'bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] hover:bg-muted',
+          : 'bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] enabled:hover:bg-muted',
         className,
       )}
     >
@@ -104,15 +108,26 @@ export function ArrangerStrip({
   const { t } = useTranslation('practice')
   const section = follow.section
   const main = section === null ? null : mainOf(section)
-  const title = follow.running
-    ? main
-      ? t('chordPlayer.arranger.playingMain', { device, main })
-      : t('chordPlayer.arranger.playing', { device })
-    : t('chordPlayer.arranger.waiting', { device })
+  const state = follow.status?.state
+  // With none connected the sheet plays itself: the head says why, and the panel's buttons rest.
+  const off = state === 'no-device' || state === 'denied' || state === 'unsupported'
+  const title = off
+    ? t('chordPlayer.arranger.notLeading', {
+        device,
+        state: t(
+          `chordPlayer.settings.arrangerState.${state === 'no-device' ? 'noDevice' : state}`,
+        ),
+      })
+    : follow.running
+      ? main
+        ? t('chordPlayer.arranger.playingMain', { device, main })
+        : t('chordPlayer.arranger.playing', { device })
+      : t('chordPlayer.arranger.waiting', { device })
   const intro = (
     <Group label={t('chordPlayer.arranger.introLabel')} columns={3} grow={3}>
       {ARRANGER_NUMBERS.map((n) => (
         <Lamp
+          disabled={off}
           key={n}
           on={section === SECTION.intro[n]}
           label={ROMAN[n]}
@@ -126,6 +141,7 @@ export function ArrangerStrip({
     <Group label={t('chordPlayer.arranger.mainLabel')} columns={5} grow={5}>
       {MAINS.map((each) => (
         <Lamp
+          disabled={off}
           key={each}
           on={main === each}
           label={each}
@@ -136,6 +152,7 @@ export function ArrangerStrip({
         />
       ))}
       <Lamp
+        disabled={off}
         on={section === SECTION.break}
         label={t('chordPlayer.arranger.into.break')}
         onClick={() => follow.press(SECTION.break)}
@@ -146,6 +163,7 @@ export function ArrangerStrip({
     <Group label={t('chordPlayer.arranger.endingRit')} columns={3} grow={3}>
       {ARRANGER_NUMBERS.map((n) => (
         <Lamp
+          disabled={off}
           key={n}
           on={section === SECTION.ending[n]}
           label={ROMAN[n]}
@@ -169,15 +187,21 @@ export function ArrangerStrip({
             follow.running ? 'bg-learned' : 'bg-muted-foreground',
           )}
         />
-        <span className="min-w-0 flex-1 truncate text-sm font-semibold" aria-live="polite">
+        <span
+          className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold text-pretty"
+          aria-live="polite"
+        >
           {title}
         </span>
-        <Lamp
-          on={follow.running}
-          label={t('chordPlayer.arranger.startStop')}
-          className="min-w-24 shrink-0 px-3"
-          onClick={follow.toggle}
-        />
+        {off ? null : (
+          <Lamp
+            disabled={off}
+            on={follow.running}
+            label={t('chordPlayer.arranger.startStop')}
+            className="min-w-24 shrink-0 px-3"
+            onClick={follow.toggle}
+          />
+        )}
         {canSide || place === 'side' ? (
           <HeadButton
             label={t(

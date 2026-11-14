@@ -1000,6 +1000,7 @@ export const practice = {
       intoLabel: 'Into the next section',
       strip: '{{device}}: style controls',
       waiting: '{{device}} · waiting for Start',
+      notLeading: '{{device}} · {{state}}. The sheet plays by itself',
       playing: '{{device}} · playing',
       playingMain: '{{device}} · playing Main {{main}}',
       style: 'Style',

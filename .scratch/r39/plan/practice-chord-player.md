@@ -91,6 +91,11 @@ each chord tapped to change it, the keys showing what sounds, nothing on screen 
     **The selection follows the chord playing** (owner, 2026-11-14: "the chord from where it began didn't get
     deselected"): Play lets go of the chord it started from; while a chord sounds its ring is the only one; on Stop
     the selection stays on the last chord played, where Play goes on from (Musicca's).
+    **Follow without an arranger plays the sheet** (owner, 2026-11-14: "the chords played is not shown while the
+    follow a midi arranger is enabled but not connected to the midi and the buttons play are not working"): the Genos
+    leads only while it is connected; with Follow on and none there, Play plays the sheet as usual and lights it, and
+    the strip says why ("Genos · Not connected. The sheet plays by itself"), its panel buttons dimmed and Start/Stop
+    gone until one is connected.
   - **Saved, synced and migrated** (owner, 2026-11-13: "I want to be able to save the like this as chord sheets
     and sync to my account and also the older ones should be able to migrate to this new structure effortlessly"):
     a sheet of bars is saved as text in the `chord_sheets` store, synced to the account like every saved store; a

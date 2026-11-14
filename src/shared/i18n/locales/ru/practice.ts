@@ -978,6 +978,7 @@ export const practice: LocaleResources['practice'] = {
       intoLabel: 'Переход к следующему разделу',
       strip: '{{device}}: управление стилем',
       waiting: '{{device}} · ждёт Start',
+      notLeading: '{{device}} · {{state}}. Лист играет сам',
       playing: '{{device}} · играет',
       playingMain: '{{device}} · играет Main {{main}}',
       style: 'Стиль',

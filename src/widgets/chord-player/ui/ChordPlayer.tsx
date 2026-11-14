@@ -193,9 +193,11 @@ export function ChordPlayer({
   // Following a MIDI arranger (a Genos): its clock lights the sheet, its Start/Stop is Play.
   const follow = useArrangerFollow(shown, prefs.follow)
   const device = follow.status?.state === 'connected' ? follow.status.device : 'Genos'
-  const playing = prefs.follow ? follow.running : transport.playing
-  const ownLit = prefs.follow ? follow.lit : transport.lit
-  const ownBeat = prefs.follow ? follow.beat : transport.beat
+  // The arranger leads only while one is connected: with Follow on and none there, the sheet plays itself.
+  const led = prefs.follow && follow.status?.state === 'connected'
+  const playing = led ? follow.running : transport.playing
+  const ownLit = led ? follow.lit : transport.lit
+  const ownBeat = led ? follow.beat : transport.beat
   // Shared live: what this copy plays goes out; while it is stopped, the chord another copy plays lights.
   const online = useOnlineSheet(sheetId, playing ? ownLit : null, playing ? ownBeat : null)
   const theirs = playing ? null : online.remote
@@ -286,7 +288,7 @@ export function ChordPlayer({
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.bars.length > 0)
   const toggle = () =>
-    prefs.follow
+    led
       ? follow.toggle()
       : transport.playing
         ? transport.stop()
@@ -767,7 +769,9 @@ export function ChordPlayer({
           onBeats={(beats) => acts.resize(dialog.place, beats)}
           onPlayFrom={() => {
             setDialog(null)
-            transport.play(transport.looped, dialog.place)
+            // A connected arranger keeps the time: the chord is only picked; elsewhere the band plays from it.
+            if (led) setPicked(dialog.place)
+            else transport.play(transport.looped, dialog.place)
           }}
           onDuplicate={() => {
             inSection(dialog.place.section, (each) => duplicateChord(each, dialog.place.index))
