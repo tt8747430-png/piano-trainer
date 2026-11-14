@@ -3,13 +3,13 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, type FakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { ServicesProvider } from '@/shared/lib/services'
 import { MidiButton } from './MidiButton'
 
 const renderButton = (midi: FakeMidi | null) =>
   renderWithSettings(
-    <ServicesProvider services={{ audio: createFakeAudio(), midi }}>
+    <ServicesProvider services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi }}>
       <MidiButton />
     </ServicesProvider>,
   )

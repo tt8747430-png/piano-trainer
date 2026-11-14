@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { arrange, parseFigure, type Performance } from '@/shared/lib/arrangement'
 import { createFakeAudio, type FakeAudio } from '@/shared/api/audio'
-import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, type FakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { midi, note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -33,7 +33,9 @@ let keyboard: FakeMidi
 
 function renderPractice(performance: Performance, setup: Partial<PracticeSetup> = {}) {
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio, midi: keyboard }}>{children}</ServicesProvider>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: keyboard }}>
+      {children}
+    </ServicesProvider>
   )
   return renderHook(
     (props: { performance: Performance; setup: PracticeSetup }) =>

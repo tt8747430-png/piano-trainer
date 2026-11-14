@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { ServicesProvider } from '@/shared/lib/services'
 import { MidiSync } from './MidiSync'
@@ -17,7 +17,9 @@ describe('MidiSync', () => {
     })
     const { container } = render(
       <SettingsStoreProvider store={settingsStore}>
-        <ServicesProvider services={{ audio: createFakeAudio(), midi }}>
+        <ServicesProvider
+          services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi }}
+        >
           <MidiSync />
         </ServicesProvider>
       </SettingsStoreProvider>,
@@ -35,7 +37,9 @@ describe('MidiSync', () => {
     expect(() =>
       render(
         <SettingsStoreProvider store={settingsStore}>
-          <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>
+          <ServicesProvider
+            services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: null }}
+          >
             <MidiSync />
           </ServicesProvider>
         </SettingsStoreProvider>,

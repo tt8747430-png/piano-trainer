@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -41,7 +41,13 @@ function renderPinned({
   })
   render(
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ServicesProvider
+        services={{
+          audio: createFakeAudio(),
+          arranger: createFakeArranger(),
+          midi: createFakeMidi(),
+        }}
+      >
         <FloatingHost screen="page">
           <PageKeyboardTools screen={kind} />
           <PinnedKeyboard shown={{ keys: [midi(60)], marks: new Map() }} screen={kind} />

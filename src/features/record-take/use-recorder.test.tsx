@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -31,7 +31,9 @@ function renderRecorder({ webMidi = true }: { webMidi?: boolean } = {}) {
   })
   const wrapper = ({ children }: { children: ReactNode }) => (
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio, midi: webMidi ? keyboard : null }}>
+      <ServicesProvider
+        services={{ audio, arranger: createFakeArranger(), midi: webMidi ? keyboard : null }}
+      >
         {children}
       </ServicesProvider>
     </SettingsStoreProvider>

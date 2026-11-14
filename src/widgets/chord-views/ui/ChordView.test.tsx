@@ -7,7 +7,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, initialPractice, ownChoice } from '@/features/practice'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import type { Performance } from '@/shared/lib/arrangement'
 import { ServicesProvider } from '@/shared/lib/services'
 import { stubMatchMedia } from '@/shared/test/match-media'
@@ -43,7 +43,13 @@ function renderSummary(bar: number) {
     restart: vi.fn(),
   }
   const rendered = renderWithSettings(
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+    <ServicesProvider
+      services={{
+        audio: createFakeAudio(),
+        arranger: createFakeArranger(),
+        midi: createFakeMidi(),
+      }}
+    >
       <ChordView
         view="diagrams"
         mode="summary"
@@ -130,7 +136,13 @@ function renderPair(bar: number) {
     restart: vi.fn(),
   }
   const { container, unmount } = renderWithSettings(
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+    <ServicesProvider
+      services={{
+        audio: createFakeAudio(),
+        arranger: createFakeArranger(),
+        midi: createFakeMidi(),
+      }}
+    >
       <ChordView
         view="diagrams"
         mode="animated"
@@ -255,7 +267,13 @@ function renderView(
     restart: vi.fn(),
   }
   return renderWithSettings(
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+    <ServicesProvider
+      services={{
+        audio: createFakeAudio(),
+        arranger: createFakeArranger(),
+        midi: createFakeMidi(),
+      }}
+    >
       <ChordView
         view={view}
         mode="animated"
@@ -358,7 +376,13 @@ describe('the loop’s grips (R37)', () => {
   function renderLooped(view: 'grid' | 'diagrams') {
     const onLoopChange = vi.fn()
     renderWithSettings(
-      <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ServicesProvider
+        services={{
+          audio: createFakeAudio(),
+          arranger: createFakeArranger(),
+          midi: createFakeMidi(),
+        }}
+      >
         <ChordView
           view={view}
           mode="animated"

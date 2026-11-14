@@ -48,7 +48,7 @@ import {
   type ContentPort,
   type ContentRemote,
 } from '@/shared/api/content'
-import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
+import { createWebArranger, createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { lazyBackend, type Backend } from '@/shared/api/supabase'
 import { createSupabaseGroups, type GroupsPort } from '@/shared/api/groups'
 import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
@@ -63,6 +63,7 @@ export function createServices(): Services {
   return {
     audio: createWebAudioOutput(),
     midi: hasWebMidi() ? createWebMidi() : null,
+    arranger: createWebArranger(),
   }
 }
 

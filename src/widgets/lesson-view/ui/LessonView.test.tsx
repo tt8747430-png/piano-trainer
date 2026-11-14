@@ -13,7 +13,7 @@ import { lessonById, type Lesson } from '@/entities/lesson'
 import { createSettingsStore, SettingsStoreProvider, type LessonReading } from '@/entities/settings'
 import { setLessonReading } from '@/features/set-preference'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
@@ -53,7 +53,9 @@ async function renderLesson(lesson: Lesson = firstLesson(), reading: LessonReadi
   })
   render(
     <SettingsStoreProvider store={store}>
-      <ServicesProvider services={{ audio, midi: createFakeMidi() }}>
+      <ServicesProvider
+        services={{ audio, arranger: createFakeArranger(), midi: createFakeMidi() }}
+      >
         <FloatingHost screen="/">
           <RouterProvider router={router} />
         </FloatingHost>

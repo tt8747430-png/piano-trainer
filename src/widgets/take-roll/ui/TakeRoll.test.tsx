@@ -8,6 +8,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { TakeRoll } from './TakeRoll'
+import { createFakeArranger } from '@/shared/api/midi'
 
 /** At 120 in 4/4: four bars of 2000 ms, recorded from bar 5. */
 const TAKE: Take = {
@@ -29,7 +30,11 @@ const TAKE: Take = {
 function setUp(extra: { kept?: { first: number; last: number } } = {}) {
   const onPlayFrom = vi.fn()
   const wrap = (ui: ReactNode) => (
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: null }}>{ui}</ServicesProvider>
+    <ServicesProvider
+      services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: null }}
+    >
+      {ui}
+    </ServicesProvider>
   )
   renderWithSettings(
     wrap(<TakeRoll take={TAKE} playing={null} onPlayFrom={onPlayFrom} {...extra} />),

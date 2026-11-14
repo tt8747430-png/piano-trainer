@@ -5,6 +5,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from './ServicesProvider'
 import { useLiveVoice } from './use-live-voice'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const C = midi(60)
 const E = midi(64)
@@ -13,7 +14,9 @@ const G = midi(67)
 function setUp() {
   const audio = createFakeAudio()
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+      {children}
+    </ServicesProvider>
   )
   const hook = renderHook(useLiveVoice, { wrapper })
   return { audio, voice: hook.result.current, hook }

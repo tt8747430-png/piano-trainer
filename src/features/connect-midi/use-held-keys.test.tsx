@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -11,7 +11,9 @@ import { useHeldKeys, useKeysDown } from './use-held-keys'
 function renderHeldKeys(hook: () => ReadonlySet<number> = useHeldKeys) {
   const keyboard = createFakeMidi()
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio: createFakeAudio(), midi: keyboard }}>
+    <ServicesProvider
+      services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi: keyboard }}
+    >
       {children}
     </ServicesProvider>
   )

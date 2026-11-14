@@ -8,6 +8,7 @@ import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import type { Heard } from './editor-context'
 import { useHeardPlayhead } from './use-heard-playhead'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const B = TICKS_PER_BEAT
 
@@ -15,7 +16,9 @@ describe('useHeardPlayhead (ADR 0096)', () => {
   it('stands at the onset Play reached, follows its clock between them, and is gone once it stops', () => {
     const audio = createFakeAudio()
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+        {children}
+      </ServicesProvider>
     )
     // From bar 2 at 60 a minute: a beat group a second, from its first beat.
     const pass = schedule(TWO_BARS, { tempo: 60, hands: audibleHands('both'), fromTick: 4 * B })

@@ -2,13 +2,15 @@ import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, type FakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { ServicesProvider } from '@/shared/lib/services'
 import { useMidiConnection } from './use-midi-connection'
 
 function setup(midi: FakeMidi | null) {
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio: createFakeAudio(), midi }}>{children}</ServicesProvider>
+    <ServicesProvider services={{ audio: createFakeAudio(), arranger: createFakeArranger(), midi }}>
+      {children}
+    </ServicesProvider>
   )
   return renderHook(() => useMidiConnection(), { wrapper })
 }

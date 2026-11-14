@@ -7,6 +7,7 @@ import { chordSounds, type Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
 import { usePlay } from './use-play'
 import { useSoundingKeys } from './use-sounding-keys'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const NOTE: Sound = { kind: 'note', midi: midi(60), at: 0, duration: 1, velocity: 0.2 }
 const C_MAJOR = [60, 64, 67].map(midi)
@@ -14,7 +15,9 @@ const C_MAJOR = [60, 64, 67].map(midi)
 function setup<T>(hook: () => T) {
   const audio = createFakeAudio()
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+    <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+      {children}
+    </ServicesProvider>
   )
   return { audio, result: renderHook(hook, { wrapper }).result }
 }

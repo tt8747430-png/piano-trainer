@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { touchVelocity } from '@/shared/lib/schedule'
@@ -21,7 +21,9 @@ function setUp() {
   })
   const wrapper = ({ children }: { children: ReactNode }) => (
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio, midi: keyboard }}>{children}</ServicesProvider>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: keyboard }}>
+        {children}
+      </ServicesProvider>
     </SettingsStoreProvider>
   )
   const hook = renderHook(useMidiSync, { wrapper })

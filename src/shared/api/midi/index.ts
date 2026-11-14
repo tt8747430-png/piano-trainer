@@ -9,3 +9,11 @@ export {
 export { describeMidiData, type MidiLogMessage } from './describe-message'
 export { createWebMidi, hasWebMidi } from './web-midi'
 export { createFakeMidi, type FakeMidi } from './fake-midi'
+export {
+  createFakeArranger,
+  createWebArranger,
+  type ArrangerEvent,
+  type ArrangerPort,
+  type ArrangerStatus,
+  type FakeArranger,
+} from './arranger'

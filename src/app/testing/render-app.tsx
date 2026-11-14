@@ -8,7 +8,7 @@ import {
   type FeaturesPort,
 } from '@/shared/api/admin'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createFakeContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
@@ -90,7 +90,7 @@ export async function renderApp(
   const view = render(
     <App
       stores={stores}
-      services={{ audio, midi: webMidi ? midi : null }}
+      services={{ audio, arranger: createFakeArranger(), midi: webMidi ? midi : null }}
       auth={auth}
       sync={sync}
       publicLibrary={publicLibrary}

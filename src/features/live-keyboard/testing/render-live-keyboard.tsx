@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
@@ -47,7 +47,7 @@ export function renderLiveKeyboard({
   })
   const { unmount } = render(
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio, midi: midiKeyboard }}>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: midiKeyboard }}>
         <KeyboardTools shown onShow={onShow} sustained={sustained} hands={hands} />
         <LiveKeyboard
           range={ONE_OCTAVE}

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { TWO_BARS } from '@/features/practice/testing/performances'
 import { createFakeAudio } from '@/shared/api/audio'
-import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { ServicesProvider } from '@/shared/lib/services'
 import type { PracticeView } from './practice-view'
@@ -27,7 +27,11 @@ function renderPlayer(view: Partial<PracticeView> = {}) {
   })
   const wrapper = ({ children }: { children: ReactNode }) => (
     <SettingsStoreProvider store={settingsStore}>
-      <ServicesProvider services={{ audio, midi: createFakeMidi() }}>{children}</ServicesProvider>
+      <ServicesProvider
+        services={{ audio, arranger: createFakeArranger(), midi: createFakeMidi() }}
+      >
+        {children}
+      </ServicesProvider>
     </SettingsStoreProvider>
   )
   const hook = renderHook(() => usePracticePlayer(TWO_BARS, { ...VIEW, ...view }, setView, 72), {

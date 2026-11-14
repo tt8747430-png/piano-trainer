@@ -7,6 +7,7 @@ import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from './ServicesProvider'
 import { usePlayback } from './use-playback'
 import { usePlayhead } from './use-playhead'
+import { createFakeArranger } from '@/shared/api/midi'
 
 const note = (key: number, at: number): Sound => ({
   kind: 'note',
@@ -22,7 +23,9 @@ describe('usePlayhead', () => {
   it('follows a play note by note on the audio clock, and lets go once it ends', () => {
     const audio = createFakeAudio()
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <ServicesProvider services={{ audio, midi: null }}>{children}</ServicesProvider>
+      <ServicesProvider services={{ audio, arranger: createFakeArranger(), midi: null }}>
+        {children}
+      </ServicesProvider>
     )
     const { result } = renderHook(
       () => {
