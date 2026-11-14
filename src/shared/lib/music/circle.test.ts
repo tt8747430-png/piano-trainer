@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { CIRCLE_OF_FIFTHS, circleKey, randomKey } from './circle'
 import { keySymbol } from './key'
-import { note, noteName } from './note'
+import { note } from './note'
 import { pitchClass } from './pitch'
 
 describe('CIRCLE_OF_FIFTHS', () => {
