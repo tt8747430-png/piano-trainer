@@ -489,11 +489,16 @@ export interface ChordPlayerSettings {
   readonly voicing: ProgressionVoicing
   /** Follow a MIDI arranger (a Genos): its Start, Stop and clock lead the sheet, which sends it its sections. */
   readonly follow: boolean
+  /** Where its Genos strip stands: a card over the dock, folded to its head, or in a laptop's side column. */
+  readonly arranger: ArrangerPlace
 }
+export const ARRANGER_PLACES = ['card', 'folded', 'side'] as const
+export type ArrangerPlace = (typeof ARRANGER_PLACES)[number]
 export const DEFAULT_CHORD_PLAYER: ChordPlayerSettings = {
   names: 'chords',
   voicing: 'led',
   follow: false,
+  arranger: 'card',
 }
 
 /** The Chords page's own settings, in its Piano sheet. */

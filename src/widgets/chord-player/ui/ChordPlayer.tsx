@@ -24,8 +24,9 @@ import { useChordSheetsStoreApi } from '@/entities/chord-sheet'
 import { styleBook, styleVariations, usePatternBook, type Style } from '@/entities/pattern'
 import { discardDraft, restoreDraft, saveDraft } from '@/features/manage-chord-sheets'
 import { libraryParam, progressionMode } from '@/entities/progression-library'
-import { selectChordPlayer, useSettings } from '@/entities/settings'
+import { selectChordPlayer, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
+import { setChordPlayer } from '@/features/set-preference'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
 import { cn, useMediaQuery } from '@/shared/lib'
 import {
@@ -172,6 +173,10 @@ export function ChordPlayer({
   const patterns = usePatternBook()
   const book = useMemo(() => styleBook(patterns), [patterns])
   const prefs = useSettings(selectChordPlayer)
+  const settingsStore = useSettingsStoreApi()
+  const wideSide = useMediaQuery('(min-width: 64rem)')
+  // The Genos strip in the side column only where there is one (a laptop); over the dock elsewhere.
+  const stripPlace = prefs.arranger === 'side' && !wideSide ? 'card' : prefs.arranger
   const { shown, entry } = hand
   const style = book.get(entry.style)
   const variations = styleVariations(style)
@@ -195,7 +200,7 @@ export function ChordPlayer({
   const [picked, setPicked] = useState<BoxPlace | null>(null)
   const [inHand, setInHand] = useState<string | null>(null)
   const reduced = useMediaQuery(REDUCED_MOTION)
-  const wide = useMediaQuery('(min-width: 64rem)')
+  const wide = wideSide
   const [library, setLibrary] = useState(false)
   const [styles, setStyles] = useState(false)
   const [dock, setDock] = useState<DockSheet | null>(null)
@@ -518,7 +523,14 @@ export function ChordPlayer({
         <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-10">
           <div
             ref={column}
-            className={cn('flex min-w-0 flex-col gap-4', prefs.follow ? 'pb-72 lg:pb-60' : 'pb-24')}
+            className={cn(
+              'flex min-w-0 flex-col gap-4',
+              prefs.follow && stripPlace === 'card'
+                ? 'pb-72 lg:pb-60'
+                : prefs.follow && stripPlace === 'folded'
+                  ? 'pb-40'
+                  : 'pb-24',
+            )}
           >
             {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
             <div className="flex flex-col gap-[18px]">
@@ -565,6 +577,16 @@ export function ChordPlayer({
             </div>
           </div>
           <aside className="hidden flex-col gap-8 lg:flex">
+            {prefs.follow && stripPlace === 'side' ? (
+              <ArrangerStrip
+                follow={follow}
+                device={device}
+                wide={false}
+                place={stripPlace}
+                canSide={true}
+                onPlace={(arranger) => setChordPlayer(settingsStore, { arranger })}
+              />
+            ) : null}
             <KeyChords
               musicKey={shown.key}
               chords={tiles}
@@ -617,9 +639,16 @@ export function ChordPlayer({
             bottom: 'calc(var(--nav-bar) + var(--docked, 0px) + 12px)',
           }}
         >
-          {prefs.follow ? (
+          {prefs.follow && stripPlace !== 'side' ? (
             <div className="pointer-events-auto w-full max-w-[47.5rem]">
-              <ArrangerStrip follow={follow} device={device} wide={wide} />
+              <ArrangerStrip
+                follow={follow}
+                device={device}
+                wide={wide && stripPlace === 'card'}
+                place={stripPlace}
+                canSide={wideSide}
+                onPlace={(arranger) => setChordPlayer(settingsStore, { arranger })}
+              />
             </div>
           ) : null}
           <div className="pointer-events-auto">{dockBar}</div>

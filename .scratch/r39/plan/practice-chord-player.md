@@ -240,3 +240,8 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
   sheet), × n, Variation n and delete in place, grip last. The paper card, the sticky dock and the floating
   actions are gone: the dock and the Genos card float over the keys on every size (`--nav-bar` + `--docked` +
   12), the Genos card with every control in view (two rows on a phone, one on a laptop).
+- The Genos strip hides or moves (owner, 2026-11-14: "give me possibility also to hide the genos controls with hide
+  button or move them to the side"): its head carries Hide (⌄; folded, it keeps its state line and Start/Stop, ⌃
+  shows it again) and, on a laptop, Move to the side (it stands at the top of the side column, Back over the dock
+  returns it). The place is saved (`chordPlayer.arranger`: card, folded, side). Auto-scroll built: the chord
+  sounding is kept in sight, clear of the bar, the keys and what floats over them, checked at 402, 393 and 1710.

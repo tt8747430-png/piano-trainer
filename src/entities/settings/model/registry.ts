@@ -107,6 +107,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'chordPlayer.names': 'chord-player',
   'chordPlayer.voicing': 'chord-player',
   'chordPlayer.follow': 'chord-player',
+  'chordPlayer.arranger': 'chord-player',
   'chords.labels': 'chords',
   'chords.range': 'chords',
   'chords.rangeFrom': 'chords',

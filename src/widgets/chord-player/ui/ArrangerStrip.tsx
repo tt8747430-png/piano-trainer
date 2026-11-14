@@ -1,7 +1,9 @@
+import { ChevronDown, ChevronUp, PanelBottom, PanelRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
+import type { ArrangerPlace } from '@/entities/settings'
 import type { ArrangerFollow } from '../model/use-arranger-follow'
 
 const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
@@ -80,16 +82,24 @@ function Group({
  * it, every control in view, none scrolled away: its state and Start/Stop on its head; Main A–D
  * (pressed again while playing, its Fill-in) and Break; Intro I–III and Ending/rit. I–III. Two rows
  * on a phone, one row of groups on a laptop (`wide`). Each lamp lit as the panel's. Only what the
- * Genos takes over MIDI is here (Yamaha's Rhythm Start and Stop, Section Control).
+ * Genos takes over MIDI is here (Yamaha's Rhythm Start and Stop, Section Control). Its head folds it
+ * to that one line, or (on a laptop) moves it to the side column and back (`place`, saved).
  */
 export function ArrangerStrip({
   follow,
   device,
   wide = false,
+  place,
+  canSide = false,
+  onPlace,
 }: {
   follow: ArrangerFollow
   device: string
   wide?: boolean
+  place: ArrangerPlace
+  /** A side column to move into: a laptop's. */
+  canSide?: boolean
+  onPlace(place: ArrangerPlace): void
 }) {
   const { t } = useTranslation('practice')
   const section = follow.section
@@ -168,8 +178,29 @@ export function ArrangerStrip({
           className="min-w-24 shrink-0 px-3"
           onClick={follow.toggle}
         />
+        {canSide || place === 'side' ? (
+          <HeadButton
+            label={t(
+              place === 'side' ? 'chordPlayer.arranger.toDock' : 'chordPlayer.arranger.toSide',
+            )}
+            onClick={() => onPlace(place === 'side' ? 'card' : 'side')}
+          >
+            {place === 'side' ? <PanelBottom aria-hidden /> : <PanelRight aria-hidden />}
+          </HeadButton>
+        ) : null}
+        {place !== 'side' ? (
+          <HeadButton
+            label={t(
+              place === 'folded' ? 'chordPlayer.arranger.show' : 'chordPlayer.arranger.hide',
+            )}
+            expanded={place !== 'folded'}
+            onClick={() => onPlace(place === 'folded' ? 'card' : 'folded')}
+          >
+            {place === 'folded' ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
+          </HeadButton>
+        ) : null}
       </div>
-      {wide ? (
+      {place === 'folded' ? null : wide ? (
         <div className="flex gap-4">
           {intro}
           {mains}
@@ -185,5 +216,31 @@ export function ArrangerStrip({
         </>
       )}
     </div>
+  )
+}
+
+/** One of the strip's head buttons: an icon, 44 square, named. */
+function HeadButton({
+  label,
+  expanded,
+  onClick,
+  children,
+}: {
+  label: string
+  expanded?: boolean
+  onClick(): void
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      aria-expanded={expanded}
+      onClick={onClick}
+      className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+    >
+      {children}
+    </button>
   )
 }

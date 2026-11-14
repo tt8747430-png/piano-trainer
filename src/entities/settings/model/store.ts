@@ -34,6 +34,7 @@ import {
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
+  ARRANGER_PLACES,
   DEFAULT_CHORD_PLAYER,
   DEFAULT_CHORDS,
   isChordLabels,
@@ -292,6 +293,8 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
     follow: typeof saved.follow === 'boolean' ? saved.follow : DEFAULT_CHORD_PLAYER.follow,
+    arranger:
+      ARRANGER_PLACES.find((place) => place === saved.arranger) ?? DEFAULT_CHORD_PLAYER.arranger,
   }
 }
 
