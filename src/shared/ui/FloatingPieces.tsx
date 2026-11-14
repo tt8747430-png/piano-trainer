@@ -83,20 +83,20 @@ export function FloatingPlaySplit({
     <div
       role="group"
       aria-label={label}
-      className="glass-honey flex h-14 w-44 shrink-0 items-center rounded-pill text-primary-foreground"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center rounded-pill text-primary-foreground"
     >
       <button
         type="button"
         aria-pressed={playing}
         onClick={onPlay}
-        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-0.5 text-base font-bold whitespace-nowrap"
+        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-3 text-base font-bold whitespace-nowrap"
       >
         {playing ? (
           <Square aria-hidden className="size-4.5 fill-current" />
         ) : (
           <Play aria-hidden className="size-4.5 fill-current" />
         )}
-        <span className="truncate">{name}</span>
+        <span>{name}</span>
       </button>
       <span aria-hidden className="h-6.5 w-px shrink-0 bg-current opacity-20" />
       {menu(

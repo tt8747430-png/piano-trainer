@@ -1,12 +1,15 @@
-import { StageMark } from '@/entities/step'
 import { Link } from '@tanstack/react-router'
-import { Dumbbell } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
-import { exercisesIn } from '@/entities/exercise'
+import { exercisesIn, type Exercise } from '@/entities/exercise'
 import { localText, useLocale } from '@/shared/i18n'
-import { noteParam, type ScaleKind, type SpelledNote } from '@/shared/lib/music'
-import { RowGroup, RowLink } from '@/shared/ui'
+import {
+  noteParam,
+  printedNote,
+  spellScale,
+  type ScaleKind,
+  type SpelledNote,
+} from '@/shared/lib/music'
+import { PractiseRow, PractiseRows } from '@/shared/ui'
 
 const SCALE_EXERCISES = exercisesIn('scales')
 
@@ -14,40 +17,52 @@ const SCALE_EXERCISES = exercisesIn('scales')
 export const firstScaleExercise = (kind: ScaleKind) =>
   SCALE_EXERCISES.find((exercise) => exercise.fields.kind?.includes(kind) !== false)
 
+/** A drill's opening, as the music it plays (the canvas's PRACTISE line): its first notes, then "…". */
+function opening(id: Exercise['id'], names: readonly string[]): string {
+  const at = (step: number) => names[((step % names.length) + names.length) % names.length] ?? ''
+  const steps = (count: number, each: (step: number) => string) =>
+    `${Array.from({ length: count }, (_, step) => each(step)).join(' · ')} …`
+  switch (id) {
+    case 'thirds':
+      return steps(3, (step) => `${at(step)} ${at(step + 2)}`)
+    case 'sixths':
+      return steps(3, (step) => `${at(step)} ${at(step + 5)}`)
+    case 'groups':
+      return steps(2, (step) => [0, 1, 2, 3].map((more) => at(step + more)).join(' '))
+    case 'contrary':
+      return steps(3, (step) => `${at(step)} ${at(-step)}`)
+    default:
+      return `${[...names, at(0)].join(' ')} …`
+  }
+}
+
 /**
- * A scale's exercises in the Player, each opening on this scale: the scale itself over several
- * octaves, in 3rds, in 6ths, in groups, in contrary motion, and the daily routine (a major or minor
- * scale's only): those that take its kind.
+ * A scale's exercises in the Player (canvas v174's PRACT60, the Chords page's `PractiseRows`), each
+ * opening on this scale and showing the music it starts with: the scale itself, in 3rds, in 6ths, in
+ * groups, in contrary motion, and the daily routine (a major or minor scale's only).
  */
 export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleKind }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
-  const fold = useFold('scales.exercises')
+  const names = spellScale(root, kind).map((tone) => printedNote(tone.note))
   return (
-    <RowGroup title={t('inPlayer')} fold={fold}>
+    <PractiseRows title={t('inPlayer')}>
       {SCALE_EXERCISES.filter((exercise) => exercise.fields.kind?.includes(kind) !== false).map(
         (exercise) => (
-          <li key={exercise.id}>
-            <RowLink
-              title={localText(exercise.name, locale)}
-              detail={localText(exercise.trains, locale)}
-              icon={Dumbbell}
-              paint="sand"
-              trailing={<StageMark stage={exercise.stage} />}
-              render={
-                <Link
-                  to="/play/exercise/$exerciseId"
-                  params={{ exerciseId: exercise.id }}
-                  search={{
-                    root: noteParam(root),
-                    kind,
-                  }}
-                />
-              }
-            />
-          </li>
+          <PractiseRow
+            key={exercise.id}
+            title={localText(exercise.name, locale)}
+            detail={opening(exercise.id, names)}
+            render={
+              <Link
+                to="/play/exercise/$exerciseId"
+                params={{ exerciseId: exercise.id }}
+                search={{ root: noteParam(root), kind }}
+              />
+            }
+          />
         ),
       )}
-    </RowGroup>
+    </PractiseRows>
   )
 }

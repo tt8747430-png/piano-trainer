@@ -50,3 +50,15 @@ lit; Fingering by hand; Practise this scale (Hands together, Tempo ladder, Hanon
 
 Sources: the ABRSM scale books' fingerings; Hanon, _The Virtuoso Pianist_; Piano Companion's scale page; musicca's
 scale and key-signature pages.
+
+## Ported (loop, 2026-11-14)
+
+- The page in the Chords page's shape, to canvas v174 (commit 0ec30560): keys at the top, the name as its two
+  pickers with its signature and notes, Scale · Chords · Key, the run with each hand's fingers in a line, the floating
+  bar Tempo · Play scale ⌄ · Hands.
+- Practise in the Player as the board's PRACT60, on the kit's `PractiseRows` (the Chords page's one implementation):
+  a plain heading, no fold; each row Play, the drill's name, the music it starts with ("C E · D F · E G …"), a
+  chevron. The two-line descriptions cut with "…", the drill icon and the level bars are gone.
+- The bar's Play split grows with its label (176 px at least): "Играть гамму" was cut on every phone.
+- Kept as the app has them (the board has no place for them yet): Compare, Start on, Fingering and Rhythm, under the
+  run; the staff scrolls sideways where the run is longer than the phone.
