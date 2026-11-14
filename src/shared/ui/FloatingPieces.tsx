@@ -68,12 +68,15 @@ export function FloatingPlaySplit({
   label,
   playing,
   onPlay,
+  menuLabel,
   menu,
 }: {
   /** What Play says: "Play chord", "Play arpeggio". */
   label: string
   playing: boolean
   onPlay: () => void
+  /** The chevron's name: its menu's, how it plays ("Play as"). */
+  menuLabel: string
   /** The chevron's menu, rendered from a trigger it is given (`ActionMenu`'s `render`). */
   menu: (trigger: ReactElement) => ReactNode
 }) {
@@ -102,6 +105,8 @@ export function FloatingPlaySplit({
       {menu(
         <button
           type="button"
+          aria-label={menuLabel}
+          title={menuLabel}
           className="flex h-14 w-11 shrink-0 items-center justify-center rounded-r-pill"
         >
           <ChevronDown aria-hidden className="size-5" />

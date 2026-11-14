@@ -3,6 +3,7 @@ import type {
   EditorStartMode,
   ChordFinderSettings,
   ProgressionsSettings,
+  IntervalSettings,
   ChordPlayerSettings,
   ChordsSettings,
   ScaleStaffSettings,
@@ -69,6 +70,7 @@ export const selectLessonReading = (state: SettingsState): LessonReading => stat
 
 /** How every progression is written and voiced (A24). */
 export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions
+export const selectIntervals = (state: SettingsState): IntervalSettings => state.intervals
 /** How the Chord player writes its chords and voices its piano (R29 CP6). */
 export const selectTuner = (state: SettingsState): TunerSettings => state.tuner
 export const selectScaleStaff = (state: SettingsState): ScaleStaffSettings => state.scaleStaff

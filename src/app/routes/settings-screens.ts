@@ -15,6 +15,7 @@ export { HowToUsePage } from '@/pages/how-to-use'
 export { AboutPage } from '@/pages/about'
 export {
   ChordFinderSettingsPage,
+  IntervalsSettingsPage,
   ProgressionsSettingsPage,
   ScalesSettingsPage,
 } from '@/pages/practice-settings'

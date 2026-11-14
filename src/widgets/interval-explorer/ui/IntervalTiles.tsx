@@ -6,7 +6,7 @@ import { useIntervalName } from './use-interval-name'
 
 /**
  * The intervals as tiles, seven to a row (canvas 170): each its short name and its semitones under
- * it, the chosen one lit. A tap chooses it and plays it.
+ * it, the chosen one filled in ink (canvas 176). A tap chooses it and plays it.
  */
 export function IntervalTiles({
   names,
@@ -20,7 +20,7 @@ export function IntervalTiles({
   const { t } = useTranslation('practice')
   const said = useIntervalName()
   return (
-    <ul aria-label={t('intervals.chosen')} className="grid grid-cols-7 gap-1.5 sm:gap-2">
+    <ul aria-label={t('intervals.chosen')} className="grid grid-cols-7 gap-1.5">
       {names.map((name) => {
         const { title, short } = said(name)
         const on = name === chosen
@@ -33,13 +33,13 @@ export function IntervalTiles({
               title={title}
               onClick={() => onPick(name)}
               className={cn(
-                'flex h-13 w-full flex-col items-center justify-center rounded-lg border bg-card transition-colors hover:bg-muted',
-                on && 'border-primary bg-selected text-selected-foreground hover:bg-selected',
+                'flex h-13 w-full flex-col items-center justify-center gap-px rounded-xl bg-card ring-1 ring-border transition-colors hover:bg-muted',
+                on && 'bg-selected text-selected-foreground hover:bg-selected',
               )}
             >
-              <span className="font-semibold">{short}</span>
+              <span className="font-bold">{short}</span>
               <span
-                className={cn('text-xs tabular-nums', on ? 'opacity-75' : 'text-muted-foreground')}
+                className={cn('text-xs tabular-nums', on ? 'opacity-70' : 'text-muted-foreground')}
               >
                 {INTERVALS[name].semitones}
               </span>

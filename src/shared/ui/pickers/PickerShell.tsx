@@ -1,5 +1,5 @@
 import { ChevronsUpDown } from 'lucide-react'
-import { useId, useState, type ReactNode } from 'react'
+import { useId, useState, type ReactElement, type ReactNode } from 'react'
 import { cn, useMediaQuery } from '@/shared/lib'
 import { Popover, PopoverContent, PopoverTrigger } from '../primitives/popover'
 import { Sheet, SheetContent, SheetTrigger } from '../Sheet'
@@ -29,6 +29,7 @@ export function PickerShell({
   spoken,
   bare = false,
   wide = false,
+  trigger: ownTrigger,
   className,
   children,
 }: {
@@ -41,6 +42,8 @@ export function PickerShell({
   bare?: boolean
   /** A panel that holds a picture (the circle of fifths): a wider popover. */
   wide?: boolean
+  /** A trigger that carries its own face (a floating bar's piece), in place of the picker's value. */
+  trigger?: ReactElement
   className?: string
   children: (panel: PickerPanel) => ReactNode
 }) {
@@ -71,7 +74,7 @@ export function PickerShell({
       <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
     </>
   )
-  const trigger = (
+  const trigger = ownTrigger ?? (
     <button
       type="button"
       aria-label={`${label}: ${spoken}`}
@@ -82,7 +85,7 @@ export function PickerShell({
   if (sheet) {
     return (
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger render={trigger}>{face}</SheetTrigger>
+        <SheetTrigger render={trigger}>{ownTrigger ? undefined : face}</SheetTrigger>
         <SheetContent title={label} initialFocus={focus}>
           {open ? children(panel) : null}
         </SheetContent>
@@ -91,7 +94,7 @@ export function PickerShell({
   }
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger render={trigger}>{face}</PopoverTrigger>
+      <PopoverTrigger render={trigger}>{ownTrigger ? undefined : face}</PopoverTrigger>
       <PopoverContent
         aria-label={label}
         align="start"

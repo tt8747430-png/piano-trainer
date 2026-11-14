@@ -46,8 +46,11 @@ export function IntervalHero({
   return (
     <section aria-labelledby="interval-chosen" className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-1">
-          <h2 id="interval-chosen" className="font-serif text-3xl font-semibold text-balance">
+        <div className="flex items-center gap-0.5">
+          <h2
+            id="interval-chosen"
+            className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
+          >
             {title}
           </h2>
           <InfoTip name={title}>
@@ -64,12 +67,13 @@ export function IntervalHero({
             </div>
           </InfoTip>
         </div>
-        <p className="text-muted-foreground">
+        <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
           {t('intervals.semitones', { count: INTERVALS[name].semitones })} ·{' '}
           {t('intervals.upTo', { low: printedNote(root), high: printedNote(upper) })}
         </p>
       </div>
-      <div className="flex flex-col gap-3 card p-4">
+      {/* Its notes on the staff, what it sounds like and Hear it: the Scales page's music card. */}
+      <div className="flex flex-col gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
         <section
           aria-label={t('intervals.written')}
           className="flex w-full min-w-40 justify-center"
@@ -86,9 +90,9 @@ export function IntervalHero({
             ) : null}
           </div>
           <Button
-            variant="soft"
+            variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="size-11 shrink-0 rounded-full bg-muted hover:bg-muted/70"
             aria-label={t('intervals.play', { name: title })}
             aria-pressed={playing}
             onClick={onPlay}

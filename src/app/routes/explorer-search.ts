@@ -210,7 +210,7 @@ export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = ['rhythm', 
 // Intervals: the root as the learner wrote it, and how a row plays (both notes at once unless asked).
 export const INTERVALS_DEFAULTS: IntervalView = {
   root: noteParam(note('C')),
-  way: 'together',
+  way: 'up',
   iv: 'P5',
 }
 const isIntervalWay = (raw: unknown): raw is IntervalWay => INTERVAL_WAYS.some((way) => way === raw)

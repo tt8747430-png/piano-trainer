@@ -72,6 +72,10 @@ import {
   isTouch,
   type ChordFinderSettings,
   type ProgressionsSettings,
+  type IntervalSettings,
+  DEFAULT_INTERVALS,
+  isIntervalOrder,
+  isIntervalSpeed,
   type KeyboardSettings,
   type KeysHeight,
   type MetronomeSettings,
@@ -94,7 +98,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 45
+export const SETTINGS_VERSION = 46
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -136,6 +140,7 @@ export function createSettingsStore({
         practiceRecent: [],
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
+        intervals: DEFAULT_INTERVALS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
         chords: DEFAULT_CHORDS,
         bars: DEFAULT_BARS,
@@ -273,6 +278,15 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
           .filter((keys) => keys.length > 0)
           .slice(-REMEMBERED_CHORDS)
       : [],
+  }
+}
+
+/** Intervals' choices as saved where each is still one of its values, the default otherwise. */
+function intervalSettings(value: unknown): IntervalSettings {
+  const saved = savedObject<IntervalSettings>(value)
+  return {
+    order: isIntervalOrder(saved.order) ? saved.order : DEFAULT_INTERVALS.order,
+    speed: isIntervalSpeed(saved.speed) ? saved.speed : DEFAULT_INTERVALS.speed,
   }
 }
 
@@ -471,6 +485,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
       : [],
     lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
+    intervals: intervalSettings(saved.intervals),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
     chords: chordsSettings(saved.chords),
     bars: barsSettings(saved.bars),

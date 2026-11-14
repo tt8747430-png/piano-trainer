@@ -365,6 +365,8 @@ export interface SettingsState {
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
+  /** How Intervals plays them all, and how fast (canvas 176). */
+  intervals: IntervalSettings
   /** How the Chord player writes its chords and voices its piano (R29 CP6). */
   chordPlayer: ChordPlayerSettings
   chords: ChordsSettings
@@ -473,6 +475,24 @@ export interface ProgressionsSettings {
   readonly voicing: ProgressionVoicing
   readonly inversion: Inversion
 }
+
+/** How Play all goes through the intervals: in the page's order, or shuffled each time. */
+export const INTERVAL_ORDERS = ['in-order', 'shuffled'] as const
+export type IntervalOrder = (typeof INTERVAL_ORDERS)[number]
+export const isIntervalOrder = isOneOf(INTERVAL_ORDERS)
+
+/** How fast an interval's two notes follow each other, and Play all goes from one to the next. */
+export const INTERVAL_SPEEDS = ['slow', 'medium', 'fast'] as const
+export type IntervalSpeed = (typeof INTERVAL_SPEEDS)[number]
+export const isIntervalSpeed = isOneOf(INTERVAL_SPEEDS)
+
+/** Intervals' own settings (canvas 176): Play all's order and the speed every interval plays at. */
+export interface IntervalSettings {
+  readonly order: IntervalOrder
+  readonly speed: IntervalSpeed
+}
+
+export const DEFAULT_INTERVALS: IntervalSettings = { order: 'in-order', speed: 'medium' }
 
 export const DEFAULT_PROGRESSIONS: ProgressionsSettings = {
   names: 'numerals',

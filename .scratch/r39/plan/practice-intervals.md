@@ -57,3 +57,17 @@ song list (`interval-songs.ts`).
   Changed once in the kit, so Scales, Intervals, Progression, Exercise, Metronome, Tuner and the libraries' Sort and
   filter all follow.
 - **Hear it** buttons 44; End the run 12 from the edge.
+
+## Ported (loop, 2026-11-14), canvas 176
+
+- `pages/intervals`: glass Back, the piano's tools and the gear (`SettingsGear page="intervals"`); the Tools menu left
+  the bar, as on Scales.
+- `widgets/interval-explorer`: the keys at the top (`PinnedKeyboard place="top"`); the name 36px serif bold with its
+  ⓘ; one music card (one treble staff, no time signature, open whole notes, `intervalMusic`), Sounds like and Hear it
+  on the muted fill; Simple · Compound over the tiles, the chosen tile filled in ink; on a laptop the tiles in a
+  26.25rem column beside the interval. One floating bar: From (a `FloatingPiece` that opens the pitch picker, through
+  `PickerShell`'s new `trigger`), Play P5 with Play as in its ⌄ (Ascending is the default way now), Play all.
+  `WayPicture` and the From · Play as fields are gone.
+- Interval settings at `/settings/intervals` (`IntervalsSettingsPage`): Play all In order · Shuffled, Speed Slow ·
+  Medium · Fast (`settings.intervals`, version 46); `oneInterval` and `everyInterval` play at the speed's pace.
+- `FloatingPlaySplit` takes `menuLabel`: its ⌄ is named for its menu on Chords, Scales and Intervals.

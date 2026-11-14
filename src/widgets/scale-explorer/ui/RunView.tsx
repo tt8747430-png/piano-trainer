@@ -215,6 +215,7 @@ export function RunView({
               label={t('practice:scales.playScale')}
               playing={playback.playing === 'up-down'}
               onPlay={play}
+              menuLabel={t('practice:scales.playHow')}
               menu={(trigger) => (
                 <ActionMenu
                   label={t('practice:scales.playHow')}

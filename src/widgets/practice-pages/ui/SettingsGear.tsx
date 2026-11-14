@@ -6,10 +6,11 @@ import { RoundLink } from '@/shared/ui'
 /**
  * Each Practice page with a gear, and the Settings page it opens (R32): only a page whose Settings hold
  * several things of its own. A page with one setting keeps it in place, and the piano's are the
- * keyboard strip's ⚙, so Chords, Intervals, Exercises and the Quiz have no gear.
+ * keyboard strip's ⚙, so Chords, Exercises and the Quiz have no gear.
  */
 const SETTINGS_OF = {
   scales: '/settings/scales',
+  intervals: '/settings/intervals',
   progressions: '/settings/progressions',
   'chord-finder': '/settings/chord-finder',
 } as const
@@ -17,6 +18,7 @@ export type GearPage = keyof typeof SETTINGS_OF
 
 const PAGE_NAME = {
   scales: 'scales',
+  intervals: 'intervals',
   progressions: 'progressions',
   'chord-finder': 'chordFinder',
 } as const satisfies Record<GearPage, string>

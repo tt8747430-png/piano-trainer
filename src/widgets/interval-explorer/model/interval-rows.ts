@@ -6,6 +6,7 @@ import {
   type ReferenceInterval,
   type SpelledNote,
 } from '@/shared/lib/music'
+import type { IntervalSpeed } from '@/entities/settings'
 import { intervalSounds, type IntervalWay, type NoteSound } from '@/shared/lib/schedule'
 
 /** An interval the page lists: the reference's, and the diminished 5th beside the augmented 4th. */
@@ -26,26 +27,51 @@ export const INTERVAL_ROWS: Readonly<Record<IntervalGroup, readonly RowInterval[
 /** The time from one interval's start to the next as Play all plays them. */
 export const EVERY_INTERVAL_GAP = 2
 
-/**
- * Every interval over the root in turn, as the list shows them, each the way chosen: what Play all
- * plays. An interval no letter writes over the root is left out, as its row is.
- */
-export function everyInterval(root: SpelledNote, way: IntervalWay): NoteSound[] {
-  return INTERVAL_GROUP_IDS.flatMap((group) => INTERVAL_ROWS[group])
-    .filter((name) => writesInterval(root, name))
-    .flatMap((name, i) => {
-      const { low, high } = intervalExample(root, name)
-      return intervalSounds(low, high, way).map((sound) => ({
-        ...sound,
-        at: sound.at + i * EVERY_INTERVAL_GAP,
-      }))
-    })
-}
-
 /** Every interval the page shows, in its order. */
 export const ROW_INTERVALS: readonly RowInterval[] = INTERVAL_GROUP_IDS.flatMap(
   (group) => INTERVAL_ROWS[group],
 )
+
+/** How long each speed takes over an interval, as a share of Medium's (Interval settings, canvas 176). */
+export const INTERVAL_PACE: Readonly<Record<IntervalSpeed, number>> = {
+  slow: 1.5,
+  medium: 1,
+  fast: 0.6,
+}
+
+/** One interval over the root, the way chosen, at the speed chosen. */
+export function oneInterval(
+  root: SpelledNote,
+  name: RowInterval,
+  way: IntervalWay,
+  speed: IntervalSpeed,
+): NoteSound[] {
+  const { low, high } = intervalExample(root, name)
+  const pace = INTERVAL_PACE[speed]
+  return intervalSounds(low, high, way).map((sound) => ({
+    ...sound,
+    at: sound.at * pace,
+    duration: sound.duration * pace,
+  }))
+}
+
+/**
+ * The intervals named, over the root, in turn, each the way chosen and at the speed chosen: what
+ * Play all plays, in the page's order or shuffled. One no letter writes over the root is left out.
+ */
+export function everyInterval(
+  root: SpelledNote,
+  way: IntervalWay,
+  speed: IntervalSpeed,
+  names: readonly RowInterval[] = ROW_INTERVALS,
+): NoteSound[] {
+  const gap = EVERY_INTERVAL_GAP * INTERVAL_PACE[speed]
+  return names
+    .filter((name) => writesInterval(root, name))
+    .flatMap((name, i) =>
+      oneInterval(root, name, way, speed).map((sound) => ({ ...sound, at: sound.at + i * gap })),
+    )
+}
 
 export const isRowInterval = (raw: unknown): raw is RowInterval =>
   ROW_INTERVALS.some((name) => name === raw)

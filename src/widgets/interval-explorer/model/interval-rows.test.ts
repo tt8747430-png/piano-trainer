@@ -15,7 +15,7 @@ describe('the Intervals page’s rows', () => {
   })
 
   it('plays every interval in turn for Play all, each the way chosen', () => {
-    const sounds = everyInterval(note('C'), 'together')
+    const sounds = everyInterval(note('C'), 'together', 'medium')
     const rows = INTERVAL_ROWS.simple.length + INTERVAL_ROWS.compound.length
     expect(sounds).toHaveLength(rows * 2)
     expect(sounds.slice(2, 4).map((sound) => [sound.midi, sound.at])).toEqual([

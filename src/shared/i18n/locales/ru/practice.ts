@@ -314,6 +314,9 @@ export const practice: LocaleResources['practice'] = {
     },
 
     playAll: 'Сыграть все',
+    all: 'Все',
+    order: { label: 'Сыграть все', 'in-order': 'По порядку', shuffled: 'Вперемешку' },
+    speed: { label: 'Темп', slow: 'Медленно', medium: 'Средне', fast: 'Быстро' },
     semitones_one: '{{count}} полутон',
     semitones_few: '{{count}} полутона',
     semitones_many: '{{count}} полутонов',

@@ -325,6 +325,11 @@ export const practice = {
     },
 
     playAll: 'Play all',
+    // Play all's caption under its picture in the floating bar.
+    all: 'Play all',
+    // Interval settings (canvas 176): how Play all goes through them, and how fast every interval plays.
+    order: { label: 'Play all', 'in-order': 'In order', shuffled: 'Shuffled' },
+    speed: { label: 'Speed', slow: 'Slow', medium: 'Medium', fast: 'Fast' },
     semitones_one: '{{count}} semitone',
     semitones_other: '{{count}} semitones',
     // The songs an interval opens, rising and falling.

@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { pitchClassOf, printedNote, type PitchClass } from '@/shared/lib/music'
 import { OctaveGrid } from './OctaveGrid'
 import { usualName } from './usual-name'
@@ -13,17 +14,27 @@ export function PitchPicker({
   value,
   onChange,
   bare,
+  trigger,
   className,
 }: {
   label: string
   value: PitchClass
   onChange: (pc: PitchClass) => void
   bare?: boolean
+  /** A trigger with its own face: the floating bar's From (Intervals, canvas 176). */
+  trigger?: ReactElement
   className?: string
 }) {
   const name = printedNote(usualName(value))
   return (
-    <PickerShell label={label} value={name} spoken={name} bare={bare} className={className}>
+    <PickerShell
+      label={label}
+      value={name}
+      spoken={name}
+      bare={bare}
+      trigger={trigger}
+      className={className}
+    >
       {({ close, start }) => (
         <OctaveGrid
           label={label}

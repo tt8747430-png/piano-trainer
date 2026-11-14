@@ -249,6 +249,7 @@ export function ChordExplorer({
             )}
             playing={playback.playing === playAs}
             onPlay={() => sound(playAs)}
+            menuLabel={t('practice:chords.playAs.label')}
             menu={(trigger) => (
               <ActionMenu
                 label={t('practice:chords.playAs.label')}
