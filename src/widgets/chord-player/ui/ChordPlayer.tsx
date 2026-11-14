@@ -38,6 +38,7 @@ import {
   removeSection,
   resizeChord,
   sectionBars,
+  sectionChords,
   setChord,
   withSection,
   addSection,
@@ -114,7 +115,7 @@ export interface ChordPlayerRoutes {
 /** Every chord of the sheet as a numeral in its key, or null where one is not (the Player's line). */
 function sheetNumerals(sheet: ChordSheet): Numeral[] | null {
   const numerals = sheet.sections.flatMap((section) =>
-    section.chords.map(({ chord }) => numeralOf(chord, sheet.key)),
+    sectionChords(section).map(({ chord }) => numeralOf(chord, sheet.key)),
   )
   return numerals.length > 0 && numerals.every((numeral) => numeral !== null)
     ? (numerals as Numeral[])
@@ -167,13 +168,16 @@ export function ChordPlayer({
 
   const inSection = (section: number, change: (each: Section) => Section) =>
     hand.editShown((sheet) => withSection(sheet, section, change))
-  const chordAt = (place: BoxPlace) => shown.sections[place.section]?.chords[place.index]
+  const chordAt = (place: BoxPlace) => {
+    const section = shown.sections[place.section]
+    return section ? sectionChords(section)[place.index] : undefined
+  }
   const acts: TileActs & { add(section: number): void } = {
     open: (place, typed) => setDialog(typed === undefined ? { place } : { place, typed }),
     remove(place) {
       const gone = chordAt(place)
       if (!gone) return
-      inSection(place.section, (section) => removeChord(section, place.index, meter))
+      inSection(place.section, (section) => removeChord(section, place.index))
       setDialog(null)
       say(t('chordPlayer.deleted', { chord: printedChord(gone.chord) }), {
         label: t('chordPlayer.undo'),
@@ -183,12 +187,13 @@ export function ChordPlayer({
     resize: (place, beats) =>
       inSection(place.section, (section) => resizeChord(section, place.index, beats)),
     add(section) {
-      const chords = shown.sections[section]?.chords ?? []
+      const held = shown.sections[section]
+      const chords = held ? sectionChords(held) : []
       const last = chords.at(-1)?.chord ?? {
         root: shown.key.tonic,
         quality: shown.key.minor ? 'min' : 'maj',
       }
-      inSection(section, (each) => insertChord(each, each.chords.length, last, meter))
+      inSection(section, (each) => insertChord(each, sectionChords(each).length, last, meter))
       setDialog({ place: { section, index: chords.length } })
     },
   }
@@ -197,12 +202,16 @@ export function ChordPlayer({
     hand.edit((sheet) => ({
       ...sheet,
       sections: sheet.sections.map((section) => {
-        const bars = barCount(section, sheet.meter) || 4
+        const bars = barCount(section) || 4
         return {
           ...section,
-          chords: randomProgression(sheet.key, bars, Math.random).map((numeral) => ({
-            chord: numeralChord(numeral, sheet.key, 'triads'),
-            beats: beatsPerBar(sheet.meter),
+          bars: randomProgression(sheet.key, bars, Math.random).map((numeral) => ({
+            chords: [
+              {
+                chord: numeralChord(numeral, sheet.key, 'triads'),
+                beats: beatsPerBar(sheet.meter),
+              },
+            ],
           })),
         }
       }),
@@ -216,7 +225,7 @@ export function ChordPlayer({
   const loopSection = transport.lit?.section ?? dialog?.place.section ?? 0
   const loopName = t(`chordPlayer.sections.${shown.sections[loopSection]?.kind ?? 'verse'}`)
   const numerals = sheetNumerals(shown)
-  const hasChords = shown.sections.some((section) => section.chords.length > 0)
+  const hasChords = shown.sections.some((section) => section.bars.length > 0)
   const toggle = () => (transport.playing ? transport.stop() : transport.play())
 
   useShortcuts(t('chordPlayer.shortcuts.group'), [
@@ -247,14 +256,14 @@ export function ChordPlayer({
   }
   const held = readDragId(inHand)
   const heldChord =
-    held?.kind === 'chord' ? shown.sections[held.section]?.chords[held.index] : undefined
+    held?.kind === 'chord' ? chordAt({ section: held.section, index: held.index }) : undefined
   const heldSection = held?.kind === 'section' ? shown.sections[held.section] : undefined
   const askDelete = async (index: number) => {
     const section = shown.sections[index]
     if (!section) return
     const named = t(`chordPlayer.sections.${section.kind}`)
     const yes =
-      section.chords.length === 0 ||
+      section.bars.length === 0 ||
       (await confirm({
         title: t('chordPlayer.deleteSection.title', { name: named }),
         body: t('chordPlayer.deleteSection.body'),
@@ -265,7 +274,7 @@ export function ChordPlayer({
   }
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
   const dialogNext = dialog
-    ? (shown.sections[dialog.place.section]?.chords[dialog.place.index + 1]?.chord ?? null)
+    ? (chordAt({ section: dialog.place.section, index: dialog.place.index + 1 })?.chord ?? null)
     : null
 
   return (

@@ -1,5 +1,4 @@
 import {
-  barTicks,
   beatsPerBar,
   beatsToTicks,
   C_MAJOR,
@@ -13,9 +12,11 @@ import { transposeChord } from './arrange'
 import type { Chart, ChartBar, ChartSection } from './types'
 
 /**
- * A chord sheet (R29 CP2): a lead sheet's sections, each played its repeats, made of chords that
- * last whole beats, laid end to end across the bar lines. What the Chord player shows, edits and
- * plays in a style.
+ * A chord sheet (R29 CP2): a lead sheet's sections, each played its repeats, made of bars, each
+ * holding its chords, each lasting whole beats. A bar is as long as its chords: an edit to one chord
+ * never retimes another, and a bar whose beats are not the meter's is kept and marked (owner,
+ * 2026-11-13: "accept the edit with this exclamation sign … and not change all the other chords
+ * timing"). What the Chord player shows, edits and plays in a style.
  */
 export const SECTION_KINDS = [
   'intro',
@@ -51,12 +52,24 @@ export interface SheetChord {
   readonly chord: Chord
   readonly beats: number
 }
+/** A bar as written: its chords in order. */
+export interface WrittenBar {
+  readonly chords: readonly SheetChord[]
+}
 export interface SheetSection {
   readonly kind: SectionKind
   readonly repeats: number
   readonly variation: Variation
-  readonly chords: readonly SheetChord[]
+  readonly bars: readonly WrittenBar[]
 }
+
+/** A section's chords in order, across its bars: the index a screen names a chord by. */
+export const sectionChords = (section: SheetSection): SheetChord[] =>
+  section.bars.flatMap((bar) => bar.chords)
+
+/** A bar's length in beats: its chords', whatever the meter says. */
+export const writtenBeats = (bar: WrittenBar): number =>
+  bar.chords.reduce((sum, { beats }) => sum + beats, 0)
 export interface ChordSheet {
   readonly key: Key
   readonly meter: SheetMeter
@@ -71,7 +84,7 @@ export const emptySection = (kind: SectionKind = 'verse'): SheetSection => ({
   kind,
   repeats: 1,
   variation: 1,
-  chords: [],
+  bars: [],
 })
 
 /** A new sheet: one empty Verse in C major, in 4/4. */
@@ -87,107 +100,92 @@ export function lineSheet(chords: readonly Chord[], key: Key, meter: SheetMeter)
   return {
     key,
     meter,
-    sections: [{ ...emptySection(), chords: chords.map((chord) => ({ chord, beats })) }],
+    sections: [
+      { ...emptySection(), bars: chords.map((chord) => ({ chords: [{ chord, beats }] })) },
+    ],
   }
 }
 
-/** Where each chord starts, in beats from its section's start. */
-const starts = (chords: readonly SheetChord[]): number[] => {
-  let at = 0
-  return chords.map(({ beats }) => {
-    const start = at
-    at += beats
-    return start
-  })
+/** Where a section's chord `index` is: its bar, and its place in that bar. */
+function placeOf(section: SheetSection, index: number): { bar: number; at: number } | null {
+  let left = index
+  for (let bar = 0; bar < section.bars.length; bar++) {
+    const count = section.bars[bar]?.chords.length ?? 0
+    if (left < count) return { bar, at: left }
+    left -= count
+  }
+  return null
 }
-const sectionBeats = (section: SheetSection) =>
-  section.chords.reduce((sum, { beats }) => sum + beats, 0)
+/** A section with its bars changed, any bar left empty dropped. */
+const withBars = (section: SheetSection, bars: readonly WrittenBar[]): SheetSection => ({
+  ...section,
+  bars: bars.filter((bar) => bar.chords.length > 0),
+})
+const changedBar = (
+  section: SheetSection,
+  bar: number,
+  change: (chords: SheetChord[]) => SheetChord[],
+): SheetSection =>
+  withBars(
+    section,
+    section.bars.map((each, i) => (i === bar ? { chords: change([...each.chords]) } : each)),
+  )
 
 /** A piece of a chord in a bar: which chord, from which beat of the bar, for how many. */
 export interface BarPiece {
   readonly chord: number
   readonly from: number
   readonly beats: number
-  /** Whether the chord began in an earlier bar and is held over the bar line into this one. */
-  readonly held: boolean
 }
 export interface SheetBar {
   readonly pieces: readonly BarPiece[]
-  /** Beats of the bar a chord fills: all of them but in a section's last bar. */
-  readonly filled: number
+  /** Its length in beats, its chords': the meter's, unless an edit left it longer or shorter. */
+  readonly beats: number
+  /** Whether its beats are not the meter's: the bar is kept as written and marked (the !). */
+  readonly wrong: boolean
 }
 
-/** A section's bars: its chords laid end to end across the bar lines, the last bar maybe part filled. */
+/** A section's bars as shown: each chord by its index in the section, from its beat in the bar. */
 export function sectionBars(section: SheetSection, meter: Meter): SheetBar[] {
   const perBar = beatsPerBar(meter)
-  const total = sectionBeats(section)
-  const count = Math.ceil(total / perBar)
-  const at = starts(section.chords)
-  return Array.from({ length: count }, (_, bar) => {
-    const barStart = bar * perBar
-    const barEnd = barStart + perBar
-    const pieces = section.chords.flatMap(({ beats }, chord): BarPiece[] => {
-      const start = at[chord] ?? 0
-      const from = Math.max(start, barStart)
-      const to = Math.min(start + beats, barEnd)
-      return to > from
-        ? [{ chord, from: from - barStart, beats: to - from, held: start < barStart }]
-        : []
+  let index = 0
+  return section.bars.map((bar) => {
+    let from = 0
+    const pieces = bar.chords.map(({ beats }) => {
+      const piece = { chord: index++, from, beats }
+      from += beats
+      return piece
     })
-    return { pieces, filled: Math.min(perBar, total - barStart) }
+    return { pieces, beats: from, wrong: from !== perBar }
   })
 }
 
 /** A section's bar count. */
-export const barCount = (section: SheetSection, meter: Meter): number =>
-  Math.ceil(sectionBeats(section) / beatsPerBar(meter))
+export const barCount = (section: SheetSection): number => section.bars.length
 
-const withChords = (section: SheetSection, chords: readonly SheetChord[]): SheetSection => ({
-  ...section,
-  chords,
-})
-
-/**
- * A box's length changed: it lasts 1 to 8 beats; the chord after it gives up or takes the beats, so
- * no bar is left short, itself never under a beat nor over 8. The last box grows or shrinks its section.
- */
+/** A chord's length changed, 1 to 8 beats; nothing else moves, so its bar may no longer add up. */
 export function resizeChord(section: SheetSection, index: number, beats: number): SheetSection {
-  const chord = section.chords[index]
-  if (!chord) return section
-  const next = section.chords[index + 1]
-  let wanted = clampBeats(beats)
-  if (next) {
-    // The next chord stays between 1 and 8 beats.
-    const total = chord.beats + next.beats
-    wanted = clamp(wanted, Math.max(CHORD_BEATS.min, total - CHORD_BEATS.max), total - 1)
-    return withChords(
-      section,
-      section.chords.map((each, i) =>
-        i === index
-          ? { ...each, beats: wanted }
-          : i === index + 1
-            ? { ...each, beats: total - wanted }
-            : each,
-      ),
-    )
-  }
-  return withChords(
-    section,
-    section.chords.map((each, i) => (i === index ? { ...each, beats: wanted } : each)),
+  const place = placeOf(section, index)
+  if (!place) return section
+  return changedBar(section, place.bar, (chords) =>
+    chords.map((each, i) => (i === place.at ? { ...each, beats: clampBeats(beats) } : each)),
   )
 }
 
-/** A chord put in place of a box's. */
-export const setChord = (section: SheetSection, index: number, chord: Chord): SheetSection =>
-  withChords(
-    section,
-    section.chords.map((each, i) => (i === index ? { ...each, chord } : each)),
+/** A chord put in place of another, keeping its length. */
+export function setChord(section: SheetSection, index: number, chord: Chord): SheetSection {
+  const place = placeOf(section, index)
+  if (!place) return section
+  return changedBar(section, place.bar, (chords) =>
+    chords.map((each, i) => (i === place.at ? { ...each, chord } : each)),
   )
+}
 
 /**
- * A chord put at `at`: at the end it takes what is left of the last bar (a whole bar where the last
- * is full); between two chords, half the beats of the one before it, which keeps the rest; `beats`
- * where given.
+ * A chord added after chord `at - 1` (`at` past the last: at the section's end). At the end it fills
+ * what the last bar lacks, else it starts a bar of its own; between chords it joins the bar of the
+ * chord before it, `beats` long (a bar of the meter where not given), and that bar is marked if it no
+ * longer adds up. Nothing else moves.
  */
 export function insertChord(
   section: SheetSection,
@@ -196,66 +194,107 @@ export function insertChord(
   meter: Meter,
   beats?: number,
 ): SheetSection {
-  const chords = [...section.chords]
-  const index = clamp(at, 0, chords.length)
-  if (beats !== undefined) {
-    chords.splice(index, 0, { chord, beats: clampBeats(beats) })
-    return withChords(section, chords)
+  const perBar = beatsPerBar(meter)
+  const total = sectionChords(section).length
+  const last = section.bars[section.bars.length - 1]
+  if (at >= total || !last) {
+    const left = last ? perBar - writtenBeats(last) : 0
+    if (beats === undefined && last && left > 0)
+      return changedBar(section, section.bars.length - 1, (chords) => [
+        ...chords,
+        { chord, beats: left },
+      ])
+    return withBars(section, [
+      ...section.bars,
+      { chords: [{ chord, beats: clampBeats(beats ?? perBar) }] },
+    ])
   }
-  const before = chords[index - 1]
-  if (index === chords.length || !before) {
-    const perBar = beatsPerBar(meter)
-    const left = perBar - (sectionBeats(section) % perBar)
-    const length = index === chords.length ? clampBeats(left) : clampBeats(perBar)
-    chords.splice(index, 0, { chord, beats: length })
-    return withChords(section, chords)
-  }
-  if (before.beats < 2) {
-    chords.splice(index, 0, { chord, beats: 1 })
-    return withChords(section, chords)
-  }
-  const half = Math.floor(before.beats / 2)
-  chords[index - 1] = { ...before, beats: before.beats - half }
-  chords.splice(index, 0, { chord, beats: half })
-  return withChords(section, chords)
+  const before = placeOf(section, Math.max(0, at - 1))
+  if (!before) return section
+  if (at === 0)
+    return withBars(section, [
+      { chords: [{ chord, beats: clampBeats(beats ?? perBar) }] },
+      ...section.bars,
+    ])
+  return changedBar(section, before.bar, (chords) => {
+    chords.splice(before.at + 1, 0, { chord, beats: clampBeats(beats ?? perBar) })
+    return chords
+  })
 }
 
 /**
- * A box deleted. Its beats go to the chord before it where that one ends inside its bar, else to
- * the chord after it where it ends inside a bar; a chord that filled whole bars takes its bars with it.
+ * A chord's copy after it: a chord alone in its bar is copied as a bar of its own after it; one
+ * sharing its bar is copied into that bar, which is then marked. Nothing else moves.
  */
-export function removeChord(
-  section: SheetSection,
-  index: number,
-  meter: Meter = '4/4',
-): SheetSection {
-  const removed = section.chords[index]
-  if (!removed) return section
-  const perBar = beatsPerBar(meter)
-  const start = starts(section.chords)[index] ?? 0
-  const end = start + removed.beats
-  const chords = [...section.chords]
-  chords.splice(index, 1)
-  const give = (at: number) => {
-    const taker = chords[at]
-    if (!taker) return
-    chords[at] = { ...taker, beats: Math.min(CHORD_BEATS.max, taker.beats + removed.beats) }
+export function duplicateChord(section: SheetSection, index: number): SheetSection {
+  const place = placeOf(section, index)
+  const bar = place ? section.bars[place.bar] : undefined
+  const chord = bar?.chords[place?.at ?? 0]
+  if (!place || !bar || !chord) return section
+  if (bar.chords.length === 1) {
+    const bars = [...section.bars]
+    bars.splice(place.bar + 1, 0, { chords: [chord] })
+    return withBars(section, bars)
   }
-  if (start % perBar !== 0 && index > 0) give(index - 1)
-  else if (end % perBar !== 0 && index < chords.length) give(index)
-  return withChords(section, chords)
+  return changedBar(section, place.bar, (chords) => {
+    chords.splice(place.at + 1, 0, chord)
+    return chords
+  })
 }
 
-/** A box moved to another place: the chords move, the lengths stay where they are, so every bar keeps its beats. */
+/** A chord deleted: its bar goes with it when it was alone there; nothing else moves. */
+export function removeChord(section: SheetSection, index: number): SheetSection {
+  const place = placeOf(section, index)
+  if (!place) return section
+  return changedBar(section, place.bar, (chords) => chords.filter((_, i) => i !== place.at))
+}
+
+/** A chord taken out of a section, and the section without it. */
+function takeChord(
+  section: SheetSection,
+  index: number,
+): { chord: SheetChord; alone: boolean; rest: SheetSection } | null {
+  const place = placeOf(section, index)
+  const bar = place ? section.bars[place.bar] : undefined
+  const chord = bar?.chords[place?.at ?? 0]
+  if (!place || !bar || !chord) return null
+  return { chord, alone: bar.chords.length === 1, rest: removeChord(section, index) }
+}
+
+/**
+ * A chord put down before chord `to` (past the last: at the end), keeping its own length: a chord
+ * that was alone in its bar lands as a bar of its own, before the bar of chord `to`; one that shared
+ * a bar lands in that bar, which is marked if it no longer adds up.
+ */
+function putChord(
+  section: SheetSection,
+  to: number,
+  { chord, alone }: { chord: SheetChord; alone: boolean },
+): SheetSection {
+  const place = placeOf(section, to)
+  if (!place) {
+    const last = section.bars.length - 1
+    return alone || last < 0
+      ? withBars(section, [...section.bars, { chords: [chord] }])
+      : changedBar(section, last, (chords) => [...chords, chord])
+  }
+  if (alone) {
+    const bars = [...section.bars]
+    bars.splice(place.bar, 0, { chords: [chord] })
+    return withBars(section, bars)
+  }
+  return changedBar(section, place.bar, (chords) => {
+    chords.splice(place.at, 0, chord)
+    return chords
+  })
+}
+
+/** A chord moved to another place in its section, with its own length; nothing else is retimed. */
 export function moveChord(section: SheetSection, from: number, to: number): SheetSection {
-  const symbols = section.chords.map(({ chord }) => chord)
-  const [moved] = symbols.splice(from, 1)
-  if (!moved) return section
-  symbols.splice(clamp(to, 0, symbols.length), 0, moved)
-  return withChords(
-    section,
-    section.chords.map((each, i) => ({ ...each, chord: symbols[i] ?? each.chord })),
-  )
+  const taken = takeChord(section, from)
+  if (!taken || from === to) return section
+  // The chord lands at index `to` of the result: before what then stands there.
+  return putChord(taken.rest, to, taken)
 }
 
 /** The sheet with section `index` in place of its own. */
@@ -304,15 +343,25 @@ export interface ChordPlace {
   readonly index: number
 }
 
-/** A box moved to another section: taken out of its own (its beats given as a delete gives them), added to the other's end or at `index`. */
+/** A chord dragged into another section, an empty one too, before chord `to.index` or at its end: it keeps its own length, and neither section is retimed. */
 export function moveChordAcross(sheet: ChordSheet, from: ChordPlace, to: ChordPlace): ChordSheet {
   if (from.section === to.section)
     return withSection(sheet, from.section, (s) => moveChord(s, from.index, to.index))
-  const chord = sheet.sections[from.section]?.chords[from.index]
-  if (!chord) return sheet
-  const taken = withSection(sheet, from.section, (s) => removeChord(s, from.index, sheet.meter))
-  return withSection(taken, to.section, (s) => insertChord(s, to.index, chord.chord, sheet.meter))
+  const source = sheet.sections[from.section]
+  const taken = source ? takeChord(source, from.index) : null
+  if (!taken) return sheet
+  const out = withSection(sheet, from.section, () => taken.rest)
+  return withSection(out, to.section, (s) => putChord(s, to.index, taken))
 }
+
+/** Every chord of a section changed alike, the bars kept. */
+export const eachChord = (
+  section: SheetSection,
+  change: (chord: SheetChord) => SheetChord,
+): SheetSection => ({
+  ...section,
+  bars: section.bars.map((bar) => ({ chords: bar.chords.map(change) })),
+})
 
 /** The time signature changed: a chord of whole bars stays as many whole bars; another keeps its beats. */
 export function relayMeter(sheet: ChordSheet, meter: SheetMeter): ChordSheet {
@@ -322,13 +371,10 @@ export function relayMeter(sheet: ChordSheet, meter: SheetMeter): ChordSheet {
     ...sheet,
     meter,
     sections: sheet.sections.map((section) =>
-      withChords(
-        section,
-        section.chords.map((each) => ({
-          ...each,
-          beats: clampBeats(each.beats % from === 0 ? (each.beats / from) * to : each.beats),
-        })),
-      ),
+      eachChord(section, (each) => ({
+        ...each,
+        beats: clampBeats(each.beats % from === 0 ? (each.beats / from) * to : each.beats),
+      })),
     ),
   }
 }
@@ -341,25 +387,20 @@ export function transposeSheet(sheet: ChordSheet, semitones: number): ChordSheet
     ...sheet,
     key,
     sections: sheet.sections.map((section) =>
-      withChords(
-        section,
-        section.chords.map((each) => ({
-          ...each,
-          chord: transposeChord(each.chord, sheet.key.tonic, key.tonic),
-        })),
-      ),
+      eachChord(section, (each) => ({
+        ...each,
+        chord: transposeChord(each.chord, sheet.key.tonic, key.tonic),
+      })),
     ),
   }
 }
 
-/** A chord as a bar plays it: from which beat of the bar, for how many, and which box it is. */
+/** A chord as a bar plays it: from which beat of the bar, for how many, and which chord it is. */
 export interface PlayedChord {
   readonly chord: Chord
   readonly index: number
   readonly from: number
   readonly beats: number
-  /** Held over the bar line from the bar before. */
-  readonly held: boolean
 }
 /** A bar as played: its section, the repeat and its bar there, where it starts, its chords. */
 export interface PlayedBar {
@@ -367,6 +408,7 @@ export interface PlayedBar {
   readonly repeat: number
   readonly bar: number
   readonly startTick: Tick
+  /** As long as its chords: a bar left longer or shorter by an edit plays as written. */
   readonly beats: number
   readonly chords: readonly PlayedChord[]
   /** The first bar of a section, the first time round: where a style may strike a crash. */
@@ -375,51 +417,39 @@ export interface PlayedBar {
   readonly fill: boolean
 }
 
-/**
- * The sheet's bars in the order they play: each section its repeats. A part-filled last bar's last
- * chord rings to the bar's end; a section with no chords plays nothing.
- */
+/** The sheet's bars in the order they play: each section its repeats, each bar as long as its chords. */
 export function playOrder(sheet: ChordSheet): PlayedBar[] {
-  const perBar = beatsPerBar(sheet.meter)
-  const length = barTicks(sheet.meter)
   const played: PlayedBar[] = []
+  let tick = 0
   sheet.sections.forEach((section, index) => {
     const bars = sectionBars(section, sheet.meter)
+    const chords = sectionChords(section)
     for (let repeat = 0; repeat < section.repeats; repeat++)
       bars.forEach((bar, at) => {
-        const last = at === bars.length - 1
-        const chords = bar.pieces.flatMap((piece, i): PlayedChord[] => {
-          const chord = section.chords[piece.chord]
-          if (!chord) return []
-          const isLast = last && i === bar.pieces.length - 1
-          return [
-            {
-              chord: chord.chord,
-              index: piece.chord,
-              from: piece.from,
-              beats: isLast ? perBar - piece.from : piece.beats,
-              held: piece.held,
-            },
-          ]
-        })
         played.push({
           section: index,
           repeat,
           bar: at,
-          startTick: played.length * length,
-          beats: perBar,
-          chords,
+          startTick: tick,
+          beats: bar.beats,
+          chords: bar.pieces.flatMap((piece): PlayedChord[] => {
+            const chord = chords[piece.chord]
+            return chord
+              ? [{ chord: chord.chord, index: piece.chord, from: piece.from, beats: piece.beats }]
+              : []
+          }),
           sectionStart: repeat === 0 && at === 0,
-          fill: repeat === section.repeats - 1 && last,
+          fill: repeat === section.repeats - 1 && at === bars.length - 1,
         })
+        tick += beatsToTicks(bar.beats)
       })
   })
   return played
 }
 
-/** Every bar's length in ticks, as `playOrder` lays them. */
+/** The sheet's length in ticks, as `playOrder` lays its bars. */
 export const playedTicks = (sheet: ChordSheet): Tick =>
-  playOrder(sheet).length * barTicks(sheet.meter)
+  playOrder(sheet).reduce((sum, bar) => sum + beatsToTicks(bar.beats), 0)
 
 /** A chart of the bars in play order (`arrange`'s input): each section's each time round a section of it, four bars a line. */
 export function sheetToChart(sheet: ChordSheet): Chart {

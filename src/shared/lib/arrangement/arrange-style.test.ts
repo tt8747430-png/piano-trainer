@@ -11,9 +11,9 @@ const section = (line: string, more: Partial<SheetSection> = {}): SheetSection =
   kind: 'verse',
   repeats: 1,
   variation: 1,
-  chords: line.split(' ').map((word) => {
+  bars: line.split(' ').map((word) => {
     const [symbol = '', beats = '4'] = word.split(':')
-    return { chord: parseChordSymbol(symbol), beats: Number(beats) }
+    return { chords: [{ chord: parseChordSymbol(symbol), beats: Number(beats) }] }
   }),
   ...more,
 })
@@ -106,7 +106,7 @@ describe('a style over a chord sheet', () => {
   it('plays the piano part through its pattern, section by section, and nothing for no chords', () => {
     const band = arrangeStyle(sheetOf(section('C G')), [POP], {})
     expect(band.piano?.notes.length).toBeGreaterThan(0)
-    const none = arrangeStyle(sheetOf({ ...section('C'), chords: [] }), [POP], {})
+    const none = arrangeStyle(sheetOf({ ...section('C'), bars: [] }), [POP], {})
     expect(none.piano).toBeNull()
     expect(none.bass).toEqual([])
     expect(none.totalTicks).toBe(0)

@@ -8,6 +8,7 @@ import {
   SECTION_KINDS,
   SECTION_REPEATS,
   sectionBars,
+  sectionChords,
   type SheetMeter,
   type SheetSection as Section,
   type Variation,
@@ -72,7 +73,7 @@ export function SheetSection({
     transition,
     isDragging,
   } = useSortable({ id: sectionDragId(index) })
-  const ids = section.chords.map((_, at) => chordDragId(index, at))
+  const ids = sectionChords(section).map((_, at) => chordDragId(index, at))
   return (
     <section
       ref={setNodeRef}
@@ -168,7 +169,7 @@ export function SheetSection({
           aria-label={t('chordPlayer.chordsOf', { name })}
           className="grid grid-cols-[repeat(auto-fill,minmax(5.5rem,1fr))] gap-2"
         >
-          {section.chords.map((chord, at) => {
+          {sectionChords(section).map((chord, at) => {
             const place = { section: index, index: at }
             return (
               <li key={ids[at]} className="flex">

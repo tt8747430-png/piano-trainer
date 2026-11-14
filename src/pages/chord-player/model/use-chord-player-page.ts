@@ -97,7 +97,7 @@ export function useChordPlayerPage() {
     },
   }
 
-  const hasChords = hand?.sheet.sections.some((section) => section.chords.length > 0) ?? false
+  const hasChords = hand?.sheet.sections.some((section) => section.bars.length > 0) ?? false
   return {
     hand,
     name,

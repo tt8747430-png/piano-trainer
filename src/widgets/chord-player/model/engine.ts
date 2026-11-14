@@ -374,8 +374,12 @@ export function styleBar(style: Style): Sound[] {
         kind: 'verse',
         repeats: 1,
         variation: 1,
-        chords: [
-          { chord: { root: C_MAJOR.tonic, quality: 'maj' }, beats: beatsPerBar(style.meter) },
+        bars: [
+          {
+            chords: [
+              { chord: { root: C_MAJOR.tonic, quality: 'maj' }, beats: beatsPerBar(style.meter) },
+            ],
+          },
         ],
       },
     ],

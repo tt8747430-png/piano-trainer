@@ -14,9 +14,9 @@ import {
 
 /**
  * A chord sheet as one line of text (R29 CP5), what a Share link carries and a saved sheet keeps:
- * `Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 C`. The key and the time, then each section: its
- * kind, `xN` its repeats and `vN` its variation where not 1, and its chords, `:N` a chord's beats
- * where it does not last a bar.
+ * `Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 | C`. The key and the time, then each section: its
+ * kind, `xN` its repeats and `vN` its variation where not 1, and its bars between `|`, `:N` a
+ * chord's beats where it does not last a bar.
  */
 export function sheetToText(sheet: ChordSheet): string {
   const bar = beatsPerBar(sheet.meter)
@@ -26,10 +26,12 @@ export function sheetToText(sheet: ChordSheet): string {
       ...(section.repeats === 1 ? [] : [`x${section.repeats}`]),
       ...(section.variation === 1 ? [] : [`v${section.variation}`]),
     ].join(' ')
-    const chords = section.chords.map(
-      ({ chord, beats }) => chordSymbol(chord) + (beats === bar ? '' : `:${beats}`),
+    const bars = section.bars.map((each) =>
+      each.chords
+        .map(({ chord, beats }) => chordSymbol(chord) + (beats === bar ? '' : `:${beats}`))
+        .join(' '),
     )
-    return [`${head}:`, ...chords].join(' ')
+    return `${head}: ${bars.join(' | ')}`.trimEnd()
   })
   return [`${keySymbol(sheet.key)} ${sheet.meter}`, ...sections].join('; ')
 }
@@ -41,6 +43,21 @@ const bounded = (text: string | undefined, min: number, max: number, otherwise: 
   return Number.isInteger(value) ? Math.min(max, Math.max(min, value)) : otherwise
 }
 
+/** Chords laid end to end into bars of `perBar` beats, a new bar once one is full. */
+function layIntoBars(chords: readonly SheetChord[], perBar: number): { chords: SheetChord[] }[] {
+  const bars: { chords: SheetChord[] }[] = []
+  let filled = perBar
+  for (const chord of chords) {
+    if (filled >= perBar) {
+      bars.push({ chords: [] })
+      filled = 0
+    }
+    bars[bars.length - 1]?.chords.push(chord)
+    filled += chord.beats
+  }
+  return bars
+}
+
 /** A section's text read: its head's words in any case and order, its chords that read. */
 function readSection(text: string, bar: number): SheetSection | null {
   const colon = text.indexOf(':')
@@ -49,25 +66,32 @@ function readSection(text: string, bar: number): SheetSection | null {
   if (!kind || !isSectionKind(kind)) return null
   const repeats = head.find((word) => /^x\d+$/i.test(word))?.slice(1)
   const variation = head.find((word) => /^v\d+$/i.test(word))?.slice(1)
-  const words =
-    colon < 0
-      ? []
-      : text
-          .slice(colon + 1)
-          .trim()
-          .split(/\s+/)
-          .filter(Boolean)
-  const chords = words.flatMap((word): SheetChord[] => {
-    const [symbol = '', beats] = word.split(':')
-    const chord = readChordSymbol(symbol)
-    return chord ? [{ chord, beats: bounded(beats, CHORD_BEATS.min, CHORD_BEATS.max, bar) }] : []
-  })
+  const bars = (colon < 0 ? '' : text.slice(colon + 1))
+    .split('|')
+    .map((part) => ({
+      chords: part
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .flatMap((word): SheetChord[] => {
+          const [symbol = '', beats] = word.split(':')
+          const chord = readChordSymbol(symbol)
+          return chord
+            ? [{ chord, beats: bounded(beats, CHORD_BEATS.min, CHORD_BEATS.max, bar) }]
+            : []
+        }),
+    }))
+    .filter((each) => each.chords.length > 0)
+  // A sheet saved before bars were written (no `|`): its chords laid into bars of the meter, as they
+  // played; a chord that crossed a bar line stays whole in the bar it starts in, which is then marked.
+  const laid =
+    !text.includes('|') && bars.length === 1 ? layIntoBars(bars[0]?.chords ?? [], bar) : bars
   const v = Number(variation)
   return {
     kind,
     repeats: bounded(repeats, SECTION_REPEATS.min, SECTION_REPEATS.max, 1),
     variation: isVariation(v) ? v : 1,
-    chords,
+    bars: laid,
   }
 }
 

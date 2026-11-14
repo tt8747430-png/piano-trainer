@@ -193,7 +193,7 @@ function chordsOf(bar: PlayedBar): Sounding[] {
     chord: each.chord,
     from: beatsToTicks(each.from),
     to: beatsToTicks(each.from + each.beats),
-    struck: !each.held,
+    struck: true,
   }))
 }
 

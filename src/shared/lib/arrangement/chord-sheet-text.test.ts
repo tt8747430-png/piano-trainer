@@ -10,19 +10,23 @@ describe('a chord sheet as text', () => {
     key: parseKey('Am') ?? C_MAJOR,
     meter: '3/4',
     sections: [
-      { kind: 'intro', repeats: 1, variation: 4, chords: [chord('Am', 3)] },
+      { kind: 'intro', repeats: 1, variation: 4, bars: [{ chords: [chord('Am', 3)] }] },
       {
         kind: 'verse',
         repeats: 2,
         variation: 1,
-        chords: [chord('Am', 2), chord('G/B', 1), chord('C', 3), chord('F#m7b5', 6)],
+        bars: [
+          { chords: [chord('Am', 2), chord('G/B', 1)] },
+          { chords: [chord('C', 3)] },
+          { chords: [chord('F#m7b5', 6)] },
+        ],
       },
-      { kind: 'preChorus', repeats: 1, variation: 2, chords: [] },
+      { kind: 'preChorus', repeats: 1, variation: 2, bars: [] },
     ],
   }
   it('sheetToText and textToSheet round-trip three sections with repeats and lengths', () => {
     const text = sheetToText(sheet)
-    expect(text).toBe('Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 C F#m7♭5:6; preChorus v2:')
+    expect(text).toBe('Am 3/4; intro v4: Am; verse x2: Am:2 G/B:1 | C | F#m7♭5:6; preChorus v2:')
     expect(textToSheet(text)).toEqual(sheet)
   })
   it('reads what it can (Postel): any case, ♭ and ♯, a word it cannot read left out', () => {

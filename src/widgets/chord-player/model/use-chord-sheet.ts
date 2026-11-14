@@ -9,6 +9,7 @@ import {
 } from '@/entities/chord-sheet'
 import { editSheet } from '@/features/manage-chord-sheets'
 import {
+  eachChord,
   emptySheet,
   sheetToText,
   textToSheet,
@@ -129,10 +130,9 @@ export function useChordSheet(id: string | undefined): ChordSheetInHand | null {
       write({
         ...moved,
         key: own.key,
-        sections: moved.sections.map((section) => ({
-          ...section,
-          chords: section.chords.map((each) => ({ ...each, chord: written(each.chord) })),
-        })),
+        sections: moved.sections.map((section) =>
+          eachChord(section, (each) => ({ ...each, chord: written(each.chord) })),
+        ),
       })
     },
     written,
