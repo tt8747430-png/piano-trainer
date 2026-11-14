@@ -106,7 +106,7 @@ export function FloatingHost({
         data-hidden={hidden || undefined}
         className={cn(
           'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
-          'justify-end',
+          'justify-center lg:justify-end',
         )}
       >
         <div
@@ -114,7 +114,7 @@ export function FloatingHost({
           data-slot="floating-actions"
           inert={hidden}
           className={cn(
-            'vt-floating flex w-full justify-end gap-3 aside:w-auto',
+            'vt-floating flex w-full justify-center gap-3 aside:w-auto lg:justify-end',
             !hidden && '[&>*>*]:pointer-events-auto',
             ALIGN,
           )}
@@ -125,7 +125,8 @@ export function FloatingHost({
 }
 
 /**
- * A screen's actions in the thumb's reach, floating at the foot of the screen over the page: its
+ * A screen's actions in the thumb's reach, floating at the foot of the screen over the page (centred
+ * on a phone, as the canvas's New, at the right from a laptop's width): its
  * main one a large round `Fab`, the rest folded into a `SpeedDial` beside it. Every part of a screen
  * that floats an action stands in the host's one column, the first to come highest, so none covers
  * another. The page under it pads its foot clear of them.
@@ -149,7 +150,7 @@ export function FloatingActions({
   return createPortal(
     <div
       className={cn(
-        'flex w-full justify-end gap-3 aside:w-auto',
+        'flex w-full justify-center gap-3 aside:w-auto lg:justify-end',
         ALIGN,
         last && 'order-last',
         className,
