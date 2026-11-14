@@ -22,7 +22,7 @@ import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import { SheetPill, SheetToolsContext, type MenuAction } from '@/shared/ui'
+import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
@@ -45,7 +45,7 @@ import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
 import { PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
-import { SheetLayoutTools, ViewSection } from '@/widgets/score-view-menu'
+import { ViewSection } from '@/widgets/score-view-menu'
 import {
   SettingsExtrasContext,
   type SettingsExtras,
@@ -369,36 +369,27 @@ export function PlayerLayout({
         </div>
         {annotating}
         {shown === 'sheet' ? (
-          // The sheet's one pill at its foot (R34, Songscription's): the layout, and in Page view the
-          // canvas's zoom beside it.
-          <SheetToolsContext value={<SheetLayoutTools />}>
-            <SheetMusic
-              view={sheetView}
-              piano={piano}
-              staffNames={names}
-              title={title}
-              credits={credits}
-              layout={layout}
-              // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
-              performance={player.performance}
-              headings={headings}
-              current={practice.state.beatGroup}
-              loop={player.loop}
-              fingers={player.fingers}
-              names={player.names}
-              positions={player.positions}
-              muted={player.muted}
-              onJump={practice.jumpToBeatGroup}
-              playing={practice.state.playing}
-              onLoopChange={player.setLoop}
-              annotations={annotations}
-            />
-            {scoreView.layout === 'page' ? null : (
-              <SheetPill>
-                <SheetLayoutTools />
-              </SheetPill>
-            )}
-          </SheetToolsContext>
+          <SheetMusic
+            view={sheetView}
+            piano={piano}
+            staffNames={names}
+            title={title}
+            credits={credits}
+            layout={layout}
+            // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
+            performance={player.performance}
+            headings={headings}
+            current={practice.state.beatGroup}
+            loop={player.loop}
+            fingers={player.fingers}
+            names={player.names}
+            positions={player.positions}
+            muted={player.muted}
+            onJump={practice.jumpToBeatGroup}
+            playing={practice.state.playing}
+            onLoopChange={player.setLoop}
+            annotations={annotations}
+          />
         ) : (
           <ChordView
             view={shown}

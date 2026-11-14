@@ -85,6 +85,11 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+
+- **Layout's one home in the Player is its view's settings (loop round 11, the Player board's view sheet):** the
+  board draws Layout as the Sheet section's first row, before Show; the floating pill over the score is gone from the
+  Player. The three layouts stay (Songscription's Endless tall). The editor keeps its gear's View on a phone and the
+  pill beside its docked panel.
 - **The Player's bar and transport built to the canvas (loop, round 10):** the bar is Close, the views as one pill
   (pictures on a phone, words from 640px) and the gear, bare over the paper; the title is the score's; Edit score,
   Share link and ··· (Print, Export) head the Settings; the transport is [Pace · Loop] [‹ ▶ ›] [Hands · Keyboard],
