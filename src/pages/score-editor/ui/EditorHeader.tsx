@@ -56,7 +56,8 @@ export function EditorActions() {
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
   return (
-    <>
+    // Undo, redo and More in one glass capsule, as the editor's board groups them.
+    <div className="flex items-center rounded-pill glass p-0.5">
       <Button
         variant="tool"
         size="icon"
@@ -88,6 +89,6 @@ export function EditorActions() {
       >
         <Ellipsis aria-hidden />
       </Button>
-    </>
+    </div>
   )
 }
