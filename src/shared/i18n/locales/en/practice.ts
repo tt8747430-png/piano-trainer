@@ -449,6 +449,14 @@ export const practice = {
   // The line of a part of Accompaniment with no pattern to show.
   // Patterns: each explained and heard, the learner's favourites, hidden and own.
   patterns: {
+    // A pattern's page (canvas 178): its bar's title, its hands, Play's menu, Practise's piece.
+    title: 'Pattern',
+    hands: 'The hands',
+    builtIn: 'Built-in',
+    yours: 'Your pattern',
+    playOver: 'Play over',
+    barOfC: 'A bar of C major',
+    practise: 'Practise',
     new: 'New pattern',
     favourite: 'Favourite',
     rightHand: 'Right hand',

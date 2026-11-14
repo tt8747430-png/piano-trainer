@@ -432,6 +432,13 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   patterns: {
+    title: 'Фактура',
+    hands: 'Руки',
+    builtIn: 'Встроенная',
+    yours: 'Ваша фактура',
+    playOver: 'Играть на',
+    barOfC: 'Такт C мажора',
+    practise: 'Отработать',
     new: 'Новая фактура',
     favourite: 'Избранное',
     rightHand: 'Правая рука',

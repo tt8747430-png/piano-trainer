@@ -52,11 +52,16 @@ function firstLine(performance: Performance): { music: TimedMusic; from: number;
 }
 
 /**
- * A pattern heard: over a bar of C major in 4/4, each hand on its figure; a pattern that plays the
- * tune over the first line of «Отче наш», as its piece plays it.
+ * A pattern heard: over a bar of C major in 4/4, each hand on its figure, or over the first line of
+ * `over` (a song it is used in, its page's Play over); a pattern that plays the tune over the first
+ * line of «Отче наш», as its piece plays it.
  */
-export function patternSample(pattern: BookPattern, book: PatternBook): PatternSample {
-  const tunePiece = pattern.pattern.rh.kind === 'tune' ? pieceById(TUNE_PIECE) : undefined
+export function patternSample(
+  pattern: BookPattern,
+  book: PatternBook,
+  over?: Piece,
+): PatternSample {
+  const tunePiece = over ?? (pattern.pattern.rh.kind === 'tune' ? pieceById(TUNE_PIECE) : undefined)
   const performance = tunePiece
     ? arrangePiece(tunePiece, { ...ownChoice(tunePiece), pattern: pattern.ref }, book)
     : arrange(C_BAR, {

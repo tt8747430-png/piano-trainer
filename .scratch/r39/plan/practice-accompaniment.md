@@ -43,3 +43,16 @@ library on the left, the pattern on the right (an empty state until one is chose
 
 Sources: Yamaha Smart Pianist's Style list (Accompaniment, Pattern, listen before choosing); the app's pattern books
 (`patterns.ts`).
+
+## Ported (loop, 2026-11-14), canvas 178
+
+- **Library:** the books' Course in Learn and Songs in Songs links went, and the library's links with them.
+- **A pattern's page** (`pages/pattern/ui/PatternPage.tsx`): Back (glass) · Pattern · the keys' tools · More; the keys
+  at the top (`PinnedKeyboard place="top"`); the name in the serif, 36 bold, its ♡ beside it (the star went); its book
+  · Built-in, or Your pattern; one card of its bar on the grand staff (what it is played over under it), its idea and
+  its book's description; The hands; Used in; on a laptop the keys over a 3fr | 2fr grid.
+- **Floating bar** (`widgets/pattern-music/ui/PatternPieces.tsx`): Loop (ink while it loops; the sample starts
+  again as it ends) · Play ⌄ (Play over: A bar of C major, or each song it is used in, up to four; a pattern that
+  plays the tune only over songs) · Practise, the Player over what it is played over. `patternSample` takes the song.
+  The full-width Practise in the Player at the page's end went.
+- Strings: `patterns.title`, `hands`, `builtIn`, `yours`, `playOver`, `barOfC`, `practise` in en and ru.

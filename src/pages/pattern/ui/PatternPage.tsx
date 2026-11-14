@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Play, Star, Trash2 } from 'lucide-react'
+import { CopyPlus, Eye, EyeOff, Globe, Heart, PencilLine, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
@@ -12,12 +13,14 @@ import {
   usePatternBook,
   usePatterns,
   usePatternsStoreApi,
+  usePartName,
+  partOfShelf,
   type BookPattern,
   type OwnPatternId,
   type PatternBook,
 } from '@/entities/pattern'
-import { piecesPlaying } from '@/entities/piece'
-import { PinnedKeyboard } from '@/features/live-keyboard'
+import { entryTitles, piecesPlaying } from '@/entities/piece'
+import { PageKeyboardTools, PinnedKeyboard } from '@/features/live-keyboard'
 import {
   deleteOwnPattern,
   restoreOwnPattern,
@@ -27,6 +30,7 @@ import {
 import { useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import {
+  ActionMenu,
   BackButton,
   ButtonLink,
   MoreMenu,
@@ -36,11 +40,11 @@ import {
   ScreenHeader,
   type MenuAction,
 } from '@/shared/ui'
-import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
+import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { PieceList } from '@/widgets/piece-list'
 import { useForgetScreens } from '@/shared/lib'
 
-/** The star in the bar: a favourite comes first in the Player's list. */
+/** The ♡ beside the name: a favourite comes first in the Player's list. */
 function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
@@ -48,10 +52,10 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   return (
     <RoundButton
       label={t('patterns.favourite')}
-      icon={Star}
+      icon={Heart}
       aria-pressed={favourite}
       onClick={() => toggleFavourite(store, pattern.ref)}
-      className="aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current"
+      className="text-muted-foreground aria-pressed:text-destructive aria-pressed:[&_svg]:fill-current"
     />
   )
 }
@@ -150,73 +154,129 @@ function usePatternActions(pattern: BookPattern, name: string) {
 }
 
 /**
- * A pattern explained: its idea, what each hand plays, the pattern on the staff and heard on the keys,
- * its source's explanation and the music that plays it, in one column. Its bar holds the star and
- * More (its own actions); Practise in the Player is the page's one honey act, at its end.
+ * A pattern in the Chords page's shape (canvas 178): Back · Pattern · the keys' tools · More; the keys
+ * at the top lighting what it plays; its name in the serif with its ♡, its book and whether it is
+ * built in; one card of its bar on the grand staff and what it is; The hands; Used in; one floating
+ * bar Loop · Play ⌄ (Play over a bar of C major or a song it is used in) · Practise, the Player. On
+ * a laptop the keys run across the top, the pattern on the left, its hands and uses on the right.
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
-  const sample = usePatternSample(pattern, book)
-  const [shown, show] = useShownKeys(pattern.ref, sample.shown)
-  const name = localText(pattern.name, locale)
+  const partName = usePartName()
   const pieces = isPatternId(pattern.ref) ? piecesPlaying(pattern.ref) : []
+  const tune = pattern.pattern.rh.kind === 'tune'
+  // What it is played over: a bar of C (none chosen), or a song it is used in.
+  const [overId, setOverId] = useState<string | null>(tune ? (pieces[0]?.id ?? null) : null)
+  const over = pieces.find((piece) => piece.id === overId)
+  const sample = usePatternSample(pattern, book, over)
+  const [shown, show] = useShownKeys(`${pattern.ref} ${overId ?? ''}`, sample.shown)
+  const name = localText(pattern.name, locale)
   const more = usePatternActions(pattern, name)
+  const own = isOwnPatternId(pattern.ref)
+  const overs = [
+    ...(tune ? [] : [{ id: null, label: t('patterns.barOfC') }]),
+    ...pieces
+      .slice(0, 4)
+      .map((piece) => ({ id: piece.id, label: entryTitles(piece, locale).primary })),
+  ]
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <ScreenHeader
-        title={name}
-        back={<BackButton />}
-        tools={<FavouriteButton pattern={pattern} />}
+        title={t('patterns.title')}
+        back={<BackButton variant="glass" />}
+        tools={<PageKeyboardTools />}
         more={<MoreMenu actions={more.actions} />}
       />
-      <PinnedKeyboard shown={shown} />
-      <div className="flex max-w-xl flex-col gap-5">
-        <p className="text-xl text-balance">{localText(pattern.idea, locale)}</p>
-        <section className="flex flex-col gap-4 card p-4">
-          <PatternStaff sample={sample} />
-          <PatternPlay sample={sample} onShow={show} variant="default" />
-        </section>
-        <dl className="flex flex-col divide-y divide-border card">
-          {[
-            [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
-            [t('patterns.leftHand'), localText(LEFT_FIGURES[pattern.lh].name, locale)],
-          ].map(([term, value]) => (
-            <div key={term} className="flex min-h-12 items-center justify-between gap-4 px-4 py-3">
-              <dt>{term}</dt>
-              <dd className="text-right text-muted-foreground">{value}</dd>
+      <PinnedKeyboard shown={shown} place="top" />
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start lg:gap-10">
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-0.5">
+              <h2 className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
+                {name}
+              </h2>
+              <FavouriteButton pattern={pattern} />
             </div>
-          ))}
-        </dl>
-        {pattern.description ? (
-          <p className="text-lg leading-relaxed text-pretty">
-            {localText(pattern.description, locale)}
-          </p>
-        ) : null}
-        {more.said}
-        {pieces.length > 0 ? (
-          <PieceList groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]} />
-        ) : null}
-        {/* The way on, the page's one honey act at its end: the pattern played in the Player. */}
-        <ButtonLink
-          size="lg"
-          className="h-12 w-full rounded-pill text-base font-semibold [&_svg]:fill-current"
-          render={
-            sample.piece ? (
-              <Link
-                to="/play/$pieceId"
-                params={{ pieceId: sample.piece.id }}
-                search={{ pattern: pattern.ref }}
-              />
-            ) : (
-              <Link to="/play/progression" search={{ pattern: pattern.ref }} />
-            )
-          }
-        >
-          <Play aria-hidden />
-          {t('inPlayer')}
-        </ButtonLink>
+            <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
+              {own
+                ? t('patterns.yours')
+                : `${partName(partOfShelf(pattern.group))} · ${t('patterns.builtIn')}`}
+            </p>
+          </div>
+          {more.said}
+          <section className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+            <PatternStaff sample={sample} />
+            <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
+              {localText(pattern.idea, locale)}
+            </p>
+            {pattern.description ? (
+              <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty">
+                {localText(pattern.description, locale)}
+              </p>
+            ) : null}
+          </section>
+        </div>
+        <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
+          <section className="flex flex-col gap-2">
+            <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+              {t('patterns.hands')}
+            </h3>
+            <dl className="flex flex-col divide-y divide-border overflow-hidden rounded-2xl bg-card ring-1 ring-border">
+              {[
+                [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
+                [t('patterns.leftHand'), localText(LEFT_FIGURES[pattern.lh].name, locale)],
+              ].map(([term, value]) => (
+                <div
+                  key={term}
+                  className="flex min-h-12 items-center justify-between gap-4 px-4 py-3"
+                >
+                  <dt>{term}</dt>
+                  <dd className="text-right text-muted-foreground">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+          {pieces.length > 0 ? (
+            <PieceList
+              groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]}
+            />
+          ) : null}
+        </div>
       </div>
+      <PatternPieces
+        sample={sample}
+        onShow={show}
+        practise={{
+          label: t('inPlayer'),
+          caption: t('patterns.practise'),
+          render: sample.piece ? (
+            <Link
+              to="/play/$pieceId"
+              params={{ pieceId: sample.piece.id }}
+              search={{ pattern: pattern.ref }}
+            />
+          ) : (
+            <Link to="/play/progression" search={{ pattern: pattern.ref }} />
+          ),
+        }}
+        menuLabel={t('patterns.playOver')}
+        menu={(trigger) => (
+          <ActionMenu
+            label={t('patterns.playOver')}
+            align="end"
+            render={trigger}
+            trigger={null}
+            actions={overs.map((each) => ({
+              key: each.id ?? 'c',
+              group: t('patterns.playOver'),
+              label: each.label,
+              checked: overId === each.id,
+              onSelect: () => setOverId(each.id),
+            }))}
+          />
+        )}
+      />
     </div>
   )
 }
