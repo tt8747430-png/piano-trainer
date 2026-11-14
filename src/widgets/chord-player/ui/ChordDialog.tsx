@@ -1,105 +1,163 @@
-import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { Copy, Play, Trash2 } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import {
   chordBass,
   chordSymbol,
-  passingChords,
   printedChord,
   printedNote,
+  printedSymbol,
+  qualitySuffix,
   readChordSymbol,
+  sameNote,
+  scaleChordAt,
   spellChord,
   type Chord,
+  type ChordQuality,
   type Key,
 } from '@/shared/lib/music'
-import { Labelled, MenuPicker, Sheet, SheetContent, Stepper, TypedField } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import {
+  ChoiceChips,
+  Labelled,
+  MenuPicker,
+  NotePicker,
+  Sheet,
+  SheetContent,
+  Stepper,
+  TypedField,
+} from '@/shared/ui'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
+/** The chords Musicca's sheet offers by name, as the board draws them (maj m 7 maj7 m7 sus4 sus2 dim add9 6). */
+const QUALITIES: readonly ChordQuality[] = [
+  'maj',
+  'min',
+  'd7',
+  'maj7',
+  'm7',
+  'sus4',
+  'sus2',
+  'dim',
+  'add9',
+  'six',
+]
+/** The key's chords suggested, its own seven triads and V7, the chord in hand left out. */
+const SUGGESTED = 6
+
+/** The key's chords, I to vii and V7, likeliest first: I, IV, V, vi, ii, V7, iii. */
+function keyChords(key: Key): Chord[] {
+  const kind = key.minor ? 'harmonic' : 'major'
+  const triad = (degree: number) => scaleChordAt(key.tonic, kind, degree, 3)
+  return [
+    triad(0),
+    triad(3),
+    triad(4),
+    triad(5),
+    triad(1),
+    scaleChordAt(key.tonic, kind, 4, 4),
+    triad(2),
+  ]
+}
+const sameChord = (a: Chord, b: Chord) =>
+  sameNote(a.root, b.root) && a.quality === b.quality && a.bass === undefined
 
 /**
- * A chord's sheet (R29 CP2, P14 folded in, R32), opened by a tap or Enter on its tile, or a letter
- * typed on it (the symbol starting from that letter): its symbol typed, its length in beats, its bass
- * note, and the passing chords that lead from it to the next tile, each put before that tile at a
- * tap; Delete chord at the foot.
+ * A chord's sheet as Musicca's (canvas 171), opened by a tap on it, its bar's !, or a letter typed on
+ * it (the symbol then typed): titled by its bar and name; Root, Chord, Bass note, Duration − n beats
+ * +, Suggested chords (the key's, a tap takes one); then Play from here and Duplicate, and Delete
+ * chord apart.
  */
 export function ChordDialog({
   open,
   onOpenChange,
+  bar,
   chord,
   beats,
-  next,
   musicKey,
   typed: started,
   onChord,
   onBeats,
-  onInsert,
+  onPlayFrom,
+  onDuplicate,
   onRemove,
 }: {
   open: boolean
   onOpenChange(open: boolean): void
+  /** Its bar in its section, from 1. */
+  bar: number
   chord: Chord
   beats: number
-  /** The box after it, where there is one: what its passing chords lead to. */
-  next: Chord | null
   musicKey: Key
-  /** A letter typed on the chord's tile: the symbol starts from it. */
+  /** A letter typed on the chord: the symbol starts from it. */
   typed?: string | undefined
   onChord(chord: Chord): void
   onBeats(beats: number): void
-  onInsert(chords: readonly Chord[]): void
+  onPlayFrom(): void
+  onDuplicate(): void
   onRemove(): void
 }) {
   const { t } = useTranslation('practice')
   const [typed, setTyped] = useState<string | null>(started ?? null)
-  const symbol = chordSymbol(chord)
   const read = typed === null ? chord : readChordSymbol(typed)
   const tones = spellChord(chord.root, chord.quality)
   const bassRole =
     chord.bass === undefined
       ? 'root'
       : (tones.find((tone) => tone.note.letter === chord.bass?.letter)?.role ?? 'root')
-  const ways = next ? passingChords(chord, next, musicKey) : []
+  const qualities = QUALITIES.includes(chord.quality) ? QUALITIES : [...QUALITIES, chord.quality]
+  const suggested = keyChords(musicKey)
+    .filter((each) => !sameChord(each, chord))
+    .slice(0, SUGGESTED)
+  /** The chord changed: its bass kept where the new chord holds it. */
+  const take = (next: Chord) => {
+    setTyped(null)
+    onChord(next)
+  }
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        title={t('chordPlayer.chord.title')}
-        description={printedChord(chord)}
-        footer={
-          <Button variant="destructive" size="lg" onClick={onRemove}>
-            <Trash2 aria-hidden />
-            {t('chordPlayer.chord.remove')}
-          </Button>
-        }
-      >
+      <SheetContent title={t('chordPlayer.chord.title', { bar, chord: printedChord(chord) })}>
         <div className="flex flex-col gap-5">
-          <TypedField
-            label={t('chordPlayer.chord.symbol')}
-            value={typed ?? symbol}
-            error={read ? null : t('chordPlayer.unread', { text: typed ?? '' })}
-            onChange={(text) => {
-              setTyped(text)
-              const chosen = readChordSymbol(text)
-              if (chosen) onChord(chosen)
-            }}
-          />
-          <Labelled label={t('chordPlayer.chord.length')}>
-            <Stepper
-              label={t('chordPlayer.chord.length')}
-              value={beats}
-              min={CHORD_BEATS.min}
-              max={CHORD_BEATS.max}
-              format={(count) => t('chordPlayer.chord.beats', { count })}
-              decrease={t('chordPlayer.chord.shorter')}
-              increase={t('chordPlayer.chord.longer')}
-              onChange={onBeats}
+          {typed !== null ? (
+            <TypedField
+              label={t('chordPlayer.chord.symbol')}
+              value={typed}
+              error={read ? null : t('chordPlayer.unread', { text: typed })}
+              onChange={(text) => {
+                setTyped(text)
+                const chosen = readChordSymbol(text)
+                if (chosen) onChord(chosen)
+              }}
+            />
+          ) : null}
+          <Labelled label={t('chordPlayer.chord.root')}>
+            <NotePicker
+              label={t('chordPlayer.chord.root')}
+              bare
+              value={chord.root}
+              onChange={(root) => take({ root, quality: chord.quality })}
+            />
+          </Labelled>
+          <Labelled label={t('chordPlayer.chord.quality')}>
+            <ChoiceChips
+              label={t('chordPlayer.chord.quality')}
+              value={chord.quality}
+              options={qualities.map((quality) => ({
+                value: quality,
+                label:
+                  quality === 'maj'
+                    ? t('chordPlayer.chord.major')
+                    : printedSymbol(qualitySuffix(quality)),
+              }))}
+              onChange={(quality) => take({ root: chord.root, quality })}
             />
           </Labelled>
           <Labelled label={t('chordPlayer.chord.bass')}>
             <MenuPicker
               label={t('chordPlayer.chord.bass')}
+              bare
               value={bassRole}
               options={BASS_ROLES.flatMap((role) => {
                 const tone = tones.find((each) => each.role === role)
@@ -115,10 +173,9 @@ export function ChordDialog({
                 ]
               })}
               onChange={(role) => {
-                setTyped(null)
                 const tone = tones.find((each) => each.role === role)
                 const { bass: _bass, ...plain } = chord
-                onChord(
+                take(
                   role === 'root' || !tone
                     ? plain
                     : { ...plain, bass: chordBass(chord.root, chord.quality, tone.note) },
@@ -126,35 +183,86 @@ export function ChordDialog({
               }}
             />
           </Labelled>
-          {next && ways.length > 0 ? (
-            <section className="flex flex-col gap-2">
-              <h3 className="font-sans text-sm text-muted-foreground">
-                {t('chordPlayer.chord.leading', { chord: printedChord(next) })}
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {ways.map((way) => {
-                  const names = way.chords.map(printedChord).join(' ')
-                  return (
-                    <li key={`${way.kind}-${names}`}>
-                      <Button
-                        variant="outline"
-                        className="min-h-11 font-display text-base"
-                        aria-label={t('chordPlayer.chord.insert', {
-                          chord: names,
-                          next: printedChord(next),
-                        })}
-                        onClick={() => onInsert(way.chords)}
-                      >
-                        {names}
-                      </Button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </section>
-          ) : null}
+          <Labelled label={t('chordPlayer.chord.length')}>
+            <Stepper
+              label={t('chordPlayer.chord.length')}
+              value={beats}
+              min={CHORD_BEATS.min}
+              max={CHORD_BEATS.max}
+              format={(count) => t('chordPlayer.chord.beats', { count })}
+              decrease={t('chordPlayer.chord.shorter')}
+              increase={t('chordPlayer.chord.longer')}
+              onChange={onBeats}
+            />
+          </Labelled>
+          <section className="flex flex-col gap-2">
+            <h3 className="font-sans text-sm text-muted-foreground">
+              {t('chordPlayer.chord.suggested')}
+            </h3>
+            <ul className="grid grid-cols-3 gap-2">
+              {suggested.map((each) => (
+                <li key={chordSymbol(each)} className="flex">
+                  <button
+                    type="button"
+                    onClick={() => take(each)}
+                    className="h-13 flex-1 rounded-[12px] bg-card font-display text-xl font-bold shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
+                  >
+                    {printedChord(each)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <div className="overflow-hidden rounded-[12px] bg-muted">
+            <SheetAct
+              icon={<Play aria-hidden className="size-5 fill-current" />}
+              onClick={onPlayFrom}
+            >
+              {t('chordPlayer.chord.playFrom')}
+            </SheetAct>
+            <div className="ml-12 h-px bg-border" />
+            <SheetAct icon={<Copy aria-hidden className="size-5" />} onClick={onDuplicate}>
+              {t('chordPlayer.chord.duplicate')}
+            </SheetAct>
+          </div>
+          <div className="overflow-hidden rounded-[12px] bg-muted">
+            <SheetAct
+              icon={<Trash2 aria-hidden className="size-5" />}
+              onClick={onRemove}
+              destructive
+            >
+              {t('chordPlayer.chord.remove')}
+            </SheetAct>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
+  )
+}
+
+/** One of the sheet's acts, the board's ACTROW: its icon and name, 48 tall, in a grouped card. */
+function SheetAct({
+  icon,
+  destructive = false,
+  onClick,
+  children,
+}: {
+  icon: ReactNode
+  destructive?: boolean
+  onClick(): void
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'flex min-h-12 w-full items-center gap-3 px-4 text-left text-base font-semibold transition-colors duration-150 ease-out hover:brightness-95',
+        destructive ? 'text-destructive' : 'text-foreground',
+      )}
+    >
+      {icon}
+      {children}
+    </button>
   )
 }

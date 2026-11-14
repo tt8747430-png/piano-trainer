@@ -334,8 +334,8 @@ export function createChordEngine({
   }
 
   return {
-    /** Plays from the top, or from the looped section's first bar, round and round. */
-    play({ loop: section = null }: { loop?: number | null } = {}) {
+    /** Plays from the top, the looped section's first bar, or a chord (Play from here), round and round. */
+    play({ loop: section = null, from }: { loop?: number | null; from?: BoxPlace } = {}) {
       if (stopTicker) finish()
       void audio.unlock()
       audio.stop()
@@ -343,9 +343,15 @@ export function createChordEngine({
       const current = plan()
       cache = arranged(current, cache)
       const { first } = range(cache.band.bars)
-      next = { bar: first, beat: 0 }
-      const start = audio.now() + PLAY_DELAY
-      nextAt = start
+      const start = from ? cache.windows.find((each) => sameBox(each.box, from)) : undefined
+      next = start
+        ? {
+            bar: start.bar,
+            beat: (start.from - (cache.band.bars[start.bar]?.startTick ?? 0)) / TICKS_PER_BEAT,
+          }
+        : { bar: first, beat: 0 }
+      const at = audio.now() + PLAY_DELAY
+      nextAt = at
       if (current.settings.countIn) {
         const beats = beatsPerBar(current.sheet.meter)
         const bar = (barTicks(current.sheet.meter) * 60) / (current.tempo * TICKS_PER_BEAT)
@@ -354,8 +360,8 @@ export function createChordEngine({
           at: (i * bar) / beats,
           accent: i === 0,
         }))
-        audio.play(clicks, start, gain)
-        nextAt = start + bar
+        audio.play(clicks, at, gain)
+        nextAt = at + bar
       }
       fading = null
       ending = null

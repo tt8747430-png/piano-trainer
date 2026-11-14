@@ -29,6 +29,7 @@ import { useMediaQuery } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
+  duplicateChord,
   insertChord,
   moveChordAcross,
   moveSection,
@@ -55,7 +56,6 @@ import {
   printedChord,
   printedNote,
   randomProgression,
-  type Chord,
   type Numeral,
 } from '@/shared/lib/music'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -287,9 +287,15 @@ export function ChordPlayer({
   }
   const openedSection = opened === null ? undefined : shown.sections[opened]
   const dialogChord = dialog ? chordAt(dialog.place) : undefined
-  const dialogNext = dialog
-    ? (chordAt({ section: dialog.place.section, index: dialog.place.index + 1 })?.chord ?? null)
-    : null
+  /** The bar the chord in the sheet stands in, from 1. */
+  const dialogBar = (() => {
+    const section = dialog ? shown.sections[dialog.place.section] : undefined
+    if (!dialog || !section) return 1
+    const at = sectionBars(section, meter).findIndex((bar) =>
+      bar.pieces.some((piece) => piece.chord === dialog.place.index),
+    )
+    return at + 1
+  })()
 
   const plays = entry.settings.plays
   const transpose = entry.settings.transpose
@@ -515,23 +521,21 @@ export function ChordPlayer({
         <ChordDialog
           open
           onOpenChange={(open) => (open ? null : setDialog(null))}
+          bar={dialogBar}
           chord={dialogChord.chord}
           beats={dialogChord.beats}
-          next={dialogNext}
           musicKey={shown.key}
           typed={dialog.typed}
           onChord={(chord) =>
             inSection(dialog.place.section, (each) => setChord(each, dialog.place.index, chord))
           }
           onBeats={(beats) => acts.resize(dialog.place, beats)}
-          onInsert={(chords: readonly Chord[]) => {
-            inSection(dialog.place.section, (each) =>
-              chords.reduce(
-                (section, chord, i) =>
-                  insertChord(section, dialog.place.index + 1 + i, chord, meter),
-                each,
-              ),
-            )
+          onPlayFrom={() => {
+            setDialog(null)
+            transport.play(transport.looped, dialog.place)
+          }}
+          onDuplicate={() => {
+            inSection(dialog.place.section, (each) => duplicateChord(each, dialog.place.index))
             setDialog(null)
           }}
           onRemove={() => acts.remove(dialog.place)}

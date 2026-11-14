@@ -1,10 +1,16 @@
 import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react'
 import { useServices } from '@/shared/lib/services'
-import { createChordEngine, workerTicker, type PlayPlan, type TransportState } from './engine'
+import {
+  createChordEngine,
+  workerTicker,
+  type BoxPlace,
+  type PlayPlan,
+  type TransportState,
+} from './engine'
 
 /** The Chord player's transport over the sheet in hand (R29 CP4): its state, Play, Stop and Loop. */
 export interface ChordTransport extends TransportState {
-  play(loop?: number | null): void
+  play(loop?: number | null, from?: BoxPlace): void
   stop(): void
   /** The section looped, or none: the whole sheet repeats. */
   readonly looped: number | null
@@ -41,7 +47,7 @@ export function useChordTransport(plan: PlayPlan): ChordTransport {
   }, engine.state)
   return {
     ...state,
-    play: (loop = looped) => engine.play({ loop }),
+    play: (loop = looped, from) => engine.play(from ? { loop, from } : { loop }),
     stop: engine.stop,
     looped,
     setLoop: (section) => {
