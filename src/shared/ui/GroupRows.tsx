@@ -78,8 +78,8 @@ export function GroupLink({
         'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
       )}
     >
-      <span className="min-w-0 flex-1">{label}</span>
-      {value ? <span className="max-w-[55%] truncate text-muted-foreground">{value}</span> : null}
+      <span className="shrink-0">{label}</span>
+      <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">{value}</span>
       <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
     </button>
   )
@@ -122,5 +122,31 @@ export function ChoiceList<T extends string>({
         </button>
       ))}
     </div>
+  )
+}
+
+/** A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows. */
+export function GroupAction({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        ROW,
+        'text-left text-link transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+      )}
+    >
+      {label}
+    </button>
+  )
+}
+
+/** A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows. */
+export function GroupChips({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <section aria-label={label} className="flex flex-col gap-2 px-4 py-2.5">
+      <h3 className="text-sm font-normal text-muted-foreground">{label}</h3>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </section>
   )
 }

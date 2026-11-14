@@ -521,12 +521,12 @@ export const practice = {
     // The keys that hold the chord found, its numeral in each.
     inKeys: 'In these keys',
     clear: 'Clear the keys',
+    clearShort: 'Clear',
+    openShort: 'Chords',
+    notes: 'The chord’s notes',
+    bassDegree: '{{degree}} · bass',
     forget: 'Forget the chords played',
-    // Where the chord shown comes from: keys held on the keyboard, the last chord, keys tapped.
-    state: { held: 'Held', last: 'Last played', tapped: 'Tapped' },
     played: 'Played',
-    // The staff where the chords are not remembered: the chord down now, else nothing.
-    staff: 'On the staff',
     remember: 'Keep chord history',
     rememberDetail:
       'The staff keeps the last {{count}} chords you played, on this device, until you clear them.',

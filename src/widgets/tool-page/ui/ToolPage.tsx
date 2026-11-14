@@ -40,7 +40,9 @@ export function ToolPage({
   play,
   dial,
   bar,
+  after,
   keys,
+  start = false,
   children,
 }: {
   title: string
@@ -57,8 +59,12 @@ export function ToolPage({
   dial?: ReactNode
   /** The floating acts before Start, each a `FloatingPiece` (the Metronome's Tap). */
   bar?: ReactNode
+  /** The floating acts after Start, each a `FloatingPiece` (the Chord finder's Chords). */
+  after?: ReactNode
   /** The on-screen keys a tool is played on, pinned under the bar (the Chord finder's). */
   keys?: ReactNode
+  /** The readout at the page's left, top down, as a page's name and what follows it (the Chord finder's). */
+  start?: boolean
   /** The readout or the picture. */
   children: ReactNode
 }) {
@@ -80,11 +86,15 @@ export function ToolPage({
         }
       />
       {keys}
-      {side ? (
-        <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-10">
+      {side || start ? (
+        <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
           <section
             aria-label={title}
-            className="flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24"
+            className={
+              start
+                ? 'flex min-w-0 flex-col gap-4'
+                : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
+            }
           >
             {children}
           </section>
@@ -115,6 +125,7 @@ export function ToolPage({
                 disabled={play.disabled === true && !play.playing}
                 onClick={play.onToggle}
               />
+              {after}
             </FloatingPieces>
           ) : null}
         </FloatingActions>
