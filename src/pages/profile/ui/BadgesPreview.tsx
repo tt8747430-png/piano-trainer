@@ -3,7 +3,7 @@ import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { badgesOf, nextMilestone, type Badge } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
-import { ProgressMeter, ProgressRing, RowLink, SettingsGroup } from '@/shared/ui'
+import { ProgressMeter, RowLink, SettingsGroup } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
 import { SectionHead } from './SectionHead'
@@ -41,29 +41,45 @@ export function NextMilestone() {
     <Link
       to="/profile/badges/$badgeId"
       params={{ badgeId: next.id }}
-      className="flex items-center gap-4 card px-4 py-4 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
+      className="flex items-center gap-4 card px-4 py-3.5 transition-colors duration-200 hover:bg-muted focus-visible:-outline-offset-3"
     >
-      {/* The goal as a ring (canvas 128): how far along, the count in its middle. */}
-      <ProgressRing
-        share={(next.goal - next.left) / next.goal}
-        track
-        className="text-paint-full-sand"
-      >
-        <span className="grid size-12 place-items-center font-display text-sm font-semibold tabular-nums">
-          <span className="sr-only">
-            {t('profile.badges.locked', { have: next.goal - next.left, goal: next.goal })}
-          </span>
-          <span aria-hidden>
-            {next.goal - next.left}/{next.goal}
-          </span>
-        </span>
-      </ProgressRing>
+      {/* The goal as a ring (the Profile board's RING): how far along, the count in its middle. */}
+      <svg viewBox="0 0 48 48" aria-hidden className="size-13 shrink-0">
+        <circle cx={24} cy={24} r={20} fill="none" strokeWidth={5} className="stroke-muted" />
+        {next.goal > next.left ? (
+          <circle
+            cx={24}
+            cy={24}
+            r={20}
+            fill="none"
+            strokeWidth={5}
+            strokeLinecap="round"
+            pathLength={100}
+            strokeDasharray={`${((next.goal - next.left) / next.goal) * 100} 100`}
+            transform="rotate(-90 24 24)"
+            className="stroke-paint-full-sand"
+          />
+        ) : null}
+        <text
+          x={24}
+          y={28}
+          textAnchor="middle"
+          fontSize={11}
+          fontWeight={700}
+          className="fill-foreground font-sans"
+        >
+          {next.goal - next.left}/{next.goal}
+        </text>
+      </svg>
+      <span className="sr-only">
+        {t('profile.badges.locked', { have: next.goal - next.left, goal: next.goal })}
+      </span>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-[0.8125rem] font-semibold text-on-paint-sand">
           {t('profile.badges.next')}
         </span>
-        <span className="font-bold text-pretty">{t(`profile.badges.names.${next.id}`)}</span>
-        <span className="text-sm text-muted-foreground text-pretty">
+        <span className="font-semibold text-pretty">{t(`profile.badges.names.${next.id}`)}</span>
+        <span className="text-[0.8125rem] text-pretty text-muted-foreground">
           {t(`profile.badges.goals.${next.id}`, { count: next.goal })}
         </span>
       </span>
