@@ -6,12 +6,20 @@ import {
   type SheetSection as Section,
   type Variation,
 } from '@/shared/lib/arrangement'
-import { Labelled, MenuPicker, Segmented, Sheet, SheetContent, Stepper } from '@/shared/ui'
+import {
+  Labelled,
+  MenuPicker,
+  Segmented,
+  Sheet,
+  SheetContent,
+  Stepper,
+  SwitchRow,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * A section's sheet, opened from its head (canvas 171): its name, how many times it plays, the
- * style's variation where it has more than one; Duplicate and Delete at the foot (Delete at once,
+ * A section's sheet, opened from its head (canvas 171): its name, how many times it plays, Loop this
+ * section, the style's variation where it has more than one; Duplicate and Delete at the foot (Delete at once,
  * with Undo in its toast).
  */
 export function SectionSheet({
@@ -23,6 +31,8 @@ export function SectionSheet({
   onChange,
   onDuplicate,
   onDelete,
+  looped,
+  onLoop,
 }: {
   open: boolean
   onOpenChange(open: boolean): void
@@ -33,6 +43,9 @@ export function SectionSheet({
   onChange(change: Partial<Section>): void
   onDuplicate(): void
   onDelete(): void
+  /** Whether Play goes round this section alone. */
+  looped: boolean
+  onLoop(on: boolean): void
 }) {
   const { t } = useTranslation('practice')
   const name = t(`chordPlayer.sections.${section.kind}`)
@@ -79,6 +92,11 @@ export function SectionSheet({
               onChange={(repeats) => onChange({ repeats })}
             />
           </Labelled>
+          <SwitchRow
+            label={t('chordPlayer.loopSection')}
+            checked={looped}
+            onCheckedChange={onLoop}
+          />
           {variations.length > 1 ? (
             <Segmented
               label={t('chordPlayer.variation')}

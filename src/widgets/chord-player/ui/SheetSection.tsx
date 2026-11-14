@@ -114,10 +114,7 @@ export function SheetSection({
         </button>
       </div>
       <SortableContext items={ids} strategy={STILL}>
-        <ol
-          aria-label={t('chordPlayer.chordsOf', { name })}
-          className="grid grid-cols-4 border-l-2 border-foreground"
-        >
+        <ol aria-label={t('chordPlayer.chordsOf', { name })} className="grid grid-cols-4">
           {bars.map((bar, at) => {
             const now = holds(lit, bar)
             return (
@@ -127,6 +124,7 @@ export function SheetSection({
                 className={cn(
                   'relative flex h-[54px] min-w-0 flex-col border-r border-foreground md:h-[68px]',
                   (at % 4 === 3 || at === bars.length - 1) && 'border-r-2',
+                  at % 4 === 0 && 'border-l-2',
                   now
                     ? 'bg-primary text-primary-foreground'
                     : holds(chosen, bar) && 'bg-primary/35',

@@ -48,7 +48,7 @@ export interface TransportState {
 const LOOKAHEAD = 0.1
 /** Stop fades the sound over this many beats. */
 const FADE_BEATS = 2
-/** The sheet's last chord rings this long when it does not repeat. */
+/** The sheet's last chord rings this long after its last time through. */
 const TAIL = 3
 /** Notes release a little early, so a chord struck again is heard twice. */
 const LEGATO = 0.95
@@ -220,6 +220,8 @@ export function createChordEngine({
     []
   let fading: { from: number; seconds: number } | null = null
   let ending: number | null = null
+  /** The times through the sheet finished in this run. */
+  let pass = 0
 
   const set = (change: Partial<TransportState>) => {
     const changed = { ...state, ...change }
@@ -277,7 +279,8 @@ export function createChordEngine({
       if (!window) return finish()
       const seconds = (ticks: Tick) => (ticks * 60) / (current.tempo * TICKS_PER_BEAT)
       const isLast = window.bar === last && windows.at(-1) === window && loop === null
-      const ringing = isLast && !current.settings.repeat
+      const plays = current.settings.plays
+      const ringing = isLast && plays > 0 && pass >= plays - 1
       const sounds = windowSounds(band, window, seconds, current.style.swing, ringing ? TAIL : 0)
       const handle = audio.play(sounds, nextAt, gain)
       queued = [
@@ -299,7 +302,10 @@ export function createChordEngine({
       } else if (following && following.bar <= last) {
         const barStart = band.bars[following.bar]?.startTick ?? 0
         next = { bar: following.bar, beat: (following.from - barStart) / TICKS_PER_BEAT }
-      } else next = { bar: first, beat: 0 }
+      } else {
+        if (window.bar === last) pass += 1
+        next = { bar: first, beat: 0 }
+      }
     }
   }
 
@@ -353,6 +359,7 @@ export function createChordEngine({
       }
       fading = null
       ending = null
+      pass = 0
       queued = []
       state = { playing: true, lit: null, beat: null }
       queue()

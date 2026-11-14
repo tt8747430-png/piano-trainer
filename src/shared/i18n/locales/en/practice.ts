@@ -854,7 +854,6 @@ export const practice = {
   chordPlayer: {
     untitled: 'New chord sheet',
     library: 'Chord sheets',
-    libraryOf: 'Chord sheet: {{name}}. Open another',
     mine: 'My chord sheets',
     noneMine: 'None saved yet. Save the sheet in hand from the ⋯ menu.',
     progressions: 'Progressions',
@@ -893,7 +892,6 @@ export const practice = {
       },
     },
     style: 'Style',
-    styleOf: 'Style: {{style}}',
     hear: 'Hear a bar of {{style}}',
     laidOut: 'Laid out in {{meter}}',
     families: {
@@ -916,8 +914,6 @@ export const practice = {
     slower: 'Slower',
     faster: 'Faster',
     bpm: '{{count}} BPM',
-    key: 'Key {{key}}',
-    keyLink: 'Key {{key}}: transpose in Settings',
     sections: {
       intro: 'Intro',
       verse: 'Verse',
@@ -929,7 +925,7 @@ export const practice = {
     },
     section: 'Section',
     repeat: 'Repeat',
-    times: '×{{count}}',
+    times: '× {{count}}',
     fewer: 'Fewer times',
     moreTimes: 'More times',
     variation: 'Variation',
@@ -942,6 +938,10 @@ export const practice = {
     wrongBar_one: 'Bar {{bar}} holds {{count}} beat, not {{beats}}: tap to set its chords’ lengths',
     wrongBar_other:
       'Bar {{bar}} holds {{count}} beats, not {{beats}}: tap to set its chords’ lengths',
+    file: 'File',
+    dock: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
+    chords: 'Chords',
+    loopSection: 'Loop this section',
     addSection: 'Add section',
     drag: 'Move {{name}}',
     bars_one: '{{count}} bar',
@@ -976,8 +976,6 @@ export const practice = {
     transport: 'Chord player',
     play: 'Play',
     stop: 'Stop',
-    loop: 'Loop {{section}}',
-    loopOff: 'Stop looping {{section}}',
     inPlayer: 'Practise in the Player',
     inProgressions: 'Open in Progressions',
     shortcuts: { group: 'Chord player', playStop: 'Play or stop', undo: 'Undo', redo: 'Redo' },
@@ -992,9 +990,6 @@ export const practice = {
       playing: 'Playing',
       countIn: 'Count-in',
       countInInfo: 'A bar of clicks before the music, its first beat accented.',
-      repeat: 'Repeat the sheet',
-      repeatInfo:
-        'On, the sheet plays again from the top until you stop it; off, its last chord rings and it ends.',
       volume: 'Volume',
       music: 'Music',
       time: 'Time signature',

@@ -147,7 +147,7 @@ describe('the chord player’s transport', () => {
     expect(repeating.audio.played).toHaveLength(2)
     expect(repeating.engine.state().playing).toBe(true)
 
-    const once = setUp('C 4/4; verse: C', { repeat: false })
+    const once = setUp('C 4/4; verse: C', { plays: 1 })
     once.engine.play()
     const piano = heard(once.audio).filter((s) => s.kind === 'note' && s.instrument === 'piano')
     expect(

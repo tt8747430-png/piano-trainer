@@ -16,8 +16,8 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { Link } from '@tanstack/react-router'
-import { ChevronDown, Dices, Plus, Repeat, SlidersHorizontal } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import { Dices, ListMusic, Piano, Plus, Redo2, Route, Undo2 } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { styleBook, styleVariations, usePatternBook } from '@/entities/pattern'
@@ -25,7 +25,7 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { useMediaQuery } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -53,24 +53,29 @@ import {
   numeralsParam,
   parseNumerals,
   printedChord,
+  printedNote,
   randomProgression,
   type Chord,
   type Numeral,
 } from '@/shared/lib/music'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
-  ButtonLink,
+  BackButton,
   FloatingActions,
   FloatingBar,
-  FloatingBarButton,
   FloatingBarPlay,
+  FloatingBarValue,
+  MoreMenu,
   NO_KEYS,
+  RoundButton,
   say,
+  ScreenHeader,
+  Sheet,
+  SheetContent,
   Stepper,
-  OpensMark,
+  type MenuAction,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { SHEET_TEMPO } from '@/entities/chord-sheet'
+import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-sheet'
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { useChordTransport } from '../model/use-chord-transport'
@@ -122,10 +127,13 @@ function sheetNumerals(sheet: ChordSheet): Numeral[] | null {
     : null
 }
 
+/** The dock's sheets, one open at a time. */
+type DockSheet = 'key' | 'tempo' | 'plays'
+
 /**
- * The Chord player (R29 CP1–CP6, R32): the head (the sheet's name opening the Library, its Style,
- * Tempo and key), the sheet's sections of equal chord tiles, Add section and Randomize at its foot,
- * the on-screen piano, and the floating transport (Play on Space, Loop, Practise in the Player). One
+ * The Chord player (canvas 171): its bar (Undo, the gear, ⋯ with the sheet's files and acts), the
+ * chart on its paper, the on-screen piano, and the dock (Style · Key · Tempo · Repeats, each opening
+ * its sheet, and Play on Space). One
  * drag context holds the sections and their chords (memory-palaces' fix): a mouse moves a thing
  * after 8px, a finger after a quarter-second hold, the keys after Space; the thing in hand is drawn
  * in the overlay, lifted, and lands only where it may.
@@ -135,6 +143,8 @@ export function ChordPlayer({
   sheetId,
   name,
   routes,
+  more,
+  settings,
 }: {
   hand: ChordSheetInHand
   /** One of My chord sheets (`?sheet=`), or none: the sheet in hand. */
@@ -142,7 +152,12 @@ export function ChordPlayer({
   /** Its name: a saved sheet's, or "New chord sheet". */
   name: string
   routes: ChordPlayerRoutes
+  /** The page's own acts on the sheet's file (New, Save as my chord sheet…, Share link), in ⋯. */
+  more: readonly MenuAction[]
+  /** The gear: the Chord player's Settings. */
+  settings: ReactNode
 }) {
+  const navigate = useNavigate()
   const { t } = useTranslation('practice')
   const locale = useLocale()
   const keyName = useKeyName()
@@ -164,6 +179,7 @@ export function ChordPlayer({
   const reduced = useMediaQuery(REDUCED_MOTION)
   const [library, setLibrary] = useState(false)
   const [styles, setStyles] = useState(false)
+  const [dock, setDock] = useState<DockSheet | null>(null)
   /** The section whose sheet is open. */
   const [opened, setOpened] = useState<number | null>(null)
   const meter = shown.meter
@@ -224,8 +240,6 @@ export function ChordPlayer({
     })
   }
 
-  const loopSection = transport.lit?.section ?? dialog?.place.section ?? 0
-  const loopName = t(`chordPlayer.sections.${shown.sections[loopSection]?.kind ?? 'verse'}`)
   const numerals = sheetNumerals(shown)
   const hasChords = shown.sections.some((section) => section.bars.length > 0)
   const toggle = () => (transport.playing ? transport.stop() : transport.play())
@@ -277,50 +291,74 @@ export function ChordPlayer({
     ? (chordAt({ section: dialog.place.section, index: dialog.place.index + 1 })?.chord ?? null)
     : null
 
+  const plays = entry.settings.plays
+  const transpose = entry.settings.transpose
+  const shortKey = `${printedNote(shown.key.tonic)}${shown.key.minor ? 'm' : ''}`
   return (
-    <div className="flex flex-col gap-5 pb-28">
-      {/* The head: one row on a laptop, two on a phone. */}
-      <div className="flex flex-col gap-3 rounded-card bg-card p-3 elevation-1 md:flex-row md:flex-wrap md:items-center md:gap-4">
-        <HeadButton
-          label={t('chordPlayer.libraryOf', { name })}
-          onClick={() => setLibrary(true)}
-          className="font-display text-2xl"
-        >
-          {name}
-        </HeadButton>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <HeadButton
-            label={t('chordPlayer.styleOf', { style: localText(style.name, locale) })}
-            onClick={() => setStyles(true)}
-            icon={<SlidersHorizontal aria-hidden className="size-4" />}
-          >
-            {localText(style.name, locale)}
-          </HeadButton>
-          <div className="flex items-center gap-2 [&_input]:w-16 [&_input]:px-2 [&_input]:text-center">
-            <span className="text-sm text-muted-foreground">{t('chordPlayer.tempo')}</span>
-            <Stepper
-              label={t('chordPlayer.tempo')}
-              value={entry.tempo}
-              min={SHEET_TEMPO.min}
-              max={SHEET_TEMPO.max}
-              typed
-              format={(count) => t('chordPlayer.bpm', { count })}
-              decrease={t('chordPlayer.slower')}
-              increase={t('chordPlayer.faster')}
-              onChange={(tempo) => hand.setEntry({ tempo })}
-            />
-          </div>
-          <Link
-            to="/practice/chord-player/settings"
-            search={sheetId === undefined ? {} : { sheet: sheetId }}
-            aria-label={t('chordPlayer.keyLink', { key: keyName(shown.key) })}
-            className="flex min-h-11 items-center gap-1 rounded-control px-2 font-semibold hover:bg-muted"
-          >
-            {t('chordPlayer.key', { key: keyName(shown.key) })}
-            <OpensMark className="size-4 text-current" />
-          </Link>
-        </div>
-      </div>
+    <div className="flex flex-col gap-4 pb-28">
+      <ScreenHeader
+        title={t('pages.chordPlayer')}
+        back={<BackButton />}
+        tools={
+          <RoundButton
+            label={t('chordPlayer.undo')}
+            icon={Undo2}
+            disabled={!hand.canUndo}
+            onClick={hand.undo}
+          />
+        }
+        settings={settings}
+        more={
+          <MoreMenu
+            label={t('chordPlayer.more')}
+            actions={[
+              {
+                key: 'redo',
+                label: t('chordPlayer.redo'),
+                icon: Redo2,
+                hidden: !hand.canRedo,
+                onSelect: hand.redo,
+              },
+              ...more,
+              {
+                key: 'library',
+                label: t('chordPlayer.library'),
+                icon: ListMusic,
+                onSelect: () => setLibrary(true),
+              },
+              {
+                key: 'randomize',
+                label: t('chordPlayer.randomize'),
+                icon: Dices,
+                group: t('chordPlayer.chords'),
+                onSelect: randomize,
+              },
+              {
+                key: 'progressions',
+                label: t('chordPlayer.inProgressions'),
+                icon: Route,
+                hidden: numerals === null,
+                onSelect: () =>
+                  void navigate({
+                    to: '/practice/progressions/line',
+                    search: { p: numeralsParam(numerals ?? []), key: keyParam(shown.key) },
+                  }),
+              },
+              {
+                key: 'player',
+                label: t('chordPlayer.inPlayer'),
+                icon: Piano,
+                hidden: numerals === null,
+                onSelect: () =>
+                  void navigate({
+                    to: '/play/progression',
+                    search: { p: numeralsParam(numerals ?? []), key: keyParam(shown.key) },
+                  }),
+              },
+            ]}
+          />
+        }
+      />
 
       <DndContext
         sensors={sensors}
@@ -331,15 +369,7 @@ export function ChordPlayer({
       >
         {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
         <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
-          <button
-            type="button"
-            onClick={() => setLibrary(true)}
-            aria-label={t('chordPlayer.libraryOf', { name })}
-            title={t('chordPlayer.libraryOf', { name })}
-            className="mx-auto min-h-11 max-w-full rounded-control px-2 text-center font-display text-xl text-balance transition-colors duration-200 ease-out hover:bg-muted"
-          >
-            {name}
-          </button>
+          <h2 className="text-center font-display text-xl font-normal text-balance">{name}</h2>
           <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
             {shown.sections.map((section, index) => (
               <SheetSection
@@ -383,68 +413,103 @@ export function ChordPlayer({
         </DragOverlay>
       </DndContext>
 
-      <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="lg" onClick={randomize}>
-          <Dices aria-hidden />
-          {t('chordPlayer.randomize')}
-        </Button>
-        {numerals ? (
-          <ButtonLink
-            variant="outline"
-            size="lg"
-            render={
-              <Link
-                to="/practice/progressions/line"
-                search={{ p: numeralsParam(numerals), key: keyParam(shown.key) }}
-              />
-            }
-          >
-            {t('chordPlayer.inProgressions')}
-          </ButtonLink>
-        ) : null}
-      </div>
-
       <PinnedKeyboard shown={NO_KEYS} />
 
       <FloatingActions>
-        <FloatingBar label={t('chordPlayer.transport')}>
+        <FloatingBar label={t('chordPlayer.transport')} className="md:w-[35rem]">
+          <FloatingBarValue
+            label={t('chordPlayer.style')}
+            value={localText(style.name, locale)}
+            onClick={() => setStyles(true)}
+          />
+          <FloatingBarValue
+            label={t('chordPlayer.dock.key')}
+            value={shortKey}
+            spoken={keyName(shown.key)}
+            onClick={() => setDock('key')}
+          />
+          <FloatingBarValue
+            label={t('chordPlayer.tempo')}
+            value={String(entry.tempo)}
+            spoken={t('chordPlayer.bpm', { count: entry.tempo })}
+            onClick={() => setDock('tempo')}
+          />
+          <FloatingBarValue
+            label={t('chordPlayer.dock.plays')}
+            value={plays === 0 ? '∞' : t('chordPlayer.times', { count: plays })}
+            spoken={
+              plays === 0
+                ? t('chordPlayer.dock.untilStop')
+                : t('chordPlayer.times', { count: plays })
+            }
+            onClick={() => setDock('plays')}
+          />
           <FloatingBarPlay
             label={transport.playing ? t('chordPlayer.stop') : t('chordPlayer.play')}
             playing={transport.playing}
             disabled={!hasChords}
             onClick={toggle}
           />
-          <FloatingBarButton
-            label={
-              transport.looped === null
-                ? t('chordPlayer.loop', { section: loopName })
-                : t('chordPlayer.loopOff', {
-                    section: t(
-                      `chordPlayer.sections.${shown.sections[transport.looped]?.kind ?? 'verse'}`,
-                    ),
-                  })
-            }
-            aria-pressed={transport.looped !== null}
-            className={cn(transport.looped !== null && 'bg-muted text-link')}
-            onClick={() => transport.setLoop(transport.looped === null ? loopSection : null)}
-          >
-            <Repeat aria-hidden />
-          </FloatingBarButton>
-          {numerals ? (
-            <FloatingBarButton
-              label={t('chordPlayer.inPlayer')}
-              render={
-                <Link
-                  to="/play/progression"
-                  search={{ p: numeralsParam(numerals), key: keyParam(shown.key) }}
-                />
-              }
-            >
-              <ChevronDown aria-hidden className="-rotate-90" />
-            </FloatingBarButton>
-          ) : null}
         </FloatingBar>
       </FloatingActions>
+
+      <Sheet open={dock !== null} onOpenChange={(open) => (open ? null : setDock(null))}>
+        {dock === 'key' ? (
+          <SheetContent title={t('chordPlayer.dock.key')}>
+            <div className="flex flex-col items-center gap-3 py-2">
+              <Stepper
+                label={t('chordPlayer.settings.transpose')}
+                value={transpose}
+                min={TRANSPOSE_RANGE.min}
+                max={TRANSPOSE_RANGE.max}
+                format={(count) => (count > 0 ? `+${count}` : count < 0 ? `−${-count}` : '0')}
+                decrease={t('chordPlayer.settings.down')}
+                increase={t('chordPlayer.settings.up')}
+                onChange={(next) => hand.setSettings({ transpose: next })}
+              />
+              <p className="text-muted-foreground" aria-live="polite">
+                {t('chordPlayer.settings.transposeTo', {
+                  from: keyName(hand.sheet.key),
+                  to: keyName(shown.key),
+                })}
+              </p>
+            </div>
+          </SheetContent>
+        ) : dock === 'tempo' ? (
+          <SheetContent title={t('chordPlayer.tempo')}>
+            <div className="flex justify-center py-2 [&_input]:w-20 [&_input]:text-center">
+              <Stepper
+                label={t('chordPlayer.tempo')}
+                value={entry.tempo}
+                min={SHEET_TEMPO.min}
+                max={SHEET_TEMPO.max}
+                typed
+                format={(count) => t('chordPlayer.bpm', { count })}
+                decrease={t('chordPlayer.slower')}
+                increase={t('chordPlayer.faster')}
+                onChange={(tempo) => hand.setEntry({ tempo })}
+              />
+            </div>
+          </SheetContent>
+        ) : dock === 'plays' ? (
+          <SheetContent title={t('chordPlayer.dock.plays')}>
+            <div className="flex justify-center py-2">
+              <Stepper
+                label={t('chordPlayer.dock.plays')}
+                value={plays}
+                min={0}
+                max={SHEET_PLAYS}
+                format={(count) =>
+                  count === 0 ? t('chordPlayer.dock.untilStop') : t('chordPlayer.times', { count })
+                }
+                decrease={t('chordPlayer.fewer')}
+                increase={t('chordPlayer.moreTimes')}
+                onChange={(next) => hand.setSettings({ plays: next })}
+              />
+            </div>
+          </SheetContent>
+        ) : null}
+      </Sheet>
 
       {dialog && dialogChord ? (
         <ChordDialog
@@ -485,6 +550,8 @@ export function ChordPlayer({
             setOpened(null)
           }}
           onDelete={() => deleteSection(opened)}
+          looped={transport.looped === opened}
+          onLoop={(on) => transport.setLoop(on ? opened : null)}
         />
       ) : null}
       <LibrarySheet
@@ -524,37 +591,5 @@ export function ChordPlayer({
         }}
       />
     </div>
-  )
-}
-
-/** A head's value that opens its sheet: the value, a chevron. */
-function HeadButton({
-  label,
-  onClick,
-  icon,
-  className,
-  children,
-}: {
-  label: string
-  onClick(): void
-  icon?: ReactNode
-  className?: string
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      onClick={onClick}
-      className={cn(
-        'flex min-h-11 min-w-0 items-center gap-2 rounded-control px-2 text-left font-semibold text-pretty hover:bg-muted focus-visible:outline-3 focus-visible:outline-ring',
-        className,
-      )}
-    >
-      {icon}
-      <span className="min-w-0">{children}</span>
-      <ChevronDown aria-hidden className="size-4 shrink-0" />
-    </button>
   )
 }

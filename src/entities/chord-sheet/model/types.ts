@@ -17,8 +17,8 @@ export interface ChordSheetSettings {
   readonly drums: PartLevel
   /** A bar counted in before the music. */
   readonly countIn: boolean
-  /** The sheet played again and again until Stop. */
-  readonly repeat: boolean
+  /** How many times the sheet plays through, 1 to 8; 0 again and again until Stop. */
+  readonly plays: number
   /** 0 to 100 %. */
   readonly volume: number
   /** Semitones the sheet is heard and shown moved by, the short way: −5 to +6. */
@@ -30,13 +30,15 @@ export const DEFAULT_SHEET_SETTINGS: ChordSheetSettings = {
   bass: { on: true, level: 70 },
   drums: { on: true, level: 70 },
   countIn: false,
-  repeat: true,
+  plays: 0,
   volume: 80,
   transpose: 0,
 }
 
 /** The tempos a chord sheet plays at, in beats a minute. */
 export const SHEET_TEMPO = { min: 40, max: 240 } as const
+/** The most times a sheet plays through before it ends (0: until Stop). */
+export const SHEET_PLAYS = 8
 export const TRANSPOSE_RANGE = TRANSPOSITION_RANGE
 
 /** A sheet as kept (R29 CP5): its text (`sheetToText`), its style, its tempo and how it plays. */

@@ -5,6 +5,7 @@ import {
   BAND_PARTS,
   DEFAULT_SHEET_SETTINGS,
   MOST_SHEETS,
+  SHEET_PLAYS,
   SHEET_TEMPO,
   sheetName,
   TRANSPOSE_RANGE,
@@ -73,7 +74,7 @@ export function readSettings(saved: unknown): ChordSheetSettings {
     bass: partLevel(settings.bass, DEFAULT_SHEET_SETTINGS.bass),
     drums: partLevel(settings.drums, DEFAULT_SHEET_SETTINGS.drums),
     countIn: flag(settings.countIn, DEFAULT_SHEET_SETTINGS.countIn),
-    repeat: flag(settings.repeat, DEFAULT_SHEET_SETTINGS.repeat),
+    plays: between(settings.plays, 0, SHEET_PLAYS, DEFAULT_SHEET_SETTINGS.plays),
     volume: between(settings.volume, 0, 100, DEFAULT_SHEET_SETTINGS.volume),
     transpose: between(settings.transpose, TRANSPOSE_RANGE.min, TRANSPOSE_RANGE.max, 0),
   }

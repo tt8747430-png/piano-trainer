@@ -1,8 +1,8 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Cable, Drum, Guitar, Minus, Piano, Plus } from 'lucide-react'
+import { Cable, Drum, Guitar, Piano } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BAND_PARTS, TRANSPOSE_RANGE, type BandPart } from '@/entities/chord-sheet'
+import { BAND_PARTS, type BandPart } from '@/entities/chord-sheet'
 import { styleBook, usePatternBook } from '@/entities/pattern'
 import {
   PROGRESSION_NAMES,
@@ -12,7 +12,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setChordPlayer } from '@/features/set-preference'
-import { formatPercent, useKeyName, useLocale } from '@/shared/i18n'
+import { formatPercent, useLocale } from '@/shared/i18n'
 import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangement'
 import {
   BackButton,
@@ -25,7 +25,6 @@ import {
   SettingsGroup,
   SwitchRow,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useChordSheet } from '@/widgets/chord-player'
 
@@ -70,13 +69,12 @@ function Level({
 /**
  * The Chord player's Settings (`/practice/chord-player/settings`, R29 CP6), a lesson's page's shape:
  * Instruments (each on or off and its level, at least one on, a part the style has none of not
- * drawn), Playing (Count-in, Repeat the sheet, Volume), Music (Time signature, Transpose, Written as,
- * Voicing), then the on-screen piano's and a connected piano's own pages. All but Written as and
+ * drawn), Playing (Count-in, Volume), Music (Time signature, Written as, Voicing; the key heard and
+ * the times through are the bar's Key and Repeats), then the on-screen piano's and a connected piano's own pages. All but Written as and
  * Voicing belong to the sheet open, saved with it.
  */
 export function ChordPlayerSettingsPage() {
   const { t } = useTranslation('practice')
-  const keyName = useKeyName()
   const { sheet: sheetId } = useSearch({ from: '/shell/practice/chord-player/settings' })
   const hand = useChordSheet(sheetId)
   const patterns = usePatternBook()
@@ -90,8 +88,6 @@ export function ChordPlayerSettingsPage() {
     (part) => part === 'piano' || (part === 'bass' ? style.hasBass : style.hasDrums),
   )
   const onCount = drawn.filter((part) => settings[part].on).length
-  const from = keyName(hand.sheet.key)
-  const to = keyName(hand.shown.key)
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('chordPlayer.settings.title')} back={<BackButton />} />
@@ -134,12 +130,6 @@ export function ChordPlayerSettingsPage() {
               checked={settings.countIn}
               onCheckedChange={(countIn) => hand.setSettings({ countIn })}
             />
-            <SwitchRow
-              label={t('chordPlayer.settings.repeat')}
-              info={t('chordPlayer.settings.repeatInfo')}
-              checked={settings.repeat}
-              onCheckedChange={(repeat) => hand.setSettings({ repeat })}
-            />
             <div className="pt-3">
               <Level
                 label={t('chordPlayer.settings.volume')}
@@ -168,46 +158,6 @@ export function ChordPlayerSettingsPage() {
                     })
                   }}
                 />
-              </Labelled>
-              <Labelled label={t('chordPlayer.settings.transpose')}>
-                <div className="flex flex-wrap items-center gap-3">
-                  <div
-                    role="group"
-                    aria-label={t('chordPlayer.settings.transpose')}
-                    className="flex items-center gap-2"
-                  >
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="size-11"
-                      aria-label={t('chordPlayer.settings.down')}
-                      disabled={settings.transpose <= TRANSPOSE_RANGE.min}
-                      onClick={() => hand.setSettings({ transpose: settings.transpose - 1 })}
-                    >
-                      <Minus aria-hidden />
-                    </Button>
-                    <span className="min-w-10 text-center text-lg font-semibold tabular-nums">
-                      {settings.transpose > 0
-                        ? `+${settings.transpose}`
-                        : settings.transpose < 0
-                          ? `−${-settings.transpose}`
-                          : '0'}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="size-11"
-                      aria-label={t('chordPlayer.settings.up')}
-                      disabled={settings.transpose >= TRANSPOSE_RANGE.max}
-                      onClick={() => hand.setSettings({ transpose: settings.transpose + 1 })}
-                    >
-                      <Plus aria-hidden />
-                    </Button>
-                  </div>
-                  <span className="text-muted-foreground" aria-live="polite">
-                    {t('chordPlayer.settings.transposeTo', { from, to })}
-                  </span>
-                </div>
               </Labelled>
             </div>
           </SettingsGroup>

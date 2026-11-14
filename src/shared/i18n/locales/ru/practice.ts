@@ -823,7 +823,6 @@ export const practice: LocaleResources['practice'] = {
   chordPlayer: {
     untitled: 'Новая гармоническая сетка',
     library: 'Гармонические сетки',
-    libraryOf: 'Сетка: {{name}}. Открыть другую',
     mine: 'Мои сетки',
     noneMine: 'Пока ничего не сохранено. Сохраните сетку из меню ⋯.',
     progressions: 'Последовательности',
@@ -862,7 +861,6 @@ export const practice: LocaleResources['practice'] = {
       },
     },
     style: 'Стиль',
-    styleOf: 'Стиль: {{style}}',
     hear: 'Послушать такт стиля «{{style}}»',
     laidOut: 'Переписано в размере {{meter}}',
     families: {
@@ -885,8 +883,6 @@ export const practice: LocaleResources['practice'] = {
     slower: 'Медленнее',
     faster: 'Быстрее',
     bpm: '{{count}} уд/мин',
-    key: 'Тональность {{key}}',
-    keyLink: 'Тональность {{key}}: транспонировать в настройках',
     sections: {
       intro: 'Вступление',
       verse: 'Куплет',
@@ -898,7 +894,7 @@ export const practice: LocaleResources['practice'] = {
     },
     section: 'Раздел',
     repeat: 'Повтор',
-    times: '×{{count}}',
+    times: '× {{count}}',
     fewer: 'Меньше раз',
     moreTimes: 'Больше раз',
     variation: 'Вариант',
@@ -918,6 +914,10 @@ export const practice: LocaleResources['practice'] = {
       'В такте {{bar}} {{count}} долей, а не {{beats}}: нажмите, чтобы задать длительности',
     wrongBar_other:
       'В такте {{bar}} {{count}} доли, а не {{beats}}: нажмите, чтобы задать длительности',
+    file: 'Файл',
+    dock: { key: 'Тональность', plays: 'Повторы', untilStop: 'До остановки' },
+    chords: 'Аккорды',
+    loopSection: 'Повторять этот раздел',
     addSection: 'Добавить раздел',
     drag: 'Переместить «{{name}}»',
     bars_one: '{{count}} такт',
@@ -956,8 +956,6 @@ export const practice: LocaleResources['practice'] = {
     transport: 'Плеер аккордов',
     play: 'Играть',
     stop: 'Стоп',
-    loop: 'Повторять «{{section}}»',
-    loopOff: 'Не повторять «{{section}}»',
     inPlayer: 'Заниматься в плеере',
     inProgressions: 'Открыть в последовательностях',
     shortcuts: {
@@ -977,9 +975,6 @@ export const practice: LocaleResources['practice'] = {
       playing: 'Воспроизведение',
       countIn: 'Отсчёт',
       countInInfo: 'Такт щелчков перед музыкой, первая доля с акцентом.',
-      repeat: 'Повторять сетку',
-      repeatInfo:
-        'Включено — сетка играет сначала, пока вы её не остановите; выключено — звучит последний аккорд, и игра заканчивается.',
       volume: 'Громкость',
       music: 'Музыка',
       time: 'Размер',

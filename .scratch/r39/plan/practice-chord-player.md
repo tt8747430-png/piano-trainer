@@ -168,3 +168,15 @@ Auto Fill, Break, Ending/rit. I II III, Fade, OTS Link; a lamp red when on, pale
 | 6 | Follow a MIDI arranger and the Genos strip | none | Web MIDI: Start, Stop, clock in; Section Control out |
 | 7 | Share, view only or can edit, live | `share` exists for folders | the sheet's online row and Realtime |
 
+
+### Ported (loop, 2026-11-14)
+
+- 1 bars of chords (done); 2 the chart, ticks and ! (done): the chart on its paper as canvas 171 draws it; a
+  section's head opens its own sheet (Section, Repeat, Loop this section, Variation, Duplicate section, Delete
+  section at once with Undo), which the board leaves undrawn: decided so its settings keep one home, the old ⋯ and
+  inline pickers gone.
+- The bar and the dock (done): Back · Chord player · Undo · gear · ⋯ (Redo, New, Save as my chord sheet…, Share
+  link, Chord sheets, Randomize chords, Open in Progressions, Practise in the Player); the dock Style · Key · Tempo
+  · Repeats · Play. Decided, one home each: the dock's Key opens the transpose stepper (Settings' Transpose row
+  gone); its Repeats is how many times the sheet plays, Until Stop or 1 to 8 (Settings' "Repeat the sheet" gone).
+  The head card, the button row and the floating Loop are gone (Loop is in the section's sheet).
