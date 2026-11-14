@@ -35,12 +35,10 @@ export function ChordsView({
   scale,
   onChange,
   choice,
-  facts,
 }: {
   scale: ScaleView
   onChange: (change: Partial<ScaleView>) => void
   choice: ReactNode
-  facts: ReactNode
 }) {
   const { t } = useTranslation(['music', 'practice'])
   const { root, kind, chords: notes, inversion, keysPlay } = scale
@@ -75,11 +73,11 @@ export function ChordsView({
           keyPlays={keyPlays}
           outlined={new Set(holding.map((chord) => chord.key))}
           onKeyPress={listening ? hear : undefined}
+          place="top"
         />
       }
       heading={choice}
-      facts={facts}
-      action={
+      bar={
         <PlayUpDown
           sounds={walkSounds(
             walk.map((placed) => placed.tones.map((tone) => tone.midi)),

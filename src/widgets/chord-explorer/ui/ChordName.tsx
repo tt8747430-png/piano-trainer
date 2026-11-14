@@ -13,16 +13,9 @@ import {
   type ChordQuality,
   type Tone,
 } from '@/shared/lib/music'
-import { MenuPicker, NotePicker } from '@/shared/ui'
+import { MenuPicker, NotePicker, TITLE_PART } from '@/shared/ui'
 import { takesTwoHands, type ChordView } from '../model/chord-view'
 import { useChordTypes } from './use-chord-types'
-
-/**
- * One part of the chord's name, the canvas's PART value for value: the serif at 44 (56 on a laptop)
- * and bold, on the fill, 14 round, 48 high at least, 2 8 4 12 inside, its ⌃⌄ faint beside it.
- */
-const PART =
-  'h-auto min-h-12 items-center gap-1.5 rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-[9px] pb-1 ps-3 font-display text-[2.75rem] leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold [&>svg]:h-[0.9375rem] [&>svg]:w-2.5 [&>svg]:text-foreground [&>svg]:opacity-55'
 
 /**
  * The chord's name made of its three pickers (R42, the canvas's NAME_A): its root, its type and the
@@ -65,7 +58,7 @@ export function ChordName({
         label={t('practice:root')}
         value={root}
         onChange={(spelled) => onChange({ root: noteParam(spelled) })}
-        className={PART}
+        className={TITLE_PART}
       />
       <MenuPicker
         bare
@@ -82,7 +75,7 @@ export function ChordName({
           )
         }
         onChange={(each) => onChange(qualityParams(each))}
-        className={PART}
+        className={TITLE_PART}
       />
       {inversions.length > 1 ? (
         <MenuPicker
@@ -109,7 +102,7 @@ export function ChordName({
             )
           }
           onChange={(inversion) => onChange({ inversion })}
-          className={PART}
+          className={TITLE_PART}
         />
       ) : null}
     </div>

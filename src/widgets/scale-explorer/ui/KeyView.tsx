@@ -61,7 +61,10 @@ export function KeyView({
     scaleShown(placeScale(tonic, kind)),
   )
   return (
-    <ScaleLayout keyboard={<PinnedKeyboard shown={shown} range={range} />} heading={choice}>
+    <ScaleLayout
+      keyboard={<PinnedKeyboard shown={shown} range={range} place="top" />}
+      heading={choice}
+    >
       <div className="grid-fields items-start gap-x-10 gap-y-6">
         <CircleOfFifths current={musicKey} />
         <div className="flex min-w-0 flex-col gap-6">
