@@ -27,16 +27,8 @@ import { LibraryTree } from './LibraryTree'
 /** How many rows a phone's run shows before Show all. */
 const FOLDED = 5
 
-/** A phone's run of rows under its name and count, folding away, after five Show all n; a book's links over it. */
-function Section({
-  section,
-  folds,
-  links,
-}: {
-  section: ShownSection
-  folds: boolean
-  links?: ReactNode
-}) {
+/** A phone's run of rows under its name and count, folding away, after five Show all n. */
+function Section({ section, folds }: { section: ShownSection; folds: boolean }) {
   const { t } = useTranslation('practice')
   const [open, setOpen] = useState(false)
   const [shut, setShut] = useState(false)
@@ -47,7 +39,6 @@ function Section({
       count={section.items.length}
       fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
     >
-      {links ? <div className="flex flex-wrap gap-2">{links}</div> : null}
       <ul className={GROUPED_LIST}>
         {(folded ? section.items.slice(0, FOLDED) : section.items).map((item) => (
           <LibraryRow key={item.id} item={item} />
@@ -122,7 +113,6 @@ export function PracticeLibrary({
       placeOf={(id) => arranged.items.find((item) => item.id === id)?.group ?? ''}
     />
   )
-  const linksOf = (place: string) => arranged.groups.find((group) => group.id === place)?.links
   if (editing)
     return (
       <>
@@ -170,29 +160,19 @@ export function PracticeLibrary({
           mine={mine?.empty}
         />
       ) : wide ? (
-        <>
-          {linksOf(shown.place) ? (
-            <div className="flex flex-wrap gap-2">{linksOf(shown.place)}</div>
-          ) : null}
-          <LibraryTable
-            items={shown.items}
-            view={view}
-            groups={arranged.groups}
-            groupWord={groupWord}
-            levels={levels}
-            extra={extra}
-            names={names}
-          />
-        </>
+        <LibraryTable
+          items={shown.items}
+          view={view}
+          groups={arranged.groups}
+          groupWord={groupWord}
+          levels={levels}
+          extra={extra}
+          names={names}
+        />
       ) : (
         <div className="flex flex-col gap-6">
           {shown.sections.map((section) => (
-            <Section
-              key={section.id}
-              section={section}
-              folds={!narrowed}
-              links={linksOf(section.id)}
-            />
+            <Section key={section.id} section={section} folds={!narrowed} />
           ))}
         </div>
       )}

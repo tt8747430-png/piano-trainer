@@ -35,8 +35,6 @@ export interface PracticeLibraryView {
 export interface LibraryGroup {
   readonly id: string
   readonly name: string
-  /** Where the rest of a book's material is (R32): its course in Learn, its songs in Songs. */
-  readonly links?: ReactNode
 }
 
 /** A run of rows on a phone: a book's, or a book's songs apart from its patterns. */

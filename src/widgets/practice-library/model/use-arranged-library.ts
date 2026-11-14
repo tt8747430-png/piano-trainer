@@ -55,7 +55,6 @@ export function useArrangedLibrary({
   const store = usePracticeLibraryStoreApi()
   const arrangement = usePracticeLibrary(selectArrangement(kind))
   const places = arrangedPlaces(groups, arrangement)
-  const links = new Map(groups.map((group) => [group.id, group.links]))
   const arranged = arrangedItems(
     // A row the page has hidden already stays Hidden's; the rest stand in their own place.
     items,
@@ -137,10 +136,7 @@ export function useArrangedLibrary({
     places,
     groups: places
       .filter((place) => !place.hidden)
-      .map((place) => {
-        const placeLinks = links.get(place.id)
-        return { id: place.id, name: place.name, ...(placeLinks ? { links: placeLinks } : {}) }
-      }),
+      .map((place) => ({ id: place.id, name: place.name })),
     items: rows,
   }
 }

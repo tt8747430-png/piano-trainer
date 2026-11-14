@@ -1,5 +1,4 @@
-import { Link } from '@tanstack/react-router'
-import { AudioWaveform, GraduationCap, Heart, HeartOff, Music, UserRound } from 'lucide-react'
+import { AudioWaveform, Heart, HeartOff, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { isMethodBookId, METHOD_BOOK_IDS } from '@/entities/book'
 import { courseById } from '@/entities/course'
@@ -20,33 +19,18 @@ import {
   type BookPattern,
   type PatternId,
 } from '@/entities/pattern'
-import { isSongCollectionId, METHOD_BOOK_PIECES } from '@/entities/piece'
 import { toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
-import { OPEN_PLAINLY } from '@/shared/lib'
 import type { RowAction } from '@/shared/ui'
 import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
 
 /** The books Accompaniment lists, in its order: the method books, then the rhythm styles. */
 const BOOKS: readonly AccompanimentPart[] = [...METHOD_BOOK_IDS, 'styles']
 
-/** A link of a book's place to where the rest of its material is: its course, its songs. */
-const BOOK_LINK =
-  'inline-flex min-h-11 items-center gap-2 rounded-pill border border-input bg-card px-3 text-sm font-semibold transition-colors duration-200 ease-out hover:bg-muted'
-
-/** The Songs folder that holds a method book's songs, where Songs lists one. */
-function songsFolderOf(part: AccompanimentPart): string | undefined {
-  if (!isMethodBookId(part)) return undefined
-  const { id } = METHOD_BOOK_PIECES[part]
-  if (isSongCollectionId(id)) return id
-  return isSongCollectionId(part) ? part : undefined
-}
-
 /**
  * The Accompaniment library's books and rows (R30-4, R32): patterns only, each method book (Called to
- * Play, Called to Play 2, Боброва, Gorshkov) and the rhythm styles a place of its patterns, with links
- * to the book's course in Learn and its songs in Songs, kept apart from the patterns; the patterns the
- * learner made Mine. A built-in pattern hides as its page hides it (the Player's picker leaves it out
+ * Play, Called to Play 2, Боброва, Gorshkov) and the rhythm styles a place of its patterns, and the
+ * patterns the learner made Mine; the books' courses and songs are Learn's and Songs'. A built-in pattern hides as its page hides it (the Player's picker leaves it out
  * too), so Hidden and the picker agree. A pattern's level is its book's course's; the styles' and the
  * learner's have none.
  */
@@ -63,44 +47,7 @@ export function useAccompanimentLibrary(): {
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
   const patterns = usePatternsStoreApi()
-  const groups = BOOKS.map((part): LibraryGroup => {
-    const course = isMethodBookId(part) ? courseById(part) : undefined
-    const folder = songsFolderOf(part)
-    return {
-      id: part,
-      name: partName(part),
-      ...(course || folder
-        ? {
-            links: (
-              <>
-                {course ? (
-                  <Link
-                    to="/courses/$courseId"
-                    params={{ courseId: course.id }}
-                    state={OPEN_PLAINLY}
-                    className={BOOK_LINK}
-                  >
-                    <GraduationCap aria-hidden className="size-4" />
-                    {t('practice:library.links.course')}
-                  </Link>
-                ) : null}
-                {folder ? (
-                  <Link
-                    to="/songs/folders/$folderId"
-                    params={{ folderId: folder }}
-                    state={OPEN_PLAINLY}
-                    className={BOOK_LINK}
-                  >
-                    <Music aria-hidden className="size-4" />
-                    {t('practice:library.links.songs')}
-                  </Link>
-                ) : null}
-              </>
-            ),
-          }
-        : {}),
-    }
-  })
+  const groups = BOOKS.map((part): LibraryGroup => ({ id: part, name: partName(part) }))
   const favouriteAction = (favourite: boolean, onSelect: () => void): RowAction => ({
     key: 'favourite',
     label: t(favourite ? 'common:library.unfavourite' : 'common:library.favourite'),

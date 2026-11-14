@@ -681,7 +681,6 @@ export const practice: LocaleResources['practice'] = {
         action: 'Удалить папку',
       },
     },
-    links: { course: 'Курс в «Обучении»', songs: 'Песни в «Песнях»' },
     sortManual: 'Вручную',
     sortBy: 'Сортировка',
     placesLabel: 'Показать',
