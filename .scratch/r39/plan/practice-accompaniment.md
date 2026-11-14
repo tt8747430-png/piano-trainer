@@ -15,6 +15,13 @@ seen (its roll) and heard (Listen) before it is chosen, as Smart Pianist's style
 - Names are the trade's: Accompaniment and Pattern (Smart Pianist).
 - A pattern is a page (canvas 134): a row opens it, built-in or your own; ··· holds Edit, Duplicate, Publish and Delete (gone at once, with Undo). New pattern opens the same editor empty.
 
+- **A pattern's page in the Chords page's shape (canvas 178, loop, 2026-11-14):** one piano, one bar, one shape
+  across Practice. Back · Pattern · Piano · More (glass); the keys edge to edge at the top, lighting the pattern's
+  notes; its name in the serif with its ♡ beside it, its book and level; one card of its bar on the grand staff and
+  what it is; The hands (Right hand, Left hand); Used in; one floating bar Loop · Play ⌄ (Play over: A bar of C major,
+  a song it is used in) · Practise (the Player). On a laptop the keys run across the top, the pattern on the left,
+  its hands and uses on the right. More holds Make your own from it, Hide, Edit, Publish, Delete. Never a star, the
+  keys docked at the foot, or Practise in the Player as a bar across the page.
 ## Today
 
 `src/pages/accompaniment` → `widgets/practice-library`; content `entities/pattern/content/patterns.ts`. Rows with an

@@ -25,3 +25,4 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r58_chordplayer.py').rea
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r60_scales.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r61_intervals.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r62_progression.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r63_pattern.py').read())
