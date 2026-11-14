@@ -28,7 +28,7 @@ function Lamp({
       title={spoken}
       onClick={onClick}
       className={cn(
-        'h-10 min-w-11 rounded-[9px] px-1.5 text-sm font-bold whitespace-nowrap transition-colors duration-150 ease-out',
+        'h-11 min-w-11 rounded-[9px] px-1.5 text-sm font-bold whitespace-nowrap transition-colors duration-150 ease-out',
         on
           ? 'bg-destructive text-destructive-foreground'
           : 'bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] hover:bg-muted',
