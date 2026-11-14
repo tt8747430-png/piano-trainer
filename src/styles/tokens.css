@@ -92,6 +92,12 @@
   --honey-ring: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
+  /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
+     its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
+     follow the theme. */
+  --wheel-near: color-mix(in oklab, var(--primary) 45%, var(--card));
+  --wheel-relative: color-mix(in oklab, var(--primary) 58%, var(--background));
+  --wheel-near-inner: color-mix(in oklab, var(--primary) 18%, var(--background));
   /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
   --selected: var(--p-umber);
   --selected-foreground: var(--p-paper-card);
@@ -332,6 +338,10 @@
     --hairline: var(--p-line);
     --key-bed: var(--p-control);
     --mark-wash: 55%;
+    /* By night the wheel's washes are fainter, so the chosen key's honey leads. */
+    --wheel-near: color-mix(in oklab, var(--primary) 22%, var(--card));
+    --wheel-relative: color-mix(in oklab, var(--primary) 34%, var(--background));
+    --wheel-near-inner: color-mix(in oklab, var(--primary) 13%, var(--background));
   }
   @media screen {
     [data-theme='dark'] {

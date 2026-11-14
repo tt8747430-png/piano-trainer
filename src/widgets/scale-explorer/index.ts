@@ -8,5 +8,3 @@ export {
   type StaffMarks,
 } from './model/scale-view'
 export { ScaleExplorer } from './ui/ScaleExplorer'
-export { KeyCircle } from './ui/KeyCircle'
-export { signatureCount } from './model/circle-layout'

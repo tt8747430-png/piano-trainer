@@ -293,14 +293,7 @@ export {
   type TensionChord,
 } from './colour-notes'
 export { SKILLS, chordSkill, isSkillId, scaleSkill, skillOf, type SkillId } from './skill'
-export {
-  CIRCLE_OF_FIFTHS,
-  circleFunctions,
-  circleKey,
-  randomKey,
-  sameKey,
-  type CircleRing,
-} from './circle'
+export { CIRCLE_OF_FIFTHS, circleKey, randomKey, sameKey, type CircleRing } from './circle'
 export { keysHolding, type KeyHolding } from './keys-holding'
 export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
 export { findNumerals, numeralReadings, standsFor, type FoundSpan } from './numeral-find'

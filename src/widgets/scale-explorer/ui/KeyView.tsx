@@ -15,7 +15,6 @@ import {
   type Key,
 } from '@/shared/lib/music'
 import type { ScaleView } from '../model/scale-view'
-import { CircleOfFifths } from './CircleOfFifths'
 import { KeyFacts } from './KeyFacts'
 import { keyThird } from '../model/holding-keys'
 import { KeyHarmonise } from './KeyHarmonise'
@@ -23,9 +22,8 @@ import { KeySignature } from './KeySignature'
 import { ScaleLayout } from './ScaleLayout'
 
 /**
- * Key view: the scale's key, named and marked on the keys as its signature writes it, on the circle of
- * fifths, which chooses another, beside its signature on a staff, its notes, relations and modes; its
- * degrees by name; the
+ * Key view: the scale's key, named and marked on the keys as its signature writes it, its signature on
+ * a staff beside its notes, relations, place on the circle of fifths (a link to the tool) and modes; the
  * chords it borrows, to tap, in the size and inversion the Chords view was left in (triads or 7ths);
  * and a melody note harmonised in it (ADR 0052).
  */
@@ -66,11 +64,8 @@ export function KeyView({
       heading={choice}
     >
       <div className="grid-fields items-start gap-x-10 gap-y-6">
-        <CircleOfFifths current={musicKey} />
-        <div className="flex min-w-0 flex-col gap-6">
-          <KeySignature value={musicKey} />
-          <KeyFacts value={musicKey} />
-        </div>
+        <KeySignature value={musicKey} />
+        <KeyFacts value={musicKey} />
       </div>
       <section className="flex flex-col gap-3">
         <h3 className="text-2xl">{t('scales.key.borrowed')}</h3>
