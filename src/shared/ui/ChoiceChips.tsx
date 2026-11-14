@@ -5,7 +5,7 @@ import { optionName, type Option, type OptionValue } from './option'
 
 /**
  * One choice of a few whose names are too long for a segmented control's track: a row of chips that
- * wraps, every one in sight, the chosen ink on sand in an ink line, as a toggle chip is when on. A
+ * wraps, every one in sight, the chosen filled in ink with the page's colour on it (canvas 153). A
  * radio group: the arrows move to a chip and choose it.
  */
 export function ChoiceChips<V extends OptionValue>({
@@ -42,7 +42,7 @@ export function ChoiceChips<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={optionName(option)}
-          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border border-transparent bg-muted px-4 text-[0.9375rem] font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3"
+          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border border-transparent bg-muted px-4 text-[0.9375rem] font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3 data-checked:bg-foreground! data-checked:text-background!"
         >
           {option.label}
         </Radio.Root>

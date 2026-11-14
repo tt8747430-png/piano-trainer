@@ -259,7 +259,7 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 - **Paper** (`background`): the page, a shade darker than the cards on it.
 - **Card Paper** (`card`, `popover`, `raised`): cards, sheets, popovers, controls at rest, what floats.
 - **Sand** (`muted`, `accent`): hover and pressed fills, tracks.
-- **Soft Line** (`border`, `chosen`): 1px round a card, and the one selected fill, a step darker than hover.
+- **Soft Line** (`border`, `chosen`): 1px round a card, and the selected fill of a segment, tab or place, a step darker than hover; a chosen chip (a library's All · Favourites · Mine, any `ChoiceChips`) is filled in ink with the page's colour on it (canvas 153).
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
 - **Hairline** (`hairline`): a divider inside a card.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.
