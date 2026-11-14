@@ -17,10 +17,12 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
-import { Dices, ListMusic, Piano, Plus, Redo2, Route, Undo2 } from 'lucide-react'
+import { Check, Dices, ListMusic, Piano, Plus, Redo2, Route, Undo, Undo2 } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useChordSheetsStoreApi } from '@/entities/chord-sheet'
 import { styleBook, styleVariations, usePatternBook } from '@/entities/pattern'
+import { discardDraft, restoreDraft, saveDraft } from '@/features/manage-chord-sheets'
 import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
@@ -158,6 +160,7 @@ export function ChordPlayer({
   settings: ReactNode
 }) {
   const navigate = useNavigate()
+  const sheets = useChordSheetsStoreApi()
   const { t } = useTranslation('practice')
   const locale = useLocale()
   const keyName = useKeyName()
@@ -325,9 +328,37 @@ export function ChordPlayer({
                 hidden: !hand.canRedo,
                 onSelect: hand.redo,
               },
+              {
+                key: 'save-draft',
+                label: t('chordPlayer.draft.save'),
+                icon: Check,
+                group: t('chordPlayer.draft.label'),
+                hidden: !hand.draft || sheetId === undefined,
+                onSelect: () => {
+                  if (sheetId === undefined) return
+                  saveDraft(sheets, sheetId)
+                  say(t('chordPlayer.draft.saved', { name }))
+                },
+              },
+              {
+                key: 'discard-draft',
+                group: t('chordPlayer.draft.label'),
+                label: t('chordPlayer.draft.discard'),
+                icon: Undo,
+                hidden: !hand.draft || sheetId === undefined,
+                onSelect: () => {
+                  if (sheetId === undefined) return
+                  const kept = discardDraft(sheets, sheetId)
+                  say(t('chordPlayer.draft.discarded'), {
+                    label: t('chordPlayer.undo'),
+                    onClick: () => kept !== null && restoreDraft(sheets, sheetId, kept),
+                  })
+                },
+              },
               ...more,
               {
                 key: 'library',
+                group: t('chordPlayer.file'),
                 label: t('chordPlayer.library'),
                 icon: ListMusic,
                 onSelect: () => setLibrary(true),
@@ -341,6 +372,7 @@ export function ChordPlayer({
               },
               {
                 key: 'progressions',
+                group: t('chordPlayer.chords'),
                 label: t('chordPlayer.inProgressions'),
                 icon: Route,
                 hidden: numerals === null,
@@ -352,6 +384,7 @@ export function ChordPlayer({
               },
               {
                 key: 'player',
+                group: t('chordPlayer.chords'),
                 label: t('chordPlayer.inPlayer'),
                 icon: Piano,
                 hidden: numerals === null,
@@ -375,7 +408,14 @@ export function ChordPlayer({
       >
         {/* The chart, a lead sheet on its paper (canvas 171): its name, its sections, Add section. */}
         <div className="flex flex-col gap-4 rounded-[6px] bg-card px-3.5 pt-4 pb-[18px] shadow-[0_0_0_1px_var(--color-border),0_10px_24px_-18px_rgb(51_41_33/0.45)]">
-          <h2 className="text-center font-display text-xl font-normal text-balance">{name}</h2>
+          <div className="flex items-baseline justify-center gap-2">
+            <h2 className="font-display text-xl font-normal text-balance">{name}</h2>
+            {hand.draft ? (
+              <span className="text-[13px] font-semibold text-honey-ink">
+                {t('chordPlayer.draft.label')}
+              </span>
+            ) : null}
+          </div>
           <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
             {shown.sections.map((section, index) => (
               <SheetSection

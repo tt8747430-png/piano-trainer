@@ -939,6 +939,13 @@ export const practice = {
     wrongBar_other:
       'Bar {{bar}} holds {{count}} beats, not {{beats}}: tap to set its chords’ lengths',
     file: 'File',
+    draft: {
+      label: 'Draft',
+      save: 'Save',
+      discard: 'Discard draft',
+      saved: 'Saved {{name}}',
+      discarded: 'Draft discarded',
+    },
     dock: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
     chords: 'Chords',
     loopSection: 'Loop this section',

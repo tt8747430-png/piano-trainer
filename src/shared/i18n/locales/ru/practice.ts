@@ -915,6 +915,13 @@ export const practice: LocaleResources['practice'] = {
     wrongBar_other:
       'В такте {{bar}} {{count}} доли, а не {{beats}}: нажмите, чтобы задать длительности',
     file: 'Файл',
+    draft: {
+      label: 'Черновик',
+      save: 'Сохранить',
+      discard: 'Удалить черновик',
+      saved: 'Сохранено: {{name}}',
+      discarded: 'Черновик удалён',
+    },
     dock: { key: 'Тональность', plays: 'Повторы', untilStop: 'До остановки' },
     chords: 'Аккорды',
     loopSection: 'Повторять этот раздел',

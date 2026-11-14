@@ -44,6 +44,11 @@ export const TRANSPOSE_RANGE = TRANSPOSITION_RANGE
 /** A sheet as kept (R29 CP5): its text (`sheetToText`), its style, its tempo and how it plays. */
 export interface ChordSheetEntry {
   readonly text: string
+  /**
+   * One of My chord sheets' edits since its last Save, as text, kept on the device and synced; the
+   * sheet opens on it, and Save makes it the sheet's chords. None while nothing is changed.
+   */
+  readonly draft: string | null
   readonly style: string
   readonly tempo: number
   readonly settings: ChordSheetSettings

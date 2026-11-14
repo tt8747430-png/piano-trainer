@@ -32,12 +32,14 @@ export function ChordPlayerPage() {
             },
             {
               key: 'save',
+              group: t('chordPlayer.file'),
               label: t('chordPlayer.saveAs'),
               icon: Save,
               onSelect: () => page.setSaving(''),
             },
             {
               key: 'share',
+              group: t('chordPlayer.file'),
               label: t('chordPlayer.share'),
               icon: Link2,
               onSelect: () => void page.share(),

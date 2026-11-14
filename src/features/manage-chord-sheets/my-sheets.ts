@@ -19,9 +19,10 @@ export function saveAsMine(
   const { mine, nextId } = store.getState()
   if (!kept || mine.length >= MOST_SHEETS) return null
   const id = `sheet-${nextId}`
-  const { text, style, tempo, settings } = entry
+  const { text, draft, style, tempo, settings } = entry
   store.setState({
-    mine: [{ id, name: kept, text, style, tempo, settings }, ...mine],
+    // Saved as it is shown: a draft brought along becomes its chords.
+    mine: [{ id, name: kept, text: draft ?? text, draft: null, style, tempo, settings }, ...mine],
     nextId: nextId + 1,
   })
   return id

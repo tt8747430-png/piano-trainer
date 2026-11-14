@@ -36,6 +36,7 @@ export type ChordSheetsStore = StoreApi<ChordSheetsState>
 /** A new sheet: one empty Verse in C major, 4/4, in Pop 1 at 100. */
 export const NEW_ENTRY: ChordSheetEntry = {
   text: sheetToText(emptySheet()),
+  draft: null,
   style: DEFAULT_STYLE,
   tempo: 100,
   settings: DEFAULT_SHEET_SETTINGS,
@@ -88,8 +89,10 @@ function readEntry(saved: unknown): ChordSheetEntry | null {
   if (!isRecord(saved) || typeof saved.text !== 'string') return null
   const sheet = textToSheet(saved.text)
   if (!sheet) return null
+  const draft = typeof saved.draft === 'string' ? textToSheet(saved.draft) : null
   return {
     text: sheetToText(sheet),
+    draft: draft ? sheetToText(draft) : null,
     style: typeof saved.style === 'string' && saved.style.length > 0 ? saved.style : DEFAULT_STYLE,
     tempo: between(saved.tempo, SHEET_TEMPO.min, SHEET_TEMPO.max, NEW_ENTRY.tempo),
     settings: readSettings(saved.settings),
