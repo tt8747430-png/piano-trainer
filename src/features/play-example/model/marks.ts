@@ -8,8 +8,11 @@ import {
   type Midi,
   type PlacedScaleChord,
   type PlacedTone,
+  type RowPosition,
+  voiceLead,
 } from '@/shared/lib/music'
-import { toneMark, type KeyMark, type ShownKeys } from '@/shared/ui'
+import type { RowChord } from './chord-row'
+import { NO_KEYS, toneMark, type KeyMark, type ShownKeys } from '@/shared/ui'
 
 /** A chord's keys as a page shows them: each by its role, labelled with its degree and its note. */
 export const chordShown = (placed: readonly PlacedTone[]): ShownKeys => ({
@@ -48,4 +51,17 @@ export function voicedShown(chord: Chord, keys: readonly Midi[]): ShownKeys {
     else if (chord.bass) marks.set(key, { tone: 'scale', label: noteName(chord.bass) })
   }
   return { keys, marks }
+}
+
+/** A row's first chord as the row voices it: what a page whose row chooses a chord shows at rest. */
+export function firstChordShown(chords: readonly RowChord[], position?: RowPosition): ShownKeys {
+  const first = chords[0]
+  if (!first) return NO_KEYS
+  return voicedShown(
+    first.chord,
+    voiceLead(
+      chords.map(({ chord }) => chord),
+      position,
+    )[0] ?? [],
+  )
 }

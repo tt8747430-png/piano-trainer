@@ -84,11 +84,18 @@ export function ChordRow({
   chords,
   position,
   onShow,
+  chooses = false,
   children,
 }: {
   chords: readonly RowChord[]
   position?: RowPosition | undefined
   onShow: (shown: ShownKeys) => void
+  /**
+   * A page's own row (a progression's, canvas 198): one chord is chosen, the first until another is
+   * tapped, its tile ringed while nothing sounds; the page shows its keys (`firstChordShown` at
+   * first) and remounts the row when the row changes, so the first is chosen again.
+   */
+  chooses?: boolean
   children: ReactNode
 }) {
   // A chord alone by its place; a move by the place it leads to, as a negative number.
@@ -106,6 +113,7 @@ export function ChordRow({
   const onsets = useMemo(() => rowOnsets(voiced.length), [voiced.length])
   const walking = usePlayhead(playback.playing === 'row' ? playback.handle : null, onsets)
   const [looping, setLooping] = useState(false)
+  const [chosen, setChosen] = useState(0)
   // Looped, the row starts again as it ends by itself; never after Stop or a chord tapped alone.
   const ended = useRef({ row: false, stopped: false })
   const rowSounds = () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO })
@@ -123,7 +131,9 @@ export function ChordRow({
     onShow,
     playing: playback.playing,
     sounding:
-      typeof playback.playing === 'number' && playback.playing >= 0 ? playback.playing : walking,
+      typeof playback.playing === 'number' && playback.playing >= 0
+        ? playback.playing
+        : (walking ?? (chooses && playback.playing === null ? chosen : null)),
     looping,
     toggleLoop: () => setLooping((was) => !was),
     playRow: () => {
@@ -132,6 +142,7 @@ export function ChordRow({
       playback.toggle('row', rowSounds)
     },
     playChord: (place) => {
+      setChosen(place)
       const chord = chords[place]?.chord
       const keys = voiced[place] ?? []
       onShow(chord ? voicedShown(chord, keys) : unmarked(keys))

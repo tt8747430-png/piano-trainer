@@ -11,6 +11,7 @@ import {
   RowRoles,
   RowStaff,
   useShownKeys,
+  firstChordShown,
 } from '@/features/play-example'
 import { useScaleName } from '@/shared/i18n'
 import {
@@ -22,7 +23,7 @@ import {
   LEAD_INS,
   CHORD_SIZES,
 } from '@/shared/lib/music'
-import { ActionMenu, KeyPicker, NO_KEYS, RowLink } from '@/shared/ui'
+import { ActionMenu, KeyPicker, RowLink } from '@/shared/ui'
 import {
   changedView,
   playedNumerals,
@@ -70,14 +71,13 @@ export function ProgressionExplorer({
   const { t } = useTranslation(['music', 'practice'])
   const scaleName = useScaleName()
   const settings = useSettings(selectProgressions)
-  const [shown, setShown] = useShownKeys(
-    `${view.key} ${view.p} ${view.mode} ${view.size} ${settings.voicing} ${settings.inversion} ${view.lead}`,
-    NO_KEYS,
-  )
   const key = keyFromParam(view.key)
   const played = playedNumerals(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
   const row = progressionRow(played, key, view.size, { mode: view.mode, names: settings.names })
+  // The row's first chord is chosen at rest, its keys shown (canvas 198); a new row starts again there.
+  const context = `${view.key} ${view.p} ${view.mode} ${view.size} ${settings.voicing} ${settings.inversion} ${view.lead}`
+  const [shown, setShown] = useShownKeys(context, firstChordShown(row, rowPosition(settings)))
   const lead = view.lead ?? 'none'
   return (
     <div className="flex flex-col gap-4">
@@ -118,7 +118,13 @@ export function ProgressionExplorer({
               <ProgressionReading view={view} onChange={change} />
             </div>
           ) : null}
-          <ChordRow chords={row} position={rowPosition(settings)} onShow={setShown}>
+          <ChordRow
+            key={context}
+            chords={row}
+            position={rowPosition(settings)}
+            onShow={setShown}
+            chooses
+          >
             <RowRoles />
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
               <RowStaff />
