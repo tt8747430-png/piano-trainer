@@ -417,6 +417,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Intervals' Compound shows the compound intervals (2026-11-15):** the Simple · Compound tab changed nothing (the tiles stayed P1–P8), a control with no visible effect; Compound now lists P8, m9 … M14, P15 with their semitones (12–24), names them (Perfect twelfth, Double octave), widens the phone's keys to two octaves and gives the staff room for the ledger lines; "Sounds like" says "A perfect fifth, an octave wider". States: Playing, Every interval in turn, Compound intervals.
 - **Scales and keys draws its states (2026-11-15):** Playing, F♯ major with six sharps and a minor pentatonic; every page with a Play shows Playing in its States box. Two faults the states found are fixed: a long scale's name (minor pentatonic) was cut, and now takes its own line under the tonic; "No standard fingering for this scale" was said of F♯ major and the black-key scales, which have one, and is said now only of the scales that have none (pentatonics, blues).
 - **The Metronome draws its states (2026-11-15):** Playing, 40 BPM and 7/4 with accents and rests, phone and laptop; an accent beat's number is light on its ink bar (it was soft ink on ink, unread).
 - **The Tuner draws its states (2026-11-15):** In tune (the needle in the green band, the words in grass), 18 cents sharp, Nothing heard (the note a soft dash, "Listening", the needle at rest in the line's colour; the page does not move between them) and No microphone (the app's words and Try again), phone, laptop and Night.

@@ -6,13 +6,15 @@
 IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
       ab: AB[tile], playL: 'Play ' + AB[tile], wayL: way,
       ways: ['Ascending', 'Descending', 'Harmonic'].map((d) => ({ d, on: d === way, mark: d === way ? '✓' : '', pick: () => set({ way: d, menu: null }) })),
-      ivs: TIL.map(([a, semis], i) => ({ a, s: String(semis), on: i === tile, bg: i === tile ? '#332921' : '#FEFDFB', fg: i === tile ? '#FEFDFB' : '#332921', sub: i === tile ? '#FEFDFB' : '#6E6259', op: i === tile ? 0.72 : 1, pick: () => set({ tile: i }) })),
+      ivs: TL.map(([a, semis], i) => ({ a, s: String(semis), on: i === tile, bg: i === tile ? '#332921' : '#FEFDFB', fg: i === tile ? '#FEFDFB' : '#332921', sub: i === tile ? '#FEFDFB' : '#6E6259', op: i === tile ? 0.72 : 1, pick: () => set({ tile: i }) })),
       tabs: ['Simple', 'Compound'].map((l) => { const on = l === (st.size ?? 'Simple'); return { l, on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => set({ size: l }) }; }),
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, allP: false, menu: null }),
       allPlaying: !!st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
+      states: [['Playing', !!st.playing, { playing: true, allP: false }], ['Every interval in turn', !!st.allP, { allP: true, playing: false }], ['Compound intervals', st.size === 'Compound', { size: 'Compound' }]]
+        .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, allP: false, size: null } : o) })),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
-      kbE: calmKeys(lo - 7, lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
+      kbE: calmKeys(comp ? lo - 2 : lo - 7, comp ? lo + 26 : lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
       kbLE: calmKeys(lo - 12, lo + 36, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 1462, 180),
       staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + STEP;
         const y = (d) => 65 - d * 3.5, acc = (d, pc) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12; return k === 1 ? '♯' : k === 11 ? '♭' : ''; };
@@ -24,7 +26,7 @@ IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
 assert IV61 != IV, 'IV return not found'
 
 STAFF61 = (lambda: (
-    f'<svg viewBox="0 0 360 84" width="100%" role="img" aria-label="The interval on the staff" style="display: block; max-width: 420px; margin: 0 auto">'
+    f'<svg viewBox="0 -18 360 102" width="100%" role="img" aria-label="The interval on the staff" style="display: block; max-width: 420px; margin: 0 auto">'
     + ''.join(f'<path d="M24 {30 + i * 7}H336" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
     + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
     + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
@@ -33,7 +35,7 @@ STAFF61 = (lambda: (
     + f'<path d="M334 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
 INFO61 = '<span style="width: 8px"></span>' + INFOB('About the interval', 'toggleAbout', 'aboutOn')
 ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Up', 'upS'), ('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
-TITLE61 = (f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'
+TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'
            f'<h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>{INFO61}</div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{{{{sub}}}}</p>{ABOUT61}</div>')
 HEAR61 = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: {SOFT}">Sounds like</span><span style="font-size: 16px; font-weight: 600">{{{{song}}}}</span></span>'
