@@ -816,6 +816,9 @@ owner's, typos fixed.
   "Click"; it is named as the board and a drummer name it, "Вудблок" in Russian.
 - **The Tuner at rest shows its A (loop, 2026-11-15):** before a note is heard, the reference note A₄ stands faint over
   "A4 = 440 Hz", where a grey dash read as a page still loading; the note heard replaces it in ink.
+- **The Tuner without a microphone keeps its dial (loop 23, 2026-11-15, the Tuner board):** the A at rest and the
+  needle stay; "The microphone is not available…" and Try again take the listening line's place, where the page had
+  dropped to a line of text over nothing.
 - **Keys named as the boards name them (loop, 2026-11-15):** where a page has no Labels setting (the Chord finder, a
   progression, a pattern) a chord's keys wear their paint and the note's name alone (`nameMark`), the degree left to
   the tiles and chips; and a page's keys grow to every key they light, never shrinking, so a chord found from A3

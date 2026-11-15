@@ -85,22 +85,6 @@ export function TunerReadout({
       setHeard({ kind: 'listening' })
     }
   }, [listening, microphone, a4, attempt])
-  if (heard.kind === 'denied')
-    return (
-      <div
-        role="alert"
-        className="flex flex-col items-center justify-center gap-4 py-10 text-center"
-      >
-        <p className="max-w-80 text-base text-pretty text-muted-foreground">{t('tuner.denied')}</p>
-        <button
-          type="button"
-          onClick={() => setAttempt((count) => count + 1)}
-          className="h-11 rounded-pill bg-muted px-5 text-base font-bold transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-        >
-          {t('tuner.retry')}
-        </button>
-      </div>
-    )
   const pitch = heard.kind === 'pitch' ? heard : null
   const cents = pitch ? Math.max(-50, Math.min(50, pitch.cents)) : 0
   const off = pitch ? Math.round(pitch.cents) : 0
@@ -196,7 +180,23 @@ export function TunerReadout({
           +50
         </text>
       </svg>
-      <p className="text-[0.9375rem] text-muted-foreground">{t('tuner.listening')}</p>
+      {/* No microphone: the dial stays at rest, and what to do takes the listening line's place. */}
+      {heard.kind === 'denied' ? (
+        <div role="alert" className="flex flex-col items-center gap-3 text-center">
+          <p className="max-w-80 text-[0.9375rem] text-pretty text-muted-foreground">
+            {t('tuner.denied')}
+          </p>
+          <button
+            type="button"
+            onClick={() => setAttempt((count) => count + 1)}
+            className="h-11 rounded-pill bg-muted px-5 text-base font-bold transition-colors hover:bg-muted-foreground/15 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            {t('tuner.retry')}
+          </button>
+        </div>
+      ) : (
+        <p className="text-[0.9375rem] text-muted-foreground">{t('tuner.listening')}</p>
+      )}
     </div>
   )
 }
