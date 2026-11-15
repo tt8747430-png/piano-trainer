@@ -64,7 +64,7 @@ TR_SRC = r'''
       autoOn: auto, autoOnBg: auto ? '#44684A' : '#DAD1C8', autoOnX: auto ? 22 : 2, autoT: () => S({ auto: !auto }),
       start: () => S({ view: 'run', n: 1, right: 0, wrong: 0, on: [], verdict: null }),
       roundT: 'Round ' + n + ' of ' + total, prog: Math.round(100 * (n - 1) / total) + '%', rightT: right + ' right', wrongT: wrong + ' wrong', prompt, notesT: notes, hint, notHint: !hint, toggleHint: () => S({ hint: !hint }),
-      kb: tapKeys(48, 76, 402, 128, on, tap, paint), kbL: tapKeys(48, 84, 760, 170, on, tap, paint), check, clear: () => S({ on: [] }), showAns: () => S({ verdict: 'shown', wrong: wrong + 1 }),
+      kb: tapKeys(48, 76, 402, 112, on, tap, paint), kbL: tapKeys(36, 96, 1462, 170, on, tap, paint), check, clear: () => S({ on: [] }), showAns: () => S({ verdict: 'shown', wrong: wrong + 1 }),
       checkBg: on.length ? '#F2B33D' : '#EEE9E2', checkInk: on.length ? '#332921' : '#9A9089', checkNot: !on.length,
       waiting: !verdict, answered: !!verdict, vT: verdict === 'right' ? 'Right' : verdict === 'shown' ? 'The answer: ' + notes : 'Not quite: it’s ' + notes, vBg: verdict === 'right' ? '#DCE9D6' : '#F5D6D0', vInk: verdict === 'right' ? '#2F5A35' : '#8E2A20',
       next, nextT: n >= total ? 'Results' : 'Next', endRun: () => S({ view: 'results', verdict: null, on: [] }),
@@ -89,12 +89,13 @@ TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; backg
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
         + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
-              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div><div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 128)}</div>{TRBTNS}</main>')
+              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div><div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 112)}</div>{TRBTNS}</main>')
         + IF('isResults', TOP('', '', '', 'Back', '<span style="width: 44px"></span>') + NARROW(CKRES)) + TOASTS)
 LTR = lambda s: s.replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Scales.dc.html', 'ScalesLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('"Settings.dc.html"', '"SettingsLaptop.dc.html"')
 trlm = (''
         + IF('isRun', LPAD(TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html')))
-              + f'<main style="flex: 1; min-height: 0; padding: 8px 0 32px; display: flex; justify-content: center"><div style="width: 760px; display: flex; flex-direction: column; gap: 14px">{TRRUN}<div style="flex: 1"></div>{TAPKEYS("kbL", 170)}{TRBTNS}</div></main>')
+              + f'<main style="flex: 1; min-height: 0; padding: 8px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 14px"><div style="width: 760px; display: flex; flex-direction: column; gap: 14px">{TRRUN}</div><div style="flex: 1"></div><div style="width: 760px">{TRBTNS}</div></main>'
+              + f'<div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{TAPKEYS("kbL", 170)}</div>')
         + IF('isResults', LTOP('', '') + WIDE(LTR(CKRES), 560)) + TOASTL)
 for stem, mode, ttl in (('Check', "'check'", 'Check a song before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
     detail(stem, ttl, js(TR_SRC.replace('__MODE__', mode)), SHOWSTATES() + trph, SHOWSTATES() + LTR(trlm), '', TR_SHEETS, LAPSHEET(TR_SHEETS), 'Practice')

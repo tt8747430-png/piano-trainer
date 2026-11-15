@@ -212,7 +212,7 @@ ph58 = (body(TOP('Main.dc.html', '', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 
 lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
                '<div style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column"><div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + CHART59(16, 6, 76, 28, 1) + '</div>'
                + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + STRIP59('position: relative; width: 100%; max-width: 760px;', True) + DOCK_L(CP_DOCK) + '</div></div>'
-               + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]))
+               + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(170) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]))
 SH58 = lambda B, P: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + B('styleOn', 'Style', WHEEL([('wStyle', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
 detail('ChordPlayer', 'Chord player', CP58, ph58, lm58, '', SH58(BSHEET, CP_PSHEET),
        SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 140px; top: 160px', 460), CP_PPOP).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html'))
