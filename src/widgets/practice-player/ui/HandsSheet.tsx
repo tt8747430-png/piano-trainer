@@ -48,11 +48,13 @@ export function HandsSheet({
                 <span
                   aria-hidden
                   className={cn(
-                    'grid size-10 shrink-0 place-items-center rounded-[10px]',
-                    hand === 'rh' ? 'bg-hand-rh-wash text-hand-rh' : 'bg-hand-lh-wash text-hand-lh',
+                    'grid size-10 shrink-0 place-items-center rounded-[4px]',
+                    hand === 'rh'
+                      ? 'bg-hand-rh-wash text-(--p-brick-deep)'
+                      : 'bg-hand-lh-wash text-(--p-lilac-deep)',
                   )}
                 >
-                  <HandIcon className={cn('size-5.5', hand === 'lh' && '-scale-x-100')} />
+                  <HandIcon className={cn('size-6', hand === 'lh' && '-scale-x-100')} />
                 </span>
                 <span className="min-w-0 flex-1 truncate text-base font-semibold">{t(hand)}</span>
                 <Switch
