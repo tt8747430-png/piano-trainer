@@ -1006,6 +1006,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 34, Profile's tiles and week as the app has them (canvas v210):** the board squeezed a tile's icon to a sliver to keep "Songs learned" on one line; its icon now keeps its 15 and the name wraps to two lines, as the app's; the week card is "Last 7 days", the true name of a rolling week with today last (2026-11-15).
 - **Loop round 30, Profile's sections 16 apart as the board's:** the learner, the week, the next badge, Badges and the rest stand 16 apart (were 28), on a phone and in each laptop column (2026-11-15).
 - **Loop round 25, MIDI devices to its board:** MIDI keyboard a headed group of plain switch rows (no tiles, no ⓘ); Playing's Octave shift a − 0 + stepper at its row's end, Touch and Pedal segmented rows, Calibrate timing a plain link row with its value; Bluetooth and the MIDI log plain link rows with chevrons (2026-11-15).
 - **Loop round 25, Report a problem to its board (P_REPORT):** Description in 13 semibold over a 12-cornered field on the card's white, its soft line, no resize grip, its example "What were you doing, and what happened?"; the footnote in 13; Send report a 50-tall pill, sand with soft ink until there is something to send. The footnote keeps what the report truly carries (2026-11-15).
