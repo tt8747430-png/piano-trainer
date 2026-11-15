@@ -19,7 +19,7 @@ import {
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { useLibraryActs, useSongActions } from '@/features/manage-library'
+import { FavouriteSwitch, useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -158,6 +158,7 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
+            <FavouriteSwitch piece={piece.id} label={t('settings.favourite')} />
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
             {copyable ? (
               <ActionRow title={t('settings.duplicate')} onClick={() => setCopying(true)} />
