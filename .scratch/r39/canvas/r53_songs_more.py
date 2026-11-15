@@ -139,7 +139,7 @@ GR_SHEETS = (BSHEET('newOn', 'New group', f'{CAPS("Name")}<input placeholder="Ne
              + ASK('delOn', 'Delete Choir accompanists?', 'Members will lose access to every folder shared with this group. Your own folders are not affected.', 'Delete', 'doDel')
              + ASK('stopOn', 'Stop sharing Hymns?', 'Members of Choir accompanists will no longer see this folder. The folder stays in your library.', 'Stop sharing', 'doStop'))
 grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>', 'openJoin'), 'Songs')
-                   + NARROW(GLIST) + STRIP() + IF('canNew', f'<div style="position: absolute; right: 20px; bottom: 120px; z-index: 30">{BTN("+ New group", "openNew", "", "primary", 56, False)}</div>') + f'<div style="height: 30px; flex: none"></div>', 'true')
+                   + NARROW(GLIST) + STRIP() + IF('canNew', NEWFAB('New group', 'openNew', 40)) + f'<div style="height: 30px; flex: none"></div>', 'true')
         + IF('isGroup', TOP('', '', IB('More', MORE, 'openMore'), 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))
         + IF('isJoin', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(JPAGE)) + TOASTS)
