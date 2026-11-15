@@ -1006,6 +1006,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 34, Settings' values at the kit's 16 (canvas v211):** the Settings list drew a row's grey value (Match system, Up to date) at 15 where every other group's row draws 16; the board now draws 16, as the app's one row does (2026-11-15).
 - **Loop round 34, Profile's tiles and week as the app has them (canvas v210):** the board squeezed a tile's icon to a sliver to keep "Songs learned" on one line; its icon now keeps its 15 and the name wraps to two lines, as the app's; the week card is "Last 7 days", the true name of a rolling week with today last (2026-11-15).
 - **Loop round 30, Profile's sections 16 apart as the board's:** the learner, the week, the next badge, Badges and the rest stand 16 apart (were 28), on a phone and in each laptop column (2026-11-15).
 - **Loop round 25, MIDI devices to its board:** MIDI keyboard a headed group of plain switch rows (no tiles, no ⓘ); Playing's Octave shift a − 0 + stepper at its row's end, Touch and Pedal segmented rows, Calibrate timing a plain link row with its value; Bluetooth and the MIDI log plain link rows with chevrons (2026-11-15).
