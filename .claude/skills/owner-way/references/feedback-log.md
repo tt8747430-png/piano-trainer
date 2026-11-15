@@ -373,6 +373,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Round pieces where the boards draw them (loop round 19):** an exercise's Key and Listen and Scales' BPM and Hands are 56 round glass pieces, as the Exercise and Scales boards measure (the Chords board keeps its 72-wide pieces for Voicing and Hands); a word too long for the circle (Тональность) widens it into a pill rather than spill out.
+
 - **Practise in the Player wears the keys (loop round 17):** the floating Practise on the Progression, Scales and Pattern pages is the keys glyph (`KeysIcon`), as the Progression board's `PRACTI` draws it; the dumbbell is gone from the app.
 
 - **The keys show their computer letters only once typed on (loop round 17):** every board draws the on-screen piano plain on a laptop; the letters that play each key appear after the learner first types a key or moves the octave (Z, X), the hidden UI shown when it is wanted. One piano, so the Chord finder, the Chords page, the Player and the editor alike.

@@ -34,18 +34,26 @@ const CAPTION =
   'max-w-16 text-center text-[0.6875rem] leading-[1.05] font-semibold whitespace-normal'
 
 /**
+ * A piece whose word is one short one (Key, Listen, BPM): round, 56 wide, as the Scales and Exercise
+ * boards; a longer word (Russian's Тональность) widens it into a pill rather than spill out.
+ */
+const ROUND = 'w-auto min-w-14 px-2.5 [&>span:last-child]:max-w-none'
+
+/**
  * A glass piece with its picture over a short word (Voicing's name, Hands): 72 wide, 56 tall, the
- * picture 22, the word 11px semibold.
+ * picture 22, the word 11px semibold; `round`, 56 wide.
  */
 export function FloatingPiece({
   label,
   caption,
+  round = false,
   className,
   children,
   ...props
 }: {
   label: string
   caption: string
+  round?: boolean
   children: ReactNode
 } & Omit<ComponentProps<typeof Button>, 'children' | 'aria-label'>) {
   return (
@@ -53,7 +61,7 @@ export function FloatingPiece({
       variant="ghost"
       aria-label={label}
       title={label}
-      className={cn(PIECE, className)}
+      className={cn(PIECE, round && ROUND, className)}
       {...props}
     >
       <span className="flex h-5.5 items-center">{children}</span>
@@ -66,16 +74,25 @@ export function FloatingPiece({
 export function FloatingPieceLink({
   label,
   caption,
+  round = false,
   render,
   children,
 }: {
   label: string
   caption: string
+  /** One short word: round, 56 wide. */
+  round?: boolean
   render: ReactElement
   children: ReactNode
 }) {
   return (
-    <ButtonLink variant="ghost" aria-label={label} title={label} className={PIECE} render={render}>
+    <ButtonLink
+      variant="ghost"
+      aria-label={label}
+      title={label}
+      className={cn(PIECE, round && ROUND)}
+      render={render}
+    >
       <span className="flex h-5.5 items-center">{children}</span>
       <span className={CAPTION}>{caption}</span>
     </ButtonLink>

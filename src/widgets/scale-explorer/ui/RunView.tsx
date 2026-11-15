@@ -206,6 +206,7 @@ export function RunView({
             <FloatingPiece
               label={`${t('practice:scales.tempo')}: ${t('music:bpm', { tempo: scale.tempo })}`}
               caption="BPM"
+              round
               aria-haspopup="dialog"
               onClick={() => setTempoOpen(true)}
             >
@@ -248,6 +249,7 @@ export function RunView({
                 <FloatingPiece
                   label={`${t('practice:hands')}: ${t(`common:hands.${hands}`)}`}
                   caption={t('practice:hands')}
+                  round
                 >
                   <HandsPicture hands={hands} />
                 </FloatingPiece>

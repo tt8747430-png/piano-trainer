@@ -269,6 +269,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 <FloatingPiece
                   label={`${t('practice:exercisePage.key')}: ${printedNote(choice.root)}`}
                   caption={t('practice:exercisePage.key')}
+                  round
                   aria-haspopup="dialog"
                 >
                   <span className="text-lg font-bold">{printedNote(choice.root)}</span>
@@ -289,6 +290,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
           <FloatingPieceLink
             label={t('practice:exercisePage.listen')}
             caption={t('practice:exercisePage.listen')}
+            round
             render={
               <Link
                 to="/play/exercise/$exerciseId"
