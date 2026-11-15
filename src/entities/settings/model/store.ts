@@ -28,8 +28,8 @@ import {
   DEFAULT_RECORDER,
   RECORDER_COUNT_INS,
   DEFAULT_SIDEBAR,
-  DEFAULT_KEYS_HEIGHT,
-  KEYS_HEIGHT_MOST,
+  DEFAULT_KEYS_WINDOWS,
+  KEYS_WINDOW_MOST,
   DEFAULT_OTHER_HAND,
   DEFAULT_PLAYBACK,
   DEFAULT_SOUND,
@@ -79,7 +79,8 @@ import {
   isIntervalOrder,
   isIntervalSpeed,
   type KeyboardSettings,
-  type KeysHeight,
+  type KeysWindow,
+  type KeysWindows,
   type MetronomeSettings,
   type MidiSettings,
   type OtherHandSettings,
@@ -100,7 +101,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 48
+export const SETTINGS_VERSION = 49
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -123,7 +124,7 @@ export function createSettingsStore({
         sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
         keyboard: defaultKeyboard(finePointer),
-        keysHeight: DEFAULT_KEYS_HEIGHT,
+        keysWindow: DEFAULT_KEYS_WINDOWS,
         recorder: DEFAULT_RECORDER,
         editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
@@ -413,14 +414,18 @@ function foldedSections(value: unknown): string[] {
   return [...new Set(ids)].slice(-FOLDED_MAX)
 }
 
-/** Each size's height kept where it is a whole number of px a screen could hold, else none. */
-function keysHeight(value: unknown): KeysHeight {
-  const saved = savedObject<KeysHeight>(value)
-  const height = (each: unknown) =>
-    Number.isInteger(each) && typeof each === 'number' && each > 0 && each <= KEYS_HEIGHT_MOST
-      ? each
+/** Each size's window kept where its edges are whole px a screen could hold, else none. */
+function keysWindows(value: unknown): KeysWindows {
+  const saved = savedObject<KeysWindows>(value)
+  const px = (each: unknown, least: number) =>
+    typeof each === 'number' && Number.isInteger(each) && each >= least && each <= KEYS_WINDOW_MOST
+  const window = (each: unknown): KeysWindow | null => {
+    const kept = savedObject<KeysWindow>(each)
+    return px(kept.left, 0) && px(kept.bottom, 0) && px(kept.width, 1) && px(kept.height, 1)
+      ? { left: kept.left, bottom: kept.bottom, width: kept.width, height: kept.height }
       : null
-  return { phone: height(saved.phone), side: height(saved.side), wide: height(saved.wide) }
+  }
+  return { phone: window(saved.phone), side: window(saved.side), wide: window(saved.wide) }
 }
 
 /** Each saved choice that is still one of its values stands; anything else takes the current one. */
@@ -465,7 +470,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
-    keysHeight: keysHeight(saved.keysHeight),
+    keysWindow: keysWindows(saved.keysWindow),
     recorder: recorderSettings(saved.recorder),
     editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,

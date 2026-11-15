@@ -132,6 +132,10 @@ export const common = {
     soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
   // The on-screen keyboard's controls in the screen's bar (R34).
+  keysWindow: {
+    move: 'Move the piano',
+    hint: 'Drag to move the piano · double-tap to put it back',
+  },
   keyboardTools: {
     // The transport's Keyboard caption: what stands in the keys' place.
     short: { keys: '2D', hands: '3D', off: 'Off' },

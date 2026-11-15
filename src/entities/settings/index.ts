@@ -58,7 +58,8 @@ export {
   type TunerSettings,
   DEFAULT_SCALE_STAFF,
   type ScaleStaffSettings,
-  type KeysHeight,
+  type KeysWindow,
+  type KeysWindows,
   type KeysScreenSize,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
@@ -78,7 +79,7 @@ export {
   selectTuner,
   selectScoreView,
   selectKeyboard,
-  selectKeysHeight,
+  selectKeysWindow,
   selectLocale,
   selectOtherHand,
   selectPlayback,

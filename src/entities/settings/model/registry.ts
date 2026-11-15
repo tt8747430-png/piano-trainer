@@ -38,7 +38,7 @@ export const NOT_PREFERENCES = [
   'practiceRecent',
   'chordFinder.chords',
   'keyboard.folded',
-  'keysHeight',
+  'keysWindow',
   'keyboard.foldedLandscape',
 ] as const
 

@@ -10,7 +10,7 @@ import type {
   TunerSettings,
   ScoreViewSettings,
   KeyboardSettings,
-  KeysHeight,
+  KeysWindows,
   OtherHandSettings,
   PlaybackSettings,
   MetronomeSettings,
@@ -33,7 +33,7 @@ export const selectSound = (state: SettingsState): SoundSettings => state.sound
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 /** The keys' height the divider set, per size of screen (R34). */
-export const selectKeysHeight = (state: SettingsState): KeysHeight => state.keysHeight
+export const selectKeysWindow = (state: SettingsState): KeysWindows => state.keysWindow
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectEditing = (state: SettingsState): EditingSettings => state.editing
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar

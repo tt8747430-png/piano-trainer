@@ -65,7 +65,6 @@ export function EditorKeyboard() {
           selected={selected}
           onKeyPress={actions.play}
           spacePedal={takes.stage === 'idle'}
-          divider={edge}
         />
       )}
     </div>

@@ -38,7 +38,7 @@ const DEFAULTS = {
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
   keyboard: defaultKeyboard(false),
-  keysHeight: { phone: null, side: null, wide: null },
+  keysWindow: { phone: null, side: null, wide: null },
   recorder: DEFAULT_RECORDER,
   editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
@@ -152,7 +152,11 @@ describe('createSettingsStore', () => {
         pedals: 'all',
         volume: 70,
       },
-      keysHeight: { phone: 140, side: null, wide: 210 },
+      keysWindow: {
+        phone: { left: 8, bottom: 96, width: 386, height: 200 },
+        side: null,
+        wide: null,
+      },
       recorder: { click: false, tune: true, countIn: 2 },
       editing: { hearNotes: false, paletteSide: 'right' },
       sidebar: 'collapsed',
@@ -358,13 +362,13 @@ describe('createSettingsStore', () => {
     )
   })
 
-  it('keeps the keys’ height per screen size where it is whole px a screen holds, else none (R34)', () => {
-    expect(restored({ keysHeight: { phone: 120, side: 4.5, wide: -3 } }).keysHeight).toEqual({
-      phone: 120,
-      side: null,
-      wide: null,
-    })
-    expect(restored({ keysHeight: 'tall' }).keysHeight).toEqual({
+  it('keeps the piano’s window per screen size where its sides are whole px, else none (loop round 24)', () => {
+    const window = { left: 8, bottom: 96, width: 386, height: 200 }
+    expect(
+      restored({ keysWindow: { phone: window, side: { ...window, width: -3 }, wide: 'tall' } })
+        .keysWindow,
+    ).toEqual({ phone: window, side: null, wide: null })
+    expect(restored({ keysWindow: 'tall' }).keysWindow).toEqual({
       phone: null,
       side: null,
       wide: null,

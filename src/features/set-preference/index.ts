@@ -1,7 +1,7 @@
 export { setAutoNext } from './set-auto-next'
 export { rememberChords, setChordFinder } from './set-chord-finder'
 export { setKeyboard } from './set-keyboard'
-export { setKeysHeight } from './set-keys-height'
+export { setKeysWindow } from './set-keys-window'
 export { setLocale } from './set-locale'
 export { setOtherHand } from './set-other-hand'
 export { setPlayback } from './set-playback'

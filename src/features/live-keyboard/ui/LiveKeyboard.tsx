@@ -9,7 +9,6 @@ import { useShortcuts } from '@/shared/lib/shortcuts'
 import { PianoKeyboard } from '@/shared/ui'
 import { useSpacePedal } from '../model/use-space-pedal'
 import { useTyping } from '../model/use-typing'
-import type { DividerEdge } from './KeysDivider'
 import { KeysPlace } from './KeysPlace'
 
 /** A key plays itself unless the screen says otherwise. */
@@ -37,15 +36,15 @@ export function LiveKeyboard({
   spacePedal = true,
   namesKeys = true,
   showsSound = true,
-  divider,
+  floating,
   height,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
   'down' | 'keySize' | 'swipe' | 'namedKeys' | 'markNotes' | 'letters' | 'onKeyPress' | 'height'
 > & {
-  /** The divider that resizes the keys, on the side facing the music; none inside a card. */
-  divider?: DividerEdge | undefined
+  /** The keys in their floating window (`KeysPlace`), standing at this foot until moved; none inside a card. */
+  floating?: string | undefined
   /** The keys' height where no divider sets it (a page's pinned keys, as the boards draw them); else a piano's proportion. */
   height?: number | undefined
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
@@ -124,5 +123,5 @@ export function LiveKeyboard({
       onKeyRelease={letGo}
     />
   )
-  return divider === undefined ? keys(height) : <KeysPlace divider={divider}>{keys}</KeysPlace>
+  return floating === undefined ? keys(height) : <KeysPlace foot={floating}>{keys}</KeysPlace>
 }

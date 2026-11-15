@@ -466,8 +466,48 @@ def headed(t, phone):
     t = t.replace('padding: 78px 0 132px', 'padding: 20px 0 132px').replace('padding: 120px 0 140px', 'padding: 24px 0 140px')
     return t
 
+
+def floating(t, phone):
+    """Loop round 24 (owner, IMG_6045–6056: "piano should also be floating and draggabble and resizeble from all the
+    angles"): the keys are a window over the music, at the foot above the transport until moved: rounded, lifted,
+    a grip along its top to move it and handles at its four corners and four edges to size it from any side. The
+    music takes the whole screen under the bar; nothing is docked at the top."""
+    left, w, bottom = (8, 386, 762) if phone else (305, 1100, 800)
+    t = t.replace("const KB = { top: 62, w: 402," if phone else "const KB = { top: 0, w: 1710,", f"const KB = {{ top: 0, w: {w},", 1)
+    t = t.replace("kbTop: KB.top, kbW: KB.w,", f"kbTop: {bottom} - bandH, kbLeft: {left}, kbW: KB.w,", 1)
+    t = t.replace("areaTop: keys ? KB.top + bandH : 0,", "areaTop: 0,", 1)
+    t = t.replace('<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 62px; background: #2A1F18"></div>\n', '', 1)
+    t = t.replace('left: 0; top: {{kbTop}}px;', 'left: {{kbLeft}}px; top: {{kbTop}}px;')
+    lift = 'border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14), 0 18px 40px -12px rgba(51,41,33,.40)'
+    t = t.replace('height: {{kbH}}px; object-fit: cover">', 'height: {{kbH}}px; object-fit: cover; ' + lift + '">', 1)
+    t = t.replace('height: {{kbH}}px; overflow: hidden; background: #2A1F18">', 'height: {{kbH}}px; overflow: hidden; background: #2A1F18; ' + lift + '">', 1)
+    if phone:
+        t = t.replace("sheetTop: keys ? 40 : 116,", "sheetTop: 116,", 1).replace("statusFg: keys ? '#FFFFFF' : '#332921',", "statusFg: '#332921',", 1).replace("panoTop: keys ? 191 : 376,", "panoTop: 376,", 1)
+    else:
+        t = t.replace("sheetTop: keys ? 44 : 64, bandTop: (keys ? 44 : 64) + 100,", "sheetTop: 76, bandTop: 176,", 1).replace("panoTop: keys ? 166 : 340,", "panoTop: 340,", 1)
+    h = 'position: absolute; z-index: 21; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)'
+    chrome = (
+        '<div aria-hidden="true" style="position: absolute; z-index: 20; left: {{kbLeft}}px; top: {{kbTop}}px; width: {{kbW}}px; height: {{kbH}}px; border-radius: 20px; pointer-events: none">'
+        # the grip along the top: hold and move
+        '<span data-tip="Move the piano" style="position: absolute; left: 50%; top: 0; width: 88px; height: 24px; margin-left: -44px; display: flex; align-items: center; justify-content: center; cursor: grab; pointer-events: auto">'
+        '<span style="width: 44px; height: 5px; border-radius: 3px; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)"></span></span>'
+        # the four corners
+        f'<span style="{h}; left: 6px; top: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nwse-resize"></span><span style="{h}; left: 6px; top: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nwse-resize"></span>'
+        f'<span style="{h}; right: 6px; top: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nesw-resize"></span><span style="{h}; right: 6px; top: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nesw-resize"></span>'
+        f'<span style="{h}; left: 6px; bottom: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nesw-resize"></span><span style="{h}; left: 6px; bottom: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nesw-resize"></span>'
+        f'<span style="{h}; right: 6px; bottom: 6px; width: 14px; height: 4px; border-radius: 2px; cursor: nwse-resize"></span><span style="{h}; right: 6px; bottom: 6px; width: 4px; height: 14px; border-radius: 2px; cursor: nwse-resize"></span>'
+        # the four edges
+        f'<span style="{h}; left: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
+        f'<span style="{h}; right: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
+        f'<span style="{h}; left: 50%; bottom: 3px; width: 28px; height: 4px; margin-left: -14px; border-radius: 2px; cursor: ns-resize"></span>'
+        '</div>')
+    anchor = '<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n\n</sc-if>\n</sc-if>'
+    assert anchor in t, 'anchor'
+    t = t.replace(anchor, chrome + '\n' + anchor, 1)
+    return t
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone)
+    t = floating(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()

@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
-  selectKeyboard,
   selectOtherHand,
   selectScoreView,
   selectTipSeen,
@@ -71,6 +70,9 @@ const NO_ACTS_MORE: readonly MenuAction[] = []
 /** A walk or a progression: no pages of its own in the Settings. */
 const NO_PAGES: readonly SettingsPageRow[] = []
 
+/** Where the keys' window stands until moved: over the transport at the screen's foot. */
+const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem)'
+
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
  * 0115, R29: Close, the title and Edit; Piano keys, MIDI and the one gear, the Player's Settings with the
@@ -79,8 +81,8 @@ const NO_PAGES: readonly SettingsPageRow[] = []
  * the music under its title (ADR 0114) as the View
  * shows it (ADR 0108: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
  * the transport under it (the loop, Restart, ‹ ▶ ›, Pace and the metronome, R36), the
- * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
- * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
+ * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys a window over the
+ * music's foot, moved and sized by the learner (loop round 24); the computer's keys
  * drive it (`usePlayerShortcuts`). Settings' Print puts the music as the View shows it in print
  * (`SongPrint`, ADR 0107).
  */
@@ -161,7 +163,6 @@ export function PlayerLayout({
   // Who wrote it, under the title in the bar (loop round 24): the sheet prints no title of its own.
   const creditLine = useCreditLine(credits)
   const { practice } = player
-  const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
   const otherHand = useSettings((state) => selectOtherHand(state).look)
   const held = useHeldKeys()
@@ -280,15 +281,12 @@ export function PlayerLayout({
   const keys = !player.keys ? (
     // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
     <PlayerArea area="keys" className="-mx-gutter">
-      <KeyboardStrip
-        edge={dock === 'top' ? 'below' : 'above'}
-        onShow={() => player.setKeys(true)}
-      />
+      <KeyboardStrip edge="above" onShow={() => player.setKeys(true)} />
     </PlayerArea>
   ) : scoreView.hands ? (
     // The hands at the keys in the keys' place (R36, flowkey's), edge to edge: watched, never tapped.
     <PlayerArea area="keys" className="-mx-gutter">
-      <KeysPlace divider={dock === 'top' ? 'below' : 'above'}>
+      <KeysPlace foot={PLAYER_FOOT}>
         {(height) => (
           <PianoHands
             height={height}
@@ -324,14 +322,14 @@ export function PlayerLayout({
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the bar's Sustain, or a MIDI keyboard's.
         spacePedal={false}
-        divider={dock === 'top' ? 'below' : 'above'}
+        floating={PLAYER_FOOT}
       />
     </PlayerArea>
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
     <PlayerScreen
-      keys={dock}
+      keys="bottom"
       aside={shown === 'diagrams' && practice.state.playing}
       panel={panel}
       docked
@@ -365,7 +363,6 @@ export function PlayerLayout({
           </>
         }
       />
-      {dock === 'top' ? keys : null}
       <PlayerArea area="sheet" className="relative">
         {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
         {!coached && !practice.state.playing && !annotating ? (
@@ -424,7 +421,7 @@ export function PlayerLayout({
           {status}
         </PlayerArea>
       ) : null}
-      {dock === 'top' ? null : keys}
+      {keys}
       {/* The transport in its own row at the foot (R31-P): never floating over the music. Under
           360px its gutter is 12px, so Pace's three-digit tempo fits beside the other six. */}
       <PlayerArea

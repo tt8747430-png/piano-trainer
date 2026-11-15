@@ -69,8 +69,9 @@ export function PlayerScreen({
       className={cn(
         SCORE_SCREEN,
         'data-panel:pe-[min(28rem,100vw)]',
-        // Docked, nothing floats over the music's foot: no room kept under its last line (R31-P).
-        docked && '[--float-room:0px]',
+        // Docked, the transport floats over nothing: the room under the music's last line is the
+        // keys' window's, where it floats over the foot (loop round 24).
+        docked && '[--float-room:var(--keys-room,0px)]',
       )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}

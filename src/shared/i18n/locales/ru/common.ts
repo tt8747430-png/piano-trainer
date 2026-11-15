@@ -116,6 +116,10 @@ export const common: LocaleResources['common'] = {
     },
     soft: { name: 'Левая', label: 'Левая педаль (una corda) — смягчает звук, пока нажата' },
   },
+  keysWindow: {
+    move: 'Переместить клавиатуру',
+    hint: 'Перетащите, чтобы переместить клавиатуру · двойное нажатие — вернуть на место',
+  },
   keyboardTools: {
     short: { keys: '2D', hands: '3D', off: 'Выкл.' },
     keyboard: 'Клавиатура',
