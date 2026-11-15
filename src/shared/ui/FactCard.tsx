@@ -19,7 +19,7 @@ export function FactCard({
     <div className="flex min-w-0 flex-col items-center gap-1 card px-2 py-3 text-center">
       <Icon aria-hidden className="size-5 text-muted-foreground" />
       <dt className="max-w-full text-sm text-muted-foreground hyphens-auto">{name}</dt>
-      <dd className="max-w-full text-lg font-semibold text-balance tabular-nums">{children}</dd>
+      <dd className="max-w-full text-lg font-semibold text-balance">{children}</dd>
     </div>
   )
 }

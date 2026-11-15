@@ -319,7 +319,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
-- **Static counts in plain figures (loop round 20):** a level's "0 of 13 learned", its chapters' 0/3, Learn's levels and the progress meters set their numbers in Onest's plain figures; its tabular 1 left a gap ("1 3"). Tabular figures stay for values that change in place (a tempo, a timer).
+- **Static counts in plain figures (loop round 20):** a level's "0 of 13 learned", its chapters' 0/3, Learn's levels and the progress meters set their numbers in Onest's plain figures; its tabular 1 left a gap ("1 3"). The kit's static counts follow (a fold's and a tree's count, a fact card, a bar number over the score). Tabular figures stay for values that change in place (a tempo, a timer).
 
 - **A course's count stays whole (loop round 19):** "0 of 13 learned" never breaks over two lines (it did in Russian at 402); Next gives way, cut short. A tile's number (a lesson's, a numbered row's) is set in plain figures: Onest's tabular 1 split "10" into "1 0". The lesson line keeps the level board's 44px tiles, 68px rows (canvas 164: a course's line is a level's).
 

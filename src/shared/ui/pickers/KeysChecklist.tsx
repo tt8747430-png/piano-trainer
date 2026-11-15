@@ -54,7 +54,7 @@ export function KeysChecklist({
           }
         >
           <span className="min-w-0 text-foreground">{label}</span>
-          <span className="flex shrink-0 items-center gap-1 text-muted-foreground tabular-nums">
+          <span className="flex shrink-0 items-center gap-1 text-muted-foreground">
             {t('picker.chosen', { count: chosen.size, total: SIGNATURES.length })}
             <OpensMark />
           </span>

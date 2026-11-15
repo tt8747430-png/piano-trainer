@@ -135,7 +135,7 @@ export function LabelRow({
           <span
             key={index}
             data-slot="bar-label"
-            className="absolute top-0 truncate text-xs text-muted-foreground tabular-nums"
+            className="absolute top-0 truncate text-xs text-muted-foreground"
             style={{
               left: measure.x + LABEL_INSET_PX,
               maxWidth: Math.max(0, until - measure.x - 2 * LABEL_INSET_PX),

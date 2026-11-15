@@ -51,9 +51,7 @@ export function FoldGroup({
             {title}
           </span>
           {count ? (
-            <span className="shrink-0 font-sans text-base text-muted-foreground tabular-nums">
-              {count}
-            </span>
+            <span className="shrink-0 font-sans text-base text-muted-foreground">{count}</span>
           ) : null}
         </button>
       </h2>

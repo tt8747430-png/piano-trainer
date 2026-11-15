@@ -13,7 +13,7 @@ export const TREE_ITEM =
 
 /** A count at a tree row's end, in soft ink. */
 export const TreeCount = ({ n }: { n: number }) => (
-  <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground tabular-nums">{n}</span>
+  <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground">{n}</span>
 )
 
 /** A tree row's painted picture: its icon on its paint's wash, the tree's size (a folder, a Settings page). */

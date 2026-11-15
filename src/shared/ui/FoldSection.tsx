@@ -61,7 +61,7 @@ export function FoldSection({
         >
           {title}
           {count === undefined ? null : (
-            <span className="font-sans text-base text-muted-foreground tabular-nums">{count}</span>
+            <span className="font-sans text-base text-muted-foreground">{count}</span>
           )}
           <ChevronDown
             aria-hidden
@@ -75,9 +75,7 @@ export function FoldSection({
         <>
           {title}
           {count === undefined ? null : (
-            <span className="ml-2 font-sans text-base text-muted-foreground tabular-nums">
-              {count}
-            </span>
+            <span className="ml-2 font-sans text-base text-muted-foreground">{count}</span>
           )}
         </>
       )}
