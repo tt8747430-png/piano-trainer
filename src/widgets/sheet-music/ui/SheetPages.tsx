@@ -11,8 +11,8 @@ const TITLE_ROOM = 44
 
 /**
  * A score's lines dealt onto A4 pages as they print (ADR 0096), the screen's and the print's alike:
- * a line starts a new page where it does not fit on the one begun, the title over the first line and
- * kept with it as the page is spread, every page but the last filled to its height (ADR 0087).
+ * a line starts a new page where it does not fit on the one begun, a printed score's title over the
+ * first line and kept with it as the page is spread (the Player's title is its bar's), every page but the last filled to its height (ADR 0087).
  */
 export function SheetPages({
   lines,
@@ -24,7 +24,8 @@ export function SheetPages({
   lines: readonly ScoreLine[]
   /** A line's height as engraved: its labels' row, its staves and the verses under its tune. */
   height: (line: ScoreLine) => number
-  title: string
+  /** Printed over the first line, on paper; the Player's pages print none, its title being its bar's. */
+  title?: string | undefined
   /** Printed under the title (ADR 0114). */
   credits?: ScoreHeader | undefined
   line: (line: ScoreLine) => ReactNode
@@ -32,7 +33,7 @@ export function SheetPages({
   const dealt = paginate(
     lines,
     (each) => height(each) + LINE_GAP,
-    PAGE.height - 2 * PAGE.margin - TITLE_ROOM - creditsRoom(credits),
+    PAGE.height - 2 * PAGE.margin - (title === undefined ? 0 : TITLE_ROOM + creditsRoom(credits)),
     undefined,
     // A page break before a line's first bar (ADR 0097).
     (each) => each.score.measures[0]?.pageBreak === true,
@@ -46,7 +47,7 @@ export function SheetPages({
       blocks={page.map((each, at) => ({
         key: String(each.first),
         content:
-          number === 0 && at === 0 ? (
+          title !== undefined && number === 0 && at === 0 ? (
             <div className="flex flex-col" style={{ gap: LINE_GAP }}>
               <div>
                 <SheetTitle title={title} place="page" />

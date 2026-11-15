@@ -4,7 +4,7 @@ import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practic
 import { barUnder, useElementSize, useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
-import { LoopGrip, SheetTitle } from '@/shared/ui'
+import { LoopGrip } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { loopedBars, playedOf } from '../model/beat-span'
 import { inSight } from '../model/in-sight'
@@ -13,16 +13,15 @@ import { BackToPlayhead } from './BackToPlayhead'
 import { gridWords } from '../model/lyric-lines'
 
 /**
- * The Grid (ADR 0108): the music's chord chart in beats under its title, its sections headed,
+ * The Grid (ADR 0108): the music's chord chart in beats, its sections headed,
  * the beat sounding filled, the loop's bars on its band, a grip at each of its ends dragging it bar by
  * bar (`onLoop`); a beat tapped takes the cursor there. Its own scroller, with room to scroll its last line clear of the transport floating over its foot. The
  * bar the cursor is in is kept in sight as the music moves on, as the sheet keeps the line playing;
- * opening, the Grid stays at its top, its title in sight, where that bar is in sight there (a loop's
+ * opening, the Grid stays at its top where that bar is in sight there (a loop's
  * further on is brought to). With the View's Lyrics, each bar's words under the beats they are sung
  * on (ADR 0108).
  */
 export function GridView({
-  title,
   performance,
   headings,
   beat,
@@ -32,7 +31,6 @@ export function GridView({
   onBeat,
   onLoop,
 }: {
-  title: string
   performance: Performance
   headings: readonly string[]
   beat: PlayedBeat
@@ -72,7 +70,6 @@ export function GridView({
       aria-label={t('views.grid')}
       className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
-      <SheetTitle title={title} place="lines" />
       <div className="relative mx-auto w-full">
         <ChordChart
           tap="go"

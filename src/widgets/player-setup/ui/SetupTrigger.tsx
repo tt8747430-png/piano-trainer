@@ -15,7 +15,6 @@ export function SetupTrigger() {
         <Button
           variant="tool"
           size="icon"
-          className="glass"
           aria-label={t('settingsPage.open')}
           title={t('settingsPage.open')}
         />

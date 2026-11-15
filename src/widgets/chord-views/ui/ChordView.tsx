@@ -26,7 +26,6 @@ import { GridView } from './GridView'
  */
 export function ChordView({
   view,
-  title,
   performance,
   headings,
   practice,
@@ -38,7 +37,6 @@ export function ChordView({
   textSize,
 }: {
   view: Exclude<MusicView, 'sheet'>
-  title: string
   performance: Performance
   /** Each section's name, by section; none for music of one section. */
   headings: readonly string[]
@@ -70,7 +68,6 @@ export function ChordView({
   }
   return view === 'grid' ? (
     <GridView
-      title={title}
       performance={performance}
       headings={headings}
       beat={beat}
@@ -82,7 +79,6 @@ export function ChordView({
     />
   ) : view === 'lyrics' ? (
     <ChordsOverLyrics
-      title={title}
       performance={performance}
       headings={headings}
       bars={bars}
@@ -98,7 +94,6 @@ export function ChordView({
     />
   ) : (
     <ChordDiagrams
-      title={title}
       performance={performance}
       bars={bars}
       beat={beat}

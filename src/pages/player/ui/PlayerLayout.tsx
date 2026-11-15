@@ -22,11 +22,12 @@ import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import type { MenuAction } from '@/shared/ui'
+import { useCreditLine, type MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
   TransportPiano,
+  BarTitle,
   CountInBeat,
   HandsSheet,
   LoopButton,
@@ -54,7 +55,7 @@ import {
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
-import { PickView } from './PickView'
+import { PickView, ViewMenu } from './PickView'
 import { SongHead } from './SongHead'
 import { CoachLine } from './CoachLine'
 import type { ScoreAnnotation } from '@/shared/lib/notation'
@@ -157,6 +158,8 @@ export function PlayerLayout({
   display?: ReactNode
 }) {
   const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
+  // Who wrote it, under the title in the bar (loop round 24): the sheet prints no title of its own.
+  const creditLine = useCreditLine(credits)
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const scoreView = useSettings(selectScoreView)
@@ -337,10 +340,22 @@ export function PlayerLayout({
           Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={<PlayerClose onClose={onClose} />}
-        middle={<PickView shown={shown} needs={needs} />}
+        lead={
+          <>
+            <PlayerClose onClose={onClose} />
+            <BarTitle title={title} credit={creditLine} />
+          </>
+        }
+        middle={
+          <div className="max-sm:hidden">
+            <PickView shown={shown} needs={needs} />
+          </div>
+        }
         actions={
           <>
+            <div className="sm:hidden">
+              <ViewMenu shown={shown} needs={needs} />
+            </div>
             {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
                 connected from Settings › Connect a piano. */}
             {isMidiConnected(connection) || connection.kind === 'connecting' ? (
@@ -362,8 +377,6 @@ export function PlayerLayout({
             view={sheetView}
             piano={piano}
             staffNames={names}
-            title={title}
-            credits={credits}
             layout={layout}
             // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
             performance={player.performance}
@@ -382,7 +395,6 @@ export function PlayerLayout({
         ) : (
           <ChordView
             view={shown}
-            title={title}
             performance={performance}
             headings={headings}
             practice={practice}

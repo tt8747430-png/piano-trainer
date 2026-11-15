@@ -13,7 +13,6 @@ import {
 import { useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
-import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
 import { footRoom, inSight, lineScroll } from '../model/in-sight'
@@ -25,7 +24,7 @@ import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
 
 /**
- * Chords over lyrics (ADR 0108, Chordify's): under the title the beat strip across the view,
+ * Chords over lyrics (ADR 0108, Chordify's): the beat strip across the view,
  * held at the top as the song scrolls under it with, where pinned (`pinned`), the song's chords as
  * diagrams in a row under it, the one sounding outlined; then in one column in its middle the song by
  * section, each under its name in spaced capitals, each line its chords as chips over its words
@@ -36,7 +35,6 @@ import { LyricRow } from './LyricRow'
  * played at), a pinned diagram to its chord (`onSymbol`, ADR 0108): the line scrolls to it.
  */
 export function ChordsOverLyrics({
-  title,
   performance,
   headings,
   bars,
@@ -50,7 +48,6 @@ export function ChordsOverLyrics({
   onLoop,
   onSymbol,
 }: {
-  title: string
   performance: Performance
   headings: readonly string[]
   /** Every bar as played, in beats. */
@@ -96,8 +93,8 @@ export function ChordsOverLyrics({
   const follow = useFollow(scroller, playing)
   const { following, returns } = follow
   // The line playing brought into the top third of the room between the strip and the transport as
-  // the music reaches it, where it is not there already. Opening, the view stays at its top, its
-  // title in sight, where that line is in sight there (a loop's further on is brought to).
+  // the music reaches it, where it is not there already. Opening, the view stays at its top where
+  // that line is in sight there (a loop's further on is brought to).
   useEffect(() => {
     const box = scroller.current
     const line = box?.querySelector(`[data-line="${soundingLine}"]`)
@@ -122,7 +119,6 @@ export function ChordsOverLyrics({
       aria-label={t('views.lyrics')}
       className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
-      <SheetTitle title={title} place="lines" />
       <div
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"

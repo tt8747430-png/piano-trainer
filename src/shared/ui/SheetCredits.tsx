@@ -18,17 +18,8 @@ export function SheetCredits({
   align?: 'center' | 'end'
   className?: string
 }): ReactNode {
-  const { t } = useTranslation('common')
-  const { subtitle, composer, lyricist, arranger, translator, tune } = credits
-  const both = lyricist !== undefined && lyricist === composer
-  const parts = [
-    both ? t('sheetCredits.wordsAndMusic', { names: lyricist }) : null,
-    !both && lyricist ? t('sheetCredits.words', { names: lyricist }) : null,
-    translator ? t('sheetCredits.translator', { names: translator }) : null,
-    !both && composer ? t('sheetCredits.music', { names: composer }) : null,
-    tune ? t('sheetCredits.tune', { names: tune }) : null,
-    arranger ? t('sheetCredits.arranger', { names: arranger }) : null,
-  ].filter((part) => part !== null)
+  const { subtitle } = credits
+  const line = useCreditLine(credits)
   return (
     <div
       data-slot="sheet-credits"
@@ -40,16 +31,35 @@ export function SheetCredits({
           {subtitle}
         </p>
       ) : null}
-      {parts.length > 0 ? (
+      {line ? (
         <p
           className={cn(
             'font-sans text-[0.8125rem] leading-6 text-pretty wrap-break-word text-muted-foreground',
             align === 'center' ? 'text-center' : 'text-end',
           )}
         >
-          {parts.join(' · ')}
+          {line}
         </p>
       ) : null}
     </div>
   )
+}
+
+/** Who wrote it, in one line, as a score prints it: "Words: John Newton · Music: New Britain"; none
+ * without a name. The sheet's credits print it; the Player's bar carries it under the title. */
+export function useCreditLine(credits: SheetCreditLines | undefined): string {
+  const { t } = useTranslation('common')
+  if (credits === undefined) return ''
+  const { composer, lyricist, arranger, translator, tune } = credits
+  const both = lyricist !== undefined && lyricist === composer
+  return [
+    both ? t('sheetCredits.wordsAndMusic', { names: lyricist }) : null,
+    !both && lyricist ? t('sheetCredits.words', { names: lyricist }) : null,
+    translator ? t('sheetCredits.translator', { names: translator }) : null,
+    !both && composer ? t('sheetCredits.music', { names: composer }) : null,
+    tune ? t('sheetCredits.tune', { names: tune }) : null,
+    arranger ? t('sheetCredits.arranger', { names: arranger }) : null,
+  ]
+    .filter((part) => part !== null)
+    .join(' · ')
 }

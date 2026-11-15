@@ -5,8 +5,8 @@ import { Button } from '@/shared/ui/primitives/button'
 import { PLAYER_KEYS } from '../model/player-keys'
 
 /**
- * Close, the score bar's first (ADR 0115), saying its key (Escape); the title is printed on the
- * sheet (ADR 0114).
+ * Close, the score bar's first (ADR 0115), saying its key (Escape): a plain icon on the bar's paper,
+ * the song's title beside it.
  */
 export function PlayerClose({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation('common')
@@ -14,7 +14,6 @@ export function PlayerClose({ onClose }: { onClose: () => void }) {
     <Button
       variant="tool"
       size="icon"
-      className="glass"
       aria-label={t('close')}
       title={keyHint(t('close'), PLAYER_KEYS.close)}
       onClick={onClose}

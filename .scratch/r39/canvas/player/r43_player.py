@@ -420,8 +420,54 @@ def grid4(t, phone):
     return t
 
 
+
+def headed(t, phone):
+    """Loop round 24 (owner, IMG_6045–6056: "the titles doesnt look good and should be in the headers ... no settings in
+    the view buttons. floating buttons with backroung doesnt make sense"): the bar is a band of paper with a hairline,
+    Close and the gear plain icons on it, the song's title and its credit beside Close; the score prints no title
+    under it. A view button only shows its view; its settings are the gear's. On a phone the views are one button
+    with the view shown, opening a menu of the four."""
+    top = 66 if phone else 16
+    left = 60 if phone else 68
+    plain = 'border: 0; background: transparent; color: #332921'
+    t = re.sub(r'(aria-label="Close" data-tip="Close" style="[^"]*?)border: 1px solid \{\{glassLine\}\}; border-radius: 9999px; background: \{\{glass\}\}; backdrop-filter: blur\(12px\); color: \{\{glassFg\}\}',
+               r'\1border: 0; border-radius: 9999px; background: transparent; color: #332921', t, count=1)
+    t = re.sub(r'(aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}" onClick="\{\{openMore\}\}" style="[^"]*?)border: 1px solid \{\{glassLine\}\}; border-radius: 9999px; background: \{\{setBg\}\}; backdrop-filter: blur\(12px\); color: \{\{glassFg\}\}',
+               r'\1border: 0; border-radius: 9999px; background: {{setBgPlain}}; color: #332921', t, count=1)
+    band = (f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: {54 if phone else 0}px; height: {(top + 52) - (54 if phone else 0)}px; '
+            'background: #FEFDFB; box-shadow: inset 0 -1px 0 #DAD1C8"></div>')
+    title = (f'<div style="position: absolute; z-index: 47; left: {left}px; right: {108 if phone else 520}px; top: {top}px; height: 44px; display: flex; flex-direction: column; justify-content: center; min-width: 0">'
+             f'<span style="font-size: {16 if phone else 17}px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</span>'
+             '<span style="font-size: 12px; line-height: 1.3; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Words: John Newton · Music: New Britain</span></div>')
+    t = t.replace('<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n<a href=', '<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n' + band + title + '\n<a href=', 1)
+    # each view button only shows its view
+    t = t.replace("pick: () => (id !== view ? this.setState({ view: id, open: 'none' }) : this.setState({ open: open === 'view' ? 'none' : 'view' })),",
+                  "pick: () => this.setState({ view: id, open: 'none' }),", 1)
+    t = t.replace("const hint = !on ? 'Show ' + name : sheet ? (pano ? 'Show as pages' : 'Show as one line') : name + ' settings';", "const hint = name;", 1)
+    t = t.replace("const label = sheet && on ? (pano ? 'Sheet, one line' : 'Sheet, pages') : name;", "const label = name;", 1)
+    t = t.replace("isMore: open === 'settings',", "isMore: open === 'settings', isViews: open === 'views', openViews: toggleOpen('views'), setBgPlain: open === 'settings' ? '#EEE9E2' : 'transparent', viewNowD: (VIEWS.find((v) => v[0] === view) || VIEWS[0])[2], viewNowName: (VIEWS.find((v) => v[0] === view) || VIEWS[0])[1],", 1)
+    if phone:
+        nav0 = t.index('<nav aria-label="View"')
+        nav1 = t.index('</nav>', nav0) + len('</nav>')
+        menu = ('<button type="button" aria-label="View: {{viewNowName}}" data-tip="View" aria-expanded="{{isViews}}" onClick="{{openViews}}" '
+                f'style="position: absolute; z-index: 48; right: 60px; top: {top}px; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">'
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{viewNowD}}"></path></svg></button>'
+                '<sc-if value="{{isViews}}" hint-placeholder-val="{{false}}"><div onClick="{{openViews}}" style="position: absolute; inset: 0; z-index: 55"></div>'
+                f'<div role="menu" aria-label="View" style="position: absolute; z-index: 56; right: 12px; top: {top + 50}px; width: 220px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: #FEFDFB; '
+                'box-shadow: 0 0 0 1px rgba(51,41,33,.06), 0 2px 4px rgba(51,41,33,.08), 0 18px 40px -12px rgba(51,41,33,.28)">'
+                '<sc-for list="{{views}}" as="v" hint-placeholder-count="4"><button type="button" role="menuitemradio" aria-checked="{{v.on}}" onClick="{{v.pick}}" '
+                'style="width: 100%; height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; gap: 12px; padding: 0 10px; color: #332921; font: inherit; font-size: 16px; text-align: left">'
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{v.d}}"></path></svg>'
+                '<span style="flex: 1">{{v.label}}</span><span aria-hidden="true" style="opacity: {{v.tick}}; font-weight: 700">✓</span></button></sc-for></div></sc-if>')
+        t = t[:nav0] + menu + t[nav1:]
+        t = t.replace("on: on ? 'true' : 'false', bg: on ? '#332921' : 'transparent',", "on: on ? 'true' : 'false', tick: on ? 1 : 0, bg: on ? '#332921' : 'transparent',", 1)
+    # the score prints no title: it is the bar's
+    t = re.sub(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Words: John Newton · Music: New Britain</p>', '', t)
+    t = t.replace('padding: 78px 0 132px', 'padding: 20px 0 132px').replace('padding: 120px 0 140px', 'padding: 24px 0 140px')
+    return t
+
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone)
+    t = headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
