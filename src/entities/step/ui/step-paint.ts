@@ -18,10 +18,13 @@ export const STEP_PAINT: Readonly<Record<StepKind, Paint>> = {
   song: 'yellow',
 }
 
-/** Each stage's paint, worn by its journey's and its courses' cards and pages (DESIGN: one meaning per paint). */
+/**
+ * Each stage's paint, worn by its journey's and its courses' cards and pages (DESIGN: one meaning per
+ * paint), in the Learn board's order: sage, sky, honey, lilac.
+ */
 export const STAGE_PAINT: Readonly<Record<Stage, Paint>> = {
-  beginner: 'sky',
-  intermediate: 'grass',
-  advanced: 'lilac',
-  professional: 'sand',
+  beginner: 'grass',
+  intermediate: 'sky',
+  advanced: 'yellow',
+  professional: 'lilac',
 }
