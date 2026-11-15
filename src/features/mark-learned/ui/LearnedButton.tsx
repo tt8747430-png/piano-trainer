@@ -6,9 +6,9 @@ import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 
 /**
- * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, it wears the one
- * chosen fill (R15) and its check sits on the learned grass. In a screen's bar it says its word
- * (canvas 164: a check alone left the learner guessing).
+ * A step's or a lesson's Learned toggle: a check waiting in soft ink; pressed, its check sits on the
+ * learned grass. In a screen's bar it says its word (canvas 164: a check alone left the learner
+ * guessing), ringed while off and in the grass wash once learned, as the boards' LEARNED.
  */
 export function LearnedButton({
   step,
@@ -36,7 +36,9 @@ export function LearnedButton({
         onPressedChange={toggle}
         title={t('learned.done')}
         className={cn(
-          'h-11 min-w-11 gap-1.5 rounded-pill border-transparent bg-muted/70 px-3.5 font-semibold text-foreground hover:bg-muted aria-pressed:bg-learned aria-pressed:text-learned-foreground',
+          // The board's LEARNED: a 34-tall pill in a 44 target, ringed while off, the grass wash and
+          // its ring once learned.
+          'h-11 min-w-11 gap-1 rounded-pill border-y-[5px] border-transparent bg-transparent bg-clip-padding px-3 text-sm font-semibold text-foreground shadow-[inset_0_0_0_1.5px_var(--color-border)] hover:bg-muted aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass aria-pressed:shadow-[inset_0_0_0_1.5px_var(--color-paint-full-grass)]',
           !worded && 'max-sm:px-0',
         )}
       >
