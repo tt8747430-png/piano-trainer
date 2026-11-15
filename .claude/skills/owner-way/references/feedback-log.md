@@ -306,6 +306,7 @@ owner's, typos fixed.
 - **Loop round 16, a scale's name as a musician writes it:** the title's picker shows the name as it follows its tonic, "G major", "D Dorian" (`scaleName`), its menu keeping the list's names; a long name (half-whole diminished) wraps inside the screen instead of being cut (2026-11-15).
 - **Loop round 16, a level's side as the board's LVSIDE:** "Levels" in the soft caps every group wears, each level a 52-tall row with 10 corners, its name 15 over its book 13, the count 13 in still figures (2026-11-15).
 - **Loop round 16, Learn's course covers as the board's COURSECARD:** 128 tall, 12 by 14 inside, the shelf 11px bold at 6% in soft ink, the title 19 in the serif in ink, its line 13 on 1.35; 168 wide on a phone, 18 apart on a laptop; the paint stays its level's (2026-11-15).
+- **Loop round 18, the editor's credit line reaches 44:** "Music: Traditional" under the title opens Title and credits from a 44-tall reach grown into the room under it, never over the title's (2026-11-15).
 - **Loop round 18, a lesson's head 28 above its first section,** as the board's document spaces head and sections (was 16) (2026-11-15).
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
