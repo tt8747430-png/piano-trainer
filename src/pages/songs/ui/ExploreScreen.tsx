@@ -26,7 +26,6 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
             value={home.q}
             onChange={(q) => show({ q })}
             label={t('explore.search')}
-            hint={t('searchHint')}
             screen={t('explore.views.explore')}
           />
         </div>
