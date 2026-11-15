@@ -64,9 +64,10 @@ export function SettingsGroup({
             // A switch row draws its line beneath it; the card's edge stands for the last one's.
             'flex flex-col card [&>[data-slot=switch-row]:last-child]:border-b-0',
             // A row's hover fills the card to its edges (R23), square between rows; a switch row, which
-            // has no inset of its own, sits 16 in, as the canvas's GROUP rows.
+            // has no inset of its own, sits 16 in, as the canvas's GROUP rows; every row is parted from
+            // the one above by a hairline, as GROUP draws them (a switch row draws its own beneath it).
             flush
-              ? 'overflow-hidden [&>[data-slot=switch-row]]:px-4 [&>:is(a,button)+:is(a,button)]:border-t [&>:is(a,button)+:is(a,button)]:border-hairline [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
+              ? 'overflow-hidden [&>[data-slot=switch-row]]:px-4 [&>:not([data-slot=switch-row])+*]:border-t [&>:not([data-slot=switch-row])+*]:border-hairline [&>*]:rounded-none [&>*:first-child]:rounded-t-card [&>*:last-child]:rounded-b-card'
               : 'gap-3 px-5 py-4',
           )}
         >

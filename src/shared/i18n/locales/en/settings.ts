@@ -61,6 +61,8 @@ export const settings = {
     reading: 'Calculating storage…',
     kept: '{{kept}} of {{total}} downloaded',
     ready: 'Available offline',
+    partly: 'Partly downloaded',
+    none: 'Not downloaded yet',
     download: 'Download for offline use',
     needsInternet: 'Needs the internet',
     downloading: 'Downloading… {{percent}}%',

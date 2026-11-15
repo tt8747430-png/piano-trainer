@@ -38,21 +38,37 @@ export function PianoSoundGroup() {
         <p className="px-4 py-3 text-muted-foreground">{t('pianoSound.reading')}</p>
       ) : sound.state === 'known' ? (
         <>
-          <p className="flex items-baseline justify-between gap-3 px-4 pt-3 pb-1">
-            <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
-            <span className="text-sm whitespace-nowrap text-muted-foreground tabular-nums">
-              {t('pianoSound.kept', {
-                kept: megabytes(sound.kept, locale),
-                total: megabytes(sound.total, locale),
-              })}
-            </span>
-          </p>
-          {sound.kept >= sound.total ? (
-            <p role="status" className="flex items-center gap-2 px-4 pt-1 pb-3 font-medium">
-              <CircleCheck aria-hidden className="size-5 shrink-0 text-learned" />
-              {t('pianoSound.ready')}
+          {/* The board's offline card: the grand and how much is kept, its bar, then where it stands. */}
+          <div className="flex flex-col gap-2 px-4 py-3.5">
+            <p className="flex items-baseline justify-between gap-3 tabular-nums">
+              <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
+              <span className="text-sm whitespace-nowrap text-muted-foreground">
+                {t('pianoSound.kept', {
+                  kept: megabytes(sound.kept, locale),
+                  total: megabytes(sound.total, locale),
+                })}
+              </span>
             </p>
-          ) : (
+            <span aria-hidden className="h-1.5 overflow-hidden rounded-pill bg-muted">
+              <span
+                className="block h-full rounded-pill bg-learned"
+                style={{
+                  width: `${Math.min(100, (sound.kept / Math.max(1, sound.total)) * 100)}%`,
+                }}
+              />
+            </span>
+            {sound.kept >= sound.total ? (
+              <p role="status" className="flex items-center gap-2 text-sm font-medium">
+                <CircleCheck aria-hidden className="size-4 shrink-0 text-learned" />
+                {t('pianoSound.ready')}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {t(sound.kept > 0 ? 'pianoSound.partly' : 'pianoSound.none')}
+              </p>
+            )}
+          </div>
+          {sound.kept >= sound.total ? null : (
             <>
               <ActionRow
                 title={t('pianoSound.download')}

@@ -57,6 +57,8 @@ export const settings: LocaleResources['settings'] = {
     reading: 'Подсчёт занятого места…',
     kept: '{{kept}} из {{total}} загружено',
     ready: 'Доступно без сети',
+    partly: 'Загружено частично',
+    none: 'Ещё не загружено',
     download: 'Загрузить для работы без сети',
     needsInternet: 'Нужен интернет',
     downloading: 'Загрузка… {{percent}}%',

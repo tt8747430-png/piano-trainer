@@ -2,90 +2,36 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import {
-  hasFinePointer,
-  KEY_DOCKS,
-  KEY_SIZES,
-  NAMED_KEYS,
-  PEDALS_SHOWN,
-  SWIPES,
-} from '@/shared/lib'
-import {
-  DockPicture,
-  KeySizePicture,
-  NoteNamesPicture,
-  PictureChoice,
-  SettingRows,
-  SettingsGroup,
-  SwipePicture,
-  SwitchRow,
-} from '@/shared/ui'
-import { PedalIcon } from './PedalIcon'
+import { KEY_DOCKS, KEY_SIZES, NAMED_KEYS, PEDALS_SHOWN, SWIPES } from '@/shared/lib'
+import { MIDDLE_OCTAVES } from '@/shared/lib/music'
+import { GroupSegmented, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { LiveKeyboard } from './LiveKeyboard'
+
+/** Key size as the board orders it: the usual first, then Large, then the whole piano. */
+const KEY_SIZE_ORDER = [
+  'fit',
+  'large',
+  'piano',
+] as const satisfies readonly (typeof KEY_SIZES)[number][]
 
 /**
- * What matters while playing (R33, musicca's Settings): the key size, the note names, the
- * pedals and, on a computer, its keys: the On-screen piano page's first group.
+ * The keys as they stand (the board's KEYPIC): the real piano over two octaves from middle C, in a
+ * card, with the names and pedals chosen below it, playing what is tapped.
  */
-export function PianoEssentialRows() {
-  const { t } = useTranslation('common')
-  const store = useSettingsStoreApi()
-  const keyboard = useSettings(selectKeyboard)
+function KeysPreview() {
   return (
-    <>
-      <PictureChoice
-        setting="keyboard.keySize"
-        label={t('keyboardSettings.keySize.label')}
-        description={t('keyboardSettings.keySize.detail')}
-        value={keyboard.keySize}
-        options={KEY_SIZES.map((value) => ({
-          value,
-          label: t(`keyboardSettings.keySize.${value}`),
-          picture: <KeySizePicture size={value} />,
-        }))}
-        onChange={(keySize) => setKeyboard(store, { keySize })}
-      />
-      <PictureChoice
-        setting="keyboard.namedKeys"
-        label={t('keyboardSettings.namedKeys.label')}
-        description={t('keyboardSettings.namedKeys.detail')}
-        value={keyboard.namedKeys}
-        options={NAMED_KEYS.map((value) => ({
-          value,
-          label: t(`keyboardSettings.namedKeys.${value}`),
-          picture: <NoteNamesPicture names={value} />,
-        }))}
-        onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
-      />
-      <PictureChoice
-        setting="keyboard.pedals"
-        label={t('keyboardSettings.pedals.label')}
-        description={t('keyboardSettings.pedals.detail')}
-        value={keyboard.pedals}
-        options={PEDALS_SHOWN.map((value) => ({
-          value,
-          label: t(`keyboardSettings.pedals.${value}`),
-          picture: (
-            <span className="flex items-end gap-0.5">
-              {Array.from({ length: value === 'all' ? 3 : 1 }, (_, at) => (
-                <PedalIcon key={at} />
-              ))}
-            </span>
-          ),
-        }))}
-        onChange={(pedals) => setKeyboard(store, { pedals })}
-      />
-      {hasFinePointer() ? <TypingSwitch /> : null}
-    </>
+    <div className="card overflow-hidden p-3">
+      <LiveKeyboard range={MIDDLE_OCTAVES} height={96} spacePedal={false} />
+    </div>
   )
 }
 
 /**
- * The on-screen piano's settings (R21, R22, R32, R33, R34), saved for every on-screen piano, ordered
- * by what a pianist changes most: Keys, the page's Sound (`sound`), Display (the chord symbol, names on highlighted
- * keys), While you play (the swipe, play on selection), then Placement (where a page docks the keys).
+ * The on-screen piano's settings (the board's P_PIANO), saved for every on-screen piano, ordered by
+ * what a pianist changes most: the keys previewed, then Keys (Key size, Note names, Pedals), the
+ * page's Sound (`sound`), Display (the chord symbol, names on highlighted keys), While you play (the
+ * swipe, play on selection) and Placement; each choice a segmented row, as the board draws them.
  * The keys' window is moved and sized where it floats, and showing them is the bar's Keyboard.
- * Each option says what it does in one line under its name; choices of look are pictures of the keys.
- * Settings › On-screen piano, and the same page in the Player's and the editor's gear.
  */
 export function KeyboardSettingsFields({ sound }: { sound?: ReactNode }) {
   const { t } = useTranslation(['common', 'settings'])
@@ -93,74 +39,89 @@ export function KeyboardSettingsFields({ sound }: { sound?: ReactNode }) {
   const keyboard = useSettings(selectKeyboard)
   return (
     <>
-      <SettingsGroup title={t('settings:piano.essentials')}>
-        <SettingRows>
-          <PianoEssentialRows />
-        </SettingRows>
+      <KeysPreview />
+      <SettingsGroup flush title={t('settings:piano.essentials')}>
+        <GroupSegmented
+          setting="keyboard.keySize"
+          label={t('keyboardSettings.keySize.label')}
+          value={keyboard.keySize}
+          options={KEY_SIZE_ORDER.map((value) => ({
+            value,
+            label: t(`keyboardSettings.keySize.${value}`),
+          }))}
+          onChange={(keySize) => setKeyboard(store, { keySize })}
+        />
+        <GroupSegmented
+          setting="keyboard.namedKeys"
+          label={t('keyboardSettings.namedKeys.label')}
+          value={keyboard.namedKeys}
+          options={NAMED_KEYS.map((value) => ({
+            value,
+            label: t(`keyboardSettings.namedKeys.${value}`),
+          }))}
+          onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
+        />
+        <GroupSegmented
+          setting="keyboard.pedals"
+          label={t('keyboardSettings.pedals.label')}
+          value={keyboard.pedals}
+          options={PEDALS_SHOWN.map((value) => ({
+            value,
+            label: t(`keyboardSettings.pedals.${value}`),
+          }))}
+          onChange={(pedals) => setKeyboard(store, { pedals })}
+        />
       </SettingsGroup>
       {sound}
-      <SettingsGroup title={t('settings:piano.look')}>
-        <SettingRows>
-          <SwitchRow
-            setting="keyboard.chordNames"
-            label={t('keyboardSettings.chordNames')}
-            description={t('keyboardSettings.chordNamesNote')}
-            checked={keyboard.chordNames}
-            onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
-          />
-          <SwitchRow
-            setting="keyboard.markNotes"
-            label={t('keyboardSettings.markNotes')}
-            description={t('keyboardSettings.markNotesNote')}
-            checked={keyboard.markNotes}
-            onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
-          />
-        </SettingRows>
+      <SettingsGroup flush title={t('settings:piano.look')}>
+        <SwitchRow
+          setting="keyboard.chordNames"
+          label={t('keyboardSettings.chordNames')}
+          checked={keyboard.chordNames}
+          onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
+        />
+        <SwitchRow
+          setting="keyboard.markNotes"
+          label={t('keyboardSettings.markNotes')}
+          checked={keyboard.markNotes}
+          onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
+        />
       </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.play')}>
-        <SettingRows>
-          <PictureChoice
-            setting="keyboard.swipe"
-            label={t('keyboardSettings.swipe.label')}
-            description={t('keyboardSettings.swipe.detail')}
-            value={keyboard.swipe}
-            options={SWIPES.map((value) => ({
-              value,
-              label: t(`keyboardSettings.swipe.${value}`),
-              picture: <SwipePicture swipe={value} />,
-            }))}
-            onChange={(swipe) => setKeyboard(store, { swipe })}
-          />
-          <SwitchRow
-            setting="keyboard.autoplay"
-            label={t('keyboardSettings.autoplay')}
-            description={t('keyboardSettings.autoplayNote')}
-            checked={keyboard.autoplay}
-            onCheckedChange={(autoplay) => setKeyboard(store, { autoplay })}
-          />
-        </SettingRows>
+      <SettingsGroup flush title={t('settings:piano.play')}>
+        <GroupSegmented
+          setting="keyboard.swipe"
+          label={t('keyboardSettings.swipe.label')}
+          value={keyboard.swipe}
+          options={SWIPES.map((value) => ({
+            value,
+            label: t(`keyboardSettings.swipe.${value}`),
+          }))}
+          onChange={(swipe) => setKeyboard(store, { swipe })}
+        />
+        <SwitchRow
+          setting="keyboard.autoplay"
+          label={t('keyboardSettings.autoplay')}
+          checked={keyboard.autoplay}
+          onCheckedChange={(autoplay) => setKeyboard(store, { autoplay })}
+        />
       </SettingsGroup>
-      <SettingsGroup title={t('settings:piano.place')}>
-        <SettingRows>
-          <PictureChoice
-            setting="keyboard.dock"
-            label={t('keyboardSettings.dock.label')}
-            description={t('keyboardSettings.dock.detail')}
-            value={keyboard.dock}
-            options={KEY_DOCKS.map((value) => ({
-              value,
-              label: t(`keyboardSettings.dock.${value}`),
-              picture: <DockPicture dock={value} />,
-            }))}
-            onChange={(dock) => setKeyboard(store, { dock })}
-          />
-        </SettingRows>
+      <SettingsGroup flush title={t('settings:piano.place')}>
+        <GroupSegmented
+          setting="keyboard.dock"
+          label={t('keyboardSettings.dock.label')}
+          value={keyboard.dock}
+          options={KEY_DOCKS.map((value) => ({
+            value,
+            label: t(`keyboardSettings.dock.${value}`),
+          }))}
+          onChange={(dock) => setKeyboard(store, { dock })}
+        />
       </SettingsGroup>
     </>
   )
 }
 
-/** Whether the computer keys play the on-screen piano (R22): Settings › Computer keys. */
+/** Whether the computer keys play the on-screen piano: On-screen piano's Computer keyboard group. */
 export function TypingSwitch() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
@@ -169,8 +130,6 @@ export function TypingSwitch() {
     <SwitchRow
       setting="keyboard.typing"
       label={t('keyboardSettings.typing')}
-      description={t('keyboardSettings.typingNote')}
-      info={t('keyboardSettings.typingHint')}
       checked={typing}
       onCheckedChange={(on) => setKeyboard(store, { typing: on })}
     />
