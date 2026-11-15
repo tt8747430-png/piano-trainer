@@ -54,10 +54,14 @@ export function SheetPage({
           {block.content}
         </Fragment>
       ))}
+      {/* Its number at the head's outer corner, as an engraver prints it (and Flat): right on an odd page, left on an even one. */}
       <span
         aria-hidden
-        className="absolute inset-x-0 text-center text-xs text-muted-foreground"
-        style={{ bottom: PAGE.margin / 2 }}
+        className="absolute text-xs text-muted-foreground tabular-nums"
+        style={{
+          top: PAGE.margin / 2,
+          ...(number % 2 === 1 ? { right: PAGE.margin } : { left: PAGE.margin }),
+        }}
       >
         {number}
       </span>

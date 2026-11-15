@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'rea
 import { useTranslation } from 'react-i18next'
 import { selectPaletteCategory, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { chosenNotes } from '@/features/score-editor'
-import { useFoldKeys } from '@/features/live-keyboard'
 import { setPaletteCategory } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
@@ -408,8 +407,7 @@ function ToolRow({ category }: { category: PaletteCategory }) {
  * The palette docked under the sheet on a phone (the Editor board, Flat's), over the keys: its grip,
  * the selection strip, then, folded (as it first opens), the chosen category's tools in one row;
  * unfolded, every section in one scroll, up to half the screen; at its foot the categories by their
- * signs, lighting the section in sight and scrolling to the one tapped, and the button that unfolds it. With the keys shown it unfolds
- * over them only once they fold away.
+ * signs, lighting the section in sight and scrolling to the one tapped, and the button that unfolds it.
  */
 export function PaletteSheet({
   folded,
@@ -420,16 +418,12 @@ export function PaletteSheet({
 }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
-  const keys = useFoldKeys()
   const [category, choose] = useCategory()
   const box = useRef<HTMLDivElement>(null)
   const onScroll = useSectionInSight(box, category, choose)
-  // The keys stand where the sections would: shown, the sheet stays folded.
-  const unfolded = !folded && keys.folded
-  const unfold = (open: boolean) => {
-    if (open && !keys.folded) keys.fold(true)
-    onFold(!open)
-  }
+  // Unfolded, the keys step aside under it (Flat's), shown again as it folds; their own toggle untouched.
+  const unfolded = !folded
+  const unfold = (open: boolean) => onFold(!open)
   return (
     <MotionConfig reducedMotion="user">
       <section

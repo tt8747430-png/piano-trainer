@@ -137,17 +137,16 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
   const footShown = floating.shown || !idle
   const music =
     editor.view.layout === 'page' ? (
-      // Pages on their canvas (ADR 0096): it moves and zooms them itself, the area never scrolls.
+      // Pages on their canvas (ADR 0096), edge to edge as Flat's: it moves and zooms them itself, the area never scrolls.
       <div
         ref={sheet}
         data-area="sheet"
-        className="h-full min-h-0 overflow-clip"
+        className="-mx-gutter h-full min-h-0 overflow-clip"
         {...floating.reading}
         onClickCapture={floating.show}
       >
-        <div className="h-full overflow-clip rounded-control">
-          <EditorSheet onAnchor={setAnchor} covered={{ bottom: below + GAP }} />
-        </div>
+        {/* Flat's page view: the canvas reaches the screen's edges, no frame round it. */}
+        <EditorSheet onAnchor={setAnchor} covered={{ bottom: below + GAP }} />
       </div>
     ) : (
       <div
@@ -247,7 +246,8 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
             <KeyboardAnchor ref={setDocked} />
           ) : null}
         </div>
-        <EditorKeyboard />
+        {/* Under the unfolded palette the keys step aside, as Flat's (owner, 2026-11-15). */}
+        <EditorKeyboard stepAside={!panel && !typing && !folded} />
       </div>
       <FieldDocked value={typing}>
         <OpenField anchor={typing ? docked : anchor} />
