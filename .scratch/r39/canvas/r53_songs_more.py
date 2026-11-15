@@ -239,7 +239,7 @@ SM_SRC = (r'''
     const need = 20, left = Math.max(0, need - desc.length), offline = st.demo === 'offline', one = st.demo === 'one', ready = rights && left === 0 && !offline;
     const states = (ROOT === 'section' ? [['one', 'A section on one chord', one, { demo: one ? null : 'one' }]] : [['pub', 'Published', pub, { pub: !pub, page: 'publish', demo: null }], ['off', 'Offline', offline, { demo: offline ? null : 'offline', page: 'publish', pub: false }]])
       .map(([k, l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => S(o) }));
-    return { ...common(st, set), states, offline, manyChords: !one, secChords: one ? 'G' : 'G · C · D · Em', isSettings: page === 'settings', isPublish: page === 'publish', isSection: page === 'section', notSection: page !== 'section', pageT: { settings: 'Settings', publish: 'Publish', section: 'Learn the Verse' }[page],
+    return { ...common(st, set), states, offline, manyChords: !one, secChords: one ? 'G' : 'G · C · D · Em', isSettings: page === 'settings', isPublish: page === 'publish', isSection: page === 'section', notSection: page !== 'section', notPublish: page !== 'publish', pageT: { settings: 'Settings', publish: 'Publish', section: 'Learn the Verse' }[page],
       back: () => S({ page: page === 'publish' ? 'settings' : 'settings' }), backT: page === 'publish' ? 'Settings' : 'Amazing Grace', backHref: page === ROOT, backT0: ROOT === 'section' ? 'Amazing Grace' : 'Amazing Grace',
       favOn: fav, favOnBg: fav ? '#44684A' : '#DAD1C8', favOnX: fav ? 22 : 2, favT: () => S({ fav: !fav }), pubV: pub ? 'Published' : 'Not published', goPublish: () => S({ page: 'publish' }),
       askDup: () => S({ sheet: 'dup' }), dupOn: st.sheet === 'dup', doDup: () => { S({ sheet: null }); toast('Amazing Grace (copy) added to Church.'); }, archive: () => toast('Amazing Grace archived.', true),
@@ -252,9 +252,12 @@ SM_SRC = (r'''
       tipOn_chg: st.tip === 'chg', tip_chg: () => S({ tip: st.tip === 'chg' ? null : 'chg' }), tipOn_pat: st.tip === 'pat', tip_pat: () => S({ tip: st.tip === 'pat' ? null : 'pat' }),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null }) };''')
 HEADCARD = f'<div style="display: flex; gap: 14px; align-items: center">{COV("", HONEY, 64)}<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 20px; font-weight: 700">Amazing Grace</span><span style="font-size: 14px; color: {SOFT}">John Newton · Your song</span></div></div>'
-SSET = (HEADCARD + SEC(CAPS('Library'), GROUP(('link', 'Folder', 'Church', ''), ('toggle', 'Favourite', 'favOn', 'favT'), ('action', 'Duplicate', 'askDup'), ('action', 'Archive', 'archive'), bg=SHEET))
-        + SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{pubV}}', 'goPublish'), ('action', 'Share link', 'share'), ('link', 'Export…', 'MusicXML, MIDI', 'openExport'), bg=SHEET))
-        + SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET), FOOT('The song moves to the Trash in Songs, to be restored until the Trash is emptied.')))
+_SLIB = SEC(CAPS('Library'), GROUP(('link', 'Folder', 'Church', ''), ('toggle', 'Favourite', 'favOn', 'favT'), ('action', 'Duplicate', 'askDup'), ('action', 'Archive', 'archive'), bg=SHEET))
+_SSHARE = SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{pubV}}', 'goPublish'), ('action', 'Share link', 'share'), ('link', 'Export…', 'MusicXML, MIDI', 'openExport'), bg=SHEET))
+_SDEL = SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET), FOOT('The song moves to the Trash in Songs, to be restored until the Trash is emptied.'))
+SSET = HEADCARD + _SLIB + _SSHARE + _SDEL
+# on a laptop the song's groups stand in two columns, as every object's Settings: the library left, sharing and Delete right
+SSET_L = HEADCARD + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_SLIB}</div><div style="display: flex; flex-direction: column; gap: 16px">{_SSHARE}{_SDEL}</div></div>'
 WHY = ''.join(f'<div style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: {c}; font-size: 16px; display: flex; align-items: center; justify-content: center">{i}</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; line-height: 1.4; color: {SOFT}">{b}</span></span></div>'
               for i, c, t, b in [('◎', SKY, 'Found by other learners', 'It appears in Explore, by its category, for anyone to play.'), ('A', HONEY, 'Your name on it', 'Shown with your profile; Privacy can hide it.'), ('♡', SAGE, 'Always yours', 'You keep your rights, and can take it out at any time.')])
 SPUB = (HEADCARD + IF('notPub', SEC(CAPS('Why publish?'), CARD(f'<div style="display: flex; flex-direction: column; gap: 14px">{WHY}</div>'))
@@ -277,7 +280,7 @@ SECT = _SHEAD + _SCH + _STIME + _SCHG + _SPAT
 # on a laptop the section's four ways in stand in two columns: the chords and In time, the changes and the patterns
 SECT_L = _SHEAD + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 20px">{_SCH}{_STIME}</div><div style="display: flex; flex-direction: column; gap: 20px">{_SCHG}{_SPAT}</div></div>'
 SMBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB) + IF('isSection', SECT)
-SMBODY_L = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB) + IF('isSection', SECT_L)
+SMBODY_L = SHOWSTATES() + IF('isSettings', SSET_L, 'true') + IF('isPublish', SPUB) + IF('isSection', SECT_L)
 SMSHEETS = (ASK('dupOn', 'Duplicate Amazing Grace?', 'An editable copy of this song is added to your library. The original remains unchanged.', 'Duplicate', 'doDup').replace('background: #B3261E; color: #FFFFFF', f'background: {ACCENT}; color: {INK}')
             + ASK('unpubOn', 'Unpublish it?', 'It leaves the Public library at once. Learners who saved a copy keep theirs. You can publish it again later.', 'Unpublish', 'doUnpub')
             + BSHEET('exportOn', 'Export', GROUP(('action', 'MusicXML', 'exported'), ('action', 'MIDI', 'exported'), bg=SHEET)))
@@ -287,7 +290,7 @@ LSM = {'Song.dc.html': 'SongLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.ht
 def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
-smlm = (IF('backHref', LTOP('SongLaptop.dc.html', ''), 'true') + IF('isPublish', PAGEHEAD_L('back', 'Settings')) + IF('isSection', WIDE(H1('{{pageT}}') + LAPIFY(SMBODY_L), 1180)) + IF('notSection', WIDE(H1('{{pageT}}') + LAPIFY(SMBODY), 704), 'true') + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
+smlm = (IF('backHref', LTOP('SongLaptop.dc.html', ''), 'true') + IF('isPublish', PAGEHEAD_L('back', 'Settings')) + IF('isPublish', WIDE(H1('{{pageT}}') + LAPIFY(SMBODY), 704)) + IF('notPublish', WIDE(H1('{{pageT}}') + LAPIFY(SMBODY_L), 1180), 'true') + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
 SM_LAP = SMSHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
 for stem, root, ttl in (('SongSettings', "'settings'", 'A song’s Settings and Publish'), ('Section', "'section'", 'A section of a song')):
     detail(stem, ttl, js(SM_SRC.replace('__ROOT__', root)), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')

@@ -140,10 +140,12 @@ def SETTINGS(lesson, lap):
         rows = (READCARDS + CAPS('The lesson') + GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET))
     else:
         rows = (CAPS('The course') + GROUP(('link', 'Name', name, 'openName'), ('action', 'Duplicate', 'dup'), bg=SHEET))
-    body = (f'<span style="margin: -8px 4px 0; font-size: 15px; color: {SOFT}">{name}</span>{rows}'
-            f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "reset"), bg=SHEET)}<div style="height: 8px"></div>{GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)}')
+    sub = f'<span style="margin: -8px 4px 0; font-size: 15px; color: {SOFT}">{name}</span>'
+    rest = f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "reset"), bg=SHEET)}<div style="height: 8px"></div>{GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)}'
+    # on a laptop the page's groups stand in two columns: what it is on the left, its progress and Delete on the right
+    body = (sub + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{rows}</div><div style="display: flex; flex-direction: column; gap: 14px">{rest}</div></div>') if lap else sub + rows + rest
     pad = 'padding: 4px 56px 60px' if lap else 'padding: 4px 16px 40px'
-    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 704px; " if lap else ""}display: flex; flex-direction: column; gap: 14px">{body}</div></main>'
+    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 1180px; " if lap else ""}display: flex; flex-direction: column; gap: 14px">{body}</div></main>'
             + (YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px") if lap else YTOAST.replace('bottom: 112px', 'bottom: 40px')))
 for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')
