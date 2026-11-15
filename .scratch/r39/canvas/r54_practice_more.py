@@ -116,11 +116,14 @@ PE_SRC = r'''
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };'''
 INPUT = lambda label, val, act='': f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span><input value="{val}" {("onInput=\"{{" + act + "}}\" ") if act else ""}aria-label="{label}" style="height: 48px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>'
 DRAFTPILL = f'<button type="button" onClick="{{{{openPublishing}}}}" style="height: 32px; padding: 0 12px; border: 0; border-radius: 16px; background: {HONEY}; color: {INK}; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; flex: none; display: flex; align-items: center; gap: 4px">{{{{draftT}}}}{CHEV_D}</button>'
-PEEDIT = (f'<div style="display: flex; align-items: center; gap: 8px">{DRAFTPILL}<span style="font-size: 13px; color: {SOFT}">Editors only · learners see the published version</span></div>'
-          + INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'The four chords behind a hundred pop songs')
-          + SEC(S9CAPS('The progression', 'prog'), TIPCARD('prog', 'Roman numerals, one per bar, separated by spaces: I V vi IV.'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px 14px; font-family: {SERIF}; font-size: 26px; letter-spacing: .04em">I – V – vi – IV</div>')
-          + SEC(CAPS('Style'), WRAPCHIPS('styles'))
-          + SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET)))
+_PEH = f'<div style="display: flex; align-items: center; gap: 8px">{DRAFTPILL}<span style="font-size: 13px; color: {SOFT}">Editors only · learners see the published version</span></div>'
+_PEN = INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'The four chords behind a hundred pop songs')
+_PEP = SEC(S9CAPS('The progression', 'prog'), TIPCARD('prog', 'Roman numerals, one per bar, separated by spaces: I V vi IV.'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px 14px; font-family: {SERIF}; font-size: 26px; letter-spacing: .04em">I – V – vi – IV</div>')
+_PES = SEC(CAPS('Style'), WRAPCHIPS('styles'))
+_PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET))
+PEEDIT = _PEH + _PEN + _PEP + _PES + _PEL
+# on a laptop what the progression is called stands left, the progression itself and its lines right
+PEEDIT_L = _PEH + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_PEN}{_PES}</div><div style="display: flex; flex-direction: column; gap: 16px">{_PEP}{_PEL}</div></div>'
 PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'), ('action', 'Share link', 'share'), bg=SHEET))
          + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET), FOOT('Only a progression an editor made can be removed; those shipped with the app stay.')))
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
@@ -129,10 +132,11 @@ PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><sp
 PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Edit a copy in the progression’s ··· menu.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}</div>')
 PESHEETS = (BSHEET('publishingOn', 'Publishing', GROUP(('link', 'Publish…', '', 'goPub'), ('action', 'Discard changes', 'discard', RED), bg=SHEET)) + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
 PEBODY = IF('isEdit', PEEDIT, 'true') + IF('isSet', PESET) + IF('isPub', PEPUB)
+PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
 peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', 'Edit progression', IB('Settings', GEARI, 'goSet'), 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
         + IF('isLearner', TOP('Progression.dc.html', '', '', 'Axis of Awesome') + NARROW(PEGATE)) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPE = lambda s: s.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html').replace('Progression.dc.html', 'ProgressionLaptop.dc.html')
-pelm = (IF('isEditor', IF('isEdit', LTOP('ProgressionLaptop.dc.html', IB('Settings', GEARI, 'goSet')), 'true') + IF('notEdit', PAGEHEAD_L('back', '{{backT}}')) + WIDE(H1('{{pageT}}') + PEBODY, 640), 'true')
+pelm = (IF('isEditor', IF('isEdit', LTOP('ProgressionLaptop.dc.html', IB('Settings', GEARI, 'goSet')), 'true') + IF('notEdit', PAGEHEAD_L('back', '{{backT}}')) + IF('isEdit', WIDE(H1('{{pageT}}') + PEEDIT_L, 1180), 'true') + IF('notEdit', WIDE(H1('{{pageT}}') + PEBODY_L, 640)), 'true')
         + IF('isLearner', LTOP('ProgressionLaptop.dc.html', '') + WIDE(LPE(PEGATE), 640)) + STRIP() + TOASTL)
 detail('ProgressionEdit', 'Edit a progression (editors)', js(PE_SRC), peph, pelm, '', PESHEETS, LAPSHEET(PESHEETS), 'Practice')
 
