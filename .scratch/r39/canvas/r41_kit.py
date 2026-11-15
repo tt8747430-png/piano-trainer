@@ -120,6 +120,10 @@ def GROUP(*rows, bg=FILL):
         elif k == 'val': out.append(f'<div style="{base}">{lab}<span style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{r[2]}</span></div>')
         elif k == 'action': out.append(f'<button type="button" onClick="{{{{{r[2]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {r[3] if len(r) > 3 else LINK}; font: inherit; font-size: 16px; text-align: left">{r[1]}</button>')
         elif k == 'raw': out.append(f'<div style="{sep}">{r[1]}</div>')
+    # round 41: one card of rows. On the card paper a group is BOXG's card, 14 corners and the hairline ring, so a page
+    # never draws its groups two ways; a filled group (on a sheet) keeps its fill alone.
+    if bg == SHEET:
+        return f'<div style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
     return f'<div style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
 def BTN(label, act='', href='', kind='primary', h=50, grow=True):
     bg = {'primary': ACCENT, 'quiet': FILL, 'ink': INK}[kind]; fg = SHEET if kind == 'ink' else INK
