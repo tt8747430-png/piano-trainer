@@ -21,7 +21,7 @@ TOAST_JS = r'''
     const toast = (t, undo) => S({ toast: t, toastUndo: !!undo });
     if (st.toast && this._tt !== st.toast) { this._tt = st.toast; const t = st.toast; setTimeout(() => { if ((this.state || {}).toast === t) S({ toast: null }); this._tt = null; }, 2800); }
     const demoOf = (L, cur, key) => L.map((l) => ({ l, bg: cur === l ? '#332921' : '#EEE9E2', fg: cur === l ? '#FEFDFB' : '#332921', pick: () => S({ [key]: cur === l ? null : l }) }));'''
-PAGEHEAD_L = lambda back_act, back_t, right='': (f'<header style="flex: none; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 40px"><button type="button" onClick="{{{{{back_act}}}}}" style="height: 44px; margin-left: -12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 2px">{CHEV_L}{back_t}</button><span style="flex: 1"></span>{right}</header>')
+PAGEHEAD_L = lambda back_act, back_t, right='': LPAD(TOP('', '', right, left=IB('Back' if back_t == 'Back' else f'Back to {back_t}', CHEV_L, back_act)))  # the page names itself under it
 WIDE = lambda inner, w=760: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; justify-content: center"><div style="width: {w}px; display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
 NARROW = lambda inner: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{inner}</main>'
 H1 = lambda t: f'<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{t}</h1>'

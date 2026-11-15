@@ -34,7 +34,7 @@ BAR66 = lambda pos: (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{tr
 CF_SET66 = GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), ('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'), ('toggle', 'Remember the chords played', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'))
 ph66 = (TOP66 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE66 + TRY66 + NOTES66 + ROWS66 + '</main>' + BAR66('left: 12px; right: 12px; bottom: 30px'))
-lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + TOP66.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px').replace('Main.dc.html', 'Laptop.dc.html')
+lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP66).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
         + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'

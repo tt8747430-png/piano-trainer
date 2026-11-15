@@ -14,8 +14,7 @@ PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop 
 assert PA63 != PA_SRC, 'PA return not found'
 PA63 = PA63.replace("favOn: fav, heartFill: fav ? '#B3261E' : 'none'", "favOn: fav, favFill: fav ? '#C2554A' : 'none', heartFill: fav ? '#B3261E' : 'none'")
 TOP63 = TOP60.replace('Scales and keys</span>', 'Pattern</span>').replace('href="Main.dc.html" aria-label="Back to Practice"', 'href="Accompaniment.dc.html" aria-label="Back to Accompaniment"').replace(ROUND60("Settings", COG, "openSet"), '') + ''
-TOP63 = TOP63.replace('</header>', '') + ROUND60('More', MORE.replace('width="24" height="24"', 'width="22" height="22"'), 'openMore') + '</header>'
-TOP63 = TOP63.replace(ROUND60("Piano", KEYSI, "openKeys") + ROUND60('More', MORE.replace('width="24" height="24"', 'width="22" height="22"'), 'openMore'), ROUND60("Piano", KEYSI, "openKeys") + ROUND60('More', MORE.replace('width="24" height="24"', 'width="22" height="22"'), 'openMore'))
+TOP63 = TOP63.replace('</div></header>', ROUND60('More', MORE, 'openMore') + '</div></header>')
 TITLE63 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px">'
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
@@ -66,7 +65,7 @@ DELETED63 = IF('deleted', EMPTY('deleted', '♪', 'Pattern deleted', 'It left yo
 ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE63 + HIDDEN63 + MUSIC63 + HANDS63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 30px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
-lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + TOP63.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px').replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
+lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
         + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'

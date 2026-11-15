@@ -47,7 +47,7 @@ TR_SRC = r'''
     const next = () => (n >= total ? S({ view: 'results', verdict: null, on: [] }) : S({ n: n + 1, verdict: null, on: [] }));
     const view = st.view ?? (MODE === 'check' ? 'run' : 'setup');
     const hint = !!st.hint;
-    return { ...common(st, set), isSetup: view === 'setup', isRun: view === 'run', isResults: view === 'results', isCheck: MODE === 'check', isTrainer: MODE !== 'check',
+    return { ...common(st, set), isRun: view === 'run', isResults: view === 'results', isCheck: MODE === 'check',
       drills: seg(['Flashcards', 'Name it', 'Play it', 'By ear'], drill, (x) => S({ drill: x })), shownSeg: seg(['Name', 'Keys', 'Staff'], shown, (x) => S({ shown: x })),
       levelV: level, openLevel: () => S({ sheet: 'level' }), levelOn: st.sheet === 'level',
       levels: ['The main chords of C', 'Major and minor in every key', 'Diminished and augmented', 'Sevenths', 'Every quality', 'Custom'].map((l) => ({ l, mark: l === level ? '✓' : '', pick: () => S({ level: l, sheet: l === 'Custom' ? 'custom' : null }) })),
@@ -65,7 +65,6 @@ TR_SRC = r'''
       resT: MODE === 'check' ? (right + ' of ' + total) : (right + ' of ' + (right + wrong)), checkDone: right >= total - 1, checkShort: right < total - 1,
       again: () => S({ view: MODE === 'check' ? 'run' : 'setup', n: 1, right: 0, wrong: 0, on: [], verdict: null }), review: () => S({ view: 'run', n: 1, on: [], verdict: null }),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };'''
-CLOSEA = '<a href="Song.dc.html" style="height: 44px; display: flex; align-items: center; padding: 0 4px; color: ' + LINK + '; font-size: 16px; font-weight: 600; text-decoration: none">Close</a>'
 TRRUN = (f'<div style="display: flex; align-items: center; gap: 10px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
          f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{roundT}}}}</span></div>'
          f'<div style="display: flex; gap: 8px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums"><span style="padding: 4px 10px; border-radius: 12px; background: #DCE9D6; color: #2F5A35">{{{{rightT}}}}</span><span style="padding: 4px 10px; border-radius: 12px; background: {FILL}; color: {SOFT}">{{{{wrongT}}}}</span></div>'
@@ -83,12 +82,12 @@ TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; backg
              + BSHEET('customOn', 'Chord qualities', f'<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 16px; font-weight: 600">{{{{recT}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{incN}}}}</span></div>{WRAPCHIPS("quals")}'
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
-        + IF('isRun', f'<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 12px"><button type="button" onClick="{{{{endRun}}}}" style="height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; padding: 0 4px">{IF("isTrainer", "End the run", "true")}</button>{IF("isCheck", CLOSEA)}<span style="flex: 1; text-align: center; font-size: 17px; font-weight: 600">{IF("isCheck", "Check: Amazing Grace")}{IF("isTrainer", "Chords", "true")}</span><span style="width: 92px"></span></header>'
+        + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
               + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div>{TAPKEYS("kb", 128)}{TRBTNS}</main>')
         + IF('isResults', TOP('', '', '', 'Back', '<span style="width: 44px"></span>') + NARROW(CKRES)) + TOASTS)
 LTR = lambda s: s.replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Scales.dc.html', 'ScalesLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('"Settings.dc.html"', '"SettingsLaptop.dc.html"')
 trlm = (''
-        + IF('isRun', f'<header style="flex: none; height: 64px; display: flex; align-items: center; padding: 0 40px"><button type="button" onClick="{{{{endRun}}}}" style="height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600">{IF("isTrainer", "End the run", "true")}</button>{IF("isCheck", CLOSEA)}<span style="flex: 1; text-align: center; font-size: 18px; font-weight: 600">{IF("isCheck", "Check: Amazing Grace")}{IF("isTrainer", "Chords", "true")}</span><span style="width: 120px"></span></header>'
+        + IF('isRun', LPAD(TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html')))
               + f'<main style="flex: 1; min-height: 0; padding: 8px 0 32px; display: flex; justify-content: center"><div style="width: 760px; display: flex; flex-direction: column; gap: 14px">{TRRUN}<div style="flex: 1"></div>{TAPKEYS("kbL", 170)}{TRBTNS}</div></main>')
         + IF('isResults', LTOP('', '') + WIDE(LTR(CKRES), 560)) + TOASTL)
 for stem, mode, ttl in (('Check', "'check'", 'Check a song before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
@@ -172,7 +171,7 @@ PATPUB = (IF('notPublished', SEC(CAPS('As others will see it'), CARD(f'<div styl
           + IF('published', CARD(f'<div style="display: flex; align-items: center; gap: 10px">{DOT(GREEN)}<span style="flex: 1; font-size: 16px; font-weight: 600">In the Public library</span><span style="font-size: 14px; color: {SOFT}">Not saved yet</span></div>') + GROUP(('link', 'View in library', '', 'Explore.dc.html'), bg=SHEET)))
 PA_MORE = (IF('builtIn', GROUP(('action', 'Make your own from it', 'makeOwn'), ('action', '{{hideT}}', 'toggleHide'), bg=SHEET), 'true')
            + IF('own', GROUP(('action', 'Edit', 'edit'), ('action', 'Publish…', 'goPub'), ('action', '{{hideT}}', 'toggleHide'), bg=SHEET) + GROUP(('action', 'Delete', 'del', RED), bg=SHEET)))
-PAHEART = f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {{{{heartInk}}}}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="{{{{heartFill}}}}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg></button>'
+PAHEART = f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="{GLASSST}; color: {{{{heartInk}}}}"><svg viewBox="0 0 24 24" width="22" height="22" fill="{{{{heartFill}}}}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg></button>'
 PABODY = IF('isPattern', PATP, 'true') + IF('isEditor', PATED) + IF('isPublish', PATPUB)
 paph = (IF('isPattern', TOP('Accompaniment.dc.html', '', PAHEART + IB('More', MORE, 'openMore'), 'Accompaniment') + f'<div style="flex: none; padding: 2px 16px 8px"><h1 style="margin: 0; font-size: 30px; font-weight: 700">{{{{pageT}}}}</h1></div>', 'true')
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back'))) + NARROW(PABODY) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
@@ -237,7 +236,7 @@ def PVSTAFF(w):
 PVPLAYER = lambda w, kb_h: (f'<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 8px 16px">{CARD(PVSTAFF(w), "16px")}<div style="flex: 1"></div>'
                              f'<div style="height: {kb_h}px; border-radius: 12px; background: linear-gradient(90deg, #FEFDFB 0 92%, {LINE} 92% 100%); background-size: {w / 21:.1f}px 100%; box-shadow: 0 0 0 1px {LINE}"></div>'
                              f'<div style="display: flex; align-items: center; gap: 10px">{BTN("Setup", "openSetup", "", "quiet", 44, False)}<span style="flex: 1"></span>{PLAYBTN(52)}</div></div>')
-PVBAR = f'<header style="flex: none; height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px"><a href="Practice.dc.html" style="height: 44px; display: flex; align-items: center; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Close</a><span style="flex: 1; min-width: 0; text-align: center; font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{{{title}}}}</span>{IB("Player settings", GEARI, "", "PlayerSettings.dc.html")}</header>'
+PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
 pvph = PVBAR.replace('Practice.dc.html', 'Main.dc.html') + PVPLAYER(370, 110)
 pvlm = PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html') + PVPLAYER(900, 170)
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):

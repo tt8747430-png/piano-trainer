@@ -38,8 +38,8 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
       unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published' : 'Has changes',
       toastOn: !!st.toast, toastT: st.toast || '', closeToast: () => set({ toast: null }), undoRemove: () => set({ toast: null }),
       removeBlock: () => set({ sheet: null, toast: 'Deleted: Scale' }),
-      learned: !!st.learned, learnedL: 'Learned', toggleLearned: () => set({ learned: !st.learned, toast: st.learned ? null : 'Marked learned' }),
-      learnedBg: st.learned ? '#DCE9D6' : 'transparent', learnedFg: st.learned ? '#2F5A35' : '#332921', learnedRing: st.learned ? 'none' : 'inset 0 0 0 1px #DAD1C8',
+      learned: !!st.learned, toggleLearned: () => set({ learned: !st.learned, toast: st.learned ? null : 'Marked learned' }),
+      learnedBg: st.learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: st.learned ? '#9BC093' : '#DAD1C8', learnedFg: st.learned ? '#2F5A35' : '#332921',
       page: st.page ?? null, onPage: !!st.page, isSet: st.page === 'settings', isPubPage: st.page === 'publish', openSettings: () => set({ page: 'settings', sheet: null }), openPubPage: () => set({ page: 'publish', sheet: null }), closePage: () => set({ page: null, sheet: null }),
       pageT: st.page === 'settings' ? 'Settings' : 'Publish',
       toolsOn: sheet === 'tools', openTools: () => set({ sheet: 'tools' }), pmOn: sheet === 'pubmenu', openPm: () => set({ sheet: 'pubmenu' }), verOn: sheet === 'versions', openVer: () => set({ sheet: 'versions' }),
@@ -91,7 +91,7 @@ def DOC(lap=False):
 DSTATUS = f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap">{{{{status}}}}</span>'
 LANGSEG = (f'<div role="radiogroup" aria-label="Written in" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{langs}}}}" as="o" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="width: 44px; height: 40px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: 14px; font-weight: {{{{o.fw}}}}">{{{{o.l}}}}</button></sc-for></div>')
 PUBBTN = f'<button type="button" onClick="{{{{openPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish…</button>'
-EDITBTN = f'<sc-if value="{{{{canEdit}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{edit}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Edit</button></sc-if>'
+EDITBTN = f'<sc-if value="{{{{canEdit}}}}" hint-placeholder-val="{{{{true}}}}">' + TB('Edit', 'edit') + '</sc-if>'
 DONEBTN = f'<button type="button" onClick="{{{{done}}}}" style="flex: none; height: 44px; padding: 0 8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 700">Done</button>'
 FMT = (f'<div role="toolbar" aria-label="Formatting" style="display: flex; align-items: center; gap: 2px">'
        + ''.join(f'<button type="button" aria-label="{l}" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">{g}</button>'
@@ -131,7 +131,7 @@ lpops = (POPOVER('insOn', 'Insert', INSBODY, 'right: 300px; top: 72px', 420) + P
 CHECKS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"></path></svg>'
 TOOLSI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8L13.5 3h-3ZM12 15l5-7"></path></svg>'
 # canvas 164: Learned says itself (scan-first 3: an icon alone left the learner guessing): a pill, grass once learned
-LEARNEDB = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="flex: none; height: 40px; margin: 0 4px; padding: 0 14px 0 10px; border: 0; border-radius: 20px; background: {{{{learnedBg}}}}; box-shadow: {{{{learnedRing}}}}; color: {{{{learnedFg}}}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{CHECKS}<span>{{{{learnedL}}}}</span></button>'
+LEARNEDB = LEARNEDT
 RBAR = LEARNEDB + IB('Tools', TOOLSI, 'openTools') + IB('Settings', GEARI, 'openSettings') + EDITBTN
 PMBTN = IB('Publishing', DOTS, 'openPm')
 PUBGO = PUBBTN.replace('{{{{openPub}}}}', '{{{{openPubPage}}}}').replace('{{openPub}}', '{{openPubPage}}')
@@ -178,7 +178,7 @@ def PAGEOVER(lap):
     inner_w = 'width: 704px; ' if lap else ''
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">'
             + (f'<div style="height: {54 if not lap else 0}px; flex: none"></div>' if not lap else '')
-            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; margin-left: -10px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
+            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; {pad}"><div style="{inner_w}display: flex; flex-direction: column; gap: 14px">'
             f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE}</sc-if><sc-if value="{{{{isPubPage}}}}" hint-placeholder-val="{{{{false}}}}">{PUBPAGE}</sc-if></div></main></div></sc-if>')
 lph = lph + PAGEOVER(False) + ASKS

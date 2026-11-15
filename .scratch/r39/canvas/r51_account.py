@@ -62,10 +62,9 @@ V_DONE = DONEPAGE('isDone', CHECKI.replace('20', '36'), SAGE, 'You’re signed i
 SIBODY = V_IN + V_CREATE + V_SENT + V_FORGOT + V_FSENT + V_NEW + V_SAVED + V_WORK + V_FAIL + V_DONE
 # the demo's own switches, outside the drawn screen's flow: offline, and a failed sign-in link
 DEMO = f'<div style="display: flex; justify-content: center; gap: 8px; padding-top: 4px">{LINKB("{{offT}}", "toggleOff")}{LINKB("Open a reset link", "goNew")}{LINKB("A link that failed", "goFailed")}</div>'
-CLOSEB = lambda href: f'<a href="{href}" aria-label="Close" style="width: 44px; height: 44px; margin-left: -6px; display: flex; align-items: center; justify-content: center; color: {INK}">{CLOSE}</a>'
 siph = (f'{TOP("", "", "", "Close", CLOSEB("Settings.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 24px 48px; display: flex; flex-direction: column; gap: 16px">'
         f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY}{DEMO}</main>')
-silm = (f'{LTOP("", CLOSEB("SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
+silm = (f'{LPAD(TOP("", "", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
         f'<span style="align-self: center; width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
         f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; text-align: center; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}{DEMO}</div></main>')
 detail('SignIn', 'Sign in', SI_JS, siph, silm, '', '', '', 'Profile')

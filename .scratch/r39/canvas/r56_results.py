@@ -152,10 +152,9 @@ RS_KEYS = lambda h: (f'<div aria-hidden="true" style="flex: none; height: {h}px;
 
 def RS_RUNVIEW(lap):
     close = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
-    bar = (f'<header style="flex: none; height: {64 if lap else 52}px; display: flex; align-items: center; gap: 8px; padding: 0 {40 if lap else 12}px">'
-           f'<a href="{close}" style="height: 44px; display: flex; align-items: center; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Close</a>'
-           f'<span style="flex: 1; text-align: center; font-size: 17px; font-weight: 600"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</span>'
-           f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center">Wait mode</span></header>')
+    wait = f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center; white-space: nowrap">Wait mode</span>'
+    bar = TOP('', f'<span style="font-family: {SERIF}">Cmaj7</span> · Inversions', wait, 'Close', CLOSEB(close), n=2)  # the pill is two buttons wide
+    bar = LPAD(bar) if lap else bar
     staff = CARD(RS_RUNSTAFF(6 if lap else 4, 92 if lap else 76, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·'), '12px 8px')
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 6px; border-radius: 3px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 6px; border-radius: 3px; background: {INK}"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')

@@ -61,7 +61,7 @@ POPS61 = POPOVER('rootOn', 'From', ROOTGRID(), 'left: calc(50% - 400px); bottom:
 ph61 = (TOP61 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE61 + MUSIC61 + SEG61 + GRID61 + '</main>'
         + BAR61('left: 12px; right: 12px; bottom: 30px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 104px'))
-lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + TOP61.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px')
+lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP61)
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-content: start; padding: 8px 40px 120px 56px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px"><div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>{TITLE61}{MUSIC61}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{SEG61}{GRID61}</div></div>'

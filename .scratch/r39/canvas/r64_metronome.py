@@ -14,7 +14,7 @@ assert ME64 != ME, 'Metronome return not found'
 ph64 = (TOP64 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         + TEMPO(72) + BEATS(110) + ME_ROWS + '</main>' + BAR64('left: 12px; right: 12px; bottom: 30px'))
 lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
-        + TOP64.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px').replace('Main.dc.html', 'Laptop.dc.html')
+        + LPAD(TOP64).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding: 24px 40px 120px 56px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 28px">{TEMPO(120)}{BEATS(220)}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ME_ROWS}</div></div>'

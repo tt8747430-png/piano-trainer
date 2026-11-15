@@ -20,7 +20,7 @@ SCALESP = (f'<a href="Scales.dc.html" aria-label="Open in Scales and keys" style
 BAR67 = lambda pos: f'<div role="toolbar" aria-label="Play the chords and open in Scales and keys" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{PLAY67}{SCALESP}</div>'
 ph67 = (TOP67 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         + CIRCLE67(370) + KEY67 + CHORDS67 + '</main>' + BAR67('left: 12px; right: 12px; bottom: 30px'))
-lm67 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + TOP67.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px').replace('Main.dc.html', 'Laptop.dc.html')
+lm67 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP67).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: center; padding: 16px 40px 120px 56px">'
         + f'<div style="min-width: 0">{CIRCLE67(620)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{KEY67}{CHORDS67}</div></div>'
         + BAR67('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')

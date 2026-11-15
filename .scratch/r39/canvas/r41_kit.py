@@ -26,14 +26,33 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 '''
 
 # ── the bar ──
-def TOP(back='', title='', right='', backlabel='Back', left=''):
-    b = left or (f'<a href="{back}" aria-label="{backlabel}" style="width: 44px; height: 44px; margin-left: -4px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else '')
-    t = f'<span style="position: absolute; left: 96px; right: 96px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
-    return f'<header style="position: relative; flex: none; height: 44px; display: flex; align-items: center; padding: 0 10px 0 16px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center">{right}</div></header>'
+GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
+# The one bar (owner, 2026-11-15: "the headers" inconsistent; Apple HIG, Toolbars: "Use the standard Back and Close
+# buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons
+# are 44 glass circles 8 apart (IB), Back the same glass circle at the leading edge. A page under a page: 56 tall,
+# its title 17 semibold centred; a place: TITLEBAR, its large title at the leading edge.
+def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
+    b = left or (f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}">{CHEV_L}</a>' if back else '')
+    n = n or max(1, b.count('width: 44px; height: 44px'), right.count('width: 44px; height: 44px'))  # the title is centred between equal insets as wide as the fuller side
+    t = f'<span style="position: absolute; left: {12 + 52 * n}px; right: {12 + 52 * n}px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
+    return f'<header style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
+def LPAD(h):
+    """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, the title's insets 28 wider."""
+    h = h.replace('padding: 0 12px', 'padding: 0 28px 0 40px', 1)
+    return re.sub(r'left: (\d+)px; right: \1px; text-align: center', lambda m: f'left: {int(m.group(1)) + 28}px; right: {int(m.group(1)) + 28}px; text-align: center', h, count=1)
 def IB(label, svg, act='', href='', pressed=''):
-    st = f'width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none'
-    if href: return f'<a href="{href}" aria-label="{label}" style="{st}">{svg}</a>'
-    return f'<button type="button" aria-label="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} style="{st}">{svg}</button>'
+    if href: return f'<a href="{href}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{svg}</a>'
+    return f'<button type="button" aria-label="{label}" data-tip="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} style="{GLASSST}">{svg}</button>'
+# A word in the bar (Edit, Learned): the same glass, as a capsule 44 tall.
+TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap'
+def TB(label, act):
+    return f'<button type="button" onClick="{{{{{act}}}}}" style="{TBST}">{label}</button>'
+# Learned, on a song and a lesson: the glass capsule, a grass wash once learned (JS gives learnedBg, learnedLine, learnedFg).
+LEARNEDT = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="{TBST}; padding-left: 12px; background: {{{{learnedBg}}}}; border-color: {{{{learnedLine}}}}; color: {{{{learnedFg}}}}">{CHECK}Learned</button>'
+LEARNED_JS = "learnedBg: learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: learned ? '#9BC093' : '#DAD1C8', learnedFg: learned ? '#2F5A35' : '#332921',"
+# A modal task (a run, sign-in) leaves by the standard Close (HIG): the same glass circle, a ✕, at the leading edge.
+def CLOSEB(href='', act='', label='Close'):
+    return IB(label, CLOSE, act, href)
 GEAR = lambda: IB('Settings', GEARI, 'openSet')
 DOTS = lambda: IB('More', MORE, 'openMore')
 
@@ -45,15 +64,15 @@ def LARGE(title, right='', soft=''):
 # rest is just empty"): the title sits in the bar itself, at its left, the actions at its right; never an empty bar
 # over a title on its own line. Back, where there is one, before the title.
 def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
-    b = f'<a href="{back}" aria-label="{backlabel}" style="flex: none; width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else ''
+    b = f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</a>' if back else ''
     fs = 26 if soft else 24 if wrap else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
     # a page's own name (a course's, a lesson's Settings') takes a second line before it is ever cut
     s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
-    return (f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 10px 4px 16px">{b}'
+    return (f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px 4px 16px">{b}'
             f'<h1 style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
-            f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center">{right}</div></header>')
+            f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
 def LTITLEBAR(title, right='', back=''):
-    b = f'<a href="{back}" aria-label="Back" style="flex: none; width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else ''
+    b = f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else ''
     return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 {44 if back else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
 # The ⓘ: one glyph for every explanation behind a tap.
 INFOI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>'
@@ -127,9 +146,7 @@ def detail(stem, title, script, phone_body, laptop_main, laptop_aside, sheets_ph
     phone(stem, title + ', phone', phone_body, script, sheets_phone)
     laptop(stem + 'Laptop' if stem != 'Main' else 'Laptop', title + ', laptop', laptop_main, laptop_aside, script, pops_laptop, section)
 def LTOP(back='', right='', title=''):
-    b = f'<a href="{back}" aria-label="Back" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else ''
-    t = f'<span style="font-size: 17px; font-weight: 600">{title}</span>' if title else ''
-    return f'<header style="flex: none; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 40px">{b}{t}<span style="flex: 1"></span>{right}</header>'
+    return LPAD(TOP(back, title, right))  # a laptop page's bar is the phone's, its title centred
 
 # the engraved melody (Amazing Grace), shared with R40
 _s = open('/home/user/piano-trainer/.scratch/r39/canvas/calm_songs.py').read()

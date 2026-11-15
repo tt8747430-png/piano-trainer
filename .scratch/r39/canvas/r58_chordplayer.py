@@ -206,10 +206,10 @@ CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
 # R59: the keys pinned at the foot; the dock floats just above them, over the chart, and the Genos strip over the dock
 STRIP_CARD = lambda pos: STRIP.replace('style="flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px"', f'style="{pos} z-index: 40; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}"', 1)
-ph58 = (body(TOP('Main.dc.html', 'Chord player', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 21, 2), '', 300)
+ph58 = (body(TOP('Main.dc.html', '', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 21, 2), '', 300)
         .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 34px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>'
                  + STRIP59('position: absolute; left: 16px; right: 16px; bottom: 234px;', False) + DOCK(CP_DOCK, 158), 1))
-lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB, 'Chord player'),
+lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
                '<div style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column"><div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + CHART59(16, 6, 76, 28, 1) + '</div>'
                + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + STRIP59('position: relative; width: 100%; max-width: 760px;', True) + DOCK_L(CP_DOCK) + '</div></div>'
                + '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px ' + LINE + '">' + CP_KEYS(160) + '</div></sc-if>', DRAG + H2('Style') + WHEEL([('wStyle', 1)]))
