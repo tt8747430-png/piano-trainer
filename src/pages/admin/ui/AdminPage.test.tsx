@@ -225,7 +225,7 @@ describe('Administration (R32)', () => {
     expect(
       (
         await screen.findAllByText(
-          'You are offline. Administration requires an internet connection.',
+          'You’re offline. Administration needs a connection.',
         )
       )[0],
     ).toBeVisible()

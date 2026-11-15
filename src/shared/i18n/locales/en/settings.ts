@@ -206,7 +206,7 @@ export const settings = {
     label: 'Description',
     footnote:
       'Include what you were doing and the screen you were on. Reports are anonymous and read by the Piano Trainer team.',
-    offline: 'Sending requires an internet connection.',
+    offline: 'You’re offline. Sending needs a connection.',
     send: 'Send report',
     sent: 'Report sent. Thank you.',
   },

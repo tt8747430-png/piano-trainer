@@ -41,7 +41,7 @@ export const admin = {
     empty: 'No items yet',
   },
   loading: 'Loading…',
-  offline: 'You are offline. Administration requires an internet connection.',
+  offline: 'You’re offline. Administration needs a connection.',
   failed: 'Could not load. Try again in a moment.',
   refused: 'The server declined the request.',
   again: 'Try again',

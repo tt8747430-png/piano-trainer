@@ -339,6 +339,6 @@ describe('Settings', () => {
     await renderApp('/settings/feedback')
     await user.type(await screen.findByRole('textbox', { name: 'Description' }), 'Broken')
     expect(screen.getByRole('button', { name: 'Send report' })).toBeDisabled()
-    expect(screen.getByText('Sending requires an internet connection.')).toBeInTheDocument()
+    expect(screen.getByText('You’re offline. Sending needs a connection.')).toBeInTheDocument()
   })
 })
