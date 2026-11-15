@@ -7,15 +7,17 @@ import {
   type Variation,
 } from '@/shared/lib/arrangement'
 import {
-  Labelled,
+  GroupLink,
+  GroupRow,
+  GroupRows,
+  GroupSegmented,
   MenuPicker,
-  Segmented,
   Sheet,
   SheetContent,
   Stepper,
-  SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { Switch } from '@/shared/ui/primitives/switch'
 
 /**
  * A section's sheet, opened from its head (canvas 171): its name, how many times it plays, Loop this
@@ -68,19 +70,23 @@ export function SectionSheet({
           </div>
         }
       >
-        <div className="flex flex-col gap-5">
-          <Labelled label={t('chordPlayer.section')}>
-            <MenuPicker
-              label={t('chordPlayer.section')}
-              value={section.kind}
-              options={SECTION_KINDS.map((kind) => ({
-                value: kind,
-                label: t(`chordPlayer.sections.${kind}`),
-              }))}
-              onChange={(kind) => onChange({ kind })}
-            />
-          </Labelled>
-          <Labelled label={t('chordPlayer.repeat')}>
+        <GroupRows label={name}>
+          <MenuPicker
+            label={t('chordPlayer.section')}
+            value={section.kind}
+            options={SECTION_KINDS.map((kind) => ({
+              value: kind,
+              label: t(`chordPlayer.sections.${kind}`),
+            }))}
+            onChange={(kind) => onChange({ kind })}
+            trigger={
+              <GroupLink
+                label={t('chordPlayer.section')}
+                value={t(`chordPlayer.sections.${section.kind}`)}
+              />
+            }
+          />
+          <GroupRow label={t('chordPlayer.repeat')}>
             <Stepper
               label={t('chordPlayer.repeat')}
               value={section.repeats}
@@ -91,21 +97,23 @@ export function SectionSheet({
               increase={t('chordPlayer.moreTimes')}
               onChange={(repeats) => onChange({ repeats })}
             />
-          </Labelled>
-          <SwitchRow
-            label={t('chordPlayer.loopSection')}
-            checked={looped}
-            onCheckedChange={onLoop}
-          />
+          </GroupRow>
+          <GroupRow label={t('chordPlayer.loopSection')}>
+            <Switch
+              aria-label={t('chordPlayer.loopSection')}
+              checked={looped}
+              onCheckedChange={onLoop}
+            />
+          </GroupRow>
           {variations.length > 1 ? (
-            <Segmented
+            <GroupSegmented
               label={t('chordPlayer.variation')}
               value={Math.min(section.variation, variations.length) as Variation}
               options={variations.map((value) => ({ value, label: String(value) }))}
               onChange={(variation) => onChange({ variation })}
             />
           ) : null}
-        </div>
+        </GroupRows>
       </SheetContent>
     </Sheet>
   )

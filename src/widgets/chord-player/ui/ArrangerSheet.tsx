@@ -8,7 +8,7 @@ import {
   type Main,
   type SectionMarks,
 } from '@/shared/lib/arrangement'
-import { Labelled, Segmented, Sheet, SheetContent } from '@/shared/ui'
+import { GroupRows, GroupSegmented, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
 
 const ROMAN: Readonly<Record<ArrangerNumber, string>> = { 1: 'I', 2: 'II', 3: 'III' }
 type Pick<V extends string> = V | 'none'
@@ -71,58 +71,53 @@ export function ArrangerSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('chordPlayer.arranger.title', { name })}>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4">
           {first ? (
-            <Labelled label={t('chordPlayer.arranger.introLabel')}>
-              <Segmented
+            <GroupRows>
+              <GroupSegmented
                 label={t('chordPlayer.arranger.introLabel')}
                 value={numbered(marks.intro)}
                 options={numberedOptions('intro')}
                 onChange={(value) => onChange({ ...marks, intro: readNumber(value) })}
               />
-            </Labelled>
+            </GroupRows>
           ) : null}
-          <section className="flex flex-col gap-3">
-            <Labelled
-              label={t('chordPlayer.arranger.mains')}
-              info={t('chordPlayer.arranger.noneInfo')}
-            >
-              <div className="flex flex-col gap-4">
-                {Array.from({ length: repeats }, (_, pass) => (
-                  <Labelled
-                    key={pass}
-                    label={t('chordPlayer.arranger.pass', { count: pass + 1, ordinal: true })}
-                  >
-                    <Segmented
-                      label={t('chordPlayer.arranger.pass', { count: pass + 1, ordinal: true })}
-                      value={orNone<Main>(marks.mains[pass] ?? null)}
-                      options={[none, ...MAINS.map((main) => ({ value: main, label: main }))]}
-                      onChange={(value) =>
-                        onChange({
-                          ...marks,
-                          mains: Array.from({ length: repeats }, (_, at) =>
-                            at === pass ? fromNone<Main>(value) : (marks.mains[at] ?? null),
-                          ),
-                        })
-                      }
-                    />
-                  </Labelled>
-                ))}
-              </div>
-            </Labelled>
-          </section>
+          <SettingsGroup
+            bare
+            title={t('chordPlayer.arranger.mains')}
+            info={t('chordPlayer.arranger.noneInfo')}
+          >
+            <GroupRows>
+              {Array.from({ length: repeats }, (_, pass) => (
+                <GroupSegmented
+                  key={pass}
+                  label={t('chordPlayer.arranger.pass', { count: pass + 1, ordinal: true })}
+                  value={orNone<Main>(marks.mains[pass] ?? null)}
+                  options={[none, ...MAINS.map((main) => ({ value: main, label: main }))]}
+                  onChange={(value) =>
+                    onChange({
+                      ...marks,
+                      mains: Array.from({ length: repeats }, (_, at) =>
+                        at === pass ? fromNone<Main>(value) : (marks.mains[at] ?? null),
+                      ),
+                    })
+                  }
+                />
+              ))}
+            </GroupRows>
+          </SettingsGroup>
           {last ? (
-            <Labelled label={t('chordPlayer.arranger.endingLabel')}>
-              <Segmented
+            <GroupRows>
+              <GroupSegmented
                 label={t('chordPlayer.arranger.endingLabel')}
                 value={numbered(marks.ending)}
                 options={numberedOptions('ending')}
                 onChange={(value) => onChange({ ...marks, ending: readNumber(value) })}
               />
-            </Labelled>
+            </GroupRows>
           ) : null}
-          <Labelled label={t('chordPlayer.arranger.intoLabel')}>
-            <Segmented
+          <GroupRows>
+            <GroupSegmented
               label={t('chordPlayer.arranger.intoLabel')}
               value={orNone<Into>(marks.into)}
               options={[
@@ -132,7 +127,7 @@ export function ArrangerSheet({
               ]}
               onChange={(value) => onChange({ ...marks, into: fromNone<Into>(value) })}
             />
-          </Labelled>
+          </GroupRows>
         </div>
       </SheetContent>
     </Sheet>

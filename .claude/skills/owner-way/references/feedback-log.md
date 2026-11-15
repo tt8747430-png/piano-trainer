@@ -817,6 +817,9 @@ owner's, typos fixed.
 - **Scale settings is the board's one group of rows (loop 22, 2026-11-15, the Scales board's `SC_SET`):**
   Fingering a segmented row, then Start on, Compare with and Rhythm as rows with their value and a chevron, each
   opening its list; On the staff in its own group below. The labelled boxes it had were the old form, gone.
+- **The Chord player's sheets in the same rows (loop 22, 2026-11-15, `r58_chordplayer`'s `CP_TAG`):** a section's
+  sheet is one group (Section ›, Repeat with its stepper, Loop this section, Variation); its arranger sheet is the
+  board's muted cards, Intro, Main each time through under its heading with the ⓘ, Ending, Into the next section.
 
 ## Sounds
 
