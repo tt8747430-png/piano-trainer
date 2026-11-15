@@ -20,7 +20,6 @@ export function FigurePage<Id extends string>({
   value,
   fit,
   onChoose,
-  onBack,
 }: {
   hand: 'rh' | 'lh'
   label: string
@@ -33,7 +32,6 @@ export function FigurePage<Id extends string>({
   fit: PatternFit
   /** A figure, or undefined for the pattern's own. */
   onChoose: (id: Id | undefined) => void
-  onBack: () => void
 }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
@@ -59,7 +57,6 @@ export function FigurePage<Id extends string>({
   return (
     <ListPage
       label={label}
-      onBack={onBack}
       groups={
         sections
           ? [

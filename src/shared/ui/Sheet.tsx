@@ -47,6 +47,7 @@ export function SheetContent({
   description,
   info,
   status,
+  back,
   children,
   footer,
   full = false,
@@ -59,6 +60,8 @@ export function SheetContent({
   info?: ReactNode
   /** Where what the sheet acts on stands, beside its title (a draft's saved state, R31-E). */
   status?: ReactNode
+  /** A page under the sheet's first: its Back, at the header's start, across from Done. */
+  back?: ReactNode
   children: ReactNode
   footer?: ReactNode
   /** The whole screen's height at every size: a preview opened full screen (ADR 0115). */
@@ -84,7 +87,8 @@ export function SheetContent({
       )}
     >
       <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-3 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
-        <div className="col-start-2 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
+        {back ? <div className="col-start-1 row-start-1 justify-self-start">{back}</div> : null}
+        <div className="col-start-2 row-start-1 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
           <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
             <DrawerTitle className="font-sans text-[1.0625rem] leading-snug font-semibold text-balance break-words">
               {title}
@@ -102,7 +106,7 @@ export function SheetContent({
           render={
             <Button
               variant="ghost"
-              className="col-start-3 justify-self-end px-2 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
+              className="col-start-3 row-start-1 justify-self-end px-2 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
             />
           }
         >

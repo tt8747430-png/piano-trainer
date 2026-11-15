@@ -10,7 +10,6 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { BackButton } from '@/shared/ui'
 import type { FigureChange } from '../model/setup-params'
 import { FigurePage } from './FigurePage'
 import { PatternPage } from './PatternPage'
@@ -71,30 +70,27 @@ export function PlayerSetup({
   const inner = own
     ? {
         title: own.label,
+        onBack: () => setPage('main'),
         content: (
-          <SetupContext value={{ figures, fit, openPage, onFigures }}>
-            <div className="flex flex-col gap-5">
-              <BackButton onClick={() => setPage('main')} />
-              {own.content}
-            </div>
-          </SetupContext>
+          <SetupContext value={{ figures, fit, openPage, onFigures }}>{own.content}</SetupContext>
         ),
       }
     : page === 'pattern'
       ? {
           title: t('pattern'),
+          onBack: toMain,
           content: (
             <PatternPage
               value={figures.pattern}
               fit={fit}
               onChoose={(pattern) => choose({ pattern })}
-              onBack={toMain}
             />
           ),
         }
       : page === 'rh'
         ? {
             title: t('rh'),
+            onBack: toMain,
             content: (
               <FigurePage
                 hand="rh"
@@ -108,13 +104,13 @@ export function PlayerSetup({
                 value={figures.rh}
                 fit={fit}
                 onChoose={(rh) => choose({ rh })}
-                onBack={toMain}
               />
             ),
           }
         : page === 'lh'
           ? {
               title: t('lh'),
+              onBack: toMain,
               content: (
                 <FigurePage
                   hand="lh"
@@ -128,7 +124,6 @@ export function PlayerSetup({
                   value={figures.lh}
                   fit={fit}
                   onChoose={(lh) => choose({ lh })}
-                  onBack={toMain}
                 />
               ),
             }

@@ -1,7 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { useTranslation } from 'react-i18next'
-import { BackMark, Listbox } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { Listbox } from '@/shared/ui'
 
 /** A choice on a list page: its name, and under it what it is or why it is closed. */
 interface SheetChoice {
@@ -22,21 +20,18 @@ interface SheetChoiceGroup {
 }
 
 /**
- * One of the sheet's lists, as a page of it, with the way back to the first page: it opens on the
- * choice it holds, so a keyboard user starts where they are, Back kept at its top. `children` follow the list (a way out).
+ * One of the sheet's lists, as a page of it (its Back in the sheet's header): it opens on the
+ * choice it holds, so a keyboard user starts where they are. `children` follow the list (a way out).
  */
 export function ListPage({
   label,
   groups,
-  onBack,
   children,
 }: {
   label: string
   groups: readonly SheetChoiceGroup[]
-  onBack: () => void
   children?: ReactNode
 }) {
-  const { t } = useTranslation('player')
   const list = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const chosen = list.current?.querySelector<HTMLElement>('[role="option"][tabindex="0"]')
@@ -45,13 +40,6 @@ export function ListPage({
   }, [])
   return (
     <div ref={list} className="flex flex-col gap-4">
-      {/* Back stays at the top of the sheet however far down the list it opened. */}
-      <div className="sticky top-0 z-10 -mx-5 border-b border-hairline bg-card px-5 py-1">
-        <Button variant="ghost" className="-ml-3" onClick={onBack}>
-          <BackMark />
-          {t('back')}
-        </Button>
-      </div>
       <Listbox
         label={label}
         className="gap-4"

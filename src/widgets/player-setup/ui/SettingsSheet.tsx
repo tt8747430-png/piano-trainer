@@ -48,6 +48,8 @@ const rank = (row: SettingsRow) => {
 export interface InnerPage {
   readonly title: string
   readonly content: ReactNode
+  /** Its Back, in the sheet's header. */
+  readonly onBack: () => void
 }
 
 /**
@@ -124,7 +126,16 @@ export function SettingsSheet({
       }}
     >
       <SetupTrigger />
-      <SheetContent title={title}>
+      <SheetContent
+        title={title}
+        back={
+          page === 'main' ? undefined : extra ? (
+            <BackButton onClick={() => onPage('main')} />
+          ) : inner ? (
+            <BackButton onClick={inner.onBack} />
+          ) : undefined
+        }
+      >
         {page === 'main' ? (
           <div className="flex flex-col gap-5">
             {head}
@@ -165,10 +176,7 @@ export function SettingsSheet({
             )}
           </div>
         ) : extra ? (
-          <div className="flex flex-col gap-5">
-            <BackButton onClick={() => onPage('main')} />
-            {extra.content}
-          </div>
+          extra.content
         ) : (
           inner?.content
         )}

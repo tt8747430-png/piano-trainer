@@ -27,12 +27,10 @@ export function PatternPage({
   value,
   fit,
   onChoose,
-  onBack,
 }: {
   value: PatternChoice
   fit: PatternFit
   onChoose: (pattern: PatternChoice) => void
-  onBack: () => void
 }) {
   const { t } = useTranslation('player')
   const locale = useLocale()
@@ -43,7 +41,6 @@ export function PatternPage({
   return (
     <ListPage
       label={t('pattern')}
-      onBack={onBack}
       groups={[
         ...(fit.methodCodes
           ? [

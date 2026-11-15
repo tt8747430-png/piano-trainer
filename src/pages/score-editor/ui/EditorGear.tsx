@@ -256,18 +256,17 @@ export function EditorGear({ draft }: { draft: EditorDraft | undefined }) {
       open={view.gear !== null}
       onOpenChange={(open) => view.setGear(open ? page : null)}
     >
-      <SheetContent title={title} status={page === 'main' ? draft?.status : undefined}>
-        {page === 'main' ? (
-          <MainPage draft={draft} />
-        ) : (
-          <div className="flex flex-col gap-5">
-            {/* Title and credits opens from the title on the score: its sheet's Close shuts it. */}
-            {gearBack(page) === null ? null : (
-              <BackButton onClick={() => view.setGear(gearBack(page))} />
-            )}
-            <PageBody page={page} />
-          </div>
-        )}
+      <SheetContent
+        title={title}
+        status={page === 'main' ? draft?.status : undefined}
+        // Title and credits opens from the title on the score: its sheet's Done shuts it.
+        back={
+          page === 'main' || gearBack(page) === null ? undefined : (
+            <BackButton onClick={() => view.setGear(gearBack(page))} />
+          )
+        }
+      >
+        {page === 'main' ? <MainPage draft={draft} /> : <PageBody page={page} />}
       </SheetContent>
     </Sheet>
   )
