@@ -17,15 +17,14 @@ export function ExploreFailed({ reason, onRetry }: { reason: NetFailure; onRetry
       icon={offline ? CloudOff : TriangleAlert}
       title={offline ? t('explore.offline') : t('explore.failed')}
       description={offline ? t('explore.offlineLine') : t('explore.failedLine')}
+      primary={!offline}
       action={
         offline ? (
           <Button variant="soft" onClick={() => show({ view: 'mine' })}>
             {t('explore.views.mine')}
           </Button>
         ) : (
-          <Button onClick={onRetry}>
-            {t('explore.again')}
-          </Button>
+          <Button onClick={onRetry}>{t('explore.again')}</Button>
         )
       }
     />

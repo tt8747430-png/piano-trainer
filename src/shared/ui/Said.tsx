@@ -1,20 +1,25 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { cn } from '@/shared/lib'
 
 /**
  * A state with nothing to list, as the canvas's EMPTY draws it: a 64 round sand mark with its icon,
- * what is empty in 18 bold, a 15 line where it teaches what to try, and its way on, 44 sand pills.
+ * what is empty in 18 bold, a 15 line where it teaches what to try, and its way on, 44 sand pills;
+ * a way back from a failure (Try again) the screen's one honey pill, as the boards' failed states.
  */
 export function Said({
   icon: Icon,
   title,
   description,
   action,
+  primary = false,
 }: {
   icon: LucideIcon
   title: string
   description?: string
   action?: ReactNode
+  /** Its way on is the screen's one action (Try again after a failure): honey, not sand. */
+  primary?: boolean
 }) {
   return (
     <div className="flex flex-col items-center gap-2 px-5 py-14 text-center">
@@ -31,7 +36,14 @@ export function Said({
         </p>
       ) : null}
       {action ? (
-        <div className="mt-1.5 flex flex-wrap justify-center gap-2 *:h-11 *:rounded-full *:border-0 *:bg-muted *:px-5 *:font-bold *:hover:bg-muted/80">
+        <div
+          className={cn(
+            'mt-1.5 flex flex-wrap justify-center gap-2 *:h-11 *:rounded-full *:border-0 *:px-5 *:font-bold',
+            primary
+              ? '*:bg-primary *:text-primary-foreground *:hover:brightness-95'
+              : '*:bg-muted *:hover:bg-muted/80',
+          )}
+        >
           {action}
         </div>
       ) : null}
