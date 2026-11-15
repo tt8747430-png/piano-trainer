@@ -5,14 +5,7 @@ import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/set
 import { setKeyboard } from '@/features/set-preference'
 import { useLocale } from '@/shared/i18n'
 import { useOnline } from '@/shared/lib'
-import {
-  ActionRow,
-  ConfirmDialog,
-  DangerRow,
-  SettingRows,
-  SettingsGroup,
-  VolumeSlider,
-} from '@/shared/ui'
+import { ActionRow, ConfirmDialog, DangerRow, SettingsGroup, VolumeSlider } from '@/shared/ui'
 import { usePianoSound } from '../model/use-piano-sound'
 
 /** Bytes as a learner reads them: megabytes to one decimal. */

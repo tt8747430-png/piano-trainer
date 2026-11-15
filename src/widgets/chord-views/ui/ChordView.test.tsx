@@ -53,7 +53,6 @@ function renderSummary(bar: number) {
       <ChordView
         view="diagrams"
         mode="summary"
-        title="Morning"
         performance={performance}
         headings={[]}
         practice={practice}
@@ -146,7 +145,6 @@ function renderPair(bar: number) {
       <ChordView
         view="diagrams"
         mode="animated"
-        title="Morning"
         performance={performance}
         headings={[]}
         practice={practice}
@@ -277,7 +275,6 @@ function renderView(
       <ChordView
         view={view}
         mode="animated"
-        title="Morning"
         performance={sungPerformance}
         headings={[]}
         practice={practice}
@@ -386,7 +383,6 @@ describe('the loop’s grips (R37)', () => {
         <ChordView
           view={view}
           mode="animated"
-          title="Morning"
           performance={performance}
           headings={[]}
           practice={{

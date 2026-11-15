@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -28,7 +28,6 @@ function renderSheet({
   const onLoopChange = vi.fn()
   const view = render(
     <SheetMusic
-      title="Morning"
       performance={performance}
       headings={['Verse']}
       current={current}
@@ -63,21 +62,6 @@ describe('SheetMusic', () => {
     )
     expect(screen.queryByText('G', { selector: 'span' })).not.toBeInTheDocument()
   })
-
-  it.each(['panorama', 'vertical', 'page'] as const)(
-    'prints the title at the sheet’s head as the page’s heading, %s (ADR 0114)',
-    async (layout) => {
-      renderSheet({
-        shown: { layout, chordNames: true, lyrics: true, hidden: [] },
-      })
-      const sheet = await screen.findByRole('region', { name: 'Sheet music' })
-      expect(within(sheet).getByRole('heading', { level: 1, name: 'Morning' })).toHaveAttribute(
-        'data-slot',
-        'sheet-title',
-      )
-      expect(document.title).toBe('Morning · Piano Trainer')
-    },
-  )
 
   it.each(['panorama', 'vertical', 'page'] as const)(
     'names no staff of a piano alone, one instrument, %s (ADR 0114, R34)',
@@ -266,7 +250,6 @@ describe('SheetMusic', () => {
   it('keeps the playhead out of sight while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0096)', async () => {
     const sheet = (current: number) => (
       <SheetMusic
-        title="Morning"
         performance={TWO_BARS}
         headings={['Verse']}
         current={current}
@@ -291,7 +274,6 @@ describe('SheetMusic', () => {
     let heard = 0
     const sheet = (clock: (() => number) | null) => (
       <SheetMusic
-        title="Morning"
         performance={TWO_BARS}
         headings={['Verse']}
         current={0}
@@ -328,7 +310,6 @@ describe('SheetMusic', () => {
     act(() =>
       rerender(
         <SheetMusic
-          title="Morning"
           performance={TWO_BARS}
           headings={['Verse']}
           current={7}

@@ -23,7 +23,6 @@ export function renderLiveKeyboard({
   spotlight = false,
   marks,
   sustained = false,
-  divider,
   onShow = () => undefined,
   hands,
 }: {
@@ -32,7 +31,6 @@ export function renderLiveKeyboard({
   spotlight?: boolean
   marks?: ReadonlyMap<Midi, KeyMark>
   sustained?: boolean
-  divider?: 'above' | 'below'
   onShow?: (shown: boolean) => void
   /** The Player's Hands beside Keyboard (R36). */
   hands?: { shown: boolean; onShow: (shown: boolean) => void }
@@ -54,7 +52,6 @@ export function renderLiveKeyboard({
           spotlight={spotlight}
           marks={marks}
           keyPlays={keyPlays}
-          divider={divider}
           {...(onKeyPress ? { onKeyPress } : {})}
         />
         <input aria-label="Search" />

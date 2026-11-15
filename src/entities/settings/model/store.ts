@@ -416,7 +416,7 @@ function foldedSections(value: unknown): string[] {
 /** Each size's window kept where its edges are whole px a screen could hold, else none. */
 function keysWindows(value: unknown): KeysWindows {
   const saved = savedObject<KeysWindows>(value)
-  const px = (each: unknown, least: number) =>
+  const px = (each: unknown, least: number): each is number =>
     typeof each === 'number' && Number.isInteger(each) && each >= least && each <= KEYS_WINDOW_MOST
   const window = (each: unknown): KeysWindow | null => {
     const kept = savedObject<KeysWindow>(each)
