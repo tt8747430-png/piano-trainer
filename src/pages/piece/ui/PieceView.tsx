@@ -54,7 +54,7 @@ export function PieceView({ piece }: { piece: Piece }) {
     0,
   )
   return (
-    <div className="flex flex-col gap-6 pb-24">
+    <div className="flex flex-col gap-1 pb-24 lg:gap-6">
       <PieceHeader
         entry={piece}
         tools={

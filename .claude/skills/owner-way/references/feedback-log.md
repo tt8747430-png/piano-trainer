@@ -268,6 +268,7 @@ owner's, typos fixed.
 
 ## Song page
 
+- **Loop round 41, the cover 4 under the bar on a phone, as the Song board:** the board's page starts 4 under its 44 bar (`padding: 4px 16px`); the app's cover stood 24 under it. Now 4, as Settings' list; the laptop keeps its 24 (2026-11-15).
 - **Loop round 28, the song page's type as its board:** the facts' values (G major, 3/4, 80 BPM) 17 at 600, the title's tracking -0.01em, as the Song board draws them.
 - **Loop round 25, Learned as the board's LEARNED:** in a song's and a lesson's bar a 34-tall pill in its 44 target, 14 semibold, ringed in the line while off, the grass wash with a grass ring once learned, never a solid green (2026-11-15).
 - **Loop round 25, a song's Settings as its board:** Library holds Folder, then Favourite, a switch running the ♡'s own command ("В избранном"), then Duplicate and Archive (2026-11-15).
