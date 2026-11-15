@@ -251,6 +251,7 @@ owner's, typos fixed.
 
 ## Song page
 
+- **Loop round 28, the song page's type as its board:** the facts' values (G major, 3/4, 80 BPM) 17 at 600, the title's tracking -0.01em, as the Song board draws them.
 - **Loop round 25, Learned as the board's LEARNED:** in a song's and a lesson's bar a 34-tall pill in its 44 target, 14 semibold, ringed in the line while off, the grass wash with a grass ring once learned, never a solid green (2026-11-15).
 - **Loop round 25, a song's Settings as its board:** Library holds Folder, then Favourite, a switch running the ♡'s own command ("В избранном"), then Duplicate and Archive (2026-11-15).
 - **Loop round 25, a song's ··· as the board's SONG_MORE:** the bar ends in More, not a gear: Edit score, Settings, Share link, Export… and, apart, Archive (or Restore), each the command its Settings page runs; Archive stays in ink, since it is undone in its toast (2026-11-15).

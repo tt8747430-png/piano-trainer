@@ -55,7 +55,7 @@ export function PieceFactLine({
           className="relative flex min-w-0 flex-1 flex-col gap-0.5 border-l border-border pl-4 first:border-l-0 first:pl-0 has-[a:hover]:[&_dd]:underline"
         >
           <dt className="text-[0.8125rem] text-muted-foreground">{fact.name}</dt>
-          <dd className="text-[1.0625rem] font-bold tabular-nums">
+          <dd className="text-[1.0625rem] font-semibold tabular-nums">
             {at === 0 && keyLink ? keyLink(fact.value) : fact.value}
           </dd>
         </div>
