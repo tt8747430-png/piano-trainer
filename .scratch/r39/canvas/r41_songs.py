@@ -23,9 +23,10 @@ def STACK(c):
     return 'url("data:image/svg+xml,' + _q(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{c}"/>{pg(6, 9, -10)}{pg(14, 7, 8)}</svg>') + '")'
 INC = {'Amazing Grace': (0, 3, 5, 4, 5), 'Für Elise': (6, 5, 6, 5, 6, 3), 'Let It Be': (3, 3, 3, 4, 2), 'Clair de lune': (5, 5, 3, 2, 1), 'Twinkle, Twinkle, Little Star': (0, 0, 4, 4, 5, 5), 'Ode to Joy': (2, 2, 3, 4, 4, 3), 'Jingle Bells': (2, 2, 2, 2, 2, 2), 'My first song': (0, 2, 4, 2)}
 def S(t, s, v, i, c, places=(), tags=(), href='Song.dc.html', ic=INK):
-    pic = STACK(c) if href == '#' else INCIPIT(INC.get(t, (2, 4)))
-    return {'folder': href == '#', 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
-SONGS_D = {'places': ['All', 'Favourites', 'Recently played', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
+    folder = href in ('#', 'Folder.dc.html') or t == 'Shared with me'
+    pic = STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))
+    return {'folder': folder, 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
+SONGS_D = {'places': ['All', 'Favourites', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
   'open': {'Folders': True, 'Songs': True},
   'filters': [{'name': 'Key', 'opts': [['C major', 4], ['G major', 2], ['D major', 1], ['A minor', 1], ['D♭ major', 1]]}, {'name': 'Level', 'opts': [['Beginner', 6], ['Intermediate', 2], ['Advanced', 1]]}],
   'sections': [
