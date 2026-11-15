@@ -775,6 +775,8 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 19, Settings' gaps as the board:** on a phone the list sits 4 under the bar and a page 8 under
+  it, its groups 16 apart (were 24), as `GROUP`'s pages draw them (2026-11-15).
 - **Loop round 19, the board's glyphs everywhere:** the keys glyph on every picture of the piano (a folder's, a
   course's, an avatar's, the guide's and Settings' On-screen piano), the stairs on Profile's Scales, and Selection
   toolbar a bar of actions under rows, as the Settings board draws it (2026-11-15).
