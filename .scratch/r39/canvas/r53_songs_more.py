@@ -149,8 +149,23 @@ grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', '<svg
         + IF('isGroup', TOP('', '', IB('More', MORE, 'openMore'), 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))
         + IF('isJoin', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(JPAGE)) + TOASTS)
-grlm = (IF('isList', LTOP('SongsLaptop.dc.html', f'{BTN("Join with a link", "openJoin", "", "quiet", 44, False)}<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}') + WIDE(H1('Groups') + GLIST.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 704) + STRIP(), 'true')
-        + IF('isGroup', PAGEHEAD_L('back', 'Groups', IB('More', MORE, 'openMore')) + WIDE(GPAGE, 704))
+# Round 41, the laptop's width used (owner: "the empty space should be properly used"): the groups and the folders
+# shared with you are cards across the page, as Songs' folders; a group's page stands in two columns, the group and its
+# folders on the left, its members on the right.
+GCARD = lambda name, sub, act, c, folder=False: (f'<button type="button" onClick="{{{{{act}}}}}" style="min-height: 156px; border: 0; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; text-align: left; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px">'
+    + (COV('', c, 56, folder=True) if folder else f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 14px; background: {c}; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center">{name[0]}</span>')
+    + f'<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 600; text-wrap: balance">{name}</span><span style="font-size: 13px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">{sub}</span></span></button>')
+GGRID = lambda *cards: f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">{"".join(cards)}</div>'
+GLIST_L = (IF('listAny', SEC(CAPS('Your groups'), GGRID(GCARD('Choir accompanists', '4 members · 2 folders · Owner', 'goGroup', LILAC), GCARD('Piano class, Tuesday', '12 members · 3 folders', 'goGroup', SKY)))
+                         + f'<div style="height: 8px"></div>' + SEC(CAPS('Shared with me'), GGRID(GCARD('Hymns', '12 songs · Shared by Maria Ionescu · Choir accompanists', 'goFolder', HONEY, True)))
+                         + FOOT('Shared folders are visible only to members of the group they are shared with.'), 'true')
+           + GLIST[GLIST.index("<sc-if value=\"{{empty}}\""):] if "<sc-if value=\"{{empty}}\"" in GLIST else None)
+_GSPLIT = GPAGE.rindex('<section', 0, GPAGE.index(CAPS('Members')))
+GPAGE_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-items: start">'
+           f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[:_GSPLIT]}</div>'
+           f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[_GSPLIT:]}</div></div>')
+grlm = (IF('isList', LTOP('SongsLaptop.dc.html', f'{BTN("Join with a link", "openJoin", "", "quiet", 44, False)}<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}') + WIDE(H1('Groups') + GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 1180) + STRIP(), 'true')
+        + IF('isGroup', PAGEHEAD_L('back', 'Groups', IB('More', MORE, 'openMore')) + WIDE(GPAGE_L, 1180))
         + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)
 detail('Groups', 'Groups', GR_JS, grph, grlm, '', GR_SHEETS, GR_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 460px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px'), 'Songs')

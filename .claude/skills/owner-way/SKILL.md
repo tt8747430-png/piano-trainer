@@ -107,7 +107,8 @@ wins there.
   stale or old is kept.
 - **No tests, no lint, no typecheck:** none written, none run (owner, 2026-11-14: "dont run the tests, no test").
 - **The visual pass stays in full:** two passes on every screen changed, the second a fresh look after the fixes, at 402
-  (and the 393 check) and 1710, Day and Night, `en` and `ru`; every shot checked against `seven-questions`, `scan-first`,
+  (and the 393 check) and 1710, by Day and in `en` only (owner, 2026-11-15: "dont check the design in night mode and
+  russian language"): Night and Russian are drawn but not checked; every shot checked against `seven-questions`, `scan-first`,
   [craft-details](references/craft-details.md) (gaps on the scale, corners, 44px, icons),
   [ux-principles](references/ux-principles.md), `DESIGN.md` and consistency with the screens that share its parts.
   Everything found is fixed before moving on.
