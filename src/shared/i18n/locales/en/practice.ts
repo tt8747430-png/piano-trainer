@@ -174,6 +174,7 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    settings: 'Scale settings',
     // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
     practise: 'Practise this scale',
     compare: { label: 'Compare with', none: 'None' },
@@ -485,6 +486,8 @@ export const practice = {
   },
   // The Chord finder (ADR 0052): a chord played or tapped, named, spelled and written.
   scaleStaff: {
+    // Scale settings' On the staff row while nothing is written besides the labels.
+    none: 'Off',
     characteristic: 'Characteristic',
     group: 'On the staff',
     tonic: 'Tonic and leading note',

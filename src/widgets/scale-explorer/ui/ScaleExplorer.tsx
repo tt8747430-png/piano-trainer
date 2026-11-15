@@ -13,6 +13,7 @@ import { walkSounds } from '@/shared/lib/schedule'
 import { usePlay } from '@/shared/lib/services'
 import { keyOfScale } from '../model/scale-key'
 import type { ScaleView } from '../model/scale-view'
+import { ScaleSettingsProvider, type ScaleSettingsSheet } from '../model/settings-sheet'
 import { ChordsView } from './ChordsView'
 import { KeyView } from './KeyView'
 import { RunView } from './RunView'
@@ -32,11 +33,14 @@ export function ScaleExplorer({
   scale,
   views,
   onChange,
+  settings,
 }: {
   scale: ScaleView
   /** The page's Scale · Chords · Key, under the name. */
   views: ReactNode
   onChange: (change: Partial<ScaleView>) => void
+  /** Scale settings, the sheet the page's gear opens. */
+  settings: ScaleSettingsSheet
 }) {
   const { t } = useTranslation('practice')
   const scaleName = useScaleName()
@@ -82,11 +86,15 @@ export function ScaleExplorer({
     </div>
   )
   // The Key view is the key's: named as the key, whichever of its scales chose it.
-  if (musicKey)
-    return <KeyView scale={scale} musicKey={musicKey} choice={choice} onChange={onChange} />
-  return scale.show === 'chords' ? (
-    <ChordsView scale={scale} onChange={onChange} choice={choice} />
-  ) : (
-    <RunView scale={scale} onChange={onChange} choice={choice} />
+  return (
+    <ScaleSettingsProvider value={settings}>
+      {musicKey ? (
+        <KeyView scale={scale} musicKey={musicKey} choice={choice} onChange={onChange} />
+      ) : scale.show === 'chords' ? (
+        <ChordsView scale={scale} onChange={onChange} choice={choice} />
+      ) : (
+        <RunView scale={scale} onChange={onChange} choice={choice} />
+      )}
+    </ScaleSettingsProvider>
   )
 }

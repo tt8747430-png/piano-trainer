@@ -1,9 +1,11 @@
 import { useSearch } from '@tanstack/react-router'
+import { Settings } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { BackButton, ScreenHeader, Segmented } from '@/shared/ui'
+import { BackButton, RoundButton, ScreenHeader, Segmented } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
-import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
+import { PianoButton } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
 import { PiecesInKey } from './PiecesInKey'
 
@@ -19,6 +21,7 @@ export function ScalesPage() {
   // A scale with one view (a blues scale's Scale alone) draws no views control (R30).
   const views = showsOf(scale.kind)
   const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
+  const [settingsOpen, setSettingsOpen] = useState(false)
   return (
     <div className="flex flex-col gap-4">
       <ScreenHeader
@@ -26,7 +29,13 @@ export function ScalesPage() {
         back={<BackButton variant="glass" />}
         settings={
           <>
-            <SettingsGear page="scales" variant="glass" />
+            <RoundButton
+              variant="glass"
+              label={t('settings.open', { page: t('pages.scales') })}
+              icon={Settings}
+              aria-haspopup="dialog"
+              onClick={() => setSettingsOpen(true)}
+            />
             <PianoButton />
           </>
         }
@@ -35,6 +44,7 @@ export function ScalesPage() {
       <ScaleExplorer
         scale={scale}
         onChange={onChange}
+        settings={{ open: settingsOpen, onOpenChange: setSettingsOpen }}
         views={
           views.length > 1 ? (
             <Segmented

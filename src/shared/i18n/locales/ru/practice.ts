@@ -161,6 +161,7 @@ export const practice: LocaleResources['practice'] = {
     shuffle: 'Вперемешку',
   },
   scales: {
+    settings: 'Настройки гаммы',
     // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
     practise: 'Отработать гамму',
     compare: { label: 'Сравнить с', none: 'Ни с чем' },
@@ -465,6 +466,8 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   scaleStaff: {
+    // Scale settings' On the staff row while nothing is written besides the labels.
+    none: 'Выкл.',
     characteristic: 'Характерная',
     group: 'На нотоносце',
     tonic: 'Тоника и вводный тон',

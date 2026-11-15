@@ -9,7 +9,6 @@ import { RoundLink } from '@/shared/ui'
  * keyboard strip's ⚙, so Chords, Exercises and the Quiz have no gear.
  */
 const SETTINGS_OF = {
-  scales: '/settings/scales',
   intervals: '/settings/intervals',
   progressions: '/settings/progressions',
   'chord-finder': '/settings/chord-finder',
@@ -17,7 +16,6 @@ const SETTINGS_OF = {
 export type GearPage = keyof typeof SETTINGS_OF
 
 const PAGE_NAME = {
-  scales: 'scales',
   intervals: 'intervals',
   progressions: 'progressions',
   'chord-finder': 'chordFinder',

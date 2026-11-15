@@ -139,21 +139,16 @@ export function RunView({
       }
       fields={
         <>
-          {/* Compare with the major or minor on the same tonic (A43): its other notes over the run. */}
-          {tones.length === 7 ? (
-            <Labelled label={t('practice:scales.compare.label')}>
-              <MenuPicker
-                bare
-                label={t('practice:scales.compare.label')}
-                value={compare ?? 'none'}
-                options={[
-                  { value: 'none' as const, label: t('practice:scales.compare.none') },
-                  ...COMPARED_SCALES.filter((other) => other !== kind).map((other) => ({
-                    value: other,
-                    label: scaleName(tonic, other),
-                  })),
-                ]}
-                onChange={(next) => onChange({ compare: next === 'none' ? undefined : next })}
+          {run.fingerings.length > 1 ? (
+            <Labelled label={t('practice:scales.fingering.label')}>
+              <Segmented
+                label={t('practice:scales.fingering.label')}
+                value={run.fingering}
+                options={run.fingerings.map((value) => ({
+                  value,
+                  label: t(`practice:scales.fingering.${value}`),
+                }))}
+                onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
               />
             </Labelled>
           ) : null}
@@ -170,16 +165,21 @@ export function RunView({
               />
             </Labelled>
           ) : null}
-          {run.fingerings.length > 1 ? (
-            <Labelled label={t('practice:scales.fingering.label')}>
-              <Segmented
-                label={t('practice:scales.fingering.label')}
-                value={run.fingering}
-                options={run.fingerings.map((value) => ({
-                  value,
-                  label: t(`practice:scales.fingering.${value}`),
-                }))}
-                onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
+          {/* Compare with the major or minor on the same tonic (A43): its other notes over the run. */}
+          {tones.length === 7 ? (
+            <Labelled label={t('practice:scales.compare.label')}>
+              <MenuPicker
+                bare
+                label={t('practice:scales.compare.label')}
+                value={compare ?? 'none'}
+                options={[
+                  { value: 'none' as const, label: t('practice:scales.compare.none') },
+                  ...COMPARED_SCALES.filter((other) => other !== kind).map((other) => ({
+                    value: other,
+                    label: scaleName(tonic, other),
+                  })),
+                ]}
+                onChange={(next) => onChange({ compare: next === 'none' ? undefined : next })}
               />
             </Labelled>
           ) : null}
