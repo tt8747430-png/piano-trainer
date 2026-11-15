@@ -13,12 +13,25 @@ const BUTTON = 'h-12.5 min-w-0 rounded-pill px-5 text-base font-bold whitespace-
  * Where the learner is in a song (canvas 125), once the Player has played it: Continue from the bar
  * it stopped at in honey and From the start beside it, or From the start alone once it was played to
  * its end; then its bars, one cell each, played through in copper, the next ringed, the rest sand,
- * with how often and how long under them. Nothing before its first play: Play floats instead.
+ * with how often and how long under them. Before its first play, Play alone in the same place (the
+ * SongLaptop board's row), so the action never moves between the song's states.
  */
 export function SongPlace({ piece, bars }: { piece: Piece; bars: number }) {
   const { t } = useTranslation('piece')
   const play = useProgress(selectSongPlay(piece.id))
-  if (!play || bars === 0) return null
+  if (bars === 0) return null
+  if (!play)
+    return (
+      <div className="flex">
+        <ButtonLink
+          className={cn(BUTTON, 'flex-1 [&_svg]:size-4.5')}
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+        >
+          <Play aria-hidden className="fill-current" />
+          {t('practise')}
+        </ButtonLink>
+      </div>
+    )
   const played = new Set(play.played.filter((bar) => bar < bars))
   const goesOn = play.at > 0 && play.at < bars
   const minutes = Math.round(play.seconds / 60)

@@ -292,6 +292,7 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 33, a song's Play never moves:** before a first play the song page drew Play as a lone floating button (in a laptop's far corner, over the cadence row on a phone); now it stands where the boards draw the play row, under Key · Time · Tempo, one honey "Practise" the width of the column, which Continue · From the start replace once played. One chord diagram app-wide: the dotted keys the Player's Diagrams board draws, also on the song page (its board had washed keys) (2026-11-15).
 - **Loop round 32, the laptop library as the SongsLaptop board:** the Places pane runs the screen's height from its top, the title, search, Sort and filter, Archive and New over the table alone; a table's rows are 56 tall (was 71), their picture 40 with corners 9, 16 from the name (2026-11-15).
 - **Loop round 32, Sort and filter wears the boards' two sliders, Settings the gear:** one glyph each, app-wide and on the canvas (the places' boards had drawn the sliders for Settings too); a learner's lesson and course menus' Settings wear the gear (2026-11-15).
 - **Loop round 31, the laptop's table holds the folders as the board's:** one table, its column heads on top, then Folders and Songs each a folding group (16 bold, its count soft); a folder a row of the table, its tile and name under Title, "23 songs · 4 learned" under Composer and key, its ···; a folder's subfolders head its table the same way (2026-11-15).

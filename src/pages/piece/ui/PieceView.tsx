@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Pencil, Play } from 'lucide-react'
+import { Pencil } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
@@ -9,13 +9,11 @@ import {
   PieceFactLine,
   type Piece,
 } from '@/entities/piece'
-import { selectSongPlay, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { OPEN_PLAINLY } from '@/shared/lib'
-import { ButtonLink, FabLink, FloatingActions } from '@/shared/ui'
+import { ButtonLink } from '@/shared/ui'
 import { useLocale } from '@/shared/i18n'
 import { PieceFirstPage } from '@/widgets/piece-cover'
 import { useSongLessons } from '../model/use-song-lessons'
@@ -50,7 +48,6 @@ export function PieceView({ piece }: { piece: Piece }) {
   const original =
     chart && !own && editsContent(account) && hasEditableOriginal(piece.id) ? chart : null
   const details = <SongDetails piece={piece} own={own} original={original} />
-  const played = useProgress(selectSongPlay(piece.id)) !== undefined
   // The bars as written: the Player keeps its place by them.
   const writtenBars = performance.bars.reduce(
     (most, bar, i) => Math.max(most, (bar.written ?? i) + 1),
@@ -117,19 +114,6 @@ export function PieceView({ piece }: { piece: Piece }) {
           </div>
         </div>
       </div>
-      {/* The one thing to do first: play it (ADR 0111), the Player as it was left; once it has
-          been played, its place under the facts says where to go on from instead. */}
-      {played ? null : (
-        <FloatingActions>
-          <FabLink
-            label={t('practise')}
-            icon={Play}
-            render={
-              <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
-            }
-          />
-        </FloatingActions>
-      )}
     </div>
   )
 }
