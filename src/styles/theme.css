@@ -1059,6 +1059,10 @@
     border-bottom: 1px solid var(--color-hairline);
     background: var(--color-card);
   }
+  /* The editor's bar (its board): glass buttons over the music, no band of paper, no hairline. */
+  &[data-floating]::before {
+    display: none;
+  }
   & > [data-area='lead'] {
     grid-area: lead;
   }
@@ -1070,6 +1074,11 @@
   &:has(> [data-area='middle']) {
     grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
     grid-template-areas: 'lead middle actions';
+    /* On a phone the views live in the gear, the middle is empty: the title takes all the room the
+       end's buttons leave, as the Player board's bar sets it. */
+    @variant max-sm {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
   }
   & > [data-area='middle'] {
     grid-area: middle;

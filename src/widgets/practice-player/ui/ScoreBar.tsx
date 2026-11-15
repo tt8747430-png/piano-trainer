@@ -16,17 +16,21 @@ export function ScoreBar({
   lead,
   middle,
   actions,
+  floating = false,
 }: {
   lead: ReactNode
   /** The Player's views, a pill in the bar's middle (its canvas); the bar then bare over the paper. */
   middle?: ReactNode
   actions: ReactNode
+  /** No band of paper and no hairline: the bar's glass buttons float over the music (the editor's board). */
+  floating?: boolean
 }) {
   const { bar } = use(ChromeShownContext)
   return (
     <header
       data-area="bar"
       data-hidden={bar ? undefined : true}
+      data-floating={floating ? true : undefined}
       inert={!bar}
       className="score-bar min-w-0 transition-[opacity,translate] duration-200 ease-out data-hidden:-translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
     >

@@ -169,6 +169,7 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
           places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
         <ScoreBar
+          floating
           lead={<EditorLead />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}

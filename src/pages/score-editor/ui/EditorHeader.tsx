@@ -11,8 +11,9 @@ export function EditorLead() {
   const { t } = useTranslation('common')
   const { actions } = useScoreEditorContext()
   return (
+    // Close as a glass circle, over the music (the editor board's bar).
     <Button
-      variant="tool"
+      variant="glass"
       size="icon"
       aria-label={t('close')}
       title={t('close')}
@@ -55,8 +56,8 @@ export function EditorActions() {
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
   return (
-    // Undo, redo and More side by side, plain icons on the bar's paper as the Player's (loop round 24).
-    <div className="flex items-center">
+    // Undo, redo and More in one glass pill, floating over the music as the editor board draws them.
+    <div className="flex items-center rounded-pill glass">
       <Button
         variant="tool"
         size="icon"

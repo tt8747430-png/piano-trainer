@@ -8,7 +8,7 @@ import { usePageHeading } from '@/shared/ui'
 export function BarTitle({ title, credit }: { title: string; credit: string }) {
   const heading = usePageHeading<HTMLHeadingElement>(title)
   return (
-    <div className="flex min-w-0 flex-col justify-center">
+    <div className="flex min-w-0 flex-1 flex-col justify-center">
       <h1
         {...heading}
         title={title}
