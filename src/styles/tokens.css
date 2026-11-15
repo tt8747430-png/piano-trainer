@@ -253,14 +253,15 @@
   --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
-  /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. */
+  /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. A key's
+     tonic is rose and its other notes honey sand, as the root among a chord's tones (canvas, Scales). */
   --key-down: var(--p-sky);
   --on-key-down: var(--p-ink);
-  --key-scale: color-mix(in oklab, var(--p-sky) var(--mark-wash), var(--key-white));
-  --key-scale-down: var(--p-sky);
+  --key-scale: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
+  --key-scale-down: var(--p-yellow);
   --on-key-scale: var(--p-ink);
-  --key-tonic: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
-  --key-tonic-down: var(--p-yellow);
+  --key-tonic: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
+  --key-tonic-down: var(--p-brick);
   --on-key-tonic: var(--p-ink);
   /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
   --key-focus: var(--p-ink);
