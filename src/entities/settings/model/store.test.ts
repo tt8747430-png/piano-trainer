@@ -135,7 +135,7 @@ describe('createSettingsStore', () => {
         countdown: 'visual',
         speedStep: 10,
       },
-      otherHand: { look: 'show', play: false },
+      otherHand: { look: 'show' },
       sound: { staves: { bass: 35, staff0: 0 }, recording: 60, click: 5 },
       trainer: { autoNext: true },
       keyboard: {

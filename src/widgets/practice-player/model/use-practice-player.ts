@@ -184,7 +184,6 @@ export function usePracticePlayer(
     rest: view.rest ?? 0,
     recording,
     mix,
-    accompany: otherHand.play,
   })
   const { state, press } = practice
   const waiting = waitsForNotes(state.mode)
@@ -220,12 +219,8 @@ export function usePracticePlayer(
     () => pedalKeys(performance, state.beatGroup),
     [performance, state.beatGroup],
   )
-  // The staves out of sight: the Staves' Show, and the other hand's where it is hidden (A35).
-  const other = otherHand.look === 'hide' ? MUTED[practisedHand] : undefined
-  const hidden = useMemo(() => {
-    const off = hiddenStaves(staves)
-    return other === undefined || off.includes(other) ? off : [...off, other]
-  }, [staves, other])
+  // The staves out of sight: the Staves' Show (A35).
+  const hidden = useMemo(() => hiddenStaves(staves), [staves])
   // Where the loop chosen from the keys began: its other end moves.
   const anchor = useRef<number | null>(null)
 

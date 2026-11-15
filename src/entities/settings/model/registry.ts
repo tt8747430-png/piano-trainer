@@ -134,7 +134,6 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'bars.swipe.folders.leading': 'swipe-actions',
   'bars.swipe.folders.trailing': 'swipe-actions',
   'otherHand.look': 'player',
-  'otherHand.play': 'player',
   'playback.countdown': 'player',
   'playback.speedStep': 'player',
   'metronome.bpm': 'metronome',

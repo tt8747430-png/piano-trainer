@@ -164,9 +164,15 @@ export const player = {
   directions: { up: 'Up', down: 'Down', both: 'Up and down', fifths: 'Circle of fifths' },
   tempo: 'Tempo',
   hands: 'Hands',
-  handsOf: 'Hands: {{hands}}',
-  // The foot's Hands (R36, flowkey's hands menu): the hands the learner plays, in every mode.
-  handsChoice: 'Which hands do you play?',
+  handsOf: 'Parts: {{hands}}',
+  // The foot's Parts (loop round 24, the board's): each hand, whether the learner plays it, how loud
+  // the app plays it otherwise, and Dim on its staff.
+  parts: {
+    title: 'Parts',
+    play: '{{hand}}: you play it',
+    volume: '{{hand}}, volume',
+    dim: 'Dim',
+  },
   pattern: 'Pattern',
   // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
   accompaniment: 'Accompaniment from the chords',
@@ -240,7 +246,6 @@ export const player = {
     accompaniment: 'Accompaniment',
     playback: 'Playback',
     display: 'Score view',
-    hands: 'Hands',
     countdown: {
       label: 'Count-in',
       detail: 'A bar counted before the music begins.',
@@ -250,16 +255,6 @@ export const player = {
       visual: 'Silent',
     },
     keys: 'Show the keyboard',
-    otherHand: {
-      label: 'The other hand',
-      detail: 'How the hand you don’t play shows in the music.',
-      info: 'Show: its staff as written. Dim: its notes greyed. Hide: only your hand’s staff remains.',
-      show: 'Show',
-      dim: 'Dim',
-      hide: 'Hide',
-    },
-    playOther: 'Hear the other hand',
-    playOtherInfo: 'The app plays the hand you don’t play, in every mode.',
   },
   /** The hands at the keys (R36): a piano seen from the seat, two hands playing the music on it. */
   handsAtKeys: {

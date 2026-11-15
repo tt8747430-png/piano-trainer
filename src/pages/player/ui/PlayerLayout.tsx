@@ -1,9 +1,8 @@
-import { Download, Eye, Hand, Printer, SlidersHorizontal } from 'lucide-react'
+import { Download, Eye, Printer, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import {
-  selectOtherHand,
   selectScoreView,
   selectTipSeen,
   useSettings,
@@ -44,7 +43,7 @@ import {
 import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
-import { PlayerHands, PlayerPlayback } from '@/widgets/player-settings'
+import { PlayerPlayback } from '@/widgets/player-settings'
 import { ViewSection } from '@/widgets/score-view-menu'
 import {
   SettingsExtrasContext,
@@ -164,7 +163,6 @@ export function PlayerLayout({
   const creditLine = useCreditLine(credits)
   const { practice } = player
   const scoreView = useSettings(selectScoreView)
-  const otherHand = useSettings((state) => selectOtherHand(state).look)
   const held = useHeldKeys()
   const { hidden } = player
   const sheetView = useMemo(() => ({ ...scoreView, hidden }), [scoreView, hidden])
@@ -244,13 +242,6 @@ export function PlayerLayout({
         label: t('settingsPage.playback'),
         icon: SlidersHorizontal,
         content: <PlayerPlayback>{playback}</PlayerPlayback>,
-      },
-      {
-        id: 'hands',
-        label: t('settingsPage.hands'),
-        icon: Hand,
-        value: t(`settingsPage.otherHand.${otherHand}`),
-        content: <PlayerHands />,
       },
       {
         id: 'display',

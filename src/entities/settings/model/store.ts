@@ -101,7 +101,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 49
+export const SETTINGS_VERSION = 50
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -196,12 +196,11 @@ function playbackSettings(value: unknown): PlaybackSettings {
   }
 }
 
-/** How the other hand looks and plays as saved, each where still valid. */
+/** How the other hand looks as saved, where still valid. */
 function otherHandSettings(value: unknown): OtherHandSettings {
   const saved = savedObject<OtherHandSettings>(value)
   return {
     look: isOtherHandLook(saved.look) ? saved.look : DEFAULT_OTHER_HAND.look,
-    play: typeof saved.play === 'boolean' ? saved.play : DEFAULT_OTHER_HAND.play,
   }
 }
 

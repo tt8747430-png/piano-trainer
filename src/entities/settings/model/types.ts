@@ -66,17 +66,16 @@ export interface SoundSettings {
 }
 
 /**
- * With one hand chosen (A35, R36: the foot's Hands, in every mode): how the other hand's staff looks
- * (shown as it is, dimmed, or hidden, only the chosen hand's staff left), and whether it is heard.
+ * With one hand chosen (loop round 24, the Parts sheet's Dim): how the other hand's staff looks, as it
+ * is or dimmed. How loud it is heard is its staff's volume.
  */
-export const OTHER_HAND_LOOKS = ['show', 'dim', 'hide'] as const
+export const OTHER_HAND_LOOKS = ['show', 'dim'] as const
 export type OtherHandLook = (typeof OTHER_HAND_LOOKS)[number]
 export interface OtherHandSettings {
   readonly look: OtherHandLook
-  readonly play: boolean
 }
-/** The other hand dimmed, and heard, as the Player always did. */
-export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim', play: true }
+/** The other hand dimmed, as the Player always did. */
+export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim' }
 
 /**
  * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
