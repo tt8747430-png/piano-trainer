@@ -44,7 +44,7 @@ def RESULT(w):
 SPLIT = lambda w: f'<div style="position: relative">{PROLL(w, 90)}<div style="position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #B3261E"></div><span style="position: absolute; left: 8px; top: calc(50% - 12px); height: 24px; padding: 0 8px; border-radius: 12px; background: #B3261E; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center">Split point: C4</span></div>'
 REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 700">{{{{atN}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{atD}}}}</span></div>'
                     + CARD(RESULT(w), '8px 12px') + CARD(SPLIT(w), '8px 12px')
-                    + SEC(CAPS('Quantize'), f'<div style="display: grid">{SEGC("grids", 44, 15)}</div>')
+                    + f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Quantize</span><div style="display: grid">{SEGC("grids", 44, 14)}</div></div>'
                     + GROUP(('toggle', 'Hide raw notes', 'rawOn', 'toggleRaw'), ('link', 'Into', '{{intoV}}', 'openInto'), bg=SHEET)
                     + f'<div style="display: flex; gap: 10px; margin-top: 4px">{BTN("Discard", "discard", "", "quiet")}{BTN("Save to score", "save")}</div>')
 BACKB = f'<button type="button" aria-label="Back" onClick="{{{{toList}}}}" style="width: 44px; height: 44px; margin-left: -4px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'

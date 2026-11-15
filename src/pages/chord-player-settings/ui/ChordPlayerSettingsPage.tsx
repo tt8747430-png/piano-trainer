@@ -131,7 +131,6 @@ export function ChordPlayerSettingsPage() {
               return (
                 <SwitchRow
                   key={part}
-                  className="px-4"
                   label={t(`chordPlayer.settings.${part}`)}
                   checked={settings[part].on}
                   disabled={last}
@@ -209,7 +208,6 @@ export function ChordPlayerSettingsPage() {
           </SettingsGroup>
           <SettingsGroup flush>
             <SwitchRow
-              className="px-4"
               label={t('chordPlayer.settings.follow')}
               info={t('chordPlayer.settings.followInfo')}
               setting="chordPlayer.follow"

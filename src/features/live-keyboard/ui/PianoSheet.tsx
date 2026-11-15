@@ -88,12 +88,7 @@ export function PianoSheet<R extends string>({
       <SheetContent title={t('pianoSheet.title')}>
         <div className="flex flex-col gap-2">
           <SettingsGroup flush>
-            <SwitchRow
-              label={t('pianoSheet.show')}
-              checked={keys}
-              onCheckedChange={onKeys}
-              className="px-4"
-            />
+            <SwitchRow label={t('pianoSheet.show')} checked={keys} onCheckedChange={onKeys} />
           </SettingsGroup>
           {onHands ? (
             <RadioCards

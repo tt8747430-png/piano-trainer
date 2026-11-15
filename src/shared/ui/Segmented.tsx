@@ -45,8 +45,8 @@ export function Segmented<V extends OptionValue>({
         // on the fill, 2 in and 2 apart, 11 round; the chosen lifted on the sheet.
         'w-full gap-0.5 bg-muted p-0.5',
         // Five choices of words are three over two, so none is cut on a phone (canvas 151); five
-        // letters (None A B C D) stay in a row.
-        options.length === 5 && options.reduce((sum, option) => sum + option.label.length, 0) > 16
+        // letters (None A B C D) or values (1/4 1/8 1/16 1/4t 1/8t, canvas 194) stay in a row.
+        options.length === 5 && options.reduce((sum, option) => sum + option.label.length, 0) > 20
           ? 'grid grid-cols-6 *:col-span-2 *:nth-last-[-n+2]:col-span-3'
           : // Each as wide as its words at least, never wrapped, the room left shared (the canvas's SEG).
             'grid auto-cols-[minmax(max-content,1fr)] grid-flow-col',
