@@ -36,9 +36,9 @@ _LAPCSS = ('<style data-lapcss>'
                   ' [data-focus="on"] [style*="grid-template-columns: %s"] > :last-child { display: none !important }' % (c, c) for c in _LAPCOLS)
         + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s"] { grid-template-columns: minmax(0, 1fr) !important }'
                   ' [data-focus="on"] [style*="grid-template-columns: %s"] > :first-child { display: none !important }' % (c, c) for c in _LAPFIRST)
-        # a reading page's contents column (Legal's On this page) folds and leaves the 680 reading column
-        + ' [data-focus="on"] [style*="grid-template-columns: 240px 680px"] { grid-template-columns: 680px !important }'
-          ' [data-focus="on"] [style*="grid-template-columns: 240px 680px"] > :first-child { display: none !important }'
+        # a reading page's contents column (Legal's On this page, a lesson's In this lesson) folds and leaves its reading column
+        + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s %s"] { grid-template-columns: %s !important }'
+                  ' [data-focus="on"] [style*="grid-template-columns: %s %s"] > :first-child { display: none !important }' % (a, b, b, a, b) for a, b in (('240px', '680px'), ('260px', '704px')))
         + '</style>')
 _LAPJS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n'
        '  const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);\n'
