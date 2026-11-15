@@ -38,6 +38,8 @@ export function ScaleChoice({
             label: t(`music:scaleKind.${kind}`),
           })),
         }))}
+        // The name as it follows its tonic, as a musician writes it: G major, D Dorian.
+        face={(kind) => t(`music:scaleName.${kind}`)}
         onChange={(kind) => onChange({ kind })}
         className={TITLE_PART}
       />
