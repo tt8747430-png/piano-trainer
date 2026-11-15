@@ -93,8 +93,12 @@ OSET_JS = js(r'''
     return { ...common(st, set), closeSheet: () => set({ sheet: null }), readCards: ['One page', 'A section at a time'].map((r) => ({ r, on: r === mode, ring: r === mode ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => set({ mode: r }) })),
       nameOn: sheet === 'name', openName: () => set({ sheet: 'name' }), insOn: sheet === 'ins', openIns: () => set({ sheet: 'ins' }),
       insL: cs.filter((c) => ins[c]).join(', ') || 'None', inCourses: cs.map((c) => ({ c, on: !!ins[c], mark: ins[c] ? '✓' : '', pick: () => set({ ins: { ...ins, [c]: !ins[c] } }) })),
-      rename: () => set({ sheet: null, toast: 'Renamed' }), dup: () => set({ toast: 'Copy made' }), reset: () => set({ toast: 'Progress reset' }), del: () => set({ toast: 'Deleted' }),
-      toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ toast: null }) };''')
+      rename: () => set({ sheet: null, toast: 'Renamed' }), dup: () => set({ toast: 'Copy made' }), reset: () => set({ toast: 'Progress reset' }), del: () => set({ toast: isLesson ? 'Lesson deleted' : 'Course deleted' }),
+      toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ toast: null }),
+      states: [['Rename, open', sheet === 'name', { sheet: 'name' }, { sheet: null }]]
+        .concat(isLesson ? [['In courses, open', sheet === 'ins', { sheet: 'ins' }, { sheet: null }]] : [])
+        .concat([['Deleted, with Undo', /deleted$/.test(st.toast || ''), { toast: isLesson ? 'Lesson deleted' : 'Course deleted' }, { toast: null }], ['Progress reset, with Undo', st.toast === 'Progress reset', { toast: 'Progress reset' }, { toast: null }]])
+        .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };''')
 READCARDS = (f'{CAPS("Read as")}<div role="radiogroup" aria-label="Read as" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px"><sc-for list="{{{{readCards}}}}" as="c" hint-placeholder-count="2">'
              f'<button type="button" role="radio" aria-checked="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="border: 0; border-radius: 14px; background: {SHEET}; box-shadow: {{{{c.ring}}}}; padding: 12px; font: inherit; color: {INK}; display: flex; flex-direction: column; gap: 8px; align-items: stretch">'
              f'<span aria-hidden="true" style="height: 56px; border-radius: 8px; background: repeating-linear-gradient(180deg, {FILL} 0 6px, transparent 6px 12px)"></span><span style="font-size: 15px; font-weight: 600">{{{{c.r}}}}</span></button></sc-for></div>')
@@ -118,7 +122,7 @@ for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')
     sh = BSHEET('nameOn', 'Rename', NAMEBODY(nm, 'Rename')) + (BSHEET('insOn', 'In courses', INSBODY) if lesson else '')
     pp = sh.replace('<div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'.replace('{LINE}', LINE), '').replace('position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px')
-    detail(stem, 'Settings · ' + nm, OSET_JS, SETTINGS(lesson, False), SETTINGS(lesson, True), '', sh, pp, 'Learn')
+    detail(stem, 'Settings · ' + nm, OSET_JS.replace('const cs =', 'const isLesson = %s, cs =' % ('true' if lesson else 'false'), 1), SHOWSTATES() + SETTINGS(lesson, False), SHOWSTATES() + SETTINGS(lesson, True), '', sh, pp, 'Learn')
 print('r57 yours ok')
 for _f in ('LearnYours', 'LearnYoursLaptop'):
     open(OUT + _f + 'Night.dc.html', 'w').write(night(open(OUT + _f + '.dc.html').read()))
