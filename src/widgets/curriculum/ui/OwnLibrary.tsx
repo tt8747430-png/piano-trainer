@@ -212,7 +212,7 @@ function OwnCourseItem({
         <RowMore label={t('own.more', { title: course.title })} actions={actions} />
       </div>
       {open && own.length > 0 ? (
-        <ul className="flex flex-col divide-y divide-hairline border-t border-hairline">
+        <ul className="flex flex-col rows-hairline border-t border-hairline">
           {own.map((lesson) => (
             <li key={lesson.id}>
               <OwnLessonItem lesson={lesson} nested />
@@ -338,7 +338,7 @@ export function OwnLibrary() {
           }
         />
       ) : (
-        <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+        <ul className="flex flex-col rows-hairline overflow-hidden card">
           {shownCourses.map((course) => (
             <OwnCourseItem
               key={course.id}

@@ -343,6 +343,42 @@
 }
 
 /*
+ * Rows parted by a line that takes no room, as the boards' GROUP draws them (an inset line under each
+ * row but the last, not a border): a list of 52 or 80 rows stands 52 or 80 a row. `rows-line` in the
+ * line's ink, `rows-hairline` in the softer hairline. Zero specificity, so a row's own position wins.
+ */
+@utility rows-line {
+  :where(& > :not(:last-child)) {
+    position: relative;
+  }
+  :where(& > :not(:last-child))::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+  }
+}
+@utility rows-hairline {
+  :where(& > :not(:last-child)) {
+    position: relative;
+  }
+  :where(& > :not(:last-child))::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-hairline);
+    pointer-events: none;
+  }
+}
+
+/*
  * A block's or a place's look (R29 B9, `shared/lib/style`): the steps `styleVars` names, and a styled
  * place's cards reading them. A place without a look of its own sets none of this and keeps DESIGN's card.
  */

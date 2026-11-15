@@ -78,7 +78,7 @@ export function BadgePage() {
               {t('profile.badges.you', { have: badge.have })}
             </p>
           </div>
-          <ol className="flex flex-col divide-y divide-hairline card px-4">
+          <ol className="flex flex-col rows-hairline card px-4">
             {TIERS.map((tier, i) => {
               const goal = badge.tiers[i] ?? 0
               const reached = earned[`${id}:${i + 1}`]

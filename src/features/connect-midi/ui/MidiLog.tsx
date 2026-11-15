@@ -123,10 +123,7 @@ export function MidiLog() {
             <span className="min-w-0 text-pretty">{t('midiSettings.log.empty')}</span>
           </p>
         ) : (
-          <ol
-            aria-label={t('midiSettings.log.label')}
-            className="flex flex-col divide-y divide-hairline"
-          >
+          <ol aria-label={t('midiSettings.log.label')} className="flex flex-col rows-hairline">
             {[...shown].reverse().map((entry) => (
               <LogRow key={entry.id} entry={entry} />
             ))}

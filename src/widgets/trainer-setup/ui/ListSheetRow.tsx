@@ -155,7 +155,7 @@ export function ListSheetRow({
                       {full ? t('choice.none') : t('choice.all')}
                     </Button>
                   </div>
-                  <ul className="card divide-y divide-hairline overflow-hidden">
+                  <ul className="card rows-hairline overflow-hidden">
                     {group.options.map((option) => {
                       const on = chosen.has(option.value)
                       return (

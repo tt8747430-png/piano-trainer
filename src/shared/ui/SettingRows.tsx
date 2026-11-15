@@ -10,7 +10,7 @@ export function SettingRows({ className, children }: { className?: string; child
   return (
     <div
       className={cn(
-        'flex flex-col divide-y divide-hairline [&>*]:py-3 [&>*:first-child]:pt-0 [&>*:last-child]:pb-0 [&>[data-slot=switch-row]]:border-hairline [&>[data-slot=switch-row]]:text-base [&>[data-slot=switch-row]:last-child]:border-b-0',
+        'flex flex-col rows-hairline [&>*]:py-3 [&>*:first-child]:pt-0 [&>*:last-child]:pb-0 [&>[data-slot=switch-row]]:border-hairline [&>[data-slot=switch-row]]:text-base [&>[data-slot=switch-row]:last-child]:border-b-0',
         className,
       )}
     >

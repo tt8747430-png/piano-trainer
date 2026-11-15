@@ -41,7 +41,7 @@ export function CheckResult({
       {learned && newlyLearned ? (
         <p className="text-lg font-semibold text-learned">{t('marked', { title })}</p>
       ) : null}
-      <ul className="flex flex-col divide-y divide-hairline card">
+      <ul className="flex flex-col rows-hairline card">
         {plan.skills.map((skillId) => {
           const skill = skillOf(skillId)
           const rating = ratingOf(answers, skillId)

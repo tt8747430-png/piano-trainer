@@ -35,7 +35,7 @@ export function InCoursesRow({ lessonId }: { lessonId: OwnLessonId }) {
       />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent title={t('own.inCourses')}>
-          <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+          <ul className="flex flex-col rows-hairline overflow-hidden card">
             {courses.map((course) => (
               <li key={course.id}>
                 <RowCheck

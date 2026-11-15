@@ -22,7 +22,7 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
       <h2 id={id} className="px-1 font-sans text-sm font-semibold text-muted-foreground">
         {t(`shelves.${shelf}`)}
       </h2>
-      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      <ul className="flex flex-col rows-hairline overflow-hidden card">
         {courses.map((course) => (
           <li key={course.id}>
             <CourseCard course={course} current={course.id === current} />
@@ -70,7 +70,7 @@ export function CoursesAbout() {
         ) : (
           <p>{t('coursesLine')}</p>
         )}
-        <ul aria-label={t('shelvesLabel')} className="flex flex-col divide-y divide-hairline">
+        <ul aria-label={t('shelvesLabel')} className="flex flex-col rows-hairline">
           {SHELVES.map((shelf) => (
             <li key={shelf} className="flex min-h-9 items-center justify-between gap-3">
               <span>{t(`shelves.${shelf}`)}</span>

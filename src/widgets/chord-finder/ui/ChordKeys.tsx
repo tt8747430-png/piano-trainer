@@ -25,7 +25,7 @@ export function ChordKeys({ found }: { found: FoundChord }) {
   const keyName = useKeyName()
   const keys = useKeysHolding(found)
   return (
-    <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-xl bg-card">
+    <ul className="flex flex-col rows-line overflow-hidden rounded-xl bg-card">
       {keys.map(({ key, numeral }) => (
         <li key={keyName(key)}>
           <RowLink

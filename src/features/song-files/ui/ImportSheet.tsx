@@ -55,7 +55,7 @@ export function ImportSheet({
           <h3 className="pt-1 pb-2 text-sm font-semibold text-muted-foreground">
             {t('import.leftOut')}
           </h3>
-          <ul className="card divide-y divide-hairline">
+          <ul className="card rows-hairline">
             {LEFT_KINDS.flatMap((kind) => {
               const count = state.leftOut[kind]
               return count ? (

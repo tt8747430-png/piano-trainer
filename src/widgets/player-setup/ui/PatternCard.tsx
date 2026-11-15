@@ -160,7 +160,7 @@ export function PatternCard({
               </span>
               <OpensMark />
             </button>
-            <div className="grid divide-y divide-hairline border-t border-hairline">
+            <div className="grid rows-hairline border-t border-hairline">
               <HandFigure
                 page="lh"
                 label={t('lh')}

@@ -34,7 +34,7 @@ export function ActivityTab() {
         entries.length === 0 ? (
           <p className="text-muted-foreground">{t('activity.none')}</p>
         ) : (
-          <ol className="flex flex-col divide-y divide-border card">
+          <ol className="flex flex-col rows-line card">
             {entries.map((entry, i) => (
               <li key={i} className="flex flex-col gap-0.5 px-4 py-3">
                 <span className="font-medium">

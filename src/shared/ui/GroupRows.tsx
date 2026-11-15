@@ -30,7 +30,7 @@ export function GroupRows({
       role="group"
       aria-label={label}
       className={cn(
-        'flex flex-col divide-y divide-border overflow-hidden rounded-xl',
+        'flex flex-col rows-line overflow-hidden rounded-xl',
         surface === 'sheet' ? 'bg-card' : 'bg-muted',
         className,
       )}
@@ -153,7 +153,7 @@ export function ChoiceList<T extends string>({
     <div
       role="radiogroup"
       aria-label={label}
-      className="flex flex-col divide-y divide-border overflow-hidden rounded-xl bg-card"
+      className="flex flex-col rows-line overflow-hidden rounded-xl bg-card"
     >
       {options.map((option) => (
         <button

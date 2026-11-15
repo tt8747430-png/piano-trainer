@@ -73,7 +73,7 @@ export function OwnItems() {
           <SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />
         ) : null}
       </SectionHead>
-      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      <ul className="flex flex-col rows-hairline overflow-hidden card">
         {shownCourses.map((course) => (
           <li key={course.id}>
             <OwnCourseRow course={course} />

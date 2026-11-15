@@ -15,7 +15,7 @@ export function TakeList() {
   const settings = useSettingsStoreApi()
   if (list.length === 0) return <p className="text-muted-foreground">{t('recorder.none')}</p>
   return (
-    <ul aria-label={t('recorder.title')} className="flex flex-col divide-y divide-hairline">
+    <ul aria-label={t('recorder.title')} className="flex flex-col rows-hairline">
       {list.map((take) => (
         <TakeRow
           key={take.id}

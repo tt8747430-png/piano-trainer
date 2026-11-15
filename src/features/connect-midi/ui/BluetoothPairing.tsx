@@ -36,7 +36,7 @@ export function BluetoothPairing() {
           title={t('midiSettings.bluetooth.connect')}
           description={t('midiSettings.bluetooth.steps')}
         >
-          <ol className="flex flex-col divide-y divide-hairline">
+          <ol className="flex flex-col rows-hairline">
             <Step number={1}>{t('midiSettings.bluetooth.power')}</Step>
             <Step number={2}>
               {t('midiSettings.bluetooth.pair')}

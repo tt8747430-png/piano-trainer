@@ -185,7 +185,7 @@ function GroupList({
         ref={setNodeRef}
         aria-label={group.label}
         data-over={isOver ? '' : undefined}
-        className="flex min-h-16 flex-col divide-y divide-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60"
+        className="flex min-h-16 flex-col rows-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60"
       >
         {children}
       </ol>

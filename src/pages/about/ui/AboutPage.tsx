@@ -83,7 +83,7 @@ export function AboutPage() {
         <GroupLink title={t('help.terms')} to="/legal/terms" />
       </SettingsGroup>
       <SettingsGroup flush title={t('aboutPage.credits')}>
-        <ul className="flex flex-col divide-y divide-hairline">
+        <ul className="flex flex-col rows-hairline">
           {CREDITS.map((credit) => (
             <li key={credit.name} className="flex flex-col gap-0.5 px-4 py-3">
               <span className="font-semibold">{credit.name}</span>

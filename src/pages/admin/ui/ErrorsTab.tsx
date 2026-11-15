@@ -27,7 +27,7 @@ export function ErrorsTab() {
         entries.length === 0 ? (
           <p className="text-muted-foreground">{t('errors.none')}</p>
         ) : (
-          <ol className="flex flex-col divide-y divide-border card">
+          <ol className="flex flex-col rows-line card">
             {groupErrors(entries).map(({ message, count, places, latest }) => (
               <li key={message} className="flex min-w-0 flex-col gap-1 px-4 py-3">
                 <span className="font-medium break-words">{message}</span>

@@ -94,7 +94,7 @@ export function KeysChecklist({
               {t('picker.clearAll')}
             </Button>
           </div>
-          <ul className="card divide-y divide-hairline overflow-hidden">
+          <ul className="card rows-hairline overflow-hidden">
             {SIGNATURES.map((count) => (
               <li key={count}>
                 <RowCheck

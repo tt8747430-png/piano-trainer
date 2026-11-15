@@ -16,7 +16,7 @@ export const ROW_FLAT =
   'flex h-full min-w-0 items-center gap-1 pr-1 transition-colors duration-200 ease-out'
 
 /** A grouped list's card (canvas 133): its rows in one card, a hairline between them. */
-export const GROUPED_LIST = 'card flex flex-col divide-y divide-border overflow-hidden'
+export const GROUPED_LIST = 'card flex flex-col rows-line overflow-hidden'
 
 /**
  * A library row's face (canvas 133): its title heavier than a settings row's, since the song or folder

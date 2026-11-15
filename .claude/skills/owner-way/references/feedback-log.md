@@ -924,6 +924,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Loop round 41, a list's lines take no room, as the boards' GROUP draws them:** the line between two rows is drawn over the row's foot (`rows-line`, `rows-hairline`, one utility for all 33 lists that parted rows with `divide-y`), so five 80 rows stand 400 and a 64 row stands 64, as the boards measure (they were a pixel taller each) (2026-11-15).
 - **Loop round 38, a name at the boards' 24 on a phone:** a large title that is a name and may wrap (Your lessons and courses, a course, your own course; `named`) takes the step down `TITLEBAR` gives it, 24 to the 28 of a fixed page such as Courses, so Your lessons and courses reads on one line at 402.
 - **Loop round 36, route states to AppLayers:** the ways on of Page not found, Something went wrong and a draft that will not open are the board's `BTN` pills (48 tall, bold, round), and an unknown address leads to Learn, as the board's Not found says. The deletion gate takes the welcome's box (22 corners, 24 above, a 20 title), as the board draws both.
 - **Loop round 35, one section head (the boards' H2):** a section's name and its See all sit on one baseline in a row the name's height, See all reaching 44 without growing it, so Learn's Courses stands 14 under the Levels as the board draws it (it stood 23); Learn's Courses and Your lessons, Profile's sections and Explore's shelves share it (`SectionHead`, `SeeAll`), where three heads had been built three ways (2026-11-15).

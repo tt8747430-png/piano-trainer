@@ -28,10 +28,7 @@ export function FeedbackTab() {
           <p className="text-muted-foreground">{t('feedback.none')}</p>
         ) : (
           <section className="flex flex-col gap-2">
-            <ol
-              aria-label={t('sections.feedback')}
-              className="flex flex-col divide-y divide-hairline card"
-            >
+            <ol aria-label={t('sections.feedback')} className="flex flex-col rows-hairline card">
               {feedback.map((each) => (
                 <li
                   key={`${each.at} ${each.text}`}

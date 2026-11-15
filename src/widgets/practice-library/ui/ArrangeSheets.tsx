@@ -69,7 +69,7 @@ function MoveSheet({
   return (
     <Sheet open onOpenChange={(open) => (open ? null : onClose())}>
       <SheetContent title={t('library.edit.moveTitle', { name: sheet.name })}>
-        <ul className="card flex flex-col divide-y divide-hairline overflow-hidden">
+        <ul className="card flex flex-col rows-hairline overflow-hidden">
           {places.map((place) => (
             <li key={place.id}>
               <button

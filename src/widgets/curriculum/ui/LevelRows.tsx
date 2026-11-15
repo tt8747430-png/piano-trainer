@@ -23,7 +23,7 @@ export function LevelRows() {
       <h2 id={id} className="px-1 font-sans text-xl font-bold">
         {t('learn:levels')}
       </h2>
-      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      <ul className="flex flex-col rows-hairline overflow-hidden card">
         {allJourneys().map((journey, i) => {
           const progress = journeyProgress(journey, learned)
           const share = progress.total === 0 ? 0 : progress.done / progress.total

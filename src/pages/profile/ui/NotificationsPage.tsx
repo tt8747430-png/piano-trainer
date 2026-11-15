@@ -180,7 +180,7 @@ function Group({
       >
         {title}
       </h2>
-      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
+      <ul className="flex flex-col rows-hairline overflow-hidden card">
         {notices.map((notice) => {
           const at = new Date(notice.at)
           const Icon =

@@ -103,7 +103,7 @@ function ShareForm({ folder, onDone }: { folder: FolderShare; onDone: () => void
       ) : data.groups.length === 0 ? (
         <p className="text-pretty text-muted-foreground">{t('groups.noneToShare')}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-hairline card">
+        <ul className="flex flex-col rows-hairline card">
           {data.groups.map((group) => {
             const choice = chosen(group.id)
             return (

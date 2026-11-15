@@ -125,7 +125,7 @@ function Members({
 }) {
   const { t } = useTranslation('admin')
   return (
-    <ul className="flex flex-col divide-y divide-border">
+    <ul className="flex flex-col rows-line">
       {accounts.map((account) => (
         <li key={account.id} className="flex min-h-11 items-center gap-3">
           <span className="min-w-0 flex-1 truncate text-sm">{account.name || account.email}</span>
