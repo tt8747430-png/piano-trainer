@@ -831,7 +831,7 @@ export const practice: LocaleResources['practice'] = {
     trainerValue_many: '{{play}} + {{count}} тактов',
     trainerValue_other: '{{play}} + {{count}} такта',
     sound: 'Звук',
-    sounds: { click: 'Щелчок', beep: 'Сигнал', drum: 'Ударная установка' },
+    sounds: { click: 'Вудблок', beep: 'Сигнал', drum: 'Ударная установка' },
     meter: 'Размер',
     group: 'Ритм',
     levels: {

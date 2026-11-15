@@ -760,6 +760,8 @@ owner's, typos fixed.
   last eight rows opened, newest first, kept per library (`pt-practice-library` v3); a chip after Favourites and a
   place in the laptop's tree once anything was opened; at All the last three lead the page above Favourites. An
   exercise's, a pattern's or a progression's page marks it as it opens.
+- **The Metronome's sound is a Woodblock (loop, 2026-11-15, the Metronome board):** the recorded block was named
+  "Click"; it is named as the board and a drummer name it, "Вудблок" in Russian.
 
 ## Sounds
 

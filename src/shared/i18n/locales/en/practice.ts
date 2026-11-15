@@ -859,7 +859,7 @@ export const practice = {
     trainerValue_one: '{{play}} + {{count}} bar',
     trainerValue_other: '{{play}} + {{count}} bars',
     sound: 'Sound',
-    sounds: { click: 'Click', beep: 'Beep', drum: 'Drum kit' },
+    sounds: { click: 'Woodblock', beep: 'Beep', drum: 'Drum kit' },
     meter: 'Time signature',
     group: 'Rhythm',
     // Each beat's square, tapped round: accent, beat, silent (as Soundbrenner's).
