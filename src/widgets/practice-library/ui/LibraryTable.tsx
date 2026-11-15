@@ -74,7 +74,7 @@ export function LibraryTable({
         <tr>
           {heading('name', t('practice:library.table.name'), 'w-2/5')}
           {heading('group', t(`practice:library.table.${groupWord}`))}
-          {levels ? heading('level', t('practice:library.table.level'), 'w-28') : null}
+          {levels ? heading('level', t('practice:library.table.level'), 'w-40') : null}
           {extra ? (
             <th scope="col" className={cn(TABLE_CELL, 'font-semibold')}>
               {extra}
@@ -98,7 +98,9 @@ export function LibraryTable({
               {groupName(item.group)}
             </td>
             {levels ? (
-              <td className={TABLE_CELL}>{item.stage ? <LevelMark stage={item.stage} /> : null}</td>
+              <td className={cn(TABLE_CELL, 'truncate')}>
+                {item.stage ? <LevelMark stage={item.stage} /> : null}
+              </td>
             ) : null}
             {extra ? (
               <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>{item.extra}</td>

@@ -14,7 +14,6 @@ import {
   SwipeRow,
 } from '@/shared/ui'
 import type { LibraryItem } from '../model/library-view'
-import { LevelMark } from './LevelMark'
 import { LibraryTile } from './LibraryTile'
 
 /** What a row's swipe to the right does: Favourite, as its More's first action. */
@@ -22,7 +21,7 @@ const LEADING = ['favourite'] as const
 
 /**
  * A row of a practice library on a phone (canvas, Songs' row in its grouped card): its picture, name
- * and line, a link to its page; its level; its ♡, one tap; its More under a mouse, a swipe to the
+ * and line (its level first, in words), a link to its page; its ♡, one tap; its More under a mouse, a swipe to the
  * right for Favourite under a finger.
  */
 export function LibraryRow({ item }: { item: LibraryItem }) {
@@ -37,15 +36,12 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
           <LibraryTile picture={item.picture} />
           <RowFace
             title={item.name}
-            detail={item.detail}
-            trailing={
-              item.trailing || item.stage ? (
-                <span className="flex shrink-0 items-center gap-2">
-                  {item.trailing}
-                  {item.stage ? <LevelMark stage={item.stage} /> : null}
-                </span>
-              ) : undefined
+            detail={
+              [item.stage ? t(`stage.${item.stage}`) : undefined, item.detail]
+                .filter(Boolean)
+                .join(' · ') || undefined
             }
+            trailing={item.trailing}
           />
         </>
       ),

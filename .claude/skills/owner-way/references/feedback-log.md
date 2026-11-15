@@ -753,6 +753,9 @@ owner's, typos fixed.
 - **A pattern's page as its board (loop, 2026-11-15, canvas 199):** its card holds the bar and one line of what it is;
   the longer description is The hands' ⓘ (owner: popups that show more with less UI). Used in is a small heading over
   one card of rows, as The hands, folded after five with Show all n; the big song cards went.
+- **A library row's level in words (loop, 2026-11-15, the FingerTechnique board):** "Intermediate", as the Level filter
+  names it, never pips and a number; on a phone it leads the row's line ("Advanced · Eight notes…") so a long Russian
+  title keeps its width, in the laptop table its own column.
 
 ## Sounds
 

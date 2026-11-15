@@ -1,11 +1,8 @@
-import { StageMark, stageRank, type Stage } from '@/entities/step'
+import { useTranslation } from 'react-i18next'
+import type { Stage } from '@/entities/step'
 
-/** A row's level as the libraries show it: its rising pips and its number (R30-4). */
+/** A row's level as the libraries show it: its stage in words ("Intermediate"), as the Level filter names it. */
 export function LevelMark({ stage }: { stage: Stage }) {
-  return (
-    <span className="inline-flex shrink-0 items-center gap-1 text-sm text-muted-foreground tabular-nums">
-      <StageMark stage={stage} />
-      <span aria-hidden>{stageRank(stage)}</span>
-    </span>
-  )
+  const { t } = useTranslation('common')
+  return <span className="shrink-0 text-sm text-muted-foreground">{t(`stage.${stage}`)}</span>
 }
