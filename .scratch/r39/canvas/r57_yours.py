@@ -15,21 +15,26 @@ YOURS = {
 }
 YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r'''
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
-    const q = st.q ?? '';
+    const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
     const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d + (k === 'learned' ? ' · learned' : ''), learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
       more: () => set({ sheet: 'row', row: t }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: '“' + t + '” deleted' }) });
-    const courses = (kind === 'Lessons' ? [] : Y.courses).filter((c) => !gone[c.t]).map((c) => {
-      const ls = c.lessons.filter(([t]) => !gone[t]).map(([t, d, k]) => rowOf(t, d, k, true));
+    const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
+      const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
       const isOpen = !!open[c.t] && kind !== 'Courses';
       return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), lessons: ls, isOpen, shut: !isOpen,
         toggle: () => set({ open: { ...open, [c.t]: !open[c.t] } }), more: () => set({ sheet: 'row', row: c.t }), chev: isOpen ? 'rotate(90deg)' : 'none' };
     });
-    const loose = (kind === 'Courses' ? [] : Y.loose).filter(([t]) => !gone[t]).map(([t, d, k]) => rowOf(t, d, k, false));
+    const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
+    const any = courses.length + loose.length > 0;
+    const states = [['Nothing made yet', bare, { bare: true, q: '' }, { bare: false }], ['Search finds nothing', !bare && ql === 'chopin', { q: 'Chopin', bare: false }, { q: '' }],
+      ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: '“Notes from my teacher” deleted' }, { gone: {}, toast: null }]]
+      .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     const sheetOpen = (n) => () => set({ sheet: n });
     return { ...common(st, set), closeSheet: () => set({ sheet: null }),
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
-      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All',
+      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
+      noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
       rowOn: sheet === 'row', rowT: st.row || '', rowIsLesson: !Y.courses.some((c) => c.t === st.row),
       removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: '“' + st.row + '” deleted' }),
       ''' + NEWJS + r'''
@@ -54,8 +59,10 @@ def LIST(lap):
               f'<a href="{ch}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{c.paint}}}}; display: flex; align-items: center; justify-content: center">{FOLDI}</span>'
               f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></span></a>{ROWMORE("c.more", "{{c.t}}")}</div>'
               f'<sc-if value="{{{{c.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><sc-for list="{{{{c.lessons}}}}" as="l" hint-placeholder-count="3">{LROW(lh, 52)}</sc-for></sc-if>')
-    return (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden; padding: 0 0 0 8px"><sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
-            f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 4)}</sc-for></div>')
+    return (f'<sc-if value="{{{{listOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden; padding: 0 0 0 8px"><sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
+            f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 4)}</sc-for></div></sc-if>'
+            + LEMPTY('noneOn', SEARCH.replace('width="18" height="18"', 'width="26" height="26"'), '{{noneT}}', 'Check the spelling, or search for a word from a lesson’s name.', BTN('Clear search', 'clearQ', kind='quiet', h=48, grow=False))
+            + LEMPTY('bareOn', BOOKI.replace('22', '26'), 'No lessons or courses yet', 'Write a lesson in your own words, then gather lessons into a course.', BTN('New lesson', 'newLesson', h=48, grow=False)))
 SORTB = (f'<button type="button" onClick="{{{{openSort}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">'
          f'{{{{sortL}}}}{CHEV_D}</button>')
 SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 12px; border-radius: 12px; background: {FILL}; color: {SOFT}">{SEARCH}'
@@ -71,9 +78,9 @@ YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}">
           f'<span style="flex: 1">{{{{toastT}}}}</span><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>')
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
 yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
-       f'{SEARCHF}{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
+       f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
 ylm = (f'{LTITLEBAR("Your lessons and courses", "", "LearnLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; flex-direction: column; gap: 14px"><div style="max-width: 900px; display: flex; flex-direction: column; gap: 14px">'
-       f'<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1">{SEARCHF}</div>{NEWBTN("openNew")}</div>{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}{LIST(True)}</div></main>'
+       f'{SHOWSTATES()}<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1"><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}</sc-if></div>{NEWBTN("openNew")}</div><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}</sc-if>{LIST(True)}</div></main>'
        f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
