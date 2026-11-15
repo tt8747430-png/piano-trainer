@@ -94,6 +94,7 @@ owner's, typos fixed.
 
 ## Player and editor together
 
+- **Loop round 32, the Keyboard button wears one glyph:** the keys, whatever the place shows; its caption says 3D, 2D or Off (it had swapped to a hand or a crossed eye). The Player boards drew a grand piano there and now draw the keys too, the one piano glyph (2026-11-15).
 - **One score in two modes:** "I don't like how the header looks with this bar under the header". One designed header, the
   same transport at the foot, Edit straight from the Player, nothing jumping.
 - **One gear per screen** (Flat's), Edit beside the title,. Settings never scattered over four menus.

@@ -1,4 +1,3 @@
-import { EyeOff, Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
 import { PianoSheet } from '@/features/live-keyboard'
@@ -39,7 +38,6 @@ export function TransportPiano({
 }) {
   const { t } = useTranslation(['common', 'player'])
   const midi = useMidiSummary()
-  const Icon = !keys ? EyeOff : hands ? Hand : KeysIcon
   return (
     <PianoSheet
       keys={keys}
@@ -66,7 +64,8 @@ export function TransportPiano({
           className={DOCK_CAPTIONED}
           onClick={open}
         >
-          <Icon aria-hidden />
+          {/* One glyph whatever is shown (the boards' Keyboard): its caption says 3D, 2D or Off. */}
+          <KeysIcon aria-hidden />
         </FloatingBarButton>
       )}
     />
