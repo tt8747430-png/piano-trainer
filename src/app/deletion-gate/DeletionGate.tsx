@@ -44,12 +44,13 @@ export function DeletionGate() {
       : new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(purgeAfter))
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t('deletionGate.title')}</AlertDialogTitle>
+      {/* The AppLayers board's gate, the welcome's box: 22 corners, 24 above and 20 about, a 20 title. */}
+      <AlertDialogContent className="gap-3 rounded-[22px] px-5 pt-6 pb-5">
+        <AlertDialogHeader className="gap-3">
+          <AlertDialogTitle className="text-xl">{t('deletionGate.title')}</AlertDialogTitle>
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="mt-1.5">
           <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
           </AlertDialogCancel>
