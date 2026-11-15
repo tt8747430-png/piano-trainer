@@ -196,13 +196,10 @@ export const editor = {
     name: 'Name',
     rename: 'Rename',
     change: 'Change instrument',
-    delete: 'Delete…',
+    delete: 'Delete',
     new: 'New instrument',
-    deleteTitle: 'Delete {{staff}}?',
-    deleteBody: 'The staff and all of its notes will be removed. You can undo this.',
-    pianoBody:
-      'The piano staves will be hidden. Their music is kept and still plays back. To restore them, choose New instrument › Piano.',
-    deleteAction: 'Delete',
+    deleted: 'Deleted {{staff}}',
+    pianoHidden: 'Piano staves hidden',
   },
   layout: {
     groups: {

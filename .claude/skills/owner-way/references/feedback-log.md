@@ -5,6 +5,9 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **Loop round 24, R38 in the editor:** deleting an instrument (or hiding the piano) happens at once, "Deleted
+  Voice · Undo" in its toast; Undo steps the score back and restores the staves' view; no question, no "Delete…"
+  (2026-11-15).
 - **Loop round 23, the keys as the boards draw them (one piano):** Fit's white keys are as wide as 36 in the
   width allows, never under 21 (19 in view on a phone, five octaves on a laptop), and the keys 112 long on a phone
   up to 132 on a laptop, as the Editor and EditorLaptop boards measure; Large and Piano keep their own (2026-11-15).
