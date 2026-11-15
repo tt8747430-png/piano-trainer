@@ -176,7 +176,8 @@ export function ScreenHeader({
               )
             ) : null}
           </div>
-          <div className="-me-1.5 flex items-center justify-self-end print:hidden">
+          {/* Round glass buttons (a tool's) stand 8 apart, as the boards draw them; bare icons touch. */}
+          <div className="-me-1.5 flex items-center justify-self-end has-[[data-variant=glass]]:gap-2 print:hidden">
             {tools}
             {settings}
             {more}
