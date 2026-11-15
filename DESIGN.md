@@ -253,6 +253,7 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 - **Grass Deep** (`learned`): learned, known, on, connected.
 - **Ochre** (`attention`): a gap or "to check"; a dot, never text.
 - **Crimson** (`destructive`): wrong and destructive.
+- **Heart** (`heart`, #B84A3E; by Night the crimson's light shade): a favourite's ♡, filled; a row's ♡ at rest is `heart-rest`, #B4AAA0.
 
 ### Neutral
 
