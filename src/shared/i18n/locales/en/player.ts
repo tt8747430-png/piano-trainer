@@ -368,6 +368,7 @@ export const player = {
     },
   },
   practiceSheet: {
+    tempo: 'Tempo',
     title: 'Practice',
     of: 'Practice: {{mode}}',
     wait: 'Wait',

@@ -10,6 +10,7 @@ import {
   GroupRows,
   GroupSegmented,
   RadioCards,
+  SettingsGroup,
   Sheet,
   SheetContent,
   TempoSteps,
@@ -102,30 +103,32 @@ export function PracticeSheet({
               {t(handsAtKeys ? 'pace.needsKeysNotHands' : 'pace.needsPiano')}
             </p>
           ) : null}
-          <GroupRows surface="sheet">
-            <GroupField className="px-2">
-              <div className="flex flex-col items-center gap-3">
-                <TempoSteps bpm={tempo} onStep={(by) => onTempo(tempo + by)} />
-                {tempo === ownTempo ? null : (
-                  <Button variant="soft" onClick={() => onTempo(ownTempo)}>
-                    {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
-                  </Button>
-                )}
-              </div>
-            </GroupField>
-            <GroupSegmented
-              setting="playback.countdown"
-              label={t('practiceSheet.metronome')}
-              value={metronome}
-              options={CLICKS.map((each) => ({
-                value: each,
-                label: t(
-                  `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
-                ),
-              }))}
-              onChange={setMetronome}
-            />
-          </GroupRows>
+          <SettingsGroup bare title={t('practiceSheet.tempo')}>
+            <GroupRows surface="sheet" label={t('practiceSheet.tempo')}>
+              <GroupField className="px-2">
+                <div className="flex flex-col items-center gap-3">
+                  <TempoSteps bpm={tempo} onStep={(by) => onTempo(tempo + by)} />
+                  {tempo === ownTempo ? null : (
+                    <Button variant="soft" onClick={() => onTempo(ownTempo)}>
+                      {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
+                    </Button>
+                  )}
+                </div>
+              </GroupField>
+              <GroupSegmented
+                setting="playback.countdown"
+                label={t('practiceSheet.metronome')}
+                value={metronome}
+                options={CLICKS.map((each) => ({
+                  value: each,
+                  label: t(
+                    `practiceSheet.metronome${each === 'off' ? 'Off' : each === 'on' ? 'On' : 'CountIn'}`,
+                  ),
+                }))}
+                onChange={setMetronome}
+              />
+            </GroupRows>
+          </SettingsGroup>
         </div>
       </SheetContent>
     </Sheet>

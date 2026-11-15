@@ -338,6 +338,7 @@ export const player: LocaleResources['player'] = {
     },
   },
   practiceSheet: {
+    tempo: 'Темп',
     title: 'Практика',
     of: 'Практика: {{mode}}',
     wait: 'Ждать',
