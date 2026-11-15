@@ -319,6 +319,8 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **A course's count stays whole (loop round 19):** "0 of 13 learned" never breaks over two lines (it did in Russian at 402); Next gives way, cut short. A tile's number (a lesson's, a numbered row's) is set in plain figures: Onest's tabular 1 split "10" into "1 0". The lesson line keeps the level board's 44px tiles, 68px rows (canvas 164: a course's line is a level's).
+
 - **Loop round 17, a lesson's place reaches 44:** "Lesson 7 of 11 · Foundations" opens its level from a 44-tall reach
   (6 over the line, 20 under, into the title, which takes no tap); it was 42 (2026-11-15).
 

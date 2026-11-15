@@ -61,7 +61,10 @@ export function CourseOverview({
           ) : (
             <>
               <p className="flex justify-between gap-3 text-sm text-muted-foreground">
-                <span>{t('progress', { learned: progress.done, total: progress.total })}</span>
+                {/* The count stays whole on its line; Next gives way, cut short. */}
+                <span className="shrink-0 whitespace-nowrap">
+                  {t('progress', { learned: progress.done, total: progress.total })}
+                </span>
                 {next ? (
                   <span className="min-w-0 truncate">{t('course.nextUp', { title: next })}</span>
                 ) : null}

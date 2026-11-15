@@ -29,7 +29,7 @@ export function TileMark({
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid shrink-0 place-items-center font-semibold tabular-nums',
+        'grid shrink-0 place-items-center font-semibold',
         // At a library row's head, its paint's wash under its ink (canvas 133); a settings row's solid.
         large
           ? cn('size-11 rounded-control text-lg', PAINT[paint].fill, PAINT[paint].ink)

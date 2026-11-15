@@ -48,7 +48,7 @@ export function LessonRow({
         <span
           aria-hidden
           className={cn(
-            'grid size-11 shrink-0 place-items-center font-sans text-[0.9375rem] font-bold tabular-nums',
+            'grid size-11 shrink-0 place-items-center font-sans text-[0.9375rem] font-bold',
             square ? 'rounded-control' : 'rounded-pill',
             done
               ? cn(PAINT.grass.fill, PAINT.grass.ink)
