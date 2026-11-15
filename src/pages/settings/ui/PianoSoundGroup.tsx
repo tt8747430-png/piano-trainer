@@ -1,6 +1,7 @@
 import { CircleCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import { useOnline } from '@/shared/lib'
 import { ActionRow, SettingsGroup } from '@/shared/ui'
 import type { PianoSound } from '../model/use-piano-sound'
 
@@ -14,7 +15,7 @@ const megabytes = (bytes: number, locale: string) =>
 
 /**
  * Storage and backup's Piano sound (A27): how much of the recorded grand this device keeps, and
- * Download for offline, with its progress, until all of it is kept. Its Remove is in the page's
+ * Download for offline, with its progress, until all of it is kept; offline it waits, saying it needs the internet. Its Remove is in the page's
  * danger group. Where the browser keeps no caches, there is nothing to show.
  */
 export function PianoSoundGroup({
@@ -26,6 +27,7 @@ export function PianoSoundGroup({
 }) {
   const { t } = useTranslation('settings')
   const locale = useLocale()
+  const online = useOnline()
   if (sound.state === 'none') return null
   return (
     <SettingsGroup flush title={t('pianoSound.label')} info={t('pianoSound.info')}>
@@ -49,13 +51,16 @@ export function PianoSoundGroup({
               <ActionRow
                 title={t('pianoSound.download')}
                 status={
-                  sound.downloading === null
-                    ? undefined
-                    : t('pianoSound.downloading', {
+                  sound.downloading !== null
+                    ? t('pianoSound.downloading', {
                         percent: Math.floor(sound.downloading * 100),
                       })
+                    : online
+                      ? undefined
+                      : t('pianoSound.needsInternet')
                 }
-                disabled={sound.downloading !== null}
+                // Offline it can only fail: it says what it needs and waits for the network.
+                disabled={sound.downloading !== null || !online}
                 onClick={onDownload}
               />
               {sound.failed ? (

@@ -877,6 +877,8 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Offline, the piano download waits and says why (loop round 18):** Storage and backup's Download for offline use is dimmed offline with "Needs the internet" (ru "Нужен интернет") beside it, as the board shows it only when it can run (`offCan`); it comes back the moment the network does.
+
 - **Loop round 22, Notifications to its board (P9_NOTES):** groups headed in small capitals, rows 64 with the title
   medium (bold while unread) over a 13px time, soft hairlines; the empty state's one action, Practise now, to
   Practice (2026-11-15).

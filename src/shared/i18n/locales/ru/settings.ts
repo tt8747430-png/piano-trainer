@@ -58,6 +58,7 @@ export const settings: LocaleResources['settings'] = {
     kept: '{{kept}} из {{total}} загружено',
     ready: 'Доступно без сети',
     download: 'Загрузить для работы без сети',
+    needsInternet: 'Нужен интернет',
     downloading: 'Загрузка… {{percent}}%',
     failed: 'Некоторые сэмплы не загрузились. Повторите попытку, когда появится сеть.',
     remove: 'Удалить загруженные сэмплы фортепиано',

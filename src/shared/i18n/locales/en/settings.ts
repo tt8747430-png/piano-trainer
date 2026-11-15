@@ -62,6 +62,7 @@ export const settings = {
     kept: '{{kept}} of {{total}} downloaded',
     ready: 'Available offline',
     download: 'Download for offline use',
+    needsInternet: 'Needs the internet',
     downloading: 'Downloading… {{percent}}%',
     failed: 'Some samples could not be downloaded. Try again when you are online.',
     remove: 'Remove downloaded piano samples',
