@@ -20,7 +20,7 @@ import { DOCK_STEP } from './dock-sizes'
  * shoulder to shoulder, so the seven still fit.
  */
 const GROUP =
-  'flex items-center gap-0.5 rounded-pill glass p-0.5 max-sm:gap-0 narrow-phone:bg-transparent narrow-phone:p-0 narrow-phone:shadow-none narrow-phone:backdrop-filter-none'
+  'flex items-center rounded-pill glass p-1 small-phone:p-0.5 narrow-phone:bg-transparent narrow-phone:p-0 narrow-phone:shadow-none narrow-phone:backdrop-filter-none'
 
 export function Transport({
   label,
@@ -64,7 +64,7 @@ export function Transport({
     <FloatingBar
       label={label}
       docked={docked}
-      className="gap-1 max-sm:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
+      className="gap-2 small-phone:gap-1 narrow-phone:gap-0 narrow-phone:px-0 landscape-phone:gap-0.5"
     >
       <div className={GROUP}>
         {start}
@@ -84,7 +84,7 @@ export function Transport({
           title={play.title}
           playing={playing}
           disabled={disabled}
-          className="order-none bg-transparent text-primary-foreground shadow-none hover:bg-foreground/10 narrow-phone:size-12"
+          className="order-none size-12 bg-transparent text-primary-foreground shadow-none hover:bg-foreground/10 small-phone:size-10"
           onClick={onPlay}
         />
         <FloatingBarButton
