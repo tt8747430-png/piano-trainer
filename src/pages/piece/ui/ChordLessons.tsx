@@ -1,6 +1,5 @@
-import { Check } from 'lucide-react'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import type { PieceId } from '@/entities/piece'
 import { CHORD_HOLDS, selectHolds, useProgress, useProgressStoreApi } from '@/entities/progress'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
@@ -8,46 +7,38 @@ import { diagramChord } from '@/features/practice'
 import { recordHold } from '@/features/record-lesson'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol } from '@/shared/lib/music'
-import { RowButton, RowGroup, type Paint, KeysIcon } from '@/shared/ui'
+import { RowButton, SettingsGroup } from '@/shared/ui'
 import { ChordSheet } from '@/widgets/chord-diagrams'
 import type { ChordLesson } from '../model/section-lessons'
+import { LessonStatus } from './LessonStatus'
 
 /**
- * A chord to learn as a row (ADR 0111): "Learn C♯m⁷", its tile in the section's paint with
- * the piano, a check on it once learned; its holds so far, "1 of 3", at its end until then.
+ * A chord to learn as a row, as the Section board draws it: "Learn C♯m⁷", then its holds so far at its
+ * end ("1 of 3"), Done in the learned green once learned; it opens the chord's sheet.
  */
-function ChordLessonRow({
-  lesson,
-  paint,
-  onOpen,
-}: {
-  lesson: ChordLesson
-  paint: Paint
-  onOpen: () => void
-}) {
+function ChordLessonRow({ lesson, onOpen }: { lesson: ChordLesson; onOpen: () => void }) {
   const { t } = useTranslation('piece')
   const held = useProgress(selectHolds(lesson.key))
   const learned = held >= CHORD_HOLDS
   return (
-    <li>
-      {/* It opens a sheet over the page, not another page: a button with no chevron. */}
-      <RowButton
-        title={t('learnSection.learnChord', { chord: printedSymbol(lesson.symbol) })}
-        icon={learned ? Check : KeysIcon}
-        paint={paint}
-        trailing={
-          learned ? (
-            // The check says it to the eye alone.
-            <span className="sr-only">{t('learnSection.done')}</span>
-          ) : held > 0 ? (
-            <span className="shrink-0 text-sm text-muted-foreground tabular-nums">
-              {t('learnSection.held', { held, needed: CHORD_HOLDS })}
-            </span>
-          ) : undefined
-        }
-        onClick={onOpen}
-      />
-    </li>
+    <RowButton
+      title={
+        <Trans
+          t={t}
+          i18nKey="learnSection.learnChord"
+          values={{ chord: printedSymbol(lesson.symbol) }}
+          components={{ b: <b className="font-semibold" /> }}
+        />
+      }
+      trailing={
+        <LessonStatus
+          done={learned}
+          count={t('learnSection.held', { held, needed: CHORD_HOLDS })}
+        />
+      }
+      opens
+      onClick={onOpen}
+    />
   )
 }
 
@@ -60,13 +51,11 @@ export function ChordLessons({
   pieceId,
   performance,
   chords,
-  paint,
 }: {
   pieceId: PieceId
   /** The piece as the Player plays it: what the sheet draws each chord from. */
   performance: Performance
   chords: readonly ChordLesson[]
-  paint: Paint
 }) {
   const { t } = useTranslation('piece')
   const store = useProgressStoreApi()
@@ -78,19 +67,19 @@ export function ChordLessons({
   if (chords.length === 0) return null
   return (
     <>
-      <RowGroup
+      <SettingsGroup
         title={t('learnSection.chords')}
         info={t('learnSection.chordsInfo', { count: CHORD_HOLDS })}
+        flush
       >
         {chords.map((lesson) => (
           <ChordLessonRow
             key={lesson.key}
             lesson={lesson}
-            paint={paint}
             onOpen={() => setShown({ lesson, open: true })}
           />
         ))}
-      </RowGroup>
+      </SettingsGroup>
       {shown && chord ? (
         <ChordSheet
           chord={chord}

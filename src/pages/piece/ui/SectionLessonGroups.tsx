@@ -1,10 +1,9 @@
-import { AudioWaveform, ListMusic, MoveRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { usePatternName } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol } from '@/shared/lib/music'
-import { RowGroup, type Paint } from '@/shared/ui'
+import { SettingsGroup } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { ChordLessons } from './ChordLessons'
 import { LessonRow } from './LessonRow'
@@ -15,19 +14,18 @@ import { LessonRow } from './LessonRow'
  * by holding it three times; then, each open (canvas 133), its chords in time (each sequence, the
  * Player in Listen with the click), one change at a time where there is more than one (Wait mode on
  * the two chords), and the pattern its chords are played by (a bar of it on one chord, its notes lit).
- * A row names what it plays: its chords, its change, its pattern and the chord it is on.
+ * A row names what it plays: its chords, its change, its pattern and the chord it is on. Each group
+ * is a settings group, as the Section board draws it: its name in small capitals, its ⓘ, plain rows.
  */
 export function SectionLessonGroups({
   piece,
   performance,
   lessons: { chords, sequences, changes, patterns },
-  paint,
 }: {
   piece: Pick<Piece, 'id'>
   /** The piece as the Player plays it, its repeats taken: what the lessons were read from. */
   performance: Performance
   lessons: SectionLessons
-  paint: Paint
 }) {
   const { t } = useTranslation('piece')
   const patternName = usePatternName()
@@ -35,23 +33,25 @@ export function SectionLessonGroups({
   const oneAtATime = changes.length > 1 ? changes : []
   return (
     <>
-      <ChordLessons pieceId={piece.id} performance={performance} chords={chords} paint={paint} />
+      <ChordLessons pieceId={piece.id} performance={performance} chords={chords} />
       {sequences.length > 0 ? (
-        <RowGroup title={t('learnSection.inTime')} info={t('learnSection.inTimeInfo')}>
+        <SettingsGroup title={t('learnSection.inTime')} info={t('learnSection.inTimeInfo')} flush>
           {sequences.map((sequence) => (
             <LessonRow
               key={sequence.key}
               pieceId={piece.id}
               lesson={sequence}
               title={sequence.symbols.map(printedSymbol).join(' · ')}
-              icon={ListMusic}
-              paint={paint}
             />
           ))}
-        </RowGroup>
+        </SettingsGroup>
       ) : null}
       {oneAtATime.length > 0 ? (
-        <RowGroup title={t('learnSection.oneChange')} info={t('learnSection.oneChangeInfo')}>
+        <SettingsGroup
+          title={t('learnSection.oneChange')}
+          info={t('learnSection.oneChangeInfo')}
+          flush
+        >
           {oneAtATime.map((change) => (
             <LessonRow
               key={`${change.from} ${change.to}`}
@@ -61,29 +61,25 @@ export function SectionLessonGroups({
                 from: printedSymbol(change.from),
                 to: printedSymbol(change.to),
               })}
-              icon={MoveRight}
-              paint={paint}
             />
           ))}
-        </RowGroup>
+        </SettingsGroup>
       ) : null}
       {patterns.length > 0 ? (
-        <RowGroup
+        <SettingsGroup
           title={t('learnSection.pattern', { count: patterns.length })}
           info={t('learnSection.patternInfo')}
+          flush
         >
           {patterns.map((pattern) => (
             <LessonRow
               key={pattern.pattern}
               pieceId={piece.id}
               lesson={pattern}
-              title={patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })}
-              detail={t('learnSection.patternOn', { chord: printedSymbol(pattern.symbol) })}
-              icon={AudioWaveform}
-              paint={paint}
+              title={`${patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })} · ${t('learnSection.patternOn', { chord: printedSymbol(pattern.symbol) })}`}
             />
           ))}
-        </RowGroup>
+        </SettingsGroup>
       ) : null}
     </>
   )

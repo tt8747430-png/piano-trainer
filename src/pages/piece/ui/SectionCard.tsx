@@ -1,60 +1,38 @@
-import { Music } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
 import { printedSymbol } from '@/shared/lib/music'
-import { PAINT, type Paint } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
-import type { LessonProgress } from '../model/song-progress'
-import { LessonsMeter } from './LessonsMeter'
 
 /**
- * A section's card: its tile in its paint beside the song's title, the section's chords
- * (where it is one run played round, `3 ×` before the run as it goes; else its chords in the order
- * they first sound), and its lessons done.
+ * A section's card, as the Section board draws it: how many times its chords go round, large (`2 ×`),
+ * beside the section's name and bars over its chords (one round's where it is a run played round;
+ * else its chords in the order they first sound).
  */
 export function SectionCard({
-  title,
-  lessons: { chords, rounds, sequences },
-  paint,
-  progress,
+  heading,
+  lessons: { bars, chords, rounds, sequences },
 }: {
-  /** The song's. */
-  title: string
+  /** The section's name, as the song heads it. */
+  heading: string
   lessons: SectionLessons
-  paint: Paint
-  progress: LessonProgress
 }) {
   const { t } = useTranslation('piece')
   const [round] = sequences
   const shown = rounds > 1 && round ? round.symbols : chords.map((chord) => chord.symbol)
   return (
-    <div className="flex items-start gap-4 card p-5">
-      <span
-        aria-hidden
-        className={cn(
-          'grid size-14 shrink-0 place-items-center rounded-control',
-          PAINT[paint].fill,
-          PAINT[paint].ink,
-        )}
-      >
-        <Music className="size-7" strokeWidth={1.5} />
+    <div className="flex items-center gap-3.5 card px-4 py-3.5">
+      {rounds > 1 ? (
+        <span className="shrink-0 text-[1.75rem] leading-none font-bold tabular-nums">
+          {t('learnSection.rounds', { n: rounds })}
+        </span>
+      ) : null}
+      <span className="flex min-w-0 flex-col">
+        <span className="leading-snug font-semibold text-pretty">
+          {heading} · {t('barsFromTo', { first: bars.first + 1, last: bars.last + 1 })}
+        </span>
+        <span className="text-sm leading-snug text-muted-foreground text-pretty">
+          {shown.length > 0 ? shown.map(printedSymbol).join(' · ') : t('learnSection.noChords')}
+        </span>
       </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <p className="text-muted-foreground">{title}</p>
-        {chords.length > 0 ? (
-          <p className="font-display text-2xl font-semibold text-pretty">
-            {rounds > 1 ? (
-              <span className="text-muted-foreground tabular-nums">
-                {t('learnSection.rounds', { n: rounds })}{' '}
-              </span>
-            ) : null}
-            {shown.map(printedSymbol).join(' · ')}
-          </p>
-        ) : (
-          <p className="text-lg text-muted-foreground">{t('learnSection.noChords')}</p>
-        )}
-        {progress.total > 0 ? <LessonsMeter progress={progress} className="mt-1" /> : null}
-      </div>
     </div>
   )
 }

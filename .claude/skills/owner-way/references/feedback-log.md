@@ -227,6 +227,8 @@ owner's, typos fixed.
 
 ## Song page
 
+- **A section's page as the Section board draws it (loop round 19):** a compact head card (`2 ×` large, then "Verse · bars 1–8" over its chords), no song tile and no progress bar; each group a settings group (its name in small capitals, its ⓘ at the heading's far end, as every settings group now); plain rows with no tiles, "Learn **G**" with the chord bold, its holds ("0 of 3") or Done in the learned green at the end; one column of 42rem on a laptop.
+
 - **The cover column as the board draws it (loop round 19):** on a laptop from 1280 wide the song page's first column is 520px (the SongLaptop board's `grid-template-columns: 520px`), its gap 48; below that it keeps 24rem, the room a 1024 screen has.
 
 - **A long value takes two lines, then an ellipsis (loop round 18):** a row's value (a song's long title in its Details) wraps between words as before and stops at two lines, as every title does.

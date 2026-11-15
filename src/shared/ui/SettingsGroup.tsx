@@ -4,7 +4,7 @@ import { InfoTip } from './InfoTip'
 
 /**
  * A group of settings, as an app's settings read (iOS's grouped list, memory-palaces' `SettingsSection`):
- * its name small over one card, what the group is for in the ⓘ beside it where its name does not say
+ * its name small over one card, what the group is for in the ⓘ at its heading's end where its name does not say
  * (ADR 0096), its rows in the card. `flush` rows (a `RowLink`, a `ChoiceRow`, a `SwitchRow`) run to the
  * card's edges; fields sit inset. Untitled, it is a page's first card (the account). A `footnote` is
  * the one line a group may have under its card (R20), as iOS's.
@@ -48,7 +48,12 @@ export function SettingsGroup({
           >
             {title}
           </h2>
-          {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+          {/* At the heading's far edge, as the boards' group heads (S9CAPS). */}
+          {info ? (
+            <InfoTip name={title} className="ms-auto">
+              {info}
+            </InfoTip>
+          ) : null}
         </div>
       ) : null}
       {bare ? (

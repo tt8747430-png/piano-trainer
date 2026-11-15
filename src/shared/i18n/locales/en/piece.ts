@@ -24,7 +24,7 @@ export const piece = {
     chordsInfo_one: 'Hold each chord on the keys to learn it.',
     chordsInfo_other:
       'Hold each chord on the keys {{count}} times to learn it, letting go of every key between.',
-    learnChord: 'Learn {{chord}}',
+    learnChord: 'Learn <b>{{chord}}</b>',
     held: '{{held}} of {{needed}}',
     inTime: 'In time',
     inTimeInfo:

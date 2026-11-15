@@ -1,11 +1,9 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
-import { selectLessons, useProgress } from '@/entities/progress'
+import { useRepertoire, type Piece } from '@/entities/piece'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
-import { useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import {
   BackButton,
@@ -15,9 +13,7 @@ import {
   NotFound,
   ScreenHeader,
 } from '@/shared/ui'
-import { lessonKeys } from '../model/section-lessons'
-import { sectionPaint } from '../model/section-paint'
-import { progressOf, sectionIndex } from '../model/song-progress'
+import { sectionIndex } from '../model/song-progress'
 import { useSongLessons } from '../model/use-song-lessons'
 import { SectionCard } from './SectionCard'
 import { SectionLessonGroups } from './SectionLessonGroups'
@@ -29,29 +25,19 @@ import { SectionLessonGroups } from './SectionLessonGroups'
  */
 function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const { t } = useTranslation('piece')
-  const locale = useLocale()
   const { performance, headings, sections } = useSongLessons(piece)
-  const done = useProgress(selectLessons)
   const lessons = sections[section]
   // The route found no section the piece has not.
   if (!lessons) return null
   const heading = headings[section] ?? ''
-  const paint = sectionPaint(heading)
   return (
-    <div className="flex flex-col gap-8 pb-4">
+    <div className="flex flex-col gap-6 pb-4">
       <ScreenHeader title={t('learnSection.title', { section: heading })} back={<BackButton />} />
-      <SectionCard
-        title={entryTitles(piece, locale).primary}
-        lessons={lessons}
-        paint={paint}
-        progress={progressOf(lessonKeys(lessons), done)}
-      />
-      <SectionLessonGroups
-        piece={piece}
-        performance={performance}
-        lessons={lessons}
-        paint={paint}
-      />
+      {/* One column of rows, as the other detail pages' (Profile's, a folder's settings). */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+        <SectionCard heading={heading} lessons={lessons} />
+        <SectionLessonGroups piece={piece} performance={performance} lessons={lessons} />
+      </div>
       {/* The whole section looped in the Player, the screen's floating action. */}
       <FloatingActions>
         <FabLink

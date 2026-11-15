@@ -25,7 +25,7 @@ export const piece: LocaleResources['piece'] = {
       'Возьмите каждый аккорд на клавишах {{count}} раз, чтобы выучить его, отпуская между ними все клавиши.',
     chordsInfo_other:
       'Возьмите каждый аккорд на клавишах {{count}} раза, чтобы выучить его, отпуская между ними все клавиши.',
-    learnChord: 'Учим {{chord}}',
+    learnChord: 'Учим <b>{{chord}}</b>',
     held: '{{held}} из {{needed}}',
     inTime: 'В темпе',
     inTimeInfo:

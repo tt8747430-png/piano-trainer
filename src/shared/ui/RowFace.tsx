@@ -12,7 +12,8 @@ export type RowTile =
 
 /** What a row shows, a link's or a button's alike. */
 export type RowFaceProps = {
-  title: string
+  /** Its name; a part of it may be set bold, as a lesson's chord ("Learn **G**"). */
+  title: ReactNode
   /** Its ⓘ, beside its title as every ⓘ sits beside the name it explains. */
   info?: ReactNode
   detail?: string | undefined
