@@ -57,6 +57,9 @@ ED4 = js(r'''
       keysOn: keys, keysPressed: keys ? 'true' : 'false', keysBg: keys ? '#332921' : 'transparent', keysFg: keys ? '#FEFDFB' : '#332921', toggleKeys: () => set({ keys: !keys }),
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
       moreOn: st.sheet === 'more', openMore: () => set({ sheet: 'more' }),
+      states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }],
+        ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
+        ['Score settings open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
       kb: calmKeys(48, 79, { 72: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 72: ['#85B8DC', ''] }, 1330, 132) };''')
 
 # the bar: ✕, the Play · Edit switch, Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
@@ -151,6 +154,6 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', eph4, ED4, BSHEET('moreOn', 'Score settings', ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1))
-full_laptop('EditorLaptop', 'Score editor, laptop', elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Take.dc.html', 'TakeLaptop.dc.html'), 'right: 24px; top: 76px', 380))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, BSHEET('moreOn', 'Score settings', ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1))
+full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Take.dc.html', 'TakeLaptop.dc.html'), 'right: 24px; top: 76px', 380))
 print('r44 editor ok')
