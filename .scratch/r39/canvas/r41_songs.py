@@ -26,7 +26,7 @@ def S(t, s, v, i, c, places=(), tags=(), href='Song.dc.html', ic=INK):
     folder = href in ('#', 'Folder.dc.html') or t == 'Shared with me'
     pic = STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))
     return {'folder': folder, 'pic': pic, 't': t, 's': s, 'v': v, 'i': '' , 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
-SONGS_D = {'places': ['All', 'Favourites', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
+SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or restore items from the archive.', 'btn': 'New song', 'arch': 'Archive.dc.html'}, 'places': ['All', 'Favourites', 'Learning', 'Learned'], 'sorts': ['Last played', 'Title', 'Composer', 'Added'], 'favs': ['Amazing Grace', 'Clair de lune'],
   'open': {'Folders': True, 'Songs': True},
   'filters': [{'name': 'Key', 'opts': [['C major', 4], ['G major', 2], ['D major', 1], ['A minor', 1], ['D♭ major', 1]]}, {'name': 'Level', 'opts': [['Beginner', 6], ['Intermediate', 2], ['Advanced', 1]]}],
   'sections': [
