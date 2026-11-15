@@ -8,7 +8,7 @@ import { usePageHeading } from './use-page-heading'
  */
 const PLACES = {
   page: 'text-center text-3xl',
-  lines: 'text-center text-2xl sm:text-3xl landscape-phone:text-xl',
+  lines: 'text-center text-[1.3125rem] sm:text-3xl landscape-phone:text-xl',
   across: 'text-xl',
 } as const
 export type TitlePlace = keyof typeof PLACES
