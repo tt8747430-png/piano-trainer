@@ -62,10 +62,12 @@ for b in boards:
         # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
         # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
         if 'header data-float' in h1 and 'data-floatcss' not in h1:
-            h1 = h1.replace('</head>', '<style data-floatcss>header[data-float] { z-index: 30; margin-bottom: -56px; pointer-events: none }'
-                            ' header[data-float] > * { pointer-events: auto } header[data-float] + *::before { content: ""; display: block; flex: none; height: 56px }'
+            h1 = h1.replace('</head>', '<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none }'
+                            ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) { margin-bottom: -56px }'
+                            ' header[data-float] > * { pointer-events: auto }'
+                            ' header[data-float] + [style*=\"flex-direction: column\"]::before, header[data-float] + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)::before { content: \"\"; display: block; flex: none; height: 56px }'
                             ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
-                            ' header[data-float] [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
+                            ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
                             ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
         if '<!--piano2d-->' in h1 and 'PIANO2D' not in h1:
             import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as _PS

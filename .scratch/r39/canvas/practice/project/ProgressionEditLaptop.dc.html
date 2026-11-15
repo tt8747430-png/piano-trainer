@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Edit a progression (editors), laptop</title>
 <script src="./support.js"></script>
-<style data-floatcss>header[data-float] { z-index: 30; margin-bottom: -56px; pointer-events: none } header[data-float] > * { pointer-events: auto } header[data-float] + *::before { content: ""; display: block; flex: none; height: 56px } :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y } header[data-float] [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px } @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>
+<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none } header[data-float]:has(+ [style*="flex-direction: column"], + :not([style*="display: flex"]):not([style*="display: grid"]):not(sc-if):not(style)) { margin-bottom: -56px } header[data-float] > * { pointer-events: auto } header[data-float] + [style*="flex-direction: column"]::before, header[data-float] + :not([style*="display: flex"]):not([style*="display: grid"]):not(sc-if):not(style)::before { content: ""; display: block; flex: none; height: 56px } :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y } header[data-float]:has(+ [style*="flex-direction: column"], + :not([style*="display: flex"]):not([style*="display: grid"]):not(sc-if):not(style)) [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px } @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>
 <body>
 <x-dc>
 <helmet>
