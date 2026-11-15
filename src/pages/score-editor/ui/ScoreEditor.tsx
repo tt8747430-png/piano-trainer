@@ -207,43 +207,48 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
               <EditorPanel />
             </aside>
           ) : null}
-          <div className="relative flex min-h-0 flex-1 flex-col">
-            {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
+          {/* Beside a docked panel the keys stand under the sheet alone, the panel running on to the
+              screen's foot, as the EditorLaptop board draws them. */}
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="relative flex min-h-0 flex-1 flex-col">
+              {/* The sheet's one pill at its foot, clear of what floats there (R34, Songscription's):
                 the layout, and in Page view the canvas's zoom beside it; on a phone held upright
                 the layout is the gear's View's, the zoom alone. */}
-            <SheetToolsContext value={panel ? <SheetLayoutTools /> : null}>
-              <div className="min-h-0 flex-1">{music}</div>
-            </SheetToolsContext>
-            {editor.view.layout === 'page' || !panel ? null : (
-              <SheetPill covered={{ bottom: below + GAP }}>
-                <SheetLayoutTools />
-              </SheetPill>
-            )}
-            {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
-            <div className="pointer-events-none absolute inset-0 z-30">
-              {/* A change that could not be saved, said at the sheet's head. */}
-              <div className="absolute inset-x-0 top-2 flex justify-center px-2">
-                <div className="pointer-events-auto w-full max-w-md">
-                  <UnsavedNotice />
+              <SheetToolsContext value={panel ? <SheetLayoutTools /> : null}>
+                <div className="min-h-0 flex-1">{music}</div>
+              </SheetToolsContext>
+              {editor.view.layout === 'page' || !panel ? null : (
+                <SheetPill covered={{ bottom: below + GAP }}>
+                  <SheetLayoutTools />
+                </SheetPill>
+              )}
+              {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
+              <div className="pointer-events-none absolute inset-0 z-30">
+                {/* A change that could not be saved, said at the sheet's head. */}
+                <div className="absolute inset-x-0 top-2 flex justify-center px-2">
+                  <div className="pointer-events-auto w-full max-w-md">
+                    <UnsavedNotice />
+                  </div>
                 </div>
-              </div>
-              <div
-                ref={foot}
-                data-hidden={footShown ? undefined : true}
-                inert={!footShown}
-                // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115).
-                className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
-              >
-                <div className="flex shrink-0 flex-col items-center gap-2">
-                  <SelectionActions />
-                  {idle ? null : (
-                    <div className="pointer-events-auto">
-                      <RecordingBar />
-                    </div>
-                  )}
+                <div
+                  ref={foot}
+                  data-hidden={footShown ? undefined : true}
+                  inert={!footShown}
+                  // The selection's commands, or a take's strip, at the sheet's foot (ADR 0115).
+                  className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
+                >
+                  <div className="flex shrink-0 flex-col items-center gap-2">
+                    <SelectionActions />
+                    {idle ? null : (
+                      <div className="pointer-events-auto">
+                        <RecordingBar />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
+            {panel ? <EditorKeyboard edge={right ? 'left' : 'right'} /> : null}
           </div>
           {panel || typing ? null : (
             // The palette docked under the sheet, over the keys (R34, as the keys dock).
@@ -255,7 +260,7 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
           ) : null}
         </div>
         {/* Under the unfolded palette the keys step aside, as Flat's (owner, 2026-11-15). */}
-        <EditorKeyboard stepAside={!panel && !typing && !folded} />
+        {panel ? null : <EditorKeyboard stepAside={!typing && !folded} />}
       </div>
       <FieldDocked value={typing}>
         <OpenField anchor={typing ? docked : anchor} />

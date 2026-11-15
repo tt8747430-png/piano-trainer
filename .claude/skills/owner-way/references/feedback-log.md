@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 34, the keys under the sheet alone beside the docked panel (EditorLaptop):** on a laptop the keys run from the screen's edge to the panel's hairline, and the panel runs on to the screen's foot, as the board draws them; they no longer pass under the panel (2026-11-15).
 - **Loop round 31, the tools stay in place, greyed, as Flat's (owner, 2026-11-15: "make the design exactly like the flat editor"; replaces R32-B's "only the tools that act on what is chosen are drawn"):** with no note chosen, Pitch, Articulations, Ornaments, Dynamics and the tempo marks keep every key in their place at 40%, disabled, "Choose a note" their tooltip; the phone's row the same; no line of text stands in their place (2026-11-15).
 - **Loop round 30, the palette's section titles in the sans** (15, 600, ink), as the Editor boards draw them, no longer the book serif. The laptop bar keeps no title: the score prints it where it is edited, so the board's title beside Close would say it twice.
 - **The editor's foot reaches the screen's edge, as Flat's:** what stands last (the keys, else the palette) runs on under the home indicator, its own paper filling the inset, instead of a bare band of page under it.

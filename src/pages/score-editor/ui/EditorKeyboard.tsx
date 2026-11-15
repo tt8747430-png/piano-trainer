@@ -3,6 +3,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { keysRange } from '@/features/practice'
 import { notesAt, type EditorState } from '@/features/score-editor'
 import { LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { cn } from '@/shared/lib'
 import { midi, rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
@@ -40,7 +41,14 @@ function scoreSpan({ draft }: EditorState): KeyRange {
  * unfolded (`stepAside`), back as the palette folds. On a phone on its side, too short for the keys
  * and a grand staff, it opens hidden, its fold kept apart there (ADR 0062).
  */
-export function EditorKeyboard({ stepAside = false }: { stepAside?: boolean }) {
+export function EditorKeyboard({
+  stepAside = false,
+  edge,
+}: {
+  stepAside?: boolean
+  /** Under the sheet beside a docked panel: the screen's edge it reaches, past the gutter. */
+  edge?: 'left' | 'right'
+}) {
   const { actions, takes } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(scoreSpan))
@@ -50,7 +58,17 @@ export function EditorKeyboard({ stepAside = false }: { stepAside?: boolean }) {
   const { folded } = useFoldKeys()
   if (folded || stepAside) return null
   return (
-    <div data-area="keys" className="vt-keys -mx-gutter min-w-0 shrink-0">
+    <div
+      data-area="keys"
+      className={cn(
+        'vt-keys min-w-0 shrink-0',
+        edge === undefined
+          ? '-mx-gutter'
+          : edge === 'left'
+            ? '-mr-3 ml-[calc(-1*var(--gutter))]'
+            : '-ml-3 mr-[calc(-1*var(--gutter))]',
+      )}
+    >
       <LiveKeyboard
         range={range}
         // The caret's keys in sight with both hands' there, narrowing to hold them as the Player's
