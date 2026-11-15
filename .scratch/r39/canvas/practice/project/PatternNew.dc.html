@@ -81,7 +81,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     const LHG = [['Held', ['Whole notes', 'Half notes']], ['Octaves', ['Octaves', 'Broken octaves']], ['Arpeggios', ['Up the chord', 'Up and down']], ['Bass lines', ['Root and fifth', 'Walking']], ['Styles', ['Stride', 'Boogie']]];
     const grp = (G, cur, k) => G.map(([g, xs]) => ({ g, xs: xs.map((x) => ({ l: x, bg: x === cur ? '#332921' : '#EEE9E2', fg: x === cur ? '#FEFDFB' : '#332921', pick: () => S({ [k]: x }) })) }));
     const name = own ? (st.name ?? 'Broken chords (mine)') : 'Broken chords';
-    return { ...common(st, set), isPattern: page === 'pattern', isEditor: page === 'new' || page === 'edit', isPublish: page === 'publish', notPattern: page !== 'pattern',
+    return { ...common(st, set), isPattern: page === 'pattern', isEditor: page === 'new' || page === 'edit', notEditor: !(page === 'new' || page === 'edit'), isPublish: page === 'publish', notPattern: page !== 'pattern',
       pageT: { pattern: name, new: 'New pattern', edit: 'Edit pattern', publish: 'Publish' }[page], name, setName: (e) => S({ name: e.target.value }), own, builtIn: !own,
       favOn: fav, heartFill: fav ? '#B3261E' : 'none', heartInk: fav ? '#B3261E' : '#332921', toggleFav: () => { S({ fav: !fav }); toast(fav ? 'Removed from Favourites.' : 'Added to Favourites.'); },
       hidden, hideT: hidden ? 'Show in the Player' : 'Hide from the Player', toggleHide: () => S({ hidden: !hidden, sheet: null }),
