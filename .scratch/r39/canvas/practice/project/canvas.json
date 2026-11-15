@@ -137,8 +137,26 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "SongNight.dc.html": {
+    "ArchiveNight.dc.html": {
       "x": 1590,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Archive and Trash, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "GroupsNight.dc.html": {
+      "x": 2120,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Groups, a group, a shared folder, Join, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongNight.dc.html": {
+      "x": 2650,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -146,12 +164,57 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "SongSettingsNight.dc.html": {
+      "x": 3180,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A song’s Settings and Publish, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SectionNight.dc.html": {
+      "x": 3710,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A section of a song, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "EditorNight.dc.html": {
-      "x": 2120,
+      "x": 4240,
       "y": 1720,
       "w": 450,
       "h": 920,
       "title": "Score editor, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorDraftNight.dc.html": {
+      "x": 4770,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A built-in song’s draft (editors), Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakesNight.dc.html": {
+      "x": 5300,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The takes, Review your recording, Night, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakeNight.dc.html": {
+      "x": 5830,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A take, Night, phone",
       "is_interactive": true,
       "page": "songs"
     },
@@ -290,8 +353,26 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "SongLaptopNight.dc.html": {
+    "ArchiveLaptopNight.dc.html": {
       "x": 6669,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Archive and Trash, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "GroupsLaptopNight.dc.html": {
+      "x": 8892,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Groups, a group, a shared folder, Join, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongLaptopNight.dc.html": {
+      "x": 11115,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -299,12 +380,57 @@
       "is_interactive": true,
       "page": "songs"
     },
+    "SongSettingsLaptopNight.dc.html": {
+      "x": 13338,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A song’s Settings and Publish, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SectionLaptopNight.dc.html": {
+      "x": 15561,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A section of a song, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
     "EditorLaptopNight.dc.html": {
-      "x": 8892,
+      "x": 17784,
       "y": 4939,
       "w": 2143,
       "h": 1299,
       "title": "Score editor, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorDraftLaptopNight.dc.html": {
+      "x": 20007,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A built-in song’s draft (editors), Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakesLaptopNight.dc.html": {
+      "x": 22230,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The takes, Review your recording, Night, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakeLaptopNight.dc.html": {
+      "x": 24453,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A take, Night, laptop",
       "is_interactive": true,
       "page": "songs"
     },
@@ -488,6 +614,42 @@
       "is_interactive": true,
       "page": "player"
     },
+    "PlayWalkNight.dc.html": {
+      "x": 1590,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: walk the chords, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayChromaticNight.dc.html": {
+      "x": 2120,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: a chromatic walk, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayProgressionNight.dc.html": {
+      "x": 2650,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: a progression in 12 keys, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayExerciseNight.dc.html": {
+      "x": 3180,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: an exercise, Night, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
     "PlayerLaptop.dc.html": {
       "x": 0,
       "y": 3140,
@@ -584,6 +746,42 @@
       "w": 2143,
       "h": 1299,
       "title": "The Player, Piano, Night, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayWalkLaptopNight.dc.html": {
+      "x": 4446,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: walk the chords, Night, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayChromaticLaptopNight.dc.html": {
+      "x": 6669,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: a chromatic walk, Night, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayProgressionLaptopNight.dc.html": {
+      "x": 8892,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: a progression in 12 keys, Night, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayExerciseLaptopNight.dc.html": {
+      "x": 11115,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: an exercise, Night, laptop",
       "is_interactive": true,
       "page": "player"
     },
@@ -767,8 +965,17 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordsNight.dc.html": {
+    "MainNight.dc.html": {
       "x": 0,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Practice, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordsNight.dc.html": {
+      "x": 530,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -776,8 +983,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "PlayChordNight.dc.html": {
+      "x": 1060,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A chord practice run and its results, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ScalesNight.dc.html": {
-      "x": 530,
+      "x": 1590,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -786,7 +1002,7 @@
       "page": "practice"
     },
     "IntervalsNight.dc.html": {
-      "x": 1060,
+      "x": 2120,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -794,8 +1010,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ProgressionsNight.dc.html": {
+      "x": 2650,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Progressions, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ProgressionNight.dc.html": {
-      "x": 1590,
+      "x": 3180,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -803,8 +1028,26 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ProgressionEditNight.dc.html": {
+      "x": 3710,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A progression, edited by an editor, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "AccompanimentNight.dc.html": {
+      "x": 4240,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Accompaniment, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "PatternNight.dc.html": {
-      "x": 2120,
+      "x": 4770,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -812,8 +1055,44 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "PatternNewNight.dc.html": {
+      "x": 5300,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A new pattern, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordPlayerNight.dc.html": {
+      "x": 5830,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Chord player, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "FingerTechniqueNight.dc.html": {
+      "x": 6360,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Finger technique, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabularyNight.dc.html": {
+      "x": 6890,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Jazz vocabulary, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ExerciseNight.dc.html": {
-      "x": 2650,
+      "x": 7420,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -821,8 +1100,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "CheckNight.dc.html": {
+      "x": 7950,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Check a song, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "MetronomeNight.dc.html": {
-      "x": 3180,
+      "x": 8480,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -831,7 +1119,7 @@
       "page": "practice"
     },
     "TunerNight.dc.html": {
-      "x": 3710,
+      "x": 9010,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -840,7 +1128,7 @@
       "page": "practice"
     },
     "ChordFinderNight.dc.html": {
-      "x": 4240,
+      "x": 9540,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -849,7 +1137,7 @@
       "page": "practice"
     },
     "CircleOfFifthsNight.dc.html": {
-      "x": 4770,
+      "x": 10070,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -1037,8 +1325,17 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "ChordsLaptopNight.dc.html": {
+    "LaptopNight.dc.html": {
       "x": 0,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Practice, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordsLaptopNight.dc.html": {
+      "x": 2223,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1046,8 +1343,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "PlayChordLaptopNight.dc.html": {
+      "x": 4446,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A chord practice run and its results, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ScalesLaptopNight.dc.html": {
-      "x": 2223,
+      "x": 6669,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1056,7 +1362,7 @@
       "page": "practice"
     },
     "IntervalsLaptopNight.dc.html": {
-      "x": 4446,
+      "x": 8892,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1064,8 +1370,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ProgressionsLaptopNight.dc.html": {
+      "x": 11115,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Progressions, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ProgressionLaptopNight.dc.html": {
-      "x": 6669,
+      "x": 13338,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1073,8 +1388,26 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "ProgressionEditLaptopNight.dc.html": {
+      "x": 15561,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A progression, edited by an editor, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "AccompanimentLaptopNight.dc.html": {
+      "x": 17784,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Accompaniment, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "PatternLaptopNight.dc.html": {
-      "x": 8892,
+      "x": 20007,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1082,8 +1415,44 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "PatternNewLaptopNight.dc.html": {
+      "x": 22230,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A new pattern, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordPlayerLaptopNight.dc.html": {
+      "x": 24453,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord player, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "FingerTechniqueLaptopNight.dc.html": {
+      "x": 26676,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Finger technique, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabularyLaptopNight.dc.html": {
+      "x": 28899,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Jazz vocabulary, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "ExerciseLaptopNight.dc.html": {
-      "x": 11115,
+      "x": 31122,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1091,8 +1460,17 @@
       "is_interactive": true,
       "page": "practice"
     },
+    "CheckLaptopNight.dc.html": {
+      "x": 33345,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Check a song, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
     "MetronomeLaptopNight.dc.html": {
-      "x": 13338,
+      "x": 35568,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1101,7 +1479,7 @@
       "page": "practice"
     },
     "TunerLaptopNight.dc.html": {
-      "x": 15561,
+      "x": 37791,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1110,7 +1488,7 @@
       "page": "practice"
     },
     "ChordFinderLaptopNight.dc.html": {
-      "x": 17784,
+      "x": 40014,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1119,7 +1497,7 @@
       "page": "practice"
     },
     "CircleOfFifthsLaptopNight.dc.html": {
-      "x": 20007,
+      "x": 42237,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1307,8 +1685,17 @@
       "is_interactive": true,
       "page": "places"
     },
-    "SettingsNight.dc.html": {
+    "PracticeResultNight.dc.html": {
       "x": 2650,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "A practice run’s results, from Profile, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SettingsNight.dc.html": {
+      "x": 3180,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -1316,8 +1703,17 @@
       "is_interactive": true,
       "page": "places"
     },
+    "AdminNight.dc.html": {
+      "x": 3710,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Administration, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LessonNight.dc.html": {
-      "x": 3180,
+      "x": 4240,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -1326,11 +1722,56 @@
       "page": "places"
     },
     "CourseNight.dc.html": {
-      "x": 3710,
+      "x": 4770,
       "y": 1720,
       "w": 450,
       "h": 920,
       "title": "A course, read and edited, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourLessonSettingsNight.dc.html": {
+      "x": 5300,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Your own lesson’s Settings, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourCourseSettingsNight.dc.html": {
+      "x": 5830,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Your own course’s Settings, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SignInNight.dc.html": {
+      "x": 6360,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Sign in and the account pages, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LegalNight.dc.html": {
+      "x": 6890,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Privacy Policy and Terms, Night, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AppLayersNight.dc.html": {
+      "x": 7420,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, Night, phone",
       "is_interactive": true,
       "page": "places"
     },
@@ -1514,8 +1955,17 @@
       "is_interactive": true,
       "page": "places"
     },
-    "SettingsLaptopNight.dc.html": {
+    "PracticeResultLaptopNight.dc.html": {
       "x": 11115,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "A practice run’s results, from Profile, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SettingsLaptopNight.dc.html": {
+      "x": 13338,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1523,8 +1973,17 @@
       "is_interactive": true,
       "page": "places"
     },
+    "AdminLaptopNight.dc.html": {
+      "x": 15561,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Administration, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
     "LessonLaptopNight.dc.html": {
-      "x": 13338,
+      "x": 17784,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1533,11 +1992,56 @@
       "page": "places"
     },
     "CourseLaptopNight.dc.html": {
-      "x": 15561,
+      "x": 20007,
       "y": 4939,
       "w": 2143,
       "h": 1299,
       "title": "A course, read and edited, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourLessonSettingsLaptopNight.dc.html": {
+      "x": 22230,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Your own lesson’s Settings, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourCourseSettingsLaptopNight.dc.html": {
+      "x": 24453,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Your own course’s Settings, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SignInLaptopNight.dc.html": {
+      "x": 26676,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Sign in and the account pages, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LegalLaptopNight.dc.html": {
+      "x": 28899,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Privacy Policy and Terms, Night, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AppLayersLaptopNight.dc.html": {
+      "x": 31122,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, Night, laptop",
       "is_interactive": true,
       "page": "places"
     }
@@ -1565,7 +2069,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 2570,
+      "maxW": 6280,
       "page": "songs"
     },
     "songs-laptop": {
@@ -1581,7 +2085,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 11035,
+      "maxW": 26596,
       "page": "songs"
     },
     "player-phone": {
@@ -1597,7 +2101,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 1510,
+      "maxW": 3630,
       "page": "player"
     },
     "player-laptop": {
@@ -1613,7 +2117,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 4366,
+      "maxW": 13258,
       "page": "player"
     },
     "practice-phone": {
@@ -1629,7 +2133,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 5220,
+      "maxW": 10520,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1645,7 +2149,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 22150,
+      "maxW": 44380,
       "page": "practice"
     },
     "places-phone": {
@@ -1661,7 +2165,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 4160,
+      "maxW": 7870,
       "page": "places"
     },
     "places-laptop": {
@@ -1677,7 +2181,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 17704,
+      "maxW": 33265,
       "page": "places"
     }
   },
@@ -1697,8 +2201,15 @@
     "SongsNight.dc.html",
     "ExploreNight.dc.html",
     "FolderNight.dc.html",
+    "ArchiveNight.dc.html",
+    "GroupsNight.dc.html",
     "SongNight.dc.html",
+    "SongSettingsNight.dc.html",
+    "SectionNight.dc.html",
     "EditorNight.dc.html",
+    "EditorDraftNight.dc.html",
+    "TakesNight.dc.html",
+    "TakeNight.dc.html",
     "SongsLaptop.dc.html",
     "ExploreLaptop.dc.html",
     "FolderLaptop.dc.html",
@@ -1714,8 +2225,15 @@
     "SongsLaptopNight.dc.html",
     "ExploreLaptopNight.dc.html",
     "FolderLaptopNight.dc.html",
+    "ArchiveLaptopNight.dc.html",
+    "GroupsLaptopNight.dc.html",
     "SongLaptopNight.dc.html",
+    "SongSettingsLaptopNight.dc.html",
+    "SectionLaptopNight.dc.html",
     "EditorLaptopNight.dc.html",
+    "EditorDraftLaptopNight.dc.html",
+    "TakesLaptopNight.dc.html",
+    "TakeLaptopNight.dc.html",
     "Player.dc.html",
     "PlayerLoop.dc.html",
     "PlayerKeyboard.dc.html",
@@ -1736,6 +2254,10 @@
     "PlayerNight.dc.html",
     "PlayerKeyboardNight.dc.html",
     "PlayerDoneNight.dc.html",
+    "PlayWalkNight.dc.html",
+    "PlayChromaticNight.dc.html",
+    "PlayProgressionNight.dc.html",
+    "PlayExerciseNight.dc.html",
     "PlayerLaptop.dc.html",
     "PlayerLaptopLoop.dc.html",
     "PlayerLaptopKeyboard.dc.html",
@@ -1747,6 +2269,10 @@
     "PlayExerciseLaptop.dc.html",
     "PlayerLaptopNight.dc.html",
     "PlayerLaptopKeyboardNight.dc.html",
+    "PlayWalkLaptopNight.dc.html",
+    "PlayChromaticLaptopNight.dc.html",
+    "PlayProgressionLaptopNight.dc.html",
+    "PlayExerciseLaptopNight.dc.html",
     "Main.dc.html",
     "Chords.dc.html",
     "PlayChord.dc.html",
@@ -1767,12 +2293,22 @@
     "Tuner.dc.html",
     "ChordFinder.dc.html",
     "CircleOfFifths.dc.html",
+    "MainNight.dc.html",
     "ChordsNight.dc.html",
+    "PlayChordNight.dc.html",
     "ScalesNight.dc.html",
     "IntervalsNight.dc.html",
+    "ProgressionsNight.dc.html",
     "ProgressionNight.dc.html",
+    "ProgressionEditNight.dc.html",
+    "AccompanimentNight.dc.html",
     "PatternNight.dc.html",
+    "PatternNewNight.dc.html",
+    "ChordPlayerNight.dc.html",
+    "FingerTechniqueNight.dc.html",
+    "JazzVocabularyNight.dc.html",
     "ExerciseNight.dc.html",
+    "CheckNight.dc.html",
     "MetronomeNight.dc.html",
     "TunerNight.dc.html",
     "ChordFinderNight.dc.html",
@@ -1797,12 +2333,22 @@
     "TunerLaptop.dc.html",
     "ChordFinderLaptop.dc.html",
     "CircleOfFifthsLaptop.dc.html",
+    "LaptopNight.dc.html",
     "ChordsLaptopNight.dc.html",
+    "PlayChordLaptopNight.dc.html",
     "ScalesLaptopNight.dc.html",
     "IntervalsLaptopNight.dc.html",
+    "ProgressionsLaptopNight.dc.html",
     "ProgressionLaptopNight.dc.html",
+    "ProgressionEditLaptopNight.dc.html",
+    "AccompanimentLaptopNight.dc.html",
     "PatternLaptopNight.dc.html",
+    "PatternNewLaptopNight.dc.html",
+    "ChordPlayerLaptopNight.dc.html",
+    "FingerTechniqueLaptopNight.dc.html",
+    "JazzVocabularyLaptopNight.dc.html",
     "ExerciseLaptopNight.dc.html",
+    "CheckLaptopNight.dc.html",
     "MetronomeLaptopNight.dc.html",
     "TunerLaptopNight.dc.html",
     "ChordFinderLaptopNight.dc.html",
@@ -1827,9 +2373,16 @@
     "LearnCoursesNight.dc.html",
     "LearnYoursNight.dc.html",
     "ProfileNight.dc.html",
+    "PracticeResultNight.dc.html",
     "SettingsNight.dc.html",
+    "AdminNight.dc.html",
     "LessonNight.dc.html",
     "CourseNight.dc.html",
+    "YourLessonSettingsNight.dc.html",
+    "YourCourseSettingsNight.dc.html",
+    "SignInNight.dc.html",
+    "LegalNight.dc.html",
+    "AppLayersNight.dc.html",
     "LearnLaptop.dc.html",
     "LearnLevelLaptop.dc.html",
     "LearnCoursesLaptop.dc.html",
@@ -1850,9 +2403,16 @@
     "LearnCoursesLaptopNight.dc.html",
     "LearnYoursLaptopNight.dc.html",
     "ProfileLaptopNight.dc.html",
+    "PracticeResultLaptopNight.dc.html",
     "SettingsLaptopNight.dc.html",
+    "AdminLaptopNight.dc.html",
     "LessonLaptopNight.dc.html",
-    "CourseLaptopNight.dc.html"
+    "CourseLaptopNight.dc.html",
+    "YourLessonSettingsLaptopNight.dc.html",
+    "YourCourseSettingsLaptopNight.dc.html",
+    "SignInLaptopNight.dc.html",
+    "LegalLaptopNight.dc.html",
+    "AppLayersLaptopNight.dc.html"
   ],
   "pages": [
     {

@@ -245,7 +245,7 @@ def kit(t, phone):
     m = re.search(r'(<section role="dialog" aria-label="Keyboard" [^>]*>.*?</h2>(?:<button[^>]*>Done</button></div>)?\n)(.*?)(</section>)', t, flags=re.S)
     assert m, 'keyboard sheet'
     t = t[:m.start(2)] + KBBODY + '\n' + t[m.end(2):]
-    t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: mm.group(1) + ' ' + KBVALS)
+    t = sub(t, r"(kb3d: keys && kbStyle === '3d', kb2d: keys && kbStyle === '2d',)", lambda mm: 'kbOn: !!keys, ' + mm.group(1) + ' ' + KBVALS)
     t = sub(t, r"const kbNames = s\.kbNames \?\? true;", "const kbLabel = s.kbLabel ?? 'names', kbNames = kbLabel !== 'none';\nconst DEG = ['1', '♭2', '2', '♭3', '3', '4', '♯4', '5', '♭6', '6', '♭7', '7'], labelOf = (m) => kbLabel === 'degrees' ? DEG[(m - keyPc + 120) % 12] : NOTE[m % 12];")
     t = lit(t, "t: mine ? NOTE[k.m % 12] :", "t: mine ? labelOf(k.m) :")
     t = lit(t, "const name = NOTE[m % 12];", "const name = labelOf(m);")
@@ -487,6 +487,8 @@ def floating(t, phone):
         t = t.replace("sheetTop: keys ? 44 : 64, bandTop: (keys ? 44 : 64) + 100,", "sheetTop: 76, bandTop: 176,", 1).replace("panoTop: keys ? 166 : 340,", "panoTop: 340,", 1)
     h = 'position: absolute; z-index: 21; background: rgba(254,253,251,.92); box-shadow: 0 0 0 1px rgba(51,41,33,.25)'
     chrome = (
+        # only while the piano shows (round 41: the grips stood on a bare score with the piano off)
+        '<sc-if value="{{kbOn}}" hint-placeholder-val="{{false}}">'
         '<div aria-hidden="true" style="position: absolute; z-index: 20; left: {{kbLeft}}px; top: {{kbTop}}px; width: {{kbW}}px; height: {{kbH}}px; border-radius: 20px; pointer-events: none">'
         # the grip along the top: hold and move
         '<span data-tip="Move the piano" style="position: absolute; left: 50%; top: 0; width: 88px; height: 24px; margin-left: -44px; display: flex; align-items: center; justify-content: center; cursor: grab; pointer-events: auto">'
@@ -500,7 +502,7 @@ def floating(t, phone):
         f'<span style="{h}; left: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
         f'<span style="{h}; right: 3px; top: 50%; width: 4px; height: 28px; margin-top: -14px; border-radius: 2px; cursor: ew-resize"></span>'
         f'<span style="{h}; left: 50%; bottom: 3px; width: 28px; height: 4px; margin-left: -14px; border-radius: 2px; cursor: ns-resize"></span>'
-        '</div>')
+        '</div></sc-if>')
     anchor = '<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n\n</sc-if>\n</sc-if>'
     assert anchor in t, 'anchor'
     t = t.replace(anchor, chrome + '\n' + anchor, 1)
