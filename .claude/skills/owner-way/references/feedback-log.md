@@ -844,7 +844,8 @@ are reference only, but progressions are facts.
 
 - **Offline said one way (loop round 22):** "You’re offline. <What> needs a connection." everywhere a screen
   needs the network (Administration and Report a problem were "You are offline… requires an internet
-  connection"); ru «Нет подключения к интернету. Для … нужна сеть.» (2026-11-15).- **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
+  connection"); ru «Нет подключения к интернету. Для … нужна сеть.» (2026-11-15).
+- **Professional wording, everywhere:** "refactor all the text and string and all names and write professionally, not
   plain words. write professional wording and sentences and not plain like you did before" — labels, settings, tips and
   empty states read like Apple, Chordify, Flat or MuseScore, in en and ru; this replaces the earlier "plain words" (2026-11-05).
 
