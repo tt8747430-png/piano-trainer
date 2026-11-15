@@ -902,6 +902,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Loop round 33, every sheet's handle as the boards' BSHEET:** 36 × 5 in the line colour (#DAD1C8, #453E38 by Night), where it was a 96 × 4 sand bar barely seen; one handle, so every sheet (2026-11-15).
 - **Loop round 33, the phone's tab bar wears the board's filled icons:** Learn's cap, Songs' notes, Practice's metronome and the Profile's figure filled at 25, as the kit's TABBAR (Apple's HIG: filled symbols in a tab bar); the laptop's sidebar keeps Lucide's outlines; a signed-in learner's picture stays the Profile's tab (2026-11-15).
 - **Loop round 29, a place's title tabs as the Songs board:** the view not in sight (Explore beside My songs) in the line's colour, 26 at 700 with -0.01em tracking, the chosen in ink; hover brings it to soft ink.
 - **Search names a song as the library does (loop 25, PAL):** a song result shows its printed title, else its composer, under its title (Amazing Grace over "New Britain (American folk tune)"), from the one `entryAuthor` the library's rows use (2026-11-15).
