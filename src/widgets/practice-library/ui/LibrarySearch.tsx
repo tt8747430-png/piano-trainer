@@ -127,7 +127,7 @@ export function LibrarySearch({
             }
             show={
               kept > 0
-                ? t('practice:library.show', { count: kept })
+                ? t(`practice:library.kinds.${kind}.show`, { count: kept })
                 : t('practice:library.showNone')
             }
             onShow={close}

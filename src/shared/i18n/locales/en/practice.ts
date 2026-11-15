@@ -765,7 +765,6 @@ export const practice = {
     anyLevel: 'Any',
     anyStyle: 'Any',
     chipLevel: 'Level: {{level}}',
-    show: 'Show {{count}}',
     showNone: 'Nothing to show',
     clear: 'Clear',
     noFavourites: 'No favourites yet',
@@ -788,6 +787,8 @@ export const practice = {
         favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
         all: 'All exercises',
         mineEmpty: 'Nothing of your own here yet.',
+        show_one: 'Show {{count}} exercise',
+        show_other: 'Show {{count}} exercises',
       },
       accompaniment: {
         tree: 'Accompaniment by book',
@@ -796,6 +797,8 @@ export const practice = {
         favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
         all: 'All accompaniment',
         mineEmpty: 'Patterns you make are kept here.',
+        show_one: 'Show {{count}} pattern',
+        show_other: 'Show {{count}} patterns',
       },
       progressions: {
         tree: 'Progressions by style',
@@ -804,6 +807,8 @@ export const practice = {
         favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',
         all: 'All progressions',
         mineEmpty: 'Progressions you keep are here.',
+        show_one: 'Show {{count}} progression',
+        show_other: 'Show {{count}} progressions',
       },
     },
   }, // The Metronome (ADR 0052): its tempo, sound, time signature and beats.
