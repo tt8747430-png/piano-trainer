@@ -1,4 +1,3 @@
-import { Upload } from 'lucide-react'
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ContentKind } from '@/shared/api/content'
@@ -27,8 +26,6 @@ export function PublishRow({
     <RowLink
       title={t('publishPage.open')}
       value={published === null ? undefined : t(`publishPage.standing.${standing}`)}
-      icon={Upload}
-      paint="sky"
       render={link}
     />
   )

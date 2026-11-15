@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams, useRouter } from '@tanstack/react-router'
-import { Archive, ArchiveRestore, Copy, Download, FolderInput, Globe, Link2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { placeIn, useFolderName, useLibraryLayout } from '@/entities/library'
@@ -32,6 +31,7 @@ import {
   ConfirmDialog,
   NotFound,
   DangerGroup,
+  ActionRow,
   DangerRow,
   RowButton,
   RowLink,
@@ -154,24 +154,16 @@ function SongSettings({ piece }: { piece: Piece }) {
               <RowButton
                 title={t('settings.folder')}
                 value={folder}
-                icon={FolderInput}
-                paint="grass"
+                opens
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
             {copyable ? (
-              <RowButton
-                title={t('settings.duplicate')}
-                icon={Copy}
-                paint="yellow"
-                onClick={() => setCopying(true)}
-              />
+              <ActionRow title={t('settings.duplicate')} onClick={() => setCopying(true)} />
             ) : null}
-            <RowButton
+            <ActionRow
               title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
-              icon={archived ? ArchiveRestore : Archive}
-              paint="lilac"
               onClick={() =>
                 library.actions
                   .find((each) => each.key === (archived ? 'restore' : 'archive'))
@@ -192,21 +184,16 @@ function SongSettings({ piece }: { piece: Piece }) {
                     ? 'editor:publishPage.standing.changed'
                     : 'editor:publishPage.standing.unpublished',
               )}
-              icon={Globe}
-              paint="lilac"
               render={<Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />}
             />
           ) : original ? (
             <OriginalPublishRow piece={original} />
           ) : null}
-          {shareable ? (
-            <RowButton title={t('settings.shareLink')} icon={Link2} paint="grass" onClick={share} />
-          ) : null}
+          {shareable ? <ActionRow title={t('settings.shareLink')} onClick={share} /> : null}
           <RowButton
             title={t('songs:export.action')}
-            detail={t('settings.exportLine')}
-            icon={Download}
-            paint="sky"
+            value={t('settings.exportLine')}
+            opens
             onClick={() => setExporting(true)}
           />
         </SettingsGroup>

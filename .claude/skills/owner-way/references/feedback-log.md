@@ -223,6 +223,12 @@ owner's, typos fixed.
 
 ## Song page
 
+- **Loop round 16, an item's Settings in plain rows (the SongSettings, YourCourseSettings and YourLessonSettings
+  boards):** a song's, a course's, a lesson's and a progression's Settings carry no coloured tiles; what acts there and
+  then (Duplicate, Archive, Share link, Reset progress) is a row in the link's blue, 16 regular, as the kit's action row
+  everywhere; a row that opens a choice says its value at its end with a chevron (Folder, Export… MusicXML, MIDI). The
+  app's Settings keep their tiles, as the Settings board draws them (2026-11-15).
+
 - **Loop round 16, the first page prints its chords (the Song board's cover):** each chord symbol over its bar, the
   Player's label row at the cover's size; a song written as chords alone shows its accompaniment under them, no tune
   invented (2026-11-15).

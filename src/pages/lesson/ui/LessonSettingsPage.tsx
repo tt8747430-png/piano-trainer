@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Bookmark, Languages, Link2, ListChecks, Map, type LucideIcon } from 'lucide-react'
+import { ListChecks } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
@@ -31,12 +31,11 @@ import {
   ChoiceCard,
   ChoiceRow,
   MultiDropdown,
-  RowButton,
+  ActionRow,
   RowLink,
   say,
   ScreenHeader,
   SettingsGroup,
-  TileMark,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { OwnLessonSettings } from './OwnLessonSettings'
@@ -150,14 +149,7 @@ function LessonSettings({
     if (shared === 'copied') say(t('settings.shared'))
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
-  const shareRow = (
-    <RowButton
-      title={t('settings.shareLink')}
-      icon={Link2}
-      paint="grass"
-      onClick={() => void share()}
-    />
-  )
+  const shareRow = <ActionRow title={t('settings.shareLink')} onClick={() => void share()} />
   return (
     <div className="flex flex-col gap-6 pb-8">
       <ScreenHeader title={t('settings.title')} back={back} />
@@ -208,13 +200,12 @@ function LessonSettings({
   )
 }
 
-/** A row that says a value, not a way on: its tile, its name, the value at its end. */
-function ValueRow({ title, value, icon }: { title: string; value: string; icon: LucideIcon }) {
+/** A row that says a value, not a way on: its name, the value at its end (the boards' plain row). */
+function ValueRow({ title, value }: { title: string; value: string }) {
   return (
     // Its name kept whole: a long value wraps under itself, at the row's end.
-    <div className="flex min-h-16 min-w-0 items-center gap-3 py-2 pr-4 pl-2">
-      <TileMark icon={icon} paint="lilac" />
-      <span className="shrink-0 text-lg font-semibold">{title}</span>
+    <div className="flex min-h-12 min-w-0 items-center gap-3 px-4 py-2">
+      <span className="shrink-0 text-base">{title}</span>
       <span className="min-w-0 flex-1 text-right text-balance text-muted-foreground">{value}</span>
     </div>
   )
@@ -251,23 +242,11 @@ function EditorRows({
       <SettingsGroup flush title={t('settings.lesson')}>
         {where.kind === 'level' ? (
           <>
-            <RowLink
-              title={t('settings.level')}
-              value={where.level}
-              icon={Map}
-              paint="sky"
-              render={where.manage}
-            />
-            <ValueRow title={t('settings.chapter')} value={where.chapter} icon={Bookmark} />
+            <RowLink title={t('settings.level')} value={where.level} render={where.manage} />
+            <ValueRow title={t('settings.chapter')} value={where.chapter} />
           </>
         ) : (
-          <RowLink
-            title={t('settings.inCourse')}
-            value={where.course}
-            icon={Map}
-            paint="sky"
-            render={where.link}
-          />
+          <RowLink title={t('settings.inCourse')} value={where.course} render={where.link} />
         )}
         {readFirst && written ? (
           <ChoiceRow title={t('settings.readFirst')} icon={ListChecks} paint="grass">
@@ -292,7 +271,6 @@ function EditorRows({
         ) : null}
         <ValueRow
           title={t('settings.languages')}
-          icon={Languages}
           value={
             written === null
               ? t('settings.opening')

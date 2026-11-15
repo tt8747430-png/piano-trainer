@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Link2, Library } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { COURSES, courseById, courseStepIds, type Course } from '@/entities/course'
 import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
@@ -8,7 +7,7 @@ import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, RowButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { ActionRow, BackButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { OwnCourseSettings } from './OwnCourseSettings'
 
@@ -43,12 +42,7 @@ export function CourseSettingsPage() {
         {editsContent(account) ? <EditorRows course={course} /> : null}
         <SettingsGroup flush title={t('settings.share')}>
           {editsContent(account) ? <CoursePublishRow course={course} /> : null}
-          <RowButton
-            title={t('settings.shareLink')}
-            icon={Link2}
-            paint="grass"
-            onClick={() => void share()}
-          />
+          <ActionRow title={t('settings.shareLink')} onClick={() => void share()} />
         </SettingsGroup>
         <ResetStepsRow
           steps={courseStepIds(course)}
@@ -81,8 +75,6 @@ function EditorRows({ course }: { course: Course }) {
       <RowLink
         title={t('edit.course.shelf')}
         value={t(`shelves.${course.shelf}`)}
-        icon={Library}
-        paint="sky"
         render={<Link to="/courses" search={{ edit: true }} />}
       />
     </SettingsGroup>

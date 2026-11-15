@@ -1,8 +1,7 @@
-import { RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import type { StepId } from '@/entities/step'
-import { RowButton, SettingsGroup, say } from '@/shared/ui'
+import { ActionRow, SettingsGroup, say } from '@/shared/ui'
 import { resetSteps, restoreSteps } from '../reset-steps'
 
 /**
@@ -27,10 +26,8 @@ export function ResetStepsRow({
   const store = useProgressStoreApi()
   return (
     <SettingsGroup flush title={t('progressGroup')}>
-      <RowButton
+      <ActionRow
         title={words.row}
-        icon={RotateCcw}
-        paint="sand"
         onClick={() => {
           const forgotten = resetSteps(store, steps)
           say(words.done, { label: words.undo, onClick: () => restoreSteps(store, forgotten) })

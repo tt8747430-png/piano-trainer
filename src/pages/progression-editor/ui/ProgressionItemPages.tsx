@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Link2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   blankProgression,
@@ -16,7 +15,7 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   ProgressionTiles,
-  RowButton,
+  ActionRow,
   say,
   ScreenHeader,
   SettingsGroup,
@@ -81,12 +80,7 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
                   />
                 }
               />
-              <RowButton
-                title={t('editor:publishPage.shareLink')}
-                icon={Link2}
-                paint="grass"
-                onClick={() => void share()}
-              />
+              <ActionRow title={t('editor:publishPage.shareLink')} onClick={() => void share()} />
             </SettingsGroup>
             {shipsWithApp(progression.id) ? null : (
               <RemoveGroup
