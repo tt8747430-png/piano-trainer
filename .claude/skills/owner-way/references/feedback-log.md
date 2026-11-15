@@ -791,6 +791,11 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 22, a badge's and a milestone's pages to their boards (P9_BADGE, P9_MILE):** the medal 88, the
+  name 26 bold sans, its tier line 15; How to earn it and Personal records in small capitals; Tiers and Milestones
+  20 bold heads with their value at the right; tier rows 60 high with 36 medals, locked ones dimmed, the date
+  reached in green; a milestone's picture a rounded square (12 in a row, 24 at its head); 44 marks in lists
+  (2026-11-15).
 - **Loop round 22, Profile's Streak and Achievements to their boards (P9_STREAK, P9_ACH):** Streak is the flame
   in a 64 sand wash beside "n day streak" (28 bold sans) and its line, the calendar, then Longest streak and Days
   this month as value rows on white (`GroupRows surface="sheet"`, the board's `bg=SHEET`); the records' figures

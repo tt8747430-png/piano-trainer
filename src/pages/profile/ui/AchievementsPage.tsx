@@ -40,8 +40,11 @@ export function AchievementsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('profile.achievements.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <section aria-labelledby={recordsId} className="flex flex-col gap-2">
-          <h2 id={recordsId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+        <section aria-labelledby={recordsId} className="flex flex-col gap-1.5">
+          <h2
+            id={recordsId}
+            className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+          >
             {t('profile.achievements.records')}
           </h2>
           <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -55,9 +58,9 @@ export function AchievementsPage() {
             ))}
           </dl>
         </section>
-        <section aria-labelledby={milestonesId} className="flex flex-col gap-2">
-          <div className="flex flex-col px-3">
-            <h2 id={milestonesId} className="font-sans text-sm font-semibold text-muted-foreground">
+        <section aria-labelledby={milestonesId} className="flex flex-col gap-1.5">
+          <div className="flex items-baseline justify-between gap-3 px-1">
+            <h2 id={milestonesId} className="font-sans text-xl font-bold">
               {t('profile.achievements.milestones')}
             </h2>
             <p className="text-sm text-muted-foreground">
@@ -87,11 +90,11 @@ export function AchievementPage() {
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={name} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
           <MilestoneMark id={achievementId} earned={day !== null} size="hero" />
-          <p className="font-display text-2xl font-semibold">{name}</p>
-          <p className="text-muted-foreground">
+          <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
+          <p className="text-[0.9375rem] text-muted-foreground">
             {day
               ? t('profile.achievements.earned', { date: dayName(day) })
               : t('profile.achievements.notEarned')}
@@ -100,11 +103,11 @@ export function AchievementPage() {
         <section aria-labelledby="achievement-how" className="flex flex-col gap-1.5">
           <h2
             id="achievement-how"
-            className="px-3 font-sans text-sm font-semibold text-muted-foreground"
+            className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
           >
             {t('profile.achievements.how')}
           </h2>
-          <p className="card px-4 py-3 text-pretty">
+          <p className="card px-4 py-3.5 text-pretty">
             {t(`profile.achievements.ways.${achievementId}`)}
           </p>
         </section>

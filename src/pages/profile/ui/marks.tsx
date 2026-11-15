@@ -12,7 +12,15 @@ const TIER_PAINT: Readonly<Record<Tier, Paint>> = {
   platinum: 'lilac',
 }
 
-const SIZE = { row: 'size-12 [&_svg]:size-6', hero: 'size-24 [&_svg]:size-11' } as const
+/** The boards' medals: 44 in a list's row, 36 in a badge's tiers, 88 at the head of its page. */
+const SIZE = {
+  row: 'size-11 [&_svg]:size-5.5',
+  tier: 'size-9 [&_svg]:size-4',
+  hero: 'size-22 [&_svg]:size-10',
+} as const
+
+/** A milestone's tile is a rounded square (P9_MILE): 12 in a row, 24 at the head of its page. */
+const TILE = { row: 'rounded-xl', tier: 'rounded-lg', hero: 'rounded-[1.5rem]' } as const
 
 /** A badge's picture: its icon on its tier's paint, or greyed before its first (its meter says how far). */
 export function BadgeMark({
@@ -57,8 +65,9 @@ export function MilestoneMark({
     <span
       aria-hidden
       className={cn(
-        'grid shrink-0 place-items-center rounded-pill',
+        'grid shrink-0 place-items-center',
         SIZE[size],
+        TILE[size],
         earned ? cn(PAINT.grass.fill, PAINT.grass.ink) : 'bg-muted text-muted-foreground',
       )}
     >
