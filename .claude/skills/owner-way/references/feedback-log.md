@@ -67,6 +67,8 @@ owner's, typos fixed.
   from here, the one honey control); the categories by name over the tools; every tool a 48px sand tile, the chosen
   in ink. Flat's list view and the sections that folded on a laptop are gone (`.scratch/r39/plan/editor-port.md`).
 - **The editor's draft (canvas 135, 2026-11-11):** "no roles, no edit mode": a built-in song's original is edited by an editor as a draft under a Publishing pill with Publish…, Versions and Discard changes; what reaches every learner asks first.
+- **The tempo's pickers say their name once (loop 22, 2026-11-15):** Beat and Tempo text stand at the row's start, so
+  their pickers show the value alone (♩, None), in the editor's Tempo sheet and the New song sheet alike.
 
 ## Pickers and tempo
 

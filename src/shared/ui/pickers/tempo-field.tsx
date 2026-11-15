@@ -133,6 +133,7 @@ export function TempoField({
       {units ? (
         <Row name={t('tempoField.beat')}>
           <MenuPicker
+            bare
             label={t('tempoField.beat')}
             value={value.unit}
             face={(unit) => (
@@ -189,6 +190,7 @@ export function TempoField({
         <>
           <Row name={t('tempoField.text')}>
             <MenuPicker
+              bare
               label={t('tempoField.text')}
               value={textChoice}
               options={[
