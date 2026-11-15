@@ -218,6 +218,7 @@ export const settings = {
   // Report a problem (R29 B2, R32): its own page, sent with the app's error reports.
   report: {
     label: 'Description',
+    placeholder: 'What were you doing, and what happened?',
     footnote:
       'Include what you were doing and the screen you were on. Reports are anonymous and read by the Piano Trainer team.',
     offline: 'You’re offline. Sending needs a connection.',

@@ -211,6 +211,7 @@ export const settings: LocaleResources['settings'] = {
   },
   report: {
     label: 'Описание',
+    placeholder: 'Что вы делали и что произошло?',
     footnote:
       'Укажите, что вы делали и на каком экране. Сообщения анонимны, их читает команда Piano Trainer.',
     offline: 'Нет подключения к интернету. Для отправки нужна сеть.',
