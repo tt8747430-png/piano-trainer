@@ -171,7 +171,12 @@ function KeyButton({
           <Glyph
             text={look.label.text}
             className={cn(
-              'font-bold tabular-nums',
+              'tabular-nums',
+              // A plain key's name is quiet (the boards' keys: 12, medium, soft ink); a lit or marked
+              // key's label is bold in its own ink.
+              look.label.kind === 'name' && !look.down && look.fill === 'white'
+                ? 'font-medium text-muted-foreground/80'
+                : 'font-bold',
               look.label.kind === 'name' || look.label.caption ? 'text-xs' : 'text-sm',
               slim && SLIM.text,
             )}

@@ -16,14 +16,17 @@ import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
-/** Fit's white keys: never narrower than this (the phone boards' 21), so a finger finds them… */
-const MIN_WHITE_PX = 21
+/**
+ * Fit's white keys: never narrower than this, so a finger finds them: the phone boards' keys, about
+ * two octaves across a 402 phone (15 white keys, 26.8 each)…
+ */
+const MIN_WHITE_PX = 26
 /** …and as wide as this many white keys in the width allows: five octaves, as the laptop boards draw. */
 const WHITES_IN_VIEW = 36
 /** Fit's keys are as long as the boards draw them: 112 on a phone, up to 132 on a laptop. */
 const FIT_LENGTH = { least: 112, most: 132, perWhite: 3.6 } as const
 /** Where the keys asked to be in sight must all fit (`fitInView`), Fit narrows them to this at most. */
-const NARROWEST_FIT_PX = 22
+const NARROWEST_FIT_PX = 26
 /** …nor wider than this: a wide screen shows the neighbouring keys instead. */
 const MAX_WHITE_PX = 48
 /** Large keys: about an octave in view on a phone. */

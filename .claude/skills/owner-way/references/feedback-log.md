@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 28, one keyboard as the boards draw it (owner, 2026-11-15: "the keyboard is not consistent across the app with new design"):** a plain key's name ("C4") is 12, medium, in soft ink, a lit or marked key's label bold in its own ink, on every keyboard (Practice, the Player, the editor); a white key is never narrower than the phone boards' 26 (about two octaves across a phone), the editor's keys included, which narrowed to 22 to hold both hands (2026-11-15).
 - **Loop round 28, the editor's bar as its board (owner, 2026-11-15: "but the headers still dont match"):** no band of paper and no hairline; Close a 44 glass circle; Play · Edit one glass pill of 44 segments, 15px, Edit filled in ink; Undo, Redo and ··· together in one glass pill. The Player's title on a phone takes all the room its buttons leave, so "Words: John Newton · Music: New Britain" shows as the board writes it (2026-11-15).
 - **The keys hold middle C when the caret has nothing (loop round 18):** with no note at the caret (a new score, an empty bar, a rest with no hand under it), the editor's keys centre on C3 to C5 as the Editor boards draw them, instead of sitting at the bottom of the score's span; with notes at the caret they still follow them.
 - **Review your recording ported to its board** (canvas 195): Quantize's five values in one row (Segmented wraps five only past 20 characters, words, never values), and a flush group pads its switch rows 16 itself, so Hide raw notes and Hear notes no longer touch the card's edge.
