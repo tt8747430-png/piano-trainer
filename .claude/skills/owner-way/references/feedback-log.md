@@ -11,7 +11,6 @@ owner's, typos fixed.
 - **Loop round 31, the tools stay in place, greyed, as Flat's (owner, 2026-11-15: "make the design exactly like the flat editor"; replaces R32-B's "only the tools that act on what is chosen are drawn"):** with no note chosen, Pitch, Articulations, Ornaments, Dynamics and the tempo marks keep every key in their place at 40%, disabled, "Choose a note" their tooltip; the phone's row the same; no line of text stands in their place (2026-11-15).
 - **Loop round 30, the palette's section titles in the sans** (15, 600, ink), as the Editor boards draw them, no longer the book serif. The laptop bar keeps no title: the score prints it where it is edited, so the board's title beside Close would say it twice.
 - **The editor's foot reaches the screen's edge, as Flat's:** what stands last (the keys, else the palette) runs on under the home indicator, its own paper filling the inset, instead of a bare band of page under it.
-- **What waits for a note says so quietly:** a section whose tools need a chosen note shows one soft line under its title, as Flat greys what cannot act; the dashed box that repeated down the panel is gone.
 - **The keys as Flat's (owner, 2026-11-15: "it doesnt make ant sense for the keyboard to close like thet, make like the flat editor does"):** unfolding the palette no longer folds the keys into a "Keyboard" strip; they step aside under the open palette and come back as it folds, their own state untouched; the piano button beside the selection is their one switch, and hidden they leave nothing behind (the strip is gone from the editor).
 - **The page view as Flat's (owner, 2026-11-15: "also the page view"):** the pages' canvas reaches the screen's edges with no rounded frame round it; each page's number stands at its head's outer corner, right on an odd page and left on an even one, as Flat and an engraver print it (the Player's pages too).
 - **The palette as Flat's (owner, 2026-11-15: "why don't you make the design exactly like the flat editor"; `flat-score-editor` IMG_4449–4485 and the owner's 17:30 shots):** folded, the chosen category's tools in one row of bare glyphs in soft ink, the chosen on a sand wash; under them, at the sheet's foot, the categories as Flat's tab bar of signs (♩, ♭♯, >, tr, ppp, the barline, 𝄞, ♯♯, 4/4, the repeat, Aa) in a sand pill, each named in its tooltip, and the button that unfolds the palette beside it; unfolded, every section a ruled table of 44px cells in a hairline box, a wide key two cells. The tabs' short names are gone (en, ru). Canvas v204.
@@ -28,20 +27,9 @@ owner's, typos fixed.
 - **Loop round 24, R38 in the editor:** deleting an instrument (or hiding the piano) happens at once, "Deleted
   Voice · Undo" in its toast; Undo steps the score back and restores the staves' view; no question, no "Delete…"
   (2026-11-15).
-- **Loop round 23, the keys as the boards draw them (one piano):** Fit's white keys are as wide as 36 in the
-  width allows, never under 21 (19 in view on a phone, five octaves on a laptop), and the keys 112 long on a phone
-  up to 132 on a laptop, as the Editor and EditorLaptop boards measure; Large and Piano keep their own (2026-11-15).
-- **The palette's tabs by name (loop, 2026-11-13, canvas 123's "seven named categories"):** a phone's strip reads
-  Notes · Pitch · Articulations · Ornaments · Dynamics · Measures · Clef · Key · Time · Repeats · Text, each its short
-  name; the section below keeps its full title. No category is a picture alone.
 - **The Editor board brought to the ruled tabs (loop, 2026-11-15, canvas 187):** the board still drew Notes ·
   Accidentals · Articulation · Dynamics · Lines · Bar · Text; it now draws the eleven the app holds, each item where
   `EditorPalette.tsx` keeps it (the slur and fingering in Articulations, the pedal in Dynamics, the octave lines in Pitch).
-- **One home for each thing; only what applies shown:** "we can at the same time edit the time signature from the
-  settings and from the palette which is strange"; "show only the actions relevant at that time like the write as common
-  in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano
-  shown on a phone from the editor itself, never only from Settings (2026-11-05).
-
 - **One home each, as Flat (2026-11-05):** "we can at the same time edit the time signature from the settings and from
   the palette which is strange". The time signature, key and clef are set in the palette's category, which their
   printed signs open; the title opens Title and credits; the gear holds only what the score does not print.
@@ -50,7 +38,6 @@ owner's, typos fixed.
 - **The palette as Flat's, its menus too (2026-11-05):** "this menu in the palette doesn't follow how the flat editor
   does this … as close as possible as the flat editor and its ui and its management and features". Every section in
   one scroll; Time signature as Flat's tiles with Customize; Key signature and Clef bare tables; Tempo in Measure.
-- **Piano keys on a phone (2026-11-05):** a button in the editor's bar, never only in the gear.
 - **Professional wording (2026-11-05):** "write professionally, not plain words": precise notation terms and concise
   sentences, as Apple, Flat, MuseScore and Dorico write them, in English and Russian.
 - **A real notation app:** "proper scores, proper functions like a real music notation software". Like Flat's: "the same
@@ -73,12 +60,6 @@ owner's, typos fixed.
   be a single staff.
 - **Every song is editable.** Where something cannot be, the learner is told why.
 - **Recording:** the learner chooses what plays along and what shows. The pedal prints one mark per press.
-- **The Player in Edit (canvas 123, 2026-11-11):** the bar is the Player's (✕, Play · Edit, Undo, Redo, ···); a
-  selection strip with Play from here heads the palette; seven named categories with drawn note icons; keys under it.
-- **The editor built to its canvas (loop, round 10):** the bar is ✕, Play · Edit in the middle, Undo, Redo and
-  ··· (Score settings); the palette's head is the selection strip (what the caret is on, Delete, Piano keys, Play
-  from here, the one honey control); the categories by name over the tools; every tool a 48px sand tile, the chosen
-  in ink. Flat's list view and the sections that folded on a laptop are gone (`.scratch/r39/plan/editor-port.md`).
 - **The editor's draft (canvas 135, 2026-11-11):** "no roles, no edit mode": a built-in song's original is edited by an editor as a draft under a Publishing pill with Publish…, Versions and Discard changes; what reaches every learner asks first.
 - **The tempo's pickers say their name once (loop 22, 2026-11-15):** Beat and Tempo text stand at the row's start, so
   their pickers show the value alone (♩, None), in the editor's Tempo sheet and the New song sheet alike.
@@ -139,9 +120,6 @@ owner's, typos fixed.
 - **Loop round 24, the piano a window over the music (owner, IMG_6045–6056: "piano should also be floating and draggabble and resizeble from all the angles"; canvas v202):** the keys, 3D or 2D, are a rounded, lifted window over the music's foot above the transport (the phone's 8px from each side, the laptop's 1100 wide and centred, as the board draws them), never a docked row. Its grip along the top moves it (the arrow keys too; a double tap puts it back); a handle at each corner and on the left, right and bottom sizes it. Each screen size keeps its own window; the music scrolls clear of it and the first tip sits above it. The keys' dock setting no longer acts in the Player; the divider is gone (2026-11-15).
 - **Loop round 24, the Parts sheet (owner, IMG_6045–6056: "hands settings should be refactored"; the board's Parts, R43 canvas 119):** the transport's hands open Parts: a card for each hand, the right first, with its picture in its paint, its name and a switch for whether you play it (one stays on), its volume (how loud the app plays it when you don't; 0, not at all) and, on the hand you don't play, Dim. Left · Both · Right, Hear the other hand, Player settings › Hands and the other hand's Hide are gone: the volume and Dim say it all, in one home (2026-11-15).
 - **No pedal under silence (loop round 18):** music with no chord symbols and no pedal marks is pedalled bar by bar only where a bar sounds a note; a new song's empty bars, or a bar of rests, carry no Ped. and no pedal is held.
-- **Loop round 24, Version without explanation lines:** Original · Simplified · Easy each its name and dots under
-  Difficulty ⓘ, which says what each is; a line stays only where one cannot be chosen ("Its chords are already
-  simple") (2026-11-15).
 - **Loop round 24, no explanation under a pattern:** the Accompaniment page's Pattern row is its name alone (a
   mix still says "Left hand changed"); the Pattern list shows each pattern's two hands as bars, as the hands' lists
   do, with a line only for why one cannot be chosen ("Needs a melody staff"); what a pattern is stays in Pattern's ⓘ
@@ -158,16 +136,7 @@ owner's, typos fixed.
   board draws Layout as the Sheet section's first row, before Show; the floating pill over the score is gone from the
   Player. The three layouts stay (Songscription's Endless tall). The editor keeps its gear's View on a phone and the
   pill beside its docked panel.
-- **The Player's bar and transport built to the canvas (loop, round 10):** the bar is Close, the views as one pill
-  (pictures on a phone, words from 640px) and the gear, bare over the paper; the title is the score's; Edit score,
-  Share link and ··· (Print, Export) head the Settings; the transport is [Pace · Loop] [‹ ▶ ›] [Hands · Keyboard],
-  the metronome a switch in Pace, Restart only the Home key. Port table `.scratch/r39/plan/player-port.md`.
-  Then: Transpose and Version are the Settings' first rows, opening in the sheet (the foot row is gone); a caption
-  under each transport picture; Pace is the Practice sheet (Wait · Play cards, the Metronome's tempo face, Metronome
-  Off · Count-in · On); Keyboard opens the Piano sheet (Show the piano, 3D piano · 2D keys, All piano settings,
-  Connect a piano). Two choices as cards are `RadioCards`, one component.
-- **The docked transport in three groups, the tip that teaches (loop, 2026-11-13):** canvas 116's "three glass
-  groups, ‹ ▶ › the tinted one" built into the docked row (R31-P keeps it off the music); the first tip says what a
+- **The tip that teaches (loop, 2026-11-13):** the first tip says what a
   learner cannot guess ("Tap a note to start from there, then press Play"), never what the Play button already says.
 - **Songscription's score page is a Player reference (2026-11-11):** "will this help you", "ok document this": the owner's saved copy, read for its controls, is written up in `.scratch/r39/plan/player-reference-songscription.md` with five proposals for the Player canvas (Endless tall, tempo by dragging, the song's keys only, shortcuts beside their names, Reset in the Key sheet). The export itself never enters the repo: it shows the owner's account and carries a recorded song.
 - **Musicca's chord player page, read (2026-11-11):** the owner's export of musicca.com/chord-player is compared with our Chord player in `.scratch/r39/plan/practice-chord-player.md` (Reference): Variation per section, Time signature, Download as audio, beat ticks and edge-dragged lengths, typed chords, draggable chords. Exports stay out of the repo.
@@ -194,7 +163,7 @@ owner's, typos fixed.
   proper refactoring of the settings of the buttons of the styles and so on". The Player's sheets now use the Chords
   kit throughout: centred title and Done, green switches, plain groups, radio cards with a check, Keyboard as Chords'.
 - **The Player speaks the Chords page's language (R43, canvas 116):** "update the player with the same style updates
-  and instructions". Light glass bar; the transport as three glass groups, ‹ ▶ › the tinted one, each symbol over its
+  and instructions". The transport as three glass groups, ‹ ▶ › the tinted one, each symbol over its
   value on a phone; Transpose the Chords page's Key (letters, ♭ ♮ ♯ on the chosen letter, spelled by direction, Back
   to the written key). A pattern settled on one page is carried to every page that has the same thing.
 - **The end of a run says what happened and what next** (2026-11-07, the redesign skill's evidence of care): Played
@@ -212,7 +181,7 @@ owner's, typos fixed.
 - **Settings a learner understands, ordered by what matters to them;** the sheet's View settings usable; nothing reserves
   a band above the keyboard, nor a tip; proper pedals, not a lever at the keys' corner (piano sites as the reference);
   the Player smooth with many notes (the Fantaisie hung). Build the approved mockup whole, "not only half" (2026-11-05).
-  Built in R32-A: pedals centred beneath the keys on the piano's rail; `/settings/player` gone, the gear the Player's settings' home.
+  `/settings/player` gone, the gear the Player's settings' home.
 - **Proper pianos, proper pedals (2026-11-05):** "i need proper pianos with proper pedal and implementations" (musicca,
   piano.org). Built in R33: ivory and ebony keys with felt and depth everywhere; the sustain held, latched (a lit
   indicator) or the score's, every key under it released together with a real damper; soft quieter and darker,
@@ -220,16 +189,14 @@ owner's, typos fixed.
   piano settings stay in its sheet. Record and Mark not repeated on the keys (the editor's Record, the Chord finder).
 - **Songscription's keyboard (2026-11-05):** "it doesn't still look good with these, and this rail at the bottom, look
   at the songscription piano implementation"; "i don't want finger number under the keyboard and no piano roll yet".
-  Built in R34: the rail gone, the keys slim and edge to edge (All keys the default), the chord held, Sustain and
-  Keyboard in the bar, a divider resizing the keys, hidden keys a "Keyboard" strip, the sheet's layout and zoom in one
-  pill;; no piano roll.
+  Built in R34: the rail gone, the keys slim and edge to edge, the chord held; no piano roll.
 
 - **The Player's Pace and metronome (2026-11-07, canvas R37):**
   - Modes are Wait and Play only, no Follow, no group titles.
   - Sheet settings have no Your marks switch: the learner's own marks always show, and are removed by deleting them.
   - The transport's menu is Practice, never Pace. It holds Wait · Play, the metronome, and the loop. A song's recording has no settings anywhere in the Player: it
     plays along, and a wrong start is fixed in the content.
-  - The Song gear has two radio cards: Arrangement (Level Beginner · Intermediate · Advanced) and Accompaniment
+  - The Song gear has two radio cards: Arrangement (its Level) and Accompaniment
     (Pattern ›). Versions and accompaniment are separate, one plays. Rejected: "As written", a switch over version
     tiles, one mixed list. Names are the trade's: flowkey's levels, Smart Pianist's Accompaniment and Pattern. No Voicing or Swing; the accompaniment is not in
     Practice.
@@ -238,8 +205,7 @@ owner's, typos fixed.
     Reset · Show n) with its count on the button and removable chips; folders that fold by their header (Recently
     used and Favourites open, each book closed, its groups inside, Mine's own folders), Close all / Open all; rows with roll, hands line, level, Listen, heart. Never chips by
     kind, stars or cards two a row.
-  - The Player keeps Sections, Print and Share link; the Song gear ends Sections, then Edit score · Print · Share
-    link · Export. No My recordings, no How did I play, no Voice commands, anywhere; no Tuner in the Player.
+  - The Player keeps Sections, Print and Share link. No My recordings, no How did I play, no Voice commands, anywhere; no Tuner in the Player.
   - The metronome is Flat's: one Off · Count-in · On choice under the tempo, and Metronome sound › opens a page
     (sound list with a check, Volume, Back). A choice with its own list opens a page, as Flat's Playback options do.
   - No cursor or scrolling settings at all, neither a switch nor choices (rejected twice). The cursor moves by
@@ -261,7 +227,7 @@ owner's, typos fixed.
   alone; "Melody" goes. A section can have its own pattern. Old settings nobody needs go.
 - **Drum grooves:** Chordify's.
 - **The Practice sheet's tempo and metronome are one group (loop 22, 2026-11-15):** under Wait · Play, one white card,
-  the tempo's steps with BPM over them (no second "Tempo" label), then Metronome Off · Count-in · On, a hairline
+  the tempo's steps with BPM over them, then Metronome Off · Count-in · On, a hairline
   between, as Scale settings' rows; the steps tighten to fit a 393 phone.
 - **Player settings › Playback keeps its gap (loop 22, 2026-11-15):** the metronome's card and Speed training's stood
   touching; the page is a column with the sheet's 16 between its cards.
@@ -296,12 +262,8 @@ owner's, typos fixed.
 
 - **Progress as the song's bars (canvas 125, 2026-11-11):** sixteen cells under the two plays, played in copper,
   the next bar outlined; no "Tap one to hear it" line.
-- **Calm:** too much at once is wrong. Play in the floating actions, Edit beside the title, Learned at the header's right.
+- **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
-- **Drawn (R39-2, 2026-11-08):** the first bars as the cover; Edit beside the title; Learned, the heart and ··· at the bar's
-  right; credits once; Key · Time · Tempo as one row; Chords to tap; Your practice; Details; Continue and Play float.
-  Waiting for the owner's word.
-
 ## Library, adding, publishing
 
 - **Loop round 41, Songs' list named and its folders even, as the Songs boards:** at Home a phone heads every song "Songs" with its count, as the laptop's table and both boards do (it said All songs on a phone alone); Shared with me and a shared folder stand 64 among the folders, as the board draws them, where they took Practice's 80 (2026-11-15).
@@ -318,14 +280,10 @@ owner's, typos fixed.
 - **Loop round 26, Explore's failure as its board's Failed:** Try again is the screen's one honey pill, never a sand one; Offline keeps its sand My songs and Nothing found its sand Clear search (2026-11-15).
 - **Loop round 24, a folder's Card style as the board draws it (owner, IMG_6045–6056: "remove all things that you didnt refactor ... all the features that the artifact doesnt have like the card style"; CSTYLE):** the preview on its sand card (Phone · Laptop, the folder's own rows), then Presets (Plain · Soft · Bold · Paper) and Layout (List · Grid · Covers) bare under their headings, Card contents, and a last group of Apply to… and Reset to default. Each change takes effect at once; the style editor's corners, borders, shadows, colours and padding, the bar's reset and the docked Apply are gone from the library (a lesson block keeps its editor) (2026-11-15).
 - **Loop round 24, folders look like folders, a chosen row is never cut (owner, IMG_6045–6056: "the select borders are clipped, and this doesnt look as folders"):** a folder's tile is the board's STACK, two pages of music, one tilted over the other, on the folder's paint, in its row, its page and the laptop's tree; a folder chooses its paint alone, its picture being its pages. In Select a chosen row takes a soft fill, no inset ring, so nothing square pokes past the card's rounded corners (2026-11-15).
-- **Loop round 24, one empty state (the board's EMPTY):** a 64 mark on sand, an 18 bold title, a 15 line, quiet 44 pill buttons; Songs, the practice libraries and Your lessons all use `Said`, and the second kit part (`EmptyState`) is gone. A search that finds nothing says how to look again: "Check the spelling, or try a song’s title or its composer." (2026-11-15).
+- **Loop round 24, one empty state (the board's EMPTY):** a 64 mark on sand, an 18 bold title, a 15 line, its way on a 48 pill; Songs, the practice libraries and Your lessons all use `Said`, and the second kit part (`EmptyState`) is gone. A search that finds nothing says how to look again: "Check the spelling, or try a song’s title or its composer." (2026-11-15).
 - **The Trash leaves Archive; Home's Card style goes (owner, 2026-11-15: "what the trash does in the archive",
   "features that the artifact doesnt have like the card style"):** Songs' ··· is Select and Trash; Archive holds
   only what was archived. Card style is a folder's alone, from its Settings, as the board draws it.
-
-- **An empty list as the board's EMPTY (loop 24):** one `EmptyState`: a 64 round sand mark with its icon (a search
-  that found nothing, filters, an empty folder, an empty library), what is empty in 18 bold, a 15 line saying what
-  to try ("Check the spelling, or try a song’s title or its composer."), its way on a 44 sand pill (2026-11-15).
 
 - **Loop round 16, a laptop's search in the bar (the SongsLaptop and ProgressionsLaptop boards):** the search box
   288 wide and Sort and filter beside it stand in the bar before New, not a row of their own over the table; a phone
@@ -353,7 +311,7 @@ owner's, typos fixed.
 - **The library, drawn (R39-1, 2026-11-08):** Continue first (big engraved covers, "Bar 9 of 16"), folders as compact
   rows, then every song with its cover, "Composer · Key · Level" and a heart; one Sort and filter with its count. The
   laptop's table shows only columns that hold something, and its Add sits in the bar, since a floating + covers the
-  table. Waiting for the owner's word.
+  table.
 - **"A real library"** like Mindscape: built-in folders and the learner's, nested to any depth; a real archive in the header,
   folders archivable; deleting a folder deletes its songs. Move works at any depth.
 - **Filter by key.** No "Chords I know" or "With chords" chips. Swipe actions on rows. Drag into folders and onto the Archive,
@@ -373,17 +331,17 @@ owner's, typos fixed.
   chevron; a song its small cover (its first notes on a printed staff), "Composer · Key", a ♡ one tap; More only under
   a mouse, a finger has the swipe and the long press; Shared with me a row at the foot of Folders. On a laptop the table is
   cover and Title · Composer and key · Progress, the places pane gains Learning and Learned, and an empty place says
-  so ("No learned songs here yet") with All songs as its way out.
+  so ("No learned songs here yet") with Songs as its way out.
 - **New is one dial (canvas 169, loop, 2026-11-13):** "proper floating actions for the new lessons or courses or also
-  other things": every library creates from one centred honey + (a card of rows on a phone, New ▾ in the bar on a
-  laptop); Songs: New song, Record, New folder, Import, New group; a Practice library: its New and New folder.
+  other things": every library creates from one honey +, at the bottom right (owner, 2026-11-15: "the new floating
+  actions should be on the right"), a card of rows on a phone, New ▾ in the bar on a laptop; Songs: New song, Record, New folder, Import, New group; a Practice library: its New and New folder.
 
 - **Loop round 13, a song's place:** the Player keeps where each song stopped and the bars played through; the song
   page then shows the canvas's Continue from bar N (honey) and From the start (sand), the bar map in copper with the
-  next bar ringed, "Bar 1 · Played n times · m minutes · Bar N"; Play floats only before the first play. Chords are
+  next bar ringed, "Bar 1 · Played n times · m minutes · Bar N". Chords are
   the board's white cards (2026-11-14).
 - **Loop round 15, the laptop's table as the board's:** Progress says where a song stopped part way, "Bar 9 of 16" as Continue says it, before Learning and Learned; the column shows once any song has one of the three (2026-11-14).
-- **Loop round 18, the Songs board back to its rulings (canvas 188):** the place chips All · Favourites · Learning · Learned (no Recently played); a folder row a stack of pages in its paint, its count, a chevron, no heart. In the app a folder wears the picture the learner chose (a note by default) on that paint; the board draws the stack (2026-11-15).
+- **Loop round 18, the Songs board back to its rulings (canvas 188):** the place chips All · Favourites · Learning · Learned (no Recently played); a folder row a stack of pages in its paint, its count, a chevron, no heart. (2026-11-15).
 - **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
 - **A public song opened offline (loop 23, 2026-11-15):** it says what Explore says offline, "Explore needs the internet.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
@@ -531,18 +489,15 @@ owner's, typos fixed.
   it, at `/practice/trainer/$trainerId`, Back to Practice. Never a Quiz or trainer list beside a topic's page.
 - **Practice lives on its topic's page; results after a run; history in Profile (canvas 160, 2026-11-11):** a grilling settled it: "remove the quiz page completely", no Chord trainer, "i dont want this from c to am, i dont understand what this is", "I like shuffle better than random order", "i want this history but not in the practices page". A page studies a thing and practises it in the Player; a run ends in a full-screen results page (every chord marked right, wrong, early or late by its ms, your best beside it); every run is kept in Profile › Practice history. Exercises is a group (Finger technique, Jazz vocabulary), never a page called Exercises under a heading that does not fit it. Never a separate trainer or quiz beside the topic's page.
 - **Every board opened before a publish (canvas 157, 2026-11-11):** "the progressions page is broken": its phone list, and Accompaniment's and Exercises', had been empty since a generator reused a helper's name. Before each publish, every board the change can reach is opened in the runtime, not only the ones drawn this turn; generator helpers carry their file's prefix.
-- **Real exercises, named as the books name them (canvas 156, 2026-11-11):** "see a chord and play it doesnt make any sense… the names are very bad… real practices that do make sense": a trainer's exercises come from the owner's books (Piano Chords Practice, 400 Piano Chord Progressions), each named for what is played ("Major seventh chords in all inversions", "The I–IV–V–I cadence") and shown engraved; never invented drill names, "Start here", "Find more" or options a pianist would not say ("inversions up and back"). the theory pages are Theory, never Harmony; no Up next, recent practice or progress the app cannot stand behind; a sheet's groups never shrink to fit. Replaces the canvas 154 line below.
+- **Real exercises, named as the books name them (canvas 156, 2026-11-11):** "see a chord and play it doesnt make any sense… the names are very bad… real practices that do make sense": a trainer's exercises come from the owner's books (Piano Chords Practice, 400 Piano Chord Progressions), each named for what is played ("Major seventh chords in all inversions", "The I–IV–V–I cadence") and shown engraved; never invented drill names, "Start here", "Find more" or options a pianist would not say ("inversions up and back"). the theory pages are Theory, never Harmony; no Up next, recent practice or progress the app cannot stand behind; a sheet's groups never shrink to fit.
 - **Chosen is filled, not chosen is white (R42, canvas 153; owner 2026-11-13: "yes" to the ink fill):** "when It is white its means not selected and when selected it should change color": every chosen chip or tile wears the chosen fill in ink with an umber tick (`DESIGN.md`, the Neutral Choice Rule); an unchosen one is plain white. Honey stays the screen's one main action. Never mark the unchosen with a word ("Stays") or a fainter look.
 - **Fingers are a label the learner can pick (R42, canvas 151):** "I want to have a fingerings option in the piano labels": finger numbers on the keys are allowed when chosen in Labels, never by default. "keep all, transpose all is not clear": a list of checkboxes says what ticking means in its heading ("Chords to transpose"), counts "n of m" and offers Select all / Clear all; never a verb pair that reads as two actions.
 - **A drill names the chords it plays (R42, canvas 150):** "practice it chromatically or diatonically. how can I do this": a row with "or" in it hides a choice; each way of moving a chord through the keys is its own row, showing its first chords. Diatonic means the key's own chords, from the key the chord belongs to.
 - **Chords checked against the owner's books (R42, canvas 149):** "read this whether our chords are correct", "fix all": a chord's notes are checked against Chord Theory for Piano and Piano Chords Practice before it is drawn; ♯11 chords sit with the alterations; a chord is drawn as played, the app's table keeps it stacked in full. The theory book's interval table counts semitones from 1 (a minor 3rd as 4); never copy its numbers.
 - **A chord list reads like the chord finder (R42, canvas 148):** "make better the sheets consistent with the chords finder so that first the chord names and then the their full name. and make also the chords in the chord finder filterable": everywhere a chord is chosen from a list, the symbol comes first, then the full name, then the mark; a long chord list has the group chips on top. Never a name before its symbol.
-- **Roots: not a circle either (R42, canvas 147):** "no circle": the twelve roots sit on the page as two rows of six toggles with Select all, one tap each, no drawer. Never for roots: a circle, a keyboard, named sets, twelve rows.
 - **One way to choose on a page (R42, canvas 145):** "we also dont have consistency in the page. different controls for selecting": every list of options on a screen is the same row (checkbox for several, radio for one, name,example; the meaning line replaced by canvas 158) with the same group heading; and the result of the choices is shown where the learner looks first (your deck: count and chords).
 - **No invented presets (R42, canvas 144):** "what is the meaning of easy roots or white keys or all roots. I dont like this": a list the learner can tick needs only Select all; named shortcuts that need explaining go.
-- **Roots are picked like keys are learnt (R42, canvas 143):** "I dont like the roots choosing control": not a toy keyboard; the same checkboxes as the chord types, one spelling per root.
 - **A bar carries only what works on its page (R42, canvas 142):** "what Is the meaning on the piano settings in the header in this page": a header copied from a sibling page keeps nothing that does nothing here; Random chords shows no keys, so no piano button.
-- **Chords for a drill are types times roots (R42, canvas 141):** "I dont like this selected. look at the examples of the chords choosing": as in musictheory.net, ToneDear and pianochord.org, the learner ticks chord types in a named checklist and taps roots on a keyboard; never 444 chords to tick one by one.
 - **A multiple choice looks like one (R42, canvas 140):** "what is this chose chords… what is with this show another… in a key is also not very understandable": several things picked from a list are checkboxes with "Select all" and "n selected", never coloured tiles; no button that only demonstrates (Show another); no filter that needs a second choice to mean anything (In a key).
 - **Choosing chords is choosing chords (R42, canvas 139):** "make proper chords choosing… select all the chords and also filter them by type like these scrollable chips on top of the drawer": a set of chords is picked from one list of every chord, filtered by chips, with Choose all per type, never through modes ("From a key or Chord types") or a Triads/Sevenths switch. An inversion is named by the note at the bottom and shown.
 - **One segmented control and stepper, 44 high (canvas 127, 2026-11-11):** a choice of two or three in a settings
@@ -590,7 +545,7 @@ owner's, typos fixed.
 - **A chord's root is a letter and ♭ ♮ ♯; a keyboard only for moving to a key (R42, canvas 107):** "it is interesting
   for transpose but not for picking a chords"; "I dont like the split note between the C sharp and d flat"; the key
   signature "like the transpose": a ♭/♯ stepper. Never: a black key split into two names.
-- ** (R42, canvas 106):** "there is not possibility to
+- **One picker for every root and key (R42, canvas 106):** "there is not possibility to
   switch between like the c sharp or d flat"; "it just lists all of this keys without good structure". One picker for
   every root and key. Never: a staff that shrinks as chords are added ("getting smaller and smaller"); a list of tiles
   that repeats the chord ("move cmaj7 to cmaj7").
@@ -684,29 +639,26 @@ owner's, typos fixed.
   numbers colors and research more", "you didn't research enough": one saved page was not research. Finger numbers
   are upright bold numerals in fingertip circles (Hoffman, Faber, Pianote), never italic, never floating badges.
   Before drawing a teaching diagram, view how at least three teaching sources draw it and cite them.
-- **Hands are proper 2D hands (R42, v75):** "use proper hands", "use proper 2d hands": a real hand's outline, flat
-  fill and one line, never capsules or blobs, and not a 3D-shaded render on a 2D page.
 - **Research the owner's material first, then one decision (R42, v74):** "research more first and use the piano
   data and its transcriptions and examples": the staff ties the notes two chords share and traces the ones that
   move; Practise rows are the teachers' drills (blocked, broken, 12 keys; each change, then the whole). Cite file and
   timestamp; say what no source gives (seventh-chord inversion fingering).
 - **Name the result, not the mechanism (R42, v73):** "what bass only means": each hand shows the chord it plays
-  (G + B♭maj7); the left hand's choice is Chord | Root, the pianist's words.
+  (G + B♭maj7).
 - **Transpose is one tap away and moves everything (R42, v73):** "transpose chords easier": the key in the staff's
   header opens half steps and twelve keys; every chord on the staff moves, spelled for the new key.
 - **A floating group is centred as one (R42, v72):** "why this is looking so not centered": a button beside a
   centred button pulls the pair off centre; centre the group.
 - **Hands play the whole chord; Split is the bass and the upper chord (R42, v71):** "when I select the left hand I
   want all the notes … both then … c e g and c e g in both hands … gm9 the g in the left hand and the BbMaj7 in the
-  right". the learner's courses (Gorshkov) before the web. - **Several chords, every action covers them (R42, v71):** the chord list is a checklist of what the staff shows;
+  right". the learner's courses (Gorshkov) before the web.
+- **Several chords, every action covers them (R42, v71):** the chord list is a checklist of what the staff shows;
   Play plays them all in the chosen mode.
 - **A control shows what it does (R42, v70):** "be more creative and clear … ux ui best principles": R.H./L.H.
   chips and a 123 toggle were not understood; No abbreviation or bare icon where a word and the result fit.
 - **A hand alone plays the chord, fingered (R42, v69):** "I want to play the c major chord in left hand with its
   fingerings and not c g c". A setting named for a hand plays the chord in that hand; reduce only past what a hand
-  holds. The hands sit beside their staves (R.H., L.H.); a setting lives where its effect shows.
-- **One home for fingering (R42, v69):** "set the fingerings in two places … make this more clear": the 123 toggle on
-  the staff;.
+  holds. A setting lives where its effect shows.
 - **Adding a chord suggests the next one (R42, v69):** "you could improve it. be creative": the key's chords, likeliest
   first, voice-led.
 - **Voicings checked against the owner's transcripts (R42, v68):** "check that our current are correct are match
@@ -718,8 +670,7 @@ owner's, typos fixed.
 - **Several chords on one staff (R42, v67):** "select more than one chord to be shown on the staff": names over the
   staff, + to add, × with Undo, All chords in order in the Play menu.
 - **Play centred, alone, honey kept (R42, v63–v64):** "the play button is too appealing … centered", then "no
-  revert the play button color": Play is one centred capsule in its honey tint. v65, "I liked the chord button": it sits just
-  left of the centred Play, and the chord is chosen from the name and the bar.
+  revert the play button color": Play is one centred capsule in its honey tint.
   v66: "now the names get cut off": a bar label is never truncated; measure the longest name in the runtime.
 - **Chords' settings live where they act (R42, v62):** Hand and Fingering in the Chord sheet after Voicing; the
   keyboard button at the header's right;.
@@ -741,8 +692,7 @@ owner's, typos fixed.
   primary action prominent in its own group, trailing.
 - **Arrows sit beside the words they change; one action with a choice of how is one split button (R42, v52):** "the
   inversions can be interpreted as go to next chord … I'd put the play together with the arpeggiate". [▶ Play chord | ⌄] with Block chord · Arpeggio.
-  v53: "the keyboard settings should be like separate from this play chord": the bar is the sound only; Keyboard
-  is its own round button beside it.
+  v53: "the keyboard settings should be like separate from this play chord": the bar is the sound only.
 - **The title is the button, without a ⌄ (R42, v51):** "remove the arrow on the big chord. it just works but without
   this arrow down".
 - **Show the choices, don't hint at a gesture (R42, v46):** "the chord root switch looks interesting but you could
@@ -782,7 +732,7 @@ owner's, typos fixed.
   is also weird". Piano gets the grand staff with no clef choice. A switch whose effect contradicts the page (a left-hand
   root under a slash chord) goes. - **Moved means removed from the old place too; a control lives on what it controls (R42, v32):** "you didn't
   remove the old settings". The keyboard's settings sit behind a keyboard button over the keys; a gear left with one
-  group goes. Musicians' terms over app switches: "Bass in the left hand", not Hands Both · Right · Left. Fingering
+  group goes. Fingering
   belongs on the staff beside the notes, not in its own view.
 - **A setting sits on what it changes; practice sits on the page (R42, v31):** "the staff settings are not very good
   … the practice in the player are too hidden".
@@ -805,8 +755,7 @@ owner's, typos fixed.
   capsule as the action it changes (Play beside Block or Arpeggio). Proximity, common region, similarity. A chord's
   inversion is written in its name as a slash chord (Cmaj7/E),.
 - **Words beat symbols (R42, v21):** "make more clear", after a symbols-only bar. Every control shows a symbol and
-  its current value in words (Block, Both hands), never a symbol alone except Play and Back. A stepper sits beside
-  the thing it steps and names the step (‹ Root position ›), never in the transport where it reads as previous song.
+  its current value in words (Block, Both hands), never a symbol alone except Play and Back.
 - **A bar follows Apple's toolbar (R42, v20):** "apple guidelines provide more guides to toolbars". At most three
   groups, each a capsule with concentric items;
   text only where no symbol can say it (a chord's name); one tinted primary action. A switch of views is an
@@ -818,8 +767,8 @@ owner's, typos fixed.
   buttons carry a caption under the icon; an icon draws what it does (stacked notes for a block chord, rising notes for
   an arpeggio). Only ‹ ›, Play and Back stand alone.
 - **No setting twice on a page (R42, v17):** "we have now duplicate settings". Before publishing, list every control
-  with its one home; a second control for the same choice goes (Chords: Inversion only on ‹ ›, block or arpeggio one
-  choice, the piano's settings only behind Keyboard).
+  with its one home; a second control for the same choice goes (Chords: block or arpeggio one choice, the piano's
+  settings only behind the Piano button).
 - **A practice page can take the Player's shape (R42, v16):** "refactor the chords page from practice in the style of
   the songs player": Back · views · gear at the top, the views in the title's place (`TitleTabs`, owner 2026-11-13: "yes"), the keys edge to edge, the subject as the title, one floating bar
 , sheets like the Player's. Spec `.scratch/r42/plan/chords.md`.
@@ -831,30 +780,13 @@ owner's, typos fixed.
   rows and the floating bar; each page keeps its own layout from its reference (iReal Pro's chart, Tenuto's answers,
   Soundbrenner's beats, Cleartune's needle, muted.io's circle, Flat's palette). Never one layout for every page.
   Spec `.scratch/r41/plan/songs-and-practice.md`.
-- **Overview drawn (R39-4, 2026-11-08):** each picture shows
-  its content (a chord on keys, a scale on a staff, a tuner's needle), never a pastel icon. Waiting for the owner's word.
 - **Chords:** every chord type, fingering by hand and inversion, voicings to choose. Add, add2, add9 named as chords are.
-  **Drawn (R39-5, 2026-11-08):** the chord first, Root · Chord · Voicing as pickers, Inversion and Hands, Fingering by
-  hand, Colour notes, Practise this chord; Play and Arpeggio above keys with no finger numbers; Chord settings behind the
-  gear. Waiting for the owner's word.
 - **Scales:** fingerings as the printed books give them, more kinds, Hanon 1–20, a tempo ladder.
-  **Drawn (R39-6, 2026-11-08):** Tonic and Scale pickers, the run engraved with fingers, Scale · Chords · Key tabs,
-  fingering by hand, Practise this scale; Play up and down with its tempo over the keys; the bar's four icons gone.
-- **Intervals drawn (R39-7, 2026-11-08):** the interval chosen as the hero (name, staff, sound, songs up and down), From
-  and Play as, Simple · Compound, rows to tap, Play and Play all over the keys, Train your ear to the Quiz. Waiting.
-- **Accompaniment drawn (R39-9, 2026-11-08):** the Pattern library itself (books as places, folders, rolls, Listen,
-  heart), a pattern opening in a sheet with its roll, hands and Practise in the Player. Waiting for the owner's word.
 - **Harmony:** draw the roles and moves on the chords (the Function · Root motion switch changed only letters).
-  **Drawn (R39-8, 2026-11-08):** Progressions as a library like Songs; a progression's chords as tiles coloured by role
-  with the root's move between them, in any key, voice-led or block. Waiting for the owner's word.
 - **Chord player:** Musicca's controls and options, with the best free sounds.
-  **Drawn (R39-10, 2026-11-08):** a lead sheet of sections and bars, a chord tapped to change it (the key's chords,
-  root, chord, length, bass), Style · Key · Tempo on top, Play and Loop above the keys, its own settings. Waiting.
-- **Metronome:** BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, beats as squares; beats you set
+- **Metronome:** BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play; beats you set
   (accent, normal, silent), any meter, subdivisions, recorded sounds; one engine for the page, the Player and the quick
   metronome.
-  **Drawn (R39-12, 2026-11-08):** the Metronome, Tuner, Chord finder and Circle of fifths each one instrument on one
-  screen, the reading large, their settings behind their own gear. Waiting.
 - **Practice ordered by relevance,** learning before tools, with a clear purpose; the Metronome's settings in place as
   Chordify's; the header's Tools a real menu, never a redirect; tools' settings never a single-option page or a redirect
   to app Settings; the Chord player simple, Apple-like, its drag and drop working (memory-palaces' fix); selection popups
@@ -866,7 +798,7 @@ owner's, typos fixed.
   drawn as real hands; no half-empty top.
 
 - **The libraries take Songs' row shape (loop, built to the Practice canvas):** Exercises, Accompaniment and
-  Progressions show one search with Sort and filter (the sort first on a phone), place chips All · Favourites · Mine,
+  Progressions show one search with Sort and filter (the sort first on a phone), place chips All · Favourites · Recently used · Mine,
   each book or style a heading with its count that folds, its rows in one card with hairlines: a 44px tile (a
   progression's opening, "I V", on its style's paint), the name bold over one line ("I – V – vi – IV"), the level, a ♡
   one tap; More only under a mouse. The chord chips and the description line left the rows; a progression's
@@ -963,7 +895,7 @@ are reference only, but progressions are facts.
 - **Search's suggestions as the board's link rows (loop round 19):** 48 tall, 10 apart, 12 at the chevron; a
   result keeps SROW9's 52 (2026-11-15).
 - **The page under a sheet dims in warm ink, unblurred, as the board's BSHEET (loop, 2026-11-14):** every sheet, dialog and confirmation lays `--scrim` (ink at 28%, by Night near-black at 84%) over the page, never a black blur; Search's laptop panel wears the board's line and lifted shadow.
-- **The + is centred on a phone, as the board's New (loop, 2026-11-14):** every floating action stands centred over the tab bar on a phone, its menu opening over it; at the right from a laptop's width.
+- **Floating actions at the bottom right (owner, 2026-11-15: "the new floating actions should be on the right"):** every floating action stands at the bottom right, over the tab bar on a phone, its menu opening up from it.
 - **The tab bar floats, as the board's TABBAR (loop, 2026-11-14):** a glass capsule 64 high, 16 in from the phone's edges, over the home indicator, the current place on the chosen fill; a soft fade under it. The rail and the sidebar unchanged. A chosen chip is filled in ink (canvas 153), every `ChoiceChips`.
 - **Ports copy the board's code, not its picture (2026-11-13):** "why dont you follow the design artifact and dont
   read its code how it implements and does things to create accurate redign of our app. the chords page doesnt look
@@ -1088,8 +1020,6 @@ are reference only, but progressions are facts.
   practice (PRODUCT.md, principle 6), always true, never locking or charging. Replaces "no streaks as pressure".
 - **One home for the keyboard's settings (2026-11-12):** "I dont want keyboard settings in three places": Settings ›
   On-screen piano; the Player's sheet and the editor's gear hold a row to it. Replaces R34's copy in both gears.
-- **Favourite has one control (2026-11-12):** "remove the switch": the ♡ in the song page's bar; no switch on its
-  Settings.
 - **Canvas 129 ("there are admin controls, no roles, no edit mode for the pages"):** Administration drawn in full in
   Settings; three roles; Edit mode is the page itself (Done · English | Русский · Publish…), Learn's level edited in
   place; Preview as learner (2026-11-11).
@@ -1142,6 +1072,16 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Design only; the canvas made consistent (2026-11-15):** "now you need to work only on the design and no app
+  implementation at all. fix all the inconsistencies in the design. like the keyboard is inconsistent across the app,
+  floating keyboard, the headers, the floating actions. the new floating actions should be on the right. and the
+  settings are not correctly placed … all the states should be properly made like the chords page does in this box
+  outside of the phone frame. when you think that you should refactor something … research for the official
+  guidelines and professional designer resources": no app code until the owner says; one keyboard, one floating
+  keyboard, one bar, one floating action (bottom right), settings in their homes, every board's states in the box
+  beside its frame; each refactor cited from HIG, Material 3 or designers' resources.
+- **The computer used properly (2026-11-15):** "all the ui should be properly made also on computer and the empty
+  space should be properly used": no laptop board a phone column in an empty screen.
 - **Design first, then build to it (2026-11-13):** "why are you improving the current app and not first make design
   and after that implement the design as close as possible. do like this": in a loop, each area is redrawn on the
   canvas and published before any change to the app; the app is then built to the drawing as closely as it can and
@@ -1162,8 +1102,7 @@ are reference only, but progressions are facts.
 - **Plan before building:** generic descriptions led to wrong builds. "Did you read it every time you implement something."
 - **"Why did you stop?"** three times: keep going until the list is empty. A message is not a stop.
 - **The maximum principle:** "this spawns too many agents and eats up all the usage".
-- **Tests:** "you don't need to run tests for each commit, only when round finishes". Agents test what changed; the full suite
-  runs on the merged result.
+- **No tests in a loop** (2026-11-14): "dont run the tests, no test"; the build runs once at an area's end.
 - **The references show what to add:** "didn't I add screenshots for you to add what we don't have".
 - **Don't decide UI trade-offs silently:** "dont make such bad decisions for yourself".
 - **No committed `.env`:** "WHY IS the .env commited to the git". That decision was the owner's.

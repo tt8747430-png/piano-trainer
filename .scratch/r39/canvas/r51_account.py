@@ -75,7 +75,7 @@ _L = open('/home/user/piano-trainer/src/shared/i18n/locales/en/legal.ts').read()
 import re as _re
 def _secs(block):
     return [(h, t) for h, t in _re.findall(r"heading: '([^']*)',\s*text:\s*'([^']*)'", block)]
-PRIV = _secs(_L[_L.index('privacy:'):_L.index('terms:')]); TERMS = _secs(_L[_L.index('terms:'):])
+PRIV = _secs(_L[_L.index('\n  privacy: {'):_L.index('\n  terms: {')]); TERMS = _secs(_L[_L.index('\n  terms: {'):])
 LEGAL_JS = js('const DOCS = ' + json.dumps({'Privacy Policy': PRIV, 'Terms of Service': TERMS}, ensure_ascii=False) + r''';
     const S = (o) => set(o), d = st.doc ?? 'Privacy Policy';
     return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i })) };''')

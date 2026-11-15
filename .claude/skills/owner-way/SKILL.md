@@ -88,6 +88,16 @@ wins there.
   measured, not glanced at: the board and the app screen are both measured in the browser (computed size, padding,
   radius, colour of each part) and every number matches; a screenshot side by side is the last check, not the only
   one.
+- **Design only, for now** (owner, 2026-11-15: "now you need to work only on the design and no app implementation at
+  all. fix all the inconsistencies in the design"): until the owner says otherwise, the loop changes the canvas alone
+  and no app code. Each round finds the canvas's inconsistencies across every board (the keyboard and the floating
+  keyboard, the bars, the floating actions, settings placed where they belong, controls mixed with settings) and makes
+  one shape of each everywhere, with no legacy shape kept. Floating actions sit at the bottom right. Every board's
+  states are drawn in the States box outside the phone frame, as the Chords board's. A refactor of a pattern is
+  first researched in the official guidelines (Apple HIG, Material 3) and professional designers' resources, cited
+  in the spec. Every screen is made as properly on a computer as on a phone, its space used: no narrow column
+  floating in an empty laptop screen (owner, 2026-11-15: "all the ui should be properly made also on computer and
+  the empty space should be properly used").
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.

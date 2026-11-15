@@ -28,11 +28,11 @@ H1 = lambda t: f'<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter
 IF = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-val="{{{{{h}}}}}">{inner}</sc-if>'
 
 # ════ Explore ════
-PUB = [('Amazing Grace', 'John Newton', 'Hymn', HONEY, '4.8', '312'), ('Canon in D', 'Pachelbel', 'Classical', SKY, '4.7', '280'), ('Scarborough Fair', 'Traditional', 'Folk', SAGE, '4.5', '154'), ('Let It Be', 'The Beatles', 'Pop', PEACH, '4.6', '201'),
+PUB = [('Amazing Grace', 'John Newton', 'Other', HONEY, '4.8', '312'), ('Canon in D', 'Pachelbel', 'Classical', SKY, '4.7', '280'), ('Scarborough Fair', 'Traditional', 'Folk', SAGE, '4.5', '154'), ('Let It Be', 'The Beatles', 'Pop', PEACH, '4.6', '201'),
        ('Study in C, Op. 599 No. 1', 'Czerny', 'Studies', LILAC, '4.4', '98'), ('Stride left hand in C', 'Ana Popescu', 'Patterns', FILL, '4.2', '61'), ('Be Thou My Vision', 'Irish hymn', 'Hymn', HONEY, '4.9', '140'), ('Gymnopédie No. 1', 'Satie', 'Classical', SKY, '4.8', '233')]
 EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + ';\n' + r'''
     const S = (o) => set(o), page = st.page ?? null, cat = st.cat ?? 'All', q = (st.q ?? '').trim().toLowerCase(), demo = st.demo ?? null;''' + TOAST_JS + r'''
-    const pick = PUB.filter(([t, by, c]) => (cat === 'All' || c === cat || (cat === 'Other' && false)) && (!q || (t + ' ' + by).toLowerCase().includes(q)));
+    const pick = PUB.filter(([t, by, c]) => (cat === 'All' || c === cat) && (!q || (t + ' ' + by).toLowerCase().includes(q)));
     const card = ([t, by, c, col, r, s]) => ({ t, by, c, col, r, s, open: () => S({ page: 'song', song: t }) });
     const shelf = (order) => order.map((i) => PUB[i]).filter((p) => pick.includes(p)).map(card);
     const song = PUB.find((p) => p[0] === (st.song ?? 'Amazing Grace'));
@@ -80,13 +80,13 @@ SHARED = (IF('sharedOk', CARD(f'<div style="display: flex; gap: 14px; align-item
              + f'<div style="display: flex">{BTN("Add to the library", "sharedAdd", "", "primary", 50)}</div>', 'true')
           + EMPTY('sharedBad', '!', 'This link holds no song', 'It may be cut short. Ask for the link again.', f'<div style="display: flex; margin-top: 6px">{BTN("To Songs", "", "Songs.dc.html", "primary", 48, False)}</div>')
           + f'<div style="display: flex; justify-content: center"><button type="button" onClick="{{{{toggleBad}}}}" style="height: 40px; border: 1.5px dashed {LINE}; border-radius: 20px; background: transparent; padding: 0 14px; font: inherit; font-size: 13px; font-weight: 600; color: {SOFT}">CANVAS · a broken link</button></div>')
-exph = (IF('isMain', IF('isList', TOP('', '', '') + f'<div style="flex: none; display: flex; align-items: baseline; gap: 16px; padding: 2px 16px 10px"><a href="Songs.dc.html" style="font-size: 34px; font-weight: 700; color: {LINE}; text-decoration: none; letter-spacing: -0.01em">My songs</a><h1 style="margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -0.01em">Explore</h1></div>'
+exph = (IF('isMain', IF('isList', f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 10px 4px 16px"><a href="Songs.dc.html" style="flex: none; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; color: {LINE}; text-decoration: none; white-space: nowrap">My songs</a><h1 style="margin: 0; flex: none; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; white-space: nowrap">Explore</h1></header>'
                                                                    + NARROW(EXLIST) + STRIP() + f'<div style="height: 92px; flex: none"></div>{TABBAR("Songs")}', 'true')
            + IF('isShelf', TOP('', '', '', 'Explore', IB('Explore', CHEV_L, 'backList')) + NARROW(H1('{{shelfT}}') + GRID('all', 2))), 'true')
         + IF('isSong', TOP('', '', REPORTB, 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(PUBSONG))
         + IF('isShared', TOP('', 'A shared song', '', 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(SHARED)) + TOASTS)
-exlm = (IF('isMain', LTOP('', '') + IF('isList', WIDE(f'<div style="display: flex; align-items: baseline; gap: 20px"><a href="SongsLaptop.dc.html" style="font-size: 34px; font-weight: 700; color: {LINE}; text-decoration: none">My songs</a><h1 style="margin: 0; font-size: 34px; font-weight: 700">Explore</h1></div>' + EXLIST.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 1000) + STRIP(), 'true')
-           + IF('isShelf', WIDE(EXSHELF + GRID('all', 5), 1000)), 'true')
+exlm = (IF('isMain', IF('isList', WIDE(f'<header style="flex: none; display: flex; align-items: center; gap: 12px; padding-top: 20px"><a href="SongsLaptop.dc.html" style="font-size: 30px; font-weight: 700; color: {LINE}; text-decoration: none">My songs</a><h1 style="margin: 0; font-size: 30px; font-weight: 700">Explore</h1></header>' + EXLIST.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 1000) + STRIP(), 'true')
+           + IF('isShelf', LTOP('', '') + WIDE(EXSHELF + GRID('all', 5), 1000)), 'true')
         + IF('isSong', PAGEHEAD_L('back', 'Explore', REPORTB) + WIDE(PUBSONG, 704))
         + IF('isShared', PAGEHEAD_L('back', 'Explore') + WIDE(H1('A shared song') + SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)
 detail('Explore', 'Explore', EX_JS, exph, exlm, '', BSHEET('reportOn', 'Report this song?', REPBODY, 'Close'),
@@ -215,14 +215,14 @@ for stem, root, ttl in (('Folder', 'null', 'A folder'), ('Archive', "'archive'",
 # ════ SongSettings and Section: a song’s Settings, Publish, a section ════
 SM_SRC = (r'''
     const S = (o) => set(o), ROOT = __ROOT__, page = st.page ?? ROOT;''' + TOAST_JS + r'''
-    const fav = st.fav ?? true, pub = st.pub ?? false, rights = !!st.rights, desc = st.desc ?? 'A hymn in G for church pianists: melody on top, four-part harmony.', cat = st.cat ?? 'Hymn';
+    const fav = st.fav ?? true, pub = st.pub ?? false, rights = !!st.rights, desc = st.desc ?? 'A hymn in G for church pianists: melody on top, four-part harmony.', cat = st.cat ?? 'Other';
     const need = 20, left = Math.max(0, need - desc.length);
     return { ...common(st, set), isSettings: page === 'settings', isPublish: page === 'publish', isSection: page === 'section', pageT: { settings: 'Settings', publish: 'Publish', section: 'Learn the Verse' }[page],
       back: () => S({ page: page === 'publish' ? 'settings' : 'settings' }), backT: page === 'publish' ? 'Settings' : 'Amazing Grace', backHref: page === ROOT, backT0: ROOT === 'section' ? 'Amazing Grace' : 'Amazing Grace',
       favOn: fav, favOnBg: fav ? '#44684A' : '#DAD1C8', favOnX: fav ? 22 : 2, favT: () => S({ fav: !fav }), pubV: pub ? 'Published' : 'Not published', goPublish: () => S({ page: 'publish' }),
       askDup: () => S({ sheet: 'dup' }), dupOn: st.sheet === 'dup', doDup: () => { S({ sheet: null }); toast('Amazing Grace (copy) added to Church.'); }, archive: () => toast('Amazing Grace archived.', true),
       share: () => toast('Link copied. Anyone who opens it can add the song to their own.'), openExport: () => S({ sheet: 'export' }), exportOn: st.sheet === 'export', exported: () => { S({ sheet: null }); toast('Amazing Grace.musicxml saved.'); },
-      del: () => toast('Amazing Grace moved to the Trash.', true), cats: chipsOf(['Classical', 'Folk', 'Pop', 'Hymn', 'Studies', 'Other'], cat, (x) => S({ cat: x })), desc, dText: desc, setDesc: (e) => S({ desc: e.target.value }), descN: desc.length + ' of 400', descLeft: left ? left + ' more characters to go' : '', hasLeft: left > 0,
+      del: () => toast('Amazing Grace moved to the Trash.', true), cats: chipsOf(['Classical', 'Folk', 'Pop', 'Studies', 'Other'], cat, (x) => S({ cat: x })), desc, dText: desc, setDesc: (e) => S({ desc: e.target.value }), descN: desc.length + ' of 400', descLeft: left ? left + ' more characters to go' : '', hasLeft: left > 0,
       rights, rightsMark: rights ? '✓' : '', rightsBg: rights ? '#332921' : '#FEFDFB', toggleRights: () => S({ rights: !rights }), canPub: rights && left === 0, pubBg: rights && left === 0 ? '#F2B33D' : '#EEE9E2', pubInk: rights && left === 0 ? '#332921' : '#9A9089', pubNot: !(rights && left === 0),
       doPub: () => { if (rights && left === 0) { S({ pub: true }); toast('Published to the Public library.'); } }, isPub: pub, notPub: !pub, copyLink: () => toast('Link copied.'), newVersion: () => toast('Updated in the Public library.'),
       askUnpub: () => S({ sheet: 'unpub' }), unpubOn: st.sheet === 'unpub', doUnpub: () => { S({ sheet: null, pub: false }); toast('Removed from the Public library.'); },
