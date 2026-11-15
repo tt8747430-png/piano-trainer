@@ -59,6 +59,7 @@ export function PatternPieces({
         <FloatingPiece
           label={t('player:loop')}
           caption={t('player:loop')}
+          round
           aria-pressed={looping}
           onClick={() => setLooping((was) => !was)}
           className="aria-pressed:bg-foreground aria-pressed:text-background aria-pressed:hover:bg-foreground"
@@ -75,6 +76,7 @@ export function PatternPieces({
         <FloatingPieceLink
           label={practise.label}
           caption={practise.caption}
+          round
           render={practise.render}
         >
           <KeysIcon aria-hidden />

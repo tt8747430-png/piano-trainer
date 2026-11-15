@@ -373,7 +373,7 @@ owner's, typos fixed.
 
 ## Practice
 
-- **Round pieces where the boards draw them (loop round 19):** an exercise's Key and Listen and Scales' BPM and Hands are 56 round glass pieces, as the Exercise and Scales boards measure (the Chords board keeps its 72-wide pieces for Voicing and Hands); a word too long for the circle (Тональность) widens it into a pill rather than spill out.
+- **Round pieces where the boards draw them (loop round 19):** an exercise's Key and Listen, Scales' BPM and Hands, Intervals' From and Play all, and a pattern's Loop and Practise are 56 round glass pieces, as the Exercise, Scales, Intervals and Pattern boards measure (the Chords board keeps its 72-wide pieces for Voicing and Hands); a word too long for the circle (Тональность) widens it into a pill rather than spill out.
 
 - **Practise in the Player wears the keys (loop round 17):** the floating Practise on the Progression, Scales and Pattern pages is the keys glyph (`KeysIcon`), as the Progression board's `PRACTI` draws it; the dumbbell is gone from the app.
 

@@ -142,6 +142,7 @@ export function IntervalExplorer({
               <FloatingPiece
                 label={`${t('intervals.from')}: ${fromName}`}
                 caption={t('intervals.from')}
+                round
                 aria-haspopup="dialog"
               >
                 <span className="text-lg font-bold">{fromName}</span>
@@ -172,6 +173,7 @@ export function IntervalExplorer({
           <FloatingPiece
             label={t('intervals.playAll')}
             caption={t('intervals.all')}
+            round
             aria-pressed={playback.playing === 'all'}
             onClick={playAll}
           >
