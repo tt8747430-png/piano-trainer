@@ -106,6 +106,7 @@ export {
   MIN_KEYS_PX,
   PianoKeyboard,
   keyFill,
+  nameMark,
   toneMark,
   unmarked,
   type KeyFill,

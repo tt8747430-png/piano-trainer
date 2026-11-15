@@ -133,6 +133,15 @@ export const toneMark = (
   face: KeyTone = tone.role,
 ): KeyMark => ({ tone: face, label: tone.degree, note: noteName(tone.note) })
 
+/**
+ * A chord tone's key as the boards label it where a page has no Labels setting (the Chord finder, a
+ * progression, a pattern): its paint by role, its note's name alone, the degree left to the tiles.
+ */
+export const nameMark = (tone: Pick<Tone, 'role' | 'note'>): KeyMark => ({
+  tone: tone.role,
+  label: noteName(tone.note),
+})
+
 /** How a key looks: a wrong key over a lit one, a lit one over a mark, a mark over a selection; down over all. */
 export function keyLook(key: Midi, states: KeyStates, text: KeyText): KeyLook {
   const mark = states.marks?.get(key)

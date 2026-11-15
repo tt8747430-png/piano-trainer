@@ -75,6 +75,15 @@ export function PinnedKeyboard({
   const laptop = useMediaQuery(LAPTOP)
   const { keys, marks } = shown
   const [opened] = useState(keys)
+  // Its octaves: the middle two, grown to every key it has shown (a chord found from A3), never
+  // shrunk, so no lit key falls off its edge and the keys never jump back.
+  const wanted = keyboardRange([...opened, ...keys], MIDDLE_OCTAVES)
+  const [widest, setWidest] = useState(wanted)
+  if (wanted.from < widest.from || wanted.to > widest.to)
+    setWidest({
+      from: wanted.from < widest.from ? wanted.from : widest.from,
+      to: wanted.to > widest.to ? wanted.to : widest.to,
+    })
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
   const edge = dock === 'bottom' ? 'above' : 'below'
   // Hidden, the keys fold into a thin strip where they stood that brings them back (R34).
@@ -82,7 +91,7 @@ export function PinnedKeyboard({
     <KeyboardStrip edge={edge} onShow={() => fold(false)} />
   ) : (
     <LiveKeyboard
-      range={range ?? keyboardRange(opened, MIDDLE_OCTAVES)}
+      range={range ?? widest}
       inView={rangeOf(showing) ?? rangeOf(opened)}
       marks={marks}
       outlined={outlined}
