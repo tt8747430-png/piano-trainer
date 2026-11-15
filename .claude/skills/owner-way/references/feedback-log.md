@@ -383,6 +383,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 38, a course counts its lessons:** "0 of 7 learned" beside "7 lessons", as the Course board's "3 of 8 learned" (it counted the guided songs too, "0 of 9"), on the course's page and wherever Continue names a course.
 - **Loop round 37, Your lessons' first run in the boards' pills:** New lesson the honey pill, New course the quiet one, 44 tall and bold (they were a rounded square and an outlined one).
 - **Loop round 34, a level counts its lessons truly:** Learn's level row said "13 lessons" where Foundations holds 11 lessons and two practice steps (a scale, a chord family), while each lesson reads "Lesson 7 of 11"; the row now counts the lessons, its "0 of 13" the steps learned, as the level's page (2026-11-15).
 - **Loop round 34, a lesson wears the board's closed book (`BOOKI`):** `LessonIcon` on Continue, a level's lesson steps, a course's current lesson, Your lessons, New lesson and Publish, where Lucide's open book with lines stood; a book of exercises keeps its open book (2026-11-15).
