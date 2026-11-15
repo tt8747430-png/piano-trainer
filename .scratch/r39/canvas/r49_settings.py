@@ -4,7 +4,6 @@
 # Exact labels from src/shared/i18n/locales/en. Rebuilds the Settings boards drawn by r45_places.
 # Exec'd by r41.py after r48_course.
 
-INFOI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5h.01"></path></svg>'
 EYE = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
 RED = '#B3261E'
 GREEN = '#44684A'
@@ -13,12 +12,10 @@ def S9CAPS(t, tip=''):
     """A group's heading; with tip, an ⓘ that opens the explanation in place (no line under a control)."""
     if not tip:
         return CAPS(t)
-    return (f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: -6px">{CAPS(t)}'
-            f'<button type="button" aria-label="About {t}" onClick="{{{{tip_{tip}}}}}" style="width: 44px; height: 44px; margin: -12px -8px -12px 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI}</button></div>')
+    return f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 20px; padding-right: 12px">{CAPS(t)}' + INFOB(f'About {t}', f'tip_{tip}', f'tipOn_{tip}') + '</div>'
 def TIPCARD(key, text):
-    return (f'<sc-if value="{{{{tipOn_{key}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="note" style="border-radius: 12px; background: {INK}; color: {SHEET}; padding: 10px 12px; font-size: 14px; line-height: 1.45; display: flex; gap: 8px; align-items: flex-start">'
-            f'<span style="flex: 1">{text}</span><button type="button" aria-label="Close" onClick="{{{{tip_{key}}}}}" style="flex: none; width: 32px; height: 32px; margin: -6px -6px -6px 0; border: 0; background: transparent; color: {SHEET}; font: inherit; font-size: 18px">×</button></div></sc-if>')
-SEC = lambda *parts: f'<section style="display: flex; flex-direction: column; gap: 6px">{"".join(parts)}</section>'
+    return INFOTIP(f'tipOn_{key}', f'tip_{key}', 'About this', f'<p style="margin: 0">{text}</p>', 'right: 0; top: 30px')
+SEC = lambda *parts: f'<section style="position: relative; display: flex; flex-direction: column; gap: 6px">{"".join(parts)}</section>'
 FOOT = lambda t: f'<p style="margin: 0 4px; font-size: 13px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">{t}</p>'
 def FIELD(label, val, key='', typ='text', note='', noteC=SOFT, eye=False):
     inp = f'<input type="{{{{{key}Type}}}}" ' if eye else f'<input type="{typ}" '

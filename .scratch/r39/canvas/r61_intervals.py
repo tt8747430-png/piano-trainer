@@ -31,11 +31,8 @@ STAFF61 = (lambda: (
     + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="2"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
     + f'<path d="{{{{z.ad}}}}" fill="none" stroke="{INK}" stroke-width="1.4" stroke-linecap="round"></path><path d="{{{{z.bd}}}}" fill="none" stroke="{INK}" stroke-width="2.6"></path></sc-for>'
     + f'<path d="M334 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
-INFO61 = (f'<button type="button" aria-label="About the interval" data-tip="About the interval" aria-expanded="{{{{aboutOn}}}}" onClick="{{{{toggleAbout}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace("22", "20")}</button>')
-ABOUT61 = (f'<sc-if value="{{{{aboutOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{toggleAbout}}}}" style="position: fixed; inset: 0; z-index: 19"></div><div role="dialog" aria-label="{{{{name}}}}" style="position: absolute; left: 0; top: 56px; z-index: 20; width: 300px; box-sizing: border-box; padding: 14px 16px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 10px">'
-           f'<p style="margin: 0; font-size: 15px; line-height: 1.4; text-wrap: pretty">{{{{mean}}}}</p>'
-           + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px; font-size: 15px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Up', 'upS'), ('Down', 'downS'), ('Inverts to', 'inv')))
-           + '</div></sc-if>')
+INFO61 = '<span style="width: 8px"></span>' + INFOB('About the interval', 'toggleAbout', 'aboutOn')
+ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Up', 'upS'), ('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
 TITLE61 = (f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'
            f'<h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>{INFO61}</div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{{{{sub}}}}</p>{ABOUT61}</div>')
