@@ -204,14 +204,16 @@ STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val=
     + HEAD59 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
 CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
-# R59: the keys pinned at the foot; the dock floats just above them, over the chart, and the Genos strip over the dock
+# R59: the keys pinned at the foot; the dock floats just above them, over the chart; on a phone the Genos strip over the dock
 STRIP_CARD = lambda pos: STRIP.replace('style="flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px"', f'style="{pos} z-index: 40; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 10px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}"', 1)
 ph58 = (body(TOP('Main.dc.html', '', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 21, 2), '', 300)
         .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 34px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>'
                  + STRIP59('position: absolute; left: 16px; right: 16px; bottom: 234px;', False) + DOCK(CP_DOCK, 158), 1))
 lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
                '<div style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column"><div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + CHART59(16, 6, 76, 28, 1) + '</div>'
-               + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + STRIP59('position: relative; width: 100%; max-width: 760px;', True) + DOCK_L(CP_DOCK) + '</div></div>', DRAG)
+               + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + DOCK_L(CP_DOCK) + '</div></div>',
+               # round 41: on a laptop the Genos's strip stands in the right column under the chords, where it covers no bar
+               DRAG + '<div style="height: 24px"></div>' + STRIP59('position: relative;', False).replace(', ' + SHADOW + '">', '">', 1))
 # the playing piano runs the window's width at its foot, under the chart and the Style column, as on every board
 lm58 += '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(170).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') + '</div></sc-if>'
 SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
