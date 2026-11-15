@@ -121,10 +121,10 @@ export function ChordPlayerSettingsPage() {
           ? t('chordPlayer.settings.arrangerState.unsupported')
           : t('chordPlayer.settings.arrangerState.noDevice')
   return (
-    <div className="flex flex-col gap-6 pb-8">
+    <div className="flex flex-col gap-2 pb-8">
       <ScreenHeader title={t('chordPlayer.settings.title')} back={<BackButton />} />
-      <div className="mx-auto grid w-full max-w-5xl gap-7 lg:grid-cols-2 lg:items-start">
-        <div className="flex flex-col gap-7">
+      <div className="mx-auto grid w-full max-w-5xl gap-4 lg:grid-cols-2 lg:items-start">
+        <div className="flex flex-col gap-4">
           <SettingsGroup flush title={t('chordPlayer.settings.instruments')}>
             {drawn.map((part) => {
               const last = settings[part].on && onCount === 1
@@ -194,7 +194,7 @@ export function ChordPlayerSettingsPage() {
             </div>
           </SettingsGroup>
         </div>
-        <div className="flex flex-col gap-7 lg:pt-7">
+        <div className="flex flex-col gap-4 lg:pt-[22px]">
           <SettingsGroup flush>
             <RowLink
               title={t('chordPlayer.settings.onScreenPiano')}
