@@ -98,6 +98,8 @@
   --honey-ring: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
+  /* A toast's action (Undo): honey on the ink toast; by night the toast is light, so the deep honey. */
+  --toast-action: var(--p-honey);
   --eyebrow: var(--p-rust);
   --played: var(--p-copper);
   /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
@@ -282,6 +284,7 @@
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
+    --toast-action: var(--p-honey-ink);
     --eyebrow: var(--p-rust-night);
     --played: var(--p-copper-night);
     --scrim: rgb(10 7 5 / 0.84);

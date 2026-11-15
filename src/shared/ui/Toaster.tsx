@@ -1,11 +1,9 @@
 import { Toast as BaseToast } from '@base-ui/react/toast'
-import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './primitives/button'
 import {
   Toast,
   ToastAction,
-  ToastClose,
   ToastContent,
   ToastPortal,
   ToastProvider,
@@ -14,27 +12,30 @@ import {
   useToastManager,
 } from './primitives/toast'
 
-/** The toasts said, newest at the front, each a card: its line, its action, its Close. */
+/**
+ * The toasts said, newest at the front, as the canvas's TOASTS: ink, 14 round, its line in the sheet's
+ * colour at 15px, its action (Undo) in honey at the right; no Close, it goes by itself or by a swipe.
+ */
 function Toasts() {
-  const { t } = useTranslation('common')
   const { toasts } = useToastManager()
   return toasts.map((each) => (
     <Toast
       key={each.id}
       toast={each}
-      className="card rounded-card border-border bg-card elevation-3"
+      className="min-h-13 rounded-[14px] border-0 bg-foreground text-background shadow-none"
     >
-      <ToastContent className="gap-2 py-2 pr-2 pl-4">
-        <ToastTitle className="min-w-0 flex-1 font-sans text-base font-medium" />
+      <ToastContent className="gap-2 py-1 pr-1 pl-4">
+        <ToastTitle className="min-w-0 flex-1 font-sans text-[0.9375rem]/5 font-normal" />
         {each.actionProps ? (
-          <ToastAction render={<Button variant="ghost" className="font-semibold text-link" />} />
+          <ToastAction
+            render={
+              <Button
+                variant="ghost"
+                className="h-11 px-3 text-[0.9375rem] font-bold text-toast-action hover:bg-background/10 hover:text-toast-action"
+              />
+            }
+          />
         ) : null}
-        <ToastClose
-          aria-label={t('close')}
-          render={<Button variant="ghost" size="icon" className="text-muted-foreground" />}
-        >
-          <X aria-hidden />
-        </ToastClose>
       </ToastContent>
     </Toast>
   ))
