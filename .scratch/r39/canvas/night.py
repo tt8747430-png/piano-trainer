@@ -9,6 +9,8 @@ NIGHT = {'#F7F3EE': '#191512', '#FEFDFB': '#24201C', '#EEE9E2': '#2E2924', '#EDE
          '#FBF1DD': '#352D1E', '#B07A2A': '#E0B26F', '#7A5418': '#E3C383', '#5E3F10': '#E3C383', '#EDC684': '#D4B176',
          '#F2C987': '#D4B176', '#356890': '#89B7DE', '#332C28': '#171310', '#CBC2B9': '#787069', '#7C302C': '#5A2422',
          '#FFFFFF': '#EDE9E1', '#B3261E': '#F2867C',
+         # a white key (calmKeys), the app's dusk key by night
+         '#FEFDFA': '#D4D0CB',
          # the Player's own greys: staff lines, hairlines, the sheet, the second ink
          '#CFC6BB': '#5A524A', '#E9E2D8': '#3A332D', '#EFE9E1': '#2E2924', '#DDD5CA': '#453E38', '#A39A90': '#857B70',
          '#4A433C': '#D2CBC1', '#BDB3A7': '#5F574F', '#D9D1C6': '#453E38', '#E4DDD3': '#3A332D', '#E7E0D6': '#3A332D',
