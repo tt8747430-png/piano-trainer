@@ -234,6 +234,7 @@ owner's, typos fixed.
 
 ## Song page
 
+- **A song's Settings, a section, the takes and a take draw their states (2026-11-15):** Settings: Published, and Offline (Publish greyed under the ochre line "You’re offline. Publishing needs a connection.", the app's words); a section on one chord (its card says G, one Learn row, no One change at a time); Takes: No takes yet; a take: Playing from bar 4, Bars 3–10 kept, Deleted. One kit part, `SHOWSTATES`, hands each board's list to the States box.
 - **A song's page draws its states in the States box (2026-11-15):** Never played (one honey Practise the column's width, no bar map, as the ruling for a song before its first play), A long title (Fantaisie-Impromptu in C♯ minor, Op. 66 takes two lines before it is cut, its cover's title an ellipsis) and No chord symbols (the Chords and progressions go; Sections lead), phone and laptop.
 - **Loop round 41, the cover 4 under the bar on a phone, as the Song board:** the board's page starts 4 under its 44 bar (`padding: 4px 16px`); the app's cover stood 24 under it. Now 4, as Settings' list; the laptop keeps its 24 (2026-11-15).
 - **Loop round 28, the song page's type as its board:** the facts' values (G major, 3/4, 80 BPM) 17 at 600, the title's tracking -0.01em, as the Song board draws them.

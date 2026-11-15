@@ -186,7 +186,9 @@ TK_SRC = r'''
     const S = (o) => set(o);''' + TOAST_JS + r'''
     const first = st.first ?? 3, last = st.last ?? 10, bars = 14, kept = !!st.kept, deleted = !!st.deleted;
     const cells = Array.from({ length: bars }, (_, i) => ({ n: i + 1, bg: i + 1 >= first && i + 1 <= last ? '#F6E7C8' : 'transparent', play: () => S({ from: i + 1, playing: true }) }));
-    return { ...common(st, set), name: st.name ?? 'Take 3', setName: (e) => S({ name: e.target.value }), cells, fromT: st.playing ? 'Playing from bar ' + (st.from ?? 1) : 'Notes: 212 · bars: 14',
+    const states = [['playing', 'Playing from bar 4', !!st.playing, { playing: !st.playing, from: 4 }], ['kept', 'Bars 3–10 kept', kept, { kept: !kept }], ['deleted', 'Deleted', deleted, { deleted: !deleted }]]
+      .map(([k, l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => S(o) }));
+    return { ...common(st, set), states, name: st.name ?? 'Take 3', setName: (e) => S({ name: e.target.value }), cells, fromT: st.playing ? 'Playing from bar ' + (st.from ?? 1) : 'Notes: 212 · bars: 14',
       firstV: String(first), lastV: String(last), fDn: () => S({ first: Math.max(1, first - 1) }), fUp: () => S({ first: Math.min(last, first + 1) }), lDn: () => S({ last: Math.max(first, last - 1) }), lUp: () => S({ last: Math.min(bars, last + 1) }),
       askKeep: () => S({ sheet: 'keep' }), keepOn: st.sheet === 'keep', keepT: 'Keep bars ' + first + '–' + last + '?', doKeep: () => { S({ sheet: null, kept: true }); toast('Kept bars ' + first + '–' + last + '.'); },
       download: () => toast('Take 3.mid saved.'), del: () => { S({ deleted: true }); toast('Take 3 deleted.', true); }, deleted, notDeleted: !deleted, lenT: kept ? '0:24 · 92 BPM' : '0:41 · 92 BPM',
@@ -203,7 +205,7 @@ TKBODY = (IF('notDeleted', f'<label style="display: flex; flex-direction: column
           + CARD(f'<div style="display: flex; flex-direction: column; gap: 8px">{PROLL(340, 120)}<div style="display: grid; grid-template-columns: repeat(14, minmax(0, 1fr))"><sc-for list="{{{{cells}}}}" as="c" hint-placeholder-count="14"><button type="button" aria-label="Play from bar {{{{c.n}}}}" onClick="{{{{c.play}}}}" style="height: 32px; border: 0; border-radius: 6px; background: {{{{c.bg}}}}; font: inherit; font-size: 12px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{c.n}}}}</button></sc-for></div><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{fromT}}}}</span></div>', '12px')
           + SEC(CAPS('Keep bars'), GROUP(('step', 'First bar', 'firstV', 'fDn', 'fUp'), ('step', 'Last bar', 'lastV', 'lDn', 'lUp'), ('action', 'Keep', 'askKeep'), bg=SHEET))
           + SEC(GROUP(('action', 'Download', 'download'), bg=SHEET), GROUP(('action', 'Delete', 'del', RED), bg=SHEET)), 'true')
-          + EMPTY('deleted', '♪', 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
+          + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
 TKASK = ASK('keepOn', '{{keepT}}', 'All other bars will be permanently deleted.', 'Keep', 'doKeep')
 tkph = TOP('Editor.dc.html', 'Take', '', 'Amazing Grace') + NARROW(TKBODY) + TOASTS
 tklm = LTOP('EditorLaptop.dc.html', '') + WIDE(H1('Take') + TKBODY.replace('PROLL', 'PROLL').replace('Editor.dc.html', 'EditorLaptop.dc.html'), 720) + TOASTL

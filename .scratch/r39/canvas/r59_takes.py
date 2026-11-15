@@ -11,7 +11,9 @@ TKS_SRC = r'''
     const gone = st.gone || [], takes = ALL.filter((t) => !gone.includes(t.id)), at = ALL.find((t) => t.id === st.at) || ALL[0];
     const review = st.page === 'review', grid = st.grid || '1/8', raw = !!st.hideRaw, into = st.into || 'Both staves';
     const drop = (id) => S({ gone: gone.concat([id]), sheet: null, page: null, last: id, toast: 'Take deleted', toastUndo: true });
-    return { ...common(st, set), closeSheet: () => S({ sheet: null }),
+    const noneOn = takes.length === 0;
+    const states = [{ l: 'No takes yet', bg: noneOn ? '#332921' : '#EEE9E2', fg: noneOn ? '#FEFDFB' : '#332921', pick: () => S({ gone: noneOn ? [] : [1, 2, 3], page: null }) }];
+    return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
       rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
@@ -31,7 +33,7 @@ TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; display: flex; flex-direction: column; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
          f'<button type="button" aria-label="Take actions" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 TKLIST = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROW}</sc-for></div>', 'true')
-          + EMPTY('none', '♪', 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'))
+          + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'))
 
 def RESULT(w):
     # the take written as notes, the grand staff the review writes into (Amazing Grace's first bar)

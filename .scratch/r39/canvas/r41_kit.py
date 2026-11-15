@@ -254,3 +254,7 @@ def NEWMENU(items):
     return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'
 NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">'
                                 f'{_NEWPLUS.replace("26", "20")}New{CHEV_D}</button>')
+# A board's states for the canvas's States box: a hidden list states_tool.py lifts out of the screen (each row's
+# {l, bg, pick}; bg ink marks the one shown). The board draws each state itself.
+def SHOWSTATES(lst='states'):
+    return f'<div aria-label="Canvas: show a state" style="display: none"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="background: {{{{p.bg}}}}">{{{{p.l}}}}</button></sc-for></div>'
