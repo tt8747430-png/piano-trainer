@@ -38,10 +38,11 @@ export function Said({
       {action ? (
         <div
           className={cn(
-            'mt-1.5 flex flex-wrap justify-center gap-2 *:h-11 *:rounded-full *:border-0 *:px-5 *:font-bold',
+            'mt-1.5 flex flex-wrap justify-center gap-2 *:rounded-full *:border-0 *:px-5 *:font-bold',
+            // The boards' EMPTY: a way on in honey 48 tall, a quiet one (Clear) 44.
             primary
-              ? '*:bg-primary *:text-primary-foreground *:hover:brightness-95'
-              : '*:bg-muted *:hover:bg-muted/80',
+              ? '*:h-12 *:bg-primary *:text-primary-foreground *:hover:brightness-95'
+              : '*:h-11 *:bg-muted *:hover:bg-muted/80',
           )}
         >
           {action}
