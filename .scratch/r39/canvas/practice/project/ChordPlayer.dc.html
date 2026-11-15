@@ -154,10 +154,14 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const labOf = (n) => kbLabel === 'names' ? NM[n.m % 12] : kbLabel === 'degrees' ? DEG[n.m % 12] : kbLabel === 'intervals' ? ['1', '♭2', '2', '♭3', '3', '4', '♭5', '5', '♯5', '6', '♭7', '7'][n.iv] : '';
     const lit = new Map(notes.map((n) => [n.m, n]));
     const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
-    let wi = 0; const whites = [], blacks = [];
-    for (let m = lo; m <= hi; m++) { const n = lit.get(m), l = n ? labOf(n) : '';
-      if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#FEFDFB', l: nW <= 30 ? l : '' }); wi++; }
-      else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#332C28', l: nW <= 22 ? l : '' }); }
+    // the keys from lo to hi; a laptop's window, 1462 wide, shows at least C2–C7 so its keys are every board's size
+    const mkKeys = (lo, hi) => { const nW = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).filter(isW).length, kw = 100 / nW;
+      let wi = 0; const whites = [], blacks = [];
+      for (let m = lo; m <= hi; m++) { const n = lit.get(m), l = n ? labOf(n) : '';
+        if (isW(m)) { whites.push({ left: (wi * kw).toFixed(3) + '%', w: kw.toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#FEFDFB', l: nW <= 36 ? l : '' }); wi++; }
+        else blacks.push({ left: (wi * kw - kw * 0.3).toFixed(3) + '%', w: (kw * 0.6).toFixed(3) + '%', bg: n ? ROLEC[n.role] : '#332C28', l: nW <= 22 ? l : '' }); }
+      return { whites, blacks }; };
+    const { whites, blacks } = mkKeys(lo, hi), wide = mkKeys(Math.min(lo, 36), Math.max(hi, 96));
     const is3d = kbOnS && kbView !== '2d';
     this._handsIn = !is3d ? null : { notes: kbHands ? notes.map((n) => ({ midi: n.m, spelled: {}, hand: n.hand, finger: undefined, startTick: 0, durationTicks: 1920, velocity: 80 })) : [],
       perSecond: 960, now: () => 1, playing: false, held: new Set(notes.map((n) => n.m)), marks: new Map(notes.map((n) => [n.m, { tone: ROLEN[n.role] }])), wrong: undefined, faded: null, skin: 'light', range: { low: lo, high: hi } };
@@ -166,7 +170,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const strip = (() => { const W = 340, w = W / 52; let i = 0, x0 = null, x1 = 0, bl = '';
       for (let m = 21; m <= 108; m++) { if (isW(m)) { if (m >= lo && x0 === null) x0 = i * w; if (m <= hi) x1 = (i + 1) * w; i++; } else bl += 'M' + (i * w - w * 0.3).toFixed(2) + ' 0h' + (w * 0.6).toFixed(2) + 'v15h-' + (w * 0.6).toFixed(2) + 'z'; }
       const nm = (m) => NM[m % 12] + (Math.floor(m / 12) - 1); return { x: x0.toFixed(2), w: (x1 - x0).toFixed(2), bl, cap: nm(lo) + ' – ' + nm(hi) }; })();
-    const cpPiano = { cpKb: kbOnS, cpKb2: kbOnS && kbView === '2d', cpKb3: is3d, cpPad: kbOnS ? 16 : 118, kbw: whites, kbb: blacks, nowChord: slot.c,
+    const cpPiano = { cpKb: kbOnS, cpKb2: kbOnS && kbView === '2d', cpKb3: is3d, cpPad: kbOnS ? 16 : 118, kbw: whites, kbb: blacks, kbwL: wide.whites, kbbL: wide.blacks, nowChord: slot.c,
       handsRef: (el) => { this._cv = el; }, labelsRef: (el) => { this._lb = el; },
       pianoOn: st.sheet === 'piano', openPiano: () => set({ sheet: 'piano' }), backSet: () => set({ sheet: 'set' }), pianoVal: !kbOnS ? 'Hidden' : kbView === '2d' ? '2D keys' : '3D piano',
       pianoSw: ((on) => ({ on, track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, flip: () => set({ kbOn: !kbOnS }) }))(kbOnS), kbHandsSw: ((on) => ({ on, track: on ? '#7FB685' : '#DAD1C8', knob: on ? 22 : 2, flip: () => set({ kbHands: !kbHands }) }))(kbHands),
