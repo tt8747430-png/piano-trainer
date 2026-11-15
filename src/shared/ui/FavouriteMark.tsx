@@ -8,7 +8,7 @@ export function FavouriteMark() {
     <Heart
       role="img"
       aria-label={t('library.favourites')}
-      className="size-4 shrink-0 fill-current text-muted-foreground"
+      className="size-4 shrink-0 fill-current text-heart"
     />
   )
 }

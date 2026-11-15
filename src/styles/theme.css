@@ -47,6 +47,8 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-heart: var(--heart);
+  --color-heart-rest: var(--heart-rest);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-alert: var(--alert);
   --color-alert-foreground: var(--alert-foreground);

@@ -163,6 +163,9 @@
   --learned-foreground: var(--p-white);
   --attention: var(--p-ochre);
   --destructive: var(--p-crimson);
+  /* A favourite: the boards' red heart, filled; at rest a row's heart is faint. */
+  --heart: #b84a3e;
+  --heart-rest: #b4aaa0;
   --destructive-foreground: var(--p-white);
   /* A notice that something was lost or not saved (AppLayers' Storage full): a crimson wash, its ink deep. */
   --alert: #f6deda;
@@ -312,6 +315,8 @@
     --learned-foreground: var(--p-dusk-950);
     --attention: var(--p-ochre-light);
     --destructive: var(--p-crimson-light);
+    --heart: var(--p-crimson-light);
+    --heart-rest: color-mix(in oklab, var(--p-dusk-line) 40%, #b4aaa0);
     --destructive-foreground: var(--p-dusk-950);
     --alert: color-mix(in oklab, var(--p-crimson) 32%, var(--p-dusk-950));
     --alert-foreground: #fbe4e1;

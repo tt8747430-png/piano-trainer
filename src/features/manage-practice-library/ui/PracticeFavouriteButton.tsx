@@ -11,7 +11,7 @@ import { togglePracticeFavourite } from '../toggle-favourite'
 
 /**
  * The ♡ in an exercise's or a progression's bar (R30-4, as a song's): pressed while it is a
- * favourite, a sand fill and a filled heart; named by what a tap does.
+ * favourite, its heart filled red; named by what a tap does.
  */
 export function PracticeFavouriteButton({ kind, id }: { kind: PracticeKind; id: string }) {
   const { t } = useTranslation('common')
@@ -23,7 +23,7 @@ export function PracticeFavouriteButton({ kind, id }: { kind: PracticeKind; id: 
       icon={Heart}
       aria-pressed={favourite}
       onClick={() => togglePracticeFavourite(store, kind, id)}
-      className="aria-pressed:bg-chosen aria-pressed:[&_svg]:fill-current"
+      className="aria-pressed:text-heart aria-pressed:[&_svg]:fill-current"
     />
   )
 }
