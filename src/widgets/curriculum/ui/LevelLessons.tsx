@@ -116,7 +116,7 @@ function ChapterGroup({
         <span aria-hidden className="min-w-0 flex-1">
           {n} · {title}
         </span>
-        <span className="shrink-0 text-[0.8125rem] font-normal tabular-nums">
+        <span className="shrink-0 text-[0.8125rem] font-normal">
           {t('journey.count', { learned: done, total: ids.length })}
         </span>
       </h3>

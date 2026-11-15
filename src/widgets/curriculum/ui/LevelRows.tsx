@@ -37,7 +37,7 @@ export function LevelRows() {
                 <ProgressRing share={share} track className={PAINT.grass.ink}>
                   <span
                     aria-hidden
-                    className="grid size-8 place-items-center rounded-pill bg-card text-[0.9375rem] font-bold tabular-nums"
+                    className="grid size-8 place-items-center rounded-pill bg-card text-[0.9375rem] font-bold"
                   >
                     {i + 1}
                   </span>
@@ -49,7 +49,7 @@ export function LevelRows() {
                     {t('learn:course.lessonCount', { count: progress.total })}
                   </span>
                 </span>
-                <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground tabular-nums">
+                <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">
                   {t('learn:journey.of', { learned: progress.done, total: progress.total })}
                 </span>
                 <OpensMark />
@@ -103,7 +103,7 @@ export function LevelNav({ current }: { current: string }) {
                     {localText(journey.title, locale)}
                   </span>
                 </span>
-                <span className="shrink-0 text-[0.8125rem] text-muted-foreground tabular-nums">
+                <span className="shrink-0 text-[0.8125rem] text-muted-foreground">
                   {t('learn:journey.count', { learned: progress.done, total: progress.total })}
                 </span>
               </Link>

@@ -44,9 +44,7 @@ export function ProgressMeter({
       )}
     >
       <ProgressBar done={done} total={total} />
-      <span aria-hidden className="tabular-nums">
-        {count}
-      </span>
+      <span aria-hidden>{count}</span>
       <span className="sr-only">{said}</span>
     </span>
   )
