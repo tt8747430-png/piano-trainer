@@ -5,6 +5,8 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+
+- **The keys hold middle C when the caret has nothing (loop round 18):** with no note at the caret (a new score, an empty bar, a rest with no hand under it), the editor's keys centre on C3 to C5 as the Editor boards draw them, instead of sitting at the bottom of the score's span; with notes at the caret they still follow them.
 - **Review your recording ported to its board** (canvas 195): Quantize's five values in one row (Segmented wraps five only past 20 characters, words, never values), and a flush group pads its switch rows 16 itself, so Hide raw notes and Hear notes no longer touch the card's edge.
 - **The takes are drawn** (canvas 194, loop; the Takes board): the list (Play in a quiet circle, the name to its page, length and tempo, ··· with Review, Download, Delete at once with Undo), its empty state, and Review your recording as its page with Back in the header: the take as notes, the roll with its split point, Quantize as one row of five (1/4 1/8 1/16 1/4t 1/8t, never 3 + 2), Hide raw notes, Into ›, then Discard and Save to score. The editor's "Takes: 3" opens it.
 - **The recording review's Back is in the sheet's header,** as every sheet's page (loop): the "‹ Back" row in its content and `SheetBack` are gone.

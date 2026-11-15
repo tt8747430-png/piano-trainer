@@ -4,8 +4,11 @@ import { keysRange } from '@/features/practice'
 import { notesAt, type EditorState } from '@/features/score-editor'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { KeyboardStrip, LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
-import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
+import { midi, rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+
+/** With nothing at the caret (a rest, an empty bar), the keys hold C3 to C5, middle C at their centre, as the boards draw them. */
+const MIDDLE: KeyRange = { from: midi(48), to: midi(72) }
 
 /** The keys of the notes at the caret. */
 const caretKeys = ({ draft, caret, layer }: EditorState): Midi[] =>
@@ -43,7 +46,7 @@ export function EditorKeyboard() {
   const here = useEditorState(useShallow(caretKeys))
   const range = useEditorState(useShallow(scoreSpan))
   const hands = useEditorState(useShallow(handsHere))
-  const inView = useMemo(() => rangeOf([...here, ...hands]), [here, hands])
+  const inView = useMemo(() => rangeOf([...here, ...hands]) ?? MIDDLE, [here, hands])
   const selected = useMemo(() => new Set(here), [here])
   const { folded, fold } = useFoldKeys()
   const dock = useSettings((state) => selectKeyboard(state).dock)
