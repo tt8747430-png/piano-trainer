@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 30, the palette's section titles in the sans** (15, 600, ink), as the Editor boards draw them, no longer the book serif. The laptop bar keeps no title: the score prints it where it is edited, so the board's title beside Close would say it twice.
 - **The editor's foot reaches the screen's edge, as Flat's:** what stands last (the keys, else the palette) runs on under the home indicator, its own paper filling the inset, instead of a bare band of page under it.
 - **What waits for a note says so quietly:** a section whose tools need a chosen note shows one soft line under its title, as Flat greys what cannot act; the dashed box that repeated down the panel is gone.
 - **The keys as Flat's (owner, 2026-11-15: "it doesnt make ant sense for the keyboard to close like thet, make like the flat editor does"):** unfolding the palette no longer folds the keys into a "Keyboard" strip; they step aside under the open palette and come back as it folds, their own state untouched; the piano button beside the selection is their one switch, and hidden they leave nothing behind (the strip is gone from the editor).
