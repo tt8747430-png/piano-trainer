@@ -312,12 +312,17 @@ export function OwnLibrary() {
       {none ? (
         <div className="flex flex-col items-start gap-4 card p-5">
           <p className="text-pretty">{t('own.empty')}</p>
-          <div className="flex flex-wrap gap-3">
+          {/* The boards' pills: the honey act, then the quiet one, 44 tall and bold. */}
+          <div className="flex flex-wrap gap-2 *:h-11 *:rounded-full *:px-5 *:font-bold">
             <Button onClick={() => setMaking('lesson')}>
               <LessonIcon data-icon="inline-start" aria-hidden />
               {t('own.newLesson')}
             </Button>
-            <Button variant="outline" onClick={() => setMaking('course')}>
+            <Button
+              variant="ghost"
+              className="bg-muted hover:bg-foreground/10"
+              onClick={() => setMaking('course')}
+            >
               {t('own.newCourse')}
             </Button>
           </div>
