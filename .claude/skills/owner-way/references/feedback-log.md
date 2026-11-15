@@ -273,6 +273,8 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 23, Continue's lines as the board:** the eyebrow and the lesson's line 13/16, the title 22 at 1.15, so a
+  two-line title sits as tight as the board's; the level rows measured equal (80, 8/12, 16/14) (2026-11-15).
 - **Loop round 21, a course's row keeps its counts:** the LearnCourses board draws a short line of what it teaches;
   the courses' summaries run two to four lines, so in its place they ended every row in an ellipsis. The row keeps
   "4 lessons · 6 songs · 4 weeks" until each course has a line that short (2026-11-15).

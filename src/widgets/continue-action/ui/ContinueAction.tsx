@@ -44,14 +44,14 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-[0.8125rem] font-semibold text-eyebrow">
+        <span className="text-[0.8125rem]/4 font-semibold text-eyebrow">
           {t('continue')} · {localText(track.title, locale)}
         </span>
-        <h2 id={id} className="font-display text-[1.375rem] leading-tight font-normal text-balance">
+        <h2 id={id} className="font-display text-[1.375rem]/[1.15] font-normal text-balance">
           {title}
         </h2>
         {meter ? (
-          <span className="text-[0.8125rem] text-muted-foreground">
+          <span className="text-[0.8125rem]/4 text-muted-foreground">
             {n > 0
               ? `${t('lessonNumber', { n })} · ${t('progress', { learned: progress.done, total: progress.total })}`
               : t('progress', { learned: progress.done, total: progress.total })}
