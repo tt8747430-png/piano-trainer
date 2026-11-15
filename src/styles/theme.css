@@ -929,7 +929,7 @@
      row kept empty. */
   --float-room: 5.5rem;
   /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
-  --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
+  --bar-above: calc(--spacing(3) + max(--spacing(4), env(safe-area-inset-top)));
   & > [data-area='bar'] {
     grid-area: bar;
   }
@@ -1062,6 +1062,10 @@
   /* The editor's bar (its board): glass buttons over the music, no band of paper, no hairline. */
   &[data-floating]::before {
     display: none;
+  }
+  /* The band's 8 under its buttons, as the Player board's bar (12 over them, 44, 8 under). */
+  &:not([data-floating]) {
+    padding-bottom: --spacing(2);
   }
   & > [data-area='lead'] {
     grid-area: lead;
