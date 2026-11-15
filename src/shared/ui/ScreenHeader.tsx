@@ -124,6 +124,9 @@ export function ScreenHeader({
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
+                // A page's own name beside Back takes a step down on a phone, as the boards' TITLEBAR
+                // sets a name that may wrap (24 to a place's 28).
+                large && back && 'max-sm:text-2xl',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',
@@ -160,6 +163,9 @@ export function ScreenHeader({
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
+                // A page's own name beside Back takes a step down on a phone, as the boards' TITLEBAR
+                // sets a name that may wrap (24 to a place's 28).
+                large && back && 'max-sm:text-2xl',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',

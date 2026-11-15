@@ -916,6 +916,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Loop round 37, a page's own name at the boards' 24 on a phone:** a large title beside Back (Your lessons and courses, Courses, a course) takes the step down `TITLEBAR` gives a name that may wrap, 24 to a place's 28, so Your lessons and courses reads on one line at 402.
 - **Loop round 36, route states to AppLayers:** the ways on of Page not found, Something went wrong and a draft that will not open are the board's `BTN` pills (48 tall, bold, round), and an unknown address leads to Learn, as the board's Not found says. The deletion gate takes the welcome's box (22 corners, 24 above, a 20 title), as the board draws both.
 - **Loop round 35, one section head (the boards' H2):** a section's name and its See all sit on one baseline in a row the name's height, See all reaching 44 without growing it, so Learn's Courses stands 14 under the Levels as the board draws it (it stood 23); Learn's Courses and Your lessons, Profile's sections and Explore's shelves share it (`SectionHead`, `SeeAll`), where three heads had been built three ways (2026-11-15).
 - **Loop round 34, every bottom sheet 16 at its sides, as the boards' (BSHEET):** all 136 sheets on the boards hold their content 16 from the edge and the app's one sheet held it 20; the sheet's body and foot now sit at 16 (the style editor's preview bleeding by the same), and its head sits 4 closer to the content, so Search's field stands 23 under its title where the board draws 22 (2026-11-15).
