@@ -515,8 +515,6 @@ export const editor: LocaleResources['editor'] = {
     split: 'Граница рук',
     splitAt: 'Граница рук: {{key}}',
     discard: 'Удалить',
-    discardTitle: 'Удалить эту запись?',
-    discardBody: 'Дубль будет удалён без возможности восстановления.',
     save: 'Сохранить в ноты',
   },
   recordingBar: {

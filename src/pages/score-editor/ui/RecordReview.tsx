@@ -4,7 +4,7 @@ import { quantise, type Take } from '@/entities/take'
 import { barAt, type TakeInto } from '@/features/score-editor'
 import { MIDDLE_C, type Midi } from '@/shared/lib/music'
 import { notate, singleStaff } from '@/shared/lib/notation'
-import { ConfirmDialog, Dropdown, NamedSegmented, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { Dropdown, NamedSegmented, say, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreView } from '@/shared/ui/score'
 import { TakeRoll } from '@/widgets/take-roll'
@@ -47,7 +47,6 @@ export function RecordReview({ take }: { take: Take }) {
   const [raw, setRaw] = useState(true)
   const [split, setSplit] = useState<Midi>(MIDDLE_C)
   const [into, setInto] = useState<TakeInto>(leadSheet ? singleStaff(0) : 'both')
-  const [discarding, setDiscarding] = useState(false)
   const notes = useMemo(() => {
     const snapped = reviewGrids(take.meter).find((each) => gridKey(each) === chosen)
     return snapped ? quantise(take, snapped) : []
@@ -129,7 +128,15 @@ export function RecordReview({ take }: { take: Take }) {
         />
       ) : null}
       <div className="grid grid-cols-2 gap-3">
-        <Button size="lg" variant="outline" onClick={() => setDiscarding(true)}>
+        <Button
+          size="lg"
+          variant="outline"
+          onClick={() => {
+            const undo = takes.remove(take.id)
+            takes.show(TAKES_PAGE)
+            say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+          }}
+        >
           {t('review.discard')}
         </Button>
         <Button
@@ -140,18 +147,6 @@ export function RecordReview({ take }: { take: Take }) {
           {t('review.save')}
         </Button>
       </div>
-      <ConfirmDialog
-        open={discarding}
-        onOpenChange={setDiscarding}
-        title={t('review.discardTitle')}
-        body={t('review.discardBody')}
-        action={t('review.discard')}
-        onConfirm={() => {
-          setDiscarding(false)
-          takes.remove(take.id)
-          takes.show(TAKES_PAGE)
-        }}
-      />
     </div>
   )
 }

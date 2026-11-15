@@ -563,8 +563,6 @@ export const editor = {
     split: 'Split point',
     splitAt: 'Split point: {{key}}',
     discard: 'Discard',
-    discardTitle: 'Discard this recording?',
-    discardBody: 'The take will be permanently deleted.',
     save: 'Save to score',
   },
   recordingBar: {
