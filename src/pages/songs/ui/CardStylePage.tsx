@@ -74,11 +74,6 @@ export function FolderCardStylePage() {
   return <CardStyle key={folder.id} folder={folder} />
 }
 
-/** The library home's Card style (R29 B9), from Songs' More. */
-export function HomeCardStylePage() {
-  return <CardStyle folder={null} />
-}
-
 /**
  * Card style (R32-C, memory-palaces' deck card style): the place's look, edited on a pinned preview
  * of its own rows as a phone or a laptop draws them; the style editor, then Card contents. Reset to

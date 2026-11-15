@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { Ellipsis, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,15 +10,7 @@ import {
 } from '@/entities/library'
 import { isOwnSongId, useRepertoire } from '@/entities/piece'
 import { DeleteFolderAsk, restoreAll, useLibraryActs } from '@/features/manage-library'
-import {
-  ActionMenu,
-  BackButton,
-  GROUPED_LIST,
-  RowLink,
-  say,
-  ScreenHeader,
-  SettingsGroup,
-} from '@/shared/ui'
+import { ActionMenu, BackButton, GROUPED_LIST, say, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ArchiveEmpty } from './ArchiveEmpty'
 import { ArchivedRow } from './ArchivedRow'
@@ -33,7 +24,7 @@ const keyOf = (entry: ShelvedEntry) =>
  * canvas 133): Restore all under its bar; what was archived, the newest first, in one card, folders
  * with their songs counted and songs, each with Restore, and its More with Delete for the learner's
  * own song (to the Trash, with Undo, R34) or folder (asked first); empty, it says what it is for. The
- * Trash lives inside it, a row under Deleted songs.
+ * Trash is Songs' ··· (owner, 2026-11-15: "what the trash does in the archive").
  */
 export function ArchivePage() {
   const { t } = useTranslation('songs')
@@ -42,7 +33,7 @@ export function ArchivePage() {
   const repertoire = useRepertoire()
   const acts = useLibraryActs()
   const [deletingFolder, setDeletingFolder] = useState<ShelvedFolder | null>(null)
-  const { archive, trash } = layout
+  const { archive } = layout
   return (
     <div className="flex flex-col gap-6 pb-4">
       <ScreenHeader title={t('archive.title')} back={<BackButton />} />
@@ -109,13 +100,6 @@ export function ArchivePage() {
             </ul>
           </div>
         )}
-        <SettingsGroup flush title={t('archive.deleted')}>
-          <RowLink
-            title={t('trash.title')}
-            value={trash.length > 0 ? t('folder.songCount', { count: trash.length }) : undefined}
-            render={<Link to="/songs/trash" />}
-          />
-        </SettingsGroup>
       </div>
       <DeleteFolderAsk
         folder={deletingFolder}

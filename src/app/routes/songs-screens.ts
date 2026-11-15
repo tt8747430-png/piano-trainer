@@ -55,7 +55,6 @@ export {
   FolderCardStylePage,
   FolderPage,
   FolderSettingsPage,
-  HomeCardStylePage,
   SongsPage,
 } from '@/pages/songs'
 export { PublicSongPage } from '@/pages/public-library'

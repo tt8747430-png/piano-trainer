@@ -265,6 +265,10 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **The Trash leaves Archive; Home's Card style goes (owner, 2026-11-15: "what the trash does in the archive",
+  "features that the artifact doesnt have like the card style"):** Songs' ··· is Select and Trash; Archive holds
+  only what was archived. Card style is a folder's alone, from its Settings, as the board draws it.
+
 - **An empty list as the board's EMPTY (loop 24):** one `EmptyState`: a 64 round sand mark with its icon (a search
   that found nothing, filters, an empty folder, an empty library), what is empty in 18 bold, a 15 line saying what
   to try ("Check the spelling, or try a song’s title or its composer."), its way on a 44 sand pill (2026-11-15).

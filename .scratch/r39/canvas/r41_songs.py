@@ -44,7 +44,7 @@ library('Songs', 'My songs', SONGS_D, soft='Explore', soft_href='Explore', right
         shelf_phone=shelf(132).replace('{SONG}', 'Song.dc.html'), shelf_laptop=shelf(170).replace('{SONG}', 'SongLaptop.dc.html').replace(f'<section', '<section style="margin-bottom: 14px"', 1).replace('style="margin-bottom: 14px" style=', 'style='),
         table_cols=(('Title', 't', 3), ('Composer and key', 's', 3), ('Progress', 'v', 1.4)),
         add_items=(('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'), ('New group', 'Groups.dc.html')),
-        more_rows=(('link', 'Select', ''), ('link', 'Export…', '')))
+        more_rows=(('link', 'Select', ''), ('link', 'Export…', ''), ('link', 'Trash', '', '')))
 
 # ── a song's page ──
 SG = js(r'''

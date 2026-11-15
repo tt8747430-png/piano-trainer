@@ -549,11 +549,6 @@ const folderCardStyleRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'FolderCardStylePage'),
 })
-const homeCardStyleRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/songs/card-style',
-  component: lazyRouteComponent(songsScreens, 'HomeCardStylePage'),
-})
 // A folder's Archived (D10, R29 B4): the songs archived from it, each to unarchive.
 const folderArchivedRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1150,7 +1145,6 @@ const routeTree = rootRoute.addChildren([
     folderRoute,
     folderSettingsRoute,
     folderCardStyleRoute,
-    homeCardStyleRoute,
     archiveRoute,
     trashRoute,
     folderArchivedRoute,

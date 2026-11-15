@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { CheckCheck, ListChecks, ListX, Palette, Settings } from 'lucide-react'
+import { CheckCheck, ListChecks, ListX, Settings, Trash2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
@@ -109,7 +109,6 @@ export function LibraryHeader({
           </>
         )
       }
-      // Home's Card style (R29 B9), Home's own: a folder's is on its Settings page.
       more={
         folder ? null : (
           <MoreMenu
@@ -120,11 +119,12 @@ export function LibraryHeader({
                 icon: ListChecks,
                 onSelect: () => page.select.start(),
               },
+              // The board's ···: Select, then the Trash (deleted songs wait there, out of Archive).
               {
-                key: 'card-style',
-                label: t('cardStyle.open'),
-                icon: Palette,
-                onSelect: () => void navigate({ to: '/songs/card-style' }),
+                key: 'trash',
+                label: t('trash.title'),
+                icon: Trash2,
+                onSelect: () => void navigate({ to: '/songs/trash' }),
               },
             ]}
           />
