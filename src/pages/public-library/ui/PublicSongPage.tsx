@@ -155,13 +155,26 @@ export function PublicSongPage() {
                   ? t('explore.offline')
                   : t('explore.failed')
             }
-            {...(reading.kind === 'failed' && reading.reason !== 'offline'
-              ? { description: t('explore.failedLine') }
+            {...(reading.kind === 'failed'
+              ? {
+                  description: t(
+                    reading.reason === 'offline' ? 'explore.offlineLine' : 'explore.failedLine',
+                  ),
+                }
               : {})}
             action={
-              <ButtonLink variant="soft" render={<Link to="/songs" search={{ view: 'explore' }} />}>
-                {t('explore.views.explore')}
-              </ButtonLink>
+              reading.kind === 'failed' && reading.reason === 'offline' ? (
+                <ButtonLink variant="soft" render={<Link to="/songs" search={{ view: 'mine' }} />}>
+                  {t('explore.views.mine')}
+                </ButtonLink>
+              ) : (
+                <ButtonLink
+                  variant="soft"
+                  render={<Link to="/songs" search={{ view: 'explore' }} />}
+                >
+                  {t('explore.views.explore')}
+                </ButtonLink>
+              )
             }
           />
         )}

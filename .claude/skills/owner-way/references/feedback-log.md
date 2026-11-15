@@ -323,6 +323,8 @@ owner's, typos fixed.
 - **Loop round 15, the laptop's table as the board's:** Progress says where a song stopped part way, "Bar 9 of 16" as Continue says it, before Learning and Learned; the column shows once any song has one of the three (2026-11-14).
 - **Loop round 18, the Songs board back to its rulings (canvas 188):** the place chips All · Favourites · Learning · Learned (no Recently played); a folder row a stack of pages in its paint, its count, a chevron, no heart. In the app a folder wears the picture the learner chose (a note by default) on that paint; the board draws the stack (2026-11-15).
 - **Loop round 14, Songs' Continue as the board's shelf:** Home opens, on a phone and a laptop, with the songs left part way, the latest first: a sideways shelf of cards 132 wide (170 on a laptop), each its first page in small (title in serif, who wrote it, the clef and its first notes), its title, a 3px copper meter and "Bar 9 of 16"; a song's place now keeps its bar count (2026-11-14).
+- **A public song opened offline (loop 23, 2026-11-15):** it says what Explore says offline, "Explore needs the internet.
+  Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
 
