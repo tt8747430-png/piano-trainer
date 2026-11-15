@@ -104,6 +104,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 25, radio cards as the boards' (PlayerApp's mode tiles, CARDV):** the chosen card in a honey wash ringed 2px in the deep honey, its dot honey with a white tick, the others white with a ringed dot; Wait · Play stand side by side, 14 round with 44 by 40 tiles, and cards holding rows (the 3D piano) stack, one `RadioCards` (2026-11-15).
 - **Loop round 25, the Settings' head as the board's (PlayerApp):** the song's tile with its two notes, its title 17 bold over "G major · 3/4 · 80 BPM" in 13, Share link and ··· white circles lifted a little, Edit score 44 tall with 12 corners in 15 semibold (2026-11-15).
 - **Loop round 25, the transport's groups as the board measures them (PlayerApp, PlayerDesk):** three glass groups 56 tall, 4 inside, 8 apart, every button 48 tall (‹ › 44 wide, Play 48) on a phone from 390px; on a laptop each picture stands beside its word in 15px semibold, 12 before and 16 after (2026-11-15).
 - **Loop round 25, the transport floats over the music (the board's PlayerApp):** its three glass groups stand over the music's foot with no band or hairline under them, the music running on beneath to the screen's edge and scrolling clear of the keys' window, else of the transport; the R31-P row at the foot is gone (2026-11-15).
