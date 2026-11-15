@@ -11,7 +11,10 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ';\n' + r''
       num: String(i + 1), tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', ring: k === 'next' ? '0 0 0 2.5px #EDC684' : (k === 'learned' ? 'none' : '0 0 0 1px #DAD1C8'),
       remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: 'Removed: ' + t }); } }));
     const removed = CR.lessons.filter(([t]) => gone[t]).map(([t]) => ({ t, back: () => { const g = { ...gone }; delete g[t]; set({ gone: g }); } }));
-    return { ...common(st, set), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
+    const lost = CR.lessons[1][0], states = [['Edited by an editor', editing, { editing: true }, { editing: false }],
+      ['A lesson removed, with Undo', !!gone[lost], { editing: true, gone: { [lost]: true }, toast: 'Removed: ' + lost }, { gone: {}, toast: null }]]
+      .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
+    return { ...common(st, set), states, editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
       t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d })), removed, hasRemoved: removed.length > 0,
       shelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
@@ -78,5 +81,5 @@ clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTI
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; align-items: flex-start"><div style="flex: 1; max-width: 1180px; display: flex; gap: 48px; align-items: flex-start">{CBODY(True)}</div></main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
 cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + POPOVER('pmOn', 'Publishing', CPM, 'right: 160px; top: 60px', 320) + POPOVER('propOn', 'Properties', CPROPS, 'left: 460px; top: 300px', 460)
-detail('Course', 'Intro to Music Reading', COURSE_JS, cph, clm, '', csh, cpops, 'Learn')
+detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')

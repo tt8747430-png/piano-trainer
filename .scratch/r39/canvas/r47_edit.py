@@ -26,7 +26,10 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
     Cm.forEach((m, i) => { marks[m] = [i === 2 || i === 6 ? '#E8C67D' : '#9BC093', ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'][i]]; });
     (st.chosen || []).forEach((m) => { qm[m] = ['#85B8DC', '']; });
     const chosen = st.chosen || [], right = chosen.length === 8 && D.every((m) => chosen.includes(m));
-    return { ...common(st, set), editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
+    const states = [['Edited by an editor', editing, { editing: true, sel: 0, preview: false }, { editing: false }], ['The lesson’s Russian text', ru, { lang: 'RU' }, { lang: 'EN' }],
+      ['Previewed as a learner', preview, { preview: true, editing: false }, { preview: false }], ['The question answered', right, { chosen: D }, { chosen: [] }]]
+      .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
+    return { ...common(st, set), states, editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
       edit: () => set({ editing: true, sel: 0 }), done: () => set({ editing: false, sheet: null }), langs: seg(['EN', 'RU'], ru ? 'RU' : 'EN', (l) => set({ lang: l })),
       place: LS.place, title: T(LS, 'title'), summary: T(LS, 'summary'), secs, status: st.saving ? 'Saving…' : 'Saved · not published',
       kb: calmKeys(60, 76, marks, 362, 96), kbL: calmKeys(60, 76, marks, 680, 120), qkb: calmKeys(60, 76, qm, 362, 96), qkbL: calmKeys(60, 76, qm, 680, 120),
@@ -181,8 +184,8 @@ def PAGEOVER(lap):
             + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; {pad}"><div style="{inner_w}display: flex; flex-direction: column; gap: 14px">'
             f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE}</sc-if><sc-if value="{{{{isPubPage}}}}" hint-placeholder-val="{{{{false}}}}">{PUBPAGE}</sc-if></div></main></div></sc-if>')
-lph = lph + PAGEOVER(False) + ASKS
-llm = llm + PAGEOVER(True) + ASKS
+lph = SHOWSTATES() + lph + PAGEOVER(False) + ASKS
+llm = SHOWSTATES() + llm + PAGEOVER(True) + ASKS
 lsh = lsh + BSHEET('toolsOn', 'Tools', TOOLSBODY) + BSHEET('pmOn', 'Publishing', PMBODY) + BSHEET('verOn', 'Versions of How major scales work', VERBODY) + BSHEET('styleOn', 'Style: Scale', STYLEBODY)
 lpops = lpops + POPOVER('toolsOn', 'Tools', TOOLSBODY, 'right: 140px; top: 64px', 380) + POPOVER('pmOn', 'Publishing', PMBODY, 'right: 120px; top: 64px', 320) + POPOVER('verOn', 'Versions of How major scales work', VERBODY, 'right: 120px; top: 64px', 440) + POPOVER('styleOn', 'Style: Scale', STYLEBODY, 'right: 260px; top: 200px', 420)
 BLOCKBODY2 = GROUP(('link', 'Add below', '', 'openIns'), ('link', 'Turn into', 'Text', '#'), ('link', 'Edit', '', 'openEx'), ('link', 'Style', 'Soft', 'openStyle'), ('link', 'Duplicate', '', '#'), ('action', 'Delete', 'removeBlock', '#B3261E'), bg=SHEET)
