@@ -720,6 +720,8 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Search's suggestions as the board's link rows (loop round 19):** 48 tall, 10 apart, 12 at the chevron; a
+  result keeps SROW9's 52 (2026-11-15).
 - **The page under a sheet dims in warm ink, unblurred, as the board's BSHEET (loop, 2026-11-14):** every sheet, dialog and confirmation lays `--scrim` (ink at 28%, by Night near-black at 84%) over the page, never a black blur; Search's laptop panel wears the board's line and lifted shadow.
 - **The + is centred on a phone, as the board's New (loop, 2026-11-14):** every floating action stands centred over the tab bar on a phone, its menu opening over it; at the right from a laptop's width.
 - **The tab bar floats, as the board's TABBAR (loop, 2026-11-14):** a glass capsule 64 high, 16 in from the phone's edges, over the home indicator, the current place on the chosen fill; a soft fade under it. The rail and the sidebar unchanged. A chosen chip is filled in ink (canvas 153), every `ChoiceChips`.

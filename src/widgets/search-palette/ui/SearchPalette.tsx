@@ -286,7 +286,9 @@ function PaletteSection({
             onMouseMove={() => onHover(option)}
             onClick={() => onChoose(option)}
             className={cn(
-              'flex min-h-13 cursor-pointer items-center gap-3 border-b border-hairline px-4 py-1.5 last:border-b-0',
+              'flex cursor-pointer items-center border-b border-hairline py-1.5 pl-4 last:border-b-0',
+              // A suggestion is the board's GROUP link row (48, 10 apart, 12 at its chevron); a result its SROW9 (52).
+              chevrons ? 'min-h-12 gap-2.5 pr-3' : 'min-h-13 gap-3 pr-4',
               option === active && 'bg-muted',
             )}
           >
