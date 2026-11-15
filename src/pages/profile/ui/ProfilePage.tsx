@@ -80,13 +80,13 @@ export function ProfilePage() {
       />
       {/* One column on a phone; on a laptop two (canvas 128): the learner, the week and the next
           badge, then the badges and achievements beside them. */}
-      <div className="mx-auto grid w-full max-w-2xl gap-7 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
-        <div className="flex min-w-0 flex-col gap-7">
+      <div className="mx-auto grid w-full max-w-2xl gap-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
+        <div className="flex min-w-0 flex-col gap-4">
           <Hero />
           <WeekCard />
           <NextMilestone />
         </div>
-        <div className="flex min-w-0 flex-col gap-7 lg:pt-2">
+        <div className="flex min-w-0 flex-col gap-4 lg:pt-2">
           <BadgesPreview />
           <AchievementsPreview />
           <HistoryPreview />
