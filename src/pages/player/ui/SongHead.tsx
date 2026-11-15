@@ -3,8 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { ActionMenu, RoundButton, TileMark, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** Share link and ··· as the board draws them: white circles on the sheet's paper, lifted a little. */
-const RAISED = 'bg-card elevation-1 hover:bg-card'
+/**
+ * Share link and ··· as the PlayerApp board draws them: white circles on the sheet's paper, a 6% ring
+ * and a 1px shade (by Night, the hairline alone).
+ */
+const RAISED =
+  'bg-card shadow-[0_0_0_1px_rgb(26_22_18/0.06),0_1px_2px_rgb(26_22_18/0.08)] hover:bg-card dark:shadow-[0_0_0_1px_var(--color-border)]'
 
 /**
  * The head of the Player's Settings (its canvas's Song settings): the song, its name over what it
