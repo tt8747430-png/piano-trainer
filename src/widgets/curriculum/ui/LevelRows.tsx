@@ -73,7 +73,10 @@ export function LevelNav({ current }: { current: string }) {
   const learned = useProgress(selectLearned)
   return (
     <nav aria-labelledby={id} className="flex flex-col gap-1">
-      <h2 id={id} className="px-3 pb-1 font-sans text-xl font-bold">
+      <h2
+        id={id}
+        className="px-1 pb-0.5 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+      >
         {t('learn:levels')}
       </h2>
       <ul className="flex flex-col gap-0.5">
@@ -88,19 +91,19 @@ export function LevelNav({ current }: { current: string }) {
                 replace
                 aria-current={here ? 'page' : undefined}
                 className={cn(
-                  'flex min-h-11 w-full items-center gap-3 rounded-control px-3 py-1.5 transition-colors duration-200 ease-out',
+                  'flex min-h-13 w-full items-center gap-2 rounded-[10px] px-3 py-1.5 transition-colors duration-200 ease-out',
                   here ? 'bg-chosen' : 'hover:bg-muted',
                 )}
               >
                 <span className="flex min-w-0 flex-1 flex-col">
-                  <span className={cn(here && 'font-semibold')}>
+                  <span className={cn('text-[0.9375rem]', here && 'font-semibold')}>
                     {t(`common:stage.${journey.stage}`)}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-[0.8125rem] text-muted-foreground">
                     {localText(journey.title, locale)}
                   </span>
                 </span>
-                <span className="shrink-0 text-sm text-muted-foreground">
+                <span className="shrink-0 text-[0.8125rem] text-muted-foreground tabular-nums">
                   {t('learn:journey.count', { learned: progress.done, total: progress.total })}
                 </span>
               </Link>
