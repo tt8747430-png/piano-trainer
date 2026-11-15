@@ -9,15 +9,19 @@ const ROW = 'flex min-h-12 w-full items-center gap-2.5 py-1.5 ps-4 pe-3 text-bas
 
 /**
  * A group of settings' rows on the muted fill, as the canvas's `GROUP` draws them (canvas 179): one
- * rounded card, a hairline between its rows, nothing round each row.
+ * rounded card, a hairline between its rows, nothing round each row. On the sheet's white where the
+ * board passes `bg=SHEET` (figures read off a page, Profile's Streak).
  */
 export function GroupRows({
   label,
+  surface = 'fill',
   className,
   children,
 }: {
   /** What a screen reader calls the group, where no heading names it. */
   label?: string
+  /** The board's `bg`: the muted `FILL` for settings, the white `SHEET` for figures. */
+  surface?: 'fill' | 'sheet'
   className?: string
   children: ReactNode
 }) {
@@ -26,7 +30,8 @@ export function GroupRows({
       role="group"
       aria-label={label}
       className={cn(
-        'flex flex-col divide-y divide-border overflow-hidden rounded-xl bg-muted',
+        'flex flex-col divide-y divide-border overflow-hidden rounded-xl',
+        surface === 'sheet' ? 'bg-card' : 'bg-muted',
         className,
       )}
     >

@@ -46,9 +46,9 @@ export function AchievementsPage() {
           </h2>
           <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {records.map(([label, value]) => (
-              <div key={label} className="flex min-w-0 flex-col-reverse gap-1 card px-4 py-3">
+              <div key={label} className="flex min-w-0 flex-col-reverse gap-0.5 card px-3.5 py-3">
                 <dt className="text-sm text-pretty text-muted-foreground">{label}</dt>
-                <dd className="font-display text-xl font-semibold text-balance tabular-nums">
+                <dd className="font-sans text-[1.375rem]/tight font-bold text-balance tabular-nums">
                   {value}
                 </dd>
               </div>

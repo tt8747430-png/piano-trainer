@@ -3,13 +3,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { practiceRecord, selectDays, streak, useProgress } from '@/entities/progress'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, GroupRow, GroupRows, ScreenHeader } from '@/shared/ui'
 import { PracticeCalendar, useToday } from '@/widgets/practice-days'
 
 /**
- * Streak (B1, memory-palaces'): the day streak large with its flame and what keeps it, the month's
- * calendar (‹ › to the months before; practised days filled, today ringed), then the longest
- * streak and the days practised this month.
+ * Streak (B1, memory-palaces'; its board P9_STREAK): the flame in its round wash beside the day
+ * streak and what keeps it, the month's calendar (‹ › to the months before; practised days filled,
+ * today ringed), then the longest streak and the days practised this month as value rows.
  */
 export function StreakPage() {
   const { t } = useTranslation('account')
@@ -23,33 +23,30 @@ export function StreakPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('profile.streakPage.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <section className="flex flex-col items-center gap-2 pt-2 text-center">
-          <Flame
-            aria-hidden
-            className={cn(
-              'size-16',
-              run > 0 ? 'fill-paint-full-sand text-paint-full-sand' : 'text-muted-foreground',
-            )}
-          />
-          <p className="font-display text-4xl font-semibold tabular-nums">
-            {t('profile.streakPage.days', { count: run })}
-          </p>
-          <p className="max-w-sm text-pretty text-muted-foreground">
-            {run > 0 ? t('profile.streakPage.keep') : t('profile.streakPage.start')}
-          </p>
+        <section className="flex items-center gap-4 p-1">
+          <span className="grid size-16 shrink-0 place-items-center rounded-full bg-paint-sand text-on-paint-sand">
+            <Flame aria-hidden className={cn('size-8', run > 0 && 'fill-current')} />
+          </span>
+          <span className="flex min-w-0 flex-col gap-1">
+            <span className="font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em] tabular-nums">
+              {t('profile.streakPage.days', { count: run })}
+            </span>
+            <span className="text-[0.9375rem]/snug text-pretty text-muted-foreground">
+              {run > 0 ? t('profile.streakPage.keep') : t('profile.streakPage.start')}
+            </span>
+          </span>
         </section>
         <PracticeCalendar title={t('profile.streakPage.calendar')} browse />
-        <dl className="grid grid-cols-2 gap-2">
-          {[
-            [t('profile.streakPage.longest'), record.bestStreak],
-            [t('profile.streakPage.month'), thisMonth],
-          ].map(([label, value]) => (
-            <div key={label} className="flex flex-col-reverse gap-1 card px-4 py-3">
-              <dt className="text-sm text-pretty text-muted-foreground">{label}</dt>
-              <dd className="font-display text-2xl font-semibold tabular-nums">{value}</dd>
-            </div>
-          ))}
-        </dl>
+        <GroupRows label={t('profile.streakPage.title')} surface="sheet">
+          <GroupRow label={t('profile.streakPage.longest')}>
+            <span className="text-muted-foreground tabular-nums">
+              {t('profile.achievements.days', { count: record.bestStreak })}
+            </span>
+          </GroupRow>
+          <GroupRow label={t('profile.streakPage.month')}>
+            <span className="text-muted-foreground tabular-nums">{thisMonth}</span>
+          </GroupRow>
+        </GroupRows>
       </div>
     </div>
   )
