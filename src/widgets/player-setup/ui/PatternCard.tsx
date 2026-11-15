@@ -108,7 +108,14 @@ const changedHands = ({ lh, rh }: { lh: unknown; rh: unknown }) =>
  * the pattern's row says; Back to the pattern brings its own parts back. Then the position the right
  * hand's chords start in. All of it under Accompaniment, as How it plays follows it.
  */
-export function PatternCard({ children }: { children?: ReactNode }) {
+export function PatternCard({
+  headed = true,
+  children,
+}: {
+  /** False on a page of its own (a song's Accompaniment), whose title already names it. */
+  headed?: boolean
+  children?: ReactNode
+}) {
   const { t } = useTranslation('player')
   const locale = useLocale()
   const { figures, openPage, onFigures } = useSetup()
@@ -118,8 +125,8 @@ export function PatternCard({ children }: { children?: ReactNode }) {
   const changed = changedHands(figures)
   const left = figures.lh ? LEFT_FIGURES[figures.lh] : pattern ? LEFT_FIGURES[pattern.lh] : null
   const right = figures.rh ? RIGHT_FIGURES[figures.rh] : pattern ? RIGHT_FIGURES[pattern.rh] : null
-  return (
-    <MenuSection title={t('accompaniment')} className="gap-5">
+  const parts = (
+    <>
       <section aria-label={t('pattern')}>
         <Labelled label={t('pattern')} info={t('patternAbout')}>
           <div className="overflow-hidden card">
@@ -186,6 +193,13 @@ export function PatternCard({ children }: { children?: ReactNode }) {
       </section>
       <InversionField />
       {children}
+    </>
+  )
+  return headed ? (
+    <MenuSection title={t('accompaniment')} className="gap-5">
+      {parts}
     </MenuSection>
+  ) : (
+    <div className="flex flex-col gap-5">{parts}</div>
   )
 }

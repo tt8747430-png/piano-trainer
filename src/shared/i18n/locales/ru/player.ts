@@ -40,6 +40,7 @@ export const player: LocaleResources['player'] = {
     label: 'Версия',
     of: 'Версия: {{level}}',
     arrangement: 'Аранжировка',
+    whatYouPlay: 'Что играть',
     scoring: 'Состав',
     group: { own: 'Ваша версия', solo: 'Фортепиано соло', voice: 'Фортепиано и голос' },
     level: { original: 'Оригинал', simple: 'Упрощённая', easy: 'Лёгкая' },

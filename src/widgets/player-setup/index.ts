@@ -14,5 +14,6 @@ export {
   type SettingsExtras,
   type SettingsPageRow,
 } from './ui/setup-extras'
+export { useSetup } from './ui/setup-context'
 export { SettingsSheet } from './ui/SettingsSheet'
 export { StavesSection, type RecordingSync } from './ui/StavesSection'

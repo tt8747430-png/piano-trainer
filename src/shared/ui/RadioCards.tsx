@@ -12,6 +12,8 @@ export interface RadioCard<V extends string> {
   readonly picture?: ReactNode
   /** Its own settings, shown under it while it is chosen (the 3D piano's Angle). */
   readonly children?: ReactNode
+  /** Its settings shown chosen or not (the Arrangement's Level, the Accompaniment's Pattern). */
+  readonly open?: boolean
 }
 
 /**
@@ -69,7 +71,7 @@ export function RadioCards<V extends string>({
               value={card.value}
               className={cn(
                 'flex w-full cursor-default items-center gap-3 py-2 pe-4 text-left select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
-                across ? 'min-h-14' : 'min-h-16',
+                across ? 'min-h-14' : card.picture === undefined ? 'min-h-12' : 'min-h-16',
                 card.picture === undefined ? 'ps-4' : 'ps-2',
               )}
             >
@@ -99,7 +101,7 @@ export function RadioCards<V extends string>({
                 {chosen ? <Check className="size-3.5" strokeWidth={3} /> : null}
               </span>
             </Radio.Root>
-            {chosen && card.children ? card.children : null}
+            {(chosen || card.open) && card.children ? card.children : null}
           </div>
         )
       })}

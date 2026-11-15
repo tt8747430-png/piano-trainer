@@ -23,6 +23,8 @@ import type { SettingsRow } from './setup-extras'
  */
 export interface MusicPage extends SettingsRow {
   readonly content: ReactNode
+  /** False where a card on the first page opens it (the Accompaniment card's Pattern), not a row. */
+  readonly listed?: boolean
 }
 
 /**
@@ -137,7 +139,7 @@ export function PlayerSetup({
         setFrom('main')
       }}
       inner={inner}
-      music={pages}
+      music={pages.filter((each) => each.listed !== false)}
     >
       <SetupContext value={{ figures, fit, openPage, onFigures }}>
         <div ref={main} className="flex flex-col gap-5 empty:hidden">

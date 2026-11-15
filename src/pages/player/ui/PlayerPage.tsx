@@ -44,7 +44,7 @@ import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
 import { ClefChoice } from './ClefChoice'
 import { TransposePage } from './TransposePage'
-import { ArrangementCard, type VersionChoice } from './ArrangementCard'
+import { type VersionChoice } from './PlayCards'
 import { AnnotateBar } from './AnnotateBar'
 
 /** A song with no typed marks. */
@@ -201,17 +201,18 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             onStaves={changeTrack}
             sync={piece.recording ? { ms: recordingSync, onChange: syncRecording } : undefined}
             onSwing={player.setSwing}
-          >
-            {controls.has('simplify') ? (
-              <ArrangementCard
-                chosen={chosenVersion}
-                own={own}
-                voice={singles.length > 0}
-                simplifies={simplifies}
-                onChoose={chooseVersion}
-              />
-            ) : null}
-          </PieceSetup>
+            arrangement={
+              controls.has('simplify')
+                ? {
+                    chosen: chosenVersion,
+                    own,
+                    voice: singles.length > 0,
+                    simplifies,
+                    onChoose: chooseVersion,
+                  }
+                : null
+            }
+          />
         }
         // The music's own pages of the Settings (its canvas's Song settings): the key it is played
         // in, and the version, each its row with what it is set to.

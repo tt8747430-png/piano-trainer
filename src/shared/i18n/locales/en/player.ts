@@ -49,6 +49,7 @@ export const player = {
     label: 'Version',
     of: 'Version: {{level}}',
     arrangement: 'Arrangement',
+    whatYouPlay: 'What you play',
     scoring: 'Scoring',
     group: { own: 'Your version', solo: 'Piano solo', voice: 'Piano and voice' },
     level: { original: 'Original', simple: 'Simplified', easy: 'Easy' },
