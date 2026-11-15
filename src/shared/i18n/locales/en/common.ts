@@ -262,6 +262,8 @@ export const common = {
     octaveShift: {
       label: 'Octave shift',
       detail: 'Moves what the piano plays up or down, for a piano with fewer keys',
+      down: 'Octave down',
+      up: 'Octave up',
     },
     touch: {
       label: 'Touch',

@@ -959,6 +959,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 25, MIDI devices to its board:** MIDI keyboard a headed group of plain switch rows (no tiles, no ⓘ); Playing's Octave shift a − 0 + stepper at its row's end, Touch and Pedal segmented rows, Calibrate timing a plain link row with its value; Bluetooth and the MIDI log plain link rows with chevrons (2026-11-15).
 - **Loop round 25, Report a problem to its board (P_REPORT):** Description in 13 semibold over a 12-cornered field on the card's white, its soft line, no resize grip, its example "What were you doing, and what happened?"; the footnote in 13; Send report a 50-tall pill, sand with soft ink until there is something to send. The footnote keeps what the report truly carries (2026-11-15).
 - **Loop round 25, the User guide to its board (P_GUIDE):** each part a card whose head, its title in 17 semibold sans with the chevron at the far edge, opens it; one part open at a time, the first to begin with; the steps plain paragraphs, the tile icon beside each and the dividers gone (2026-11-15).
 - **Loop round 25, About to its board:** the app's 56 tile with its name (20 bold) and version beside it on the page's left edge; Software update its own group, where it stands beside a dot (grass current, honey waiting, ochre at work) over Check for updates, or Install and restart when one waits; Licence in regular weight; Legal plain link rows. The acknowledgements keep each work's maker and licence, which their licences ask for (2026-11-15).

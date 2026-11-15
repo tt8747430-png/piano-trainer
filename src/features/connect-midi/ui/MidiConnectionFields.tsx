@@ -1,12 +1,12 @@
-import { CircleAlert, Speaker, Volume2 } from 'lucide-react'
+import { CircleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
-import { InfoTip, SettingRows, SwitchRow, KeysIcon } from '@/shared/ui'
+import { InfoTip, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { useMidiInput } from '../use-midi-input'
 
 /**
- * The MIDI keyboard's switches, as the MIDI screen opens with them: MIDI input (the app hears the
+ * The MIDI keyboard's group (the board's: plain switch rows), as the MIDI screen opens with it: MIDI input (the app hears the
  * keyboards), MIDI output (the app's music on the keyboard's speaker) and MIDI input plays sound.
  * Output and sound need input, and say so while greyed. Where the browser has no Web MIDI, or MIDI
  * was blocked, a line over them says so, its ⓘ how to put it right.
@@ -20,7 +20,7 @@ export function MidiConnectionFields() {
   const denied = connection.kind === 'ready' && connection.status.state === 'denied'
   const needsInput = unsupported ? undefined : t('midiSettings.needsInput')
   return (
-    <div className="flex flex-col gap-3">
+    <>
       {unsupported || denied ? (
         <p
           role="status"
@@ -38,21 +38,17 @@ export function MidiConnectionFields() {
           </span>
         </p>
       ) : null}
-      <SettingRows>
+      <SettingsGroup flush title={t('midi.label')}>
         <SwitchRow
           setting="midi.input"
-          icon={<KeysIcon />}
           label={t('midiSettings.input')}
-          info={t('midiSettings.inputNote')}
           checked={on}
           disabled={unsupported}
           onCheckedChange={turn}
         />
         <SwitchRow
           setting="midi.throughPiano"
-          icon={<Speaker />}
           label={t('midiSettings.output')}
-          info={t('midiSettings.outputNote')}
           checked={on && throughPiano}
           disabled={!on}
           reason={needsInput}
@@ -60,15 +56,13 @@ export function MidiConnectionFields() {
         />
         <SwitchRow
           setting="midi.sound"
-          icon={<Volume2 />}
           label={t('midiSettings.sound')}
-          info={t('midiSettings.soundNote')}
           checked={on && sound}
           disabled={!on}
           reason={needsInput}
           onCheckedChange={(next) => setMidi(store, { sound: next })}
         />
-      </SettingRows>
-    </div>
+      </SettingsGroup>
+    </>
   )
 }

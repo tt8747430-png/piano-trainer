@@ -240,6 +240,8 @@ export const common: LocaleResources['common'] = {
     octaveShift: {
       label: 'Сдвиг октавы',
       detail: 'Сдвигает игру пианино вверх или вниз — для пианино с меньшим числом клавиш',
+      down: 'На октаву ниже',
+      up: 'На октаву выше',
     },
     touch: {
       label: 'Чувствительность',
