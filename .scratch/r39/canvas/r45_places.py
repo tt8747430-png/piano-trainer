@@ -187,8 +187,12 @@ detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('moreOn', 'Fo
 cph2 = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 48px; display: flex; flex-direction: column; gap: 16px">{COURSELIST}</main>{LTOAST.replace("bottom: 112px", "bottom: 40px")}')
 cl2 = COURSELIST.replace('href="Course.dc.html"', 'href="CourseLaptop.dc.html"')
+# on a laptop the shelves stand side by side, Beginner to Chords and improvisation, every course in sight (owner,
+# 2026-11-15: "the empty space should be properly used")
+_k = cl2.index('</section></sc-for>') + len('</section></sc-for>')
+cl2 = '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start">' + cl2[:_k] + '</div>' + cl2[_k:]
 clm2 = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
-        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="max-width: 860px; display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
+        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
         f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY),
        POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + POPOVER('ncOn', 'New course', NCBODY, 'right: 40px; top: 72px', 480), 'Learn')
