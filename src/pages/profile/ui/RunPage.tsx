@@ -10,9 +10,11 @@ import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/s
 /** A figure of the run (canvas 160): its value first and large, its name under it. */
 function Tile({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1 card p-3">
-      <dd className="text-2xl leading-tight font-bold whitespace-nowrap">{value}</dd>
-      <dt className="mt-auto text-sm font-semibold text-muted-foreground">{label}</dt>
+    <div className="flex min-w-0 flex-col gap-0.5 card p-3">
+      <dd className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
+        {value}
+      </dd>
+      <dt className="mt-auto pt-1 text-[0.8125rem] font-semibold text-muted-foreground">{label}</dt>
     </div>
   )
 }
@@ -29,7 +31,7 @@ function Retry({ run }: { run: PracticeRun }) {
   const retry = (
     <ButtonLink
       size="lg"
-      className="w-full sm:mx-auto sm:w-90"
+      className="h-13 w-full rounded-full font-bold sm:mx-auto sm:w-90"
       render={
         <Link
           to="/practice/trainer/$trainerId"
@@ -75,8 +77,9 @@ export function RunPage() {
   const best = record && record.best > run.accuracy
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.history.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-6 pb-docked-8 sm:pb-4">
+      {/* The PracticeResult board's bar: Back alone, the run's name on the page. */}
+      <ScreenHeader title={name} back={<BackButton />} titleOnPage />
+      <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pt-2 pb-docked-8 sm:gap-6 sm:pb-4">
         <div className="flex flex-col items-center gap-2 text-center">
           <span
             aria-hidden
@@ -89,10 +92,10 @@ export function RunPage() {
           >
             <Mark strokeWidth={2.4} className={perfect ? 'fill-current' : undefined} />
           </span>
-          <h1 className="mt-2 font-sans text-[1.625rem] leading-tight font-bold text-balance">
+          <h1 className="mt-2 font-sans text-[1.625rem] leading-tight font-bold tracking-[-0.01em] text-balance">
             {name}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground tabular-nums">
             {perfect
               ? t('profile.history.result.perfect')
               : t('profile.history.result.correct', { right, count: run.answered })}
@@ -116,7 +119,7 @@ export function RunPage() {
           />
         </dl>
         {record ? (
-          <p className="text-center text-[0.9375rem] text-muted-foreground">
+          <p className="text-center text-[0.9375rem] text-muted-foreground tabular-nums">
             {best
               ? t('profile.history.result.best', { percent: record.best })
               : t('profile.history.result.newBest')}
