@@ -81,13 +81,17 @@ def _secs(block):
 PRIV = _secs(_L[_L.index('\n  privacy: {'):_L.index('\n  terms: {')]); TERMS = _secs(_L[_L.index('\n  terms: {'):])
 LEGAL_JS = js('const DOCS = ' + json.dumps({'Privacy Policy': PRIV, 'Terms of Service': TERMS}, ensure_ascii=False) + r''';
     const S = (o) => set(o), d = st.doc ?? 'Privacy Policy';
-    return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i })) };''')
-SECS = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><section style="display: flex; flex-direction: column; gap: 6px"><h2 style="margin: 0; font-size: 19px; font-weight: 700">{{{{s.h}}}}</h2>'
+    return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i, href: '#s' + i, bg: i ? 'transparent' : 'var(--fill, #EEE9E2)', fw: i ? 450 : 600 })),
+      states: [['Terms of Service', d === 'Terms of Service', { doc: 'Terms of Service' }, { doc: 'Privacy Policy' }]]
+        .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => S(on ? off : o) })) };''')
+SECS = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><section id="{{{{s.id}}}}" style="display: flex; flex-direction: column; gap: 6px; scroll-margin-top: 16px"><h2 style="margin: 0; font-size: 19px; font-weight: 700">{{{{s.h}}}}</h2>'
         f'<p style="margin: 0; font-size: 16px; line-height: 1.55; max-width: 65ch; text-wrap: pretty">{{{{s.t}}}}</p></section></sc-for>')
 LHEAD = f'<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{{{{docT}}}}</h1><span style="margin-top: -12px; font-size: 14px; color: {SOFT}">Last changed 4 November 2026</span>'
 lgph = (f'{TOP("Settings.dc.html", "", "", "Settings")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 20px 48px; display: flex; flex-direction: column; gap: 20px">'
-        f'<div style="display: flex">{SEGC("docs", 44, 14)}</div>{LHEAD}{SECS}</main>')
-lglm = (f'{LTOP("SettingsLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 0 0 56px"><div style="width: 680px; display: flex; flex-direction: column; gap: 22px">'
-        f'<div style="display: flex; width: 380px">{SEGC("docs", 44, 15)}</div>{LHEAD}{SECS}</div></main>')
-detail('Legal', 'Legal', LEGAL_JS, lgph, lglm, '', '', '', 'Profile')
+        f'<div style="display: flex; flex-direction: column">{SEGC("docs", 44, 15)}</div>{LHEAD}{SECS}</main>')
+lglm = (f'{LTOP("SettingsLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 0 0 56px"><div style="display: grid; grid-template-columns: 240px 680px; gap: 64px; align-items: start">'
+        f'<nav aria-label="On this page" style="position: sticky; top: 0; padding-top: 4px; display: flex; flex-direction: column; gap: 2px"><span style="padding: 0 12px 8px; font-size: 13px; font-weight: 600; color: {SOFT}">On this page</span>'
+        f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><a href="{{{{s.href}}}}" style="min-height: 40px; padding: 8px 12px; box-sizing: border-box; border-radius: 10px; background: {{{{s.bg}}}}; color: {INK}; text-decoration: none; font-size: 15px; font-weight: {{{{s.fw}}}}; line-height: 1.35; display: flex; align-items: center">{{{{s.h}}}}</a></sc-for></nav>'
+        f'<div style="display: flex; flex-direction: column; gap: 22px"><div style="display: flex; flex-direction: column; width: 420px">{SEGC("docs", 44, 15)}</div>{LHEAD}{SECS}</div></div></main>')
+detail('Legal', 'Legal', LEGAL_JS, SHOWSTATES() + lgph, SHOWSTATES() + lglm, '', '', '', 'Profile')
 print('r51 account ok')
