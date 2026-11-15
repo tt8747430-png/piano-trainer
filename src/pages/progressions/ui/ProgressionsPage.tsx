@@ -8,7 +8,6 @@ import { BackButton, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
-import { SettingsGear } from '@/widgets/practice-pages'
 import { KeepProgressionSheet } from '@/widgets/progression-explorer'
 import { useProgressionLibrary } from '../model/use-progression-library'
 
@@ -54,7 +53,6 @@ export function ProgressionsPage() {
           back: <BackButton />,
           edit,
           tools: editing ? undefined : made.menu,
-          settings: <SettingsGear page="progressions" />,
         }}
         kind="progressions"
         view={view}
