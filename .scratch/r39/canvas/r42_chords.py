@@ -716,7 +716,7 @@ return {
     const MSG = { handsLoading: 'Getting the hands ready…', handsFailed: 'The hands didn’t load.', handsUnsupported: 'This device can’t draw the hands.' };
     const MIDI = { midiNone: 'No MIDI keyboard found.', midiOn: 'Connected: Roland FP-30X', midiUnsupported: 'This browser can’t connect a MIDI keyboard.', midiLost: 'Roland FP-30X is not connected.' };
     return { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
-      stateList: [['', 'As designed'], ['handsLoading', 'Hands: loading'], ['handsFailed', 'Hands: did not load'], ['handsUnsupported', 'Hands: this device cannot draw them'], ['midiNone', 'MIDI keyboard: none found'], ['midiOn', 'MIDI keyboard: connected'], ['midiUnsupported', 'MIDI keyboard: this browser has none'], ['midiLost', 'MIDI keyboard: unplugged while playing'], ['large', 'Text: larger (130%)'], ['offline', 'Offline: the lighter piano'], ['eight', 'Staff: eight chords, the most']].map(([v, l]) => ({ l, mark: v === demo ? '✓' : '', fw: v === demo ? 700 : 500, pick: () => go(v) })),
+      stateList: [['', 'As designed'], ['handsLoading', 'Hands: loading'], ['handsFailed', 'Hands: did not load'], ['handsUnsupported', 'Hands: this device cannot draw them'], ['midiNone', 'MIDI keyboard: none found'], ['midiOn', 'MIDI keyboard: connected'], ['midiUnsupported', 'MIDI keyboard: this browser has none'], ['midiLost', 'MIDI keyboard: unplugged while playing'], ['large', 'Text: larger (130%)'], ['offline', 'Offline: the lighter piano'], ['eight', 'Staff: eight chords, the most']].map(([v, l]) => ({ l, on: v === demo ? 'true' : 'false', mark: v === demo ? '✓' : '', fw: v === demo ? 700 : 450, pick: () => go(v) })),
       stageMsgOn: !!MSG[demo] && is3d, stageMsg: MSG[demo] || '', stageRetry: demo === 'handsFailed', stageKeys: demo === 'handsFailed' || demo === 'handsUnsupported',
       retryHands: () => set({ demo: 'handsLoading' }), showKeys: () => set({ demo: '', kbView: '2d' }),
       midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo] && demo !== 'midiOn', midiSubVal: demo === 'midiOn' ? 'Roland FP-30X' : 'None', midiSubValC: demo === 'midiOn' ? C.ink : C.soft,
@@ -1064,12 +1064,12 @@ for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chor
 # one type scale on this page (review, canvas 90): 15 and 17, from the shared sheet kit, fold into 14 and 16
 for f in ('Chords', 'ChordsLaptop'):
     h = open(OUT + f + '.dc.html').read().replace('font-size: 17px', 'font-size: 16px')
-    TOOL = ('<div data-canvas-tool style="position: absolute; left: %s; top: %s; z-index: 300; font-family: ui-monospace, Menlo, monospace"><button type="button" aria-label="Canvas tool: show a state" aria-expanded="{{statesOpen}}" onClick="{{toggleStates}}" style="height: 22px; padding: 0 8px; border: 1px dashed #8A8178; border-radius: 11px; background: #FFF8; color: #685E56; font: inherit; font-size: 11px">States</button>'
-            '<sc-if value="{{statesOpen}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="States" style="position: absolute; left: 0; top: 26px; width: 290px; padding: 4px; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8, 0 14px 28px -8px rgba(51,41,33,.3); display: flex; flex-direction: column"><sc-for list="{{stateList}}" as="o" hint-placeholder-count="9"><button type="button" role="menuitemradio" onClick="{{o.pick}}" style="min-height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #332921; font: inherit; font-size: 12px; font-weight: {{o.fw}}; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px"><span>{{o.l}}</span><span>{{o.mark}}</span></button></sc-for></div></sc-if></div>')
+    exec(open('/home/user/piano-trainer/.scratch/r39/canvas/states_tool.py').read().split('def _script')[0])
+    TOOL = _tool(False, f.endswith('Laptop'))
     a = '<div style="width: 450px; height: 920px; position: relative; font-family: ' if not f.endswith('Laptop') else '<img src="'
     assert a in h, f
     i = h.index(a); j = h.index('>', i) + 1 if not f.endswith('Laptop') else i
-    h = h[:j] + TOOL % (('2px', '0px') if not f.endswith('Laptop') else ('24px', '24px')) + h[j:].replace('font-size: 15px', 'font-size: 14px')
+    h = h[:j] + TOOL + h[j:].replace('font-size: 15px', 'font-size: 14px')
     # one system on this page (consistency audit, canvas 91): spacing on 4/8 steps (2 stays, as the hairline inside
     # segmented rows); cards 16 round everywhere; the switch knob on the page's surface and ink shadow; no 800 weight
     STEP = {5: 4, 6: 8, 7: 8, 9: 8, 10: 12, 14: 16, 18: 16, 22: 24}
