@@ -29,7 +29,8 @@ G_JS = js('const SRCH = ' + json.dumps(SRCH, ensure_ascii=False) + r''';
 
 # the page under the layers: Learn, quiet
 MIDIB = f'<button type="button" aria-label="{{{{midiL}}}}" onClick="{{{{openMidi}}}}" style="position: relative; {GLASSST}">{MIDII}<span style="position: absolute; right: 9px; bottom: 9px; width: 9px; height: 9px; border-radius: 5px; background: {{{{midiLit}}}}"></span></button>'
-GBAR = IB('Search', SEARCH.replace('18', '22'), 'openSearch') + MIDIB + IB('Shortcuts', KBDI, 'openKeys')
+# a phone has no keyboard, so no Shortcuts; the laptop's bar has them (GBAR_L)
+GBAR = IB('Search', SEARCH.replace('18', '22'), 'openSearch') + MIDIB
 UNDER = (CARD(f'<span style="font-size: 13px; font-weight: 600; color: #A8551F">Continue</span><span style="display: block; font-family: {SERIF}; font-size: 22px; margin-top: 4px">How major scales work</span><span style="font-size: 13px; color: {SOFT}">Beginner · 7 of 18 learned</span>')
          + H2('Chapter 3: Scales and keys') + BOXG(*[f'<div style="min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 8px 16px"><span style="width: 28px; height: 28px; border-radius: 8px; background: {c}"></span><span style="font-size: 16px">{t}</span></div>' for t, c in [('Tones and semitones', SAGE), ('How major scales work', HONEY), ('Keys with sharps', FILL), ('Keys with flats', FILL)]]))
 # on a laptop Search is the sidebar's field (Ctrl K), never a second one in the bar; the page under is Learn's two columns
@@ -74,7 +75,7 @@ gph = (f'<sc-if value="{{{{notRoute}}}}" hint-placeholder-val="{{{{true}}}}">{TI
        + WELCOME + DELGATE + BANNER('left: 12px; right: 12px; top: 58px'))
 glm = (f'{LTOP("", GBAR_L)}<sc-if value="{{{{notRoute}}}}" hint-placeholder-val="{{{{true}}}}"><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 24px; display: flex; justify-content: center"><div style="width: 1180px; display: flex; flex-direction: column; gap: 16px"><h1 style="margin: 0; font-size: 34px; font-weight: 700">Learn</h1>{UNDER_L}</div></main></sc-if>{ROUTE}{DEMOSTRIP()}'
        + WELCOME.replace('SignIn.dc.html', 'SignInLaptop.dc.html') + DELGATE + BANNER('right: 28px; bottom: 28px; width: 440px').replace('Settings.dc.html', 'SettingsLaptop.dc.html'))
-GSHEETS = BSHEET('searchOn', 'Search', PAL) + BSHEET('midiOn', 'MIDI keyboard', MIDIBODY) + BSHEET('keysOn', 'Shortcuts', KEYSB)
+GSHEETS = BSHEET('searchOn', 'Search', PAL) + BSHEET('midiOn', 'MIDI keyboard', MIDIBODY)
 GPOPS = (f'<sc-if value="{{{{searchOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.24)"></div><div role="dialog" aria-label="Search" class="nos" style="position: absolute; left: 50%; top: 96px; transform: translateX(-50%); z-index: 61; width: 640px; max-height: 680px; overflow-y: auto; box-sizing: border-box; border-radius: 20px; background: {PAGE}; padding: 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">'
          + PAL.replace('Lesson.dc.html', 'LessonLaptop.dc.html').replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Metronome.dc.html', 'MetronomeLaptop.dc.html') + f'<span style="font-size: 13px; color: {SOFT}">Up and down move through the results, Enter opens one, Escape closes.</span></div></sc-if>'
          + POPOVER('midiOn', 'MIDI keyboard', MIDIBODY, 'right: 80px; top: 64px', 340) + POPOVER('keysOn', 'Shortcuts', KEYSB, 'right: 40px; top: 64px', 440))
