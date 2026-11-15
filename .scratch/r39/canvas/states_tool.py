@@ -62,14 +62,15 @@ def _tool(night, laptop):
               'text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px"><span>{{o.l}}</span><span>{{o.mark}}</span></button></sc-for></div></sc-if></div>' % text)
 
 
-def _script(lists, buttons):
+def _script(lists, buttons, playing=False):
     """Wraps the board's renderVals: the strips' choices, then the canvas buttons, under As designed."""
     return ('\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n'
             '  const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);\n'
             '  const close = (f) => () => { f && f(); set({ statesOpen: false }); };\n'
             '  const rows = [].concat(' + ', '.join('(v.%s || []).map((p) => ({ l: p.l, on: p.bg === "%s", pick: p.pick }))' % (n, INK) for n in lists)
             + (', ' if lists and buttons else '')
-            + ', '.join('[{ l: %r, on: false, pick: v.%s }]' % (l, a) for l, a in buttons) + ');\n'
+            + ', '.join('[{ l: %r, on: false, pick: v.%s }]' % (l, a) for l, a in buttons)
+            + ((', ' if lists or buttons else '') + '[{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]' if playing else '') + ');\n'
             '  const none = !rows.some((r) => r.on);\n'
             '  const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);\n'
             '  return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),\n'
@@ -87,14 +88,16 @@ def run():
         if 'data-canvas-tool' in h:
             continue
         h, lists, buttons = _lift(h)
-        if not lists and not buttons:
+        # a page that plays (its floating bar's Play) shows Playing in its States box too
+        playing = 'onClick="{{togglePlay}}"' in h and 'playing:' in h
+        if not lists and not buttons and not playing:
             continue
         stem = f[:-8]
         root = re.compile(r'<div style="[^"]*position: relative[^"]*">').search(h, h.index('</helmet>'))
         assert root, f
         h = h[:root.end()] + _tool('Night' in stem, 'Laptop' in stem) + h[root.end():]
         k = h.rindex('</script>')
-        h = h[:k] + _script(lists, buttons) + h[k:]
+        h = h[:k] + _script(lists, buttons, playing) + h[k:]
         open(p, 'w').write(h)
         done.append(stem)
     print('states tool on', len(done), 'boards:', ' '.join(done))

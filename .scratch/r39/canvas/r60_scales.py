@@ -10,7 +10,7 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       tonicL: tonic, kindLow: KINDS[kind].charAt(0).toLowerCase() + KINDS[kind].slice(1),
       noteLine: ivs.map((_, i) => spell(i)).join(' '), sigLine: kind <= 5 ? SIGW.charAt(0).toUpperCase() + SIGW.slice(1) : ivs.length + ' notes',
       fingRH: fingOk && ivs.length === 7 ? '1 2 3 1 2 3 4 5' : '', fingLH: fingOk && ivs.length === 7 ? '5 4 3 2 1 3 2 1' : '',
-      rhOn: fingOk && ivs.length === 7 && hands !== 'Left', lhOn: fingOk && ivs.length === 7 && hands !== 'Right', noFing: !(fingOk && ivs.length === 7),
+      rhOn: fingOk && ivs.length === 7 && hands !== 'Left', lhOn: fingOk && ivs.length === 7 && hands !== 'Right', noFing: !(fingOk && ivs.length === 7) && kind > 5,
       tempo: st.tempo ?? 72, tDn: () => set({ tempo: Math.max(40, (st.tempo ?? 72) - 4) }), tUp: () => set({ tempo: Math.min(200, (st.tempo ?? 72) + 4) }),
       menu: st.menu || '', playMenu: st.menu === 'play', handsMenu: st.menu === 'hands', tempoMenu: st.menu === 'tempo',
       openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }), openHands: () => set({ menu: st.menu === 'hands' ? null : 'hands' }), openTempo: () => set({ menu: st.menu === 'tempo' ? null : 'tempo' }), closeMenu: () => set({ menu: null }),
@@ -20,13 +20,15 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', hB: hands === 'Both', hR: hands === 'Right', hL: hands === 'Left',
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'In ' + tonic + ' ' + KINDS[kind].toLowerCase()]].map(([t, s]) => ({ t, s })),
+      states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
+        .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
 
 PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 64px; padding: 0 12px 0 16px; border: 0; border-radius: 16px; background: {FILL}; color: {INK}; '
                                   f'display: flex; align-items: center; gap: 8px; font: inherit"><span style="font-family: {SERIF}; font-size: 40px; font-weight: 700; line-height: 1; white-space: nowrap">{{{{{val}}}}}</span>'
                                   f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
-TITLE60 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div>'
+TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div>'
            f'<p style="margin: 0 0 0 4px; font-size: 15px; color: {SOFT}"><span>{{{{sigLine}}}}</span> · <span style="color: {INK}">{{{{noteLine}}}}</span></p></div>')
 SEG60 = (f'<div role="tablist" aria-label="Scales and keys" style="flex: none; display: flex; height: 40px; box-sizing: border-box; padding: 3px; border-radius: 20px; background: {FILL}"><sc-for list="{{{{tabs}}}}" as="v" hint-placeholder-count="3">'
          f'<button type="button" role="tab" aria-selected="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 34px; padding: 0 4px; border: 0; border-radius: 17px; background: {{{{v.bg}}}}; box-shadow: {{{{v.sh}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{v.fw}}}}">{{{{v.l}}}}</button></sc-for></div>')

@@ -97,7 +97,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 { const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
-  const rows = [].concat((v.shows || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })));
+  const rows = [].concat((v.shows || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), [{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]);
   const none = !rows.some((r) => r.on);
   const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);
   return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
