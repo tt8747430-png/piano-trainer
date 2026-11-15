@@ -377,7 +377,6 @@ export const player = {
     of: 'Practice: {{mode}}',
     wait: 'Wait',
     play: 'Play',
-    tempo: 'Tempo',
     scoreTempo: 'Score tempo: {{tempo}} BPM',
     metronome: 'Metronome',
     metronomeOff: 'Off',

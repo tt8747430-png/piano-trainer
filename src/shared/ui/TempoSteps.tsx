@@ -43,7 +43,7 @@ export function TempoSteps({
       <p aria-hidden className="text-[0.9375rem] text-muted-foreground">
         {mark ? `${mark} · ${t('metronome.bpm')}` : t('metronome.bpm')}
       </p>
-      <div className="flex w-full items-center justify-center gap-2">
+      <div className="flex w-full items-center justify-center gap-1.5 min-[25rem]:gap-2">
         {STEPS.slice(0, 2).map(step)}
         <p
           className={cn(

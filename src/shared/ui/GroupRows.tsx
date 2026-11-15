@@ -66,15 +66,18 @@ export function GroupRow({
 export function GroupField({
   label,
   setting,
+  className,
   children,
 }: {
   /** Its name over the control, hidden from a screen reader where the control says it. */
   label?: string
   setting?: string
+  /** A wide control (the tempo's steps) takes more of the row. */
+  className?: string
   children: ReactNode
 }) {
   return (
-    <div data-setting={setting} className="flex flex-col gap-2 py-3 ps-4 pe-3">
+    <div data-setting={setting} className={cn('flex flex-col gap-2 py-3 ps-4 pe-3', className)}>
       {label ? (
         <span aria-hidden className="text-base">
           {label}

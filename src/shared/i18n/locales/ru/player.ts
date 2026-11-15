@@ -348,7 +348,6 @@ export const player: LocaleResources['player'] = {
     of: 'Практика: {{mode}}',
     wait: 'Ждать',
     play: 'Играть',
-    tempo: 'Темп',
     scoreTempo: 'Темп нот: {{tempo}} уд/мин',
     metronome: 'Метроном',
     metronomeOff: 'Выкл.',

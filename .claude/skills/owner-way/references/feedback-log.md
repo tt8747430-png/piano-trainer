@@ -224,6 +224,9 @@ owner's, typos fixed.
 - **Settings:** a song with written staves plays its staves; patterns, inversion and voice leading belong to a chord chart
   alone; "Melody" goes. A section can have its own pattern. Old settings nobody needs go.
 - **Drum grooves:** Chordify's.
+- **The Practice sheet's tempo and metronome are one group (loop 22, 2026-11-15):** under Wait · Play, one white card,
+  the tempo's steps with BPM over them (no second "Tempo" label), then Metronome Off · Count-in · On, a hairline
+  between, as Scale settings' rows; the steps tighten to fit a 393 phone.
 
 ## Song page
 
