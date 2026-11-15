@@ -75,8 +75,22 @@ export function SheetOverlay({
         size={labelSize}
       />
       {verdicts ? <VerdictShapes layout={layout} heads={verdicts} /> : null}
+      {/* This line's bars, for a loop's grip dragged here from another line. */}
+      <div
+        aria-hidden
+        data-loop-line
+        data-first={firstBar}
+        data-ends={layout.measures.map((measure) => measure.x + measure.width).join(',')}
+        className="pointer-events-none absolute inset-0"
+      />
       {loop ? (
-        <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
+        <LoopBand
+          layout={layout}
+          loop={loop}
+          onChange={onLoopChange}
+          firstBar={firstBar}
+          lastPieceBar={performance.bars.length - 1}
+        />
       ) : null}
       {group && here ? (
         <Playhead

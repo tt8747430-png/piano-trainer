@@ -180,7 +180,7 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
+        className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain px-3"
         style={{ gap: LINE_GAP }}
       >
         <div>

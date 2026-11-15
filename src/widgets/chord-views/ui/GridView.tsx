@@ -70,7 +70,7 @@ export function GridView({
     <section
       ref={scroller}
       aria-label={t('views.grid')}
-      className="flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto overscroll-contain *:shrink-0"
+      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
       <SheetTitle title={title} place="lines" />
       <div className="relative mx-auto w-full">

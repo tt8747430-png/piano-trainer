@@ -104,6 +104,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 24, the loop's grips drag across lines (owner, IMG_6045–6056: "the drag holders to loop doesnt work"):** a grip was held to its own line, and a phone lays one or two bars to a line, so it could not move; now each line marks its bars, a grip follows the finger over the whole score (the window keeps the drag when the grip moves to another line), the start from the first bar to the loop's end and the end from its start to the piece's last bar, and the click a drag ends with is swallowed. The score's scroller keeps 12px each side so the end grip's tab is never cut (2026-11-15).
 - **No pedal under silence (loop round 18):** music with no chord symbols and no pedal marks is pedalled bar by bar only where a bar sounds a note; a new song's empty bars, or a bar of rests, carry no Ped. and no pedal is held.
 - **Loop round 24, Version without explanation lines:** Original · Simplified · Easy each its name and dots under
   Difficulty ⓘ, which says what each is; a line stays only where one cannot be chosen ("Its chords are already
@@ -265,6 +266,7 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 24, one empty state (the board's EMPTY):** a 64 mark on sand, an 18 bold title, a 15 line, quiet 44 pill buttons; Songs, the practice libraries and Your lessons all use `Said`, and the second kit part (`EmptyState`) is gone. A search that finds nothing says how to look again: "Check the spelling, or try a song’s title or its composer." (2026-11-15).
 - **The Trash leaves Archive; Home's Card style goes (owner, 2026-11-15: "what the trash does in the archive",
   "features that the artifact doesnt have like the card style"):** Songs' ··· is Select and Trash; Archive holds
   only what was archived. Card style is a folder's alone, from its Settings, as the board draws it.

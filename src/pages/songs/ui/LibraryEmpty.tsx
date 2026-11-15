@@ -1,6 +1,6 @@
 import { FolderInput, FolderOpen, ListFilter, Music, Plus, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { EmptyState } from '@/shared/ui'
+import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
@@ -53,35 +53,39 @@ export function LibraryEmpty({
                   ? t('emptyLearning')
                   : t('empty')
     return (
-      <EmptyState
+      <Said
         icon={searched ? SearchX : ListFilter}
         title={said}
-        line={searched ? t('emptyQueryLine') : undefined}
-      >
-        <Button variant="ghost" onClick={onClear}>
-          {placeAlone ? t('tree.all') : common('library.clearFilters')}
-        </Button>
-      </EmptyState>
+        description={searched ? t('emptyQueryLine') : undefined}
+        action={
+          <Button variant="ghost" onClick={onClear}>
+            {placeAlone ? t('tree.all') : common('library.clearFilters')}
+          </Button>
+        }
+      />
     )
   }
   return (
-    <EmptyState
+    <Said
       icon={inFolder ? FolderOpen : Music}
       title={t(inFolder ? 'folder.emptyTitle' : 'homeEmpty.title')}
-      line={t(inFolder ? 'folder.emptyDescription' : 'homeEmpty.description')}
-    >
-      {page.may('addSong') ? (
-        <Button variant="ghost" onClick={() => page.open({ kind: 'new-song' })}>
-          <Plus data-icon="inline-start" aria-hidden />
-          {t('newSong')}
-        </Button>
-      ) : null}
-      {inFolder && page.may('moveIn') ? (
-        <Button variant="ghost" onClick={() => page.open({ kind: 'move-in' })}>
-          <FolderInput data-icon="inline-start" aria-hidden />
-          {t('folder.moveIn')}
-        </Button>
-      ) : null}
-    </EmptyState>
+      description={t(inFolder ? 'folder.emptyDescription' : 'homeEmpty.description')}
+      action={
+        <>
+          {page.may('addSong') ? (
+            <Button variant="ghost" onClick={() => page.open({ kind: 'new-song' })}>
+              <Plus data-icon="inline-start" aria-hidden />
+              {t('newSong')}
+            </Button>
+          ) : null}
+          {inFolder && page.may('moveIn') ? (
+            <Button variant="ghost" onClick={() => page.open({ kind: 'move-in' })}>
+              <FolderInput data-icon="inline-start" aria-hidden />
+              {t('folder.moveIn')}
+            </Button>
+          ) : null}
+        </>
+      }
+    />
   )
 }

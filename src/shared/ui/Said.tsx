@@ -1,17 +1,9 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 
 /**
- * A state with nothing to list (the canvas's empty state): a round muted mark, one bold line (and a
- * soft second where it teaches), one way on.
+ * A state with nothing to list, as the canvas's EMPTY draws it: a 64 round sand mark with its icon,
+ * what is empty in 18 bold, a 15 line where it teaches what to try, and its way on, 44 sand pills.
  */
 export function Said({
   icon: Icon,
@@ -22,21 +14,27 @@ export function Said({
   icon: LucideIcon
   title: string
   description?: string
-  action: ReactNode
+  action?: ReactNode
 }) {
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <Icon aria-hidden />
-        </EmptyMedia>
-        {/* A long query breaks rather than run off the screen. */}
-        <EmptyTitle role="status" className="break-words">
-          {title}
-        </EmptyTitle>
-        {description ? <EmptyDescription>{description}</EmptyDescription> : null}
-      </EmptyHeader>
-      <EmptyContent>{action}</EmptyContent>
-    </Empty>
+    <div className="flex flex-col items-center gap-2 px-5 py-14 text-center">
+      <span className="flex size-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <Icon aria-hidden className="size-6.5" />
+      </span>
+      {/* A long query breaks rather than run off the screen. */}
+      <p role="status" className="text-lg font-bold text-balance wrap-break-word">
+        {title}
+      </p>
+      {description ? (
+        <p className="max-w-[340px] text-[0.9375rem]/[1.45] text-pretty text-muted-foreground">
+          {description}
+        </p>
+      ) : null}
+      {action ? (
+        <div className="mt-1.5 flex flex-wrap justify-center gap-2 *:h-11 *:rounded-full *:border-0 *:bg-muted *:px-5 *:font-bold *:hover:bg-muted/80">
+          {action}
+        </div>
+      ) : null}
+    </div>
   )
 }

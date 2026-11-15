@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, ChevronRight, Copy, Settings2, Trash2 } from 'lucide-react'
+import { BookOpenText, ChevronRight, Copy, SearchX, Settings2, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -30,6 +30,7 @@ import {
   NewDial,
   NewMenu,
   RowMore,
+  Said,
   say,
   SearchField,
   SortChoice,
@@ -321,12 +322,15 @@ export function OwnLibrary() {
           </div>
         </div>
       ) : nothing ? (
-        <div className="flex flex-col items-start gap-3 card p-5">
-          <p className="text-pretty">{t('own.noMatch', { query: query.trim() })}</p>
-          <Button variant="outline" onClick={() => setQuery('')}>
-            {t('own.clear')}
-          </Button>
-        </div>
+        <Said
+          icon={SearchX}
+          title={t('own.noMatch', { query: query.trim() })}
+          action={
+            <Button variant="ghost" onClick={() => setQuery('')}>
+              {t('own.clear')}
+            </Button>
+          }
+        />
       ) : (
         <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
           {shownCourses.map((course) => (

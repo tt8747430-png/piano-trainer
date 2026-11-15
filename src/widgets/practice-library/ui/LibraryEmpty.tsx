@@ -1,17 +1,9 @@
-import { Heart, History } from 'lucide-react'
+import { Heart, History, Inbox, ListFilter, SearchX } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { TileMark } from '@/shared/ui'
+import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 import { ALL, FAVOURITES, MINE, RECENT, type PracticeLibraryView } from '../model/library-view'
 import type { LibraryKind } from '../model/library-words'
 
@@ -40,65 +32,52 @@ export function LibraryEmpty({
   if (filtering) {
     const searched = view.q.trim()
     return (
-      <Empty>
-        <EmptyHeader>
-          {/* A long query breaks rather than run off the screen. */}
-          <EmptyTitle className="break-words">
-            {searched
-              ? t(`library.kinds.${kind}.noMatch`, { query: searched })
-              : t('library.noneFiltered')}
-          </EmptyTitle>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" onClick={() => set({ q: '', stage: 'any' })}>
+      <Said
+        icon={searched ? SearchX : ListFilter}
+        title={
+          searched
+            ? t(`library.kinds.${kind}.noMatch`, { query: searched })
+            : t('library.noneFiltered')
+        }
+        action={
+          <Button variant="ghost" onClick={() => set({ q: '', stage: 'any' })}>
             {t('library.clear')}
           </Button>
-        </EmptyContent>
-      </Empty>
+        }
+      />
     )
   }
   if (place === RECENT)
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia>
-            <TileMark icon={History} paint="sand" />
-          </EmptyMedia>
-          <EmptyTitle>{t('library.noRecent')}</EmptyTitle>
-          <EmptyDescription>{t('library.noRecentHint')}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" onClick={() => set({ place: ALL })}>
+      <Said
+        icon={History}
+        title={t('library.noRecent')}
+        description={t('library.noRecentHint')}
+        action={
+          <Button variant="ghost" onClick={() => set({ place: ALL })}>
             {t(`library.kinds.${kind}.all`)}
           </Button>
-        </EmptyContent>
-      </Empty>
+        }
+      />
     )
   if (place === FAVOURITES)
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia>
-            <TileMark icon={Heart} paint="sand" />
-          </EmptyMedia>
-          <EmptyTitle>{t('library.noFavourites')}</EmptyTitle>
-          <EmptyDescription>{t(`library.kinds.${kind}.favouritesHint`)}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" onClick={() => set({ place: ALL })}>
+      <Said
+        icon={Heart}
+        title={t('library.noFavourites')}
+        description={t(`library.kinds.${kind}.favouritesHint`)}
+        action={
+          <Button variant="ghost" onClick={() => set({ place: ALL })}>
             {t(`library.kinds.${kind}.all`)}
           </Button>
-        </EmptyContent>
-      </Empty>
+        }
+      />
     )
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyTitle>
-          {place === MINE ? t(`library.kinds.${kind}.mineEmpty`) : t('library.empty')}
-        </EmptyTitle>
-      </EmptyHeader>
-      {place === MINE && mine ? <EmptyContent>{mine}</EmptyContent> : null}
-    </Empty>
+    <Said
+      icon={Inbox}
+      title={place === MINE ? t(`library.kinds.${kind}.mineEmpty`) : t('library.empty')}
+      action={place === MINE ? mine : undefined}
+    />
   )
 }

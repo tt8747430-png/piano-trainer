@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
@@ -47,6 +47,12 @@ export function LoopGrip({
     const next = Math.min(max, Math.max(min, to))
     if (next !== bar) onMove(next)
   }
+  // The latest move, for a drag the window follows: the grip may move to another line of the score
+  // (and this element leave) while the finger is still down.
+  const moveRef = useRef(move)
+  useEffect(() => {
+    moveRef.current = move
+  })
   const Chevron = end === 'start' ? ChevronLeft : ChevronRight
   return (
     <div
@@ -77,14 +83,30 @@ export function LoopGrip({
       }}
       onPointerDown={(event) => {
         event.stopPropagation()
-        event.currentTarget.setPointerCapture(event.pointerId)
+        event.preventDefault()
+        const grip = event.currentTarget
+        const id = event.pointerId
+        const follow = (moved: PointerEvent) => {
+          if (moved.pointerId !== id) return
+          const under = barAt(moved.clientX, moved.clientY, grip)
+          if (under !== null) moveRef.current(under)
+        }
+        const stop = (ended: PointerEvent) => {
+          if (ended.pointerId !== id) return
+          // The click a drag ends with lands on whatever is under the finger: it is the drag's, not a tap.
+          window.addEventListener('click', (click) => click.stopPropagation(), {
+            capture: true,
+            once: true,
+          })
+          window.removeEventListener('pointermove', follow)
+          window.removeEventListener('pointerup', stop)
+          window.removeEventListener('pointercancel', stop)
+        }
+        window.addEventListener('pointermove', follow)
+        window.addEventListener('pointerup', stop)
+        window.addEventListener('pointercancel', stop)
       }}
       onClick={(event) => event.stopPropagation()}
-      onPointerMove={(event) => {
-        if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
-        const under = barAt(event.clientX, event.clientY, event.currentTarget)
-        if (under !== null) move(under)
-      }}
       className={cn(
         'group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-control outline-none',
         className,

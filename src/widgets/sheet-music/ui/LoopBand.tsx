@@ -1,7 +1,7 @@
 import type { BarRange } from '@/features/practice'
 import { LoopGrip } from '@/shared/ui'
 import { barsBand, loopEnds, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
-import { barAt } from '../model/bar-at'
+import { barUnderPoint } from '../model/line-under'
 
 /**
  * The loop, the Player's bars chosen (ADR 0096): one light band of the selection colour over every
@@ -13,12 +13,15 @@ export function LoopBand({
   loop,
   onChange,
   firstBar = 0,
+  lastPieceBar,
 }: {
   layout: ScoreLayout
   loop: BarRange
   onChange: (loop: BarRange) => void
   /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
   firstBar?: number
+  /** The piece's last bar: a grip is dragged across lines up to it. */
+  lastPieceBar: number
 }) {
   const lastBar = firstBar + layout.measures.length - 1
   // On a line, the part of the loop it holds, a grip where the loop ends there.
@@ -31,15 +34,6 @@ export function LoopBand({
   })
   // Each grip on its barline, down the band's edge.
   const ends = loopEnds(layout, from - firstBar, to - firstBar)
-  // The bar of this line under a point on the screen, in the layout's px however the sheet is
-  // zoomed (a page canvas's zoom): its measures, offset to the piece's bars.
-  const onLine = (x: number, grip: HTMLElement) => {
-    const sheet = grip.parentElement
-    const frame = sheet?.getBoundingClientRect()
-    if (!sheet || !frame) return null
-    const zoom = sheet.offsetWidth > 0 && frame.width > 0 ? frame.width / sheet.offsetWidth : 1
-    return barAt(layout.measures, (x - frame.left) / zoom) + firstBar
-  }
   return (
     <>
       <ScoreMark slot="loop" kind="band" box={box} />
@@ -47,9 +41,9 @@ export function LoopBand({
         <LoopGrip
           end="start"
           bar={loop.first}
-          min={firstBar}
-          max={Math.min(loop.last, lastBar)}
-          barAt={(x, _, grip) => onLine(x, grip)}
+          min={0}
+          max={loop.last}
+          barAt={barUnderPoint}
           style={{ left: ends.start, top: box.top, height: box.height }}
           onMove={(bar) => onChange({ first: bar, last: loop.last })}
         />
@@ -58,9 +52,9 @@ export function LoopBand({
         <LoopGrip
           end="end"
           bar={loop.last}
-          min={Math.max(loop.first, firstBar)}
-          max={lastBar}
-          barAt={(x, _, grip) => onLine(x, grip)}
+          min={loop.first}
+          max={lastPieceBar}
+          barAt={barUnderPoint}
           style={{ left: ends.end, top: box.top, height: box.height }}
           onMove={(bar) => onChange({ first: loop.first, last: bar })}
         />
