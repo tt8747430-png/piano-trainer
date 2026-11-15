@@ -4,9 +4,11 @@ import { ShortcutsButton } from '@/features/shortcuts-help'
 import { hasFinePointer } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
+import { PianoSoundGroup } from './PianoSoundGroup'
 
 /**
- * Settings › On-screen piano (R22, R33): the keys drawn on screen, how they sound, look, play and sit;
+ * Settings › On-screen piano (R22, R33): the keys drawn on screen, their Sound (the grand kept for
+ * offline and the Volume, loop round 24), how they look, play and sit;
  * on a computer, the computer keys' switch among them and the shortcuts' list (R29: no page of their
  * own, and none on a phone, which has no letters to play).
  */
@@ -14,7 +16,7 @@ export function OnScreenPianoPage() {
   const { t } = useTranslation('settings')
   return (
     <SettingsScreen title={t('pages.onScreenPiano')}>
-      <KeyboardSettingsFields />
+      <KeyboardSettingsFields sound={<PianoSoundGroup />} />
       {hasFinePointer() ? (
         <SettingsGroup title={t('pages.computerKeys')}>
           <ShortcutsButton />

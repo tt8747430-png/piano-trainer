@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
@@ -18,12 +19,11 @@ import {
   SettingsGroup,
   SwipePicture,
   SwitchRow,
-  VolumeSlider,
 } from '@/shared/ui'
 import { PedalIcon } from './PedalIcon'
 
 /**
- * What matters while playing (R33, musicca's Settings): the key size, the note names, the volume, the
+ * What matters while playing (R33, musicca's Settings): the key size, the note names, the
  * pedals and, on a computer, its keys: the On-screen piano page's first group.
  */
 export function PianoEssentialRows() {
@@ -56,12 +56,6 @@ export function PianoEssentialRows() {
         }))}
         onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
       />
-      <VolumeSlider
-        setting="keyboard.volume"
-        label={t('keyboardSettings.volume')}
-        value={keyboard.volume}
-        onChange={(volume) => setKeyboard(store, { volume })}
-      />
       <PictureChoice
         setting="keyboard.pedals"
         label={t('keyboardSettings.pedals.label')}
@@ -87,13 +81,13 @@ export function PianoEssentialRows() {
 
 /**
  * The on-screen piano's settings (R21, R22, R32, R33, R34), saved for every on-screen piano, ordered
- * by what a pianist changes most: Keys and sound, Display (the chord symbol, names on highlighted
+ * by what a pianist changes most: Keys, the page's Sound (`sound`), Display (the chord symbol, names on highlighted
  * keys), While you play (the swipe, play on selection), then Placement (where a page docks the keys).
- * The keys' height is the divider's, and showing them the bar's Keyboard: neither is a setting here.
+ * The keys' window is moved and sized where it floats, and showing them is the bar's Keyboard.
  * Each option says what it does in one line under its name; choices of look are pictures of the keys.
  * Settings › On-screen piano, and the same page in the Player's and the editor's gear.
  */
-export function KeyboardSettingsFields() {
+export function KeyboardSettingsFields({ sound }: { sound?: ReactNode }) {
   const { t } = useTranslation(['common', 'settings'])
   const store = useSettingsStoreApi()
   const keyboard = useSettings(selectKeyboard)
@@ -104,6 +98,7 @@ export function KeyboardSettingsFields() {
           <PianoEssentialRows />
         </SettingRows>
       </SettingsGroup>
+      {sound}
       <SettingsGroup title={t('settings:piano.look')}>
         <SettingRows>
           <SwitchRow

@@ -31,7 +31,8 @@ export const settings = {
   },
   // The on-screen piano's page: its groups.
   piano: {
-    essentials: 'Keys and sound',
+    essentials: 'Keys',
+    sound: 'Sound',
     look: 'Display',
     place: 'Placement',
     play: 'While you play',
@@ -56,7 +57,6 @@ export const settings = {
   },
   // The grand piano's recorded notes on this device (A27, R29 SND).
   pianoSound: {
-    label: 'Offline piano',
     info: 'The piano is a sampled grand: Salamander Grand Piano, a Yamaha C5. Its samples download as you first play each note. Download them all to hear the grand offline; until then, a lighter sampled piano plays offline.',
     reading: 'Calculating storage…',
     kept: '{{kept}} of {{total}} downloaded',
@@ -70,8 +70,6 @@ export const settings = {
     body: 'Offline, a lighter sampled piano plays until you download them again.',
     cancel: 'Cancel',
     confirm: 'Remove',
-    footnote:
-      'Resetting clears your lessons, practised songs, practice results, streak and badges on this device. Removing the samples frees their space; they download again as you play.',
   },
   backup: {
     label: 'Backup',

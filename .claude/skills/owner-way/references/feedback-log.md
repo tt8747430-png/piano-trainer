@@ -950,6 +950,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 24, the piano's sound on On-screen piano (owner, IMG_6045–6056: "the sound settings go to the storage and backup"; canvas v203):** the grand kept for offline (how much, Download for offline use), the Volume and Remove downloaded piano samples are one Sound card under Keys on On-screen piano, where the Piano sheet's Sound row leads; Storage and backup keeps the device's storage, Backup and Reset progress. The canvas's On-screen piano page drew blank (its flag's name held a hyphen) and draws again (2026-11-15).
 - **The welcome as its board (loop 24, AppLayers):** a 22-cornered dialog on the page's paper, the app's own tile
   (72, the keys) over "Welcome to Piano Trainer" in 24 bold sans and its line in 16; Language in the soft caps
   over its two choices; Start playing (honey) over Sign in (sand), each a 50-tall pill the dialog's width; no

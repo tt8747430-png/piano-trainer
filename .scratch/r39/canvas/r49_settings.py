@@ -80,12 +80,9 @@ BAR = lambda w, c=GREEN: f'<span style="display: block; height: 8px; border-radi
 P_STORAGE = (SEC(S9CAPS('Device storage', 'store'), TIPCARD('store', 'This browser manages storage itself. Install the app or save a backup to keep your data safe.'),
                  BOXG(f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px"><span style="font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">48 MB used on this device</span>{BAR("38%", "#5B8DB8")}<span style="display: flex; gap: 16px; font-size: 13px; color: {SOFT}"><span style="display: flex; align-items: center; gap: 6px">{DOT("#5B8DB8")}Songs and takes 18 MB</span><span style="display: flex; align-items: center; gap: 6px">{DOT(GREEN)}Piano 30 MB</span></span></div>',
                       GROUP(('toggle', 'Protect from clearing', 'protOn', 'protT'), bg=SHEET)), f'<sc-if value="{{{{protOn}}}}" hint-placeholder-val="{{{{true}}}}">{FOOT("Protected: the browser will not clear this data to free up space")}</sc-if>')
-             + SEC(S9CAPS('Offline piano', 'offl'), TIPCARD('offl', 'The full sampled piano plays without a connection once it is downloaded.'),
-                   BOXG(f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px"><span style="display: flex; justify-content: space-between; font-size: 16px; font-variant-numeric: tabular-nums"><span style="font-weight: 600">{{{{offT}}}}</span><span style="color: {SOFT}">{{{{offN}}}}</span></span>{BAR("{{offW}}")}</div>',
-                        f'<sc-if value="{{{{offCan}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{download}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; padding: 6px 16px">Download for offline use</button></sc-if>'))
              + SEC(CAPS('Backup'), GROUP(('action', 'Save a backup', 'saveBackup'), ('action', 'Restore from a file', 'askRestore'), bg=SHEET))
-             + SEC(GROUP(('action', 'Reset progress', 'askReset', RED), ('action', 'Remove downloaded piano samples', 'askRemove', RED), bg=SHEET),
-                   FOOT('Resetting clears learned steps, practised songs and quiz results on this device. Removing the samples frees their space; a lighter piano plays offline until you download them again.')))
+             + SEC(GROUP(('action', 'Reset progress', 'askReset', RED), bg=SHEET),
+                   FOOT('Resetting clears learned steps, practised songs and quiz results on this device.')))
 
 # ── On-screen piano: a picture of the keys that answers each choice ──
 def MINIKEYS(names):
@@ -106,7 +103,12 @@ def MINIKEYS(names):
 KEYPIC = CARD(f'<sc-if value="{{{{nnC}}}}" hint-placeholder-val="{{{{true}}}}">{MINIKEYS("c")}</sc-if><sc-if value="{{{{nnEvery}}}}" hint-placeholder-val="{{{{false}}}}">{MINIKEYS("every")}</sc-if><sc-if value="{{{{nnHidden}}}}" hint-placeholder-val="{{{{false}}}}">{MINIKEYS("")}</sc-if>', '12px 12px')
 SHORTBODY = BOXG(*[f'<div style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="flex: 1; font-size: 16px">{a}</span><span style="display: flex; gap: 4px">' + ''.join(f'<kbd style="min-width: 28px; height: 28px; padding: 0 8px; box-sizing: border-box; border-radius: 6px; background: {FILL}; box-shadow: inset 0 -1px 0 {LINE}; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">{k}</kbd>' for k in ks) + '</span></div>'
                    for a, ks in [('Play the white keys', ['A', 'S', 'D', 'F', '…']), ('Play the black keys', ['W', 'E', 'T', 'Y', 'U']), ('Octave down', ['Z']), ('Octave up', ['X']), ('Hold the sustain pedal', ['Space'])]])
-P_PIANO = (KEYPIC + SEC(CAPS('Keys and sound'), GROUP(('seg', 'Key size', 'keySize'), ('seg', 'Note names', 'noteNames'), ('raw', f'<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="font-size: 16px">Volume</span><input type="range" aria-label="Volume" min="0" max="100" value="80" style="flex: 1; min-width: 0; accent-color: {INK}"></div>'), ('seg', 'Pedals', 'pedals'), bg=SHEET))
+P_PIANO = (KEYPIC + SEC(CAPS('Keys'), GROUP(('seg', 'Key size', 'keySize'), ('seg', 'Note names', 'noteNames'), ('seg', 'Pedals', 'pedals'), bg=SHEET))
+           + SEC(S9CAPS('Sound', 'offl'), TIPCARD('offl', 'A sampled grand: Salamander Grand Piano, a Yamaha C5. Its notes download as you first play them; downloaded, the grand plays offline too. Until then a lighter piano plays offline.'),
+                 BOXG(f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px"><span style="display: flex; justify-content: space-between; font-size: 16px; font-variant-numeric: tabular-nums"><span style="font-weight: 600">Grand piano</span><span style="color: {SOFT}">{{{{offN}}}}</span></span>{BAR("{{offW}}")}<span style="font-size: 14px; color: {SOFT}">{{{{offT}}}}</span></div>',
+                      f'<sc-if value="{{{{offCan}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{download}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; padding: 6px 16px">Download for offline use</button></sc-if>',
+                      f'<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="font-size: 16px">Volume</span><input type="range" aria-label="Volume" min="0" max="100" value="80" style="flex: 1; min-width: 0; accent-color: {INK}"></div>',
+                      f'<button type="button" onClick="{{{{askRemove}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {RED}; font: inherit; font-size: 16px; text-align: left; padding: 6px 16px">Remove downloaded piano samples</button>'))
            + SEC(CAPS('Display'), GROUP(('toggle', 'Chord symbol', 'chordOn', 'chordT'), ('toggle', 'Note names on highlighted keys', 'hlOn', 'hlT'), bg=SHEET))
            + SEC(CAPS('While you play'), GROUP(('seg', 'Swipe gesture', 'swipeG'), ('toggle', 'Play on selection', 'posOn', 'posT'), bg=SHEET))
            + SEC(CAPS('Placement'), GROUP(('seg', 'Position', 'place'), bg=SHEET))
@@ -182,7 +184,7 @@ P_ABOUT = (f'<div style="display: flex; align-items: center; gap: 16px; padding:
 
 PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Change password', P_PASSWORD), ('Privacy', P_PRIVACY), ('General', P_GENERAL), ('Storage and backup', P_STORAGE), ('On-screen piano', P_PIANO),
          ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
-SLUG = lambda p: p.replace(' ', '_')
+SLUG = lambda p: p.replace(' ', '_').replace('-', '_')
 PARENT = {'Edit profile': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
 def PAGEBODIES(pre, lap=False):
     out = []
@@ -204,7 +206,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     // ⓘ tips
     ['prev', 'sync', 'priv', 'store', 'offl', 'ckb', 'dev'].forEach((k) => { v['tipOn_' + k] = st.tip === k; v['tip_' + k] = () => S({ tip: st.tip === k ? null : k }); });
     // pages
-    PAGES.forEach((p) => { const s = p.replace(/ /g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
+    PAGES.forEach((p) => { const s = p.replace(/[ -]/g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
     const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'General' ? (st.theme ?? 'Match system') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') : l === 'About' ? (st.upd === 'avail' ? 'Update available' : 'Up to date') : val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
     const theme = st.theme ?? 'Match system', lang = st.lang ?? 'English';
     const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : '#F7F3EE', bot: t === 'Light' ? '#F7F3EE' : '#2A231E', card: t === 'Dark' ? '#3A312A' : '#FEFDFB' }));
