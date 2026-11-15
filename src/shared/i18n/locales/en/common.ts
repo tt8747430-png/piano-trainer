@@ -92,6 +92,8 @@ export const common = {
   infoTip: 'About {{name}}',
   loading: 'Loading',
   // The four levels, a journey's and a course's (ADR 0053).
+  // A row's level, short, as Learn numbers its levels (the libraries' rows on a phone).
+  levelNumber: 'Level {{number}}',
   stage: {
     beginner: 'Beginner',
     intermediate: 'Intermediate',

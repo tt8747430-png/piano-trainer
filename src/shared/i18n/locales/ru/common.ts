@@ -81,6 +81,7 @@ export const common: LocaleResources['common'] = {
   password: { show: 'Показать пароль', hide: 'Скрыть пароль' },
   infoTip: 'Подробнее: {{name}}',
   loading: 'Загрузка',
+  levelNumber: 'Уровень {{number}}',
   stage: {
     beginner: 'Начальный',
     intermediate: 'Средний',
