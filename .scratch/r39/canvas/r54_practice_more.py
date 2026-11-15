@@ -47,7 +47,13 @@ TR_SRC = r'''
     const next = () => (n >= total ? S({ view: 'results', verdict: null, on: [] }) : S({ n: n + 1, verdict: null, on: [] }));
     const view = st.view ?? (MODE === 'check' ? 'run' : 'setup');
     const hint = !!st.hint;
-    return { ...common(st, set), isRun: view === 'run', isResults: view === 'results', isCheck: MODE === 'check',
+    const states = [['Keys chosen', on.length > 0 && !verdict && view === 'run', { view: 'run', on: want.slice(0, 2), verdict: null }, { on: [] }],
+      ['A wrong answer', verdict === 'wrong', { view: 'run', on: [want[0], want[1] + 1], verdict: 'wrong', wrong: 1 }, { on: [], verdict: null, wrong: 0 }],
+      ['A right answer', verdict === 'right', { view: 'run', on: want, verdict: 'right', right: 2 }, { on: [], verdict: null, right: 1 }],
+      ['The answer shown', verdict === 'shown', { view: 'run', on: [], verdict: 'shown' }, { verdict: null }],
+      ['Results', view === 'results', { view: 'results', verdict: null, on: [] }, { view: 'run' }]]
+      .map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => S(on2 ? off : o) }));
+    return { ...common(st, set), states, isRun: view === 'run', isResults: view === 'results', isCheck: MODE === 'check',
       drills: seg(['Flashcards', 'Name it', 'Play it', 'By ear'], drill, (x) => S({ drill: x })), shownSeg: seg(['Name', 'Keys', 'Staff'], shown, (x) => S({ shown: x })),
       levelV: level, openLevel: () => S({ sheet: 'level' }), levelOn: st.sheet === 'level',
       levels: ['The main chords of C', 'Major and minor in every key', 'Diminished and augmented', 'Sevenths', 'Every quality', 'Custom'].map((l) => ({ l, mark: l === level ? '✓' : '', pick: () => S({ level: l, sheet: l === 'Custom' ? 'custom' : null }) })),
@@ -91,7 +97,7 @@ trlm = (''
               + f'<main style="flex: 1; min-height: 0; padding: 8px 0 32px; display: flex; justify-content: center"><div style="width: 760px; display: flex; flex-direction: column; gap: 14px">{TRRUN}<div style="flex: 1"></div>{TAPKEYS("kbL", 170)}{TRBTNS}</div></main>')
         + IF('isResults', LTOP('', '') + WIDE(LTR(CKRES), 560)) + TOASTL)
 for stem, mode, ttl in (('Check', "'check'", 'Check a song before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
-    detail(stem, ttl, js(TR_SRC.replace('__MODE__', mode)), trph, LTR(trlm), '', TR_SHEETS, LAPSHEET(TR_SHEETS), 'Practice')
+    detail(stem, ttl, js(TR_SRC.replace('__MODE__', mode)), SHOWSTATES() + trph, SHOWSTATES() + LTR(trlm), '', TR_SHEETS, LAPSHEET(TR_SHEETS), 'Practice')
 print('r54 trainer, check ok')
 
 # ════ ProgressionEdit (EDITOR) ════
