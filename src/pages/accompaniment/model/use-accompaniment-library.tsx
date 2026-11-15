@@ -80,7 +80,7 @@ export function useAccompanimentLibrary(): {
       picture:
         group === MINE
           ? { icon: UserRound, paint: 'sand' }
-          : { icon: AudioWaveform, paint: 'yellow' },
+          : { icon: AudioWaveform, paint: 'lilac' },
       link: (
         <Link
           to="/practice/accompaniment/patterns/$patternRef"

@@ -686,6 +686,8 @@ owner's, typos fixed.
 - **The tiles in the board's paints (loop round 16, `r41_kit.py`'s `pic`):** the drills sage, the jazz books sky,
   the Chord player honey, and the four tools on the page's quiet fill (`plain`), the Tuner's needle in copper and
   the circle's C wedge in honey.
+- **Accompaniment's rows in lilac (loop, 2026-11-15):** a pattern's row tile wears lilac, as the board's library draws it
+  and as Accompaniment's own tile on Practice already did; it was yellow, one thing in two paints.
 
 ## Sounds
 
