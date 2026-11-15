@@ -239,7 +239,12 @@ export function libraryView(
     groups,
     scope,
     shown,
-    hidden: filtering ? total - shown : 0,
+    // A place alone (Favourites, Learning, Learned) is where the learner is, not a filter to clear:
+    // the notice of what is hidden speaks only for a search or the sheet's filters.
+    hidden:
+      filtering && (filter.q.trim() !== '' || filtersOn(filter) > placesOn(filter))
+        ? total - shown
+        : 0,
     filtering,
   }
 }
