@@ -313,6 +313,7 @@ export const songs = {
     actions: 'Actions',
   },
   tree: {
+    places: 'Places',
     label: 'Library',
     all: 'All songs',
     folders: 'Folders',

@@ -1,31 +1,17 @@
 import { Link } from '@tanstack/react-router'
-import {
-  Archive,
-  ChevronDown,
-  CircleCheck,
-  CircleDashed,
-  Heart,
-  Music,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   childFolders,
   folderPath,
-  FolderTile,
   useFolderName,
-  useLibrary,
   useLibraryLayout,
   type FolderId,
   type ShelvedFolder,
 } from '@/entities/library'
-import type { PieceId } from '@/entities/piece'
-import { selectLearned, selectPractised, useProgress } from '@/entities/progress'
-import { pieceStepId } from '@/entities/step'
 import { cn } from '@/shared/lib'
-import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList } from '@/shared/ui'
+import { PAINT, TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList } from '@/shared/ui'
 
 /** Where the learner is in the library, as the tree marks it. */
 /** A place of the tree: All songs, a filter's own (Favourites, Learning, Learned), or a folder. */
@@ -39,37 +25,30 @@ const FILTERED = {
   learned: { learned: 'yes' },
 } as const
 
-/** A folder's tile, the tree's size: its pages on its paint, as its row wears it. */
+/** A folder's mark in the pane, the board's: a 10px square of its paint, 3 round. */
 const FolderSwatch = ({ folder }: { folder: ShelvedFolder }) => (
-  <FolderTile look={folder} className="size-6 rounded-[6px]" />
+  <span aria-hidden className={cn('size-2.5 shrink-0 rounded-[3px]', PAINT[folder.paint].fill)} />
 )
 
+/** A place, as the board's pane names it: its word alone, the open one in bold on its wash. */
 function Place({
-  to,
   place = 'all',
-  icon,
   label,
-  count,
   current,
 }: {
-  to: '/songs' | '/songs/archive' | '/songs/trash'
-  /** On All songs: the filter it is. */
+  /** The filter of All songs it is. */
   place?: keyof typeof FILTERED
-  icon: LucideIcon
   label: string
-  count: number
   current: boolean
 }) {
   return (
     <TreeItem
-      icon={icon}
       label={label}
-      count={count}
       current={current}
       render={
         <Link
-          to={to}
-          search={to === '/songs' ? FILTERED[place] : undefined}
+          to="/songs"
+          search={FILTERED[place]}
           // The tree marks the place itself: the router's own mark would light All songs in a folder.
           activeOptions={{ exact: true, includeSearch: true }}
           activeProps={{}}
@@ -80,25 +59,16 @@ function Place({
 }
 
 /**
- * The library as a tree, the laptop's left pane (Mindscape's and Apple Music's sidebar): All songs and
- * Favourites, the learner's folders nested and folded (a folder holding folders has a disclosure, the
- * path to the folder open unfolded), and the Archive at its foot. Each row a link to its place,
+ * The library as a tree, the laptop's left pane as the board draws it (`r41_lib`): Places (All,
+ * Favourites, Learning, Learned) by their words alone, then the learner's folders, each a dot of its
+ * paint and its count, nested and folded (a folder holding folders has a disclosure, the path to the
+ * folder open unfolded). The Archive is the bar's, the Trash its ···. Each row a link to its place,
  * the place open marked.
  */
 export function LibraryTree({ current, extra }: { current: TreePlace; extra?: ReactNode }) {
   const { t } = useTranslation('songs')
-  const { t: common } = useTranslation('common')
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
-  const favourites = useLibrary((state) => state.favourites.length)
-  const songs = new Set(layout.folders.flatMap((folder) => folder.songs))
-  for (const id of layout.home) songs.add(id)
-  const learnedSteps = useProgress(selectLearned)
-  const practised = useProgress(selectPractised)
-  const isLearned = (id: PieceId) => learnedSteps[pieceStepId(id)] !== undefined
-  const learned = [...songs].filter(isLearned).length
-  // Played and not yet learned, as the Learning place lists them.
-  const learning = [...songs].filter((id) => practised[id] !== undefined && !isLearned(id)).length
   // The folders on the way to the one open stand unfolded.
   const path =
     current === 'all' || current === 'favourites' || current === 'learning' || current === 'learned'
@@ -115,6 +85,9 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
   const branch = (parent: FolderId | null, depth: number): ReactNode => {
     const folders = childFolders(layout.folders, parent)
     if (folders.length === 0) return null
+    // The disclosure's room is kept only where a folder of this run holds folders, so a flat
+    // library's folders stand on the places' edge, as the board's.
+    const disclosing = folders.some((each) => childFolders(layout.folders, each.id).length > 0)
     return (
       <TreeList>
         {folders.map((folder) => {
@@ -144,9 +117,9 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
                       )}
                     />
                   </button>
-                ) : (
+                ) : disclosing ? (
                   <span aria-hidden className="size-6 shrink-0" />
-                )}
+                ) : null}
                 <Link
                   to="/songs/folders/$folderId"
                   params={{ folderId: folder.id }}
@@ -166,59 +139,21 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
     )
   }
   return (
-    <nav aria-label={t('tree.label')} className="flex flex-col gap-1">
+    <nav aria-label={t('tree.label')} className="flex flex-col">
+      <TreeHeading first>{t('tree.places')}</TreeHeading>
       <TreeList>
+        <Place label={t('places.all')} current={current === 'all'} />
         <Place
-          to="/songs"
-          icon={Music}
-          label={t('tree.all')}
-          count={songs.size}
-          current={current === 'all'}
-        />
-        <Place
-          to="/songs"
           place="favourites"
-          icon={Heart}
-          label={common('library.favourites')}
-          count={favourites}
+          label={t('places.favourites')}
           current={current === 'favourites'}
         />
-        <Place
-          to="/songs"
-          place="learning"
-          icon={CircleDashed}
-          label={t('places.learning')}
-          count={learning}
-          current={current === 'learning'}
-        />
-        <Place
-          to="/songs"
-          place="learned"
-          icon={CircleCheck}
-          label={t('places.learned')}
-          count={learned}
-          current={current === 'learned'}
-        />
+        <Place place="learning" label={t('places.learning')} current={current === 'learning'} />
+        <Place place="learned" label={t('places.learned')} current={current === 'learned'} />
       </TreeList>
       <TreeHeading>{t('tree.folders')}</TreeHeading>
       {branch(null, 0)}
       {extra}
-      <TreeList className="mt-4">
-        <Place
-          to="/songs/archive"
-          icon={Archive}
-          label={t('archive.title')}
-          count={layout.archive.length}
-          current={false}
-        />
-        <Place
-          to="/songs/trash"
-          icon={Trash2}
-          label={t('trash.title')}
-          count={layout.trash.length}
-          current={false}
-        />
-      </TreeList>
     </nav>
   )
 }

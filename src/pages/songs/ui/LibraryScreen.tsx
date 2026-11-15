@@ -172,8 +172,8 @@ export function LibraryScreen({
         }
       />
       {wide ? (
-        <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
-          <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
+        <div className="grid grid-cols-[15rem_minmax(0,1fr)] items-start gap-8">
+          <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pe-3 pb-4 shadow-[1px_0_0_var(--color-hairline)]">
             <LibraryTree
               current={
                 folder?.id ??

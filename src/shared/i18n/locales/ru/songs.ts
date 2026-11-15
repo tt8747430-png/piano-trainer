@@ -301,6 +301,7 @@ export const songs: LocaleResources['songs'] = {
     actions: 'Действия',
   },
   tree: {
+    places: 'Разделы',
     label: 'Библиотека',
     all: 'Все песни',
     folders: 'Папки',

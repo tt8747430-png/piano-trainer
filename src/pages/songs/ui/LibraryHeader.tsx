@@ -3,10 +3,9 @@ import { CheckCheck, ListChecks, ListX, Settings, Trash2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
-import { useMediaQuery, useUp } from '@/shared/lib'
+import { useUp } from '@/shared/lib'
 import {
   BackButton,
-  LIBRARY_PANES,
   MoreMenu,
   RoundButton,
   RoundLink,
@@ -43,7 +42,6 @@ export function LibraryHeader({
   add?: ReactNode
 }) {
   const { t } = useTranslation('songs')
-  const wide = useMediaQuery(LIBRARY_PANES)
   const views = useSongsViews('mine')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
@@ -103,8 +101,8 @@ export function LibraryHeader({
                 onClick={() => page.select.start()}
               />
             ) : null}
-            {/* A laptop's tree holds Archive and Trash: one way to each (ui-and-mockups). */}
-            {folder || wide ? null : <ArchiveButton />}
+            {/* The Archive is the bar's at Home, on a phone and a laptop alike (the boards'). */}
+            {folder ? null : <ArchiveButton />}
             {add}
           </>
         )

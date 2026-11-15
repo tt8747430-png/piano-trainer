@@ -2,7 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { groupTile, useGroupsData, useKeepSharesCurrent } from '@/features/share-folder'
-import { PlaceRow } from '@/shared/ui'
+import { cn } from '@/shared/lib'
+import { PAINT, PlaceRow, TREE_ITEM, TreeCount, TreeList } from '@/shared/ui'
 
 /**
  * Shared with me (R30 S6): the folders others share with the learner's groups, each a row to its page
@@ -17,48 +18,34 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
   const shared = data.kind === 'ready' ? data.shared.filter((each) => !each.mine) : []
   const groupName = (id: string) =>
     data.kind === 'ready' ? (data.groups.find((each) => each.id === id)?.name ?? '') : ''
+  // In the laptop's pane: the shared folders after the learner's, each a row of the pane's kind (a
+  // grass dot, its count), then Shared with me, the way to Groups, as the board lists it with the folders.
   if (inTree)
     return (
-      <>
-        {shared.length > 0 ? (
-          <>
-            <h2 className="px-2 pt-4 pb-1 font-sans text-xs font-semibold text-muted-foreground">
-              {t('groups.sharedWithMe')}
-            </h2>
-            <ul className="flex flex-col gap-0.5">
-              {shared.map((folder) => {
-                const { icon: Icon } = groupTile(folder)
-                return (
-                  <li key={folder.id} className="flex">
-                    <Link
-                      to="/songs/shared-folders/$sharedId"
-                      params={{ sharedId: folder.id }}
-                      className="flex min-h-10 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium hover:bg-muted focus-visible:-outline-offset-3"
-                    >
-                      <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
-                      <span className="min-w-0 truncate">{folder.name}</span>
-                      <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground">
-                        {folder.songs.length}
-                      </span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </>
-        ) : null}
-        <ul className="mt-4 flex flex-col gap-0.5">
-          <li className="flex">
+      <TreeList>
+        {shared.map((folder) => (
+          <li key={folder.id} className="flex">
             <Link
-              to="/songs/groups"
-              className="flex min-h-10 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium hover:bg-muted focus-visible:-outline-offset-3"
+              to="/songs/shared-folders/$sharedId"
+              params={{ sharedId: folder.id }}
+              className={TREE_ITEM}
             >
-              <Users aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
-              {t('groups.title')}
+              <span
+                aria-hidden
+                className={cn('size-2.5 shrink-0 rounded-[3px]', PAINT.grass.fill)}
+              />
+              <span className="min-w-0 truncate">{folder.name}</span>
+              <TreeCount n={folder.songs.length} />
             </Link>
           </li>
-        </ul>
-      </>
+        ))}
+        <li className="flex">
+          <Link to="/songs/groups" className={TREE_ITEM}>
+            <span aria-hidden className={cn('size-2.5 shrink-0 rounded-[3px]', PAINT.grass.fill)} />
+            <span className="min-w-0 truncate">{t('groups.sharedWithMe')}</span>
+          </Link>
+        </li>
+      </TreeList>
     )
   // A phone's Home: rows at the foot of Folders' card, as folders are (canvas 133).
   return (

@@ -5,11 +5,11 @@ import { cn } from '@/shared/lib'
 import { PAINT, type Paint } from './paint'
 
 /**
- * A tree row's look: a link or button the width of the pane, the place open marked by `aria-current`
- * in the one selected style (`choice`).
+ * A tree row's look, the board's library pane (`r41_lib`): 40 tall, 15 in ink, 9 corners, 12 in; the
+ * place open marked by `aria-current` in the one selected style (`choice`) and in bold.
  */
 export const TREE_ITEM =
-  'flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-control px-2 text-[0.9375rem] font-medium text-foreground choice focus-visible:-outline-offset-3'
+  'flex min-h-10 min-w-0 flex-1 items-center gap-2.5 rounded-[9px] px-3 text-[0.9375rem] font-medium text-foreground choice focus-visible:-outline-offset-3 aria-[current=page]:font-bold'
 
 /** A count at a tree row's end, in soft ink. */
 export const TreeCount = ({ n }: { n: number }) => (
@@ -35,9 +35,14 @@ export const TreeList = ({ className, ...props }: ComponentProps<'ul'>) => (
   <ul className={cn('flex flex-col gap-0.5', className)} {...props} />
 )
 
-/** A heading over a run of a tree's rows (Folders, Books). */
-export const TreeHeading = ({ children }: { children: ReactNode }) => (
-  <h2 className="px-2 pt-4 pb-1 font-sans text-xs font-semibold text-muted-foreground">
+/** A heading over a run of a tree's rows (Places, Folders, Books), in the soft caps every group wears. */
+export const TreeHeading = ({ children, first }: { children: ReactNode; first?: boolean }) => (
+  <h2
+    className={cn(
+      'px-1 pb-1.5 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase',
+      !first && 'pt-4',
+    )}
+  >
     {children}
   </h2>
 )
