@@ -1,8 +1,8 @@
-import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMediaQuery } from '@/shared/lib'
 import { FoldGroup } from './FoldGroup'
+import { FilterIcon } from './icons/FilterIcon'
 import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 import { Toggle } from './primitives/toggle'
@@ -47,7 +47,7 @@ export function FilterSheet({
   } as const
   const face = (
     <>
-      <SlidersHorizontal aria-hidden />
+      <FilterIcon aria-hidden />
       {count > 0 ? (
         <span
           aria-hidden

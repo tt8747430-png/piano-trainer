@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, ChevronRight, Copy, SearchX, Settings2, Trash2 } from 'lucide-react'
+import { BookOpenText, ChevronRight, Copy, SearchX, Settings, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -75,7 +75,7 @@ function OwnLessonItem({ lesson, nested }: { lesson: OwnLesson; nested: boolean 
     {
       key: 'settings',
       label: t('own.settings'),
-      icon: Settings2,
+      icon: Settings,
       onSelect: () =>
         void navigate({ to: '/lessons/$lessonId/settings', params: { lessonId: lesson.id } }),
     },
@@ -161,7 +161,7 @@ function OwnCourseItem({
     {
       key: 'settings',
       label: t('own.settings'),
-      icon: Settings2,
+      icon: Settings,
       onSelect: () =>
         void navigate({ to: '/courses/$courseId/settings', params: { courseId: course.id } }),
     },
