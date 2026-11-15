@@ -117,6 +117,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 34, the laptop's keys button says Piano:** the sheet it opens, by name, as the PlayerDesk board; a phone's caption keeps the mode (3D, 2D, Off) (2026-11-15).
 - **Loop round 34, the laptop's transport names the hands in full:** Both hands, Right hand, Left hand (Обе руки…) beside the picture, as the PlayerDesk board; a phone keeps Both under it (`captionWide` on the bar's button) (2026-11-15).
 - **Loop round 33, the Player's bar band as its board:** 12 over the buttons and 8 under them, a 64 band under the status bar (it was 8 and 4, 56); the editor's floating bar keeps no band (2026-11-15).
 - **Loop round 29, the laptop's views pill as the PlayerDesk board:** a 44 glass pill padded 4 holding four 112 × 34 segments at 14, 600 (Sheet · Diagrams · Grid · Lyrics), the shown filled in ink; the one pill (`ViewPill`) takes a size, the editor's Play · Edit keeping its 44 segments.
