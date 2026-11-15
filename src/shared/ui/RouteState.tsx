@@ -48,8 +48,8 @@ export function RouteState({
         {title}
       </h1>
       <p className="max-w-[340px] text-base/[1.45] text-pretty text-muted-foreground">{line}</p>
-      {/* The ways on stand 48 tall, as the board draws them, whatever button each page passes. */}
-      <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:px-5 *:text-base">
+      {/* The ways on are the board's pills, 48 tall and bold, whatever button each page passes. */}
+      <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:rounded-full *:px-5 *:text-base *:font-bold">
         {children}
       </div>
     </div>

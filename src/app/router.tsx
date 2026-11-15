@@ -116,7 +116,7 @@ const practiceScreens = () => import('./routes/practice-screens')
 function NotFoundScreen() {
   return (
     <AppShell>
-      <NotFoundPage way="songs" />
+      <NotFoundPage way="learn" />
     </AppShell>
   )
 }

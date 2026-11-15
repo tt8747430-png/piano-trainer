@@ -25,7 +25,7 @@ export function NotOpen({ line, children }: { line: string; children?: ReactNode
         {line}
       </p>
       {children ? (
-        <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:px-5 *:text-base">
+        <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:rounded-full *:px-5 *:text-base *:font-bold">
           {children}
         </div>
       ) : null}
