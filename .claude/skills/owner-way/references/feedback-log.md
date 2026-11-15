@@ -317,6 +317,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 21, the Metronome's slider as tall as its thumb:** its row 28, the beats 20 under it, as the board's
+  range input (the beats sat 4 under the thumb) (2026-11-15).
 - **Loop round 20, the overview as Learn under its bar:** Theory starts 4 under the bar, the sections 14 apart,
   as the Main board draws it (was 14 under the bar) (2026-11-15).
 - **Rows show what they hold (loop round 11, the Practice board's `pic`):** each place of Practice wears a small

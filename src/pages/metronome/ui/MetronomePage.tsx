@@ -79,7 +79,7 @@ export function MetronomePage() {
         large
         onStep={metronome.nudge}
       />
-      <div className="flex w-full items-center" data-setting="metronome.bpm">
+      <div className="mb-1 flex h-7 w-full items-center" data-setting="metronome.bpm">
         <Slider
           value={metronome.tempoNow}
           min={BPM_RANGE.min}
