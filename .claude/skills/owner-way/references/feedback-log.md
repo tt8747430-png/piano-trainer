@@ -750,6 +750,9 @@ owner's, typos fixed.
 - **A pattern's keys show its chord (loop, 2026-11-15, `r63_pattern.py`):** a pattern's page marks C major's tones,
   C · E · G, in the chord-tone paints over its bar of C, as the board's keys do; a song tune stays unmarked. A key's
   name label ("C4") keeps one line.
+- **A pattern's page as its board (loop, 2026-11-15, canvas 199):** its card holds the bar and one line of what it is;
+  the longer description is The hands' ⓘ (owner: popups that show more with less UI). Used in is a small heading over
+  one card of rows, as The hands, folded after five with Show all n; the big song cards went.
 
 ## Sounds
 

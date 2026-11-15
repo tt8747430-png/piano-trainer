@@ -29,11 +29,13 @@ import {
   toggleHidden,
 } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
+import { Button } from '@/shared/ui/primitives/button'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   ActionMenu,
   BackButton,
   ButtonLink,
+  InfoTip,
   MoreMenu,
   NotFound,
   RoundButton,
@@ -42,8 +44,11 @@ import {
   type MenuAction,
 } from '@/shared/ui'
 import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
-import { PieceList } from '@/widgets/piece-list'
+import { EntryRow } from '@/widgets/piece-list'
 import { useForgetScreens } from '@/shared/lib'
+
+/** How many songs and lessons Used in shows before Show all. */
+const FOLDED = 5
 
 /** The ♡ beside the name: a favourite comes first in the Player's list. */
 function FavouriteButton({ pattern }: { pattern: BookPattern }) {
@@ -175,6 +180,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   const name = localText(pattern.name, locale)
   const more = usePatternActions(pattern, name)
   const own = isOwnPatternId(pattern.ref)
+  const [allUses, setAllUses] = useState(false)
   const overs = [
     ...(tune ? [] : [{ id: null, label: t('patterns.barOfC') }]),
     ...pieces
@@ -211,18 +217,20 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
             <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
               {localText(pattern.idea, locale)}
             </p>
-            {pattern.description ? (
-              <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty">
-                {localText(pattern.description, locale)}
-              </p>
-            ) : null}
           </section>
         </div>
         <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
           <section className="flex flex-col gap-2">
-            <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
-              {t('patterns.hands')}
-            </h3>
+            <div className="ms-1 flex items-center gap-1.5">
+              <h3 className="font-sans text-sm font-semibold text-foreground">
+                {t('patterns.hands')}
+              </h3>
+              {pattern.description ? (
+                <InfoTip name={t('patterns.hands')}>
+                  {localText(pattern.description, locale)}
+                </InfoTip>
+              ) : null}
+            </div>
             <dl className="flex flex-col divide-y divide-border overflow-hidden rounded-2xl bg-card ring-1 ring-border">
               {[
                 [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
@@ -239,9 +247,21 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
             </dl>
           </section>
           {pieces.length > 0 ? (
-            <PieceList
-              groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]}
-            />
+            <section className="flex flex-col gap-2">
+              <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+                {t('patterns.usedIn')}
+              </h3>
+              <ul className="card flex flex-col p-1.5">
+                {(allUses ? pieces : pieces.slice(0, FOLDED)).map((piece) => (
+                  <EntryRow key={piece.id} entry={piece} tile={false} />
+                ))}
+              </ul>
+              {!allUses && pieces.length > FOLDED ? (
+                <Button variant="soft" className="self-start" onClick={() => setAllUses(true)}>
+                  {t('library.showAll', { count: pieces.length })}
+                </Button>
+              ) : null}
+            </section>
           ) : null}
         </div>
       </div>

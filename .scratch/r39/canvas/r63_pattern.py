@@ -10,7 +10,7 @@ PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop 
       playMenu: st.menu === 'play', closeMenu: () => S({ menu: null }), openPlay: () => S({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),
       overs: ['A bar of C major', 'Amazing Grace'].map((d) => ({ d, on: d === over, mark: d === over ? '✓' : '', pick: () => S({ over63: d, menu: null }) })),
-      keysOn: st.sheet === 'keys', openKeys: () => S({ sheet: 'keys' }), openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more', isPattern:''')
+      descOn: st.sheet === 'desc', openDesc: () => S({ sheet: 'desc' }), keysOn: st.sheet === 'keys', openKeys: () => S({ sheet: 'keys' }), openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more', isPattern:''')
 assert PA63 != PA_SRC, 'PA return not found'
 PA63 = PA63.replace("favOn: fav, heartFill: fav ? '#B3261E' : 'none'", "favOn: fav, favFill: fav ? '#C2554A' : 'none', heartFill: fav ? '#B3261E' : 'none'")
 TOP63 = TOP60.replace('Scales and keys</span>', 'Pattern</span>').replace('href="Main.dc.html" aria-label="Back to Practice"', 'href="Accompaniment.dc.html" aria-label="Back to Accompaniment"').replace(ROUND60("Settings", COG, "openSet"), '') + ''
@@ -46,7 +46,11 @@ def _staff63():
     return f'<svg viewBox="0 0 360 132" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; max-width: 460px; margin: 0 auto">{s}</svg>'
 MUSIC63 = CARD(_staff63() + f'<p style="margin: 12px 4px 0; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</p>', '16px 16px 14px')
 H3_63 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
-HANDS63 = f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("The hands")}' + GROUP(('val', 'Right hand', '{{rhT}}'), ('val', 'Left hand', '{{lhT}}'), bg=SHEET) + '</section>'
+DESC63 = 'The left hand holds the octave. The right hand keeps its chord under the fingers and rocks in 8ths: the upper notes together, then the lowest note alone. For a G chord after C, that is D and G together, then B.'
+# The hands' ⓘ (loop, 2026-11-15): the pattern's longer description, out of the way until asked for, as InfoTip draws it.
+INFO63 = (f'<button type="button" aria-label="About the hands" onClick="{{{{openDesc}}}}" style="position: relative; flex: none; width: 20px; height: 20px; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace('width="22" height="22"', 'width="16" height="16"')}</button>'
+          f'<sc-if value="{{{{descOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: fixed; inset: 0; z-index: 60"></div><div role="dialog" aria-label="The hands" style="position: absolute; left: 0; top: 28px; z-index: 61; width: 288px; max-width: calc(100% - 8px); box-sizing: border-box; padding: 12px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 14px; line-height: 1.4; text-wrap: pretty">{DESC63}</div></sc-if>')
+HANDS63 = f'<section style="flex: none; position: relative; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 6px">{H3_63("The hands")}{INFO63}</div>' + GROUP(('val', 'Right hand', '{{rhT}}'), ('val', 'Left hand', '{{lhT}}'), bg=SHEET) + '</section>'
 USED63 = f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("Used in")}' + GROUP(('link', 'Amazing Grace', 'Verse', 'Song.dc.html'), ('link', 'Called to Play, lesson 12', '', 'Lesson.dc.html'), bg=SHEET) + '</section>'
 HIDDEN63 = IF('hidden', CARD(f'<span style="font-size: 15px; line-height: 1.45">Hidden from the Player’s list and from its book. You can still find it under Hidden.</span>'))
 PRACTP63 = PRACTP.replace('href="PlayProgression.dc.html"', 'href="Player.dc.html"')
