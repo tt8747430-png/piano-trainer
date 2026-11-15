@@ -6,19 +6,19 @@ import {
   Library,
   Mic,
   Music,
-  Piano,
   Target,
   Upload,
   GraduationCap,
   type LucideIcon,
 } from 'lucide-react'
 import type { BadgeId, MilestoneId } from '@/entities/progress'
+import { ScaleIcon } from '@/shared/ui'
 
 export const BADGE_ICON: Readonly<Record<BadgeId, LucideIcon>> = {
   streak: Flame,
   repertoire: Music,
   lessons: BookOpenCheck,
-  scales: Piano,
+  scales: ScaleIcon,
   devotion: CalendarDays,
   library: Library,
 }

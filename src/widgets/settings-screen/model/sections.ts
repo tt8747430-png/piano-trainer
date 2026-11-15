@@ -12,15 +12,14 @@ import {
   TriangleAlert,
   MessagesSquare,
   ArrowRightToLine,
-  Piano,
   SunMedium,
   ShieldUser,
-  SquareCheck,
   ToggleRight,
   UsersRound,
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from '@/shared/ui'
+import { KeysIcon, SelectionBarIcon } from '@/shared/ui'
 
 /** One of Settings' own pages: where it is, its name, its picture, and the paths that are its own. */
 export interface SettingsPageEntry {
@@ -75,7 +74,7 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
       {
         to: '/settings/on-screen-piano',
         title: 'pages.onScreenPiano',
-        icon: Piano,
+        icon: KeysIcon,
         paint: 'lilac',
       },
       {
@@ -93,7 +92,7 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
       {
         to: '/settings/select-toolbar',
         title: 'pages.selectionToolbar',
-        icon: SquareCheck,
+        icon: SelectionBarIcon,
         paint: 'sky',
       },
       {

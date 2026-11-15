@@ -9,11 +9,11 @@ import {
   Music2,
   Music3,
   Music4,
-  Piano,
   Radio,
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from './paint'
+import { KeysIcon } from './icons/KeysIcon'
 
 /** The built-in profile pictures (B1): note and instrument motifs, each on a paint of the palette. */
 export const BUILT_IN_AVATARS = {
@@ -21,7 +21,7 @@ export const BUILT_IN_AVATARS = {
   quavers: { icon: Music2, paint: 'sky' },
   beamed: { icon: Music3, paint: 'grass' },
   semiquavers: { icon: Music4, paint: 'lilac' },
-  piano: { icon: Piano, paint: 'sand' },
+  piano: { icon: KeysIcon, paint: 'sand' },
   guitar: { icon: Guitar, paint: 'grass' },
   drum: { icon: Drum, paint: 'yellow' },
   mic: { icon: Mic, paint: 'lilac' },

@@ -10,7 +10,6 @@ import {
   ListChecks,
   Lightbulb,
   Music2,
-  Piano,
   Timer,
   TrendingDown,
   TrendingUp,
@@ -18,6 +17,7 @@ import {
   Workflow,
   type LucideIcon,
 } from 'lucide-react'
+import { KeysIcon } from '@/shared/ui'
 
 /** Each course's icon, its card's and its page's; a method book's an open book. */
 export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
@@ -34,7 +34,7 @@ export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
   'music-reading-training': Library,
   'major-arpeggios': Waves,
   'minor-arpeggios': Workflow,
-  'mastering-chords': Piano,
+  'mastering-chords': KeysIcon,
   'improvising-with-chords': Lightbulb,
   'my-practice-plan': ListChecks,
   'called-to-play': BookOpen,

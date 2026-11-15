@@ -775,6 +775,9 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 19, the board's glyphs everywhere:** the keys glyph on every picture of the piano (a folder's, a
+  course's, an avatar's, the guide's and Settings' On-screen piano), the stairs on Profile's Scales, and Selection
+  toolbar a bar of actions under rows, as the Settings board draws it (2026-11-15).
 - **Settings on a laptop as its board (loop round 16, SettingsLaptop):** no bar; the list a full-height column,
   its hairline to the right, headed by a 28px Settings; the page beside it: Back (a page under a page) and its
   actions in one 44px row, then its 26px title.

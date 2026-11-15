@@ -18,13 +18,13 @@ import {
   Music,
   Palette,
   PencilLine,
-  Piano,
   Repeat,
   Replace,
   Settings,
   Volume2,
   type LucideIcon,
 } from 'lucide-react'
+import { KeysIcon } from '@/shared/ui'
 
 /** A step of the guide: its words, and the icon the app wears for what it names. */
 export interface GuideStep {
@@ -82,7 +82,7 @@ export const GUIDE = [
     steps: [
       { key: 'howToUse.midi.connect', icon: Cable },
       { key: 'howToUse.midi.settings', icon: Settings },
-      { key: 'howToUse.midi.play', icon: Piano },
+      { key: 'howToUse.midi.play', icon: KeysIcon },
     ],
   },
   {
