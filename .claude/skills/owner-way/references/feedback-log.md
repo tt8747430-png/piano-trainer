@@ -303,6 +303,7 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 41, Songs' list named and its folders even, as the Songs boards:** at Home a phone heads every song "Songs" with its count, as the laptop's table and both boards do (it said All songs on a phone alone); Shared with me and a shared folder stand 64 among the folders, as the board draws them, where they took Practice's 80 (2026-11-15).
 - **Loop round 40, a favourite's heart red, as every board paints it (#B84A3E):** a library row's ♡ rests faint (#B4AAA0) and fills red once chosen; a song's or pattern's ♡ in its bar fills red with no sand wash under it; the small mark in Select is red. One `--heart` token, by Night the crimson's light shade (2026-11-15).
 - **Loop round 40, a song's, course's and lesson's Settings as the SongSettings board:** the head 8 under the bar, the cover 64 (was 56, 24 under), its groups 16 apart as Settings' are (they stood 28 apart); the Chord player's Settings the same, its second column's first card level with the first's (2026-11-15).
 - **Loop round 38, an empty state's way on at the boards' 48:** Try again, To Songs, New group and every honey way out of a said state stand 48 tall, as `EMPTY` draws them; a quiet one (Clear) stays 44.

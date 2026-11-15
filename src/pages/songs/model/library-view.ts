@@ -57,7 +57,7 @@ export interface ViewLookups {
   readonly compare: (a: string, b: string) => number
   /** Home's name, over its songs while the filters look through the library. */
   readonly home: string
-  /** Every song's heading at Home, under the folders (a phone's All songs). */
+  /** Every song's heading at Home, under the folders: Songs, as the laptop's table and the boards name it. */
   readonly allSongs: string
 }
 
@@ -132,7 +132,7 @@ export function libraryView(
     everySong = false,
   }: {
     tree?: boolean
-    /** At Home, every song under the folders as one list, All songs (a phone's Home). */
+    /** At Home, every song under the folders as one list, Songs (a phone's Home). */
     everySong?: boolean
   } = {},
 ): LibraryView {

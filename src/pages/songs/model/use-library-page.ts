@@ -99,7 +99,7 @@ export function useLibraryPage(
         opened: byLastOpened(practised),
         compare,
         home: t('library.home'),
-        allSongs: t('tree.all'),
+        allSongs: t('table.songs'),
       },
       // Every song at Home while browsing; Select drags in the library's own places.
       { tree, everySong: !tree && !selecting },

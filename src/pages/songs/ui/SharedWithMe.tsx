@@ -53,6 +53,7 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
       {shared.map((folder) => (
         <PlaceRow
           key={folder.id}
+          folder
           {...groupTile(folder)}
           title={folder.name}
           detail={t('groups.sharedBy', {
@@ -63,6 +64,7 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
         />
       ))}
       <PlaceRow
+        folder
         icon={Users}
         paint="sky"
         title={t('groups.sharedWithMe')}

@@ -8,9 +8,10 @@ import type { PagePicture } from './PagePictures'
 import { TileMark } from './TileMark'
 
 /**
- * A row of a grouped list that leads to a place (canvas 133 and Practice's), 80 tall: its 44px tile, its name
- * over one line on what it is, a chevron; in its card, as a library's rows (Songs' Shared with me,
- * Practice's pages). `render` is the link (a router `Link`).
+ * A row of a grouped list that leads to a place (canvas 133 and Practice's): its 44px tile, its name
+ * over one line on what it is, a chevron; 80 tall as Practice's pages, or 64 as a folder among the
+ * folders (`folder`, Songs' Shared with me, as the Songs board draws it). `render` is the link (a router
+ * `Link`).
  */
 export function PlaceRow({
   icon,
@@ -18,6 +19,7 @@ export function PlaceRow({
   paint,
   title,
   detail,
+  folder = false,
   render,
 }: {
   icon: LucideIcon
@@ -25,14 +27,16 @@ export function PlaceRow({
   paint: Paint
   title: string
   detail?: string | undefined
+  /** Stands among a library's folders, 64 tall as they are, rather than a place's 80. */
+  folder?: boolean
   render: useRender.RenderProp
 }) {
   const link = useRender({
     defaultTagName: 'a',
     render,
     props: {
-      // The canvas's PROW measures 80 tall: 64 inside, 8 above and below.
-      className: cn(ROW_BODY, ROW_LIBRARY_FACE, '[--row-min:5rem]'),
+      // The canvas's PROW measures 80 tall: 64 inside, 8 above and below; a folder's row 64.
+      className: cn(ROW_BODY, ROW_LIBRARY_FACE, folder ? '[--row-min:4rem]' : '[--row-min:5rem]'),
       children: (
         <>
           <TileMark large icon={icon} picture={picture} paint={paint} />
