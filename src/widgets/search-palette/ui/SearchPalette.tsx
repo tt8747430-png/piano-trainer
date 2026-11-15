@@ -201,7 +201,6 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
           <Chip onClick={() => ask('')}>{t('clear')}</Chip>
         </div>
       ) : null}
-      {wide ? <p className="text-sm text-pretty text-muted-foreground">{t('hint')}</p> : null}
     </div>
   )
 

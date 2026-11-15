@@ -885,6 +885,9 @@ are reference only, but progressions are facts.
 - **A page's bar on a laptop centres its title (loop round 17):** seven of the nine laptop boards (Chord finder, Exercise, Metronome, Pattern, Progression, Tuner, Scales, Intervals) draw TOP stretched: Back at the start, the title centred, the acts at the end; only the Chord player draws LTOP. The bar keeps the centred title at every width.
 - **Search is a palette,** never a page. **Back means up,** to where the learner came from, else the parent.
 - **The pencil means one thing:** edit what the screen shows.
+- **Search's palette has no line of keys under it (loop 23, 2026-11-15):** "Up and down move through the results…"
+  stood under the laptop's results, an explanation under a control; it is the dialog's description for a screen
+  reader alone now.
 
 ## Actions and menus
 
