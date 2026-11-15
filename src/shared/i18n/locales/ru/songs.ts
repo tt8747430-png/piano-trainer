@@ -7,6 +7,7 @@ export const songs: LocaleResources['songs'] = {
   noChart: 'Аккорды недоступны',
   empty: 'Ничего не найдено.',
   emptyQuery: 'По запросу «{{query}}» ничего не найдено.',
+  emptyQueryLine: 'Проверьте написание или попробуйте название песни либо имя композитора.',
   stage: 'Уровень',
   anyStage: 'Любой',
   emptyStage: 'Здесь нет песен уровня «{{stage}}».',

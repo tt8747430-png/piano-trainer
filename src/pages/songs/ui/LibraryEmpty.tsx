@@ -1,13 +1,7 @@
-import { FolderInput, Plus } from 'lucide-react'
+import { FolderInput, FolderOpen, ListFilter, Music, Plus, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { EmptyState } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 import { keyFromParam } from '@/shared/lib/music'
 import { useKeyName } from '@/shared/i18n'
 import { filtersOn, placesOn } from '../model/library-view'
@@ -59,41 +53,35 @@ export function LibraryEmpty({
                   ? t('emptyLearning')
                   : t('empty')
     return (
-      <Empty>
-        <EmptyHeader>
-          {/* A long query breaks rather than run off the screen. */}
-          <EmptyTitle className="break-words">{said}</EmptyTitle>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" onClick={onClear}>
-            {placeAlone ? t('tree.all') : common('library.clearFilters')}
-          </Button>
-        </EmptyContent>
-      </Empty>
+      <EmptyState
+        icon={searched ? SearchX : ListFilter}
+        title={said}
+        line={searched ? t('emptyQueryLine') : undefined}
+      >
+        <Button variant="ghost" onClick={onClear}>
+          {placeAlone ? t('tree.all') : common('library.clearFilters')}
+        </Button>
+      </EmptyState>
     )
   }
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyTitle>{t(inFolder ? 'folder.emptyTitle' : 'homeEmpty.title')}</EmptyTitle>
-        <EmptyDescription>
-          {t(inFolder ? 'folder.emptyDescription' : 'homeEmpty.description')}
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent className="flex-row flex-wrap justify-center">
-        {page.may('addSong') ? (
-          <Button variant="soft" onClick={() => page.open({ kind: 'new-song' })}>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('newSong')}
-          </Button>
-        ) : null}
-        {inFolder && page.may('moveIn') ? (
-          <Button variant="soft" onClick={() => page.open({ kind: 'move-in' })}>
-            <FolderInput data-icon="inline-start" aria-hidden />
-            {t('folder.moveIn')}
-          </Button>
-        ) : null}
-      </EmptyContent>
-    </Empty>
+    <EmptyState
+      icon={inFolder ? FolderOpen : Music}
+      title={t(inFolder ? 'folder.emptyTitle' : 'homeEmpty.title')}
+      line={t(inFolder ? 'folder.emptyDescription' : 'homeEmpty.description')}
+    >
+      {page.may('addSong') ? (
+        <Button variant="ghost" onClick={() => page.open({ kind: 'new-song' })}>
+          <Plus data-icon="inline-start" aria-hidden />
+          {t('newSong')}
+        </Button>
+      ) : null}
+      {inFolder && page.may('moveIn') ? (
+        <Button variant="ghost" onClick={() => page.open({ kind: 'move-in' })}>
+          <FolderInput data-icon="inline-start" aria-hidden />
+          {t('folder.moveIn')}
+        </Button>
+      ) : null}
+    </EmptyState>
   )
 }

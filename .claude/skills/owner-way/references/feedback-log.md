@@ -265,6 +265,10 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **An empty list as the board's EMPTY (loop 24):** one `EmptyState`: a 64 round sand mark with its icon (a search
+  that found nothing, filters, an empty folder, an empty library), what is empty in 18 bold, a 15 line saying what
+  to try ("Check the spelling, or try a song’s title or its composer."), its way on a 44 sand pill (2026-11-15).
+
 - **Loop round 16, a laptop's search in the bar (the SongsLaptop and ProgressionsLaptop boards):** the search box
   288 wide and Sort and filter beside it stand in the bar before New, not a row of their own over the table; a phone
   keeps its row under the title (2026-11-15).

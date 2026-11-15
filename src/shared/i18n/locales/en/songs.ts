@@ -7,6 +7,7 @@ export const songs = {
   empty: 'No matching songs.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
+  emptyQueryLine: 'Check the spelling, or try a song’s title or its composer.',
   // A song's stage, as its course places it (ADR 0053).
   stage: 'Level',
   anyStage: 'Any',
