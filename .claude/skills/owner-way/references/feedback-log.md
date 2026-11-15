@@ -125,7 +125,7 @@ owner's, typos fixed.
   do, with a line only for why one cannot be chosen ("Needs a melody staff"); what a pattern is stays in Pattern's ⓘ
   (2026-11-15).
 
-- **Loop round 19, the Player's Piano sheet to its board (r43, `KBVALS`):** the 3D card holds Angle (Seat · Above) and Hands on the keys, and Range follows the cards: Fit the song · 61 keys · 76 keys · 88 keys (C2–C7, E1–G7, A0–C8), each kept in the Player's own settings. The board's Labels row is not ported: what the keys carry has one home, Settings › On-screen piano. Every segmented control is the board's SEG: each segment as wide as its words, never wrapped, the room left shared (2026-11-15).
+- **Loop round 19, the Player's Piano sheet to its board (r43, `KBVALS`):** the 3D card holds Angle (Seat · Above) and Hands on the keys, and Range follows the cards: Fit the song · 61 keys · 76 keys · 88 keys (C2–C7, E1–G7, A0–C8), each kept in the Player's own settings. Every segmented control is the board's SEG: each segment as wide as its words, never wrapped, the room left shared (2026-11-15).
 
 - **Loop round 17, nothing under the bar:** the progress line along the score's head is gone, as the Player's boards draw none; the bar stands bare over the paper (2026-11-15).
 
@@ -979,10 +979,8 @@ are reference only, but progressions are facts.
 - **Loop round 25, the User guide to its board (P_GUIDE):** each part a card whose head, its title in 17 semibold sans with the chevron at the far edge, opens it; one part open at a time, the first to begin with; the steps plain paragraphs, the tile icon beside each and the dividers gone (2026-11-15).
 - **Loop round 25, About to its board:** the app's 56 tile with its name (20 bold) and version beside it on the page's left edge; Software update its own group, where it stands beside a dot (grass current, honey waiting, ochre at work) over Check for updates, or Install and restart when one waits; Licence in regular weight; Legal plain link rows. The acknowledgements keep each work's maker and licence, which their licences ask for (2026-11-15).
 - **Loop round 25, Storage and backup's Device storage to its board:** the size used in bold over a bar parted into Songs and takes (sky) and Piano (green) with its legend; Protect from clearing a switch, on and still once the browser grants it, what the browser said in a line under the card (2026-11-15).
-- **Loop round 25, On-screen piano to its board (P_PIANO; owner IMG_6045–6056: "not consistent piano settings"):** the real piano on top, two octaves from middle C, showing the names and playing what is tapped; Keys as three segmented rows (Key size Fit to music · Large · All keys, Note names, Pedals), Placement and the swipe likewise, the picture cards and every line under a row gone; Sound the grand with its download bar and where it stands (Not downloaded yet, Partly downloaded, Available offline); on a computer, Computer keyboard last with its ⓘ, the switch and Shortcuts ›. Every row of a settings card is now parted by a hairline, as GROUP draws them (2026-11-15).
 - **Loop round 25, Selection toolbar to its board (P_TOOLBAR):** the toolbar previewed on top as a selection shows it (a 60-tall pill, "2 selected" and the bar's icons in 44 circles, live as acts change), then the acts as rows of their name alone (60 tall, red −, the grip), Available with "All slots are in use" under its heading rather than in the card, Restore defaults and the footnote; the sections 16 apart (2026-11-15).
 - **Loop round 25, Swipe actions to its board (P_SWIPE):** Songs | Folders, then the row as its leading swipe opens it (the first act's tray in its swipe paint, solid under white, beside Amazing Grace or a folder), then Leading swipe (right) and Trailing swipe (left), each a white group of First and Second whose value opens the side's acts and No action (a sheet on a phone, a popover on a laptop); emptying First moves Second up. The add, remove and drag list and Restore defaults are gone from this page; the footnote keeps Undo, true to R38 (2026-11-15).
-- **Loop round 24, the piano's sound on On-screen piano (owner, IMG_6045–6056: "the sound settings go to the storage and backup"; canvas v203):** the grand kept for offline (how much, Download for offline use), the Volume and Remove downloaded piano samples are one Sound card under Keys on On-screen piano, where the Piano sheet's Sound row leads; Storage and backup keeps the device's storage, Backup and Reset progress. The canvas's On-screen piano page drew blank (its flag's name held a hyphen) and draws again (2026-11-15).
 - **The welcome as its board (loop 24, AppLayers):** a 22-cornered dialog on the page's paper, the app's own tile
   (72, the keys) over "Welcome to Piano Trainer" in 24 bold sans and its line in 16; Language in the soft caps
   over its two choices; Start playing (honey) over Sign in (sand), each a 50-tall pill the dialog's width; no
@@ -1005,7 +1003,7 @@ are reference only, but progressions are facts.
 - **Loop round 19, Settings' gaps as the board:** on a phone the list sits 4 under the bar and a page 8 under
   it, its groups 16 apart (were 24), as `GROUP`'s pages draw them (2026-11-15).
 - **Loop round 19, the board's glyphs everywhere:** the keys glyph on every picture of the piano (a folder's, a
-  course's, an avatar's, the guide's and Settings' On-screen piano), the stairs on Profile's Scales, and Selection
+  course's, an avatar's, the guide's), the stairs on Profile's Scales, and Selection
   toolbar a bar of actions under rows, as the Settings board draws it (2026-11-15).
 - **Settings on a laptop as its board (loop round 16, SettingsLaptop):** no bar; the list a full-height column,
   its hairline to the right, headed by a 28px Settings; the page beside it: Back (a page under a page) and its
@@ -1022,8 +1020,6 @@ are reference only, but progressions are facts.
   buttons. The laptop's tree of Settings is gone.
 - **Pressure to practise (2026-11-12):** "I want to put pressure on the user": the streak holds the learner to daily
   practice (PRODUCT.md, principle 6), always true, never locking or charging. Replaces "no streaks as pressure".
-- **One home for the keyboard's settings (2026-11-12):** "I dont want keyboard settings in three places": Settings ›
-  On-screen piano; the Player's sheet and the editor's gear hold a row to it. Replaces R34's copy in both gears.
 - **Canvas 129 ("there are admin controls, no roles, no edit mode for the pages"):** Administration drawn in full in
   Settings; three roles; Edit mode is the page itself (Done · English | Русский · Publish…), Learn's level edited in
   place; Preview as learner (2026-11-11).
