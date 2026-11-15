@@ -108,10 +108,8 @@
   --color-key-down: var(--key-down);
   --color-on-key-down: var(--on-key-down);
   --color-key-tonic: var(--key-tonic);
-  --color-key-tonic-down: var(--key-tonic-down);
   --color-on-key-tonic: var(--on-key-tonic);
   --color-key-scale: var(--key-scale);
-  --color-key-scale-down: var(--key-scale-down);
   --color-on-key-scale: var(--on-key-scale);
   --color-key-focus: var(--key-focus);
   --color-key-focus-halo: var(--key-focus-halo);
@@ -134,13 +132,6 @@
   --color-role-9th: var(--role-9th);
   --color-role-11th: var(--role-11th);
   --color-role-13th: var(--role-13th);
-  --color-role-root-wash: var(--role-root-wash);
-  --color-role-3rd-wash: var(--role-3rd-wash);
-  --color-role-5th-wash: var(--role-5th-wash);
-  --color-role-7th-wash: var(--role-7th-wash);
-  --color-role-9th-wash: var(--role-9th-wash);
-  --color-role-11th-wash: var(--role-11th-wash);
-  --color-role-13th-wash: var(--role-13th-wash);
   --color-on-role: var(--on-role);
 }
 

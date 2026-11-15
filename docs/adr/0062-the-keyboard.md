@@ -28,8 +28,8 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
   screen, their widths unchanged; arrows, Home, End and Enter (back to the proportion) from the keyboard; kept per
   screen size (`keysHeight`: phone upright, phone on its side, wider), the screen as left, not a preference. The
   Player, the editor and every page's docked keys have it; keys inside a card (a round, a chord diagram) do not.
-- **Marks.** The keys put down are the ones struck last, and every mark stays (its wash while quiet, its full paint
-  while it sounds; ADR 0011). A marked key names its note under its degree (`markNotes`); no row of chips repeats it.
+- **Marks.** The keys put down are the ones struck last, and every mark stays (a chord tone or a scale's note in its full
+  paint, sinking while it sounds; a hand's wash while quiet, its full paint while it sounds; ADR 0011). A marked key names its note under its degree (`markNotes`); no row of chips repeats it.
 - **Typing** reads physical keys (`code`), so every layout plays the same notes; never from a text field, with a
   modifier held, or on auto-repeat.
 - **The keyboard's controls are the screen's bar's** (`KeyboardTools`, R34): the chord a hand holds (the live

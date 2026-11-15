@@ -524,8 +524,8 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   sheen towards the player, a sloped front, their shadow on the ivory; a 1px bed parts them; the key slip's red felt
   (`--key-felt`) along their far end. The light and shade lie over each key's fill, so marks keep their colour. A
   computer letter sits on its key as a small key cap.
-- **Marks:** a role, a hand or a scale's note is its wash at rest and full paint while it sounds, ink on it. A scale's
-  notes are honey sand, its tonic rose.
+- **Marks:** a chord tone or a scale's note wears its full paint at rest and while it sounds, ink on it; sounding, it
+  sinks. A hand is its wash at rest and full paint while it sounds. A scale's notes are honey sand, its tonic rose.
 - **Down:** a plain key turns sky, sinks 2px in 80ms (its far end darker under the felt, its shadow gone) and stays down at least 150ms. A quiz's chosen keys are honey, a wrong
   key crimson with ✕, a missing key a deep-sky ring.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.

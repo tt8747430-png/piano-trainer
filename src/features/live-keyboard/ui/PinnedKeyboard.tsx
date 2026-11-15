@@ -7,19 +7,23 @@ import {
   type KeyRange,
   type Midi,
 } from '@/shared/lib/music'
-import { cn } from '@/shared/lib'
+import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { Docked, Pinned, type ShownKeys } from '@/shared/ui'
 import { useFoldKeys, type KeysScreen } from '../model/use-fold-keys'
 import { KeyboardStrip } from './KeyboardStrip'
 import { LiveKeyboard } from './LiveKeyboard'
+
+/** A page's pinned keys stand as every Practice board draws them: 150px on a phone, 180 on a laptop. */
+const PHONE_KEYS_PX = 150
+const LAPTOP_KEYS_PX = 180
 
 /**
  * A page's keyboard, pinned while the page scrolls (an explorer's, a tool's, a lesson's): `range` fills its width (by default the
  * middle octaves grown to hold the keys it opened on, so the keys never change size as a page shows
  * other keys), and it scrolls the keys the app shows into view, no further than that. A key a hand chooses (`selected`) never moves it: the keys hold still
  * under the finger (ADR 0062). It stays edge to edge where the keyboard settings dock it, at the
- * screen's foot over the tab bar or at its top under the screen's bar (R34, Songscription's), its
- * divider facing the music. Hidden from the page's bar (`PageKeyboardTools`), it folds into a thin
+ * screen's foot over the tab bar or at its top under the screen's bar (R34, Songscription's), with no
+ * divider: the boards draw a page's keys at their piano's proportion (canvas 197). Hidden from the page's bar (`PageKeyboardTools`), it folds into a thin
  * labelled strip where it stood that brings it back at a tap, nothing floating; on a phone on its
  * side a reading page opens with it hidden until shown there (ADR 0062); a screen played on
  * (`screen="playing"`) keeps it in sight.
@@ -62,6 +66,7 @@ export function PinnedKeyboard({
   const docked = useSettings((state) => selectKeyboard(state).dock)
   const dock = place ?? docked
   const { folded, fold } = useFoldKeys(screen)
+  const laptop = useMediaQuery(LAPTOP)
   const { keys, marks } = shown
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
@@ -81,7 +86,7 @@ export function PinnedKeyboard({
       onKeyPress={onKeyPress}
       spotlight
       fitInView={fitInView}
-      divider={edge}
+      height={laptop ? LAPTOP_KEYS_PX : PHONE_KEYS_PX}
     />
   )
   // Edge to edge (R34): the dock's gutters and foot are the keys' own.
@@ -92,7 +97,8 @@ export function PinnedKeyboard({
       </Docked>
     )
   return (
-    <Pinned bleed className={cn('vt-keys', className)}>
+    // 8 under the bar, as every Practice board draws the keys (a page's own 16 gap less 8).
+    <Pinned bleed className={cn('vt-keys -mt-2', className)}>
       {body}
     </Pinned>
   )

@@ -142,7 +142,7 @@ export function HandCard({
               width={BLACK}
               height={SHORT}
               rx={1.5}
-              className={played.has(key) ? 'fill-key-scale-down' : 'fill-foreground'}
+              className={played.has(key) ? 'fill-key-scale' : 'fill-foreground'}
             />
           ))}
         {/* Each finger from its knuckle, an outline with paper inside; then the palm over their

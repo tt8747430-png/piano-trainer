@@ -89,6 +89,7 @@ export function ChordFinderPage() {
       keys={
         <PinnedKeyboard
           place="top"
+          className="mt-2"
           screen="playing"
           shown={{
             keys,

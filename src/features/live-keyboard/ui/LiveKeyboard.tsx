@@ -38,6 +38,7 @@ export function LiveKeyboard({
   namesKeys = true,
   showsSound = true,
   divider,
+  height,
   ...keyboard
 }: Omit<
   ComponentProps<typeof PianoKeyboard>,
@@ -45,6 +46,8 @@ export function LiveKeyboard({
 > & {
   /** The divider that resizes the keys, on the side facing the music; none inside a card. */
   divider?: DividerEdge | undefined
+  /** The keys' height where no divider sets it (a page's pinned keys, as the boards draw them); else a piano's proportion. */
+  height?: number | undefined
   /** What a tap means besides its sound: a quiz's choice, Wait mode's answer. */
   onKeyPress?: ((key: Midi) => void) | undefined
   /** The explorers' keyboards: the keys struck last go down, alone or together. */
@@ -121,5 +124,5 @@ export function LiveKeyboard({
       onKeyRelease={letGo}
     />
   )
-  return divider === undefined ? keys(undefined) : <KeysPlace divider={divider}>{keys}</KeysPlace>
+  return divider === undefined ? keys(height) : <KeysPlace divider={divider}>{keys}</KeysPlace>
 }

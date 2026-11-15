@@ -212,13 +212,6 @@
    * increased contrast.
    */
   --mark-wash: 35%;
-  --role-root-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
-  --role-3rd-wash: color-mix(in oklab, var(--p-sky) var(--mark-wash), var(--key-white));
-  --role-5th-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
-  --role-7th-wash: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
-  --role-9th-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
-  --role-11th-wash: color-mix(in oklab, var(--p-sand) var(--mark-wash), var(--key-white));
-  --role-13th-wash: color-mix(in oklab, var(--p-teal) var(--mark-wash), var(--key-white));
   --on-role: var(--p-ink);
 
   /* The Player's hands; never in the explorers. */
@@ -255,15 +248,14 @@
   --key-cast: color-mix(in oklab, var(--p-ink) 22%, transparent);
   --on-key-white: var(--p-ink);
   --on-key-black: var(--p-white);
-  /* A mark is its wash at rest and its full colour when its key sounds; a plain key down turns sky. A key's
-     tonic is rose and its other notes honey sand, as the root among a chord's tones (canvas, Scales). */
+  /* A chord tone, a key's tonic or its other notes wear their full paint, at rest and sounding (the board's keys,
+     canvas 197); a key down sinks under the felt, and a plain key down turns sky. A key's tonic is rose and its
+     other notes honey sand, as the root among a chord's tones (canvas, Scales). */
   --key-down: var(--p-sky);
   --on-key-down: var(--p-ink);
-  --key-scale: color-mix(in oklab, var(--p-yellow) var(--mark-wash), var(--key-white));
-  --key-scale-down: var(--p-yellow);
+  --key-scale: var(--p-yellow);
   --on-key-scale: var(--p-ink);
-  --key-tonic: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
-  --key-tonic-down: var(--p-brick);
+  --key-tonic: var(--p-brick);
   --on-key-tonic: var(--p-ink);
   /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
   --key-focus: var(--p-ink);

@@ -2,25 +2,25 @@ import { memo, useId, type PointerEvent } from 'react'
 import { BLACK_HEIGHT, cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { Glyph } from '../Glyph'
-import { ROLE_BG, ROLE_WASH } from '../role-classes'
+import { ROLE_BG } from '../role-classes'
 import { sameLook, type KeyFill, type KeyLook } from './key-look'
 
 const LABEL_INK = 'text-on-role'
 
-/** A key at rest: plain, or a mark's pale wash (the book's paint before the key is played). */
+/** A key at rest: plain, or a mark in its full paint (the board's keys, canvas 197); the hands keep their wash. */
 const REST: Readonly<Record<KeyFill, string>> = {
   white: 'bg-key-white text-on-key-white',
   black: 'bg-key-black text-on-key-black',
   lit: 'bg-primary text-primary-foreground',
   selected: 'bg-primary text-primary-foreground',
   wrong: 'bg-destructive text-destructive-foreground',
-  root: cn(ROLE_WASH.root, LABEL_INK),
-  '3rd': cn(ROLE_WASH['3rd'], LABEL_INK),
-  '5th': cn(ROLE_WASH['5th'], LABEL_INK),
-  '7th': cn(ROLE_WASH['7th'], LABEL_INK),
-  '9th': cn(ROLE_WASH['9th'], LABEL_INK),
-  '11th': cn(ROLE_WASH['11th'], LABEL_INK),
-  '13th': cn(ROLE_WASH['13th'], LABEL_INK),
+  root: cn(ROLE_BG.root, LABEL_INK),
+  '3rd': cn(ROLE_BG['3rd'], LABEL_INK),
+  '5th': cn(ROLE_BG['5th'], LABEL_INK),
+  '7th': cn(ROLE_BG['7th'], LABEL_INK),
+  '9th': cn(ROLE_BG['9th'], LABEL_INK),
+  '11th': cn(ROLE_BG['11th'], LABEL_INK),
+  '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh-wash', LABEL_INK),
   // The left hand is outlined, the right filled (DESIGN.md, Palette Law; R34): they part by shape too.
   lh: cn('bg-hand-lh-wash outline-1 -outline-offset-1 outline-hand-lh', LABEL_INK),
@@ -29,23 +29,14 @@ const REST: Readonly<Record<KeyFill, string>> = {
   scale: 'bg-key-scale text-on-key-scale',
 }
 
-/** A key that sounds or is held: a plain key turns Key Down, a mark its full paint. */
+/** A key that sounds or is held: a plain key turns Key Down, a hand's mark its full paint; a mark keeps its paint and sinks. */
 const DOWN: Readonly<Record<KeyFill, string>> = {
   ...REST,
   white: 'bg-key-down text-on-key-down',
   black: 'bg-key-down text-on-key-down',
-  root: cn(ROLE_BG.root, LABEL_INK),
-  '3rd': cn(ROLE_BG['3rd'], LABEL_INK),
-  '5th': cn(ROLE_BG['5th'], LABEL_INK),
-  '7th': cn(ROLE_BG['7th'], LABEL_INK),
-  '9th': cn(ROLE_BG['9th'], LABEL_INK),
-  '11th': cn(ROLE_BG['11th'], LABEL_INK),
-  '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh', LABEL_INK),
   lh: cn('bg-hand-lh/50 outline-2 -outline-offset-2 outline-hand-lh', LABEL_INK),
   staff: cn('bg-hand-staff', LABEL_INK),
-  tonic: 'bg-key-tonic-down text-on-key-tonic',
-  scale: 'bg-key-scale-down text-on-key-scale',
 }
 
 /**
