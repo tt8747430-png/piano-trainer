@@ -118,6 +118,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 34, no double gap in Player settings:** an empty column for the screen's own choices stood between the song's head and the first group, so they stood 41 apart; empty, it now takes no room, and they stand the sheet's 20 apart (2026-11-15).
 - **Loop round 34, Play wears the board's metronome (`METRO`):** the Practice button and its Play card draw the board's case, pendulum and bar (`PlayAlongIcon`), not Lucide's metronome; Wait keeps the hourglass (2026-11-15).
 - **Loop round 34, the laptop's keys button says Piano:** the sheet it opens, by name, as the PlayerDesk board; a phone's caption keeps the mode (3D, 2D, Off) (2026-11-15).
 - **Loop round 34, the laptop's transport names the hands in full:** Both hands, Right hand, Left hand (Обе руки…) beside the picture, as the PlayerDesk board; a phone keeps Both under it (`captionWide` on the bar's button) (2026-11-15).

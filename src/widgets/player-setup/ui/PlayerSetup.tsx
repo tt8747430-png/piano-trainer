@@ -140,7 +140,7 @@ export function PlayerSetup({
       music={pages}
     >
       <SetupContext value={{ figures, fit, openPage, onFigures }}>
-        <div ref={main} className="flex flex-col gap-5">
+        <div ref={main} className="flex flex-col gap-5 empty:hidden">
           {children}
         </div>
       </SetupContext>
