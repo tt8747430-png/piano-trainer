@@ -74,39 +74,44 @@ export function VersionPage({
           />
         </Labelled>
       ) : null}
-      <ul className="card flex flex-col divide-y divide-hairline overflow-hidden">
-        {SONG_VERSIONS.map((version) => {
-          const current = chosen.version === version
-          const same = version === 'simple' && !simplifies
-          return (
-            <li key={version}>
-              <button
-                type="button"
-                aria-pressed={current}
-                disabled={same}
-                className="flex min-h-16 w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted disabled:hover:bg-transparent"
-                onClick={() => {
-                  onChoose({ group: chosen.group, version })
-                }}
-              >
-                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  <span className="flex items-center gap-2.5 text-base font-semibold">
-                    {t(`version.level.${version}`)}
-                    <Dots level={DIFFICULTY[version]} />
-                    <span className="sr-only">
-                      {t('version.difficulty', { n: DIFFICULTY[version] })}
+      {/* What each version is lives in the ⓘ; under a choice only why it cannot be chosen. */}
+      <Labelled label={t('version.levels')} info={t('version.levelsAbout')}>
+        <ul className="card flex flex-col divide-y divide-hairline overflow-hidden">
+          {SONG_VERSIONS.map((version) => {
+            const current = chosen.version === version
+            const same = version === 'simple' && !simplifies
+            return (
+              <li key={version}>
+                <button
+                  type="button"
+                  aria-pressed={current}
+                  disabled={same}
+                  className="flex min-h-16 w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-muted disabled:hover:bg-transparent"
+                  onClick={() => {
+                    onChoose({ group: chosen.group, version })
+                  }}
+                >
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="flex items-center gap-2.5 text-base font-semibold">
+                      {t(`version.level.${version}`)}
+                      <Dots level={DIFFICULTY[version]} />
+                      <span className="sr-only">
+                        {t('version.difficulty', { n: DIFFICULTY[version] })}
+                      </span>
                     </span>
+                    {same ? (
+                      <span className="text-sm text-pretty text-muted-foreground">
+                        {t('version.alreadySimple')}
+                      </span>
+                    ) : null}
                   </span>
-                  <span className="text-sm text-pretty text-muted-foreground">
-                    {same ? t('version.alreadySimple') : t(`version.about.${version}`)}
-                  </span>
-                </span>
-                {current ? <Check aria-hidden className="size-5 text-primary" /> : null}
-              </button>
-            </li>
-          )
-        })}
-      </ul>
+                  {current ? <Check aria-hidden className="size-5 text-primary" /> : null}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </Labelled>
     </div>
   )
 }

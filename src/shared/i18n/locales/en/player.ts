@@ -52,11 +52,9 @@ export const player = {
     group: { own: 'Your version', solo: 'Piano solo', voice: 'Piano and voice' },
     level: { original: 'Original', simple: 'Simplified', easy: 'Easy' },
     difficulty: 'Difficulty {{n}} of 3',
-    about: {
-      original: 'The score as written',
-      simple: 'Every chord a plain triad, the tune kept',
-      easy: 'The tune, one note of each chord',
-    },
+    levels: 'Difficulty',
+    levelsAbout:
+      'Original: the score as written. Simplified: every chord a plain triad, the tune kept. Easy: the tune, one note of each chord.',
     alreadySimple: 'Its chords are already simple',
   },
   tuner: {

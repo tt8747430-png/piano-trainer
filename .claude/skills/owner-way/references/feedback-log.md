@@ -94,6 +94,9 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Loop round 24, Version without explanation lines:** Original · Simplified · Easy each its name and dots under
+  Difficulty ⓘ, which says what each is; a line stays only where one cannot be chosen ("Its chords are already
+  simple") (2026-11-15).
 - **Loop round 24, no explanation under a pattern:** the Accompaniment page's Pattern row is its name alone (a
   mix still says "Left hand changed"); the Pattern list shows each pattern's two hands as bars, as the hands' lists
   do, with a line only for why one cannot be chosen ("Needs a melody staff"); what a pattern is stays in Pattern's ⓘ
