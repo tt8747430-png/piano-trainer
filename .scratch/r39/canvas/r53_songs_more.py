@@ -253,8 +253,8 @@ SMBODY = IF('isSettings', SSET, 'true') + IF('isPublish', SPUB) + IF('isSection'
 SMSHEETS = (ASK('dupOn', 'Duplicate Amazing Grace?', 'An editable copy of this song is added to your library. The original remains unchanged.', 'Duplicate', 'doDup').replace('background: #B3261E; color: #FFFFFF', f'background: {ACCENT}; color: {INK}')
             + ASK('unpubOn', 'Unpublish it?', 'It leaves the Public library at once. Learners who saved a copy keep theirs. You can publish it again later.', 'Unpublish', 'doUnpub')
             + BSHEET('exportOn', 'Export', GROUP(('action', 'MusicXML', 'exported'), ('action', 'MIDI', 'exported'), bg=SHEET)))
-FAB = f'<sc-if value="{{{{isSection}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; right: 20px; bottom: 116px; z-index: 30">{BTN(PLAY.replace("22", "18") + " Practise", "", "Player.dc.html", "primary", 56, False)}</div></sc-if>'
-smph = (IF('backHref', TOP('Song.dc.html', '{{pageT}}', '', 'Amazing Grace'), 'true') + IF('isPublish', TOP('', '{{pageT}}', '', 'Settings', IB('Settings', CHEV_L, 'back'))) + NARROW(SMBODY) + FAB + TOASTS)
+FAB = f'<sc-if value="{{{{isSection}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; right: 16px; bottom: 40px; z-index: 30">{BTN(PLAY.replace("22", "18") + " Practise", "", "Player.dc.html", "primary", 56, False)}</div></sc-if>'
+smph = (IF('backHref', TOP('Song.dc.html', '{{pageT}}', '', 'Amazing Grace'), 'true') + IF('isPublish', TOP('', '{{pageT}}', '', 'Settings', IB('Settings', CHEV_L, 'back'))) + NARROW(SMBODY).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + FAB + TOASTS)
 LSM = {'Song.dc.html': 'SongLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.html', 'Explore.dc.html': 'ExploreLaptop.dc.html', 'Chords.dc.html': 'ChordsLaptop.dc.html', 'Player.dc.html': 'PlayerLaptop.dc.html', 'Accompaniment.dc.html': 'AccompanimentLaptop.dc.html'}
 def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
