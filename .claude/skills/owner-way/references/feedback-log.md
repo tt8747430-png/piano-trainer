@@ -1014,6 +1014,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 37, a switch row as its neighbours:** 16px and 52 tall, as the boards' toggle rows sit level with the link rows beside them (it was 18px and 56, so Favourite stood taller than Duplicate under it), everywhere a switch row is used.
 - **Loop round 36, a run's results as the PracticeResult board:** Back alone in the bar, the run's name on the page (26, tightened), tiles of tabular figures over 13 labels, sections 20 apart on a phone, Retry a 52 bold pill at the foot. The board's run on a staff waits for runs that keep each chord; a trainer run keeps accuracy, streak and pace.
 - **Loop round 36, a closed editor or Administration says so as the route states do:** a 72 lock on the sand, its line 17 semibold, what to do 48 tall, in every content editor and the Admin pages (it was a bare bold line) (2026-11-15).
 - **Loop round 36, Legal as its board:** Privacy Policy · Terms of Service one switch over the page (the other replaces this one; Конфиденциальность · Условия in Russian, to fit), on a phone the title leaves the bar for the page, 30 bold, the date 13 under it, each section's heading 19 bold in the sans (the book serif is gone there) (2026-11-15).

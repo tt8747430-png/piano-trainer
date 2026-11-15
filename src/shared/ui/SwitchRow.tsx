@@ -65,7 +65,7 @@ export function SwitchRow({
       data-setting={setting}
       title={why}
       className={cn(
-        'relative isolate flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
+        'relative isolate flex min-h-13 items-center justify-between gap-4 border-b border-border py-2 text-base',
         className,
       )}
     >
