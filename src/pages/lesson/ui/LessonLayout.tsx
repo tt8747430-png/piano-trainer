@@ -188,7 +188,7 @@ export function PlaceLink({ children, ...link }: LinkProps & { children: ReactNo
   return (
     <Link
       {...link}
-      className="relative rounded-control font-semibold text-inherit underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
+      className="relative rounded-control font-semibold text-inherit underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-5 hover:underline"
     >
       {children}
     </Link>
