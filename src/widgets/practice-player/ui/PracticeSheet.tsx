@@ -1,4 +1,4 @@
-import { Hourglass, Metronome, type LucideIcon } from 'lucide-react'
+import { Hourglass, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings, useSettingsStoreApi } from '@/entities/settings'
@@ -16,12 +16,13 @@ import {
   TempoSteps,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
 
 /** The two ways to practise (its canvas, R37): the music waits for your notes, or plays at its tempo. */
 type Way = 'wait' | 'play'
 const WAYS: readonly Way[] = ['wait', 'play']
-const WAY_ICON: Readonly<Record<Way, LucideIcon>> = { wait: Hourglass, play: Metronome }
+const WAY_ICON: Readonly<Record<Way, LucideIcon>> = { wait: Hourglass, play: PlayAlongIcon }
 const wayOf = (mode: PracticeMode): Way => (mode === 'listen' ? 'play' : 'wait')
 
 /** The metronome with the music (Flat's three): silent, one bar counted in, or counting in and clicking on. */
