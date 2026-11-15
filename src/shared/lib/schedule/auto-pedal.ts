@@ -4,10 +4,11 @@ import { pedalLine, type PedalEvent, type Tick } from '@/shared/lib/music'
 /**
  * A pedal for music written without one (A27): pressed with each new chord symbol and let up where
  * it ends (a change where the next follows at once, the pedal up through a bar of no chord); where
- * the music has no chord symbols, changed at each bar; let up where the music ends.
+ * the music has no chord symbols, changed at each bar that sounds a note (a bar of rests is left
+ * unpedalled, and a score with no notes yet has no pedal); let up where the music ends.
  */
 export function autoPedal(
-  performance: Pick<Performance, 'chords' | 'bars' | 'totalTicks'>,
+  performance: Pick<Performance, 'chords' | 'bars' | 'notes' | 'totalTicks'>,
 ): PedalEvent[] {
   const presses: { from: Tick; to: Tick }[] = []
   if (performance.chords.length > 0) {
@@ -21,12 +22,14 @@ export function autoPedal(
       symbol = chord.symbol
     }
   } else
-    performance.bars.forEach((bar, i) =>
-      presses.push({
-        from: bar.startTick,
-        to: performance.bars[i + 1]?.startTick ?? performance.totalTicks,
-      }),
-    )
+    performance.bars.forEach((bar, i) => {
+      const from = bar.startTick
+      const to = performance.bars[i + 1]?.startTick ?? performance.totalTicks
+      const sounds = performance.notes.some(
+        (note) => !note.silent && note.startTick >= from && note.startTick < to,
+      )
+      if (sounds) presses.push({ from, to })
+    })
   // A lift and the next press at one tick are a change.
   return pedalLine(
     presses.flatMap(({ from, to }): PedalEvent[] => [

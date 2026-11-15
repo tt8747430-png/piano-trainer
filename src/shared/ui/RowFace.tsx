@@ -75,7 +75,8 @@ export function RowFace({
       ) : null}
       {/* Beside a value, the title takes the room it needs (two thirds at most); the value wraps
           between its words under itself, never inside one, and a narrow row takes from the title, down
-          to its longest word (round 28: never cut inside one at 320px). */}
+          to its longest word (round 28: never cut inside one at 320px); a long value, two lines and then an
+          ellipsis, as every title (a song's long name in its Details). */}
       <span className={value ? 'max-w-[65%] min-w-min flex-[1_4_auto]' : 'min-w-0 flex-1'}>
         {info ? (
           <span className="flex items-center gap-1">
@@ -115,7 +116,10 @@ export function RowFace({
       {value ? (
         <>
           {' '}
-          <span data-slot="row-value" className="ms-auto min-w-min text-end text-muted-foreground">
+          <span
+            data-slot="row-value"
+            className="ms-auto line-clamp-2 min-w-min text-end text-muted-foreground"
+          >
             {value}
           </span>
         </>

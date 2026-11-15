@@ -101,6 +101,8 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+
+- **No pedal under silence (loop round 18):** music with no chord symbols and no pedal marks is pedalled bar by bar only where a bar sounds a note; a new song's empty bars, or a bar of rests, carry no Ped. and no pedal is held.
 - **Loop round 24, Version without explanation lines:** Original · Simplified · Easy each its name and dots under
   Difficulty ⓘ, which says what each is; a line stays only where one cannot be chosen ("Its chords are already
   simple") (2026-11-15).
@@ -224,6 +226,8 @@ owner's, typos fixed.
 - **Drum grooves:** Chordify's.
 
 ## Song page
+
+- **A long value takes two lines, then an ellipsis (loop round 18):** a row's value (a song's long title in its Details) wraps between words as before and stops at two lines, as every title does.
 
 - **Loop round 16, an item's Settings in plain rows (the SongSettings, YourCourseSettings and YourLessonSettings
   boards):** a song's, a course's, a lesson's and a progression's Settings carry no coloured tiles; what acts there and
