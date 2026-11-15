@@ -105,7 +105,7 @@ function FolderForm({
           maxLength={FOLDER_NAME_MAX}
           onChange={(event) => setName(event.target.value)}
         />
-        <LookFields look={look} onChange={setLook} />
+        <LookFields pictures={false} look={look} onChange={setLook} />
       </form>
     </SheetContent>
   )

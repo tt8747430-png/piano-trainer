@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import {
   childFolders,
   folderPath,
-  FOLDER_PICTURE_ICONS,
+  FolderTile,
   useFolderName,
   useLibrary,
   useLibraryLayout,
@@ -25,7 +25,7 @@ import type { PieceId } from '@/entities/piece'
 import { selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { cn } from '@/shared/lib'
-import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList, TreeSwatch } from '@/shared/ui'
+import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList } from '@/shared/ui'
 
 /** Where the learner is in the library, as the tree marks it. */
 /** A place of the tree: All songs, a filter's own (Favourites, Learning, Learned), or a folder. */
@@ -39,9 +39,9 @@ const FILTERED = {
   learned: { learned: 'yes' },
 } as const
 
-/** A small tile of a folder's picture on its paint, the tree's size. */
+/** A folder's tile, the tree's size: its pages on its paint, as its row wears it. */
 const FolderSwatch = ({ folder }: { folder: ShelvedFolder }) => (
-  <TreeSwatch icon={FOLDER_PICTURE_ICONS[folder.picture]} paint={folder.paint} />
+  <FolderTile look={folder} className="size-6 rounded-[6px]" />
 )
 
 function Place({

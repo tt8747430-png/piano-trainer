@@ -23,41 +23,46 @@ const CHOICE =
 export function LookFields({
   look,
   onChange,
+  pictures = true,
 }: {
   look: FolderLook
   onChange: (look: FolderLook) => void
+  /** Whether its picture is chosen: a folder's is its pages, the board's, so it chooses its paint alone. */
+  pictures?: boolean
 }) {
   const { t } = useTranslation('songs')
   const paint = PAINT[look.paint]
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <span aria-hidden className="text-sm text-muted-foreground">
-          {t('folder.picture')}
-        </span>
-        <RadioGroup
-          aria-label={t('folder.picture')}
-          value={look.picture}
-          onValueChange={(picture: FolderPicture) => onChange({ ...look, picture })}
-          // Six to a row where they fit, two even rows, never one left over.
-          className="flex max-w-82 flex-wrap gap-2"
-        >
-          {FOLDER_PICTURES.map((picture) => {
-            const Icon = FOLDER_PICTURE_ICONS[picture]
-            return (
-              <Radio.Root
-                key={picture}
-                value={picture}
-                aria-label={t(`folder.pictures.${picture}`)}
-                title={t(`folder.pictures.${picture}`)}
-                className={cn(CHOICE, paint.fill, paint.ink)}
-              >
-                <Icon aria-hidden />
-              </Radio.Root>
-            )
-          })}
-        </RadioGroup>
-      </div>
+      {pictures ? (
+        <div className="flex flex-col gap-2">
+          <span aria-hidden className="text-sm text-muted-foreground">
+            {t('folder.picture')}
+          </span>
+          <RadioGroup
+            aria-label={t('folder.picture')}
+            value={look.picture}
+            onValueChange={(picture: FolderPicture) => onChange({ ...look, picture })}
+            // Six to a row where they fit, two even rows, never one left over.
+            className="flex max-w-82 flex-wrap gap-2"
+          >
+            {FOLDER_PICTURES.map((picture) => {
+              const Icon = FOLDER_PICTURE_ICONS[picture]
+              return (
+                <Radio.Root
+                  key={picture}
+                  value={picture}
+                  aria-label={t(`folder.pictures.${picture}`)}
+                  title={t(`folder.pictures.${picture}`)}
+                  className={cn(CHOICE, paint.fill, paint.ink)}
+                >
+                  <Icon aria-hidden />
+                </Radio.Root>
+              )
+            })}
+          </RadioGroup>
+        </div>
+      ) : null}
       <div className="flex flex-col gap-2">
         <span aria-hidden className="text-sm text-muted-foreground">
           {t('folder.paint')}

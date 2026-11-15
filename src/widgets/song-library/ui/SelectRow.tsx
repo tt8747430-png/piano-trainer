@@ -94,7 +94,7 @@ export function SelectRow({
         className={cn(
           grouped ? ROW_FLAT : ROW_CARD,
           'hover:bg-muted data-drop:bg-selected/15 data-drop:ring-2 data-drop:ring-selected data-drop:ring-inset',
-          checked && 'ring-2 ring-selected ring-inset',
+          checked && 'bg-selected/12 hover:bg-selected/18',
         )}
       >
         {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's.
@@ -163,7 +163,7 @@ export function RowInHand({
       className={cn(
         ROW_CARD,
         'relative cursor-grabbing elevation-3',
-        checked && 'ring-2 ring-selected ring-inset',
+        checked && 'bg-selected/12 hover:bg-selected/18',
       )}
     >
       <div className={ROW_BODY}>{children}</div>

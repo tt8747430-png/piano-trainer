@@ -266,6 +266,7 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 24, folders look like folders, a chosen row is never cut (owner, IMG_6045–6056: "the select borders are clipped, and this doesnt look as folders"):** a folder's tile is the board's STACK, two pages of music, one tilted over the other, on the folder's paint, in its row, its page and the laptop's tree; a folder chooses its paint alone, its picture being its pages. In Select a chosen row takes a soft fill, no inset ring, so nothing square pokes past the card's rounded corners (2026-11-15).
 - **Loop round 24, one empty state (the board's EMPTY):** a 64 mark on sand, an 18 bold title, a 15 line, quiet 44 pill buttons; Songs, the practice libraries and Your lessons all use `Said`, and the second kit part (`EmptyState`) is gone. A search that finds nothing says how to look again: "Check the spelling, or try a song’s title or its composer." (2026-11-15).
 - **The Trash leaves Archive; Home's Card style goes (owner, 2026-11-15: "what the trash does in the archive",
   "features that the artifact doesnt have like the card style"):** Songs' ··· is Select and Trash; Archive holds
