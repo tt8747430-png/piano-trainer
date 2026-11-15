@@ -89,7 +89,10 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
           <span className="truncate font-semibold text-foreground">{face.title}</span>
         </PieceLink>
       </th>
-      <td className={cn(CELL, 'max-w-0 truncate text-sm text-muted-foreground')}>{face.detail}</td>
+      {/* A long credit wraps to a second line rather than cut the key off its end. */}
+      <td className={cn(CELL, 'max-w-0 text-sm text-muted-foreground')}>
+        <span className="line-clamp-2 text-pretty">{face.detail}</span>
+      </td>
       {show.chords ? (
         <td
           className={cn(CHORDS, 'max-w-64 truncate font-display text-muted-foreground')}

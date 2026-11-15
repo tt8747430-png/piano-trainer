@@ -218,6 +218,7 @@ owner's, typos fixed.
 
 - **Learning is what was started (loop round 17):** the Learning place and chip hold the songs opened in the Player and not yet learned, as the board's Progress column says "Learning"; a song never opened is in neither place, and an empty Learning says "No songs you are learning here yet." (2026-11-15).
 - **A place is not a filter (loop round 17):** Favourites, Learning or Learned chosen alone shows no "Shown n of 93 · Clear filters"; the notice speaks only for a search or the sheet's filters.
+- **The key never cut off (loop round 17):** in the laptop's table a long credit ("New Britain (American folk tune)") wraps to a second line, so the key at its end stays read.
 
 - **Every page behind the library (canvas 133, 2026-11-11):** "you missed so many features": Explore with its shelves and
   states, a public song (rating, Add to my library, Report), Groups and a shared folder, a folder's Settings and Card
