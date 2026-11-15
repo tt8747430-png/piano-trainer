@@ -35,7 +35,7 @@ export function TitleTabs<V extends OptionValue>({
         <Radio.Root
           key={String(option.value)}
           value={option.value}
-          className="relative inline-flex min-h-11 shrink-0 cursor-default items-center text-[1.625rem] leading-tight font-bold whitespace-nowrap text-muted-foreground/70 transition-colors duration-200 select-none hover:text-muted-foreground focus-visible:outline-offset-2 data-checked:text-foreground"
+          className="relative inline-flex min-h-11 shrink-0 cursor-default items-center text-[1.625rem] leading-tight font-bold tracking-[-0.01em] whitespace-nowrap text-border transition-colors duration-200 select-none hover:text-muted-foreground focus-visible:outline-offset-2 data-checked:text-foreground"
         >
           {option.label}
         </Radio.Root>
