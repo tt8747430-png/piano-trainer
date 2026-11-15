@@ -21,7 +21,7 @@ def INCIPIT(notes):
 def STACK(c):
     pg = lambda x, y, r: f'<g transform="rotate({r} {x + 12} {y + 15})"><rect x="{x}" y="{y}" width="24" height="30" rx="3" fill="#FFFFFF" stroke="#332921" stroke-opacity=".18"/>' + ''.join(f'<path d="M{x + 4} {y + 12 + i * 3}H{x + 20}" stroke="#332921" stroke-width=".6" opacity=".45"/>' for i in range(5)) + '</g>'
     return 'url("data:image/svg+xml,' + _q(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{c}"/>{pg(6, 9, -10)}{pg(14, 7, 8)}</svg>') + '")'
-INC = {'Amazing Grace': (0, 3, 5, 4, 5), 'Für Elise': (6, 5, 6, 5, 6, 3), 'Let It Be': (3, 3, 3, 4, 2), 'Clair de lune': (5, 5, 3, 2, 1), 'Twinkle, Twinkle, Little Star': (0, 0, 4, 4, 5, 5), 'Ode to Joy': (2, 2, 3, 4, 4, 3), 'Jingle Bells': (2, 2, 2, 2, 2, 2), 'My first song': (0, 2, 4, 2)}
+INC = {'Be Thou My Vision': (2, 2, 3, 4, 3, 2), 'It Is Well': (4, 4, 3, 2, 2), 'Great Is Thy Faithfulness': (0, 2, 4, 4, 5), 'Silent Night': (4, 5, 4, 2), 'Amazing Grace': (0, 3, 5, 4, 5), 'Für Elise': (6, 5, 6, 5, 6, 3), 'Let It Be': (3, 3, 3, 4, 2), 'Clair de lune': (5, 5, 3, 2, 1), 'Twinkle, Twinkle, Little Star': (0, 0, 4, 4, 5, 5), 'Ode to Joy': (2, 2, 3, 4, 4, 3), 'Jingle Bells': (2, 2, 2, 2, 2, 2), 'My first song': (0, 2, 4, 2)}
 def S(t, s, v, i, c, places=(), tags=(), href='Song.dc.html', ic=INK):
     folder = href in ('#', 'Folder.dc.html') or t == 'Shared with me'
     pic = STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))
