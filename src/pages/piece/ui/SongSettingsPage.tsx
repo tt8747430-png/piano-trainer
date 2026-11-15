@@ -134,14 +134,14 @@ function SongSettings({ piece }: { piece: Piece }) {
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
-    <div className="flex flex-col gap-6 pb-8">
+    <div className="flex flex-col gap-2 pb-8">
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         {/* The song at the head: what these settings are for (R32-C). */}
         <div className="flex items-center gap-4">
           {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
-          <SongCoverPicker piece={piece} className="w-14 text-xl" />
+          <SongCoverPicker piece={piece} className="w-16 text-2xl" />
           <div className="flex min-w-0 flex-col gap-0.5">
             <p className="font-sans text-xl/tight font-bold text-balance">{title}</p>
             {byline ? <p className="truncate text-sm text-muted-foreground">{byline}</p> : null}

@@ -303,6 +303,7 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 40, a song's, course's and lesson's Settings as the SongSettings board:** the head 8 under the bar, the cover 64 (was 56, 24 under), its groups 16 apart as Settings' are (they stood 28 apart) (2026-11-15).
 - **Loop round 38, an empty state's way on at the boards' 48:** Try again, To Songs, New group and every honey way out of a said state stand 48 tall, as `EMPTY` draws them; a quiet one (Clear) stays 44.
 - **Loop round 34, a library row 64 as its board writes it (canvas v209):** the boards' `LIB_ROW` wrote 64 but drew 80 (content-box, its padding added); it is border-box now, so Songs and the Practice libraries draw the 64 the app's standard Spacing has; Roomy stays the learner's 80 (2026-11-15).
 - **Loop round 33, a song's Play never moves:** before a first play the song page drew Play as a lone floating button (in a laptop's far corner, over the cadence row on a phone); now it stands where the boards draw the play row, under Key · Time · Tempo, one honey "Practise" the width of the column, which Continue · From the start replace once played. One chord diagram app-wide: the dotted keys the Player's Diagrams board draws, also on the song page (its board had washed keys) (2026-11-15).

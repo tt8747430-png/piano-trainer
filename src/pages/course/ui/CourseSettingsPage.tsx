@@ -35,10 +35,10 @@ export function CourseSettingsPage() {
     if (shared === 'failed') say(t('settings.shareFailed'))
   }
   return (
-    <div className="flex flex-col gap-6 pb-8">
+    <div className="flex flex-col gap-2 pb-8">
       <ScreenHeader title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{title}</p>
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+        <p className="px-1 text-muted-foreground text-pretty">{title}</p>
         {editsContent(account) ? <EditorRows course={course} /> : null}
         <SettingsGroup flush title={t('settings.share')}>
           {editsContent(account) ? <CoursePublishRow course={course} /> : null}
