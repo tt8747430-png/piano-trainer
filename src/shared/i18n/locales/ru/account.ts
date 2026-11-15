@@ -169,6 +169,7 @@ export const account: LocaleResources['account'] = {
       summary: '{{time}} · {{days}} из 7 дней',
       day: '{{day}}: {{time}}',
       most: 'не больше {{time}}',
+      empty: 'Сыграйте что-нибудь сегодня — и это появится здесь.',
     },
     notifications: {
       title: 'Уведомления',

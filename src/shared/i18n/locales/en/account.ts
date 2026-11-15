@@ -155,6 +155,7 @@ export const account = {
       summary: '{{time}} · {{days}} of 7 days',
       day: '{{day}}: {{time}}',
       most: '{{time}} at most',
+      empty: 'Play anything today and it shows here.',
     },
     // Notifications (B1): what was reached, in the order it came.
     notifications: {

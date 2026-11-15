@@ -46,28 +46,36 @@ export function WeekCard() {
         </p>
       </div>
       <div className="flex flex-col gap-1.5">
-        <ol className="grid h-18 grid-cols-7 items-end gap-2">
-          {week.map((day) => (
-            <li
-              key={day.day}
-              aria-label={t('profile.week.day', {
-                day: named.format(dateOfDay(day.day)),
-                time: time(day.seconds),
-              })}
-              className="flex h-full items-end"
-            >
-              <span
-                aria-hidden
-                className={cn(
-                  'w-full rounded-[6px]',
-                  day.seconds > 0 ? 'min-h-1' : 'h-1 bg-muted',
-                  day.seconds > 0 && (day.day === today ? 'bg-played' : 'bg-played/50'),
-                )}
-                style={day.seconds > 0 ? { height: `${(day.seconds / most) * 100}%` } : undefined}
-              />
-            </li>
-          ))}
-        </ol>
+        {/* A week not yet played says what fills it, over the flat days. */}
+        <div className="relative">
+          {total === 0 ? (
+            <p className="absolute inset-x-0 top-5 text-center text-sm text-pretty text-muted-foreground">
+              {t('profile.week.empty')}
+            </p>
+          ) : null}
+          <ol className="grid h-18 grid-cols-7 items-end gap-2">
+            {week.map((day) => (
+              <li
+                key={day.day}
+                aria-label={t('profile.week.day', {
+                  day: named.format(dateOfDay(day.day)),
+                  time: time(day.seconds),
+                })}
+                className="flex h-full items-end"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    'w-full rounded-[6px]',
+                    day.seconds > 0 ? 'min-h-1' : 'h-1 bg-muted',
+                    day.seconds > 0 && (day.day === today ? 'bg-played' : 'bg-played/50'),
+                  )}
+                  style={day.seconds > 0 ? { height: `${(day.seconds / most) * 100}%` } : undefined}
+                />
+              </li>
+            ))}
+          </ol>
+        </div>
         <ol
           aria-hidden
           className="grid grid-cols-7 gap-2 text-center text-xs text-muted-foreground"

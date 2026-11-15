@@ -978,9 +978,12 @@ are reference only, but progressions are facts.
   14/12 padding; a tile's figures outrank their units ("2 h 45 min" in a third of a phone) (2026-11-14).
 - **Loop round 13, Settings' pictures:** as the board draws them: MIDI devices a plug (and so wherever MIDI is, the
   bar's MIDI button and Practice settings), User guide a closed book (an open book is a course), Report a problem a
-  warning triangle (2026-11-14).- **The account pages offline say one true thing (loop 23, 2026-11-15):** "You’re offline. Your account needs a
+  warning triangle (2026-11-14).
+- **The account pages offline say one true thing (loop 23, 2026-11-15):** "You’re offline. Your account needs a
   connection." over Sign in, Create an account, Forgotten password and New password alike, where Forgotten password
   said Signing in needs one.
+- **A week not yet played says what fills it (loop 23, 2026-11-15):** Last 7 days with nothing played shows
+  "Play anything today and it shows here." centred over the flat days, instead of seven empty tracks alone.
 
 ## Words
 
