@@ -1,13 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { Download, Ellipsis, NotebookPen, Trash2 } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
-import { ActionMenu, PlayButton } from '@/shared/ui'
+import { ActionMenu, PlayButton, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useScoreEditorContext } from '../model/editor-context'
 import { useTakeTitle } from '../model/use-take-title'
-import { DeleteTakeDialog } from './DeleteTakeDialog'
 import { TakeName } from './TakeName'
 
 /**
@@ -28,7 +27,6 @@ export function TakeRow({
   const { takes } = useScoreEditorContext()
   const name = useId()
   const title = useTakeTitle(take)
-  const [deleting, setDeleting] = useState(false)
   return (
     <li aria-labelledby={name} className="flex items-center gap-3 py-3">
       <PlayButton label={t('recorder.play')} playing={playing} onClick={onPlay} />
@@ -78,15 +76,12 @@ export function TakeRow({
             label: t('recorder.delete'),
             icon: Trash2,
             destructive: true,
-            onSelect: () => setDeleting(true),
+            onSelect: () => {
+              const undo = takes.remove(take.id)
+              say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+            },
           },
         ]}
-      />
-      <DeleteTakeDialog
-        take={take}
-        open={deleting}
-        onOpenChange={setDeleting}
-        onDelete={() => takes.remove(take.id)}
       />
     </li>
   )

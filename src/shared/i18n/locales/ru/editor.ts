@@ -539,11 +539,7 @@ export const editor: LocaleResources['editor'] = {
     play: 'Сыграть',
     download: 'Скачать',
     delete: 'Удалить',
-    deleting: {
-      title: 'Удалить этот дубль?',
-      confirm: 'Удалить',
-      cancel: 'Отмена',
-    },
+    deleted: 'Дубль удалён',
     back: 'Назад',
     into: {
       label: 'Куда',

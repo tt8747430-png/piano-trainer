@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **A take's Delete goes at once, with Undo** (R38, loop; the board's "Take deleted · Undo brings it back"): from its row's ··· and its page, "Take deleted · Undo" puts it back in its place; the "Delete this take?" dialog is gone. Toasts now sit above every sheet and dialog (z-60), so an Undo said from the Takes sheet is seen and pressed.
 - **Loop round 24, R38 in the editor:** deleting an instrument (or hiding the piano) happens at once, "Deleted
   Voice · Undo" in its toast; Undo steps the score back and restores the staves' view; no question, no "Delete…"
   (2026-11-15).

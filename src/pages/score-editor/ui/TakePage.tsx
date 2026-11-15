@@ -12,6 +12,7 @@ import {
   DangerGroup,
   DangerRow,
   NotFound,
+  say,
   ScreenHeader,
   unmarked,
 } from '@/shared/ui'
@@ -23,7 +24,6 @@ import { useTakeDownload } from '../model/use-take-download'
 import { useSongTitle } from '../model/use-song-title'
 import { useTakePlay } from '../model/use-take-play'
 import { useTakeTitle } from '../model/use-take-title'
-import { DeleteTakeDialog } from './DeleteTakeDialog'
 import { KeepBars } from './KeepBars'
 import { TakeNameField } from './TakeNameField'
 
@@ -41,7 +41,6 @@ function TakeView({ take }: { take: Take }) {
   const store = useTakesStoreApi()
   const navigate = useNavigate()
   const [kept, setKept] = useState<KeptBars>(() => wholeTake(take))
-  const [deleting, setDeleting] = useState(false)
   const playing = play.playing !== null
   const takes = {
     to: '/edit/$pieceId',
@@ -50,7 +49,10 @@ function TakeView({ take }: { take: Take }) {
   }
   // Back to the takes first: deleted while shown, the page would say it is not found.
   const remove = () =>
-    void navigate({ ...takes, replace: true }).then(() => deleteTake(store, take.id))
+    void navigate({ ...takes, replace: true }).then(() => {
+      const undo = deleteTake(store, take.id)
+      say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+    })
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={title} back={<BackButton />} tools={<PageKeyboardTools />} />
@@ -87,9 +89,8 @@ function TakeView({ take }: { take: Take }) {
         <ActionRow title={t('recorder.download')} onClick={download} />
       </div>
       <DangerGroup>
-        <DangerRow title={t('recorder.delete')} onClick={() => setDeleting(true)} />
+        <DangerRow title={t('recorder.delete')} onClick={remove} />
       </DangerGroup>
-      <DeleteTakeDialog take={take} open={deleting} onOpenChange={setDeleting} onDelete={remove} />
     </div>
   )
 }

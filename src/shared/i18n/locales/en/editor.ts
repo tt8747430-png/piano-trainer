@@ -590,11 +590,7 @@ export const editor = {
     play: 'Play',
     download: 'Download',
     delete: 'Delete',
-    deleting: {
-      title: 'Delete this take?',
-      confirm: 'Delete',
-      cancel: 'Cancel',
-    },
+    deleted: 'Take deleted',
     back: 'Back',
     // Where a take is written: the piano's staves, or a single staff by its name (ADR 0097).
     into: {

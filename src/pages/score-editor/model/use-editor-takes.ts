@@ -87,7 +87,8 @@ export interface EditorTakes {
   readonly stop: () => void
   readonly write: (take: Take, choice: WriteChoice) => void
   readonly download: (take: Take) => void
-  readonly remove: (id: TakeId) => void
+  /** Deletes a take; what it returns brings it back. */
+  readonly remove: (id: TakeId) => () => void
 }
 
 /** The draft's bars on the meter's grid, each in its section's (ADR 0097), as the click follows them. */
