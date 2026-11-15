@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import type { Hand } from '@/shared/lib/music'
 import type { Hands } from '@/shared/lib/schedule'
+import { GroupSegmented } from './GroupRows'
 import { NamedSegmented } from './NamedSegmented'
 import { Segmented } from './Segmented'
 
@@ -53,6 +54,7 @@ export function HandsSegmented<V extends Hands>({
   hands = ORDER as readonly V[],
   painted = false,
   named = false,
+  grouped = false,
 }: {
   label: string
   value: V
@@ -63,6 +65,8 @@ export function HandsSegmented<V extends Hands>({
   painted?: boolean
   /** Its name on screen beside it (NamedSegmented). */
   named?: boolean
+  /** A row of a settings group, its name over it (GroupSegmented). */
+  grouped?: boolean
 }) {
   const { t } = useTranslation('common')
   const options = ORDER.filter((each): each is V => hands.includes(each as V)).map((each) => ({
@@ -81,6 +85,6 @@ export function HandsSegmented<V extends Hands>({
       </span>
     ) : undefined,
   }))
-  const Control = named ? NamedSegmented<V> : Segmented<V>
+  const Control = grouped ? GroupSegmented<V> : named ? NamedSegmented<V> : Segmented<V>
   return <Control label={label} value={value} options={options} onChange={onChange} />
 }

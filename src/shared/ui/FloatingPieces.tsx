@@ -121,6 +121,23 @@ export function FloatingPlayPiece({
 }
 
 /**
+ * The floating primary that opens where the playing happens (an exercise's Start, the Player),
+ * tinted honey glass, 176 wide as `FloatingPlayPiece`: its picture and its word.
+ */
+export function FloatingPlayLink({ label, render }: { label: string; render: ReactElement }) {
+  return (
+    <ButtonLink
+      variant="ghost"
+      render={render}
+      className="glass-honey flex h-14 w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
+    >
+      <Play aria-hidden className="size-4.5 fill-current" />
+      <span>{label}</span>
+    </ButtonLink>
+  )
+}
+
+/**
  * The floating primary that plays, tinted honey glass, 176 wide: Play with its word (Stop while it
  * sounds) and, past a hairline, its menu's chevron (how it plays).
  */

@@ -623,6 +623,12 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   exercisePage: {
+    // Under its card's staff: the bars written of the whole.
+    bars: 'Такты 1–{{last}} из {{count}}',
+    title: 'Упражнение',
+    number: 'Номер',
+    previous: 'Предыдущее',
+    next: 'Следующее',
     // The floating bar's other way in (its board): the exercise played to you, in Listen mode.
     listen: 'Слушать',
     target: 'Целевой темп',
@@ -632,9 +638,8 @@ export const practice: LocaleResources['practice'] = {
     doneToday: 'Выполнено сегодня',
     order: 'Следующая тональность',
     orders: { fifths: 'По квинтовому кругу', chromatic: 'Хроматически' },
-    trains: 'Цель упражнения',
-    how: 'Техника исполнения',
-    options: 'Настройки',
+    how: 'Как играть',
+    options: 'Параметры',
     key: 'Тональность',
     hands: 'Руки',
     octaves: 'Октавы',
@@ -643,8 +648,6 @@ export const practice: LocaleResources['practice'] = {
     slower: 'Медленнее',
     faster: 'Быстрее',
     start: 'Начать',
-    rh: 'Правая рука',
-    lh: 'Левая рука',
   },
   exercises: {
     groups: {

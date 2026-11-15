@@ -1,6 +1,8 @@
 import { Check, ChevronRight } from 'lucide-react'
-import type { ReactNode } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import type { OptionValue } from './option'
+import { Segmented } from './Segmented'
 
 /** A row's room, as the canvas's `GROUP` draws it: 48 high, its name in the body's size. */
 const ROW = 'flex min-h-12 w-full items-center gap-2.5 py-1.5 ps-4 pe-3 text-base'
@@ -48,6 +50,25 @@ export function GroupRow({
     <div data-setting={setting} className={ROW}>
       <span className="min-w-0 flex-1">{label}</span>
       {children}
+    </div>
+  )
+}
+
+/**
+ * A row of two or three choices, as the canvas's `GROUP` seg rows draw it (canvas 127): its name in
+ * the body's size over the segmented control, across the group's width. A screen reader hears the
+ * name once, from the control.
+ */
+export function GroupSegmented<V extends OptionValue>({
+  setting,
+  ...props
+}: ComponentProps<typeof Segmented<V>> & { setting?: string }) {
+  return (
+    <div data-setting={setting} className="flex flex-col gap-2 py-3 ps-4 pe-3">
+      <span aria-hidden className="text-base">
+        {props.label}
+      </span>
+      <Segmented {...props} />
     </div>
   )
 }

@@ -12,12 +12,12 @@ line) and a quiz shows how far you have come at a glance, as Tenuto's and Functi
 - No finger numbers on or under the keys; no explanation line under a control (an ⓘ at most).
 - A trainer has its setup page (canvas 134): Drill, Shown, Level, Custom chord qualities, Timing, the best score, Start; its run plays on keys (Show answer, Clear, Check, Next) and ends on Results. A song's Check is the same run over the song's chords, Close back to the song. Exercise's Start opens the Player with a setup sheet.
 - **An exercise's page in the Chords page's shape (canvas 185, loop, 2026-11-15; `r68_exercise.py`):** one piano, one
-  bar, one shape across Practice. The keys edge to edge under Back · Exercise · Settings · Piano, the first position
-  lit (the tonic in rose, the others sand, named); the name in the serif with its ♡ and its book; one card of its first
+  bar, one shape across Practice. The keys edge to edge under Back · Exercise · Piano (no gear: count-in and waiting
+  are the Player's settings), the first position lit in the Scales page's tones, named; the name in the serif with its ♡ and its book; one card of its first
   bars on the staff with what it trains; The exercise as one group (Number, Hands, Rhythm, Next key: Circle of fifths ·
-  Chromatic, Tempo with its ladder); How to play in words. One floating bar: Key (the root over its caption, opening
-  the root grid) · Start (honey, the Player) · Listen. The gear's Exercise settings: Count-in, Wait for the right note,
-  All piano settings. Never the hand drawing with finger numbers, the Key as a row as well as in the bar, or Listen
+  Chromatic, Octaves where it has them, Tempo, Target tempo); How to play in words. One floating bar: Key (the root
+  over its caption, opening the key picker) · Start (honey, the Player) · Listen (the Player in Listen). The card writes
+  the playing hand's staff alone, "Bars 1–2 of 30" under it. Built 2026-11-15. Never the hand drawing with finger numbers, the Key as a row as well as in the bar, or Listen
   and Start as a dock of two buttons.
 
 ## Today

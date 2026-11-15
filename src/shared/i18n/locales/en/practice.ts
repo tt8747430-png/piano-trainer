@@ -651,6 +651,12 @@ export const practice = {
   },
   // An exercise's page (A41), before the Player.
   exercisePage: {
+    // Under its card's staff: the bars written of the whole.
+    bars: 'Bars 1–{{last}} of {{count}}',
+    title: 'Exercise',
+    number: 'Number',
+    previous: 'Previous',
+    next: 'Next',
     // The floating bar's other way in (its board): the exercise played to you, in Listen mode.
     listen: 'Listen',
     target: 'Target tempo',
@@ -660,9 +666,8 @@ export const practice = {
     doneToday: 'Completed today',
     order: 'Next key',
     orders: { fifths: 'Circle of fifths', chromatic: 'Chromatic' },
-    trains: 'Focus',
-    how: 'Technique',
-    options: 'Options',
+    how: 'How to play',
+    options: 'The exercise',
     key: 'Key',
     hands: 'Hands',
     octaves: 'Octaves',
@@ -671,8 +676,6 @@ export const practice = {
     slower: 'Slower',
     faster: 'Faster',
     start: 'Start',
-    rh: 'Right hand',
-    lh: 'Left hand',
   },
   exercises: {
     // The Exercises page's groups.

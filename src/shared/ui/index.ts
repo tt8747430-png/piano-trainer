@@ -52,6 +52,7 @@ export {
   FloatingPiece,
   FloatingPieceLink,
   FloatingPieces,
+  FloatingPlayLink,
   FloatingPlayPiece,
   FloatingPlaySplit,
 } from './FloatingPieces'
@@ -66,7 +67,15 @@ export { NewSheet, SheetPart } from './NewSheet'
 export { Stepper } from './Stepper'
 export { TITLE_PART } from './title-part'
 export { FormField } from './FormField'
-export { ChoiceList, GroupAction, GroupChips, GroupLink, GroupRow, GroupRows } from './GroupRows'
+export {
+  ChoiceList,
+  GroupAction,
+  GroupChips,
+  GroupLink,
+  GroupRow,
+  GroupRows,
+  GroupSegmented,
+} from './GroupRows'
 export { HandsPicture, HandsSegmented, HandSwatch } from './HandsSegmented'
 export { NamedSegmented } from './NamedSegmented'
 export { KeyPicker } from './pickers/KeyPicker'
