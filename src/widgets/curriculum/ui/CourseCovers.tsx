@@ -22,29 +22,28 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
       to="/courses/$courseId"
       params={{ courseId: course.id }}
       aria-current={current ? 'step' : undefined}
-      className="group flex w-44 shrink-0 snap-start flex-col gap-2 lg:w-full"
+      className="group flex w-42 shrink-0 snap-start flex-col gap-2 lg:w-full"
     >
       <span
         className={cn(
-          'flex aspect-[3/2] flex-col justify-between rounded-card p-3 ring-1 ring-black/5 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
+          'flex h-32 flex-col justify-between rounded-[14px] px-3.5 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
           paint.fill,
-          paint.ink,
         )}
       >
         {current ? (
-          <span className="self-start rounded-pill bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">
+          <span className="flex h-6 items-center self-start rounded-pill bg-primary px-2.5 text-xs font-bold text-primary-foreground">
             {t('upNext')}
           </span>
         ) : (
-          <span className="text-xs font-semibold tracking-wide uppercase opacity-80">
+          <span className="flex min-h-6 items-center text-[0.6875rem] font-bold tracking-[0.06em] text-muted-foreground uppercase">
             {t(`shelves.${course.shelf}`)}
           </span>
         )}
-        <span className="font-display text-lg leading-tight text-balance">
+        <span className="font-display text-[1.1875rem]/[1.15] text-balance text-foreground">
           {localText(course.title, locale)}
         </span>
       </span>
-      <span className="line-clamp-2 px-0.5 text-sm text-pretty text-muted-foreground">
+      <span className="line-clamp-2 text-[0.8125rem]/[1.35] text-pretty text-muted-foreground">
         {localText(course.summary, locale)}
       </span>
     </Link>
@@ -80,7 +79,7 @@ export function CourseCovers() {
           {t('seeAll')}
         </Link>
       </div>
-      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:px-0">
+      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4.5 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">
             <CourseCover course={course} current={course.id === current} />

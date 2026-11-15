@@ -288,6 +288,7 @@ owner's, typos fixed.
 - **Loop round 14, a level's line as the board's PATHROW:** each lesson a 68-tall row, its tile 44 round with its number in 15px bold, 4 in from the gutter, the title 16 over its detail, Next a 26-tall honey pill; a chapter's name on the gutter with its count in 13px; the goal 15px; 16 between chapters. Courses and Your lessons wear the same row (2026-11-14).
 - **Loop round 15, a group's label as the board's CAPS:** 13px semibold, 4% tracking, 16 tall, 6 over its card, the same on every settings page, Search's groups and the Chord player's; Settings' groups 16 apart (2026-11-14).
 - **Loop round 15, Profile's tiles hold any time:** the units at the label's 13 under figures of 22, and from ten hours the time in hours alone ("12 h"), so "9 ч 45 мин" fits a 393 phone's third; the board's 24 does not fit the real face (2026-11-14).
+- **Loop round 16, Learn's course covers as the board's COURSECARD:** 128 tall, 12 by 14 inside, the shelf 11px bold at 6% in soft ink, the title 19 in the serif in ink, its line 13 on 1.35; 168 wide on a phone, 18 apart on a laptop; the paint stays its level's (2026-11-15).
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
 ## Practice
