@@ -1012,6 +1012,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 36, the account pages as the SignIn board:** Close (an X) in the bar, the title 32 bold in the sans at the head of the column, everything 16 apart; Google and Apple pills 50 tall (Apple "· Coming soon" in its words, no chip), the fields bare on the page with their labels 13 semibold, the honey action a 50 pill, Forgot password?, Create an account and Back to sign in in the link colour reaching 44, the Terms and Privacy links too. Field outlines keep the control line, for 3:1 (2026-11-15).
 - **Loop round 34, Settings' values at the kit's 16 (canvas v211):** the Settings list drew a row's grey value (Match system, Up to date) at 15 where every other group's row draws 16; the board now draws 16, as the app's one row does (2026-11-15).
 - **Loop round 34, Profile's tiles and week as the app has them (canvas v210):** the board squeezed a tile's icon to a sliver to keep "Songs learned" on one line; its icon now keeps its 15 and the name wraps to two lines, as the app's; the week card is "Last 7 days", the true name of a rolling week with today last (2026-11-15).
 - **Loop round 30, Profile's sections 16 apart as the board's:** the learner, the week, the next badge, Badges and the rest stand 16 apart (were 28), on a phone and in each laptop column (2026-11-15).

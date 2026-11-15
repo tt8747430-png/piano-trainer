@@ -33,9 +33,9 @@ export function FormField({
   const [shown, setShown] = useState(false)
   const password = type === 'password'
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1.5', className)}>
       <div className="flex items-center gap-1.5">
-        <label htmlFor={id} className="text-sm text-muted-foreground">
+        <label htmlFor={id} className="mx-1 text-[0.8125rem] font-semibold text-muted-foreground">
           {label}
         </label>
         {info === undefined ? null : <InfoTip name={label}>{info}</InfoTip>}

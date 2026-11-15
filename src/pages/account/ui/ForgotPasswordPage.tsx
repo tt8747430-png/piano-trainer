@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useOnline } from '@/shared/lib'
+import { cn, useOnline } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { emailProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { AccountScreen, FieldGroup, OfflineLine, ProblemLine } from './AccountScreen'
+import { ACCOUNT_LINK, AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
 
 /**
  * Forgotten password (ADR 0116): sends a link to choose a new one, and says so whatever the
@@ -36,7 +36,7 @@ export function ForgotPasswordPage() {
           <p className="text-muted-foreground">{t('forgot.says')}</p>
           <OfflineLine online={online} />
           <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
-            <FieldGroup>
+            <>
               <FormField
                 label={t('email')}
                 type="email"
@@ -46,9 +46,14 @@ export function ForgotPasswordPage() {
                 onChange={(event) => setEmail(event.target.value)}
                 error={invalid ? t('invalid.email') : undefined}
               />
-            </FieldGroup>
+            </>
             <ProblemLine problem={problem} />
-            <Button type="submit" size="lg" disabled={!online || busy}>
+            <Button
+              type="submit"
+              size="lg"
+              className="h-12.5 rounded-full font-bold"
+              disabled={!online || busy}
+            >
               {t('forgot.submit')}
             </Button>
           </form>
@@ -58,11 +63,7 @@ export function ForgotPasswordPage() {
           {t('forgot.sent', { email: sent })}
         </p>
       )}
-      <Link
-        to="/account/sign-in"
-        replace
-        className="inline-flex min-h-11 items-center justify-center text-sm font-medium"
-      >
+      <Link to="/account/sign-in" replace className={cn(ACCOUNT_LINK, 'self-center')}>
         {t('forgot.back')}
       </Link>
     </AccountScreen>
