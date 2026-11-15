@@ -38,6 +38,8 @@ export type ScreenHeaderProps = {
   /** The page shows its title itself, large under the bar (a document, read or in Edit): the bar
    * keeps it for a screen reader alone, never saying it twice, and leaves its room to the tools. */
   titleOnPage?: boolean
+  /** A large title that is a name and may wrap (a course's, Your lessons and courses): 24 on a phone. */
+  named?: boolean
 } & (
   | {
       /** A place's title, set larger in the same row. */
@@ -73,6 +75,7 @@ export function ScreenHeader({
   views,
   large = false,
   titleOnPage = false,
+  named = false,
 }: ScreenHeaderProps) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
@@ -124,9 +127,8 @@ export function ScreenHeader({
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
-                // A page's own name beside Back takes a step down on a phone, as the boards' TITLEBAR
-                // sets a name that may wrap (24 to a place's 28).
-                large && back && 'max-sm:text-2xl',
+                // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
+                large && named && 'max-sm:text-2xl',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',
@@ -163,9 +165,8 @@ export function ScreenHeader({
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
-                // A page's own name beside Back takes a step down on a phone, as the boards' TITLEBAR
-                // sets a name that may wrap (24 to a place's 28).
-                large && back && 'max-sm:text-2xl',
+                // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
+                large && named && 'max-sm:text-2xl',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',

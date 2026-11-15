@@ -103,6 +103,7 @@ export function OwnCoursePage({ course }: { course: OwnCourse }) {
       <ScreenHeader
         title={course.title}
         large
+        named
         back={<BackButton />}
         settings={
           <RoundLink

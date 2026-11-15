@@ -98,6 +98,7 @@ function AppCourse({ courseId }: { courseId: string }) {
         title={localText(course.title, locale)}
         // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
         large
+        named
         back={<BackButton />}
         settings={
           <RoundLink

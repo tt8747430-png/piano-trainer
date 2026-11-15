@@ -10,7 +10,7 @@ export function YoursPage() {
   const { t } = useTranslation('learn')
   return (
     <div className="flex flex-col pb-8">
-      <ScreenHeader title={t('own.title')} large back={<BackButton />} />
+      <ScreenHeader title={t('own.title')} large named back={<BackButton />} />
       <div className="flex w-full max-w-4xl flex-col">
         <OwnLibrary />
       </div>
