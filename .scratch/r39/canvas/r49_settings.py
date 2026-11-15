@@ -1,7 +1,7 @@
-# R49: Settings with every page drawn and working (wave 3 and 4 of coverage.md): the Account with Editorial access,
+# R49: Settings with every page drawn and working : the Account with Editorial access,
 # Sync, Sign out and Delete account; Edit profile, Change password, Privacy; General; Storage and backup; On-screen
 # piano; MIDI devices with its log and timing; Selection toolbar; Swipe actions; User guide; Report a problem; About.
-# Exact labels from inventory.md (src/shared/i18n/locales/en). Rebuilds the Settings boards drawn by r45_places.
+# Exact labels from src/shared/i18n/locales/en. Rebuilds the Settings boards drawn by r45_places.
 # Exec'd by r41.py after r48_course.
 
 INFOI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5h.01"></path></svg>'

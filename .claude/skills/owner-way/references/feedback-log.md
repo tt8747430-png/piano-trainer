@@ -946,8 +946,7 @@ are reference only, but progressions are facts.
   toast; only what can't be undone, or reaches other people, asks first. Replaces "confirm before losing or hiding work".
 - **A loss is shown as a loss** (2026-11-07, "i don't like your rejection", of leaving out loss framing): name what goes,
   by name or count, and let the way out name its cost; always true, never a fake countdown.
-- **Shadows on cards** (2026-11-07, "yes to shadows"): a card is white on a darker sand panel with a small layered
-  shadow; tracks are inset. **Filter chips show their counts** ("Advanced 6"); a chip with none is dimmed, not hidden.
+- **Filter chips show their counts** ("Advanced 6"); a chip with none is dimmed, not hidden.
 - **Progress, by best practice** (2026-11-07, "use the best practices"): one practice record (time this week against
   last week, one bar per day on a value axis), a streak with milestones and rest days earned by practising (one per 7
   days, two at most), and the week shared in a group. Drawn, not built.

@@ -371,8 +371,7 @@ whole.
 ## Elevation & Depth
 
 Flat and grouped. A card separates by its lighter paper and a 1px soft line, never by a shadow; hover and press fill
-with sand. _Ruled 2026-11-07, not yet built: cards white on a darker sand panel with a small layered shadow (`craft-
-details.md`, "Depth"); this paragraph changes when it is._ Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
+with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no room). Shadows belong to what floats over the page, and they are soft, layered and deeper by night.
 
 ### Shadow Vocabulary
 

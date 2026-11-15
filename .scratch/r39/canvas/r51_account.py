@@ -1,4 +1,4 @@
-# R51: the account pages (coverage.md wave 3) — Sign in, Create an account, Check your email, Forgotten password and
+# R51: the account pages — Sign in, Create an account, Check your email, Forgotten password and
 # its sent state, New password, the sign-in link (/auth/callback) working and failed — and Legal (Privacy Policy,
 # Terms of Service), every string from src/shared/i18n/locales/en/account.ts and legal.ts. Exec'd by r41.py last.
 

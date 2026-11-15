@@ -1,4 +1,4 @@
-# R53: Songs' remaining routes (coverage.md wave 5), strings from inventory.md's SONGS section:
+# R53: Songs' remaining routes, strings from the en strings:
 #   Explore     — Explore with its shelves, a public song (rating, Add to my library, Report), a shared song link
 #   Groups      — Groups, Join with a link, New group, a group (invite link, shared folders, members), a shared folder
 #   Folder      — a folder (Archived row), Folder settings, Card style, the folder's Archived

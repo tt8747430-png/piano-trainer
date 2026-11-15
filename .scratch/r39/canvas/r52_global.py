@@ -1,7 +1,7 @@
-# R52: the app-wide layers and route states (coverage.md wave 4), drawn over Learn: the search palette (Recent
+# R52: the app-wide layers and route states, drawn over Learn: the search palette (Recent
 # searches, Suggestions, results by group, Nothing found), the MIDI button's popover in each state, the Shortcuts
 # sheet, the Welcome dialog, the update banner, Storage full, the account-deletion gate, and the route states
-# (Loading, Something went wrong, offline, Page not found). Strings from inventory.md's GLOBAL. Exec'd last.
+# (Loading, Something went wrong, offline, Page not found). Strings from the en strings. Exec'd last.
 
 MIDII = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"></path></svg>'
 KBDI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path></svg>'

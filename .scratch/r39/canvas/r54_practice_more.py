@@ -1,4 +1,4 @@
-# R54: Practice and editor routes still missing (coverage.md wave 6), strings from inventory.md:
+# R54: Practice and editor routes still missing strings from src/shared/i18n/locales/en:
 #   Trainer         — /practice/quiz/$trainerId: setup (Drill, Shown, Level or Custom with its selection sheet, Timing,
 #                     Rounds, the record line), a Play it round on the piano (Check, Clear, Show answer), Results
 #   Check           — /check?of=: a song's chords checked before it is marked learned, and its result

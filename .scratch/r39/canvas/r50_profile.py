@@ -1,5 +1,5 @@
-# R50: Profile with every page (coverage.md wave 3): Streak with its month, Badges and a badge's tiers, Achievements
-# and an achievement, Notifications with Mark all read, Clear all and the empty state. Labels from inventory.md
+# R50: Profile with every page: Streak with its month, Badges and a badge's tiers, Achievements
+# and an achievement, Notifications with Mark all read, Clear all and the empty state. Labels from the en strings
 # (pages/profile). Rebuilds the Profile boards drawn by r45_places; exec'd by r41.py after r49_settings.
 
 BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row: a day counts once you play for five minutes.', [('Bronze', '3 days', 'Reached 14 October'), ('Silver', '7 days', 'Reached 6 November'), ('Gold', '14 days', '2 to go'), ('Platinum', '30 days', 'Locked')], '12 days'),

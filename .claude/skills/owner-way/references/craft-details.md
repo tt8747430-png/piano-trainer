@@ -73,11 +73,10 @@ place, before, after, why.
 
 - **Press:** the skills scale a pressed button to 0.96. `DESIGN.md`: buttons and chips change colour alone and never move;
   only the floating actions keep their press (`active:scale-96`).
-- **Depth:** ruled 2026-11-07, "yes to shadows": cards are white on a darker sand panel with a small layered shadow
-  (`0 0 0 1px` ink at 5%, `0 1px 2px` at 6%, `0 3px 10px -4px` at 10%); tracks are inset. `DESIGN.md` still says
-  surface and line until it is built.
-- **Letter-spacing:** `baseline-ui` forbids changing it; the app sets none today, and `seven-questions` (large headings
-  tighten 2 to 3%) stands over the ban.
+- **Depth:** cards separate by their lighter paper and a 1px ring, never a shadow, as the boards draw them;
+  shadows belong to what floats (`DESIGN.md`).
+- **Letter-spacing:** `baseline-ui` forbids changing it; the boards tighten large titles (-0.01em, a tempo's figures
+  -0.03em), and `seven-questions` (large headings tighten 2 to 3%) stands over the ban.
 - **Motion values:** `animate`, `emil-design-eng` and `review-animations` share one table (curves, durations, press
   0.97, reduced motion "gentler, not zero"). The app overrides four rows: its one curve is `--ease-out`
   `cubic-bezier(0.22, 1, 0.36, 1)` (`src/styles/theme.css`); sheets take about 450ms; buttons do not scale on press;
