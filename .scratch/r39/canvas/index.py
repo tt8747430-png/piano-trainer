@@ -67,6 +67,9 @@ for b in boards:
                             ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
                             ' header[data-float] [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
                             ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
+        if '<!--piano2d-->' in h1 and 'PIANO2D' not in h1:
+            import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as _PS
+            k = h1.rindex('</script>'); h1 = h1[:k] + '/*PIANO2D*/' + _PS.PIANO2D_JS + h1[k:]
         if h1 != h0: open(P + b, 'w').write(h1)
 missing = [b for b in boards if not os.path.exists(P + b)]
 links = {b: re.findall(r'href="([^"#{][^"]*\.dc\.html)"', open(P + b).read()) for b in boards if b not in missing}

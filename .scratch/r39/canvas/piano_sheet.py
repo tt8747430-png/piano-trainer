@@ -97,6 +97,18 @@ SEG_JS = ("(list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur, bg: 
           "sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }))")
 
 
+def PIANO_SHEET_2D(labels=2):
+    """The same sheet where the page draws 2D keys alone (Scales, Intervals, an exercise, a pattern, a progression,
+    the Chord finder): no view cards, since the hands are not offered there; Labels, then Sound and MIDI keyboard."""
+    return ('<!--piano2d-->' + BLOCK(f'<span style="font-size: 16px; color: {INK}">Labels</span>', SEG('kbLabelSeg', labels))
+            + f'<div style="{CARD}">' + LINK('Sound', 'soundSub') + LINK('MIDI keyboard', 'midiSub', SEP) + '</div>')
+# its bindings, wrapped round the page's own values (index.py adds them to every page that draws PIANO_SHEET_2D)
+PIANO2D_JS = ("\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n"
+              "  const v = R.call(this), st = this.state || {}, kbLabel = st.kbLabel ?? 'names', SEGP = " + SEG_JS + ";\n"
+              "  if (kbLabel === 'none') for (const k of Object.keys(v)) { const kb = v[k]; if (kb && Array.isArray(kb.whites)) v[k] = { ...kb, whites: kb.whites.map((w) => ({ ...w, label: '' })), blacks: (kb.blacks || []).map((b) => ({ ...b, label: '' })) }; }\n  return Object.assign({}, v, { kbLabelSeg: SEGP([['names', 'Note names'], ['none', 'None']], kbLabel, (x) => this.setState({ kbLabel: x })),\n"
+              "    kbDimOp: 1, kbPE: 'auto', soundSub: '', soundSubOn: false, soundSubVal: 'Grand piano', soundSubValC: '#685E56', midiSub: '', midiSubOn: false, midiSubVal: 'None', midiSubValC: '#685E56' });\n"
+              "}; }\n")
+
 # The live 3D stage, shared by every page with a 3D piano (the Chords page, the Chord player): the app's own hands
 # (src/widgets/piano-hands, createStage) from pthands.bundle.js. A page sets this._cv (the canvas), this._lb (the labels'
 # box), this._handsIn (the stage's input) and this._labels3d, and calls this._hands3d() after each render.
