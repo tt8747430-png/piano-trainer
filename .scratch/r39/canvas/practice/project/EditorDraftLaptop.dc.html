@@ -136,6 +136,9 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       keysOn: keys, keysShown: keys && !open, notKeys: !keys || open, keysPressed: keys ? 'true' : 'false', keysBg: keys ? '#332921' : 'transparent', keysFg: keys ? '#FEFDFB' : '#332921', toggleKeys: () => set({ keys: !keys }),
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
       moreOn: st.sheet === 'more', stv: '', stvOn: false, stvVal: 'Piano', stvValC: '#685E56', lay: '', layOn: false, layVal: 'Pages', layValC: '#685E56', snd: '', sndOn: false, sndVal: 'Grand piano', sndValC: '#685E56', midi: '', midiOn: false, midiVal: 'None', midiValC: '#685E56', exp: '', expOn: false, expVal: '', expValC: '#685E56', prn: '', prnOn: false, prnVal: '', prnValC: '#685E56', openMore: () => set({ sheet: 'more' }),
+      states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }],
+        ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
+        ['Score settings open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
       kb: calmKeys(48, 79, { 72: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 72: ['#85B8DC', ''] }, 1330, 132) };
   }
 }
@@ -144,7 +147,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 { const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
-  const rows = [].concat((v.dsDemo || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })));
+  const rows = [].concat((v.dsDemo || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), (v.states || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })));
   const none = !rows.some((r) => r.on);
   const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);
   return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
