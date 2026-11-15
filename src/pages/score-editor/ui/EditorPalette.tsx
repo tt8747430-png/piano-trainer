@@ -198,45 +198,10 @@ function useSectionInSight(
   return onScroll
 }
 
-/** Whether a sideways scroller has more past its start and past its end: where it fades. */
-function useScrollEdges(box: RefObject<HTMLDivElement | null>) {
-  const [edges, setEdges] = useState({ before: false, after: false })
-  useEffect(() => {
-    const element = box.current
-    if (!element) return
-    const measure = () => {
-      const before = element.scrollLeft > 1
-      const after = element.scrollLeft + element.clientWidth < element.scrollWidth - 1
-      setEdges((was) => (was.before === before && was.after === after ? was : { before, after }))
-    }
-    measure()
-    element.addEventListener('scroll', measure, { passive: true })
-    const watch = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
-    watch?.observe(element)
-    return () => {
-      element.removeEventListener('scroll', measure)
-      watch?.disconnect()
-    }
-  }, [box])
-  return edges
-}
-
-/** The fade at a scroller's edge with more past it (R31-E, the mockup's strip). */
-const FADES = {
-  none: '',
-  before: 'mask-l-from-85%',
-  after: 'mask-r-from-85%',
-  both: 'mask-x-from-85%',
-} as const
-
-const fadeOf = ({ before, after }: { before: boolean; after: boolean }) =>
-  FADES[before && after ? 'both' : before ? 'before' : after ? 'after' : 'none']
-
 /**
  * The strip of categories (R31-E, R32-C, Flat's tab bar; canvas 123): each by its short name in a sand pill, the one in
  * sight on a card-paper thumb that slides to the one tapped; only those that act where the caret
- * writes (R32-B). It scrolls sideways in its own box, the lit one kept in view, fading only at an
- * edge with more past it.
+ * writes (R32-B). It scrolls sideways in its own box, the lit one kept in view, with no fade at its edges.
  */
 function CategoryStrip({
   current,
@@ -250,7 +215,6 @@ function CategoryStrip({
   const strip = useRef<HTMLDivElement>(null)
   const roving = useRovingFocus(strip)
   const motionOf = useScrollMotion()
-  const edges = useScrollEdges(strip)
   // The category lit kept in sight in its strip, in the middle.
   useEffect(() => {
     const box = strip.current
@@ -266,10 +230,7 @@ function CategoryStrip({
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className={cn(
-        'flex min-w-0 overflow-x-auto rounded-card bg-muted p-0.5 scrollbar-none',
-        fadeOf(edges),
-      )}
+      className={cn('flex min-w-0 overflow-x-auto rounded-card bg-muted p-0.5 scrollbar-none')}
     >
       {categories.map((category) => {
         const name = t(`palette.category.${category}`)
@@ -393,7 +354,6 @@ function ToolRow({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
   const row = useRef<HTMLDivElement>(null)
   const roving = useRovingFocus(row)
-  const edges = useScrollEdges(row)
   return (
     <div
       ref={row}
@@ -402,7 +362,6 @@ function ToolRow({ category }: { category: PaletteCategory }) {
       {...roving}
       className={cn(
         'flex min-w-0 items-center gap-2 overflow-x-auto overscroll-x-contain scrollbar-none',
-        fadeOf(edges),
       )}
     >
       <Laid form="bar">
