@@ -86,7 +86,7 @@ RS_MOTION = ('<style data-motion>@keyframes rs-rise { from { opacity: 0; transfo
              '@media (prefers-reduced-motion: reduce) { .rs-rise, .rs-pop { animation: none } }</style>')
 
 
-def RS_BODY(per_row, cw, perfect, from_profile, lap=False):
+def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
     icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#9A6A1E" if perfect else RS_SAGE_INK}; '
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
     line = '12 of 12 correct · 72 BPM' if perfect else '11 of 12 correct · 72 BPM'
@@ -104,7 +104,7 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False):
                                     f'font-size: 15px; font-weight: 600; text-decoration: none">All practice in Profile{CHEV_R}</a>')
     foot = (f'<div class="rs-rise rs-d4" style="display: flex; flex-direction: column; align-items: center; gap: 0">'
             f'<span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{best}</span>{prof}</div>')
-    return head + tiles + run + foot
+    return (head, tiles, run, foot) if parts else head + tiles + run + foot
 
 
 def RS_ACTIONS(perfect, from_profile, lap=False):
@@ -130,8 +130,13 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
     body = both(lambda p: RS_BODY(per_row, cw, p, from_profile, lap))
     acts = both(lambda p: RS_ACTIONS(p, from_profile, lap))
     if lap:
-        return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 32px 56px 32px; display: flex; justify-content: center">'
-                f'<div style="width: 560px; display: flex; flex-direction: column; gap: 24px">{RS_SHOW}{body}<div style="width: 360px; align-self: center">{acts}</div></div></main>')
+        # on a laptop the verdict, its figures and what to do next stand left, the run written out large beside them
+        def side(p):
+            h, t, r, f = RS_BODY(per_row, cw, p, from_profile, lap, parts=True)
+            return (f'<div style="display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 56px; align-items: center">'
+                    f'<div style="display: flex; flex-direction: column; gap: 24px">{h}{t}{f}<div>{RS_ACTIONS(p, from_profile, lap)}</div></div>{r}</div>')
+        return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 32px; display: flex; flex-direction: column; justify-content: center; gap: 24px">'
+                f'{RS_SHOW}{both(side)}</main>')
     return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: {8 if from_profile else 16}px 16px 24px; display: flex; flex-direction: column; gap: 20px">{RS_SHOW}{body}</main>'
             f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>')
 
@@ -165,10 +170,10 @@ def RS_RUNVIEW(lap):
 
 
 rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_RESULTS(4, 76, False))
-rs_lm = RS_MOTION + IF('isRun', RS_RUNVIEW(True), 'true') + IF('isResults', RS_RESULTS(6, 84, False, True))
+rs_lm = RS_MOTION + IF('isRun', RS_RUNVIEW(True), 'true') + IF('isResults', RS_RESULTS(6, 116, False, True))
 detail('PlayChord', 'The Player: a chord practice run and its results', RS_JS("'run'"), rs_ph, rs_lm, '', '', '', 'Practice')
 # opened from Profile › Practice history: the bar's Back, no Done and no link back to Profile
 rs_pph = RS_MOTION + TOP('Profile.dc.html', '', '', 'Back') + RS_RESULTS(4, 76, True)
-rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html') + RS_RESULTS(6, 84, True, True)
+rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html') + RS_RESULTS(6, 116, True, True)
 detail('PracticeResult', 'A practice run’s results, from Profile', RS_JS("'result'"), rs_pph, rs_plm, '', '', '', 'Profile')
 print('r56 results ok')
