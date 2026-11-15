@@ -77,7 +77,7 @@ export function PracticePage() {
   const { t } = useTranslation('practice')
   const groups = useGroups()
   return (
-    <div className="flex flex-col gap-3.5">
+    <div className="flex flex-col">
       <ScreenHeader
         title={t('title')}
         large
@@ -90,34 +90,36 @@ export function PracticePage() {
           </>
         }
       />
-      {groups.map(({ id, places }) => (
-        <FoldSection
-          key={id}
-          title={t(`groups.${id}`)}
-          headingClassName="px-1 font-sans text-xl font-bold"
-        >
-          <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
-            {places.map(({ key, title, detail, tile, link }) => (
-              <PlaceRow
-                key={key}
-                icon={tile.icon}
-                picture={tile.picture}
-                paint={tile.paint}
-                title={title}
-                detail={detail}
-                render={link}
-              />
-            ))}
-          </ul>
-          <ul className="hidden grid-cols-5 gap-3 lg:grid">
-            {places.map(({ key, ...place }) => (
-              <li key={key} className="flex [&>a]:flex-1">
-                <PageCard {...place} />
-              </li>
-            ))}
-          </ul>
-        </FoldSection>
-      ))}
+      <div className="mt-1 flex flex-col gap-3.5">
+        {groups.map(({ id, places }) => (
+          <FoldSection
+            key={id}
+            title={t(`groups.${id}`)}
+            headingClassName="px-1 font-sans text-xl font-bold"
+          >
+            <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
+              {places.map(({ key, title, detail, tile, link }) => (
+                <PlaceRow
+                  key={key}
+                  icon={tile.icon}
+                  picture={tile.picture}
+                  paint={tile.paint}
+                  title={title}
+                  detail={detail}
+                  render={link}
+                />
+              ))}
+            </ul>
+            <ul className="hidden grid-cols-5 gap-3 lg:grid">
+              {places.map(({ key, ...place }) => (
+                <li key={key} className="flex [&>a]:flex-1">
+                  <PageCard {...place} />
+                </li>
+              ))}
+            </ul>
+          </FoldSection>
+        ))}
+      </div>
     </div>
   )
 }

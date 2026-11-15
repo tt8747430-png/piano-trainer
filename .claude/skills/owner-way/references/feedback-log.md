@@ -314,6 +314,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 20, the overview as Learn under its bar:** Theory starts 4 under the bar, the sections 14 apart,
+  as the Main board draws it (was 14 under the bar) (2026-11-15).
 - **Rows show what they hold (loop round 11, the Practice board's `pic`):** each place of Practice wears a small
   picture of its music instead of a glyph: the chord's keys lit, a scale on a staff, a leap, I IV V, a bass under its
   pattern, a Hanon bar, swung eighths, a chord sheet, the Metronome, the Tuner's needle, the finder's lens, the circle.
