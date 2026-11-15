@@ -111,7 +111,7 @@ function Hero() {
   return (
     <section aria-label={name ?? t('profile.guest')} className="flex flex-col gap-4 pt-1">
       <div className="flex items-center gap-4">
-        <div className="relative shrink-0 self-start">
+        <div className="relative shrink-0">
           <Avatar name={account ? name : null} size="hero" picture={profile?.avatar ?? null} />
           {account ? (
             // Edit photo on the picture's lower right (memory-palaces'): it opens Edit profile.
@@ -153,10 +153,20 @@ function Hero() {
           )
         ) : (
           <div className="flex min-w-0 flex-col items-start gap-2">
-            <p className="text-xl leading-tight font-bold text-balance">{t('profile.guest')}</p>
+            <p className="text-[1.375rem] leading-tight font-bold text-balance">
+              {t('profile.guest')}
+            </p>
             {/* What a guest stands to lose, said truly (R38, canvas 136): kept here, not everywhere. */}
-            <p className="text-sm text-muted-foreground text-pretty">{t('profile.guestKept')}</p>
-            <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
+            <p className="text-sm/[1.4] text-muted-foreground text-pretty">
+              {t('profile.guestKept')}
+            </p>
+            {/* The board's Sign in: a 44 honey pill, bold. */}
+            <ButtonLink
+              className="h-11 rounded-full px-5 font-bold"
+              render={<Link to="/account/sign-in" />}
+            >
+              {t('profile.signIn')}
+            </ButtonLink>
           </div>
         )}
       </div>
