@@ -23,6 +23,9 @@ def night(h):
     for a, b in NIGHT_VARS: h = h.replace(a, b)
     # white as a surface is the night's card, not its ink
     h = re.sub(r'background: #(?:FFFFFF|ffffff|fff)\b', 'background: #24201C', h)
+    # a cover's paper (an SVG's white fill, inline or inside a data URI) is the night's card too, its ink the night's
+    h = re.sub(r'fill="#(?:FFFFFF|ffffff)"', 'fill="#24201C"', h)
+    h = re.sub(r'%23([0-9A-Fa-f]{6})', lambda m: '%23' + ('24201C' if m.group(1).upper() == 'FFFFFF' else NIGHT.get('#' + m.group(1).upper(), '#' + m.group(1))[1:]), h)
     h = re.sub(r'#[0-9A-Fa-f]{6}\b', lambda m: NIGHT.get(m.group(0).upper(), m.group(0)), h)
     h = re.sub(r'rgba\((?:51, ?41, ?33|26, ?22, ?18), ?([\d.]+)\)', lambda m: 'rgba(10,7,5,%s)' % min(0.9, round(float(m.group(1)) * 3, 2)), h)
     h = h.replace('rgba(254,253,251,.86)', 'rgba(36,32,28,.86)').replace('rgba(246,243,238,0)', 'rgba(25,21,18,0)').replace('rgba(247, 243, 238, 0)', 'rgba(25,21,18,0)').replace('rgba(255, 255, 255, 0.92)', 'rgba(36,32,28,.92)')
