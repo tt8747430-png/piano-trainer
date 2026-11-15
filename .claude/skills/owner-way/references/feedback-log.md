@@ -399,6 +399,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 24, an interval's ⓘ as its board's INFO61:** a 20px glyph in a 44px reach, 12 clear of the name (it was 16px, tight against the title) (2026-11-15).
 - **Loop round 24, Scales as its board:** the page opens with both hands, each on its staff with its fingering line under the run (the board's Right hand and Left hand lines and its two-hand Hands button), and the exercises' heading names the scale, "Practise G major in the Player", as the Chords page names its chord (2026-11-15).
 - **A chord in the left hand (loop round 22, the Chords board's Hands menu):** Hands offers Both hands, Right hand and Left hand; the left hand holds the close chord an octave under the right's, on the bass staff, with its own fingering and the 3D left hand. Kept in the URL (`hands=lh`) as the others.
 
