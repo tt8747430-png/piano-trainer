@@ -612,6 +612,7 @@ export const songs = {
     previewOn: 'Preview on',
     phone: 'Phone',
     laptop: 'Laptop',
+    layout: { list: 'List', card: 'Grid', grid: 'Covers' },
     shows: 'Card contents',
     show: { key: 'Key', chords: 'Chords', progress: 'Level and progress' },
     applyTo: 'Apply to…',

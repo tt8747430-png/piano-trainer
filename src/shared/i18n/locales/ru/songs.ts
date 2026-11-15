@@ -611,6 +611,7 @@ export const songs: LocaleResources['songs'] = {
     previewOn: 'Предпросмотр на',
     phone: 'Телефон',
     laptop: 'Ноутбук',
+    layout: { list: 'Список', card: 'Сетка', grid: 'Обложки' },
     shows: 'Содержимое карточки',
     show: { key: 'Тональность', chords: 'Аккорды', progress: 'Уровень и прогресс' },
     applyTo: 'Применить к…',

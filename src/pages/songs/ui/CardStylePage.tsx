@@ -1,5 +1,5 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { Check, Layers, RotateCcw } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -16,22 +16,21 @@ import {
 } from '@/entities/library'
 import { resetCardLook, setCardLook } from '@/features/manage-library'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { sameStyle } from '@/shared/lib/style'
+import { BLOCK_PRESETS, presetOf, sameStyle, STYLE_LAYOUTS } from '@/shared/lib/style'
 import {
   ActionMenu,
+  ActionRow,
   BackButton,
   ButtonLink,
   ConfirmDialog,
-  Docked,
   LIBRARY_PANES,
   NotFound,
-  RoundButton,
   ScreenHeader,
   Segmented,
   SettingsGroup,
+  say,
   SwitchRow,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import {
   CardLookProvider,
   cardLookProps,
@@ -39,9 +38,12 @@ import {
   LibraryRows,
   SongRow,
 } from '@/widgets/song-library'
-import { StyleEditor } from '@/widgets/style-editor'
 import { useLibraryPage, type LibraryPage } from '../model/use-library-page'
 import { SongTable } from './SongTable'
+
+/** The presets a place's cards take (the board's four; Night is a lesson block's alone). */
+const CARD_PRESETS = ['plain', 'soft', 'bold', 'paper'] as const
+type CardPreset = (typeof CARD_PRESETS)[number]
 
 /** Which device the preview draws the rows on. */
 type Device = 'phone' | 'laptop'
@@ -75,23 +77,22 @@ export function FolderCardStylePage() {
 }
 
 /**
- * Card style (R32-C, memory-palaces' deck card style): the place's look, edited on a pinned preview
- * of its own rows as a phone or a laptop draws them; the style editor, then Card contents. Reset to
- * default in the bar; at the foot Apply to… (this place, it with its subfolders, or every folder,
- * asked first) and Apply, which keeps the draft for this place. Nothing is kept until then.
+ * Card style (loop round 24, the board's): the place's look, its own rows previewed as a phone or a
+ * laptop draws them, then Presets (Plain · Soft · Bold · Paper), Layout (List · Grid · Covers) and
+ * Card contents; then Apply to… (this place, it with its subfolders, or every folder, asked first)
+ * and Reset to default. Each change takes effect at once.
  */
 function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const nameOf = useFolderName()
   const store = useLibraryStoreApi()
   const layout = useLibraryLayout()
   const laptop = useMediaQuery(LIBRARY_PANES)
   const place: CardPlace = folder?.id ?? 'home'
-  const saved = useLibrary((state) => state.cardLooks[place]) ?? DEFAULT_CARD_LOOK
-  const [draft, setDraft] = useState<CardLook>(saved)
+  // The look as it stands: every change takes effect at once (the board's; no Apply).
+  const draft = useLibrary((state) => state.cardLooks[place]) ?? DEFAULT_CARD_LOOK
   const [device, setDevice] = useState<Device>(laptop ? 'laptop' : 'phone')
   const [asking, setAsking] = useState(false)
-  const [said, setSaid] = useState<string | null>(null)
   const page = useLibraryPage(folder, NO_FILTER)
 
   // Every folder under this one, at any depth (Home: every folder).
@@ -102,54 +103,65 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
   const subfolders = below(place)
   const everyFolder: CardPlace[] = ['home', ...layout.folders.map((each) => each.id)]
   // The app's own look is kept as none: the place reads the default again.
+  const keep = (places: readonly CardPlace[], look: CardLook) => {
+    if (sameLook(look, DEFAULT_CARD_LOOK)) for (const each of places) resetCardLook(store, each)
+    else setCardLook(store, places, look)
+  }
   const apply = (places: readonly CardPlace[]) => {
-    if (sameLook(draft, DEFAULT_CARD_LOOK)) for (const each of places) resetCardLook(store, each)
-    else setCardLook(store, places, draft)
-    setSaid(t('cardStyle.applied', { count: places.length }))
+    keep(places, draft)
+    say(t('cardStyle.applied', { count: places.length }))
   }
-  const change = (next: CardLook) => {
-    setDraft(next)
-    setSaid(null)
-  }
+  const change = (next: CardLook) => keep([place], next)
   const name = folder ? nameOf(folder) : t('library.home')
 
   return (
-    <div className="flex flex-col gap-6 pb-docked-8">
-      <ScreenHeader
-        title={t('cardStyle.title')}
-        back={<BackButton />}
-        tools={
-          <RoundButton
-            label={t('cardStyle.reset')}
-            icon={RotateCcw}
-            disabled={sameLook(draft, DEFAULT_CARD_LOOK)}
-            onClick={() => change(DEFAULT_CARD_LOOK)}
+    <div className="flex flex-col gap-6 pb-8">
+      <ScreenHeader title={t('cardStyle.title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+        {/* The preview first (the board's): the place's own rows as a phone or a laptop draws them. */}
+        <div className="flex flex-col gap-2.5 rounded-[18px] bg-muted p-4">
+          <Segmented<Device>
+            label={t('cardStyle.previewOn')}
+            value={device}
+            options={[
+              { value: 'phone', label: t('cardStyle.phone') },
+              { value: 'laptop', label: t('cardStyle.laptop') },
+            ]}
+            onChange={setDevice}
           />
-        }
-      />
-      <StyleEditor
-        value={draft.style}
-        onChange={(style) => change({ ...draft, style })}
-        preview={
-          <div className="flex h-full flex-col gap-3">
-            <div className="flex min-h-11 items-center justify-between gap-3">
-              <p className="min-w-0 flex-1 truncate font-display text-lg font-semibold">{name}</p>
-              <div className="w-48 shrink-0">
-                <Segmented<Device>
-                  label={t('cardStyle.previewOn')}
-                  value={device}
-                  options={[
-                    { value: 'phone', label: t('cardStyle.phone') },
-                    { value: 'laptop', label: t('cardStyle.laptop') },
-                  ]}
-                  onChange={setDevice}
-                />
-              </div>
-            </div>
-            <StylePreview look={draft} page={page} device={device} />
-          </div>
-        }
-      >
+          <p className="truncate font-display text-lg font-semibold">{name}</p>
+          <StylePreview look={draft} page={page} device={device} />
+        </div>
+        <section className="flex flex-col gap-2">
+          <h2 className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+            {t('common:style.presets')}
+          </h2>
+          <Segmented<CardPreset>
+            label={t('common:style.presets')}
+            value={presetOf({ ...draft.style, layout: 'list' }) as CardPreset | null}
+            options={CARD_PRESETS.map((preset) => ({
+              value: preset,
+              label: t(`common:style.preset.${preset}`),
+            }))}
+            onChange={(preset) =>
+              change({ ...draft, style: { ...BLOCK_PRESETS[preset], layout: draft.style.layout } })
+            }
+          />
+        </section>
+        <section className="flex flex-col gap-2">
+          <h2 className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+            {t('common:style.layout')}
+          </h2>
+          <Segmented
+            label={t('common:style.layout')}
+            value={draft.style.layout}
+            options={STYLE_LAYOUTS.map((layout) => ({
+              value: layout,
+              label: t(`cardStyle.layout.${layout}`),
+            }))}
+            onChange={(layout) => change({ ...draft, style: { ...draft.style, layout } })}
+          />
+        </section>
         <SettingsGroup title={t('cardStyle.shows')}>
           {CARD_SHOWS.map((show) => (
             <SwitchRow
@@ -160,25 +172,25 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
             />
           ))}
         </SettingsGroup>
-      </StyleEditor>
-      {/* Apply to… and Apply at the foot, always in reach: never under a long page's end. */}
-      <Docked className="pt-3">
-        <div className="flex w-full flex-wrap items-center justify-end gap-3">
-          {said ? (
-            <p role="status" className="me-auto text-sm text-muted-foreground">
-              {said}
-            </p>
-          ) : null}
+        <SettingsGroup flush>
           <ActionMenu
             label={t('cardStyle.applyToTitle')}
             align="end"
             trigger={
               <>
-                <Layers aria-hidden />
-                {t('cardStyle.applyTo')}
+                <span className="flex-1 text-start">{t('cardStyle.applyTo')}</span>
+                <span className="text-muted-foreground">
+                  {t(folder ? 'cardStyle.thisFolder' : 'cardStyle.homeOnly')}
+                </span>
+                <ChevronRight aria-hidden className="size-5 text-muted-foreground" />
               </>
             }
-            render={<Button variant="soft" size="lg" className="flex-1 sm:flex-none" />}
+            render={
+              <button
+                type="button"
+                className="flex min-h-13 w-full items-center gap-3 px-4 text-base hover:bg-muted/60"
+              />
+            }
             actions={[
               {
                 key: 'this',
@@ -201,17 +213,13 @@ function CardStyle({ folder }: { folder: ShelvedFolder | null }) {
               },
             ]}
           />
-          <Button
-            size="lg"
-            className="flex-1 sm:flex-none"
-            disabled={sameLook(draft, saved)}
-            onClick={() => apply([place])}
-          >
-            <Check aria-hidden />
-            {t('cardStyle.apply')}
-          </Button>
-        </div>
-      </Docked>
+          <ActionRow
+            title={t('cardStyle.reset')}
+            disabled={sameLook(draft, DEFAULT_CARD_LOOK)}
+            onClick={() => change(DEFAULT_CARD_LOOK)}
+          />
+        </SettingsGroup>
+      </div>
       <ConfirmDialog
         open={asking}
         onOpenChange={setAsking}
