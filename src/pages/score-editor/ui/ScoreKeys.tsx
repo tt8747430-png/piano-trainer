@@ -125,14 +125,14 @@ function ExpressionKeys({ group }: { group: ExpressionGroup }) {
 
 /**
  * Flat's Tempo tools in Measure (R32-C): Tempo, a tempo mark at the notes chosen set on its dial,
- * then the tempo words (accel., rit., a tempo…), each on the notes chosen; drawn while some are
- * (R32-B).
+ * then the tempo words (accel., rit., a tempo…), each on the notes chosen; greyed in place while
+ * none is, as Flat's.
  */
 export function TempoKeys() {
   const { t } = useTranslation('editor')
-  if (!useNotesChosen()) return null
+  const chosen = useNotesChosen()
   return (
-    <>
+    <fieldset disabled={!chosen} className="contents [&:disabled_button]:opacity-40">
       <GroupName name={t('expressions.tempo')} />
       <KeyGrid label={t('expressions.tempo')}>
         <TempoChangePopover
@@ -146,7 +146,7 @@ export function TempoKeys() {
         />
         <ExpressionKeys group="tempo" />
       </KeyGrid>
-    </>
+    </fieldset>
   )
 }
 

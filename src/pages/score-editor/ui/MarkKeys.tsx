@@ -54,7 +54,7 @@ const useMarkOn = (mark: MarkChoice): boolean =>
     return notes.length > 0 && notes.every((n) => hasMark(n.marks, mark))
   })
 
-/** One mark's key: on and off on the notes chosen; left out with none chosen (R32-B). */
+/** One mark's key: on and off on the notes chosen; greyed in place while none is, as Flat's. */
 function MarkKey({
   mark,
   label,
@@ -68,12 +68,13 @@ function MarkKey({
 }) {
   const { actions } = useScoreEditorContext()
   const on = useMarkOn(mark)
-  if (!useNotesChosen()) return null
+  const chosen = useNotesChosen()
   return (
     <PaletteKey
       label={label}
       tool={tool}
       pressed={on}
+      disabled={!chosen}
       onClick={() => actions.dispatch({ type: 'mark', mark })}
     >
       {children}

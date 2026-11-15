@@ -60,25 +60,6 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
 }
 
 /**
- * What a category says in place of its tools while it has none to show (R32-B): to choose a note.
- * In the row too, where it stands in the tools' place.
- */
-export function PaletteHint({ children }: { children: ReactNode }) {
-  const bar = usePaletteForm() === 'bar'
-  return (
-    <p
-      className={cn(
-        'text-sm text-muted-foreground',
-        // Under its title a quiet line, as Flat greys what cannot act; no box repeated down the palette.
-        bar ? 'flex min-h-11 items-center px-2' : 'text-pretty',
-      )}
-    >
-      {children}
-    </p>
-  )
-}
-
-/**
  * A group of keys as the form lays them out (the Editor board, Flat's palettes): in a section one
  * ruled table of 44px-wide cells in a hairline box, a wide key two cells; in the row, in line.
  */

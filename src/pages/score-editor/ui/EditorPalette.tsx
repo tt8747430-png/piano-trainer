@@ -29,7 +29,7 @@ import {
 } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
 import { PaletteFormContext, type PaletteForm } from './palette-form'
-import { GroupName, KeyGrid, PaletteHint, PaletteSection } from './palette-keys'
+import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
 import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
 import { SelectionStrip } from './SelectionStrip'
 import { TimePicker } from './TimePicker'
@@ -55,8 +55,9 @@ function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) =
 
 /**
  * A category's section (its canvas, Flat's): its title, then its tools as tiles; in the folded row,
- * its keys alone. Only the tools that act on what is chosen are drawn (R32-B); a category whose
- * every tool changes notes asks for one while none is chosen.
+ * its keys alone. A category whose every tool changes notes stands greyed while none is chosen, its
+ * tools in place and the reason their tooltip, as Flat's palette does (owner, 2026-11-15: "make the
+ * design exactly like the flat editor").
  */
 function Category({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
@@ -66,7 +67,19 @@ function Category({ category }: { category: PaletteCategory }) {
     <PaletteSection category={category} title={title}>
       {/* Notes titles its own sections: its input modes, then Notation. */}
       {category === 'notes' ? null : <GroupName name={title} />}
-      {waits ? <PaletteHint>{t('palette.chooseNote')}</PaletteHint> : <Tools category={category} />}
+      {waits ? (
+        <fieldset
+          disabled
+          title={t('palette.chooseNote')}
+          aria-label={t('palette.chooseNote')}
+          // `contents`: the tools keep the layout of their form, the row or the panel; greyed each.
+          className="contents [&_button]:opacity-40"
+        >
+          <Tools category={category} />
+        </fieldset>
+      ) : (
+        <Tools category={category} />
+      )}
     </PaletteSection>
   )
 }
