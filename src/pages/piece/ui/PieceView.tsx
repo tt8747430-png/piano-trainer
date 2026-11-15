@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Pencil, Play, Settings } from 'lucide-react'
+import { Pencil, Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
@@ -15,7 +15,7 @@ import { FavouriteButton } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { ButtonLink, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
+import { ButtonLink, FabLink, FloatingActions } from '@/shared/ui'
 import { useLocale } from '@/shared/i18n'
 import { PieceFirstPage } from '@/widgets/piece-cover'
 import { useSongLessons } from '../model/use-song-lessons'
@@ -26,12 +26,13 @@ import { PieceHeader } from './PieceHeader'
 import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 import { SongDetails } from './SongDetails'
+import { SongMore } from './SongMore'
 import { SongPlace } from './SongPlace'
 import { YourPractice } from './YourPractice'
 
 /**
  * A song's page (R32-C; Apple Music's album page, MuseScore's score page): its bar (Back, the title
- * with ✎, which opens the score editor, ♡, Learned, Settings); the song (its cover, a tap changing it; who wrote it; one line of facts; what is said of it); its music (its sections, the
+ * with ✎, which opens the score editor, ♡, Learned, More); the song (its cover, a tap changing it; who wrote it; one line of facts; what is said of it); its music (its sections, the
  * learner's practice, its chords and progressions); and its Details, every property a row edited
  * where it stands (Notion's). From a laptop's width the song is the left column and its music, then
  * its practice and Details, the right; a phone reads them in the same order. Play floats, the Player as it was
@@ -66,13 +67,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           </>
         }
         titleOnPage
-        settings={
-          <RoundLink
-            label={t('settings.open')}
-            icon={Settings}
-            render={<Link to="/songs/$pieceId/settings" params={{ pieceId: piece.id }} />}
-          />
-        }
+        settings={<SongMore piece={piece} />}
       />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12 xl:grid-cols-[minmax(0,32.5rem)_minmax(0,1fr)]">
         <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">

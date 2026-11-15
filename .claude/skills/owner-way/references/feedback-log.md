@@ -238,6 +238,7 @@ owner's, typos fixed.
 
 ## Song page
 
+- **Loop round 25, a song's ··· as the board's SONG_MORE:** the bar ends in More, not a gear: Edit score, Settings, Share link, Export… and, apart, Archive (or Restore), each the command its Settings page runs; Archive stays in ink, since it is undone in its toast (2026-11-15).
 - **A section's page as the Section board draws it (loop round 19):** a compact head card (`2 ×` large, then "Verse · bars 1–8" over its chords), no song tile and no progress bar; each group a settings group (its name in small capitals, its ⓘ at the heading's far end, as every settings group now); plain rows with no tiles, "Learn **G**" with the chord bold, its holds ("0 of 3") or Done in the learned green at the end; one column of 42rem on a laptop.
 
 - **The cover column as the board draws it (loop round 19):** on a laptop from 1280 wide the song page's first column is 520px (the SongLaptop board's `grid-template-columns: 520px`), its gap 48; below that it keeps 24rem, the room a 1024 screen has.
