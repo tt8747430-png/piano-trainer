@@ -446,6 +446,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 36, the Check as its board:** Close and "Check: Minor blues" in the bar, the rounds' bar with "Round 1 of 4" beside it, the tally as two chips (right in grass, wrong quiet), the prompt centred 40 in the book serif, the keys at the screen's foot and under them Show answer · Clear · Check, one row of 50-tall pills on the sand (Check the honey, Clear dimmed until a key is chosen), their words wrapping rather than cut in Russian; the floating Check and the link-buttons are gone, in a trainer's run too (one board) (2026-11-15).
 - **Loop round 33, the chosen fill is the boards' ink:** a chosen tile, row check or octave cell filled umber `#4B4038` where every board fills it `#332921` (`INK`); the one selected fill is ink by Day now, Night unchanged (2026-11-15).
 - **Loop round 26, the tools against their boards:** Metronome, Tuner and Circle of fifths match; round glass buttons in a bar stand 8 apart as the boards draw them, on every page that has them (Scales, Intervals, Chord finder, a progression); bare bar icons still touch; a picker's field (Spelled in, every key picker) wears the soft hairline, not the control line (2026-11-15).
 - **Loop round 24, the tools' parts 16 apart on a phone, as the boards' `body` (14):** the Chord finder's tones and Also read as, the Metronome's beats and its settings, the Tuner's dial and Reference pitch (they were 24, the Metronome's 52 with a reserved line); "Keep counting" is a pill over the beats while a bar is silent, taking no room (2026-11-15).

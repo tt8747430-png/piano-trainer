@@ -19,7 +19,7 @@ import {
 } from '@/features/trainer'
 import { cn, useWakeLock } from '@/shared/lib'
 import { type Midi, printedNote, type Tone } from '@/shared/lib/music'
-import { Fab, FloatingActions, RoundButton, type KeyMark } from '@/shared/ui'
+import { RoundButton, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
 import { DegreeSlots } from './DegreeSlots'
@@ -27,6 +27,12 @@ import { RoundStaff } from './RoundStaff'
 import { showsStaff } from './staff-question'
 import { useRoundShortcuts } from './use-round-shortcuts'
 import { useRoundWords } from './use-round-words'
+
+/** A pill of the round's foot, as the Check board's: 50 tall, sharing the row, 15 bold. */
+const FOOT =
+  'h-12.5 min-w-0 flex-1 rounded-full px-2 text-[0.9375rem] leading-tight font-bold text-balance whitespace-normal'
+/** The foot's quiet pills, on the sand. */
+const QUIET = 'bg-muted text-foreground hover:bg-foreground/10'
 
 /** Whether a round asked by ear, or a card, hides this side until it is answered or turned over. */
 function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
@@ -58,7 +64,7 @@ function ChordHint({ tones }: { tones: readonly Tone[] }) {
       ))}
     </ul>
   ) : (
-    <Button variant="link" className="self-start px-2" onClick={() => setShown(true)}>
+    <Button variant="link" className="self-center px-2" onClick={() => setShown(true)}>
       {t('hint')}
     </Button>
   )
@@ -196,7 +202,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       : choosesKeys(question)
         ? t('quiz:check')
         : t('quiz:next')
-  const primaryIcon = result
+  const PrimaryIcon = result
     ? trainer.run.over
       ? ListChecks
       : SkipForward
@@ -209,14 +215,14 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
   return (
     <section ref={board} className="flex min-h-0 flex-1 flex-col gap-3 landscape-phone:gap-2">
       <div className="flex items-start gap-3">
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center">
           <h2
             ref={prompt}
             tabIndex={-1}
             className={cn(
               'text-balance hyphens-auto wrap-break-word outline-none',
               building
-                ? 'text-5xl landscape-phone:text-3xl'
+                ? 'text-[2.5rem] leading-tight landscape-phone:text-3xl'
                 : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
             )}
           >
@@ -245,22 +251,6 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       {question.mode === 'key-degrees' ? (
         <DegreeSlots question={question} played={selected} answered={result !== null} />
       ) : null}
-
-      <LiveKeyboard
-        range={roundRange(asks, question)}
-        selected={
-          choosing || (pressing && question.mode === 'key-degrees') ? new Set(selected) : undefined
-        }
-        lit={lit}
-        marks={marks}
-        outlined={checked?.outlined}
-        wrong={checked?.wrong}
-        onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
-        // A round asks for a chord or its name: the keys do not go down while a round asked by ear
-        // sounds, and a round played on the keys hides their names.
-        namesKeys={!choosesKeys(question) && !pressesKeys(question)}
-        showsSound={!heard || result !== null}
-      />
 
       {/* Right or Not quite, in words and colour, then why. */}
       <div aria-live="polite" className="flex min-h-7 flex-col gap-1">
@@ -311,43 +301,63 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         )
       ) : null}
 
-      {/* The round's other actions, in plain words: Clear and Show answer. */}
-      {(choosing && selected.length > 0) || (!result && !card && !isChoice(question)) ? (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          {choosing && selected.length > 0 ? (
-            <Button variant="link" className="px-2" onClick={trainer.clear}>
-              {t('quiz:clear')}
-            </Button>
-          ) : null}
-          {!result && !card && !isChoice(question) ? (
-            <Button variant="link" className="px-2" onClick={trainer.reveal}>
-              {t('quiz:showAnswer')}
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
       {choosing && selected.length === 0 ? (
         <span id={checkHint} className="sr-only">
           {t('quiz:checkHint')}
         </span>
       ) : null}
 
-      {/* The one primary action, the same from the round's start to its Next, in the capsule; a
-          round answered by its buttons has none until it is answered, the buttons being its act, so
-          the capsule never stands over them. */}
-      {act === null && isChoice(question) ? null : (
-        <FloatingActions>
-          <Fab
-            ref={primary}
-            extended
-            label={primaryLabel}
-            icon={primaryIcon}
-            disabled={act === null}
-            aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
-            onClick={act ?? undefined}
-          />
-        </FloatingActions>
-      )}
+      {/* At the foot, as the Check board: the keys, then the round's acts in one row of pills,
+          Show answer, Clear and the one primary (Check, Reveal, Next), each a word; a round
+          answered by its buttons has no primary until it is answered, its buttons being its act. */}
+      <div className="mt-auto flex flex-col gap-3 pt-2">
+        <LiveKeyboard
+          range={roundRange(asks, question)}
+          selected={
+            choosing || (pressing && question.mode === 'key-degrees')
+              ? new Set(selected)
+              : undefined
+          }
+          lit={lit}
+          marks={marks}
+          outlined={checked?.outlined}
+          wrong={checked?.wrong}
+          onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
+          // A round asks for a chord or its name: the keys do not go down while a round asked by ear
+          // sounds, and a round played on the keys hides their names.
+          namesKeys={!choosesKeys(question) && !pressesKeys(question)}
+          showsSound={!heard || result !== null}
+        />
+        <div className="mx-auto flex w-full max-w-xl gap-2">
+          {!result && !card && !isChoice(question) ? (
+            <Button variant="ghost" className={cn(FOOT, QUIET)} onClick={trainer.reveal}>
+              {t('quiz:showAnswer')}
+            </Button>
+          ) : null}
+          {choosing ? (
+            <Button
+              variant="ghost"
+              className={cn(FOOT, QUIET)}
+              disabled={selected.length === 0}
+              onClick={trainer.clear}
+            >
+              {t('quiz:clear')}
+            </Button>
+          ) : null}
+          {act === null && isChoice(question) ? null : (
+            <Button
+              ref={primary}
+              className={FOOT}
+              disabled={act === null}
+              aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
+              onClick={act ?? undefined}
+            >
+              <PrimaryIcon aria-hidden />
+              {primaryLabel}
+            </Button>
+          )}
+        </div>
+      </div>
     </section>
   )
 }
