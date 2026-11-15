@@ -173,7 +173,6 @@ export const player = {
   // The Setup's section of what a chord chart's hands play (A35): the pattern, the position, swing.
   accompaniment: 'Accompaniment from the chords',
   fromChart: 'From the chart',
-  fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',

@@ -116,11 +116,6 @@ export function PatternCard({ children }: { children?: ReactNode }) {
   const pattern = figures.pattern === 'chart' ? null : book.require(figures.pattern)
   const name = pattern ? localText(pattern.name, locale) : t('fromChart')
   const changed = changedHands(figures)
-  const about = changed
-    ? t(`changed.${changed}`)
-    : pattern
-      ? localText(pattern.idea, locale)
-      : t('fromChartDescription')
   const left = figures.lh ? LEFT_FIGURES[figures.lh] : pattern ? LEFT_FIGURES[pattern.lh] : null
   const right = figures.rh ? RIGHT_FIGURES[figures.rh] : pattern ? RIGHT_FIGURES[pattern.rh] : null
   return (
@@ -133,7 +128,7 @@ export function PatternCard({ children }: { children?: ReactNode }) {
               data-setup-page="pattern"
               aria-label={`${t('pattern')}: ${name}${changed ? `, ${t(`changed.${changed}`).toLowerCase()}` : ''}`}
               onClick={() => openPage('pattern')}
-              className="flex min-h-18 w-full items-center gap-3 px-3 py-2 text-left transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
+              className="flex min-h-16 w-full items-center gap-3 px-3 py-2 text-left transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
             >
               <span
                 aria-hidden
@@ -149,15 +144,12 @@ export function PatternCard({ children }: { children?: ReactNode }) {
                 <span className="block truncate text-lg font-semibold">
                   {changed ? t('yourMix', { pattern: name }) : name}
                 </span>
-                <span
-                  className={cn(
-                    // Its idea in two lines at most: a phone reads it whole, never cut mid-word.
-                    'line-clamp-2 text-sm text-pretty',
-                    changed ? 'font-semibold text-foreground' : 'text-muted-foreground',
-                  )}
-                >
-                  {about}
-                </span>
+                {/* Only a mix says so under its name; what a pattern is stays in Pattern's ⓘ. */}
+                {changed ? (
+                  <span className="block text-sm font-semibold text-pretty">
+                    {t(`changed.${changed}`)}
+                  </span>
+                ) : null}
               </span>
               <OpensMark />
             </button>

@@ -160,7 +160,6 @@ export const player: LocaleResources['player'] = {
   accompaniment: 'Аккомпанемент по аккордам',
   pattern: 'Фактура',
   fromChart: 'Как в песне',
-  fromChartDescription: 'Каждый раздел и аккорд так, как указано в песне.',
   rh: 'Правая рука',
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',

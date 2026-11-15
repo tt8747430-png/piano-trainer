@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
+  LEFT_FIGURES,
   patternNeed,
   pickerShelves,
   selectFavourites,
@@ -10,10 +11,12 @@ import {
   usePatterns,
   type PatternChoice,
   type PatternFit,
+  RIGHT_FIGURES,
   useFullShelfName,
 } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
+import { FigureRoll } from './FigureRoll'
 import { ListPage } from './ListPage'
 
 /**
@@ -49,7 +52,6 @@ export function PatternPage({
                   {
                     key: 'chart',
                     label: t('fromChart'),
-                    note: t('fromChartDescription'),
                     selected: value === 'chart',
                     onChoose: () => onChoose('chart'),
                   },
@@ -64,7 +66,14 @@ export function PatternPage({
             return {
               key: `${shelf.shelf}:${pattern.ref}`,
               label: localText(pattern.name, locale),
-              note: need ? t(`needs.${need}`) : localText(pattern.idea, locale),
+              // Its two hands' bars, not a line saying what it is (an option carries no explanation).
+              ...(need ? { note: t(`needs.${need}`) } : {}),
+              picture: (
+                <span aria-hidden className="flex shrink-0 gap-1.5 text-muted-foreground">
+                  <FigureRoll hand="lh" figure={LEFT_FIGURES[pattern.lh].figure} />
+                  <FigureRoll hand="rh" figure={RIGHT_FIGURES[pattern.rh].figure} />
+                </span>
+              ),
               selected: value === pattern.ref,
               disabled: need !== null,
               onChoose: () => onChoose(pattern.ref),

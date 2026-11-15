@@ -94,6 +94,10 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Loop round 24, no explanation under a pattern:** the Accompaniment page's Pattern row is its name alone (a
+  mix still says "Left hand changed"); the Pattern list shows each pattern's two hands as bars, as the hands' lists
+  do, with a line only for why one cannot be chosen ("Needs a melody staff"); what a pattern is stays in Pattern's ⓘ
+  (2026-11-15).
 
 - **Loop round 19, the Player's Piano sheet to its board (r43, `KBVALS`):** the 3D card holds Angle (Seat · Above) and Hands on the keys, and Range follows the cards: Fit the song · 61 keys · 76 keys · 88 keys (C2–C7, E1–G7, A0–C8), each kept in the Player's own settings. The board's Labels row is not ported: what the keys carry has one home, Settings › On-screen piano. Every segmented control is the board's SEG: each segment as wide as its words, never wrapped, the room left shared (2026-11-15).
 
