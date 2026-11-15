@@ -27,7 +27,7 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
   const playback = useSettings(selectPlayback)
   const click = useSettings((state) => selectSound(state).click)
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {children}
       <SettingsGroup flush>
         <RowLink
@@ -61,7 +61,7 @@ export function PlayerPlayback({ children }: { children?: ReactNode }) {
           })
         }
       />
-    </>
+    </div>
   )
 }
 

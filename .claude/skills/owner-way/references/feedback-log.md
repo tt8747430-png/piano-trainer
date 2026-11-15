@@ -227,6 +227,8 @@ owner's, typos fixed.
 - **The Practice sheet's tempo and metronome are one group (loop 22, 2026-11-15):** under Wait · Play, one white card,
   the tempo's steps with BPM over them (no second "Tempo" label), then Metronome Off · Count-in · On, a hairline
   between, as Scale settings' rows; the steps tighten to fit a 393 phone.
+- **Player settings › Playback keeps its gap (loop 22, 2026-11-15):** the metronome's card and Speed training's stood
+  touching; the page is a column with the sheet's 16 between its cards.
 
 ## Song page
 
