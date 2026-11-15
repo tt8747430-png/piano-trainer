@@ -83,7 +83,8 @@ export function ToolPage({
         back={<BackButton variant="glass" />}
         settings={
           gear || settings || actions ? (
-            <>
+            // The board's round glass buttons stand 8 apart.
+            <span className="flex items-center gap-2">
               {gear ??
                 (settings ? (
                   <RoundLink
@@ -94,7 +95,7 @@ export function ToolPage({
                   />
                 ) : null)}
               {actions}
-            </>
+            </span>
           ) : undefined
         }
       />

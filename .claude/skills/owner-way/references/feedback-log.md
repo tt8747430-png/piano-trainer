@@ -409,6 +409,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 26, the tools against their boards:** Metronome, Tuner and Circle of fifths match; a tool's round glass buttons in the bar stand 8 apart as the board draws them (the Chord finder's gear and Keyboard touched); a picker's field (Spelled in, every key picker) wears the soft hairline, not the control line (2026-11-15).
 - **Loop round 24, the tools' parts 16 apart on a phone, as the boards' `body` (14):** the Chord finder's tones and Also read as, the Metronome's beats and its settings, the Tuner's dial and Reference pitch (they were 24, the Metronome's 52 with a reserved line); "Keep counting" is a pill over the beats while a bar is silent, taking no room (2026-11-15).
 - **Loop round 24, a library row's level as its board:** on a phone, Accompaniment's, Exercises' and Progressions' rows carry their level at the right, "Level 1" as Learn numbers the levels, and the line under the name is what it plays alone; the laptop table keeps the stage in words, as the Level filter names it (2026-11-15).
 - **Loop round 24, the Progressions library's bar as its board:** no gear; a progression's settings (names, voicing, inversion) stay on its own page's gear, one gear for them (owner, IMG_6045–6056: "remove all things … that the artifact doesnt have") (2026-11-15).
