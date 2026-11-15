@@ -524,7 +524,7 @@ export const songs = {
     patternCount_other: '{{count}} patterns',
     loading: 'Loading Explore…',
     offlineLine: 'Explore needs the internet. Your own songs are all here.',
-    offline: 'Explore is available when online.',
+    offline: 'You’re offline',
     failed: 'Explore didn’t load.',
     failedLine: 'Try again in a moment.',
     again: 'Try again',

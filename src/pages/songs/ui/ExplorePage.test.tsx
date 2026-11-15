@@ -148,7 +148,7 @@ describe('Explore', () => {
     const { router } = await renderApp('/songs?view=explore', {
       publicLibrary: createFakePublicLibrary({ online: () => false }),
     })
-    expect(await screen.findByText('Explore is available when online.')).toBeVisible()
+    expect(await screen.findByText('You’re offline')).toBeVisible()
     expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull()
     await user.click(screen.getByRole('button', { name: 'My songs' }))
     expect(router.state.location.search).not.toMatchObject({ view: 'explore' })

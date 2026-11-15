@@ -60,7 +60,7 @@ GRID = lambda lst, cols: f'<div style="display: grid; grid-template-columns: rep
 EXLIST = (EXSEARCH + IF('any', SHELF('New', 'sNew', 'seeNew') + SHELF('Most saved', 'sSaved', 'seeSaved') + SHELF('Top rated', 'sTop', 'seeTop')
                        + GROUP(('link', 'A shared song link', '', 'goShared'), bg=SHEET), 'true')
           + IF('loading', ''.join(f'<span style="height: {h}px; border-radius: 16px; background: {FILL}"></span>' for h in (28, 210, 28, 210)))
-          + EMPTY('offline', '⌁', 'Explore is available when online.', 'Explore needs the internet. Your own songs are all here.', f'<div style="display: flex; margin-top: 6px">{BTN("My songs", "", "Songs.dc.html", "primary", 48, False)}</div>')
+          + EMPTY('offline', '⌁', 'You’re offline', 'Explore needs the internet. Your own songs are all here.', f'<div style="display: flex; margin-top: 6px">{BTN("My songs", "", "Songs.dc.html", "primary", 48, False)}</div>')
           + EMPTY('failed', '!', 'Explore didn’t load.', 'Try again in a moment.', f'<div style="display: flex; margin-top: 6px">{BTN("Try again", "clearQ", "", "primary", 48, False)}</div>')
           + EMPTY('empty', '♪', 'Nothing published yet.', 'Publish one of your songs from its Settings: Publish in library.')
           + EMPTY('none', '?', '{{noneT}}', 'Try another word, or another category.', f'<div style="display: flex; margin-top: 6px">{BTN("Clear", "clearQ", "", "quiet", 44, False)}</div>'))
