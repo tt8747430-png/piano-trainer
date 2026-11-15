@@ -4,6 +4,7 @@ import { entryTitles, shownCredits, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
+import { LabelRow, labelRow, labelScale } from '@/shared/ui/score'
 import { openingScore } from '../model/incipit'
 
 /** The bars on each line of the first page: two, as a phone's page holds them legibly. */
@@ -32,6 +33,9 @@ export function PieceFirstPage({ piece }: { piece: Piece }) {
   })).filter((line) => line.measures.length > 0)
   const time = score.measures[0]?.time
   const [writer] = shownCredits(piece)
+  const scale = width * SCALE_PER_PX
+  // The chord symbols' row over each line, as the Player prints it (canvas 125: G over its bar).
+  const row = labelRow(true, scale)
   return (
     <figure
       role="img"
@@ -48,13 +52,31 @@ export function PieceFirstPage({ piece }: { piece: Piece }) {
       <div ref={box} aria-hidden className="flex flex-col">
         {width > 0
           ? lines.map((line, index) => (
-              <LazyScoreView
-                key={index}
-                score={line}
-                scale={width * SCALE_PER_PX}
-                fill={width}
-                {...(index > 0 && time ? { timeBefore: time } : {})}
-              />
+              <div key={index} style={{ paddingTop: row }}>
+                <LazyScoreView
+                  score={line}
+                  scale={scale}
+                  fill={width}
+                  {...(index > 0 && time ? { timeBefore: time } : {})}
+                >
+                  {(layout) => (
+                    <LabelRow
+                      layout={layout}
+                      labels={[]}
+                      headings={[]}
+                      chords={line.measures.flatMap((measure) =>
+                        measure.chords.map((chord) => ({
+                          startTick: chord.tick,
+                          symbol: chord.symbol,
+                        })),
+                      )}
+                      meter={line.meter}
+                      row={row}
+                      size={labelScale(scale)}
+                    />
+                  )}
+                </LazyScoreView>
+              </div>
             ))
           : null}
       </div>

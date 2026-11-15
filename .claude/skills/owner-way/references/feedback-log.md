@@ -223,6 +223,9 @@ owner's, typos fixed.
 
 ## Song page
 
+- **Loop round 16, the first page prints its chords (the Song board's cover):** each chord symbol over its bar, the
+  Player's label row at the cover's size; a song written as chords alone shows its accompaniment under them, no tune
+  invented (2026-11-15).
 - **Details titled as Chords and Sections are (loop round 16, the SongLaptop board):** one section title, 20px bold,
   over the Details card (`SettingsGroup heading`); a course's read-only Level row as tall as Genre's, a hairline between.
 - **The song page, its settings and its editing redone,** on phone and laptop: details (words, music and harmony, level,
