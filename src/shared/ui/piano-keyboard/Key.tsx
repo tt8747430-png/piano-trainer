@@ -172,7 +172,7 @@ function KeyButton({
             text={look.label.text}
             className={cn(
               'tabular-nums',
-              // A plain key's name is quiet (the boards' keys: 12, medium, soft ink); a lit or marked
+              // A plain key's name is quiet (the boards' keys: 12, medium, the key's ink at 60%, legible by Night); a lit or marked
               // key's label is bold in its own ink.
               look.label.kind === 'name' && !look.down && look.fill === 'white'
                 ? 'font-medium opacity-60'
