@@ -22,6 +22,7 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r55_editor_draft.py').re
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r56_results.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r57_yours.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r58_chordplayer.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r59_takes.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r60_scales.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r61_intervals.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r62_progression.py').read())

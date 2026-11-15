@@ -92,8 +92,17 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "Take.dc.html": {
+    "Takes.dc.html": {
       "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The takes, Review your recording, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Take.dc.html": {
+      "x": 5830,
       "y": 300,
       "w": 450,
       "h": 920,
@@ -191,8 +200,17 @@
       "is_interactive": true,
       "page": "songs"
     },
-    "TakeLaptop.dc.html": {
+    "TakesLaptop.dc.html": {
       "x": 22230,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The takes, Review your recording, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakeLaptop.dc.html": {
+      "x": 24453,
       "y": 1720,
       "w": 2143,
       "h": 1299,
@@ -1395,7 +1413,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 5750,
+      "maxW": 6280,
       "page": "songs"
     },
     "songs-laptop": {
@@ -1403,7 +1421,7 @@
       "y": 1420,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 24373,
+      "maxW": 26596,
       "page": "songs"
     },
     "player-phone": {
@@ -1514,6 +1532,7 @@
     "Section.dc.html",
     "Editor.dc.html",
     "EditorDraft.dc.html",
+    "Takes.dc.html",
     "Take.dc.html",
     "SongsLaptop.dc.html",
     "ExploreLaptop.dc.html",
@@ -1525,6 +1544,7 @@
     "SectionLaptop.dc.html",
     "EditorLaptop.dc.html",
     "EditorDraftLaptop.dc.html",
+    "TakesLaptop.dc.html",
     "TakeLaptop.dc.html",
     "Player.dc.html",
     "PlayerLoop.dc.html",

@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **The takes are drawn** (canvas 194, loop; the Takes board): the list (Play in a quiet circle, the name to its page, length and tempo, ··· with Review, Download, Delete at once with Undo), its empty state, and Review your recording as its page with Back in the header: the take as notes, the roll with its split point, Quantize as one row of five (1/4 1/8 1/16 1/4t 1/8t, never 3 + 2), Hide raw notes, Into ›, then Discard and Save to score. The editor's "Takes: 3" opens it.
 - **The recording review's Back is in the sheet's header,** as every sheet's page (loop): the "‹ Back" row in its content and `SheetBack` are gone.
 - **The recording review's Discard goes at once, with Undo** (R38, loop): the take is back on the Takes page with "Take deleted · Undo"; "Discard this recording?" is gone.
 - **A take's Delete goes at once, with Undo** (R38, loop; the board's "Take deleted · Undo brings it back"): from its row's ··· and its page, "Take deleted · Undo" puts it back in its place; the "Delete this take?" dialog is gone. Toasts now sit above every sheet and dialog (z-60), so an Undo said from the Takes sheet is seen and pressed.
