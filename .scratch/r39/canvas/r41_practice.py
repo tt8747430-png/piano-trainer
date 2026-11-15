@@ -36,7 +36,7 @@ ph = f'''{TITLEBAR('Practice', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 14px">
 {SHOWSTATES()}{H2('Theory')}{PLIST(THEORY)}{H2('Exercises')}{PLIST(EXERCISES)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
 grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
-lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span>{TOOLSBTN}{IB('Search', SEARCH.replace('18', '22'), href='#')}</header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
+lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span>{TOOLSBTN}</header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{grid(THEORY)}{H2('Exercises')}{grid(EXERCISES)}{H2('Tools')}{grid(TOOLS)}</main>'''
 TOOLSHEET = PLIST(TOOLS)
 detail('Main', 'Practice', MAIN, ph, lm, '', BSHEET('toolsOn', 'Tools', TOOLSHEET), POPOVER('toolsOn', 'Tools', PLIST([(p, t, s, v, L(h, True)) for p, t, s, v, h in TOOLS]), 'right: 40px; top: 60px', 400))
