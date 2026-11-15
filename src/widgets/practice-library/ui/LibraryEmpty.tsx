@@ -1,4 +1,4 @@
-import { Heart } from 'lucide-react'
+import { Heart, History } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
@@ -12,7 +12,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/shared/ui/primitives/empty'
-import { ALL, FAVOURITES, MINE, type PracticeLibraryView } from '../model/library-view'
+import { ALL, FAVOURITES, MINE, RECENT, type PracticeLibraryView } from '../model/library-view'
 import type { LibraryKind } from '../model/library-words'
 
 /**
@@ -57,6 +57,23 @@ export function LibraryEmpty({
       </Empty>
     )
   }
+  if (place === RECENT)
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia>
+            <TileMark icon={History} paint="sand" />
+          </EmptyMedia>
+          <EmptyTitle>{t('library.noRecent')}</EmptyTitle>
+          <EmptyDescription>{t('library.noRecentHint')}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button variant="soft" onClick={() => set({ place: ALL })}>
+            {t(`library.kinds.${kind}.all`)}
+          </Button>
+        </EmptyContent>
+      </Empty>
+    )
   if (place === FAVOURITES)
     return (
       <Empty>

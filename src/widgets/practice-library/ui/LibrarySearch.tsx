@@ -14,6 +14,7 @@ import {
 import {
   ALL,
   FAVOURITES,
+  RECENT,
   HIDDEN,
   MINE,
   PRACTICE_SORTS,
@@ -63,11 +64,20 @@ export function LibrarySearch({
     sort === 'group' ? t('practice:library.sortManual') : t(`practice:library.table.${sort}`)
   const styles = groupWord === 'style'
   const placeName =
-    view.place === FAVOURITES || view.place === MINE || view.place === HIDDEN
+    view.place === FAVOURITES ||
+    view.place === RECENT ||
+    view.place === MINE ||
+    view.place === HIDDEN
       ? names[view.place]
       : groups.find((group) => group.id === view.place)?.name
-  // A phone's place chips (canvas): All, Favourites, and Mine where the learner makes their own.
-  const placeChips = [ALL, FAVOURITES, ...(mine ? [MINE] : [])]
+  // A phone's place chips (canvas): All, Favourites, Recently used once anything was opened, and
+  // Mine where the learner makes their own.
+  const placeChips = [
+    ALL,
+    FAVOURITES,
+    ...((shown.counts[RECENT] ?? 0) > 0 ? [RECENT] : []),
+    ...(mine ? [MINE] : []),
+  ]
   const placeChip = placeChips.includes(shown.place) ? shown.place : ALL
   const stages = STAGES.filter((stage) => shown.stages.includes(stage) || stage === view.stage)
   const chips: (FilterChipOn | null)[] = [

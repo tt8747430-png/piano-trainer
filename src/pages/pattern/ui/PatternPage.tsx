@@ -28,6 +28,7 @@ import {
   toggleFavourite,
   toggleHidden,
 } from '@/features/manage-patterns'
+import { useMarkPracticeUsed } from '@/features/manage-practice-library'
 import { useShownKeys } from '@/features/play-example'
 import { Button } from '@/shared/ui/primitives/button'
 import { localText, useLocale } from '@/shared/i18n'
@@ -169,6 +170,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
+  useMarkPracticeUsed('accompaniment', `pattern:${pattern.ref}`)
   const partName = usePartName()
   const pieces = isPatternId(pattern.ref) ? piecesPlaying(pattern.ref) : []
   const tune = pattern.pattern.rh.kind === 'tune'

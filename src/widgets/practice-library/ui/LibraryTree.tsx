@@ -1,10 +1,20 @@
-import { BookOpen, EyeOff, Heart, List, Music, UserRound, type LucideIcon } from 'lucide-react'
+import {
+  BookOpen,
+  EyeOff,
+  Heart,
+  History,
+  List,
+  Music,
+  UserRound,
+  type LucideIcon,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { TreeHeading, TreeItem, TreeList } from '@/shared/ui'
 import {
   ALL,
   FAVOURITES,
+  RECENT,
   HIDDEN,
   MINE,
   type LibraryGroup,
@@ -56,6 +66,7 @@ export function LibraryTree({
       <TreeList>
         {item(ALL, t('practice:library.all'), Music)}
         {item(FAVOURITES, t('common:library.favourites'), Heart)}
+        {(counts[RECENT] ?? 0) > 0 ? item(RECENT, t('practice:library.recent'), History) : null}
       </TreeList>
       <TreeHeading>{t(`practice:library.${groupWord}s`)}</TreeHeading>
       <TreeList>

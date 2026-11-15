@@ -21,7 +21,7 @@ import {
 } from './types'
 
 export const PRACTICE_LIBRARY_STORAGE_KEY = 'pt-practice-library'
-export const PRACTICE_LIBRARY_VERSION = 2
+export const PRACTICE_LIBRARY_VERSION = 3
 
 /**
  * What the learner keeps in Practice's libraries (R30-4, R32): favourites of each kind, their own
@@ -38,7 +38,12 @@ export interface PracticeLibraryState {
   readonly arrangements: Readonly<Record<ArrangedLibrary, Arrangement>>
   /** The next folder's number, across the libraries: a deleted folder's is never reused. */
   readonly nextFolder: number
+  /** Each library's rows the learner opened last, newest first: its Recently used. */
+  readonly recent: Readonly<Record<ArrangedLibrary, readonly string[]>>
 }
+
+/** How many rows a library's Recently used keeps. */
+export const RECENT_MAX = 8
 
 export type PracticeLibraryStore = StoreApi<PracticeLibraryState>
 
@@ -52,6 +57,7 @@ const INITIAL: PracticeLibraryState = {
     progressions: EMPTY_ARRANGEMENT,
   },
   nextFolder: 1,
+  recent: { exercises: [], accompaniment: [], progressions: [] },
 }
 
 export const createPracticeLibraryStore = (saving: SavingOptions = {}): PracticeLibraryStore =>
@@ -117,7 +123,14 @@ function sanitize(persisted: unknown): PracticeLibraryState {
     typeof saved.nextFolder === 'number' && Number.isSafeInteger(saved.nextFolder)
       ? saved.nextFolder
       : 1
+  const recent = isRecord(saved.recent) ? saved.recent : {}
+  const recentOf = (library: ArrangedLibrary): string[] => ids(recent[library]).slice(0, RECENT_MAX)
   return {
+    recent: {
+      exercises: recentOf('exercises'),
+      accompaniment: recentOf('accompaniment'),
+      progressions: recentOf('progressions'),
+    },
     favourites: { exercises: listOf('exercises'), progressions: listOf('progressions') },
     progressions,
     nextOwn: Math.max(next, past, 1),

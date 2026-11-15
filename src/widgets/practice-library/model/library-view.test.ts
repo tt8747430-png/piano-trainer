@@ -28,7 +28,7 @@ const GROUPS = [
   { id: 'jonny', name: 'Piano With Jonny' },
 ]
 const DEFAULTS: PracticeLibraryView = { q: '', sort: 'group', place: 'all', stage: 'any' }
-const NAMES = { favourites: 'Favourites', mine: 'Mine', hidden: 'Hidden' }
+const NAMES = { recent: 'Recently used', favourites: 'Favourites', mine: 'Mine', hidden: 'Hidden' }
 const shown = (view: Partial<PracticeLibraryView>) =>
   libraryShown(
     ITEMS,

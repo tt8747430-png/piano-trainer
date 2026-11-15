@@ -1,3 +1,4 @@
+import { selectRecent, usePracticeLibrary } from '@/entities/practice-library'
 import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
@@ -6,6 +7,7 @@ import { FilteredNotice, FoldSection, GROUPED_LIST, LIBRARY_PANES } from '@/shar
 import { Button } from '@/shared/ui/primitives/button'
 import {
   FAVOURITES,
+  RECENT,
   HIDDEN,
   libraryShown,
   MINE,
@@ -97,7 +99,9 @@ export function PracticeLibrary({
   const wide = useMediaQuery(LIBRARY_PANES)
   const set = useSetSearch<PracticeLibraryView>()
   const q = useDeferredValue(view.q)
+  const recent = usePracticeLibrary(selectRecent(kind))
   const names = {
+    [RECENT]: t('practice:library.recent'),
     [FAVOURITES]: t('common:library.favourites'),
     [MINE]: t('practice:library.mine'),
     [HIDDEN]: t('practice:library.hidden'),
@@ -129,7 +133,7 @@ export function PracticeLibrary({
   const shown = libraryShown(
     arranged.items,
     { ...view, q },
-    { groups: arranged.groups, mine: mine !== undefined, compare: collator.compare, names },
+    { groups: arranged.groups, mine: mine !== undefined, compare: collator.compare, names, recent },
   )
   const narrowed = shown.filtering || shown.place !== 'all'
   const body = (

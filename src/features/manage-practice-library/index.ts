@@ -1,3 +1,5 @@
+export { markPracticeUsed } from './mark-used'
+export { useMarkPracticeUsed } from './model/use-mark-used'
 export { togglePracticeFavourite } from './toggle-favourite'
 export {
   deleteProgression,

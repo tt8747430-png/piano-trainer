@@ -1,4 +1,4 @@
-import { PracticeFavouriteButton } from '@/features/manage-practice-library'
+import { PracticeFavouriteButton, useMarkPracticeUsed } from '@/features/manage-practice-library'
 import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { Volume2 } from 'lucide-react'
 import { useMemo } from 'react'
@@ -63,6 +63,7 @@ export function ExercisePage() {
 function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation(['practice', 'player'])
   const locale = useLocale()
+  useMarkPracticeUsed('exercises', exercise.id)
   const search = useSearch({ from: '/shell/practice/exercises/$exerciseId' })
   const setSearch = useSetSearch<ExercisePageSearch>()
   const { root, tonality, octaves, hanon, rhythm, order, target } = search

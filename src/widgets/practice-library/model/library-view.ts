@@ -12,6 +12,10 @@ export type PracticeSort = (typeof PRACTICE_SORTS)[number]
 /** The places of a library's tree that every library has, beside its books (or styles). */
 export const ALL = 'all'
 export const FAVOURITES = 'favourites'
+/** The rows the learner opened last, newest first. */
+export const RECENT = 'recent'
+/** How many of them lead All on a phone. */
+const RECENT_LEADING = 3
 /** What the learner made (own patterns, own progressions). */
 export const MINE = 'mine'
 /** Accompaniment's built-in patterns the learner hid, while there are some. */
@@ -117,7 +121,8 @@ export const placesOf = (groups: readonly LibraryGroup[], mine: boolean): string
 /**
  * A practice library as its URL shows it (R30-4): the place's rows (All, Favourites, a book, Mine)
  * narrowed by the search and the level, in the sort's order; on a phone, the runs they fall in, each
- * book's in its order with Mine and Hidden last, and at All with nothing narrowing, Favourites first.
+ * book's in its order with Mine and Hidden last, and at All with nothing narrowing, the last three
+ * opened (Recently used) and Favourites first.
  */
 export function libraryShown(
   items: readonly LibraryItem[],
@@ -127,22 +132,31 @@ export function libraryShown(
     mine,
     compare,
     names,
+    recent = [],
   }: {
     groups: readonly LibraryGroup[]
     mine: boolean
     compare: (a: string, b: string) => number
-    /** The runs' names: Favourites, Mine, Hidden. */
-    names: Readonly<Record<typeof FAVOURITES | typeof MINE | typeof HIDDEN, string>>
+    /** The runs' names: Recently used, Favourites, Mine, Hidden. */
+    names: Readonly<Record<typeof RECENT | typeof FAVOURITES | typeof MINE | typeof HIDDEN, string>>
+    /** The rows opened last, newest first. */
+    recent?: readonly string[]
   },
 ): LibraryShown {
   const places = placesOf(groups, mine)
-  const place = view.place === FAVOURITES || places.includes(view.place) ? view.place : ALL
+  const place =
+    view.place === FAVOURITES || view.place === RECENT || places.includes(view.place)
+      ? view.place
+      : ALL
+  const used = (item: LibraryItem) => item.group !== HIDDEN && recent.includes(item.id)
   const inPlace = (item: LibraryItem) =>
     place === ALL
       ? item.group !== HIDDEN
       : place === FAVOURITES
         ? item.favourite
-        : item.group === place
+        : place === RECENT
+          ? used(item)
+          : item.group === place
   const scoped = items.filter(inPlace)
   const keeps = (item: LibraryItem) =>
     (view.stage === 'any' || item.stage === view.stage) &&
@@ -159,11 +173,15 @@ export function libraryShown(
       )
     return list.toSorted((a, b) => groupAt(a) - groupAt(b))
   }
-  const shown = sorted(scoped.filter(keeps))
+  const byRecent = (list: readonly LibraryItem[]) =>
+    list.toSorted((a, b) => recent.indexOf(a.id) - recent.indexOf(b.id))
+  const kept = scoped.filter(keeps)
+  const shown = place === RECENT && view.sort === 'group' ? byRecent(kept) : sorted(kept)
   const filtering = view.q.trim() !== '' || view.stage !== 'any'
   const counts: Record<string, number> = {
     [ALL]: items.filter((item) => item.group !== HIDDEN).length,
     [FAVOURITES]: items.filter((item) => item.favourite).length,
+    [RECENT]: items.filter(used).length,
   }
   for (const item of items) counts[item.group] = (counts[item.group] ?? 0) + 1
   const sectionOf = (item: LibraryItem): LibrarySection =>
@@ -190,14 +208,22 @@ export function libraryShown(
     )
     .map(({ section, items: rows }) => ({ ...section, items: rows }))
   const favourites = shown.filter((item) => item.favourite)
+  const lately = byRecent(shown.filter(used)).slice(0, RECENT_LEADING)
+  const leading: ShownSection[] =
+    place === ALL && !filtering
+      ? [
+          ...(lately.length > 0 ? [{ id: RECENT, name: names[RECENT], items: lately }] : []),
+          ...(favourites.length > 0
+            ? [{ id: FAVOURITES, name: names[FAVOURITES], items: favourites }]
+            : []),
+        ]
+      : []
   const sections: ShownSection[] =
-    place === FAVOURITES
+    place === FAVOURITES || place === RECENT
       ? shown.length > 0
-        ? [{ id: FAVOURITES, name: names[FAVOURITES], items: shown }]
+        ? [{ id: place, name: names[place], items: shown }]
         : []
-      : place === ALL && !filtering && favourites.length > 0
-        ? [{ id: FAVOURITES, name: names[FAVOURITES], items: favourites }, ...byBook]
-        : byBook
+      : [...leading, ...byBook]
   const stages = [...new Set(scoped.flatMap((item) => (item.stage ? [item.stage] : [])))].toSorted(
     (a, b) => stageRank(a) - stageRank(b),
   )

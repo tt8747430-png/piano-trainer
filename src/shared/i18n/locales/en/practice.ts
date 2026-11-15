@@ -754,6 +754,9 @@ export const practice = {
     books: 'Books',
     styles: 'Styles',
     mine: 'Mine',
+    recent: 'Recently used',
+    noRecent: 'Nothing opened yet',
+    noRecentHint: 'What you open here comes first, newest at the top.',
     hidden: 'Hidden',
     searchHint: 'Search',
     // An accompaniment's hands, each its figure.

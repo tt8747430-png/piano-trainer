@@ -29,3 +29,9 @@ export const selectArrangement =
   (library: ArrangedLibrary) =>
   (state: PracticeLibraryState): Arrangement =>
     state.arrangements[library]
+
+/** A library's rows the learner opened last, newest first: its Recently used. */
+export const selectRecent =
+  (library: ArrangedLibrary) =>
+  (state: PracticeLibraryState): readonly string[] =>
+    state.recent[library]

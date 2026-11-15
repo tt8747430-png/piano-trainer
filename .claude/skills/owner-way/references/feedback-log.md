@@ -756,6 +756,10 @@ owner's, typos fixed.
 - **A library row's level in words (loop, 2026-11-15, the FingerTechnique board):** "Intermediate", as the Level filter
   names it, never pips and a number; on a phone it leads the row's line ("Advanced · Eight notes…") so a long Russian
   title keeps its width, in the laptop table its own column.
+- **Recently used in the Practice libraries (loop, 2026-11-15, the Accompaniment and FingerTechnique boards):** the
+  last eight rows opened, newest first, kept per library (`pt-practice-library` v3); a chip after Favourites and a
+  place in the laptop's tree once anything was opened; at All the last three lead the page above Favourites. An
+  exercise's, a pattern's or a progression's page marks it as it opens.
 
 ## Sounds
 
