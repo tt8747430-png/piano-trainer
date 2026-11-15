@@ -11,7 +11,7 @@ import { dockTap } from '../model/tap-on-screen'
  * the editor's palette) and the transport the keys, no band between them (R32).
  */
 export const SCORE_SCREEN =
-  'player-screen min-h-0 flex-1 gap-x-3 pt-3 pb-2 max-sm:gap-x-2 landscape-phone:gap-x-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
+  'player-screen min-h-0 flex-1 gap-x-3 py-2 max-sm:gap-x-2 landscape-phone:gap-x-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
 
 /** Whether an event happened on the music (`data-area="sheet"`). */
 const onSheet = (event: SyntheticEvent) =>

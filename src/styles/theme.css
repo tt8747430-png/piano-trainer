@@ -929,7 +929,13 @@
      row kept empty. */
   --float-room: 5.5rem;
   /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
-  --bar-above: calc(--spacing(3) + max(--spacing(4), env(safe-area-inset-top)));
+  --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
+  /* The Player's band (its board): 12 over its buttons; the editor's glass buttons stand 8 under the
+     status bar, as theirs. */
+  &:has(.score-bar:not([data-floating])) {
+    padding-top: --spacing(3);
+    --bar-above: calc(--spacing(3) + max(--spacing(4), env(safe-area-inset-top)));
+  }
   & > [data-area='bar'] {
     grid-area: bar;
   }
