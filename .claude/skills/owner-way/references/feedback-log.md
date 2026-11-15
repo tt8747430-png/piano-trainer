@@ -113,6 +113,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 29, the laptop's views pill as the PlayerDesk board:** a 44 glass pill padded 4 holding four 112 × 34 segments at 14, 600 (Sheet · Diagrams · Grid · Lyrics), the shown filled in ink; the one pill (`ViewPill`) takes a size, the editor's Play · Edit keeping its 44 segments.
 - **Loop round 25, the Practice sheet's Tempo heading (PlayerApp):** the tempo and the metronome sit under "Tempo", the group's caps label, as the board heads them; the tempo face stays the Metronome's one dial (2026-11-15).
 - **Loop round 25, radio cards as the boards' (PlayerApp's mode tiles, CARDV):** the chosen card in a honey wash ringed 2px in the deep honey, its dot honey with a white tick, the others white with a ringed dot; Wait · Play stand side by side, 14 round with 44 by 40 tiles, and cards holding rows (the 3D piano) stack, one `RadioCards` (2026-11-15).
 - **Loop round 25, the Settings' head as the board's (PlayerApp):** the song's tile with its two notes, its title 17 bold over "G major · 3/4 · 80 BPM" in 13, Share link and ··· white circles lifted a little, Edit score 44 tall with 12 corners in 15 semibold (2026-11-15).

@@ -39,6 +39,7 @@ export function PickView({
   const settings = useSettingsStoreApi()
   return (
     <ViewPill
+      size="views"
       label={t('views.label')}
       value={shown}
       views={PICKED.map(({ view, icon }) => {
