@@ -14,7 +14,7 @@ import {
   walkChords,
 } from '@/shared/lib/music'
 import { walkSounds } from '@/shared/lib/schedule'
-import { InversionChoice, Labelled, Segmented } from '@/shared/ui'
+import { GroupField, GroupRows, GroupSegmented, InversionChoice } from '@/shared/ui'
 import { chordKeyPlays, chordMarks, chordsHolding } from '../model/scale-keys'
 import type { ScaleView } from '../model/scale-view'
 import { useHeardNote } from '../model/use-heard-note'
@@ -87,52 +87,48 @@ export function ChordsView({
         />
       }
       fields={
-        <>
-          <Labelled label={t('music:chordSize.label')}>
-            <Segmented
-              label={t('music:chordSize.label')}
-              value={notes}
-              options={CHORD_NOTES.map((value) => ({
-                value,
-                label: t(`music:chordSizeShort.${STACK_SIZES[value]}`),
-                title: t(`music:chordSize.${STACK_SIZES[value]}`),
-              }))}
-              onChange={(next) =>
-                onChange({ chords: next, inversion: fitInversion(inversion, next) })
-              }
-            />
-          </Labelled>
-          <Labelled label={t('music:inversion.label')}>
+        <GroupRows label={t('practice:scales.settings')}>
+          <GroupSegmented
+            label={t('music:chordSize.label')}
+            value={notes}
+            options={CHORD_NOTES.map((value) => ({
+              value,
+              label: t(`music:chordSizeShort.${STACK_SIZES[value]}`),
+              title: t(`music:chordSize.${STACK_SIZES[value]}`),
+            }))}
+            onChange={(next) =>
+              onChange({ chords: next, inversion: fitInversion(inversion, next) })
+            }
+          />
+          <GroupField label={t('music:inversion.label')}>
             <InversionChoice
               notes={notes}
               value={inversion}
               onChange={(next) => onChange({ inversion: next })}
             />
-          </Labelled>
-          <Labelled label={t('practice:scales.keysPlay.label')}>
-            <Segmented
-              label={t('practice:scales.keysPlay.label')}
-              value={keysPlay}
-              options={KEYS_PLAY.map((value) => ({
-                value,
-                label: t(`practice:scales.keysPlay.${value}`),
-              }))}
-              onChange={(next) => onChange({ keysPlay: next })}
-            />
-          </Labelled>
-          <Labelled label={t('practice:scales.walk.played')}>
-            <Segmented
-              label={t('practice:scales.walk.played')}
-              value={scale.arpeggio ? 'arpeggio' : 'block'}
-              options={[
-                { value: 'block', label: t('practice:scales.walk.block') },
-                { value: 'arpeggio', label: t('practice:arpeggio') },
-              ]}
-              onChange={(played) => onChange({ arpeggio: played === 'arpeggio' })}
-            />
-          </Labelled>
-          <TempoSlider tempo={scale.tempo} onChange={(tempo) => onChange({ tempo })} />
-        </>
+          </GroupField>
+          <GroupSegmented
+            label={t('practice:scales.keysPlay.label')}
+            value={keysPlay}
+            options={KEYS_PLAY.map((value) => ({
+              value,
+              label: t(`practice:scales.keysPlay.${value}`),
+            }))}
+            onChange={(next) => onChange({ keysPlay: next })}
+          />
+          <GroupSegmented
+            label={t('practice:scales.walk.played')}
+            value={scale.arpeggio ? 'arpeggio' : 'block'}
+            options={[
+              { value: 'block', label: t('practice:scales.walk.block') },
+              { value: 'arpeggio', label: t('practice:arpeggio') },
+            ]}
+            onChange={(played) => onChange({ arpeggio: played === 'arpeggio' })}
+          />
+          <GroupField>
+            <TempoSlider tempo={scale.tempo} onChange={(tempo) => onChange({ tempo })} />
+          </GroupField>
+        </GroupRows>
       }
     >
       <KeyChords

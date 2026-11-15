@@ -74,6 +74,7 @@ export {
   ChoiceList,
   GroupAction,
   GroupChips,
+  GroupField,
   GroupLink,
   GroupRow,
   GroupRows,

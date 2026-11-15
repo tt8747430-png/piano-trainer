@@ -60,48 +60,68 @@ export function GroupRow({
 }
 
 /**
- * A row of two or three choices, as the canvas's `GROUP` seg rows draw it (canvas 127): its name in
- * the body's size over the segmented control, across the group's width. A screen reader hears the
- * name once, from the control.
+ * A row whose control stands under its name, across the group's width, as the canvas's `GROUP` seg
+ * rows draw it (canvas 127): a segmented choice, a slider that names itself (no `label` then).
  */
+export function GroupField({
+  label,
+  setting,
+  children,
+}: {
+  /** Its name over the control, hidden from a screen reader where the control says it. */
+  label?: string
+  setting?: string
+  children: ReactNode
+}) {
+  return (
+    <div data-setting={setting} className="flex flex-col gap-2 py-3 ps-4 pe-3">
+      {label ? (
+        <span aria-hidden className="text-base">
+          {label}
+        </span>
+      ) : null}
+      {children}
+    </div>
+  )
+}
+
+/** A row of two or three choices: its name over the segmented control, heard once, from the control. */
 export function GroupSegmented<V extends OptionValue>({
   setting,
   ...props
 }: ComponentProps<typeof Segmented<V>> & { setting?: string }) {
   return (
-    <div data-setting={setting} className="flex flex-col gap-2 py-3 ps-4 pe-3">
-      <span aria-hidden className="text-base">
-        {props.label}
-      </span>
+    <GroupField label={props.label} setting={setting}>
       <Segmented {...props} />
-    </div>
+    </GroupField>
   )
 }
 
 /**
- * A row that opens its choice (a sheet of options, a page): its name, its value in Soft Ink, and a
- * chevron.
+ * A row that opens its choice (a sheet of options, a page, a picker's list): its name, its value in
+ * Soft Ink, and a chevron. Given as a picker's `trigger`, the picker opens it.
  */
 export function GroupLink({
   label,
   value,
   setting,
-  onClick,
+  className,
+  ...button
 }: {
   label: string
   value?: string | undefined
   setting?: string
-  onClick: () => void
-}) {
+} & Omit<ComponentProps<'button'>, 'value' | 'children'>) {
   return (
     <button
       type="button"
       data-setting={setting}
       aria-haspopup="dialog"
-      onClick={onClick}
+      {...button}
       className={cn(
         ROW,
         'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+        className,
       )}
     >
       <span className="shrink-0">{label}</span>

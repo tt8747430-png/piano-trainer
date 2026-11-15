@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScaleStaff, useSettings } from '@/entities/settings'
-import { RowLink, SettingsGroup, Sheet, SheetContent } from '@/shared/ui'
+import { GroupLink, GroupRows, Sheet, SheetContent } from '@/shared/ui'
 import { useScaleSettingsSheet } from '../model/settings-sheet'
 
 /**
@@ -32,6 +32,7 @@ export function ScaleLayout({
 }) {
   const { t } = useTranslation('practice')
   const sheet = useScaleSettingsSheet()
+  const navigate = useNavigate()
   const staff = useSettings(selectScaleStaff)
   const written = (['tonic', 'tetrachords'] as const).filter((layer) => staff[layer])
   return (
@@ -47,19 +48,22 @@ export function ScaleLayout({
       {bar}
       <Sheet open={sheet.open} onOpenChange={sheet.onOpenChange}>
         <SheetContent title={t('scales.settings')}>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             {fields}
-            <SettingsGroup flush>
-              <RowLink
-                title={t('scaleStaff.group')}
+            <GroupRows>
+              <GroupLink
+                label={t('scaleStaff.group')}
+                aria-haspopup={undefined}
                 value={
                   written.length
                     ? written.map((layer) => t(`scaleStaff.${layer}`)).join(', ')
                     : t('scaleStaff.none')
                 }
-                render={<Link to="/settings/scales" search={{ from: 'scales' }} />}
+                onClick={() =>
+                  void navigate({ to: '/settings/scales', search: { from: 'scales' } })
+                }
               />
-            </SettingsGroup>
+            </GroupRows>
           </div>
         </SheetContent>
       </Sheet>

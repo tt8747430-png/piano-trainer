@@ -811,6 +811,9 @@ owner's, typos fixed.
   progression, a pattern) a chord's keys wear their paint and the note's name alone (`nameMark`), the degree left to
   the tiles and chips; and a page's keys grow to every key they light, never shrinking, so a chord found from A3
   keeps its root on the keyboard.
+- **Scale settings is the board's one group of rows (loop 22, 2026-11-15, the Scales board's `SC_SET`):**
+  Fingering a segmented row, then Start on, Compare with and Rhythm as rows with their value and a chevron, each
+  opening its list; On the staff in its own group below. The labelled boxes it had were the old form, gone.
 
 ## Sounds
 

@@ -16,15 +16,15 @@ import { PRACTICE_RHYTHM_IDS, RUN_DIRECTIONS, runSounds } from '@/shared/lib/sch
 import { usePlayback } from '@/shared/lib/services'
 import {
   ActionMenu,
-  Dropdown,
   FloatingActions,
   FloatingPiece,
   FloatingPieces,
   FloatingPlaySplit,
+  GroupLink,
+  GroupRows,
+  GroupSegmented,
   HandsPicture,
-  Labelled,
   MenuPicker,
-  Segmented,
   Sheet,
   SheetContent,
   Stepper,
@@ -109,6 +109,8 @@ export function RunView({
       compared,
     )
   }, [music, placed, down, hands, layers, t, root, kind, compare])
+  const startTone = tones[start - 1] ?? tones[0]
+  const startName = startTone ? printedNote(startTone.note) : ''
   const playback = usePlayback<'up-down'>()
   const play = () => playback.toggle('up-down', () => runSounds(run.music, scale.tempo))
   usePlayKey(play)
@@ -138,65 +140,65 @@ export function RunView({
         </section>
       }
       fields={
-        <>
+        <GroupRows label={t('practice:scales.settings')}>
           {run.fingerings.length > 1 ? (
-            <Labelled label={t('practice:scales.fingering.label')}>
-              <Segmented
-                label={t('practice:scales.fingering.label')}
-                value={run.fingering}
-                options={run.fingerings.map((value) => ({
-                  value,
-                  label: t(`practice:scales.fingering.${value}`),
-                }))}
-                onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
-              />
-            </Labelled>
+            <GroupSegmented
+              label={t('practice:scales.fingering.label')}
+              value={run.fingering}
+              options={run.fingerings.map((value) => ({
+                value,
+                label: t(`practice:scales.fingering.${value}`),
+              }))}
+              onChange={(value) => onChange({ fingering: value === run.own ? undefined : value })}
+            />
           ) : null}
-          {/* The chromatic scale from another note is the chromatic scale on that root. A menu of the
-              scale's notes: seven or eight outgrow a narrow phone's row. */}
+          {/* The chromatic scale from another note is the chromatic scale on that root. */}
           {tones.length <= MOST_STARTS ? (
-            <Labelled label={t('practice:scales.startOn')}>
-              <MenuPicker
-                bare
-                label={t('practice:scales.startOn')}
-                value={start}
-                options={tones.map((tone, i) => ({ value: i + 1, label: printedNote(tone.note) }))}
-                onChange={(next) => onChange({ start: next })}
-              />
-            </Labelled>
+            <MenuPicker
+              label={t('practice:scales.startOn')}
+              value={start}
+              options={tones.map((tone, i) => ({ value: i + 1, label: printedNote(tone.note) }))}
+              onChange={(next) => onChange({ start: next })}
+              trigger={<GroupLink label={t('practice:scales.startOn')} value={startName} />}
+            />
           ) : null}
           {/* Compare with the major or minor on the same tonic (A43): its other notes over the run. */}
           {tones.length === 7 ? (
-            <Labelled label={t('practice:scales.compare.label')}>
-              <MenuPicker
-                bare
-                label={t('practice:scales.compare.label')}
-                value={compare ?? 'none'}
-                options={[
-                  { value: 'none' as const, label: t('practice:scales.compare.none') },
-                  ...COMPARED_SCALES.filter((other) => other !== kind).map((other) => ({
-                    value: other,
-                    label: scaleName(tonic, other),
-                  })),
-                ]}
-                onChange={(next) => onChange({ compare: next === 'none' ? undefined : next })}
-              />
-            </Labelled>
-          ) : null}
-          <Labelled label={t('practice:scales.rhythmLabel')}>
-            <Dropdown
-              bare
-              label={t('practice:scales.rhythmLabel')}
-              value={rhythm}
-              options={PRACTICE_RHYTHM_IDS.map((r) => ({
-                value: r,
-                label: t(`practice:scales.rhythm.${r}`),
-              }))}
-              onChange={(next) => onChange({ rhythm: next })}
-              className="w-full"
+            <MenuPicker
+              label={t('practice:scales.compare.label')}
+              value={compare ?? 'none'}
+              options={[
+                { value: 'none' as const, label: t('practice:scales.compare.none') },
+                ...COMPARED_SCALES.filter((other) => other !== kind).map((other) => ({
+                  value: other,
+                  label: scaleName(tonic, other),
+                })),
+              ]}
+              onChange={(next) => onChange({ compare: next === 'none' ? undefined : next })}
+              trigger={
+                <GroupLink
+                  label={t('practice:scales.compare.label')}
+                  value={compare ? scaleName(tonic, compare) : t('practice:scales.compare.none')}
+                />
+              }
             />
-          </Labelled>
-        </>
+          ) : null}
+          <MenuPicker
+            label={t('practice:scales.rhythmLabel')}
+            value={rhythm}
+            options={PRACTICE_RHYTHM_IDS.map((r) => ({
+              value: r,
+              label: t(`practice:scales.rhythm.${r}`),
+            }))}
+            onChange={(next) => onChange({ rhythm: next })}
+            trigger={
+              <GroupLink
+                label={t('practice:scales.rhythmLabel')}
+                value={t(`practice:scales.rhythm.${rhythm}`)}
+              />
+            }
+          />
+        </GroupRows>
       }
       bar={
         <FloatingActions>
