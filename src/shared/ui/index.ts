@@ -34,6 +34,7 @@ export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
 export { ScaleIcon } from './icons/ScaleIcon'
 export { KeysIcon } from './icons/KeysIcon'
+export { MetronomeIcon } from './icons/MetronomeIcon'
 export { SelectionBarIcon } from './icons/SelectionBarIcon'
 export { PAGE_PICTURES, type PagePicture } from './PagePictures'
 export {

@@ -1,9 +1,8 @@
-import { LayoutGrid } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMetronome } from '@/features/metronome'
 import { cn, useMediaQuery } from '@/shared/lib'
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { MetronomeIcon, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { ToolsPanel } from './ToolsPanel'
@@ -16,7 +15,8 @@ const POPOVER_WIDTH = '(min-width: 48rem)'
  * player's. It opens the Tools in place over the page, which stays as it was: a popover under the
  * button on a laptop, a sheet on a phone (`ToolsPanel`). The Metronome runs on with them closed,
  * until the page is left. Worded (Practice's bar, where it is the bar's one act) it says "Tools";
- * elsewhere a phone's bar keeps its room for the title with the icon alone, worded from 40rem.
+ * elsewhere a phone's bar keeps its room for the title with the icon alone (the boards' metronome
+ * glyph, the Metronome being the first of the Tools), worded from 40rem.
  */
 export function ToolsButton({ worded = false }: { worded?: boolean }) {
   const { t } = useTranslation('practice')
@@ -39,7 +39,7 @@ export function ToolsButton({ worded = false }: { worded?: boolean }) {
   )
   const face = (
     <>
-      <LayoutGrid aria-hidden className={cn(worded ? 'hidden' : 'sm:hidden')} />
+      <MetronomeIcon aria-hidden className={cn(worded ? 'hidden' : 'sm:hidden')} />
       <span className={cn(!worded && 'max-sm:sr-only')}>{label}</span>
     </>
   )

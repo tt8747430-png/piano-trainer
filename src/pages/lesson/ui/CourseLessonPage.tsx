@@ -56,11 +56,13 @@ export function CourseLessonPage() {
       settings={<Link to="/courses/$courseId/$lessonId/settings" params={{ courseId, lessonId }} />}
       back={<BackButton />}
       after={(place.lesson.after ?? []).flatMap((id) => {
-        const before = place.course.lessons.find((each) => each.id === id)
+        const at = place.course.lessons.findIndex((each) => each.id === id)
+        const before = place.course.lessons[at]
         return before
           ? [
               {
                 title: localText(before.title, locale),
+                n: at + 1,
                 link: {
                   to: '/courses/$courseId/$lessonId',
                   params: { courseId, lessonId: id },

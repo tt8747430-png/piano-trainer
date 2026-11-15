@@ -1,7 +1,7 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { PageKeyboardTools } from '@/features/live-keyboard'
 import { ArrowLeft, ArrowRight, Settings } from 'lucide-react'
-import { Fragment, type ReactElement, type ReactNode } from 'react'
+import { type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import type { StepId } from '@/entities/step'
@@ -51,7 +51,12 @@ export function LessonLayout({
   step: StepId
   place: ReactNode
   /** The lessons to read before it, each a link by its title. */
-  after?: readonly { readonly title: string; readonly link: LinkProps }[]
+  after?: readonly {
+    readonly title: string
+    /** Its number along the level or course, where it shares this lesson's. */
+    readonly n?: number | undefined
+    readonly link: LinkProps
+  }[]
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
@@ -112,18 +117,18 @@ export function LessonLayout({
               </p>
             ) : null}
             {after.length > 0 ? (
-              <p className="text-[0.875rem] text-muted-foreground print:hidden">
-                {t('afterLinks')}{' '}
-                {after.map(({ title, link }, i) => (
-                  <Fragment key={title}>
-                    {i > 0 ? ', ' : null}
-                    <Link
-                      {...link}
-                      className="inline-flex min-h-11 items-center font-semibold text-link hover:underline"
-                    >
-                      {title}
-                    </Link>
-                  </Fragment>
+              // The lessons to read first (the board's "After: 6 · …"): each its own 44px link, a row of
+              // them wrapping whole, never a title broken over two lines with a gap between.
+              <p className="flex flex-wrap items-center gap-x-3 text-[0.875rem] text-muted-foreground print:hidden">
+                <span>{t('afterLinks')}</span>
+                {after.map(({ title, n, link }) => (
+                  <Link
+                    key={title}
+                    {...link}
+                    className="inline-flex min-h-11 items-center font-semibold text-link underline-offset-4 hover:underline"
+                  >
+                    {n === undefined ? title : `${n} · ${title}`}
+                  </Link>
                 ))}
               </p>
             ) : null}

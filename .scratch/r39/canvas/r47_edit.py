@@ -129,7 +129,7 @@ lpops = (POPOVER('insOn', 'Insert', INSBODY, 'right: 300px; top: 72px', 420) + P
          + POPOVER('pubOn', 'Publish', PUBBODY, 'right: 28px; top: 72px', 400) + POPOVER('moreOn', 'How major scales work', MOREBODY, 'right: 28px; top: 64px', 320))
 # ── canvas 130: the lesson's real bar, its Settings and Publish pages, the Publishing menu, Versions, Style, Tools ──
 CHECKS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"></path></svg>'
-TOOLSI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 3 7 21M12 3l5 18M9.5 12h5"></path></svg>'
+TOOLSI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8L13.5 3h-3ZM12 15l5-7"></path></svg>'
 # canvas 164: Learned says itself (scan-first 3: an icon alone left the learner guessing): a pill, grass once learned
 LEARNEDB = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="flex: none; height: 40px; margin: 0 4px; padding: 0 14px 0 10px; border: 0; border-radius: 20px; background: {{{{learnedBg}}}}; box-shadow: {{{{learnedRing}}}}; color: {{{{learnedFg}}}}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{CHECKS}<span>{{{{learnedL}}}}</span></button>'
 RBAR = LEARNEDB + IB('Tools', TOOLSI, 'openTools') + IB('Settings', GEARI, 'openSettings') + EDITBTN

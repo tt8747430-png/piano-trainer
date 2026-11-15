@@ -64,10 +64,13 @@ function LessonScreen({
       back={<BackButton />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)
+        const at = lessonPlace(id)
         return before
           ? [
               {
                 title: localText(before.title, locale),
+                // Its number along the level, where it shares the level with this lesson (the board's "6 · …").
+                n: at && at.journey.id === lessonPlace(lesson.id)?.journey.id ? at.n : undefined,
                 link: {
                   to: '/lessons/$lessonId',
                   params: { lessonId: id },
