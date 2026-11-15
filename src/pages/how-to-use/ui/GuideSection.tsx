@@ -1,32 +1,53 @@
+import { ChevronDown } from 'lucide-react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFold } from '@/features/fold-section'
-import { FoldSection } from '@/shared/ui'
+import { cn } from '@/shared/lib'
 import type { GuidePart } from '../model/guide'
 
 /**
- * A part of How to use: its title, the button that folds it (as the learner left it), and its steps
- * as a numbered list, each beside the icon its control wears in the app.
+ * A part of the User guide (the board's GUIDEB): a card whose head, its title in 17 semibold with the
+ * chevron at the far edge, opens or closes it; open, its steps as plain paragraphs.
  */
-export function GuideSection({ part }: { part: GuidePart }) {
+export function GuideSection({
+  part,
+  open,
+  onToggle,
+}: {
+  part: GuidePart
+  open: boolean
+  onToggle: () => void
+}) {
   const { t } = useTranslation('settings')
-  const fold = useFold(`howToUse.${part.id}`)
+  const body = useId()
   return (
-    <FoldSection
-      title={t(`howToUse.${part.id}.title`)}
-      fold={fold}
-      headingClassName="text-xl"
-      className="card px-5 py-4"
-    >
-      <ol className="flex flex-col divide-y divide-hairline">
-        {part.steps.map(({ key, icon: Icon }) => (
-          <li key={key} className="flex items-start gap-3 py-3 first:pt-1 last:pb-1">
-            <span className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-foreground">
-              <Icon aria-hidden className="size-5" />
-            </span>
-            <span className="min-w-0 pt-1.5 text-pretty">{t(key)}</span>
-          </li>
-        ))}
-      </ol>
-    </FoldSection>
+    <section className="card overflow-hidden">
+      <h2 className="font-sans text-[1.0625rem]/6 font-semibold">
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={body}
+          onClick={onToggle}
+          className="flex min-h-14 w-full items-center gap-2.5 px-4 py-2 text-start transition-colors hover:bg-foreground/[0.04]"
+        >
+          <span className="flex-1 text-balance">{t(`howToUse.${part.id}.title`)}</span>
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'size-5 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none',
+              open && 'rotate-180',
+            )}
+          />
+        </button>
+      </h2>
+      {open ? (
+        <div id={body} className="flex flex-col gap-2 px-4 pb-3.5">
+          {part.steps.map(({ key }) => (
+            <p key={key} className="max-w-[65ch] text-base/normal text-pretty">
+              {t(key)}
+            </p>
+          ))}
+        </div>
+      ) : null}
+    </section>
   )
 }
