@@ -174,6 +174,7 @@ export const practice = {
   },
   // Scales and keys: the run, the chords, the key.
   scales: {
+    practiseIn: 'Practise {{scale}} in the Player',
     settings: 'Scale settings',
     // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
     practise: 'Practise this scale',

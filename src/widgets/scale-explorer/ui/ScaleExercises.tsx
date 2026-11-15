@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { exercisesIn, type Exercise } from '@/entities/exercise'
-import { localText, useLocale } from '@/shared/i18n'
+import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import {
   noteParam,
   printedNote,
@@ -44,9 +44,10 @@ function opening(id: Exercise['id'], names: readonly string[]): string {
 export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleKind }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
+  const scaleName = useScaleName()
   const names = spellScale(root, kind).map((tone) => printedNote(tone.note))
   return (
-    <PractiseRows title={t('inPlayer')}>
+    <PractiseRows title={t('scales.practiseIn', { scale: scaleName(root, kind) })}>
       {SCALE_EXERCISES.filter((exercise) => exercise.fields.kind?.includes(kind) !== false).map(
         (exercise) => (
           <PractiseRow

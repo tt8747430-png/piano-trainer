@@ -161,6 +161,7 @@ export const practice: LocaleResources['practice'] = {
     shuffle: 'Вперемешку',
   },
   scales: {
+    practiseIn: 'Отработать {{scale}} в плеере',
     settings: 'Настройки гаммы',
     // The floating bar's way into the Player with this scale (its board): the scale's first exercise.
     practise: 'Отработать гамму',

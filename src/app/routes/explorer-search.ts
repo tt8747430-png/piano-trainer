@@ -143,7 +143,7 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   octaves: 1,
   rhythm: 'even',
   tempo: 80,
-  hands: 'rh',
+  hands: 'both',
   chords: 3,
   inversion: 0,
   keysPlay: 'chords',
