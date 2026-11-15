@@ -66,7 +66,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
   )
   return (
     <div
-      className={cn('flex items-center gap-1 border-t border-border pt-3', collapsed && 'flex-col')}
+      className={cn('mt-auto flex items-center gap-1 border-t border-border pt-3', collapsed && 'flex-col')}
     >
       {collapsed ? <Tipped label={t('nav.profile')}>{profile}</Tipped> : profile}
       {settings}

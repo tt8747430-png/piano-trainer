@@ -720,6 +720,8 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **The learner at the sidebar's foot (loop round 20, LearnLaptop):** the Profile row and its gear stand at the
+  foot of the laptop's sidebar whether or not recents show above them (were under Practice with none) (2026-11-15).
 - **Search's suggestions as the board's link rows (loop round 19):** 48 tall, 10 apart, 12 at the chevron; a
   result keeps SROW9's 52 (2026-11-15).
 - **The page under a sheet dims in warm ink, unblurred, as the board's BSHEET (loop, 2026-11-14):** every sheet, dialog and confirmation lays `--scrim` (ink at 28%, by Night near-black at 84%) over the page, never a black blur; Search's laptop panel wears the board's line and lifted shadow.
