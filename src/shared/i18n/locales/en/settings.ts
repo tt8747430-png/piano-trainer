@@ -178,6 +178,7 @@ export const settings = {
       offline: 'Unavailable offline',
       failed: 'Check failed. Try again',
       install: 'Install and restart',
+      check: 'Check for updates',
     },
   },
   // The account's own page (round 3): its name, password, signing out, deleting it.

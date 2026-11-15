@@ -174,6 +174,7 @@ export const settings: LocaleResources['settings'] = {
       offline: 'Недоступно без сети',
       failed: 'Сбой проверки. Повторите',
       install: 'Установить и перезапустить',
+      check: 'Проверить обновления',
     },
   },
   accountPage: {
