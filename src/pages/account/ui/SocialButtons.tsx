@@ -31,8 +31,8 @@ const APPLE = (
   </svg>
 )
 
-/** The board's account buttons: 50 tall, round ends, 16 semibold, 10 between the mark and the name. */
-const PILL = 'h-12.5 gap-2.5 rounded-full font-semibold'
+/** The board's account buttons: 50 tall, round ends, the soft hairline round them, 16 semibold, 10 between the mark and the name. */
+const PILL = 'h-12.5 gap-2.5 rounded-full border-border font-semibold'
 
 /**
  * Signing in with another account (ADR 0116): Google, which leaves for its page and comes back to
