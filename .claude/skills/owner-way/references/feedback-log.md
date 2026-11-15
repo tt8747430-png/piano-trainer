@@ -94,6 +94,7 @@ owner's, typos fixed.
 
 ## Player and editor together
 
+- **Loop round 32, a key down and the chosen note's keys in sky:** the boards' piano paints a key down `#85B8DC` (`--key-down`), the score's selection colour; the app had painted it and the editor's chosen keys honey, the one action's colour. Every keyboard now (2026-11-15). The editor's credits line reaches 44 under the title (it was 38).
 - **Loop round 32, the Keyboard button wears one glyph:** the keys, whatever the place shows; its caption says 3D, 2D or Off (it had swapped to a hand or a crossed eye). The Player boards drew a grand piano there and now draw the keys too, the one piano glyph (2026-11-15).
 - **One score in two modes:** "I don't like how the header looks with this bar under the header". One designed header, the
   same transport at the foot, Edit straight from the Player, nothing jumping.

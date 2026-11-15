@@ -11,8 +11,10 @@ const LABEL_INK = 'text-on-role'
 const REST: Readonly<Record<KeyFill, string>> = {
   white: 'bg-key-white text-on-key-white',
   black: 'bg-key-black text-on-key-black',
-  lit: 'bg-primary text-primary-foreground',
-  selected: 'bg-primary text-primary-foreground',
+  // A key down and the chosen note's keys in the boards' key-down sky (piano_sheet's --key-down), the
+  // score's selection colour: never the honey of the one action.
+  lit: cn('bg-(--p-sky)', LABEL_INK),
+  selected: cn('bg-(--p-sky)', LABEL_INK),
   wrong: 'bg-destructive text-destructive-foreground',
   root: cn(ROLE_BG.root, LABEL_INK),
   '3rd': cn(ROLE_BG['3rd'], LABEL_INK),

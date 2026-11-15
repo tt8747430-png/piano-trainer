@@ -49,7 +49,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
           onClick={open}
           // Its reach 44 tall, grown into the room under it, never over the title's.
           className={cn(
-            "relative block w-full text-start before:absolute before:inset-x-0 before:top-0 before:-bottom-4 before:content-['']",
+            "relative block w-full text-start before:absolute before:inset-x-0 before:top-0 before:-bottom-6 before:content-['']",
             OPENS,
           )}
         >
