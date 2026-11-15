@@ -38,7 +38,7 @@ export function ProgressMeter({
   return (
     <span
       className={cn(
-        'flex text-sm text-muted-foreground',
+        'flex text-[0.8125rem] text-muted-foreground',
         above ? 'flex-col-reverse gap-2' : 'items-center gap-3',
         className,
       )}

@@ -353,6 +353,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 27, a place's title and its progress as the boards set them:** the large bar title (Learn, Courses, a level, Profile) is 28 bold at -1% tracking, line height 1.15, as the boards' TOP draws it (was 26 and tighter); a meter's count ("Beginner · 0 of 13 learned") is 13, the boards' status (2026-11-15).
 - **Static counts in plain figures (loop round 20):** a level's "0 of 13 learned", its chapters' 0/3, Learn's levels and the progress meters set their numbers in Onest's plain figures; its tabular 1 left a gap ("1 3"). Songs' and Profile's static numbers follow (Explore's count, Continue's "Bar 9 of 16", Profile's stats, a streak, a run's results); The kit's static counts follow (a fold's and a tree's count, a fact card, a bar number over the score). Tabular figures stay for values that change in place (a tempo, a timer).
 
 - **A course's count stays whole (loop round 19):** "0 of 13 learned" never breaks over two lines (it did in Russian at 402); Next gives way, cut short. A tile's number (a lesson's, a numbered row's) is set in plain figures: Onest's tabular 1 split "10" into "1 0". The lesson line keeps the level board's 44px tiles, 68px rows (canvas 164: a course's line is a level's).

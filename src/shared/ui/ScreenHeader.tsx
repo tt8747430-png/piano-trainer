@@ -122,7 +122,7 @@ export function ScreenHeader({
               className={cn(
                 'min-w-0 font-sans outline-none',
                 large
-                  ? 'line-clamp-2 text-[1.625rem] leading-tight font-bold tracking-tight text-balance wrap-break-word hyphens-auto'
+                  ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
@@ -158,7 +158,7 @@ export function ScreenHeader({
               className={cn(
                 'min-w-0 font-sans outline-none',
                 large
-                  ? 'line-clamp-2 text-[1.625rem] leading-tight font-bold tracking-tight text-balance wrap-break-word hyphens-auto'
+                  ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 titleOnPage && 'sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
