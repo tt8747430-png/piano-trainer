@@ -59,6 +59,14 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())
 for b in boards:
     if os.path.exists(P + b):
         h0 = open(P + b).read(); h1 = keyface(h0)
+        # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
+        # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
+        if 'header data-float' in h1 and 'data-floatcss' not in h1:
+            h1 = h1.replace('</head>', '<style data-floatcss>header[data-float] { z-index: 30; margin-bottom: -56px; pointer-events: none }'
+                            ' header[data-float] > * { pointer-events: auto } header[data-float] + *::before { content: ""; display: block; flex: none; height: 56px }'
+                            ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
+                            ' header[data-float] [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
+                            ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
         if h1 != h0: open(P + b, 'w').write(h1)
 missing = [b for b in boards if not os.path.exists(P + b)]
 links = {b: re.findall(r'href="([^"#{][^"]*\.dc\.html)"', open(P + b).read()) for b in boards if b not in missing}

@@ -34,8 +34,8 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
     b = left or (f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}">{CHEV_L}</a>' if back else '')
     n = n or max(1, b.count('width: 44px; height: 44px'), right.count('width: 44px; height: 44px'))  # the title is centred between equal insets as wide as the fuller side
-    t = f'<span style="position: absolute; left: {12 + 52 * n}px; right: {12 + 52 * n}px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
-    return f'<header style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
+    t = f'<span data-bar-title style="position: absolute; left: {12 + 52 * n}px; right: {12 + 52 * n}px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
+    return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
 def LPAD(h):
     """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, the title's insets 28 wider."""
     h = h.replace('padding: 0 12px', 'padding: 0 28px 0 40px', 1)
@@ -68,8 +68,8 @@ def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
     fs = 26 if soft else 24 if wrap else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
     # a page's own name (a course's, a lesson's Settings') takes a second line before it is ever cut
     s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
-    return (f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px 4px 16px">{b}'
-            f'<h1 style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
+    return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px 4px 16px">{b}'
+            f'<h1 data-bar-title style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
             f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
 def LTITLEBAR(title, right='', back=''):
     b = f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else ''
@@ -183,7 +183,7 @@ def TABBAR(cur):
                 f'color: {INK if on else "#8A7F76"}; background: {FILL if on else "transparent"}">{svg}'
                 f'<span style="font-size: 11px; font-weight: {700 if on else 550}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
-    edge = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(247,243,238,0), rgba(247,243,238,.7)); backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%); mask-image: linear-gradient(to bottom, transparent, #000 60%)"></div>'
+    edge = ''  # nothing behind what floats (owner, 2026-11-15: floating buttons with a background make no sense)
     return edge + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
 
 # small pictures that show the content (Practice's rows and cards)

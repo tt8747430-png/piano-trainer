@@ -1003,8 +1003,8 @@ def STATEROW(label, sub): return ('<a href="#" style="min-height: 48px; box-sizi
 B_PIANO = PS.PIANO_SHEET(True, 3, 5)
 PIANOBTN = lambda: GLASSBTN('Piano', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)
-DOCK_A_PHONE = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 112px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(246,243,238,0), {PAGE} 30%)"></div><div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN_A}</div>'
-DOCK_A_LAPTOP = f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 39; pointer-events: none; background: linear-gradient(to bottom, rgba(246,243,238,0), {PAGE} 30%)"></div><div role="toolbar" aria-label="Voicing, sound and hands" style="position: absolute; left: 0; right: 0; bottom: 24px; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{VOICEBTN}{PLAYSPLIT}{HANDSBTN_A}</div>'
+DOCK_A_PHONE = ''  # no band behind the floating buttons
+DOCK_A_LAPTOP = ''
 def LISTSHEET(cond, body, phone_like, pos='', back='closeSheet'):
     b = body.replace('{{backChord}}', '{{' + back + '}}')
     if phone_like:
