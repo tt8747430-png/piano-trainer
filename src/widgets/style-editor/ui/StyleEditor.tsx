@@ -116,7 +116,7 @@ export function StyleEditor({
       {inSheet ? (
         <section
           aria-label={t('style.preview')}
-          className="sticky top-0 z-10 -mx-5 h-44 overflow-hidden border-b border-hairline bg-muted px-5 py-4"
+          className="sticky top-0 z-10 -mx-4 h-44 overflow-hidden border-b border-hairline bg-muted px-4 py-4"
         >
           {preview}
         </section>

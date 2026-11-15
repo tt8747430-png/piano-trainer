@@ -910,6 +910,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Loop round 34, every bottom sheet 16 at its sides, as the boards' (BSHEET):** all 136 sheets on the boards hold their content 16 from the edge and the app's one sheet held it 20; the sheet's body and foot now sit at 16 (the style editor's preview bleeding by the same), and its head sits 4 closer to the content, so Search's field stands 23 under its title where the board draws 22 (2026-11-15).
 - **Loop round 33, every sheet's handle as the boards' BSHEET:** 36 × 5 in the line colour (#DAD1C8, #453E38 by Night), where it was a 96 × 4 sand bar barely seen; one handle, so every sheet (2026-11-15).
 - **Loop round 33, the phone's tab bar wears the board's filled icons:** Learn's cap, Songs' notes, Practice's metronome and the Profile's figure filled at 25, as the kit's TABBAR (Apple's HIG: filled symbols in a tab bar); the laptop's sidebar keeps Lucide's outlines; a signed-in learner's picture stays the Profile's tab (2026-11-15).
 - **Loop round 29, a place's title tabs as the Songs board:** the view not in sight (Explore beside My songs) in the line's colour, 26 at 700 with -0.01em tracking, the chosen in ink; hover brings it to soft ink.

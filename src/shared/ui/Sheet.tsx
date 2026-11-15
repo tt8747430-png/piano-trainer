@@ -86,7 +86,7 @@ export function SheetContent({
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
       )}
     >
-      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-3 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
+      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
         {back ? <div className="col-start-1 row-start-1 justify-self-start">{back}</div> : null}
         <div className="col-start-2 row-start-1 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
           <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
@@ -113,11 +113,11 @@ export function SheetContent({
           {t('done')}
         </DrawerClose>
       </DrawerHeader>
-      <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-5 pt-1 pb-6 *:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-4 pt-1 pb-6 *:shrink-0">
         {children}
       </div>
       {footer ? (
-        <DrawerFooter className="border-t border-hairline px-5 pt-4 pb-sheet-foot">
+        <DrawerFooter className="border-t border-hairline px-4 pt-4 pb-sheet-foot">
           {footer}
         </DrawerFooter>
       ) : null}
