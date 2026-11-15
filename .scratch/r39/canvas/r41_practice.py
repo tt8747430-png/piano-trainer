@@ -25,7 +25,7 @@ SPACER = '<span style="flex: 1"></span>'
 THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales, fingerings, key signatures', '', 'Scales.dc.html'),
           ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html'),
           ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
-EXERCISES = [('drill', 'Finger technique', 'Hanon, five-finger position', '', 'FingerTechnique.dc.html'), ('swing', 'Jazz vocabulary', 'Barry Harris, Piano With Jonny', '', 'JazzVocabulary.dc.html')]
+EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('swing', 'Barry Harris', '5 exercises', '', 'JazzVocabulary.dc.html'), ('swing', 'Piano With Jonny', '5 exercises', '', 'JazzVocabulary.dc.html')]
 TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'Chromatic tuner', '', 'Tuner.dc.html'),
          ('lens', 'Chord finder', 'Chord identification', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
 TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
