@@ -500,12 +500,15 @@ export const practice = {
     upper: 'Upper tetrachord',
   },
   chordFinder: {
-    promptTitle: 'Play or tap a chord',
-    prompt: 'Hold three or more keys; the chord is named as you play.',
+    promptTitle: 'Play a chord',
+    prompt: 'Hold three or more keys, here or on your piano',
     promptFolded: 'Play it on a connected piano, or show the keyboard to tap one.',
     // The chords an empty Chord finder offers to try, each put on the keys at a tap (R32).
     tryLabel: 'Try a chord',
     try: { major: 'C major', minor7: 'A minor 7th', dominant7: 'D dominant 7th' },
+    // The line under the name (canvas 181): "C major 7th, 1st inversion · Imaj7 in C major".
+    named: '{{root}} {{quality, lowercase}}',
+    numeralIn: '{{numeral}} in {{key}}',
     spelledIn: 'Spelled in',
     spelledInInfo:
       'Accidentals follow this key: the same black key is B♭ in F major and A♯ in B major, and each chord shows its numeral in the key.',
@@ -525,6 +528,19 @@ export const practice = {
     clearShort: 'Clear',
     openShort: 'Chords',
     notes: 'The chord’s notes',
+    // A note's tile names its part of the chord as a pianist does (canvas 181): root, 3rd, 5th, 7th.
+    tone: {
+      root: 'root',
+      '2': '2nd',
+      '3': '3rd',
+      '4': '4th',
+      '5': '5th',
+      '6': '6th',
+      '7': '7th',
+      '9': '9th',
+      '11': '11th',
+      '13': '13th',
+    },
     bassDegree: '{{degree}} · bass',
     forget: 'Forget the chords played',
     played: 'Played',

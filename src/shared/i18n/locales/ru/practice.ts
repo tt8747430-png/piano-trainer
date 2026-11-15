@@ -480,8 +480,8 @@ export const practice: LocaleResources['practice'] = {
     upper: 'Верхний тетрахорд',
   },
   chordFinder: {
-    promptTitle: 'Сыграйте или нажмите аккорд',
-    prompt: 'Зажмите три клавиши или больше — аккорд назовётся по ходу игры.',
+    promptTitle: 'Сыграйте аккорд',
+    prompt: 'Зажмите три клавиши или больше, здесь или на своём пианино',
     promptFolded: 'Сыграйте его на подключённом инструменте или откройте клавиатуру.',
     tryLabel: 'Попробуйте аккорд',
     try: {
@@ -489,6 +489,9 @@ export const practice: LocaleResources['practice'] = {
       minor7: 'Ля минорный септаккорд',
       dominant7: 'Ре доминантсептаккорд',
     },
+    // The line under the name (canvas 181): "C major 7th, 1st inversion · Imaj7 in C major".
+    named: '{{quality}} от {{root}}',
+    numeralIn: '{{numeral}} в тональности {{key}}',
     spelledIn: 'Запись в тональности',
     spelledInInfo:
       'Знаки альтерации следуют тональности: одна и та же чёрная клавиша — си-бемоль в фа мажоре и ля-диез в си мажоре; у каждого аккорда указана его ступень.',
@@ -507,6 +510,19 @@ export const practice: LocaleResources['practice'] = {
     clearShort: 'Сбросить',
     openShort: 'Аккорды',
     notes: 'Ноты аккорда',
+    // A note's tile names its part of the chord as a pianist does (canvas 181): root, 3rd, 5th, 7th.
+    tone: {
+      root: 'прима',
+      '2': 'секунда',
+      '3': 'терция',
+      '4': 'кварта',
+      '5': 'квинта',
+      '6': 'секста',
+      '7': 'септима',
+      '9': 'нона',
+      '11': 'ундецима',
+      '13': 'терцдецима',
+    },
     bassDegree: '{{degree}} · бас',
     forget: 'Забыть сыгранные аккорды',
     played: 'Сыграно',

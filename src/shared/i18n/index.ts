@@ -30,6 +30,8 @@ void i18n.use(initReactI18next).init({
   interpolation: { escapeValue: false },
   initAsync: false,
 })
+// `{{quality, lowercase}}`: a name set inside a phrase ("C major 7th"), where it stands capitalised alone.
+i18n.services.formatter?.add('lowercase', (value: string, lng) => value.toLocaleLowerCase(lng))
 
 export { i18n }
 

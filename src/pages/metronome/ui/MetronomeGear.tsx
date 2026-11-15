@@ -19,6 +19,7 @@ export function MetronomeGear({ metronome }: { metronome: Metronome }) {
   return (
     <>
       <RoundButton
+        variant="glass"
         label={title}
         icon={Settings}
         aria-expanded={open}

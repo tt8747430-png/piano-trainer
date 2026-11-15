@@ -152,7 +152,7 @@ export function ScreenHeader({
         // The canvas's TOP: Back at the start, the title centred on the screen, the acts at the end.
         <div className="grid min-h-11 grid-cols-[minmax(max-content,1fr)_minmax(0,auto)_minmax(max-content,1fr)] items-center">
           <div className="-ms-1 flex justify-self-start print:hidden">{back}</div>
-          <div className="flex min-w-0 items-center justify-center gap-0.5 px-1">
+          <div className="flex min-w-0 items-center justify-center gap-0.5 px-2">
             <h1
               {...pageHeading}
               className={cn(

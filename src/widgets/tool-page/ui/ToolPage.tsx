@@ -53,7 +53,7 @@ export function ToolPage({
   settings?: useRender.RenderProp
   /** The tool's gear where its settings open in place, in a sheet (the Metronome's), not a page. */
   gear?: ReactNode
-  /** The bar's act before the gear (a MIDI button, an ⓘ). */
+  /** The bar's buttons after the gear, as the canvas's TOP60 orders them (the Chord finder's Piano). */
   actions?: ReactNode
   /** What sets the tool, under the readout. */
   controls?: ReactNode
@@ -81,16 +81,21 @@ export function ToolPage({
       <ScreenHeader
         title={title}
         back={<BackButton variant="glass" />}
-        tools={actions}
         settings={
-          gear ??
-          (settings ? (
-            <RoundLink
-              label={t('practice:settings.open', { page: title })}
-              icon={Settings}
-              render={settings}
-            />
-          ) : undefined)
+          gear || settings || actions ? (
+            <>
+              {gear ??
+                (settings ? (
+                  <RoundLink
+                    variant="glass"
+                    label={t('practice:settings.open', { page: title })}
+                    icon={Settings}
+                    render={settings}
+                  />
+                ) : null)}
+              {actions}
+            </>
+          ) : undefined
         }
       />
       {keys}

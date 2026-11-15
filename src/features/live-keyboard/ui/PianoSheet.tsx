@@ -48,9 +48,13 @@ export function PianoSheet({
   midi,
 }: {
   keys: boolean
-  hands: boolean
   onKeys: (shown: boolean) => void
-  onHands: (shown: boolean) => void
+  /**
+   * The hands at the keys (3D) or the keys (2D), as two cards, where the screen offers the hands (the
+   * Player, Chords); without it the sheet shows the keys alone (the Chord finder's, played on).
+   */
+  hands?: boolean
+  onHands?: (shown: boolean) => void
   /** The screen's button that opens it, given how to open it. */
   trigger: (open: () => void) => ReactNode
   /** What the keys carry, where the screen offers a choice (Chords): the canvas's Labels. */
@@ -92,45 +96,47 @@ export function PianoSheet({
               className="px-4"
             />
           </SettingsGroup>
-          <RadioCards
-            label={t('pianoSheet.view')}
-            value={shown}
-            disabled={!keys}
-            cards={[
-              {
-                value: 'hands',
-                label: t('pianoSheet.hands'),
-                picture: <Piano3DPicture />,
-                children: stage ? (
-                  <>
-                    {/* The canvas's rows in the chosen card, a honey hairline over each. */}
-                    <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
-                      <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
-                      <div className="w-42 flex-none">
-                        <Segmented
-                          label={t('pianoSheet.angle')}
-                          value={stage.angle}
-                          options={CAMERA_ANGLES.map((each) => ({
-                            value: each,
-                            label: t(`pianoSheet.angles.${each}`),
-                          }))}
-                          onChange={stage.onAngle}
-                        />
+          {onHands ? (
+            <RadioCards
+              label={t('pianoSheet.view')}
+              value={shown}
+              disabled={!keys}
+              cards={[
+                {
+                  value: 'hands',
+                  label: t('pianoSheet.hands'),
+                  picture: <Piano3DPicture />,
+                  children: stage ? (
+                    <>
+                      {/* The canvas's rows in the chosen card, a honey hairline over each. */}
+                      <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
+                        <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
+                        <div className="w-42 flex-none">
+                          <Segmented
+                            label={t('pianoSheet.angle')}
+                            value={stage.angle}
+                            options={CAMERA_ANGLES.map((each) => ({
+                              value: each,
+                              label: t(`pianoSheet.angles.${each}`),
+                            }))}
+                            onChange={stage.onAngle}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <SwitchRow
-                      label={t('pianoSheet.handsOnKeys')}
-                      checked={stage.handsOnKeys}
-                      onCheckedChange={stage.onHandsOnKeys}
-                      className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
-                    />
-                  </>
-                ) : undefined,
-              },
-              { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
-            ]}
-            onChange={(next) => onHands(next === 'hands')}
-          />
+                      <SwitchRow
+                        label={t('pianoSheet.handsOnKeys')}
+                        checked={stage.handsOnKeys}
+                        onCheckedChange={stage.onHandsOnKeys}
+                        className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
+                      />
+                    </>
+                  ) : undefined,
+                },
+                { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
+              ]}
+              onChange={(next) => onHands(next === 'hands')}
+            />
+          ) : null}
           {range ? (
             <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
               <div className="flex items-center justify-between gap-3">

@@ -1,12 +1,18 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useKeyName } from '@/shared/i18n'
 import {
   alteredSymbol,
+  keysHolding,
   noteName,
+  numeralText,
+  printedNote,
   printedSymbol,
+  sameKey,
   voicingKind,
   writtenSymbol,
   type FoundChord,
+  type Key,
   type LeftOut,
   type Midi,
 } from '@/shared/lib/music'
@@ -28,19 +34,23 @@ export const chordLabel = (found: FoundChord, slash: boolean): string =>
 interface Telling {
   readonly keys?: readonly Midi[]
   readonly slash: boolean
+  /** The key it is spelled in: the chord's numeral there ends the line, where the key holds it. */
+  readonly musicKey?: Key
 }
 
 /**
- * What a found chord is, in words (ADR 0052): its kind where the table names it; its inversion (or,
- * where the name leaves its bass out and the bass is no inversion, the note in the bass); each tone
- * left out; how the keys lay it out (close, open, drop 2 or 3, a shell, 4ths, So What); and an altered
- * dominant's chart name, printed as the sheets print a chord. The same function until the language
- * changes.
+ * What a found chord is, in words (ADR 0052; canvas 181's "C major 7th, 1st inversion · Imaj7 in C
+ * major"): its root and kind where the table names it, with its inversion (or, where the name leaves
+ * its bass out and the bass is no inversion, the note in the bass); each tone left out; how the keys
+ * lay it out, where it is more than a close voicing (open, drop 2 or 3, a shell, 4ths, So What); an
+ * altered dominant's chart name; and its numeral in the key it is spelled in, printed as the sheets
+ * print a chord. The same function until the language changes.
  */
 export function useChordAbout(): (found: FoundChord, telling: Telling) => string[] {
   const { t } = useTranslation(['music', 'practice'])
+  const keyName = useKeyName()
   return useCallback(
-    (found, { keys, slash }) => {
+    (found, { keys, slash, musicKey }) => {
       // Its inversion's name where a tone of the chord is lowest (1 its 3rd, up to its 7th), never root.
       const word =
         found.inversion !== undefined && found.inversion >= 1
@@ -55,14 +65,33 @@ export function useChordAbout(): (found: FoundChord, telling: Telling) => string
             : t('practice:chordFinder.bass', { note: noteName(found.bass) })
       const voicing = keys ? voicingKind(keys, found) : undefined
       const altered = alteredSymbol(found)
+      const { root, quality } = found.chord
+      const named = quality
+        ? t('practice:chordFinder.named', {
+            root: printedNote(root),
+            quality: t(`music:quality.${quality}`),
+          })
+        : undefined
+      const head = [named, inversion].filter((part) => part).join(', ')
+      const there =
+        musicKey && quality
+          ? keysHolding(root, quality).find((holding) => sameKey(holding.key, musicKey))
+          : undefined
       return [
-        ...(found.chord.quality ? [t(`music:quality.${found.chord.quality}`)] : []),
-        ...(inversion ? [inversion] : []),
+        ...(head ? [head] : []),
         ...found.leftOut.map((tone) => t(`practice:chordFinder.${LEFT_OUT_WORDS[tone]}`)),
-        ...(voicing ? [t(`practice:chordFinder.voicing.${voicing}`)] : []),
+        ...(voicing && voicing !== 'close' ? [t(`practice:chordFinder.voicing.${voicing}`)] : []),
         ...(altered ? [t('practice:chordFinder.altered', { symbol: printedSymbol(altered) })] : []),
+        ...(there && musicKey
+          ? [
+              t('practice:chordFinder.numeralIn', {
+                numeral: printedSymbol(numeralText(there.numeral)),
+                key: keyName(musicKey),
+              }),
+            ]
+          : []),
       ]
     },
-    [t],
+    [t, keyName],
   )
 }

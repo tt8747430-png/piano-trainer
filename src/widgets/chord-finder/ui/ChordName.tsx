@@ -1,7 +1,13 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { printedNote, printedSymbol, type FoundChord, type Midi } from '@/shared/lib/music'
+import {
+  printedNote,
+  printedSymbol,
+  type FoundChord,
+  type Key,
+  type Midi,
+} from '@/shared/lib/music'
 import { GroupChips } from '@/shared/ui'
 import { readingAt, toneOfKey, type Finding } from '../model/finding'
 import { chordLabel, useChordAbout } from './use-chord-about'
@@ -39,6 +45,7 @@ export function ChordName({
   reading,
   slash,
   keysFolded,
+  musicKey,
 }: {
   finding: Finding
   keys: readonly Midi[]
@@ -48,6 +55,8 @@ export function ChordName({
   slash: boolean
   /** The page's keys are folded away: a chord comes from a MIDI keyboard, or the keys come back. */
   keysFolded: boolean
+  /** The key the page spells in: the chord's numeral there ends the line under its name. */
+  musicKey: Key
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
@@ -77,16 +86,19 @@ export function ChordName({
       return (
         <Named
           name={printedSymbol(chordLabel(shown, slash))}
-          line={about(shown, { keys, slash }).join(' · ')}
+          line={about(shown, { keys, slash, musicKey }).join(' · ')}
         />
       )
     }
   }
 }
 
+/** The chord tones a tile names in words; an altered 5th or tension keeps its sign (♭5, ♯11). */
+const TONE_WORDS = ['2', '3', '4', '5', '6', '7', '9', '11', '13'] as const
+
 /**
- * The chord's notes as tiles, lowest first, as the canvas draws them: each its note large and its
- * degree under it, the bass said so.
+ * The chord's notes as tiles, lowest first, as the canvas draws them: each its note large and, under
+ * it, its part of the chord as a pianist names it (root, 3rd, 5th, 7th), the bass said so.
  */
 export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly Midi[] }) {
   const { t } = useTranslation('practice')
@@ -97,7 +109,17 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
       const tone = toneOfKey(found, key)
       if (!tone || seen.has(tone.degree)) return []
       seen.add(tone.degree)
-      return [{ note: printedNote(tone.note), degree: tone.degree, bass: place === 0 }]
+      const number = tone.degree.replace(/^[^0-9]+/, '')
+      // A 3rd or 7th takes its kind from the chord's name; any other sign is part of what it is.
+      const plain = number === tone.degree || number === '3' || number === '7'
+      const word = plain ? TONE_WORDS.find((each) => each === number) : undefined
+      const part =
+        tone.degree === '1'
+          ? t('chordFinder.tone.root')
+          : word
+            ? t(`chordFinder.tone.${word}`)
+            : tone.degree
+      return [{ note: printedNote(tone.note), degree: tone.degree, part, bass: place === 0 }]
     })
   return (
     <ul
@@ -112,7 +134,7 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
         >
           <span className="text-2xl font-bold">{tile.note}</span>
           <span className="text-xs text-muted-foreground">
-            {tile.bass ? t('chordFinder.bassDegree', { degree: tile.degree }) : tile.degree}
+            {tile.bass ? t('chordFinder.bassDegree', { degree: tile.part }) : tile.part}
           </span>
         </li>
       ))}
@@ -120,7 +142,7 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
   )
 }
 
-/** The chord's other readings (Also read as), each a chip that makes it the one shown, the chosen in ink. */
+/** The chord's other readings (Also read as), each a chip that makes it the one shown (canvas 181). */
 export function ChordReadings({
   readings,
   reading,
@@ -140,17 +162,17 @@ export function ChordReadings({
       ? [{ at, label: chordLabel(each, slash) }]
       : [],
   )
-  if (listed.length < 2) return null
+  const others = listed.filter(({ label }) => label !== shown)
+  if (others.length === 0) return null
   return (
     <GroupChips label={t('chordFinder.readings')}>
-      {listed.map(({ at, label }) => (
+      {others.map(({ at, label }) => (
         <button
           key={label}
           type="button"
-          aria-pressed={label === shown}
           aria-label={t('chordFinder.reading', { symbol: printedSymbol(label) })}
           onClick={() => onReading(at)}
-          className="flex h-11 items-center rounded-pill px-3 text-[0.9375rem] font-semibold transition-colors hover:bg-foreground/[0.06] aria-pressed:bg-foreground aria-pressed:text-background focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="flex h-11 items-center rounded-pill px-3 text-[0.9375rem] font-semibold transition-colors hover:bg-foreground/[0.06] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           {printedSymbol(label)}
         </button>

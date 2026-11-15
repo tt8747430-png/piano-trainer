@@ -7,13 +7,16 @@ export function RoundLink({
   label,
   icon: Icon,
   render,
+  variant = 'bar',
 }: {
   label: string
   icon: LucideIcon
   render: useRender.RenderProp
+  /** A bar's soft round button, or the glass one of a page over its picture (Practice's bars). */
+  variant?: 'bar' | 'glass'
 }) {
   return (
-    <ButtonLink variant="bar" size="icon" aria-label={label} title={label} render={render}>
+    <ButtonLink variant={variant} size="icon" aria-label={label} title={label} render={render}>
       <Icon aria-hidden />
     </ButtonLink>
   )
