@@ -2,6 +2,7 @@ import {
   buildChord,
   fitChordInversion,
   fitParts,
+  midi,
   sizesOf,
   noteFromParam,
   placeChord,
@@ -31,7 +32,7 @@ export interface ChordView extends PartsParams {
   readonly root: NoteParam
   readonly voicing: Voicing
   readonly inversion: number
-  readonly hands: 'rh' | 'both'
+  readonly hands: 'rh' | 'lh' | 'both'
   /** The key the chord was opened in (Harmony's or Progressions' chords): its colour notes follow its degree. */
   readonly key?: KeyParam | undefined
   /**
@@ -133,13 +134,18 @@ export function viewChord(view: ChordView): {
   fingers: ChordFingers
 } {
   const chord = buildChord(noteFromParam(view.root), partsFromParams(view))
-  const placed =
+  const close =
     view.voicing === 'close'
       ? placeChord(chord.tones, {
           inversion: view.inversion,
           bothHands: view.hands === 'both' || takesTwoHands(chord.tones.length),
         })
       : voiceChord(chord.tones, view.voicing, view.inversion)
+  // The left hand alone holds the chord an octave under where the right would (the board's Left hand).
+  const placed =
+    view.voicing === 'close' && view.hands === 'lh' && close.lh.length === 0
+      ? { ...close, lh: close.rh.map((key) => ({ ...key, midi: midi(key.midi - 12) })), rh: [] }
+      : close
   return { chord, placed, fingers: placedFingering(placed) }
 }
 

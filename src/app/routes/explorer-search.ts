@@ -78,7 +78,7 @@ export const CHORDS_DEFAULTS: ChordsSearch = {
 const isTriad = isOneOf(TRIADS)
 const isBuiltSize = isOneOf(BUILT_SIZES)
 const isSeventh = isOneOf(SEVENTHS)
-const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
+const isChordHands = isOneOf<ChordView['hands']>(['rh', 'lh', 'both'])
 const isVoicing = isOneOf(VOICINGS)
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')

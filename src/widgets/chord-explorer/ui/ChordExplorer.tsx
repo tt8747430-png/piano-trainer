@@ -302,7 +302,7 @@ export function ChordExplorer({
               </FloatingPiece>
             }
             trigger={null}
-            actions={(['both', 'rh'] as const).map((each) => ({
+            actions={(['both', 'rh', 'lh'] as const).map((each) => ({
               key: each,
               label: t(`common:hands.${each}`),
               checked: handsShown === each,

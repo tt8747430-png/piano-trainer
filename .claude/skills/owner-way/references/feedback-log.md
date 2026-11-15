@@ -375,6 +375,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **A chord in the left hand (loop round 22, the Chords board's Hands menu):** Hands offers Both hands, Right hand and Left hand; the left hand holds the close chord an octave under the right's, on the bass staff, with its own fingering and the 3D left hand. Kept in the URL (`hands=lh`) as the others.
+
 - **Show names what it keeps (loop round 22):** a Practice library's Sort and filter ends "Show 54 progressions" (exercises, patterns), as Songs' "Show 93 songs", never "Show: 54"; the same foot, wrapping its two buttons where the words need the room.
 
 - **Round pieces where the boards draw them (loop round 19):** an exercise's Key and Listen, Scales' BPM and Hands, Intervals' From and Play all, and a pattern's Loop and Practise are 56 round glass pieces, as the Exercise, Scales, Intervals and Pattern boards measure (the Chords board keeps its 72-wide pieces for Voicing and Hands); a word too long for the circle (Тональность) widens it into a pill rather than spill out.
