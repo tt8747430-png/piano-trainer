@@ -8,7 +8,7 @@ export const account: LocaleResources['account'] = {
   google: 'Войти через Google',
   apple: 'Войти через Apple',
   soon: 'Скоро',
-  offline: 'Нет подключения к интернету. Для входа нужна сеть.',
+  offline: 'Нет подключения к интернету. Для работы с аккаунтом нужна сеть.',
   profile: {
     badges: {
       title: 'Значки',

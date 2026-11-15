@@ -7,7 +7,7 @@ export const account = {
   google: 'Continue with Google',
   apple: 'Continue with Apple',
   soon: 'Coming soon',
-  offline: 'You’re offline. Signing in needs a connection.',
+  offline: 'You’re offline. Your account needs a connection.',
   // The Profile: who is signed in, and what they have done.
   profile: {
     // The badges (B1): six, each in four tiers, and the nearest one still to earn.
