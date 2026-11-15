@@ -98,6 +98,7 @@ function FolderForm({
       <form onSubmit={submit} className="flex flex-col gap-6">
         <NameField
           label={t('folder.name')}
+          autoFocus
           value={name}
           placeholder={suggestion}
           enterKeyHint="done"

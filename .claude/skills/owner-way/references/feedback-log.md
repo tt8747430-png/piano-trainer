@@ -852,6 +852,8 @@ are reference only, but progressions are facts.
 
 ## Actions and menus
 
+- **A New sheet opens with its name focused (loop round 18):** New song, a New folder, a New group and every `NewSheet` put the caret in their name field as they open, the phone's keyboard up, as iOS's New Folder does; the learner types at once instead of tapping the field first.
+
 - **One way to each action:** "why are there duplicate buttons and actions".
 - **Drag, never Move up or down:** "why dont drag and drop".
 - **Short menu items.** **Change it everywhere:** "and not just in one place".

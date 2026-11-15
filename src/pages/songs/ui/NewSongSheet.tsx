@@ -279,6 +279,7 @@ export function NewSongSheet({
             <>
               <NameField
                 label={t('making.name')}
+                autoFocus
                 value={title}
                 maxLength={TITLE_MAX}
                 onChange={(event) => setTitle(event.target.value)}

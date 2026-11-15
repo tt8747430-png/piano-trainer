@@ -58,6 +58,7 @@ function NewGroupForm({ onMade }: { onMade: (group: LearnerGroup) => void }) {
       <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
         <NameField
           label={t('groups.name')}
+          autoFocus
           value={name}
           placeholder={t('groups.namePlaceholder')}
           enterKeyHint="done"
