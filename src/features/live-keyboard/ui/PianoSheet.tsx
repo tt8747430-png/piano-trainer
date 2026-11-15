@@ -175,7 +175,7 @@ export function PianoSheet<R extends string>({
               title={t('pianoSheet.sound')}
               value={t('pianoSheet.grand')}
               detail={online ? undefined : t('pianoSheet.offline')}
-              render={<Link to="/settings/storage" />}
+              render={<Link to="/settings/on-screen-piano" />}
             />
             <RowLink
               title={t('pianoSheet.midi')}
