@@ -102,7 +102,7 @@ export function ToolPage({
       {side || start ? (
         <div
           className={cn(
-            'mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] content-start items-start gap-6 pb-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10',
+            'mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] content-start items-start gap-4 pb-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10',
             // 16 under the keys, as every Practice board sets the name under its keys.
             keys !== undefined && 'pt-4',
           )}

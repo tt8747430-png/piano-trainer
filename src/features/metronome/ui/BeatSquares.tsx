@@ -87,11 +87,11 @@ export function BeatSquares({
             </li>
           ))}
         </ol>
-        {/* Under the beats in the gap before the settings, taking no room (the board draws none). */}
+        {/* Over the beats while a bar is silent, taking no room (the board draws none). */}
         <p
           aria-hidden={!muted}
           className={cn(
-            'absolute inset-x-0 top-full mt-0.5 flex h-5 items-center justify-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-150 ease-out',
+            'pointer-events-none absolute top-1/2 left-1/2 flex h-9 -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-pill bg-card px-3.5 text-sm font-semibold whitespace-nowrap text-foreground shadow-(--elevation-2) transition-opacity duration-150 ease-out',
             !muted && 'opacity-0',
           )}
         >
