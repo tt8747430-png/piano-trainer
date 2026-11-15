@@ -20,7 +20,8 @@ import {
   type PatternBook,
 } from '@/entities/pattern'
 import { entryTitles, piecesPlaying } from '@/entities/piece'
-import { PageKeyboardTools, PinnedKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PianoButton } from '@/widgets/practice-pages'
 import {
   deleteOwnPattern,
   restoreOwnPattern,
@@ -185,7 +186,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
       <ScreenHeader
         title={t('patterns.title')}
         back={<BackButton variant="glass" />}
-        tools={<PageKeyboardTools />}
+        settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />
       <PinnedKeyboard shown={shown} place="top" />

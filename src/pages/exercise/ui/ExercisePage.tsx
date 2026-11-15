@@ -12,7 +12,8 @@ import {
   type ExerciseChoice,
 } from '@/entities/exercise'
 import { selectTempo, useProgress } from '@/entities/progress'
-import { PageKeyboardTools, PinnedKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PianoButton } from '@/widgets/practice-pages'
 import { TappableStaff } from '@/features/play-example'
 import { arrangeExercise } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
@@ -104,7 +105,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       <ScreenHeader
         title={t('practice:exercisePage.title')}
         back={<BackButton variant="glass" />}
-        tools={<PageKeyboardTools />}
+        settings={<PianoButton />}
       />
       <PinnedKeyboard shown={shown} place="top" />
       {/* One grid: on a phone the title, the music, The exercise, How to play; on a laptop the

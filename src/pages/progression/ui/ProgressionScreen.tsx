@@ -1,5 +1,4 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { BookmarkPlus, PencilLine, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +13,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, MoreMenu, RoundButton, RoundLink, say, ScreenHeader } from '@/shared/ui'
-import { SettingsGear } from '@/widgets/practice-pages'
+import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
 import {
   KeepProgressionSheet,
   ProgressionExplorer,
@@ -85,7 +84,6 @@ export function ProgressionScreen({
   const listed = library ?? own
   const tools = (
     <>
-      <PageKeyboardTools />
       {listed ? null : (
         <RoundButton
           label={t('progressions.mine.keep')}
@@ -123,7 +121,12 @@ export function ProgressionScreen({
               },
             }
           : {})}
-        settings={<SettingsGear page="progressions" />}
+        settings={
+          <>
+            <SettingsGear page="progressions" variant="glass" />
+            <PianoButton />
+          </>
+        }
         more={
           own ? (
             <MoreMenu

@@ -1,9 +1,8 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Eraser, Music2, Piano } from 'lucide-react'
+import { Eraser, Music2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMidiSummary } from '@/features/connect-midi'
-import { PianoSheet, PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
+import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
 import { partsParams, useSetSearch } from '@/shared/lib'
 import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
@@ -16,11 +15,11 @@ import {
   GroupLink,
   GroupRows,
   KeyPicker,
-  RoundButton,
   Sheet,
   SheetContent,
   usePlayKey,
 } from '@/shared/ui'
+import { PianoButton } from '@/widgets/practice-pages'
 import { ToolPage } from '@/widgets/tool-page'
 import { scaleOverlay } from '../model/scale-overlay'
 import {
@@ -53,7 +52,7 @@ const TRY = [
  * says what to do and three chords are offered to try. Its settings are a page off its gear.
  */
 export function ChordFinderPage() {
-  const { t } = useTranslation(['practice', 'music', 'player'])
+  const { t } = useTranslation(['practice', 'music'])
   const view = useSearch({ from: '/shell/practice/chord-finder' })
   const change = useSetSearch<ChordFinderView>()
   const finder = useChordFinder(view)
@@ -68,8 +67,7 @@ export function ChordFinderPage() {
   const opensInChords = reading !== undefined && (!reading.bass || reading.inversion !== undefined)
   const play = () => playback.toggle('chord', () => chordSounds(keys, { arpeggio: false }))
   usePlayKey(play, keys.length > 0)
-  const { folded, fold } = useFoldKeys('playing')
-  const midi = useMidiSummary()
+  const { folded } = useFoldKeys('playing')
   const trail = finder.remember ? (
     <ChordTrail
       chords={finder.staff}
@@ -86,22 +84,7 @@ export function ChordFinderPage() {
     <ToolPage
       title={t('practice:pages.chordFinder')}
       start
-      actions={
-        <PianoSheet
-          midi={midi}
-          keys={!folded}
-          onKeys={(shown) => fold(!shown)}
-          trigger={(open) => (
-            <RoundButton
-              variant="glass"
-              label={t('player:pianoSheet.title')}
-              icon={Piano}
-              aria-haspopup="dialog"
-              onClick={open}
-            />
-          )}
-        />
-      }
+      actions={<PianoButton screen="playing" />}
       settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
       keys={
         <PinnedKeyboard

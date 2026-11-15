@@ -1,10 +1,9 @@
 import { useSearch } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { IntervalExplorer, type IntervalView } from '@/widgets/interval-explorer'
-import { SettingsGear } from '@/widgets/practice-pages'
+import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
 
 /**
  * The Intervals explorer (canvas 176, in the Chords page's shape): every interval over a chosen root,
@@ -19,8 +18,12 @@ export function IntervalsPage() {
       <ScreenHeader
         title={t('pages.intervals')}
         back={<BackButton variant="glass" />}
-        tools={<PageKeyboardTools />}
-        settings={<SettingsGear page="intervals" />}
+        settings={
+          <>
+            <SettingsGear page="intervals" variant="glass" />
+            <PianoButton />
+          </>
+        }
       />
       <IntervalExplorer view={view} onChange={onChange} />
     </div>

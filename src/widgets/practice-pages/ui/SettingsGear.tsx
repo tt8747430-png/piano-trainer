@@ -27,10 +27,18 @@ const PAGE_NAME = {
  * A Practice page's gear (A24, R18), in its bar: its Settings page, the same one Settings lists,
  * opened with the page named so Back returns to it.
  */
-export function SettingsGear({ page }: { page: GearPage }) {
+export function SettingsGear({
+  page,
+  variant = 'bar',
+}: {
+  page: GearPage
+  /** Glass on a page over its keys (the canvas's TOP60), a bar's soft button on a library. */
+  variant?: 'bar' | 'glass'
+}) {
   const { t } = useTranslation('practice')
   return (
     <RoundLink
+      variant={variant}
       label={t('settings.open', { page: t(`pages.${PAGE_NAME[page]}`) })}
       icon={Settings}
       render={<Link to={SETTINGS_OF[page]} search={{ from: page }} />}

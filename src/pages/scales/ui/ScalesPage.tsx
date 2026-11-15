@@ -1,10 +1,9 @@
 import { useSearch } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
 import { BackButton, ScreenHeader, Segmented } from '@/shared/ui'
 import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
-import { SettingsGear } from '@/widgets/practice-pages'
+import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
 import { PiecesInKey } from './PiecesInKey'
 
@@ -25,8 +24,12 @@ export function ScalesPage() {
       <ScreenHeader
         title={t('pages.scales')}
         back={<BackButton variant="glass" />}
-        tools={<PageKeyboardTools />}
-        settings={<SettingsGear page="scales" />}
+        settings={
+          <>
+            <SettingsGear page="scales" variant="glass" />
+            <PianoButton />
+          </>
+        }
       />
       {step ? <StepPanel step={step} /> : null}
       <ScaleExplorer
