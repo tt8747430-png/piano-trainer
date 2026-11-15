@@ -219,4 +219,4 @@ After: `transition: transform 200ms` with `scale(0.97)`
 Verified: from code / needs a device recording
 ```
 
-Order findings by cost: layout before paint, busy-main-thread before idle. Then stop. Apply fixes when asked.
+Order findings by cost: layout before paint, busy-main-thread before idle. Then stop. Apply fixes when asked. In piano-trainer's loop there is no stop: apply the fixes at once and go on (`owner-way`, Loops and refactors).
