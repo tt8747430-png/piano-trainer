@@ -651,6 +651,8 @@ export const practice: LocaleResources['practice'] = {
   },
   exercises: {
     groups: {
+      scales: 'Гаммы',
+      arpeggios: 'Арпеджио',
       technique: 'Техника пальцев',
       barryHarris: 'Барри Харрис',
       jonny: 'Piano With Jonny',

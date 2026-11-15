@@ -150,11 +150,16 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                 <Stepper
                   label={t('practice:exercisePage.number')}
                   value={choice.hanon}
-                  min={HANON_NUMBERS[0]}
-                  max={HANON_NUMBERS[HANON_NUMBERS.length - 1]}
+                  min={Math.min(...HANON_NUMBERS)}
+                  max={Math.max(...HANON_NUMBERS)}
                   step={1}
                   format={(number) => t('player:exercise.hanon.number', { number })}
-                  onChange={(next) => setSearch({ hanon: next, tempo: undefined })}
+                  onChange={(next) =>
+                    setSearch({
+                      hanon: HANON_NUMBERS.find((number) => number === next),
+                      tempo: undefined,
+                    })
+                  }
                   decrease={t('practice:exercisePage.previous')}
                   increase={t('practice:exercisePage.next')}
                 />

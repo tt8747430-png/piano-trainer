@@ -680,6 +680,8 @@ export const practice = {
   exercises: {
     // The Exercises page's groups.
     groups: {
+      scales: 'Scales',
+      arpeggios: 'Arpeggios',
       technique: 'Finger technique',
       barryHarris: 'Barry Harris',
       jonny: 'Piano With Jonny',
