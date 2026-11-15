@@ -111,7 +111,7 @@
   --wheel-relative: color-mix(in oklab, var(--primary) 58%, var(--background));
   --wheel-near-inner: color-mix(in oklab, var(--primary) 18%, var(--background));
   /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
-  --selected: var(--p-umber);
+  --selected: var(--p-ink);
   --selected-foreground: var(--p-paper-card);
   --secondary: var(--p-sky-mist);
   --secondary-foreground: var(--p-sky-mist-ink);
