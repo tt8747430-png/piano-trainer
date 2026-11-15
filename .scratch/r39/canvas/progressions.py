@@ -78,7 +78,7 @@ class Component extends DCLogic {
     if (style && !q) flat = LIB.filter((p) => p[1] === style);
     if (flat) { flat = flat.filter(match); if (sort === 'name') flat = flat.slice().sort((a, b) => a[2].localeCompare(b[2])); }
     const groups = STYLES.map(([id, name]) => { const items = LIB.filter((p) => p[1] === id && match(p)); const isOpen = open.includes(id); return { id, name, count: String(items.length), isOpen, rot: isOpen ? 'rotate(90deg)' : 'none', items: isOpen ? items.map(row) : [], toggle: () => set({ open: isOpen ? open.filter((o) => o !== id) : open.concat([id]) }) }; }).filter((g) => g.count !== '0');
-    const places = [['all', 'All'], ['fav', 'Favourites'], ['recent', 'Recently played'], ['mine', 'Mine']].map(([id, l]) => ({ l, on: place === id, bg: place === id ? '#1A1612' : '#FFFFFF', fg: place === id ? '#FFFFFF' : '#1A1612', sh: place === id ? 'none' : '0 0 0 1px #E2DACF', pick: () => set({ place: id, style: null }) }));
+    const places = [['all', 'All'], ['fav', 'Favourites'], ['recent', 'Recently used'], ['mine', 'Mine']].map(([id, l]) => ({ l, on: place === id, bg: place === id ? '#1A1612' : '#FFFFFF', fg: place === id ? '#FFFFFF' : '#1A1612', sh: place === id ? 'none' : '0 0 0 1px #E2DACF', pick: () => set({ place: id, style: null }) }));
     const nFilt = kinds.length + (sort !== 'manual' ? 1 : 0);
     const shown = flat ? flat.length : LIB.filter(match).length;
     return {
@@ -87,12 +87,12 @@ class Component extends DCLogic {
       setQ: (e) => set({ q: e.target.value }), clearQ: () => set({ q: '' }),
       nFilt: String(nFilt), hasFilt: nFilt > 0, filtOn: sheet === 'filter', openFilt: () => set({ sheet: 'filter', menu: false }), closeAll: () => set({ sheet: null, menu: false }),
       addOn: sheet === 'add', openAdd: () => set({ sheet: sheet === 'add' ? null : 'add', menu: false }), menuOn: menu, toggleMenu: () => set({ menu: !menu, sheet: null }),
-      sorts: [['manual', 'As arranged'], ['name', 'Name'], ['recent', 'Recently played']].map(([id, l]) => ({ l, on: sort === id, mark: sort === id ? '✓' : '', pick: () => set({ sort: id }) })),
+      sorts: [['manual', 'As arranged'], ['name', 'Name'], ['recent', 'Recently used']].map(([id, l]) => ({ l, on: sort === id, mark: sort === id ? '✓' : '', pick: () => set({ sort: id }) })),
       kindChips: [['major', 'Major key', LIB.filter((p) => p[4]).length], ['minor', 'Minor key', LIB.filter((p) => p[5]).length]].map(([id, l, n]) => ({ l: l + ' · ' + n, on: kinds.includes(id), bg: kinds.includes(id) ? '#1A1612' : '#FFFFFF', fg: kinds.includes(id) ? '#FFFFFF' : '#1A1612', pick: () => set({ kinds: kinds.includes(id) ? kinds.filter((k) => k !== id) : kinds.concat([id]) }) })),
       showN: 'Show ' + shown, reset: () => set({ kinds: [], sort: 'manual' }),
-      tree: [['all', 'All', LIB.length + mine.length], ['fav', 'Favourites', hearts.length], ['recent', 'Recently played', recent.length], ['mine', 'Mine', mine.length]].map(([id, l, n]) => ({ l, n: String(n), bg: !style && place === id ? '#EFE8DF' : 'transparent', w: !style && place === id ? 700 : 500, pick: () => set({ place: id, style: null }) })),
+      tree: [['all', 'All', LIB.length + mine.length], ['fav', 'Favourites', hearts.length], ['recent', 'Recently used', recent.length], ['mine', 'Mine', mine.length]].map(([id, l, n]) => ({ l, n: String(n), bg: !style && place === id ? '#EFE8DF' : 'transparent', w: !style && place === id ? 700 : 500, pick: () => set({ place: id, style: null }) })),
       styles: STYLES.map(([id, l]) => ({ l, n: String(LIB.filter((p) => p[1] === id).length), bg: style === id ? '#EFE8DF' : 'transparent', w: style === id ? 700 : 500, pick: () => set({ style: id, place: 'all' }) })),
-      listTitle: style ? STYLES.find((x) => x[0] === style)[1] : ({ all: 'All progressions', fav: 'Favourites', recent: 'Recently played', mine: 'Mine' })[place],
+      listTitle: style ? STYLES.find((x) => x[0] === style)[1] : ({ all: 'All progressions', fav: 'Favourites', recent: 'Recently used', mine: 'Mine' })[place],
       legend: ['ton', 'pre', 'dom', 'bor', 'sec'].map((k) => ({ l: ROLE[k][0], bg: ROLE[k][1], fg: ROLE[k][2] }))
     };
   }
