@@ -791,6 +791,9 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 22, Notifications to its board (P9_NOTES):** groups headed in small capitals, rows 64 with the title
+  medium (bold while unread) over a 13px time, soft hairlines; the empty state's one action, Practise now, to
+  Practice (2026-11-15).
 - **Loop round 22, a badge's and a milestone's pages to their boards (P9_BADGE, P9_MILE):** the medal 88, the
   name 26 bold sans, its tier line 15; How to earn it and Personal records in small capitals; Tiers and Milestones
   20 bold heads with their value at the right; tier rows 60 high with 36 medals, locked ones dimmed, the date

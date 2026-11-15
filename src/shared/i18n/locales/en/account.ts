@@ -174,6 +174,7 @@ export const account = {
       cancel: 'Cancel',
       remove: 'Remove',
       emptyTitle: 'No notifications yet',
+      practiseNow: 'Practise now',
       empty: 'Reach a new level, earn a badge or beat your best, and you’ll hear about it here.',
       level: 'Level {{level}} reached',
       tier: '{{tier}} {{badge}}',

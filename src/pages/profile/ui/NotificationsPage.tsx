@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { BellOff, CheckCheck, Flame, Medal, Target, Trash2, TrendingUp, X } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,7 @@ import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   BackButton,
+  ButtonLink,
   ConfirmDialog,
   MoreMenu,
   RoundButton,
@@ -97,7 +98,11 @@ export function NotificationsPage() {
             icon={BellOff}
             title={t('profile.notifications.emptyTitle')}
             description={t('profile.notifications.empty')}
-            action={null}
+            action={
+              <ButtonLink size="lg" render={<Link to="/practice" />}>
+                {t('profile.notifications.practiseNow')}
+              </ButtonLink>
+            }
           />
         ) : (
           GROUPS.map((group) => {
@@ -168,11 +173,14 @@ function Group({
       void navigate({ to: notice.kind === 'streak' ? '/profile/streak' : '/profile/achievements' })
   }
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-1.5">
+      <h2
+        id={id}
+        className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+      >
         {title}
       </h2>
-      <ul className="flex flex-col divide-y divide-border overflow-hidden card">
+      <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
         {notices.map((notice) => {
           const at = new Date(notice.at)
           const Icon =
@@ -192,18 +200,20 @@ function Group({
                   },
                 ]}
               >
-                <div className="flex min-h-16 items-center gap-1 bg-card pr-2">
+                <div className="flex min-h-16 items-center gap-1 bg-card pr-1">
                   <button
                     type="button"
                     onClick={() => open(notice)}
                     className="flex min-w-0 flex-1 items-center gap-3 py-2 pl-3 text-left focus-visible:-outline-offset-3"
                   >
                     <TileMark icon={Icon} paint={notice.read ? 'sand' : 'yellow'} />
-                    <span className="flex min-w-0 flex-col">
-                      <span className={cn('text-pretty', !notice.read && 'font-semibold')}>
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <span
+                        className={cn('text-pretty', notice.read ? 'font-medium' : 'font-bold')}
+                      >
                         {titleOf(notice)}
                       </span>
-                      <span className="text-sm text-muted-foreground tabular-nums">
+                      <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
                         {groupOf(notice, new Date()) === 'earlier'
                           ? date.format(at)
                           : time.format(at)}

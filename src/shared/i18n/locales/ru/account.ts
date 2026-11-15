@@ -189,6 +189,7 @@ export const account: LocaleResources['account'] = {
       cancel: 'Отмена',
       remove: 'Удалить',
       emptyTitle: 'Уведомлений пока нет',
+      practiseNow: 'Заниматься',
       empty:
         'Достигните нового уровня, получите значок или побейте свой рекорд, и мы сообщим об этом здесь.',
       level: 'Достигнут уровень {{level}}',
