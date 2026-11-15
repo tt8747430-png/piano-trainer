@@ -95,7 +95,6 @@ export const player = {
       circle: 'Circle',
     },
   },
-  progress: 'Progress',
   coach: {
     listen: 'Tap a note to start from there, then press Play.',
     wait: 'Press Play, then play each highlighted note.',

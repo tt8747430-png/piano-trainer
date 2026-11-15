@@ -199,8 +199,6 @@ export function PlayerLayout({
   useEffect(() => {
     if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
   }, [playing, view.mode, settingsStore, tip])
-  const groups = performance.beatGroups.length
-  const progress = groups > 1 ? practice.state.beatGroup / (groups - 1) : 0
   // The Settings' head's ··· (its canvas): the music's acts only, in parts: the song's, practice's,
   // the tools, sharing. Every setting is the gear's; Share link is the head's own button.
   const moreMenu: MenuAction[] = (
@@ -356,17 +354,6 @@ export function PlayerLayout({
         {!coached && !practice.state.playing && !annotating ? (
           <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
         ) : null}
-        {/* How far through the music the cursor is: a thin line along the score's head. */}
-        <div
-          role="progressbar"
-          aria-label={t('progress')}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(progress * 100)}
-          className="absolute inset-x-0 top-0 z-10 h-0.5 bg-hairline"
-        >
-          <div className="h-full bg-primary" style={{ width: `${progress * 100}%` }} />
-        </div>
         {annotating}
         {shown === 'sheet' ? (
           <SheetMusic

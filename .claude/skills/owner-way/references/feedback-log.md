@@ -86,6 +86,8 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 17, nothing under the bar:** the progress line along the score's head is gone, as the Player's boards draw none; the bar stands bare over the paper (2026-11-15).
+
 - **Loop round 15, chord symbols raised as the boards set them:** over the staff, in the Player and the editor, and in the engraving, a symbol's numbers and alterations are raised (G⁷, C♯m⁷♭⁵) and its accidentals printed as signs, one splitter (`symbolParts`) shared with the symbols in a line (`ChordText`) (2026-11-14).
 - **Loop round 14, who wrote it under the title, as the boards print it:** one quiet line, "Words: John Newton · Music: New Britain" in 13px, centred under the Player's title and at the right of the editor's and a printed page; a built-in song's credits fill the score's lines where it has none, so every song prints them (2026-11-14).
 

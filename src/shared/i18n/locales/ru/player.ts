@@ -90,7 +90,6 @@ export const player: LocaleResources['player'] = {
       circle: 'Обвести',
     },
   },
-  progress: 'Прогресс',
   coach: {
     listen: 'Нажмите на ноту, чтобы начать с неё, затем — «Играть».',
     wait: 'Нажмите «Играть» и исполняйте каждую подсвеченную ноту.',
