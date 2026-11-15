@@ -117,6 +117,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 34, the laptop's transport names the hands in full:** Both hands, Right hand, Left hand (Обе руки…) beside the picture, as the PlayerDesk board; a phone keeps Both under it (`captionWide` on the bar's button) (2026-11-15).
 - **Loop round 33, the Player's bar band as its board:** 12 over the buttons and 8 under them, a 64 band under the status bar (it was 8 and 4, 56); the editor's floating bar keeps no band (2026-11-15).
 - **Loop round 29, the laptop's views pill as the PlayerDesk board:** a 44 glass pill padded 4 holding four 112 × 34 segments at 14, 600 (Sheet · Diagrams · Grid · Lyrics), the shown filled in ink; the one pill (`ViewPill`) takes a size, the editor's Play · Edit keeping its 44 segments.
 - **Loop round 25, the Practice sheet's Tempo heading (PlayerApp):** the tempo and the metronome sit under "Tempo", the group's caps label, as the board heads them; the tempo face stays the Metronome's one dial (2026-11-15).

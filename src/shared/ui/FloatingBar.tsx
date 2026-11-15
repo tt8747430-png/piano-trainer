@@ -94,6 +94,7 @@ export function FloatingBarButton({
   render,
   named = false,
   caption,
+  captionWide,
   className,
   children,
   ...props
@@ -104,6 +105,8 @@ export function FloatingBarButton({
   named?: boolean
   /** A word under its picture: what it is set to (Wait, Both) or what it is (Loop). */
   caption?: string | undefined
+  /** The caption in full where a laptop has the room (Both hands for Both), as its laptop board. */
+  captionWide?: string | undefined
   /** A link in place of a button. */
   render?: useRender.RenderProp
   children: ReactNode
@@ -138,7 +141,16 @@ export function FloatingBarButton({
     >
       {children}
       {named ? label : null}
-      {caption ? <span aria-hidden>{caption}</span> : null}
+      {caption ? (
+        <span aria-hidden className={captionWide ? 'lg:hidden' : undefined}>
+          {caption}
+        </span>
+      ) : null}
+      {caption && captionWide ? (
+        <span aria-hidden className="max-lg:hidden">
+          {captionWide}
+        </span>
+      ) : null}
     </Button>
   )
 }
