@@ -166,7 +166,15 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
     <>
       {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
           places, so the bar and the keys stand still as Practise · Edit switches. */}
-      <div data-keys={dock} className={SCORE_SCREEN}>
+      <div
+        data-keys={dock}
+        className={cn(
+          SCORE_SCREEN,
+          // As Flat's, what stands at the foot (the keys, else the palette) runs on under the home
+          // indicator to the screen's edge, its own paper filling the inset.
+          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 data-[keys=bottom]:[&>[data-area=keys]]:bg-card data-[keys=bottom]:[&>[data-area=keys]]:pb-safe',
+        )}
+      >
         <ScoreBar
           floating
           lead={<EditorLead />}
