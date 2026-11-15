@@ -105,8 +105,9 @@ export function TunerReadout({
   const cents = pitch ? Math.max(-50, Math.min(50, pitch.cents)) : 0
   const off = pitch ? Math.round(pitch.cents) : 0
   const tuned = pitch !== null && Math.abs(pitch.cents) <= IN_TUNE
-  const name = pitch ? NAMES[((pitch.key % 12) + 12) % 12] : '–'
-  const octave = pitch ? Math.floor(pitch.key / 12) - 1 : null
+  // At rest, the reference note it tunes to, faint, over its pitch (A4 = 440 Hz).
+  const name = pitch ? NAMES[((pitch.key % 12) + 12) % 12] : 'A'
+  const octave = pitch ? Math.floor(pitch.key / 12) - 1 : 4
   return (
     <div className="flex w-full flex-col items-center gap-3">
       <div className="flex flex-col items-center gap-1">
@@ -115,12 +116,12 @@ export function TunerReadout({
           aria-label={t('tuner.note')}
           className={cn(
             'leading-none font-bold',
-            pitch === null && 'text-muted-foreground/40',
+            pitch === null && 'text-muted-foreground/30',
             large ? 'text-[6rem] lg:text-[8.75rem]' : 'text-[6rem]',
           )}
         >
           {name}
-          {octave === null ? null : <sub className="text-[0.333em] font-semibold">{octave}</sub>}
+          <sub className="text-[0.333em] font-semibold">{octave}</sub>
         </output>
         <p
           className={cn(

@@ -762,6 +762,8 @@ owner's, typos fixed.
   exercise's, a pattern's or a progression's page marks it as it opens.
 - **The Metronome's sound is a Woodblock (loop, 2026-11-15, the Metronome board):** the recorded block was named
   "Click"; it is named as the board and a drummer name it, "Вудблок" in Russian.
+- **The Tuner at rest shows its A (loop, 2026-11-15):** before a note is heard, the reference note A₄ stands faint over
+  "A4 = 440 Hz", where a grey dash read as a page still loading; the note heard replaces it in ink.
 
 ## Sounds
 
