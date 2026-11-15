@@ -88,7 +88,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       keyL: NN[key] + ' major', roots: rootGrid(key, (i) => set({ key: i, sheet: null })), voiceSeg: seg(['Voice-led', 'Block'], st.voice ?? 'Voice-led', (l) => set({ voice: l })),
       bpm: (st.bpm ?? 96) + ' BPM', bpmDn: () => set({ bpm: (st.bpm ?? 96) - 4 }), bpmUp: () => set({ bpm: (st.bpm ?? 96) + 4 }),
       kb: calmKeys(48, 76, marks, 370, 110), kbL: calmKeys(41, 84, marks, 860, 160), loop, loopBg: loop ? '#EDE9E1' : '#2E2924', loopFg: loop ? '#24201C' : '#EDE9E1', toggleLoop: () => set({ loop: !loop }),
-      kbE: calmKeys(lo62 - 0, lo62 + 24, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1366, 180),
+      kbE: calmKeys(lo62 - 0, lo62 + 24, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180),
       loopCap: loop ? 'Looping' : 'Loop', loopTint: loop ? '#EDE9E1' : 'rgba(36,32,28,.86)', loopInk: loop ? '#24201C' : '#EDE9E1',
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, menu: null }),

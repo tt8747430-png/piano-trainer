@@ -98,7 +98,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       allPlaying: !!st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       kbE: calmKeys(lo - 7, lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
-      kbLE: calmKeys(lo - 12, lo + 24, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 926, 180),
+      kbLE: calmKeys(lo - 12, lo + 36, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 1462, 180),
       staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + STEP;
         const y = (d) => 65 - d * 3.5, acc = (d, pc) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12; return k === 1 ? '♯' : k === 11 ? '♭' : ''; };
         const har = way === 'Harmonic', x1 = har ? 180 : 150, x2 = har ? (n <= 2 ? 192 : 180) : 210;

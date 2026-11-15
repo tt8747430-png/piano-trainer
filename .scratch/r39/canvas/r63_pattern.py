@@ -5,7 +5,7 @@
 # C major, Amazing Grace) · Practise (the Player). The editor and Publish stay r54's.
 PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop = !!st.loop, over = st.over63 ?? 'A bar of C major';
     const marks = { 36: [ROLE[1], 'C'], 48: [ROLE[1], 'C'], 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] };
-    return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1366, 180),
+    return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
       loop, toggleLoop: () => S({ loop: !loop }), loopTint: loop ? '#332921' : 'rgba(254,253,251,.86)', loopInk: loop ? '#FEFDFB' : '#332921',
       playMenu: st.menu === 'play', closeMenu: () => S({ menu: null }), openPlay: () => S({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),
@@ -66,7 +66,7 @@ ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos"
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
 lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE63}{HIDDEN63}{MUSIC63}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(HANDS63)}{LPA(USED63)}</div></div></div>'

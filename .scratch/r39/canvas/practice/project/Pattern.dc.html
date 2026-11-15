@@ -83,7 +83,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     const name = own ? (st.name ?? 'Broken chords (mine)') : 'Broken chords';
     const loop = !!st.loop, over = st.over63 ?? 'A bar of C major';
     const marks = { 36: [ROLE[1], 'C'], 48: [ROLE[1], 'C'], 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] };
-    return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1366, 180),
+    return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
       loop, toggleLoop: () => S({ loop: !loop }), loopTint: loop ? '#332921' : 'rgba(254,253,251,.86)', loopInk: loop ? '#FEFDFB' : '#332921',
       playMenu: st.menu === 'play', closeMenu: () => S({ menu: null }), openPlay: () => S({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),

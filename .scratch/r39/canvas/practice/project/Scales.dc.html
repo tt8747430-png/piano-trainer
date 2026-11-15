@@ -115,7 +115,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       kb: calmKeys(lo - 5, lo + 19, marks, 370, 120), kbL: calmKeys(lo - 12, lo + 24, marks, 840, 170),
       handsSeg: seg(['Left', 'Both', 'Right'], hands, (l) => set({ hands: l })), oct: oct + (oct === 1 ? ' octave' : ' octaves'), octDn: () => set({ oct: Math.max(1, oct - 1) }), octUp: () => set({ oct: Math.min(4, oct + 1) }),
       chords: tri, ss: { sig, notes: notesS, led },
-      kbE: calmKeys(lo - 5, lo + 19, marks, 402, 150), kbLE: calmKeys(lo - 12, lo + 24, marks, 926, 180),
+      kbE: calmKeys(lo - 5, lo + 19, marks, 402, 150), kbLE: calmKeys(lo - 12, lo + 36, marks, 1462, 180),
       fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })),
       tonicL: tonic, kindLow: KINDS[kind].charAt(0).toLowerCase() + KINDS[kind].slice(1),
       noteLine: ivs.map((_, i) => spell(i)).join(' '), sigLine: kind <= 5 ? SIGW.charAt(0).toUpperCase() + SIGW.slice(1) : ivs.length + ' notes',

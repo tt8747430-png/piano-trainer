@@ -75,7 +75,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     const no = st.no ?? 1, key = st.key ?? 0, bpm = st.bpm ?? 60, target = 108;
     const marks = { 60: [ROLE[1], 'C'], 62: ['#F3D9A8', 'D'], 64: ['#F3D9A8', 'E'], 65: ['#F3D9A8', 'F'], 67: ['#F3D9A8', 'G'] };
     const order = st.order ?? 'Circle of fifths';
-    return { ...common(st, set), kbE: calmKeys(55, 79, marks, 402, 150), kbLE: calmKeys(48, 96, marks, 1366, 180),
+    return { ...common(st, set), kbE: calmKeys(55, 79, marks, 402, 150), kbLE: calmKeys(48, 96, marks, 1462, 180),
       keyShort: NN[key], playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing }),
       favFill: (st.fav ?? true) ? '#C2554A' : 'none', keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       tgL: (st.tg ?? 108) + ' BPM', tgDn: () => set({ tg: Math.max(bpm, (st.tg ?? 108) - 4) }), tgUp: () => set({ tg: (st.tg ?? 108) + 4 }),

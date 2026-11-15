@@ -5,7 +5,7 @@
 # Practise in the Player as rows, and one floating bar: Tempo · Play scale ⌄ (Up, Up and down, Down; Octaves) · Hands.
 # The scale's spelling, signature, staff and triads are r41_practice's SC logic, unchanged.
 SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r'''      chords: tri, ss: { sig, notes: notesS, led },
-      kbE: calmKeys(lo - 5, lo + 19, marks, 402, 150), kbLE: calmKeys(lo - 12, lo + 24, marks, 926, 180),
+      kbE: calmKeys(lo - 5, lo + 19, marks, 402, 150), kbLE: calmKeys(lo - 12, lo + 36, marks, 1462, 180),
       fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })),
       tonicL: tonic, kindLow: KINDS[kind].charAt(0).toLowerCase() + KINDS[kind].slice(1),
       noteLine: ivs.map((_, i) => spell(i)).join(' '), sigLine: kind <= 5 ? SIGW.charAt(0).toUpperCase() + SIGW.slice(1) : ivs.length + ' notes',
@@ -68,8 +68,8 @@ ph60 = (TOP60 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + TITLE60 + SEG60 + VIEW60(4) + PRACT60 + '</main>'
         + BAR60('left: 12px; right: 12px; bottom: 30px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 40px; align-content: start; padding: 8px 40px 120px 56px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px"><div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>{TITLE60}{SEG60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">') + '</div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px 40px; align-content: start; padding: 8px 40px 120px 56px">'
+        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE60}{SEG60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">') + '</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 4px">{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)

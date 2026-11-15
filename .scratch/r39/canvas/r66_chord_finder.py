@@ -5,9 +5,9 @@
 # read as, Played, In these keys; one floating bar of glass pieces: Clear · Play (honey) · Chords (open it there).
 # Empty: Play a chord, the line saying how, three chords to try.
 CF66 = CF.replace("kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, marks, 860, 200), clear: () => set({ held: [] }) };",
-    "kb: calmKeys(48, 76, marks, 370, 170), kbE: calmKeys(48, 72, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1366, 180), clear: () => set({ held: [] }), "
+    "kb: calmKeys(48, 76, marks, 370, 170), kbE: calmKeys(48, 72, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180), clear: () => set({ held: [] }), "
     "tryIt: () => set({ held: [52, 60, 67, 71] }), keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), "
-    "playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), inKeys: 'C major, G major, E minor' };")
+    "playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), inKeys: 'C major, G major, E minor', states: [{ l: 'Nothing played', bg: empty ? '#332921' : '#EEE9E2', pick: () => set({ held: empty ? null : [] }) }] };")
 assert CF66 != CF, 'Chord finder return not found'
 TOP66 = TOP60.replace('Scales and keys</span>', 'Chord finder</span>').replace(ROUND60("Settings", COG, "openSet"), ROUND60("Chord finder settings", COG, "openSet"))
 CHEVS66 = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
@@ -33,10 +33,10 @@ BAR66 = lambda pos: (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{tr
                      + PIECE66('Clear the keys', 'Clear', ERASEI, 'onClick="{{clear}}"') + PLAY66 + PIECE66('Open in Chords', 'Chords', CHORDSI) + '</div></sc-if>')
 CF_SET66 = GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), ('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'), ('toggle', 'Remember the chords played', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'))
 ph66 = (TOP66 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE66 + TRY66 + NOTES66 + ROWS66 + '</main>' + BAR66('left: 12px; right: 12px; bottom: 30px'))
+        + SHOWSTATES() + TITLE66 + TRY66 + NOTES66 + ROWS66 + '</main>' + BAR66('left: 12px; right: 12px; bottom: 30px'))
 lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP66).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
+        + f'{SHOWSTATES()}<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE66.replace("font-size: 44px", "font-size: 64px")}{TRY66}{NOTES66}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS66}</div></div></div>'

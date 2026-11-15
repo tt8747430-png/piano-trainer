@@ -5,7 +5,7 @@
 # the Scales page's Practise rows; Passing chords; the songs it is heard in; and one floating bar as Scales': Loop ·
 # Play ⌄ (Chords: Triads, 7ths, 9ths; Approach chords: None, Secondary dominants, ii–V) · Practise (the Player).
 PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: () => set({ loop: !loop }),
-      kbE: calmKeys(lo62 - 0, lo62 + 24, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1366, 180),
+      kbE: calmKeys(lo62 - 0, lo62 + 24, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180),
       loopCap: loop ? 'Looping' : 'Loop', loopTint: loop ? '#332921' : 'rgba(254,253,251,.86)', loopInk: loop ? '#FEFDFB' : '#332921',
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, menu: null }),
@@ -70,7 +70,7 @@ ph62 = (TOP62 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + BAR62('left: 12px; right: 12px; bottom: 30px') + PMENU62('left: 50%; translate: -50% 0; bottom: 104px'))
 lm62 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP62)
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE62}{TILES62.replace("height: 96px", "height: 120px").replace("font-size: 26px", "font-size: 34px")}{MUSIC62}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{WALKS62}{BETWEEN62}{SONGS62}</div></div></div>'

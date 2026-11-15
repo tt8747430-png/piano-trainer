@@ -13,7 +13,7 @@ IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
       allPlaying: !!st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       kbE: calmKeys(lo - 7, lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
-      kbLE: calmKeys(lo - 12, lo + 24, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 926, 180),
+      kbLE: calmKeys(lo - 12, lo + 36, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 1462, 180),
       staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + STEP;
         const y = (d) => 65 - d * 3.5, acc = (d, pc) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12; return k === 1 ? '♯' : k === 11 ? '♭' : ''; };
         const har = way === 'Harmonic', x1 = har ? 180 : 150, x2 = har ? (n <= 2 ? 192 : 180) : 210;
@@ -59,8 +59,8 @@ ph61 = (TOP61 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + TITLE61 + MUSIC61 + SEG61 + GRID61 + '</main>'
         + BAR61('left: 12px; right: 12px; bottom: 30px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 104px'))
 lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP61)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-content: start; padding: 8px 40px 120px 56px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px"><div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>{TITLE61}{MUSIC61}</div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px 40px; align-content: start; padding: 8px 40px 120px 56px">'
+        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE61}{MUSIC61}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{SEG61}{GRID61}</div></div>'
         + BAR61('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
 phone('Intervals', 'Intervals, phone', ph61, IV61, SHEETS61)

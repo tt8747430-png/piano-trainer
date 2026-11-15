@@ -6,7 +6,7 @@
 # floating bar: Key (the root, a value over its caption, opening the root grid) · Start (the Player) · Listen.
 EX68 = EX.replace("    return { ...common(st, set),", r'''    const marks = { 60: [ROLE[1], 'C'], 62: ['#F3D9A8', 'D'], 64: ['#F3D9A8', 'E'], 65: ['#F3D9A8', 'F'], 67: ['#F3D9A8', 'G'] };
     const order = st.order ?? 'Circle of fifths';
-    return { ...common(st, set), kbE: calmKeys(55, 79, marks, 402, 150), kbLE: calmKeys(48, 96, marks, 1366, 180),
+    return { ...common(st, set), kbE: calmKeys(55, 79, marks, 402, 150), kbLE: calmKeys(48, 96, marks, 1462, 180),
       keyShort: NN[key], playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing }),
       favFill: (st.fav ?? true) ? '#C2554A' : 'none', keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       tgL: (st.tg ?? 108) + ' BPM', tgDn: () => set({ tg: Math.max(bpm, (st.tg ?? 108) - 4) }), tgUp: () => set({ tg: (st.tg ?? 108) + 4 }),
@@ -35,7 +35,7 @@ ph68 = (TOP68 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + TITLE68 + MUSIC68(338) + ROWS68 + HOW68 + '</main>' + BAR68('left: 12px; right: 12px; bottom: 30px'))
 lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP68).replace('FingerTechnique.dc.html', 'FingerTechniqueLaptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
         + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}{HOW68}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68}</div></div></div>'
