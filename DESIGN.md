@@ -476,8 +476,9 @@ square at the top.
   control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
   theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
-- **Toast** (`say`): a card over the screen's foot, clear of all that floats there, with Undo and ✕; gone in five
-  seconds. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
+- **Toast** (`say`): ink, 14 round, over the screen's foot and above every sheet, clear of all that floats there; its
+  line in the sheet's colour, Undo in honey (deep honey by Night, when the toast is light), no ✕; gone in five seconds
+  or by a swipe. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
   or reaches other people, asks first in the dialog, naming what goes.
 - **Marks:** learned a grass disc with a check (`LearnedBadge`); a gap a 10px ochre dot; progress a 6px grass bar on a
   sand track (`ProgressMeter`), or an arc round a lesson's number (`ProgressRing`).
