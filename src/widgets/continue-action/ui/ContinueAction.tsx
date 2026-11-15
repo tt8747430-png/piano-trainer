@@ -1,11 +1,11 @@
-import { BookOpenText, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ProgressBar } from '@/shared/ui'
+import { ProgressBar, LessonIcon } from '@/shared/ui'
 import { continueStep, courseProgress, journeyProgress, useStepTitle } from '@/widgets/curriculum'
 
 /**
@@ -25,7 +25,7 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   if (!next) return null
   const { step } = next
   const read = step.kind === 'lesson' || step.kind === 'course-lesson'
-  const Icon = read ? BookOpenText : Play
+  const Icon = read ? LessonIcon : Play
   const title = stepTitle(step).primary
   const track = 'course' in next ? next.course : next.journey
   const progress =

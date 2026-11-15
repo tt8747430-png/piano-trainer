@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { BookOpenText, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -13,7 +13,7 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ActionMenu, OpensMark } from '@/shared/ui'
+import { ActionMenu, OpensMark, LessonIcon } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
 import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
@@ -94,7 +94,7 @@ export function OwnItems() {
             <li key={lesson.id}>
               <LessonRow
                 render={<Link to="/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-                mark={<BookOpenText className="size-5" strokeWidth={1.75} />}
+                mark={<LessonIcon className="size-5" strokeWidth={1.75} />}
                 done={learnedIt}
                 share={lessonShare(lesson.sections.length, read[step], learnedIt)}
                 title={localText(lesson.title, locale)}

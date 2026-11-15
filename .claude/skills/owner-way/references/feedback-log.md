@@ -374,6 +374,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 34, a lesson wears the board's closed book (`BOOKI`):** `LessonIcon` on Continue, a level's lesson steps, a course's current lesson, Your lessons, New lesson and Publish, where Lucide's open book with lines stood; a book of exercises keeps its open book (2026-11-15).
 - **Loop round 34, a stage's paint in the Learn board's order:** Beginner sage, Intermediate sky, Advanced honey, Professional lilac, as `coursesHome` paints its shelves (it was sky, grass, lilac, sand); one `STAGE_PAINT`, so the covers, a course's page and the editors change together (2026-11-15).
 - **Loop round 32, Tools as the icon wherever the bar is not Practice's:** a lesson's bar on a laptop said "Tools" where its board draws the metronome alone; now the word stands only on Practice's bar, the icon everywhere else at every width, its name in its tooltip (2026-11-15).
 - **Loop round 32, the lesson's bar and its "After:" as the boards:** one gear for Settings on every board (the places' two-slider mark became the Practice pages' cog the app wears); the Tools wear the metronome (its case and pendulum, the Metronome's page picture) wherever they show as an icon, never a grid; a lesson's prerequisites read "After: 7 · Chord functions…", numbered along the level or course, each its own 44px link in a row that wraps whole (two had broken into a sentence with a 44px gap between its lines) (2026-11-15).

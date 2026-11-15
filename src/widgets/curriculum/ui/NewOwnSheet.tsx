@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { BookOpenText, Library } from 'lucide-react'
+import { Library } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { FolderLook } from '@/entities/library'
@@ -18,7 +18,7 @@ import {
   saveOwnCourse,
   setInCourse,
 } from '@/features/manage-own-lessons'
-import { ChoiceChips, NewSheet, SheetPart, type MenuAction } from '@/shared/ui'
+import { ChoiceChips, NewSheet, SheetPart, type MenuAction, LessonIcon } from '@/shared/ui'
 
 /** What the learner makes: a lesson or a course of their own. */
 export type OwnKind = 'lesson' | 'course'
@@ -34,7 +34,7 @@ export function useNewOwnActions(onPick: (kind: OwnKind) => void): readonly Menu
     {
       key: 'lesson',
       label: t('own.newLesson'),
-      icon: BookOpenText,
+      icon: LessonIcon,
       onSelect: () => onPick('lesson'),
     },
     { key: 'course', label: t('own.newCourse'), icon: Library, onSelect: () => onPick('course') },

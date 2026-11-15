@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { allJourneys, lessonById } from '@/entities/lesson'
@@ -16,7 +16,7 @@ import { LookFields } from '@/features/manage-library'
 import { createOwnLesson, saveOwnCourse } from '@/features/manage-own-lessons'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { useRestingSave } from '@/shared/lib'
-import type { EditAction } from '@/shared/ui'
+import { LessonIcon, type EditAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import {
@@ -140,14 +140,14 @@ export function OwnCourseEditor({
   const found: AddGroup[] = [
     {
       title: t('own.lessons'),
-      icon: BookOpenText,
+      icon: LessonIcon,
       items: own
         .filter((lesson) => !value.lessons.includes(lesson.id))
         .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, locale) })),
     },
     {
       title: t('own.appLessons'),
-      icon: BookOpenText,
+      icon: LessonIcon,
       typed: true,
       items: level.filter((each) => !value.lessons.includes(each.key)),
     },

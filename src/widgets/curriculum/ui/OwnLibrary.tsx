@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { BookOpenText, ChevronRight, Copy, SearchX, Settings, Trash2 } from 'lucide-react'
+import { ChevronRight, Copy, SearchX, Settings, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
@@ -35,6 +35,7 @@ import {
   SearchField,
   SortChoice,
   type MenuAction,
+  LessonIcon,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { lessonShare } from '../model/progress'
@@ -60,7 +61,7 @@ function OwnLessonItem({ lesson, nested }: { lesson: OwnLesson; nested: boolean 
     {
       key: 'open',
       label: t('own.open'),
-      icon: BookOpenText,
+      icon: LessonIcon,
       onSelect: () => void navigate({ to: '/lessons/$lessonId', params: { lessonId: lesson.id } }),
     },
     {
@@ -103,7 +104,7 @@ function OwnLessonItem({ lesson, nested }: { lesson: OwnLesson; nested: boolean 
       <div className="min-w-0 flex-1">
         <LessonRow
           render={<Link to="/lessons/$lessonId" params={{ lessonId: lesson.id }} />}
-          mark={<BookOpenText className="size-5" strokeWidth={1.75} />}
+          mark={<LessonIcon className="size-5" strokeWidth={1.75} />}
           done={done}
           share={lessonShare(lesson.sections.length, read[step], done)}
           title={title}
@@ -146,7 +147,7 @@ function OwnCourseItem({
     {
       key: 'open',
       label: t('own.open'),
-      icon: BookOpenText,
+      icon: LessonIcon,
       onSelect: () => void navigate({ to: '/courses/$courseId', params: { courseId: course.id } }),
     },
     {
@@ -313,7 +314,7 @@ export function OwnLibrary() {
           <p className="text-pretty">{t('own.empty')}</p>
           <div className="flex flex-wrap gap-3">
             <Button onClick={() => setMaking('lesson')}>
-              <BookOpenText data-icon="inline-start" aria-hidden />
+              <LessonIcon data-icon="inline-start" aria-hidden />
               {t('own.newLesson')}
             </Button>
             <Button variant="outline" onClick={() => setMaking('course')}>

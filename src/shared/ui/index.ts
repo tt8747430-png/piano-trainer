@@ -36,6 +36,7 @@ export { ScaleIcon } from './icons/ScaleIcon'
 export { KeysIcon } from './icons/KeysIcon'
 export { FilterIcon } from './icons/FilterIcon'
 export { MetronomeIcon } from './icons/MetronomeIcon'
+export { LessonIcon } from './icons/LessonIcon'
 export { SelectionBarIcon } from './icons/SelectionBarIcon'
 export { PAGE_PICTURES, type PagePicture } from './PagePictures'
 export {

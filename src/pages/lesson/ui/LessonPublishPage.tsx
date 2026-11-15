@@ -1,10 +1,10 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { BookOpenText } from 'lucide-react'
+
 import { useTranslation } from 'react-i18next'
 import { LESSONS, lessonById, lessonPlace, type Lesson } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, TileMark } from '@/shared/ui'
+import { BackButton, TileMark, LessonIcon } from '@/shared/ui'
 import { DraftPublishScreen } from '@/widgets/content-editor'
 
 /** A level's lesson's Publish page (`/lessons/$lessonId/publish`, R29 B6), an editor's. */
@@ -36,7 +36,7 @@ function LessonPublish({ lesson, id }: { lesson: Lesson; id: string }) {
       removable={!LESSONS.some((each) => each.id === id)}
       preview={
         <div className="card flex min-h-16 items-center gap-3 p-2">
-          <TileMark icon={BookOpenText} paint="sky" />
+          <TileMark icon={LessonIcon} paint="sky" />
           <span className="flex min-w-0 flex-col">
             <span className="text-lg font-semibold text-balance">{title}</span>
             {place ? (

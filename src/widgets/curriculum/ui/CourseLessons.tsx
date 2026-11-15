@@ -1,4 +1,5 @@
-import { BookOpenText } from 'lucide-react'
+import { LessonIcon } from '@/shared/ui'
+
 import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +50,7 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
                   />
                 }
                 // As a level's line: the next one its book, the rest their number, said once.
-                mark={current ? <BookOpenText className="size-5" strokeWidth={1.75} /> : i + 1}
+                mark={current ? <LessonIcon className="size-5" strokeWidth={1.75} /> : i + 1}
                 done={done}
                 share={share}
                 current={current}

@@ -1,4 +1,5 @@
-import { BookOpenText, CalendarDays, Music } from 'lucide-react'
+import { LessonIcon } from '@/shared/ui'
+import { CalendarDays, Music } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { Course } from '@/entities/course'
 import { cn } from '@/shared/lib'
@@ -20,7 +21,7 @@ export function CourseFacts({
   const { t } = useTranslation(['learn', 'common'])
   const facts = [
     {
-      icon: BookOpenText,
+      icon: LessonIcon,
       label: t('learn:course.lessonCount', { count: course.lessons.length }),
     },
     ...(course.songs.length > 0
