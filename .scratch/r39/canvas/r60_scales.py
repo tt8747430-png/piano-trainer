@@ -6,6 +6,7 @@
 # The scale's spelling, signature, staff and triads are r41_practice's SC logic, unchanged.
 SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r'''      chords: tri, ss: { sig, notes: notesS, led },
       kbE: calmKeys(lo - 5, lo + 19, marks, 402, 150), kbLE: calmKeys(lo - 12, lo + 24, marks, 926, 180),
+      fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })),
       tonicL: tonic, kindLow: KINDS[kind].charAt(0).toLowerCase() + KINDS[kind].slice(1),
       noteLine: ivs.map((_, i) => spell(i)).join(' '), sigLine: kind <= 5 ? SIGW.charAt(0).toUpperCase() + SIGW.slice(1) : ivs.length + ' notes',
       fingRH: fingOk && ivs.length === 7 ? '1 2 3 1 2 3 4 5' : '', fingLH: fingOk && ivs.length === 7 ? '5 4 3 2 1 3 2 1' : '',

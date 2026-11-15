@@ -342,6 +342,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Scale settings is the gear's sheet, in place** (canvas 196, loop): the view's choices leave the page for one sheet: Fingering (As the scale · From the thumb), Start on, Compare with (A43, kept), Rhythm; the Chords view's size, inversion and what the keys play; then On the staff › to its one home in Settings. The board's Count-in goes: Play scale is a listen, a count-in before it does nothing.
 - **A scale's keys carry their names alone** (loop, the Scales board): the tonic rose, the rest sand, each key its note's name (G A B C D E F♯); no degree numerals and no fingers on the keys, which the staff carries. One `scaleShown`, so Scales and keys, a key's view and the examples change together.
 - **Chords' practise rows show their music, one chord or several** (loop, canvas 193): Inversions shows the rotations (C E G B · E G B C · …) and Arpeggio its notes (C E G B C …), as the app does; the board's "Root position, 1st, 2nd" and "Two octaves" were words where the music fits.
 - **Loop round 21, the Chord player's bar across the gutter:** Style · Key · Tempo · Repeats and Play span the
