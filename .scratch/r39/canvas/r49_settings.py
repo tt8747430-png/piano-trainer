@@ -282,6 +282,8 @@ s9lm = (f'<div style="flex: 1; min-height: 0; display: grid; grid-template-colum
         f'<div style="display: flex; align-items: center; gap: 4px; min-height: 44px"><sc-if value="{{{{lapBack}}}}" hint-placeholder-val="{{{{false}}}}">{IB('Back to {{lapBackT}}', CHEV_L, 'back')}</sc-if></div>'
         f'<h2 style="margin: -8px 0 6px; font-size: 26px; font-weight: 700">{{{{lapT}}}}</h2>{PAGEBODIES("l_", True)}</div></main></div>'
         + PREVPILL('left: 50%; transform: translateX(-50%); bottom: 28px; white-space: nowrap') + S9TOAST.replace('left: 16px; right: 16px; bottom: 40px', 'left: 50%; transform: translateX(-50%); width: 420px; bottom: 28px') + S9ASKS)
-SETTINGS_JS = SETTINGS_JS.replace("return { ...common(st, set), ...v,", "v.acctBg = page === 'Account' || PARENT[cur] === 'Account' ? '#F2ECE4' : '#FEFDFB'; v.syncLine = st.syncing ? 'Syncing…' : 'Synced ' + (st.synced ?? '2 min ago');\n    return { ...common(st, set), ...v,")
-detail('Settings', 'Settings', SETTINGS_JS, s9ph, s9lm, '', S9SHEETS, S9POPS, 'Profile')
+SETTINGS_JS = SETTINGS_JS.replace("return { ...common(st, set), ...v,", "v.acctBg = page === 'Account' || PARENT[cur] === 'Account' ? '#F2ECE4' : '#FEFDFB'; v.syncLine = st.syncing ? 'Syncing…' : 'Synced ' + (st.synced ?? '2 min ago');\n"
+    "    v.states = [['Signed out', !!st.out, { out: true }, { out: false }], ['Syncing', !!st.syncing, { syncing: true, out: false }, { syncing: false }], ['An update available', st.upd === 'avail', { upd: 'avail' }, { upd: null }], ['Viewing as a learner', !!st.prev, { prev: true }, { prev: false }]]"
+    ".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));\n    return { ...common(st, set), ...v,")
+detail('Settings', 'Settings', SETTINGS_JS, SHOWSTATES() + s9ph, SHOWSTATES() + s9lm, '', S9SHEETS, S9POPS, 'Profile')
 print('r49 settings ok')
