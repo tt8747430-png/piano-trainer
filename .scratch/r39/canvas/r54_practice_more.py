@@ -251,16 +251,6 @@ PVSET = (IF('isWalk', SEC(CAPS('Root'), WRAPCHIPS('roots')) + SEC(CAPS('Chord si
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
                       + SEC(S9CAPS('Tempo ladder', 'lad'), TIPCARD('lad', 'Each clean pass raises the tempo a little, up to the target.'), GROUP(('toggle', 'Tempo ladder', 'ladOn', 'ladT'), bg=SHEET)))
          + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>')
-def PVSTAFF(w):
-    lines = ''.join(f'<path d="M0 {y}H{w}" stroke="{INK}" stroke-width=".8" opacity=".55"></path>' for y in (20, 28, 36, 44, 52, 92, 100, 108, 116, 124))
-    notes = ''.join(f'<ellipse cx="{40 + i * (w - 60) / 8:.0f}" cy="{[44, 40, 36, 40, 44, 40, 36, 32][i]}" rx="5" ry="4" fill="{INK}" opacity=".55"></ellipse><ellipse cx="{40 + i * (w - 60) / 8:.0f}" cy="{[116, 116, 112, 112, 116, 116, 108, 108][i]}" rx="5" ry="4" fill="{INK}" opacity=".55"></ellipse>' for i in range(8))
-    return f'<svg viewBox="0 0 {w} 140" width="100%" aria-hidden="true" style="display: block">{lines}{notes}</svg>'
-PVPLAYER = lambda w, kb_h: (f'<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 8px 16px">{CARD(PVSTAFF(w), "16px")}<div style="flex: 1"></div>'
-                             f'<div style="height: {kb_h}px; border-radius: 12px; background: linear-gradient(90deg, #FEFDFB 0 92%, {LINE} 92% 100%); background-size: {w / 21:.1f}px 100%; box-shadow: 0 0 0 1px {LINE}"></div>'
-                             f'<div style="display: flex; align-items: center; gap: 10px">{BTN("Setup", "openSetup", "", "quiet", 44, False)}<span style="flex: 1"></span>{PLAYBTN(52)}</div></div>')
 PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
-pvph = PVBAR.replace('Practice.dc.html', 'Main.dc.html') + PVPLAYER(370, 110)
-pvlm = PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html') + PVPLAYER(900, 170)
-for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v)), pvph, pvlm, '', BSHEET('setupOn', 'Setup', PVSET, 'Close'), POPOVER('setupOn', 'Setup', PVSET, 'right: 40px; top: 64px', 420), 'Practice')
+# the four runs' Player is drawn in r56_results.py, from the run view's parts (round 41)
 print('r54 take, player variants ok')

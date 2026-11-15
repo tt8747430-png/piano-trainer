@@ -30,11 +30,15 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
         lines += f'<path d="M{w - .6} 16V48" stroke="{INK}" stroke-width="1.2"></path>'
     if clef:
         return f'<svg viewBox="0 0 {w} 72" width="{w}" height="72" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text></svg>'
-    steps = sorted(RS_STEP(l, o) for l, o in notes)
+    # round 41: a note may carry its accidental, (letter, octave, '♯' or '♭'), set left of the chord as an engraver does
+    accs = {RS_STEP(n[0], n[1]): n[2] for n in notes if len(n) > 2}
+    steps = sorted(RS_STEP(n[0], n[1]) for n in notes)
     cx, out, prev, shifted = w / 2 - 3, '', None, False
     for s in steps:
         shifted = (prev is not None and s - prev == 1 and not shifted)
         x = cx + (10 if shifted else 0)
+        if s in accs:
+            out += f'<text x="{cx - 16:.1f}" y="{y(s) + 4}" font-family="Noto Music, serif" font-size="14" fill="{INK}">{accs[s]}</text>'
         if s <= 0:
             out += f'<path d="M{cx - 9} 56H{cx + 9 + (10 if shifted else 0)}" stroke="{INK}" stroke-width="1"></path>'
         c = RS_RED if red and RS_STEP(*red) == s else INK
@@ -178,3 +182,35 @@ rs_pph = RS_MOTION + TOP('Profile.dc.html', '', '', 'Back') + RS_RESULTS(4, 76, 
 rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html') + RS_RESULTS(6, 116, True, True)
 detail('PracticeResult', 'A practice run’s results, from Profile', RS_JS("'result'"), rs_pph, rs_plm, '', '', '', 'Profile')
 print('r56 results ok')
+
+# Round 41: the Player's runs (walk the chords, a chromatic walk, a progression in 12 keys, an exercise) in the run
+# view's parts, where a wireframe stood (a staff with no clef and grey dots, keys with no black keys in a card): the
+# chords engraved on the treble staff, the one piano edge to edge at the foot with the first chord's tones in their
+# paints, the transport centred under the staff; Setup opens the run's choices, as before.
+PV_WALK = [[('C', 4), ('E', 4), ('G', 4)], [('D', 4), ('F', 4), ('A', 4)], [('E', 4), ('G', 4), ('B', 4)], [('F', 4), ('A', 4), ('C', 5)], [('G', 4), ('B', 4), ('D', 5)], [('A', 4), ('C', 5), ('E', 5)], [('B', 4), ('D', 5), ('F', 5)], [('C', 5), ('E', 5), ('G', 5)]]
+_F, _S = '♭', '♯'
+PV_MUSIC = {'walk': PV_WALK,
+    'chromatic': [[('C', 4), ('E', 4, _F), ('G', 4), ('B', 4, _F)], [('C', 4, _S), ('E', 4), ('G', 4, _S), ('B', 4)], [('D', 4), ('F', 4), ('A', 4), ('C', 5)], [('E', 4, _F), ('G', 4, _F), ('B', 4, _F), ('D', 5, _F)],
+                  [('E', 4), ('G', 4), ('B', 4), ('D', 5)], [('F', 4), ('A', 4, _F), ('C', 5), ('E', 5, _F)], [('F', 4, _S), ('A', 4), ('C', 5, _S), ('E', 5)], [('G', 4), ('B', 4, _F), ('D', 5), ('F', 5)]],
+    'progression': [[('C', 4), ('E', 4), ('G', 4)], [('B', 3), ('D', 4), ('G', 4)], [('C', 4), ('E', 4), ('A', 4)], [('C', 4), ('F', 4), ('A', 4)]] * 2,
+    'exercise': [[(l, o)] for l, o in (('C', 4), ('E', 4), ('F', 4), ('G', 4), ('A', 4), ('G', 4), ('F', 4), ('E', 4))]}
+def PV_STAFF(n, cw, v='walk'):
+    cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(i == n - 1)) for i in range(n))
+    return CARD(f'<div style="display: flex; justify-content: center">{cells}</div>', '12px 8px')
+def PV_RUN(lap, v):
+    setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
+    transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
+                 f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
+    if lap:
+        return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 1180px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
+                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
+    return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(4, 76, v)}<div style="flex: 1"></div>'
+            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
+PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
+         "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
+PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
+for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSET, 'Close'), POPOVER('setupOn', 'Setup', PVSET, 'right: 40px; top: 64px', 420), 'Practice')
+print('r56 runs ok')
