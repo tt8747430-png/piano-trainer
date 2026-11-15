@@ -232,7 +232,7 @@ function TileFace({
 }) {
   return (
     <>
-      <span className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap tabular-nums">
+      <span className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap">
         {/* The figures outrank their units: "2 h 45 min" keeps to a third of a phone. */}
         {String(value)
           .split(/(\d+)/)

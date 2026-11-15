@@ -37,7 +37,7 @@ export function SharedWithMe({ inTree }: { inTree: boolean }) {
                     >
                       <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
                       <span className="min-w-0 truncate">{folder.name}</span>
-                      <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground tabular-nums">
+                      <span className="ms-auto ps-2 text-sm font-normal text-muted-foreground">
                         {folder.songs.length}
                       </span>
                     </Link>

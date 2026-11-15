@@ -11,7 +11,7 @@ import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/s
 function Tile({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex min-w-0 flex-col gap-1 card p-3">
-      <dd className="text-2xl leading-tight font-bold whitespace-nowrap tabular-nums">{value}</dd>
+      <dd className="text-2xl leading-tight font-bold whitespace-nowrap">{value}</dd>
       <dt className="mt-auto text-sm font-semibold text-muted-foreground">{label}</dt>
     </div>
   )
@@ -92,7 +92,7 @@ export function RunPage() {
           <h1 className="mt-2 font-sans text-[1.625rem] leading-tight font-bold text-balance">
             {name}
           </h1>
-          <p className="text-muted-foreground tabular-nums">
+          <p className="text-muted-foreground">
             {perfect
               ? t('profile.history.result.perfect')
               : t('profile.history.result.correct', { right, count: run.answered })}
@@ -116,7 +116,7 @@ export function RunPage() {
           />
         </dl>
         {record ? (
-          <p className="text-center text-[0.9375rem] text-muted-foreground tabular-nums">
+          <p className="text-center text-[0.9375rem] text-muted-foreground">
             {best
               ? t('profile.history.result.best', { percent: record.best })
               : t('profile.history.result.newBest')}

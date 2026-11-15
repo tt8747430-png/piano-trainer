@@ -28,7 +28,7 @@ export function StreakPage() {
             <Flame aria-hidden className={cn('size-8', run > 0 && 'fill-current')} />
           </span>
           <span className="flex min-w-0 flex-col gap-1">
-            <span className="font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em] tabular-nums">
+            <span className="font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em]">
               {t('profile.streakPage.days', { count: run })}
             </span>
             <span className="text-[0.9375rem]/snug text-pretty text-muted-foreground">
@@ -39,12 +39,12 @@ export function StreakPage() {
         <PracticeCalendar title={t('profile.streakPage.calendar')} browse />
         <GroupRows label={t('profile.streakPage.title')} surface="sheet">
           <GroupRow label={t('profile.streakPage.longest')}>
-            <span className="text-muted-foreground tabular-nums">
+            <span className="text-muted-foreground">
               {t('profile.achievements.days', { count: record.bestStreak })}
             </span>
           </GroupRow>
           <GroupRow label={t('profile.streakPage.month')}>
-            <span className="text-muted-foreground tabular-nums">{thisMonth}</span>
+            <span className="text-muted-foreground">{thisMonth}</span>
           </GroupRow>
         </GroupRows>
       </div>

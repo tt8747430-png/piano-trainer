@@ -12,7 +12,7 @@ export function RunRow({ id, name, detail, accuracy }: RunLine) {
     <RowLink
       title={name}
       detail={detail}
-      trailing={<span className="text-[1.0625rem] font-bold tabular-nums">{accuracy}</span>}
+      trailing={<span className="text-[1.0625rem] font-bold">{accuracy}</span>}
       render={<Link to="/profile/history/$runId" params={{ runId: id }} />}
     />
   )

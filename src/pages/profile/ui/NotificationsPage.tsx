@@ -213,7 +213,7 @@ function Group({
                       >
                         {titleOf(notice)}
                       </span>
-                      <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
+                      <span className="text-[0.8125rem] text-muted-foreground">
                         {groupOf(notice, new Date()) === 'earlier'
                           ? date.format(at)
                           : time.format(at)}

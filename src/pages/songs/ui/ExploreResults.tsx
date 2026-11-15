@@ -38,7 +38,7 @@ export function ExploreResults({
             {t('explore.shelvesBack')}
           </Button>
         ) : (
-          <h2 className="font-sans text-sm font-semibold text-muted-foreground tabular-nums">
+          <h2 className="font-sans text-sm font-semibold text-muted-foreground">
             {browse.kind === 'found'
               ? t(patterns ? 'explore.patternCount' : 'explore.songCount', {
                   count: browse.entries.length,

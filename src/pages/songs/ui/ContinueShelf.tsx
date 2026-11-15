@@ -50,7 +50,7 @@ export function ContinueShelf() {
                   style={{ width: `${Math.round((play.at / play.bars) * 100)}%` }}
                 />
               </span>
-              <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
+              <span className="text-[0.8125rem] text-muted-foreground">
                 {t('continue.bar', { bar: play.at + 1, total: play.bars })}
               </span>
             </PieceLink>

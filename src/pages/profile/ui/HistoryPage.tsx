@@ -41,12 +41,10 @@ function MonthChart() {
     <div className="flex flex-col gap-3 card px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <p className="flex flex-col gap-0.5">
-          <span className="text-[1.375rem] leading-tight font-bold tabular-nums">
-            {time(total)}
-          </span>
+          <span className="text-[1.375rem] leading-tight font-bold">{time(total)}</span>
           <span className="text-sm text-muted-foreground">{t('profile.history.month')}</span>
         </p>
-        <p className="text-sm font-semibold text-muted-foreground tabular-nums">
+        <p className="text-sm font-semibold text-muted-foreground">
           {change === 0
             ? t('profile.history.same')
             : t(change > 0 ? 'profile.history.more' : 'profile.history.less', {
