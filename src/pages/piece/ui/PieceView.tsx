@@ -74,7 +74,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           />
         }
       />
-      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12">
+      <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:items-start lg:gap-x-12 xl:grid-cols-[minmax(0,32.5rem)_minmax(0,1fr)]">
         <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">
           <PieceFirstPage piece={piece} />
           <div className="flex flex-col gap-2">

@@ -227,6 +227,8 @@ owner's, typos fixed.
 
 ## Song page
 
+- **The cover column as the board draws it (loop round 19):** on a laptop from 1280 wide the song page's first column is 520px (the SongLaptop board's `grid-template-columns: 520px`), its gap 48; below that it keeps 24rem, the room a 1024 screen has.
+
 - **A long value takes two lines, then an ellipsis (loop round 18):** a row's value (a song's long title in its Details) wraps between words as before and stops at two lines, as every title does.
 
 - **Loop round 16, an item's Settings in plain rows (the SongSettings, YourCourseSettings and YourLessonSettings
