@@ -1,4 +1,4 @@
-import { Dumbbell, Play, Repeat } from 'lucide-react'
+import { Play, Repeat } from 'lucide-react'
 import {
   createContext,
   use,
@@ -24,6 +24,7 @@ import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { useFitZoom } from '@/shared/lib'
 import {
+  KeysIcon,
   FloatingActions,
   FloatingPiece,
   FloatingPieces,
@@ -312,7 +313,7 @@ export function RowPlay({
               caption={practise.caption}
               render={practise.render}
             >
-              <Dumbbell aria-hidden />
+              <KeysIcon aria-hidden />
             </FloatingPieceLink>
           ) : null}
         </FloatingPieces>

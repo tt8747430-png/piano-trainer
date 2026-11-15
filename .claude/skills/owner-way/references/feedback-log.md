@@ -361,6 +361,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Practise in the Player wears the keys (loop round 17):** the floating Practise on the Progression, Scales and Pattern pages is the keys glyph (`KeysIcon`), as the Progression board's `PRACTI` draws it; the dumbbell is gone from the app.
+
 - **The keys show their computer letters only once typed on (loop round 17):** every board draws the on-screen piano plain on a laptop; the letters that play each key appear after the learner first types a key or moves the octave (Z, X), the hidden UI shown when it is wanted. One piano, so the Chord finder, the Chords page, the Player and the editor alike.
 
 - **Scale settings ported** (loop, canvas 196): the gear on Scales and keys opens the sheet in place; the run's Fingering, Start on, Compare with, Rhythm (in the board's order) and the Chords view's size, inversion, keys play, played as and tempo leave the page for it; On the staff › shows what is written (Off, or the layers on) and opens its one home in Settings. The practise rows now follow the staff, as the board.

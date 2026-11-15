@@ -1,8 +1,9 @@
-import { Dumbbell, Repeat } from 'lucide-react'
+import { Repeat } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePlayback } from '@/shared/lib/services'
 import {
+  KeysIcon,
   FloatingActions,
   FloatingPiece,
   FloatingPieceLink,
@@ -76,7 +77,7 @@ export function PatternPieces({
           caption={practise.caption}
           render={practise.render}
         >
-          <Dumbbell aria-hidden />
+          <KeysIcon aria-hidden />
         </FloatingPieceLink>
       </FloatingPieces>
     </FloatingActions>
