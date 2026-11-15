@@ -3,10 +3,8 @@ import { useState, type ReactNode } from 'react'
 import {
   CAMERA_ANGLES,
   CHORD_LABELS,
-  CHORD_RANGES,
   type CameraAngle,
   type ChordLabels,
-  type ChordRange,
   useOnline,
 } from '@/shared/lib'
 import { printedKeyName, type Midi } from '@/shared/lib/music'
@@ -36,7 +34,7 @@ export type PianoShown = 'hands' | 'keys'
  * keys) or the 2D keys as two cards, choosing one shows it; then the Sound and the MIDI keyboard, each
  * a row to its home with its value now.
  */
-export function PianoSheet({
+export function PianoSheet<R extends string>({
   keys,
   hands,
   onKeys,
@@ -61,13 +59,14 @@ export function PianoSheet({
   labels?: { readonly value: ChordLabels; readonly onChange: (labels: ChordLabels) => void }
   /** How many keys it shows and which, where the screen offers a choice (Chords): the canvas's Range. */
   range?: {
-    readonly value: ChordRange
+    readonly value: R
+    /** Its choices, each named (Chords' Fit the chord · 2 octaves · 4 octaves; the Player's keys). */
+    readonly options: readonly { readonly value: R; readonly label: string }[]
     readonly low: Midi
     readonly high: Midi
-    readonly onChange: (range: ChordRange) => void
-    /** The white keys the strip moves (two or four octaves), and where it was dragged to. */
-    readonly whites: number
-    readonly onMove: (from: Midi) => void
+    readonly onChange: (range: R) => void
+    /** Where the strip is a slider (Chords'): the white keys it moves, and where it was dragged to. */
+    readonly move?: { readonly whites: number; readonly onMove: (from: Midi) => void }
   }
   /** The 3D piano's own rows, under its card while it is chosen (Chords): Angle, Hands on the keys. */
   stage?: {
@@ -152,15 +151,12 @@ export function PianoSheet({
                   from: printedKeyName(range.low),
                   to: printedKeyName(range.high),
                 })}
-                move={{ whites: range.whites, onMove: range.onMove }}
+                {...(range.move ? { move: range.move } : {})}
               />
               <Segmented
                 label={t('pianoSheet.range')}
                 value={range.value}
-                options={CHORD_RANGES.map((each) => ({
-                  value: each,
-                  label: t(`pianoSheet.ranges.${each}`),
-                }))}
+                options={range.options}
                 onChange={range.onChange}
               />
             </div>

@@ -364,6 +364,8 @@ export const player = {
     range: 'Range',
     rangeShown: 'The keys shown: {{from}} to {{to}}',
     ranges: { chord: 'Fit the chord', two: '2 octaves', four: '4 octaves' },
+    // The Player's Range (its Piano sheet, the canvas's): the song's keys, or a keyboard's span.
+    songRanges: { song: 'Fit the song', '61': '61 keys', '76': '76 keys', '88': '88 keys' },
     labels: 'Labels',
     label: {
       names: 'Note names',

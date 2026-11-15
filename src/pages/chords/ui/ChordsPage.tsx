@@ -10,7 +10,7 @@ import {
 import { useMidiSummary } from '@/features/connect-midi'
 import { PianoSheet, useFoldKeys } from '@/features/live-keyboard'
 import { setChords, setScoreView } from '@/features/set-preference'
-import { useSetSearch } from '@/shared/lib'
+import { CHORD_RANGES, useSetSearch } from '@/shared/lib'
 import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
 import { ChordExplorer, framedChord, RANGE_WHITES, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
@@ -50,6 +50,10 @@ export function ChordsPage() {
             }}
             range={{
               value: range,
+              options: CHORD_RANGES.map((each) => ({
+                value: each,
+                label: t(`player:pianoSheet.ranges.${each}`),
+              })),
               low: framed.low,
               high: framed.high,
               // Fit the chord forgets where the strip was dragged; a drag on it shows two octaves.
@@ -58,9 +62,14 @@ export function ChordsPage() {
                   settings,
                   next === 'chord' ? { range: next, rangeFrom: null } : { range: next },
                 ),
-              whites: RANGE_WHITES[range === 'chord' ? 'two' : range],
-              onMove: (from) =>
-                setChords(settings, { range: range === 'chord' ? 'two' : range, rangeFrom: from }),
+              move: {
+                whites: RANGE_WHITES[range === 'chord' ? 'two' : range],
+                onMove: (from) =>
+                  setChords(settings, {
+                    range: range === 'chord' ? 'two' : range,
+                    rangeFrom: from,
+                  }),
+              },
             }}
             trigger={(open) => (
               <RoundButton

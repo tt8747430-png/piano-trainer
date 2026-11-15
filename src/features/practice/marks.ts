@@ -1,3 +1,4 @@
+import type { SongRange } from '@/shared/lib'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import {
   keyboardRange,
@@ -68,6 +69,17 @@ export const keysRange = (keys: readonly Midi[]): KeyRange => keyboardRange(keys
 /** Every note of the piece on the keyboard, from a C to a B. */
 export const playerRange = (performance: Performance): KeyRange =>
   keysRange(performance.notes.map((n) => n.midi))
+
+/** A keyboard's span by its keys: 61 from C2, 76 from E1, the piano's 88 from A0. */
+const SPANS: Readonly<Record<Exclude<SongRange, 'song'>, KeyRange>> = {
+  '61': { from: midi(36), to: midi(96) },
+  '76': { from: midi(28), to: midi(103) },
+  '88': { from: midi(21), to: midi(108) },
+}
+
+/** The keys the Player shows (its Range): every note of the piece, or a keyboard's span. */
+export const songRange = (performance: Performance, range: SongRange): KeyRange =>
+  range === 'song' ? playerRange(performance) : SPANS[range]
 
 /**
  * The keys sounding only under the sustain pedal at a beat group (A27, Show it): struck under the

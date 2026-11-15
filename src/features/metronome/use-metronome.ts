@@ -98,7 +98,7 @@ function atVolume(
   const share = volume / 100
   return sounds.map((sound) =>
     sound.kind === 'click'
-      ? { ...sound, gain: sound.gain * share }
+      ? { ...sound, gain: (sound.gain ?? 1) * share }
       : { ...sound, velocity: sound.velocity * share },
   )
 }

@@ -41,6 +41,7 @@ import {
   isChordLabels,
   isChordRange,
   isCameraAngle,
+  isSongRange,
   type ChordsSettings,
   type ChordPlayerSettings,
   isProgressionNames,
@@ -99,7 +100,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 47
+export const SETTINGS_VERSION = 48
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -339,7 +340,7 @@ const isSheetView = isOneOf(SHEET_VIEWS)
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'hands') =>
+  const switched = (key: 'chordNames' | 'lyrics' | 'pinned' | 'keys' | 'hands' | 'handsOnKeys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
@@ -351,6 +352,9 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
     hands: switched('hands'),
+    angle: isCameraAngle(saved.angle) ? saved.angle : DEFAULT_SCORE_VIEW.angle,
+    handsOnKeys: switched('handsOnKeys'),
+    range: isSongRange(saved.range) ? saved.range : DEFAULT_SCORE_VIEW.range,
   }
 }
 

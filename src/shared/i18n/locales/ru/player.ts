@@ -335,6 +335,8 @@ export const player: LocaleResources['player'] = {
     range: 'Диапазон',
     rangeShown: 'Показаны клавиши: от {{from}} до {{to}}',
     ranges: { chord: 'По аккорду', two: '2 октавы', four: '4 октавы' },
+    // The Player's Range (its Piano sheet, the canvas's): the song's keys, or a keyboard's span.
+    songRanges: { song: 'По песне', '61': '61 клавиша', '76': '76 клавиш', '88': '88 клавиш' },
     labels: 'Подписи',
     label: {
       names: 'Ноты',

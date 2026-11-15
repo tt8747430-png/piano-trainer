@@ -13,7 +13,7 @@ import {
   hiddenStaves,
   loopParam,
   pedalKeys,
-  playerRange,
+  songRange,
   practiceMarks,
   practisedHands,
   readLoop,
@@ -133,6 +133,7 @@ export function usePracticePlayer(
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
   const savedKeys = useSettings((state) => selectScoreView(state).keys)
+  const keysShown = useSettings((state) => selectScoreView(state).range)
   const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
   const otherHand = useSettings(selectOtherHand)
@@ -192,7 +193,7 @@ export function usePracticePlayer(
     () => (waiting ? practisedHands(practisedHand) : audibleHands(practisedHand)),
     [waiting, practisedHand],
   )
-  const range = useMemo(() => playerRange(performance), [performance])
+  const range = useMemo(() => songRange(performance, keysShown), [performance, keysShown])
   // Stable while the beat group is, so the keyboard's memoised keys re-render only when theirs change.
   const marks = useMemo(
     () =>

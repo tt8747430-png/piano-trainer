@@ -89,6 +89,8 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 19, the Player's Piano sheet to its board (r43, `KBVALS`):** the 3D card holds Angle (Seat · Above) and Hands on the keys, and Range follows the cards: Fit the song · 61 keys · 76 keys · 88 keys (C2–C7, E1–G7, A0–C8), each kept in the Player's own settings. Every segmented control is the board's SEG: each segment as wide as its words, never wrapped, the room left shared (2026-11-15).
+
 - **Loop round 17, nothing under the bar:** the progress line along the score's head is gone, as the Player's boards draw none; the bar stands bare over the paper (2026-11-15).
 
 - **Loop round 15, chord symbols raised as the boards set them:** over the staff, in the Player and the editor, and in the engraving, a symbol's numbers and alterations are raised (G⁷, C♯m⁷♭⁵) and its accidentals printed as signs, one splitter (`symbolParts`) shared with the symbols in a line (`ChordText`) (2026-11-14).

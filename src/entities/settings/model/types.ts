@@ -11,6 +11,7 @@ import {
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
+  SONG_RANGES,
   SWIPES,
   type CameraAngle,
   type ChordLabels,
@@ -22,6 +23,7 @@ import {
   type OctaveShift,
   type PedalWay,
   type PedalsShown,
+  type SongRange,
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
@@ -269,6 +271,12 @@ export interface ScoreViewSettings {
    * the music on it; off, the keys, which a tap plays.
    */
   readonly hands: boolean
+  /** Where the 3D piano is seen from (its Piano sheet's Angle): from the seat, or from above. */
+  readonly angle: CameraAngle
+  /** The 3D piano with the hands at the keys, or the keys alone (Hands on the keys). */
+  readonly handsOnKeys: boolean
+  /** How many keys stand in the keys' place (its Piano sheet's Range): the song's, or 61, 76 or 88. */
+  readonly range: SongRange
 }
 
 /**
@@ -286,6 +294,9 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   textSize: 100,
   keys: true,
   hands: true,
+  angle: 'seat',
+  handsOnKeys: true,
+  range: 'song',
 }
 
 /** The bar trainer as left: on or off, its counts kept either way. */
@@ -553,6 +564,7 @@ export const DEFAULT_CHORDS: ChordsSettings = {
 export const isCameraAngle = isOneOf(CAMERA_ANGLES)
 export const isChordLabels = isOneOf(CHORD_LABELS)
 export const isChordRange = isOneOf(CHORD_RANGES)
+export const isSongRange = isOneOf(SONG_RANGES)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({

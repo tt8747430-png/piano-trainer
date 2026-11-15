@@ -15,6 +15,7 @@ export {
   CAMERA_ANGLES,
   CHORD_LABELS,
   CHORD_RANGES,
+  SONG_RANGES,
   KEY_DOCKS,
   KEY_SIZES,
   NAMED_KEYS,
@@ -27,6 +28,7 @@ export {
   type KeySize,
   type NamedKeys,
   type PedalsShown,
+  type SongRange,
   type Swipe,
 } from './keyboard-choices'
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'

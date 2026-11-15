@@ -298,6 +298,8 @@ export function PlayerLayout({
             wrong={player.wrong}
             faded={player.practised === 'both' ? null : player.practised === 'rh' ? 'lh' : 'rh'}
             range={{ low: player.range.from, high: player.range.to }}
+            angle={scoreView.angle}
+            handsShown={scoreView.handsOnKeys}
             onShowKeys={() => setScoreView(settingsStore, { hands: false })}
           />
         )}
@@ -444,6 +446,17 @@ export function PlayerLayout({
                 hands={scoreView.hands}
                 onKeys={player.setKeys}
                 onHands={(hands: boolean) => setScoreView(settingsStore, { hands })}
+                stage={{
+                  angle: scoreView.angle,
+                  onAngle: (angle) => setScoreView(settingsStore, { angle }),
+                  handsOnKeys: scoreView.handsOnKeys,
+                  onHandsOnKeys: (handsOnKeys) => setScoreView(settingsStore, { handsOnKeys }),
+                }}
+                range={{
+                  value: scoreView.range,
+                  keys: player.range,
+                  onChange: (range) => setScoreView(settingsStore, { range }),
+                }}
               />
             }
           />

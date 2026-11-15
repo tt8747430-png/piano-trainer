@@ -26,6 +26,13 @@ export const CHORD_RANGES = ['chord', 'two', 'four'] as const
 /** How many keys a chord's piano shows (the canvas's Range): just the chord's, or two or four octaves round it. */
 export type ChordRange = (typeof CHORD_RANGES)[number]
 
+export const SONG_RANGES = ['song', '61', '76', '88'] as const
+/**
+ * How many keys the Player shows (its Piano sheet's Range, the canvas's): every note of the song, or
+ * a keyboard's span, 61 (C2–C7), 76 (E1–G7) or the piano's 88 (A0–C8).
+ */
+export type SongRange = (typeof SONG_RANGES)[number]
+
 export const CAMERA_ANGLES = ['seat', 'above'] as const
 /**
  * Where a 3D piano is seen from (the Piano sheet's Angle, canvas 121): the seat, as Flowkey films,
