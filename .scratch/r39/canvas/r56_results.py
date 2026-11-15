@@ -137,17 +137,16 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
 
 
 RS_JS = lambda mode: js(r'''
-    const S = (o) => set(o), MODE = ''' + mode + r''', view = st.view ?? (MODE === 'run' ? 'run' : 'results'), show = st.show ?? 'After mistakes';
+    const S = (o) => set(o), CM7 = { 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, MODE = ''' + mode + r''', view = st.view ?? (MODE === 'run' ? 'run' : 'results'), show = st.show ?? 'After mistakes';
     return { ...common(st, set), isRun: view === 'run', isResults: view === 'results', isMiss: show === 'After mistakes', isPerfect: show === 'Perfect run',
       shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#332921' : '#EEE9E2', fg: show === l ? '#FEFDFB' : '#332921', pick: () => S({ show: l }) })),
       playing: !!st.playing, playLabel: st.playing ? 'Pause' : 'Play',
       togglePlay: () => { if (st.playing) { S({ playing: false }); return; } S({ playing: true }); setTimeout(() => S({ playing: false, view: 'results' }), 1400); },
-      chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
+      kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(48, 84, CM7, 760, 170), chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
-RS_KEYS = lambda h: (f'<div aria-hidden="true" style="flex: none; height: {h}px; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}; display: flex; background: {SHEET}">'
-                     + ''.join(f'<span style="flex: 1; box-shadow: inset -1px 0 0 {LINE}; background: {"#F6E3BC" if i in (7, 9, 11, 13) else SHEET}"></span>' for i in range(21)) + '</div>')
+RS_KEYS = lambda h, k='kb': KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
 
 
 def RS_RUNVIEW(lap):
@@ -159,7 +158,7 @@ def RS_RUNVIEW(lap):
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 6px; border-radius: 3px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 6px; border-radius: 3px; background: {INK}"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
     transport = f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
-    inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170 if lap else 110)}{transport}'
+    inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170, "kbL") if lap else '<div style="flex: none; margin: 0 -16px">' + RS_KEYS(112) + '</div>'}{transport}'
     if lap:
         return bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 32px; display: flex; justify-content: center"><div style="width: 760px; display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
     return bar + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>'

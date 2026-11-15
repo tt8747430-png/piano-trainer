@@ -12,7 +12,7 @@ LAPSHEET = lambda s, w=440: s.replace('left: 0; right: 0; bottom: 0; z-index: 61
 WRAPCHIPS = lambda lst: KCHIPS(lst).replace('flex: none; display: flex; gap: 6px; overflow-x: auto; margin: -5px -16px; padding: 0 16px', 'display: flex; flex-wrap: wrap; gap: 0 6px; margin: -5px 0')
 # A piano whose keys are buttons: k.tap marks or unmarks a key (the trainer's Play it, the Check)
 def TAPKEYS(lst, h):
-    return (f'<div style="position: relative; flex: none; width: 100%; height: {h}px; border-radius: 14px; overflow: hidden; background: {LINE}; box-shadow: 0 0 0 1px {LINE}">'
+    return (f'<div style="position: relative; flex: none; width: 100%; height: {h}px; overflow: hidden; background: {LINE}">'
             f'<sc-for list="{{{{{lst}.whites}}}}" as="k" hint-placeholder-count="14"><button type="button" aria-label="{{{{k.name}}}}" aria-pressed="{{{{k.on}}}}" onClick="{{{{k.tap}}}}" style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {h}px; box-sizing: border-box; border: 0; border-right: 1px solid {LINE}; background: {{{{k.bg}}}}; padding: 0 0 8px; display: flex; align-items: flex-end; justify-content: center; font: inherit; font-size: 12px; font-weight: 700; color: {INK}">{{{{k.label}}}}</button></sc-for>'
             f'<sc-for list="{{{{{lst}.blacks}}}}" as="k" hint-placeholder-count="10"><button type="button" aria-label="{{{{k.name}}}}" aria-pressed="{{{{k.on}}}}" onClick="{{{{k.tap}}}}" style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {round(h * 0.62)}px; border: 0; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; padding: 0 0 6px; display: flex; align-items: flex-end; justify-content: center; font: inherit; font-size: 11px; font-weight: 700; color: {INK}"></button></sc-for></div>')
 KEYS_JS = r'''
@@ -58,7 +58,7 @@ TR_SRC = r'''
       autoOn: auto, autoOnBg: auto ? '#44684A' : '#DAD1C8', autoOnX: auto ? 22 : 2, autoT: () => S({ auto: !auto }),
       start: () => S({ view: 'run', n: 1, right: 0, wrong: 0, on: [], verdict: null }),
       roundT: 'Round ' + n + ' of ' + total, prog: Math.round(100 * (n - 1) / total) + '%', rightT: right + ' right', wrongT: wrong + ' wrong', prompt, notesT: notes, hint, notHint: !hint, toggleHint: () => S({ hint: !hint }),
-      kb: tapKeys(48, 76, 370, 128, on, tap, paint), kbL: tapKeys(48, 84, 760, 170, on, tap, paint), check, clear: () => S({ on: [] }), showAns: () => S({ verdict: 'shown', wrong: wrong + 1 }),
+      kb: tapKeys(48, 76, 402, 128, on, tap, paint), kbL: tapKeys(48, 84, 760, 170, on, tap, paint), check, clear: () => S({ on: [] }), showAns: () => S({ verdict: 'shown', wrong: wrong + 1 }),
       checkBg: on.length ? '#F2B33D' : '#EEE9E2', checkInk: on.length ? '#332921' : '#9A9089', checkNot: !on.length,
       waiting: !verdict, answered: !!verdict, vT: verdict === 'right' ? 'Right' : verdict === 'shown' ? 'The answer: ' + notes : 'Not quite: it’s ' + notes, vBg: verdict === 'right' ? '#DCE9D6' : '#F5D6D0', vInk: verdict === 'right' ? '#2F5A35' : '#8E2A20',
       next, nextT: n >= total ? 'Results' : 'Next', endRun: () => S({ view: 'results', verdict: null, on: [] }),
@@ -83,7 +83,7 @@ TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; backg
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
         + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
-              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div>{TAPKEYS("kb", 128)}{TRBTNS}</main>')
+              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div><div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 128)}</div>{TRBTNS}</main>')
         + IF('isResults', TOP('', '', '', 'Back', '<span style="width: 44px"></span>') + NARROW(CKRES)) + TOASTS)
 LTR = lambda s: s.replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Scales.dc.html', 'ScalesLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('"Settings.dc.html"', '"SettingsLaptop.dc.html"')
 trlm = (''
