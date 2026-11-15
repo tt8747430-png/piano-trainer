@@ -11,7 +11,7 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
+import { cn, OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
@@ -20,11 +20,14 @@ import { useSearchPalette } from '@/widgets/search-palette'
 import { SidebarAccount } from './SidebarAccount'
 import { SidebarRecents } from './SidebarRecents'
 import { SidebarSearch } from './SidebarSearch'
+import { LearnTabIcon, PracticeTabIcon, ProfileTabIcon, SongsTabIcon } from './tab-icons'
 
 interface Place {
   readonly to: '/' | '/songs' | '/practice' | '/profile' | '/settings'
   readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.settings'
   readonly icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>
+  /** Its icon in the phone's tab bar, filled (the canvas's tab bar). */
+  readonly tab: ComponentType<{ className?: string }>
   readonly exact: boolean
   /**
    * Where else the place is the current one: Learn's lessons and courses (ADR 0053); the Profile's
@@ -47,13 +50,30 @@ interface Place {
  * guest (memory-palaces', Noji's).
  */
 function ProfileIcon({ className }: { className?: string }) {
+  return <LearnerPicture className={className} guest={UserRound} />
+}
+
+/** The Profile's tab on a phone: the learner's picture, or the filled figure for a guest. */
+function ProfileTab({ className }: { className?: string }) {
+  return <LearnerPicture className={className} guest={ProfileTabIcon} />
+}
+
+function LearnerPicture({
+  className,
+  guest: Guest,
+}: {
+  className?: string | undefined
+  guest: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>
+}) {
   const { account } = useAccount()
   const { state } = useLearnerProfile()
   const picture = state.kind === 'ready' ? state.profile.avatar : null
   return account ? (
-    <Avatar name={account.name || account.email} picture={picture} size="icon" />
+    <span className={cn('place-items-center', className)}>
+      <Avatar name={account.name || account.email} picture={picture} size="icon" />
+    </span>
   ) : (
-    <UserRound aria-hidden className={className} />
+    <Guest aria-hidden className={className} />
   )
 }
 
@@ -62,6 +82,7 @@ const PROFILE: Place = {
   to: '/profile',
   label: 'nav.profile',
   icon: ProfileIcon,
+  tab: ProfileTab,
   exact: false,
   also: ['/account'],
   alsoWithoutSidebar: ['/settings', '/admin', '/legal'],
@@ -78,6 +99,7 @@ const PLACES: readonly Place[] = [
     to: '/',
     label: 'nav.learn',
     icon: GraduationCap,
+    tab: LearnTabIcon,
     exact: true,
     also: ['/lessons', '/courses'],
     key: { code: 'Digit1', alt: true },
@@ -86,6 +108,7 @@ const PLACES: readonly Place[] = [
     to: '/songs',
     label: 'nav.songs',
     icon: Music,
+    tab: SongsTabIcon,
     exact: false,
     key: { code: 'Digit2', alt: true },
   },
@@ -93,6 +116,7 @@ const PLACES: readonly Place[] = [
     to: '/practice',
     label: 'nav.practice',
     icon: Metronome,
+    tab: PracticeTabIcon,
     exact: false,
     key: { code: 'Digit3', alt: true },
   },
@@ -118,7 +142,7 @@ const PLACE_LINK =
  * alone (its name in a tooltip, and still its link's name) while the sidebar is collapsed.
  */
 function PlaceLink({
-  place: { to, label, icon: Icon, exact, also = [], alsoWithoutSidebar = [] },
+  place: { to, label, icon: Icon, tab: Tab, exact, also = [], alsoWithoutSidebar = [] },
   collapsed,
 }: {
   place: Place
@@ -137,7 +161,8 @@ function PlaceLink({
     : {}
   const content = (
     <>
-      <Icon aria-hidden className="size-6 shrink-0 lg:size-5" />
+      <Tab className="grid size-[25px] shrink-0 lg:hidden" />
+      <Icon aria-hidden className="hidden size-5 shrink-0 lg:grid" />
       <span className="lg:group-data-[sidebar=collapsed]/nav:sr-only">{t(label)}</span>
     </>
   )
