@@ -69,7 +69,7 @@ care shows in a hundred small things done the same way.
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation (in a loop: decide each, ask nothing). Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
-8. **Build** only after the owner's "ok": the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
+8. **Build** after the owner's "ok" (in a loop at once, no "ok" awaited): the port table's order, one item per commit; in a loop `owner-way`'s Loops and refactors (no tests or lint, the full visual pass, the build at the area's end, `main` when the owner asks), otherwise its gate. In
    autonomous mode ("continue with all") or a loop the canvas and spec are still made first, then built without waiting;
    every open choice is decided, and no question is put to the owner.
 
@@ -176,7 +176,8 @@ all" builds every finding in one turn.
 
 ## Reporting
 
-Answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
+In a loop there is no report and no end of turn (`owner-way`, Reporting): one line per item, then the next item.
+Outside a loop: answer first, in the owner's words for things. Then what changed (bullets), the checks run, the canvas link and
 version, the push state, and the open questions numbered, each with your recommendation, already drawn; in a loop or
 autonomous mode no questions, only what was decided. A question
 the owner answers with a question gets the facts from the code, the choices, and one recommendation.
@@ -199,7 +200,7 @@ area writes its phone and laptop boards from the same parts and state, and the r
 | A reference cited but never read | read its manual page; quote its labels |
 | Several options drawn when the owner asked for one improvement | build the recommendation; ask after, drawn |
 | Rejected patterns returning in new clothes (chips by kind, stars, two-a-row cards) | the feedback log's "Never" lines |
-| App code started while the design is open | the canvas until "ok"; then port |
+| App code started while the design is open | the canvas until "ok", then port; in a loop the canvas first, then port at once |
 | Docs left out of a turn | spec, log, drawing, commit, push: every turn |
 | A clean screen called done ("fine is the floor") | the evidence of care: status, undo, recovery, one pattern per situation |
 | A small tweak reported as a round | one bold decision per turn, named at the top of the report |

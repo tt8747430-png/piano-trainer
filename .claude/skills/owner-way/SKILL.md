@@ -157,8 +157,8 @@ does not read first: write the spec, build it, and log it.
   only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left: start again
   from the beginning ([Loops and refactors](#loops-and-refactors)). On "continue", pick up exactly where the work
   stopped.
-- **Answer questions first,** in a line or two, then carry on. Asked to research and say what you will do: stop after
-  saying it.
+- **Answer questions first,** in a line or two, then carry on in the same turn. Outside a loop, asked only to research
+  and say what you will do: say it and wait; in a loop, never.
 - **"Continue with all" means autonomous mode:** every open task (the plan's rounds, the review findings), one round after
   another, without asking anything: no AskUserQuestion, no "shall I…", no stopping to report between rounds. It runs as
   a loop ([Loops and refactors](#loops-and-refactors)): the build at each area's end, each change pushed to the session
@@ -214,7 +214,11 @@ does not read first: write the spec, build it, and log it.
 
 ## Reporting
 
-Only when the owner says "stop" or asks a question; in a loop, one line per item and never a closing report. Short,
+A report ends a turn, so in a loop there is none (owner, 2026-11-15: "why did you stop, continue and dont stop, and
+remove all the instructions and skills and memory that go against this"): a summary of rounds, a "next is …" line
+with no tool call after it, or a status message at a natural break is a stop, and is never written. Every message in a
+loop ends with the next tool call; a nudge to say what you are doing gets one line, then the work goes on in the same
+turn. The report below is written only when the owner says "stop" or asks a question; in a loop, one line per item and never a closing report. Short,
 answer first, in the owner's words for things (screens, controls), not file names:
 
 1. What was built or fixed.

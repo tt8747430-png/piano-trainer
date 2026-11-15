@@ -72,7 +72,8 @@ and the running screen before it is trusted. Do the whole task, then a second pa
 **In a loop, or when the owner says so** (`owner-way`, Loops and refactors), steps 1, 2 and 4 give way: no tests
 written or run, no typecheck or lint; step 3's two visual passes stay in full; the build runs once at the end of a big
 feature (an area's refactor) and only what breaks it is fixed; work goes to the session branch, and to `main` only when
-the owner asks.
+the owner asks. A loop never ends a turn and never writes a summary or a closing report: only "stop" ends it
+(`owner-way`, Reporting).
 
 ## Commands
 
