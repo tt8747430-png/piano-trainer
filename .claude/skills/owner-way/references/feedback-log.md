@@ -944,6 +944,16 @@ are reference only, but progressions are facts.
   stood under the laptop's results, an explanation under a control; it is the dialog's description for a screen
   reader alone now.
 
+- **Every laptop screen adapts: the sidebar folds, Focus hides the rest (owner, 2026-11-15: "make the ui very
+  adaptable like the main focus of the page and the other things can be easily hide or show … for every screen"):**
+  the sidebar's head holds two 40px buttons after the name. Hide sidebar (Apple HIG, Sidebars: people can hide it;
+  macOS puts the toggle at the window's top leading edge) folds it to a 76px rail of the same places, icons only, the
+  profile its avatar (Material 3, Navigation rail). Focus hides the sidebar and every side panel (a tool's settings
+  column, the library's Places, a list pane) so the page's one thing fills the window, as macOS full screen and
+  Ulysses' distraction-free mode do; Exit focus, a glass capsule at the foot's leading corner, or Esc brings them
+  back. No letter shortcut: a letter alone is the piano's. One implementation for all 61 laptop boards
+  (`.scratch/r39/canvas/lapwin.py`, run by `index.py`).
+
 ## Actions and menus
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18

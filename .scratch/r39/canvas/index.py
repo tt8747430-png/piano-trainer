@@ -56,9 +56,10 @@ d.pop('noteOrder', None)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 # canvas 167: the one piano, every board's 2D keys in the app's faces (keyface.py)
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/lapwin.py').read())
 for b in boards:
     if os.path.exists(P + b):
-        h0 = open(P + b).read(); h1 = keyface(h0)
+        h0 = open(P + b).read(); h1 = lapwin(keyface(h0), night(b[:-8]))
         # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
         # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
         if 'header data-float' in h1 and 'data-floatcss' not in h1:
