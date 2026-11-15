@@ -141,39 +141,43 @@ export function LibraryScreen({
       ) : null}
     </>
   )
+  // The place's bar (its title, search, Sort and filter, Archive, New): over the songs alone on a
+  // laptop, the Places pane beside them running the screen's height (the SongsLaptop board).
+  const bar = (
+    <LibraryHeader
+      page={page}
+      folder={folder}
+      search={
+        wide ? (
+          <LibrarySearchRow
+            page={page}
+            filter={filter}
+            screen={folder ? nameOf(folder) : t('title')}
+            wide
+          />
+        ) : undefined
+      }
+      add={
+        wide ? (
+          <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+        ) : undefined
+      }
+      edit={
+        folder && renames
+          ? {
+              editing: editing !== null,
+              onEdit: () => setSearch({ edit: true }),
+              onDone: done,
+            }
+          : undefined
+      }
+    />
+  )
   return (
     <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
-      <LibraryHeader
-        page={page}
-        folder={folder}
-        search={
-          wide ? (
-            <LibrarySearchRow
-              page={page}
-              filter={filter}
-              screen={folder ? nameOf(folder) : t('title')}
-              wide
-            />
-          ) : undefined
-        }
-        add={
-          wide ? (
-            <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-          ) : undefined
-        }
-        edit={
-          folder && renames
-            ? {
-                editing: editing !== null,
-                onEdit: () => setSearch({ edit: true }),
-                onDone: done,
-              }
-            : undefined
-        }
-      />
       {wide ? (
         <div className="grid grid-cols-[15rem_minmax(0,1fr)] items-start gap-8">
-          <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pe-3 pb-4 shadow-[1px_0_0_var(--color-hairline)]">
+          <aside className="sticky top-0 max-h-dvh min-h-dvh overflow-y-auto pe-3 pt-6 pb-4 shadow-[1px_0_0_var(--color-hairline)]">
             <LibraryTree
               current={
                 folder?.id ??
@@ -188,10 +192,16 @@ export function LibraryScreen({
               extra={<SharedWithMe inTree />}
             />
           </aside>
-          <div className="flex min-w-0 flex-col gap-4">{body}</div>
+          <div className="flex min-w-0 flex-col gap-4">
+            {bar}
+            {body}
+          </div>
         </div>
       ) : (
-        body
+        <>
+          {bar}
+          {body}
+        </>
       )}
       {!page.select.on ? (
         wide ? null : (

@@ -39,6 +39,11 @@ const SORTED_BY: Partial<Record<'title' | 'key' | 'played', LibrarySort>> = {
 }
 
 const CELL = TABLE_CELL
+/** A row's cell (the SongsLaptop board's rows): 56 tall around a 44px More. */
+const ROWCELL = cn(CELL, 'py-1.5')
+/** A row's face: its 40px picture (corners 9) 16 from its name, the board's. */
+const FACE =
+  'flex min-w-0 items-center gap-4 rounded-control focus-visible:-outline-offset-3 [&>:first-child]:size-10 [&>:first-child]:rounded-[9px]'
 /** The chords stand only where the pane has room for them beside the rest (48rem). */
 const CHORDS = cn(CELL, 'hidden @3xl:table-cell')
 
@@ -90,29 +95,26 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
   const stopped = stoppedAt(useProgress(selectSongPlay(entry.id)))
   return (
     <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
-      <th scope="row" className={cn(CELL, 'w-1/2 max-w-0 font-normal')}>
-        <PieceLink
-          entry={entry}
-          className="flex min-w-0 items-center gap-3 rounded-control focus-visible:-outline-offset-3"
-        >
+      <th scope="row" className={cn(ROWCELL, 'w-1/2 max-w-0 font-normal')}>
+        <PieceLink entry={entry} className={FACE}>
           <PieceMark entry={entry} />
           <span className="truncate font-semibold text-foreground">{face.title}</span>
         </PieceLink>
       </th>
       {/* A long credit wraps to a second line rather than cut the key off its end. */}
-      <td className={cn(CELL, 'max-w-0 text-sm text-muted-foreground')}>
+      <td className={cn(ROWCELL, 'max-w-0 text-sm text-muted-foreground')}>
         <span className="line-clamp-2 text-pretty">{face.detail}</span>
       </td>
       {show.chords ? (
         <td
-          className={cn(CHORDS, 'max-w-64 truncate font-display text-muted-foreground')}
+          className={cn(CHORDS, 'py-1.5', 'max-w-64 truncate font-display text-muted-foreground')}
           aria-hidden
         >
           {pieceChords(entry).map(printedSymbol).join('  ')}
         </td>
       ) : null}
       {show.progress && (held.learned || held.played || held.underway) ? (
-        <td className={cn(CELL, 'text-sm whitespace-nowrap text-muted-foreground tabular-nums')}>
+        <td className={cn(ROWCELL, 'text-sm whitespace-nowrap text-muted-foreground tabular-nums')}>
           {learned ? (
             <LearnedBadge label={t('common:learned.done')} />
           ) : stopped ? (
@@ -123,11 +125,11 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
         </td>
       ) : null}
       {held.played ? (
-        <td className={cn(CELL, 'text-sm text-muted-foreground tabular-nums')}>
+        <td className={cn(ROWCELL, 'text-sm text-muted-foreground tabular-nums')}>
           <LastPlayed at={at} />
         </td>
       ) : null}
-      <td className={cn(CELL, 'w-0 pe-0')}>
+      <td className={cn(ROWCELL, 'w-0 pe-0')}>
         <span className="flex items-center justify-end">
           <FavouriteToggle piece={entry.id} />
           <RowMore
@@ -157,20 +159,16 @@ function FolderTableRow({
   const name = nameOf(folder)
   return (
     <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
-      <th scope="row" className={cn(CELL, 'w-1/2 max-w-0 font-normal')}>
-        <Link
-          to="/songs/folders/$folderId"
-          params={{ folderId: folder.id }}
-          className="flex min-w-0 items-center gap-3 rounded-control focus-visible:-outline-offset-3"
-        >
+      <th scope="row" className={cn(ROWCELL, 'w-1/2 max-w-0 font-normal')}>
+        <Link to="/songs/folders/$folderId" params={{ folderId: folder.id }} className={FACE}>
           <FolderTile look={folder} large />
           <span className="truncate font-semibold text-foreground">{name}</span>
         </Link>
       </th>
-      <td colSpan={span} className={cn(CELL, 'max-w-0 truncate text-sm text-muted-foreground')}>
+      <td colSpan={span} className={cn(ROWCELL, 'max-w-0 truncate text-sm text-muted-foreground')}>
         {useHoldsLine(holds)}
       </td>
-      <td className={cn(CELL, 'w-0 pe-0')}>
+      <td className={cn(ROWCELL, 'w-0 pe-0')}>
         <span className="flex items-center justify-end">
           <RowMore
             label={t('common:library.moreOf', { name })}
