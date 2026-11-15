@@ -18,13 +18,16 @@ ED4 = js(r'''
     const PAL = [
       ['Notes', [['rest', '𝄽', M, 'Rest', '0'], ['w', '𝅝', M, 'Whole note', '7'], ['h', '𝅗𝅥', M, 'Half note', '6'], ['q', '𝅘𝅥', M, 'Quarter note', '5'], ['e', '𝅘𝅥𝅮', M, 'Eighth note', '4'],
         ['s', '𝅘𝅥𝅯', M, '16th note', '3'], ['t', '𝅘𝅥𝅰', M, '32nd note', '2'], ['x', '𝅘𝅥𝅱', M, '64th note', '1'], ['dot', '𝅘𝅥 .', M, 'Dot', '.'], ['tie', '⁀', T, 'Tie', 'T'], ['tup', '3', S, 'Triplet', '⌘3'], ['grace', '𝆕', M, 'Grace note', 'G']]],
-      ['Accidentals', [['bb', '𝄫', M, 'Double flat', '⇧-'], ['b', '♭', M, 'Flat', '-'], ['n', '♮', M, 'Natural', '='], ['sh', '♯', M, 'Sharp', '+'], ['x2', '𝄪', M, 'Double sharp', '⇧+']]],
-      ['Articulations', [['stacc', '•', T, 'Staccato', 'S'], ['acc', '>', S, 'Accent', 'A'], ['ten', '–', S, 'Tenuto', 'N'], ['marc', '^', S, 'Marcato', '⇧A'], ['ferm', '𝄐', M, 'Fermata', 'F'], ['stiss', '▾', T, 'Staccatissimo', '⇧S']]],
+      ['Pitch', [['bb', '𝄫', M, 'Double flat', '⇧-'], ['b', '♭', M, 'Flat', '-'], ['n', '♮', M, 'Natural', '='], ['sh', '♯', M, 'Sharp', '+'], ['x2', '𝄪', M, 'Double sharp', '⇧+'], ['8va', '8va', S, 'Octave higher', ''], ['8vb', '8vb', S, 'Octave lower', '']]],
+      ['Articulations', [['stacc', '•', T, 'Staccato', 'S'], ['acc', '>', S, 'Accent', 'A'], ['ten', '–', S, 'Tenuto', 'N'], ['marc', '^', S, 'Marcato', '⇧A'], ['ferm', '𝄐', M, 'Fermata', 'F'], ['stiss', '▾', T, 'Staccatissimo', '⇧S'], ['slur', '⌒', T, 'Slur', 'L'], ['fing', '1', S, 'Fingering', '']]],
+      ['Ornaments', [['trill', 'tr', S, 'Trill', ''], ['mord', '𝆝', M, 'Mordent', ''], ['turn', '𝆗', M, 'Turn', ''], ['gliss', '⟋', T, 'Glissando', ''], ['trem', '𝄏', M, 'Tremolo', '']]],
       ['Dynamics', [['ppp', 'ppp', S, 'Pianississimo', ''], ['pp', 'pp', S, 'Pianissimo', ''], ['p', 'p', S, 'Piano', ''], ['mp', 'mp', S, 'Mezzo-piano', ''], ['mf', 'mf', S, 'Mezzo-forte', ''],
-        ['f', 'f', S, 'Forte', ''], ['ff', 'ff', S, 'Fortissimo', ''], ['fff', 'fff', S, 'Fortississimo', ''], ['sfz', 'sfz', S, 'Sforzando', ''], ['cresc', '𝆒', M, 'Crescendo', '<'], ['dim', '𝆓', M, 'Diminuendo', '>']]],
-      ['Lines', [['slur', '⌒', T, 'Slur', 'L'], ['8va', '8va', S, 'Octave higher', ''], ['8vb', '8vb', S, 'Octave lower', ''], ['ped', '𝆮', M, 'Pedal', 'P'], ['gliss', '⟋', T, 'Glissando', ''], ['trill', 'tr', S, 'Trill', '']]],
-      ['Bar', [['time', '3/4', S, 'Time signature', ''], ['key', '♯', M, 'Key signature', ''], ['clef', '𝄞', M, 'Clef', ''], ['tempo', '♩=80', T, 'Tempo', ''], ['rs', '𝄆', M, 'Repeat start', ''], ['re', '𝄇', M, 'Repeat end', ''],
-        ['end1', '1.', S, 'First ending', ''], ['dbl', '𝄁', M, 'Double barline', ''], ['fin', '𝄂', M, 'Final barline', ''], ['addbar', '+ Bar', T, 'Add a bar after', '⌘B']]],
+        ['f', 'f', S, 'Forte', ''], ['ff', 'ff', S, 'Fortissimo', ''], ['fff', 'fff', S, 'Fortississimo', ''], ['sfz', 'sfz', S, 'Sforzando', ''], ['cresc', '𝆒', M, 'Crescendo', '<'], ['dim', '𝆓', M, 'Diminuendo', '>'], ['ped', '𝆮', M, 'Pedal', 'P']]],
+      ['Measures', [['addbar', '+ Bar', T, 'Add a bar after', '⌘B'], ['tempo', '♩=80', T, 'Tempo', ''], ['dbl', '𝄁', M, 'Double barline', ''], ['fin', '𝄂', M, 'Final barline', '']]],
+      ['Clef', [['clef', '𝄞', M, 'Treble clef', ''], ['bclef', '𝄢', M, 'Bass clef', ''], ['aclef', '𝄡', M, 'Alto clef', '']]],
+      ['Key', [['key', '♯', M, 'Key signature', '']]],
+      ['Time', [['time', '3/4', S, 'Three four', ''], ['time44', '4/4', S, 'Four four', ''], ['time68', '6/8', S, 'Six eight', '']]],
+      ['Repeats', [['rs', '𝄆', M, 'Repeat start', ''], ['re', '𝄇', M, 'Repeat end', ''], ['end1', '1.', S, 'First ending', ''], ['segno', '𝄋', M, 'Segno', ''], ['coda', '𝄌', M, 'Coda', '']]],
       ['Text', [['chord', 'C⁷', S, 'Chord symbol', '⌘K'], ['lyr', 'la', S, 'Lyrics', '⌘L'], ['txt', 'Aa', T, 'Text', '⌘T'], ['rn', 'IV', S, 'Roman numeral', ''], ['reh', 'A', T, 'Rehearsal mark', '⌘M']]]];
 
     // the durations, rests and curves drawn as notation, not as a font's glyphs: a head, then the stem and flags

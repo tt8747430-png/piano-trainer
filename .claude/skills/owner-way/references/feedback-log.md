@@ -8,6 +8,9 @@ owner's, typos fixed.
 - **The palette's tabs by name (loop, 2026-11-13, canvas 123's "seven named categories"):** a phone's strip reads
   Notes · Pitch · Articulations · Ornaments · Dynamics · Measures · Clef · Key · Time · Repeats · Text, each its short
   name; the section below keeps its full title. No category is a picture alone.
+- **The Editor board brought to the ruled tabs (loop, 2026-11-15, canvas 187):** the board still drew Notes ·
+  Accidentals · Articulation · Dynamics · Lines · Bar · Text; it now draws the eleven the app holds, each item where
+  `EditorPalette.tsx` keeps it (the slur and fingering in Articulations, the pedal in Dynamics, the octave lines in Pitch).
 - **One home for each thing; only what applies shown:** "we can at the same time edit the time signature from the
   settings and from the palette which is strange"; "show only the actions relevant at that time like the write as common
   in the 5/4 is not relevant and is weird that it is shown but is disabled"; the palette and menus as Flat's; the piano
