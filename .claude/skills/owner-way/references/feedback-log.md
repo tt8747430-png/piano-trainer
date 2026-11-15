@@ -368,6 +368,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 32, Tools as the icon wherever the bar is not Practice's:** a lesson's bar on a laptop said "Tools" where its board draws the metronome alone; now the word stands only on Practice's bar, the icon everywhere else at every width, its name in its tooltip (2026-11-15).
 - **Loop round 32, the lesson's bar and its "After:" as the boards:** one gear for Settings on every board (the places' two-slider mark became the Practice pages' cog the app wears); the Tools wear the metronome (its case and pendulum, the Metronome's page picture) wherever they show as an icon, never a grid; a lesson's prerequisites read "After: 7 · Chord functions…", numbered along the level or course, each its own 44px link in a row that wraps whole (two had broken into a sentence with a 44px gap between its lines) (2026-11-15).
 - **Loop round 30, the Courses' shelves as the board's:** a shelf's name 4 in from its card's edge (was 12), 6 over the card, the shelves 16 apart on a phone and 20 on a laptop (2026-11-15).
 - **Loop round 27, a place's title and its progress as the boards set them:** the large bar title (Learn, Courses, a level, Profile) is 28 bold at -1% tracking, line height 1.15, as the boards' TOP draws it (was 26 and tighter); a meter's count ("Beginner · 0 of 13 learned") is 13, the boards' status (2026-11-15).

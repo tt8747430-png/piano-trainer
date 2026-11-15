@@ -15,8 +15,8 @@ const POPOVER_WIDTH = '(min-width: 48rem)'
  * player's. It opens the Tools in place over the page, which stays as it was: a popover under the
  * button on a laptop, a sheet on a phone (`ToolsPanel`). The Metronome runs on with them closed,
  * until the page is left. Worded (Practice's bar, where it is the bar's one act) it says "Tools";
- * elsewhere a phone's bar keeps its room for the title with the icon alone (the boards' metronome
- * glyph, the Metronome being the first of the Tools), worded from 40rem.
+ * elsewhere it is the boards' metronome glyph alone at every width (a lesson's bar, the explorers'),
+ * the Metronome being the first of the Tools, its name in its tooltip.
  */
 export function ToolsButton({ worded = false }: { worded?: boolean }) {
   const { t } = useTranslation('practice')
@@ -32,15 +32,15 @@ export function ToolsButton({ worded = false }: { worded?: boolean }) {
         // Worded, the board's TOOLSBTN: a filled pill 36 tall inside its 44px reach.
         worded
           ? 'border-y-4 border-transparent bg-muted bg-clip-padding px-3.5 text-[0.9375rem] font-semibold hover:bg-accent'
-          : 'max-sm:px-0',
+          : 'px-0',
       )}
       title={label}
     />
   )
   const face = (
     <>
-      <MetronomeIcon aria-hidden className={cn(worded ? 'hidden' : 'sm:hidden')} />
-      <span className={cn(!worded && 'max-sm:sr-only')}>{label}</span>
+      {worded ? null : <MetronomeIcon aria-hidden />}
+      <span className={cn(!worded && 'sr-only')}>{label}</span>
     </>
   )
   const panel = <ToolsPanel metronome={metronome} close={() => setOpen(false)} />
