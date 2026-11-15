@@ -845,6 +845,10 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Loading is the page's shape, as the board's (loop 24, AppLayers):** while a screen's chunk loads, six sand
+  blocks (36, 96, 24, then three 56) with 14 corners, 12 apart, fading from 90% to 40%, in place of a lone spinner
+  (2026-11-15).
+
 - **A screen that cannot open says why, as the board's route states (loop 24, AppLayers):** one `RouteState` for
   Page not found and Something went wrong: a 72 round mark (? on sand, ! on a crimson wash, the offline mark on
   honey), the title 22 bold sans, a 16 line saying why ("The link may be old, or the song or lesson was deleted.";
