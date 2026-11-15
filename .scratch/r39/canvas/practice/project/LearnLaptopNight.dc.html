@@ -108,6 +108,8 @@ const COURSES = [["Beginner courses", [["Introduction to the Piano", "The keys, 
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#3A332D' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
       nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#EDE9E1' : '#2E2924', pick: () => set({ demo: demo === k ? null : k }) })),
+      edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#EDE9E1' : '#2E2924', pick: () => set({ demo: demo === k ? null : k }) }))
+        .concat([{ l: 'Edited by an editor', bg: editing ? '#EDE9E1' : '#2E2924', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t + ' · ' + x.n + ' lessons', got: x.done + ' of ' + x.n, ring: 'conic-gradient(#7FAF78 ' + Math.round(100 * x.done / x.n) + '%, #3A332D 0)' })),
       coursesHome: COURSES.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h, now: k === 'now', later: k !== 'now', paint: ['#2C3A2B', '#24323D', '#3E3420', '#2F2A3A'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),

@@ -1001,6 +1001,11 @@ are reference only, but progressions are facts.
   last staff in sight); an in-place control may still grey.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
+- **In Edit, a row's Remove is a red minus, not a red word (loop, 2026-11-15):** the Courses page and a course in
+  Edit drew "Remove" in red on every row, a column of red words that squeezed the titles to three lines. Each is now
+  the iOS delete control, a 22px red circle with a white minus in a 44px target beside the drag handle, named
+  "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
+
 ## Profile and Settings
 
 - **No On-screen piano page (owner, 2026-11-15: "the on screen piano settings are also weird and doesnt seam necessary"):** the keys' choices live once, in the Piano sheet beside the keys (Keyboard, Labels); Key size, Pedals, Chord symbol, Note names on highlighted keys, Swipe gesture, Placement and Volume are gone (they repeated that sheet, showed no difference, or are the device's own volume). The grand's offline download is Storage and backup's Piano sound; the computer keyboard is General's. Settings' Piano group is MIDI devices alone, and the pages' "On-screen piano ›" rows are gone. No line explains under a control there either (Protect from clearing, Reset progress).
