@@ -34,7 +34,7 @@ export function SheetCredits({
       {line ? (
         <p
           className={cn(
-            'font-sans text-[0.8125rem] leading-6 text-pretty wrap-break-word text-muted-foreground',
+            'font-sans text-[0.8125rem] leading-snug text-pretty wrap-break-word text-muted-foreground',
             align === 'center' ? 'text-center' : 'text-end',
           )}
         >

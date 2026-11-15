@@ -1,3 +1,4 @@
+import { ChevronUp } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -199,9 +200,38 @@ function useSectionInSight(
 }
 
 /**
- * The strip of categories (R31-E, R32-C, Flat's tab bar; canvas 123): each by its short name in a sand pill, the one in
- * sight on a card-paper thumb that slides to the one tapped; only those that act where the caret
- * writes (R32-B). It scrolls sideways in its own box, the lit one kept in view, with no fade at its edges.
+ * Each category's picture in the tab bar (the Editor board, Flat's): a sign of the notation it
+ * writes, in the face a score prints it in; its name is its label and tooltip.
+ */
+const CATEGORY_SIGN: Record<
+  PaletteCategory,
+  { sign: string; face: 'music' | 'term' | 'serif' | 'sans' }
+> = {
+  notes: { sign: '\u2669', face: 'music' },
+  pitch: { sign: '\u266D\u266F', face: 'music' },
+  articulations: { sign: '>', face: 'serif' },
+  ornaments: { sign: 'tr', face: 'term' },
+  dynamics: { sign: 'ppp', face: 'term' },
+  measures: { sign: '\u{1D101}', face: 'music' },
+  clef: { sign: '\u{1D11E}', face: 'music' },
+  key: { sign: '\u266F\u266F', face: 'music' },
+  time: { sign: '4/4', face: 'serif' },
+  repeats: { sign: '\u{1D106}', face: 'music' },
+  text: { sign: 'Aa', face: 'sans' },
+}
+
+const FACE = {
+  music: 'font-music text-[1.625rem]',
+  term: 'font-serif text-lg font-bold italic',
+  serif: 'font-serif text-lg font-bold',
+  sans: 'font-sans text-[0.9375rem] font-semibold',
+} as const
+
+/**
+ * The tab bar of categories (the Editor board, Flat's tab bar at the palette's foot): each by its
+ * sign in a sand pill, the one in sight on a card-paper thumb that slides to the one tapped; only
+ * those that act where the caret writes (R32-B). It scrolls sideways in its own box, the lit one
+ * kept in view, with no fade at its edges.
  */
 function CategoryStrip({
   current,
@@ -230,21 +260,22 @@ function CategoryStrip({
       role="toolbar"
       aria-label={t('palette.categories')}
       {...roving}
-      className={cn('flex min-w-0 overflow-x-auto rounded-card bg-muted p-0.5 scrollbar-none')}
+      className="flex min-w-0 flex-1 overflow-x-auto rounded-card bg-muted p-0.5 scrollbar-none"
     >
       {categories.map((category) => {
         const name = t(`palette.category.${category}`)
-        const tab = t(`palette.tab.${category}`)
+        const { sign, face } = CATEGORY_SIGN[category]
         const chosen = current === category
         return (
           <button
             key={category}
             data-for={category}
             type="button"
-            title={tab === name ? undefined : name}
+            aria-label={name}
+            title={name}
             aria-current={chosen ? 'true' : undefined}
             onClick={() => onChoose(category)}
-            className="relative grid h-11 shrink-0 place-items-center rounded-control px-3.5 text-sm font-semibold whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground"
+            className="relative grid h-11 min-w-11 shrink-0 place-items-center rounded-control px-1.5 leading-none whitespace-nowrap text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:-outline-offset-3 aria-[current=true]:text-foreground"
           >
             {chosen ? (
               <motion.span
@@ -253,7 +284,9 @@ function CategoryStrip({
                 className="absolute inset-0 rounded-control bg-card shadow-sm"
               />
             ) : null}
-            <span className="relative">{tab}</span>
+            <span aria-hidden className={cn('relative', FACE[face])}>
+              {sign}
+            </span>
           </button>
         )
       })}
@@ -361,7 +394,7 @@ function ToolRow({ category }: { category: PaletteCategory }) {
       aria-label={t('palette.toolbar')}
       {...roving}
       className={cn(
-        'flex min-w-0 items-center gap-2 overflow-x-auto overscroll-x-contain scrollbar-none',
+        'flex min-w-0 shrink-0 items-center gap-1 overflow-x-auto overscroll-x-contain pb-2 scrollbar-none',
       )}
     >
       <Laid form="bar">
@@ -372,10 +405,10 @@ function ToolRow({ category }: { category: PaletteCategory }) {
 }
 
 /**
- * The palette docked under the sheet on a phone (its canvas, Flat's), over the keys: its grip, the
- * selection strip, the categories by name, then, folded (as it first opens), the chosen category's
- * tools in one row; unfolded, every section in one scroll, up to half the screen, the categories
- * lighting the section in sight and scrolling to the one tapped. With the keys shown it unfolds
+ * The palette docked under the sheet on a phone (the Editor board, Flat's), over the keys: its grip,
+ * the selection strip, then, folded (as it first opens), the chosen category's tools in one row;
+ * unfolded, every section in one scroll, up to half the screen; at its foot the categories by their
+ * signs, lighting the section in sight and scrolling to the one tapped, and the button that unfolds it. With the keys shown it unfolds
  * over them only once they fold away.
  */
 export function PaletteSheet({
@@ -410,14 +443,11 @@ export function PaletteSheet({
             onFold={(next) => unfold(!next)}
           />
           <SelectionStrip className="-me-2 pb-2" />
-          <div className="shrink-0 pb-2">
-            <CategoryStrip current={category} onChoose={choose} />
-          </div>
           {unfolded ? (
             <div
               ref={box}
               onScroll={onScroll}
-              className="relative flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain pt-1"
+              className="relative flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain pt-1 pb-3"
             >
               <Laid form="grid">
                 <Sections />
@@ -426,6 +456,26 @@ export function PaletteSheet({
           ) : (
             <ToolRow category={category} />
           )}
+          {/* Flat's tab bar at the foot, and the button that opens every section above it. */}
+          <div className="flex shrink-0 items-center gap-2 pt-1">
+            <CategoryStrip current={category} onChoose={choose} />
+            <button
+              type="button"
+              aria-label={t(unfolded ? 'palette.close' : 'palette.open')}
+              title={t(unfolded ? 'palette.close' : 'palette.open')}
+              aria-expanded={unfolded}
+              onClick={() => unfold(!unfolded)}
+              className="-me-1.5 grid size-11 shrink-0 place-items-center rounded-full text-foreground transition-colors duration-150 ease-out hover:bg-accent [&_svg]:size-5"
+            >
+              <ChevronUp
+                aria-hidden
+                className={cn(
+                  'transition-transform duration-200 ease-out motion-reduce:transition-none',
+                  unfolded && 'rotate-180',
+                )}
+              />
+            </button>
+          </div>
         </fieldset>
       </section>
     </MotionConfig>

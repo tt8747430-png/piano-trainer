@@ -5,13 +5,15 @@ import type { PaletteCategory } from '../model/palette-categories'
 import type { Tool } from '../model/shortcuts'
 import { PaletteTipSide, useKeyTip, usePaletteForm } from './palette-form'
 
-/** What is chosen on the music, as the pickers' cells show it (ADR 0114): a sky glyph on a sky wash. */
-const PRESSED =
-  'aria-pressed:bg-foreground aria-pressed:text-background aria-pressed:hover:bg-foreground/90'
+/** What is chosen on the music (the Editor board, Flat's palette): the glyph in ink on a sand wash. */
+const PRESSED = 'aria-pressed:bg-muted aria-pressed:text-foreground aria-pressed:hover:bg-muted'
 
-/** A tool's tile (its canvas, Flat's): 48px of sand, the chosen in ink; the same in a section and in the row. */
+/**
+ * A tool (the Editor board, Flat's palette): a bare glyph 48px square in soft ink, no tile; in the
+ * row a rounded wash when chosen, in a section a cell of its ruled table.
+ */
 const TILE =
-  'h-12 min-w-12 shrink-0 rounded-control border-0 bg-muted px-2 text-foreground shadow-none hover:bg-accent focus-visible:-outline-offset-3 active:scale-100 landscape-phone:h-10 landscape-phone:min-w-10'
+  'h-12 min-w-12 shrink-0 rounded-control border-0 bg-transparent px-2 text-muted-foreground shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 active:scale-100 landscape-phone:h-10 landscape-phone:min-w-10'
 
 /** A tile two wide: a term's words, a barline's drawing. */
 const WIDE = 'min-w-24 px-3'
@@ -78,8 +80,8 @@ export function PaletteHint({ children }: { children: ReactNode }) {
 }
 
 /**
- * A group of keys as the form lays them out (its canvas, Flat's palettes): in a section tiles
- * wrapping 8px apart; in the row, in line.
+ * A group of keys as the form lays them out (the Editor board, Flat's palettes): in a section one
+ * ruled table of 44px-wide cells in a hairline box, a wide key two cells; in the row, in line.
  */
 export function KeyGrid({ label, children }: { label?: string | undefined; children: ReactNode }) {
   const group = { role: label ? 'group' : undefined, 'aria-label': label }
@@ -88,7 +90,11 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
     <div
       {...group}
       data-slot="key-grid"
-      className={form === 'bar' ? 'contents' : 'flex flex-wrap gap-2'}
+      className={
+        form === 'bar'
+          ? 'contents'
+          : 'grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] overflow-hidden rounded-card border border-hairline bg-card [&>*]:min-w-0! [&>*]:rounded-none! [&>*]:shadow-[1px_0_0_var(--color-hairline),0_1px_0_var(--color-hairline)]! [&>[data-span=wide]]:col-span-2'
+      }
     >
       {children}
     </div>
@@ -110,6 +116,7 @@ export function PaletteKey({
   return (
     <ToolKey
       label={label}
+      data-span={span}
       tip={useKeyTip(label, tool)}
       tipSide={use(PaletteTipSide)}
       className={cn(TILE, PRESSED, span === 'wide' && WIDE, className)}
@@ -148,6 +155,7 @@ export function SignTile({
       aria-label={label}
       title={tip}
       aria-pressed={pressed}
+      data-span="wide"
       {...props}
       className={cn(
         'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
