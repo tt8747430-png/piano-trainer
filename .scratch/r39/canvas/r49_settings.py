@@ -182,7 +182,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     PAGES.forEach((p) => { const s = p.replace(/[ -]/g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
     const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'General' ? (st.theme ?? 'Match system') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') : l === 'About' ? (st.upd === 'avail' ? 'Update available' : 'Up to date') : val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
     const theme = st.theme ?? 'Match system', lang = st.lang ?? 'English';
-    const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : '#F7F3EE', bot: t === 'Light' ? '#F7F3EE' : '#2A231E', card: t === 'Dark' ? '#3A312A' : '#FEFDFB' }));
+    const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : 'rgb(247,243,238)', bot: t === 'Light' ? 'rgb(247,243,238)' : '#2A231E', card: t === 'Dark' ? '#3A312A' : 'rgb(254,253,251)' }));
     const langs = ['English', 'Русский'].map((l) => ({ l, on: l === lang, ring: l === lang ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', fw: l === lang ? 700 : 500, pick: () => S({ lang: l }) }));
     // account and sync
     const pic = st.pic ?? -1;

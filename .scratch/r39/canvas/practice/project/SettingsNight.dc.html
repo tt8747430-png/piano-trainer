@@ -87,7 +87,7 @@ const GROUPS = [["App", [["General", "Match system"], ["Storage and backup", ""]
     PAGES.forEach((p) => { const s = p.replace(/[ -]/g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
     const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'General' ? (st.theme ?? 'Match system') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') : l === 'About' ? (st.upd === 'avail' ? 'Update available' : 'Up to date') : val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#3A332D' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
     const theme = st.theme ?? 'Match system', lang = st.lang ?? 'English';
-    const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #EDE9E1' : '0 0 0 1px #453E38', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : '#191512', bot: t === 'Light' ? '#191512' : '#2A231E', card: t === 'Dark' ? '#3A312A' : '#24201C' }));
+    const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #EDE9E1' : '0 0 0 1px #453E38', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : 'rgb(247,243,238)', bot: t === 'Light' ? 'rgb(247,243,238)' : '#2A231E', card: t === 'Dark' ? '#3A312A' : 'rgb(254,253,251)' }));
     const langs = ['English', 'Русский'].map((l) => ({ l, on: l === lang, ring: l === lang ? '0 0 0 2.5px #EDE9E1' : '0 0 0 1px #453E38', fw: l === lang ? 700 : 500, pick: () => S({ lang: l }) }));
     // account and sync
     const pic = st.pic ?? -1;
