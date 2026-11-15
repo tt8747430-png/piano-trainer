@@ -88,11 +88,19 @@ const Y = {"courses": [{"t": "Sunday service set", "paint": "#2C3A2B", "pic": "c
     const states = [['Nothing made yet', bare, { bare: true, q: '' }, { bare: false }], ['Search finds nothing', !bare && ql === 'chopin', { q: 'Chopin', bare: false }, { q: '' }],
       ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: '“Notes from my teacher” deleted' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#EDE9E1' : '#2E2924', pick: () => set(on ? off : o) }));
+    const sel = st.sel ?? 'Sunday service set', selBg = (t) => t === sel ? '#2E2924' : 'transparent';
+    courses.forEach((c) => { c.pick = () => set({ sel: c.t }); c.selBg = selBg(c.t); c.cur = c.t === sel ? 'true' : 'false'; c.lessons.forEach((l) => { l.pick = () => set({ sel: l.t }); l.selBg = selBg(l.t); l.cur = l.t === sel ? 'true' : 'false'; }); });
+    loose.forEach((l) => { l.pick = () => set({ sel: l.t }); l.selBg = selBg(l.t); l.cur = l.t === sel ? 'true' : 'false'; });
+    const pc = Y.courses.find((c) => c.t === sel), inC = Y.courses.find((c) => c.lessons.some(([t]) => t === sel)), pl = pc ? null : (inC ? inC.lessons : Y.loose).find(([t]) => t === sel) || Y.loose[0];
+    const pLs = pc ? pc.lessons.map(([t, d, k]) => ({ t, d, learned: k === 'learned', todo: k !== 'learned', fw: k === 'learned' ? 450 : 600 })) : [];
+    const pDone = pLs.filter((l) => l.learned).length, pNext = pLs.find((l) => l.todo);
+    const pane = pc ? { pT: pc.t, pKind: 'Course · ' + pc.lessons.length + ' lessons', pLine: pc.line, pPaint: pc.paint, pCourse: true, pLesson: false, pLs, pProg: pDone + ' of ' + pLs.length + ' learned', pPct: Math.round(100 * pDone / pLs.length) + '%', pGo: pNext ? 'Continue: ' + pNext.t : 'Open', pHref: 'CourseLaptop.dc.html', pSet: 'YourCourseSettingsLaptop.dc.html' }
+      : { pT: pl[0], pKind: 'Lesson · ' + pl[1] + (pl[2] === 'learned' ? ' · learned' : ''), pLine: inC ? 'In ' + inC.t : 'In no course', pPaint: '#2E2924', pCourse: false, pLesson: true, pLs: [], pProg: '', pPct: '0%', pGo: pl[2] === 'learned' ? 'Read again' : 'Open', pHref: 'LessonLaptop.dc.html', pSet: 'YourLessonSettingsLaptop.dc.html' };
     const sheetOpen = (n) => () => set({ sheet: n });
     return { ...common(st, set), closeSheet: () => set({ sheet: null }),
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
-      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
+      ...pane, paneOn: any, courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
       noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
       rowOn: sheet === 'row', rowT: st.row || '', rowIsLesson: !Y.courses.some((c) => c.t === st.row),
       removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: '“' + st.row + '” deleted' }),
