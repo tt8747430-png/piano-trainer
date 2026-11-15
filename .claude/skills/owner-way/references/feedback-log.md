@@ -5,6 +5,9 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **Loop round 23, the keys as the boards draw them (one piano):** Fit's white keys are as wide as 36 in the
+  width allows, never under 21 (19 in view on a phone, five octaves on a laptop), and the keys 112 long on a phone
+  up to 132 on a laptop, as the Editor and EditorLaptop boards measure; Large and Piano keep their own (2026-11-15).
 - **The palette's tabs by name (loop, 2026-11-13, canvas 123's "seven named categories"):** a phone's strip reads
   Notes · Pitch · Articulations · Ornaments · Dynamics · Measures · Clef · Key · Time · Repeats · Text, each its short
   name; the section below keeps its full title. No category is a picture alone.
@@ -220,6 +223,8 @@ owner's, typos fixed.
   Waiting for the owner's word.
 
 ## Library, adding, publishing
+- **Canvas 192, Groups:** the board's + New group shows only where a group can be made, not signed out or
+  offline, as the app already does (2026-11-15).
 
 - **Canvas 191, Explore offline says it once:** "You’re offline" over "Explore needs the internet. Your own songs
   are all here." and My songs (was a title that said the same as its line); ru «Нет подключения к интернету»
@@ -733,6 +738,8 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+- **Loop round 23, two-line rows as the boards:** a row's title over its detail is 16 semibold (Courses,
+  Badges, Milestones, the song and lesson lists), a one-line row (Settings) stays regular (2026-11-15).
 
 - **The learner at the sidebar's foot (loop round 20, LearnLaptop):** the Profile row and its gear stand at the
   foot of the laptop's sidebar whether or not recents show above them (were under Practice with none) (2026-11-15).

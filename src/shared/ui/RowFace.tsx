@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib'
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { Paint } from './paint'
@@ -53,7 +54,11 @@ export function RowFace({
   const name = (
     <span
       data-slot="row-title"
-      className="line-clamp-2 text-base leading-snug font-normal text-pretty group-data-current/row:font-semibold"
+      // Over a detail the title is semibold, as the boards draw every two-line row (16/600).
+      className={cn(
+        'line-clamp-2 text-base leading-snug text-pretty group-data-current/row:font-semibold',
+        detail ? 'font-semibold' : 'font-normal',
+      )}
     >
       {title}
     </span>

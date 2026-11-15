@@ -16,8 +16,12 @@ import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
 
-/** Fit's white keys: never narrower than this, so a finger finds them; past it the keyboard scrolls… */
-const MIN_WHITE_PX = 34
+/** Fit's white keys: never narrower than this (the phone boards' 21), so a finger finds them… */
+const MIN_WHITE_PX = 21
+/** …and as wide as this many white keys in the width allows: five octaves, as the laptop boards draw. */
+const WHITES_IN_VIEW = 36
+/** Fit's keys are as long as the boards draw them: 112 on a phone, up to 132 on a laptop. */
+const FIT_LENGTH = { least: 112, most: 132, perWhite: 3.6 } as const
 /** Where the keys asked to be in sight must all fit (`fitInView`), Fit narrows them to this at most. */
 const NARROWEST_FIT_PX = 22
 /** …nor wider than this: a wide screen shows the neighbouring keys instead. */
@@ -39,7 +43,8 @@ const keysLength = (length: string, most: string) =>
 
 /** A white key's width for each key size, as CSS in the scroller's container units. */
 const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> = {
-  fit: (whites) => `clamp(${MIN_WHITE_PX}px, 100cqw / ${whites}, ${MAX_WHITE_PX}px)`,
+  fit: (whites) =>
+    `clamp(${MIN_WHITE_PX}px, max(100cqw / ${WHITES_IN_VIEW}, 100cqw / ${whites}), ${MAX_WHITE_PX}px)`,
   large: () => `${LARGE_WHITE_PX}px`,
   piano: () => `calc(100cqw / ${PIANO_LAYOUT.whites})`,
 }
@@ -49,7 +54,7 @@ const WHITE_WIDTH: Readonly<Record<KeySize, (whitesInRange: number) => string>> 
  * to them, down to `NARROWEST_FIT_PX`.
  */
 const fitWidth = (whitesInRange: number, whitesAsked: number) =>
-  `clamp(max(${NARROWEST_FIT_PX}px, min(${MIN_WHITE_PX}px, 100cqw / ${whitesAsked})), 100cqw / ${whitesInRange}, ${MAX_WHITE_PX}px)`
+  `clamp(max(${NARROWEST_FIT_PX}px, min(${MIN_WHITE_PX}px, 100cqw / ${whitesAsked})), max(100cqw / ${WHITES_IN_VIEW}, 100cqw / ${whitesInRange}), ${MAX_WHITE_PX}px)`
 
 /** Where the arrow keys, Home and End take the keyboard's tab stop. */
 const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
@@ -245,9 +250,11 @@ export function PianoKeyboard({
         style={{
           width: `calc(${PIANO_LAYOUT.whites} * ${white})`,
           height:
-            height === undefined
-              ? keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS)
-              : `${height}px`,
+            height !== undefined
+              ? `${height}px`
+              : keySize === 'fit'
+                ? `clamp(min(${FIT_LENGTH.least}px, ${MOST_KEYS}), calc(${white} * ${FIT_LENGTH.perWhite}), min(${FIT_LENGTH.most}px, ${MOST_KEYS}))`
+                : keysLength(`calc(${white} * ${KEY_LENGTH})`, MOST_KEYS),
         }}
       >
         {keyButtons}
