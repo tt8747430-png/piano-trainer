@@ -317,6 +317,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Loop round 21, the Chord player's bar across the gutter:** Style · Key · Tempo · Repeats and Play span the
+  phone's width as the board's DOCK (560 at most), not hugging their contents (2026-11-15).
 - **Loop round 21, the Metronome's slider as tall as its thumb:** its row 28, the beats 20 under it, as the board's
   range input (the beats sat 4 under the thumb) (2026-11-15).
 - **Loop round 20, the overview as Learn under its bar:** Theory starts 4 under the bar, the sections 14 apart,

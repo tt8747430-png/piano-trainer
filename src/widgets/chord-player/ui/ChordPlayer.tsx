@@ -694,7 +694,7 @@ export function ChordPlayer({
               />
             </div>
           ) : null}
-          <div className="pointer-events-auto">{dockBar}</div>
+          <div className="pointer-events-auto flex w-full justify-center">{dockBar}</div>
         </div>
       ) : null}
 
