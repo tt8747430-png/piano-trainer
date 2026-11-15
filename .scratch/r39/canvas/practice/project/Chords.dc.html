@@ -791,15 +791,16 @@ return {
   practise: (() => {
     // canvas 160 (owner: "I dont want this from c to am… but I do want more chords pratice", "I like shuffle"):
     // the chosen chords' changes, the same exercises on each chord, the key orders, Shuffle; each row shows its music
-    const ovOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), n = QS[c.q].t.map(([s0, d0]) => spell(rt, ((s0 % 12) + 12) % 12, d0).name); RL = rLet; return 'LH ' + n[0] + ' · RH ' + n.join(' '); };
+    const nmOf = (c) => { RL = c.rl; const rt = rootPc(c.rl, c.ra), n = QS[c.q].t.map(([s0, d0]) => spell(rt, ((s0 % 12) + 12) % 12, d0).name); RL = rLet; return n; };
+    const ovOf = (c) => { const n = nmOf(c); return 'LH ' + n[0] + ' · RH ' + n.join(' '); };
     const trOf = (c, d) => { if (!d) return symOf(Object.assign({}, c, { inv: 0 })).s; const [l, a] = fitRoot(...spellPc((rootPc(c.rl, c.ra) + d) % 12, -1), c.q); return LET[l] + ACC[String(a)] + QS[c.q].k; };
-    const invs = q.t.length > 3 ? 'Root position, 1st, 2nd, 3rd' : 'Root position, 1st, 2nd';
-    if (seq.length < 2) return [{ a: 'Inversions', b: invs }, { a: 'Arpeggio', b: 'Two octaves' }, { a: 'Over the root', b: ovOf(seq[cur] || seq[0]) }].concat(keyDrills);
+    const n0 = nmOf(seq[cur] || seq[0]), invs = n0.map((_, at) => n0.slice(at).concat(n0.slice(0, at)).join(' ')).join(' · ');
+    if (seq.length < 2) return [{ a: 'Inversions', b: invs }, { a: 'Arpeggio', b: n0.join(' ') + ' ' + n0[0] + ' …' }, { a: 'Over the root', b: ovOf(seq[cur] || seq[0]) }].concat(keyDrills);
     const syms = seq.map((c) => trOf(c, 0)), keys = (d) => [0, d].map((k) => seq.map((c) => trOf(c, k)).join(' ')).join(' · ') + ' …';
     const sh = [2, 0, 3, 1, 4, 6, 5, 7].filter((i) => i < seq.length).map((i) => syms[i]);
     return [{ a: 'Chord changes', b: syms.concat([syms[0]]).join(' · ') + ' …' },
       { a: 'Inversions', b: [0, 1, 2].map((i) => symOf(Object.assign({}, seq[0], { inv: i })).s).concat([syms[1]]).join(' · ') + ' …' },
-      { a: 'Arpeggio', b: 'Two octaves' },
+      { a: 'Arpeggio', b: nmOf(seq[0]).join(' ') + ' ' + nmOf(seq[0])[0] + ' …' },
       { a: 'Over the root', b: ovOf(seq[0]) + ' · ' + ovOf(seq[1]).replace(/ · RH .*/, '') + ' …' },
       { a: 'Chromatically', b: keys(1) }, { a: 'Circle of fifths', b: keys(5) },
       { a: 'Shuffle', b: sh.join(' · ') + ' …' }];

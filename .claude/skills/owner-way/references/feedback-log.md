@@ -337,6 +337,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **Chords' practise rows show their music, one chord or several** (loop, canvas 193): Inversions shows the rotations (C E G B · E G B C · …) and Arpeggio its notes (C E G B C …), as the app does; the board's "Root position, 1st, 2nd" and "Two octaves" were words where the music fits.
 - **Loop round 21, the Chord player's bar across the gutter:** Style · Key · Tempo · Repeats and Play span the
   phone's width as the board's DOCK (560 at most), not hugging their contents (2026-11-15).
 - **Loop round 21, the Metronome's slider as tall as its thumb:** its row 28, the beats 20 under it, as the board's
