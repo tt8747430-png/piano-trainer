@@ -31,25 +31,45 @@ export function LibraryFilters({
   /** A laptop's two panes: the table's headings sort and the tree holds the places. */
   wide?: boolean
 }) {
-  const { t } = useTranslation('songs')
-  const set = useSetSearch<SongsFilter>()
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <div className="min-w-0 flex-1">
-          <SearchField
-            value={filter.q}
-            onChange={(q) => set({ q })}
-            label={t('search')}
-            hint={t('searchHint')}
-            screen={screen}
-          />
-        </div>
-        <SongsFilterSheet page={page} filter={filter} sorted={!wide} />
-      </div>
+    <div className="flex flex-col gap-3 empty:hidden">
+      {wide ? null : <LibrarySearchRow page={page} filter={filter} screen={screen} />}
       {wide ? null : <PlaceChips filter={filter} />}
       <SongsFilterChips filter={filter} />
       {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
+    </div>
+  )
+}
+
+/**
+ * The search box and Sort and filter beside it: a row of its own on a phone, in the bar on a laptop
+ * (the SongsLaptop board: 288 wide, before New), where the table's headings sort.
+ */
+export function LibrarySearchRow({
+  page,
+  filter,
+  screen,
+  wide = false,
+}: {
+  page: LibraryPage
+  filter: SongsFilter
+  screen: string
+  wide?: boolean
+}) {
+  const { t } = useTranslation('songs')
+  const set = useSetSearch<SongsFilter>()
+  return (
+    <div className="flex items-center gap-2">
+      <div className={wide ? 'w-72' : 'min-w-0 flex-1'}>
+        <SearchField
+          value={filter.q}
+          onChange={(q) => set({ q })}
+          label={t('search')}
+          hint={t('searchHint')}
+          screen={screen}
+        />
+      </div>
+      <SongsFilterSheet page={page} filter={filter} sorted={!wide} />
     </div>
   )
 }

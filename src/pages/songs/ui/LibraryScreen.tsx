@@ -21,7 +21,7 @@ import { ContinueShelf } from './ContinueShelf'
 import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
-import { LibraryFilters } from './LibraryFilters'
+import { LibraryFilters, LibrarySearchRow } from './LibraryFilters'
 import { LibraryHeader } from './LibraryHeader'
 import { LibrarySelect } from './LibrarySelect'
 import { LibraryTree } from './LibraryTree'
@@ -146,6 +146,16 @@ export function LibraryScreen({
       <LibraryHeader
         page={page}
         folder={folder}
+        search={
+          wide ? (
+            <LibrarySearchRow
+              page={page}
+              filter={filter}
+              screen={folder ? nameOf(folder) : t('title')}
+              wide
+            />
+          ) : undefined
+        }
         add={
           wide ? (
             <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />

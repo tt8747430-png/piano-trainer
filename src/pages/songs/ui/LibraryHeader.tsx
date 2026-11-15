@@ -30,12 +30,15 @@ export function LibraryHeader({
   page,
   folder,
   edit,
+  search,
   add,
 }: {
   page: LibraryPage
   folder: ShelvedFolder | null
   /** The folder's Edit, where it may be renamed. */
   edit?: EditAction
+  /** The search and its Sort and filter, on a laptop: the bar's first tools. */
+  search?: ReactNode
   /** New, on a laptop: the primary action, last of the tools (`NewMenu`). */
   add?: ReactNode
 }) {
@@ -91,6 +94,7 @@ export function LibraryHeader({
       tools={
         edit?.editing ? null : (
           <>
+            {search}
             {/* At Home Select is in More (canvas 133); a folder's bar has no More. */}
             {folder ? (
               <RoundButton

@@ -242,6 +242,10 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Loop round 16, a laptop's search in the bar (the SongsLaptop and ProgressionsLaptop boards):** the search box
+  288 wide and Sort and filter beside it stand in the bar before New, not a row of their own over the table; a phone
+  keeps its row under the title (2026-11-15).
+
 - **Loop round 16, Explore's search says what it finds:** "Search songs and patterns" as the Explore board writes it,
   never the bare "Search"; it fits a 393 phone in Russian (2026-11-15).
 - **Canvas 192, Groups:** the board's + New group shows only where a group can be made, not signed out or
