@@ -50,6 +50,8 @@ export const settings = {
     info: 'Your songs, progress and the app’s offline copy are stored by this browser. When a device runs low on space, a browser may clear an app’s data unless the app has asked it to keep the data.',
     reading: 'Calculating storage…',
     used: '{{size}} used on this device',
+    songs: 'Songs and takes {{size}}',
+    piano: 'Piano {{size}}',
     keepSafe: 'Protect from clearing',
     safe: 'Protected: the browser will not clear this data to free up space',
     refused:

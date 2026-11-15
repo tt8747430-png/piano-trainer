@@ -6,6 +6,7 @@ import { KeepOnDeviceFields } from '@/features/keep-on-device'
 import { resetProgress } from '@/features/reset-progress'
 import { ConfirmDialog, DangerGroup, DangerRow, SettingsGroup as Group } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
+import { usePianoSound } from '../model/use-piano-sound'
 
 /**
  * Settings › Storage and backup (A15): what this device keeps (and keeping it safe), Backup, and
@@ -16,11 +17,10 @@ export function StoragePage() {
   const { t } = useTranslation('settings')
   const progress = useProgressStoreApi()
   const [confirming, setConfirming] = useState(false)
+  const piano = usePianoSound()
   return (
     <SettingsScreen title={t('pages.storage')}>
-      <Group flush title={t('storage.label')} info={t('storage.info')}>
-        <KeepOnDeviceFields />
-      </Group>
+      <KeepOnDeviceFields piano={piano.sound.state === 'known' ? piano.sound.kept : 0} />
       <Group flush title={t('backup.label')} info={t('backup.says')}>
         <BackupFields />
       </Group>
