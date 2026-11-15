@@ -2,7 +2,7 @@ import { DndContext } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Minus, Plus, type LucideIcon } from 'lucide-react'
+import { GripVertical, Minus, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   barAvailable,
@@ -12,8 +12,8 @@ import {
   type BarSurface,
 } from '@/entities/settings'
 import { cn, useSortableList } from '@/shared/lib'
-import { ActionRow, SettingsGroup } from '@/shared/ui'
 import { BAR_ICONS } from '../model/bar-icons'
+import { ActionRow, SettingsGroup } from '@/shared/ui'
 
 /** The round mark at a row's start: a red − takes the act off, a green + puts it on (iOS's edit list). */
 function EditMark({
@@ -52,36 +52,21 @@ function EditMark({
   )
 }
 
-/** An act's icon and name, the row's middle. */
-function ActName({
-  icon: Icon,
-  label,
-  muted,
-}: {
-  icon: LucideIcon
-  label: string
-  muted?: boolean
-}) {
+/** An act's name, the row's middle (the board's TBROW: the name alone; the preview shows its icon). */
+function ActName({ label, muted }: { label: string; muted?: boolean }) {
   return (
-    <span
-      className={cn('flex min-w-0 flex-1 items-center gap-3', muted && 'text-muted-foreground')}
-    >
-      <Icon aria-hidden className="size-5 flex-none" />
-      <span className="truncate">{label}</span>
-    </span>
+    <span className={cn('min-w-0 flex-1 truncate', muted && 'text-muted-foreground')}>{label}</span>
   )
 }
 
 /** An act on the bar: its − at the start, its name, its handle at the end to drag it in order. */
 function OnRow({
   act,
-  icon,
   label,
   canRemove,
   onRemove,
 }: {
   act: BarAct
-  icon: LucideIcon
   label: string
   canRemove: boolean
   onRemove: () => void
@@ -95,7 +80,7 @@ function OnRow({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn(
-        'relative flex min-h-13 items-center gap-1 bg-card py-1 pl-1 not-last:border-b not-last:border-hairline',
+        'relative flex min-h-15 items-center gap-2 bg-card py-1 ps-2 pe-1 not-last:border-b not-last:border-hairline',
         isDragging && 'z-10 shadow-md',
       )}
     >
@@ -106,7 +91,7 @@ function OnRow({
         disabled={!canRemove}
         onClick={onRemove}
       />
-      <ActName icon={icon} label={label} />
+      <ActName label={label} />
       <button
         type="button"
         aria-label={t('bars.move', { act: label })}
@@ -145,7 +130,7 @@ export function BarEditor({
   const room = barHasRoom(surface, bar)
   const name = (act: BarAct) => t(`bars.act.${act}`)
   return (
-    <div data-setting={`bars.${surface}`} className="flex flex-col gap-6">
+    <div data-setting={`bars.${surface}`} className="flex flex-col gap-4">
       <div className="card overflow-hidden">
         <DndContext {...sortable.dnd} modifiers={[restrictToVerticalAxis]}>
           <SortableContext items={[...sortable.items]} strategy={verticalListSortingStrategy}>
@@ -154,7 +139,6 @@ export function BarEditor({
                 <OnRow
                   key={act}
                   act={act}
-                  icon={BAR_ICONS[act]}
                   label={name(act)}
                   canRemove={barCanShrink(surface, bar)}
                   onRemove={() => onChange(bar.filter((each) => each !== act))}
@@ -168,15 +152,20 @@ export function BarEditor({
         </DndContext>
       </div>
       {available.length > 0 ? (
-        <SettingsGroup flush title={t('bars.available')}>
+        <section className="flex flex-col gap-1.5">
+          <h2 className="px-1 font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+            {t('bars.available')}
+          </h2>
           {room ? null : (
-            <p className="px-4 pt-3 text-sm text-pretty text-muted-foreground">{t('bars.full')}</p>
+            <p className="px-1 text-[0.8125rem] text-pretty text-muted-foreground">
+              {t('bars.full')}
+            </p>
           )}
-          <ul>
+          <ul aria-label={t('bars.available')} className="card overflow-hidden">
             {available.map((act) => (
               <li
                 key={act}
-                className="flex min-h-13 items-center gap-1 py-1 pr-4 pl-1 not-last:border-b not-last:border-hairline"
+                className="flex min-h-15 items-center gap-2 py-1 ps-2 pe-4 not-last:border-b not-last:border-hairline"
               >
                 <EditMark
                   kind="add"
@@ -184,15 +173,40 @@ export function BarEditor({
                   disabled={!room}
                   onClick={() => onChange([...bar, act])}
                 />
-                <ActName icon={BAR_ICONS[act]} label={name(act)} muted={!room} />
+                <ActName label={name(act)} muted={!room} />
               </li>
             ))}
           </ul>
-        </SettingsGroup>
+        </section>
       ) : null}
       <SettingsGroup flush>
         <ActionRow title={t('bars.reset')} onClick={() => onChange(null)} />
       </SettingsGroup>
+    </div>
+  )
+}
+
+/**
+ * The toolbar as a selection shows it (the board's TBPREVIEW): a floating pill with the count and the
+ * bar's acts, each its icon in a 44 circle, in their order.
+ */
+export function BarPreview({ bar }: { bar: readonly BarAct[] }) {
+  const { t } = useTranslation('settings')
+  return (
+    <div role="img" aria-label={t('bars.previewToolbar')} className="flex justify-center py-2">
+      <div className="flex h-15 items-center gap-1 rounded-pill bg-card px-2 shadow-[0_0_0_1px_var(--color-border),0_6px_18px_-8px_rgb(51_41_33/0.3)]">
+        <span className="px-2.5 text-[0.9375rem] font-bold whitespace-nowrap">
+          {t('bars.previewSelected')}
+        </span>
+        {bar.map((act) => {
+          const Icon = BAR_ICONS[act]
+          return (
+            <span key={act} className="grid size-11 place-items-center">
+              <Icon aria-hidden className="size-5" />
+            </span>
+          )
+        })}
+      </div>
     </div>
   )
 }

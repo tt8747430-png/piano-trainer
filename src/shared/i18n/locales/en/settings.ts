@@ -110,6 +110,8 @@ export const settings = {
     previewComposer: 'John Newton',
     previewFolder: 'Hymns',
     previewHolds: '12 songs',
+    previewToolbar: 'The selection toolbar',
+    previewSelected: '2 selected',
     available: 'Available',
     full: 'All slots are in use. Remove an action to add another.',
     none: 'No action: this swipe does nothing.',

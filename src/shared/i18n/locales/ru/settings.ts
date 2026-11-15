@@ -105,6 +105,8 @@ export const settings: LocaleResources['settings'] = {
     previewComposer: 'Джон Ньютон',
     previewFolder: 'Гимны',
     previewHolds: '12 песен',
+    previewToolbar: 'Панель выделения',
+    previewSelected: 'Выбрано: 2',
     available: 'Доступные',
     full: 'Все места заняты. Уберите действие, чтобы добавить другое.',
     none: 'Нет действия: смахивание ничего не делает.',

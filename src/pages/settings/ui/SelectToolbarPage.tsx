@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { barOf, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setBar } from '@/features/set-preference'
 import { SettingsGroup } from '@/shared/ui'
-import { BarEditor } from '@/widgets/bar-editor'
+import { BarEditor, BarPreview } from '@/widgets/bar-editor'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
@@ -16,6 +16,7 @@ export function SelectToolbarPage() {
   const bar = useSettings((state) => barOf(state.bars, 'select.songs'))
   return (
     <SettingsScreen title={t('pages.selectionToolbar')}>
+      <BarPreview bar={bar} />
       <SettingsGroup bare title={t('bars.songs')} footnote={t('bars.selectFootnote')}>
         <BarEditor
           surface="select.songs"
