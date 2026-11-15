@@ -1068,7 +1068,7 @@
   /* The Player's and the editor's bar (their canvases, loop round 24): Close and the title, a pill in
      the bar's middle, the end's buttons; a band of paper with its hairline, as every bar. */
   &:has(> [data-area='middle']) {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
     grid-template-areas: 'lead middle actions';
   }
   & > [data-area='middle'] {

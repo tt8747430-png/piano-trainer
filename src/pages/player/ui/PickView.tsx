@@ -71,7 +71,7 @@ export function ViewMenu({ shown, needs }: { shown: MusicView; needs: ViewNeeds 
           <Button
             variant="tool"
             size="icon"
-            aria-label={`${t('views.label')}: ${t(`views.short.${shown}`)}`}
+            aria-label={t('views.shown', { view: t(`views.short.${shown}`) })}
             title={t('views.label')}
           />
         }

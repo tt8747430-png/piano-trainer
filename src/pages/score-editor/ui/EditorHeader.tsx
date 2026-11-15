@@ -13,7 +13,6 @@ export function EditorLead() {
   return (
     <Button
       variant="tool"
-      className="glass"
       size="icon"
       aria-label={t('close')}
       title={t('close')}
@@ -56,8 +55,8 @@ export function EditorActions() {
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
   return (
-    // Undo, redo and More in one glass capsule, as the editor's board groups them.
-    <div className="flex items-center rounded-pill glass p-0.5">
+    // Undo, redo and More side by side, plain icons on the bar's paper as the Player's (loop round 24).
+    <div className="flex items-center">
       <Button
         variant="tool"
         size="icon"
