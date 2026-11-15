@@ -6,7 +6,7 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { STAGE_PAINT } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { PAINT } from '@/shared/ui'
+import { PAINT, SeeAll, SectionHead } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 
 /** How many covers Learn shows before See all. */
@@ -68,17 +68,9 @@ export function CourseCovers() {
   )
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3.5">
-      <div className="flex items-center justify-between gap-4 px-1">
-        <h2 id={id} className="font-sans text-xl font-bold">
-          {t('courses')}
-        </h2>
-        <Link
-          to="/courses"
-          className="-mx-2 inline-flex min-h-11 items-center rounded-control px-2 font-semibold text-link hover:underline"
-        >
-          {t('seeAll')}
-        </Link>
-      </div>
+      <SectionHead id={id} title={t('courses')}>
+        <SeeAll label={t('seeAll')} render={<Link to="/courses" />} />
+      </SectionHead>
       <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4.5 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">

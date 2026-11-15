@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RATED_MIN, type PublicEntry, type PublicSort } from '@/shared/api/public-library'
-import { Button } from '@/shared/ui/primitives/button'
+import { SeeAll, SectionHead } from '@/shared/ui'
 import { ExploreCard } from '@/widgets/song-preview'
 import type { ExploreCategory } from '../model/explore-view'
 import { entriesOf, useExploreBrowse } from '../model/use-explore-browse'
@@ -72,14 +72,9 @@ function Shelf({
   const id = useId()
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-2">
-      <div className="flex min-h-9 items-center justify-between gap-2">
-        <h2 id={id} className="font-sans text-xl font-bold">
-          {t(`explore.shelves.${sort}`)}
-        </h2>
-        <Button variant="ghost" onClick={onSeeAll}>
-          {t('explore.seeAll')}
-        </Button>
-      </div>
+      <SectionHead id={id} title={t(`explore.shelves.${sort}`)}>
+        <SeeAll label={t('explore.seeAll')} onClick={onSeeAll} />
+      </SectionHead>
       <ul
         aria-labelledby={id}
         className="-mx-gutter flex snap-x scroll-px-gutter gap-2 overflow-x-auto overscroll-x-contain px-gutter pb-1 scrollbar-none lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0 lg:[&>li:nth-child(n+6)]:hidden"

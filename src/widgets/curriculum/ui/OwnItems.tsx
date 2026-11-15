@@ -13,7 +13,7 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ActionMenu, OpensMark, LessonIcon } from '@/shared/ui'
+import { ActionMenu, OpensMark, LessonIcon, SeeAll, SectionHead } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
 import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
@@ -68,19 +68,11 @@ export function OwnItems() {
   const shownLessons = lessons.toReversed().slice(0, SHOWN - shownCourses.length)
   return (
     <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3.5">
-      <div className="flex items-center justify-between gap-4 px-1">
-        <h2 id={id} className="font-sans text-xl font-bold">
-          {t('own.title')}
-        </h2>
+      <SectionHead id={id} title={t('own.title')}>
         {lessons.length + courses.length > 0 ? (
-          <Link
-            to="/your-lessons"
-            className="-mx-2 inline-flex min-h-11 items-center rounded-control px-2 font-semibold text-link hover:underline"
-          >
-            {t('seeAll')}
-          </Link>
+          <SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />
         ) : null}
-      </div>
+      </SectionHead>
       <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
         {shownCourses.map((course) => (
           <li key={course.id}>
