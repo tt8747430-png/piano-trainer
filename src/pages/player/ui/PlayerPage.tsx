@@ -165,6 +165,7 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
     <PieceInversions pieceId={piece.id}>
       <PlayerLayout
         title={title}
+        about={[keyName({ tonic: choice.tonic, minor: pieceKey(piece).minor }), piece.meter]}
         credits={isDegreePiece(piece) ? undefined : printedHeader(piece)}
         layout={isDegreePiece(piece) ? undefined : piece.layout}
         onClose={close}

@@ -87,6 +87,7 @@ const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem)'
  */
 export function PlayerLayout({
   title,
+  about,
   credits,
   layout,
   onClose,
@@ -131,6 +132,8 @@ export function PlayerLayout({
    */
   recording?: Recording | undefined
   title: string
+  /** What the Settings' head says of the music before its tempo: its key and its time ("G major", "3/4"). */
+  about?: readonly string[] | undefined
   /** Printed under the title on the sheet (ADR 0114): a piece's subtitle, composer, lyricist, arranger. */
   credits?: ScoreHeader | undefined
   /** The score's staff size and the most bars a line holds (ADR 0114): a piece's. */
@@ -229,7 +232,7 @@ export function PlayerLayout({
     head: (
       <SongHead
         title={title}
-        detail={t('music:bpm', { tempo: player.tempo })}
+        detail={[...(about ?? []), t('music:bpm', { tempo: player.tempo })].join(' · ')}
         share={share?.onSelect}
         acts={moreMenu}
         onEdit={onEdit}
