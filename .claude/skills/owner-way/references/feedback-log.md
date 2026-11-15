@@ -747,6 +747,9 @@ owner's, typos fixed.
   the circle's C wedge in honey.
 - **Accompaniment's rows in lilac (loop, 2026-11-15):** a pattern's row tile wears lilac, as the board's library draws it
   and as Accompaniment's own tile on Practice already did; it was yellow, one thing in two paints.
+- **A pattern's keys show its chord (loop, 2026-11-15, `r63_pattern.py`):** a pattern's page marks C major's tones,
+  C · E · G, in the chord-tone paints over its bar of C, as the board's keys do; a song tune stays unmarked. A key's
+  name label ("C4") keeps one line.
 
 ## Sounds
 

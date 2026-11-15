@@ -157,7 +157,9 @@ function KeyButton({
         <span
           aria-hidden
           className={cn(
-            'relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere transition-opacity duration-200 ease-out',
+            'relative flex w-full flex-col items-center text-center leading-tight transition-opacity duration-200 ease-out',
+            // A note's name never breaks ("C2" over two lines on narrow keys); a mark's word may.
+            look.label.kind === 'name' ? 'px-0 whitespace-nowrap' : 'px-0.5 wrap-anywhere',
             look.label.ghost && 'opacity-40',
             slim && SLIM.label,
             slim && look.label.kind === 'name' && geometry.midi !== MIDDLE_C && SLIM.gone,

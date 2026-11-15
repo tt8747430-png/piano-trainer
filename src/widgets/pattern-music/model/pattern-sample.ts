@@ -1,5 +1,6 @@
 import { accompanimentOptions, type BookPattern, type PatternBook } from '@/entities/pattern'
 import { pieceById, wholeBar, type Piece } from '@/entities/piece'
+import { voicedShown } from '@/features/play-example'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { C_MAJOR, note } from '@/shared/lib/music'
@@ -11,10 +12,11 @@ import { unmarked, type ShownKeys } from '@/shared/ui'
 const TUNE_PIECE = 'otche'
 /** A bar of C heard at a steady walk. */
 const SAMPLE_TEMPO = 80
+const C_CHORD = { root: note('C'), quality: 'maj' } as const
 const C_BAR: Chart = {
   key: C_MAJOR,
   meter: '4/4',
-  sections: [{ lines: [[wholeBar({ root: note('C'), quality: 'maj' })]] }],
+  sections: [{ lines: [[wholeBar(C_CHORD)]] }],
 }
 
 /** A pattern as its page and the editor play it: what the staff writes, what sounds, the keys. */
@@ -82,5 +84,7 @@ export function patternSample(
     toTick: to,
   })
   const keys = [...new Set(music.notes.map((n) => n.midi))].sort((a, b) => a - b)
-  return { music, sounds, shown: unmarked(keys), piece: tunePiece ?? null }
+  // Over its bar of C the keys wear C major's tones, as the pattern's board paints them (canvas 198).
+  const shown = tunePiece ? unmarked(keys) : voicedShown(C_CHORD, keys)
+  return { music, sounds, shown, piece: tunePiece ?? null }
 }

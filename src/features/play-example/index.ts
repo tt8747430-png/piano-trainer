@@ -1,4 +1,4 @@
-export { chordShown, chordsRange, firstChordShown, scaleShown } from './model/marks'
+export { chordShown, chordsRange, firstChordShown, scaleShown, voicedShown } from './model/marks'
 export { useShownKeys } from './model/use-shown-keys'
 export { intervalExample, intervalRoot, writesInterval } from './model/interval-example'
 export { IntervalCard } from './ui/IntervalCard'
