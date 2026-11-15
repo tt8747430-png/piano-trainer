@@ -3,7 +3,6 @@ import {
   Disc3,
   Gauge,
   BookOpenText,
-  ChartNoAxesColumnIncreasing,
   CircleDot,
   Dumbbell,
   GraduationCap,
@@ -18,6 +17,7 @@ import {
   SquarePlay,
   type LucideIcon,
 } from 'lucide-react'
+import { ScaleIcon } from './icons/ScaleIcon'
 import { PAGE_PICTURES, type PagePicture } from './PagePictures'
 import type { Paint } from './paint'
 
@@ -40,7 +40,7 @@ export const PAGE_TILES = {
   lesson: { icon: BookOpenText, paint: 'sand' },
   course: { icon: GraduationCap, paint: 'sky' },
   chords: { icon: KeyboardMusic, paint: 'sand', picture: PAGE_PICTURES.keys },
-  scales: { icon: ChartNoAxesColumnIncreasing, paint: 'sky', picture: PAGE_PICTURES.staff },
+  scales: { icon: ScaleIcon, paint: 'sky', picture: PAGE_PICTURES.staff },
   key: { icon: CircleDot, paint: 'lilac' },
   // Two notes and the leap between them (the board's arc).
   intervals: { icon: Spline, paint: 'grass', picture: PAGE_PICTURES.arc },

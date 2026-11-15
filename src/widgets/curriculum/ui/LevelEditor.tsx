@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ChartNoAxesColumnIncreasing, Ellipsis, KeyboardMusic, Trash2 } from 'lucide-react'
+import { Ellipsis, KeyboardMusic, Trash2 } from 'lucide-react'
 import { Fragment, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -13,7 +13,7 @@ import { STAGE_PAINT } from '@/entities/step'
 import { DraftActions, DraftStatus, useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn, slug } from '@/shared/lib'
-import { ActionMenu, confirm, PAINT, say } from '@/shared/ui'
+import { ActionMenu, confirm, PAINT, say, ScaleIcon } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   AddRow,
@@ -128,7 +128,7 @@ function LevelDocument({
         key,
         title: stepTitle(step).primary,
         detail: t('edit.journey.check'),
-        icon: step.kind === 'chords' ? KeyboardMusic : ChartNoAxesColumnIncreasing,
+        icon: step.kind === 'chords' ? KeyboardMusic : ScaleIcon,
         paint: cn(paint.fill, paint.ink),
       }
     const lesson = lessonById(step.lessonId)

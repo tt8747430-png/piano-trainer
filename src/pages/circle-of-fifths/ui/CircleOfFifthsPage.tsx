@@ -1,5 +1,4 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { ChartNoAxesColumnIncreasing } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
@@ -21,7 +20,7 @@ import {
 } from '@/shared/lib/music'
 import { chordSounds, walkSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { FloatingPieceLink } from '@/shared/ui'
+import { FloatingPieceLink, ScaleIcon } from '@/shared/ui'
 import { ToolPage } from '@/widgets/tool-page'
 import { KeyWheel } from './KeyWheel'
 
@@ -100,7 +99,7 @@ export function CircleOfFifthsPage() {
             />
           }
         >
-          <ChartNoAxesColumnIncreasing aria-hidden />
+          <ScaleIcon aria-hidden />
         </FloatingPieceLink>
       }
       side={

@@ -1,4 +1,4 @@
-import { BookOpenText, ChartNoAxesColumnIncreasing, KeyboardMusic } from 'lucide-react'
+import { BookOpenText, KeyboardMusic } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { lessonById, type Chapter, type Journey, type JourneyStep } from '@/entities/lesson'
@@ -11,7 +11,7 @@ import {
 } from '@/entities/progress'
 import { lessonStepId, skillsOfStep, StepLink, stepIdOf, type StepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ProgressMeter } from '@/shared/ui'
+import { ProgressMeter, ScaleIcon } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { afterWorthSaying } from '../model/after'
@@ -21,7 +21,7 @@ import { LessonLine, LessonRow, LessonStop } from './LessonRow'
 const ICON = {
   lesson: BookOpenText,
   chords: KeyboardMusic,
-  scale: ChartNoAxesColumnIncreasing,
+  scale: ScaleIcon,
 } as const
 
 /**

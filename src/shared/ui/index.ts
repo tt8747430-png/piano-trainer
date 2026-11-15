@@ -31,6 +31,7 @@ export { MenuSection } from './MenuSection'
 export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
+export { ScaleIcon } from './icons/ScaleIcon'
 export { PAGE_PICTURES, type PagePicture } from './PagePictures'
 export {
   Fab,
