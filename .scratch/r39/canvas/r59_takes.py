@@ -16,7 +16,7 @@ TKS_SRC = r'''
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
       moreOn: st.sheet === 'more', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved.', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),
@@ -35,14 +35,20 @@ TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap
 TKLIST = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROW}</sc-for></div>', 'true')
           + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'))
 
+def _HEADS(w):
+    # bar 1 (and bar 2 when the staff is wide), each note spread across its bar as an engraver spaces them
+    ys = [38, 26, 34, 30, 34, 38, 30, 26]
+    n = 8 if w > 500 else 4
+    x0, x1 = 70, w - 30
+    return [(round(x0 + i * (x1 - x0) / n), ys[i]) for i in range(n)]
 def RESULT(w):
     # the take written as notes, the grand staff the review writes into (Amazing Grace's first bar)
     ys = [10 + i * 8 for i in range(5)]; yb = [78 + i * 8 for i in range(5)]
     lines = ''.join(f'<path d="M8 {y}H{w - 8}" stroke="#685E56" stroke-width="1"></path>' for y in ys + yb)
-    heads = ''.join(f'<ellipse cx="{x}" cy="{y}" rx="5.5" ry="4" fill="{INK}" transform="rotate(-20 {x} {y})"></ellipse><path d="M{x + 5} {y}V{y - 26}" stroke="{INK}" stroke-width="1.3"></path>' for x, y in ((90, 38), (150, 26), (210, 34), (270, 30)))
+    heads = ''.join(f'<ellipse cx="{x}" cy="{y}" rx="5.5" ry="4" fill="{INK}" transform="rotate(-20 {x} {y})"></ellipse><path d="M{x + 5} {y}V{y - 26}" stroke="{INK}" stroke-width="1.3"></path>' for x, y in _HEADS(w))
     return (f'<svg viewBox="0 0 {w} 120" width="100%" role="img" aria-label="The take written as notes: bar 1" style="display: block">{lines}'
             f'<path d="M8 10V110M{w - 8} 10V110" stroke="#685E56" stroke-width="1.2"></path><text x="16" y="44" font-family="{SERIF}" font-size="40" fill="{INK}">𝄞</text><text x="16" y="104" font-family="{SERIF}" font-size="30" fill="{INK}">𝄢</text>{heads}'
-            f'<rect x="110" y="94" width="14" height="4" fill="{INK}"></rect></svg>')
+            f'<rect x="110" y="94" width="14" height="4" fill="{INK}"></rect>' + (f'<path d="M{(70 + w - 30) // 2 - 8} 10V110" stroke="#685E56" stroke-width="1"></path><rect x="{(70 + w - 30) // 2 + 40}" y="94" width="14" height="4" fill="{INK}"></rect>' if w > 500 else '') + '</svg>')
 SPLIT = lambda w: f'<div style="position: relative">{PROLL(w, 90)}<div style="position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: #B3261E"></div><span style="position: absolute; left: 8px; top: calc(50% - 12px); height: 24px; padding: 0 8px; border-radius: 12px; background: #B3261E; color: #FFFFFF; font-size: 13px; font-weight: 600; display: flex; align-items: center">Split point: C4</span></div>'
 REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 700">{{{{atN}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{atD}}}}</span></div>'
                     + CARD(RESULT(w), '8px 12px') + CARD(SPLIT(w), '8px 12px')
@@ -54,9 +60,19 @@ TKS_MORE = GROUP(('action', 'Review', 'doReview'), ('action', 'Download', 'downl
 TKS_INTO = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{intoList}}}}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{o.l}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{o.mark}}}}</span></button></sc-for></div>'
 tksph = (IF('isList', TOP('Editor.dc.html', 'Takes', '', 'Amazing Grace'), 'true') + IF('isReview', TOP('', 'Review your recording', '', 'Takes', BACKB))
          + NARROW(IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(340))) + TOASTS)
-tkslm = (IF('isList', LTOP('EditorLaptop.dc.html'), 'true') + IF('isReview', LTOP('', '', '').replace('<span style="flex: 1">', BACKB + '<span style="flex: 1">', 1))
-         + WIDE(H1('{{pageT}}') + IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(680)), 720) + TOASTL)
+TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type="button" aria-current="{{r.cur}}" onClick="{{r.pick}}" style="flex: 1; border: 0; background: transparent; padding: 0; font: inherit; text-align: left;', 1)
+          .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1))
+assert TKROWL != TKROW and '</a>' not in TKROWL
+TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL}</sc-for></div>', 'true'))
+tkslm = (LTOP('EditorLaptop.dc.html') + SHOWSTATES()
+         + IF('some', f'<main style="flex: 1; min-height: 0; padding: 0 40px 32px; display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 40px; align-items: start">'
+              f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{H1("Takes")}{TKLISTL}</div>'
+              f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; border-radius: 18px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px">'
+              f'<h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Review your recording</h2>{REVIEW(900)}</section></main>', 'true')
+         + IF('none', WIDE(H1('Takes') + EMPTY('none', MUSICN, 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'), 720))
+         + TOASTL)
+TKS_MOREL = GROUP(('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
 detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
        BSHEET('moreOn', '{{moreT}}', TKS_MORE) + BSHEET('intoOn', 'Into', TKS_INTO),
-       POPOVER('moreOn', '{{moreT}}', TKS_MORE, 'right: 360px; top: 220px', 300) + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300), 'Songs')
+       POPOVER('moreOn', '{{moreT}}', TKS_MOREL, 'left: 420px; top: 220px', 300) + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300), 'Songs')
 print('r59 takes ok')
