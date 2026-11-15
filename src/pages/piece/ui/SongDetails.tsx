@@ -132,7 +132,7 @@ function DetailsCard({ piece, writes }: { piece: Piece; writes: SongWrites | nul
   const facts = songFacts(shown, locale)
   const level = course ?? details.level
   return (
-    <SettingsGroup flush title={t('piece:details.label')}>
+    <SettingsGroup flush heading title={t('piece:details.label')}>
       {writes ? (
         <>
           <PropertyRow title={t('piece:details.title')} value={facts.title} empty={empty}>
@@ -272,7 +272,7 @@ function DetailsCard({ piece, writes }: { piece: Piece; writes: SongWrites | nul
  */
 function ReadRow({ title, value, info }: { title: string; value: string; info?: string }) {
   return (
-    <div className="flex min-h-16 min-w-0 items-center gap-3 py-2 pr-3 pl-4">
+    <div className="flex min-h-13 min-w-0 items-center gap-3 border-hairline py-2 pr-3 pl-4 not-first:border-t [&+:is(a,button)]:border-t [&+:is(a,button)]:border-hairline">
       <RowFace
         title={title}
         value={value}

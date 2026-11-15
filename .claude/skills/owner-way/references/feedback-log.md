@@ -197,6 +197,9 @@ owner's, typos fixed.
 - **Drum grooves:** Chordify's.
 
 ## Song page
+
+- **Details titled as Chords and Sections are (loop round 16, the SongLaptop board):** one section title, 20px bold,
+  over the Details card (`SettingsGroup heading`); a course's read-only Level row as tall as Genre's, a hairline between.
 - **The song page, its settings and its editing redone,** on phone and laptop: details (words, music and harmony, level,
   genre, language, tags) edited as properties, not the inline editor; card styles intuitive, showing what they change in
   the real list, as memory-palaces' pinned cards and presets; the groups pages work and look right (2026-11-05).

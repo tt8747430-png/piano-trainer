@@ -15,6 +15,7 @@ export function SettingsGroup({
   footnote,
   flush = false,
   bare = false,
+  heading = false,
   children,
   className,
 }: {
@@ -24,6 +25,8 @@ export function SettingsGroup({
   flush?: boolean
   /** Its own cards under its name (a list of instruments' families), no card round them. */
   bare?: boolean
+  /** Its name as a page's section title (a song's Details, beside its Chords and Sections). */
+  heading?: boolean
   children: ReactNode
   className?: string
 }) {
@@ -31,13 +34,17 @@ export function SettingsGroup({
   return (
     <section
       aria-labelledby={title ? id : undefined}
-      className={cn('flex flex-col gap-1.5', className)}
+      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-1.5', className)}
     >
       {title ? (
-        <div className="flex items-center gap-1 px-1">
+        <div className={cn('flex items-center gap-1', !heading && 'px-1')}>
           <h2
             id={id}
-            className="font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+            className={
+              heading
+                ? 'font-sans text-xl font-bold'
+                : 'font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase'
+            }
           >
             {title}
           </h2>
