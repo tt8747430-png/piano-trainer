@@ -301,7 +301,7 @@ def CP_KEYS(h):
 CP_SET = (CAPS('Instruments') + GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'))
           + CAPS('Playing') + GROUP(('link', 'Count-in', '1 bar', ''), ('toggle', 'Repeat the sheet', 'cpRepOn', 'cpRepT'), ('link', 'Volume', '80%', ''))
           + CAPS('Music') + GROUP(('link', 'Time signature', '4/4', ''), ('link', 'Transpose', 'C → C', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200))
-          + GROUP(('link', 'On-screen piano', '{{pianoVal}}', 'openPiano'), ('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
+          + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)
 CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', _BACKP + '<span style="font-size: 17px; font-weight: 600">Piano</span>', 1)

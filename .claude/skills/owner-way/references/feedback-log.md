@@ -962,6 +962,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **No On-screen piano page (owner, 2026-11-15: "the on screen piano settings are also weird and doesnt seam necessary"):** the keys' choices live once, in the Piano sheet beside the keys (Keyboard, Labels); Key size, Pedals, Chord symbol, Note names on highlighted keys, Swipe gesture, Placement and Volume are gone (they repeated that sheet, showed no difference, or are the device's own volume). The grand's offline download is Storage and backup's Piano sound; the computer keyboard is General's. Settings' Piano group is MIDI devices alone, and the pages' "On-screen piano ›" rows are gone. No line explains under a control there either (Protect from clearing, Reset progress).
 - **Loop round 40, the account pages' Google and Apple pills ringed as the SignIn board's SSO:** the soft hairline (the board's LINE) round each, where they wore the fields' darker control line; the fields keep it, for 3:1, and stay 48 tall as FIELD draws them (2026-11-15).
 - **Loop round 37, Profile's guest head as its board:** the picture centred on the words, the title 22, the line 14/1.4, Sign in a 44 bold honey pill (it was a rounded square under a top-pinned picture).
 - **Loop round 37, a switch row as its neighbours:** 16px and 52 tall, as the boards' toggle rows sit level with the link rows beside them (it was 18px and 56, so Favourite stood taller than Duplicate under it), everywhere a switch row is used.

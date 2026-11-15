@@ -70,46 +70,22 @@ P_PASSWORD = (FIELD('Current password', 'oldpassword', 'pw1', eye=True) + FIELD(
 P_PRIVACY = (SEC(S9CAPS('Profile', 'priv'), TIPCARD('priv', 'Your name and picture on songs you publish, and your profile in Explore. Off: published songs show “Piano Trainer learner”.'), GROUP(('toggle', 'Show my profile', 'showOn', 'showT'), bg=SHEET))
              + SEC(CAPS('How your published songs show you'), CARD(f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 52px; height: 52px; border-radius: 10px; background: {SKY}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 22px">𝄞</span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">Amazing Grace</span><span style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: {SOFT}"><span style="width: 20px; height: 20px; border-radius: 10px; background: #E9D8C4; font-size: 11px; display: flex; align-items: center; justify-content: center; color: {INK}">{{{{byInit}}}}</span>{{{{byName}}}}</span></span></div>')))
 
-P_GENERAL = THEMES
+P_GENERAL = THEMES + SEC(S9CAPS('Computer keyboard', 'ckb'), TIPCARD('ckb', 'The letter keys play the on-screen piano. Z and X shift the octave · Space holds the sustain pedal.'), GROUP(('toggle', 'Play with computer keyboard', 'ckbOn', 'ckbT'), ('link', 'Shortcuts', '', 'openShort'), bg=SHEET))
 
 # ── Storage and backup ──
 BAR = lambda w, c=GREEN: f'<span style="display: block; height: 8px; border-radius: 4px; background: {FILL}; overflow: hidden"><span style="display: block; width: {w}; height: 8px; border-radius: 4px; background: {c}"></span></span>'
 P_STORAGE = (SEC(S9CAPS('Device storage', 'store'), TIPCARD('store', 'This browser manages storage itself. Install the app or save a backup to keep your data safe.'),
                  BOXG(f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px"><span style="font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">48 MB used on this device</span>{BAR("38%", "#5B8DB8")}<span style="display: flex; gap: 16px; font-size: 13px; color: {SOFT}"><span style="display: flex; align-items: center; gap: 6px">{DOT("#5B8DB8")}Songs and takes 18 MB</span><span style="display: flex; align-items: center; gap: 6px">{DOT(GREEN)}Piano 30 MB</span></span></div>',
-                      GROUP(('toggle', 'Protect from clearing', 'protOn', 'protT'), bg=SHEET)), f'<sc-if value="{{{{protOn}}}}" hint-placeholder-val="{{{{true}}}}">{FOOT("Protected: the browser will not clear this data to free up space")}</sc-if>')
-             + SEC(CAPS('Backup'), GROUP(('action', 'Save a backup', 'saveBackup'), ('action', 'Restore from a file', 'askRestore'), bg=SHEET))
-             + SEC(GROUP(('action', 'Reset progress', 'askReset', RED), bg=SHEET),
-                   FOOT('Resetting clears learned steps, practised songs and quiz results on this device.')))
-
-# ── On-screen piano: a picture of the keys that answers each choice ──
-def MINIKEYS(names):
-    W, wk = 336, 14
-    xs = W / wk
-    out = [f'<svg viewBox="0 0 {W} 92" width="100%" role="img" aria-label="The on-screen piano" style="display: block">']
-    WN = 'CDEFGAB'
-    for i in range(wk):
-        out.append(f'<rect x="{i * xs + .5:.1f}" y="0.5" width="{xs - 1:.1f}" height="90" rx="4" fill="#FFFFFF" stroke="#DAD1C8"></rect>')
-        lab = WN[i % 7] + str(4 + i // 7)
-        if names == 'every' or (names == 'c' and i % 7 == 0):
-            out.append(f'<text x="{i * xs + xs / 2:.1f}" y="80" text-anchor="middle" font-size="10" font-weight="600" fill="#685E56">{lab}</text>')
-    for i in range(wk - 1):
-        if i % 7 in (0, 1, 3, 4, 5):
-            out.append(f'<rect x="{(i + 1) * xs - xs * .3:.1f}" y="0" width="{xs * .6:.1f}" height="56" rx="3" fill="#332921"></rect>')
-    out.append('</svg>')
-    return ''.join(out)
-KEYPIC = CARD(f'<sc-if value="{{{{nnC}}}}" hint-placeholder-val="{{{{true}}}}">{MINIKEYS("c")}</sc-if><sc-if value="{{{{nnEvery}}}}" hint-placeholder-val="{{{{false}}}}">{MINIKEYS("every")}</sc-if><sc-if value="{{{{nnHidden}}}}" hint-placeholder-val="{{{{false}}}}">{MINIKEYS("")}</sc-if>', '12px 12px')
-SHORTBODY = BOXG(*[f'<div style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="flex: 1; font-size: 16px">{a}</span><span style="display: flex; gap: 4px">' + ''.join(f'<kbd style="min-width: 28px; height: 28px; padding: 0 8px; box-sizing: border-box; border-radius: 6px; background: {FILL}; box-shadow: inset 0 -1px 0 {LINE}; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">{k}</kbd>' for k in ks) + '</span></div>'
-                   for a, ks in [('Play the white keys', ['A', 'S', 'D', 'F', '…']), ('Play the black keys', ['W', 'E', 'T', 'Y', 'U']), ('Octave down', ['Z']), ('Octave up', ['X']), ('Hold the sustain pedal', ['Space'])]])
-P_PIANO = (KEYPIC + SEC(CAPS('Keys'), GROUP(('seg', 'Key size', 'keySize'), ('seg', 'Note names', 'noteNames'), ('seg', 'Pedals', 'pedals'), bg=SHEET))
-           + SEC(S9CAPS('Sound', 'offl'), TIPCARD('offl', 'A sampled grand: Salamander Grand Piano, a Yamaha C5. Its notes download as you first play them; downloaded, the grand plays offline too. Until then a lighter piano plays offline.'),
+                      GROUP(('toggle', 'Protect from clearing', 'protOn', 'protT'), bg=SHEET)))
+             + SEC(S9CAPS('Piano sound', 'offl'), TIPCARD('offl', 'A sampled grand: Salamander Grand Piano, a Yamaha C5. Its notes download as you first play them; downloaded, the grand plays offline too. Until then a lighter piano plays offline.'),
                  BOXG(f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px"><span style="display: flex; justify-content: space-between; font-size: 16px; font-variant-numeric: tabular-nums"><span style="font-weight: 600">Grand piano</span><span style="color: {SOFT}">{{{{offN}}}}</span></span>{BAR("{{offW}}")}<span style="font-size: 14px; color: {SOFT}">{{{{offT}}}}</span></div>',
                       f'<sc-if value="{{{{offCan}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{download}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; padding: 6px 16px">Download for offline use</button></sc-if>',
-                      f'<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="font-size: 16px">Volume</span><input type="range" aria-label="Volume" min="0" max="100" value="80" style="flex: 1; min-width: 0; accent-color: {INK}"></div>',
                       f'<button type="button" onClick="{{{{askRemove}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {RED}; font: inherit; font-size: 16px; text-align: left; padding: 6px 16px">Remove downloaded piano samples</button>'))
-           + SEC(CAPS('Display'), GROUP(('toggle', 'Chord symbol', 'chordOn', 'chordT'), ('toggle', 'Note names on highlighted keys', 'hlOn', 'hlT'), bg=SHEET))
-           + SEC(CAPS('While you play'), GROUP(('seg', 'Swipe gesture', 'swipeG'), ('toggle', 'Play on selection', 'posOn', 'posT'), bg=SHEET))
-           + SEC(CAPS('Placement'), GROUP(('seg', 'Position', 'place'), bg=SHEET))
-           + SEC(S9CAPS('Computer keyboard', 'ckb'), TIPCARD('ckb', 'The letter keys play the on-screen piano. Z and X shift the octave · Space holds the sustain pedal.'), GROUP(('toggle', 'Play with computer keyboard', 'ckbOn', 'ckbT'), ('link', 'Shortcuts', '', 'openShort'), bg=SHEET)))
+             + SEC(CAPS('Backup'), GROUP(('action', 'Save a backup', 'saveBackup'), ('action', 'Restore from a file', 'askRestore'), bg=SHEET))
+             + SEC(GROUP(('action', 'Reset progress', 'askReset', RED), bg=SHEET)))
+
+SHORTBODY = BOXG(*[f'<div style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 6px 16px"><span style="flex: 1; font-size: 16px">{a}</span><span style="display: flex; gap: 4px">' + ''.join(f'<kbd style="min-width: 28px; height: 28px; padding: 0 8px; box-sizing: border-box; border-radius: 6px; background: {FILL}; box-shadow: inset 0 -1px 0 {LINE}; font: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center">{k}</kbd>' for k in ks) + '</span></div>'
+                   for a, ks in [('Play the white keys', ['A', 'S', 'D', 'F', '…']), ('Play the black keys', ['W', 'E', 'T', 'Y', 'U']), ('Octave down', ['Z']), ('Octave up', ['X']), ('Hold the sustain pedal', ['Space'])]])
 
 # ── MIDI devices, its log and timing ──
 DEV = (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 16px"><span style="flex: none; width: 36px; height: 36px; border-radius: 10px; background: {SAGE}; color: #2F5A35; display: flex; align-items: center; justify-content: center">{KEYSI.replace("22", "20")}</span>'
@@ -179,7 +155,7 @@ P_ABOUT = (f'<div style="display: flex; align-items: center; gap: 16px; padding:
            + SEC(CAPS('Legal'), GROUP(('link', 'Privacy Policy', '', 'Legal.dc.html'), ('link', 'Terms of Service', '', 'Legal.dc.html'), bg=SHEET))
            + SEC(CAPS('Acknowledgements'), GROUP(*[('val', a, b) for a, b in [('Music engraving', 'Verovio'), ('The 3D piano', 'three.js'), ('The hands at the keys', 'WebXR generic hand'), ('Piano samples', 'Salamander Grand Piano'), ('Offline piano samples', 'Splendid Grand Piano'), ('Drum samples', 'Virtuosity Drums'), ('Electric bass samples', 'Growlybass'), ('Double bass samples', 'Meatbass'), ('Text and music fonts', 'Noto'), ('The method the lessons follow', '«Боже, спасибо»'), ('The Studies', 'Public domain')]], bg=SHEET)))
 
-PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Change password', P_PASSWORD), ('Privacy', P_PRIVACY), ('General', P_GENERAL), ('Storage and backup', P_STORAGE), ('On-screen piano', P_PIANO),
+PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Change password', P_PASSWORD), ('Privacy', P_PRIVACY), ('General', P_GENERAL), ('Storage and backup', P_STORAGE), 
          ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
 SLUG = lambda p: p.replace(' ', '_').replace('-', '_')
 PARENT = {'Edit profile': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
@@ -231,10 +207,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     const off = st.off ?? 54, dl = st.dl ?? false;
     Object.assign(v, { offT: dl ? 'Downloading… ' + Math.round(off / 88 * 100) + '%' : off >= 88 ? 'Available offline' : off ? 'Partly downloaded' : 'Not downloaded', offN: off + ' of 88 downloaded', offW: Math.round(off / 88 * 100) + '%', offCan: off < 88 && !dl,
       download: () => { S({ dl: true, off: 62 }); setTimeout(() => S({ off: 76 }), 600); setTimeout(() => S({ dl: false, off: 88 }), 1300); } });
-    // on-screen piano
-    const nn = st.nn ?? 'On every C';
-    Object.assign(v, { keySize: seg(['Fit to music', 'Large', 'All keys'], st.ks ?? 'Fit to music', (x) => S({ ks: x })), noteNames: seg(['On every C', 'On every key', 'Hidden'], nn, (x) => S({ nn: x })), nnC: nn === 'On every C', nnEvery: nn === 'On every key', nnHidden: nn === 'Hidden',
-      pedals: seg(['Sustain only', 'All three'], st.ped ?? 'Sustain only', (x) => S({ ped: x })), swipeG: seg(['Scroll', 'Glissando'], st.sg ?? 'Scroll', (x) => S({ sg: x })), place: seg(['Bottom', 'Top'], st.pl ?? 'Bottom', (x) => S({ pl: x })),
+    Object.assign(v, {
       openShort: () => S({ sheet: 'short' }), shortOn: st.sheet === 'short' });
     // MIDI
     const oct = st.oct ?? 0, lat = st.lat ?? 18;

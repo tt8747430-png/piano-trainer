@@ -59,7 +59,7 @@ BAR60 = lambda pos: f'<div role="toolbar" aria-label="Tempo, play and hands" sty
 ROUND60 = lambda label, svg, act: IB(label, svg, act)  # the kit's one bar button
 TOP60 = TOP('Main.dc.html', 'Scales and keys', ROUND60("Settings", COG, "openSet") + ROUND60("Piano", KEYSI, "openKeys"), 'Back to Practice')
 KB60 = lambda k, h: KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1)
-SC_KEYS60 = GROUP(('link', 'Keyboard', '2D', ''), ('link', 'Labels', 'Note names', ''), ('link', 'On-screen piano', '', 'Settings.dc.html'), ('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'), bg=SHEET)
+SC_KEYS60 = GROUP(('link', 'Keyboard', '2D', ''), ('link', 'Labels', 'Note names', ''), ('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'), bg=SHEET)
 SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
 

@@ -246,9 +246,8 @@ IC = {'General': ('#5B8DB8', '<circle cx="12" cy="12" r="3"></circle><path d="M1
       'User guide': ('#5B8DB8', '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5"></path>'),
       'Report a problem': ('#8C7AB8', '<path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>'),
       'About': ('#B08A5B', '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7h.01"></path>')}
-SETGROUPS = [('App', [('General', 'Match system'), ('Storage and backup', '')]), ('Piano', [('On-screen piano', ''), ('MIDI devices', 'Not connected')]), ('Library', [('Selection toolbar', ''), ('Swipe actions', '')]), ('Support', [('User guide', ''), ('Report a problem', ''), ('About', 'Up to date')])]
+SETGROUPS = [('App', [('General', 'Match system'), ('Storage and backup', '')]), ('Piano', [('MIDI devices', 'Not connected')]), ('Library', [('Selection toolbar', ''), ('Swipe actions', '')]), ('Support', [('User guide', ''), ('Report a problem', ''), ('About', 'Up to date')])]
 PANES = {'Storage and backup': [('Device storage', [('48 MB used on this device', ''), ('Protect from clearing', 'On')]), ('Backup', [('Save a backup', ''), ('Restore from a file', '')]), ('', [('Reset progress', 'danger')])],
-         'On-screen piano': [('', [('Keys and sound', ''), ('Display', ''), ('Placement', ''), ('While you play', '')])],
          'MIDI devices': [('', [('No piano connected', 'Connect one by USB or Bluetooth, then press a key.')])],
          'Selection toolbar': [('', [('The actions it shows', 'Favourite, Move, Share, Archive')])], 'Swipe actions': [('', [('Swipe right', 'Favourite'), ('Swipe left', 'Archive')])],
          'User guide': [('', [('How to use Piano Trainer', '')])], 'Report a problem': [('', [('Describe what happened', '')])],
