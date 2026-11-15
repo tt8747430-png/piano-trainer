@@ -417,6 +417,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **The Metronome draws its states (2026-11-15):** Playing, 40 BPM and 7/4 with accents and rests, phone and laptop; an accent beat's number is light on its ink bar (it was soft ink on ink, unread).
 - **The Tuner draws its states (2026-11-15):** In tune (the needle in the green band, the words in grass), 18 cents sharp, Nothing heard (the note a soft dash, "Listening", the needle at rest in the line's colour; the page does not move between them) and No microphone (the app's words and Try again), phone, laptop and Night.
 - **Loop round 41, the Metronome's tempo as its board's TEMPO:** the number keeps the font's own line height, so its word (Allegro · BPM) stands 2 over it as drawn, where a dropped leading-none had set it 1.5 and pushed the word 16 off; on its page the word stands 13 under the bar's buttons, as the board's 14 (it touched them). The Player's tempo, the same TempoSteps, keeps its place (2026-11-15).
 - **Loop round 39, Scales' Hands as its board's HANDSSC:** the round Hands piece is its picture alone, the two hands or one, its name spoken and in its tip (it carried a "Hands" word the board does not); `FloatingPiece`'s word is optional for this (2026-11-15).
