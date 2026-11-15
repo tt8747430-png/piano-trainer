@@ -178,11 +178,11 @@ const Metro: PagePicture = ({ className }) => (
   </Frame>
 )
 
-/** The Tuner: a gauge and its needle. */
+/** The Tuner: a gauge and its needle, in copper. */
 const Needle: PagePicture = ({ className }) => (
   <Frame className={className}>
     <path d="M9 30A14 14 0 0 1 35 30" fill="none" strokeWidth={1.4} className={LINE} />
-    <path d="M22 31 25 15" strokeWidth={2} strokeLinecap="round" className="stroke-current" />
+    <path d="M22 31 25 15" strokeWidth={2} strokeLinecap="round" className="stroke-(--p-copper)" />
     <circle cx={22} cy={31} r={2} className={INK} />
   </Frame>
 )
@@ -198,12 +198,12 @@ const Lens: PagePicture = ({ className }) => (
   </Frame>
 )
 
-/** The Circle of fifths: the wheel, C's wedge lit. */
+/** The Circle of fifths: the wheel, C's wedge lit in honey. */
 const Circle: PagePicture = ({ className }) => (
   <Frame className={className}>
     <circle cx={22} cy={22} r={14} strokeWidth={1.2} className={cn(WHITE, LINE)} />
     <circle cx={22} cy={22} r={7} fill="none" strokeWidth={0.8} className={LINE} />
-    <path d="M22 8 29 9.9 22 15z" strokeWidth={0.6} className={cn('fill-current', LINE)} />
+    <path d="M22 8 29 9.9 22 15z" strokeWidth={0.6} className={cn('fill-primary', LINE)} />
   </Frame>
 )
 

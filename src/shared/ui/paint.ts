@@ -1,12 +1,12 @@
 import type { KeyRole } from '@/shared/lib/music'
 
 /** The chrome's paints that name places and kinds of step (DESIGN.md, the paint set). */
-export type Paint = 'sand' | 'sky' | 'grass' | 'yellow' | 'lilac'
+export type Paint = 'plain' | 'sand' | 'sky' | 'grass' | 'yellow' | 'lilac'
 
 /**
  * A paint as the book prints it on a place: its wash as a tile's fill, its deep shade as the icon on
  * it; at full strength, ink on it, for a chip while what it names sounds; and solid, a row's tile under
- * a white glyph.
+ * a white glyph. Plain is the page's quiet fill, the tools' (the Practice board's `pic`).
  */
 export const PAINT: Readonly<
   Record<
@@ -14,6 +14,12 @@ export const PAINT: Readonly<
     { readonly fill: string; readonly ink: string; readonly full: string; readonly tile: string }
   >
 > = {
+  plain: {
+    fill: 'bg-muted',
+    ink: 'text-foreground',
+    full: 'bg-muted',
+    tile: 'bg-muted-foreground',
+  },
   sand: {
     fill: 'bg-paint-sand',
     ink: 'text-on-paint-sand',

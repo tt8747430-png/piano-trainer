@@ -48,15 +48,15 @@ export const PAGE_TILES = {
   patterns: { icon: AudioWaveform, paint: 'lilac', picture: PAGE_PICTURES.roll },
   progressions: { icon: ListMusic, paint: 'yellow', picture: PAGE_PICTURES.roman },
   // The Chord player (R29 CP1): a chord sheet played by a band.
-  chordPlayer: { icon: SquarePlay, paint: 'lilac', picture: PAGE_PICTURES.chart },
-  chordFinder: { icon: ScanSearch, paint: 'sky', picture: PAGE_PICTURES.lens },
-  exercises: { icon: Dumbbell, paint: 'sand', picture: PAGE_PICTURES.drill },
+  chordPlayer: { icon: SquarePlay, paint: 'yellow', picture: PAGE_PICTURES.chart },
+  chordFinder: { icon: ScanSearch, paint: 'plain', picture: PAGE_PICTURES.lens },
+  exercises: { icon: Dumbbell, paint: 'grass', picture: PAGE_PICTURES.drill },
   quiz: { icon: ListChecks, paint: 'lilac' },
   // The Metronome (ADR 0052): a steady beat to practise to.
-  metronome: { icon: Metronome, paint: 'grass', picture: PAGE_PICTURES.metro },
+  metronome: { icon: Metronome, paint: 'plain', picture: PAGE_PICTURES.metro },
   // The tools (R29 B11): the circle and the Tuner.
-  circleOfFifths: { icon: Disc3, paint: 'lilac', picture: PAGE_PICTURES.circle },
-  tuner: { icon: Gauge, paint: 'grass', picture: PAGE_PICTURES.needle },
+  circleOfFifths: { icon: Disc3, paint: 'plain', picture: PAGE_PICTURES.circle },
+  tuner: { icon: Gauge, paint: 'plain', picture: PAGE_PICTURES.needle },
   // A folder of the library (ADR 0106): songs, in their order.
   folder: { icon: Folder, paint: 'yellow' },
 } as const satisfies Readonly<Record<string, Tile>>

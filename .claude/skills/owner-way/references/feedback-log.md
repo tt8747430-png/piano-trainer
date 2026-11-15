@@ -673,6 +673,9 @@ owner's, typos fixed.
   heading over one card of rows on a phone (`PlaceRow`: a 44px wash tile, the name bold over one short line, "Chord
   types, voicings, inversions"), large-tiled cards five across on a laptop; the bar's Tools (`ToolsButton`) beside
   Search on a phone. The books stay three rows (the library's places), not the canvas's merged Jazz vocabulary.
+- **The tiles in the board's paints (loop round 16, `r41_kit.py`'s `pic`):** the drills sage, the jazz books sky,
+  the Chord player honey, and the four tools on the page's quiet fill (`plain`), the Tuner's needle in copper and
+  the circle's C wedge in honey.
 
 ## Sounds
 
