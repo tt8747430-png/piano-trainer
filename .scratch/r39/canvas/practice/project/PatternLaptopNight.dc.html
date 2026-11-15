@@ -16,7 +16,7 @@ button{font:inherit;cursor:pointer}
 main>*{flex:none}
 </style>
 </helmet>
-<div style="width: 2143px; height: 1299px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif">
+<div style="width: 2143px; height: 1299px; position: relative; font-family: 'Instrument Sans', system-ui, sans-serif"><div data-canvas-tool style="position: absolute; left: 24px; top: 24px; z-index: 300; font-family: ui-monospace, Menlo, monospace"><button type="button" aria-label="Canvas tool: show a state" aria-expanded="{{statesOpen}}" onClick="{{toggleStates}}" style="height: 22px; padding: 0 8px; border: 1px dashed #7D7368; border-radius: 11px; background: #FFF8; color: #BBB3A8; font: inherit; font-size: 11px">States</button><sc-if value="{{statesOpen}}" hint-placeholder-val="{{false}}"><div role="menu" aria-label="States" style="position: absolute; left: 0; top: 26px; width: 290px; padding: 4px; border-radius: 12px; background: #2B2621; box-shadow: 0 0 0 1px #453E38, 0 14px 28px -8px rgba(51,41,33,.3); display: flex; flex-direction: column"><sc-for list="{{stateList}}" as="o" hint-placeholder-count="5"><button type="button" role="menuitemradio" aria-checked="{{o.on}}" onClick="{{o.pick}}" style="min-height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #EDE7DF; font: inherit; font-size: 12px; font-weight: {{o.fw}}; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px"><span>{{o.l}}</span><span>{{o.mark}}</span></button></sc-for></div></sc-if></div>
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 1112px; background: url(/_blob/f871bb10e202ef4d610c06d6f5fa0603) 0 0 / 1710px 1112px no-repeat"></div>
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 36.6px; width: 1710px; height: 37px; background: rgba(255,255,255,0.28)"></div>
 <div aria-hidden="true" style="position: absolute; left: 217.7px; top: 73.6px; width: 1710px; height: 51px; background: url(/_blob/f266599616a3d0c813d8daf482613b7f) 0 0 / 100% 100%; border-radius: 16px 16px 0 0; font: 500 14px/51px -apple-system, system-ui, sans-serif; color: #3C3C43; text-align: center">pianotrainer.app</div>
@@ -97,7 +97,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
       loop, toggleLoop: () => S({ loop: !loop }), loopTint: loop ? '#EDE9E1' : 'rgba(36,32,28,.86)', loopInk: loop ? '#24201C' : '#EDE9E1',
       playMenu: st.menu === 'play', closeMenu: () => S({ menu: null }), openPlay: () => S({ menu: st.menu === 'play' ? null : 'play' }),
-      playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),
+      states: [{ l: 'Looping', bg: st.loop ? '#EDE9E1' : '#2E2924', pick: () => set({ loop: !st.loop }) }], playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),
       overs: ['A bar of C major', 'Amazing Grace'].map((d) => ({ d, on: d === over, mark: d === over ? '✓' : '', pick: () => S({ over63: d, menu: null }) })),
       descOn: st.sheet === 'desc', openDesc: () => S({ sheet: 'desc' }), keysOn: st.sheet === 'keys', openKeys: () => S({ sheet: 'keys' }), openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more', isPattern: page === 'pattern', isEditor: page === 'new' || page === 'edit', isPublish: page === 'publish', notPattern: page !== 'pattern',
       pageT: { pattern: name, new: 'New pattern', edit: 'Edit pattern', publish: 'Publish' }[page], name, setName: (e) => S({ name: e.target.value }), own, builtIn: !own,
@@ -113,6 +113,16 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
   }
 }
 
+
+{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
+  const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
+  const close = (f) => () => { f && f(); set({ statesOpen: false }); };
+  const rows = [].concat((v.states || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), [{ l: "Playing", on: !!v.playing, pick: v.toggle }]);
+  const none = !rows.some((r) => r.on);
+  const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);
+  return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
+    stateList: list.map((r) => ({ l: r.l, on: r.on ? "true" : "false", fw: r.on ? 700 : 450, mark: r.on ? "✓" : "", pick: close(r.pick) })) });
+}; }
 /*PIANO2D*/
 { const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
   const v = R.call(this), st = this.state || {}, kbLabel = st.kbLabel ?? 'names', SEGP = (list, cur, pick) => list.map(([id, l]) => ({ l, on: id === cur, bg: id === cur ? '#FEFDFB' : 'transparent', sh: id === cur ? '0 1px 2px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.08)' : 'none', fw: id === cur ? 600 : 500, pick: () => pick(id) }));

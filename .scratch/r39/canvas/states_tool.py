@@ -70,7 +70,7 @@ def _script(lists, buttons, playing=False):
             '  const rows = [].concat(' + ', '.join('(v.%s || []).map((p) => ({ l: p.l, on: p.bg === "%s", pick: p.pick }))' % (n, INK) for n in lists)
             + (', ' if lists and buttons else '')
             + ', '.join('[{ l: %r, on: false, pick: v.%s }]' % (l, a) for l, a in buttons)
-            + ((', ' if lists or buttons else '') + '[{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]' if playing else '') + ');\n'
+            + ((', ' if lists or buttons else '') + '[{ l: "Playing", on: !!v.playing, pick: v.%s }]' % playing if playing else '') + ');\n'
             '  const none = !rows.some((r) => r.on);\n'
             '  const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);\n'
             '  return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),\n'
@@ -89,7 +89,7 @@ def run():
             continue
         h, lists, buttons = _lift(h)
         # a page that plays (its floating bar's Play) shows Playing in its States box too
-        playing = 'onClick="{{togglePlay}}"' in h and 'playing:' in h
+        playing = next((a for a in ('togglePlay', 'toggle') if 'onClick="{{%s}}"' % a in h and '{{notPlaying}}' in h), None)
         if not lists and not buttons and not playing:
             continue
         stem = f[:-8]
