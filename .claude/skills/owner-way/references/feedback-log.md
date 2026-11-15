@@ -270,6 +270,9 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 21, a course's row keeps its counts:** the LearnCourses board draws a short line of what it teaches;
+  the courses' summaries run two to four lines, so in its place they ended every row in an ellipsis. The row keeps
+  "4 lessons · 6 songs · 4 weeks" until each course has a line that short (2026-11-15).
 - **"A library, not a path":** levels as chips ("why is it called a journey when it is not a journey anymore"). No days
   practised on Learn.
 - **Real editors:** "an endless editor like a simple text editor but with all of our features like the obsidian app does",
