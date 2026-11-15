@@ -132,11 +132,35 @@ HANDS3D = r'''
           const by = L.slice().sort((a, b) => a.x - b.x); for (let i = 1; i < by.length; i++) { const need = (by[i - 1].w + by[i].w) / 2 + 3 - (by[i].x - by[i - 1].x); if (need > 0) { by[i - 1].x -= need / 2; by[i].x += need / 2; } }
           // a key outside the view keeps its label hidden, never half cut at the edge
           L.forEach((l) => { l.el.style.left = l.x.toFixed(1) + 'px'; l.el.style.visibility = l.x - l.w / 2 < 4 || l.x + l.w / 2 > W - 4 ? 'hidden' : 'visible'; }); };
+        // the 3D keys play (owner, 2026-11-15: "the 3d keyboard should also be interactive"): a press finds the key under the
+        // finger from the stage's own projection (a black key's top first, then the white key's), sounds it and holds it down
+        if (!cv.__ptTap) { cv.__ptTap = true; cv.style.cursor = 'pointer'; cv.style.touchAction = 'none';
+          const up = () => { if (this._tap3d == null) return; this._tap3d = null; if (this._stage && this._handsIn) this._stage.update(this._handsIn); };
+          cv.addEventListener('pointerdown', (e) => { const m = this._keyAt3d(cv, e); if (m == null) return; e.preventDefault(); this._tap3d = m; this._tone3d(m);
+            if (this._stage && this._handsIn) this._stage.update(Object.assign({}, this._handsIn, { held: new Set([...(this._handsIn.held || []), m]) })); });
+          cv.addEventListener('pointerup', up); cv.addEventListener('pointerleave', up); cv.addEventListener('pointercancel', up); }
         this._stage = window.PTHands.createStage(cv, d, { onLoaded: () => {}, onFailed: () => this.setState({ kbView: '2d' }) }); this._stageCv = cv;
         const box = cv.parentElement, rs = () => { if (this._stage) this._stage.resize(box.clientWidth, box.clientHeight); };
         this._ro = new ResizeObserver(rs); this._ro.observe(box); rs();
       }
       this._stage.update(d); if (this._lb && !(this._labels3d || []).length) this._lb.replaceChildren();
     } catch (e) { this._stage = null; this.setState({ kbView: '2d' }); } // where 3D cannot be drawn, the flat keys
+  }
+  _keyAt3d(cv, e) {
+    const P = cv.__ptProj, K = cv.__ptKey; if (!P || !K) return null;
+    const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    // inside the quad of four projected corners (they are convex in any view of the keys)
+    const inside = (q) => { let s = 0; for (let i = 0; i < 4; i++) { const a = q[i], b = q[(i + 1) % 4], c = (b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0]); if (c !== 0) { if (s && Math.sign(c) !== s) return false; s = Math.sign(c); } } return true; };
+    const quad = (m, black) => { const hw = (black ? K.bw : K.w) / 2, z0 = -K.len, z1 = black ? -K.len + K.blen : 0; return [P(m, black, z0, -hw), P(m, black, z0, hw), P(m, black, z1, hw), P(m, black, z1, -hw)]; };
+    const isB = (m) => [1, 3, 6, 8, 10].includes(m % 12);
+    for (let m = 21; m <= 108; m++) if (isB(m) && inside(quad(m, true))) return m;
+    for (let m = 21; m <= 108; m++) if (!isB(m) && inside(quad(m, false))) return m;
+    return null;
+  }
+  _tone3d(m) {
+    try { const A = this._ac3d = this._ac3d || new (window.AudioContext || window.webkitAudioContext)(), t = A.currentTime + 0.01, f = 440 * Math.pow(2, (m - 69) / 12);
+      [[1, 0.22], [2, 0.08], [3, 0.03]].forEach(([h, v]) => { const o = A.createOscillator(), g = A.createGain(); o.type = 'sine'; o.frequency.value = f * h;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.6); o.connect(g).connect(A.destination); o.start(t); o.stop(t + 1.7); });
+    } catch (e) { /* no sound where audio is blocked; the key still goes down */ }
   }
 '''

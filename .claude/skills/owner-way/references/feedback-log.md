@@ -853,6 +853,12 @@ owner's, typos fixed.
   sheet is one group (Section ›, Repeat with its stepper, Loop this section, Variation); its arranger sheet is the
   board's muted cards, Intro, Main each time through under its heading with the ⓘ, Ending, Into the next section.
 
+- **The 3D piano plays (owner, 2026-11-15: "the 3d keyboard should also be interactive"):** on the Chords page and
+  the Chord player, a press on the live 3D keys finds the key under the finger from the stage's own projection (a
+  black key's top first, then the white key's), sounds it and holds it down in the pressed colour until the finger
+  lifts, as the 2D keys do. The Player's 3D keys already sound on a press. One implementation in the shared stage
+  (`piano_sheet.py`'s `HANDS3D`); the stage reports each key's corners (`pthands.bundle.js`, `__ptProj`).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
