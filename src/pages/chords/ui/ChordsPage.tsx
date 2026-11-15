@@ -1,5 +1,4 @@
 import { useSearch } from '@tanstack/react-router'
-import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectChords,
@@ -11,7 +10,7 @@ import { useMidiSummary } from '@/features/connect-midi'
 import { PianoSheet, useFoldKeys } from '@/features/live-keyboard'
 import { setChords, setScoreView } from '@/features/set-preference'
 import { CHORD_RANGES, useSetSearch } from '@/shared/lib'
-import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, RoundButton, ScreenHeader, KeysIcon } from '@/shared/ui'
 import { ChordExplorer, framedChord, RANGE_WHITES, type ChordView } from '@/widgets/chord-explorer'
 import { StepPanel } from '@/widgets/step-panel'
 
@@ -75,7 +74,7 @@ export function ChordsPage() {
               <RoundButton
                 variant="glass"
                 label={t('player:pianoSheet.title')}
-                icon={Piano}
+                icon={KeysIcon}
                 aria-haspopup="dialog"
                 onClick={open}
               />

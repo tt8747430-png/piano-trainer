@@ -6,7 +6,6 @@ import {
   ListMusic,
   Mic,
   Music2,
-  Piano,
   Ruler,
   TextCursorInput,
 } from 'lucide-react'
@@ -26,6 +25,7 @@ import {
   SettingsGroup,
   Sheet,
   SheetContent,
+  KeysIcon,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PRINTED_PARTS, SheetLayoutTools, SheetViewFields } from '@/widgets/score-view-menu'
@@ -194,7 +194,7 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           {/* The keys' settings have one home, Settings › On-screen piano (2026-11-12): a row to it. */}
           <RowLink
             title={t('scoreSettings.pages.piano')}
-            icon={Piano}
+            icon={KeysIcon}
             paint="sky"
             render={<Link to="/settings/on-screen-piano" />}
           />

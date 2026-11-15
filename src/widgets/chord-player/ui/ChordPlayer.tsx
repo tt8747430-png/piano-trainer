@@ -17,7 +17,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
-import { Check, Dices, ListMusic, Piano, Plus, Redo2, Route, Undo, Undo2 } from 'lucide-react'
+import { Check, Dices, ListMusic, Plus, Redo2, Route, Undo, Undo2 } from 'lucide-react'
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSaved, useChordSheets, useChordSheetsStoreApi } from '@/entities/chord-sheet'
@@ -78,6 +78,7 @@ import {
   SheetContent,
   Stepper,
   type MenuAction,
+  KeysIcon,
 } from '@/shared/ui'
 import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-sheet'
 import type { BoxPlace } from '../model/engine'
@@ -525,7 +526,7 @@ export function ChordPlayer({
                 key: 'player',
                 group: t('chordPlayer.chords'),
                 label: t('chordPlayer.inPlayer'),
-                icon: Piano,
+                icon: KeysIcon,
                 hidden: numerals === null,
                 onSelect: () =>
                   void navigate({

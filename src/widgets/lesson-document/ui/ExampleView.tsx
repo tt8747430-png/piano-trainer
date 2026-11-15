@@ -1,13 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import {
-  CircleHelp,
-  Copy,
-  FilePen,
-  Paintbrush,
-  Piano,
-  SlidersHorizontal,
-  Trash2,
-} from 'lucide-react'
+import { CircleHelp, Copy, FilePen, Paintbrush, SlidersHorizontal, Trash2 } from 'lucide-react'
 import {
   Component,
   use,
@@ -32,6 +24,7 @@ import {
   OpensMark,
   Segmented,
   TileMark,
+  KeysIcon,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -489,7 +482,7 @@ export function ExampleView({
                 aria-hidden
                 className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
               >
-                <Piano className="size-4" />
+                <KeysIcon className="size-4" />
                 {words('question.answer')}
               </span>
             </div>

@@ -1,8 +1,9 @@
-import { Hand, Piano } from 'lucide-react'
+import { Hand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 import { HeldChord } from './HeldChord'
 import { SustainControl } from './SustainControl'
+import { KeysIcon } from '@/shared/ui'
 
 export interface KeyboardToolsProps {
   /** The bar's look: a screen bar's soft round buttons, or the score's bar's toolbar (ADR 0115). */
@@ -76,7 +77,7 @@ export function KeyboardTools({
         aria-pressed={keysShown}
         onClick={() => show('keys')}
       >
-        <Piano aria-hidden />
+        <KeysIcon aria-hidden />
       </Button>
     </>
   )

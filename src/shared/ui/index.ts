@@ -32,6 +32,7 @@ export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
 export { ScaleIcon } from './icons/ScaleIcon'
+export { KeysIcon } from './icons/KeysIcon'
 export { PAGE_PICTURES, type PagePicture } from './PagePictures'
 export {
   Fab,

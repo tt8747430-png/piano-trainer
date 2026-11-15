@@ -1,8 +1,8 @@
-import { ArrowDownToLine, ArrowUpToLine, EyeOff, PenLine, Piano, Plus, Trash2 } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpToLine, EyeOff, PenLine, Plus, Trash2 } from 'lucide-react'
 import { useState, type ComponentProps, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isSingleStaff, staffPlace } from '@/shared/lib/notation'
-import { ActionMenu } from '@/shared/ui'
+import { ActionMenu, KeysIcon } from '@/shared/ui'
 import { useLayerName, type Printed } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { EVERY_STAFF, rowsInSight } from '../model/rows-in-sight'
@@ -91,7 +91,7 @@ export function StaffMenu({
                 {
                   key: 'showPiano',
                   label: t('printed.showPiano'),
-                  icon: Piano,
+                  icon: KeysIcon,
                   onSelect: () => dispatch({ type: 'piano', hidden: false }),
                 },
               ]

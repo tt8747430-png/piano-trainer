@@ -1,4 +1,4 @@
-import { Bell, Music, Piano, Plus, Settings, SunMoon } from 'lucide-react'
+import { Bell, Music, Plus, Settings, SunMoon } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -14,6 +14,7 @@ import {
   SettingsGroup,
   SwitchRow,
   TileMark,
+  KeysIcon,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -110,7 +111,7 @@ export function ComponentsTab() {
           />
         </div>
         <ProgressRing share={0.6}>
-          <Piano aria-hidden className="size-5" />
+          <KeysIcon aria-hidden className="size-5" />
         </ProgressRing>
       </Kind>
       <Kind title={t('components.feedback')}>

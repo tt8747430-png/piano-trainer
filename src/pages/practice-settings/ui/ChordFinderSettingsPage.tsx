@@ -1,4 +1,4 @@
-import { History, KeyRound, Piano } from 'lucide-react'
+import { History, KeyRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   REMEMBERED_CHORDS,
@@ -7,7 +7,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setChordFinder } from '@/features/set-preference'
-import { SettingRows, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { SettingRows, SettingsGroup, SwitchRow, KeysIcon } from '@/shared/ui'
 import { PracticeSettingsScreen } from './PracticeSettingsScreen'
 
 /**
@@ -44,7 +44,7 @@ export function ChordFinderSettingsPage() {
           />
           <SwitchRow
             setting="chordFinder.scale"
-            icon={<Piano />}
+            icon={<KeysIcon />}
             label={t('chordFinder.scaleShown')}
             info={t('chordFinder.scaleShownDetail')}
             checked={finder.scale}

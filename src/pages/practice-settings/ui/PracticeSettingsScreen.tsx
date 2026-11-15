@@ -1,9 +1,9 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Plug, Piano } from 'lucide-react'
+import { Plug } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { RowLink, SettingsGroup, KeysIcon } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
@@ -27,7 +27,7 @@ export function PracticeSettingsScreen({
       <SettingsGroup flush title={t('groups.piano.label')}>
         <RowLink
           title={t('pages.onScreenPiano')}
-          icon={Piano}
+          icon={KeysIcon}
           paint="lilac"
           render={<Link to="/settings/on-screen-piano" />}
         />

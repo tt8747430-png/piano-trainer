@@ -1,6 +1,7 @@
-import { Maximize2, Piano } from 'lucide-react'
+import { Maximize2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { KeysIcon } from '@/shared/ui'
 
 /**
  * The keys folded away (R34, Songscription's "Piano roll ↗" strip): a thin labelled strip where they
@@ -20,7 +21,7 @@ export function KeyboardStrip({ edge, onShow }: { edge: 'above' | 'below'; onSho
         edge === 'above' ? 'border-t' : 'border-b',
       )}
     >
-      <Piano aria-hidden className="size-4" />
+      <KeysIcon aria-hidden className="size-4" />
       {t('keyboardTools.keyboard')}
       <Maximize2 aria-hidden className="size-3.5" />
     </button>

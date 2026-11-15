@@ -1,8 +1,7 @@
-import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
 import { PianoSheet, useFoldKeys, type KeysScreen } from '@/features/live-keyboard'
-import { RoundButton } from '@/shared/ui'
+import { RoundButton, KeysIcon } from '@/shared/ui'
 
 /**
  * A Practice page's Piano (the canvas's TOP60: Settings, then Piano, both glass): it opens the one
@@ -22,7 +21,7 @@ export function PianoButton({ screen = 'reading' }: { screen?: KeysScreen }) {
         <RoundButton
           variant="glass"
           label={t('pianoSheet.title')}
-          icon={Piano}
+          icon={KeysIcon}
           aria-haspopup="dialog"
           onClick={open}
         />

@@ -1,14 +1,14 @@
-import { AlignLeft, FileText, LayoutGrid, Piano } from 'lucide-react'
+import { AlignLeft, FileText, LayoutGrid } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSettingsStoreApi, type MusicView } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
-import { ViewPill } from '@/shared/ui'
+import { ViewPill, KeysIcon } from '@/shared/ui'
 import type { ViewNeeds } from '@/widgets/chord-views'
 
 /** The views in the order the bar shows them (its canvas): the score first, each with its picture. */
 const PICKED = [
   { view: 'sheet', icon: FileText },
-  { view: 'diagrams', icon: Piano },
+  { view: 'diagrams', icon: KeysIcon },
   { view: 'grid', icon: LayoutGrid },
   { view: 'lyrics', icon: AlignLeft },
 ] as const satisfies readonly { view: MusicView; icon: unknown }[]

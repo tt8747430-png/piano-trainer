@@ -1,4 +1,4 @@
-import { Check, Piano } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PieceId } from '@/entities/piece'
@@ -8,7 +8,7 @@ import { diagramChord } from '@/features/practice'
 import { recordHold } from '@/features/record-lesson'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol } from '@/shared/lib/music'
-import { RowButton, RowGroup, type Paint } from '@/shared/ui'
+import { RowButton, RowGroup, type Paint, KeysIcon } from '@/shared/ui'
 import { ChordSheet } from '@/widgets/chord-diagrams'
 import type { ChordLesson } from '../model/section-lessons'
 
@@ -33,7 +33,7 @@ function ChordLessonRow({
       {/* It opens a sheet over the page, not another page: a button with no chevron. */}
       <RowButton
         title={t('learnSection.learnChord', { chord: printedSymbol(lesson.symbol) })}
-        icon={learned ? Check : Piano}
+        icon={learned ? Check : KeysIcon}
         paint={paint}
         trailing={
           learned ? (

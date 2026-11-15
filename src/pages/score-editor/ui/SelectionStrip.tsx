@@ -1,4 +1,4 @@
-import { Delete, Piano, Play, Square } from 'lucide-react'
+import { Delete, Play, Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
@@ -8,6 +8,7 @@ import { caretSaid } from '../model/caret-said'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { useValueWord } from './use-value-word'
+import { KeysIcon } from '@/shared/ui'
 
 /** The strip's round buttons, 44 across. */
 const ROUND = 'size-11 shrink-0 rounded-pill [&_svg:not([class*=size-])]:size-5'
@@ -86,7 +87,7 @@ export function SelectionStrip({ className }: { className?: string }) {
         )}
         onClick={() => keys.fold(!keys.folded)}
       >
-        <Piano aria-hidden />
+        <KeysIcon aria-hidden />
       </Button>
       <Button
         size="icon"

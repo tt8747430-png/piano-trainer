@@ -1,8 +1,8 @@
-import { CircleAlert, Piano, Speaker, Volume2 } from 'lucide-react'
+import { CircleAlert, Speaker, Volume2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setMidi } from '@/features/set-preference'
-import { InfoTip, SettingRows, SwitchRow } from '@/shared/ui'
+import { InfoTip, SettingRows, SwitchRow, KeysIcon } from '@/shared/ui'
 import { useMidiInput } from '../use-midi-input'
 
 /**
@@ -41,7 +41,7 @@ export function MidiConnectionFields() {
       <SettingRows>
         <SwitchRow
           setting="midi.input"
-          icon={<Piano />}
+          icon={<KeysIcon />}
           label={t('midiSettings.input')}
           info={t('midiSettings.inputNote')}
           checked={on}

@@ -1,9 +1,10 @@
-import { Check, CircleHelp, Eye, Piano, RotateCcw, X, type LucideIcon } from 'lucide-react'
+import { Check, CircleHelp, Eye, RotateCcw, X, type LucideIcon } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
 import { Button } from '@/shared/ui/primitives/button'
 import type { QuestionState } from '../model/lesson-question'
+import { KeysIcon } from '@/shared/ui'
 
 /** The question's one button at each stage, so a keyboard user's focus stays on it. */
 interface QuestionAction {
@@ -42,7 +43,7 @@ export function QuestionBlock({
   const id = useId()
   const action: QuestionAction =
     stage === 'closed'
-      ? { label: t('question.answer'), icon: Piano, onClick: onOpen }
+      ? { label: t('question.answer'), icon: KeysIcon, onClick: onOpen }
       : stage === 'choosing' || stage === 'wrong'
         ? { label: t('question.show'), icon: Eye, onClick: onReveal }
         : { label: t('question.again'), icon: RotateCcw, onClick: onRetry }
@@ -82,7 +83,7 @@ export function QuestionBlock({
             t('question.shown')
           ) : stage === 'choosing' ? (
             <>
-              <Piano aria-hidden className="size-4 text-muted-foreground" />
+              <KeysIcon aria-hidden className="size-4 text-muted-foreground" />
               <span className="text-muted-foreground">{t('question.onKeys')}</span>
               <span aria-hidden className="flex gap-1">
                 {Array.from({ length: count.total }, (_, i) => (
