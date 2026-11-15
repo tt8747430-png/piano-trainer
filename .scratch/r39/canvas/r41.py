@@ -30,3 +30,4 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r64_metronome.py').read(
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r65_tuner.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r66_chord_finder.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r67_circle.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r68_exercise.py').read())

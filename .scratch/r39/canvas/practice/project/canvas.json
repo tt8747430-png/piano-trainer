@@ -722,8 +722,17 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "MetronomeNight.dc.html": {
+    "ExerciseNight.dc.html": {
       "x": 2650,
+      "y": 1720,
+      "w": 450,
+      "h": 920,
+      "title": "An exercise, Night, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "MetronomeNight.dc.html": {
+      "x": 3180,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -732,7 +741,7 @@
       "page": "practice"
     },
     "TunerNight.dc.html": {
-      "x": 3180,
+      "x": 3710,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -741,7 +750,7 @@
       "page": "practice"
     },
     "ChordFinderNight.dc.html": {
-      "x": 3710,
+      "x": 4240,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -750,7 +759,7 @@
       "page": "practice"
     },
     "CircleOfFifthsNight.dc.html": {
-      "x": 4240,
+      "x": 4770,
       "y": 1720,
       "w": 450,
       "h": 920,
@@ -983,8 +992,17 @@
       "is_interactive": true,
       "page": "practice"
     },
-    "MetronomeLaptopNight.dc.html": {
+    "ExerciseLaptopNight.dc.html": {
       "x": 11115,
+      "y": 4939,
+      "w": 2143,
+      "h": 1299,
+      "title": "An exercise, Night, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "MetronomeLaptopNight.dc.html": {
+      "x": 13338,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -993,7 +1011,7 @@
       "page": "practice"
     },
     "TunerLaptopNight.dc.html": {
-      "x": 13338,
+      "x": 15561,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1002,7 +1020,7 @@
       "page": "practice"
     },
     "ChordFinderLaptopNight.dc.html": {
-      "x": 15561,
+      "x": 17784,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1011,7 +1029,7 @@
       "page": "practice"
     },
     "CircleOfFifthsLaptopNight.dc.html": {
-      "x": 17784,
+      "x": 20007,
       "y": 4939,
       "w": 2143,
       "h": 1299,
@@ -1433,7 +1451,7 @@
       "y": 1420,
       "text": "Phone, Night",
       "kind": "title1",
-      "maxW": 4690,
+      "maxW": 5220,
       "page": "practice"
     },
     "practice-laptop": {
@@ -1449,7 +1467,7 @@
       "y": 4639,
       "text": "Laptop, Night",
       "kind": "title1",
-      "maxW": 19927,
+      "maxW": 22150,
       "page": "practice"
     },
     "places-phone": {
@@ -1566,6 +1584,7 @@
     "IntervalsNight.dc.html",
     "ProgressionNight.dc.html",
     "PatternNight.dc.html",
+    "ExerciseNight.dc.html",
     "MetronomeNight.dc.html",
     "TunerNight.dc.html",
     "ChordFinderNight.dc.html",
@@ -1595,6 +1614,7 @@
     "IntervalsLaptopNight.dc.html",
     "ProgressionLaptopNight.dc.html",
     "PatternLaptopNight.dc.html",
+    "ExerciseLaptopNight.dc.html",
     "MetronomeLaptopNight.dc.html",
     "TunerLaptopNight.dc.html",
     "ChordFinderLaptopNight.dc.html",

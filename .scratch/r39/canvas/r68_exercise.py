@@ -1,0 +1,48 @@
+# R68: an exercise's page in the Chords page's shape (loop, 2026-11-15). Run from r41.py after r67 (it replaces the
+# Exercise boards r41_practice writes). One piano, one bar, one shape across Practice: the keys edge to edge under a bar
+# of glass buttons (Back · Exercise · Settings · Piano), the first position lit on them; the exercise's name in the
+# serif with its ♡, its book; one card of its first bars on the staff and what it trains; The exercise (Number, Hands,
+# Rhythm, Next key, Tempo with its ladder); How to play, in words, no hand drawing (no finger numbers on keys); and one
+# floating bar: Key (the root, a value over its caption, opening the root grid) · Start (the Player) · Listen.
+EX68 = EX.replace("    return { ...common(st, set),", r'''    const marks = { 60: [ROLE[1], 'C'], 62: ['#F3D9A8', 'D'], 64: ['#F3D9A8', 'E'], 65: ['#F3D9A8', 'F'], 67: ['#F3D9A8', 'G'] };
+    const order = st.order ?? 'Circle of fifths';
+    return { ...common(st, set), kbE: calmKeys(55, 79, marks, 402, 150), kbLE: calmKeys(48, 96, marks, 1366, 180),
+      keyShort: NN[key], playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing }),
+      favFill: (st.fav ?? true) ? '#C2554A' : 'none', keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
+      orderSeg: seg(['Circle of fifths', 'Chromatic'], order, (l) => set({ order: l })),''', 1)
+assert EX68 != EX, 'EX return not found'
+TOP68 = TOP60.replace('Scales and keys</span>', 'Exercise</span>').replace('href="Main.dc.html" aria-label="Back to Practice"', 'href="FingerTechnique.dc.html" aria-label="Back to Finger technique"')
+TITLE68 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px">'
+           f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">Hanon No. 1</h2>'
+           f'<button type="button" aria-label="Favourite" aria-pressed="{{{{fav}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
+           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">The Virtuoso Pianist · Finger technique</p></div>')
+MUSIC68 = lambda w: CARD(hanon(w) + f'<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: {SOFT}; margin: 6px 2px 0"><span>Bars 1–2 of 28</span><span>The left hand an octave lower</span></div>'
+                         + f'<p style="margin: 12px 4px 0; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">A figure climbs two octaves and comes back, for even, independent fingers.</p>', '16px 16px 14px')
+H3_68 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
+ROWS68 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_68("The exercise")}'
+          + GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('seg', 'Hands', 'handsSeg'), ('seg', 'Rhythm', 'rhythmSeg'), ('seg', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('raw', LADDER), bg=SHEET) + '</section>')
+HOW68 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_68("How to play")}'
+         + CARD(f'<p style="margin: 0; font-size: 15px; line-height: 1.45; text-wrap: pretty">Keep the hand in its five-finger shape and lift each finger well; play evenly, every note as loud as the next, as the figure climbs two octaves and comes back.</p>') + '</section>')
+KEYP68 = f'<button type="button" aria-label="Key: {{{{keyL}}}}" aria-haspopup="dialog" onClick="{{{{openRoot}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05"><span style="font-size: 18px; font-weight: 700">{{{{keyShort}}}}</span><span style="font-size: 11px; font-weight: 600; color: {SOFT}">Key</span></button>'
+START68 = f'<a href="PlayExercise.dc.html" aria-label="Start in the Player" style="pointer-events: auto; flex: none; width: 168px; {TINTGRP}; color: #332921; text-decoration: none; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">{PLAYI}<span>Start</span></a>'
+LISTEN68 = (f'<button type="button" aria-label="Listen" aria-pressed="{{{{playing}}}}" onClick="{{{{toggle}}}}" style="pointer-events: auto; justify-self: start; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">'
+            f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{SPEAKER.replace("18", "20")}<span style="font-size: 11px; font-weight: 600; color: {SOFT}">Listen</span></sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}<span style="font-size: 11px; font-weight: 600; color: {SOFT}">Stop</span></sc-if></button>')
+BAR68 = lambda pos: f'<div role="toolbar" aria-label="Key, start and listen" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{KEYP68}{START68}{LISTEN68}</div>'
+EX_SET68 = GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Wait for the right note', 'On', ''), ('link', 'All piano settings', '', ''), bg=SHEET)
+SHEETS68 = BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('setOn', 'Exercise settings', EX_SET68) + BSHEET('keysOn', 'Piano', SC_KEYS60)
+POPS68 = (POPOVER('rootOn', 'Key', ROOTGRID(), 'left: calc(50% - 400px); bottom: 100px; top: auto') + POPOVER('setOn', 'Exercise settings', EX_SET68)
+          + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px'))
+ph68 = (TOP68 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
+        + TITLE68 + MUSIC68(338) + ROWS68 + HOW68 + '</main>' + BAR68('left: 12px; right: 12px; bottom: 30px'))
+lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + TOP68.replace('padding: 0 12px', 'padding: 0 28px 0 40px').replace('left: 112px; right: 112px', 'left: 140px; right: 140px').replace('FingerTechnique.dc.html', 'FingerTechniqueLaptop.dc.html')
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
+        + f'<div style="flex: none; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}">{KB60("kbLE", 180)}</div>'
+        + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}{HOW68}</div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68}</div></div></div>'
+        + BAR68('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + '</div>')
+phone('Exercise', 'An exercise, phone', ph68, EX68, SHEETS68)
+laptop('ExerciseLaptop', 'An exercise, laptop', lm68, '', EX68, POPS68, 'Practice')
+for f in ('Exercise', 'ExerciseLaptop'):
+    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
+print('r68 exercise ok')
