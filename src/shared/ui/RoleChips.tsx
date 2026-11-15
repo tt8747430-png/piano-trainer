@@ -11,7 +11,7 @@ import { PAINT, ROLE_PAINT } from './paint'
  */
 export function RoleTiles({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3">
+    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3 px-1">
       {children}
     </ol>
   )
@@ -51,7 +51,7 @@ export function RoleTile({
         aria-pressed={sounding}
         onClick={onClick}
         className={cn(
-          'flex h-24 w-full flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-foreground focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring lg:h-30',
+          'flex h-24 w-full flex-col items-center justify-center gap-0.5 rounded-[14px] px-1 text-foreground focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring lg:h-30',
           look.fill,
           sounding && 'ring-2 ring-foreground ring-inset',
         )}
