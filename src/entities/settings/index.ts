@@ -47,6 +47,7 @@ export {
   type OtherHandSettings,
   type MetronomeSettings,
   DEFAULT_METRONOME,
+  METRONOME_VOLUMES,
   type MidiSettings,
   type PracticeToggle,
   type SoundSettings,

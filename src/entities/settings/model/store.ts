@@ -18,6 +18,7 @@ import {
   isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_METRONOME,
+  METRONOME_VOLUMES,
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
@@ -98,7 +99,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 46
+export const SETTINGS_VERSION = 47
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -392,6 +393,10 @@ function metronomeSettings(value: unknown): MetronomeSettings {
       step: count(speed.step, initial.speed.step),
       every: count(speed.every, initial.speed.every),
     },
+    volume: (METRONOME_VOLUMES as readonly unknown[]).includes(saved.volume)
+      ? (saved.volume as number)
+      : initial.volume,
+    flash: typeof saved.flash === 'boolean' ? saved.flash : initial.flash,
   }
 }
 

@@ -35,6 +35,7 @@ export interface ToolPlay {
 export function ToolPage({
   title,
   settings,
+  gear,
   actions,
   controls,
   side,
@@ -50,6 +51,8 @@ export function ToolPage({
   title: string
   /** The tool's Settings page, a router `Link`; none where the tool has nothing to set. */
   settings?: useRender.RenderProp
+  /** The tool's gear where its settings open in place, in a sheet (the Metronome's), not a page. */
+  gear?: ReactNode
   /** The bar's act before the gear (a MIDI button, an ⓘ). */
   actions?: ReactNode
   /** What sets the tool, under the readout. */
@@ -80,18 +83,19 @@ export function ToolPage({
         back={<BackButton variant="glass" />}
         tools={actions}
         settings={
-          settings ? (
+          gear ??
+          (settings ? (
             <RoundLink
               label={t('practice:settings.open', { page: title })}
               icon={Settings}
               render={settings}
             />
-          ) : undefined
+          ) : undefined)
         }
       />
       {keys}
       {side || start ? (
-        <div className="mx-auto grid w-full max-w-6xl flex-1 lg:mx-0 lg:max-w-none grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
+        <div className="mx-auto grid w-full max-w-6xl flex-1 content-start lg:mx-0 lg:max-w-none grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
           <section
             aria-label={title}
             className={

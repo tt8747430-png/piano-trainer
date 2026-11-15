@@ -310,7 +310,14 @@ export interface MetronomeSettings {
   readonly subdivision: Subdivision
   readonly trainer: BarTrainerSettings
   readonly speed: SpeedTrainerSettings
+  /** How loud it clicks, in `METRONOME_VOLUMES`' steps of ten, a percent of its full sound. */
+  readonly volume: number
+  /** The screen flashes on each beat, to follow it by eye. */
+  readonly flash: boolean
 }
+
+/** The Metronome's volumes, ten to a hundred percent. */
+export const METRONOME_VOLUMES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as const
 
 /** 120 a minute in 4/4, a click on each beat; the bar trainer off, at two bars and two. */
 export const DEFAULT_METRONOME: MetronomeSettings = {
@@ -321,6 +328,8 @@ export const DEFAULT_METRONOME: MetronomeSettings = {
   subdivision: 'none',
   trainer: { on: false, play: 2, mute: 2 },
   speed: { on: false, from: 80, to: 120, step: 5, every: 4 },
+  volume: 100,
+  flash: false,
 }
 
 export interface SettingsState {

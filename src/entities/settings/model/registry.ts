@@ -141,6 +141,8 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'metronome.levels': 'metronome',
   'metronome.subdivision': 'metronome',
   'metronome.speed': 'metronome',
+  'metronome.volume': 'metronome',
+  'metronome.flash': 'metronome',
   'tuner.a4': 'tuner',
   'scaleStaff.tonic': 'scales',
   'scaleStaff.tetrachords': 'scales',

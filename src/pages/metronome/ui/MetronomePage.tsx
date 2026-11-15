@@ -7,6 +7,7 @@ import { BPM_RANGE } from '@/shared/lib/schedule'
 import { FloatingPiece } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { ToolPage } from '@/widgets/tool-page'
+import { MetronomeGear } from './MetronomeGear'
 import { MetronomeSettings } from './MetronomeSettings'
 import { TempoSteps } from '@/shared/ui'
 
@@ -70,6 +71,7 @@ export function MetronomePage() {
         </FloatingPiece>
       }
       side={<MetronomeSettings metronome={metronome} />}
+      gear={<MetronomeGear metronome={metronome} />}
     >
       <TempoSteps
         bpm={metronome.tempoNow}
@@ -88,6 +90,15 @@ export function MetronomePage() {
           <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
         </Slider>
       </div>
+      {metronome.flash && metronome.playing && metronome.beat !== null ? (
+        // Flash on the beat: a honey wash over the screen as each beat sounds, keyed to the beat
+        // so it flashes anew each time; it never takes a tap.
+        <span
+          key={`${metronome.bar ?? 0}.${metronome.beat}`}
+          aria-hidden
+          className="beat-flash pointer-events-none fixed inset-0 z-40 bg-primary/25"
+        />
+      ) : null}
       <BeatSquares
         tall
         levels={metronome.beatLevels}

@@ -770,6 +770,26 @@
     translate: 0 6px;
   }
 }
+/*
+ * The Metronome's Flash on the beat: the screen washed in honey as each beat sounds, fading at once;
+ * opacity alone moves. Under reduced motion it does not flash: the beats' squares still show the beat.
+ */
+.beat-flash {
+  animation: beat-flash 320ms var(--ease-out) forwards;
+}
+@keyframes beat-flash {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beat-flash {
+    display: none;
+  }
+}
 /* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
 @utility bottom-nav-bar {
   bottom: var(--nav-bar);
