@@ -589,7 +589,6 @@ export const editor = {
     download: 'Download',
     delete: 'Delete',
     deleted: 'Take deleted',
-    back: 'Back',
     // Where a take is written: the piano's staves, or a single staff by its name (ADR 0097).
     into: {
       label: 'Into',

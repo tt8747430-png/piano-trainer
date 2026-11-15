@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { selectRoomLeft, selectTake, useTakes } from '@/entities/take'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { BackButton, Sheet, SheetContent } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { TakeList } from './TakeList'
@@ -23,7 +23,10 @@ export function TakesSheet() {
   )
   return (
     <Sheet open={takes.open} onOpenChange={(open) => takes.show(open ? TAKES_PAGE : null)}>
-      <SheetContent title={writing ? t('review.title') : t('recorder.title')}>
+      <SheetContent
+        title={writing ? t('review.title') : t('recorder.title')}
+        back={writing ? <BackButton onClick={() => takes.show(TAKES_PAGE)} /> : undefined}
+      >
         {writing ? (
           <RecordReview take={writing} />
         ) : (

@@ -538,7 +538,6 @@ export const editor: LocaleResources['editor'] = {
     download: 'Скачать',
     delete: 'Удалить',
     deleted: 'Дубль удалён',
-    back: 'Назад',
     into: {
       label: 'Куда',
       piano: 'Фортепиано',

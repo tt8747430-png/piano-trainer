@@ -14,7 +14,6 @@ import { gridKey, reviewGrids, reviewMusic } from '../model/review'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { useTakePlay } from '../model/use-take-play'
-import { SheetBack } from './SheetBack'
 import { TakeName } from './TakeName'
 
 /** The engraved result's size: a little under the sheet's. */
@@ -82,7 +81,6 @@ export function RecordReview({ take }: { take: Take }) {
   ]
   return (
     <div className="flex flex-col gap-4 pt-2">
-      <SheetBack onBack={() => takes.show(TAKES_PAGE)} />
       <TakeName take={take} />
       <section aria-label={t('review.result')} className="flex flex-col gap-2">
         <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-control border border-border bg-card p-2 scrollbar-none">
