@@ -74,6 +74,7 @@ export function ChordsView({
           outlined={new Set(holding.map((chord) => chord.key))}
           onKeyPress={listening ? hear : undefined}
           place="top"
+          column
         />
       }
       heading={choice}

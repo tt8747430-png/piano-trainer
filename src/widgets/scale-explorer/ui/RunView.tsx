@@ -117,7 +117,7 @@ export function RunView({
   const handsShown = hands === 'both' ? (['rh', 'lh'] as const) : ([hands] as const)
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" />}
+      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" column />}
       heading={choice}
       music={
         <section className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-card px-3 py-4 ring-1 ring-border">

@@ -95,9 +95,11 @@ export function IntervalExplorer({
   const fromName = printedNote(usualName(pitchClassOf(root)))
   return (
     <div className="flex flex-col gap-4">
-      <PinnedKeyboard shown={example.shown} place="top" fitInView />
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_26.25rem] lg:items-start lg:gap-10">
-        <div className="flex min-w-0 flex-col gap-4">
+      {/* The board's laptop (canvas 197): the keys in a card heading the first column, 20 over the
+          name; the size and the tiles beside them, 40 apart. On a phone the keys stay pinned on top. */}
+      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_26.25rem] lg:items-start lg:gap-x-10 lg:gap-y-5 lg:pt-2">
+        <PinnedKeyboard shown={example.shown} place="top" fitInView column />
+        <div className="flex min-w-0 flex-col gap-4 lg:col-start-1 lg:row-start-2 lg:gap-5">
           <IntervalHero
             name={chosen}
             root={root}
@@ -106,7 +108,7 @@ export function IntervalExplorer({
             onPlay={() => play(chosen)}
           />
         </div>
-        <div className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-24">
+        <div className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:pt-1">
           <Segmented<IntervalGroup>
             label={t('intervals.size.label')}
             value={group}

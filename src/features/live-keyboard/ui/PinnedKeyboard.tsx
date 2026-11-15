@@ -39,6 +39,7 @@ export function PinnedKeyboard({
   screen = 'reading',
   place,
   fitInView = false,
+  column = false,
   className,
 }: {
   /** The keys to hold in view, each marked as the page shows it. */
@@ -60,6 +61,11 @@ export function PinnedKeyboard({
   place?: 'top' | undefined
   /** Narrows its keys until the keys shown fit its width, both hands of a chord (the Chord player). */
   fitInView?: boolean
+  /**
+   * On a laptop, a card heading the page's first column, in the page's flow (Intervals' and Scales'
+   * boards, canvas 197): the page is a grid whose first row's first cell it takes.
+   */
+  column?: boolean
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
@@ -98,7 +104,15 @@ export function PinnedKeyboard({
     )
   return (
     // 8 under the bar, as every Practice board draws the keys (a page's own 16 gap less 8).
-    <Pinned bleed className={cn('vt-keys -mt-2', className)}>
+    <Pinned
+      bleed
+      className={cn(
+        'vt-keys -mt-2',
+        column &&
+          'lg:static lg:col-start-1 lg:row-start-1 lg:mx-0 lg:mt-0 lg:overflow-hidden lg:rounded-2xl lg:pt-0 lg:ring-1 lg:ring-border',
+        className,
+      )}
+    >
       {body}
     </Pinned>
   )

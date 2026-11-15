@@ -60,7 +60,7 @@ export function KeyView({
   )
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={shown} range={range} place="top" />}
+      keyboard={<PinnedKeyboard shown={shown} range={range} place="top" column />}
       heading={choice}
     >
       <div className="grid-fields items-start gap-x-10 gap-y-6">
