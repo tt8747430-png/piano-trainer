@@ -5,12 +5,11 @@ import { selectLocale, selectWelcomed, useSettings, useSettingsStoreApi } from '
 import { setLocale, setWelcomed } from '@/features/set-preference'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount } from '@/shared/lib/account'
-import { Segmented } from '@/shared/ui'
+import { Segmented, SettingsGroup } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
@@ -39,25 +38,43 @@ export function Welcome({ shown }: { shown: boolean }) {
   }
   return (
     <AlertDialog open={shown && ready && !signedIn && !welcomed}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle className="font-display text-2xl">
+      {/* The AppLayers board's welcome: the app's tile, a sans title, Language in caps, then Start
+          playing over Sign in, each the dialog's width. */}
+      <AlertDialogContent className="max-w-[calc(100%-2.5rem)] gap-3 rounded-[22px] bg-background px-5 pt-6 pb-5 shadow-(--elevation-3) data-[size=default]:max-w-[calc(100%-2.5rem)] data-[size=default]:sm:max-w-100">
+        <img src="/favicon.svg" alt="" className="size-18 justify-self-center rounded-[18px]" />
+        <AlertDialogHeader className="gap-3 sm:group-data-[size=default]/alert-dialog-content:place-items-center sm:group-data-[size=default]/alert-dialog-content:text-center">
+          <AlertDialogTitle className="font-sans text-2xl font-bold text-balance">
             {t('welcome.title')}
           </AlertDialogTitle>
-          <AlertDialogDescription>{t('welcome.says')}</AlertDialogDescription>
+          <AlertDialogDescription className="text-base/[1.45] text-pretty">
+            {t('welcome.says')}
+          </AlertDialogDescription>
         </AlertDialogHeader>
-        <Segmented
-          label={t('welcome.language')}
-          value={locale}
-          options={LOCALES.map((value) => ({ value, label: t(`settings:language.${value}`) }))}
-          onChange={(value) => setLocale(settings, value)}
-        />
-        <AlertDialogFooter>
-          <Button variant="outline" onClick={signIn}>
+        <SettingsGroup title={t('welcome.language')} bare>
+          <Segmented
+            label={t('welcome.language')}
+            value={locale}
+            options={LOCALES.map((value) => ({ value, label: t(`settings:language.${value}`) }))}
+            onChange={(value) => setLocale(settings, value)}
+          />
+        </SettingsGroup>
+        <div className="mt-1.5 grid gap-2">
+          <Button
+            size="lg"
+            className="h-[50px] rounded-full font-bold"
+            onClick={() => setWelcomed(settings)}
+          >
+            {t('welcome.start')}
+          </Button>
+          <Button
+            size="lg"
+            variant="ghost"
+            className="h-[50px] rounded-full bg-muted font-bold hover:bg-muted/80"
+            onClick={signIn}
+          >
             {t('welcome.signIn')}
           </Button>
-          <Button onClick={() => setWelcomed(settings)}>{t('welcome.start')}</Button>
-        </AlertDialogFooter>
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )

@@ -926,6 +926,11 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **The welcome as its board (loop 24, AppLayers):** a 22-cornered dialog on the page's paper, the app's own tile
+  (72, the keys) over "Welcome to Piano Trainer" in 24 bold sans and its line in 16; Language in the soft caps
+  over its two choices; Start playing (honey) over Sign in (sand), each a 50-tall pill the dialog's width; no
+  footer band (2026-11-15).
+
 - **Offline, the piano download waits and says why (loop round 18):** Storage and backup's Download for offline use is dimmed offline with "Needs the internet" (ru "Нужен интернет") beside it, as the board shows it only when it can run (`offCan`); it comes back the moment the network does.
 
 - **Loop round 22, Notifications to its board (P9_NOTES):** groups headed in small capitals, rows 64 with the title
