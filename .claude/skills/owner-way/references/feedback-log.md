@@ -241,6 +241,9 @@ owner's, typos fixed.
   Waiting for the owner's word.
 
 ## Library, adding, publishing
+
+- **Loop round 16, Explore's search says what it finds:** "Search songs and patterns" as the Explore board writes it,
+  never the bare "Search"; it fits a 393 phone in Russian (2026-11-15).
 - **Canvas 192, Groups:** the board's + New group shows only where a group can be made, not signed out or
   offline, as the app already does (2026-11-15).
 
