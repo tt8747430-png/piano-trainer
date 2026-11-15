@@ -27,6 +27,10 @@ export function LevelRows() {
         {allJourneys().map((journey, i) => {
           const progress = journeyProgress(journey, learned)
           const share = progress.total === 0 ? 0 : progress.done / progress.total
+          // Its lessons, as a lesson numbers itself ("Lesson 7 of 11"); its chord and scale steps aside.
+          const lessons = journey.chapters
+            .flatMap((chapter) => chapter.steps)
+            .filter((step) => step.kind === 'lesson').length
           return (
             <li key={journey.id}>
               <Link
@@ -46,7 +50,7 @@ export function LevelRows() {
                   <span className="font-semibold">{t(`common:stage.${journey.stage}`)}</span>
                   <span className="text-sm text-pretty text-muted-foreground">
                     {localText(journey.title, locale)} ·{' '}
-                    {t('learn:course.lessonCount', { count: progress.total })}
+                    {t('learn:course.lessonCount', { count: lessons })}
                   </span>
                 </span>
                 <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">

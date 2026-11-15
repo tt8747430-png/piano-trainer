@@ -374,6 +374,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 34, a level counts its lessons truly:** Learn's level row said "13 lessons" where Foundations holds 11 lessons and two practice steps (a scale, a chord family), while each lesson reads "Lesson 7 of 11"; the row now counts the lessons, its "0 of 13" the steps learned, as the level's page (2026-11-15).
 - **Loop round 34, a lesson wears the board's closed book (`BOOKI`):** `LessonIcon` on Continue, a level's lesson steps, a course's current lesson, Your lessons, New lesson and Publish, where Lucide's open book with lines stood; a book of exercises keeps its open book (2026-11-15).
 - **Loop round 34, a stage's paint in the Learn board's order:** Beginner sage, Intermediate sky, Advanced honey, Professional lilac, as `coursesHome` paints its shelves (it was sky, grass, lilac, sand); one `STAGE_PAINT`, so the covers, a course's page and the editors change together (2026-11-15).
 - **Loop round 32, Tools as the icon wherever the bar is not Practice's:** a lesson's bar on a laptop said "Tools" where its board draws the metronome alone; now the word stands only on Practice's bar, the icon everywhere else at every width, its name in its tooltip (2026-11-15).
