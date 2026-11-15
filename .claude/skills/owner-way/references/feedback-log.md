@@ -867,6 +867,7 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **Search names a song as the library does (loop 25, PAL):** a song result shows its printed title, else its composer, under its title (Amazing Grace over "New Britain (American folk tune)"), from the one `entryAuthor` the library's rows use (2026-11-15).
 - **The app's notices as the board's (loop 24, AppLayers):** on a phone they stack at the top under the status bar,
   12 in from each side; on a laptop at the foot's right, 28 in, 440 wide. A new version is an ink band 56 tall
   ("A new version is ready", Later, the honey Update pill; "Restarting…" alone once tapped). A save that failed

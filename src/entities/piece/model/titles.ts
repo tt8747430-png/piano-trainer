@@ -38,3 +38,14 @@ export const entryWords = (entry: Entry): string[] => [
   entry.titleRu ?? '',
   ...(entry.credits ?? []).flatMap((credit) => (credit.role === 'unknown' ? [] : [credit.names])),
 ]
+
+/** The credit a row names as its author: who wrote the music, else who wrote it all. */
+const AUTHOR_ROLES = ['music', 'words-and-music', 'authors'] as const
+
+/** An entry's author as its rows name it under its title ("Beethoven"), where its credits print one. */
+export const entryAuthor = (entry: Pick<Entry, 'credits'>): string | undefined =>
+  AUTHOR_ROLES.flatMap((role) =>
+    (entry.credits ?? []).flatMap((credit) =>
+      credit.role === role && 'names' in credit ? [credit.names] : [],
+    ),
+  )[0]

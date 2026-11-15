@@ -4,7 +4,7 @@ import { LESSONS, lessonById, lessonPlace } from '@/entities/lesson'
 import type { FolderId } from '@/entities/library'
 import type { OwnCourse, OwnLesson } from '@/entities/own-lessons'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
-import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
+import { entryAuthor, entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import type { OwnProgression } from '@/entities/practice-library'
 import { libraryByStyle, libraryLine, progressionMode } from '@/entities/progression-library'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
@@ -157,11 +157,13 @@ export function indexEntries({
     }),
     ...pieces.map((entry): IndexEntry => {
       const { primary, secondary } = entryTitles(entry, locale)
+      // Under its title, as the library's row: its printed title, else its composer (the board's PAL).
+      const detail = secondary ?? entryAuthor(entry)
       return {
         id: `songs:${entry.id}`,
         kind: 'songs',
         title: primary,
-        ...(secondary ? { detail: secondary } : {}),
+        ...(detail ? { detail } : {}),
         words: [entry.title, entry.titleEn ?? '', entry.titleRu ?? ''],
         target: { opens: 'piece', entry, archived: archived.has(entry.id) },
       }

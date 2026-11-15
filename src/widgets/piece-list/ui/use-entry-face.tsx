@@ -1,7 +1,7 @@
 import { FilePenLine, GraduationCap, Music, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, pieceChords, pieceKey, type Entry } from '@/entities/piece'
+import { entryAuthor, entryTitles, pieceChords, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -31,9 +31,6 @@ export interface EntryFace {
   readonly kind: { readonly icon: LucideIcon; readonly paint: Paint }
 }
 
-/** The credit a row names as its author: who wrote the music, else who wrote it all. */
-const AUTHOR_ROLES = ['music', 'words-and-music', 'authors'] as const
-
 /**
  * A piece's or listing's row's face, wherever it is listed (the library, Search, the archive; canvas
  * 133): its title over its second title or its composer and its key ("Beethoven · A minor"; a
@@ -55,11 +52,7 @@ export function useEntryFace(
   const { primary, secondary } = entryTitles(entry, locale)
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const chords = pieceChords(entry)
-  const author = AUTHOR_ROLES.flatMap((role) =>
-    (entry.credits ?? []).flatMap((credit) =>
-      credit.role === role && 'names' in credit ? [credit.names] : [],
-    ),
-  )[0]
+  const author = entryAuthor(entry)
   const said =
     entry.kind === 'listing'
       ? [t('noChart')]

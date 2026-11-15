@@ -8,8 +8,8 @@ import { GroupRow, GroupSegmented, Stepper } from '@/shared/ui'
 /** An octave shift as written: a sign before it, the minus a true one. */
 const shiftLabel = (shift: number) => (shift > 0 ? `+${shift}` : shift < 0 ? `−${-shift}` : '0')
 
-const LOWEST = OCTAVE_SHIFTS[0]
-const HIGHEST = OCTAVE_SHIFTS[OCTAVE_SHIFTS.length - 1]
+const LOWEST = Math.min(...OCTAVE_SHIFTS)
+const HIGHEST = Math.max(...OCTAVE_SHIFTS)
 
 /**
  * How the MIDI keyboard plays (the board's Playing): Octave shift a − n + stepper at its row's end,

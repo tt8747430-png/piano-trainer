@@ -146,7 +146,7 @@ export {
   readsAsMadeSong,
   type MadeSong,
 } from './model/content-record'
-export { entryTitles, entryWords } from './model/titles'
+export { entryAuthor, entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'
 export { useCreditNames } from './ui/use-credit-names'
 export { PieceFactLine } from './ui/PieceFactLine'
