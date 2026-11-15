@@ -331,7 +331,8 @@ export function LessonView({
         </h2>
         <SectionLinks lesson={lesson} reading={read === null ? null : sectionId(read)} />
       </nav>
-      <div className="flex min-w-0 flex-col gap-4">
+      {/* The head 28 above the sections, as the canvas's lesson spaces them. */}
+      <div className="flex min-w-0 flex-col gap-7">
         {head}
         <div className="flex flex-col gap-10">
           <PinnedKeyboard
