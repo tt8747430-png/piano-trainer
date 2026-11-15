@@ -38,8 +38,8 @@ export function PlayerScreen({
   /** A panel at the right is open (a laptop's Settings): the screen ends where it starts. */
   panel?: boolean
   /**
-   * Nothing floats over the music (the Player's docked transport and foot, R31-P): no scroll room
-   * kept for a transport floating at its foot.
+   * The keys are a window over the music's foot (the Player's, loop round 24): the music's scroll
+   * room under its last line reaches above the window, else above the floating transport.
    */
   docked?: boolean
   children: ReactNode
@@ -69,9 +69,10 @@ export function PlayerScreen({
       className={cn(
         SCORE_SCREEN,
         'data-panel:pe-[min(28rem,100vw)]',
-        // Docked, the transport floats over nothing: the room under the music's last line is the
-        // keys' window's, where it floats over the foot (loop round 24).
-        docked && '[--float-room:var(--keys-room,0px)]',
+        // The room under the music's last line clears the keys' window, else the transport; the music
+        // runs on to the screen's foot under the floating transport, as the board draws it.
+        docked &&
+          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] [--float-room:max(var(--keys-room,0px),5.5rem)] landscape-phone:mb-0',
       )}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}

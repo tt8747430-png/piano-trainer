@@ -413,11 +413,11 @@ export function PlayerLayout({
         </PlayerArea>
       ) : null}
       {keys}
-      {/* The transport in its own row at the foot (R31-P): never floating over the music. Under
-          360px its gutter is 12px, so Pace's three-digit tempo fits beside the other six. */}
+      {/* The transport floats over the music's foot as the board's (loop 25, PlayerApp): three
+          glass groups, no band or hairline under them, the music scrolling on beneath. */}
       <PlayerArea
-        area="transport"
-        className="-mx-gutter border-t border-hairline px-gutter narrow-phone:px-3 xl:border-t-0"
+        area="dock"
+        className="mb-[calc(env(safe-area-inset-bottom)+0.5rem)]! w-full narrow-phone:px-1 landscape-phone:mb-1!"
       >
         <div className="mx-auto w-full max-w-xl lg:w-fit">
           <PlayerDock
