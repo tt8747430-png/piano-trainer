@@ -19,10 +19,16 @@ export function SettingsScreen({
   title,
   sub = false,
   actions,
+  lead,
   children,
 }: {
   title: string
   sub?: boolean
+  /**
+   * What stands over the page's own title (Legal's Privacy Policy · Terms of Service): on a phone the
+   * title then leaves the bar for the page, 30 bold under it, as the Legal board draws it.
+   */
+  lead?: ReactNode
   /** The bar's own actions (a page's ⓘ). */
   actions?: ReactNode
   children: ReactNode
@@ -36,8 +42,23 @@ export function SettingsScreen({
   if (!panes)
     return (
       <div className="flex flex-col gap-2">
-        <ScreenHeader title={title} back={<BackButton />} tools={actions} />
-        <div className="mx-auto w-full max-w-2xl">{page}</div>
+        <ScreenHeader
+          title={title}
+          titleOnPage={lead !== undefined}
+          back={<BackButton />}
+          tools={actions}
+        />
+        <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+          {lead === undefined ? null : (
+            <>
+              {lead}
+              <h1 className="font-sans text-[1.875rem]/tight font-bold tracking-[-0.01em] text-balance">
+                {title}
+              </h1>
+            </>
+          )}
+          {page}
+        </div>
       </div>
     )
   return (
@@ -56,6 +77,7 @@ export function SettingsScreen({
           <span className="flex-1" />
           {actions}
         </div>
+        {lead}
         <h2 className="-mt-2 font-sans text-[1.625rem]/tight font-bold text-balance">{title}</h2>
         {page}
       </div>

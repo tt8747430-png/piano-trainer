@@ -1,5 +1,7 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import { Segmented } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** When either page last changed. */
@@ -27,6 +29,7 @@ const TERMS = ['use', 'account', 'publish', 'content', 'thirdParty', 'contact', 
 export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
   const { t } = useTranslation('legal')
   const locale = useLocale()
+  const navigate = useNavigate()
   const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(UPDATED)
   const sections =
     page === 'privacy'
@@ -41,12 +44,29 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
           text: t(`terms.sections.${key}.text`),
         }))
   return (
-    <SettingsScreen title={t(`${page}.title`)} sub>
+    <SettingsScreen
+      title={t(`${page}.title`)}
+      sub
+      // The two pages one switch apart, as the Legal board: the other replaces this one.
+      lead={
+        <div className="self-start">
+          <Segmented
+            label={t('pages')}
+            value={page}
+            options={(['privacy', 'terms'] as const).map((each) => ({
+              value: each,
+              label: t(`tab.${each}`),
+            }))}
+            onChange={(each) => void navigate({ to: `/legal/${each}`, replace: true })}
+          />
+        </div>
+      }
+    >
       <div className="flex flex-col gap-5">
-        <p className="text-sm text-muted-foreground">{t('updated', { date })}</p>
+        <p className="-mt-2 text-[0.8125rem] text-muted-foreground">{t('updated', { date })}</p>
         {sections.map(({ key, heading, text }) => (
           <section key={key} className="flex flex-col gap-1.5">
-            <h2 className="font-display text-xl">{heading}</h2>
+            <h2 className="font-sans text-[1.1875rem] font-bold">{heading}</h2>
             <p className="text-pretty">{text}</p>
           </section>
         ))}

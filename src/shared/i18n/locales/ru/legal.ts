@@ -2,6 +2,8 @@ import type { LocaleResources } from '../../types'
 
 export const legal: LocaleResources['legal'] = {
   updated: 'Изменено {{date}}',
+  pages: 'Правовые документы',
+  tab: { privacy: 'Конфиденциальность', terms: 'Условия' },
   privacy: {
     title: 'Политика конфиденциальности',
     sections: {
