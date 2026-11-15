@@ -6,12 +6,12 @@ import { ButtonLink } from '@/shared/ui'
 
 /**
  * The archive's way in, in Songs' bar at Home (Mindscape's header; canvas 133): the archive's icon,
- * opening the Archive, the Trash inside it, with a small count of both on the icon.
+ * opening the Archive, with a small count of what is archived on the icon. The Trash is Songs' ···,
+ * apart (owner, IMG_6045–6056: "what the trash does in the archive").
  */
 export function ArchiveButton() {
   const { t } = useTranslation('songs')
-  const { archive, trash } = useLibraryLayout()
-  const count = archive.length + trash.length
+  const count = useLibraryLayout().archive.length
   const label = t('archive.title')
   return (
     <span className="relative inline-flex">
