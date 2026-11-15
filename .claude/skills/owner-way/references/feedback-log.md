@@ -118,6 +118,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 35, the gear's Arrangement card (owner, 2026-11-07; the PlayerApp board):** what you play heads the Player's Settings under the song: the Arrangement card, chosen, its Level row under it, Easy · Simplified · Original, easiest first (Simplified greyed with its reason where it changes no chord), and a Scoring row (your own version, the piano alone, with the voice) where the song has more than one; the Version page and its row are gone. A radio card without a picture takes no tile (2026-11-15).
 - **Loop round 34, no double gap in Player settings:** an empty column for the screen's own choices stood between the song's head and the first group, so they stood 41 apart; empty, it now takes no room, and they stand the sheet's 20 apart (2026-11-15).
 - **Loop round 34, Play wears the board's metronome (`METRO`):** the Practice button and its Play card draw the board's case, pendulum and bar (`PlayAlongIcon`), not Lucide's metronome; Wait keeps the hourglass (2026-11-15).
 - **Loop round 34, the laptop's keys button says Piano:** the sheet it opens, by name, as the PlayerDesk board; a phone's caption keeps the mode (3D, 2D, Off) (2026-11-15).

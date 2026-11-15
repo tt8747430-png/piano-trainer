@@ -9,7 +9,7 @@ export interface RadioCard<V extends string> {
   readonly value: V
   readonly label: string
   /** What the choice looks like, drawn in a 64 by 48 tile: a picture of a 3D piano, the 2D keys. */
-  readonly picture: ReactNode
+  readonly picture?: ReactNode
   /** Its own settings, shown under it while it is chosen (the 3D piano's Angle). */
   readonly children?: ReactNode
 }
@@ -68,19 +68,22 @@ export function RadioCards<V extends string>({
             <Radio.Root
               value={card.value}
               className={cn(
-                'flex w-full cursor-default items-center gap-3 py-2 ps-2 pe-4 text-left select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
+                'flex w-full cursor-default items-center gap-3 py-2 pe-4 text-left select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
                 across ? 'min-h-14' : 'min-h-16',
+                card.picture === undefined ? 'ps-4' : 'ps-2',
               )}
             >
-              <span
-                aria-hidden
-                className={cn(
-                  'grid flex-none place-items-center bg-card text-foreground ring-1 ring-border',
-                  across ? 'h-10 w-11 rounded-md [&_svg]:size-5.5' : 'h-12 w-16 rounded-lg',
-                )}
-              >
-                {card.picture}
-              </span>
+              {card.picture === undefined ? null : (
+                <span
+                  aria-hidden
+                  className={cn(
+                    'grid flex-none place-items-center bg-card text-foreground ring-1 ring-border',
+                    across ? 'h-10 w-11 rounded-md [&_svg]:size-5.5' : 'h-12 w-16 rounded-lg',
+                  )}
+                >
+                  {card.picture}
+                </span>
+              )}
               <span className="min-w-0 flex-1 text-base font-semibold text-pretty">
                 {card.label}
               </span>

@@ -1,4 +1,5 @@
 import { Music2, Rows3 } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { choosableChordSize, type Piece } from '@/entities/piece'
 import type { PatternFit } from '@/entities/pattern'
@@ -36,6 +37,7 @@ export function PieceSetup({
   onStaves,
   sync,
   onSwing,
+  children,
 }: {
   piece: Piece
   /** What this kind of music is offered (`controlsFor`). */
@@ -54,6 +56,8 @@ export function PieceSetup({
   /** The recording's Sync, where the piece has one. */
   sync?: RecordingSync | undefined
   onSwing: (feel: SwingFeel) => void
+  /** What you play (the Arrangement card), at the head of the settings. */
+  children?: ReactNode
 }) {
   const { t } = useTranslation(['player', 'music'])
   const chordSize = controls.has('chordSize') ? choosableChordSize(piece) : null
@@ -88,7 +92,11 @@ export function PieceSetup({
         />
       ),
     })
-  return <PlayerSetup figures={choice} fit={fit} onFigures={onChange} pages={pages} />
+  return (
+    <PlayerSetup figures={choice} fit={fit} onFigures={onChange} pages={pages}>
+      {children}
+    </PlayerSetup>
+  )
 }
 
 /** A chord chart's Accompaniment page: its chord size, the pattern and its hands, its Swing. */

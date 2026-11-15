@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch, useNavigate } from '@tanstack/react-router'
-import { ArrowUpDown, Highlighter, Layers, ListTree } from 'lucide-react'
+import { ArrowUpDown, Highlighter, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -44,7 +44,7 @@ import { PlayerLayout } from './PlayerLayout'
 import { SectionsSheet } from './SectionsSheet'
 import { ClefChoice } from './ClefChoice'
 import { TransposePage } from './TransposePage'
-import { VersionPage, type VersionChoice } from './VersionPage'
+import { ArrangementCard, type VersionChoice } from './ArrangementCard'
 import { AnnotateBar } from './AnnotateBar'
 
 /** A song with no typed marks. */
@@ -201,7 +201,17 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
             onStaves={changeTrack}
             sync={piece.recording ? { ms: recordingSync, onChange: syncRecording } : undefined}
             onSwing={player.setSwing}
-          />
+          >
+            {controls.has('simplify') ? (
+              <ArrangementCard
+                chosen={chosenVersion}
+                own={own}
+                voice={singles.length > 0}
+                simplifies={simplifies}
+                onChoose={chooseVersion}
+              />
+            ) : null}
+          </PieceSetup>
         }
         // The music's own pages of the Settings (its canvas's Song settings): the key it is played
         // in, and the version, each its row with what it is set to.
@@ -221,25 +231,6 @@ function PiecePlayer({ piece, own }: { piece: Piece; own: boolean }) {
               />
             ),
           },
-          ...(controls.has('simplify')
-            ? [
-                {
-                  id: 'version',
-                  label: t('player:version.title'),
-                  icon: Layers,
-                  value: t(`player:version.level.${choice.version}`),
-                  content: (
-                    <VersionPage
-                      chosen={chosenVersion}
-                      own={own}
-                      voice={singles.length > 0}
-                      simplifies={simplifies}
-                      onChoose={chooseVersion}
-                    />
-                  ),
-                },
-              ]
-            : []),
         ]}
         more={more}
         musicXml={files.musicXml}

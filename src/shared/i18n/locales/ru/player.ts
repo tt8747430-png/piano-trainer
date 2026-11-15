@@ -40,12 +40,11 @@ export const player: LocaleResources['player'] = {
     label: 'Версия',
     of: 'Версия: {{level}}',
     arrangement: 'Аранжировка',
+    scoring: 'Состав',
     group: { own: 'Ваша версия', solo: 'Фортепиано соло', voice: 'Фортепиано и голос' },
     level: { original: 'Оригинал', simple: 'Упрощённая', easy: 'Лёгкая' },
     difficulty: 'Сложность {{n}} из 3',
-    levels: 'Сложность',
-    levelsAbout:
-      'Оригинал: ноты как написаны. Упрощённая: каждый аккорд — простое трезвучие, мелодия та же. Лёгкая: мелодия и по одной ноте каждого аккорда.',
+    levels: 'Уровень',
     alreadySimple: 'Аккорды и так простые',
   },
   tuner: {
