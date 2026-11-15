@@ -45,7 +45,7 @@ export function BeatSquares({
   const { t } = useTranslation('practice')
   if (tall)
     return (
-      <div className="flex w-full flex-col gap-2">
+      <div className="relative w-full">
         <ol
           aria-label={t('metronome.beats')}
           data-muted={muted || undefined}
@@ -87,10 +87,11 @@ export function BeatSquares({
             </li>
           ))}
         </ol>
+        {/* Under the beats in the gap before the settings, taking no room (the board draws none). */}
         <p
           aria-hidden={!muted}
           className={cn(
-            'flex items-center justify-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-150 ease-out',
+            'absolute inset-x-0 top-full mt-0.5 flex h-5 items-center justify-center gap-1.5 text-sm font-medium text-muted-foreground transition-opacity duration-150 ease-out',
             !muted && 'opacity-0',
           )}
         >
