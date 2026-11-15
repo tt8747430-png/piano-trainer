@@ -18,7 +18,12 @@ SI_JS = js(r'''
     };
     const create = () => { if (!name.trim()) return S({ fe: 'name' }); if (!okEmail) return S({ fe: 'email' }); if (!okPw) return S({ fe: 'pw' }); S({ view: 'sent', fe: '' }); };
     const showPw = !!st.showPw;
-    return { ...common(st, set), offline: !!st.offline, toggleOff: () => S({ offline: !st.offline }), offT: st.offline ? 'Back online' : 'Try offline',
+    const states = [['Create an account', v === 'create', { view: 'create' }, { view: 'in' }], ['Check your email', v === 'sent', { view: 'sent' }, { view: 'in' }],
+      ['Forgotten password', v === 'forgot', { view: 'forgot' }, { view: 'in' }], ['A reset link opened', v === 'newpw', { view: 'newpw' }, { view: 'in' }],
+      ['A link that failed', v === 'failed', { view: 'failed' }, { view: 'in' }], ['Signing you in', v === 'working', { view: 'working' }, { view: 'in' }],
+      ['A wrong password', !!err, { view: 'in', pw: 'wrong password', err: 'That email and password don’t match an account.' }, { err: '', pw: '' }], ['Offline', !!st.offline, { offline: true }, { offline: false }]]
+      .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => S(on ? off : o) }));
+    return { ...common(st, set), states, offline: !!st.offline,
       isIn: v === 'in', isCreate: v === 'create', isSent: v === 'sent', isForgot: v === 'forgot', isForgotSent: v === 'forgotSent', isNew: v === 'newpw', isSaved: v === 'saved', isWorking: v === 'working', isFailed: v === 'failed', isDone: v === 'done',
       isForm: ['in', 'create', 'forgot', 'newpw'].includes(v), title: titles[v] || 'Signed in', email, pw, name, pwType: showPw ? 'text' : 'password', eyeL: showPw ? 'Hide password' : 'Show password', eye: () => S({ showPw: !showPw }),
       setEmail: (e) => S({ email: e.target.value, fe: '' }), setPw: (e) => S({ pw: e.target.value, fe: '' }), setName: (e) => S({ name: e.target.value, fe: '' }),
@@ -57,17 +62,16 @@ V_NEW = f'<sc-if value="{{{{isNew}}}}" hint-placeholder-val="{{{{false}}}}">{PW}
 V_SAVED = DONEPAGE('isSaved', CHECKI.replace('20', '36'), SAGE, 'Your new password is saved.', 'You are signed in on this device.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
 SPIN = f'<span style="width: 36px; height: 36px; border-radius: 18px; border: 4px solid {FILL}; border-top-color: {INK}; box-sizing: border-box; animation: spin 900ms linear infinite"></span><style>@keyframes spin {{ to {{ transform: rotate(360deg) }} }} @media (prefers-reduced-motion: reduce) {{ * {{ animation: none !important }} }}</style>'
 V_WORK = DONEPAGE('isWorking', SPIN, FILL, 'Signing you in…', 'This takes a moment.', '')
-V_FAIL = DONEPAGE('isFailed', '<span style="font-size: 34px; font-weight: 700">!</span>', '#F6DEDA', 'Sign in', 'This link didn’t work. It may have expired or been used already.', f'<div style="display: flex">{BTN("Sign in again", "goIn", "", "primary", 50)}</div>')
+V_FAIL = DONEPAGE('isFailed', '<span style="font-size: 34px; font-weight: 700">!</span>', '#F6DEDA', 'This link didn’t work', 'It may have expired or been used already. Sign in again, or ask for a new link.', f'<div style="display: flex">{BTN("Sign in again", "goIn", "", "primary", 50)}</div>')
 V_DONE = DONEPAGE('isDone', CHECKI.replace('20', '36'), SAGE, 'You’re signed in', 'Your library syncs across your devices from now on.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
 SIBODY = V_IN + V_CREATE + V_SENT + V_FORGOT + V_FSENT + V_NEW + V_SAVED + V_WORK + V_FAIL + V_DONE
 # the demo's own switches, outside the drawn screen's flow: offline, and a failed sign-in link
-DEMO = f'<div style="display: flex; justify-content: center; gap: 8px; padding-top: 4px">{LINKB("{{offT}}", "toggleOff")}{LINKB("Open a reset link", "goNew")}{LINKB("A link that failed", "goFailed")}</div>'
 siph = (f'{TOP("", "", "", "Close", CLOSEB("Settings.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 24px 48px; display: flex; flex-direction: column; gap: 16px">'
-        f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY}{DEMO}</main>')
+        f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY}</main>')
 silm = (f'{LPAD(TOP("", "", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
         f'<span style="align-self: center; width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
-        f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; text-align: center; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}{DEMO}</div></main>')
-detail('SignIn', 'Sign in', SI_JS, siph, silm, '', '', '', 'Profile')
+        f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; text-align: center; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}</div></main>')
+detail('SignIn', 'Sign in', SI_JS, SHOWSTATES() + siph, SHOWSTATES() + silm, '', '', '', 'Profile')
 
 # ── Legal ──
 _L = open('/home/user/piano-trainer/src/shared/i18n/locales/en/legal.ts').read()
