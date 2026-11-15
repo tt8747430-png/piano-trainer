@@ -238,7 +238,7 @@ owner's, typos fixed.
 
 ## Song page
 
-- **Loop round 25, a song's Settings as its board:** Library opens with Favourite, a switch running the ♡'s own command ("В избранном"), then Folder, Duplicate, Archive (2026-11-15).
+- **Loop round 25, a song's Settings as its board:** Library holds Folder, then Favourite, a switch running the ♡'s own command ("В избранном"), then Duplicate and Archive (2026-11-15).
 - **Loop round 25, a song's ··· as the board's SONG_MORE:** the bar ends in More, not a gear: Edit score, Settings, Share link, Export… and, apart, Archive (or Restore), each the command its Settings page runs; Archive stays in ink, since it is undone in its toast (2026-11-15).
 - **A section's page as the Section board draws it (loop round 19):** a compact head card (`2 ×` large, then "Verse · bars 1–8" over its chords), no song tile and no progress bar; each group a settings group (its name in small capitals, its ⓘ at the heading's far end, as every settings group now); plain rows with no tiles, "Learn **G**" with the chord bold, its holds ("0 of 3") or Done in the learned green at the end; one column of 42rem on a laptop.
 
