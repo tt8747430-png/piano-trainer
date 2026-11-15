@@ -749,6 +749,10 @@ are reference only, but progressions are facts.
 - **One icon, one meaning.** **One home per idea:** the page shows what you look at, its Settings how it always behaves.
 
 ## Profile and Settings
+
+- **Settings on a laptop as its board (loop round 16, SettingsLaptop):** no bar; the list a full-height column,
+  its hairline to the right, headed by a 28px Settings; the page beside it: Back (a page under a page) and its
+  actions in one 44px row, then its 26px title.
 - **Practice history built (loop round 10, canvas 160):** every practice run kept on Profile: the last three on
   Profile, all of them by day under a 30-day chart, each opening its results (Accuracy, In a row, Per answer, the
   personal best, Retry at that level). Timing, Tempo, the run on the staff and Practise mistakes wait for the
