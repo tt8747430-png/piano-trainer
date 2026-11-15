@@ -1013,6 +1013,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 36, a closed editor or Administration says so as the route states do:** a 72 lock on the sand, its line 17 semibold, what to do 48 tall, in every content editor and the Admin pages (it was a bare bold line) (2026-11-15).
 - **Loop round 36, Legal as its board:** Privacy Policy · Terms of Service one switch over the page (the other replaces this one; Конфиденциальность · Условия in Russian, to fit), on a phone the title leaves the bar for the page, 30 bold, the date 13 under it, each section's heading 19 bold in the sans (the book serif is gone there) (2026-11-15).
 - **Loop round 36, the account pages as the SignIn board:** Close (an X) in the bar, the title 32 bold in the sans at the head of the column, everything 16 apart; Google and Apple pills 50 tall (Apple "· Coming soon" in its words, no chip), the fields bare on the page with their labels 13 semibold, the honey action a 50 pill, Forgot password?, Create an account and Back to sign in in the link colour reaching 44, the Terms and Privacy links too. Field outlines keep the control line, for 3:1 (2026-11-15).
 - **Loop round 34, Settings' values at the kit's 16 (canvas v211):** the Settings list drew a row's grey value (Match system, Up to date) at 15 where every other group's row draws 16; the board now draws 16, as the app's one row does (2026-11-15).

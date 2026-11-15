@@ -1,3 +1,4 @@
+import { Lock } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DraftActions, DraftStatus, type ContentDraft } from '@/features/edit-original'
@@ -5,22 +6,30 @@ import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, ScreenHeader, type EditAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { languageActions } from './LanguageChoice'
 
-/** A screen saying why the form is not open (yet): its line, and what to do. */
+/**
+ * A screen saying why the form is not open (yet), as the app's route states draw theirs: a 72 lock
+ * on the sand, its line 17 semibold, and what to do, 48 tall.
+ */
 export function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
   return (
-    <Empty className="min-h-80">
-      <EmptyHeader>
-        <EmptyTitle>
-          <p role="status" className="text-lg">
-            {line}
-          </p>
-        </EmptyTitle>
-      </EmptyHeader>
-      {children ? <EmptyContent>{children}</EmptyContent> : null}
-    </Empty>
+    <div className="flex min-h-80 flex-1 flex-col items-center justify-center gap-2.5 p-6 text-center">
+      <span
+        aria-hidden
+        className="flex size-18 items-center justify-center rounded-full bg-muted text-foreground"
+      >
+        <Lock className="size-7" />
+      </span>
+      <p role="status" className="max-w-[340px] text-[1.0625rem] font-semibold text-balance">
+        {line}
+      </p>
+      {children ? (
+        <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:px-5 *:text-base">
+          {children}
+        </div>
+      ) : null}
+    </div>
   )
 }
 
