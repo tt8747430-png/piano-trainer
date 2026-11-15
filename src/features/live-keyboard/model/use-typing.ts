@@ -20,7 +20,8 @@ const NONE: ReadonlySet<Midi> = new Set()
  * The computer keyboard as a piano, read by physical key (GarageBand's Musical Typing). A typed key
  * calls `onKey`, as a tap does, and is held down until it is let go (or the window loses the focus),
  * for at least the shortest press; Z and X move the typing octave, and the keyboard shows it until the screen's own keys in view
- * change. Nothing plays from a text field, with a modifier held, or on auto-repeat; a key that
+ * change. The letters show on the keys once the learner first types on them, so the keys stay plain
+ * until the computer keyboard is in use. Nothing plays from a text field, with a modifier held, or on auto-repeat; a key that
  * plays is not also the browser's. Letting go of Cmd lets go of every typed key: macOS sends no
  * key-up for a letter released while Cmd is held. Each key let go calls `onKeyUp` with the key it
  * played; typing switched off, or the screen gone, lets go of every key held.
@@ -42,6 +43,8 @@ export function useTyping({
   held: ReadonlySet<Midi>
 } {
   const [typingC, setTypingC] = useState(TYPING_START)
+  /** Whether the learner has typed on the keys yet: their letters show from then on (the canvas draws none). */
+  const [typedOn, setTypedOn] = useState(false)
   /** Each physical key held down, under its code, with the piano key it played (the octave may move meanwhile). */
   const { keys: held, press, release, releaseAll } = usePresses<string>()
   /** The screen's keys in view when Z or X last moved the octave: the octave shows until they change. */
@@ -67,6 +70,7 @@ export function useTyping({
       const by = event.code === OCTAVE_UP ? 1 : -1
       setTypingC((c) => moveTypingOctave(c, by))
       setMovedOver({ view: inView })
+      setTypedOn(true)
       return
     }
     const key = typedKey(event.code, typingC)
@@ -75,6 +79,7 @@ export function useTyping({
     letGo(event.code)
     playing.current.set(event.code, key)
     press(event.code, key)
+    setTypedOn(true)
     onKey(key)
   })
 
@@ -100,7 +105,7 @@ export function useTyping({
   const letters = useMemo(() => typingLetters(typingC), [typingC])
   const followsTyping = enabled && movedOver !== null && sameRange(movedOver.view, inView)
   return {
-    letters: enabled ? letters : undefined,
+    letters: enabled && typedOn ? letters : undefined,
     inView: followsTyping ? rangeOf([...letters.keys()]) : inView,
     held: enabled ? held : NONE,
   }

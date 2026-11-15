@@ -361,6 +361,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **The keys show their computer letters only once typed on (loop round 17):** every board draws the on-screen piano plain on a laptop; the letters that play each key appear after the learner first types a key or moves the octave (Z, X), the hidden UI shown when it is wanted. One piano, so the Chord finder, the Chords page, the Player and the editor alike.
+
 - **Scale settings ported** (loop, canvas 196): the gear on Scales and keys opens the sheet in place; the run's Fingering, Start on, Compare with, Rhythm (in the board's order) and the Chords view's size, inversion, keys play, played as and tempo leave the page for it; On the staff › shows what is written (Off, or the layers on) and opens its one home in Settings. The practise rows now follow the staff, as the board.
 - **Scale settings is the gear's sheet, in place** (canvas 196, loop): the view's choices leave the page for one sheet: Fingering (As the scale · From the thumb), Start on, Compare with (A43, kept), Rhythm; the Chords view's size, inversion and what the keys play; then On the staff › to its one home in Settings. The board's Count-in goes: Play scale is a listen, a count-in before it does nothing.
 - **A scale's keys carry their names alone** (loop, the Scales board): the tonic rose, the rest sand, each key its note's name (G A B C D E F♯); no degree numerals and no fingers on the keys, which the staff carries. One `scaleShown`, so Scales and keys, a key's view and the examples change together.
