@@ -3,21 +3,21 @@
 # buttons (Back · title · Settings · Piano), the interval's name with its ⓘ, its two notes on the staff with what it
 # sounds like and Hear it, Simple · Compound over the tiles (the chosen one filled in ink), and one floating bar as
 # Scales': From (the root) · Play P5 ⌄ (Ascending, Descending, Harmonic) · Play all.
-IV61 = IV.replace("allSeg: seg(", r'''steps: [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7][n],
-      ab: AB[n], playL: 'Play ' + AB[n], wayL: way,
+IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
+      ab: AB[tile], playL: 'Play ' + AB[tile], wayL: way,
       ways: ['Ascending', 'Descending', 'Harmonic'].map((d) => ({ d, on: d === way, mark: d === way ? '✓' : '', pick: () => set({ way: d, menu: null }) })),
-      ivs: AB.map((a, i) => ({ a, s: String(i), on: i === n, bg: i === n ? '#332921' : '#FEFDFB', fg: i === n ? '#FEFDFB' : '#332921', sub: i === n ? 'rgba(254,253,251,.7)' : '#6E6259', pick: () => set({ n: i }) })),
+      ivs: TIL.map(([a, semis], i) => ({ a, s: String(semis), on: i === tile, bg: i === tile ? '#332921' : '#FEFDFB', fg: i === tile ? '#FEFDFB' : '#332921', sub: i === tile ? '#FEFDFB' : '#6E6259', op: i === tile ? 0.72 : 1, pick: () => set({ tile: i }) })),
       tabs: ['Simple', 'Compound'].map((l) => { const on = l === (st.size ?? 'Simple'); return { l, on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => set({ size: l }) }; }),
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, allP: false, menu: null }),
       allPlaying: !!st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
-      kbE: calmKeys(lo - 7, lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], NN[hi % 12]] }, 402, 150),
-      kbLE: calmKeys(lo - 12, lo + 24, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], NN[hi % 12]] }, 926, 180),
-      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7][n];
+      kbE: calmKeys(lo - 7, lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
+      kbLE: calmKeys(lo - 12, lo + 24, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 926, 180),
+      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], st0 = L.indexOf(NN[from].charAt(0)), d2 = st0 + STEP;
         const y = (d) => 65 - d * 3.5, acc = (d, pc) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12; return k === 1 ? '♯' : k === 11 ? '♭' : ''; };
         const har = way === 'Harmonic', x1 = har ? 180 : 150, x2 = har ? (n <= 2 ? 192 : 180) : 210;
-        const notes = [[st0, from, x1], [d2, (from + n) % 12, x2]].map(([d, pc, x]) => ({ x, y: y(d), acc: acc(d, pc), ax: x - 18, ay: y(d) + 5, hasAcc: !!acc(d, pc) }));
+        const notes = [[st0, from, x1], [d2, (from + n) % 12, x2]].map(([d, pc, x]) => ({ x, y: y(d), acc: acc(d, pc), ax: x - 18, ay: y(d) + 5, hasAcc: !!acc(d, pc), ...(() => { const a = acc(d, pc), X = x - 14, Y = y(d); return a === '♭' ? { ad: `M${X - 3} ${Y - 15}V${Y + 4}C${X + 4} ${Y + 1} ${X + 5} ${Y - 5} ${X - 3} ${Y - 3}`, bd: '' } : a === '♯' ? { ad: `M${X - 2} ${Y - 11}V${Y + 9}M${X + 2} ${Y - 12}V${Y + 8}`, bd: `M${X - 5} ${Y - 2}L${X + 5} ${Y - 5}M${X - 5} ${Y + 4}L${X + 5} ${Y + 1}` } : { ad: '', bd: '' }; })() }));
         const led = []; notes.forEach((z) => { const d = (65 - z.y) / 3.5; if (d <= 0) led.push({ d: 'M' + (z.x - 10) + ' 65H' + (z.x + 10) }); if (d >= 12) for (let k = 12; k <= d; k += 2) led.push({ d: 'M' + (z.x - 10) + ' ' + y(k) + 'H' + (z.x + 10) }); });
         return { notes, led }; })(),
       allSeg: seg(''')
@@ -29,7 +29,7 @@ STAFF61 = (lambda: (
     + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
     + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
     + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="2"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
-    + f'<sc-if value="{{{{z.hasAcc}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="17" font-family="Noto Music, serif" fill="{INK}">{{{{z.acc}}}}</text></sc-if></sc-for>'
+    + f'<path d="{{{{z.ad}}}}" fill="none" stroke="{INK}" stroke-width="1.4" stroke-linecap="round"></path><path d="{{{{z.bd}}}}" fill="none" stroke="{INK}" stroke-width="2.6"></path></sc-for>'
     + f'<path d="M334 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
 INFO61 = (f'<button type="button" aria-label="About the interval" data-tip="About the interval" aria-expanded="{{{{aboutOn}}}}" onClick="{{{{toggleAbout}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace("22", "20")}</button>')
 ABOUT61 = (f'<sc-if value="{{{{aboutOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{toggleAbout}}}}" style="position: fixed; inset: 0; z-index: 19"></div><div role="dialog" aria-label="{{{{name}}}}" style="position: absolute; left: 0; top: 56px; z-index: 20; width: 300px; box-sizing: border-box; padding: 14px 16px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 10px">'
@@ -45,7 +45,7 @@ MUSIC61 = CARD(STAFF61 + '<div style="height: 12px"></div>' + HEAR61, '16px 16px
 SEG61 = SEG60.replace('aria-label="Scales and keys"', 'aria-label="Intervals"').replace('hint-placeholder-count="3"', 'hint-placeholder-count="2"')
 GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="13">'
           f'<button type="button" role="radio" aria-checked="{{{{i.on}}}}" onClick="{{{{i.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{i.fg}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">'
-          f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button></sc-for></div>')
+          f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; opacity: {{{{i.op}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button></sc-for></div>')
 # the floating bar, as Scales': the left is where the interval is played from, the centre Play with how, the right all of them
 FROMBTN = f'<button type="button" aria-label="From: {{{{fromL}}}}" aria-haspopup="dialog" onClick="{{{{openRoot}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05"><span style="font-size: 18px; font-weight: 700">{{{{fromL}}}}</span><span style="font-size: 11px; font-weight: 600; color: {SOFT}">From</span></button>'
 LISTI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M3 6h12M3 12h12M3 18h7"></path><path d="M17 13v8l5-4z" fill="currentColor"></path></svg>'
