@@ -149,10 +149,11 @@ export function ScreenHeader({
           ) : null}
         </div>
       ) : (
-        // The canvas's TOP: Back at the start, the title centred on the screen, the acts at the end.
-        <div className="grid min-h-11 grid-cols-[minmax(max-content,1fr)_minmax(0,auto)_minmax(max-content,1fr)] items-center">
-          <div className="-ms-1 flex justify-self-start print:hidden">{back}</div>
-          <div className="flex min-w-0 items-center justify-center gap-0.5 px-2">
+        // The canvas's TOP: Back at the start, the title centred on the screen, the acts at the end;
+        // on a laptop its LTOP, the title beside Back at the start.
+        <div className="grid min-h-11 grid-cols-[minmax(max-content,1fr)_minmax(0,auto)_minmax(max-content,1fr)] items-center lg:flex lg:gap-2">
+          <div className="-ms-1 flex justify-self-start empty:hidden print:hidden">{back}</div>
+          <div className="flex min-w-0 items-center justify-center gap-0.5 px-2 lg:justify-start lg:px-0">
             <h1
               {...pageHeading}
               className={cn(
@@ -176,7 +177,7 @@ export function ScreenHeader({
               )
             ) : null}
           </div>
-          <div className="-me-1.5 flex items-center justify-self-end print:hidden">
+          <div className="-me-1.5 flex items-center justify-self-end print:hidden lg:ms-auto">
             {tools}
             {settings}
             {more}

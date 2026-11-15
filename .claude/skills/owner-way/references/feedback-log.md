@@ -802,6 +802,10 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+
+- **Loop round 17, a laptop's bar as the kit's LTOP:** on a laptop a page's bar (not a place's large title) sets its
+  title 17 semibold beside Back at the start, its actions at the end, as every laptop board draws it; a phone keeps the
+  title centred (TOP) (2026-11-15).
 - **A toast is the canvas's TOASTS** (loop): ink, 14 round, 52 high, its line 15px in the sheet's colour, Undo in honey at its right; no ×, it goes by itself or by a swipe. By Night the toast is light and Undo the deep honey (`--toast-action`), since the board's honey on cream reads at under 2:1. It sits above every sheet and dialog (z-60).
 - **Loop round 24, a sheet's page has its Back in the header:** across from Done, beside the title, never a lone
   chevron row under the header nor a sticky "‹ Back" over a list; one way in every sheet with pages (the editor's
