@@ -70,6 +70,18 @@ for b in boards:
                             ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
                             ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
                             ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
+        # on a phone the floating bar steps aside while the learner reads down and returns on the first move up (owner,
+        # 2026-11-15: "the main focus of the page and the other things can be easily hide or show"; Apple HIG, Toolbars:
+        # hide bars on swipe to give the content the screen; Material 3, top app bar: hide on scroll, return on scroll up)
+        if 'header data-float' in h1 and 'data-barhide' not in h1 and 'Laptop' not in b:
+            h1 = h1.replace('</head>', '<style data-barhide>header[data-float] { transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 160ms cubic-bezier(0.22, 1, 0.36, 1) }'
+                            ' header[data-float][data-away] { transform: translateY(-64px); opacity: 0; pointer-events: none !important }'
+                            ' header[data-float][data-away] > * { pointer-events: none !important }'
+                            ' @media (prefers-reduced-motion: reduce) { header[data-float] { transition: none } }</style>'
+                            '<script data-barhide>(() => { const last = new WeakMap(); document.addEventListener("scroll", (e) => { const t = e.target;'
+                            ' if (!(t instanceof Element)) return; const h = t.previousElementSibling; if (!h || !h.matches("header[data-float]")) return;'
+                            ' const y = t.scrollTop, p = last.has(t) ? last.get(t) : 0; if (Math.abs(y - p) < 6) return; last.set(t, y);'
+                            ' if (y > p && y > 56) h.setAttribute("data-away", ""); else h.removeAttribute("data-away"); }, true); })();</script></head>', 1)
         if '<!--piano2d-->' in h1 and 'PIANO2D' not in h1:
             import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as _PS
             k = h1.rindex('</script>'); h1 = h1[:k] + '/*PIANO2D*/' + _PS.PIANO2D_JS + h1[k:]

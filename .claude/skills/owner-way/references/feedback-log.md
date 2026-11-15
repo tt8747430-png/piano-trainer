@@ -960,6 +960,12 @@ are reference only, but progressions are facts.
   back. No letter shortcut: a letter alone is the piano's. One implementation for all 61 laptop boards
   (`.scratch/r39/canvas/lapwin.py`, run by `index.py`).
 
+- **On a phone the floating bar steps aside while reading (owner, 2026-11-15, the adaptable UI):** scrolling down a
+  page past its first 56px slides the floating bar up and out (220ms, the app's one curve); the first move up brings
+  it back. Apple HIG, Toolbars (hide bars on swipe so the content has the screen) and Material 3's top app bar (hide
+  on scroll, return on scroll up). Under reduced motion it changes without moving. Every phone board with the floating
+  bar (59), by `index.py`; the floating actions at the foot stay.
+
 ## Actions and menus
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18
