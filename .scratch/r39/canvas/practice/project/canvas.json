@@ -461,15 +461,6 @@
       "is_interactive": true,
       "page": "player"
     },
-    "PlayerApp.dc.html": {
-      "x": 9010,
-      "y": 300,
-      "w": 450,
-      "h": 920,
-      "title": "The Player, earlier draft, phone",
-      "is_interactive": true,
-      "page": "player"
-    },
     "PlayerNight.dc.html": {
       "x": 0,
       "y": 1720,
@@ -575,15 +566,6 @@
       "w": 2143,
       "h": 1299,
       "title": "The Player: an exercise, laptop",
-      "is_interactive": true,
-      "page": "player"
-    },
-    "PlayerDesk.dc.html": {
-      "x": 20007,
-      "y": 3140,
-      "w": 2143,
-      "h": 1299,
-      "title": "The Player, earlier draft, laptop",
       "is_interactive": true,
       "page": "player"
     },
@@ -1607,7 +1589,7 @@
       "y": 0,
       "text": "Phone",
       "kind": "title1",
-      "maxW": 9460,
+      "maxW": 8930,
       "page": "player"
     },
     "player-phone-night": {
@@ -1623,7 +1605,7 @@
       "y": 2840,
       "text": "Laptop",
       "kind": "title1",
-      "maxW": 22150,
+      "maxW": 19927,
       "page": "player"
     },
     "player-laptop-night": {
@@ -1751,7 +1733,6 @@
     "PlayerKey.dc.html",
     "PlayerDone.dc.html",
     "PlayerDiagrams.dc.html",
-    "PlayerApp.dc.html",
     "PlayerNight.dc.html",
     "PlayerKeyboardNight.dc.html",
     "PlayerDoneNight.dc.html",
@@ -1764,7 +1745,6 @@
     "PlayChromaticLaptop.dc.html",
     "PlayProgressionLaptop.dc.html",
     "PlayExerciseLaptop.dc.html",
-    "PlayerDesk.dc.html",
     "PlayerLaptopNight.dc.html",
     "PlayerLaptopKeyboardNight.dc.html",
     "Main.dc.html",
