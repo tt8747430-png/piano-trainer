@@ -1,5 +1,14 @@
+import { Link } from '@tanstack/react-router'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectSort, useLibrary, type LibrarySort } from '@/entities/library'
+import {
+  FolderTile,
+  selectSort,
+  useFolderName,
+  useLibrary,
+  type LibrarySort,
+} from '@/entities/library'
 import { PieceLink, pieceChords, type Entry } from '@/entities/piece'
 import { FavouriteToggle } from '@/features/manage-library'
 import {
@@ -17,9 +26,10 @@ import { printedSymbol } from '@/shared/lib/music'
 import { LearnedBadge, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
 import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
-import { useCardLook } from '@/widgets/song-library'
+import { useCardLook, useHoldsLine } from '@/widgets/song-library'
+import type { FolderView } from '../model/library-view'
 import type { LibraryPage } from '../model/use-library-page'
-import { songActions } from './row-actions'
+import { folderActions, songActions } from './row-actions'
 
 /** A column a heading sorts by, and the library's sort it is. */
 const SORTED_BY: Partial<Record<'title' | 'key' | 'played', LibrarySort>> = {
@@ -130,6 +140,86 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
   )
 }
 
+/** A folder as a row of the table (the SongsLaptop board): its tile and name, what it holds where the composer stands. */
+function FolderTableRow({
+  view,
+  page,
+  span,
+}: {
+  view: FolderView
+  page: LibraryPage
+  /** The cells between its name and its More: the table's other columns. */
+  span: number
+}) {
+  const { t } = useTranslation(['songs', 'common'])
+  const nameOf = useFolderName()
+  const { folder, ...holds } = view
+  const name = nameOf(folder)
+  return (
+    <tr className="border-b border-hairline transition-colors hover:bg-muted/60">
+      <th scope="row" className={cn(CELL, 'w-1/2 max-w-0 font-normal')}>
+        <Link
+          to="/songs/folders/$folderId"
+          params={{ folderId: folder.id }}
+          className="flex min-w-0 items-center gap-3 rounded-control focus-visible:-outline-offset-3"
+        >
+          <FolderTile look={folder} large />
+          <span className="truncate font-semibold text-foreground">{name}</span>
+        </Link>
+      </th>
+      <td colSpan={span} className={cn(CELL, 'max-w-0 truncate text-sm text-muted-foreground')}>
+        {useHoldsLine(holds)}
+      </td>
+      <td className={cn(CELL, 'w-0 pe-0')}>
+        <span className="flex items-center justify-end">
+          <RowMore
+            label={t('common:library.moreOf', { name })}
+            actions={menuOf(folderActions(folder, name, page, t))}
+          />
+        </span>
+      </td>
+    </tr>
+  )
+}
+
+/** A group's head in the table, folding what follows: its name in 16 bold, its count soft (the board's). */
+function GroupHead({
+  title,
+  count,
+  open,
+  onToggle,
+  span,
+}: {
+  title: string
+  count: number
+  open: boolean
+  onToggle: () => void
+  span: number
+}) {
+  return (
+    <tr>
+      <th scope="colgroup" colSpan={span} className="pt-2 text-start font-normal">
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={onToggle}
+          className="flex h-11 items-center gap-1.5 rounded-control px-1 text-foreground hover:bg-muted"
+        >
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'size-4 text-muted-foreground transition-transform duration-200',
+              !open && '-rotate-90',
+            )}
+          />
+          <span className="text-base font-bold">{title}</span>
+          <span className="text-sm text-muted-foreground">{count}</span>
+        </button>
+      </th>
+    </tr>
+  )
+}
+
 /**
  * A place's songs as a table, the laptop's right pane (canvas 133, Apple Music's songs list): each
  * song's small cover and title, its composer and key, its progress where any song
@@ -137,8 +227,24 @@ function SongTableRow({ entry, page, held }: { entry: Entry; page: LibraryPage; 
  * place's Card style shows them. A heading sorts by its column; the sorted one again returns to the
  * learner's own order. Narrower than 48rem, the pane leaves the chords out.
  */
-export function SongTable({ entries, page }: { entries: readonly Entry[]; page: LibraryPage }) {
+export function SongTable({
+  entries,
+  page,
+  folders = [],
+}: {
+  entries: readonly Entry[]
+  page: LibraryPage
+  /** The place's folders, a folding group of the table's rows over its songs' (the SongsLaptop board). */
+  folders?: readonly FolderView[]
+}) {
   const { t } = useTranslation(['songs', 'common', 'music'])
+  const [shut, setShut] = useState<ReadonlySet<'folders' | 'songs'>>(new Set())
+  const toggle = (key: 'folders' | 'songs') =>
+    setShut((was) => {
+      const next = new Set(was)
+      if (!next.delete(key)) next.add(key)
+      return next
+    })
   const { show } = useCardLook()
   const learnedSteps = useProgress(selectLearned)
   const practised = useProgress(selectPractised)
@@ -148,6 +254,9 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
     played: entries.some((entry) => practised[entry.id] !== undefined),
     underway: entries.some((entry) => stoppedAt(plays[entry.id]) !== undefined),
   }
+  const progress = show.progress && (held.learned || held.played || held.underway)
+  // Title, composer and key, then the optional ones, then the actions.
+  const columns = 3 + (show.chords ? 1 : 0) + (progress ? 1 : 0) + (held.played ? 1 : 0)
   return (
     <div className="@container">
       <table className="w-full border-collapse">
@@ -174,10 +283,37 @@ export function SongTable({ entries, page }: { entries: readonly Entry[]; page: 
             </th>
           </tr>
         </thead>
+        {folders.length > 0 ? (
+          <tbody>
+            <GroupHead
+              title={t('songs:folder.list')}
+              count={folders.length}
+              open={!shut.has('folders')}
+              onToggle={() => toggle('folders')}
+              span={columns}
+            />
+            {shut.has('folders')
+              ? null
+              : folders.map((view) => (
+                  <FolderTableRow key={view.folder.id} view={view} page={page} span={columns - 2} />
+                ))}
+          </tbody>
+        ) : null}
         <tbody>
-          {entries.map((entry) => (
-            <SongTableRow key={entry.id} entry={entry} page={page} held={held} />
-          ))}
+          {folders.length > 0 ? (
+            <GroupHead
+              title={t('songs:table.songs')}
+              count={entries.length}
+              open={!shut.has('songs')}
+              onToggle={() => toggle('songs')}
+              span={columns}
+            />
+          ) : null}
+          {shut.has('songs')
+            ? null
+            : entries.map((entry) => (
+                <SongTableRow key={entry.id} entry={entry} page={page} held={held} />
+              ))}
         </tbody>
       </table>
     </div>

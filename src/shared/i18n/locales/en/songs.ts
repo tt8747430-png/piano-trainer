@@ -304,6 +304,7 @@ export const songs = {
   // The laptop's library tree (R30 S2), Apple Music's sidebar.
   // The laptop's table of songs (R30 S2): its headings.
   table: {
+    songs: 'Songs',
     title: 'Title',
     chords: 'Chords',
     composerKey: 'Composer and key',

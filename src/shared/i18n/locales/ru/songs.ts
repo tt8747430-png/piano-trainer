@@ -292,6 +292,7 @@ export const songs: LocaleResources['songs'] = {
     description: 'Создайте песню или восстановите элементы из архива.',
   },
   table: {
+    songs: 'Песни',
     title: 'Название',
     chords: 'Аккорды',
     composerKey: 'Автор и тональность',

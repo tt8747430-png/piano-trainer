@@ -77,7 +77,27 @@ export function LibraryBrowse({
     <CardLookProvider value={look ?? DEFAULT_CARD_LOOK}>
       <div className="flex flex-col gap-6">
         <FilteredNotice shown={view.shown} hidden={view.hidden} onClear={onClear} />
-        {view.folders.length > 0 || moreFolders ? (
+        {asTable ? (
+          // A laptop's table: the place's folders a folding group of its rows, over its songs (the
+          // SongsLaptop board), in one card in the place's style where it has one (R32-C).
+          look ? (
+            <div {...styled}>
+              <div className="card overflow-hidden px-2">
+                <SongTable
+                  entries={view.groups.flatMap((group) => group.entries)}
+                  folders={view.folders}
+                  page={page}
+                />
+              </div>
+            </div>
+          ) : (
+            <SongTable
+              entries={view.groups.flatMap((group) => group.entries)}
+              folders={view.folders}
+              page={page}
+            />
+          )
+        ) : view.folders.length > 0 || moreFolders ? (
           headed ? (
             // Headed beside Continue and the songs, a phone's Home's sections (canvas 133), folding.
             <FoldSection
@@ -89,18 +109,6 @@ export function LibraryBrowse({
             </FoldSection>
           ) : (
             <section aria-label={t('folder.list')}>{folderRows}</section>
-          )
-        ) : null}
-        {asTable ? (
-          // List on a laptop is the table, inside one card in the place's style (R32-C).
-          look ? (
-            <div {...styled}>
-              <div className="card overflow-hidden px-2">
-                <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
-              </div>
-            </div>
-          ) : (
-            <SongTable entries={view.groups.flatMap((group) => group.entries)} page={page} />
           )
         ) : null}
         {(asTable ? [] : view.groups).map((group) => {

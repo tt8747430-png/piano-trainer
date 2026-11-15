@@ -117,9 +117,9 @@ export function sortSongs(
  * place holds, its folders' folders too: the songs that match under their folders' paths from it
  * (its own last, under its name), and the folders whose names match the search.
  *
- * Beside the library's tree (`tree`, a laptop's two panes) the folders are the tree's: Home lists every
- * song in one list (All songs: Home's own first, then the folders'), a folder its own songs, each
- * narrowed by the filters in one list.
+ * Beside the library's tree (`tree`, a laptop's two panes) the place's folders head its table as on a
+ * phone (the SongsLaptop board's Folders), then Home lists every song in one list (Home's own first,
+ * then the folders'), a folder its own songs, each narrowed by the filters in one list.
  */
 export function libraryView(
   layout: LibraryLayout,
@@ -225,13 +225,11 @@ export function libraryView(
   })
   const searched = filter.q.trim() !== ''
   return {
-    folders: (tree
-      ? []
-      : filtering
-        ? searched
-          ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
-          : []
-        : byName(childFolders(layout.folders, place))
+    folders: (filtering
+      ? searched
+        ? byName(nested).filter((folder) => matchesQuery([lookups.folderName(folder)], filter.q))
+        : []
+      : byName(childFolders(layout.folders, place))
     ).map(folderView),
     here: ((folder) => (folder ? folderView(folder) : null))(
       place === null ? undefined : layout.folders.find((each) => each.id === place),
