@@ -907,6 +907,11 @@ are reference only, but progressions are facts.
 
 ## Actions and menus
 
+- **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18
+  bold sans at the start, its line 15 on 1.45; Cancel (sand) and the act as two equal 44 pills, a loss filled in
+  crimson; no band under them. One primitive, so ConfirmDialog, the deletion gate and every ask follow
+  (2026-11-15).
+
 - **A New sheet opens with its name focused (loop round 18):** New song, a New folder, a New group and every `NewSheet` put the caret in their name field as they open, the phone's keyboard up, as iOS's New Folder does; the learner types at once instead of tapping the field first.
 
 - **One way to each action:** "why are there duplicate buttons and actions".

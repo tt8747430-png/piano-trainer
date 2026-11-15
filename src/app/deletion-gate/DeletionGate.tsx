@@ -4,6 +4,7 @@ import { useLocale } from '@/shared/i18n'
 import { useAccount } from '@/shared/lib/account'
 import {
   AlertDialog,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -49,9 +50,9 @@ export function DeletionGate() {
           <AlertDialogDescription>{t('deletionGate.body', { date })}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button variant="outline" onClick={() => void auth.signOut()}>
+          <AlertDialogCancel onClick={() => void auth.signOut()}>
             {t('deletionGate.signOut')}
-          </Button>
+          </AlertDialogCancel>
           <Button onClick={() => void keep()}>{t('deletionGate.keep')}</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
