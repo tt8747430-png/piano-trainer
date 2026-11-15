@@ -91,7 +91,7 @@ export function ToolPage({
       />
       {keys}
       {side || start ? (
-        <div className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
+        <div className="mx-auto grid w-full max-w-6xl flex-1 lg:mx-0 lg:max-w-none grid-cols-[minmax(0,1fr)] items-start gap-6 pb-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
           <section
             aria-label={title}
             className={
