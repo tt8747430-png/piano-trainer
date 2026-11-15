@@ -69,9 +69,8 @@ export function PaletteHint({ children }: { children: ReactNode }) {
     <p
       className={cn(
         'text-sm text-muted-foreground',
-        bar
-          ? 'flex min-h-11 items-center px-2'
-          : 'rounded-control border border-dashed border-hairline p-3',
+        // Under its title a quiet line, as Flat greys what cannot act; no box repeated down the palette.
+        bar ? 'flex min-h-11 items-center px-2' : 'text-pretty',
       )}
     >
       {children}
