@@ -40,7 +40,9 @@ NEWJS = r'''newOn: st.sheet === 'new', pickOn: st.sheet === 'pick', openNew: () 
       createL: st.nk === 'Course' ? 'Create course' : 'Create lesson', create: () => set({ sheet: null, toast: st.nk === 'Course' ? 'Course created' : 'Lesson created' }),'''
 LEARN_JS = js(PLACES_PRE + r'''
     const view = st.view ?? 'Lessons', lv = st.lv ?? 0, own = lv === 4, editing = !!st.editing, gone = st.gone ?? {};
-    const L = LEVELS[Math.min(lv, 3)]; let idx = 0;
+    // the States box: a first visit (nothing learned yet) and a level finished
+    const demo = st.demo ?? null, LV = demo === 'fresh' ? LEVELS.map((x) => ({ ...x, done: 0 })) : demo === 'finished' ? LEVELS.map((x, i) => (i === 0 ? { ...x, done: x.n } : x)) : LEVELS;
+    const L = LV[Math.min(lv, 3)]; let idx = 0;
     const chapters = L.ch.map((c, ci) => { const rows = c.rows.filter((r) => !gone[r.t]).map((r, ri) => { const i = idx++; const done = i < L.done, next = i === L.done;
         return { ...r, done, next, todo: !done && !next && !r.check, tScale: !done && !next && !!r.check && !!r.scale, tChord: !done && !next && !!r.check && !r.scale, num: String(i + 1), first: i === 0, last: i === L.n - 1,
           tileBg: done ? '#DCE9D6' : '#FEFDFB', tileRing: next ? '0 0 0 2.5px #EDC684' : (done ? 'none' : '0 0 0 1px #DAD1C8'), tileFg: done ? '#2F5A35' : '#685E56', rad: r.check ? '11px' : '22px',
@@ -54,11 +56,11 @@ LEARN_JS = js(PLACES_PRE + r'''
       wkL: wk + ' weeks', fewerW: () => set({ wk: Math.max(1, wk - 1) }), moreW: () => set({ wk: wk + 1 }), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false }), addChapter: () => set({ toast: 'Chapter added: Chapter 6' }), status: 'Saved · not published', toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), isLessons: view === 'Lessons', isCourses: view === 'Courses', toLessons: () => set({ view: 'Lessons' }), toCourses: () => set({ view: 'Courses' }),
       lessonsInk: view === 'Lessons' ? '#332921' : '#DAD1C8', coursesInk: view === 'Courses' ? '#332921' : '#DAD1C8',
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'], own ? 'Your lessons' : L.chip, (l) => set({ lv: ['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'].indexOf(l) })),
-      tree: LEVELS.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
+      tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
-      nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: 'Continue · ' + L.t,
+      nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
-      levelsHome: LEVELS.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t + ' · ' + x.n + ' lessons', got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
+      levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t + ' · ' + x.n + ' lessons', got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
       coursesHome: COURSES.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h, now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
       courses: COURSES.map(([h, cs]) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: 'Removed: ' + t }); }, done: k === 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: k === 'done' ? '#DCE9D6' : '#F6E7C8', ring: k === 'now' ? '0 0 0 2.5px #EDC684' : 'none' })) })) };''')
@@ -158,9 +160,9 @@ MOREL = GROUP(('action', 'Edit', 'editOn'), bg=SHEET)
 MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCourse'), bg=SHEET)
 
 # Learn: the overview
-lph = (f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 14px">'
+lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 14px">'
        f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
-llm = (f'{LTITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 18px">'
+llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 18px">'
        f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{CONT}{H2("Levels")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 14px">{OWNGROUP(True)}</div></div>'
        f'{H2("Courses", SEEALL("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
@@ -168,12 +170,12 @@ detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 # A level: its line of lessons
 LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 4px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{levelSub}}}}</span>{METER}'
           f'<p contenteditable="{{{{editing}}}}" style="margin: 4px 0 0; outline: none; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p></div>')
-vph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("{{jt}}", IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
+vph = (SHOWSTATES() + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("{{jt}}", IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 48px; display: flex; flex-direction: column; gap: 16px">{LVHEAD}{PATHF(False)}</main>{LTOAST.replace("bottom: 112px", "bottom: 40px")}')
 LVSIDE = (f'{CONT}{CAPS("Levels")}<div style="display: flex; flex-direction: column; gap: 2px"><sc-for list="{{{{tree}}}}" as="p" hint-placeholder-count="5"><button type="button" onClick="{{{{p.pick}}}}" style="min-height: 52px; border: 0; border-radius: 10px; background: {{{{p.bg}}}}; color: {INK}; text-align: left; padding: 6px 12px; font: inherit; display: flex; align-items: center; gap: 8px"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: {{{{p.fw}}}}">{{{{p.l}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{p.t}}}}</span></span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{p.n}}}}</span></button></sc-for></div>')
 LBACK = lambda back, label, title, right: (f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 44px"><a href="{back}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{CHEV_L}</a>'
                                            f'<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>')
-vlm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "{{jt}}", IB("More", MORE, "openMore"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
+vlm = (SHOWSTATES() + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "{{jt}}", IB("More", MORE, "openMore"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 48px; align-items: start">'
        f'<div style="display: flex; flex-direction: column; gap: 16px">{LVHEAD}{PATHF(True)}</div><div style="position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px">{LVSIDE}</div></main>'
        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
