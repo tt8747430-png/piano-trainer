@@ -10,16 +10,16 @@ import re
 _PANEL = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path></svg>'
 _FOCUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>'
 _EXIT = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"></path></svg>'
-_HEAD_OLD = '<div style="height: 44px; display: flex; align-items: center; padding: 0 10px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>'
-_BTN = 'width: 40px; height: 40px; flex: none; border: 0; border-radius: 10px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center'
-_HEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 0 0 10px">'
+_LAPHEAD_OLD = '<div style="height: 44px; display: flex; align-items: center; padding: 0 10px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>'
+_LAPBTN = 'width: 40px; height: 40px; flex: none; border: 0; border-radius: 10px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center'
+_LAPHEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 0 0 10px">'
          '<span data-sidetext style="flex: 1; min-width: 0; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px; white-space: nowrap">Piano Trainer</span>'
-         '<button type="button" data-lapbtn aria-label="{{lapSideL}}" data-tip="{{lapSideL}}" aria-expanded="{{lapSideOn}}" onClick="{{lapSideT}}" style="' + _BTN + '">' + _PANEL + '</button>'
-         '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _BTN + '">' + _FOCUS + '</button></div>')
+         '<button type="button" data-lapbtn aria-label="{{lapSideL}}" data-tip="{{lapSideL}}" aria-expanded="{{lapSideOn}}" onClick="{{lapSideT}}" style="' + _LAPBTN + '">' + _PANEL + '</button>'
+         '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div>')
 # the runtime writes each style back as the browser serialises it (minmax(0px, …))
-_COLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr) 380px', 'minmax(0px, 1fr) 440px', 'minmax(0px, 3fr) minmax(0px, 2fr)']
-_FIRST = ['240px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
-_CSS = ('<style data-lapcss>'
+_LAPCOLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr) 380px', 'minmax(0px, 1fr) 440px', 'minmax(0px, 3fr) minmax(0px, 2fr)']
+_LAPFIRST = ['240px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
+_LAPCSS = ('<style data-lapcss>'
         '[data-lapwin][data-side="off"] { grid-template-columns: 76px minmax(0, 1fr) !important }'
         ' [data-side="off"] > nav { padding-left: 14px !important; padding-right: 14px !important; align-items: center }'
         ' [data-side="off"] [data-sidetext], [data-side="off"] > nav > label > span, [data-side="off"] > nav > label > kbd, [data-side="off"] > nav a > span:not([aria-hidden]) { display: none !important }'
@@ -33,11 +33,11 @@ _CSS = ('<style data-lapcss>'
         ' [data-focus="on"] > nav, [data-focus="on"] aside.nos { display: none !important }'
         ' [data-lapwin][data-focus="on"] > [data-focusexit] { display: flex }'
         + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s"] { grid-template-columns: minmax(0, 1fr) !important }'
-                  ' [data-focus="on"] [style*="grid-template-columns: %s"] > :last-child { display: none !important }' % (c, c) for c in _COLS)
+                  ' [data-focus="on"] [style*="grid-template-columns: %s"] > :last-child { display: none !important }' % (c, c) for c in _LAPCOLS)
         + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s"] { grid-template-columns: minmax(0, 1fr) !important }'
-                  ' [data-focus="on"] [style*="grid-template-columns: %s"] > :first-child { display: none !important }' % (c, c) for c in _FIRST)
+                  ' [data-focus="on"] [style*="grid-template-columns: %s"] > :first-child { display: none !important }' % (c, c) for c in _LAPFIRST)
         + '</style>')
-_JS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n'
+_LAPJS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n'
        '  const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);\n'
        '  const side = st.lapSide || "on", focus = st.lapFocus || "off";\n'
        '  if (!window.__lapEsc) { window.__lapEsc = true; document.addEventListener("keydown", (e) => { if (e.key === "Escape" && window.__lapExit) window.__lapExit(); }); }\n'
@@ -49,7 +49,7 @@ _JS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.render
 
 
 def lapwin(h, night):
-    if 'data-lapwin' in h or _HEAD_OLD not in h:
+    if 'data-lapwin' in h or _LAPHEAD_OLD not in h:
         return h
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)
     if not m:
@@ -60,6 +60,6 @@ def lapwin(h, night):
              'padding: 0 18px 0 14px; border: 0; border-radius: 22px; %s; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); '
              'align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600">%sExit focus</button>' % (glass, _EXIT))
     h = h[:m.start()] + '<div ' + m.group(1) + ' data-lapwin data-side="{{lapSide}}" data-focus="{{lapFocus}}">' + exitb + h[m.end():]
-    h = h.replace(_HEAD_OLD, _HEAD, 1).replace('</head>', _CSS + '</head>', 1)
+    h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
     k = h.rindex('</script>')
-    return h[:k] + _JS + h[k:]
+    return h[:k] + _LAPJS + h[k:]

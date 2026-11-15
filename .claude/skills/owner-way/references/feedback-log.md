@@ -966,6 +966,12 @@ are reference only, but progressions are facts.
   on scroll, return on scroll up). Under reduced motion it changes without moving. Every phone board with the floating
   bar (59), by `index.py`; the floating actions at the foot stay.
 
+- **Sections fold on the overview pages (owner, 2026-11-15, the adaptable UI):** on Learn, Practice and Profile,
+  phone and laptop, each section's heading is a disclosure (Apple HIG, Disclosure controls; Material 3's expandable
+  list sections): a 44px button, the title and a chevron that points down when open and to the side when folded. The
+  content goes, the heading stays, so the page becomes a short list of what can be opened again; See all stays beside
+  it. `.scratch/r39/canvas/folds.py`, run by `index.py`.
+
 ## Actions and menus
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18
