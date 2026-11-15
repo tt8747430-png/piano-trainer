@@ -31,7 +31,7 @@ export function TrashPage() {
           <div className="flex flex-col gap-3">
             <Button
               variant="bar"
-              className="self-start text-destructive"
+              className="self-start h-11 rounded-full border-0 bg-muted px-5 text-base font-bold hover:bg-muted/80 text-destructive"
               onClick={() => setDeleting('all')}
             >
               {t('trash.emptyAll')}
@@ -51,7 +51,7 @@ export function TrashPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="rounded-pill"
+                          className="rounded-pill text-muted-foreground"
                           aria-label={t('library.more')}
                           title={t('library.more')}
                         />

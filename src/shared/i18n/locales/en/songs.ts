@@ -144,19 +144,6 @@ export const songs = {
   },
   library: {
     showAll: 'Show all {{count}}',
-    // Archive asks first (R17), then says it with Undo.
-    archiving: {
-      one: 'Archive “{{title}}”?',
-      folder: 'Archive the folder “{{name}}”?',
-      many: 'Archive {{count}} items?',
-      body: 'You can restore them from the Archive.',
-    },
-    // Archive in a folder (D10): hidden from it, brought back from its Archived (n).
-    hiding: {
-      one: 'Hide “{{title}}” from this folder?',
-      many: 'Hide {{count}} songs from this folder?',
-      body: 'You can restore it from Archived at any time.',
-    },
     home: 'Home',
     play: 'Play',
     editScore: 'Edit score',

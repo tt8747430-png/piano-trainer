@@ -211,8 +211,8 @@ export function useLibraryPage(
     may,
     mayOnFolder,
     mayDelete,
-    /** Songs archived, asked first: in a folder, hidden from it (D10), brought back from its Archived. */
-    archive: (ids: readonly PieceId[]) => acts.archive(ids, folder !== null),
+    /** Songs archived at once, with Undo: in a folder, brought back from its Archived (D10). */
+    archive: (ids: readonly PieceId[]) => acts.archive(ids),
     /** The learner's own songs deleted: into the Trash, with Undo (R34). */
     trash: (ids: readonly PieceId[]) => acts.trash(ids),
     setSort: (next: LibrarySort) => setSort(store, next),
@@ -264,7 +264,7 @@ export function useLibraryPage(
           what: t('select.count', { count: chosenSongs.length }),
         }),
       archive: () => {
-        acts.archiveChosen(chosenSongs, chosenFolders, folder !== null)
+        acts.archiveChosen(chosenSongs, chosenFolders)
         exit()
       },
       /** What a row's face carries: every row chosen in sight where it is chosen, else itself. */
@@ -287,8 +287,7 @@ export function useLibraryPage(
         if (into) acts.move(moving, into.id)
         else if ('zone' in target && target.zone === 'out')
           acts.move(moving, folder?.parent ?? null)
-        else if ('zone' in target && target.zone === 'archive')
-          acts.archiveChosen(songs, folders, folder !== null)
+        else if ('zone' in target && target.zone === 'archive') acts.archiveChosen(songs, folders)
         else return
         exit()
       },

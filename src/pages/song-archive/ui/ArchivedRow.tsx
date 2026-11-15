@@ -67,7 +67,7 @@ export function ArchivedRow({
           restore ? t('folder.unarchiveNamed', { name }) : t('archive.restoreNamed', { name })
         }
         onClick={onRestore}
-        className="shrink-0 px-3 text-[0.9375rem]"
+        className="h-11 shrink-0 rounded-full bg-muted px-3 text-sm font-semibold hover:bg-muted/80"
       >
         {restore ?? t('library.restore')}
       </Button>

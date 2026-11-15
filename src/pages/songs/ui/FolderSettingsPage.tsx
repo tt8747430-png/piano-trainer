@@ -111,8 +111,9 @@ function FolderSettings({ folder }: { folder: ShelvedFolder }) {
               title={t('folder.archive')}
               icon={Archive}
               paint="lilac"
-              onClick={async () => {
-                if (await acts.archiveFolder(folder)) void leave()
+              onClick={() => {
+                acts.archiveFolder(folder)
+                void leave()
               }}
             />
           ) : null}

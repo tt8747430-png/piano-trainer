@@ -144,17 +144,6 @@ export const songs: LocaleResources['songs'] = {
   },
   library: {
     showAll: 'Показать все {{count}}',
-    archiving: {
-      one: 'Убрать «{{title}}» в архив?',
-      folder: 'Убрать папку «{{name}}» в архив?',
-      many: 'Убрать в архив: {{count}}?',
-      body: 'Их можно вернуть из архива.',
-    },
-    hiding: {
-      one: 'Скрыть «{{title}}» из этой папки?',
-      many: 'Скрыть песни из этой папки: {{count}}?',
-      body: 'Их можно вернуть из раздела «В архиве».',
-    },
     home: 'Главная',
     play: 'Играть',
     editScore: 'Редактировать ноты',
