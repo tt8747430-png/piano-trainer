@@ -18,8 +18,8 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
   const id = useId()
   const courses = coursesOn(shelf)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-1.5">
+      <h2 id={id} className="px-1 font-sans text-sm font-semibold text-muted-foreground">
         {t(`shelves.${shelf}`)}
       </h2>
       <ul className="flex flex-col divide-y divide-hairline overflow-hidden card">
@@ -44,7 +44,7 @@ export function CourseShelves() {
   const current = next && 'course' in next ? next.course.id : undefined
   return (
     // On a laptop the shelves stand two a row across the page's width, never one long column.
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8 lg:gap-y-5">
       {SHELVES.map((shelf) => (
         <ShelfSection key={shelf} shelf={shelf} current={current} />
       ))}
