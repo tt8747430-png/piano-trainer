@@ -52,7 +52,8 @@ export function FloatingPiece({
   ...props
 }: {
   label: string
-  caption: string
+  /** Its word under the picture; none where the picture says it alone (Scales' Hands, its board). */
+  caption?: string
   round?: boolean
   children: ReactNode
 } & Omit<ComponentProps<typeof Button>, 'children' | 'aria-label'>) {
@@ -65,7 +66,7 @@ export function FloatingPiece({
       {...props}
     >
       <span className="flex h-5.5 items-center">{children}</span>
-      <span className={CAPTION}>{caption}</span>
+      {caption ? <span className={CAPTION}>{caption}</span> : null}
     </Button>
   )
 }

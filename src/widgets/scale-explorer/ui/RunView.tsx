@@ -250,7 +250,6 @@ export function RunView({
               render={
                 <FloatingPiece
                   label={`${t('practice:hands')}: ${t(`common:hands.${hands}`)}`}
-                  caption={t('practice:hands')}
                   round
                 >
                   <HandsPicture hands={hands} />
