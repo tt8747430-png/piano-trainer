@@ -342,6 +342,7 @@ owner's, typos fixed.
 
 ## Practice
 
+- **A scale's keys carry their names alone** (loop, the Scales board): the tonic rose, the rest sand, each key its note's name (G A B C D E F♯); no degree numerals and no fingers on the keys, which the staff carries. One `scaleShown`, so Scales and keys, a key's view and the examples change together.
 - **Chords' practise rows show their music, one chord or several** (loop, canvas 193): Inversions shows the rotations (C E G B · E G B C · …) and Arpeggio its notes (C E G B C …), as the app does; the board's "Root position, 1st, 2nd" and "Two octaves" were words where the music fits.
 - **Loop round 21, the Chord player's bar across the gutter:** Style · Key · Tempo · Repeats and Play span the
   phone's width as the board's DOCK (560 at most), not hugging their contents (2026-11-15).

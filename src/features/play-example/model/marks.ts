@@ -18,15 +18,15 @@ export const chordShown = (placed: readonly PlacedTone[]): ShownKeys => ({
 })
 
 /**
- * A scale's keys: the tonic in its own colour, every note with its degree; no finger numbers on the
- * keys (R34): the staff and the hand drawings carry them.
+ * A scale's keys, as the Scales board draws them: the tonic in its own colour, every note named, no
+ * degree and no finger on the keys (R34): the staff carries the fingers.
  */
 export const scaleShown = (placed: readonly PlacedTone[]): ShownKeys => ({
   keys: placed.map((key) => key.midi),
   marks: new Map(
     placed.map((key) => [
       key.midi,
-      toneMark(key.tone, key.tone.role === 'root' ? 'tonic' : 'scale'),
+      { tone: key.tone.role === 'root' ? 'tonic' : 'scale', label: noteName(key.tone.note) },
     ]),
   ),
 })
