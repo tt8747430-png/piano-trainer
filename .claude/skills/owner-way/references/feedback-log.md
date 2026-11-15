@@ -844,6 +844,12 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+
+- **A screen that cannot open says why, as the board's route states (loop 24, AppLayers):** one `RouteState` for
+  Page not found and Something went wrong: a 72 round mark (? on sand, ! on a crimson wash, the offline mark on
+  honey), the title 22 bold sans, a 16 line saying why ("The link may be old, or the song or lesson was deleted.";
+  "The screen could not open. Reloading usually fixes it…"; offline, "This screen opens once you’re back online"),
+  then the ways on 48 tall (Back, Reload), centred in the screen (2026-11-15).
 - **A toast is the canvas's TOASTS** (loop): ink, 14 round, 52 high, its line 15px in the sheet's colour, Undo in honey at its right; no ×, it goes by itself or by a swipe. By Night the toast is light and Undo the deep honey (`--toast-action`), since the board's honey on cream reads at under 2:1. It sits above every sheet and dialog (z-60).
 - **Loop round 24, a sheet's page has its Back in the header:** across from Done, beside the title, never a lone
   chevron row under the header nor a sticky "‹ Back" over a list; one way in every sheet with pages (the editor's

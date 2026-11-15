@@ -21,10 +21,13 @@ export const common = {
   errors: {
     title: 'Something went wrong',
     offline: 'You’re offline. This screen opens once you’re back online.',
+    failed:
+      'The screen could not open. Reloading usually fixes it; the error has been sent so it can be fixed.',
     reload: 'Reload',
   },
   notFound: {
     title: 'Page not found',
+    line: 'The link may be old, or the song or lesson was deleted.',
     toSongs: 'Go to Songs',
     toLearn: 'Go to Learn',
     toScales: 'Go to Scales and keys',

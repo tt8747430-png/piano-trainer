@@ -3,15 +3,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useUp } from '@/shared/lib'
 import { useReportError } from '@/shared/lib/error-reports'
-import { usePageHeading } from '@/shared/ui'
+import { RouteState } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 
 type RouteErrorProps = Partial<ErrorComponentProps> & { reload?: () => void }
 
@@ -29,25 +22,18 @@ export function RouteError({ error, reload = () => window.location.reload() }: R
     if (error) report(error, path)
   }, [error, path, report])
   const back = useUp()
-  const heading = usePageHeading<HTMLHeadingElement>(t('errors.title'))
+  const online = navigator.onLine
   return (
-    <Empty role="alert" className="min-h-96">
-      <EmptyHeader>
-        <EmptyTitle>
-          <h1 {...heading} className="text-3xl outline-none">
-            {t('errors.title')}
-          </h1>
-        </EmptyTitle>
-        {navigator.onLine ? null : (
-          <EmptyDescription className="text-base">{t('errors.offline')}</EmptyDescription>
-        )}
-      </EmptyHeader>
-      <EmptyContent className="flex-row justify-center">
-        <Button onClick={reload}>{t('errors.reload')}</Button>
-        <Button variant="soft" onClick={back}>
-          {t('back')}
-        </Button>
-      </EmptyContent>
-    </Empty>
+    <RouteState
+      alert
+      mark={online ? 'failed' : 'offline'}
+      title={t('errors.title')}
+      line={online ? t('errors.failed') : t('errors.offline')}
+    >
+      <Button variant="soft" onClick={back}>
+        {t('back')}
+      </Button>
+      <Button onClick={reload}>{t('errors.reload')}</Button>
+    </RouteState>
   )
 }
