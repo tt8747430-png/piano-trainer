@@ -43,7 +43,13 @@ export function LibrarySearch({
   screen,
   names,
   mine,
+  at,
 }: {
+  /**
+   * Where it stands: a phone's own row, the box with its chips under it; a laptop's bar, the box
+   * alone, 288 wide before New (the ProgressionsLaptop board); under a laptop's bar, the chips alone.
+   */
+  at: 'row' | 'bar' | 'under'
   kind: LibraryKind
   view: PracticeLibraryView
   shown: LibraryShown
@@ -99,82 +105,86 @@ export function LibrarySearch({
   ]
   const count = libraryFiltersOn(view, groups, groupWord)
   const kept = shown.filtering ? shown.items.length : shown.scope
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2">
-        <div className="min-w-0 flex-1">
-          <SearchField
-            value={view.q}
-            onChange={(q) => set({ q })}
-            label={t(`practice:library.kinds.${kind}.search`)}
-            hint={t('practice:library.searchHint')}
-            screen={screen}
-          />
-        </div>
-        <FilterSheet
-          sorted={!wide}
-          count={count}
-          foot={(close) => (
-            <FilterFoot
-              on={count > 0}
-              onClear={() =>
-                set(styles && count > 0 ? { stage: 'any', place: ALL } : { stage: 'any' })
-              }
-              show={
-                kept > 0
-                  ? t('practice:library.show', { count: kept })
-                  : t('practice:library.showNone')
-              }
-              onShow={close}
-            />
-          )}
-        >
-          {wide ? null : (
-            <FilterGroup title={t('practice:library.sortBy')}>
-              {sorts.map((sort) => (
-                <FilterChoice key={sort} pressed={view.sort === sort} onPress={() => set({ sort })}>
-                  {sortName(sort)}
-                </FilterChoice>
-              ))}
-            </FilterGroup>
-          )}
-          {levels ? (
-            <FilterGroup title={t('practice:library.table.level')}>
-              <FilterChoice pressed={view.stage === 'any'} onPress={() => set({ stage: 'any' })}>
-                {t('practice:library.anyLevel')}
-              </FilterChoice>
-              {stages.map((stage) => (
-                <FilterChoice
-                  key={stage}
-                  pressed={view.stage === stage}
-                  onPress={() => set({ stage })}
-                >
-                  {t(`common:stage.${stage}`)}
-                </FilterChoice>
-              ))}
-            </FilterGroup>
-          ) : null}
-          {styles ? (
-            <FilterGroup title={t('practice:library.table.style')}>
-              <FilterChoice
-                pressed={!groups.some((group) => group.id === view.place)}
-                onPress={() => set({ place: ALL })}
-              >
-                {t('practice:library.anyStyle')}
-              </FilterChoice>
-              {groups.map((group) => (
-                <FilterChoice
-                  key={group.id}
-                  pressed={view.place === group.id}
-                  onPress={() => set({ place: group.id })}
-                >
-                  {group.name}
-                </FilterChoice>
-              ))}
-            </FilterGroup>
-          ) : null}
-        </FilterSheet>
+  const box = (
+    <div className="flex items-center gap-2">
+      <div className={at === 'bar' ? 'w-72' : 'min-w-0 flex-1'}>
+        <SearchField
+          value={view.q}
+          onChange={(q) => set({ q })}
+          label={t(`practice:library.kinds.${kind}.search`)}
+          hint={t('practice:library.searchHint')}
+          screen={screen}
+        />
       </div>
+      <FilterSheet
+        sorted={!wide}
+        count={count}
+        foot={(close) => (
+          <FilterFoot
+            on={count > 0}
+            onClear={() =>
+              set(styles && count > 0 ? { stage: 'any', place: ALL } : { stage: 'any' })
+            }
+            show={
+              kept > 0
+                ? t('practice:library.show', { count: kept })
+                : t('practice:library.showNone')
+            }
+            onShow={close}
+          />
+        )}
+      >
+        {wide ? null : (
+          <FilterGroup title={t('practice:library.sortBy')}>
+            {sorts.map((sort) => (
+              <FilterChoice key={sort} pressed={view.sort === sort} onPress={() => set({ sort })}>
+                {sortName(sort)}
+              </FilterChoice>
+            ))}
+          </FilterGroup>
+        )}
+        {levels ? (
+          <FilterGroup title={t('practice:library.table.level')}>
+            <FilterChoice pressed={view.stage === 'any'} onPress={() => set({ stage: 'any' })}>
+              {t('practice:library.anyLevel')}
+            </FilterChoice>
+            {stages.map((stage) => (
+              <FilterChoice
+                key={stage}
+                pressed={view.stage === stage}
+                onPress={() => set({ stage })}
+              >
+                {t(`common:stage.${stage}`)}
+              </FilterChoice>
+            ))}
+          </FilterGroup>
+        ) : null}
+        {styles ? (
+          <FilterGroup title={t('practice:library.table.style')}>
+            <FilterChoice
+              pressed={!groups.some((group) => group.id === view.place)}
+              onPress={() => set({ place: ALL })}
+            >
+              {t('practice:library.anyStyle')}
+            </FilterChoice>
+            {groups.map((group) => (
+              <FilterChoice
+                key={group.id}
+                pressed={view.place === group.id}
+                onPress={() => set({ place: group.id })}
+              >
+                {group.name}
+              </FilterChoice>
+            ))}
+          </FilterGroup>
+        ) : null}
+      </FilterSheet>
+    </div>
+  )
+  if (at === 'bar') return box
+  return (
+    <div className="flex flex-col gap-3 empty:hidden">
+      {at === 'row' ? box : null}
       {wide ? null : (
         <ChoiceChips
           label={t('practice:library.placesLabel')}

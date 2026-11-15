@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { C_MAJOR, keyParam } from '@/shared/lib/music'
-import { BackButton, ScreenHeader, type MenuAction } from '@/shared/ui'
+import { BackButton, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { NewProgressionSheet } from '@/widgets/content-editor'
 import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
@@ -47,15 +47,15 @@ export function ProgressionsPage() {
   const made = useLibraryNew('progressions', creates)
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader
-        large
-        title={t('pages.progressions')}
-        back={<BackButton />}
-        edit={edit}
-        tools={editing ? undefined : made.menu}
-        settings={<SettingsGear page="progressions" />}
-      />
       <PracticeLibrary
+        header={{
+          large: true,
+          title: t('pages.progressions'),
+          back: <BackButton />,
+          edit,
+          tools: editing ? undefined : made.menu,
+          settings: <SettingsGear page="progressions" />,
+        }}
         kind="progressions"
         view={view}
         items={items}

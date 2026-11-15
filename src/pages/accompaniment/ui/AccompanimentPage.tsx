@@ -1,7 +1,7 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Music4, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { BackButton, ButtonLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink } from '@/shared/ui'
 import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
 import { useAccompanimentLibrary } from '../model/use-accompaniment-library'
 
@@ -28,14 +28,14 @@ export function AccompanimentPage() {
   ])
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader
-        large
-        title={t('pages.accompaniment')}
-        back={<BackButton />}
-        edit={edit}
-        tools={editing ? undefined : made.menu}
-      />
       <PracticeLibrary
+        header={{
+          large: true,
+          title: t('pages.accompaniment'),
+          back: <BackButton />,
+          edit,
+          tools: editing ? undefined : made.menu,
+        }}
         kind="accompaniment"
         view={view}
         items={items}

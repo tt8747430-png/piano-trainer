@@ -3,7 +3,14 @@ import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useMediaQuery, useSetSearch } from '@/shared/lib'
-import { FilteredNotice, FoldSection, GROUPED_LIST, LIBRARY_PANES } from '@/shared/ui'
+import {
+  FilteredNotice,
+  FoldSection,
+  GROUPED_LIST,
+  LIBRARY_PANES,
+  ScreenHeader,
+  type ScreenHeaderProps,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   FAVOURITES,
@@ -75,8 +82,11 @@ export function PracticeLibrary({
   extra,
   mine,
   screen,
+  header,
   editing = false,
 }: {
+  /** The page's bar: on a laptop the library's search and Sort and filter lead its tools. */
+  header: ScreenHeaderProps
   kind: LibraryKind
   view: PracticeLibraryView
   items: readonly LibraryItem[]
@@ -120,6 +130,7 @@ export function PracticeLibrary({
   if (editing)
     return (
       <>
+        <ScreenHeader {...header} />
         <ArrangeList
           kind={kind}
           places={arranged.places}
@@ -136,20 +147,36 @@ export function PracticeLibrary({
     { groups: arranged.groups, mine: mine !== undefined, compare: collator.compare, names, recent },
   )
   const narrowed = shown.filtering || shown.place !== 'all'
+  const search = {
+    kind,
+    view,
+    shown,
+    groups: arranged.groups,
+    groupWord,
+    levels,
+    wide,
+    screen,
+    names,
+    mine: mine !== undefined,
+  }
+  const bar = (
+    <ScreenHeader
+      {...header}
+      tools={
+        wide ? (
+          <>
+            <LibrarySearch at="bar" {...search} />
+            {header.tools}
+          </>
+        ) : (
+          header.tools
+        )
+      }
+    />
+  )
   const body = (
     <div className="flex min-w-0 flex-col gap-4">
-      <LibrarySearch
-        kind={kind}
-        view={view}
-        shown={shown}
-        groups={arranged.groups}
-        groupWord={groupWord}
-        levels={levels}
-        wide={wide}
-        screen={screen}
-        names={names}
-        mine={mine !== undefined}
-      />
+      <LibrarySearch at={wide ? 'under' : 'row'} {...search} />
       <FilteredNotice
         shown={shown.items.length}
         hidden={shown.filtering ? shown.scope - shown.items.length : 0}
@@ -185,24 +212,28 @@ export function PracticeLibrary({
   if (!wide)
     return (
       <>
+        {bar}
         {body}
         {sheets}
       </>
     )
   return (
-    <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
-      <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
-        <LibraryTree
-          kind={kind}
-          place={shown.place}
-          groups={arranged.groups}
-          groupWord={groupWord}
-          mine={mine !== undefined}
-          counts={shown.counts}
-        />
-      </aside>
-      {body}
-      {sheets}
-    </div>
+    <>
+      {bar}
+      <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
+        <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
+          <LibraryTree
+            kind={kind}
+            place={shown.place}
+            groups={arranged.groups}
+            groupWord={groupWord}
+            mine={mine !== undefined}
+            counts={shown.counts}
+          />
+        </aside>
+        {body}
+        {sheets}
+      </div>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { BackButton, ScreenHeader } from '@/shared/ui'
+import { BackButton } from '@/shared/ui'
 import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
 import { useExerciseLibrary } from '../model/use-exercise-library'
 
@@ -19,14 +19,14 @@ export function ExercisesPage() {
   const made = useLibraryNew('exercises', [])
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <ScreenHeader
-        large
-        title={t('pages.exercises')}
-        back={<BackButton />}
-        edit={edit}
-        tools={editing ? undefined : made.menu}
-      />
       <PracticeLibrary
+        header={{
+          large: true,
+          title: t('pages.exercises'),
+          back: <BackButton />,
+          edit,
+          tools: editing ? undefined : made.menu,
+        }}
         kind="exercises"
         view={view}
         items={items}

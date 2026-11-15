@@ -21,7 +21,7 @@ export interface EditAction {
   readonly label?: string
 }
 
-type ScreenHeaderProps = {
+export type ScreenHeaderProps = {
   /** The screen's name: its title and the page's. */
   title: string
   back?: ReactNode
