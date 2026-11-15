@@ -845,6 +845,12 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **The app's notices as the board's (loop 24, AppLayers):** on a phone they stack at the top under the status bar,
+  12 in from each side; on a laptop at the foot's right, 28 in, 440 wide. A new version is an ink band 56 tall
+  ("A new version is ready", Later, the honey Update pill; "Restarting…" alone once tapped). A save that failed
+  is a crimson wash (`--alert`) in its deep ink: the line 16 bold, the help 14, Close and a deep Settings pill
+  at its foot; the editor's unsaved notice wears the same (2026-11-15).
+
 - **Loading is the page's shape, as the board's (loop 24, AppLayers):** while a screen's chunk loads, six sand
   blocks (36, 96, 24, then three 56) with 14 corners, 12 apart, fading from 90% to 40%, in place of a lone spinner
   (2026-11-15).

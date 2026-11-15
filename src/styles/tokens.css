@@ -164,6 +164,9 @@
   --attention: var(--p-ochre);
   --destructive: var(--p-crimson);
   --destructive-foreground: var(--p-white);
+  /* A notice that something was lost or not saved (AppLayers' Storage full): a crimson wash, its ink deep. */
+  --alert: #f6deda;
+  --alert-foreground: #5c1410;
   /* The book's line: soft round a card, firm enough round a control to find it (3:1). */
   --border: var(--p-line);
   --input: var(--p-control);
@@ -310,6 +313,8 @@
     --attention: var(--p-ochre-light);
     --destructive: var(--p-crimson-light);
     --destructive-foreground: var(--p-dusk-950);
+    --alert: color-mix(in oklab, var(--p-crimson) 32%, var(--p-dusk-950));
+    --alert-foreground: #fbe4e1;
     --border: var(--p-dusk-line);
     --input: var(--p-dusk-control);
     --hairline: var(--p-dusk-800);
