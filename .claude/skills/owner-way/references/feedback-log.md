@@ -216,6 +216,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Learning is what was started (loop round 17):** the Learning place and chip hold the songs opened in the Player and not yet learned, as the board's Progress column says "Learning"; a song never opened is in neither place, and an empty Learning says "No songs you are learning here yet." (2026-11-15).
+
 - **Every page behind the library (canvas 133, 2026-11-11):** "you missed so many features": Explore with its shelves and
   states, a public song (rating, Add to my library, Report), Groups and a shared folder, a folder's Settings and Card
   style, Archive and Trash, a song's Settings, Publish and a section's page, each reached from where the app reaches it.

@@ -13,7 +13,7 @@ export const songs: LocaleResources['songs'] = {
   emptyQueryStage: 'По запросу «{{query}}» на уровне «{{stage}}» ничего не найдено.',
   emptyFavourites: 'Здесь пока нет избранного.',
   emptyLearned: 'Здесь пока нет выученных песен.',
-  emptyLearning: 'Все песни здесь выучены.',
+  emptyLearning: 'Здесь пока нет песен, которые вы разучиваете.',
   emptyKey: 'Здесь нет песен в тональности {{key}}.',
   emptyFilters: 'Здесь нет песен под эти фильтры.',
   emptyQueryFilters: 'По запросу «{{query}}» с этими фильтрами ничего не найдено.',

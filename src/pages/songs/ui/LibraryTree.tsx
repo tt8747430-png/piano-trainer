@@ -21,7 +21,8 @@ import {
   type FolderId,
   type ShelvedFolder,
 } from '@/entities/library'
-import { selectLearned, useProgress } from '@/entities/progress'
+import type { PieceId } from '@/entities/piece'
+import { selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { cn } from '@/shared/lib'
 import { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList, TreeSwatch } from '@/shared/ui'
@@ -93,7 +94,11 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
   const songs = new Set(layout.folders.flatMap((folder) => folder.songs))
   for (const id of layout.home) songs.add(id)
   const learnedSteps = useProgress(selectLearned)
-  const learned = [...songs].filter((id) => learnedSteps[pieceStepId(id)] !== undefined).length
+  const practised = useProgress(selectPractised)
+  const isLearned = (id: PieceId) => learnedSteps[pieceStepId(id)] !== undefined
+  const learned = [...songs].filter(isLearned).length
+  // Played and not yet learned, as the Learning place lists them.
+  const learning = [...songs].filter((id) => practised[id] !== undefined && !isLearned(id)).length
   // The folders on the way to the one open stand unfolded.
   const path =
     current === 'all' || current === 'favourites' || current === 'learning' || current === 'learned'
@@ -183,7 +188,7 @@ export function LibraryTree({ current, extra }: { current: TreePlace; extra?: Re
           place="learning"
           icon={CircleDashed}
           label={t('places.learning')}
-          count={songs.size - learned}
+          count={learning}
           current={current === 'learning'}
         />
         <Place

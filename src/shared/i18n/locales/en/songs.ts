@@ -14,7 +14,7 @@ export const songs = {
   emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” level.',
   emptyFavourites: 'No favourites here yet.',
   emptyLearned: 'No learned songs here yet.',
-  emptyLearning: 'Every song here is learned.',
+  emptyLearning: 'No songs you are learning here yet.',
   emptyKey: 'No songs here in {{key}}.',
   emptyFilters: 'No songs here match these filters.',
   emptyQueryFilters: 'No songs match “{{query}}” with these filters.',

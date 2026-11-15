@@ -137,9 +137,13 @@ export function libraryView(
   } = {},
 ): LibraryView {
   const loose = new Set(layout.home)
+  // Learning is a song played and not yet learned; one never opened is in neither place.
+  const started = new Set(lookups.opened)
+  const learnedOrLearning = (id: PieceId) =>
+    filter.learned === 'yes' ? lookups.learned.has(id) : !lookups.learned.has(id) && started.has(id)
   const keeps = (entry: Entry) =>
     (filter.folder === 'any' || loose.has(entry.id)) &&
-    (filter.learned === 'any' || lookups.learned.has(entry.id) === (filter.learned === 'yes')) &&
+    (filter.learned === 'any' || learnedOrLearning(entry.id)) &&
     (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
     (filter.key === '' || songKeyParam(entry) === filter.key) &&
     (!filter.favourites || lookups.favourites.has(entry.id)) &&
