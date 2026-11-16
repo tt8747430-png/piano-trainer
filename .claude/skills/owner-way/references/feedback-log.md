@@ -368,6 +368,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Loop round 47, a chapter's ··· opens the chapter (LearnLevel, editing):** the ··· beside a chapter only showed a toast reading "Chapter: Rename · Remove chapter"; it opens a Chapter sheet on a phone and a popover under it on a laptop, its Name in a field and Remove chapter in red, which happens at once with Undo ("The keyboard and the staff removed from Foundations") (2026-11-16).
 - **Loop round 47, one title for a song:** a course and the intervals' songs called it "Twinkle, Twinkle" where the library, its page and Intervals' Sounds like call it "Twinkle, Twinkle, Little Star"; the full title everywhere, and the course row takes its cover (2026-11-16).
 - **Loop round 47, a course's guided songs wear their covers (a course):** Ode to Joy, Twinkle and Amazing Grace each showed a note glyph on a blue tile; each wears its own first notes, as every song in Songs, and Amazing Grace is credited to John Newton, as on its page, not "Traditional" (2026-11-16).
 - **Loop round 47, a lesson's contents marks the section in view (a lesson on a laptop):** In this lesson listed its sections all alike; the one in view now stands on sand in semibold, its number on white, as Legal's On this page marks its own (2026-11-16).
@@ -905,6 +906,7 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+- **Loop round 47, a toast names the thing, then what happened (every board):** "Removed: Amazing Grace", "Created: New lesson", "Deleted: Scale", "Added: Tip" and "“Notes from my teacher” deleted" read the other way round from "Amazing Grace archived"; every toast now reads name then verb ("New lesson created", "Scale deleted", "Ode to Joy removed from the course"), with no quotes (2026-11-16).
 - **Loop round 47, one way to write a toast (every board):** toasts ended with a full stop on some boards and none on others (Take deleted, Take 3 deleted.); as Material 3's snackbar writes them, a toast of one short statement has no full stop (Silent Night restored, Link copied, Profile saved) and one of two sentences keeps them (Published. Learners will receive it the next time they open the app.). Publishing a progression said "Learners see it on their next visit"; it now says what the course, lesson and editor say (2026-11-16).
 - **Loop round 46, Search's results speak Learn's words; nothing found is the one empty state:** a lesson found read "Beginner · Chapter 3", a place Learn has no name for, and "Chords in a major key" is no lesson of Foundations; it reads "How major scales work · Foundations · Lesson 7", as the level's page. No results now wears the empty-state shape: a search mark, the 18 title, its line and Clear search as the 48 pill (2026-11-16).
 - **Loop round 46, Search counts the lessons as Learn does:** its Continue suggestion said "Lesson 7 of 18" where Learn, the lesson and Continue say Foundations has 13; it reads "Continue · Lesson 7 of 13" (2026-11-16).

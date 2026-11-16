@@ -46,17 +46,17 @@ LEARN_JS = js(PLACES_PRE + r'''
     // a first visit has finished no course: the first beginner course is Next
     const CRS = demo === 'fresh' ? COURSES.map(([h, cs], si) => [h, cs.map(([t, sub], ci) => [t, sub, si === 0 && ci === 0 ? 'now' : ''])]) : COURSES;
     const L = LV[Math.min(lv, 3)]; let idx = 0;
-    const chapters = L.ch.map((c, ci) => { const rows = c.rows.filter((r) => !gone[r.t]).map((r, ri) => { const i = idx++; const done = i < L.done, next = i === L.done;
+    const chapters = L.ch.filter((c) => !gone['ch:' + c.t]).map((c, ci) => { const rows = c.rows.filter((r) => !gone[r.t]).map((r, ri) => { const i = idx++; const done = i < L.done, next = i === L.done;
         return { ...r, done, next, todo: !done && !next && !r.check, tScale: !done && !next && !!r.check && !!r.scale, tChord: !done && !next && !!r.check && !r.scale, num: String(i + 1), first: i === 0, last: i === L.n - 1,
           tileBg: done ? '#DCE9D6' : '#FEFDFB', tileRing: next ? '0 0 0 2.5px #EDC684' : (done ? 'none' : '0 0 0 1px #DAD1C8'), tileFg: done ? '#2F5A35' : '#685E56', rad: r.check ? '11px' : '22px',
-          spineTop: i === 0 ? 'transparent' : (i <= L.done ? '#9BC093' : '#DAD1C8'), spineBot: i === L.n - 1 ? 'transparent' : (i < L.done ? '#9BC093' : '#DAD1C8'), weight: next ? 700 : 600, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [r.t]: true }, toast: 'Removed: ' + r.t }); } }; });
-      const got = rows.filter((r) => r.done).length; return { t: (ci + 1) + ' · ' + c.t, rows, count: got + '/' + rows.length, add: () => set({ toast: 'Lesson added: New lesson' }), menu: () => set({ toast: 'Chapter: Rename · Remove chapter' }) }; });
+          spineTop: i === 0 ? 'transparent' : (i <= L.done ? '#9BC093' : '#DAD1C8'), spineBot: i === L.n - 1 ? 'transparent' : (i < L.done ? '#9BC093' : '#DAD1C8'), weight: next ? 700 : 600, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [r.t]: true }, toast: r.t + ' removed from ' + L.t }); } }; });
+      const got = rows.filter((r) => r.done).length; return { t: (ci + 1) + ' · ' + c.t, rows, count: got + '/' + rows.length, add: () => set({ toast: 'New lesson added' }), menu: () => set({ sheet: 'chap', chap: c.t }) }; });
     const nxt = chapters.flatMap((c) => c.rows).find((r) => r.next);
     const sh = st.sheet ?? null, wk = st.wk ?? 4;
-    return { ...common(st, set), ncOn: sh === 'newCourse', openNewCourse: () => set({ sheet: 'newCourse' }), ''' + NEWJS + r'''
-      created: (w) => () => set({ sheet: null, toast: w }), mkLesson: () => set({ sheet: null, toast: 'Created: New lesson' }), mkCourse: () => set({ sheet: null, toast: 'Created: New course' }),
+    return { ...common(st, set), chapOn: sh === 'chap', chapT: st.chap ?? '', dropChap: () => set({ sheet: null, gone: { ...gone, ['ch:' + st.chap]: true }, toast: st.chap + ' removed from ' + L.t }), ncOn: sh === 'newCourse', openNewCourse: () => set({ sheet: 'newCourse' }), ''' + NEWJS + r'''
+      created: (w) => () => set({ sheet: null, toast: w }), mkLesson: () => set({ sheet: null, toast: 'New lesson created' }), mkCourse: () => set({ sheet: null, toast: 'New course created' }),
       ncShelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], st.ncShelf ?? 'Beginner courses', (x) => set({ ncShelf: x })), ncLevels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], st.ncLevel ?? 'Beginner', (x) => set({ ncLevel: x })),
-      wkL: wk + ' weeks', fewerW: () => set({ wk: Math.max(1, wk - 1) }), moreW: () => set({ wk: wk + 1 }), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false }), addChapter: () => set({ toast: 'Chapter added: Chapter 6' }), status: 'Saved · not published', toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), isLessons: view === 'Lessons', isCourses: view === 'Courses', toLessons: () => set({ view: 'Lessons' }), toCourses: () => set({ view: 'Courses' }),
+      wkL: wk + ' weeks', fewerW: () => set({ wk: Math.max(1, wk - 1) }), moreW: () => set({ wk: wk + 1 }), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false }), addChapter: () => set({ toast: 'Chapter 6 added' }), status: 'Saved · not published', toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), isLessons: view === 'Lessons', isCourses: view === 'Courses', toLessons: () => set({ view: 'Lessons' }), toCourses: () => set({ view: 'Courses' }),
       lessonsInk: view === 'Lessons' ? '#332921' : '#DAD1C8', coursesInk: view === 'Courses' ? '#332921' : '#DAD1C8',
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'], own ? 'Your lessons' : L.chip, (l) => set({ lv: ['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'].indexOf(l) })),
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
@@ -69,7 +69,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t + ' · ' + x.n + ' lessons', got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
       coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h.replace(/ courses$/, ''), now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
-      courses: CRS.map(([h, cs]) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: 'Removed: ' + t }); }, done: k === 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: k === 'done' ? '#DCE9D6' : '#F6E7C8', ring: k === 'now' ? '0 0 0 2.5px #EDC684' : 'none' })) })) };''')
+      courses: CRS.map(([h, cs]) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: t + ' removed' }); }, done: k === 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: k === 'done' ? '#DCE9D6' : '#F6E7C8', ring: k === 'now' ? '0 0 0 2.5px #EDC684' : 'none' })) })) };''')
 LCHIPS = KCHIPS('levels')
 def PATHROW(laptop=False):
     href = 'LessonLaptop.dc.html' if laptop else 'Lesson.dc.html'
@@ -162,6 +162,8 @@ INFOBODY = (f'<p style="margin: 0; font-size: 16px; line-height: 1.5">A course t
             f'<ul style="margin: 0; padding: 0; list-style: none; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
             + ''.join(f'<li style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 0 16px; {"box-shadow: inset 0 -1px 0 " + LINE if i < len(COURSES) - 1 else ""}"><span style="flex: 1; font-size: 16px">{sh}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{len(cs)} {"course" if len(cs) == 1 else "courses"}</span></li>' for i, (sh, cs) in enumerate(COURSES))
             + '</ul>')
+CHAPBODY = (f'{CAPS("Name")}<input aria-label="Name" value="{{{{chapT}}}}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
+            + GROUP(('action', 'Remove chapter', 'dropChap', RED), bg=SHEET))
 MOREL = GROUP(('action', 'Edit', 'editOn'), bg=SHEET)
 MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCourse'), bg=SHEET)
 
@@ -185,7 +187,7 @@ vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholde
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 48px; align-items: start">'
        f'<div style="display: flex; flex-direction: column; gap: 16px">{LVHEAD}{PATHF(True)}</div><div style="position: sticky; top: 0; display: flex; flex-direction: column; gap: 12px">{LVSIDE}</div></main>'
        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
-detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('moreOn', 'Foundations', MOREL), POPOVER('moreOn', 'Foundations', MOREL, 'right: 40px; top: 72px', 300), 'Learn')
+detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('moreOn', 'Foundations', MOREL) + BSHEET('chapOn', 'Chapter', CHAPBODY), POPOVER('moreOn', 'Foundations', MOREL, 'right: 40px; top: 72px', 300) + POPOVER('chapOn', 'Chapter', CHAPBODY, 'left: 600px; top: 240px', 380), 'Learn')
 
 # Courses: every shelf
 cph2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'

@@ -18,7 +18,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
     const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
     const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d + (k === 'learned' ? ' · learned' : ''), learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
-      more: () => set({ sheet: 'row', row: t }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: '“' + t + '” deleted' }) });
+      more: () => set({ sheet: 'row', row: t }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
     const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
       const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
       const isOpen = !!open[c.t] && kind !== 'Courses';
@@ -28,7 +28,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
     const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
     const any = courses.length + loose.length > 0;
     const states = [['Nothing made yet', bare, { bare: true, q: '' }, { bare: false }], ['Search finds nothing', !bare && ql === 'chopin', { q: 'Chopin', bare: false }, { q: '' }],
-      ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: '“Notes from my teacher” deleted' }, { gone: {}, toast: null }]]
+      ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: 'Notes from my teacher deleted' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     const sel = st.sel ?? 'Sunday service set', selBg = (t) => t === sel ? '#EEE9E2' : 'transparent';
     courses.forEach((c) => { c.pick = () => set({ sel: c.t }); c.selBg = selBg(c.t); c.cur = c.t === sel ? 'true' : 'false'; c.lessons.forEach((l) => { l.pick = () => set({ sel: l.t }); l.selBg = selBg(l.t); l.cur = l.t === sel ? 'true' : 'false'; }); });
@@ -45,7 +45,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       ...pane, paneOn: any, courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
       noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
       rowOn: sheet === 'row', rowT: st.row || '', rowIsLesson: !Y.courses.some((c) => c.t === st.row),
-      removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: '“' + st.row + '” deleted' }),
+      removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: st.row + ' deleted' }),
       ''' + NEWJS + r'''
       q, typed: (e) => set({ q: e.target.value }),
       toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }) };''')

@@ -78,7 +78,7 @@ class Component extends DCLogic {
       modeSeg: [['major', 'Major'], ['minor', 'Minor']].map(([id, l]) => ({ l, on: (st.mode || 'major') === id, ...seg((st.mode || 'major') === id), pick: () => set({ mode: id }) })), menuOn: menu, toggleMenu: () => set({ menu: !menu, sheet: null }),
       selName: selC ? selC[0] : '', selBass: pc && pc.bass !== null ? ROOTS[pc.bass] + ' in the bass' : 'Its root', selBeats: selC ? selC[1] + (selC[1] === 1 ? ' beat' : ' beats') : '',
       shorter: () => upd((c) => { const x = c[sel[0]].chords[sel[1]]; x[1] = Math.max(1, x[1] - 1); }), longer: () => upd((c) => { const x = c[sel[0]].chords[sel[1]]; x[1] = Math.min(8, x[1] + 1); }),
-      remove: () => { upd((c) => { c[sel[0]].chords.splice(sel[1], 1); }); set({ sheet: null, sel: null, toast: 'Deleted ' + selC[0] }); },
+      remove: () => { upd((c) => { c[sel[0]].chords.splice(sel[1], 1); }); set({ sheet: null, sel: null, toast: selC[0] + ' deleted' }); },
       toast: st.toast || '', hasToast: !!st.toast, undoToast: () => set({ secs: START, toast: '' }),
       roots: ROOTS.map((r, i) => ({ r, on: pc && pc.r === i, bg: pc && pc.r === i ? '#1A1612' : '#FFFFFF', fg: pc && pc.r === i ? '#FFFFFF' : '#1A1612', pick: () => setChord(r + (pc ? pc.q : '')) })),
       quals: QUAL.map(([q, l]) => ({ l, on: pc && pc.q === q, bg: pc && pc.q === q ? '#1A1612' : '#FFFFFF', fg: pc && pc.q === q ? '#FFFFFF' : '#1A1612', pick: () => setChord(ROOTS[pc.r] + q) })),

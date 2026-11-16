@@ -76,17 +76,17 @@ const CR = {"t": "Intro to Music Reading", "s": "Read notes on both staves at si
     const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner courses', level = st.level ?? 'Beginner';
     const lessons = CR.lessons.filter(([t]) => !gone[t]).map(([t, k], i) => ({ t, n: 'Lesson ' + (i + 1), learned: k === 'learned', next: k === 'next', unpub: k === 'unpub', todo: k !== 'learned' && k !== 'next',
       num: String(i + 1), tileBg: k === 'learned' ? '#2C3A2B' : '#24201C', ring: k === 'next' ? '0 0 0 2.5px #D4B176' : (k === 'learned' ? 'none' : '0 0 0 1px #453E38'),
-      remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: 'Removed: ' + t }); } }));
+      remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: t + ' removed from the course' }); } }));
     const removed = CR.lessons.filter(([t]) => gone[t]).map(([t]) => ({ t, back: () => { const g = { ...gone }; delete g[t]; set({ gone: g }); } }));
     const lost = CR.lessons[1][0], states = [['Edited by an editor', editing, { editing: true }, { editing: false }],
-      ['A lesson removed, with Undo', !!gone[lost], { editing: true, gone: { [lost]: true }, toast: 'Removed: ' + lost }, { gone: {}, toast: null }]]
+      ['A lesson removed, with Undo', !!gone[lost], { editing: true, gone: { [lost]: true }, toast: lost + ' removed from the course' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#EDE9E1' : '#2E2924', pick: () => set(on ? off : o) }));
     return { ...common(st, set), states, editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
       t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d, pic: CRPICS[t] })), removed, hasRemoved: removed.length > 0,
       shelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
       weeksL: weeks + ' weeks', fewer: () => set({ weeks: Math.max(1, weeks - 1) }), more: () => set({ weeks: Math.min(52, weeks + 1) }),
-      newOn: sheet === 'new', openNew: () => set({ sheet: 'new' }), create: () => set({ sheet: null, toast: 'Lesson added: New lesson' }),
+      newOn: sheet === 'new', openNew: () => set({ sheet: 'new' }), create: () => set({ sheet: null, toast: 'New lesson added' }),
       pmOn: sheet === 'pubmenu', openPm: () => set({ sheet: 'pubmenu' }), propOn: sheet === 'props', openProps: () => set({ sheet: 'props' }),
       page: st.page ?? null, onPage: !!st.page, isSet: st.page === 'settings', isPub: st.page === 'publish', openSettings: () => set({ page: 'settings', sheet: null }), openPub: () => set({ page: 'publish', sheet: null }), closePage: () => set({ page: null }),
       pageT: st.page === 'settings' ? 'Settings' : 'Publish', resetOn: sheet === 'reset', askReset: () => set({ sheet: 'reset' }), doReset: () => set({ sheet: null, toast: 'Progress reset' }), delOn: sheet === 'delete', askDel: () => set({ sheet: 'delete' }),

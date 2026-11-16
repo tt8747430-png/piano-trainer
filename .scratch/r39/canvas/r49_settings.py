@@ -5,7 +5,6 @@
 # Exec'd by r41.py after r48_course.
 
 EYE = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
-RED = '#B3261E'
 GREEN = '#44684A'
 
 def S9CAPS(t, tip=''):
