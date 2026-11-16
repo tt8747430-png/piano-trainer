@@ -139,7 +139,7 @@ def OWNROW(t, sub, href, kind='lesson'):
     shape = 'border-radius: 11px' if kind == 'course' else f'width: 40px; height: 40px; margin: 2px; border-radius: 20px; box-shadow: {"none" if kind == "learned" else "inset 0 0 0 1px " + LINE}'
     return (f'<a href="{href}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; {shape}; background: {bg}; color: {fg}; display: flex; align-items: center; justify-content: center">{ic}</span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
-NEWROW = lambda t, act: f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; box-shadow: inset 0 -1px 0 {FILL}"><span style="flex: none; width: 44px; display: flex; justify-content: center">{PLUSI}</span>{t}</button>'
+NEWROW = lambda t, act: ADDROW(t, act, node=44, pad='0 12px', gap=12)
 def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
     head = H2("Your lessons and courses", SEEALL("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
