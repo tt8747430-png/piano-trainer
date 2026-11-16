@@ -19,6 +19,7 @@ await page.waitForTimeout(2500)
 let i = 0
 for (const s of JSON.parse(steps)) {
   if (s.click) { const l = page.locator(s.click).first(); console.log('click', s.click, await l.count()); await l.click({ timeout: 3000 }).catch((e) => console.log('ERR', e.message.slice(0, 200))) }
+  if (s.fill) await page.locator(s.fill[0]).first().fill(s.fill[1]).catch((e) => console.log('ERR', e.message.slice(0, 200)))
   if (s.wait) await page.waitForTimeout(s.wait)
   if (s.shot) await page.screenshot({ path: out + '-' + (i++) + '.png' })
   if (s.eval) console.log(await page.evaluate(s.eval))
