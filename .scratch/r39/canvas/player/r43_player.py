@@ -9,7 +9,10 @@ Reads the merged Player pages from player/base/ (written by merge_player.py) and
   ♭ ♮ ♯ on the chosen letter only, every key spelled the way it moves (up in sharps, down in flats), Back to the
   written key;
 - the chord names over the staff in the Chords page's book serif; the Chords page's tap, focus and tooltip rules.
-Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)"""
+Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)
+
+Careful: the built PlayerApp and PlayerDesk boards (and their Night) carry passes made after this script (the States
+tool, the keys' faces), which a fresh run drops; for a small change, patch the four built boards in place too."""
 import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
