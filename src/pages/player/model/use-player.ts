@@ -25,10 +25,16 @@ import {
   type PracticeChoice,
   type TrackChoice,
   type TrackId,
+  waitsForNotes,
 } from '@/features/practice'
 import { syncRecording } from '@/features/edit-piece'
 import { recordPass } from '@/features/record-lesson'
-import { recordPractised, usePracticeClock, useSongPlayRecord } from '@/features/record-practised'
+import {
+  recordPractised,
+  useAtTheKeys,
+  usePracticeClock,
+  useSongPlayRecord,
+} from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
 import { controlsFor, usePracticePlayer, type PlayerControl } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
@@ -128,13 +134,21 @@ export function usePlayer(
   // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
   // (ADR 0111). Read as it is counted, never a reason to record again.
   const { passes } = player.practice.state
-  // The time practised (B1): while the transport runs or waits for the learner's notes.
-  usePracticeClock(player.practice.state.playing)
+  // The time practised (B1): while the transport runs, and in Wait mode up to 30 seconds past the
+  // learner's last key (the research's item 6), so a learner who walks away adds no minutes.
+  const { state } = player.practice
+  const waiting = state.playing && waitsForNotes(state.mode)
+  const atTheKeys = useAtTheKeys(
+    state.playing && !waiting,
+    waiting,
+    `${state.beatGroup}:${state.received.length}:${state.ahead.length}:${state.wrongHere.length}`,
+  )
+  usePracticeClock(atTheKeys)
   // The song's place (canvas 125): the bars played through and where Continue opens next.
   const lastBar = writtenBarOf(performance, performance.bars.length - 1)
   useSongPlayRecord(
     piece.id,
-    player.practice.state.playing,
+    atTheKeys,
     writtenBarAt(performance, player.practice.state.beatGroup),
     lastBar,
   )
