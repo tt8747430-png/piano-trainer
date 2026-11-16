@@ -161,7 +161,7 @@ class Component extends DCLogic {
       empty, found: !empty, clear: () => set({ held: [] }),
       name: 'Cmaj7/E', long: 'C major 7th, 1st inversion', numeral: 'Imaj7 in ' + key + ' major',
       notes: [['E', '3rd', 'bass'], ['C', 'root', ''], ['G', '5th', ''], ['B', '7th', '']].map(([n, d, b]) => ({ n, d, b })),
-      also: ['Em(♭6)', 'G6/E (no 3rd)'],
+      also: ['Em(♭6)'],
       inKeys: [['C major', 'Imaj7'], ['G major', 'IVmaj7'], ['E minor', '♭VImaj7'], ['A minor', 'IIImaj7']].map(([k, r]) => ({ k, r })),
       played: [['G7', 'V7'], ['Am7', 'vi7'], ['Dm7', 'ii7']].map(([c, r]) => ({ c, r })),
       tries: [['C major', [60, 64, 67]], ['A minor 7th', [57, 60, 64, 67]], ['D dominant 7th', [62, 66, 69, 72]]].map(([l, h]) => ({ l, pick: tryC(h) })),

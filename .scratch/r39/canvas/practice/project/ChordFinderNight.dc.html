@@ -78,7 +78,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const held = st.held ?? [52, 60, 67, 71], empty = held.length === 0;
     const R = { 52: [ROLE[3], 'E'], 60: [ROLE[1], 'C'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, marks = {}; held.forEach((m) => { marks[m] = R[m] || ['#D4B176', NN[m % 12]]; });
     return { ...common(st, set), ...SW(st, set, [['cfSl', true], ['cfK', true], ['cfSc', false], ['cfH', true]]), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), empty, found: !empty, name: empty ? 'Play a chord' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : 'C major 7th, 1st inversion · Imaj7 in C major',
-      notes: [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']].map(([n, d]) => ({ n, d })), alts: ['Em(♭6)', 'G6/E (no 3rd)'].map((a) => ({ a })), played: ['G7', 'Am7', 'Dm7'].map((p) => ({ p })),
+      notes: [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']].map(([n, d]) => ({ n, d })), alts: ['Em(♭6)'].map((a) => ({ a })), played: ['G7', 'Am7', 'Dm7'].map((p) => ({ p })),
       kb: calmKeys(48, 76, marks, 370, 170), kbE: calmKeys(48, 72, marks, 402, 150), kbLE: calmKeys(36, 84, marks, 1462, 180), clear: () => set({ held: [] }), tryIt: () => set({ held: [52, 60, 67, 71] }), keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), inKeys: 'C major, G major, E minor', states: [{ l: 'Nothing played', bg: empty ? '#EDE9E1' : '#2E2924', pick: () => set({ held: empty ? null : [] }) }] };
   }
 }
