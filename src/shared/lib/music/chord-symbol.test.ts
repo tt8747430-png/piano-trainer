@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, chordRootSpelling, qualityIntervals, qualitySpellings } from './chord'
+import { qualityIntervals } from './chord'
+import { CHORD_QUALITIES, chordRootSpelling, qualitySpellings } from './chord-quality'
 import {
   ChordSymbolError,
   chordsOfLine,

@@ -44,7 +44,17 @@ something to play, and the root goes to the left hand.
 - **The chord table has 46 qualities**, each a Skill (ADR 0025): every type Musicca's chord finder lists (the power
   chord `C5`, Maj11, m13, Maj13 among them) and 13sus4. Any chord is built from its parts (`buildChord`): the triad,
   a suspension or the power chord's bare 5th (no larger size, no inversion), the size up to a 13th, the 7th, an added tone, and alterations. Only what the chord takes is offered, and a change that leaves a part out of reach takes the nearest in
-  reach. A chord is named by the table where it has it, else by the stacks' rule (`stackSuffix`).
+  reach. A chord is named by the table where it has it, else by the builder's rule (`partsSuffix`): one alteration bare
+  after its number (`C7♭9`, `C13#11`), two or more in brackets by degree, a flat before a sharp (`C7(♭5,♭9)`,
+  `C7(#5,#9)`); a 6/9 over a bass writes its 9 in brackets (`C6(9)/E`). Of two parts that build one chord the builder
+  keeps the one with fewer added tones (`C13(♭9,#11)`, not `C7(♭9,#11)(add13)`).
+- **One implementation of a chord.** A `Chord` holds a `ChordKind`: the table's quality where the table has the chord,
+  else the builder's parts (`kindOfParts`), so `C9#11`, `C7sus2` or `Cm7(add11)` is written, read, spelled and played
+  as any other. A symbol is read (`readChordSymbol`) by the table's spellings, then by the builder's grammar
+  (`chord-grammar.ts`: triad · 6th · size and 7th · alterations · added tones · suspension) in the spellings charts and
+  other apps write (`minMaj7`, `hdim7`, `7(#9,#5)`, `9(13)` the 13th, `7(13)` the 7th with an added 13th, `6add9`,
+  `ma7`, `j7`), so every name the builder or the finder says reads back as the same chord; an added 2nd reads as the
+  table's add9, its octave. A chord the builder does not make is not read.
 - **A chord's colour notes are one model** (`colour-notes.ts`, A33): `colourNotes(root, parts, key?)` groups every
   note over a chord as its **chord tones**, its **tensions** and the notes to **avoid**. Without a key a 7th chord
   takes the owner's tension table (`availableTensions`, the one source of tensions, its test's oracle), any other
@@ -78,9 +88,9 @@ something to play, and the root goes to the left hand.
   chord from middle C, its top doubled an octave down); So What (three 4ths and a major 3rd from the 9th, only over
   Dorian tones with a perfect 5th and no major 3rd). A voicing a chord cannot take says why (`fourNotes`, `noThird`,
   `noSeventh`, `notDorian`).
-- **A numeral is a degree, a shift and a quality of the table**, read as a chord symbol with a degree for its root:
-  upper case takes any spelling (`V7`, `IMaj7`, `IIm7`), lower case is a chord with a minor 3rd (`ii7`, `iiø7`,
-  `vii°7`). It is written back one way. A flat counts from the major scale in either mode (A minor's ♭VI is F). A plain
+- **A numeral is a degree, a shift and a chord's kind**, read as a chord symbol with a degree for its root: upper
+  case takes any spelling (`V7`, `IMaj7`, `IIm7`, `V7(#5,♭9)`), lower case is a chord with a minor 3rd (`ii7`, `iiø7`,
+  `vii°7`, `iim7(add11)`); a line of numerals keeps a bracket's commas. It is written back one way. A flat counts from the major scale in either mode (A minor's ♭VI is F). A plain
   triad grows with the chord size to the key's own chord; a triad not the key's grows to its 7th chord, then to the
   9th the key has over it; a half-diminished chord's 9th is its natural one (`m9♭5`). A numeral may be applied
   (`V/ii`, `ii°/vi`), read in the key on that degree. A chord typed is its numeral, whatever its quality.

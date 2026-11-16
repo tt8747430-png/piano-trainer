@@ -107,25 +107,32 @@ export {
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
 export { type NoteLyrics, type Syllable } from './lyrics'
 export {
-  CHORD_FAMILIES,
-  CHORD_QUALITIES,
   chordBass,
-  chordFamily,
-  chordRootSpelling,
   chordSymbol,
   qualityRootSpelling,
   writtenSymbol,
-  qualitiesIn,
   qualityIntervals,
-  qualitySpellings,
   qualitySuffix,
   spellChord,
+  isTableQuality,
+  kindOfParts,
+  partsOfKind,
   type Chord,
-  type ChordFamily,
-  type ChordQuality,
+  type ChordKind,
 } from './chord'
 export {
+  CHORD_FAMILIES,
+  CHORD_QUALITIES,
+  chordFamily,
+  chordRootSpelling,
+  qualitiesIn,
+  qualitySpellings,
+  type ChordFamily,
+  type ChordQuality,
+} from './chord-quality'
+export {
   ALTERATIONS,
+  CHORD_PARTS,
   partsOf,
   ADDED_TONES,
   addedOf,

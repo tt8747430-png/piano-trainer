@@ -5,6 +5,7 @@ import { chordsParam, walkOpening } from '@/features/practice'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
 import {
   isInversion,
+  isTableQuality,
   noteParam,
   printedNote,
   printedSymbol,
@@ -125,25 +126,27 @@ export function ChordPractice({
               })}
             />
           ))
-        : WALKS.map((direction) => (
-            <PractiseRow
-              key={direction}
-              title={t(direction === 'up' ? 'chords.chromatic' : 'chords.fifths')}
-              detail={walkOpening(root, quality, direction)}
-              render={
-                <Link
-                  to="/play/chromatic"
-                  search={{
-                    chords: chordsParam([quality]),
-                    root: noteParam(root),
-                    direction,
-                    ...(isInversion(inversion) ? { inversion } : {}),
-                    nearest: false,
-                  }}
-                />
-              }
-            />
-          ))}
+        : isTableQuality(quality)
+          ? WALKS.map((direction) => (
+              <PractiseRow
+                key={direction}
+                title={t(direction === 'up' ? 'chords.chromatic' : 'chords.fifths')}
+                detail={walkOpening(root, quality, direction)}
+                render={
+                  <Link
+                    to="/play/chromatic"
+                    search={{
+                      chords: chordsParam([quality]),
+                      root: noteParam(root),
+                      direction,
+                      ...(isInversion(inversion) ? { inversion } : {}),
+                      nearest: false,
+                    }}
+                  />
+                }
+              />
+            ))
+          : null}
       {home ? (
         <PractiseRow
           title={t('chords.diatonically', { key: keyName(home.home) })}

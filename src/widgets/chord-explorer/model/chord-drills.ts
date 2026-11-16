@@ -1,4 +1,5 @@
 import {
+  isTableQuality,
   LETTERS,
   chordSymbol,
   keyParam,
@@ -72,7 +73,7 @@ export const overTheRoot = (chord: Chord): string => {
  * or sevenths as the chord is; the line its first four (Dm7 · Em7 · Fmaj7 · G7 …) and the key named.
  */
 export function diatonically(chord: Chord): (ChordDrill & { readonly home: Key }) | null {
-  const home = HOME[chord.quality]
+  const home = isTableQuality(chord.quality) ? HOME[chord.quality] : undefined
   if (!home) return null
   const [kind, degree] = home
   const size = spellChord(chord.root, chord.quality).length > 3 ? 4 : 3

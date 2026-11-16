@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, qualitySuffix } from './chord'
+import { qualitySuffix } from './chord'
+import { CHORD_QUALITIES } from './chord-quality'
 import {
   addedOf,
   alterationsOf,
@@ -87,13 +88,13 @@ describe('buildChord', () => {
     [{ size: 7, alterations: ['b5'] }, 'C7♭5: C E G♭ B♭'],
     [{ size: 7, alterations: ['s11'] }, 'C7#11: C E G B♭ F#'],
     [{ size: 7, alterations: ['b13'] }, 'C7♭13: C E G B♭ A♭'],
-    [{ size: 7, alterations: ['b5', 'b9'] }, 'C7♭5♭9: C E G♭ B♭ D♭'],
+    [{ size: 7, alterations: ['b5', 'b9'] }, 'C7(♭5,♭9): C E G♭ B♭ D♭'],
     [{ size: 9, alterations: ['s11'] }, 'C9#11: C E G B♭ D F#'],
     [{ size: 13, alterations: ['b9'] }, 'C13♭9: C E G B♭ D♭ A'],
     [{ size: 13, alterations: ['s11'] }, 'C13#11: C E G B♭ D F# A'],
-    [{ size: 13, alterations: ['b9', 'b13'] }, 'C7♭9♭13: C E G B♭ D♭ A♭'],
+    [{ size: 13, alterations: ['b9', 'b13'] }, 'C7(♭9,♭13): C E G B♭ D♭ A♭'],
     [{ size: 13, seventh: 'major', alterations: ['s11'] }, 'Cmaj13#11: C E G B D F# A'],
-    [{ triad: 'aug', size: 7, alterations: ['s9'] }, 'C7#5#9: C E G# B♭ D#'],
+    [{ triad: 'aug', size: 7, alterations: ['s9'] }, 'C7(#5,#9): C E G# B♭ D#'],
     [{ triad: 'sus4', size: 7, alterations: ['b9'] }, 'C7sus4♭9: C F G B♭ D♭'],
     [{ triad: 'sus4', size: 13, alterations: ['b9'] }, 'C13sus4♭9: C F G B♭ D♭ A'],
   ] as const)('alters a 7th chord with a major 3rd: %o → %s', (change, expected) => {
@@ -114,7 +115,7 @@ describe('buildChord', () => {
 
   it('names a chord the table has as the table does, and knows its quality', () => {
     const b9s5 = buildChord(note('C'), parts({ triad: 'aug', size: 7, alterations: ['b9'] }))
-    expect(b9s5).toMatchObject({ quality: 'b9s5', suffix: '7♭9#5' })
+    expect(b9s5).toMatchObject({ quality: 'b9s5', suffix: '7(#5,♭9)' })
     const alt = buildChord(
       note('C'),
       parts({ triad: 'aug', size: 7, alterations: ['b5', 'b9', 's9'] }),

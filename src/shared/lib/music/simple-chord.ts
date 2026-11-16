@@ -1,4 +1,5 @@
 import type { Chord } from './chord'
+import type { ChordQuality } from './chord-quality'
 import { hasMinorThird } from './numerals'
 
 /**
@@ -6,7 +7,7 @@ import { hasMinorThird } from './numerals'
  * has a minor 3rd (a diminished chord too), major otherwise (augmented, suspended); a slash chord's
  * bass and every added note dropped.
  */
-export const simplifyChord = (chord: Chord): Chord => ({
+export const simplifyChord = (chord: Chord): Chord<ChordQuality> => ({
   root: chord.root,
   quality: hasMinorThird(chord.quality) ? 'min' : 'maj',
 })

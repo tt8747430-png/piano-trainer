@@ -1,20 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import {
-  CHORD_FAMILIES,
-  CHORD_QUALITIES,
   chordBass,
-  chordFamily,
-  chordRootSpelling,
   chordSymbol,
-  qualitiesIn,
   qualityIntervals,
   qualityRootSpelling,
-  qualitySpellings,
   qualitySuffix,
   spellChord,
   writtenSymbol,
-  type ChordQuality,
 } from './chord'
+import {
+  CHORD_FAMILIES,
+  CHORD_QUALITIES,
+  chordFamily,
+  chordRootSpelling,
+  qualitiesIn,
+  qualitySpellings,
+  type ChordQuality,
+} from './chord-quality'
 import { parseChordSymbol } from './chord-symbol'
 import { letterIndex, note, noteName, pitchClassOf, type SpelledNote } from './note'
 import { pitchClass } from './pitch'

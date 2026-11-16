@@ -1,7 +1,7 @@
 import {
   CHORD_QUALITIES,
   chordSkill,
-  type ChordQuality,
+  type ChordKind,
   type SkillId,
   type SpelledNote,
 } from '@/shared/lib/music'
@@ -15,6 +15,6 @@ export function skillsOfPiece(piece: Piece): SkillId[] {
 }
 
 /** Each chord of a piece's chart once, as it is written (its root's spelling and quality), in order. */
-export const chordsOfPiece = (piece: Piece): { root: SpelledNote; quality: ChordQuality }[] => [
+export const chordsOfPiece = (piece: Piece): { root: SpelledNote; quality: ChordKind }[] => [
   ...factsOf(piece).chords,
 ]

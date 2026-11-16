@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, chordSymbol, qualityIntervals } from './chord'
+import { chordSymbol, qualityIntervals } from './chord'
+import { CHORD_QUALITIES } from './chord-quality'
 import { parseChordSymbol } from './chord-symbol'
 import type { Key } from './key'
 import { note } from './note'

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { keysHolding } from './keys-holding'
 import { note, noteName } from './note'
 import { numeralText } from './numerals'
-import type { ChordQuality } from './chord'
+import type { ChordQuality } from './chord-quality'
 
 /** Each key that holds a chord, written as `C major: I`. */
 const holding = (root: Parameters<typeof note>, quality: ChordQuality) =>

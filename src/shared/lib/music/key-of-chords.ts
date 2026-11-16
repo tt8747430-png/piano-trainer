@@ -1,4 +1,4 @@
-import { chordBass, qualityIntervals, type Chord, type ChordQuality } from './chord'
+import { chordBass, qualityIntervals, type Chord, type ChordKind } from './chord'
 import { CIRCLE_OF_FIFTHS } from './circle'
 import { isWrittenKey, keySignature, type Key } from './key'
 import { pitchClassOf } from './note'
@@ -28,11 +28,11 @@ const KEYS: readonly Key[] = [
   ...CIRCLE_OF_FIFTHS.map((place) => place.minor),
 ]
 
-const hasInterval = (quality: ChordQuality, steps: number, semitones: number): boolean =>
+const hasInterval = (quality: ChordKind, steps: number, semitones: number): boolean =>
   qualityIntervals(quality).some((each) => each.steps === steps && each.semitones === semitones)
 
 /** A chord that can be a dominant: a major 3rd, and a minor 7th or none (G, G7, G7♭9, G13, G7alt). */
-const isDominant = (quality: ChordQuality): boolean =>
+const isDominant = (quality: ChordKind): boolean =>
   hasInterval(quality, 2, 4) && (quality === 'maj' || hasInterval(quality, 6, 10))
 
 /** Whether a chord is the key's tonic chord: on its tonic, with the key's 3rd and a perfect 5th. */

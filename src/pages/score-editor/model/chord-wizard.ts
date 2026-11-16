@@ -1,5 +1,7 @@
 import {
+  isTableQuality,
   note,
+  simplifyChord,
   spellChord,
   type Chord,
   type ChordQuality,
@@ -39,14 +41,17 @@ export function wizardChord(choice: WizardChoice): Chord {
 const isWizardAccidental = (value: number): value is WizardAccidental =>
   (WIZARD_ACCIDENTALS as readonly number[]).includes(value)
 
-/** The choices that build a chord typed (an inversion where its bass is a chord tone), else C major. */
+/**
+ * The choices that build a chord typed (an inversion where its bass is a chord tone), else C major. A
+ * chord the wizard's qualities do not have (`C9#11`) opens on its root's plain triad.
+ */
 export function wizardOf(chord: Chord | null): WizardChoice {
   if (!chord || !isWizardAccidental(chord.root.accidental))
     return { letter: 'C', accidental: 0, quality: 'maj', inversion: 0 }
   const choice = {
     letter: chord.root.letter,
     accidental: chord.root.accidental,
-    quality: chord.quality,
+    quality: isTableQuality(chord.quality) ? chord.quality : simplifyChord(chord).quality,
   }
   const bass = chord.bass
   const at = bass

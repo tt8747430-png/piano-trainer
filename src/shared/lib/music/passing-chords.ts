@@ -1,10 +1,5 @@
-import {
-  type Chord,
-  type ChordQuality,
-  qualityIntervals,
-  qualityRootSpelling,
-  spellChord,
-} from './chord'
+import { type Chord, qualityIntervals, qualityRootSpelling, spellChord } from './chord'
+import { type ChordQuality } from './chord-quality'
 import { INTERVALS, spellAbove, spellBelow, type IntervalName } from './interval'
 import type { Key } from './key'
 import { pitchClassOf, plainRoot, type SpelledNote } from './note'

@@ -1,12 +1,12 @@
 import {
   ADDED_TONES,
   ALTERATIONS,
-  partsOf,
+  partsOfKind,
   type AddedTone,
   type Alteration,
   type BuiltSize,
+  type ChordKind,
   type ChordParts,
-  type ChordQuality,
   type Seventh,
   type Triad,
 } from '@/shared/lib/music'
@@ -66,8 +66,8 @@ export const partsParams = ({ added, alterations, ...parts }: ChordParts): Parts
   ].join(','),
 })
 
-/** The URL params that open the builder on a table quality: a skill's or a chord family's way in. */
-export const qualityParams = (quality: ChordQuality): PartsParams => partsParams(partsOf(quality))
+/** The URL params that open the builder on a chord's kind: a skill's, a chord family's or a typed chord's way in. */
+export const qualityParams = (quality: ChordKind): PartsParams => partsParams(partsOfKind(quality))
 
 export const partsFromParams = ({ colour, ...params }: PartsParams): ChordParts => ({
   ...params,
