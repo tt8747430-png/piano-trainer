@@ -18,7 +18,7 @@ TOP63 = TOP63.replace('</div></header>', ROUND60('More', MORE, 'openMore') + '</
 TITLE63 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px">'
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
-           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play, level 2 · Built-in", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
+           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play · Level 1", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
 def _staff63():
     y = lambda d: 58 - d * 3.5          # treble: d=0 is E4 on the bottom line
     yb = lambda d: 112 - d * 3.5        # bass: d=0 is G2 on the bottom line
