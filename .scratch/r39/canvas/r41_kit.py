@@ -41,9 +41,11 @@ def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
     t = f'<span data-bar-title style="flex: 0 1 auto; min-width: 0; margin-left: {8 if b else 4}px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
     return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
 def LPAD(h):
-    """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, the title's insets 28 wider."""
+    """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, its title the laptop's 30 bold."""
     h = h.replace('padding: 0 12px', 'padding: 0 28px 0 40px', 1)
-    return re.sub(r'left: (\d+)px; right: \1px; text-align: center', lambda m: f'left: {int(m.group(1)) + 28}px; right: {int(m.group(1)) + 28}px; text-align: center', h, count=1)
+    # a laptop page's title is its 30 bold, as every laptop page's (Takes, Archive, a song's Settings)
+    h = h.replace('margin-left: 8px; font-size: 17px; font-weight: 600;', 'margin-left: 12px; font-size: 30px; font-weight: 700; letter-spacing: -0.01em;', 1).replace('margin-left: 4px; font-size: 17px; font-weight: 600;', 'margin-left: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em;', 1)
+    return h
 def IB(label, svg, act='', href='', pressed=''):
     if href: return f'<a href="{href}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{svg}</a>'
     return f'<button type="button" aria-label="{label}" data-tip="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} style="{GLASSST}">{svg}</button>'
