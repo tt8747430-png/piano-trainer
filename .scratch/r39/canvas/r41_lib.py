@@ -47,7 +47,7 @@ MUSIC_I = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="c
 LIBSTRIP = (f'<div aria-label="Canvas: show a state" style="display: none"><sc-for list="{{{{states}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="background: {{{{p.bg}}}}; color: {{{{p.fg}}}}">{{{{p.l}}}}</button></sc-for></div>')
 # the one empty state (the boards' EMPTY): a 64 mark on sand, an 18 bold title, a 15 line, its way on a 48 pill
 def LEMPTY(cond, icon, t, b, btns=''):
-    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center"><span style="width: 64px; height: 64px; border-radius: 32px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{icon}</span>'
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center"><span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; color: {INK}; display: flex; align-items: center; justify-content: center">{icon}</span>'
             f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 340px; text-wrap: pretty">{b}</span>{('<div style="display: flex; gap: 10px; margin-top: 8px">' + btns + '</div>') if btns else ''}</div></sc-if>')
 # loading is the page's shape (AppLayers): sand rows fading, never a lone spinner
 SKELROW = lambda h, r=12: f'<div style="height: {h}px; border-radius: {r}px; background: {FILL}"></div>'
