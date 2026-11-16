@@ -102,7 +102,7 @@ const ACCIDENTAL_KEYS = [0, 1, -1] as const satisfies readonly Accidental[]
 /**
  * The accidentals, Flat's (ADR 0114): each a toggle on the notes chosen, pressed while every one
  * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
- * left out with no note chosen (R32-B).
+ * greyed in place with no note chosen (Flat's).
  */
 function AccidentalKeys() {
   const { t } = useTranslation('editor')
@@ -114,7 +114,6 @@ function AccidentalKeys() {
       return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
     }),
   )
-  if (!chosen) return null
   const keys = {
     1: { label: t('accidentals.sharp'), picture: <Sharp />, tool: 'sharp' },
     [-1]: { label: t('accidentals.flat'), picture: <Flat />, tool: 'flat' },
@@ -128,6 +127,8 @@ function AccidentalKeys() {
         label={label}
         tool={tool}
         pressed={carried[i] ?? false}
+        disabled={!chosen}
+        reason={t('reason.chooseNote')}
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
         <span aria-hidden>{picture}</span>
@@ -252,7 +253,7 @@ export function NoteBar() {
   )
   const onStaff = useEditorState((state) => state.layer !== 'chords')
   const chosen = useNotesChosen()
-  // A tie only where a note there has the same key's note after it (R32-B).
+  // A tie acts only where a note there has the same key's note after it; else it greys (Flat's).
   const tieable = useEditorState(
     (state) =>
       state.layer !== 'chords' &&
@@ -271,31 +272,37 @@ export function NoteBar() {
       ) : null}
       <ValueKeys />
       <Divider />
-      {dottable ? (
+      <PaletteKey
+        label={t('dot')}
+        tool="dot"
+        pressed={shown?.dots === 1}
+        disabled={!dottable}
+        reason={t('reason.noDot')}
+        onClick={() => dispatch({ type: 'dot' })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}.
+        </span>
+      </PaletteKey>
+      <PaletteKey
+        label={t('doubleDot')}
+        pressed={shown?.dots === 2}
+        disabled={!doubleDottable}
+        reason={t('reason.noDot')}
+        onClick={() => dispatch({ type: 'dot', dots: 2 })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}..
+        </span>
+      </PaletteKey>
+      {onStaff ? (
         <PaletteKey
-          label={t('dot')}
-          tool="dot"
-          pressed={shown?.dots === 1}
-          onClick={() => dispatch({ type: 'dot' })}
+          label={t('marks.tie')}
+          tool="tie"
+          disabled={!tieable}
+          reason={t('reason.noTie')}
+          onClick={() => dispatch({ type: 'tie' })}
         >
-          <span aria-hidden className={GLYPH}>
-            {VALUE_GLYPHS[4]}.
-          </span>
-        </PaletteKey>
-      ) : null}
-      {doubleDottable ? (
-        <PaletteKey
-          label={t('doubleDot')}
-          pressed={shown?.dots === 2}
-          onClick={() => dispatch({ type: 'dot', dots: 2 })}
-        >
-          <span aria-hidden className={GLYPH}>
-            {VALUE_GLYPHS[4]}..
-          </span>
-        </PaletteKey>
-      ) : null}
-      {tieable ? (
-        <PaletteKey label={t('marks.tie')} tool="tie" onClick={() => dispatch({ type: 'tie' })}>
           <svg
             aria-hidden
             viewBox="0 0 24 24"
@@ -317,10 +324,12 @@ export function NoteBar() {
       </PaletteKey>
       <Divider />
       <AccidentalKeys />
-      {chosen ? (
+      {onStaff ? (
         <PaletteKey
           label={t('respell')}
           tool="respell"
+          disabled={!chosen}
+          reason={t('reason.chooseNote')}
           onClick={() => dispatch({ type: 'respell' })}
         >
           <span aria-hidden className="flex items-center [&_svg]:size-4.5">
@@ -364,9 +373,11 @@ function TupletKey({ num }: { num: TupletCount }) {
   const shown = useShown()
   const meter = useEditorState((state) => state.draft.meter)
   const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
-  if (!takesTuplet(value, num, meter)) return null
+  const takes = takesTuplet(value, num, meter)
   return (
     <PaletteKey
+      disabled={!takes}
+      reason={t('reason.noTuplet')}
       label={t(`tuplets.${TUPLET_WORDS[num]}`)}
       tool={num === 9 ? undefined : `tuplet${num}`}
       pressed={shown?.tuplet?.num === num}

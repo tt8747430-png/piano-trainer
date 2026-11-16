@@ -66,6 +66,7 @@ function MarkKey({
   tool?: Tool
   children: ReactNode
 }) {
+  const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const on = useMarkOn(mark)
   const chosen = useNotesChosen()
@@ -75,6 +76,7 @@ function MarkKey({
       tool={tool}
       pressed={on}
       disabled={!chosen}
+      reason={t('reason.chooseNote')}
       onClick={() => actions.dispatch({ type: 'mark', mark })}
     >
       {children}

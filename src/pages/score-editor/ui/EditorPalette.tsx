@@ -7,6 +7,7 @@ import { chosenNotes } from '@/features/score-editor'
 import { setPaletteCategory } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
+import { KeysWait } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
 import {
@@ -67,19 +68,9 @@ function Category({ category }: { category: PaletteCategory }) {
     <PaletteSection category={category} title={title}>
       {/* Notes titles its own sections: its input modes, then Notation. */}
       {category === 'notes' ? null : <GroupName name={title} />}
-      {waits ? (
-        <fieldset
-          disabled
-          title={t('palette.chooseNote')}
-          aria-label={t('palette.chooseNote')}
-          // `contents`: the tools keep the layout of their form, the row or the panel; greyed each.
-          className="contents [&_button]:opacity-40"
-        >
-          <Tools category={category} />
-        </fieldset>
-      ) : (
+      <KeysWait value={waits ? t('reason.chooseNote') : null}>
         <Tools category={category} />
-      )}
+      </KeysWait>
     </PaletteSection>
   )
 }

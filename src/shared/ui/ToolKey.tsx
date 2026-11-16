@@ -1,12 +1,19 @@
-import { useId, type ComponentProps } from 'react'
+import { createContext, use, useId, type ComponentProps } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from './primitives/tooltip'
 
 /**
+ * Why the keys inside cannot act now ("Select one or more notes first."), for a palette's section
+ * that waits on a choice: each key in it greys in place and says so in its tooltip (Flat's rule).
+ */
+export const KeysWait = createContext<string | null>(null)
+
+/**
  * A palette's key: a big square of its glyph or icon, named by `label` for a screen reader and in a
- * tooltip under a pointer; with `pressed` a toggle, filled while on. A key that cannot act is not
- * drawn (R32-B); it greys only while its whole palette waits (a take recording). What a term on its
+ * tooltip under a pointer; with `pressed` a toggle, filled while on. A key that cannot act here
+ * stays in its place, greyed (loop round 31, Flat's rule): `aria-disabled`, so it keeps its focus
+ * and its tooltip, which says why ("Tie: No note of the same pitch follows."); a press does nothing. What a term on its
  * face means (`description`: dolce, sweetly) is its tooltip and a screen reader's description, never
  * a line on it (ADR 0096). Pressed, it gives a little under the finger (ADR 0114).
  */
@@ -17,7 +24,9 @@ export function ToolKey({
   pressed,
   tipSide = 'top',
   disabled,
+  reason,
   className,
+  onClick,
   children,
   ...props
 }: {
@@ -29,11 +38,16 @@ export function ToolKey({
   pressed?: boolean
   /** Where its tooltip opens: over it, or under it where it stands at the screen's top. */
   tipSide?: 'top' | 'bottom'
+  /** Why it cannot act now, said after its name in its tooltip while `disabled`. */
+  reason?: string | undefined
 } & Omit<
   ComponentProps<typeof Button>,
   'variant' | 'size' | 'aria-label' | 'aria-pressed' | 'render' | 'nativeButton' | 'title'
 >) {
   const id = useId()
+  const wait = use(KeysWait)
+  const off = Boolean(disabled) || wait !== null
+  const why = reason ?? wait ?? undefined
   const about = description ? `${id}-about` : undefined
   return (
     <Tooltip>
@@ -44,9 +58,10 @@ export function ToolKey({
             aria-label={label}
             aria-pressed={pressed}
             aria-describedby={about}
-            disabled={disabled}
+            aria-disabled={off || undefined}
+            onClick={off ? (event) => event.preventDefault() : onClick}
             className={cn(
-              'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground aria-disabled:cursor-not-allowed aria-disabled:text-muted-foreground/40 aria-disabled:hover:bg-transparent [&_svg:not([class*=size-])]:size-5',
               className,
             )}
             {...props}
@@ -60,7 +75,9 @@ export function ToolKey({
           </span>
         ) : null}
       </TooltipTrigger>
-      <TooltipContent side={tipSide}>{description ?? tip}</TooltipContent>
+      <TooltipContent side={tipSide}>
+        {off && why ? `${label}: ${why}` : (description ?? tip)}
+      </TooltipContent>
     </Tooltip>
   )
 }

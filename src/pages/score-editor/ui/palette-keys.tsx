@@ -1,6 +1,6 @@
 import { use, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
-import { InfoTip, ToolKey } from '@/shared/ui'
+import { InfoTip, KeysWait, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
 import type { Tool } from '../model/shortcuts'
 import { PaletteTipSide, useKeyTip, usePaletteForm } from './palette-form'
@@ -83,7 +83,7 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
 
 /**
  * A palette's key (`ToolKey`): a tile, in a section and in the row alike. Its tooltip names it, then its shortcut (`tool`, Flat's). A key that cannot act on what is
- * chosen is not drawn (R32-B): its caller leaves it out.
+ * chosen stays in its place, greyed, its tooltip saying why (`KeysWait`, loop round 31, Flat's).
  */
 export function PaletteKey({
   label,
@@ -129,16 +129,19 @@ export function SignTile({
   'aria-label' | 'aria-pressed' | 'title' | 'disabled' | 'children'
 >) {
   const tip = useKeyTip(label, tool)
+  const wait = use(KeysWait)
   return (
     <button
       type="button"
       aria-label={label}
-      title={tip}
+      title={wait === null ? tip : `${label}: ${wait}`}
       aria-pressed={pressed}
+      aria-disabled={wait !== null || undefined}
       data-span="wide"
       {...props}
+      onClick={wait === null ? props.onClick : undefined}
       className={cn(
-        'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
+        'flex min-w-0 items-center justify-center px-1 text-foreground/80 transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:z-10 focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:text-muted-foreground/40 disabled:hover:bg-transparent aria-disabled:cursor-not-allowed aria-disabled:text-muted-foreground/40 aria-disabled:hover:bg-transparent motion-reduce:transition-none',
         TILE,
         WIDE,
         PRESSED,

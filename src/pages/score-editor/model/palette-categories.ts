@@ -8,8 +8,9 @@ import type { BarMarkChoice } from '@/features/score-editor'
  * octave lines, articulations with the slur and the fingering, ornaments, dynamics with the hairpins
  * and the pedal; the bars chosen (added, removed, broken), their clef, the song's key and time
  * signature, barlines and repeats; text: the chord symbols, the lyrics and the expression words. What
- * is typed where it prints (ADR 0096) has its key among its kin. Only what acts where the caret is
- * and on what is chosen is shown, never greyed (R32-B).
+ * is typed where it prints (ADR 0096) has its key among its kin. A category that can never act where
+ * the caret is leaves the strip; a tool that cannot act on what is chosen stays in its place, greyed,
+ * its tooltip saying why (loop round 31, Flat's).
  */
 export const PALETTE_CATEGORIES = [
   'notes',
@@ -43,8 +44,8 @@ export const openCategories = (layer: Layer): readonly PaletteCategory[] =>
   PALETTE_CATEGORIES.filter((category) => categoryOpen(category, layer))
 
 /**
- * The categories whose every tool acts on notes chosen (R32-B): with none chosen, they say to choose
- * one in place of their tools.
+ * The categories whose every tool acts on notes chosen : with none chosen, every tool greys in place,
+ * each tooltip saying to choose a note (Flat's).
  */
 const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'ornaments', 'dynamics']
 
