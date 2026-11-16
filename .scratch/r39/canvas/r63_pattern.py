@@ -71,7 +71,7 @@ lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE63}{HIDDEN63}{MUSIC63}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(USED63)}</div></div></div>'
         + BAR63('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + PMENU63('left: 50%; translate: -50% 0; bottom: 100px')) + '</div>', 'true')
-        + IF('notPattern', PAGEHEAD_L('back', 'Back') + WIDE(H1('{{pageT}}') + LPA(IF('isEditor', PATED) + IF('isPublish', PATPUB)), 640)) + TOASTL)
+        + IF('notPattern', LTITLEBAR('{{pageT}}', backact='back') + LCOL(LPA(IF('isEditor', PATED) + IF('isPublish', PATPUB)), 640)) + TOASTL)
 phone('Pattern', 'A pattern, phone', ph63, js(PA63.replace('__ROOT__', "'pattern'")), SHEETS63)
 laptop('PatternLaptop', 'A pattern, laptop', lm63, '', js(PA63.replace('__ROOT__', "'pattern'")), POPS63, 'Practice')
 print('r63 pattern ok')

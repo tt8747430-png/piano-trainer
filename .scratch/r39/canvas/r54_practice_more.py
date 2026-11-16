@@ -136,7 +136,7 @@ PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
 peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', 'Edit progression', IB('Settings', GEARI, 'goSet'), 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
         + IF('isLearner', TOP('Progression.dc.html', '', '', 'Axis of Awesome') + NARROW(PEGATE)) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPE = lambda s: s.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html').replace('Progression.dc.html', 'ProgressionLaptop.dc.html')
-pelm = (IF('isEditor', IF('isEdit', LTOP('ProgressionLaptop.dc.html', IB('Settings', GEARI, 'goSet')), 'true') + IF('notEdit', PAGEHEAD_L('back', '{{backT}}')) + IF('isEdit', WIDE(H1('{{pageT}}') + PEEDIT_L, 1180), 'true') + IF('notEdit', WIDE(H1('{{pageT}}') + PEBODY_L, 640)), 'true')
+pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', IB('Settings', GEARI, 'goSet'), back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 1180), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
         + IF('isLearner', LTOP('ProgressionLaptop.dc.html', '') + WIDE(LPE(PEGATE), 640)) + STRIP() + TOASTL)
 detail('ProgressionEdit', 'Edit a progression (editors)', js(PE_SRC), peph, pelm, '', PESHEETS, LAPSHEET(PESHEETS), 'Practice')
 
@@ -192,7 +192,7 @@ PABODY = IF('isPattern', PATP, 'true') + IF('isEditor', PATED) + IF('isPublish',
 paph = (IF('isPattern', TOP('Accompaniment.dc.html', '', PAHEART + IB('More', MORE, 'openMore'), 'Accompaniment') + f'<div style="flex: none; padding: 2px 16px 8px"><h1 style="margin: 0; font-size: 30px; font-weight: 700">{{{{pageT}}}}</h1></div>', 'true')
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back'))) + NARROW(PABODY) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPA = lambda s: s.replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('Lesson.dc.html', 'LessonLaptop.dc.html').replace('Player.dc.html', 'PlayerLaptop.dc.html').replace('Explore.dc.html', 'ExploreLaptop.dc.html')
-palm = (IF('isPattern', LTOP('AccompanimentLaptop.dc.html', PAHEART + IB('More', MORE, 'openMore')), 'true') + IF('notPattern', PAGEHEAD_L('back', 'Back')) + IF('notEditor', WIDE(H1('{{pageT}}') + LPA(PABODY), 640), 'true') + IF('isEditor', WIDE(H1('{{pageT}}') + LPA(IF('isEditor', PATED_L)), 1180)) + STRIP() + TOASTL)
+palm = (IF('isPattern', LTOP('AccompanimentLaptop.dc.html', PAHEART + IB('More', MORE, 'openMore')), 'true') + IF('notPattern', LTITLEBAR('{{pageT}}', backact='back')) + IF('notEditor', LCOL(LPA(PABODY), 640), 'true') + IF('isEditor', LCOL(LPA(IF('isEditor', PATED_L)), 1180)) + STRIP() + TOASTL)
 for stem, root, ttl in (('Pattern', "'pattern'", 'A pattern, built-in or your own'), ('PatternNew', "'new'", 'A new pattern')):
     detail(stem, ttl, js(PA_SRC.replace('__ROOT__', root)), paph, palm, '', BSHEET('moreOn', '{{name}}', PA_MORE), POPOVER('moreOn', '{{name}}', LPA(PA_MORE), 'right: 40px; top: 64px', 320), 'Practice')
 print('r54 progression edit, pattern ok')
@@ -228,7 +228,7 @@ TKBODY_L = (IF('notDeleted', f'<div style="display: grid; grid-template-columns:
           + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
 TKASK = ASK('keepOn', '{{keepT}}', 'All other bars will be permanently deleted.', 'Keep', 'doKeep')
 tkph = TOP('Editor.dc.html', 'Take', '', 'Amazing Grace') + NARROW(TKBODY) + TOASTS
-tklm = LTOP('EditorLaptop.dc.html', '') + WIDE(H1('Take') + TKBODY_L.replace('Editor.dc.html', 'EditorLaptop.dc.html'), 1180) + TOASTL
+tklm = LTITLEBAR('Take', back='EditorLaptop.dc.html') + LCOL(TKBODY_L.replace('Editor.dc.html', 'EditorLaptop.dc.html'), 1180) + TOASTL
 detail('Take', 'A take', js(TK_SRC), tkph, tklm, '', TKASK, TKASK, 'Songs')
 
 # ════ The Player's variants: Walk, Chromatic, Progression, Exercise — their setup over the Player ════
