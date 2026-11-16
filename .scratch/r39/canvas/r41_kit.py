@@ -72,9 +72,10 @@ def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
     return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px 4px 16px">{b}'
             f'<h1 data-bar-title style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
             f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
-def LTITLEBAR(title, right='', back=''):
-    b = f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else ''
-    return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 {44 if back else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+def LTITLEBAR(title, right='', back='', backact=''):
+    b = (f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else
+         f'<button type="button" onClick="{{{{{backact}}}}}" aria-label="Back" data-tip="Back" style="{GLASSST}; border: 0; cursor: pointer">{CHEV_L}</button>' if backact else '')
+    return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 {44 if (back or backact) else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
 # The ⓘ: one glyph for every explanation behind a tap.
 INFOI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>'
 # The ⓘ's one shape (owner: explanations go in ⓘ popups; Material 3's rich tooltip, HIG's popover): a 20 glyph in a

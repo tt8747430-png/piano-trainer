@@ -314,7 +314,7 @@ SM_SRC = (r'''
       tipOn_chg: st.tip === 'chg', tip_chg: () => S({ tip: st.tip === 'chg' ? null : 'chg' }), tipOn_pat: st.tip === 'pat', tip_pat: () => S({ tip: st.tip === 'pat' ? null : 'pat' }),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null }) };''')
 HEADCARD = f'<div style="display: flex; gap: 14px; align-items: center">{COV("Amazing Grace", HONEY, 64)}<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 20px; font-weight: 700">Amazing Grace</span><span style="font-size: 14px; color: {SOFT}">John Newton · Your song</span></div></div>'
-_SLIB = SEC(CAPS('Library'), GROUP(('link', 'Folder', 'Hymns', ''), ('toggle', 'Favourite', 'favOn', 'favT'), ('action', 'Duplicate', 'askDup'), ('action', 'Archive', 'archive'), bg=SHEET))
+_SLIB = SEC(CAPS('Library'), GROUP(('link', 'Folder', 'Hymns', ''), ('action', 'Duplicate', 'askDup'), ('action', 'Archive', 'archive'), bg=SHEET))
 _SSHARE = SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{pubV}}', 'goPublish'), ('action', 'Share link', 'share'), ('link', 'Export…', 'MusicXML, MIDI', 'openExport'), bg=SHEET))
 _SDEL = SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET), FOOT('The song moves to the Trash in Songs, to be restored until the Trash is emptied.'))
 SSET = HEADCARD + _SLIB + _SSHARE + _SDEL
@@ -360,7 +360,7 @@ LSM = {'Song.dc.html': 'SongLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.ht
 def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
-smlm = (IF('backHref', LTOP('SongLaptop.dc.html', ''), 'true') + IF('isPublish', PAGEHEAD_L('back', 'Settings')) + WIDE(H1('{{pageT}}') + LAPIFY(SMBODY_L), 1180) + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
+smlm = (IF('backHref', LTITLEBAR('{{pageT}}', back='SongLaptop.dc.html'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
 SM_LAP = SMSHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
 for stem, root, ttl in (('SongSettings', "'settings'", 'A song’s Settings and Publish'), ('Section', "'section'", 'A section of a song')):
     detail(stem, ttl, js(SM_SRC.replace('__ROOT__', root)), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
