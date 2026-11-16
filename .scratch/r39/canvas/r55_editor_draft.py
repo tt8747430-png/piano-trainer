@@ -49,8 +49,8 @@ assert LTITLE in elm4
 edlm = (IF('isLive', elm4.replace(LTITLE, f'<span style="display: flex; align-items: center; gap: 8px">{PUBPILL.replace("height: 36px", "height: 32px").replace("font-size: 14px", "font-size: 13px")}{SAVET}</span>', 1), 'true')
         + IF('notLive', GHEAD('SongLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; left: 24px; bottom: 148px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-DSH = BSHEET('pubOn', 'Publishing', PUBBODY) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
-DSL = POPOVER('pubOn', 'Publishing', PUBBODY, 'left: 80px; top: 80px', 380) + LAPSHEET(BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY), 480) + DASKS
+DSH = BSHEET('moreOn', 'Score settings', ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('pubOn', 'Publishing', PUBBODY) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
+DSL = POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Take.dc.html', 'TakeLaptop.dc.html'), 'right: 24px; top: 76px', 380) + POPOVER('pubOn', 'Publishing', PUBBODY, 'left: 80px; top: 80px', 380) + LAPSHEET(BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY), 480) + DASKS
 phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, DJS, DSH)
 full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS, DSL)
 print('r55 editor draft ok')
