@@ -8,11 +8,11 @@ BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row: a day coun
            ('Scale Master', '', 0, 'Finish a scale’s practice run on Scales and keys with every key correct.', [('Bronze', '3 scales', '1 to go'), ('Silver', '12 scales', 'Locked'), ('Gold', '24 scales', 'Locked'), ('Platinum', '30 scales', 'Locked')], '2 scales'),
            ('Daily Devotion', 'Silver', 2, 'Practise for a long stretch in one day.', [('Bronze', '15 minutes', 'Reached 20 October'), ('Silver', '30 minutes', 'Reached 9 November'), ('Gold', '60 minutes', '20 to go'), ('Platinum', '120 minutes', 'Locked')], '40 minutes'),
            ('Library Builder', 'Gold', 3, 'Keep songs in your library: added, imported or written.', [('Bronze', '5 songs', 'Reached 2 March 2025'), ('Silver', '20 songs', 'Reached 4 June 2025'), ('Gold', '50 songs', 'Reached 1 October'), ('Platinum', '100 songs', '42 to go')], '58 songs')]
-RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Practice time', '12 h 40 min'), ('Best accuracy', '94%'), ('Songs learned', '4'), ('Days practised', '38')]
-MILES = [('First song learned', 'Earned 3 November 2026', 'Learn every section of one song.'), ('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
+RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Best accuracy', '94%'), ('Days practised', '38')]
+MILES = [('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
          ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a song on a MIDI keyboard.'), ('A perfect run', '', 'Play a whole song in Wait mode with no wrong notes.')]
 NOTES9 = [('Today', [('Level 7 reached', '2 h ago', 'lvl', True), ('Best accuracy: 94%', '5 h ago', 'acc', True)]), ('Yesterday', [('Silver Streak Keeper', 'Yesterday, 19:40', 'badge', False)]),
-          ('Earlier', [('First song learned', '3 November', 'mile', False), ('Gold Library Builder', '1 October', 'badge', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
+          ('Earlier', [('Bronze Repertoire', '3 November', 'badge', False), ('Gold Library Builder', '1 October', 'badge', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
 # Practice history (canvas 160): every practice run, by day; opens its results
 RUNS9 = [('Today', [('Cmaj7', 'Inversions', '92%', '72 BPM', '14:20'), ('C Am F G', 'Chord changes', '88%', '66 BPM', '13:55')]),
          ('Yesterday', [('G7', 'Circle of fifths', '100%', '80 BPM', '19:05'), ('Dm7', 'Arpeggio', '83%', '60 BPM', '18:40')]),
@@ -43,9 +43,9 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const who = st.who ?? 'Signed in';
     return { ...common(st, set), isSigned: who === 'Signed in', isGuest: who === 'Guest', isLoading: who === 'Loading', notLoading: who !== 'Loading',
       whoDemo: ['Signed in', 'Guest', 'Loading'].map((l) => ({ l, bg: who === l ? '#332921' : '#EEE9E2', fg: who === l ? '#FEFDFB' : '#332921', pick: () => S({ who: l }) })), week, isMain: !page, isSub: !!page, pageT: titles[page] || page || '', backT: back ? titles[back] : 'Profile', goBack: () => S({ page: back }),
-      isStreak: page === 'streak', isBadges: page === 'badges', isBadge: !!badge, isAch: page === 'ach', isMile: !!mile, isNotes: page === 'notes', isHistory: page === 'history', goHistory: () => S({ page: 'history' }), runDays, runLatest, bars30, showH1: !badge && !mile,
-      subW: ['streak', 'badges', 'ach', 'history'].includes(page) ? 1180 : 704, goStreak: () => S({ page: 'streak' }), goBadges: () => S({ page: 'badges' }), goAch: () => S({ page: 'ach' }), goNotes: () => S({ page: 'notes' }),
-      goB0: () => S({ page: 'Streak Keeper' }), goB1: () => S({ page: 'Repertoire' }), goB2: () => S({ page: 'Lesson Finisher' }), goM0: () => S({ page: 'First song learned' }), goM1: () => S({ page: 'First lesson done' }), goM5: () => S({ page: 'A perfect run' }),
+      isStreak: page === 'streak', isBadges: page === 'badges', isBadge: !!badge, isAch: page === 'ach', isMile: !!mile, isNotes: page === 'notes', isHistory: page === 'history', goHistory: () => S({ page: 'history' }), runDays, runLatest, bars30, showH1: !badge && !mile, barT: badge || mile ? '' : (titles[page] || page || ''),
+      subW: ['streak', 'badges', 'history'].includes(page) ? 1180 : 704, goStreak: () => S({ page: 'streak' }), goBadges: () => S({ page: 'badges' }), goAch: () => S({ page: 'ach' }), goNotes: () => S({ page: 'notes' }),
+      goB0: () => S({ page: 'Streak Keeper' }), goB1: () => S({ page: 'Repertoire' }), goB2: () => S({ page: 'Lesson Finisher' }), goM0: () => S({ page: 'First recording' }), goM1: () => S({ page: 'First lesson done' }), goM5: () => S({ page: 'A perfect run' }),
       monT: M.t, monN: M.n + ' days', cells, prevMon: () => S({ mon: 1 }), nextMon: () => S({ mon: 0 }), canNext: mon === 1, nextOp: mon === 1 ? 1 : 0.35,
       badges, bName: badge ? badge[0] : '', bTier: badge ? (badge[1] ? 'Tier ' + badge[2] + ' of 4 · ' + badge[1] : 'Not started') : '', bMed: badge ? MEDC[badge[1]] : '#DAD1C8', bWay: badge ? badge[3] : '', bYou: badge ? badge[5] : '', tiers,
       miles: MILES.map(([n, e], i) => ({ n, e: e || 'Not earned yet', got: !!e, bg: e ? '#DCE9D6' : '#EEE9E2', ink: e ? '#2F5A35' : '#9A9089', nink: e ? '#332921' : '#685E56', locked: !e, open: () => S({ page: n }) })),
@@ -72,7 +72,7 @@ def _BSUB(n):
 BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW9(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
 def AROW9(name, sub, got, act):
     return AROW(name, sub, got).replace('<div style="min-height: 60px;', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px;', 1)[:-6] + f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
-ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First song learned', 'Earned 3 November 2026', True, 'goM0') + AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
+ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
@@ -131,7 +131,7 @@ _SH = P9_STREAK.index(CAL)
 P9_STREAK_L = P9_STREAK[:_SH] + _2C(CAL, GROUP(('val', 'Longest streak', '16 days'), ('val', 'Days this month', '{{monN}}'), bg=SHEET), 'minmax(0, 1fr)', '380px')
 P9_BADGES_L = P9_BADGES.replace('box-shadow: 0 0 0 1px ' + LINE + '; overflow: hidden">', 'box-shadow: 0 0 0 1px ' + LINE + '; overflow: hidden; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">', 1).replace('min-height: 64px; border: 0;', 'min-height: 72px; border: 0; box-shadow: inset 0 -1px 0 ' + FILL + ', inset -1px 0 0 ' + FILL + ';', 1)
 _AM = P9_ACH.rindex('<section', 0, P9_ACH.index('Milestones'))
-P9_ACH_L = _2C(P9_ACH[:_AM], P9_ACH[_AM:], '420px')
+P9_ACH_L = P9_ACH.replace('grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px', 'grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px', 1)
 _HR = P9_HIST.index('<sc-for list="{{runDays}}"')
 P9_HIST_L = _2C(f'<div style="position: sticky; top: 0">{P9_HIST[:_HR]}</div>', P9_HIST[_HR:], '480px')
 SUBS9 = (f'<sc-if value="{{{{isStreak}}}}" hint-placeholder-val="{{{{false}}}}">{P9_STREAK}</sc-if><sc-if value="{{{{isBadges}}}}" hint-placeholder-val="{{{{false}}}}">{P9_BADGES}</sc-if><sc-if value="{{{{isBadge}}}}" hint-placeholder-val="{{{{false}}}}">{P9_BADGE}</sc-if>'
@@ -151,11 +151,10 @@ WHO9 = (f'<div aria-label="Canvas: show a state" style="flex: none; display: fle
 HEROX = IF9('isSigned', HERO_P, 'true') + IF9('isGuest', GUEST_P)
 p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="Settings.dc.html"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + BADGES9H + ACH9 + HIST9H, "true")}</main>{TABBAR("Profile")}</sc-if>'
-        f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{pageT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
+        f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{barT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">'
         f'<div style="display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + HIST9H, "true")}</div><div style="display: flex; flex-direction: column; gap: 12px">{IF9("notLoading", BADGES9H + ACH9, "true")}</div></main></sc-if>'
-        f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LPAD(TOP('', '', MOREB9, left=IB('Back to {{backT}}', CHEV_L, 'goBack'))) + f''
-        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; justify-content: center"><div style="width: {{{{subW}}}}px; display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{showH1}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; font-size: 30px; font-weight: 700">{{{{pageT}}}}</h1></sc-if>{SUBS9L}</div></main></sc-if>' + P9_ASK)
+        f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
 detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
 print('r50 profile ok')
