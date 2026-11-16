@@ -24,7 +24,7 @@ ph65 = (TOP65 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + HEARD65(96, 340) + MICOFF65 + ROWS65 + '</main>')
 lm65 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
         + LPAD(TOP65).replace('Main.dc.html', 'Laptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding: 48px 40px 120px 56px">'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding: 24px 40px 120px 56px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column">{HEARD65(140, 560)}{MICOFF65}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS65}</div></div></div>')
 phone('Tuner', 'Tuner, phone', ph65, TU65)
