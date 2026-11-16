@@ -36,3 +36,4 @@ scripts/youtube-transcripts/state/
 
 # Firecrawl CLI cache
 .firecrawl/
+__pycache__/
