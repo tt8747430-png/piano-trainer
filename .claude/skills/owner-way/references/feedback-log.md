@@ -295,6 +295,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **Loop round 61, Recently played says one progress and one clock (research Songs 1, 2):** it skips a learned song, as the table calls it Learned, and orders by when each was last played, kept with its place, not by the order the record was written (Flat's Recent scores) (2026-11-16).
 - **My songs is Flat's overview, ported (loop round 61, the R72 Songs board):** Recently played with See all, the Folders as cards (Favourites, the learner's, Shared with me), the Archive and the Trash as rows with counts; search is the bar's button and every song lives on All songs (`/songs/all`) with Select. The search field, the place chips and the long Songs list left My songs.
 - **A library row's title wraps to two lines before it is cut** (loop round 49; ui-and-mockups, "titles wrap to two lines"): "Twinkle, Twinkle, Littl…" on the phone's My songs now reads whole on two lines, the row growing to fit; the clamp is in the one library row (`LIB_ROW`), so Songs, a folder, Explore and the Practice libraries all follow.
 - **Loop round 48, each Continue cover shows its own opening (My songs):** Amazing Grace, Ode to Joy and Für Elise drew one same falling line; each cover now engraves its song's first notes, the same incipit its row's picture draws (2026-11-16).

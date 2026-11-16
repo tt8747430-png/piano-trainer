@@ -176,7 +176,7 @@ export function usePlayer(
     if (loop) return
     const { songs } = progress.getState()
     setBestBefore(songs[piece.id]?.best[hands] ?? null)
-    const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1)
+    const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1, new Date())
     if (next !== songs) progress.setState({ songs: next })
   })
   useEffect(() => {

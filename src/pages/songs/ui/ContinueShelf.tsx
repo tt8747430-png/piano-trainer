@@ -10,7 +10,8 @@ import { PieceShelfCover } from '@/widgets/piece-cover'
 const SHOWN = 8
 
 /**
- * Songs' Continue (canvas 133, Apple Music's Recently played): the songs stopped part way, the latest
+ * Songs' Continue (canvas 133, Apple Music's Recently played): the songs stopped part way and not
+ * learned (loop round 46: Continue and the table say one progress), the latest
  * first, each a card of its first page, its title, a copper meter of how far it got and "Bar 9 of 16";
  * a tap opens the song, where Continue from bar 9 waits. A shelf that scrolls sideways; nothing before
  * the first song is left part way.
@@ -20,9 +21,10 @@ export function ContinueShelf({ more }: { more?: number } = {}) {
   const locale = useLocale()
   const repertoire = useRepertoire()
   const songs = useProgress((state) => state.songs)
+  const learned = useProgress((state) => state.learned)
   const archived = useLibrary((state) => state.archive)
   const gone = new Set(archived.flatMap((entry) => (entry.kind === 'song' ? [entry.id] : [])))
-  const shown = songsToContinue(songs)
+  const shown = songsToContinue(songs, learned)
     .flatMap(([id, play]) => {
       const entry = gone.has(id) ? undefined : repertoire.entry(id)
       return entry && entry.kind !== 'listing' ? [{ entry, play }] : []

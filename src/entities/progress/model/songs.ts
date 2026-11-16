@@ -13,6 +13,8 @@ export interface SongPlay {
   readonly seconds: number
   /** How many bars the song has as written, when it was last played. */
   readonly bars: number
+  /** When it was last played, ISO: what Continue orders by (the research's Songs item 2). */
+  readonly last: string
   /** The best Wait-mode pass, per cent, by the hands it was played with (research item 4). */
   readonly best: Readonly<Partial<Record<Hands, number>>>
 }
@@ -39,13 +41,14 @@ function bestOf(value: unknown): SongPlay['best'] {
 /** A saved song's play as it can be read; nothing where it cannot. */
 export function songPlay(value: unknown): SongPlay | undefined {
   if (typeof value !== 'object' || value === null) return undefined
-  const { played, at, times, seconds, bars, best } = value as Partial<
+  const { played, at, times, seconds, bars, last, best } = value as Partial<
     Record<keyof SongPlay, unknown>
   >
   if (!Array.isArray(played) || !isPlace(at) || !isPlace(times) || !isPlace(bars)) return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
+  if (typeof last !== 'string' || Number.isNaN(Date.parse(last))) return undefined
   const sorted = [...new Set(played.filter(isPlace))].sort((a, b) => a - b)
-  return { played: sorted, at, times, seconds, bars, best: bestOf(best) }
+  return { played: sorted, at, times, seconds, bars, last, best: bestOf(best) }
 }
 
 /** What a stretch in the Player adds to a song's play. */
@@ -59,6 +62,8 @@ export interface SongStretch {
   readonly seconds: number
   /** How many bars the song has as written. */
   readonly bars: number
+  /** When it stopped, ISO. */
+  readonly ended: string
 }
 
 /**
@@ -79,6 +84,7 @@ export function withSongStretch(
     times: (was?.times ?? 0) + (stretch.started ? 1 : 0),
     seconds: (was?.seconds ?? 0) + Math.max(0, stretch.seconds),
     bars: stretch.bars,
+    last: stretch.ended,
     best: was?.best ?? {},
   }
   return withSong(songs, pieceId, next)
@@ -106,23 +112,33 @@ export function withWaitScore(
   hands: Hands,
   score: number,
   bars: number,
+  now: Date,
 ): Readonly<Partial<Record<PieceId, SongPlay>>> {
   const was = songs[pieceId]
   if ((was?.best[hands] ?? -1) >= score) return songs
-  const base: SongPlay = was ?? { played: [], at: 0, times: 0, seconds: 0, bars, best: {} }
+  const base: SongPlay = was ?? {
+    played: [],
+    at: 0,
+    times: 0,
+    seconds: 0,
+    bars,
+    last: now.toISOString(),
+    best: {},
+  }
   return withSong(songs, pieceId, { ...base, best: { ...base.best, [hands]: score } })
 }
 
 /**
- * The songs to go on with (canvas 133, Songs' Continue): each stopped part way, the latest played
- * first, with its place.
+ * The songs to go on with (canvas 133, Songs' Continue): each stopped part way and not learned, the
+ * latest played first (Flat's Recent scores, by when), with its place.
  */
 export function songsToContinue(
   songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
+  learned: Readonly<Partial<Record<string, string>>>,
 ): readonly (readonly [PieceId, SongPlay])[] {
   return Object.entries(songs)
     .flatMap(([id, play]): (readonly [PieceId, SongPlay])[] =>
-      play && play.at > 0 && play.at < play.bars ? [[id, play]] : [],
+      play && play.at > 0 && play.at < play.bars && learned[id] === undefined ? [[id, play]] : [],
     )
-    .reverse()
+    .toSorted(([, a], [, b]) => Date.parse(b.last) - Date.parse(a.last))
 }
