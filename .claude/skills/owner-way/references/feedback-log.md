@@ -429,6 +429,7 @@ owner's, typos fixed.
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
 ## Practice
+- **Loop round 46, the Tuner's No microphone is the one empty state (Tuner):** a bare grey line and a sand Try again, where every said state has the EMPTY shape; now the microphone struck through on a 64 sand mark, No microphone, "Allow the microphone in the browser to use the tuner." and Try again as the honey 48 pill (2026-11-16).
 
 - **Loop round 44, the exercise books' counts are true (Practice, JazzVocabulary):** Barry Harris and Piano With Jonny each said 5 exercises on the overview while their page holds 2; each now says 2, and Barry Harris's rows wear the overview's lilac (6°) where they wore sky (2026-11-16).
 - **Loop round 44, a pattern's tile is its piano roll (Accompaniment):** the rows' tiles held a font's note glyph (♩♩, ♫), drawn about 10px wide; each now draws its pattern as a small roll, the left hand low in lilac ink and the right hand high in ink, timed as its line says (the waltz's root then two chords, Alberti's root–5th–3rd–5th), as Progressions' tiles show their numerals (2026-11-16).
@@ -1022,6 +1023,7 @@ are reference only, but progressions are facts.
   "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
 
 ## Profile and Settings
+- **Loop round 46, signed out wears the person, as Profile's guest (Settings):** Settings' Sign in card showed a camera, the add-a-photo glyph, where Profile's guest shows a person; one glyph for someone not signed in (2026-11-16).
 
 - **Loop round 44, Settings has its Back on a laptop too (SettingsLaptop):** the list pane's title stood alone, so the laptop had no way back to Profile, where its gear opens it; Back to Profile now stands beside the title, as the phone's bar and the Administration pane hold theirs (2026-11-16).
 - **Loop round 44, the piano sound says its state once (Settings › Storage and backup):** a part-downloaded grand shows "54 of 88 downloaded" over its bar alone; "Partly downloaded" under it said the same again. Downloading…, Available offline and Not downloaded still show, since the count does not say them (2026-11-16).
