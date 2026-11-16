@@ -28,8 +28,8 @@ VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 
         + IF('v.older', f'<button type="button" onClick="{{{{v.restore}}}}" style="height: 44px; padding: 0 14px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 15px; font-weight: 600; color: {INK}">Restore</button>') + '</div></sc-for></div>')
 PUBBODY = (f'<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 4px"><span style="font-size: 16px; font-weight: 600">Amazing Grace · the original</span>{SAVET}</div>'
            + GROUP(('link', 'Publish…', '', 'askPub'), ('link', 'Versions', '3', 'openVers'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
-           + f'<p style="margin: 0; padding: 0 4px; font-size: 13px; line-height: 1.45; color: {SOFT}">Only editors see this draft. Learners keep the published version until you publish.</p>')
-VERSBODY = f'<p style="margin: 0; padding: 0 4px; font-size: 15px; line-height: 1.45; color: {SOFT}">Every published version is kept. Restoring a version republishes it for all learners.</p>' + VROW
+           + f'')
+VERSBODY = f'' + VROW
 DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.', 'Publish', 'doPub')
          + ASKP('restOn', 'Restore this version?', 'This version will be republished for all learners, replacing the current one.', 'Restore', 'doRest')
          + ASK('discOn', 'Discard changes?', 'The score will revert to its published version, and your changes will be lost.', 'Discard', 'doDisc'))
