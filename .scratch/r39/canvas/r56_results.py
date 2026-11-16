@@ -93,12 +93,10 @@ RS_MOTION = ('<style data-motion>@keyframes rs-rise { from { opacity: 0; transfo
 def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
     icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#9A6A1E" if perfect else RS_SAGE_INK}; '
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
-    line = '12 of 12 correct · 72 BPM' if perfect else '11 of 12 correct · 72 BPM'
     head = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">{icon}'
-            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1>'
-            f'<span class="rs-rise rs-d1" style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{line}</span></div>')
+            f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
     tiles = ('<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">'
-             + RS_TILE('100%' if perfect else '92%', '', '', 'Accuracy')
+             + RS_TILE('100%' if perfect else '92%', '', '12 of 12' if perfect else '11 of 12', 'Accuracy')
              + RS_TILE('12' if perfect else '9', '', 'on time' if perfect else 'on time<br>2 early · 1 late', 'Timing')
              + RS_TILE('72', 'BPM', '', 'Tempo') + '</div>')
     run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600">The run</h2>'

@@ -211,7 +211,7 @@ library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Rece
   add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', 'openFolder')))
 library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Intermediate', 1]]}],
-  'sections': [{'g': 'The Virtuoso Pianist', 'rows': [Rw('Hanon', 'Nos. 1 to 20', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',))]},
+  'sections': [{'g': 'The Virtuoso Pianist', 'rows': [Rw('Hanon', 'Finger independence', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',))]},
                {'g': 'Five-finger position', 'rows': [Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]}]},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
 library('JazzVocabulary', 'Jazz vocabulary', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': [], 'open': {},
