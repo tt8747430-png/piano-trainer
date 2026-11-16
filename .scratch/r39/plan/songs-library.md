@@ -18,6 +18,8 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
   Flat); each song a card (its first notes, title on two lines, composer · key, progress · last played) with ··· for
   Practise, Edit score, Add to a folder, Favourite, Settings, Archive. Select puts a check before each card and a glass
   bar of Add to folder, Favourite and Archive in the New's place. New folder is a sheet: a name and Create.
+  A folder is the same page under its own name (Flat's playlist, 095–096), with ··· for Rename, Colour, Share and
+  Archive folder; an empty folder is one card: "Nothing in this folder yet" and Add songs, which opens All songs.
   This replaces, for Songs: the place chips and the Sort and filter page (Favourites is a folder now; Learning and
   Learned show on each card), the Archive icon in the bar, and Continue as the shelf's name.
 - "A real library" like Mindscape: built-in and own folders nested to any depth; a real archive in the header; deleting a

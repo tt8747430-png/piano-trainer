@@ -28,16 +28,16 @@ FL_JS = r'''
     const rows = list.map((r) => { const on = picked.includes(r.t); return { ...r, on, ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#BFB3A7', ckMark: on ? 1 : 0,
       tap: () => selOn ? S({ picked: on ? picked.filter((x) => x !== r.t) : [...picked, r.t] }) : null, more: () => S({ sheet: 'row', row: r.t }) }; });
     const menu = (L, cur, key) => L.map((l) => ({ l, on: l === cur, mark: l === cur ? 1 : 0, pick: () => S({ [key]: l, sheet: null }) }));
-    return { ...common(st, set), rows, count: list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
+    return { ...common(st, set), rows, count: bare ? '0 songs' : list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
       sortOn: st.sheet === 'sort', openSort: () => S({ sheet: 'sort' }), sorts: ['Last played', 'Title', 'Composer', 'Added'].map((l) => ({ l, on: l === sort, mark: l === sort ? 1 : 0, pick: () => S({ sort: l, dir: l === 'Title' || l === 'Composer' ? 'Ascending' : 'Descending', sheet: null }) })), dirs: menu(['Ascending', 'Descending'], dir, 'dir'),
       rowOn: st.sheet === 'row', rowT: st.row ?? 'Amazing Grace', q: st.q ?? '', typed: (e) => S({ q: e.target.value }),
       none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare,
       selOn, selOff: !selOn, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: picked.length + ' selected', selNone: picked.length === 0, selSome: picked.length > 0,
       addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: () => S({ sheet: st.sheet === 'add' ? null : 'add' }),
       folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76',
-      states: [['bare', 'A new learner'], ['search', 'No results']].map(([k, l]) => ({ l, bg: (k === 'search' ? q === 'chopin' : demo === k) ? '#332921' : '#EEE9E2', pick: () => k === 'search' ? S({ q: q === 'chopin' ? '' : 'Chopin' }) : S({ demo: demo === k ? null : k }) })) };'''
-def FLJS(rows):
-    return js('    const ROWS = ' + json.dumps(rows, ensure_ascii=False) + ';' + FL_JS)
+      states: [['bare', BARE_L], ['search', 'No results']].map(([k, l]) => ({ l, bg: (k === 'search' ? q === 'chopin' : demo === k) ? '#332921' : '#EEE9E2', pick: () => k === 'search' ? S({ q: q === 'chopin' ? '' : 'Chopin' }) : S({ demo: demo === k ? null : k }) })) };'''
+def FLJS(rows, bare_l='A new learner'):
+    return js('    const ROWS = ' + json.dumps(rows, ensure_ascii=False) + '; const BARE_L = ' + json.dumps(bare_l) + ';' + FL_JS)
 
 TICK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg>'
 SORTI = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8 4-4 4 4M7 4v16M21 16l-4 4-4-4M17 20V4"></path></svg>'
@@ -124,12 +124,28 @@ SELBAR = lambda bottom: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{
 ROWSHEET = lambda sfx: GROUP(('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit score', '', 'Editor' + sfx), ('action', 'Add to a folder', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK), ('link', 'Settings', '', 'SongSettings' + sfx), ('action', 'Archive', 'closeSheet', RED), bg=SHEET)
 SELTB = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div style="{grid}"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for></div></sc-if>'
-alph = (TOP('Songs.dc.html', '<sc-if value="{{selOff}}" hint-placeholder-val="{{true}}">All songs</sc-if><sc-if value="{{selOn}}" hint-placeholder-val="{{false}}">{{selT}}</sc-if>', SELTB, 'My songs', n=2)
-        + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD}{COUNTROW}{NOMATCH}{LIST('Song.dc.html', 'display: flex; flex-direction: column; gap: 10px')}</main>
+FEMPTY = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="{CARDROW}; flex: 1; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 48px 24px; text-align: center">'
+          f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {SKY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
+          f'<span style="font-size: 20px; font-weight: 700">Nothing in this folder yet</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Add songs from your library, or find one in Explore.</span>'
+          f'<div style="margin-top: 8px">{BTN("Add songs", href="{ALL}", h=48, grow=False)}</div></div></sc-if>')
+FOLDERMORE = lambda sfx: GROUP(('action', 'Rename', 'closeSheet', INK), ('action', 'Colour', 'closeSheet', INK), ('link', 'Share', '', 'Groups' + sfx), ('action', 'Archive folder', 'closeSheet', RED), bg=SHEET)
+def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
+    head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
+    more = IB('More', MORE, 'openMore') if folder else ''
+    fe = lambda sfx: FEMPTY.replace('{ALL}', 'AllSongs' + sfx) if folder else ''
+    ph = (TOP(back + '.dc.html', head, SELTB + more, backlabel, n=2 + folder)
+          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD}{COUNTROW}{NOMATCH}{fe('.dc.html')}{LIST('Song.dc.html', 'display: flex; flex-direction: column; gap: 10px')}</main>
 <sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{NEWDIAL([(l, g) for l, g in _NEW][::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}</sc-if>{SELBAR(34)}{SORTMENU('right: 16px; top: 176px')}''')
-allm = (LTOP('SongsLaptop.dc.html', SELTB + NEWBTN('openAdd'), '<sc-if value="{{selOff}}" hint-placeholder-val="{{true}}">All songs</sc-if><sc-if value="{{selOn}}" hint-placeholder-val="{{false}}">{{selT}}</sc-if>')
-        + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 56px 120px; display: flex; flex-direction: column; gap: 14px">{SHOWSTATES()}<div style="display: flex; align-items: center; gap: 24px"><div style="width: 520px; display: flex; flex-direction: column">{SEARCHFIELD}</div><div style="flex: 1">{COUNTROW}</div></div>{NOMATCH}{LIST('SongLaptop.dc.html', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px')}</main>
+    lm = (LTOP(back + 'Laptop.dc.html', SELTB + more + NEWBTN('openAdd'), head)
+          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 56px 120px; display: flex; flex-direction: column; gap: 14px">{SHOWSTATES()}<div style="display: flex; align-items: center; gap: 24px"><div style="width: 520px; display: flex; flex-direction: column">{SEARCHFIELD}</div><div style="flex: 1">{COUNTROW}</div></div>{NOMATCH}{fe('Laptop.dc.html')}{LIST('SongLaptop.dc.html', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px')}</main>
 {SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')}''')
-alpops = SORTMENU('right: 56px; top: 124px') + POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 120px; top: 220px', 320)
-detail('AllSongs', 'All songs', FLJS(_ROWS), alph, allm, '', BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET, alpops + ovpops.split('</sc-if>', 1)[1], 'Songs')
+    pops = SORTMENU('right: 56px; top: 124px') + POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 120px; top: 220px', 320)
+    sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET
+    if folder:
+        sheets += BSHEET('moreOn', title, FOLDERMORE('.dc.html')); pops += POPOVER('moreOn', title, FOLDERMORE('Laptop.dc.html'), 'right: 200px; top: 72px', 320)
+    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1], 'Songs')
+LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
+HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
+         ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', '30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', '12 Oct', 1)]
+LISTPAGE('Folder', 'Hymns', [{'t': a, 's': b, 'v': c, 'when': d, 'add': e, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d, e in HYMNS], 'Songs', 'My songs', folder=True)
 print('flat songs ok')
