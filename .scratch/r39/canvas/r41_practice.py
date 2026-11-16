@@ -29,7 +29,7 @@ THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc
 # page that holds both books)
 EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Jazz vocabulary', '4 exercises', '', 'JazzVocabulary.dc.html')]
 TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'A4 = 440 Hz', '', 'Tuner.dc.html'),
-         ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
+         ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Every key and its signature', '', 'CircleOfFifths.dc.html')]
 MAIN = js(r"    return { ...common(st, set),"
            r" states: [['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
            r".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };")
