@@ -36,8 +36,8 @@ lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
         + f'<div style="flex: none; margin: -8px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}{HOW68}</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68}</div></div></div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}</div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68}{HOW68}</div></div></div>'  # the phone's order: the exercise's choices, then How to play (round 58)
         + BAR68('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + '</div>')
 phone('Exercise', 'An exercise, phone', ph68, EX68, SHEETS68)
 laptop('ExerciseLaptop', 'An exercise, laptop', lm68, '', EX68, POPS68, 'Practice')
