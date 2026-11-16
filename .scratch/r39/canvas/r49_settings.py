@@ -131,7 +131,7 @@ SWPREVIEW = (f'<div role="img" aria-label="A swiped row" style="position: relati
 P_SWIPE = (f'<div style="display: grid">{SEGC("swKind", 44, 15)}</div>' + SWPREVIEW
            + SEC(CAPS('Leading swipe (right)'), GROUP(('link', 'First', '{{swR1}}', 'pickR1'), ('link', 'Second', '{{swR2}}', 'pickR2'), bg=SHEET))
            + SEC(CAPS('Trailing swipe (left)'), GROUP(('link', 'First', '{{swL1}}', 'pickL1'), ('link', 'Second', '{{swL2}}', 'pickL2'), bg=SHEET))
-           + FOOT('Up to two actions on each side. Archive and Delete always ask for confirmation.'))
+           + FOOT('Up to two actions on each side. Archive and Delete happen at once, with Undo.'))
 SWPICK = f'<div role="radiogroup" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{swOpts}}}}" as="o" hint-placeholder-count="5"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 52px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; gap: 10px; padding: 6px 16px"><span style="flex: 1">{{{{o.l}}}}</span><sc-if value="{{{{o.on}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if></button></sc-for></div>'
 
 # ── User guide, Report a problem, About ──
