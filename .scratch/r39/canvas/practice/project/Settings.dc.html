@@ -97,16 +97,16 @@ const GROUPS = [["App", [["General", "Match system"], ["Storage and backup", ""]
       syncNow: () => { if (st.syncing) return; S({ syncing: true }); setTimeout(() => S({ syncing: false, synced: 'just now' }), 1400); } });
     for (let i = 0; i < PICS.length; i++) { v['pickPic_' + i] = () => S({ pic: i }); v['picRing_' + i] = pic === i ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8'; }
     Object.assign(v, { openPhoto: () => S({ sheet: 'photo' }), photoOn: st.sheet === 'photo', removePhoto: () => S({ pic: -1, sheet: null }), newEmailOn: !!st.newEmail, toggleNewEmail: () => S({ newEmail: !st.newEmail }), linkSent: !!st.linkSent, sendLink: () => S({ linkSent: true }),
-      saveT: st.saving ? 'Saving…' : 'Save changes', saveProfile: () => { S({ saving: true }); setTimeout(() => S({ saving: false, toast: 'Profile saved.' }), 700); },
-      pw3V: st.pwBad ? 'a longer phrse' : 'a longer phrase', pwErr: !!st.pwErr, updatePw: () => st.pwBad ? S({ pwErr: true }) : S({ toast: 'Password updated.', page: 'Account' }) });
+      saveT: st.saving ? 'Saving…' : 'Save changes', saveProfile: () => { S({ saving: true }); setTimeout(() => S({ saving: false, toast: 'Profile saved' }), 700); },
+      pw3V: st.pwBad ? 'a longer phrse' : 'a longer phrase', pwErr: !!st.pwErr, updatePw: () => st.pwBad ? S({ pwErr: true }) : S({ toast: 'Password updated', page: 'Account' }) });
     ['pw1', 'pw2', 'pw3'].forEach((k) => { v[k + 'Type'] = st[k] ? 'text' : 'password'; v[k + 'EyeL'] = st[k] ? 'Hide password' : 'Show password'; v[k + 'Eye'] = () => S({ [k]: !st[k] }); });
     // dialogs
     Object.assign(v, { askSignOut: () => S({ sheet: 'signout' }), signoutOn: st.sheet === 'signout', doSignOut: () => S({ out: true, sheet: null, prev: false, page: page ? 'Account' : null }),
       askDelete: () => S({ sheet: 'delete', delTyped: '' }), deleteOn: st.sheet === 'delete', setDel: (e) => S({ delTyped: e.target.value }), delNot: (st.delTyped ?? '') !== 'DELETE',
-      delBg: (st.delTyped ?? '') === 'DELETE' ? '#B3261E' : '#EEE9E2', delInk: (st.delTyped ?? '') === 'DELETE' ? '#FFFFFF' : '#9A9089', doDelete: () => { if ((st.delTyped ?? '') === 'DELETE') S({ sheet: null, out: true, toast: 'Your account will be deleted on 11 December 2026.' }); },
-      askReset: () => S({ sheet: 'reset' }), resetOn: st.sheet === 'reset', doReset: () => S({ sheet: null, toast: 'Progress reset on this device.' }),
+      delBg: (st.delTyped ?? '') === 'DELETE' ? '#B3261E' : '#EEE9E2', delInk: (st.delTyped ?? '') === 'DELETE' ? '#FFFFFF' : '#9A9089', doDelete: () => { if ((st.delTyped ?? '') === 'DELETE') S({ sheet: null, out: true, toast: 'Your account will be deleted on 11 December 2026' }); },
+      askReset: () => S({ sheet: 'reset' }), resetOn: st.sheet === 'reset', doReset: () => S({ sheet: null, toast: 'Progress reset on this device' }),
       askRemove: () => S({ sheet: 'remove' }), removeOn: st.sheet === 'remove', doRemove: () => S({ sheet: null, off: 0 }),
-      askRestore: () => S({ sheet: 'restore' }), restoreOn: st.sheet === 'restore', doRestore: () => S({ sheet: null, toast: 'Restoring… the app will restart.' }),
+      askRestore: () => S({ sheet: 'restore' }), restoreOn: st.sheet === 'restore', doRestore: () => S({ sheet: null, toast: 'Restoring… the app will restart' }),
       saveBackup: () => S({ toast: 'Backup saved: piano-trainer-2026-11-11.json' }) });
     // offline piano
     const off = st.off ?? 54, dl = st.dl ?? false;

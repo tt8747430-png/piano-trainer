@@ -8,12 +8,12 @@ DS_KEYS = r'''
       saveT: { Editing: chg ? 'Saved · not published' : 'Published · no changes', Saving: 'Saving…', Offline: 'Offline: not saved yet', 'Not saved': 'Not saved. It will retry with your next change.' }[ds] || '',
       saveC: ds === 'Not saved' ? '#B3261E' : '#685E56',
       pubOn: st.sheet === 'pub', openPub: () => set({ sheet: 'pub' }), closeSheet: () => set({ sheet: st.sheet === 'rest' ? 'vers' : null }),
-      askPub: () => { if (ds === 'Offline') { set({ sheet: null }); toast('You’re offline. Try again when you reconnect.'); } else if (!chg) { set({ sheet: null }); toast('No changes since the last publication.'); } else set({ sheet: 'pubAsk' }); },
+      askPub: () => { if (ds === 'Offline') { set({ sheet: null }); toast('You’re offline. Try again when you reconnect.'); } else if (!chg) { set({ sheet: null }); toast('No changes since the last publication'); } else set({ sheet: 'pubAsk' }); },
       pubAskOn: st.sheet === 'pubAsk', doPub: () => { set({ sheet: null, chg: false }); toast('Published. Learners will receive it the next time they open the app.'); },
       versOn: st.sheet === 'vers', openVers: () => set({ sheet: 'vers' }),
       vers: VERS.map(([t, n], i) => ({ t, newest: n, older: !n, restore: () => set({ sheet: 'rest', rv: i }) })),
       restOn: st.sheet === 'rest', doRest: () => { set({ sheet: null, chg: false }); toast('Restored. Learners will receive it the next time they open the app.'); },
-      askDisc: () => { if (!chg) { set({ sheet: null }); toast('No changes since the last publication.'); } else set({ sheet: 'disc' }); },
+      askDisc: () => { if (!chg) { set({ sheet: null }); toast('No changes since the last publication'); } else set({ sheet: 'disc' }); },
       discOn: st.sheet === 'disc', doDisc: () => { set({ sheet: null, chg: false }); toast('Changes discarded'); },
       retry: () => set({ ds: 'Editing' }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => set({ toast: null }),'''
 DJS = ED4.replace("    return { ...common(st, set),", DS_JS + "\n    return { ...common(st, set)," + DS_KEYS, 1)

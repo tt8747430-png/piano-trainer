@@ -125,7 +125,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       levelV: level, openLevel: () => S({ sheet: 'level' }), levelOn: st.sheet === 'level',
       levels: ['The main chords of C', 'Major and minor in every key', 'Diminished and augmented', 'Sevenths', 'Every quality', 'Custom'].map((l) => ({ l, mark: l === level ? '✓' : '', pick: () => S({ level: l, sheet: l === 'Custom' ? 'custom' : null }) })),
       isCustom: custom, incN: inc.length + ' of ' + Q.length + ' included', openCustom: () => S({ sheet: 'custom' }), customOn: st.sheet === 'custom', recT: isRec ? 'Recommended set' : 'Custom selection',
-      quals: Q.map((q) => ({ l: q, bg: inc.includes(q) ? '#332921' : '#EEE9E2', fg: inc.includes(q) ? '#FEFDFB' : '#332921', pick: () => { if (inc.includes(q) && inc.length === 1) { toast('At least one stays included.'); return; } S({ inc: inc.includes(q) ? inc.filter((x) => x !== q) : [...inc, q] }); } })),
+      quals: Q.map((q) => ({ l: q, bg: inc.includes(q) ? '#332921' : '#EEE9E2', fg: inc.includes(q) ? '#FEFDFB' : '#332921', pick: () => { if (inc.includes(q) && inc.length === 1) { toast('At least one stays included'); return; } S({ inc: inc.includes(q) ? inc.filter((x) => x !== q) : [...inc, q] }); } })),
       selAll: () => S({ inc: Q }), clearSel: () => S({ inc: [Q[0]] }), restore: () => S({ inc: REC }), notRec: !isRec,
       tlV: TL[tl], tlDn: () => S({ tl: Math.max(0, tl - 1) }), tlUp: () => S({ tl: Math.min(TL.length - 1, tl + 1) }), roundsV: RN(rounds), rDn: () => S({ rounds: Math.max(0, rounds - 5) }), rUp: () => S({ rounds: rounds + 5 }),
       autoOn: auto, autoOnBg: auto ? '#44684A' : '#DAD1C8', autoOnX: auto ? 22 : 2, autoT: () => S({ auto: !auto }),

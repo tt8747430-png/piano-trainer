@@ -58,7 +58,7 @@ TR_SRC = r'''
       levelV: level, openLevel: () => S({ sheet: 'level' }), levelOn: st.sheet === 'level',
       levels: ['The main chords of C', 'Major and minor in every key', 'Diminished and augmented', 'Sevenths', 'Every quality', 'Custom'].map((l) => ({ l, mark: l === level ? '✓' : '', pick: () => S({ level: l, sheet: l === 'Custom' ? 'custom' : null }) })),
       isCustom: custom, incN: inc.length + ' of ' + Q.length + ' included', openCustom: () => S({ sheet: 'custom' }), customOn: st.sheet === 'custom', recT: isRec ? 'Recommended set' : 'Custom selection',
-      quals: Q.map((q) => ({ l: q, bg: inc.includes(q) ? '#332921' : '#EEE9E2', fg: inc.includes(q) ? '#FEFDFB' : '#332921', pick: () => { if (inc.includes(q) && inc.length === 1) { toast('At least one stays included.'); return; } S({ inc: inc.includes(q) ? inc.filter((x) => x !== q) : [...inc, q] }); } })),
+      quals: Q.map((q) => ({ l: q, bg: inc.includes(q) ? '#332921' : '#EEE9E2', fg: inc.includes(q) ? '#FEFDFB' : '#332921', pick: () => { if (inc.includes(q) && inc.length === 1) { toast('At least one stays included'); return; } S({ inc: inc.includes(q) ? inc.filter((x) => x !== q) : [...inc, q] }); } })),
       selAll: () => S({ inc: Q }), clearSel: () => S({ inc: [Q[0]] }), restore: () => S({ inc: REC }), notRec: !isRec,
       tlV: TL[tl], tlDn: () => S({ tl: Math.max(0, tl - 1) }), tlUp: () => S({ tl: Math.min(TL.length - 1, tl + 1) }), roundsV: RN(rounds), rDn: () => S({ rounds: Math.max(0, rounds - 5) }), rUp: () => S({ rounds: rounds + 5 }),
       autoOn: auto, autoOnBg: auto ? '#44684A' : '#DAD1C8', autoOnX: auto ? 22 : 2, autoT: () => S({ auto: !auto }),
@@ -109,8 +109,8 @@ PE_SRC = r'''
       pageT: { edit: 'Edit progression', settings: 'Settings', publish: 'Publish' }[page], back: () => S({ page: page === 'publish' ? 'settings' : 'edit' }), backT: page === 'publish' ? 'Settings' : 'Edit progression',
       goSet: () => S({ page: 'settings', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }), draftT: draft, styles: chipsOf(['Pop', 'Rock', 'Jazz', 'Blues', 'Classical', 'R&B / Soul', 'Gospel', 'Modal', 'Theory'], style, (x) => S({ style: x, draft: 'Draft · 3 changes' })),
       name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }), openPublishing: () => S({ sheet: 'publishing' }), publishingOn: st.sheet === 'publishing',
-      discard: () => { S({ sheet: 'discard' }); }, discardOn: st.sheet === 'discard', doDiscard: () => { S({ sheet: null, draft: 'Published · no changes' }); toast('Changes discarded.'); },
-      publish: () => { S({ draft: 'Published · no changes', page: 'edit', sheet: null }); toast('Published. Learners see it on their next visit.'); }, share: () => toast('Link copied.'),
+      discard: () => { S({ sheet: 'discard' }); }, discardOn: st.sheet === 'discard', doDiscard: () => { S({ sheet: null, draft: 'Published · no changes' }); toast('Changes discarded'); },
+      publish: () => { S({ draft: 'Published · no changes', page: 'edit', sheet: null }); toast('Published. Learners will receive it the next time they open the app.'); }, share: () => toast('Link copied'),
       tipOn_prog: st.tip === 'prog', tip_prog: () => S({ tip: st.tip === 'prog' ? null : 'prog' }), tipOn_lines: st.tip === 'lines', tip_lines: () => S({ tip: st.tip === 'lines' ? null : 'lines' }),
       demo: demoOf(['Editor', 'Learner'], role, 'role').map((d) => ({ ...d, pick: () => S({ role: d.l }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };'''
@@ -153,10 +153,10 @@ PA_SRC = r'''
       favOn: fav, heartFill: fav ? '#B3261E' : 'none', heartInk: fav ? '#B3261E' : '#332921', toggleFav: () => { S({ fav: !fav }); toast(fav ? 'Removed from Favourites.' : 'Added to Favourites.'); },
       hidden, hideT: hidden ? 'Show in the Player' : 'Hide from the Player', toggleHide: () => S({ hidden: !hidden, sheet: null }),
       makeOwn: () => S({ page: 'new', sheet: null }), edit: () => S({ page: 'edit', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }),
-      del: () => { S({ sheet: null, deleted: true }); toast(name + ' deleted.', true); }, deleted: !!st.deleted, notDeleted: !st.deleted,
-      save: () => { S({ page: 'pattern', own: true }); toast('Saved to your patterns.'); }, cancel: () => S({ page: ROOT === 'pattern' ? 'pattern' : 'pattern' }), back: () => S({ page: 'pattern' }),
+      del: () => { S({ sheet: null, deleted: true }); toast(name + ' deleted', true); }, deleted: !!st.deleted, notDeleted: !st.deleted,
+      save: () => { S({ page: 'pattern', own: true }); toast('Saved to your patterns'); }, cancel: () => S({ page: ROOT === 'pattern' ? 'pattern' : 'pattern' }), back: () => S({ page: 'pattern' }),
       rhT: rh, lhT: lh, rhG: grp(RHG, rh, 'rh'), lhG: grp(LHG, lh, 'lh'), over: seg(['Over a bar of C major', 'Over Amazing Grace'], st.over ?? 'Over a bar of C major', (x) => S({ over: x })),
-      published: !!st.pub, notPublished: !st.pub, doPub: () => { S({ pub: true }); toast('Published to the Public library.'); },
+      published: !!st.pub, notPublished: !st.pub, doPub: () => { S({ pub: true }); toast('Published to the Public library'); },
       demo: demoOf(['Built-in', 'Your own'], own ? 'Your own' : 'Built-in', 'x').map((d) => ({ ...d, pick: () => S({ own: d.l === 'Your own', page: 'pattern' }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, deleted: false }) };'''
 def ROLL(w):
@@ -206,8 +206,8 @@ TK_SRC = r'''
       .map(([k, l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => S(o) }));
     return { ...common(st, set), states, name: st.name ?? 'Take 3', setName: (e) => S({ name: e.target.value }), cells, fromT: st.playing ? 'Playing from bar ' + (st.from ?? 1) : '212 notes · 14 bars',
       firstV: String(first), lastV: String(last), keepL: 'Keep bars ' + first + '–' + last, fDn: () => S({ first: Math.max(1, first - 1) }), fUp: () => S({ first: Math.min(last, first + 1) }), lDn: () => S({ last: Math.max(first, last - 1) }), lUp: () => S({ last: Math.min(bars, last + 1) }),
-      askKeep: () => S({ sheet: 'keep' }), keepOn: st.sheet === 'keep', keepT: 'Keep bars ' + first + '–' + last + '?', doKeep: () => { S({ sheet: null, kept: true }); toast('Kept bars ' + first + '–' + last + '.'); },
-      download: () => toast('Take 3.mid saved.'), del: () => { S({ deleted: true }); toast('Take 3 deleted.', true); }, deleted, notDeleted: !deleted, lenT: kept ? '0:24 · 92 BPM' : '0:41 · 92 BPM',
+      askKeep: () => S({ sheet: 'keep' }), keepOn: st.sheet === 'keep', keepT: 'Keep bars ' + first + '–' + last + '?', doKeep: () => { S({ sheet: null, kept: true }); toast('Kept bars ' + first + '–' + last); },
+      download: () => toast('Take 3.mid saved'), del: () => { S({ deleted: true }); toast('Take 3 deleted', true); }, deleted, notDeleted: !deleted, lenT: kept ? '0:24 · 92 BPM' : '0:41 · 92 BPM',
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, deleted: false }) };'''
 def PROLL(w, h):
     import random

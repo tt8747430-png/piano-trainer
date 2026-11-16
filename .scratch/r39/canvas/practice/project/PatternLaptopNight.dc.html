@@ -104,10 +104,10 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       favOn: fav, favFill: fav ? '#C2554A' : 'none', heartFill: fav ? '#F2867C' : 'none', heartInk: fav ? '#F2867C' : '#EDE9E1', toggleFav: () => { S({ fav: !fav }); toast(fav ? 'Removed from Favourites.' : 'Added to Favourites.'); },
       hidden, hideT: hidden ? 'Show in the Player' : 'Hide from the Player', toggleHide: () => S({ hidden: !hidden, sheet: null }),
       makeOwn: () => S({ page: 'new', sheet: null }), edit: () => S({ page: 'edit', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }),
-      del: () => { S({ sheet: null, deleted: true }); toast(name + ' deleted.', true); }, deleted: !!st.deleted, notDeleted: !st.deleted,
-      save: () => { S({ page: 'pattern', own: true }); toast('Saved to your patterns.'); }, cancel: () => S({ page: ROOT === 'pattern' ? 'pattern' : 'pattern' }), back: () => S({ page: 'pattern' }),
+      del: () => { S({ sheet: null, deleted: true }); toast(name + ' deleted', true); }, deleted: !!st.deleted, notDeleted: !st.deleted,
+      save: () => { S({ page: 'pattern', own: true }); toast('Saved to your patterns'); }, cancel: () => S({ page: ROOT === 'pattern' ? 'pattern' : 'pattern' }), back: () => S({ page: 'pattern' }),
       rhT: rh, lhT: lh, rhG: grp(RHG, rh, 'rh'), lhG: grp(LHG, lh, 'lh'), over: seg(['Over a bar of C major', 'Over Amazing Grace'], st.over ?? 'Over a bar of C major', (x) => S({ over: x })),
-      published: !!st.pub, notPublished: !st.pub, doPub: () => { S({ pub: true }); toast('Published to the Public library.'); },
+      published: !!st.pub, notPublished: !st.pub, doPub: () => { S({ pub: true }); toast('Published to the Public library'); },
       demo: demoOf(['Built-in', 'Your own'], own ? 'Your own' : 'Built-in', 'x').map((d) => ({ ...d, pick: () => S({ own: d.l === 'Your own', page: 'pattern' }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, deleted: false }) };
   }

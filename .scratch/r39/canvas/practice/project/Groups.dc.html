@@ -82,13 +82,13 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       goGroup: () => S({ page: 'group' }), goFolder: () => S({ page: 'folder' }), goJoinPage: () => S({ page: 'join', sheet: null }), back: () => S({ page: page === 'folder' && st.fromGroup ? 'group' : null }),
       openNew: () => S({ sheet: 'new' }), newOn: st.sheet === 'new', openJoin: () => S({ sheet: 'join' }), joinOn: st.sheet === 'join', openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more',
       openShare: () => S({ sheet: 'choose' }), chooseOn: st.sheet === 'choose', pickFolder: () => S({ sheet: 'share' }), shareOn: st.sheet === 'share', perms: seg(['Can view', 'Can edit'], perm, (x) => S({ perm: x })),
-      shareDone: () => { S({ sheet: null, shared: true }); toast('Hymns shared with Choir accompanists.'); }, sharedNew: !!st.shared,
-      invOn: inv, invOnBg: inv ? '#44684A' : '#DAD1C8', invOnX: inv ? 22 : 2, invT: () => S({ inv: !inv }), copyInv: () => toast('Invite link copied.'),
+      shareDone: () => { S({ sheet: null, shared: true }); toast('Hymns shared with Choir accompanists'); }, sharedNew: !!st.shared,
+      invOn: inv, invOnBg: inv ? '#44684A' : '#DAD1C8', invOnX: inv ? 22 : 2, invT: () => S({ inv: !inv }), copyInv: () => toast('Invite link copied'),
       members: members.map(([n, r]) => ({ n, r, owner: r === 'Owner', other: r !== 'Owner', init: n === 'You' ? 'A' : n[0], ask: () => S({ sheet: 'rm', who: n }) })), memN: members.length + ' members',
       rmOn: st.sheet === 'rm', rmT: 'Remove ' + (st.who ?? '') + '?', doRm: () => S({ gone: [...(st.gone ?? []), st.who], sheet: null }),
-      askDel: () => S({ sheet: 'del' }), delOn: st.sheet === 'del', doDel: () => { S({ sheet: null, page: null }); toast('Choir accompanists deleted.'); },
-      askStop: () => S({ sheet: 'stop' }), stopOn: st.sheet === 'stop', doStop: () => { S({ sheet: null, page: null }); toast('Hymns is no longer shared.'); },
-      joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists.'); }, signedOut: demo === 'Signed out', canNew: demo !== 'Signed out' && demo !== 'Offline', empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
+      askDel: () => S({ sheet: 'del' }), delOn: st.sheet === 'del', doDel: () => { S({ sheet: null, page: null }); toast('Choir accompanists deleted'); },
+      askStop: () => S({ sheet: 'stop' }), stopOn: st.sheet === 'stop', doStop: () => { S({ sheet: null, page: null }); toast('Hymns is no longer shared'); },
+      joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists'); }, signedOut: demo === 'Signed out', canNew: demo !== 'Signed out' && demo !== 'Offline', empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };
   }
 }

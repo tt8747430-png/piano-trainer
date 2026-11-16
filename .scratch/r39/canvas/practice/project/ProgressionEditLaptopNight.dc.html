@@ -92,8 +92,8 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       pageT: { edit: 'Edit progression', settings: 'Settings', publish: 'Publish' }[page], back: () => S({ page: page === 'publish' ? 'settings' : 'edit' }), backT: page === 'publish' ? 'Settings' : 'Edit progression',
       goSet: () => S({ page: 'settings', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }), draftT: draft, styles: chipsOf(['Pop', 'Rock', 'Jazz', 'Blues', 'Classical', 'R&B / Soul', 'Gospel', 'Modal', 'Theory'], style, (x) => S({ style: x, draft: 'Draft · 3 changes' })),
       name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }), openPublishing: () => S({ sheet: 'publishing' }), publishingOn: st.sheet === 'publishing',
-      discard: () => { S({ sheet: 'discard' }); }, discardOn: st.sheet === 'discard', doDiscard: () => { S({ sheet: null, draft: 'Published · no changes' }); toast('Changes discarded.'); },
-      publish: () => { S({ draft: 'Published · no changes', page: 'edit', sheet: null }); toast('Published. Learners see it on their next visit.'); }, share: () => toast('Link copied.'),
+      discard: () => { S({ sheet: 'discard' }); }, discardOn: st.sheet === 'discard', doDiscard: () => { S({ sheet: null, draft: 'Published · no changes' }); toast('Changes discarded'); },
+      publish: () => { S({ draft: 'Published · no changes', page: 'edit', sheet: null }); toast('Published. Learners will receive it the next time they open the app.'); }, share: () => toast('Link copied'),
       tipOn_prog: st.tip === 'prog', tip_prog: () => S({ tip: st.tip === 'prog' ? null : 'prog' }), tipOn_lines: st.tip === 'lines', tip_lines: () => S({ tip: st.tip === 'lines' ? null : 'lines' }),
       demo: demoOf(['Editor', 'Learner'], role, 'role').map((d) => ({ ...d, pick: () => S({ role: d.l }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };
