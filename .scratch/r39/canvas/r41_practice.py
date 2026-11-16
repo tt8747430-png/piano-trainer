@@ -26,20 +26,20 @@ THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc
           ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html'),
           ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
 EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Barry Harris', '2 exercises', '', 'JazzVocabulary.dc.html'), ('swing', 'Piano With Jonny', '2 exercises', '', 'JazzVocabulary.dc.html')]
-TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'Chromatic tuner', '', 'Tuner.dc.html'),
-         ('lens', 'Chord finder', 'Chord identification', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
-TOOLSBTN = TB('Tools', 'openTools')  # a word in the bar is the one glass capsule (TBST), as Learned and Edit
-MAIN = js(r"    return { ...common(st, set), toolsOn: st.sheet === 'tools', openTools: () => set({ sheet: 'tools' }),"
-           r" states: [['Tools menu open', st.sheet === 'tools', { sheet: 'tools' }, { sheet: null }], ['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
+TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'A4 = 440 Hz', '', 'Tuner.dc.html'),
+         ('lens', 'Chord finder', 'Last: Cmaj7', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
+MAIN = js(r"    return { ...common(st, set),"
+           r" states: [['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
            r".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };")
-ph = f'''{TITLEBAR('Practice', TOOLSBTN + IB('Search', SEARCH.replace('18', '22'), href='#'))}
+ph = f'''{TITLEBAR('Practice', IB('Search', SEARCH.replace('18', '22'), href='#'))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{PLIST(THEORY)}{H2('Exercises')}{PLIST(EXERCISES)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
 grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
-lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span>{TOOLSBTN}</header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
+lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span></header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{grid(THEORY)}{H2('Exercises')}{grid(EXERCISES)}{H2('Tools')}{grid(TOOLS)}</main>'''
-TOOLSHEET = PLIST(TOOLS)
-detail('Main', 'Practice', MAIN, ph, lm, '', BSHEET('toolsOn', 'Tools', TOOLSHEET), POPOVER('toolsOn', 'Tools', PLIST([(p, t, s, v, L(h, True)) for p, t, s, v, h in TOOLS]), 'right: 40px; top: 60px', 400))
+# Practice's own Tools section is the tools' home on this page; the bar's Tools menu, which listed the same five a
+# scroll away, is kept for the pages that have no such section (a lesson) (owner, 2026-11-16: "the same act reachable two ways")
+detail('Main', 'Practice', MAIN, ph, lm, '', '', '')
 
 # ═════ Scales and keys (Piano Companion: the staff, then the chords that fit; R39 rulings) ═════
 def scale_staff(w, fingers):
