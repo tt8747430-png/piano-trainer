@@ -36,6 +36,8 @@ const readFolderSearch = (raw: Raw): FolderSearch => ({
   edit: raw.edit === true,
 })
 export const folderSearch = routeSearch(readFolderSearch, FOLDER_DEFAULTS)
+// All songs (R72, Flat's library): every song in one list, searched, sorted and filtered as Home was.
+export const allSongsSearch = routeSearch(readSongsSearch, SONGS_DEFAULTS)
 
 // A song's page (R30 S4): in Edit or not, entered from its ✎.
 

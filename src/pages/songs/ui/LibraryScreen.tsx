@@ -40,9 +40,12 @@ export function LibraryScreen({
   folder,
   filter,
   inEdit = false,
+  all = false,
 }: {
   folder: ShelvedFolder | null
   filter: SongsFilter
+  /** All songs (R72, Flat's library): every song in one list, no folders, no tree, Select in its bar. */
+  all?: boolean
   /** The folder in Edit (its URL's `edit`): its name and look in place under the bar. */
   inEdit?: boolean
 }) {
@@ -51,8 +54,10 @@ export function LibraryScreen({
   const navigate = useNavigate()
   const q = useDeferredValue(filter.q)
   // A laptop's two panes (R30 S2): the library's tree on the left, the place's songs on the right.
-  const wide = useMediaQuery(LIBRARY_PANES)
-  const page = useLibraryPage(folder, { ...filter, q }, { tree: wide })
+  const laptop = useMediaQuery(LIBRARY_PANES)
+  // All songs has no tree beside it: one column, its songs a table on a laptop.
+  const wide = laptop && !all
+  const page = useLibraryPage(folder, { ...filter, q }, { tree: laptop || all })
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)
   const drop = useSongDrop(songImport.importFile)
@@ -102,8 +107,9 @@ export function LibraryScreen({
       <LibraryFilters
         page={page}
         filter={filter}
-        screen={folder ? nameOf(folder) : t('title')}
-        wide={wide}
+        screen={folder ? nameOf(folder) : all ? t('all.title') : t('title')}
+        wide={laptop}
+        all={all}
       />
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
@@ -115,13 +121,16 @@ export function LibraryScreen({
       ) : (
         <>
           {/* Home opens with the songs left part way (canvas 133), a phone's and a laptop's. */}
-          {folder === null && view.shown === view.scope.length ? <ContinueShelf /> : null}
+          {folder === null && !all && view.shown === view.scope.length ? <ContinueShelf /> : null}
           <LibraryBrowse
             page={page}
             place={folder?.id ?? 'home'}
-            table={wide}
+            table={laptop}
+            noFolders={all}
             moreFolders={
-              folder === null && !wide && !view.filtering ? <SharedWithMe inTree={false} /> : null
+              folder === null && !wide && !all && !view.filtering ? (
+                <SharedWithMe inTree={false} />
+              ) : null
             }
             onClear={clear}
           />
@@ -147,18 +156,20 @@ export function LibraryScreen({
     <LibraryHeader
       page={page}
       folder={folder}
+      all={all ? (filter.favourites ? 'favourites' : 'all') : false}
       search={
-        wide ? (
+        laptop ? (
           <LibrarySearchRow
             page={page}
             filter={filter}
-            screen={folder ? nameOf(folder) : t('title')}
+            screen={folder ? nameOf(folder) : all ? t('all.title') : t('title')}
             wide
+            all={all}
           />
         ) : undefined
       }
       add={
-        wide ? (
+        laptop ? (
           <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
         ) : undefined
       }
@@ -204,7 +215,7 @@ export function LibraryScreen({
         </>
       )}
       {!page.select.on ? (
-        wide ? null : (
+        laptop ? null : (
           <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
         )
       ) : empty ? (

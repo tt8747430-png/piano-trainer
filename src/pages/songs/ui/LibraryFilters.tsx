@@ -23,6 +23,7 @@ export function LibraryFilters({
   filter,
   screen,
   wide = false,
+  all = false,
 }: {
   page: LibraryPage
   filter: SongsFilter
@@ -30,11 +31,13 @@ export function LibraryFilters({
   screen: string
   /** A laptop's two panes: the table's headings sort and the tree holds the places. */
   wide?: boolean
+  /** All songs (R72): its search says so; Favourites is My songs' card, so no place chips. */
+  all?: boolean
 }) {
   return (
     <div className="flex flex-col gap-3 empty:hidden">
-      {wide ? null : <LibrarySearchRow page={page} filter={filter} screen={screen} />}
-      {wide ? null : <PlaceChips filter={filter} />}
+      {wide ? null : <LibrarySearchRow page={page} filter={filter} screen={screen} all={all} />}
+      {wide || all ? null : <PlaceChips filter={filter} />}
       <SongsFilterChips filter={filter} />
       {filter.q.trim() === '' ? null : <SearchEverywhere query={filter.q} />}
     </div>
@@ -50,11 +53,13 @@ export function LibrarySearchRow({
   filter,
   screen,
   wide = false,
+  all = false,
 }: {
   page: LibraryPage
   filter: SongsFilter
   screen: string
   wide?: boolean
+  all?: boolean
 }) {
   const { t } = useTranslation('songs')
   const set = useSetSearch<SongsFilter>()
@@ -64,8 +69,8 @@ export function LibrarySearchRow({
         <SearchField
           value={filter.q}
           onChange={(q) => set({ q })}
-          label={t('search')}
-          hint={t('searchHint')}
+          label={all ? t('all.search') : t('search')}
+          hint={all ? t('all.search') : t('searchHint')}
           screen={screen}
         />
       </div>

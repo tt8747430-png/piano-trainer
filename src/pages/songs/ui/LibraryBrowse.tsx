@@ -27,6 +27,7 @@ export function LibraryBrowse({
   place,
   table = false,
   moreFolders,
+  noFolders = false,
   onClear,
 }: {
   page: LibraryPage
@@ -36,6 +37,8 @@ export function LibraryBrowse({
   table?: boolean
   /** Rows at the foot of the folders: a phone's Home's Shared with me (canvas 133). */
   moreFolders?: ReactNode
+  /** All songs: its songs alone, the folders left to My songs. */
+  noFolders?: boolean
   onClear: () => void
 }) {
   const { t } = useTranslation(['songs', 'common'])
@@ -85,7 +88,7 @@ export function LibraryBrowse({
               <div className="card overflow-hidden px-2">
                 <SongTable
                   entries={view.groups.flatMap((group) => group.entries)}
-                  folders={view.folders}
+                  folders={noFolders ? [] : view.folders}
                   page={page}
                 />
               </div>
@@ -93,11 +96,11 @@ export function LibraryBrowse({
           ) : (
             <SongTable
               entries={view.groups.flatMap((group) => group.entries)}
-              folders={view.folders}
+              folders={noFolders ? [] : view.folders}
               page={page}
             />
           )
-        ) : view.folders.length > 0 || moreFolders ? (
+        ) : noFolders ? null : view.folders.length > 0 || moreFolders ? (
           headed ? (
             // Headed beside Continue and the songs, a phone's Home's sections (canvas 133), folding.
             <FoldSection

@@ -80,6 +80,7 @@ import {
   readSongsHomeSearch,
   SONGS_KEPT,
   songsHomeSearch,
+  allSongsSearch,
   folderSearch,
   validateJoinGroupSearch,
   validateSharedSongSearch,
@@ -560,6 +561,13 @@ const folderArchivedRoute = createRoute({
     if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'FolderArchivedPage'),
+})
+// All songs (R72, Flat's library): every song the learner has, in one list to search, sort and select.
+const allSongsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/all',
+  ...allSongsSearch,
+  component: lazyRouteComponent(songsScreens, 'AllSongsPage'),
 })
 // The library's archive (ADR 0106): what the learner archived, to restore.
 const archiveRoute = createRoute({
@@ -1145,6 +1153,7 @@ const routeTree = rootRoute.addChildren([
     folderRoute,
     folderSettingsRoute,
     folderCardStyleRoute,
+    allSongsRoute,
     archiveRoute,
     trashRoute,
     folderArchivedRoute,

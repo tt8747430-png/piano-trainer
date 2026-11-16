@@ -74,6 +74,18 @@ details.
   stays the page's one honey control.
 - **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), tags.
 
+- **My songs is an overview** (R72, Flat's library; loop round 61): Recently played (the shelf of songs left part
+  way, See all n opening All songs), then the Folders as cards of their own (Favourites first, opening All songs on
+  the favourites; the learner's folders; Shared with me), then the Archive and the Trash, each a row with its count.
+  Search is the bar's round button and opens **All songs** (`/songs/all`): every song in one list, searched, sorted
+  and filtered by the Sort and filter sheet, Select in its bar. A search or filter carried in Home's URL still shows
+  what it finds there. The laptop's overview has no tree beside it: the folder cards three across.
+
 ## Consequences
 
 A study, practised on Practice, is in no library. A folder played song after song is a later round's.
+
+## History
+
+- 2026-11-16, loop round 61: My songs became the R72 board's overview and All songs its own page; the Archive left
+  the bar for a row beside the Trash, which left the bar's ···.

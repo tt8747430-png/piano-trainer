@@ -53,7 +53,8 @@ export const songs: LocaleResources['songs'] = {
       key: 'Тональность',
     },
   },
-  continue: { title: 'Продолжить', bar: 'Такт {{bar}} из {{total}}' },
+  continue: { title: 'Недавние', bar: 'Такт {{bar}} из {{total}}', seeAll: 'Все {{count}}' },
+  all: { title: 'Все песни', search: 'Поиск по вашим песням' },
   groups: {
     title: 'Группы',
     new: 'Новая группа',

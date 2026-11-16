@@ -59,7 +59,13 @@ export const songs = {
   },
   // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   // Songs' Continue (R30 S3): the last songs played.
-  continue: { title: 'Continue', bar: 'Bar {{bar}} of {{total}}' },
+  continue: {
+    title: 'Recently played',
+    bar: 'Bar {{bar}} of {{total}}',
+    seeAll: 'See all {{count}}',
+  },
+  // All songs (R72, Flat's library): every song in one list.
+  all: { title: 'All songs', search: 'Search your songs' },
   // Groups and the folders shared with them (R30 S6).
   groups: {
     title: 'Groups',

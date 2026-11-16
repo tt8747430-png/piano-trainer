@@ -28,12 +28,15 @@ import { useSongsViews } from './SongsSwitch'
 export function LibraryHeader({
   page,
   folder,
+  all = false,
   edit,
   search,
   add,
 }: {
   page: LibraryPage
   folder: ShelvedFolder | null
+  /** All songs (R72): Back to Songs, its title (Favourites from My songs' card), Select in the bar. */
+  all?: 'all' | 'favourites' | false
   /** The folder's Edit, where it may be renamed. */
   edit?: EditAction
   /** The search and its Sort and filter, on a laptop: the bar's first tools. */
@@ -65,6 +68,24 @@ export function LibraryHeader({
           <Button variant="soft" onClick={select.exit}>
             {t('select.done')}
           </Button>
+        }
+      />
+    )
+  if (all)
+    return (
+      <ScreenHeader
+        title={all === 'favourites' ? t('places.favourites') : t('all.title')}
+        back={<BackButton label={t('folder.up', { name: t('title') })} onClick={up} />}
+        tools={
+          <>
+            {search}
+            <RoundButton
+              label={t('select.start')}
+              icon={ListChecks}
+              onClick={() => page.select.start()}
+            />
+            {add}
+          </>
         }
       />
     )

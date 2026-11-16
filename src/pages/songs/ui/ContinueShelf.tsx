@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useLibrary } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire } from '@/entities/piece'
@@ -14,7 +15,7 @@ const SHOWN = 8
  * a tap opens the song, where Continue from bar 9 waits. A shelf that scrolls sideways; nothing before
  * the first song is left part way.
  */
-export function ContinueShelf() {
+export function ContinueShelf({ more }: { more?: number } = {}) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const repertoire = useRepertoire()
@@ -30,12 +31,23 @@ export function ContinueShelf() {
   if (shown.length === 0) return null
   return (
     <section aria-labelledby="songs-continue" className="flex flex-col gap-2">
-      <h2 id="songs-continue" className="mx-1 font-sans text-xl font-bold">
-        {t('continue.title')}
-      </h2>
-      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
+      <div className="mx-1 flex items-center justify-between gap-3">
+        <h2 id="songs-continue" className="font-sans text-xl font-bold">
+          {t('continue.title')}
+        </h2>
+        {/* See all n (the R72 board): every song, on All songs. */}
+        {more ? (
+          <Link
+            to="/songs/all"
+            className="flex min-h-11 items-center text-base font-semibold text-link hover:underline"
+          >
+            {t('continue.seeAll', { count: more })}
+          </Link>
+        ) : null}
+      </div>
+      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-5 lg:overflow-visible lg:px-0">
         {shown.map(({ entry, play }) => (
-          <li key={entry.id} className="w-33 flex-none snap-start lg:w-42.5">
+          <li key={entry.id} className="w-33 flex-none snap-start lg:w-auto lg:min-w-0">
             <PieceLink
               entry={entry}
               className="flex flex-col gap-1.5 rounded-[10px] text-foreground focus-visible:outline-offset-2"
