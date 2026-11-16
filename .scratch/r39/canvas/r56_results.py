@@ -148,7 +148,7 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
 RS_JS = lambda mode: js(r'''
     const S = (o) => set(o), CM7 = { 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, MODE = ''' + mode + r''', view = st.view ?? (MODE === 'run' ? 'run' : 'results'), show = st.show ?? 'After mistakes';
     return { ...common(st, set), isRun: view === 'run', isResults: view === 'results', isMiss: show === 'After mistakes', isPerfect: show === 'Perfect run',
-      shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#332921' : '#EEE9E2', fg: show === l ? '#FEFDFB' : '#332921', pick: () => S({ show: l }) })),
+      shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#332921' : '#EEE9E2', fg: show === l ? '#FEFDFB' : '#332921', pick: () => S({ show: l, view: 'results' }) })),
       playing: !!st.playing, playLabel: st.playing ? 'Pause' : 'Play',
       togglePlay: () => { if (st.playing) { S({ playing: false }); return; } S({ playing: true }); setTimeout(() => S({ playing: false, view: 'results' }), 1400); },
       kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
@@ -194,9 +194,11 @@ PV_MUSIC = {'walk': PV_WALK,
                   [('E', 4), ('G', 4), ('B', 4), ('D', 5)], [('F', 4), ('A', 4, _F), ('C', 5), ('E', 5, _F)], [('F', 4, _S), ('A', 4), ('C', 5, _S), ('E', 5)], [('G', 4), ('B', 4, _F), ('D', 5), ('F', 5)]],
     'progression': [[('C', 4), ('E', 4), ('G', 4)], [('B', 3), ('D', 4), ('G', 4)], [('C', 4), ('E', 4), ('A', 4)], [('C', 4), ('F', 4), ('A', 4)]] * 2,
     'exercise': [[(l, o)] for l, o in (('C', 4), ('E', 4), ('F', 4), ('G', 4), ('A', 4), ('G', 4), ('F', 4), ('E', 4))]}
+def PV_LINE(n, cw, v='walk', start=0, last=True):
+    cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
+    return f'<div style="display: flex; justify-content: center">{cells}</div>'
 def PV_STAFF(n, cw, v='walk'):
-    cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(i == n - 1)) for i in range(n))
-    return CARD(f'<div style="display: flex; justify-content: center">{cells}</div>', '12px 8px')
+    return CARD(PV_LINE(n, cw, v), '12px 8px')
 def PV_RUN(lap, v):
     setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
     transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
@@ -206,7 +208,7 @@ def PV_RUN(lap, v):
                 + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 1180px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
                 f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(4, 76, v)}<div style="flex: 1"></div>'
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{CARD(PV_LINE(4, 76, v, 0, False) + '<div style="height: 16px"></div>' + PV_LINE(4, 76, v, 4), '12px 8px')}<div style="flex: 1"></div>'
             f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}

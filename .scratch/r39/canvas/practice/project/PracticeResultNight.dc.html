@@ -74,7 +74,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 
     const S = (o) => set(o), CM7 = { 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }, MODE = 'result', view = st.view ?? (MODE === 'run' ? 'run' : 'results'), show = st.show ?? 'After mistakes';
     return { ...common(st, set), isRun: view === 'run', isResults: view === 'results', isMiss: show === 'After mistakes', isPerfect: show === 'Perfect run',
-      shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#EDE9E1' : '#2E2924', fg: show === l ? '#24201C' : '#EDE9E1', pick: () => S({ show: l }) })),
+      shows: ['After mistakes', 'Perfect run'].map((l) => ({ l, bg: show === l ? '#EDE9E1' : '#2E2924', fg: show === l ? '#24201C' : '#EDE9E1', pick: () => S({ show: l, view: 'results' }) })),
       playing: !!st.playing, playLabel: st.playing ? 'Pause' : 'Play',
       togglePlay: () => { if (st.playing) { S({ playing: false }); return; } S({ playing: true }); setTimeout(() => S({ playing: false, view: 'results' }), 1400); },
       kb: calmKeys(53, 79, CM7, 402, 112), kbL: calmKeys(36, 96, CM7, 1462, 170), chordT: st.playing ? 'Chord 12 of 12' : 'Chord 11 of 12', prog: st.playing ? '100%' : '92%',
