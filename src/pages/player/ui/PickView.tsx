@@ -90,6 +90,8 @@ export function ViewMenu({ shown, needs }: { shown: MusicView; needs: ViewNeeds 
               <DropdownMenuRadioItem
                 key={view}
                 value={view}
+                // A view picked closes the menu: it only shows a view.
+                closeOnClick
                 disabled={need !== undefined}
                 title={need === undefined ? undefined : t(`needs.${need}`)}
               >
