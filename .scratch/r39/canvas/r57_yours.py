@@ -134,13 +134,13 @@ NAMEBODY = lambda v, label: (f'{CAPS("Name")}<input aria-label="Name" value="{v}
 INSBODY = GROUP(('raw', f'<sc-for list="{{{{inCourses}}}}" as="k" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{{{k.on}}}}" onClick="{{{{k.pick}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 16px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: 1">{{{{k.c}}}}</span><span style="font-weight: 700; color: #2F5A35">{{{{k.mark}}}}</span></button></sc-for>'), bg=SHEET)
 def SETTINGS(lesson, lap):
     name = 'Warm-up before church' if lesson else 'Sunday service set'
-    head = LTITLEBAR('Settings', '', ("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html") if lap else (f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px{" 0 44px" if lap else ""}"><a href="{("LessonLaptop" if lap else "Lesson") if lesson else ("CourseLaptop" if lap else "Course")}.dc.html" aria-label="Back" data-tip="Back" style="{GLASSST}; margin-left: -4px">{CHEV_L}</a>'
-            f'<h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Settings</h1></header>')
+    head = LTITLEBAR('Settings', '', ("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html") if lap else TOP(("Lesson" if lesson else "Course") + ".dc.html", 'Settings')
     if lesson:
         rows = (READCARDS + CAPS('The lesson') + GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET))
     else:
         rows = (CAPS('The course') + GROUP(('link', 'Name', name, 'openName'), ('action', 'Duplicate', 'dup'), bg=SHEET))
-    sub = f'<span style="margin: -8px 4px 0; font-size: 15px; color: {SOFT}">{name}</span>'
+    # on a laptop the name stands under the large title; a phone's centred bar says Settings alone, the Name row names it
+    sub = f'<span style="margin: -8px 4px 0; font-size: 15px; color: {SOFT}">{name}</span>' if lap else ''
     rest = f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "reset"), bg=SHEET)}<div style="height: 8px"></div>{GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)}'
     # on a laptop the page's groups stand in two columns: what it is on the left, its progress and Delete on the right
     body = (sub + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{rows}</div><div style="display: flex; flex-direction: column; gap: 14px">{rest}</div></div>') if lap else sub + rows + rest
