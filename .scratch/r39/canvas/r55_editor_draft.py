@@ -19,9 +19,9 @@ DS_KEYS = r'''
 DJS = ED4.replace("    return { ...common(st, set),", DS_JS + "\n    return { ...common(st, set)," + DS_KEYS, 1)
 assert DJS != ED4
 
-PUBPILL = (f'<button type="button" onClick="{{{{openPub}}}}" aria-haspopup="dialog" style="flex: none; height: 36px; padding: 0 10px 0 14px; border: 0; border-radius: 18px; background: {HONEY}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px">Publishing{CHEV_D}</button>')
+PUBPILL = (f'<button type="button" onClick="{{{{openPub}}}}" aria-haspopup="dialog" data-reach44 style="flex: none; position: relative; height: 36px; padding: 0 10px 0 14px; border: 0; border-radius: 18px; background: {HONEY}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px">Publishing{CHEV_D}</button>')
 SAVET = f'<span role="status" style="min-width: 0; font-size: 13px; color: {{{{saveC}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{saveT}}}}</span>'
-DROW = f'<div style="flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px 8px">{PUBPILL}{SAVET}</div>'
+DROW = '<style data-reach44>[data-reach44]::before { content: ""; position: absolute; inset: -4px 0 }</style>' + f'<div style="flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px 8px">{PUBPILL}{SAVET}</div>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go).replace('background: #B3261E', f'background: {INK}')
 VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 60px; display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
         f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest · what learners have</span>")}</span>'
