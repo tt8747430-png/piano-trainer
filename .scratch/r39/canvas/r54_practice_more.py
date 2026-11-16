@@ -129,7 +129,7 @@ PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'),
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
          + FOOT('Publishing replaces the version learners see. They get it on their next visit; nothing they saved is lost.')
          + f'<div style="display: flex; gap: 8px">{BTN("Discard changes", "discard", "", "quiet", 50)}{BTN("Publish", "publish", "", "primary", 50)}</div>')
-PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Edit a copy in the progression’s ··· menu.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}</div>')
+PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Make your own from it at the foot of the progression’s page.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}</div>')
 PESHEETS = (BSHEET('publishingOn', 'Publishing', GROUP(('link', 'Publish…', '', 'goPub'), ('action', 'Discard changes', 'discard', RED), bg=SHEET)) + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
 PEBODY = IF('isEdit', PEEDIT, 'true') + IF('isSet', PESET) + IF('isPub', PEPUB)
 PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
