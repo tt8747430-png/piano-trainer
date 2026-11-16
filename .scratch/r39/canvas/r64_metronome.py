@@ -17,10 +17,10 @@ ph64 = (TOP64 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + SHOWSTATES() + TEMPO(72) + BEATS(110) + ME_ROWS + '</main>' + BAR64('left: 12px; right: 12px; bottom: 30px'))
 lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
         + LPAD(TOP64).replace('Main.dc.html', 'Laptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding: 24px 40px 120px 56px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 28px">{SHOWSTATES()}{TEMPO(120)}{BEATS(220)}</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ME_ROWS}</div></div>'
+        # one centred column, the tool first and its settings under it (owner, 2026-11-16: "the page has one focus")
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 120px">'
+        + f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}{TEMPO(120)}{BEATS(160)}{ME_ROWS}</div></div>'
         + BAR64('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST) + BSHEET('setOn', 'Metronome settings', ME_SET))
-laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 40px; top: 160px') + POPOVER('setOn', 'Metronome settings', ME_SET, 'right: 40px; top: 64px'), 'Practice')
+laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; top: 604px') + POPOVER('setOn', 'Metronome settings', ME_SET, 'right: 40px; top: 64px'), 'Practice')
 print('r64 metronome ok')

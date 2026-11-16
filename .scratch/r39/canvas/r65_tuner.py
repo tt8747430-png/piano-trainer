@@ -1,7 +1,7 @@
 # R65: the Tuner in the Practice pages' language (loop, 2026-11-14). Run from r41.py after r64 (it replaces the
 # Tuner boards r41_practice writes). The bar of glass buttons (Back · Tuner) as the Metronome's, no gear (its one
 # setting is on the page); the note large, how far it is in words and its frequency; the needle on an arc ±50 cents
-# with the in-tune band; under it on a phone, beside it on a laptop, one group: A4 stepped in place. No floating bar:
+# with the in-tune band; under it on both sizes, one group: A4 stepped in place. No floating bar:
 # the Tuner listens while the page is open. Without the microphone, the app's words and Try again.
 TOP65 = (TOP64.replace('Metronome</span>', 'Tuner</span>').replace(ROUND60("Metronome settings", COG, "openSet"), ''))
 TU65 = (TU.replace("    return { ...common(st, set), setOn:", """    const quiet = !!st.quiet && mic, pick = (o) => set(Object.assign({ cents: null, quiet: false, mic: true }, o));
@@ -24,9 +24,8 @@ ph65 = (TOP65 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + HEARD65(96, 340) + MICOFF65 + ROWS65 + '</main>')
 lm65 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
         + LPAD(TOP65).replace('Main.dc.html', 'Laptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding: 24px 40px 120px 56px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column">{HEARD65(140, 560)}{MICOFF65}</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS65}</div></div></div>')
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px">'
+        + f'<div style="width: min(560px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 32px">{HEARD65(140, 560)}{MICOFF65}{ROWS65}</div></div></div>')
 phone('Tuner', 'Tuner, phone', ph65, TU65)
 laptop('TunerLaptop', 'Tuner, laptop', lm65, '', TU65, '', 'Practice')
 print('r65 tuner ok')
