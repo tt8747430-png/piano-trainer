@@ -40,10 +40,10 @@ STAFF61 = (lambda: (
     + f'<path d="{{{{z.ad}}}}" fill="none" stroke="{INK}" stroke-width="1.4" stroke-linecap="round"></path><path d="{{{{z.bd}}}}" fill="none" stroke="{INK}" stroke-width="2.6"></path></sc-for>'
     + f'<path d="M334 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
 INFO61 = '<span style="width: 8px"></span>' + INFOB('About the interval', 'toggleAbout', 'aboutOn')
-ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Up', 'upS'), ('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
+ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
 TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'
            f'<h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>{INFO61}</div>'
-           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{{{{sub}}}}</p>{ABOUT61}</div>')
+           f'{ABOUT61}</div>')
 HEAR61 = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: {SOFT}">Sounds like</span><span style="font-size: 16px; font-weight: 600">{{{{song}}}}</span></span>'
           f'<button type="button" aria-label="Hear it" data-tip="Hear it" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</button></div>')
 MUSIC61 = CARD(STAFF61 + '<div style="height: 12px"></div>' + HEAR61, '16px 16px 14px')
@@ -70,10 +70,6 @@ lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div style="margin: 0 0 28px">{KB60("kbLE", 180)}</div><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE61}{MUSIC61}'
         + f'<div style="display: flex; flex-direction: column; gap: 16px">{GRID61}</div></div></div>'
         + BAR61('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
-# on a laptop the way down and the inversion stand under the grid (Sounds like is the way up); its ⓘ keeps the meaning alone
-SONGS61 = '<div style="flex: none; margin-top: 8px">' + GROUP(('val', 'Down', '{{downS}}'), ('val', 'Inverts to', '{{inv}}'), bg=SHEET) + '</div>'
-ABOUT61L = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>', 'left: 0; top: 56px')
-lm61 = lm61.replace(GRID61 + '</div></div>', GRID61 + SONGS61 + '</div></div>').replace(ABOUT61, ABOUT61L)
 phone('Intervals', 'Intervals, phone', ph61, IV61, SHEETS61)
 laptop('IntervalsLaptop', 'Intervals, laptop', lm61, '', IV61, POPS61, 'Practice')
 print('r61 intervals ok')
