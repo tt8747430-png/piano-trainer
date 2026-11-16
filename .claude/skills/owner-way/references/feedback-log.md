@@ -368,6 +368,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Loop round 48, the next course still says its level (Learn, Courses):** the Next badge took the place of the card's level, so Intro to Music Reading alone of its shelf said no BEGINNER; the badge now stands before the level, 8 apart (2026-11-16).
 - **Loop round 47, a chapter's ··· opens the chapter (LearnLevel, editing):** the ··· beside a chapter only showed a toast reading "Chapter: Rename · Remove chapter"; it opens a Chapter sheet on a phone and a popover under it on a laptop, its Name in a field and Remove chapter in red, which happens at once with Undo ("The keyboard and the staff removed from Foundations") (2026-11-16).
 - **Loop round 47, one title for a song:** a course and the intervals' songs called it "Twinkle, Twinkle" where the library, its page and Intervals' Sounds like call it "Twinkle, Twinkle, Little Star"; the full title everywhere, and the course row takes its cover (2026-11-16).
 - **Loop round 47, a course's guided songs wear their covers (a course):** Ode to Joy, Twinkle and Amazing Grace each showed a note glyph on a blue tile; each wears its own first notes, as every song in Songs, and Amazing Grace is credited to John Newton, as on its page, not "Traditional" (2026-11-16).

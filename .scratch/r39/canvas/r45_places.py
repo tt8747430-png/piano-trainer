@@ -136,7 +136,7 @@ def COURSECARD(w, href):
     # a course's cover is its name printed on its shelf's paint, the shelf above it, as a book's cover; under it its line
     return (f'<a href="{href}" style="flex: none; width: {w}; min-width: 0; display: flex; flex-direction: column; gap: 8px; color: {INK}; text-decoration: none">'
             f'<span style="position: relative; height: 128px; box-sizing: border-box; padding: 12px 14px; border-radius: 14px; background: {{{{k.paint}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.06); display: flex; flex-direction: column; justify-content: space-between">'
-            f'<span style="display: flex; min-height: 24px; align-items: center"><sc-if value="{{{{k.later}}}}" hint-placeholder-val="{{{{true}}}}"><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: {SOFT}">{{{{k.shelf}}}}</span></sc-if><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if></span>'
+            f'<span style="display: flex; min-height: 24px; align-items: center; gap: 8px"><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: {SOFT}">{{{{k.shelf}}}}</span></span>'
             f'<span style="font-family: {SERIF}; font-size: 19px; line-height: 1.15; text-wrap: balance">{{{{k.t}}}}</span>'
             f'</span>'
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')
