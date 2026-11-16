@@ -44,6 +44,8 @@ export interface PracticeState {
    * Player records as a lesson done (ADR 0111).
    */
   readonly passes: number
+  /** Wait mode: whether the pass last counted had no slip; null before one is: the exercise's ladder reads it. */
+  readonly lastPassClean: boolean | null
   /**
    * Wait mode: this pass was moved on by hand (› or a place ahead tapped), or begun part way, so it
    * is not counted as played.
@@ -172,6 +174,7 @@ export function initialPractice(
     wrongHere: [],
     slips: {},
     passes: 0,
+    lastPassClean: null,
     skipped: false,
   }
   return moveTo(state, bounds(state).first)
@@ -188,10 +191,15 @@ function next(state: PracticeState): PracticeState {
   if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
   const played = waitsForNotes(state.mode) && state.playing && !state.skipped
   const passes = played ? state.passes + 1 : state.passes
-  if (state.mode === 'listen' || state.loop) return { ...moveTo(state, first), passes }
+  const lastPassClean = played
+    ? Object.values(state.slips).every((count) => !count)
+    : state.lastPassClean
+  if (state.mode === 'listen' || state.loop)
+    return { ...moveTo(state, first), passes, lastPassClean }
   return {
     ...state,
     passes,
+    lastPassClean,
     playing: false,
     expected: [],
     received: [],

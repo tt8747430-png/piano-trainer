@@ -1,5 +1,13 @@
-import { useMemo } from 'react'
-import { exerciseChoice, tempoKey, type ExerciseChoice, type Exercise } from '@/entities/exercise'
+import { useEffect, useMemo, useRef } from 'react'
+import {
+  CLEAN_TO_CLIMB,
+  exerciseChoice,
+  rungAbove,
+  rungBelow,
+  tempoKey,
+  type ExerciseChoice,
+  type Exercise,
+} from '@/entities/exercise'
 import { selectTempo, useProgress, useProgressStoreApi } from '@/entities/progress'
 import { keepTempo } from '@/features/keep-tempo'
 import { arrangeExercise } from '@/features/practice'
@@ -85,6 +93,24 @@ export function useExercisePlayer(
     },
     ownTempo,
   )
+  // The ladder climbs by itself (its ⓘ's promise; the research's item 5): a rung up after four
+  // clean Wait-mode passes in a row, a rung down after a pass with a slip.
+  const { passes, lastPassClean } = player.practice.state
+  const cleanRun = useRef(0)
+  const counted = useRef(passes)
+  useEffect(() => {
+    if (passes === counted.current) return
+    counted.current = passes
+    if (lastPassClean === false) {
+      cleanRun.current = 0
+      player.setTempo(rungBelow(player.tempo))
+      return
+    }
+    cleanRun.current += 1
+    if (cleanRun.current < CLEAN_TO_CLIMB) return
+    cleanRun.current = 0
+    player.setTempo(rungAbove(player.tempo))
+  }, [passes, lastPassClean, player])
   return {
     choice,
     performance,

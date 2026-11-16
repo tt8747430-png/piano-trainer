@@ -16,6 +16,13 @@ export const rungOf = (tempo: number): Rung =>
 /** The next rung up from a tempo (the top stays the top). */
 export const rungAbove = (tempo: number): Rung => TEMPO_LADDER.find((rung) => rung > tempo) ?? TOP
 
+/** The rung below the one a tempo has reached (the bottom stays the bottom). */
+export const rungBelow = (tempo: number): Rung =>
+  TEMPO_LADDER.findLast((rung) => rung < rungOf(tempo)) ?? TEMPO_LADDER[0]
+
+/** How many clean passes in a row climb a rung. */
+export const CLEAN_TO_CLIMB = 4
+
 /** The ladder's top rung. */
 const TOP: Rung = 132
 

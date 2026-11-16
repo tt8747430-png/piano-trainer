@@ -451,7 +451,7 @@ export const player = {
   // An exercise's tempos, rung by rung.
   tempoLadder: {
     label: 'Tempo ladder',
-    info: 'Climb one rung once four passes in a row are clean and even. After a slip, step back a rung. The exercise opens at the tempo you last played it at.',
+    info: 'In Wait mode the ladder climbs one rung once four passes in a row are clean, and steps back a rung after a slip. The exercise opens at the tempo you last played it at.',
   },
   exercise: {
     nextKey: 'Next key',
