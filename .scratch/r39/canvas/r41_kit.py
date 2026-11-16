@@ -27,7 +27,9 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 '''
 
 # ── the bar ──
-GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
+# one glass for every control that floats over the page (bars, floating actions, the transport): DESIGN.md, Placement
+GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
+GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
 # The one bar (owner, 2026-11-15: "the headers" inconsistent; Apple HIG, Toolbars: "Use the standard Back and Close
 # buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons
 # are 44 glass circles 8 apart (IB), Back the same glass circle at the leading edge. A page under a page: 56 tall,

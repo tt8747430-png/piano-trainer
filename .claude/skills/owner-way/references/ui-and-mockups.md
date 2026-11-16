@@ -40,6 +40,8 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 **Layout**
 
+- Every bar and floating button is glass; a bar has no background band or line (`DESIGN.md`, Placement; Apple's
+  grouping rules in `.scratch/r39/plan/bars.md`). Glass never goes on content.
 - Phone and desktop have the same features, text and layout logic.
 - Nothing hangs under a bar: a status or language goes in the bar or its menu.
 - Floating things float, reserve no space, and auto-hide reliably.

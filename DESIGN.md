@@ -415,6 +415,19 @@ square at the top.
   ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
   under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
   the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
+- **Glass is the controls' layer, and every bar and floating button wears it** (owner, 2026-11-16: "I want
+  consistency and all the buttons should be glass"): Back, Close, the bar's tools, Settings, More, a view switch,
+  the floating actions and the transport float over the page in one glass: the warm sheet at 86%, 20px blur with
+  saturation 1.6, a 1px ink ring at 7% and a soft shadow (0 4px 14px −6px, ink at 25%). A lone button is a 44 circle;
+  buttons of one function share one capsule (View with Settings; Undo, Redo and More), More last. Glass never
+  goes on content: a card, a cover, a list row or a sheet's own rows (Apple HIG, Materials: "Don't use Liquid Glass
+  in the content layer"). The full rules, from Apple's Toolbars guidance, are in `.scratch/r39/plan/bars.md`:
+  Back or Close alone at the leading edge, as its symbol; at most three groups; a text button (Edit, Done, Save) in a
+  capsule of its own, never sharing glass with a symbol; one honey action at most, trailing.
+- **A bar has no background** (owner, 2026-11-16: "why the header in the player has background"): no band, no
+  fill and no hairline under it, on every screen, the Player's and the editor's included. Its buttons float over
+  the page; where content scrolls under it, a scroll edge fade (the page's paper to clear) keeps the title legible
+  (Apple HIG, Toolbars: "Reduce the use of toolbar backgrounds").
 - **Page, sheet or menu:** a page for settings and many fields; a sheet for creating one thing or one focused choice; a
   menu for one-tap commands. A sheet never holds a second sheet; a menu never holds a setting.
 - **An act on an item is a button, never a switch:** Favourite and Learned on the item's card and in its menus. An item's

@@ -57,9 +57,9 @@ def lapwin(h):
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)
     if not m:
         return h
-    glass = ('background: rgba(254, 253, 251, 0.78); color: #332921; box-shadow: 0 0 0 1px rgba(51,41,33,0.08), 0 10px 28px -8px rgba(51,41,33,0.28)')
+    glass = ('background: rgba(254,253,251,.86); color: #332921; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)')
     exitb = ('<button type="button" data-focusexit onClick="{{lapFocusT}}" style="position: absolute; left: 24px; bottom: 24px; z-index: 40; height: 44px; '
-             'padding: 0 18px 0 14px; border: 0; border-radius: 22px; %s; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); '
+             'padding: 0 18px 0 14px; border: 0; border-radius: 22px; %s; backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8); '
              'align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600">%sExit focus</button>' % (glass, _EXIT))
     h = h[:m.start()] + '<div ' + m.group(1) + ' data-lapwin data-side="{{lapSide}}" data-focus="{{lapFocus}}">' + exitb + h[m.end():]
     h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
