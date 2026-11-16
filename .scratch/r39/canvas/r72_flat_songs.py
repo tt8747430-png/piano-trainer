@@ -16,7 +16,7 @@ SONGS_ALL = [  # title, composer · key, progress, last played, added order
     ('My first song', 'Written by you · C major', 'Not started', 'Added 23 Oct', 8),
 ]
 FOLDERS_ALL = [('Favourites', '2 songs', PEACH, 'heart'), ('Songs to learn', '23 songs · 4 learned', HONEY, ''), ('Hymns', '6 songs · 2 learned', SKY, ''),
-               ('Called to Play', '15 songs · Book 1', LILAC, ''), ('Shared with me', "4 songs · From Maria's group", SAGE, 'shared')]
+               ('Called to Play', '15 songs · Book 1', LILAC, ''), ('Shared with me', '1 folder · Choir hymns', SAGE, 'shared')]
 _ROWS = [{'t': t, 's': s, 'v': v, 'when': w, 'add': a, 'pic': INCIPIT(INC.get(t, (2, 4)))} for t, s, v, w, a in SONGS_ALL]
 
 FL_JS = r'''
