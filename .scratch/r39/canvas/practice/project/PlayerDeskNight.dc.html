@@ -469,7 +469,7 @@ const setKey = (l, a) => this.setState({ songKey: { l, a } });
 const stepKey = (dir) => setKey(...spellPc((keyPc + dir + 12) % 12, dir));
 const KEYPICK = (curL, curA, pick) => ({
   lets: [0, 1, 2, 3, 4, 5, 6].map((l) => { const on = l === curL, a2 = on ? curA : 0;
-    return { s: LET[l] + ACCS[String(a2)], on, bg: on ? '#3E3420' : '#24201C', ring: on ? 'none' : '0 0 0 1px #453E38', fw: on ? 800 : 600,
+    return { s: LET[l] + ACCS[String(a2)], on, bg: on ? '#453E38' : '#24201C', ring: on ? 'none' : '0 0 0 1px #453E38', fw: on ? 800 : 600,
       aria: 'Key of ' + LET[l] + (a2 ? (a2 > 0 ? ' sharp' : ' flat') : '') + ' major', pick: () => { if (!on) pick(l, 0); } }; }),
   accs: [[-1, '♭', 'Flat'], [0, '♮', 'Natural'], [1, '♯', 'Sharp']].map(([a, g, w]) => { const on = a === curA, good = keyOk(curL, a);
     return { l: g, aria: w + ' ' + LET[curL], on, dis: !good, op: good ? 1 : 0.35, bg: on ? '#453E38' : 'transparent',

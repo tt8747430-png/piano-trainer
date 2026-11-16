@@ -106,6 +106,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Loop round 50, Transpose chooses a key as every key picker does (PlayerKey):** the chosen letter wore the honey wash, the one action's colour; it is the sand fill with no ring, as the Chords page's and every key picker's, on both sizes and by Night (2026-11-16).
 - **Loop round 46, the laptop's keyboard button says what the keys show (PlayerDesk):** it read "Piano" while the phone's reads 3D, 2D or Off under the same keys glyph (loop round 32's ruling); the laptop now says 3D, 2D or Off too (2026-11-16).
 
 - **Loop round 45, a view starts under the bar with the keys shown (PlayerViewLyrics, PlayerViewGrid, every Player board with keys):** with the keys on, Lyrics and the Grid started 16 from the screen's top, from before the bar was a band, so the beat strip and Verse 1 ran under the status bar and the bar; they start under the bar now (a phone 128, a laptop 80), as without the keys (2026-11-16).
