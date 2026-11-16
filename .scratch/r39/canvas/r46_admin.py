@@ -3,7 +3,7 @@
 # confirmation is the one ConfirmDialog. Exec'd by r41.py after r45_places.
 ADMIN_SECS = ['Overview', 'Accounts', 'Groups', 'Feature flags', 'Content reports', 'Feedback', 'Error log', 'Audit log', 'Drafts', 'Component gallery']
 ADMIN_IC = {'Overview': ('#5B8DB8', '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path>'),
-            'Accounts': ('#5F8F62', '<circle cx="9" cy="8" r="3.5"></circle><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .6 3.5 2.6 3.5 5"></path>'),
+            'Accounts': ('#5F8F62', '<circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>'),
             'Groups': ('#8C7AB8', '<circle cx="8" cy="9" r="3"></circle><circle cx="16" cy="9" r="3"></circle><path d="M2 20c0-3 2.7-5 6-5s6 2 6 5M14 15c3.3 0 6 2 6 5"></path>'),
             'Feature flags': ('#B08A5B', '<path d="M5 21V4M5 4h11l-2 4 2 4H5"></path>'),
             'Content reports': ('#C0564B', '<path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>'),
