@@ -15,6 +15,15 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
    `piano-chords-and-scales-app/` is a welcome source for any screen. `music-theory-book-app/` is for its learning
    content only, never as a UI example. The app's own old screens are never an example.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
+   **Question every part of it** (owner, 2026-11-16: "you shouldnt just take the current app design as so it should
+   be … you should question every decision and every component that is on the page or in app so that we dont have
+   unneded components unneded pages, duplicate content … are the tabs correct? do we need them. should we migrate
+   them, should we somehow merge them. what content can be shown easier or what is already know by the user"): what
+   is drawn today is a draft, never the spec. Before any polish, list each page, section, tab, control and line of
+   text, and for each ask: is it needed; does it say again what another part (or another page) already says; would
+   it merge with a neighbour or move to where it is used; could a picture or the music show it more simply; does the
+   learner already know it. Remove, merge or move what fails, in the same turn, and say in the spec what went and
+   why. Polish only what survives.
 3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
    reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
 4. **Build what the board's code draws** (`SKILL.md`, Port from the board's code): read the board's generator and

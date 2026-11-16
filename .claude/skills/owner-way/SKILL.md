@@ -99,6 +99,11 @@ wins there.
   in the spec. Every screen is made as properly on a computer as on a phone, its space used: no narrow column
   floating in an empty laptop screen (owner, 2026-11-15: "all the ui should be properly made also on computer and
   the empty space should be properly used").
+- **Question everything on the page first** (owner, 2026-11-16: "you should question every decision and every
+  component … so that we dont have unneded components unneded pages, duplicate content"): the current design is not
+  the spec. Each round, before polishing a page, every page, tab, section, control and explanation on it is asked:
+  needed? said elsewhere? merge, move, or show it as a picture? already known to the learner? What fails goes the same
+  turn ([ui-and-mockups](references/ui-and-mockups.md), Building a screen, step 2).
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.
