@@ -112,7 +112,8 @@ def GROUP(*rows, bg=FILL):
                 out.append(f'<button type="button" {("onClick=\"{{" + tgt + "}}\"") if tgt else ""} style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
         elif k == 'seg': out.append(f'<div style="{base.replace("align-items: center; gap: 10px; padding: 6px 12px 6px 16px", "flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 12px 12px 16px")}"><span style="font-size: 16px">{r[1]}</span>{SEGC(r[2], 44, 14)}</div>')
         elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5])}</div>')
-        elif k == 'toggle': out.append(f'<button type="button" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2])}</button>')
+        # a switch row is one control: the row is the switch and carries its name; the drawn switch is its picture
+        elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2]).replace(f'role="switch" aria-checked="{{{{{r[2]}}}}}"', 'aria-hidden="true"', 1)}</button>')
         elif k == 'val': out.append(f'<div style="{base}">{lab}<span style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{r[2]}</span></div>')
         elif k == 'action': out.append(f'<button type="button" onClick="{{{{{r[2]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {r[3] if len(r) > 3 else LINK}; font: inherit; font-size: 16px; text-align: left">{r[1]}</button>')
         elif k == 'raw': out.append(f'<div style="{sep}">{r[1]}</div>')

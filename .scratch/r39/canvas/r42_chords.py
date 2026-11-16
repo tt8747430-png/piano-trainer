@@ -877,6 +877,7 @@ def DRAWERS(phone_like):
 # a switch row is one control: the row is the switch and carries its name
 def SWROW(html, on, act):
     a = '<button type="button" onClick="{{' + act + '}}"'; b = '<span role="switch" aria-checked="{{' + on + '}}"'
+    if html.count('role="switch" aria-checked="{{' + on + '}}" onClick="{{' + act + '}}"') == 1: return html  # the kit's GROUP row already is the switch
     assert html.count(a) == 1 and html.count(b) == 1, (on, html.count(a), html.count(b))
     return html.replace(a, '<button type="button" role="switch" aria-checked="{{' + on + '}}" onClick="{{' + act + '}}"').replace(b, '<span aria-hidden="true"')
 B_PIANO = PS.PIANO_SHEET(True, 3, 5)
