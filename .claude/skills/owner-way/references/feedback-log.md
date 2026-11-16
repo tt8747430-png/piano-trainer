@@ -278,6 +278,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **A library row's title wraps to two lines before it is cut** (loop round 49; ui-and-mockups, "titles wrap to two lines"): "Twinkle, Twinkle, Littl…" on the phone's My songs now reads whole on two lines, the row growing to fit; the clamp is in the one library row (`LIB_ROW`), so Songs, a folder, Explore and the Practice libraries all follow.
 - **Loop round 48, each Continue cover shows its own opening (My songs):** Amazing Grace, Ode to Joy and Für Elise drew one same falling line; each cover now engraves its song's first notes, the same incipit its row's picture draws (2026-11-16).
 - **Loop round 47, the Trash holds what My songs does not (Trash):** My first song lay in the Trash while My songs listed it; the Trash holds Waltz sketch (Written by you · A minor), worded as the library words a learner's own song (2026-11-16).
 - **Loop round 47, the Archive holds what My songs does not (Archive, Search):** Ode to Joy stood in the Archive while My songs and Continue had it at Bar 5 of 12; the Archive holds Greensleeves (Traditional · Folk) instead. Search's Clair de lune no longer says Archived (My songs lists it), and Amazing Grace reads G major there as everywhere else (2026-11-16).
