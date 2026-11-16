@@ -12,7 +12,7 @@ RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Practice time'
 MILES = [('First song learned', 'Earned 3 November 2026', 'Learn every section of one song.'), ('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
          ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a song on a MIDI keyboard.'), ('A perfect run', '', 'Play a whole song in Wait mode with no wrong notes.')]
 NOTES9 = [('Today', [('Level 7 reached', '2 h ago', 'lvl', True), ('Best accuracy: 94%', '5 h ago', 'acc', True)]), ('Yesterday', [('Silver Streak Keeper', 'Yesterday, 19:40', 'badge', False)]),
-          ('Earlier', [('Gold Library Builder', '1 October', 'badge', False), ('First song learned', '3 November', 'mile', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
+          ('Earlier', [('First song learned', '3 November', 'mile', False), ('Gold Library Builder', '1 October', 'badge', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
 # Practice history (canvas 160): every practice run, by day; opens its results
 RUNS9 = [('Today', [('Cmaj7', 'Inversions', '92%', '72 BPM', '14:20'), ('C Am F G', 'Chord changes', '88%', '66 BPM', '13:55')]),
          ('Yesterday', [('G7', 'Circle of fifths', '100%', '80 BPM', '19:05'), ('Dm7', 'Arpeggio', '83%', '60 BPM', '18:40')]),
