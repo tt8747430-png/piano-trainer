@@ -96,13 +96,11 @@ export const player = {
   coach: {
     listen: 'Tap a note to start from there, then press Play.',
     wait: 'Press Play, then play each highlighted note.',
-    follow: 'Play the highlighted notes; the accompaniment follows your tempo.',
     close: 'Dismiss tip',
   },
   // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {
     wait: { name: 'Wait mode', line: 'The music waits for the right notes.' },
-    follow: { name: 'Interpret', line: 'The music follows your tempo.' },
   },
   tools: 'Tools',
   // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.

@@ -2,6 +2,7 @@ import { Hourglass, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPlayback, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { useTapTempo } from '@/features/metronome'
 import type { PracticeMode } from '@/features/practice'
 import { setPlayback } from '@/features/set-preference'
 import {
@@ -15,6 +16,7 @@ import {
   SheetContent,
   TempoSteps,
 } from '@/shared/ui'
+import { tempoWord } from '@/shared/lib/music'
 import { Button } from '@/shared/ui/primitives/button'
 import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
@@ -62,6 +64,9 @@ export function PracticeSheet({
   onClick: (on: boolean) => void
 }) {
   const { t } = useTranslation('player')
+  const taps = useTapTempo()
+  const { t: tMusic } = useTranslation('music')
+  const { t: tPractice } = useTranslation('practice')
   const settings = useSettingsStoreApi()
   const { countdown } = useSettings(selectPlayback)
   const [open, setOpen] = useState(false)
@@ -108,12 +113,28 @@ export function PracticeSheet({
             <GroupRows surface="sheet" label={t('practiceSheet.tempo')}>
               <GroupField className="px-2">
                 <div className="flex flex-col items-center gap-3">
-                  <TempoSteps bpm={tempo} onStep={(by) => onTempo(tempo + by)} />
-                  {tempo === ownTempo ? null : (
-                    <Button variant="soft" onClick={() => onTempo(ownTempo)}>
-                      {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
+                  <TempoSteps
+                    bpm={tempo}
+                    mark={tMusic(`tempoWord.${tempoWord(tempo)}.name`)}
+                    onStep={(by) => onTempo(tempo + by)}
+                  />
+                  {/* The tempo is the metronome's, with − + Tap and its marking (R37 ruling). */}
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <Button
+                      variant="soft"
+                      onClick={() => {
+                        const bpm = taps.tap()
+                        if (bpm !== null) onTempo(bpm)
+                      }}
+                    >
+                      {tPractice('metronome.tap')}
                     </Button>
-                  )}
+                    {tempo === ownTempo ? null : (
+                      <Button variant="soft" onClick={() => onTempo(ownTempo)}>
+                        {t('practiceSheet.scoreTempo', { tempo: ownTempo })}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </GroupField>
               <GroupSegmented

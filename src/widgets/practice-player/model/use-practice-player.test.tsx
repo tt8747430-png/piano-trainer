@@ -97,7 +97,6 @@ describe('usePracticePlayer', () => {
 
   it('dims the staff of the hand not chosen, in every mode (R36)', () => {
     expect(renderPlayer({ mode: 'wait', hands: 'rh' }).result.current.muted).toBe('bass')
-    expect(renderPlayer({ mode: 'follow', hands: 'lh' }).result.current.muted).toBe('treble')
     expect(renderPlayer({ hands: 'lh' }).result.current.muted).toBe('treble')
     expect(renderPlayer().result.current.muted).toBeUndefined()
   })
