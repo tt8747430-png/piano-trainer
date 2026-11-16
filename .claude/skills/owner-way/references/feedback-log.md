@@ -1207,6 +1207,7 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Loop round 46, a States box names each state once:** a board that lists its own Playing (Intervals) showed Playing twice, its own and the one the States tool adds for any board that plays; the tool keeps the first of each name (2026-11-16).
 - **Design only; the canvas made consistent (2026-11-15):** "now you need to work only on the design and no app
   implementation at all. fix all the inconsistencies in the design. like the keyboard is inconsistent across the app,
   floating keyboard, the headers, the floating actions. the new floating actions should be on the right. and the
