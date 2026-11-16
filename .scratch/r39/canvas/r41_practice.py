@@ -160,8 +160,31 @@ lm = lapbody(LTOP('Laptop.dc.html', GEAR()), IV_ABOUT(44) + IV_PIC('kbL', 190) +
 detail('Intervals', 'Intervals', IV, ph, lm, '', BSHEET('rootOn', 'From', ROOTGRID()) + BSHEET('setOn', 'Interval settings', IV_SET), POPOVER('rootOn', 'From', ROOTGRID()) + POPOVER('setOn', 'Interval settings', IV_SET))
 
 # ═════ The libraries: Progressions, Accompaniment, Exercises (one shape) ═════
+# loop round 44: an accompaniment pattern's tile is its own piano roll (left hand low in lilac ink, right hand high in
+# ink), timed as its line says, instead of a font's note glyph drawn 10px wide
+_CH = (5, 6, 7)
+ROLLS = {  # beats in the bar, then (start, length, height 0 low to 7 high) per note
+  'Bass + chords': (4, [(0, 4, 0), (0, 4, 2)] + [(b, .8, h) for b in range(4) for h in _CH]),
+  'Broken chords': (4, [(0, 4, 0)] + [(i * .5, .4, 5 if i % 2 == 0 else 7) for i in range(8)]),
+  'Waltz': (3, [(0, .9, 0)] + [(b, .8, h) for b in (1, 2) for h in _CH]),
+  'Arpeggio 1–5–8': (4, [(i * .5, .4, h) for i, h in enumerate((0, 2, 4, 5, 7, 5, 4, 2))]),
+  'Runs down to the root': (4, [(0, .9, 6), (1, .9, 4), (2, .6, 3), (2.67, .6, 2), (3.33, .6, 1)]),
+  'Broken chord, 6/8': (6, [(0, 6, 0)] + [(i, .8, h) for i, h in enumerate((5, 6, 7, 6, 5, 6))]),
+  'Afterbeats, 6/8': (6, [(0, .9, 0), (3, .9, 1)] + [(b, .8, h) for b in (1, 2, 4, 5) for h in (5, 6)]),
+  'Bass and chord, 4/4': (4, [(0, 2, 0), (2, 2, 1)] + [(b, d, h) for b, d in ((1, .9), (2, 1.9)) for h in _CH]),
+  'Alberti bass': (4, [(i * .5, .4, h) for i, h in enumerate((0, 3, 2, 3, 0, 3, 2, 3))]),
+  'Ballad': (4, [(0, 2, 0), (2, 2, 2)] + [(b, .9, h) for b in (1, 3) for h in _CH]),
+  'Swing comping': (4, [(b + .67, .3, h) for b in range(4) for h in _CH]),
+}
+def _rollurl(t):
+    beats, notes = ROLLS[t]
+    bars = ''.join(f'<rect x="{6 + 32 * a / beats:.1f}" y="{33 - h * 3.5:.1f}" width="{max(1.6, 32 * d / beats - .6):.1f}" height="2.6" rx="1.3" fill="{"%23332921" if h >= 4 else "%237A6BB0"}"/>' for a, d, h in notes)
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{LILAC.replace("#", "%23")}"/><path d="M6 21.5h32" stroke="%23332921" stroke-opacity=".12"/>{bars}</svg>'
+    return 'url("data:image/svg+xml,' + svg.replace('"', "'").replace('<', '%3C').replace('>', '%3E').replace(' ', '%20') + '")'
 def Rw(t, s, v, i, c, href, places=(), tags=(), ic=INK):
-    return {'t': t, 's': s, 'v': v, 'i': i, 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
+    r = {'t': t, 's': s, 'v': v, 'i': i, 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
+    if t in ROLLS: r.update(i='', pic=_rollurl(t))
+    return r
 library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Recently used'], 'favs': ['Axis of Awesome'], 'open': {},
   'filters': [{'name': 'Key', 'opts': [['Major key', 18], ['Minor key', 8]]}],
   'sections': [{'g': 'Pop', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', '', 'I V', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('50s doo-wop', 'I – vi – IV – V', '', 'I vi', HONEY, 'Progression.dc.html', (), ('Major key',)), Rw('Royal Road', 'IV – V – iii – vi', '', 'IV', HONEY, 'Progression.dc.html', (), ('Major key',))]},
