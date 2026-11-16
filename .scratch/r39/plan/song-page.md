@@ -35,8 +35,9 @@ cover), one clear next act (Continue from where you stopped), and everything els
 8. **Details**: Level, Genre, Language, Tags (unset reads "Add tags").
 9. Floating: **Continue from bar 9** with its progress line and the round **Play**. The page ends with room under it.
 
-Laptop: the same parts in two columns: the song (cover, title, byline, facts) on the left; Chords in one row of six,
-then Your practice and Details side by side on the right. The floating bar is centred under the content, and Title and
+Laptop (loop round 58, owner 2026-11-16: "the page has one focus … never a rival column"): one centred column 880
+wide. Its head is the cover (348) beside the title, byline, facts, Continue from bar 9 · From the start and the bars
+played; under it Chords in one row of six with the song's progressions, Sections, Details, each once. Title and
 credits opens as a dialog.
 
 ## Canvas 125 (2026-11-11): progress drawn as the song's bars

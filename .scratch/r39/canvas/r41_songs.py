@@ -80,12 +80,16 @@ ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
 </main>'''
 sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('creditsOn', 'Title and credits', CREDITS)
+# one centred column (owner, 2026-11-16: "the page has one focus"): the song's cover beside its name and Continue as
+# the column's head, then its chords, sections and details under it, never a rival column beside it
 lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
-<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 48px; padding: 4px 56px 40px; align-items: start">
-<div style="display: flex; flex-direction: column; gap: 18px">{COVER_BIG(480, 22)}{TITLE}{FACTS}{ACTS_L}</div>
-<div style="display: flex; flex-direction: column; gap: 24px; padding-top: 4px">{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 2px')}{PROGS}</section></sc-if>
+<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 48px">
+<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+<div style="display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: end"><div>{COVER_BIG(348, 20)}</div><div style="display: flex; flex-direction: column; gap: 18px">{TITLE}{FACTS}{ACTS_L}</div></div>
+{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 2px')}{PROGS}</section></sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
-<section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section></div>
+<section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
+</div>
 </div>'''
 pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html')) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
