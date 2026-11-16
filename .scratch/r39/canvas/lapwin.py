@@ -11,11 +11,12 @@ _PANEL = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="cu
 _FOCUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>'
 _EXIT = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"></path></svg>'
 _LAPHEAD_OLD = '<div style="height: 44px; display: flex; align-items: center; padding: 0 10px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>'
-_LAPBTN = 'width: 40px; height: 40px; flex: none; border: 0; border-radius: 10px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center'
+_LAPBTN = 'width: 44px; height: 44px; flex: none; border: 0; border-radius: 22px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center'
 _LAPHEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 0 0 10px">'
-         '<span data-sidetext style="flex: 1; min-width: 0; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px; white-space: nowrap">Piano Trainer</span>'
+         '<span data-sidetext style="flex: 1; min-width: 0; font-family: \'Instrument Serif\', Georgia, serif; font-size: 24px; white-space: nowrap">Piano Trainer</span>'
+         '<div data-sidebtns style="flex: none; display: flex; border-radius: 22px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)">'
          '<button type="button" data-lapbtn aria-label="{{lapSideL}}" data-tip="{{lapSideL}}" aria-expanded="{{lapSideOn}}" onClick="{{lapSideT}}" style="' + _LAPBTN + '">' + _PANEL + '</button>'
-         '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div>')
+         '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div></div>')
 # the runtime writes each style back as the browser serialises it (minmax(0px, …))
 _LAPCOLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr) 380px', 'minmax(0px, 1fr) 440px', 'minmax(0px, 3fr) minmax(0px, 2fr)']
 _LAPFIRST = ['240px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
@@ -26,6 +27,7 @@ _LAPCSS = ('<style data-lapcss>'
         ' [data-side="off"] [data-sidehead] { flex-direction: column; height: auto !important; padding: 0 !important; gap: 4px !important }'
         ' [data-side="off"] > nav > label { width: 48px; padding: 0 !important; justify-content: center }'
         ' [data-side="off"] > nav a { width: 48px; padding: 0 !important; justify-content: center; font-size: 0 !important; gap: 0 !important }'
+        ' [data-side="off"] [data-sidebtns] { flex-direction: column }'
         ' [data-lapbtn]:hover { background: rgba(128, 110, 90, 0.12) !important }'
         ' [data-lapbtn]:focus-visible, [data-focusexit]:focus-visible { outline: 2px solid currentColor; outline-offset: 2px }'
         ' [data-lapwin] > [data-focusexit] { display: none }'
