@@ -48,8 +48,8 @@ def CBODY(lap):
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><h1 contenteditable="true" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; outline: none">{{{{t}}}}</h1></sc-if>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
             f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{FACTS}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{PROPS}</sc-if></div>')
-    go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span><span>Next: The bass clef</span></div>{METER.replace("{{meter}}", "37%")}'
-          f'<div style="display: flex; margin-top: 4px">{BTN("Continue", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
+    go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
+          f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
     about = f'{H2("About")}<p contenteditable="{{{{editing}}}}" style="margin: 0 4px; font-size: 16px; line-height: 1.55; outline: none">{{{{about}}}}</p>'
     if lap:  # canvas 164: no narrow column in a wide screen; the course's card held in view, its lessons beside it
         return (f'<div style="width: 400px; flex: none; position: sticky; top: 0; display: flex; flex-direction: column; gap: 16px">{COVER}{head}{go}{about}</div>'
