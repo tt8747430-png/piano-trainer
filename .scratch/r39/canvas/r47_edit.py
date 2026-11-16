@@ -10,7 +10,7 @@ LESSON = {
   'summaryRu': 'Постройте мажорную гамму от любой клавиши по одной схеме тонов и полутонов.',
   'secs': [
     {'h': 'One pattern for every key', 'hRu': 'Одна схема для всех тональностей',
-     'p': 'Every major scale climbs by the same steps: whole, whole, half, whole, whole, whole, half. Start on C and only white keys fit the pattern.',
+     'p': 'Every major scale climbs by the same pattern of whole and half steps. Start on C and only white keys fit it.',
      'pRu': 'Любая мажорная гамма поднимается одинаково: тон, тон, полутон, тон, тон, тон, полутон. От до схеме подходят только белые клавиши.',
      'ex': 'scale', 'take': 'W W H W W W H, from any key.'},
     {'h': 'Building D major', 'hRu': 'Строим ре мажор',
