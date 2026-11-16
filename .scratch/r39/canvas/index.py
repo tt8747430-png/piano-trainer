@@ -21,14 +21,12 @@ PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords')
 # page; a row's variants (a state, Night) sit beside its main board
 LW, PW, GAP, DEVGAP, TITLE, ROWGAP = 2143, 450, 80, 240, 300, 200
 def L(stem, name): return (stem, name)
-# round 41: every page has its Night board (r69_night.py); a row shows it wherever it is drawn
-def NIGHT(stem): return os.path.exists(P + stem + 'Night.dc.html')
+# owner, 2026-11-16: "remove all the night versions": the canvas draws Day only; no row carries a Night board
+def NIGHT(stem): return False
 PAGES = [
   ('songs', 'Songs', [(n, [L(lp, n + ', laptop')] + ([L(lp + 'Night', n + ', Night, laptop')] if NIGHT(ph) else []), [L(ph, n + ', phone')] + ([L(ph + 'Night', n + ', Night, phone')] if NIGHT(ph) else [])) for ph, lp, n in SONGS]),
   ('player', 'The Player', [
     ('The Player', [L(lp, n + ', laptop') for ph, lp, n in PLAYER], [L(ph, n + ', phone') for ph, lp, n in PLAYER]),
-    ('The Player, Night', [L('PlayerLaptopNight', 'The Player, Night, laptop'), L('PlayerLaptopKeyboardNight', 'The Player, Piano, Night, laptop')] + [L(lp + 'Night', n + ', Night, laptop') for ph, lp, n in PLAYER if ph.startswith('Play') and not ph.startswith('Player') and NIGHT(lp)],
-     [L('PlayerNight', 'The Player, Night, phone'), L('PlayerKeyboardNight', 'The Player, Piano, Night, phone'), L('PlayerDoneNight', 'The Player, Played through, Night, phone')] + [L(ph + 'Night', n + ', Night, phone') for ph, lp, n in PLAYER if ph.startswith('Play') and not ph.startswith('Player') and NIGHT(ph)]),
     ('The Player’s layers, phone', [], [L(ph, 'The Player, ' + n + ', phone') for ph, n in PLAYER_PHONES])]),
   ('practice', 'Practice', [(n, [L(lp, n + ', laptop')] + ([L(lp + 'Night', n + ', Night, laptop')] if NIGHT(ph) else []),
                                 [L(ph, n + ', phone')] + ([L(ph + 'Night', n + ', Night, phone')] if NIGHT(ph) else [])) for ph, lp, n in PRACTICE]),
