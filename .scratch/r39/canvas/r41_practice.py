@@ -25,7 +25,7 @@ SPACER = '<span style="flex: 1"></span>'
 THEORY = [('keys', 'Chords', 'Chord types, voicings, inversions', '', 'Chords.dc.html'), ('staff', 'Scales and keys', 'Scales, fingerings, key signatures', '', 'Scales.dc.html'),
           ('arc', 'Intervals', 'Minor 2nd to octave', '', 'Intervals.dc.html'), ('roman', 'Progressions', 'Pop, jazz and classical', '', 'Progressions.dc.html'),
           ('roll', 'Accompaniment', 'Bass and chord patterns', '', 'Accompaniment.dc.html')]
-EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Barry Harris', '5 exercises', '', 'JazzVocabulary.dc.html'), ('swing', 'Piano With Jonny', '5 exercises', '', 'JazzVocabulary.dc.html')]
+EXERCISES = [('drill', 'Finger technique', '2 exercises', '', 'FingerTechnique.dc.html'), ('sixdim', 'Barry Harris', '2 exercises', '', 'JazzVocabulary.dc.html'), ('swing', 'Piano With Jonny', '2 exercises', '', 'JazzVocabulary.dc.html')]
 TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.dc.html'), ('metro', 'Metronome', '120 BPM · 4/4', '', 'Metronome.dc.html'), ('needle', 'Tuner', 'Chromatic tuner', '', 'Tuner.dc.html'),
          ('lens', 'Chord finder', 'Chord identification', '', 'ChordFinder.dc.html'), ('circle', 'Circle of fifths', 'Key signatures, diatonic chords', '', 'CircleOfFifths.dc.html')]
 TOOLSBTN = f'<button type="button" onClick="{{{{openTools}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Tools</button>'
@@ -212,7 +212,7 @@ library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', '#'), ('New folder', '#')))
 library('JazzVocabulary', 'Jazz vocabulary', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': [], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Advanced', 1], ['Professional', 2]]}],
-  'sections': [{'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', SKY, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', SKY, 'Exercise.dc.html', (), ('Professional',))]},
+  'sections': [{'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', LILAC, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', LILAC, 'Exercise.dc.html', (), ('Professional',))]},
                {'g': 'Piano With Jonny', 'rows': [Rw('2-5-1 scale', 'Swung 8ths over a ii–V–I', 'Beginner', '251', SKY, 'Exercise.dc.html', (), ('Beginner',)), Rw('Rapid switch', 'One line through all twelve keys', 'Professional', '12', SKY, 'Exercise.dc.html', (), ('Professional',))]}]},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', '#'), ('New folder', '#')))
 
