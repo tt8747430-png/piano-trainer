@@ -4,8 +4,9 @@
 CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, one clef at a time, then together.',
        'about': 'Eight short lessons, each with a song to read at the end. Read a little every day: reading grows by repetition more than by length.',
        'lessons': [['The staff and the treble clef', 'learned'], ['Notes on the lines', 'learned'], ['Notes in the spaces', 'learned'], ['The bass clef', 'next'], ['Ledger lines', ''], ['The grand staff', ''], ['Reading both hands', ''], ['Sight-reading a little every day', 'unpub']],
-       'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle', 'Traditional · Beginner'], ['Amazing Grace', 'Traditional · Beginner']]}
-COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ';\n' + r'''
+       'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
+CRPICS = {t: INCIPIT(INC.get(t, (2, 4))) for t, _ in CRS['songs']}
+COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS = ' + json.dumps(CRPICS) + ';\n' + r'''
     const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner courses', level = st.level ?? 'Beginner';
     const lessons = CR.lessons.filter(([t]) => !gone[t]).map(([t, k], i) => ({ t, n: 'Lesson ' + (i + 1), learned: k === 'learned', next: k === 'next', unpub: k === 'unpub', todo: k !== 'learned' && k !== 'next',
       num: String(i + 1), tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', ring: k === 'next' ? '0 0 0 2.5px #EDC684' : (k === 'learned' ? 'none' : '0 0 0 1px #DAD1C8'),
@@ -15,7 +16,7 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ';\n' + r''
       ['A lesson removed, with Undo', !!gone[lost], { editing: true, gone: { [lost]: true }, toast: 'Removed: ' + lost }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     return { ...common(st, set), states, editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
-      t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d })), removed, hasRemoved: removed.length > 0,
+      t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d, pic: CRPICS[t] })), removed, hasRemoved: removed.length > 0,
       shelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
       weeksL: weeks + ' weeks', fewer: () => set({ weeks: Math.max(1, weeks - 1) }), more: () => set({ weeks: Math.min(52, weeks + 1) }),
@@ -43,7 +44,7 @@ LROWS = (f'<div style="position: relative"><span aria-hidden="true" style="posit
          f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><sc-if value="{{{{hasRemoved}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px"><span style="font-size: 14px; color: {SOFT}">Or add one back</span><sc-for list="{{{{removed}}}}" as="r" hint-placeholder-count="1"><button type="button" onClick="{{{{r.back}}}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 18px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">+ {{{{r.t}}}}</button></sc-for></div></sc-if>'
          f'<button type="button" onClick="{{{{openNew}}}}" style="height: 48px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 0 4px">{PLUS}Add lesson</button></sc-if>')
 SONGROWS = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{songs}}}}" as="g" hint-placeholder-count="3"><a href="Song.dc.html" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none">'
-            f'<span style="flex: none; width: 40px; height: 40px; border-radius: 10px; background: {SKY}; display: flex; align-items: center; justify-content: center">{NOTE}</span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{g.d}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for></div>')
+            f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: {{{{g.pic}}}} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{g.d}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for></div>')
 def CBODY(lap):
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><h1 contenteditable="true" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; outline: none">{{{{t}}}}</h1></sc-if>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
