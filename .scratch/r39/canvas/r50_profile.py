@@ -74,7 +74,7 @@ assert MILE.startswith('<div style="border-radius: 14px;')
 MILE9 = MILE.replace('<div style="border-radius: 14px;', '<button type="button" onClick="{{goB0}}" style="width: 100%; border: 0; font: inherit; text-align: left; color: ' + INK + '; border-radius: 16px;', 1)[:-6] + '</button>'
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
-RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
+RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="font-family: {SERIF}">{{{{r.c}}}}</span> · {{{{r.e}}}}</span>'
            f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
            f'<span style="flex: none; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{r.a}}}}</span><span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
