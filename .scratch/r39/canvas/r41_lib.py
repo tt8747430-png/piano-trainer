@@ -69,6 +69,10 @@ def ADDROW(label, act, node=36, pad='0 16px', gap=14):
     return (f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 56px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: {gap}px; padding: {pad}">'
             f'<span style="flex: none; width: {node}px; height: {node}px; border-radius: {node // 2}px; background: {FILL}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>{label}</button>')
 ADDCARD = lambda label, act: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{ADDROW(label, act)}</div>'
+# The one picture of a group (owner 2026-11-16: "the groups dont look like groups"): up to three of its members'
+# avatars overlapping, each the app's one avatar (the person's initial on sand), ringed in the card's paper
+AVBG = '#E9D8C4'
+FACES = lambda ls: ('<span aria-hidden="true" style="flex: none; width: 84px; display: flex">' + ''.join(f'<span style="flex: none; width: 32px; height: 32px; margin-right: -6px; border-radius: 16px; background: {AVBG}; box-shadow: 0 0 0 2px {SHEET}; color: {INK}; font-size: 14px; display: flex; align-items: center; justify-content: center">{x}</span>' for x in ls[:3]) + '</span>')
 NEWNAME_L = lambda html: html.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
 LFOLDERSHEET = NEWNAME('folderOn', 'New folder', 'Folder name', 'fname', 'named', 'closeSheet', 'createBg', 'createFg')
 LFOLDERSHEET_L = NEWNAME_L(LFOLDERSHEET)
