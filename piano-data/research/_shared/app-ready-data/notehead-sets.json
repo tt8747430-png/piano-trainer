@@ -1,0 +1,298 @@
+[
+ {
+  "name": "Aikin 7-shape Noteheads",
+  "entityID": "noteheadset.aikin7Shape",
+  "noteheadSetType": "kScaleDegree",
+  "noteheadSetCategory": "kScaleDegree",
+  "noteheads": "notehead.noteShapeTriangleUpWhite, notehead.noteShapeTriangleUpBlack, notehead.noteShapeMoonWhite, notehead.noteShapeMoonBlack, notehead.noteShapeDiamondWhite, notehead.noteShapeDiamondBlack, notehead.noteShapeTriangleRightWhite, notehead.noteShapeTriangleRightBlack, notehead.noteShapeTriangleLeftWhite, notehead.noteShapeTriangleLeftBlack, notehead.noteShapeRoundWhite, notehead.noteShapeRoundBlack, notehead.noteShapeSquareWhite, notehead.noteShapeSquareBlack, notehead.noteShapeTriangleRoundWhite, notehead.noteShapeTriangleRoundBlack",
+  "defaultNoteheadID": "notehead.noteShapeRoundBlack"
+ },
+ {
+  "name": "Circle X Noteheads",
+  "entityID": "noteheadset.circleXNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadCircleXDoubleWhole, notehead.noteheadCircleXWhole, notehead.noteheadCircleXHalf, notehead.noteheadCircleX",
+  "defaultNoteheadID": "notehead.noteheadCircleX"
+ },
+ {
+  "name": "Circled Noteheads",
+  "entityID": "noteheadset.circledNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.noteheadCircledDoubleWhole, notehead.noteheadCircledWhole, notehead.noteheadCircledHalf, notehead.noteheadCircledBlack",
+  "defaultNoteheadID": "notehead.noteheadCircledBlack"
+ },
+ {
+  "name": "Default Noteheads",
+  "entityID": "noteheadset.default",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.noteheadBlack, notehead.noteheadHalf, notehead.noteheadWhole, notehead.noteheadDoubleWhole, notehead.noteheadDoubleWholeSquare, notehead.mensuralNoteheadLongaWhite, notehead.mensuralNoteheadMaximaWhite",
+  "defaultNoteheadID": "notehead.noteheadBlack"
+ },
+ {
+  "name": "Diamond Noteheads",
+  "entityID": "noteheadset.diamondNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kDiamonds",
+  "noteheads": "notehead.noteheadDiamondDoubleWhole, notehead.noteheadDiamondWhole, notehead.noteheadDiamondHalf, notehead.noteheadDiamondBlack",
+  "defaultNoteheadID": "notehead.noteheadDiamondBlack"
+ },
+ {
+  "name": "Figurenotes Noteheads",
+  "entityID": "noteheadset.figurenotes",
+  "noteheadSetType": "kPitched",
+  "noteheadSetCategory": "kPitched",
+  "noteheads": "notehead.figurenotesBlack, notehead.figurenotesAWhole, notehead.figurenotesAHalf, notehead.figurenotesABlack, notehead.figurenotesBWhole, notehead.figurenotesBHalf, notehead.figurenotesBBlack, notehead.figurenotesCWhole, notehead.figurenotesCHalf, notehead.figurenotesCBlack, notehead.figurenotesDWhole, notehead.figurenotesDHalf, notehead.figurenotesDBlack, notehead.figurenotesEWhole, notehead.figurenotesEHalf, notehead.figurenotesEBlack, notehead.figurenotesFWhole, notehead.figurenotesFHalf, notehead.figurenotesFBlack, notehead.figurenotesGWhole, notehead.figurenotesGHalf, notehead.figurenotesGBlack",
+  "defaultNoteheadID": "notehead.figurenotesBlack"
+ },
+ {
+  "name": "Funk 7-shape Noteheads",
+  "entityID": "noteheadset.funk7Shape",
+  "noteheadSetType": "kScaleDegree",
+  "noteheadSetCategory": "kScaleDegree",
+  "noteheads": "notehead.noteShapeMoonLeftWhite, notehead.noteShapeMoonLeftBlack, notehead.noteShapeArrowheadLeftWhite, notehead.noteShapeArrowheadLeftBlack, notehead.noteShapeDiamondWhite, notehead.noteShapeDiamondBlack, notehead.noteShapeTriangleRightWhite, notehead.noteShapeTriangleRightBlack, notehead.noteShapeTriangleLeftWhite, notehead.noteShapeTriangleLeftBlack, notehead.noteShapeRoundWhite, notehead.noteShapeRoundBlack, notehead.noteShapeSquareWhite, notehead.noteShapeSquareBlack, notehead.noteShapeTriangleRoundLeftWhite, notehead.noteShapeTriangleRoundLeftBlack",
+  "defaultNoteheadID": "notehead.noteShapeRoundBlack"
+ },
+ {
+  "name": "Large Arrow Down Noteheads",
+  "entityID": "noteheadset.largeArrowDownNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadLargeArrowDownDoubleWhole, notehead.noteheadLargeArrowDownWhole, notehead.noteheadLargeArrowDownHalf, notehead.noteheadLargeArrowDownBlack",
+  "defaultNoteheadID": "notehead.noteheadLargeArrowDownBlack"
+ },
+ {
+  "name": "Large Arrow Up Noteheads",
+  "entityID": "noteheadset.largeArrowUpNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadLargeArrowUpDoubleWhole, notehead.noteheadLargeArrowUpWhole, notehead.noteheadLargeArrowUpHalf, notehead.noteheadLargeArrowUpBlack",
+  "defaultNoteheadID": "notehead.noteheadLargeArrowUpBlack"
+ },
+ {
+  "name": "Large Circled Noteheads",
+  "entityID": "noteheadset.largeCircledNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.noteheadCircledDoubleWholeLarge, notehead.noteheadCircledWholeLarge, notehead.noteheadCircledHalfLarge, notehead.noteheadCircledBlackLarge",
+  "defaultNoteheadID": "notehead.noteheadCircledBlackLarge"
+ },
+ {
+  "name": "Large X and Diamond Noteheads",
+  "entityID": "noteheadset.largeXAndDiamond",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadSlashX, notehead.noteheadSlashDiamondWhite",
+  "defaultNoteheadID": "notehead.noteheadSlashX"
+ },
+ {
+  "name": "Larger Noteheads",
+  "entityID": "noteheadset.large",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.mensuralNoteheadMaximaWhite, notehead.mensuralNoteheadLongaWhite, notehead.noteheadDoubleWholeOversized, notehead.noteheadDoubleWholeSquareOversized, notehead.noteheadWholeOversized, notehead.noteheadHalfOversized, notehead.noteheadBlackOversized",
+  "defaultNoteheadID": "notehead.noteheadBlackOversized"
+ },
+ {
+  "name": "Moon Noteheads",
+  "entityID": "noteheadset.moon",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kRoundAndSquare",
+  "noteheads": "notehead.noteheadMoonBlack, notehead.noteheadMoonWhite",
+  "defaultNoteheadID": "notehead.noteheadMoonBlack"
+ },
+ {
+  "name": "Muted Slash Noteheads",
+  "entityID": "noteheadset.mutedSlashNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kSlashes",
+  "noteheads": "notehead.noteheadSlashWhiteDoubleWhole, notehead.noteheadSlashWhiteWhole, notehead.noteheadSlashWhiteMuted, notehead.noteheadSlashVerticalEndsMuted",
+  "defaultNoteheadID": "notehead.noteheadSlashVerticalEndsMuted"
+ },
+ {
+  "name": "Old-Style Diamond Noteheads",
+  "entityID": "noteheadset.oldDiamondNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kDiamonds",
+  "noteheads": "notehead.noteheadDiamondDoubleWholeOld, notehead.noteheadDiamondWholeOld, notehead.noteheadDiamondHalfOld, notehead.noteheadDiamondBlackOld",
+  "defaultNoteheadID": "notehead.noteheadDiamondBlackOld"
+ },
+ {
+  "name": "Ornate X Noteheads",
+  "entityID": "noteheadset.ornatex",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadXOrnate, notehead.noteheadXOrnateEllipse",
+  "defaultNoteheadID": "notehead.noteheadXOrnate"
+ },
+ {
+  "name": "Oversized Slash Noteheads",
+  "entityID": "noteheadset.slashNoteheadsOversized",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kSlashes",
+  "noteheads": "notehead.noteheadSlashDiamondWhiteOversized, notehead.noteheadSlashDiamondWhiteOversized, notehead.noteheadSlashDiamondWhiteOversized, notehead.noteheadSlashVerticalEndsOversized",
+  "defaultNoteheadID": "notehead.noteheadSlashVerticalEndsOversized"
+ },
+ {
+  "name": "Pitch Name Noteheads",
+  "entityID": "noteheadset.noteNames",
+  "noteheadSetType": "kPitched",
+  "noteheadSetCategory": "kPitched",
+  "noteheads": "notehead.noteheadBlackPitched, notehead.noteAWhole, notehead.noteAHalf, notehead.noteABlack, notehead.noteBWhole, notehead.noteBHalf, notehead.noteBBlack, notehead.noteCWhole, notehead.noteCHalf, notehead.noteCBlack, notehead.noteDWhole, notehead.noteDHalf, notehead.noteDBlack, notehead.noteEWhole, notehead.noteEHalf, notehead.noteEBlack, notehead.noteFWhole, notehead.noteFHalf, notehead.noteFBlack, notehead.noteGWhole, notehead.noteGHalf, notehead.noteGBlack, notehead.noteASharpWhole, notehead.noteASharpHalf, notehead.noteASharpBlack, notehead.noteBSharpWhole, notehead.noteBSharpHalf, notehead.noteBSharpBlack, notehead.noteCSharpWhole, notehead.noteCSharpHalf, notehead.noteCSharpBlack, notehead.noteDSharpWhole, notehead.noteDSharpHalf, notehead.noteDSharpBlack, notehead.noteESharpWhole, notehead.noteESharpHalf, notehead.noteESharpBlack, notehead.noteFSharpWhole, notehead.noteFSharpHalf, notehead.noteFSharpBlack, notehead.noteGSharpWhole, notehead.noteGSharpHalf, notehead.noteGSharpBlack, notehead.noteAFlatWhole, notehead.noteAFlatHalf, notehead.noteAFlatBlack, notehead.noteBFlatWhole, notehead.noteBFlatHalf, notehead.noteBFlatBlack, notehead.noteCFlatWhole, notehead.noteCFlatHalf, notehead.noteCFlatBlack, notehead.noteDFlatWhole, notehead.noteDFlatHalf, notehead.noteDFlatBlack, notehead.noteEFlatWhole, notehead.noteEFlatHalf, notehead.noteEFlatBlack, notehead.noteFFlatWhole, notehead.noteFFlatHalf, notehead.noteFFlatBlack, notehead.noteGFlatWhole, notehead.noteGFlatHalf, notehead.noteGFlatBlack",
+  "defaultNoteheadID": "notehead.noteheadBlackPitched"
+ },
+ {
+  "name": "Plus Noteheads",
+  "entityID": "noteheadset.plusNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadPlusDoubleWhole, notehead.noteheadPlusWhole, notehead.noteheadPlusHalf, notehead.noteheadPlusBlack",
+  "defaultNoteheadID": "notehead.noteheadPlusBlack"
+ },
+ {
+  "name": "Rectangular Noteheads",
+  "entityID": "noteheadset.rectangular",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kRoundAndSquare",
+  "noteheads": "notehead.noteheadSquareBlack, notehead.noteheadSquareWhite",
+  "defaultNoteheadID": "notehead.noteheadSquareBlack"
+ },
+ {
+  "name": "Round White with Dot Noteheads",
+  "entityID": "noteheadset.roundWhiteWithDot",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kRoundAndSquare",
+  "noteheads": "notehead.noteheadRoundWhiteWithDot",
+  "defaultNoteheadID": "notehead.noteheadRoundWhiteWithDot"
+ },
+ {
+  "name": "Slash Noteheads",
+  "entityID": "noteheadset.slashNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kSlashes",
+  "noteheads": "notehead.noteheadSlashWhiteDoubleWhole, notehead.noteheadSlashWhiteWhole, notehead.noteheadSlashWhiteHalf, notehead.noteheadSlashVerticalEnds",
+  "defaultNoteheadID": "notehead.noteheadSlashVerticalEnds"
+ },
+ {
+  "name": "Slashed Noteheads (Bottom Left to Top Right)",
+  "entityID": "noteheadset.slashedNoteheadsBLTR",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.noteheadSlashedDoubleWhole1, notehead.noteheadSlashedWhole1, notehead.noteheadSlashedHalf1, notehead.noteheadSlashedBlack1",
+  "defaultNoteheadID": "notehead.noteheadSlashedBlack1"
+ },
+ {
+  "name": "Slashed Noteheads (Top Left to Bottom Right)",
+  "entityID": "noteheadset.slashedNoteheadsTLBR",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCommon",
+  "noteheads": "notehead.noteheadSlashedDoubleWhole2, notehead.noteheadSlashedWhole2, notehead.noteheadSlashedHalf2, notehead.noteheadSlashedBlack2",
+  "defaultNoteheadID": "notehead.noteheadSlashedBlack2"
+ },
+ {
+  "name": "Small Slash Noteheads",
+  "entityID": "noteheadset.slashNoteheadsSmall",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kSlashes",
+  "noteheads": "notehead.noteheadSlashDiamondWhiteWholeOversized, notehead.noteheadSlashDiamondWhiteOversized, notehead.noteheadSlashVerticalEndsSmallOversized",
+  "defaultNoteheadID": "notehead.noteheadSlashVerticalEndsSmallOversized"
+ },
+ {
+  "name": "Triangle Down Noteheads",
+  "entityID": "noteheadset.triangleDownNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadTriangleDownDoubleWhole, notehead.noteheadTriangleDownWhole, notehead.noteheadTriangleDownHalf, notehead.noteheadTriangleDownBlack",
+  "defaultNoteheadID": "notehead.noteheadTriangleDownBlack"
+ },
+ {
+  "name": "Triangle Left Noteheads",
+  "entityID": "noteheadset.triangleleft",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadTriangleLeftBlack, notehead.noteheadTriangleLeftWhite",
+  "defaultNoteheadID": "notehead.noteheadTriangleLeftBlack"
+ },
+ {
+  "name": "Triangle Right Noteheads",
+  "entityID": "noteheadset.triangleright",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadTriangleRightBlack, notehead.noteheadTriangleRightWhite",
+  "defaultNoteheadID": "notehead.noteheadTriangleRightBlack"
+ },
+ {
+  "name": "Triangle Up Noteheads",
+  "entityID": "noteheadset.triangleUpNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kTriangular",
+  "noteheads": "notehead.noteheadTriangleUpDoubleWhole, notehead.noteheadTriangleUpWhole, notehead.noteheadTriangleUpHalf, notehead.noteheadTriangleUpBlack",
+  "defaultNoteheadID": "notehead.noteheadTriangleUpBlack"
+ },
+ {
+  "name": "Walker 4-shape Noteheads",
+  "entityID": "noteheadset.walker4Shape",
+  "noteheadSetType": "kScaleDegree",
+  "noteheadSetCategory": "kScaleDegree",
+  "noteheads": "notehead.noteShapeTriangleRightWhite, notehead.noteShapeTriangleRightBlack, notehead.noteShapeTriangleLeftWhite, notehead.noteShapeTriangleLeftBlack, notehead.noteShapeRoundWhite, notehead.noteShapeRoundBlack, notehead.noteShapeSquareWhite, notehead.noteShapeSquareBlack, notehead.noteShapeDiamondWhiteWalker4, notehead.noteShapeDiamondBlackWalker4",
+  "defaultNoteheadID": "notehead.noteShapeRoundBlack"
+ },
+ {
+  "name": "Walker 7-shape Noteheads",
+  "entityID": "noteheadset.walker7Shape",
+  "noteheadSetType": "kScaleDegree",
+  "noteheadSetCategory": "kScaleDegree",
+  "noteheads": "notehead.noteShapeKeystoneWhite, notehead.noteShapeKeystoneBlack, notehead.noteShapeQuarterMoonWhite, notehead.noteShapeQuarterMoonBlack, notehead.noteShapeDiamondWhite, notehead.noteShapeDiamondBlack, notehead.noteShapeTriangleRightWhite, notehead.noteShapeTriangleRightBlack, notehead.noteShapeTriangleLeftWhite, notehead.noteShapeTriangleLeftBlack, notehead.noteShapeRoundWhite, notehead.noteShapeRoundBlack, notehead.noteShapeSquareWhite, notehead.noteShapeSquareBlack, notehead.noteShapeIsoscelesTriangleWhite, notehead.noteShapeIsoscelesTriangleBlack",
+  "defaultNoteheadID": "notehead.noteShapeRoundBlack"
+ },
+ {
+  "name": "White Diamond Noteheads",
+  "entityID": "noteheadset.whiteDiamondNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kDiamonds",
+  "noteheads": "notehead.noteheadDiamondDoubleWhole, notehead.noteheadDiamondWhole, notehead.noteheadDiamondMinimaWhite",
+  "defaultNoteheadID": "notehead.noteheadDiamondMinimaWhite"
+ },
+ {
+  "name": "Wide Diamond Noteheads",
+  "entityID": "noteheadset.wideDiamondNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kDiamonds",
+  "noteheads": "notehead.noteheadDiamondDoubleWhole, notehead.noteheadDiamondWhole, notehead.noteheadDiamondHalfWide, notehead.noteheadDiamondBlackWide",
+  "defaultNoteheadID": "notehead.noteheadDiamondBlackWide"
+ },
+ {
+  "name": "With X Noteheads",
+  "entityID": "noteheadset.withXNoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadDoubleWholeWithX, notehead.noteheadWholeWithX, notehead.noteheadHalfWithX, notehead.noteheadVoidWithX",
+  "defaultNoteheadID": "notehead.noteheadVoidWithX"
+ },
+ {
+  "name": "X Noteheads",
+  "entityID": "noteheadset.Xnoteheads",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadXDoubleWhole, notehead.noteheadXWhole, notehead.noteheadXHalf, notehead.noteheadXBlack",
+  "defaultNoteheadID": "notehead.noteheadXBlack"
+ },
+ {
+  "name": "X and Circle X Noteheads",
+  "entityID": "noteheadset.xAndCircleX",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadXBlackQuarter, notehead.noteheadCircleXHalf, notehead.noteheadCircleXWhole, notehead.noteheadCircleXDoubleWhole",
+  "defaultNoteheadID": "notehead.noteheadXBlackQuarter"
+ },
+ {
+  "name": "X and Diamond Noteheads",
+  "entityID": "noteheadset.xAndDiamond",
+  "noteheadSetType": "kNormal",
+  "noteheadSetCategory": "kCrosses",
+  "noteheads": "notehead.noteheadXBlackQuarter, notehead.noteheadDiamondWhiteWide",
+  "defaultNoteheadID": "notehead.noteheadXBlackQuarter"
+ }
+]

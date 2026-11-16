@@ -1,0 +1,248 @@
+{
+ "_source": "Core.framework disassembly of DefaultUserPreferences.init @0xd576c and DefaultAccompanimentPreferences.init(scoreScale:) @0xace0c (exact); Swift field metadata (exact)",
+ "DefaultUserPreferences": {
+  "metronomeState": false,
+  "metronomeGain": 0.5,
+  "cursorMode": "beats",
+  "countDownKind": "acoustic",
+  "mode": "playAlong",
+  "feedbackAIEnabled": true,
+  "pianoMinimized": false,
+  "tuningDiapason": 440,
+  "automaticRecording": true
+ },
+ "DefaultAccompanimentPreferences": {
+  "tempoCoef": 100,
+  "cursorPosition": 0,
+  "loopStatus": false,
+  "loopStart": 0,
+  "loopEnd": 4,
+  "lastScore": 0,
+  "maxScore": 0,
+  "lastScoreVersion": 1,
+  "maxScoreVersion": 1,
+  "maxRhythmGameScore": 0,
+  "displayAccompaniment": false,
+  "showFingering": true,
+  "isInRhythmGame": null,
+  "scoreScale": "argument (device dependent)"
+ },
+ "CountdownModeFromDouble": {
+  "0": "none",
+  "1": "acoustic",
+  "2": "visual"
+ },
+ "enums": {
+  "CursorMode": [
+   "none",
+   "beats",
+   "continuous",
+   "recognition"
+  ],
+  "CountdownMode": [
+   "none",
+   "acoustic",
+   "visual"
+  ],
+  "PageScrollingMode": [
+   "page",
+   "continue"
+  ],
+  "PerformanceHands": [
+   "right",
+   "left",
+   "both"
+  ],
+  "SoloOutputType": [
+   "audio",
+   "synth"
+  ],
+  "VideoFeedbackChoice": [
+   "alwaysOn",
+   "transparent",
+   "hide"
+  ],
+  "PerformanceRecordingMode": [
+   "video",
+   "audio"
+  ],
+  "EchoCancellationType": [
+   "none",
+   "VPIO",
+   "OliveAEC"
+  ]
+ },
+ "PerformanceSettingType": [
+  "transpositionInterval",
+  "transpositionOctave",
+  "scoreClef",
+  "displayAccompaniment",
+  "countDownKind",
+  "cursorMode",
+  "pageScrolling",
+  "position",
+  "scoreScale",
+  "tuning",
+  "transpositionInstrument",
+  "stateSoloMidi",
+  "mixerGain",
+  "volumeMetronome",
+  "volumeSystem",
+  "loopStatus",
+  "loopStart",
+  "loopEnd",
+  "stateMetronome",
+  "performanceMode",
+  "performanceTrackGain",
+  "feedbackAIEnabled",
+  "handSettingsMode",
+  "rhythmMode",
+  "tempo",
+  "pianoMinimized",
+  "latency",
+  "showFingering"
+ ],
+ "MetronautPerformancePreferences": [
+  "mode",
+  "feedbackAIEnabled",
+  "scrollStyle",
+  "metronomeVolume",
+  "countDownKind",
+  "cursorMode",
+  "metronomeState",
+  "pianoMinimized",
+  "tuningDiapason",
+  "automaticRecording",
+  "identifier",
+  "tempoCoef",
+  "playingMode",
+  "instrumentTranspo",
+  "intervalTranspo",
+  "octaveTranspo",
+  "clef",
+  "scoreScale",
+  "displayAccompaniment",
+  "showFingering",
+  "cursorPosition",
+  "loopStatus",
+  "loopStart",
+  "loopEnd",
+  "lastScore",
+  "maxScore",
+  "lastScoreVersion",
+  "maxScoreVersion",
+  "maxRhythmGameScore",
+  "isInRhythmGame",
+  "userInstrumentId"
+ ],
+ "PerformancePreferences_recordingSnapshot": [
+  "mode",
+  "mixer",
+  "soloGain",
+  "accompanimentGain",
+  "tempo",
+  "metronome",
+  "countdownMode",
+  "octaveTransposition",
+  "intervalTransposition",
+  "instrumentTransposition",
+  "clef",
+  "octavia",
+  "displayAccompaniment",
+  "displayPianoKeyboard",
+  "cursorMode",
+  "scrollingMode",
+  "loopState",
+  "loopBeginMeasure",
+  "loopBeginPulsation",
+  "loopEndMeasure",
+  "loopEndPulsation",
+  "cursorPosition",
+  "showFingering"
+ ],
+ "userDefaultsKeys": {
+  "Core.MNDefaultsGlobal": [
+   "install_date"
+  ],
+  "Core.MNDefaultsSync": [
+   "last_date"
+  ],
+  "Core.MNDefaultsUser": [
+   "token_app",
+   "token_firebase",
+   "username",
+   "email",
+   "first_name",
+   "last_name",
+   "firebase_id",
+   "instrument_id",
+   "instrument_last_modification",
+   "level_id",
+   "level_last_modification",
+   "daily_performance_done",
+   "is_trial_period",
+   "product_id",
+   "store",
+   "credit_piece_qty",
+   "audioRecording_onboarding",
+   "listenButtonHint_onboarding",
+   "appstoreCountryCode",
+   "perfCounter",
+   "perfSessionCounter",
+   "performanceAlreadyPresented"
+  ],
+  "Core.MNDefaultsCard": [
+   "clicked_ids"
+  ],
+  "Core.MNDefaultsPieceRequest": [
+   "voted_ids"
+  ],
+  "Core.MNDefaultsWorkout": [
+   "show_training_onboarding"
+  ],
+  "Core.MNDefaultsOnboarding": [
+   "onboarding_pref"
+  ],
+  "Core.MNDefaultsSubscription": [
+   "subscription_first_show_date"
+  ],
+  "Core.MNDefaultsFreeWorkoutStep": [
+   "show_first_free_workout_step"
+  ],
+  "Core.MNDefaultsPlaylistFavorite": [
+   "synced_favorite_playlist"
+  ],
+  "Core.MNDefaultsPerformance": [
+   "is_summary_disable",
+   "midi_onboarding"
+  ],
+  "Core.MNDefaultsABExperiment": [
+   "firstScreenPractice"
+  ],
+  "Core.UserDefaultsBooleanKey": [
+   "premiumDescriptionAlreadyPresented"
+  ],
+  "Core.UserDefaultsIntKey": [
+   "numberOfTimesPushNotifAlreadyPresented",
+   "selectedHomeTabTag",
+   "postShowSwipeIndicatorCount"
+  ],
+  "Metronaut.AppClipUserDefaultsKey": [
+   "cookies"
+  ],
+  "Metronaut.DeepLinkKey": [
+   "premium_delta_days_connected_user",
+   "premium_specific_date_connected_user",
+   "congrats",
+   "referral_user"
+  ],
+  "literalStringsSeen": [
+   "last_install_date"
+  ]
+ },
+ "files": {
+  "antescofo_defaultconnection.json": "DefaultInput (midi/microphone/microphoneMacOS)",
+  "antescofo_measurement.json": "LatencyValues per output port (inferred)",
+  "com.antescofo.metronaut/measurements/": "directory (exact string)"
+ }
+}

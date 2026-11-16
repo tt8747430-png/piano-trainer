@@ -1,0 +1,79 @@
+{
+  "description": "Metronaut backend hosts and endpoint paths recovered statically. 'exact' = literal string in the named binary (strings -arch arm64). Paths of 15 bytes or fewer are usually stored as Swift small-string immediates in code and do not appear in strings output, so this list is incomplete. No keys or tokens are included.",
+  "hosts": {
+    "catalog": {
+      "world_production": "https://catalog.metronaut.app/",
+      "world_staging": "https://catalog.staging.antescofo.dev/",
+      "china_production": "https://catalog.production.metronautapp.cn/",
+      "china_staging": "https://catalog.staging.metronautapp.cn/",
+      "source": "exact: Frameworks/Networking (strings); enum Networking.CatalogBackend {World,China}.{staging,production}"
+    },
+    "auth": {
+      "world_production": "https://auth.metronaut.app/",
+      "world_staging": "https://auth.staging.antescofo.dev/",
+      "china_production": "https://auth.production.metronautapp.cn/",
+      "china_staging": "https://auth.staging.metronautapp.cn/",
+      "source": "exact: Frameworks/Networking (strings); enum Networking.AuthBackend {World,China}.{staging,production}"
+    },
+    "support": {
+      "zendesk_api": "https://antescofo.zendesk.com + /api/v2/requests",
+      "help_center": "https://community.metronautapp.com/hc/ (articles/, requests/new, section/)",
+      "source": "exact: Frameworks/Networking, MacOS/Metronaut"
+    },
+    "web": ["https://metronautapp.com", "https://metronautapp.com/piece/", "https://metronautapp.com/pieces/", "https://metronautapp.com/community/"],
+    "deep_links": ["https://link.metronaut.app/ (Branch)", "link.metronaut.app, 64nx.app.link, 64nx-alternate.app.link, clicks.metronautapp.com (Info.plist branch_universal_link_domains)", "URL scheme metronaut://"],
+    "media_cdn": "https://s3-eu-west-1.amazonaws.com/production.antescofo.com/ (author images in all.json; exact)"
+  },
+  "server_selection": {
+    "AbstractRequest.ServerEnum": ["auth", "catalog"],
+    "AbstractRequest.RequestPolicy": ["network", "cached", "both"],
+    "Backend.Headers": ["language", "full"],
+    "Backend.Parameters": ["countryCode", "cursor", "userId"],
+    "Backend.Authorization": ["bearer(String)", "basic"],
+    "Encoding": ["URL(brackets|noBrackets)", "json"],
+    "source": "exact: Networking __swift5_fieldmd"
+  },
+  "catalog_paths_exact": [
+    {"path": "/v4/static_data/", "request": "Networking.StaticDataRequest", "params": ["platform"], "returns": "Core.StaticData {genres, simplifications, publishers, audioCopyrights, partKinds, accompanimentKinds, instruments, instrumentFamilies}"},
+    {"path": "/v4/collections/", "request": "Networking.CollectionRequest / CollectionDetailsRequest", "params": ["instrument", "level", "countryCode", "genrePreference"]},
+    {"path": "/v4/recently_played/", "request": "Networking.RecentlyPlayedRequest", "params": ["instrument", "level", "genre", "countryCode", "offset", "limit"]},
+    {"path": "/v4/recommendation/", "request": "Networking.RecommendationRequest / RecommendationsRequest", "params": ["pieceId", "instrument", "level", "countryCode", "genrePreference", "limit"]},
+    {"path": "/v5/discovery/", "request": "Networking.DiscoverRequestV5", "params": ["instrument", "level", "genre_preference", "countryCode", "is_intro_offer_eligible", "offset", "limit", "clicked_card_ids", "launch_date", "platform"]},
+    {"path": "/v5/search/", "request": "Networking.SearchRequest", "params": ["offset", "limit", "query", "instrument", "level", "filters", "pks", "token", "countryCode", "genrePreference", "hasInternet", "widescreen", "showCategories"], "returns": "Networking.SearchResults {widgets, parameters, hasMore}"},
+    {"path": "/v5/search/pieces/", "request": "Networking.SearchRequestOpuses", "returns": "SearchOpusesResult {opuses}"},
+    {"path": "/v5/search/collections/", "request": "Networking.SearchRequestCollections", "returns": "SearchCollectionsResult {collections}"},
+    {"path": "/v5/search/authors/", "request": "Networking.SearchRequestAuthors", "returns": "SearchAuthorsResult {authors}"},
+    {"path": "versions/", "request": "Networking.PerfVersionsRequest (pieceId)", "params": ["instrument", "level", "accompanimentId"], "note": "relative fragment; prefix not recovered"}
+  ],
+  "catalog_routes_from_enums": {
+    "CatalogAPIv2": ["all", "pieces.piece", "pieces.pieceSlug(author_slug, piece_slug)", "previewPieces"],
+    "CatalogAPIv3": ["workoutSteps"],
+    "other_requests_without_recovered_path": ["PracticeRequest", "DiscoverRequest (v4?)", "FreePiecesRequest", "PreviewPiece", "PieceRequest", "WorkoutRequest", "WorkoutStepRequest", "ComposerDetailsRequest", "MyMusicGetRequest", "PlaylistGetRequest/PlaylistsGetRequest/RequestPostPlaylist/RequestPutPlaylist/RequestPatchPlaylist/RequestDeletePlaylist/RequestPostPlaylistPiece/RequestPatchPlaylistPiece/RequestDeletePlaylistPiece", "VideoCardsRequest", "FeaturesRequest (platform)", "VersionCheckRequest -> {latest_ios_version, minimum_ios_version}", "GetGradeDetailsRequest", "GetStreakDetailsRequest", "ClassroomsGetRequest", "SchoolsGetRequest", "StudentsGetRequest", "TeachersGetRequest"],
+    "source": "exact: Networking __swift5_types (case and type names); paths for these are inferred to be short inline strings"
+  },
+  "user_and_stats_paths_exact": [
+    {"path": "/stats/performance/", "request": "Networking.PerfStatCreate / PerfStatsGetRequest", "params": ["limit", "offset"]},
+    {"path": "/v1/performance_summary/?limit=3", "request": "Networking.PostPerformanceSummaryRequest (inferred)"},
+    {"path": "/recording/create/", "request": "Networking.RecordingUploadCreate", "body": "RecordingUploadCreateBody", "returns": "RecordingUploadCreateResponse {recording, nimUrl, imageUrl, mediaMultipartInfo{uploadId, filename, parts, partSize}, httpStatus}"},
+    {"path": "/recording/finished_multipart/", "request": "Networking.RecordingUploadFinished", "body": ["id", "uploadId", "etags", "mediaFilename"]},
+    {"path": "/v1/shares/", "request": "SharesGetRequest / ShareDeleteRequest / SharePiecePostRequest", "params": ["offset", "limit"]},
+    {"path": "/ranking/user_league/", "request": "Networking.GetUserLeagueRequest"},
+    {"path": "ranking/rankpool/", "request": "Networking.RequestPostRankPool / RequestGetRankPool"},
+    {"path": "social/socialpost/", "request": "CommunityFeedPostsGetRequest / CommunityPostsGetRequest / CommunityPostGetRequest"},
+    {"path": "social/socialpost/create/", "request": "Networking.CommunityPostCreate"},
+    {"path": "social/usersocialpost/", "request": "Networking.CommunityUserPostsGetRequest"},
+    {"path": "social/postvideo/", "request": "inferred: community video upload"},
+    {"path": "/v1/conversion_score/purchase_begin/", "request": "Networking.ConversionScorePurchaseBeginRequest", "params": ["currencyCode", "instrumentId", "levelId", "genrePreference", "status", "platform", "isIpad"]},
+    {"path": "subscription/offer", "request": "inferred: Networking.ProductOffering {label, sublabel, expires_at, available_products[{apple_product_id, apple_discount_id, sublabel, reference_product, name}]}"},
+    {"path": "apple-discount-signature/", "request": "AuthAPI.appleDiscountSignature -> AppStoreDiscountSignature {offerId, keyId, nonce, signature, timestamp}"},
+    {"path": "jwt/refresh/", "request": "Networking.RequestJwtRefresh"}
+  ],
+  "auth_routes_from_enums": {
+    "AuthAPI": ["appleDiscountSignature", "appleVerify(receiptData)", "branch(UserDeepLink)", "device(Device{deviceId, model, apnsToken, pushauthorized, defaultLanguage, os, timezone})", "product", "purchase(read token)", "subscribe(receipt_data, products, language, isIpad)", "currencyRate", "loginMethods -> {apple, email, facebook, sms, wechat, google}"],
+    "AuthAPI.jwt": ["firebase(token)"],
+    "AuthAPI.restAuth": ["facebook", "login", "apple", "google", "registration", "wechat", "testEmail", "deleteAccount", "smsCheck", "smsStart"],
+    "AuthAPI.restAuth.password": ["reset"],
+    "source": "exact: Networking __swift5_fieldmd"
+  },
+  "third_party_endpoints_exact": "See ANALYTICS_EVENTS.md (Amplitude, Branch, AppsFlyer SKAN, Firebase, Crashlytics, Braze, Google OAuth, Apple AdServices)."
+}

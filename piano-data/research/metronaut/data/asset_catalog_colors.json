@@ -1,0 +1,357 @@
+[
+ {
+  "name": "AnnotationButton",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.631,
+    0.643,
+    0.702,
+    1
+   ],
+   "hex": "#A1A4B3",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "AnnotationMenu",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.247,
+    0.259,
+    0.247,
+    1
+   ],
+   "hex": "#3F423F",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "AnnotationTextButton",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.208,
+    0.686,
+    0.969,
+    1
+   ],
+   "hex": "#35AFF7",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "background",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    0.969,
+    0.925,
+    1
+   ],
+   "hex": "#FFF7EC",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.082,
+    0.082,
+    0.09,
+    1
+   ],
+   "hex": "#151517",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "backgroundBlue",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.208,
+    0.686,
+    0.969,
+    1
+   ],
+   "hex": "#35AFF7",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.208,
+    0.141,
+    0.412,
+    1
+   ],
+   "hex": "#352469",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "backgroundLaunch",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.208,
+    0.682,
+    0.969,
+    1
+   ],
+   "hex": "#35AEF7",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0,
+    0.012,
+    0.227,
+    1
+   ],
+   "hex": "#00033A",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "backgroundRed",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.961,
+    0.192,
+    0.192,
+    1
+   ],
+   "hex": "#F53131",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "backgroundWhite",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.114,
+    0.114,
+    0.122,
+    1
+   ],
+   "hex": "#1D1D1F",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "bluePerf",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.208,
+    0.682,
+    0.969,
+    1
+   ],
+   "hex": "#35AEF7",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0,
+    0.012,
+    0.227,
+    1
+   ],
+   "hex": "#00033A",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "green",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0,
+    0.314,
+    0.294,
+    1
+   ],
+   "hex": "#00504B",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0,
+    0.58,
+    0.447,
+    1
+   ],
+   "hex": "#009472",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "performanceBackground",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    0.969,
+    0.929,
+    1
+   ],
+   "hex": "#FFF7ED",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "primaryText",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0.224,
+    0.224,
+    0.251,
+    1
+   ],
+   "hex": "#393940",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "secondaryText",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    0,
+    0,
+    0,
+    0.545
+   ],
+   "hex": "#000000",
+   "alpha": 0.545
+  },
+  "dark": {
+   "rgba": [
+    1,
+    1,
+    1,
+    0.544
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 0.544
+  }
+ },
+ {
+  "name": "tabBarBackground",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.224,
+    0.224,
+    0.251,
+    1
+   ],
+   "hex": "#393940",
+   "alpha": 1
+  }
+ },
+ {
+  "name": "white",
+  "catalog": "app",
+  "colorspace": "srgb",
+  "any": {
+   "rgba": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "hex": "#FFFFFF",
+   "alpha": 1
+  },
+  "dark": {
+   "rgba": [
+    0.078,
+    0.078,
+    0.086,
+    1
+   ],
+   "hex": "#141416",
+   "alpha": 1
+  }
+ }
+]

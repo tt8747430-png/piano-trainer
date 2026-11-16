@@ -1,0 +1,452 @@
+{
+  "account.profile.section.school": {
+    "format": {
+      "one": "School",
+      "zero": "Schools",
+      "other": "Schools",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "account.welcomePeriod.title": {
+    "format": {
+      "one": "1h of Unlimited Access Left",
+      "zero": "Last hour of Unlimited Access",
+      "other": "%uh of Unlimited Access Left",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "account.welcomePeriod.title.obsolete": {
+    "format": {
+      "one": "1h of Premium Access Left",
+      "zero": "Last hour of Premium Access",
+      "other": "%uh of Premium Access Left",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "button.reminder.XMinutesLeft.title": {
+    "format": {
+      "one": "1 min left",
+      "zero": "0 min left",
+      "other": "%u min left",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "button.subscription.monthlyxfree.title": {
+    "format": {
+      "one": "7-day Free Trial",
+      "zero": "7-day Free Trial",
+      "other": "7-day Free Trial",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "button.subscription.monthlyXThen.specialOffer.title": {
+    "format": {
+      "one": "for %u month then %@ / month",
+      "zero": "",
+      "other": "for %u months then %@ / month",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "endSession.recordings": {
+    "format": {
+      "one": "New recording",
+      "zero": "New recording",
+      "other": "New recordings",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "foopup.noPrintCredit.freeTrial.subtitle": {
+    "format": {
+      "one": "You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra score per month.",
+      "zero": "You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra score per month.",
+      "other": "You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra scores per month.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "foopup.noPrintCredit.subscriber.subtitle": {
+    "format": {
+      "one": "You have printed %u score this month. You will be able to print %u more starting {{date}}.",
+      "zero": "You have printed %u score this month. You will be able to print %u more starting {{date}}.",
+      "other": "You have printed %u scores this month. You will be able to print %u more starting {{date}}.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "foopup.printConfirmation.button.subscriber.subtitle": {
+    "format": {
+      "one": "%u printout left this month",
+      "zero": "0 printout left this month",
+      "other": "%u printouts left this month",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "foopup.printConfirmation.freeTrial.subtitle": {
+    "format": {
+      "one": "You can print %u score during your free trial. The same score can be printed as many times as you want.",
+      "zero": "You can print %u scores during your free trial. The same score can be printed as many times as you want.",
+      "other": "You can print %u scores during your free trial. The same score can be printed as many times as you want.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "gamification.details.streak.content.title": {
+    "format": {
+      "one": "New streak started!",
+      "zero": "",
+      "other": "Weeks in a row!",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "global.xPieces": {
+    "format": {
+      "one": "%li Piece",
+      "zero": "%li Piece",
+      "other": "%li Pieces",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "header.subscription.XMinutesLeft.title": {
+    "format": {
+      "one": "1 min of play time left today",
+      "zero": "No free play time left today",
+      "other": "%u min of play time left today",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "home.PracticeDashboard.goal": {
+    "format": {
+      "one": "",
+      "zero": "",
+      "other": "%@ days",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "home.PracticeDashboard.week.hourTotalDuration": {
+    "format": {
+      "one": "hour",
+      "zero": "hour",
+      "other": "hours",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "home.PracticeDashboard.week.minutesTotalDuration": {
+    "format": {
+      "one": "minute",
+      "zero": "minute",
+      "other": "minutes",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "home.PracticeDashboard.week.xWeekAgo": {
+    "format": {
+      "one": "%@ week ago",
+      "zero": "%@ week ago",
+      "other": "%@ weeks ago",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "myMusic.footer.subscription.subtitle": {
+    "format": {
+      "one": "Or enjoy 1 minute of free play time every day.",
+      "zero": "Or enjoy 0 minute of free play time every day.",
+      "other": "Or enjoy %u minutes of free play time every day.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "nda.global.collection": {
+    "format": {
+      "one": "Collection",
+      "zero": "Collection",
+      "other": "Collections",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "Notification.subscription.XMinutesLeft.subtitle": {
+    "format": {
+      "one": "",
+      "zero": "",
+      "other": "You have %u minutes of play time left.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "Notification.subscription.XMinutesPlayed.title": {
+    "format": {
+      "one": "",
+      "zero": "",
+      "other": "You’ve played %u minutes, what a maestro! 🕺",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "pieceCell.versions": {
+    "format": {
+      "one": "version",
+      "zero": "",
+      "other": "versions",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "pieceVersions.purchase.title": {
+    "format": {
+      "one": "Included Version",
+      "zero": "",
+      "other": "Included Versions (%u)",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "practice.workout.totalSteps": {
+    "format": {
+      "one": "%u step",
+      "zero": "%u step",
+      "other": "%u steps",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "preview.offeredPiece.button.subtitle": {
+    "format": {
+      "one": "%u free piece left",
+      "zero": "%u free piece left",
+      "other": "%u free pieces left",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "preview.purchase.button.subtitle": {
+    "format": {
+      "one": "%u version (score + audio)",
+      "zero": "%u version (score + audio)",
+      "other": "%u versions (score + audio)",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "Reminder.subscription.XMinutesLeft.title": {
+    "format": {
+      "one": "1 minute of play time left this month.",
+      "zero": "Your monthly free time is up.",
+      "other": "%u minutes of play time left this month.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.duration": {
+    "format": {
+      "one": "%u month",
+      "zero": "%u month",
+      "other": "%u months",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.freeTrial.day.button": {
+    "format": {
+      "one": "Start my %u-day Free Trial",
+      "zero": "",
+      "other": "Start my %u-day Free Trial",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.freeTrial.day.title": {
+    "format": {
+      "one": "%u-days Free Trial",
+      "zero": "",
+      "other": "%u-day Free Trial",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.freeTrial.month.button": {
+    "format": {
+      "one": "Start my 1-month Free Trial",
+      "zero": "",
+      "other": "Start my %u-month Free Trial",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.freeTrial.month.title": {
+    "format": {
+      "one": "1 month Free Trial",
+      "zero": "",
+      "other": "%u-months Free Trial",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.month.freeDays.button.subtitle": {
+    "format": {
+      "one": "",
+      "zero": "",
+      "other": "{{duration}} days free then {{price}} per month.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.month.freeMonths.button.subtitle": {
+    "format": {
+      "one": "{{duration}} month free then {{price}} per month.",
+      "zero": "",
+      "other": "{{duration}} months free then {{price}} per month.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.offer.month.subtitle": {
+    "format": {
+      "one": "for %u month, then %@ / month",
+      "zero": "for %u month, then %@ / month",
+      "other": "for %u months, then %@ / month",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.offer.payAsYouGo.50off.month.subtitle": {
+    "format": {
+      "one": "for %u month, then %@ / month",
+      "zero": "for %u month, then %@ / month",
+      "other": "for %u months, then %@ / month",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.year.freeDays.button.subtitle": {
+    "format": {
+      "one": "",
+      "zero": "",
+      "other": "{{duration}} days free then {{price}} per year",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "subscription.year.freeMonths.button.subtitle": {
+    "format": {
+      "one": "1 month free then {{price}} per year.",
+      "zero": "",
+      "other": "{{duration}} months free then {{price}} per year.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.subtitle": {
+    "format": {
+      "one": "As a welcome gift, enjoy playing with Metronaut with no time limit during 24h.",
+      "zero": "As a welcome gift, enjoy playing with Metronaut with no time limit during %u hours.",
+      "other": "As a welcome gift, enjoy playing with Metronaut with no time limit during %u days.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.subtitle.obsolete": {
+    "format": {
+      "one": "Play with Metronaut without limits during 24h, like a Premium user.",
+      "zero": "",
+      "other": "Play with Metronaut without limits during %u days, like a Premium user.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.subtitle.obsolete2": {
+    "format": {
+      "one": "As a welcome gift, enjoy playing with Metronaut without limits during 24h, like a Premium user.",
+      "zero": "As a welcome gift, enjoy playing with Metronaut without limits during %u hours, like a Premium user.",
+      "other": "As a welcome gift, enjoy playing with Metronaut without limits during %u days, like a Premium user.",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.title": {
+    "format": {
+      "one": "1 Day Welcome Access",
+      "zero": "%u Days Welcome Access",
+      "other": "%u Days Welcome Access",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.title.obsolete": {
+    "format": {
+      "one": "1 Day Premium Access",
+      "zero": "",
+      "other": "%u Days Premium Access",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  },
+  "welcomePeriod.popup.title.obsolete2": {
+    "format": {
+      "one": "1 Day Free Welcome Access",
+      "zero": "%u Days Free Welcome Access",
+      "other": "%u Days Free Welcome Access",
+      "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+      "NSStringFormatValueTypeKey": "li"
+    },
+    "NSStringLocalizedFormatKey": "%#@format@"
+  }
+}

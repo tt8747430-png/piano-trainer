@@ -1,0 +1,70 @@
+{
+ "_source": "MetronautPreviewUIKit.ScoreReaderV.keyCommands @0xcab38 (exact titles/inputs/modifiers); Metronaut buildMenu removes UIMenu.edit and UIMenu.format (exact)",
+ "shortcuts": [
+  {
+   "title": "Play/Pause",
+   "input": "Space",
+   "modifiers": []
+  },
+  {
+   "title": "Print",
+   "input": "P",
+   "modifiers": [
+    "Command"
+   ]
+  },
+  {
+   "title": "Scroll to Next Page",
+   "input": "PageDown",
+   "modifiers": []
+  },
+  {
+   "title": "Scroll To Next Page",
+   "input": "DownArrow",
+   "modifiers": []
+  },
+  {
+   "title": "Scroll to Previous Page",
+   "input": "PageUp",
+   "modifiers": []
+  },
+  {
+   "title": "Previous Page",
+   "input": "UpArrow",
+   "modifiers": []
+  },
+  {
+   "title": "Next Page",
+   "input": "RightArrow",
+   "modifiers": []
+  },
+  {
+   "title": "Next Page",
+   "input": "LeftArrow",
+   "modifiers": [],
+   "note": "title as compiled; behaviour likely previous page (inferred)"
+  },
+  {
+   "title": "Zoom In",
+   "input": "+",
+   "modifiers": [
+    "Command"
+   ]
+  },
+  {
+   "title": "Zoom Out",
+   "input": "-",
+   "modifiers": [
+    "Command"
+   ]
+  }
+ ],
+ "wantsPriorityOverSystemBehavior": true,
+ "menuBar": {
+  "removed": [
+   "Edit",
+   "Format"
+  ],
+  "rest": "system default Mac Catalyst menus (inferred)"
+ }
+}

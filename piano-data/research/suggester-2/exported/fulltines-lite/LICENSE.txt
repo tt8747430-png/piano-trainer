@@ -1,0 +1,19 @@
+fulltines-lite.sf2 — exported unmodified from
+  Suggester 2.app/Contents/Frameworks/Instruments.framework/Versions/A/Resources/soundfonts/fulltines-lite.sf2
+SHA-256: 2df4bfbfd3e94c099416b0a6d1868b3d1635389d091181f29f7fbd8f42f1437b
+
+Licence and attribution, copied verbatim from the file's own SoundFont 2 INFO chunk:
+
+  INAM: FM Electric Piano Version 1.00
+  ICRD: Thursday 7 June 2018, 16:50:34
+  IENG: Strix SoundFont
+  ICOP: Public Domain
+  ICMT: Recorded using 'Dexed' FM software synth.
+        Patch name: 'FullTines'
+        Change Log: V1.00 Initial Release
+        The License Info:
+        Licensed under the Creative Commons CC0 1.0 License.
+  ISFT: Polyphone
+
+CC0 1.0 requires no attribution. Crediting "Strix SoundFont (CC0)" is courteous.
+Note: the file name suggests a "lite" cut of the original; this copy is exactly what Suggester 2 ships.

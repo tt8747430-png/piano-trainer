@@ -1,0 +1,4974 @@
+{
+ "clefs": [
+  {
+   "name": "4-string Tab Clef",
+   "id": "clef.tab.4"
+  },
+  {
+   "name": "6-string Tab Clef",
+   "id": "clef.tab"
+  },
+  {
+   "name": "Alto Clef",
+   "id": "clef.alto"
+  },
+  {
+   "name": "Alto Clef 8 Below",
+   "id": "clef.alto8ba"
+  },
+  {
+   "name": "Baritone Bass Clef",
+   "id": "clef.baritone-bass"
+  },
+  {
+   "name": "Baritone Clef",
+   "id": "clef.baritone"
+  },
+  {
+   "name": "Bass Clef",
+   "id": "clef.bass"
+  },
+  {
+   "name": "Bass Clef 15 Above",
+   "id": "clef.bass15ma"
+  },
+  {
+   "name": "Bass Clef 15 Below",
+   "id": "clef.bass15ba"
+  },
+  {
+   "name": "Bass Clef 8 Above",
+   "id": "clef.bass8va"
+  },
+  {
+   "name": "Bass Clef 8 Below",
+   "id": "clef.bass8ba"
+  },
+  {
+   "name": "French Violin Clef",
+   "id": "clef.frenchviolin"
+  },
+  {
+   "name": "Indian Drum Clef",
+   "id": "clef.percussionindian"
+  },
+  {
+   "name": "Invisible Clef",
+   "id": "clef.invisible"
+  },
+  {
+   "name": "Mezzo-soprano Clef",
+   "id": "clef.mezzo-soprano"
+  },
+  {
+   "name": "Percussion Clef",
+   "id": "clef.percussion"
+  },
+  {
+   "name": "Percussion Clef (Rectangular)",
+   "id": "clef.percussion2"
+  },
+  {
+   "name": "Soprano Clef",
+   "id": "clef.soprano"
+  },
+  {
+   "name": "Sub-bass Clef",
+   "id": "clef.sub-bass"
+  },
+  {
+   "name": "Tenor Clef",
+   "id": "clef.tenor"
+  },
+  {
+   "name": "Tenor Clef 8 Below",
+   "id": "clef.tenor8ba"
+  },
+  {
+   "name": "Treble Clef",
+   "id": "clef.treble"
+  },
+  {
+   "name": "Treble Clef 15 Above",
+   "id": "clef.treble15ma"
+  },
+  {
+   "name": "Treble Clef 15 Below",
+   "id": "clef.treble15ba"
+  },
+  {
+   "name": "Treble Clef 8 Above",
+   "id": "clef.treble8va"
+  },
+  {
+   "name": "Treble Clef 8 Below",
+   "id": "clef.treble8ba"
+  }
+ ],
+ "ottavaLines": [
+  {
+   "name": "Loco",
+   "id": "line.ottava.loco"
+  },
+  {
+   "name": "Octave down",
+   "id": "line.ottava.down.8"
+  },
+  {
+   "name": "Octave up",
+   "id": "line.ottava.up.8"
+  },
+  {
+   "name": "Three octaves down",
+   "id": "line.ottava.down.22"
+  },
+  {
+   "name": "Three octaves up",
+   "id": "line.ottava.up.22"
+  },
+  {
+   "name": "Two octaves down",
+   "id": "line.ottava.down.15"
+  },
+  {
+   "name": "Two octaves up",
+   "id": "line.ottava.up.15"
+  }
+ ],
+ "noteheadSets": [
+  {
+   "name": "Aikin 7-shape Noteheads",
+   "id": "noteheadset.aikin7Shape"
+  },
+  {
+   "name": "Circle X Noteheads",
+   "id": "noteheadset.circleXNoteheads"
+  },
+  {
+   "name": "Circled Noteheads",
+   "id": "noteheadset.circledNoteheads"
+  },
+  {
+   "name": "Default Noteheads",
+   "id": "noteheadset.default"
+  },
+  {
+   "name": "Diamond Noteheads",
+   "id": "noteheadset.diamondNoteheads"
+  },
+  {
+   "name": "Figurenotes Noteheads",
+   "id": "noteheadset.figurenotes"
+  },
+  {
+   "name": "Funk 7-shape Noteheads",
+   "id": "noteheadset.funk7Shape"
+  },
+  {
+   "name": "Large Arrow Down Noteheads",
+   "id": "noteheadset.largeArrowDownNoteheads"
+  },
+  {
+   "name": "Large Arrow Up Noteheads",
+   "id": "noteheadset.largeArrowUpNoteheads"
+  },
+  {
+   "name": "Large Circled Noteheads",
+   "id": "noteheadset.largeCircledNoteheads"
+  },
+  {
+   "name": "Large X and Diamond Noteheads",
+   "id": "noteheadset.largeXAndDiamond"
+  },
+  {
+   "name": "Larger Noteheads",
+   "id": "noteheadset.large"
+  },
+  {
+   "name": "Moon Noteheads",
+   "id": "noteheadset.moon"
+  },
+  {
+   "name": "Muted Slash Noteheads",
+   "id": "noteheadset.mutedSlashNoteheads"
+  },
+  {
+   "name": "Old-Style Diamond Noteheads",
+   "id": "noteheadset.oldDiamondNoteheads"
+  },
+  {
+   "name": "Ornate X Noteheads",
+   "id": "noteheadset.ornatex"
+  },
+  {
+   "name": "Oversized Slash Noteheads",
+   "id": "noteheadset.slashNoteheadsOversized"
+  },
+  {
+   "name": "Pitch Name Noteheads",
+   "id": "noteheadset.noteNames"
+  },
+  {
+   "name": "Plus Noteheads",
+   "id": "noteheadset.plusNoteheads"
+  },
+  {
+   "name": "Rectangular Noteheads",
+   "id": "noteheadset.rectangular"
+  },
+  {
+   "name": "Round White with Dot Noteheads",
+   "id": "noteheadset.roundWhiteWithDot"
+  },
+  {
+   "name": "Slash Noteheads",
+   "id": "noteheadset.slashNoteheads"
+  },
+  {
+   "name": "Slashed Noteheads (Bottom Left to Top Right)",
+   "id": "noteheadset.slashedNoteheadsBLTR"
+  },
+  {
+   "name": "Slashed Noteheads (Top Left to Bottom Right)",
+   "id": "noteheadset.slashedNoteheadsTLBR"
+  },
+  {
+   "name": "Small Slash Noteheads",
+   "id": "noteheadset.slashNoteheadsSmall"
+  },
+  {
+   "name": "Triangle Down Noteheads",
+   "id": "noteheadset.triangleDownNoteheads"
+  },
+  {
+   "name": "Triangle Left Noteheads",
+   "id": "noteheadset.triangleleft"
+  },
+  {
+   "name": "Triangle Right Noteheads",
+   "id": "noteheadset.triangleright"
+  },
+  {
+   "name": "Triangle Up Noteheads",
+   "id": "noteheadset.triangleUpNoteheads"
+  },
+  {
+   "name": "Walker 4-shape Noteheads",
+   "id": "noteheadset.walker4Shape"
+  },
+  {
+   "name": "Walker 7-shape Noteheads",
+   "id": "noteheadset.walker7Shape"
+  },
+  {
+   "name": "White Diamond Noteheads",
+   "id": "noteheadset.whiteDiamondNoteheads"
+  },
+  {
+   "name": "Wide Diamond Noteheads",
+   "id": "noteheadset.wideDiamondNoteheads"
+  },
+  {
+   "name": "With X Noteheads",
+   "id": "noteheadset.withXNoteheads"
+  },
+  {
+   "name": "X Noteheads",
+   "id": "noteheadset.Xnoteheads"
+  },
+  {
+   "name": "X and Circle X Noteheads",
+   "id": "noteheadset.xAndCircleX"
+  },
+  {
+   "name": "X and Diamond Noteheads",
+   "id": "noteheadset.xAndDiamond"
+  }
+ ],
+ "restSets": [
+  {
+   "name": "Default rests",
+   "id": "restset.default"
+  },
+  {
+   "name": "Old-style quarter rests",
+   "id": "restset.old-style"
+  },
+  {
+   "name": "Z-style quarter rests",
+   "id": "restset.z-style"
+  }
+ ],
+ "ornaments": [
+  {
+   "name": "Bend",
+   "id": "ornament.brassBend"
+  },
+  {
+   "name": "Cadence",
+   "id": "ornament.precompCadence"
+  },
+  {
+   "name": "Cadence with turn",
+   "id": "ornament.precompCadenceWithTurn"
+  },
+  {
+   "name": "Cadence with upper prefix",
+   "id": "ornament.precompCadenceUpperPrefix"
+  },
+  {
+   "name": "Cadence with upper prefix and turn",
+   "id": "ornament.precompCadenceUpperPrefixTurn"
+  },
+  {
+   "name": "Descending slide",
+   "id": "ornament.precompDescendingSlide"
+  },
+  {
+   "name": "Double cadence",
+   "id": "ornament.precompDoubleCadenceLowerPrefix"
+  },
+  {
+   "name": "Double cadence with mordent",
+   "id": "ornament.precompPortDeVoixMordent"
+  },
+  {
+   "name": "Double cadence with mordent and upper prefix",
+   "id": "ornament.precompInvertedMordentUpperPrefix"
+  },
+  {
+   "name": "Double cadence with upper prefix",
+   "id": "ornament.precompDoubleCadenceUpperPrefix"
+  },
+  {
+   "name": "Double cadence with upper prefix and turn",
+   "id": "ornament.precompDoubleCadenceUpperPrefixTurn"
+  },
+  {
+   "name": "Flip",
+   "id": "ornament.brassFlip"
+  },
+  {
+   "name": "Haydn ornament",
+   "id": "ornament.haydn"
+  },
+  {
+   "name": "Inverted turn",
+   "id": "ornament.turnInverted"
+  },
+  {
+   "name": "Inverted turn up",
+   "id": "ornament.turnUpS"
+  },
+  {
+   "name": "Jazz turn",
+   "id": "ornament.brassJazzTurn"
+  },
+  {
+   "name": "Mordent",
+   "id": "ornament.mordent"
+  },
+  {
+   "name": "Mordent with release",
+   "id": "ornament.precompMordentRelease"
+  },
+  {
+   "name": "Mordent with upper prefix",
+   "id": "ornament.precompMordentUpperPrefix"
+  },
+  {
+   "name": "Pincé",
+   "id": "ornament.pinceCouperin"
+  },
+  {
+   "name": "Port de voix",
+   "id": "ornament.portDeVoixV"
+  },
+  {
+   "name": "Schleifer",
+   "id": "ornament.schleifer"
+  },
+  {
+   "name": "Shake",
+   "id": "ornament.shake3"
+  },
+  {
+   "name": "Short trill",
+   "id": "ornament.shortTrill"
+  },
+  {
+   "name": "Slide",
+   "id": "ornament.precompSlide"
+  },
+  {
+   "name": "Slide-trill (D'Anglebert)",
+   "id": "ornament.precompSlideTrillDAnglebert"
+  },
+  {
+   "name": "Slide-trill (Muffat)",
+   "id": "ornament.precompSlideTrillMuffat"
+  },
+  {
+   "name": "Slide-trill with one-note suffix (Marpurg)",
+   "id": "ornament.precompSlideTrillMarpurg"
+  },
+  {
+   "name": "Slide-trill with two-note suffix (J.S. Bach)",
+   "id": "ornament.precompSlideTrillBach"
+  },
+  {
+   "name": "Slide-trill with two-note suffix (Muffat)",
+   "id": "ornament.precompSlideTrillSuffixMuffat"
+  },
+  {
+   "name": "Smear",
+   "id": "ornament.brassSmear"
+  },
+  {
+   "name": "Supported appoggiatura trill",
+   "id": "ornament.precompAppoggTrill"
+  },
+  {
+   "name": "Supported appoggiatura trill with two-note suffix",
+   "id": "ornament.precompAppoggTrillSuffix"
+  },
+  {
+   "name": "Tremblement",
+   "id": "ornament.tremblement"
+  },
+  {
+   "name": "Tremblement appuyé",
+   "id": "ornament.tremblementCouperin"
+  },
+  {
+   "name": "Trill",
+   "id": "ornament.trill"
+  },
+  {
+   "name": "Trill with lower suffix",
+   "id": "ornament.precompTrillLowerSuffix"
+  },
+  {
+   "name": "Trill with mordent",
+   "id": "ornament.precompTrillWithMordent"
+  },
+  {
+   "name": "Trill with two-note suffix (Dandrieu)",
+   "id": "ornament.precompTrillSuffixDandrieu"
+  },
+  {
+   "name": "Turn",
+   "id": "ornament.turn"
+  },
+  {
+   "name": "Turn up",
+   "id": "ornament.turnUp"
+  },
+  {
+   "name": "Turn with slash",
+   "id": "ornament.turnSlash"
+  },
+  {
+   "name": "Turn-trill (D'Anglebert)",
+   "id": "ornament.precompTurnTrillDAnglebert"
+  },
+  {
+   "name": "Turn-trill with two-note suffix (J.S. Bach)",
+   "id": "ornament.precompTurnTrillBach"
+  },
+  {
+   "name": "Vibrato Bar Dip",
+   "id": "ornament.vibratoBarDip"
+  }
+ ],
+ "tempoPresets": [
+  {
+   "name": "Adagietto",
+   "id": "tempopreset.adagietto"
+  },
+  {
+   "name": "Adagio",
+   "id": "tempopreset.adagio"
+  },
+  {
+   "name": "Affettuoso",
+   "id": "tempopreset.affettuoso"
+  },
+  {
+   "name": "Agitato",
+   "id": "tempopreset.agitato"
+  },
+  {
+   "name": "Alla breve",
+   "id": "tempopreset.allabreve"
+  },
+  {
+   "name": "Alla marcia",
+   "id": "tempopreset.allamarcia"
+  },
+  {
+   "name": "Allegretto",
+   "id": "tempopreset.allegretto"
+  },
+  {
+   "name": "Allegrissimo",
+   "id": "tempopreset.allegrissimo"
+  },
+  {
+   "name": "Allegro",
+   "id": "tempopreset.allegro"
+  },
+  {
+   "name": "Allegro moderato",
+   "id": "tempopreset.allegromoderato"
+  },
+  {
+   "name": "Allegro vivace",
+   "id": "tempopreset.allegrovivace"
+  },
+  {
+   "name": "Andante",
+   "id": "tempopreset.andante"
+  },
+  {
+   "name": "Andante moderato",
+   "id": "tempopreset.andantemoderato"
+  },
+  {
+   "name": "Andantino",
+   "id": "tempopreset.andantino"
+  },
+  {
+   "name": "Animato",
+   "id": "tempopreset.animato"
+  },
+  {
+   "name": "Appassionato",
+   "id": "tempopreset.appassionato"
+  },
+  {
+   "name": "Brillante",
+   "id": "tempopreset.brillante"
+  },
+  {
+   "name": "Con bravura",
+   "id": "tempopreset.conbravura"
+  },
+  {
+   "name": "Con brio",
+   "id": "tempopreset.conbrio"
+  },
+  {
+   "name": "Con dolcezza",
+   "id": "tempopreset.condolcezza"
+  },
+  {
+   "name": "Con fuoco",
+   "id": "tempopreset.confuoco"
+  },
+  {
+   "name": "Con moto",
+   "id": "tempopreset.conmoto"
+  },
+  {
+   "name": "Deciso",
+   "id": "tempopreset.deciso"
+  },
+  {
+   "name": "Energico",
+   "id": "tempopreset.energico"
+  },
+  {
+   "name": "Eroico",
+   "id": "tempopreset.eroico"
+  },
+  {
+   "name": "Furioso",
+   "id": "tempopreset.furioso"
+  },
+  {
+   "name": "Giocoso",
+   "id": "tempopreset.giocoso"
+  },
+  {
+   "name": "Gioioso",
+   "id": "tempopreset.gioioso"
+  },
+  {
+   "name": "Grandioso",
+   "id": "tempopreset.grandioso"
+  },
+  {
+   "name": "Grave",
+   "id": "tempopreset.grave"
+  },
+  {
+   "name": "Grazioso",
+   "id": "tempopreset.grazioso"
+  },
+  {
+   "name": "L'istesso tempo",
+   "id": "tempopreset.listessotempo"
+  },
+  {
+   "name": "Lacrimoso",
+   "id": "tempopreset.lacrimoso"
+  },
+  {
+   "name": "Lamentoso",
+   "id": "tempopreset.lamentoso"
+  },
+  {
+   "name": "Larghetto",
+   "id": "tempopreset.larghetto"
+  },
+  {
+   "name": "Larghissimo",
+   "id": "tempopreset.larghissimo"
+  },
+  {
+   "name": "Largo",
+   "id": "tempopreset.largo"
+  },
+  {
+   "name": "Lento",
+   "id": "tempopreset.lento"
+  },
+  {
+   "name": "Lento",
+   "id": "tempopreset.relative_lento"
+  },
+  {
+   "name": "Maestoso",
+   "id": "tempopreset.maestoso"
+  },
+  {
+   "name": "Malinconico",
+   "id": "tempopreset.malinconico"
+  },
+  {
+   "name": "Marcia moderato",
+   "id": "tempopreset.marciamoderato"
+  },
+  {
+   "name": "Marziale",
+   "id": "tempopreset.marziale"
+  },
+  {
+   "name": "Mesto",
+   "id": "tempopreset.mesto"
+  },
+  {
+   "name": "Misterioso",
+   "id": "tempopreset.misterioso"
+  },
+  {
+   "name": "Moderato",
+   "id": "tempopreset.moderato"
+  },
+  {
+   "name": "Mosso",
+   "id": "tempopreset.mosso"
+  },
+  {
+   "name": "Movimento",
+   "id": "tempopreset.movimento"
+  },
+  {
+   "name": "Nobilmente",
+   "id": "tempopreset.nobilmente"
+  },
+  {
+   "name": "Patetico",
+   "id": "tempopreset.patetico"
+  },
+  {
+   "name": "Prestissimo",
+   "id": "tempopreset.prestissimo"
+  },
+  {
+   "name": "Presto",
+   "id": "tempopreset.presto"
+  },
+  {
+   "name": "Ritenuto",
+   "id": "tempopreset.ritenuto"
+  },
+  {
+   "name": "Scherzando",
+   "id": "tempopreset.scherzando"
+  },
+  {
+   "name": "Stretto",
+   "id": "tempopreset.stretto"
+  },
+  {
+   "name": "Tempo I",
+   "id": "tempopreset.tempoI"
+  },
+  {
+   "name": "Tempo II",
+   "id": "tempopreset.tempoII"
+  },
+  {
+   "name": "Tempo comodo",
+   "id": "tempopreset.tempocomodo"
+  },
+  {
+   "name": "Tempo giusto",
+   "id": "tempopreset.tempogiusto"
+  },
+  {
+   "name": "Tempo primo",
+   "id": "tempopreset.tempoprimo"
+  },
+  {
+   "name": "Tempo secondo",
+   "id": "tempopreset.temposecondo"
+  },
+  {
+   "name": "Tempo semplice",
+   "id": "tempopreset.temposemplice"
+  },
+  {
+   "name": "Tranquillamente",
+   "id": "tempopreset.tranquillamente"
+  },
+  {
+   "name": "Trionfante",
+   "id": "tempopreset.trionfante"
+  },
+  {
+   "name": "Vivace",
+   "id": "tempopreset.vivace"
+  },
+  {
+   "name": "Vivacissimo",
+   "id": "tempopreset.vivacissimo"
+  },
+  {
+   "name": "a tempo",
+   "id": "tempopreset.atempo"
+  },
+  {
+   "name": "accelerando",
+   "id": "tempopreset.accel"
+  },
+  {
+   "name": "allargando",
+   "id": "tempopreset.allarg"
+  },
+  {
+   "name": "calando",
+   "id": "tempopreset.calando"
+  },
+  {
+   "name": "lentando",
+   "id": "tempopreset.lentando"
+  },
+  {
+   "name": "morendo",
+   "id": "tempopreset.morendo"
+  },
+  {
+   "name": "precipitando",
+   "id": "tempopreset.precipitando"
+  },
+  {
+   "name": "rallentando",
+   "id": "tempopreset.rall"
+  },
+  {
+   "name": "ritardando",
+   "id": "tempopreset.ritardando"
+  },
+  {
+   "name": "smorzando",
+   "id": "tempopreset.smorz"
+  },
+  {
+   "name": "sostenuto",
+   "id": "tempopreset.sost"
+  },
+  {
+   "name": "stringendo",
+   "id": "tempopreset.stringendo"
+  }
+ ],
+ "rhythmicFeels": [
+  {
+   "name": "2:1 swing 16ths (fixed)",
+   "id": "rhythmicfeel.swing.2_1_fixed.16ths"
+  },
+  {
+   "name": "2:1 swing 8ths (fixed)",
+   "id": "rhythmicfeel.swing.2_1_fixed"
+  },
+  {
+   "name": "3:1 swing 16ths (fixed)",
+   "id": "rhythmicfeel.swing.3_1_fixed.16ths"
+  },
+  {
+   "name": "3:1 swing 8ths (fixed)",
+   "id": "rhythmicfeel.swing.3_1_fixed"
+  },
+  {
+   "name": "Heavy swing 16ths",
+   "id": "rhythmicfeel.swing.heavy.16ths"
+  },
+  {
+   "name": "Heavy swing 8ths",
+   "id": "rhythmicfeel.swing.heavy"
+  },
+  {
+   "name": "Light swing 16ths",
+   "id": "rhythmicfeel.swing.light.16ths"
+  },
+  {
+   "name": "Light swing 8ths",
+   "id": "rhythmicfeel.swing.light"
+  },
+  {
+   "name": "Medium swing 16ths",
+   "id": "rhythmicfeel.swing.medium.16ths"
+  },
+  {
+   "name": "Medium swing 8ths",
+   "id": "rhythmicfeel.swing.medium"
+  },
+  {
+   "name": "Straight (no swing)",
+   "id": "rhythmicfeel.straight"
+  }
+ ],
+ "pageSizes": [
+  {
+   "name": "A3",
+   "id": "pagedimension.a3"
+  },
+  {
+   "name": "A4",
+   "id": "pagedimension.a4"
+  },
+  {
+   "name": "A5",
+   "id": "pagedimension.a5"
+  },
+  {
+   "name": "B4",
+   "id": "pagedimension.b4"
+  },
+  {
+   "name": "B5",
+   "id": "pagedimension.b5"
+  },
+  {
+   "name": "Band (5\" x 7\")",
+   "id": "pagedimension.band"
+  },
+  {
+   "name": "C4",
+   "id": "pagedimension.c4"
+  },
+  {
+   "name": "Concert (9\" x 12\")",
+   "id": "pagedimension.concert"
+  },
+  {
+   "name": "Executive (7.25\" x 10.5\")",
+   "id": "pagedimension.executive"
+  },
+  {
+   "name": "Folio (8.5\" x 13\")",
+   "id": "pagedimension.folio"
+  },
+  {
+   "name": "Hymn (5.25\" x 8.75\")",
+   "id": "pagedimension.hymn"
+  },
+  {
+   "name": "Legal (8.5\" x 14\")",
+   "id": "pagedimension.legal"
+  },
+  {
+   "name": "Letter",
+   "id": "pagedimension.letter"
+  },
+  {
+   "name": "Octavo (6.75\" x 10.5\")",
+   "id": "pagedimension.octavo"
+  },
+  {
+   "name": "Part (10\" x 13\")",
+   "id": "pagedimension.part_10"
+  },
+  {
+   "name": "Part (9.5\" x 12.5\")",
+   "id": "pagedimension.part9_5"
+  },
+  {
+   "name": "Quarto (Metric Demy)",
+   "id": "pagedimension.quarto"
+  },
+  {
+   "name": "Statement (5.5\" x 8.5\")",
+   "id": "pagedimension.statement"
+  },
+  {
+   "name": "Tabloid",
+   "id": "pagedimension.tabloid"
+  }
+ ],
+ "lineStyles": [
+  {
+   "name": "Brace (left)",
+   "id": "linestyle.brace.left"
+  },
+  {
+   "name": "Brace (right)",
+   "id": "linestyle.brace.right"
+  },
+  {
+   "name": "Curve with arrow (down)",
+   "id": "linestyle.curve-with-arrow.down"
+  },
+  {
+   "name": "Curve with arrow (up)",
+   "id": "linestyle.curve-with-arrow.up"
+  },
+  {
+   "name": "Dashed line (long)",
+   "id": "linestyle.dashedLineLong"
+  },
+  {
+   "name": "Dashed line (long) with outline arrowhead",
+   "id": "linestyle.dashedLineLongOutlineArrowhead"
+  },
+  {
+   "name": "Dashed line (long) with solid arrowhead",
+   "id": "linestyle.dashedLineLongSolidArrowhead"
+  },
+  {
+   "name": "Dashed line (short)",
+   "id": "linestyle.dashedLineShort"
+  },
+  {
+   "name": "Dashed line (short) with inward-pointing hook",
+   "id": "linestyle.dashedLineShortInwardHook"
+  },
+  {
+   "name": "Dashed line (short) with inward-pointing hooks",
+   "id": "linestyle.dashedLineShortInwardHooks"
+  },
+  {
+   "name": "Dashed line (short) with outline arrowhead",
+   "id": "linestyle.dashedLineShortOutlineArrowhead"
+  },
+  {
+   "name": "Dashed line (short) with solid arrowhead",
+   "id": "linestyle.dashedLineShortSolidArrowhead"
+  },
+  {
+   "name": "Dashed line (short) with terminal line",
+   "id": "linestyle.dashedLineShortTerminalLine"
+  },
+  {
+   "name": "Dashed line (short) with terminal lines",
+   "id": "linestyle.dashedLineShortTerminalLines"
+  },
+  {
+   "name": "Dashed vertical line (short)",
+   "id": "linestyle.dashedVerticalLineShort"
+  },
+  {
+   "name": "Dashed vertical line (short) with left-pointing hook",
+   "id": "linestyle.dashedVerticalLineShortLeftHook"
+  },
+  {
+   "name": "Dashed vertical line (short) with left-pointing hooks",
+   "id": "linestyle.dashedVerticalLineShortLeftHooks"
+  },
+  {
+   "name": "Dashed vertical line (short) with right-pointing hook",
+   "id": "linestyle.dashedVerticalLineShorRightHook"
+  },
+  {
+   "name": "Dashed vertical line (short) with right-pointing hooks",
+   "id": "linestyle.dashedVerticalLineShorRightHooks"
+  },
+  {
+   "name": "Dashed vertical line (short) with solid arrowhead",
+   "id": "linestyle.dashedVerticalLineShortSolidArrowhead"
+  },
+  {
+   "name": "Flat-bottom wedge (thick-thin)",
+   "id": "linestyle.wedgeFlatBottomThickThin"
+  },
+  {
+   "name": "Flat-bottom wedge (thin-thick)",
+   "id": "linestyle.wedgeFlatBottomThinThick"
+  },
+  {
+   "name": "Flat-top wedge (thick-thin)",
+   "id": "linestyle.wedgeFlatTopThickThin"
+  },
+  {
+   "name": "Flat-top wedge (thin-thick)",
+   "id": "linestyle.wedgeFlatTopThinThick"
+  },
+  {
+   "name": "Solid line",
+   "id": "linestyle.solidLine"
+  },
+  {
+   "name": "Solid line (thick) with terminal lines",
+   "id": "linestyle.solidLineThickTerminalLines"
+  },
+  {
+   "name": "Solid line (thicker) with terminal lines",
+   "id": "linestyle.solidLineThickerTerminalLines"
+  },
+  {
+   "name": "Solid line with inward-pointing hook",
+   "id": "linestyle.solidLineInwardHook"
+  },
+  {
+   "name": "Solid line with inward-pointing hooks",
+   "id": "linestyle.solidLineInwardHooks"
+  },
+  {
+   "name": "Solid line with outline arrowhead",
+   "id": "linestyle.solidLineOutlineArrowhead"
+  },
+  {
+   "name": "Solid line with solid arrowhead",
+   "id": "linestyle.solidLineSolidArrowhead"
+  },
+  {
+   "name": "Solid line with terminal line",
+   "id": "linestyle.solidLineTerminalLine"
+  },
+  {
+   "name": "Solid line with terminal lines",
+   "id": "linestyle.solidLineTerminalLines"
+  },
+  {
+   "name": "Solid vertical line",
+   "id": "linestyle.solidVerticalLine"
+  },
+  {
+   "name": "Solid vertical line with left-pointing hook",
+   "id": "linestyle.solidVerticalLineLeftHook"
+  },
+  {
+   "name": "Solid vertical line with left-pointing hooks",
+   "id": "linestyle.solidVerticalLineLeftHooks"
+  },
+  {
+   "name": "Solid vertical line with right-pointing hook",
+   "id": "linestyle.solidVerticalLineRightHook"
+  },
+  {
+   "name": "Solid vertical line with right-pointing hooks",
+   "id": "linestyle.solidVerticalLineRightHooks"
+  },
+  {
+   "name": "Solid vertical line with solid arrowhead",
+   "id": "linestyle.solidVerticalLineSolidArrowhead"
+  },
+  {
+   "name": "Symmetrical wedge (thick-thin)",
+   "id": "linestyle.wedgeSymmetricalThickThin"
+  },
+  {
+   "name": "Symmetrical wedge (thin-thick)",
+   "id": "linestyle.wedgeSymmetricalThinThick"
+  },
+  {
+   "name": "Wavy line",
+   "id": "linestyle.wavyLine"
+  },
+  {
+   "name": "Wavy line (narrow-wide)",
+   "id": "linestyle.wavyLineNarrowWide"
+  },
+  {
+   "name": "Wide wiggly line",
+   "id": "linestyle.wideWigglyLine"
+  },
+  {
+   "name": "Wiggly line",
+   "id": "linestyle.wigglyLine"
+  },
+  {
+   "name": "Wiggly line (slow-fast)",
+   "id": "linestyle.wigglyLineSlowFast"
+  }
+ ],
+ "lineBodies": [
+  {
+   "name": "Brace (left)",
+   "id": "linebodystyle.brace.left"
+  },
+  {
+   "name": "Brace (right)",
+   "id": "linebodystyle.brace.right"
+  },
+  {
+   "name": "Curve (down)",
+   "id": "linebodystyle.curve.down"
+  },
+  {
+   "name": "Curve (up)",
+   "id": "linebodystyle.curve.up"
+  },
+  {
+   "name": "Dashed line body (long)",
+   "id": "linebodystyle.dashedLong"
+  },
+  {
+   "name": "Dashed line body (short)",
+   "id": "linebodystyle.dashedShort"
+  },
+  {
+   "name": "Dashed line body (short-long)",
+   "id": "linebodystyle.dashedShortLong"
+  },
+  {
+   "name": "Dotted line body (large)",
+   "id": "linebodystyle.dottedLarge"
+  },
+  {
+   "name": "Dotted line body (medium)",
+   "id": "linebodystyle.dottedMedium"
+  },
+  {
+   "name": "Dotted line body (small)",
+   "id": "linebodystyle.dottedSmall"
+  },
+  {
+   "name": "Double line body (thick)",
+   "id": "linebodystyle.doubleThick"
+  },
+  {
+   "name": "Double line body (thin)",
+   "id": "linebodystyle.doubleThin"
+  },
+  {
+   "name": "Flat-bottom wedge body (thick-thin)",
+   "id": "linebodystyle.wedgeFlatBottomThickThin"
+  },
+  {
+   "name": "Flat-bottom wedge body (thin-thick)",
+   "id": "linebodystyle.wedgeFlatBottomThinThick"
+  },
+  {
+   "name": "Flat-inside wedge body (thick-thin)",
+   "id": "linebodystyle.wedgeFlatInsideThickThin"
+  },
+  {
+   "name": "Flat-inside wedge body (thin-thick)",
+   "id": "linebodystyle.wedgeFlatInsideThinThick"
+  },
+  {
+   "name": "Flat-outside wedge body (thick-thin)",
+   "id": "linebodystyle.wedgeFlatOutsideThickThin"
+  },
+  {
+   "name": "Flat-outside wedge body (thin-thick)",
+   "id": "linebodystyle.wedgeFlatOutsideThinThick"
+  },
+  {
+   "name": "Flat-top wedge body (thick-thin)",
+   "id": "linebodystyle.wedgeFlatTopThickThin"
+  },
+  {
+   "name": "Flat-top wedge body (thin-thick)",
+   "id": "linebodystyle.wedgeFlatTopThinThick"
+  },
+  {
+   "name": "Solid line body (thick)",
+   "id": "linebodystyle.solidThick"
+  },
+  {
+   "name": "Solid line body (thicker)",
+   "id": "linebodystyle.solidThicker"
+  },
+  {
+   "name": "Solid line body (thin)",
+   "id": "linebodystyle.solidThin"
+  },
+  {
+   "name": "Symmetrical wedge body (thick-thin)",
+   "id": "linebodystyle.wedgeSymmetricalThickThin"
+  },
+  {
+   "name": "Symmetrical wedge body (thin-thick)",
+   "id": "linebodystyle.wedgeSymmetricalThinThick"
+  },
+  {
+   "name": "Wavy body",
+   "id": "linebodystyle.repeatableGlyphWavy"
+  },
+  {
+   "name": "Wavy body (narrow-wide)",
+   "id": "linebodystyle.repeatableGlyphWavyNarrowWide"
+  },
+  {
+   "name": "Wavy body (variable)",
+   "id": "linebodystyle.repeatableGlyphWavyVariable"
+  },
+  {
+   "name": "Wavy body (wide-narrow)",
+   "id": "linebodystyle.repeatableGlyphWavyWideNarrow"
+  },
+  {
+   "name": "Wiggly body",
+   "id": "linebodystyle.repeatableGlyphWiggly"
+  },
+  {
+   "name": "Wiggly body (fast-slow)",
+   "id": "linebodystyle.repeatableGlyphWigglyFastSlow"
+  },
+  {
+   "name": "Wiggly body (slow-fast)",
+   "id": "linebodystyle.repeatableGlyphWigglySlowFast"
+  },
+  {
+   "name": "Wiggly body (variable)",
+   "id": "linebodystyle.repeatableGlyphWigglyVariable"
+  },
+  {
+   "name": "Wiggly body (wide)",
+   "id": "linebodystyle.repeatableGlyphWigglyWide"
+  }
+ ],
+ "lineAnnotations": [
+  {
+   "name": "Axis-aligned terminal line",
+   "id": "lineannotation.terminalLineAxisAligned"
+  },
+  {
+   "name": "Chevron arrowhead (large)",
+   "id": "lineannotation.arrowheadChevronLarge"
+  },
+  {
+   "name": "Chevron arrowhead (small)",
+   "id": "lineannotation.arrowheadChevronSmall"
+  },
+  {
+   "name": "Down-pointing axis-aligned hook",
+   "id": "lineannotation.downHookAxisAligned"
+  },
+  {
+   "name": "Down-pointing rotatable hook",
+   "id": "lineannotation.downHookRotatable"
+  },
+  {
+   "name": "Inward-pointing axis-aligned hook",
+   "id": "lineannotation.inwardHookAxisAligned"
+  },
+  {
+   "name": "Inward-pointing rotatable hook",
+   "id": "lineannotation.inwardHookRotatable"
+  },
+  {
+   "name": "Left-pointing axis-aligned hook",
+   "id": "lineannotation.leftHookAxisAligned"
+  },
+  {
+   "name": "Left-pointing rotatable hook",
+   "id": "lineannotation.leftHookRotatable"
+  },
+  {
+   "name": "Outline arrowhead (large)",
+   "id": "lineannotation.arrowheadOutlineLarge"
+  },
+  {
+   "name": "Outline arrowhead (small)",
+   "id": "lineannotation.arrowheadOutlineSmall"
+  },
+  {
+   "name": "Right-pointing axis-aligned hook",
+   "id": "lineannotation.rightHookAxisAligned"
+  },
+  {
+   "name": "Right-pointing rotatable hook",
+   "id": "lineannotation.rightHookRotatable"
+  },
+  {
+   "name": "Rotatable terminal line",
+   "id": "lineannotation.terminalLineRotatable"
+  },
+  {
+   "name": "Solid arrowhead (large)",
+   "id": "lineannotation.arrowheadSolidLarge"
+  },
+  {
+   "name": "Solid arrowhead (small)",
+   "id": "lineannotation.arrowheadSolidSmall"
+  },
+  {
+   "name": "Up-pointing axis-aligned hook",
+   "id": "lineannotation.upHookAxisAligned"
+  },
+  {
+   "name": "Up-pointing rotatable hook",
+   "id": "lineannotation.upHookRotatable"
+  },
+  {
+   "name": "Restrike Bend",
+   "id": "lineannotation.restrikeBend"
+  }
+ ],
+ "accidentals": [
+  {
+   "name": "1 comma flat",
+   "id": "accidental.53et.turkish-folk.flat1"
+  },
+  {
+   "name": "1 comma sharp",
+   "id": "accidental.53et.turkish-folk.sharp1"
+  },
+  {
+   "name": "2 commas flat",
+   "id": "accidental.53et.turkish-folk.flat2"
+  },
+  {
+   "name": "2 commas sharp",
+   "id": "accidental.53et.turkish-folk.sharp2"
+  },
+  {
+   "name": "3 commas flat",
+   "id": "accidental.53et.turkish-folk.flat3"
+  },
+  {
+   "name": "3 commas sharp",
+   "id": "accidental.53et.turkish-folk.sharp3"
+  },
+  {
+   "name": "4 commas flat",
+   "id": "accidental.53et.turkish-folk.flat4"
+  },
+  {
+   "name": "5 commas sharp",
+   "id": "accidental.53et.turkish-folk.sharp5"
+  },
+  {
+   "name": "Arrow down (quarter-tone flat)",
+   "id": "accidental.24et.western.arrow-down.gould"
+  },
+  {
+   "name": "Arrow up (quarter-tone sharp)",
+   "id": "accidental.24et.western.arrow-up.gould"
+  },
+  {
+   "name": "Bakiye flat",
+   "id": "accidental.53et.aeu.flat.bakiye"
+  },
+  {
+   "name": "Bakiye sharp",
+   "id": "accidental.53et.aeu.sharp.bakiye"
+  },
+  {
+   "name": "Buyuk mucenneb flat",
+   "id": "accidental.53et.aeu.flat.buyuk-mucenneb"
+  },
+  {
+   "name": "Buyuk mucenneb sharp",
+   "id": "accidental.53et.aeu.sharp.buyuk-mucenneb"
+  },
+  {
+   "name": "Double flat",
+   "id": "accidental.12et.western.double-flat"
+  },
+  {
+   "name": "Double flat",
+   "id": "accidental.17et.persian.double-flat"
+  },
+  {
+   "name": "Double flat",
+   "id": "accidental.24et.western.double-flat.gould"
+  },
+  {
+   "name": "Double flat",
+   "id": "accidental.24et.western.double-flat.stein"
+  },
+  {
+   "name": "Double sharp",
+   "id": "accidental.12et.western.double-sharp"
+  },
+  {
+   "name": "Double sharp",
+   "id": "accidental.17et.persian.double-sharp"
+  },
+  {
+   "name": "Double sharp",
+   "id": "accidental.24et.western.double-sharp.gould"
+  },
+  {
+   "name": "Double sharp",
+   "id": "accidental.24et.western.double-sharp.stein"
+  },
+  {
+   "name": "Fazla flat",
+   "id": "accidental.53et.aeu.flat.fazla"
+  },
+  {
+   "name": "Fazla sharp",
+   "id": "accidental.53et.aeu.sharp.fazla"
+  },
+  {
+   "name": "Five-quarter-tones flat",
+   "id": "accidental.24et.western.double-flat-down.gould"
+  },
+  {
+   "name": "Five-quarter-tones sharp",
+   "id": "accidental.24et.western.double-sharp-up.gould"
+  },
+  {
+   "name": "Flat",
+   "id": "accidental.12et.western.flat"
+  },
+  {
+   "name": "Flat",
+   "id": "accidental.17et.persian.flat"
+  },
+  {
+   "name": "Flat",
+   "id": "accidental.24et.western.flat.gould"
+  },
+  {
+   "name": "Flat",
+   "id": "accidental.24et.western.flat.stein"
+  },
+  {
+   "name": "Koron",
+   "id": "accidental.17et.persian"
+  },
+  {
+   "name": "Kucuk mucenneb flat",
+   "id": "accidental.53et.aeu.flat.kucuk-mucenneb"
+  },
+  {
+   "name": "Kucuk mucenneb sharp",
+   "id": "accidental.53et.aeu.sharp.kucuk-mucenneb"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.12et.western.natural"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.17et.persian.natural"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.24et.western.natural.gould"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.24et.western.natural.stein"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.53et.aeu.natural"
+  },
+  {
+   "name": "Natural",
+   "id": "accidental.53et.turkish-folk.natural"
+  },
+  {
+   "name": "Quarter-tone flat",
+   "id": "accidental.24et.western.quarter-flat.stein"
+  },
+  {
+   "name": "Quarter-tone flat (flat)",
+   "id": "accidental.24et.western.flat-up.gould"
+  },
+  {
+   "name": "Quarter-tone flat (natural)",
+   "id": "accidental.24et.western.natural-down.gould"
+  },
+  {
+   "name": "Quarter-tone sharp",
+   "id": "accidental.24et.western.quarter-sharp.stein"
+  },
+  {
+   "name": "Quarter-tone sharp (natural)",
+   "id": "accidental.24et.western.natural-up.gould"
+  },
+  {
+   "name": "Quarter-tone sharp (sharp)",
+   "id": "accidental.24et.western.sharp-down.gould"
+  },
+  {
+   "name": "Sharp",
+   "id": "accidental.12et.western.sharp"
+  },
+  {
+   "name": "Sharp",
+   "id": "accidental.17et.persian.sharp"
+  },
+  {
+   "name": "Sharp",
+   "id": "accidental.24et.western.sharp.gould"
+  },
+  {
+   "name": "Sharp",
+   "id": "accidental.24et.western.sharp.stein"
+  },
+  {
+   "name": "Sori",
+   "id": "accidental.17et.persian.sori"
+  },
+  {
+   "name": "Tanini flat",
+   "id": "accidental.53et.aeu.flat.tanini"
+  },
+  {
+   "name": "Tanini flat",
+   "id": "accidental.53et.turkish-folk.flat.tanini"
+  },
+  {
+   "name": "Tanini sharp",
+   "id": "accidental.53et.aeu.sharp.tanini"
+  },
+  {
+   "name": "Tanini sharp",
+   "id": "accidental.53et.turkish-folk.sharp.tanini"
+  },
+  {
+   "name": "Three-quarter-tones flat",
+   "id": "accidental.24et.western.double-flat-up.gould"
+  },
+  {
+   "name": "Three-quarter-tones flat",
+   "id": "accidental.24et.western.three-quarters-flat.stein"
+  },
+  {
+   "name": "Three-quarter-tones flat (flat)",
+   "id": "accidental.24et.western.flat-down.gould"
+  },
+  {
+   "name": "Three-quarter-tones sharp",
+   "id": "accidental.24et.western.double-sharp-down.gould"
+  },
+  {
+   "name": "Three-quarter-tones sharp",
+   "id": "accidental.24et.western.three-quarters-sharp.stein"
+  },
+  {
+   "name": "Three-quarter-tones sharp (sharp)",
+   "id": "accidental.24et.western.sharp-up.gould"
+  },
+  {
+   "name": "Triple flat",
+   "id": "accidental.12et.western.triple-flat"
+  },
+  {
+   "name": "Triple flat",
+   "id": "accidental.24et.western.triple-flat.gould"
+  },
+  {
+   "name": "Triple flat",
+   "id": "accidental.24et.western.triple-flat.stein"
+  },
+  {
+   "name": "Triple sharp",
+   "id": "accidental.12et.western.triple-sharp"
+  },
+  {
+   "name": "Triple sharp",
+   "id": "accidental.24et.western.triple-sharp.gould"
+  },
+  {
+   "name": "Triple sharp",
+   "id": "accidental.24et.western.triple-sharp.stein"
+  }
+ ],
+ "accidentalSystems": [
+  {
+   "name": "Accidentals for Persian music (17ET)",
+   "id": "accidental system.17et.persian"
+  },
+  {
+   "name": "Arel-Ezgi-Uzdilek (AEU) accidentals (53ET)",
+   "id": "accidental system.53et.aeu"
+  },
+  {
+   "name": "Turkish folk music accidentals (53ET)",
+   "id": "accidental system.53et.turkish-folk"
+  },
+  {
+   "name": "Western accidentals for 12ET",
+   "id": "accidental system.12et.western"
+  },
+  {
+   "name": "Western accidentals for 24ET (Gould arrow quartertones)",
+   "id": "accidental system.24et.western.gould"
+  },
+  {
+   "name": "Western accidentals for 24ET (Stein-Zimmermann quartertones)",
+   "id": "accidental system.24et.western.stein"
+  }
+ ],
+ "temperaments": [
+  {
+   "name": "Makam Nihavend (53ET)",
+   "id": "temperament definition.53et.makam.nihavend"
+  },
+  {
+   "name": "Makam Rast (53ET)",
+   "id": "temperament definition.53et.makam.rast"
+  },
+  {
+   "name": "Persian Dastgah (17ET)",
+   "id": "temperament definition.17et.persian-dastgah"
+  },
+  {
+   "name": "Standard Western tuning (12EDO)",
+   "id": "temperament definition.12-edo"
+  },
+  {
+   "name": "Standard Western tuning (24EDO)",
+   "id": "temperament definition.24-edo"
+  }
+ ],
+ "paragraphStyles": [
+  {
+   "name": "Bar numbers (parts)",
+   "id": "paragraph.barnumbers.part"
+  },
+  {
+   "name": "Bar numbers (score)",
+   "id": "paragraph.barnumbers.score"
+  },
+  {
+   "name": "Composer",
+   "id": "paragraph.composer"
+  },
+  {
+   "name": "Copyright",
+   "id": "paragraph.copyright"
+  },
+  {
+   "name": "Cue Labels",
+   "id": "paragraph.cuelabels"
+  },
+  {
+   "name": "Default Text",
+   "id": "paragraph.defaulttext"
+  },
+  {
+   "name": "Figured Bass Tasto Solo",
+   "id": "paragraph.figuredbasstastosolo"
+  },
+  {
+   "name": "Flow Title",
+   "id": "paragraph.flowtitle"
+  },
+  {
+   "name": "Galley View Margin Labels",
+   "id": "paragraph.galleyviewsmarginlabels"
+  },
+  {
+   "name": "Harp Pedal Settings",
+   "id": "paragraph.harppedalsettings"
+  },
+  {
+   "name": "Header",
+   "id": "paragraph.header"
+  },
+  {
+   "name": "Instrument Change Labels",
+   "id": "paragraph.instrumentchangelabels"
+  },
+  {
+   "name": "Instrument Change Warnings",
+   "id": "paragraph.instrumentchangewarnings"
+  },
+  {
+   "name": "Layout name",
+   "id": "paragraph.layoutname"
+  },
+  {
+   "name": "Lyricist",
+   "id": "paragraph.lyricist"
+  },
+  {
+   "name": "Lyrics",
+   "id": "paragraph.lyrics"
+  },
+  {
+   "name": "Lyrics (Chorus Translation)",
+   "id": "paragraph.lyrics.chorus.translation"
+  },
+  {
+   "name": "Lyrics (Chorus)",
+   "id": "paragraph.lyrics.chorus"
+  },
+  {
+   "name": "Lyrics (Translation)",
+   "id": "paragraph.lyrics.translation"
+  },
+  {
+   "name": "Lyrics (Verse Numbers)",
+   "id": "paragraph.lyrics.versenumbers"
+  },
+  {
+   "name": "MIDI Trigger Region Labels",
+   "id": "paragraph.miditriggerregionlabels"
+  },
+  {
+   "name": "Page Number",
+   "id": "paragraph.pagenumber"
+  },
+  {
+   "name": "Percussion Legend",
+   "id": "paragraph.percussionlegend"
+  },
+  {
+   "name": "Player Group Labels",
+   "id": "paragraph.playergrouplabels"
+  },
+  {
+   "name": "Player Labels",
+   "id": "paragraph.condensationlabels"
+  },
+  {
+   "name": "Rehearsal Marks",
+   "id": "paragraph.rehearsalmarks"
+  },
+  {
+   "name": "Repeat Count",
+   "id": "paragraph.repeatcount"
+  },
+  {
+   "name": "Repeat Marker Jumps",
+   "id": "paragraph.repeatmarkerjumps"
+  },
+  {
+   "name": "Repeat Marker Sections",
+   "id": "paragraph.repeatmarkersections"
+  },
+  {
+   "name": "Staff Labels",
+   "id": "paragraph.stafflabels"
+  },
+  {
+   "name": "Staff Labels (Inner)",
+   "id": "paragraph.stafflabelsinner"
+  },
+  {
+   "name": "Staff Labels (Percussion Grid)",
+   "id": "paragraph.stafflabelsgrid"
+  },
+  {
+   "name": "Tacet",
+   "id": "paragraph.tacet"
+  },
+  {
+   "name": "Tempo (Gradual)",
+   "id": "paragraph.tempogradual"
+  },
+  {
+   "name": "Tempo (Immediate)",
+   "id": "paragraph.tempoimmediate"
+  },
+  {
+   "name": "Tempo (Metronome Mark)",
+   "id": "paragraph.tempometronomemark"
+  },
+  {
+   "name": "Title",
+   "id": "paragraph.title"
+  }
+ ],
+ "repeatableSymbols": [
+  {
+   "name": "Accel./rit. beam 1 (widest)",
+   "id": "repeatableComposite.beamAccelRit1"
+  },
+  {
+   "name": "Accel./rit. beam 10",
+   "id": "repeatableComposite.beamAccelRit10"
+  },
+  {
+   "name": "Accel./rit. beam 11",
+   "id": "repeatableComposite.beamAccelRit11"
+  },
+  {
+   "name": "Accel./rit. beam 12",
+   "id": "repeatableComposite.beamAccelRit12"
+  },
+  {
+   "name": "Accel./rit. beam 13",
+   "id": "repeatableComposite.beamAccelRit13"
+  },
+  {
+   "name": "Accel./rit. beam 14",
+   "id": "repeatableComposite.beamAccelRit14"
+  },
+  {
+   "name": "Accel./rit. beam 15",
+   "id": "repeatableComposite.beamAccelRit15"
+  },
+  {
+   "name": "Accel./rit. beam 2",
+   "id": "repeatableComposite.beamAccelRit2"
+  },
+  {
+   "name": "Accel./rit. beam 3",
+   "id": "repeatableComposite.beamAccelRit3"
+  },
+  {
+   "name": "Accel./rit. beam 4",
+   "id": "repeatableComposite.beamAccelRit4"
+  },
+  {
+   "name": "Accel./rit. beam 5",
+   "id": "repeatableComposite.beamAccelRit5"
+  },
+  {
+   "name": "Accel./rit. beam 6",
+   "id": "repeatableComposite.beamAccelRit6"
+  },
+  {
+   "name": "Accel./rit. beam 7",
+   "id": "repeatableComposite.beamAccelRit7"
+  },
+  {
+   "name": "Accel./rit. beam 8",
+   "id": "repeatableComposite.beamAccelRit8"
+  },
+  {
+   "name": "Accel./rit. beam 9",
+   "id": "repeatableComposite.beamAccelRit9"
+  },
+  {
+   "name": "Accel./rit. beam terminating line",
+   "id": "repeatableComposite.beamAccelRitFinal"
+  },
+  {
+   "name": "Arpeggiato down",
+   "id": "repeatableComposite.wiggleArpeggiatoDown"
+  },
+  {
+   "name": "Arpeggiato down arrow",
+   "id": "repeatableComposite.wiggleArpeggiatoDownArrow"
+  },
+  {
+   "name": "Arpeggiato down swash",
+   "id": "repeatableComposite.wiggleArpeggiatoDownSwash"
+  },
+  {
+   "name": "Arpeggiato up",
+   "id": "repeatableComposite.wiggleArpeggiatoUp"
+  },
+  {
+   "name": "Arpeggiato up arrow",
+   "id": "repeatableComposite.wiggleArpeggiatoUpArrow"
+  },
+  {
+   "name": "Arpeggiato up swash",
+   "id": "repeatableComposite.wiggleArpeggiatoUpSwash"
+  },
+  {
+   "name": "Circular motion segment",
+   "id": "repeatableComposite.wiggleCircular"
+  },
+  {
+   "name": "Circular motion segment end",
+   "id": "repeatableComposite.wiggleCircularEnd"
+  },
+  {
+   "name": "Circular motion segment, large",
+   "id": "repeatableComposite.wiggleCircularLarge"
+  },
+  {
+   "name": "Circular motion segment, larger",
+   "id": "repeatableComposite.wiggleCircularLarger"
+  },
+  {
+   "name": "Circular motion segment, larger still",
+   "id": "repeatableComposite.wiggleCircularLargerStill"
+  },
+  {
+   "name": "Circular motion segment, largest",
+   "id": "repeatableComposite.wiggleCircularLargest"
+  },
+  {
+   "name": "Circular motion segment, small",
+   "id": "repeatableComposite.wiggleCircularSmall"
+  },
+  {
+   "name": "Circular motion start",
+   "id": "repeatableComposite.wiggleCircularStart"
+  },
+  {
+   "name": "Constant circular motion segment",
+   "id": "repeatableComposite.wiggleCircularConstant"
+  },
+  {
+   "name": "Constant circular motion segment (flipped)",
+   "id": "repeatableComposite.wiggleCircularConstantFlipped"
+  },
+  {
+   "name": "Constant circular motion segment (flipped, large)",
+   "id": "repeatableComposite.wiggleCircularConstantFlippedLarge"
+  },
+  {
+   "name": "Constant circular motion segment (large)",
+   "id": "repeatableComposite.wiggleCircularConstantLarge"
+  },
+  {
+   "name": "Glissando wiggle segment",
+   "id": "repeatableComposite.wiggleGlissando"
+  },
+  {
+   "name": "Group glissando 1",
+   "id": "repeatableComposite.wiggleGlissandoGroup1"
+  },
+  {
+   "name": "Group glissando 2",
+   "id": "repeatableComposite.wiggleGlissandoGroup2"
+  },
+  {
+   "name": "Group glissando 3",
+   "id": "repeatableComposite.wiggleGlissandoGroup3"
+  },
+  {
+   "name": "Guitar vibrato wiggle segment",
+   "id": "repeatableComposite.guitarVibratoStroke"
+  },
+  {
+   "name": "Guitar wide vibrato stroke",
+   "id": "repeatableComposite.guitarWideVibratoStroke"
+  },
+  {
+   "name": "Narrow sawtooth line segment",
+   "id": "repeatableComposite.wiggleSawtoothNarrow"
+  },
+  {
+   "name": "Narrow square wave line segment",
+   "id": "repeatableComposite.wiggleSquareWaveNarrow"
+  },
+  {
+   "name": "Quasi-random squiggle 1",
+   "id": "repeatableComposite.wiggleRandom1"
+  },
+  {
+   "name": "Quasi-random squiggle 2",
+   "id": "repeatableComposite.wiggleRandom2"
+  },
+  {
+   "name": "Quasi-random squiggle 3",
+   "id": "repeatableComposite.wiggleRandom3"
+  },
+  {
+   "name": "Quasi-random squiggle 4",
+   "id": "repeatableComposite.wiggleRandom4"
+  },
+  {
+   "name": "Sawtooth line segment",
+   "id": "repeatableComposite.wiggleSawtooth"
+  },
+  {
+   "name": "Square wave line segment",
+   "id": "repeatableComposite.wiggleSquareWave"
+  },
+  {
+   "name": "Vibrato / shake wiggle segment",
+   "id": "repeatableComposite.wiggleVibrato"
+  },
+  {
+   "name": "Vibrato large, fast",
+   "id": "repeatableComposite.wiggleVibratoLargeFast"
+  },
+  {
+   "name": "Vibrato large, faster",
+   "id": "repeatableComposite.wiggleVibratoLargeFaster"
+  },
+  {
+   "name": "Vibrato large, faster still",
+   "id": "repeatableComposite.wiggleVibratoLargeFasterStill"
+  },
+  {
+   "name": "Vibrato large, fastest",
+   "id": "repeatableComposite.wiggleVibratoLargeFastest"
+  },
+  {
+   "name": "Vibrato large, slow",
+   "id": "repeatableComposite.wiggleVibratoLargeSlow"
+  },
+  {
+   "name": "Vibrato large, slower",
+   "id": "repeatableComposite.wiggleVibratoLargeSlower"
+  },
+  {
+   "name": "Vibrato large, slowest",
+   "id": "repeatableComposite.wiggleVibratoLargeSlowest"
+  },
+  {
+   "name": "Vibrato largest, fast",
+   "id": "repeatableComposite.wiggleVibratoLargestFast"
+  },
+  {
+   "name": "Vibrato largest, faster",
+   "id": "repeatableComposite.wiggleVibratoLargestFaster"
+  },
+  {
+   "name": "Vibrato largest, faster still",
+   "id": "repeatableComposite.wiggleVibratoLargestFasterStill"
+  },
+  {
+   "name": "Vibrato largest, fastest",
+   "id": "repeatableComposite.wiggleVibratoLargestFastest"
+  },
+  {
+   "name": "Vibrato largest, slow",
+   "id": "repeatableComposite.wiggleVibratoLargestSlow"
+  },
+  {
+   "name": "Vibrato largest, slower",
+   "id": "repeatableComposite.wiggleVIbratoLargestSlower"
+  },
+  {
+   "name": "Vibrato largest, slowest",
+   "id": "repeatableComposite.wiggleVibratoLargestSlowest"
+  },
+  {
+   "name": "Vibrato medium, fast",
+   "id": "repeatableComposite.wiggleVibratoMediumFast"
+  },
+  {
+   "name": "Vibrato medium, faster",
+   "id": "repeatableComposite.wiggleVibratoMediumFaster"
+  },
+  {
+   "name": "Vibrato medium, faster still",
+   "id": "repeatableComposite.wiggleVibratoMediumFasterStill"
+  },
+  {
+   "name": "Vibrato medium, fastest",
+   "id": "repeatableComposite.wiggleVibratoMediumFastest"
+  },
+  {
+   "name": "Vibrato medium, slow",
+   "id": "repeatableComposite.wiggleVibratoMediumSlow"
+  },
+  {
+   "name": "Vibrato medium, slower",
+   "id": "repeatableComposite.wiggleVIbratoMediumSlower"
+  },
+  {
+   "name": "Vibrato medium, slowest",
+   "id": "repeatableComposite.wiggleVibratoMediumSlowest"
+  },
+  {
+   "name": "Vibrato small, fast",
+   "id": "repeatableComposite.wiggleVibratoSmallFast"
+  },
+  {
+   "name": "Vibrato small, faster",
+   "id": "repeatableComposite.wiggleVibratoSmallFaster"
+  },
+  {
+   "name": "Vibrato small, faster still",
+   "id": "repeatableComposite.wiggleVibratoSmallFasterStill"
+  },
+  {
+   "name": "Vibrato small, fastest",
+   "id": "repeatableComposite.wiggleVibratoSmallFastest"
+  },
+  {
+   "name": "Vibrato small, slow",
+   "id": "repeatableComposite.wiggleVibratoSmallSlow"
+  },
+  {
+   "name": "Vibrato small, slower",
+   "id": "repeatableComposite.wiggleVibratoSmallSlower"
+  },
+  {
+   "name": "Vibrato small, slowest",
+   "id": "repeatableComposite.wiggleVibratoSmallSlowest"
+  },
+  {
+   "name": "Vibrato smallest, fast",
+   "id": "repeatableComposite.wiggleVibratoSmallestFast"
+  },
+  {
+   "name": "Vibrato smallest, faster",
+   "id": "repeatableComposite.wiggleVibratoSmallestFaster"
+  },
+  {
+   "name": "Vibrato smallest, faster still",
+   "id": "repeatableComposite.wiggleVibratoSmallestFasterStill"
+  },
+  {
+   "name": "Vibrato smallest, fastest",
+   "id": "repeatableComposite.wiggleVibratoSmallestFastest"
+  },
+  {
+   "name": "Vibrato smallest, slow",
+   "id": "repeatableComposite.wiggleVibratoSmallestSlow"
+  },
+  {
+   "name": "Vibrato smallest, slower",
+   "id": "repeatableComposite.wiggleVibratoSmallestSlower"
+  },
+  {
+   "name": "Vibrato smallest, slowest",
+   "id": "repeatableComposite.wiggleVibratoSmallestSlowest"
+  },
+  {
+   "name": "Vibrato start",
+   "id": "repeatableComposite.wiggleVibratoStart"
+  },
+  {
+   "name": "Wide sawtooth line segment",
+   "id": "repeatableComposite.wiggleSawtoothWide"
+  },
+  {
+   "name": "Wide square wave line segment",
+   "id": "repeatableComposite.wiggleSquareWaveWide"
+  },
+  {
+   "name": "Wide vibrato / shake wiggle segment",
+   "id": "repeatableComposite.wiggleVibratoWide"
+  },
+  {
+   "name": "Wiggle trill",
+   "id": "repeatableComposite.wiggleTrill"
+  },
+  {
+   "name": "Wiggle trill fast",
+   "id": "repeatableComposite.wiggleTrillFast"
+  },
+  {
+   "name": "Wiggle trill faster",
+   "id": "repeatableComposite.wiggleTrillFaster"
+  },
+  {
+   "name": "Wiggle trill faster still",
+   "id": "repeatableComposite.wiggleTrillFasterStill"
+  },
+  {
+   "name": "Wiggle trill fastest",
+   "id": "repeatableComposite.wiggleTrillFastest"
+  },
+  {
+   "name": "Wiggle trill slow",
+   "id": "repeatableComposite.wiggleTrillSlow"
+  },
+  {
+   "name": "Wiggle trill slower",
+   "id": "repeatableComposite.wiggleTrillSlower"
+  },
+  {
+   "name": "Wiggle trill slower still",
+   "id": "repeatableComposite.wiggleTrillSlowerStill"
+  },
+  {
+   "name": "Wiggle trill slowest",
+   "id": "repeatableComposite.wiggleTrillSlowest"
+  },
+  {
+   "name": "Wiggle wavy",
+   "id": "repeatableComposite.wiggleWavy"
+  },
+  {
+   "name": "Wiggle wavy narrow",
+   "id": "repeatableComposite.wiggleWavyNarrow"
+  },
+  {
+   "name": "Wiggle wavy wide",
+   "id": "repeatableComposite.wiggleWavyWide"
+  }
+ ],
+ "techniqueAppearances": [
+  {
+   "name": "Above (sopra)",
+   "id": "pta.keyboardAboveSopraText"
+  },
+  {
+   "name": "Aeolian",
+   "id": "pta.aeolianText"
+  },
+  {
+   "name": "Air",
+   "id": "pta.airText"
+  },
+  {
+   "name": "Alla Chitarra",
+   "id": "pta.allaChitarraText"
+  },
+  {
+   "name": "Alto sul tasto",
+   "id": "pta.altoSulTastoAbbreviatedText"
+  },
+  {
+   "name": "Aperto (text)",
+   "id": "pta.apertoText"
+  },
+  {
+   "name": "Arco",
+   "id": "pta.arcoText"
+  },
+  {
+   "name": "Artificial Harmonic (Tab)",
+   "id": "pta.artificialHarmonicTab"
+  },
+  {
+   "name": "Ascending Aeolian Chords (Salzedo)",
+   "id": "pta.salzedoAeolianAscending"
+  },
+  {
+   "name": "Au talon",
+   "id": "pta.auTalonText"
+  },
+  {
+   "name": "Below (sotto)",
+   "id": "pta.keyboardBelowSottoText"
+  },
+  {
+   "name": "Bisbigliando (whisper)",
+   "id": "pta.bisbigliandoText"
+  },
+  {
+   "name": "Bow On Tailpiece",
+   "id": "pta.stringsBowOnTailpiece"
+  },
+  {
+   "name": "Bow on Bridge",
+   "id": "pta.stringsBowOnBridge"
+  },
+  {
+   "name": "Bow on Bridge on Four Strings",
+   "id": "pta.stringsBowBehindBridgeFourStrings"
+  },
+  {
+   "name": "Bow on Bridge on One String",
+   "id": "pta.stringsBowBehindBridgeOneString"
+  },
+  {
+   "name": "Bow on Bridge on Three Strings",
+   "id": "pta.stringsBowBehindBridgeThreeStrings"
+  },
+  {
+   "name": "Bow on Bridge on Two Strings",
+   "id": "pta.stringsBowBehindBridgeTwoStrings"
+  },
+  {
+   "name": "Bucket mute",
+   "id": "pta.bucketMuteText"
+  },
+  {
+   "name": "Buzz Pizzicato",
+   "id": "pta.stringsBuzzPizzicato"
+  },
+  {
+   "name": "Center (Caltabiano)",
+   "id": "pta.unpitchedCnter3"
+  },
+  {
+   "name": "Center (Ghent)",
+   "id": "pta.unpitchedCenter2"
+  },
+  {
+   "name": "Center (Text)",
+   "id": "pta.unpitchedCenterText"
+  },
+  {
+   "name": "Center (Weinberg)",
+   "id": "pta.unpitchedCenter1"
+  },
+  {
+   "name": "Change Bow Direction",
+   "id": "pta.stringsChangeBowDirection"
+  },
+  {
+   "name": "Choke (Weinberg)",
+   "id": "pta.unpitchedChokeCymbal"
+  },
+  {
+   "name": "Clavichord Bebung (2 Fingers)",
+   "id": "pta.keyboardBebung2"
+  },
+  {
+   "name": "Clavichord Bebung (3 Fingers)",
+   "id": "pta.keyboardBebung3"
+  },
+  {
+   "name": "Clavichord Bebung (4 Fingers)",
+   "id": "pta.keyboardBebung4"
+  },
+  {
+   "name": "Closed / Rim Shot",
+   "id": "pta.unpitchedClosedRimShot"
+  },
+  {
+   "name": "Closed Hole",
+   "id": "pta.windClosedHole"
+  },
+  {
+   "name": "Closed Wah Pedal",
+   "id": "pta.guitarClosedWahPedal"
+  },
+  {
+   "name": "Col Legno",
+   "id": "pta.colLegnoText"
+  },
+  {
+   "name": "Col Legno Battuto",
+   "id": "pta.colLegnoBattutoText"
+  },
+  {
+   "name": "Col Legno Tratto",
+   "id": "pta.colLegnoTrattoText"
+  },
+  {
+   "name": "Con bocca chiusa",
+   "id": "pta.vocalConBoccaChiusa"
+  },
+  {
+   "name": "Con sordino",
+   "id": "pta.conSordinoText"
+  },
+  {
+   "name": "Crush",
+   "id": "pta.unpitchedCrush"
+  },
+  {
+   "name": "Cuivré",
+   "id": "pta.cuivreText"
+  },
+  {
+   "name": "Cup mute",
+   "id": "pta.cupMuteText"
+  },
+  {
+   "name": "Damp",
+   "id": "pta.unpitchedDamp1"
+  },
+  {
+   "name": "Damp (Large)",
+   "id": "pta.unpitchedDamp2"
+  },
+  {
+   "name": "Damp (Left)",
+   "id": "pta.unpitchedDamp4"
+  },
+  {
+   "name": "Damp (Right)",
+   "id": "pta.unpitchedDamp3"
+  },
+  {
+   "name": "Damp Above (Salzedo)",
+   "id": "pta.salzedoDampAbove"
+  },
+  {
+   "name": "Damp Below (Salzedo)",
+   "id": "pta.salzedoDampBelow"
+  },
+  {
+   "name": "Damp Only Low Strings (Salzedo)",
+   "id": "pta.salzedoDampLowStrings"
+  },
+  {
+   "name": "Damp With Both Hands (Salzedo)",
+   "id": "pta.salzedoDampBothHands"
+  },
+  {
+   "name": "Descending Aeolian Chords (Salzedo)",
+   "id": "pta.salzedoAeolianDescending"
+  },
+  {
+   "name": "Double-tongue",
+   "id": "pta.windDoubleTongue"
+  },
+  {
+   "name": "Down Bow",
+   "id": "pta.stringsDownBow"
+  },
+  {
+   "name": "Détaché",
+   "id": "pta.detacheText"
+  },
+  {
+   "name": "Edge (Text)",
+   "id": "pta.unpitchedEdgeText"
+  },
+  {
+   "name": "Fade In",
+   "id": "pta.guitarFadeIn"
+  },
+  {
+   "name": "Fade Out",
+   "id": "pta.guitarFadeOut"
+  },
+  {
+   "name": "Finger Click (Stockhausen)",
+   "id": "pta.vocalFingerClick"
+  },
+  {
+   "name": "Fingernail Flick",
+   "id": "pta.stringsFingernailFlick"
+  },
+  {
+   "name": "Flatter Embouchure",
+   "id": "pta.windFlatEmbouchure"
+  },
+  {
+   "name": "Flatterzunge (flz.)",
+   "id": "pta.flutterTongueFlzText"
+  },
+  {
+   "name": "Flautando",
+   "id": "pta.flautandoText"
+  },
+  {
+   "name": "Fluidic Sounds, Left Hand (Salzedo)",
+   "id": "pta.salzedoFluidicSoundsLeft"
+  },
+  {
+   "name": "Fluidic Sounds, Right Hand (Salzedo)",
+   "id": "pta.salzedoFluidicSoundsRight"
+  },
+  {
+   "name": "Flutter-tongue (f.t.)",
+   "id": "pta.flutterTongueFtText"
+  },
+  {
+   "name": "Flutter-tongue (flt.)",
+   "id": "pta.flutterTongueFltText"
+  },
+  {
+   "name": "Fouetté",
+   "id": "pta.stringsFouette"
+  },
+  {
+   "name": "Frullato",
+   "id": "pta.frullatoText"
+  },
+  {
+   "name": "Full Barré",
+   "id": "pta.guitarBarreFull"
+  },
+  {
+   "name": "Guitar Shake",
+   "id": "pta.guitarShake"
+  },
+  {
+   "name": "Half Barré",
+   "id": "pta.guitarBarreHalf"
+  },
+  {
+   "name": "Half Harmonic",
+   "id": "pta.stringsHalfHarmonic"
+  },
+  {
+   "name": "Half-closed Hole",
+   "id": "pta.windThreeQuartersClosedHole"
+  },
+  {
+   "name": "Half-mute",
+   "id": "pta.brassHalfMute"
+  },
+  {
+   "name": "Half-open",
+   "id": "pta.unpitchedHalfOpen"
+  },
+  {
+   "name": "Half-open (Weinberg)",
+   "id": "pta.unpitchedHalfOpenWeinberg"
+  },
+  {
+   "name": "Half-open Wah Pedal",
+   "id": "pta.guitarHalfOpenWahPedal"
+  },
+  {
+   "name": "Hammer on",
+   "id": "pta.guitarHammerOn"
+  },
+  {
+   "name": "Harmon mute (text)",
+   "id": "pta.bucketHarmonMuteText"
+  },
+  {
+   "name": "Harmon mute, stem in",
+   "id": "pta.brassHarmonMuteStemIn"
+  },
+  {
+   "name": "Harmon mute, stem in (text)",
+   "id": "pta.bucketHarmonMuteStemInText"
+  },
+  {
+   "name": "Harmon mute, stem left",
+   "id": "pta.brassHarmonMuteStemLeft"
+  },
+  {
+   "name": "Harmon mute, stem out",
+   "id": "pta.brassHarmonMuteStemOut"
+  },
+  {
+   "name": "Harmon mute, stem out (text)",
+   "id": "pta.bucketHarmonMuteStemOutText"
+  },
+  {
+   "name": "Harmon mute, stem right",
+   "id": "pta.brassHarmonMuteStemRight"
+  },
+  {
+   "name": "Harmonic (o)",
+   "id": "pta.stringsHarmonic"
+  },
+  {
+   "name": "Harp Tuning Key",
+   "id": "pta.harpTuningKey"
+  },
+  {
+   "name": "Harp Tuning Key Glissando",
+   "id": "pta.harpTuningKeyGlissando"
+  },
+  {
+   "name": "Harp Tuning Key Handle",
+   "id": "pta.harpTuningKeyHandle"
+  },
+  {
+   "name": "Harp Tuning Key Shank",
+   "id": "pta.harpTuningKeyShank"
+  },
+  {
+   "name": "Isolated Sounds (Salzedo)",
+   "id": "pta.salzedoIsolatedSounds"
+  },
+  {
+   "name": "Jeté",
+   "id": "pta.stringsJete"
+  },
+  {
+   "name": "Jeté (text)",
+   "id": "pta.jeteText"
+  },
+  {
+   "name": "Key Slap",
+   "id": "pta.windKeySlap"
+  },
+  {
+   "name": "Key clicks",
+   "id": "pta.keyClicksText"
+  },
+  {
+   "name": "Laissez Vibrer (l.v.)",
+   "id": "pta.laissezVibrerText"
+  },
+  {
+   "name": "Left (L)",
+   "id": "pta.leftStickText"
+  },
+  {
+   "name": "Left Hand (Agostini)",
+   "id": "pta.unpitchedLeftHand"
+  },
+  {
+   "name": "Left Hand (L.H.)",
+   "id": "pta.keyboardLeftHandText"
+  },
+  {
+   "name": "Left-hand Pizzicato",
+   "id": "pta.stringsLeftHandPizzicato"
+  },
+  {
+   "name": "Left-hand Tapping",
+   "id": "pta.guitarLeftHandTapping"
+  },
+  {
+   "name": "Legato",
+   "id": "pta.legatoText"
+  },
+  {
+   "name": "Mano destra (right hand)",
+   "id": "pta.keyboardManoDestraText"
+  },
+  {
+   "name": "Mano sinistra (left hand)",
+   "id": "pta.keyboardManoSinistraText"
+  },
+  {
+   "name": "Marcato (text)",
+   "id": "pta.marcatoText"
+  },
+  {
+   "name": "Martellato",
+   "id": "pta.martellatoText"
+  },
+  {
+   "name": "Martelé",
+   "id": "pta.marteleText"
+  },
+  {
+   "name": "Metal Rod",
+   "id": "pta.harpMetalRod"
+  },
+  {
+   "name": "Metallic Sounds (Salzedo)",
+   "id": "pta.salzedoMetallicSounds"
+  },
+  {
+   "name": "Metallic Sounds, One String (Salzedo)",
+   "id": "pta.salzedoMetallicSoundsOneString"
+  },
+  {
+   "name": "Modo Ordinario",
+   "id": "pta.modoOrdinarioText"
+  },
+  {
+   "name": "Molto Vibrato",
+   "id": "pta.moltoVibratoText"
+  },
+  {
+   "name": "Mouth Closed",
+   "id": "pta.vocalMouthClosed"
+  },
+  {
+   "name": "Mouth Open",
+   "id": "pta.vocalMouthOpen"
+  },
+  {
+   "name": "Mouth Pursed",
+   "id": "pta.vocalMouthPursed"
+  },
+  {
+   "name": "Mouth Slightly Open",
+   "id": "pta.vocalMouthSlightlyOpen"
+  },
+  {
+   "name": "Mouth Wide Open",
+   "id": "pta.vocalMouthWideOpen"
+  },
+  {
+   "name": "Mouthpiece/Hand Pop",
+   "id": "pta.windMouthpiecePop"
+  },
+  {
+   "name": "Much More Reed (Push Inwards)",
+   "id": "pta.windReedPositionIn"
+  },
+  {
+   "name": "Muffle Totally (Salzedo)",
+   "id": "pta.salzedoMuffleTotally"
+  },
+  {
+   "name": "Muffled",
+   "id": "pta.unpitchedMuffledText"
+  },
+  {
+   "name": "Multiphonic",
+   "id": "pta.multiphonicText"
+  },
+  {
+   "name": "Mute (+)",
+   "id": "pta.brassMute"
+  },
+  {
+   "name": "Mute (text)",
+   "id": "pta.muteText"
+  },
+  {
+   "name": "Mute Off",
+   "id": "pta.stringsMuteOff"
+  },
+  {
+   "name": "Mute Off (text)",
+   "id": "pta.muteOffText"
+  },
+  {
+   "name": "Mute On",
+   "id": "pta.stringsMuteOn"
+  },
+  {
+   "name": "Nasal Voice",
+   "id": "pta.vocalNasalVoice"
+  },
+  {
+   "name": "Natural Harmonic (Tab)",
+   "id": "pta.naturalHarmonicTab"
+  },
+  {
+   "name": "Naturale (nat.)",
+   "id": "pta.naturaleText"
+  },
+  {
+   "name": "Non Laissez Vibrer (non l.v.)",
+   "id": "pta.nonLaissezVibrerText"
+  },
+  {
+   "name": "Non Vibrato",
+   "id": "pta.nonVibratoText"
+  },
+  {
+   "name": "Normal Position (Caltabiano)",
+   "id": "pta.unpitchedNormalPosition"
+  },
+  {
+   "name": "Normal Reed Position",
+   "id": "pta.windReedPositionNormal"
+  },
+  {
+   "name": "Oboic Flux (Salzedo)",
+   "id": "pta.salzedoOboicFlux"
+  },
+  {
+   "name": "On Rim",
+   "id": "pta.unpitchedOnRim"
+  },
+  {
+   "name": "Open",
+   "id": "pta.brassOpen"
+  },
+  {
+   "name": "Open",
+   "id": "pta.unpitchedOpen"
+  },
+  {
+   "name": "Open (remove mute)",
+   "id": "pta.openRemoveMuteText"
+  },
+  {
+   "name": "Open (text)",
+   "id": "pta.openText"
+  },
+  {
+   "name": "Open Wah Pedal",
+   "id": "pta.guitarOpenWahPedal"
+  },
+  {
+   "name": "Open hole",
+   "id": "pta.windOpenHole"
+  },
+  {
+   "name": "Ordinario (ord.)",
+   "id": "pta.ordinarioText"
+  },
+  {
+   "name": "Overpressure (Down Bow)",
+   "id": "pta.stringsOverpressureDownBow"
+  },
+  {
+   "name": "Overpressure (No Bow Direction)",
+   "id": "pta.stringsOverpressureNoDirection"
+  },
+  {
+   "name": "Overpressure (Up Bow)",
+   "id": "pta.stringsOverpressureUpBow"
+  },
+  {
+   "name": "Overpressure Possibile (Down Bow)",
+   "id": "pta.stringsOverpressurePossibileDownBow"
+  },
+  {
+   "name": "Overpressure Possibile (Up Bow)",
+   "id": "pta.stringsOverpressurePossibileUpBow"
+  },
+  {
+   "name": "Palm Mute",
+   "id": "pta.guitarPalmMute"
+  },
+  {
+   "name": "Pedal Heel 1",
+   "id": "pta.keyboardHeel1"
+  },
+  {
+   "name": "Pedal Heel 2",
+   "id": "pta.keyboardHeel2"
+  },
+  {
+   "name": "Pedal Heel 3",
+   "id": "pta.keyboardHeel3"
+  },
+  {
+   "name": "Pedal Heel Toe",
+   "id": "pta.keyboardHeelToe"
+  },
+  {
+   "name": "Pedal Heel to Toe",
+   "id": "pta.keyboardHeelToToe"
+  },
+  {
+   "name": "Pedal Toe 1",
+   "id": "pta.keyboardToe1"
+  },
+  {
+   "name": "Pedal Toe 2",
+   "id": "pta.keyboardToe2"
+  },
+  {
+   "name": "Pedal Toe to Heel",
+   "id": "pta.keyboardToeToHeel"
+  },
+  {
+   "name": "Pinch Harmonic (Tab)",
+   "id": "pta.pinchHarmonicTab"
+  },
+  {
+   "name": "Pizzicato",
+   "id": "pta.pizzText"
+  },
+  {
+   "name": "Play at Upper End of Strings (Salzedo)",
+   "id": "pta.salzedoPlayUpperEnd"
+  },
+  {
+   "name": "Pluck Inside",
+   "id": "pta.keyboardPluckInside"
+  },
+  {
+   "name": "Pluck With Fingernails",
+   "id": "pta.stringsPluckedWithFingernails"
+  },
+  {
+   "name": "Plunger mute",
+   "id": "pta.plungerMuteText"
+  },
+  {
+   "name": "Poco Vibrato",
+   "id": "pta.pocoVibratoText"
+  },
+  {
+   "name": "Poco sul tasto",
+   "id": "pta.pocoSulTastoAbbreviatedText"
+  },
+  {
+   "name": "Près de la Table (p.d.l.t.)",
+   "id": "pta.pdltText"
+  },
+  {
+   "name": "Pull off",
+   "id": "pta.guitarPullOff"
+  },
+  {
+   "name": "Punta d'arco",
+   "id": "pta.puntaDArcoText"
+  },
+  {
+   "name": "Relaxed Embouchure",
+   "id": "pta.windRelaxedEmbouchure"
+  },
+  {
+   "name": "Right (R)",
+   "id": "pta.rightStickText"
+  },
+  {
+   "name": "Right Hand (Agostini)",
+   "id": "pta.unpitchedRightHand"
+  },
+  {
+   "name": "Right Hand (R.H.)",
+   "id": "pta.keyboardRightHandText"
+  },
+  {
+   "name": "Right-hand Tapping",
+   "id": "pta.guitarRightHandTapping"
+  },
+  {
+   "name": "Rim (Caltabiano)",
+   "id": "pta.unpitchedRim3"
+  },
+  {
+   "name": "Rim (Ghent)",
+   "id": "pta.unpitchedRim2"
+  },
+  {
+   "name": "Rim Only",
+   "id": "pta.windRimOnly"
+  },
+  {
+   "name": "Rim or Edge (Weinberg)",
+   "id": "pta.unpitchedRim1"
+  },
+  {
+   "name": "Saltando",
+   "id": "pta.saltandoText"
+  },
+  {
+   "name": "Scrape Around Rim (Clockwise)",
+   "id": "pta.unpitchedScrapeAroundRimClockwise"
+  },
+  {
+   "name": "Scrape Around Rim (Counter-clockwise)",
+   "id": "pta.unpitchedScrapeAroundRimCounterclockwise"
+  },
+  {
+   "name": "Scrape from Center to Edge",
+   "id": "pta.unpitchedScrapeCenterToEdge"
+  },
+  {
+   "name": "Scrape from Edge to Center",
+   "id": "pta.unpitchedScrapeEdgeToCenter"
+  },
+  {
+   "name": "Senza Vibrato",
+   "id": "pta.senzaVibratoText"
+  },
+  {
+   "name": "Senza sordino",
+   "id": "pta.senzaSordinoText"
+  },
+  {
+   "name": "Sharper Embouchure",
+   "id": "pta.windSharpEmbouchure"
+  },
+  {
+   "name": "Slap-tongue",
+   "id": "pta.slapTongueText"
+  },
+  {
+   "name": "Slide With Suppleness (Salzedo)",
+   "id": "pta.salzedoSlide"
+  },
+  {
+   "name": "Snap Pizzicato",
+   "id": "pta.stringsSnapPizzicato"
+  },
+  {
+   "name": "Snare Drum Effect (Salzedo)",
+   "id": "pta.salzedoSnareDrum"
+  },
+  {
+   "name": "Snares Off",
+   "id": "pta.unpitchedSnaresOffText"
+  },
+  {
+   "name": "Snares On",
+   "id": "pta.unpitchedSnaresOnText"
+  },
+  {
+   "name": "Somewhat Relaxed Embouchure",
+   "id": "pta.windLessRelaxedEmbouchure"
+  },
+  {
+   "name": "Somewhat Tight Embouchure",
+   "id": "pta.windSomewhatTightEmbouchure"
+  },
+  {
+   "name": "Spiccato",
+   "id": "pta.spiccText"
+  },
+  {
+   "name": "Stick Shot",
+   "id": "pta.unpitchedStickShot"
+  },
+  {
+   "name": "Stopped (+)",
+   "id": "pta.brassStoppedPlus"
+  },
+  {
+   "name": "Stopped (text)",
+   "id": "pta.stoppedText"
+  },
+  {
+   "name": "Straight mute",
+   "id": "pta.straightMuteText"
+  },
+  {
+   "name": "String 0",
+   "id": "pta.guitarString0"
+  },
+  {
+   "name": "String 1",
+   "id": "pta.guitarString1"
+  },
+  {
+   "name": "String 2",
+   "id": "pta.guitarString2"
+  },
+  {
+   "name": "String 3",
+   "id": "pta.guitarString3"
+  },
+  {
+   "name": "String 4",
+   "id": "pta.guitarString4"
+  },
+  {
+   "name": "String 5",
+   "id": "pta.guitarString5"
+  },
+  {
+   "name": "String 6",
+   "id": "pta.guitarString6"
+  },
+  {
+   "name": "String 7",
+   "id": "pta.guitarString7"
+  },
+  {
+   "name": "String 8",
+   "id": "pta.guitarString8"
+  },
+  {
+   "name": "String 9",
+   "id": "pta.guitarString9"
+  },
+  {
+   "name": "Strong Air Pressure",
+   "id": "pta.windStrongAirPressure"
+  },
+  {
+   "name": "Strum Down",
+   "id": "pta.guitarStrumDown"
+  },
+  {
+   "name": "Strum Up",
+   "id": "pta.guitarStrumUp"
+  },
+  {
+   "name": "Sul Ponticello (Bow on Bridge)",
+   "id": "pta.stringsBowBehindBridge"
+  },
+  {
+   "name": "Sul Tasto",
+   "id": "pta.sulTastoText"
+  },
+  {
+   "name": "Sul ponticello (sul pont.)",
+   "id": "pta.sulPontText"
+  },
+  {
+   "name": "Tam-tam Sounds (Salzedo)",
+   "id": "pta.salzedoTamTamSounds"
+  },
+  {
+   "name": "Tap the Pick Guard (Golpe)",
+   "id": "pta.guitarGolpe"
+  },
+  {
+   "name": "Tapping (T)",
+   "id": "pta.guitarTapT"
+  },
+  {
+   "name": "Tapping (dot)",
+   "id": "pta.guitarTapDot"
+  },
+  {
+   "name": "Tapping (plus)",
+   "id": "pta.guitarTapPlusSign"
+  },
+  {
+   "name": "Thumb Position",
+   "id": "pta.stringsThumbPosition"
+  },
+  {
+   "name": "Thunder Effect (Salzedo)",
+   "id": "pta.salzedoThunderEffect"
+  },
+  {
+   "name": "Tight Embouchure",
+   "id": "pta.windTightEmbouchure"
+  },
+  {
+   "name": "Timpanic Sounds (Salzedo)",
+   "id": "pta.salzedoTimpanicSounds"
+  },
+  {
+   "name": "Tongue Click (Stockhausen)",
+   "id": "pta.vocalTongueClick"
+  },
+  {
+   "name": "Tongue and Finger Click (Stockhausen)",
+   "id": "pta.vocalTongueFingerClick"
+  },
+  {
+   "name": "Trill Key",
+   "id": "pta.windTrillKey"
+  },
+  {
+   "name": "Triple-tongue",
+   "id": "pta.windTripleTongue"
+  },
+  {
+   "name": "Up Bow",
+   "id": "pta.stringsUpBow"
+  },
+  {
+   "name": "Valve trill",
+   "id": "pta.valveTrill"
+  },
+  {
+   "name": "Very Little Reed (Pull Outwards)",
+   "id": "pta.windReedPositionOut"
+  },
+  {
+   "name": "Very Tight Embouchure",
+   "id": "pta.windVeryTightEmbouchure"
+  },
+  {
+   "name": "Vibraphone Half Pedal (½ ped.)",
+   "id": "pta.vibraphoneHalfPedText"
+  },
+  {
+   "name": "Vibraphone Motor Off",
+   "id": "pta.vibraphoneMotorOff"
+  },
+  {
+   "name": "Vibraphone Motor On",
+   "id": "pta.vibraphoneMotorOn"
+  },
+  {
+   "name": "Vibraphone Pedal (l.v.)",
+   "id": "pta.vibraphoneLvText"
+  },
+  {
+   "name": "Vibraphone Pedal (ped.)",
+   "id": "pta.vibraphonePedText"
+  },
+  {
+   "name": "Vibrato",
+   "id": "pta.vibratoText"
+  },
+  {
+   "name": "Vibrato Bar Dip",
+   "id": "pta.guitarVibratoBarDip"
+  },
+  {
+   "name": "Vibrato Bar Scoop",
+   "id": "pta.guitarVibratoBarScoop"
+  },
+  {
+   "name": "Vibrato bar line",
+   "id": "pta.guitarVibratoBarLine"
+  },
+  {
+   "name": "Volume Swell",
+   "id": "pta.guitarVolumeSwell"
+  },
+  {
+   "name": "Weak Air Pressure",
+   "id": "pta.windWeakAirPressure"
+  },
+  {
+   "name": "Whistle Tone",
+   "id": "pta.whistleToneText"
+  },
+  {
+   "name": "Whistling Sounds (Salzedo)",
+   "id": "pta.salzedoWhistlingSounds"
+  },
+  {
+   "name": "With Mute (text)",
+   "id": "pta.withMuteText"
+  },
+  {
+   "name": "Xylo",
+   "id": "pta.xyloText"
+  },
+  {
+   "name": "m.d. (right hand)",
+   "id": "pta.keyboardMDText"
+  },
+  {
+   "name": "m.s. (left hand)",
+   "id": "pta.keyboardMSText"
+  }
+ ],
+ "playingTechniquesByGroup": {
+  "kDynamics": [
+   {
+    "name": "Accent",
+    "id": "pt.accent",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crescendo",
+    "id": "pt.crescendo",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Crescendo-diminuendo",
+    "id": "pt.crescendoDiminuendo",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Diminuendo",
+    "id": "pt.diminuendo",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Diminuendo-crescendo",
+    "id": "pt.diminuendoCrescendo",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Fade in",
+    "id": "pt.fadeIn",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Fade out",
+    "id": "pt.fadeOut",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Fouetté",
+    "id": "pt.fouette",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Marcato",
+    "id": "pt.marcato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Soft",
+    "id": "pt.soft",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Volume swell",
+    "id": "pt.volumeSwell",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "f",
+    "id": "pt.f",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "ff",
+    "id": "pt.ff",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "fff",
+    "id": "pt.fff",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "ffp",
+    "id": "pt.ffp",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "fp",
+    "id": "pt.fp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "mf",
+    "id": "pt.mf",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "mp",
+    "id": "pt.mp",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "p",
+    "id": "pt.p",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "pf",
+    "id": "pt.pf",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "pp",
+    "id": "pt.pp",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "ppp",
+    "id": "pt.ppp",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "sf",
+    "id": "pt.sf",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "sfp",
+    "id": "pt.sfp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "sfz",
+    "id": "pt.sfz",
+    "text": null,
+    "articulationType": "kAttribute"
+   }
+  ],
+  "kTechniques": [
+   {
+    "name": "Alternative fingering",
+    "id": "pt.alternativeFingering",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Artificial harmonic",
+    "id": "pt.artificialHarmonic",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Backstick",
+    "id": "pt.backstick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bartok/snap pizzicato",
+    "id": "pt.bartoksnapPizzicato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bass tone",
+    "id": "pt.bassTone",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bell",
+    "id": "pt.bell",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bell mute",
+    "id": "pt.bellMute",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Bow on bridge",
+    "id": "pt.bowOnBridge",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Bow on tailpiece",
+    "id": "pt.bowOnTailpiece",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Bowed",
+    "id": "pt.bowed",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Bowl hit",
+    "id": "pt.hitBowl",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bucket mute",
+    "id": "pt.bucketMute",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Buzz pizzicato",
+    "id": "pt.buzzPizzicato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Buzz roll",
+    "id": "pt.buzzRoll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Cage hit",
+    "id": "pt.hitCage",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Centre",
+    "id": "pt.centre",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Choke",
+    "id": "pt.choke",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Chorus",
+    "id": "pt.chorus",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Circular roll",
+    "id": "pt.circularRoll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Click",
+    "id": "pt.click",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Closed",
+    "id": "pt.closed",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Closed end",
+    "id": "pt.closedEnd",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Closed hole",
+    "id": "pt.closedHole",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Col legno battuto",
+    "id": "pt.colLegnoBattuto",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Col legno tratto",
+    "id": "pt.colLegnoTratto",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Cross stick",
+    "id": "pt.crossStick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crunch",
+    "id": "pt.crunch",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crunch choke",
+    "id": "pt.crunchChoke",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crush",
+    "id": "pt.crush",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crush (dry)",
+    "id": "pt.crushDry",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Crush (fat)",
+    "id": "pt.crushFat",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Cuivré",
+    "id": "pt.cuivre",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Cup mute",
+    "id": "pt.cupMute",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Damp",
+    "id": "pt.damp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Dead stroke",
+    "id": "pt.deadStroke",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Delay",
+    "id": "pt.delay",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ding",
+    "id": "pt.ding",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Distortion",
+    "id": "pt.distortion",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Double-tongue",
+    "id": "pt.doubleTongue",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Down",
+    "id": "pt.down",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Downbow",
+    "id": "pt.downbow",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Dreads (beater)",
+    "id": "pt.beaterDreads",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Dress harness hit",
+    "id": "pt.harnessHit",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Dut (vocal)",
+    "id": "pt.vocalDut",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Edge (cymbals)",
+    "id": "pt.edgeCymbals",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Edge (drums)",
+    "id": "pt.edgeDrums",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Edge rebound",
+    "id": "pt.edgeRebound",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Felt (beater)",
+    "id": "pt.beaterFelt",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Finger click",
+    "id": "pt.fingerClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Flange",
+    "id": "pt.flange",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Flat crash",
+    "id": "pt.flatCrash",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Flat roll",
+    "id": "pt.flatRoll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Flautando",
+    "id": "pt.flautando",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Flutter-tongue",
+    "id": "pt.flutterTongue",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Foot",
+    "id": "pt.foot",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Frame",
+    "id": "pt.frame",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Friction slide 1",
+    "id": "pt.frictionSlide1",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Friction slide 2",
+    "id": "pt.frictionSlide2",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ga (open)",
+    "id": "pt.tabla-ga",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ge (open)",
+    "id": "pt.tabla-ge",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ghost note",
+    "id": "pt.ghostNote",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Gi (muted open)",
+    "id": "pt.tabla-gi",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Guitar pizzicato",
+    "id": "pt.guitarPizzicato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Half-harmonic",
+    "id": "pt.halfHarmonic",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Half-muted",
+    "id": "pt.halfMuted",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Half-open",
+    "id": "pt.halfOpen",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Harmon mute, stem extended",
+    "id": "pt.harmonMuteStemExtended",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Harmon mute, stem in",
+    "id": "pt.harmonMuteStemIn",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Harmon mute, stem out",
+    "id": "pt.harmonMuteStemOut",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Harp harmonic",
+    "id": "pt.harpHarmonic",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Hi-hat",
+    "id": "pt.hiHat",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Hit (loose)",
+    "id": "pt.hitLoose",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Hit (medium)",
+    "id": "pt.hitMedium",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Hit (tight)",
+    "id": "pt.hitTight",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Jet whistle",
+    "id": "pt.jetWhistle",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Jeté",
+    "id": "pt.jete",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ke (closed)",
+    "id": "pt.tabla-ke",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Key click",
+    "id": "pt.keyClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Key click with pitch",
+    "id": "pt.keyClickWithPitch",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "LH pizzicato",
+    "id": "pt.lhPizzicato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Laissez vibrer",
+    "id": "pt.laissezVibrer",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Left (LH)",
+    "id": "pt.left",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Left-hand tap",
+    "id": "pt.leftHandTap",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Loose",
+    "id": "pt.loose",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Martelé",
+    "id": "pt.martele",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Motor off",
+    "id": "pt.motorOff",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Motor on",
+    "id": "pt.motorOn",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouth closed",
+    "id": "pt.mouthClosed",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouth open",
+    "id": "pt.mouthOpen",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouth pursed",
+    "id": "pt.mouthPursed",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouth slightly open",
+    "id": "pt.mouthSlightlyOpen",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouth wide open",
+    "id": "pt.mouthWideOpen",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Mouthpiece pop",
+    "id": "pt.mouthpiecePop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Muffled strings",
+    "id": "pt.muffledStrings",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Muffled/Damped",
+    "id": "pt.muffledDamped",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Multiphonic",
+    "id": "pt.multiphonic",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Muted",
+    "id": "pt.muted",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Na (open)",
+    "id": "pt.tabla-na",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Nail",
+    "id": "pt.nail",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Nail pizzicato",
+    "id": "pt.nailPizzicato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Nasal voice",
+    "id": "pt.nasalVoice",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Natural",
+    "id": "pt.natural",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Natural harmonic 1",
+    "id": "pt.naturalHarmonic1",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Natural harmonic 2",
+    "id": "pt.naturalHarmonic2",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Non vibrato",
+    "id": "pt.nonVibrato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Open 1",
+    "id": "pt.open1",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Open 2",
+    "id": "pt.open2",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Open end",
+    "id": "pt.openEnd",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Open hole",
+    "id": "pt.openHole",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Over the head double shot",
+    "id": "pt.doubleShotOverTheHeader",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Over the head hit",
+    "id": "pt.hitOverTheHead",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Over the head shot",
+    "id": "pt.shotOverTheHead",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Overdrive ",
+    "id": "pt.overdrive",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Overpressure",
+    "id": "pt.overpressure",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "P.d.l.t.",
+    "id": "pt.pdlt",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Palm muting",
+    "id": "pt.palmMuting",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pedal",
+    "id": "pt.pedal",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Phaser",
+    "id": "pt.phaser",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Pick scrape",
+    "id": "pt.pickScrape",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Pinch harmonic",
+    "id": "pt.pinchHarmonic",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pincé",
+    "id": "pt.pince",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Ping",
+    "id": "pt.ping",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Pizzicato",
+    "id": "pt.pizzicato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pizzicato alla chitarra",
+    "id": "pt.pizzicatoAllaChitarra",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pizzicato secco",
+    "id": "pt.pizzicatoSecco",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Plucked",
+    "id": "pt.plucked",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Plunger mute",
+    "id": "pt.plungerMute",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pop",
+    "id": "pt.pop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Port crash",
+    "id": "pt.portCrash",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Press roll",
+    "id": "pt.pressRoll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Puffy (beater)",
+    "id": "pt.beaterPuffy",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Pull",
+    "id": "pt.pull",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Push",
+    "id": "pt.push",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rake",
+    "id": "pt.rake",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Release",
+    "id": "pt.release",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Right (RH)",
+    "id": "pt.right",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Right hand tap",
+    "id": "pt.rightHandTap",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Right-hand tap (tapping)",
+    "id": "pt.rightHandTapTapping",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rim",
+    "id": "pt.rim",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rim knock",
+    "id": "pt.rimKnock",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rim only",
+    "id": "pt.rimOnly",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rim shot",
+    "id": "pt.rimShot",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rods (beater)",
+    "id": "pt.beaterRods",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Scrape",
+    "id": "pt.scrape",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Scrape (left)",
+    "id": "pt.scrapeLeft",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Scrape (right)",
+    "id": "pt.scrapeRight",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Scratch in",
+    "id": "pt.scratchIn",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Scratch out",
+    "id": "pt.scratchOut",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Shell",
+    "id": "pt.shell",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Side stick",
+    "id": "pt.sideStick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Simile",
+    "id": "pt.simile",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Sizzle",
+    "id": "pt.sizzle",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Sizzle suck",
+    "id": "pt.sizzleSuck",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Skank",
+    "id": "pt.skank",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Skin",
+    "id": "pt.skin",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Slap",
+    "id": "pt.slap",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Slap (congas)",
+    "id": "pt.slapCongas",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Slap tongue",
+    "id": "pt.slapTongue",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Snares off",
+    "id": "pt.snareOff",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Snares on",
+    "id": "pt.snareOn",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Snenor",
+    "id": "pt.snenor",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Sons xylophoniques",
+    "id": "pt.sonsXylophoniques",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Sostenuto pedal",
+    "id": "pt.sostenutoPedal",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Spoken",
+    "id": "pt.spoken",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Stand click",
+    "id": "pt.standClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Sticks",
+    "id": "pt.sticks",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Stick (butt)",
+    "id": "pt.stickButt",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft)",
+    "id": "pt.stickShaft",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft 1)",
+    "id": "pt.stickShaft1",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft 2)",
+    "id": "pt.stickShaft2",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft 3)",
+    "id": "pt.stickShaft3",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft 4)",
+    "id": "pt.stickShaft4",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft 5)",
+    "id": "pt.stickShaft5",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shaft open)",
+    "id": "pt.stickShaftOpen",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (shoulder)",
+    "id": "pt.stickShoulder",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip)",
+    "id": "pt.stickTip",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick click",
+    "id": "pt.stickClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick shot",
+    "id": "pt.stickShot",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick snap",
+    "id": "pt.stickSnap",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip 1)",
+    "id": "pt.stickTip1",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip 2)",
+    "id": "pt.stickTip2",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip 3)",
+    "id": "pt.stickTip3",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip 4)",
+    "id": "pt.stickTip4",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stick (tip 5)",
+    "id": "pt.stickTip5",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Sticks in",
+    "id": "pt.sticksIn",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stir",
+    "id": "pt.stir",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Stopped",
+    "id": "pt.stopped",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Straight mute",
+    "id": "pt.straightMute",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Suck",
+    "id": "pt.suck",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Sul ponticello",
+    "id": "pt.sulPonticello",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Sul tasto",
+    "id": "pt.sulTasto",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Sustain pedal",
+    "id": "pt.sustainPedal",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Swish",
+    "id": "pt.swish",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Swoosh roll",
+    "id": "pt.swooshRoll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Ta (muted open)",
+    "id": "pt.tabla-ta",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tap",
+    "id": "pt.tap",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tap at edge",
+    "id": "pt.tapEdge",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tap choke",
+    "id": "pt.tapChoke",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tap halfway",
+    "id": "pt.tapHalfway",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Te (closed)",
+    "id": "pt.tabla-te",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Throw",
+    "id": "pt.throw",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Throwoff off",
+    "id": "pt.throwoffOff",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Throwoff on",
+    "id": "pt.throwoffOn",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Ti (muted closed)",
+    "id": "pt.tabla-ti",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tongue and finger click",
+    "id": "pt.tongueFingerClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tongue click",
+    "id": "pt.tongueClick",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tongue stop",
+    "id": "pt.tongueStop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Triple-tongue",
+    "id": "pt.tripleTongue",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Tu (open)",
+    "id": "pt.tabla-tu",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Una corda",
+    "id": "pt.unaCorda",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Up",
+    "id": "pt.up",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Upbow",
+    "id": "pt.upbow",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Vacuum suck",
+    "id": "pt.vacuumSuck",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Vibrato bar line",
+    "id": "pt.vibratoBarLine",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Wah-wah",
+    "id": "pt.wahWahGuitar",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Wah-wah open",
+    "id": "pt.wahWahOpen",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Wah-wah stopped",
+    "id": "pt.wahWahStopped",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Whale call",
+    "id": "pt.whaleCall",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Whisper",
+    "id": "pt.whisper",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Whistle",
+    "id": "pt.whistle",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Whistle tone",
+    "id": "pt.whistleTone",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Zing",
+    "id": "pt.zing",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Zing (fast)",
+    "id": "pt.zingFast",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Zing (slow)",
+    "id": "pt.zingSlow",
+    "text": null,
+    "articulationType": "kAttribute"
+   }
+  ],
+  "kOrnaments": [
+   {
+    "name": "Arpeggio down",
+    "id": "pt.arpeggioDown",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Arpeggio up",
+    "id": "pt.arpeggioUp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Bend",
+    "id": "pt.bend",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Con vibrato",
+    "id": "pt.conVibrato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Dip/bend",
+    "id": "pt.dipbend",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Doit",
+    "id": "pt.doit",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Fall (drop)",
+    "id": "pt.fallDrop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Flip",
+    "id": "pt.flip",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Glissando down",
+    "id": "pt.glissandoDown",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Glissando up",
+    "id": "pt.glissandoUp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Growl",
+    "id": "pt.growl",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Jazz turn",
+    "id": "pt.jazzTurn",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Plop",
+    "id": "pt.plop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Portamento down",
+    "id": "pt.portamentoDown",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Portamento up",
+    "id": "pt.portamentoUp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Pre-bend",
+    "id": "pt.preBend",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Rip",
+    "id": "pt.rip",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Roll",
+    "id": "pt.roll",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Scoop",
+    "id": "pt.scoop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Shake",
+    "id": "pt.shake",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Slide",
+    "id": "pt.slide",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Slight bend",
+    "id": "pt.slightBend",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Smear",
+    "id": "pt.smear",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Squeeze",
+    "id": "pt.squeeze",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Strum down",
+    "id": "pt.strumDown",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Strum up",
+    "id": "pt.strumUp",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tremblement",
+    "id": "pt.tremblement",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tremolo",
+    "id": "pt.tremolo",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Trill",
+    "id": "pt.trill",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Trill (half-step)",
+    "id": "pt.trill.half",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Trill (whole step)",
+    "id": "pt.trill.whole",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Vibrato",
+    "id": "pt.vibrato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Vibrato bar dip",
+    "id": "pt.vibratoBarDip",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Vibrato bar scoop",
+    "id": "pt.vibratoBarScoop",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Wide vibrato",
+    "id": "pt.wideVibrato",
+    "text": null,
+    "articulationType": "kAttribute"
+   }
+  ],
+  "kLengths": [
+   {
+    "name": "Collé",
+    "id": "pt.colle",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Détaché",
+    "id": "pt.detache",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Détaché lancé",
+    "id": "pt.detacheLance",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Legato",
+    "id": "pt.legato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Martellato",
+    "id": "pt.martellato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Non legato",
+    "id": "pt.nonLegato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Portato/Louré",
+    "id": "pt.portatoloure",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Ricochet",
+    "id": "pt.ricochet",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Saltando",
+    "id": "pt.saltando",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Sautillé",
+    "id": "pt.sautille",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Spiccato",
+    "id": "pt.spiccato",
+    "text": null,
+    "articulationType": "kDirection"
+   },
+   {
+    "name": "Staccatissimo",
+    "id": "pt.staccatissimo",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Staccato",
+    "id": "pt.staccato",
+    "text": null,
+    "articulationType": "kAttribute"
+   },
+   {
+    "name": "Tenuto",
+    "id": "pt.tenuto",
+    "text": null,
+    "articulationType": "kAttribute"
+   }
+  ]
+ }
+}

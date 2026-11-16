@@ -1,0 +1,460 @@
+{
+  "description": "Inferred schema of Metronaut.app/Contents/Resources/all.json (bundled catalog seed)",
+  "root": {
+    "types": {
+      "object": 1
+    },
+    "count": 1,
+    "properties": {
+      "cursor": {
+        "types": {
+          "integer": 1
+        },
+        "count": 1,
+        "range": {
+          "min": 7065,
+          "max": 7065
+        },
+        "presentIn": "1/1"
+      },
+      "collection": {
+        "types": {
+          "array": 1
+        },
+        "count": 1,
+        "items": {
+          "types": {
+            "object": 73
+          },
+          "count": 73,
+          "properties": {
+            "pk": {
+              "types": {
+                "integer": 73
+              },
+              "count": 73,
+              "range": {
+                "min": 130,
+                "max": 253
+              },
+              "presentIn": "73/73"
+            },
+            "title": {
+              "types": {
+                "string": 73
+              },
+              "count": 73,
+              "presentIn": "73/73"
+            },
+            "image": {
+              "types": {
+                "null": 73
+              },
+              "count": 73,
+              "presentIn": "73/73"
+            },
+            "pieces": {
+              "types": {
+                "array": 73
+              },
+              "count": 73,
+              "items": {
+                "types": {
+                  "integer": 89
+                },
+                "count": 89,
+                "range": {
+                  "min": 498,
+                  "max": 992
+                }
+              },
+              "arrayLength": {
+                "min": 0,
+                "max": 15,
+                "mean": 1.22,
+                "empty": 31
+              },
+              "presentIn": "73/73"
+            },
+            "piececollection": {
+              "types": {
+                "boolean": 73
+              },
+              "count": 73,
+              "presentIn": "73/73"
+            },
+            "tags": {
+              "types": {
+                "array": 73
+              },
+              "count": 73,
+              "items": {
+                "types": {
+                  "string": 1
+                },
+                "count": 1
+              },
+              "arrayLength": {
+                "min": 0,
+                "max": 1,
+                "mean": 0.01,
+                "empty": 72
+              },
+              "presentIn": "73/73"
+            }
+          }
+        },
+        "arrayLength": {
+          "min": 73,
+          "max": 73,
+          "mean": 73,
+          "empty": 0
+        },
+        "presentIn": "1/1"
+      },
+      "author": {
+        "types": {
+          "array": 1
+        },
+        "count": 1,
+        "items": {
+          "types": {
+            "object": 129
+          },
+          "count": 129,
+          "properties": {
+            "pk": {
+              "types": {
+                "integer": 129
+              },
+              "count": 129,
+              "range": {
+                "min": 136,
+                "max": 268
+              },
+              "presentIn": "129/129"
+            },
+            "first_name": {
+              "types": {
+                "string": 129
+              },
+              "count": 129,
+              "presentIn": "129/129"
+            },
+            "last_name": {
+              "types": {
+                "string": 129
+              },
+              "count": 129,
+              "presentIn": "129/129"
+            },
+            "image": {
+              "types": {
+                "string": 116,
+                "null": 13
+              },
+              "count": 129,
+              "presentIn": "129/129"
+            },
+            "pieces": {
+              "types": {
+                "array": 129
+              },
+              "count": 129,
+              "items": {
+                "types": {
+                  "integer": 149
+                },
+                "count": 149,
+                "range": {
+                  "min": 498,
+                  "max": 992
+                }
+              },
+              "arrayLength": {
+                "min": 0,
+                "max": 21,
+                "mean": 1.16,
+                "empty": 87
+              },
+              "presentIn": "129/129"
+            }
+          }
+        },
+        "arrayLength": {
+          "min": 129,
+          "max": 129,
+          "mean": 129,
+          "empty": 0
+        },
+        "presentIn": "1/1"
+      },
+      "piece": {
+        "types": {
+          "array": 1
+        },
+        "count": 1,
+        "items": {
+          "types": {
+            "object": 149
+          },
+          "count": 149,
+          "properties": {
+            "pk": {
+              "types": {
+                "integer": 149
+              },
+              "count": 149,
+              "range": {
+                "min": 498,
+                "max": 992
+              },
+              "presentIn": "149/149"
+            },
+            "title": {
+              "types": {
+                "string": 149
+              },
+              "count": 149,
+              "presentIn": "149/149"
+            },
+            "status": {
+              "types": {
+                "string": 149
+              },
+              "count": 149,
+              "presentIn": "149/149"
+            },
+            "genre": {
+              "types": {
+                "string": 149
+              },
+              "count": 149,
+              "presentIn": "149/149"
+            },
+            "difficulty": {
+              "types": {
+                "integer": 141,
+                "null": 8
+              },
+              "count": 149,
+              "range": {
+                "min": 1,
+                "max": 3
+              },
+              "presentIn": "149/149"
+            },
+            "collections": {
+              "types": {
+                "array": 149
+              },
+              "count": 149,
+              "items": {
+                "types": {
+                  "integer": 89
+                },
+                "count": 89,
+                "range": {
+                  "min": 184,
+                  "max": 251
+                }
+              },
+              "arrayLength": {
+                "min": 0,
+                "max": 2,
+                "mean": 0.6,
+                "empty": 62
+              },
+              "presentIn": "149/149"
+            },
+            "accompaniments": {
+              "types": {
+                "array": 149
+              },
+              "count": 149,
+              "items": {
+                "types": {
+                  "object": 176
+                },
+                "count": 176,
+                "properties": {
+                  "pk": {
+                    "types": {
+                      "integer": 176
+                    },
+                    "count": 176,
+                    "range": {
+                      "min": 498,
+                      "max": 1030
+                    },
+                    "presentIn": "176/176"
+                  },
+                  "kind": {
+                    "types": {
+                      "object": 169,
+                      "null": 7
+                    },
+                    "count": 176,
+                    "properties": {
+                      "description": {
+                        "types": {
+                          "string": 169
+                        },
+                        "count": 169,
+                        "presentIn": "169/169"
+                      }
+                    },
+                    "presentIn": "176/176"
+                  },
+                  "instrument": {
+                    "types": {
+                      "integer": 176
+                    },
+                    "count": 176,
+                    "range": {
+                      "min": 33,
+                      "max": 57
+                    },
+                    "presentIn": "176/176"
+                  },
+                  "transposition": {
+                    "types": {
+                      "integer": 176
+                    },
+                    "count": 176,
+                    "range": {
+                      "min": 0,
+                      "max": 2
+                    },
+                    "presentIn": "176/176"
+                  }
+                }
+              },
+              "arrayLength": {
+                "min": 1,
+                "max": 4,
+                "mean": 1.18,
+                "empty": 0
+              },
+              "presentIn": "149/149"
+            },
+            "authors": {
+              "types": {
+                "array": 149
+              },
+              "count": 149,
+              "items": {
+                "types": {
+                  "integer": 149
+                },
+                "count": 149,
+                "range": {
+                  "min": 138,
+                  "max": 263
+                }
+              },
+              "arrayLength": {
+                "min": 1,
+                "max": 1,
+                "mean": 1,
+                "empty": 0
+              },
+              "presentIn": "149/149"
+            },
+            "movement": {
+              "types": {
+                "null": 75,
+                "integer": 74
+              },
+              "count": 149,
+              "range": {
+                "min": 1,
+                "max": 24
+              },
+              "presentIn": "149/149"
+            },
+            "work_number": {
+              "types": {
+                "null": 103,
+                "string": 46
+              },
+              "count": 149,
+              "presentIn": "149/149"
+            },
+            "piece_icon": {
+              "types": {
+                "null": 149
+              },
+              "count": 149,
+              "presentIn": "149/149"
+            }
+          }
+        },
+        "arrayLength": {
+          "min": 149,
+          "max": 149,
+          "mean": 149,
+          "empty": 0
+        },
+        "presentIn": "1/1"
+      },
+      "instrument": {
+        "types": {
+          "array": 1
+        },
+        "count": 1,
+        "items": {
+          "types": {
+            "object": 29
+          },
+          "count": 29,
+          "properties": {
+            "pk": {
+              "types": {
+                "integer": 29
+              },
+              "count": 29,
+              "range": {
+                "min": 33,
+                "max": 67
+              },
+              "presentIn": "29/29"
+            },
+            "name": {
+              "types": {
+                "string": 29
+              },
+              "count": 29,
+              "presentIn": "29/29"
+            },
+            "transposition": {
+              "types": {
+                "integer": 29
+              },
+              "count": 29,
+              "range": {
+                "min": -14,
+                "max": 3
+              },
+              "presentIn": "29/29"
+            },
+            "image": {
+              "types": {
+                "null": 29
+              },
+              "count": 29,
+              "presentIn": "29/29"
+            }
+          }
+        },
+        "arrayLength": {
+          "min": 29,
+          "max": 29,
+          "mean": 29,
+          "empty": 0
+        },
+        "presentIn": "1/1"
+      }
+    }
+  }
+}

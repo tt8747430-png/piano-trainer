@@ -1,0 +1,5526 @@
+# Metronaut — full English string tables
+
+Source (**exact**): `Metronaut.app/Contents/Resources/en.lproj/` — `Localizable.strings` (4219 keys, 752,838 bytes, UTF-16), `Localizable.stringsdict` (45 plural entries), `AppShortcuts.strings` (4), `InfoPlist.strings` (11).
+Widget extension (**exact**): `PlugIns/Metronaut-WidgetExtension.appex/Contents/Resources/en.lproj/Localizable.strings` has 4219 keys; it is byte-for-byte the same key/value set as the app table (shared table).
+
+Machine-readable copies: `data/strings_en.json`, `data/stringsdict_en.json`, `data/appshortcuts_en.json`, `data/infoplist_en.json`, `data/widget_strings_en.json`.
+
+Notes:
+- Keys are grouped below by the text before the first `.`. Keys without a dot are listed under `(no prefix)`; these are mostly legacy keys whose key equals the English text or marketing copy.
+- Values are reproduced verbatim except: `|` is escaped, line breaks are shown as `<br>`, `<` is HTML-escaped. Format specifiers (`%@`, `%d`, `%1$@`) are kept.
+- Many keys look like UI-flow names (onboarding, practice, subscription, crm = Braze/CRM push and in-app copy). They are the best static evidence for screens and labels.
+
+## Supported locales (**exact**, `*.lproj` folders, 17)
+
+de, en, es, fr, it, ja, ko, nl, pl, pt-BR, ru, sv, th, tr, uk, zh-Hans, zh-Hant. Development region: `en_US` (Info.plist `CFBundleDevelopmentRegion`).
+
+## InfoPlist.strings (permission prompts and ATT text)
+
+| key | value |
+|---|---|
+| `NSMicrophoneUsageDescription` | This will allow us to adapt the accompaniment tempo to you and record your performance. |
+| `NSUserTrackingUsageDescription_NEW_2` | You won't see any ads in our App. |
+| `NSCameraUsageDescription` | Metronaut uses your camera for video recording of your performances. |
+| `CFBundleName` | Metronaut |
+| `CFBundleDisplayName` | Metronaut |
+| `NSBluetoothAlwaysUsageDescription` | Metronaut uses Bluetooth to connect MIDI instruments. |
+| `NSUserTrackingUsageDescription_NEW_1` | This will help us to bring more musicians like you to Metronaut community. |
+| `NSSpeechRecognitionUsageDescription` | Allow to control Metronaut with your voice. |
+| `NSUserTrackingUsageDescription` | This will help us to bring more musicians like you to Metronaut community. You won't see any ads in our App. |
+| `watchos.NSMicrophoneUsageDescription` | This enables using Live Tuner Analysis. |
+| `NSPhotoLibraryUsageDescription` | Allow to save your recordings in your Photo Library. |
+
+## AppShortcuts.strings (Siri / App Intents phrases)
+
+| key | value |
+|---|---|
+| `Open ${target} in ${applicationName}` | Open ${target} in ${applicationName} |
+| `Search ${applicationName}` | Search ${applicationName} |
+| `Practice in ${applicationName}` | Practice in ${applicationName} |
+| `Play ${target} on ${applicationName}` | Play ${target} on ${applicationName} |
+
+## Localizable.stringsdict (plural rules)
+
+| key | format key | variable | rule values |
+|---|---|---|---|
+| `account.profile.section.school` | %#@format@ | format | one: School; zero: Schools; other: Schools |
+| `account.welcomePeriod.title` | %#@format@ | format | one: 1h of Unlimited Access Left; zero: Last hour of Unlimited Access; other: %uh of Unlimited Access Left |
+| `account.welcomePeriod.title.obsolete` | %#@format@ | format | one: 1h of Premium Access Left; zero: Last hour of Premium Access; other: %uh of Premium Access Left |
+| `button.reminder.XMinutesLeft.title` | %#@format@ | format | one: 1 min left; zero: 0 min left; other: %u min left |
+| `button.subscription.monthlyxfree.title` | %#@format@ | format | one: 7-day Free Trial; zero: 7-day Free Trial; other: 7-day Free Trial |
+| `button.subscription.monthlyXThen.specialOffer.title` | %#@format@ | format | one: for %u month then %@ / month; zero: ; other: for %u months then %@ / month |
+| `endSession.recordings` | %#@format@ | format | one: New recording; zero: New recording; other: New recordings |
+| `foopup.noPrintCredit.freeTrial.subtitle` | %#@format@ | format | one: You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra score per month.; zero: You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra score per month.; other: You have already printed your free score. Once your subscription starts ({{date}}), you will be able to print %u extra scores per month. |
+| `foopup.noPrintCredit.subscriber.subtitle` | %#@format@ | format | one: You have printed %u score this month. You will be able to print %u more starting {{date}}.; zero: You have printed %u score this month. You will be able to print %u more starting {{date}}.; other: You have printed %u scores this month. You will be able to print %u more starting {{date}}. |
+| `foopup.printConfirmation.button.subscriber.subtitle` | %#@format@ | format | one: %u printout left this month; zero: 0 printout left this month; other: %u printouts left this month |
+| `foopup.printConfirmation.freeTrial.subtitle` | %#@format@ | format | one: You can print %u score during your free trial. The same score can be printed as many times as you want.; zero: You can print %u scores during your free trial. The same score can be printed as many times as you want.; other: You can print %u scores during your free trial. The same score can be printed as many times as you want. |
+| `gamification.details.streak.content.title` | %#@format@ | format | one: New streak started!; zero: ; other: Weeks in a row! |
+| `global.xPieces` | %#@format@ | format | one: %li Piece; zero: %li Piece; other: %li Pieces |
+| `header.subscription.XMinutesLeft.title` | %#@format@ | format | one: 1 min of play time left today; zero: No free play time left today; other: %u min of play time left today |
+| `home.PracticeDashboard.goal` | %#@format@ | format | one: ; zero: ; other: %@ days |
+| `home.PracticeDashboard.week.hourTotalDuration` | %#@format@ | format | one: hour; zero: hour; other: hours |
+| `home.PracticeDashboard.week.minutesTotalDuration` | %#@format@ | format | one: minute; zero: minute; other: minutes |
+| `home.PracticeDashboard.week.xWeekAgo` | %#@format@ | format | one: %@ week ago; zero: %@ week ago; other: %@ weeks ago |
+| `myMusic.footer.subscription.subtitle` | %#@format@ | format | one: Or enjoy 1 minute of free play time every day.; zero: Or enjoy 0 minute of free play time every day.; other: Or enjoy %u minutes of free play time every day. |
+| `nda.global.collection` | %#@format@ | format | one: Collection; zero: Collection; other: Collections |
+| `Notification.subscription.XMinutesLeft.subtitle` | %#@format@ | format | one: ; zero: ; other: You have %u minutes of play time left. |
+| `Notification.subscription.XMinutesPlayed.title` | %#@format@ | format | one: ; zero: ; other: You’ve played %u minutes, what a maestro! 🕺 |
+| `pieceCell.versions` | %#@format@ | format | one: version; zero: ; other: versions |
+| `pieceVersions.purchase.title` | %#@format@ | format | one: Included Version; zero: ; other: Included Versions (%u) |
+| `practice.workout.totalSteps` | %#@format@ | format | one: %u step; zero: %u step; other: %u steps |
+| `preview.offeredPiece.button.subtitle` | %#@format@ | format | one: %u free piece left; zero: %u free piece left; other: %u free pieces left |
+| `preview.purchase.button.subtitle` | %#@format@ | format | one: %u version (score + audio); zero: %u version (score + audio); other: %u versions (score + audio) |
+| `Reminder.subscription.XMinutesLeft.title` | %#@format@ | format | one: 1 minute of play time left this month.; zero: Your monthly free time is up.; other: %u minutes of play time left this month. |
+| `subscription.duration` | %#@format@ | format | one: %u month; zero: %u month; other: %u months |
+| `subscription.freeTrial.day.button` | %#@format@ | format | one: Start my %u-day Free Trial; zero: ; other: Start my %u-day Free Trial |
+| `subscription.freeTrial.day.title` | %#@format@ | format | one: %u-days Free Trial; zero: ; other: %u-day Free Trial |
+| `subscription.freeTrial.month.button` | %#@format@ | format | one: Start my 1-month Free Trial; zero: ; other: Start my %u-month Free Trial |
+| `subscription.freeTrial.month.title` | %#@format@ | format | one: 1 month Free Trial; zero: ; other: %u-months Free Trial |
+| `subscription.month.freeDays.button.subtitle` | %#@format@ | format | one: ; zero: ; other: {{duration}} days free then {{price}} per month. |
+| `subscription.month.freeMonths.button.subtitle` | %#@format@ | format | one: {{duration}} month free then {{price}} per month.; zero: ; other: {{duration}} months free then {{price}} per month. |
+| `subscription.offer.month.subtitle` | %#@format@ | format | one: for %u month, then %@ / month; zero: for %u month, then %@ / month; other: for %u months, then %@ / month |
+| `subscription.offer.payAsYouGo.50off.month.subtitle` | %#@format@ | format | one: for %u month, then %@ / month; zero: for %u month, then %@ / month; other: for %u months, then %@ / month |
+| `subscription.year.freeDays.button.subtitle` | %#@format@ | format | one: ; zero: ; other: {{duration}} days free then {{price}} per year |
+| `subscription.year.freeMonths.button.subtitle` | %#@format@ | format | one: 1 month free then {{price}} per year.; zero: ; other: {{duration}} months free then {{price}} per year. |
+| `welcomePeriod.popup.subtitle` | %#@format@ | format | one: As a welcome gift, enjoy playing with Metronaut with no time limit during 24h.; zero: As a welcome gift, enjoy playing with Metronaut with no time limit during %u hours.; other: As a welcome gift, enjoy playing with Metronaut with no time limit during %u days. |
+| `welcomePeriod.popup.subtitle.obsolete` | %#@format@ | format | one: Play with Metronaut without limits during 24h, like a Premium user.; zero: ; other: Play with Metronaut without limits during %u days, like a Premium user. |
+| `welcomePeriod.popup.subtitle.obsolete2` | %#@format@ | format | one: As a welcome gift, enjoy playing with Metronaut without limits during 24h, like a Premium user.; zero: As a welcome gift, enjoy playing with Metronaut without limits during %u hours, like a Premium user.; other: As a welcome gift, enjoy playing with Metronaut without limits during %u days, like a Premium user. |
+| `welcomePeriod.popup.title` | %#@format@ | format | one: 1 Day Welcome Access; zero: %u Days Welcome Access; other: %u Days Welcome Access |
+| `welcomePeriod.popup.title.obsolete` | %#@format@ | format | one: 1 Day Premium Access; zero: ; other: %u Days Premium Access |
+| `welcomePeriod.popup.title.obsolete2` | %#@format@ | format | one: 1 Day Free Welcome Access; zero: %u Days Free Welcome Access; other: %u Days Free Welcome Access |
+
+## Prefix index (Localizable.strings)
+
+| prefix | keys |
+|---|---|
+| [collection](#p-collection) | 626 |
+| [crm](#p-crm) | 388 |
+| [practice](#p-practice) | 286 |
+| [card](#p-card) | 149 |
+| [exploration](#p-exploration) | 140 |
+| [performance](#p-performance) | 135 |
+| [extendedOnboarding](#p-extendedonboarding) | 134 |
+| [settings](#p-settings) | 134 |
+| [subscription](#p-subscription) | 120 |
+| [Instrument](#p-instrument) | 117 |
+| [account](#p-account) | 109 |
+| [home](#p-home) | 94 |
+| [global](#p-global) | 83 |
+| [popup](#p-popup) | 73 |
+| [nda](#p-nda) | 68 |
+| [(no prefix)](#p--no-prefix-) | 67 |
+| [account23](#p-account23) | 59 |
+| [Login](#p-login) | 55 |
+| [productOffering](#p-productoffering) | 55 |
+| [onboarding](#p-onboarding) | 53 |
+| [search](#p-search) | 50 |
+| [alert](#p-alert) | 47 |
+| [discover](#p-discover) | 47 |
+| [mymusic](#p-mymusic) | 44 |
+| [songDetails](#p-songdetails) | 44 |
+| [ph](#p-ph) | 35 |
+| [subscriptionPrompt](#p-subscriptionprompt) | 33 |
+| [preview](#p-preview) | 32 |
+| [mode](#p-mode) | 29 |
+| [tempo](#p-tempo) | 27 |
+| [gamification](#p-gamification) | 24 |
+| [login](#p-login) | 24 |
+| [previousRecording](#p-previousrecording) | 24 |
+| [app](#p-app) | 23 |
+| [inApp](#p-inapp) | 22 |
+| [foopup](#p-foopup) | 21 |
+| [vocalCommand](#p-vocalcommand) | 20 |
+| [Showcase](#p-showcase) | 19 |
+| [myMusic](#p-mymusic) | 18 |
+| [coach](#p-coach) | 17 |
+| [genre](#p-genre) | 17 |
+| [playlist](#p-playlist) | 17 |
+| [preferences](#p-preferences) | 17 |
+| [watchos](#p-watchos) | 17 |
+| [deeplink](#p-deeplink) | 16 |
+| [endSession](#p-endsession) | 16 |
+| [Reminder](#p-reminder) | 16 |
+| [applestoredemo](#p-applestoredemo) | 15 |
+| [part](#p-part) | 15 |
+| [rewardAction](#p-rewardaction) | 15 |
+| [att](#p-att) | 12 |
+| [Performance](#p-performance) | 12 |
+| [Popup](#p-popup) | 12 |
+| [TikTok](#p-tiktok) | 12 |
+| [backend](#p-backend) | 11 |
+| [button](#p-button) | 11 |
+| [social](#p-social) | 11 |
+| [Subscription](#p-subscription) | 11 |
+| [support](#p-support) | 11 |
+| [jtbd](#p-jtbd) | 10 |
+| [magicLogin](#p-magiclogin) | 10 |
+| [ranking](#p-ranking) | 10 |
+| [teacher](#p-teacher) | 10 |
+| [message](#p-message) | 9 |
+| [perfOrRhythm](#p-perforrhythm) | 9 |
+| [post](#p-post) | 9 |
+| [appstore](#p-appstore) | 8 |
+| [google](#p-google) | 8 |
+| [piece](#p-piece) | 8 |
+| [setting](#p-setting) | 8 |
+| [speechRecognition](#p-speechrecognition) | 8 |
+| [accompanimentKind](#p-accompanimentkind) | 7 |
+| [ad](#p-ad) | 7 |
+| [mic](#p-mic) | 7 |
+| [nauts](#p-nauts) | 7 |
+| [PieceRequest](#p-piecerequest) | 7 |
+| [push](#p-push) | 7 |
+| [UserGoal](#p-usergoal) | 7 |
+| [widget](#p-widget) | 7 |
+| [contactForm](#p-contactform) | 6 |
+| [facebook](#p-facebook) | 6 |
+| [InstrumentFamily](#p-instrumentfamily) | 6 |
+| [nickname](#p-nickname) | 6 |
+| [print](#p-print) | 6 |
+| [rec](#p-rec) | 6 |
+| [volume](#p-volume) | 6 |
+| [welcomePeriodEnded](#p-welcomeperiodended) | 6 |
+| [cameraFeedback](#p-camerafeedback) | 5 |
+| [download](#p-download) | 5 |
+| [drawer](#p-drawer) | 5 |
+| [header](#p-header) | 5 |
+| [Notification](#p-notification) | 5 |
+| [omr](#p-omr) | 5 |
+| [onboardingTech](#p-onboardingtech) | 5 |
+| [workout](#p-workout) | 5 |
+| [workoutstep](#p-workoutstep) | 5 |
+| [footer](#p-footer) | 4 |
+| [opus](#p-opus) | 4 |
+| [order](#p-order) | 4 |
+| [partKind](#p-partkind) | 4 |
+| [pieceRequest](#p-piecerequest) | 4 |
+| [shortcutitem](#p-shortcutitem) | 4 |
+| [student](#p-student) | 4 |
+| [trad](#p-trad) | 4 |
+| [user_level](#p-user-level) | 4 |
+| [appIntent](#p-appintent) | 3 |
+| [audioRec](#p-audiorec) | 3 |
+| [common](#p-common) | 3 |
+| [endPreview](#p-endpreview) | 3 |
+| [error](#p-error) | 3 |
+| [freeDurationExplanation](#p-freedurationexplanation) | 3 |
+| [freeDurationRenewal](#p-freedurationrenewal) | 3 |
+| [premiumSwitchedOff](#p-premiumswitchedoff) | 3 |
+| [share](#p-share) | 3 |
+| [shareSent](#p-sharesent) | 3 |
+| [storage](#p-storage) | 3 |
+| [upvote](#p-upvote) | 3 |
+| [userGoal](#p-usergoal) | 3 |
+| [UserGoals](#p-usergoals) | 3 |
+| [videoRec](#p-videorec) | 3 |
+| [videoRecording](#p-videorecording) | 3 |
+| [annotation](#p-annotation) | 2 |
+| [community](#p-community) | 2 |
+| [deeplinkinput](#p-deeplinkinput) | 2 |
+| [education](#p-education) | 2 |
+| [explicitRec](#p-explicitrec) | 2 |
+| [FreeTrialBanner](#p-freetrialbanner) | 2 |
+| [general](#p-general) | 2 |
+| [howToCancel](#p-howtocancel) | 2 |
+| [InApp](#p-inapp) | 2 |
+| [internalNotification](#p-internalnotification) | 2 |
+| [loadingApp](#p-loadingapp) | 2 |
+| [mixer](#p-mixer) | 2 |
+| [part_simplified](#p-part-simplified) | 2 |
+| [pieceDownload](#p-piecedownload) | 2 |
+| [recording](#p-recording) | 2 |
+| [recordingDrawer](#p-recordingdrawer) | 2 |
+| [test](#p-test) | 2 |
+| [workoutstepconfig](#p-workoutstepconfig) | 2 |
+| [92042fcb-3c9b-412c-a2b4-cc70474bfb37-Symbols](#p-92042fcb-3c9b-412c-a2b4-cc70474bfb37-symbols) | 1 |
+| [accompaniment](#p-accompaniment) | 1 |
+| [availableParts](#p-availableparts) | 1 |
+| [discovery](#p-discovery) | 1 |
+| [fundamental_position1](#p-fundamental-position1) | 1 |
+| [generic](#p-generic) | 1 |
+| [gift](#p-gift) | 1 |
+| [Global](#p-global) | 1 |
+| [idfa](#p-idfa) | 1 |
+| [inappevent](#p-inappevent) | 1 |
+| [listen](#p-listen) | 1 |
+| [moreNauts](#p-morenauts) | 1 |
+| [notification](#p-notification) | 1 |
+| [originalVersion](#p-originalversion) | 1 |
+| [PieceCell](#p-piececell) | 1 |
+| [pieceVersions](#p-pieceversions) | 1 |
+| [pompeMG](#p-pompemg) | 1 |
+| [Preview](#p-preview) | 1 |
+| [ProductError](#p-producterror) | 1 |
+| [punctuationMark](#p-punctuationmark) | 1 |
+| [recordings](#p-recordings) | 1 |
+| [rhythmGame](#p-rhythmgame) | 1 |
+| [scorePreview](#p-scorepreview) | 1 |
+| [section](#p-section) | 1 |
+| [SpecialOffer](#p-specialoffer) | 1 |
+| [students](#p-students) | 1 |
+| [subscriptionOffer](#p-subscriptionoffer) | 1 |
+| [swanlake](#p-swanlake) | 1 |
+| [tab](#p-tab) | 1 |
+| [teaching](#p-teaching) | 1 |
+| [tempRec](#p-temprec) | 1 |
+| [tonality](#p-tonality) | 1 |
+| [unit](#p-unit) | 1 |
+| [welcomePeriod](#p-welcomeperiod) | 1 |
+
+<a id="p-collection"></a>
+### collection (626)
+
+| key | value |
+|---|---|
+| `collection.274` | Christmas Selection |
+| `collection.276` | Guitar Duets |
+| `collection.283` | Our Users' Favorites |
+| `collection.284` | Exploring Baroque Music |
+| `collection.285` | Our Users' Favorites |
+| `collection.286` | Exploring Classical Genre |
+| `collection.287` | Our Users' Favorites |
+| `collection.288` | Our Users' Favorites |
+| `collection.289` | Romantic Orchestra Pieces |
+| `collection.290` | Dive in French Impressionism |
+| `collection.291` | Exploring Romantic Genre |
+| `collection.292` | Most Iconic Opera Arias |
+| `collection.293` | A Break from Classical Music |
+| `collection.294` | Beautiful Sonatas |
+| `collection.295` | Baroque Orchestra Pieces |
+| `collection.296` | Most Romantic Pieces |
+| `collection.297` | Traditional Songs |
+| `collection.298` | Most Famous Lieder |
+| `collection.299` | Relaxing music |
+| `collection.300` | Essential Mozart |
+| `collection.301` | Johann Sebastian Bach |
+| `collection.302` | Most Famous Concertos |
+| `collection.303` | Classical Orchestra Pieces |
+| `collection.304` | The Art of Slow Movements |
+| `collection.305` | The Stars of Classical Music |
+| `collection.306` | Spring is Coming |
+| `collection.307` | Beautiful Melancholy |
+| `collection.308` | Easy Orchestra Pieces |
+| `collection.309` | Feeling Happy! |
+| `collection.310` | The Best of Sacred Music |
+| `collection.311` | Play with an orchestra |
+| `collection.311_copy` | Play with an orchestra |
+| `collection.313` | Girl Power |
+| `collection.313.save-copy` | Iconic Pieces Composed by Women |
+| `collection.314` | Classical Music on the Big Screen |
+| `collection.314_old` | Classical Music on the Big Screen |
+| `collection.315` | Sea, Music and Sun |
+| `collection.316` | Pieces for Piano Solo |
+| `collection.318` | Dramatic Pieces |
+| `collection.324` | Japanese Method: Violin School 4 |
+| `collection.325` | Japanese Method: Violin School 5 |
+| `collection.326` | Japanese Method: Violin School 6 |
+| `collection.327` | Japanese Method: Violin School 7 |
+| `collection.328` | Japanese Method: Violin School 8 |
+| `collection.329` | Japanese Method: Violin School 9 |
+| `collection.330` | Japanese Method: Violin School 10 |
+| `collection.334` | In the House of Gospel |
+| `collection.335` | Anthems |
+| `collection.336` | Best of Nursery Rhymes |
+| `collection.337` | Japan |
+| `collection.348` | Celtic Music |
+| `collection.352` | Team Bach (Composer challenge) |
+| `collection.352_copy` | Bach: The most Beautiful Pieces |
+| `collection.353` | Ludwig van Beethoven |
+| `collection.354` | Egg-cellent Easter |
+| `collection.355` | Japanese Method: Piano 1 |
+| `collection.356` | Japanese Method: Piano 2 |
+| `collection.357` | Japanese Method: Piano 3 |
+| `collection.358` | Japanese Method: Piano 4 |
+| `collection.359` | Japanese Method: Piano 5 |
+| `collection.360` | Japanese Method: Piano 6 |
+| `collection.361` | Japanese Method: Piano 7 |
+| `collection.362` | Robert Schumann |
+| `collection.363` | Classics Made Easy |
+| `collection.364` | Vivaldi's summer |
+| `collection.366` | Vivaldi's summer |
+| `collection.368` | France |
+| `collection.369` | Metrolympic Games |
+| `collection.370` | Metrolympic Games |
+| `collection.371` | Metrolympic Games |
+| `collection.372` | Metrolympic Games |
+| `collection.373` | Metrolympic Games |
+| `collection.374` | Metrolympic Games |
+| `collection.375` | Metrolympic Games |
+| `collection.376` | Metrolympic Games |
+| `collection.377` | Metrolympic Games |
+| `collection.378` | Metrolympic Games |
+| `collection.379` | Metrolympic Games |
+| `collection.380` | Metrolympic Games |
+| `collection.381` | Claude Debussy |
+| `collection.381_old` | Claude Debussy's Birthday |
+| `collection.382` | Exercises for building technique |
+| `collection.384` | The Violinist's Repertoire |
+| `collection.385` | The Cellist's Repertoire |
+| `collection.386` | The Flutist's Repertoire |
+| `collection.387` | The Pianist's Repertoire |
+| `collection.388` | The Clarinetist's Repertoire |
+| `collection.389` | Top piano accompaniments |
+| `collection.391` | Ballet Music |
+| `collection.392` | Vivaldi's The Four Seasons |
+| `collection.393` | Notebook for Anna Magdalena Bach |
+| `collection.394` | Peer Gynt |
+| `collection.395` | The Magic Flute |
+| `collection.396` | Czerny: Practical Exercises for Beginners, Op.599 |
+| `collection.397` | Vaccai's Practical Vocal Method |
+| `collection.398` | Concone: Lessons and Exercises |
+| `collection.400` | Schumann - Easy Pieces |
+| `collection.401` | Tchaikovsky - Children's Album |
+| `collection.402` | Bartók's Romanian Folk Dances |
+| `collection.403` | Bartók - 10 Easy Pieces for Piano |
+| `collection.404` | Diabelli: Easy 4 Hands Pieces |
+| `collection.405` | 12 Easy Duets for Violin and Viola by Mozart |
+| `collection.406` | Felix Mendelssohn |
+| `collection.407` | Grieg's Lyric Pieces |
+| `collection.408` | Frédéric Chopin |
+| `collection.409` | J. S. Bach: Inventions |
+| `collection.410` | Wohlfahrt - Easy 4 Hands Pieces for Children |
+| `collection.412` | Camille Saint-Saëns |
+| `collection.413` | Halloween Spooky Pieces |
+| `collection.414` | Learn to read music |
+| `collection.415` | Fed up with sharps and flats |
+| `collection.416` | You've got the beat! |
+| `collection.419` | Scales, triads, arpeggios I |
+| `collection.420` | Chinese Musicians' Association Piano Exam, 2nd Edition, Level 1-5 – Pieces |
+| `collection.421` | Love, Love, Love |
+| `collection.422` | Celebrate the Chinese New Year |
+| `collection.423` | Let's Party ! |
+| `collection.423_copy` | Carnivals Around the World |
+| `collection.424` | Brahms Sonatas |
+| `collection.425` | J. S. Bach: Keyboard Concertos |
+| `collection.426` | J. S. Bach's Sonatas |
+| `collection.427` | The most beautiful waltzes |
+| `collection.428` | Pyotr Ilyich Tchaikovsky |
+| `collection.429` | Chinese Musicians' Association Piano Exam, 2nd Edition, Level 6-8 - Pieces |
+| `collection.430` | Advanced Piano Exercices |
+| `collection.431` | Johannes Brahms |
+| `collection.432` | Richard Wagner |
+| `collection.432_copy` | Richard Wagner |
+| `collection.433` | Brasil te amo |
+| `collection.434` | Tango Loco |
+| `collection.435` | Songs of America |
+| `collection.436` | Country Music |
+| `collection.437` | Mexican Folk Songs |
+| `collection.438` | Ragtime |
+| `collection.439` | A Common Chord Progression |
+| `collection.439.desc` | Playing piano is fun, even more so when you have a better understanding of what you are playing. In this workout we'll explore the most common chords of the major scale (I, IV and V). |
+| `collection.440` | At the heart of America |
+| `collection.441` | Learn to play J. S. Bach's Aria, BWV 515 |
+| `collection.441.desc` | You don't need to be a virtuoso to play Bach. Follow the steps to learn how to play the Aria, BWV 515 and wow all your friends! |
+| `collection.442` | Chords for Lords |
+| `collection.442.desc` | Learning to read and play chords will bring your piano playing to the next level! This workout contains exercises and pieces with increasing difficulty to help you improve your skill. Show us how far you can go! |
+| `collection.443` | First steps |
+| `collection.443.desc` | Even beginners can enjoy playing the piano. In this easy workout, we will practice very simple things before playing our first songs. |
+| `collection.444` | Hand Coordination |
+| `collection.444.desc` | Playing piano with both hands can be challenging, especially different notes or rhythms. This workout will help you improve your piano hand coordination and independence. |
+| `collection.445` | Mastering 3-beat patterns |
+| `collection.445.desc` | In this workout discover simple 3-beat pieces. With each step, the difficulty increases. Let's see how far you can go! |
+| `collection.446` | Daily Routine II |
+| `collection.446.desc` | This workout will help you warm up before playing. Following the steps you will alternate between triplets and eighth notes and finish with a little melody. |
+| `collection.447` | Daily Routine I |
+| `collection.447.desc` | Just like an athlete, you too, need to warm up before practicing! Follow these few steps and you will be well-prepared for playing. |
+| `collection.448` | Learn to play J. S. Bach's Minuet in G Major |
+| `collection.448.desc` | You don't need to be a virtuoso to play some of Bach's most famous pieces. Follow the steps to learn how to play the Minuet in G major. |
+| `collection.449` | Daily Routine III |
+| `collection.449.desc` | Just like an athlete, you too, need to warm up before practicing! Follow these few steps and you will be well-prepared for playing. |
+| `collection.450` | Daily Routine IV |
+| `collection.450.desc` | In this workout you will warm up your fingers using the pentatonic scale. 5 notes for 5 fingers, it's easy, but pay attention to the rhythms! |
+| `collection.451` | Edvard Grieg |
+| `collection.452` | Summer Music Festival |
+| `collection.453` | Become an Arpeggio pro |
+| `collection.454` | The Art of Articulation |
+| `collection.454.desc` | Legato, staccato, sforzando, marcato, tenuto... In music too, articulation is important! This is what will shape your music. In this workout you'll practice common articulations from the classical repertoire through famous musical themes. |
+| `collection.455` | A fun musical pattern: Call & Response |
+| `collection.456` | Have a break, have some quarter notes! |
+| `collection.456.desc` | In this workout, we focus on quarter notes. Try to sight-read all the excerpts! |
+| `collection.457` | Left Hand Accompaniment I |
+| `collection.458` | Left Hand Accompaniment II - Alberti Bass |
+| `collection.460` | Learn to play For Elise by Beethoven |
+| `collection.460.desc` | If you want to master one of the most famous piano pieces of all time, this workout is for you. We have broken down Beethoven's For Elise into easy-to-learn steps, so let's dive right into it! |
+| `collection.461` | Learn a small piece in A minor by Mozart |
+| `collection.462` | Learn to play Offenbach's famous Barcarolle |
+| `collection.462.desc` | If you want to master one of the most famous classical music pieces of all time, this workout is for you. We have broken down Offenbach's Barcarolle into easy-to-learn steps, so let's dive right into it! |
+| `collection.464` | Travel Around the World |
+| `collection.465` | Crazy Dynamics |
+| `collection.466` | CCOM Exercises |
+| `collection.467` | CCOM Pieces |
+| `collection.468` | Travelling in time |
+| `collection.469` | Germany, ich liebe dich |
+| `collection.470` | Childhood Memories |
+| `collection.471` | Thirds 1 |
+| `collection.472` | Thirds 2 |
+| `collection.473` | Thirds 3 |
+| `collection.473.desc` | In this course, the level increases a little, work the thirds with precision in major and minor. |
+| `collection.474` | Thirds 4 |
+| `collection.474.desc` | This course will challenge you to play thirds in a more complex way than previous courses. You will start with movement exercises, then you will work on each of the hands for coordination in constant movement. Finally, you will practice playing thirds in contrary movements. |
+| `collection.475` | Handel's Violin Sonatas |
+| `collection.476` | Mozart: Violin Concertos |
+| `collection.477` | Rieding: Violin Concertos |
+| `collection.478` | J. S. Bach: Violin Sonatas |
+| `collection.479` | César Franck: Violin Sonata |
+| `collection.480` | The Best Piano Concertos |
+| `collection.481` | J. S. Bach's Violin Concertos |
+| `collection.482` | J. S. Bach: Violin Sonatas and Partitas |
+| `collection.483` | Bridge: 4 Short Pieces for Violin and Piano |
+| `collection.484` | Dvořák: Romantic Pieces, Op.75 |
+| `collection.485` | Elgar: Six Very Easy Pieces, Op.22 |
+| `collection.486` | Fauré: Violin Sonata No.1, Op.13 |
+| `collection.487` | Händel: Sonate No.3, HWV 370 |
+| `collection.488` | Seitz: Student Concertos |
+| `collection.489` | J. S. Bach's Flute Sonatas |
+| `collection.490` | C. P. E. Bach's Flute Sonatas |
+| `collection.491` | Devienne: Flute Concerto No.7 |
+| `collection.492` | Philippe Gaubert |
+| `collection.493` | Gaubert: Flute Sonatas |
+| `collection.495` | Handel: Flute Sonatas |
+| `collection.497` | Reinecke : Flute Sonata "Undine" |
+| `collection.498` | Saint-Saëns: The Carnival of the Animals |
+| `collection.499` | Telemann : Flute Sonata in F Minor |
+| `collection.500` | Vivaldi: La tempesta di mare |
+| `collection.501` | Vivaldi: La notte |
+| `collection.502` | J. S. Bach: Cello Sonatas |
+| `collection.503` | J. S. Bach's Cello Suites |
+| `collection.504` | Bréval: Cello Concertino No.1, Op.14 |
+| `collection.505` | Bruch: 4 Pieces for Cello, Op.70 |
+| `collection.506` | Brahms' Cello Sonatas |
+| `collection.507` | Caix d'Hervelois: Cello Suite No.2 |
+| `collection.508` | Elgar: Cello Concerto, Op.85 |
+| `collection.509` | Haydn's Cello Concertos |
+| `collection.510` | Marcello: Cello Sonatas, Op.1 |
+| `collection.511` | Mendelssohn: Cello Sonata No.1, Op.45 |
+| `collection.512` | Saint-Saëns: Cello Concerto No.1, Op.33 |
+| `collection.513` | Schlemüller: 6 Easy Concert Pieces, Op.12 |
+| `collection.514` | Schubert: Arpeggione Sonata |
+| `collection.515` | Schumann: Fantasiestücke |
+| `collection.516` | Schumann: Five Pieces in Folk Style, Op.102 |
+| `collection.517` | Vivaldi's Cello Sonatas |
+| `collection.518` | Japanese Method: Violin School 1 |
+| `collection.519` | Japanese Method: Violin School 2 |
+| `collection.520` | Japanese Method: Violin School 3 |
+| `collection.521` | Japanese Method: Viola School 1 |
+| `collection.522` | Japanese Method: Viola School 2 |
+| `collection.523` | Japanese Method: Cello School 1 |
+| `collection.524` | Japanese Method: Cello School 2 |
+| `collection.525` | Japanese Method: Flute School 1 |
+| `collection.526` | Japanese Method: Double Bass School 1 |
+| `collection.527` | Japanese Method: Double Bass School 5 |
+| `collection.528` | Japanese Method: Guitar School 1 |
+| `collection.529` | J. S. Bach : Polonaises for Keyboard |
+| `collection.530` | J. S. Bach: Minuets |
+| `collection.531` | Beethoven: Ecossaises |
+| `collection.532` | Burgmüller: 25 Easy Studies |
+| `collection.533` | Chopin: Mazurkas |
+| `collection.534` | Chopin: Waltzes |
+| `collection.535` | Chopin: Preludes and Nocturnes |
+| `collection.536` | Satie: Gymnopédies |
+| `collection.537` | Mozart: Flute Concertos |
+| `collection.538` | The Nutcracker |
+| `collection.539` | Mozart: Piano Concertos |
+| `collection.540` | Clementi: Piano Sonatas |
+| `collection.541` | Beethoven: Sonatinas for Piano |
+| `collection.542` | Erik Satie |
+| `collection.543` | Weber's Concertos |
+| `collection.544` | Major scales 4 octaves |
+| `collection.545` | Harmonic minor scales 4 octaves |
+| `collection.546` | Thanksgiving Music |
+| `collection.547` | Japanese Method: Cello School 3 |
+| `collection.555` | Your Christmas Band |
+| `collection.556` | Joyful Christmas |
+| `collection.557` | Classical Christmas |
+| `collection.558` | Christmas Classics for Beginners |
+| `collection.560` | Cozy Christmas |
+| `collection.562` | Third Position |
+| `collection.562.desc` | This position can sometimes seem a little difficult to master, but with a little practice you can make it flow and feel natural, and that's what this course is all about! So, are you ready to take up the challenge of third position? Let's go ! |
+| `collection.563` | Feel the triple-time rhythm |
+| `collection.563.desc` | In this course, each step is a different piece but all are in 3 beats. Try to feel this rhythm and its pulsations through different musical aesthetics and different tempos. |
+| `collection.564` | Legato |
+| `collection.567.desc` | In this workout we focus on plucking the strings with the fingers of the right hand instead of using the bow, here are some examples. Try to complete all the steps of the workout, you will recognize famous themes of classical music there. |
+| `collection.568` | Learn to Play Pachelbel's Canon in D for Violin |
+| `collection.568.desc` | This is THE violinist's piece par excellence! You should be completely comfortable with each step before beginning the next. Up to you! |
+| `collection.569` | Yiruma |
+| `collection.570` | Amélie: Soundtrack |
+| `collection.571` | Celtic Music and Saint-Patrick's Day |
+| `collection.577` | Stevie Wonder |
+| `collection.578` | The Police |
+| `collection.579` | Alicia Keys |
+| `collection.581` | Chan Chan - Compay Segundo |
+| `collection.614` | Party Rock Anthem - LMFAO |
+| `collection.615` | I Will Survive - Gloria Gaynor |
+| `collection.616` | Somewhere Only We Know, Keane |
+| `collection.618` | Sweet Dreams (Are Made of This) |
+| `collection.619` | Amado mio by Pink Martini |
+| `collection.620` | Game of Thrones |
+| `collection.621` | Bob Marley |
+| `collection.622` | Vanessa Carlton |
+| `collection.623` | Maroon 5 |
+| `collection.624` | Lynyrd Skynyrd |
+| `collection.625` | Latin Songs |
+| `collection.626` | Soft Rock |
+| `collection.627` | Metallica |
+| `collection.628` | Blues |
+| `collection.629` | TV shows & movies soundtracks |
+| `collection.630` | Frank Sinatra |
+| `collection.631` | Ayọ: Down on My Knees |
+| `collection.632` | Bill Withers |
+| `collection.633` | Twisted Sisters: We're Not Gonna Take it |
+| `collection.634` | Brian McKnight: Back at One |
+| `collection.635` | Schumann: Violin Sonatas |
+| `collection.636` | Mozart: Violin Sonatas |
+| `collection.637` | Mozart: Piano Sonatas |
+| `collection.638` | Chopin: Mazurkas |
+| `collection.639` | Studies and exercises for piano |
+| `collection.640` | Bach: Suite No.2 in B Minor, BWV 1067 |
+| `collection.641` | Telemann: Flute Sonatas |
+| `collection.642` | Romantic Miniatures for Flute |
+| `collection.643` | Saint-Saëns: Clarinet Sonata, Op.167 |
+| `collection.644` | Gade: Fantasias, Op.43 |
+| `collection.645` | Lefèvre: Clarinet Sonata No.1 |
+| `collection.646` | Schumann: Fantasiestücke, Op.73 |
+| `collection.647` | Baermann: Clarinett-Schule, Op.63 |
+| `collection.648` | Schumann: 3 Romances, Op.94 |
+| `collection.649` | Vivaldi: Flute Sonata in C Major, RV 48 |
+| `collection.650` | Godard: Suite de trois morceaux, Op.116 |
+| `collection.651` | Mercadente: Flute Concerto |
+| `collection.652` | Gaubert: Flute Pieces |
+| `collection.653` | Nielsen: Flute Concerto |
+| `collection.654` | Quantz: Flute Concerto in G Major |
+| `collection.655` | Reinecke: Flute Sonata, Op.167 "Undine" |
+| `collection.656` | Taffanel: Andante pastoral and Scherzettino |
+| `collection.657` | Chopin: Cello Sonata, Op.65 |
+| `collection.659` | Dancla: Petite école de la mélodie, Op.123 |
+| `collection.660` | Dancla: 36 Etudes, Op.84 |
+| `collection.661` | Leo Portnoff: Violin Concertino, Op.13 |
+| `collection.662` | Mozart: Violin and viola duets |
+| `collection.663` | Bohm: Easy/Intermediate Pieces |
+| `collection.664` | Dandrieu: Violin Sonata, Op.3 No.2 |
+| `collection.665` | Schumann: Violin Sonata No.1, Op.105 |
+| `collection.666` | ABBA |
+| `collection.667` | Pixies |
+| `collection.668` | Harry Styles |
+| `collection.669` | Tchaikovsky: Memory of a Dear Place, Op.42 |
+| `collection.670` | Schumann: Kinderszenen, Op.15 |
+| `collection.672` | Debussy: Preludes |
+| `collection.673` | Bach: Keyboard Concerto No.3 in D major, BWV 1054 |
+| `collection.674` | Einaudi |
+| `collection.676` | Brazilian Music |
+| `collection.677` | Electro-Pop/Dance |
+| `collection.678` | Folk Music |
+| `collection.679` | Hard Rock |
+| `collection.680` | Soul Music |
+| `collection.681` | Franz Ferdinand |
+| `collection.682` | New wave |
+| `collection.683` | John Lennon: Imagine |
+| `collection.684` | David Bowie: Space Oddity |
+| `collection.685` | Wolfgang Amadeus Mozart |
+| `collection.686` | Antonio Vivaldi |
+| `collection.687` | Franz Schubert |
+| `collection.688` | Joseph Haydn |
+| `collection.689` | Georg Friedrich Händel |
+| `collection.690` | Maurice Ravel |
+| `collection.691` | Jazz Songs |
+| `collection.692` | Hard Rock |
+| `collection.693` | Traditionnal Music in Movies |
+| `collection.694` | Musicals |
+| `collection.695` | Pop Music |
+| `collection.698` | Viva Italia! |
+| `collection.699` | Russian Music |
+| `collection.700` | Viennese School |
+| `collection.701` | England Forever! |
+| `collection.702` | China |
+| `collection.703` | John Williams |
+| `collection.704` | Old School Jazz & Swing |
+| `collection.705` | Pop Music |
+| `collection.706` | Rock |
+| `collection.707` | Soul - R&B |
+| `collection.708` | Jazz |
+| `collection.709` | Suspense... |
+| `collection.710` | Lullabies |
+| `collection.711` | Bossa Nova |
+| `collection.712` | The Beauty of Sadness |
+| `collection.714` | Powerful Epic Music |
+| `collection.715` | Keep Passion Alive |
+| `collection.749` | Feel the Fear |
+| `collection.750` | SHCM exam |
+| `collection.751` | Mozart's Works at the Age of 8 |
+| `collection.752` | Imagine Dragons |
+| `collection.754` | Wednesday |
+| `collection.756` | Schumann: Dichterliebe |
+| `collection.757` | Concone: 50 Lessons in Singing, Op.9 |
+| `collection.758` | Concone: 30 Daily Exercises, Op.11 |
+| `collection.759` | Debussy: 2 Romances |
+| `collection.760` | Vaccai: Practical Vocal Method |
+| `collection.761` | Bel canto |
+| `collection.762` | Bizet: Carmen |
+| `collection.763` | Fauré: Songs |
+| `collection.764` | J. S. Bach: Famous Vocal Works |
+| `collection.765` | One string exercises (level 1) |
+| `collection.765.desc` | In this workout for beginners, the exercises are only performed on a single string in the A major scale. Try to complete all the steps successfully then move on to the one-string level 2 workout. |
+| `collection.766` | One string exercises (level 2) |
+| `collection.766.desc` | Here is the continuation of the exercise routine on one string. Do all these exercises and only move on to the next one if you really feel comfortable. Up to you! |
+| `collection.767` | D Major Daily Routine |
+| `collection.767.desc` | Working scales on violin is essential. To start on the instrument, it is important to practice slowly while deciphering with simple rhythms: one note on each beat. Here is an easy tour of the D major scale, one of the most used in the classical violin repertoire. |
+| `collection.768` | Vivaldi: Winter |
+| `collection.769` | Blackpink |
+| `collection.770` | Learn to play Schindler's List |
+| `collection.770.desc` | This piece full of emotions is considered one of the most beautiful compositions for this instrument. It should definitely be part of your repertoire! |
+| `collection.771` | French Songs |
+| `collection.772` | Learn to Play Amélie's Waltz |
+| `collection.772.desc` | Here is a swirling course to make you feel the 3 beats of the waltz on the violin. Try to complete all stages without getting dizzy! |
+| `collection.773` | Learn to Play Swan Lake |
+| `collection.773.desc` | Learn to play the most iconic moment from Tchaikovsky's Swan Lake. A staple of romantic music full of grace and power that everyone knows! |
+| `collection.774` | Learn to Play Elgar's Salut d'Amour |
+| `collection.774.desc` | Through this progressive and didactic course, learn this famous piece for violin full of lyricism. |
+| `collection.775` | Beethoven: Moonlight Sonata |
+| `collection.776` | Chopin: Polonaises |
+| `collection.777` | Albert Roussel: Joueurs de Flûte |
+| `collection.778` | J. S. Bach: Italian Concerto |
+| `collection.779` | Beethoven: Kreutzer Sonata |
+| `collection.780` | Beethoven: Tempest Sonata |
+| `collection.781` | Earth Day |
+| `collection.782` | Labour Day |
+| `collection.783` | Granados: Spanish Dances |
+| `collection.784` | The Well-Tempered Clavier |
+| `collection.785` | Marcello: Recorder Sonata in F Major |
+| `collection.786` | Debussy: Children's corner |
+| `collection.787` | Diabelli: Sonatinas for Piano Solo |
+| `collection.789` | Haydn: Keyboard Sonatas |
+| `collection.790` | Schumann: Album for the Young, Op.68 |
+| `collection.792` | Haendel: Recorder Sonatas |
+| `collection.793` | The Recorderist's Repertoire |
+| `collection.794` | Marcello: Recorder Sonata in F Major Op.2 No.1 |
+| `collection.795` | Telemann: Recorder Sonata in F Major |
+| `collection.796` | Trumpet Repertoire |
+| `collection.797` | Saxophone Repertoire |
+| `collection.798` | Viola Repertoire |
+| `collection.799` | Guitar Repertoire |
+| `collection.800` | French Horn Repertoire |
+| `collection.801` | Double Bass Repertoire |
+| `collection.802` | Trombone Repertoire |
+| `collection.803` | Oboe Repertoire |
+| `collection.804` | Tina Turner |
+| `collection.805` | Chopin: Preludes and Nocturnes |
+| `collection.806` | Satie: Gymnopédies |
+| `collection.807` | Telemann: Duets TWV 40:107 |
+| `collection.808` | Contest pieces |
+| `collection.809` | The Killers |
+| `collection.810` | Andrew Lloyd Webber |
+| `collection.811` | Dua Lipa |
+| `collection.812` | Céline Dion |
+| `collection.813` | Keane |
+| `collection.814` | Indie rock |
+| `collection.815` | Classic Rock |
+| `collection.816` | Pop rock |
+| `collection.817` | Folk rock |
+| `collection.819` | Béla Bartók |
+| `collection.820` | Maurice Ravel |
+| `collection.821` | Bon Jovi |
+| `collection.822` | Back to School! |
+| `collection.823` | Mendelssohn: Songs Without Words |
+| `collection.824` | Mika |
+| `collection.825` | Pop divas |
+| `collection.826` | Küchler: Violin Concertos |
+| `collection.827` | The most beautiful French melodies |
+| `collection.828` | Schubert: Impromptus |
+| `collection.829` | Vivaldi: Autumn |
+| `collection.830` | Japanese Method: Viola School 3 |
+| `collection.831` | Japanese Method: Viola School 4 |
+| `collection.832` | Japanese Method: Viola School 5 |
+| `collection.833` | MGMT |
+| `collection.834` | L'Arlésienne |
+| `collection.835` | Avril Lavigne |
+| `collection.836` | Linkin Park |
+| `collection.837` | Billy Joel |
+| `collection.838` | Simon and Garfunkel |
+| `collection.839` | Ravel: Ma mère l'Oye |
+| `collection.840` | Gabriel Fauré |
+| `collection.841` | Fauré: Dolly Suite |
+| `collection.842` | Brahms: Hungarian Dances |
+| `collection.843` | Kuhlau: Piano sonatinas |
+| `collection.844` | Beethoven: Sonata Pathétique |
+| `collection.845` | Hurlstone: 4 Characteristic Pieces |
+| `collection.846` | Brahms: Klavierstücke, Intermezzos |
+| `collection.847` | Chopin: Waltzes |
+| `collection.848` | Chopin: Studies for piano |
+| `collection.849` | Swan Lake |
+| `collection.850` | 4-Hands piano |
+| `collection.851` | Scott Joplin |
+| `collection.852` | Antonín Dvořák |
+| `collection.853` | Christmas carols |
+| `collection.854` | Marais: Five old French dances |
+| `collection.855` | Weber: Clarinet Concerto No.2 in E♭ Major |
+| `collection.856` | Bréval: Cello Concerto No.2 in D Major Op.17 |
+| `collection.857` | Cimarosa: Keyboard Sonatas |
+| `collection.858` | Weber's Concertos |
+| `collection.859` | Domenico Scarlatti: Keyboard Sonatas |
+| `collection.860` | Sergei Rachmaninoff |
+| `collection.861` | Romberg: Cello sonata No.4 in E minor |
+| `collection.862` | Bizet: Jeux d'enfants |
+| `collection.863` | Georges Bizet |
+| `collection.864` | Giacomo Puccini |
+| `collection.865` | Composers to Celebrate in 2024 |
+| `collection.866` | Tchaikovsky: The seasons |
+| `collection.867` | Clarinet Concerto in A Major |
+| `collection.868` | The Marriage of Figaro |
+| `collection.869` | Mozart's Operas |
+| `collection.870` | Vivaldi: Violin Concerto No. 6 in A Minor |
+| `collection.871` | Cello Sonata in G Minor |
+| `collection.872` | Blavet: Sonata in D Minor 'La Vibray' |
+| `collection.873` | Telemann: Sonata for Bassoon in E♭ Major |
+| `collection.874` | Bassoon Concerto in E♭ Major |
+| `collection.875` | Wieniawski: Violin Concerto No.2 in D minor |
+| `collection.876` | Japanese Method: Piano |
+| `collection.877` | Cello Sonata in G Minor |
+| `collection.878` | Tchaikovsky: Violin Concerto in D Major |
+| `collection.879` | Galliard: Cello Sonata No. 3 in F Major |
+| `collection.880` | Elgar: Deux chansons, Op.15 |
+| `collection.881` | Grovlez: Lament and Tarantella |
+| `collection.882` | Weissenborn: Concert Pieces, Op. 9 |
+| `collection.883` | Weissenborn: 5 Little Pieces |
+| `collection.884` | Schumann : Myrthen op.25 |
+| `collection.885` | Vivaldi: The Violin Concertos |
+| `collection.886` | Verdi: La Traviata |
+| `collection.887` | Sitt: Concertino for Violin in A Minor |
+| `collection.888` | Lalo: The Mother and the Child |
+| `collection.889` | Bridge: Cello Sonata in E Minor, H.125 |
+| `collection.890` | Stamitz: Clarinet Concerto No. 3 in B♭ Major |
+| `collection.891` | Wohlfahrt: Violin Method op.38 |
+| `collection.892` | Partita for Keyboard in B-flat Major, BWV 825 |
+| `collection.893` | Japanese Method: Cello School 4 |
+| `collection.894` | Japanese Method: Cello School 5 |
+| `collection.895` | Japanese Method: Cello School 6 |
+| `collection.896` | Japanese Method: Cello School 7 |
+| `collection.897` | Japanese Method: Cello School 8 |
+| `collection.898` | Japanese Method: Cello School 9 |
+| `collection.899` | Japanese Method: Flute School 2 |
+| `collection.900` | Japanese Method: Flute School 3 |
+| `collection.901` | Japanese Method: Flute School 4 |
+| `collection.902` | Japanese Method: Flute School 5 |
+| `collection.903` | Japanese Method: Flute School 6 |
+| `collection.904` | Japanese Method: Flute School 9 |
+| `collection.905` | Japanese Method: Flute School 11 |
+| `collection.906` | Japanese Method: Viola School 6 |
+| `collection.907` | Telemann: Concerto for Viola in G Major |
+| `collection.908` | Poulenc: Clarinet sonata |
+| `collection.909` | Beethoven: Violin Sonata "Spring" |
+| `collection.910` | Piano Sonata No. 20 in G Major |
+| `collection.911` | Beethoven: Piano Sonata No. 19 in G Minor |
+| `collection.912` | J. S. Bach: Sinfonias for Keyboard |
+| `collection.913` | Studies and exercises for violin |
+| `collection.914` | Bohemian Music |
+| `collection.915` | J. S. Bach: Suite in G Major, BWV 822 |
+| `collection.916` | J. S. Bach: French Suites |
+| `collection.917` | Bartók: For Children |
+| `collection.918` | Handel: Suites |
+| `collection.920` | Pieces for Virtuosos |
+| `collection.921` | Vivaldi: Flute Concerto No. 3 in D Major, RV 428 |
+| `collection.922` | Wedding selection |
+| `collection.923` | Boehme: Concerto for Trumpet in E minor |
+| `collection.924` | Ravel: 5 Greek folk songs |
+| `collection.925` | Hahn: 7 Lullabies |
+| `collection.926` | Mozart: Don Giovanni |
+| `collection.927` | Mozart: Così fan tutte |
+| `collection.928` | Beethoven: Famous Sonatas |
+| `collection.929` | Bel canto |
+| `collection.930` | Japanese Method: Double Bass School 2 |
+| `collection.931` | Japanese Method: Viola School 7 |
+| `collection.932` | Japanese Method: Viola School 8 |
+| `collection.933` | Anatomy of a Fall |
+| `collection.934` | Sir Edward Elgar |
+| `collection.935` | Carl Maria von Weber |
+| `collection.936` | Japanese Method: Double Bass School 3 & 4 |
+| `collection.937` | Clarinet Concerto in B-flat Major |
+| `collection.938` | Cannes magic awaits! |
+| `collection.939` | Debussy: Cello Sonata |
+| `collection.940` | Best Symphonic themes |
+| `collection.941` | Learn to play River Flow in You by Yiruma |
+| `collection.941.desc` | Learn River Flows in You by Yiruma. A popular and moving piece, ideal for enhancing your expressiveness on the piano. Its melodic simplicity makes it an excellent choice for beginners. |
+| `collection.943` | Sor : Études |
+| `collection.944` | Vivaldi: Guitar Concerto, RV 93 |
+| `collection.945` | Sor: Exercises |
+| `collection.946` | Mussorgsky: Pictures at an Exhibition |
+| `collection.947` | J.S. Bach: Double Violin Concerto in D minor, BWV 1043 |
+| `collection.948` | Learn to Play Clair de Lune by Debussy |
+| `collection.948.desc` | Immerse yourself in Debussy's enchanting universe with a very simple learning journey of the main theme from the famous piece Clair de Lune. This emblematic piece offers a musical experience rich in emotions. |
+| `collection.949` | Learn to play Amélie by Yann Tiersen |
+| `collection.950` | Celebrate International Dance Day |
+| `collection.951` | Learn to play Experience by Einaudi |
+| `collection.951.desc` | In this journey, we will focus on mastering expressive hand play, working on control of dynamics and fluidity of transitions. Get ready to dive into a captivating musical journey, where each note resonates with a unique emotional depth. |
+| `collection.952` | Godowsky: Miniatures |
+| `collection.953` | Metronaut China Competition |
+| `collection.954` | Schubert: Die schöne Müllerin |
+| `collection.955` | Puccini's Operas |
+| `collection.956` | Viola Concerto in C Minor in the Style of J.C. Bach |
+| `collection.957` | Pepusch: Viola sonata in D minor |
+| `collection.959` | Rachmaninoff: 6 Pieces, Op.11 |
+| `collection.960` | Schumann: Pictures from the East, Op.66 |
+| `collection.961` | Wolf: Goethe Songs |
+| `collection.992` | Giuseppe Verdi |
+| `collection.daily.desc.generic` | Just like an athlete, you too, need to warm up before practicing! Follow these few steps and you will be well-prepared for playing. |
+| `collection.formatting.4marriages` | Four Weddings and a Funeral – {full_piece_title} |
+| `collection.formatting.Anatomy` | Anatomy of a Fall – {full_piece_title} |
+| `collection.formatting.Aseriousman` | A Serious Man – {full_piece_title} |
+| `collection.formatting.Bridgetjones` | Bridget Jones's Diary – {full_piece_title} |
+| `collection.formatting.discours` | The King's Speech – {full_piece_title} |
+| `collection.formatting.ElephantMan` | Elephant Man – {full_piece_title} |
+| `collection.formatting.emma` | Emma – {full_piece_title} |
+| `collection.formatting.EyesWideShut` | Eyes Wide Shut – {full_piece_title} |
+| `collection.formatting.fabelmans` | The Fabelmans - Concerto in D Minor: II. Adagio |
+| `collection.formatting.FatalAttraction` | Fatal Attraction – {full_piece_title} |
+| `collection.formatting.fightclub` | Fight Club – {full_piece_title} |
+| `collection.formatting.gilda` | Gilda – {full_piece_title} |
+| `collection.formatting.Habanera` | Pixar's Up - {full_piece_title} |
+| `collection.formatting.Hopscotch` | Hopscotch |
+| `collection.formatting.intouchables` | The Intouchables – {full_piece_title} |
+| `collection.formatting.JohnWickParabellum` | John Wick: Parabellum – {full_piece_title} |
+| `collection.formatting.joker` | Joker – {full_piece_title} |
+| `collection.formatting.kingsman` | Kingsman – {full_piece_title} |
+| `collection.formatting.lacasadepapel` | Money Heist – {full_piece_title} |
+| `collection.formatting.LeParrain` | The Godfather – {full_piece_title} |
+| `collection.formatting.Leprocès` | The Trial – {full_piece_title} |
+| `collection.formatting.MatrixRevolutions` | Matrix - Moonlight Sonata |
+| `collection.formatting.Obrother` | O Brother – {full_piece_title} |
+| `collection.formatting.Orange` | A Clockwork Orange – {full_piece_title} |
+| `collection.formatting.practiceHelper.oneHand1` | A Major scale |
+| `collection.formatting.Pretty Woman` | Pretty Woman – {full_piece_title} |
+| `collection.formatting.Se7en` | Se7en – {full_piece_title} |
+| `collection.formatting.tangobar` | True Lies – {full_piece_title} |
+| `collection.formatting.Thegraduate` | The Graduate – {full_piece_title} |
+| `collection.formatting.TheShawshankRedemption` | The Shawshank Redemption – {full_piece_title} |
+| `collection.formatting.Thetreeoflife` | The Tree of Life – {full_piece_title} |
+| `collection.formatting.trainwreck` | Trainwreck – {full_piece_title} |
+| `collection.formatting.twilight` | Twilight – {full_piece_title} |
+| `collection.formatting.Up` | Up – {full_piece_title} |
+| `collection.formatting.Witches` | The Witches of Eastwick – {full_piece_title} |
+| `collection.opusSection` | Theme Collections |
+| `collection.suzuki` | Japanese Method: {instrument} School {number} |
+| `collection.usersfavorite` | Our Users' Favorites |
+
+<a id="p-crm"></a>
+### crm (388)
+
+| key | value |
+|---|---|
+| `crm.aiTempoAndroid.mail.title2` | Wait |
+| `crm.aiTempoAndroid.mail.title3` | AI Tempo |
+| `crm.china.0110.push.body` | Metronaut team wish you a happy National day. |
+| `crm.china.0110.push.title` | Wish China thriving prosperity 🇨🇳! |
+| `crm.Christmas.Campaign.Push.relance.body` | Last day to get 50% off Premium subscription for our special offer! |
+| `crm.christmascollection.body` | And to cheer up further, check out our expanded Christmas Collection crafted for every instrument and level! Discover your favorite Carols Collection and spread the Christmas spirit around you! |
+| `crm.collection.421` | Love, Love, Love |
+| `crm.crm_push.igor.jose` | 🎉 Surprise! New piece for you on Metronaut : (title), (composer) 🎶 |
+| `crm.crm_push1` | New : Listen and play the incredible "(title)" on Metronaut |
+| `crm.crm_push2` | New : Listen and play "(title)" by (composer) on Metronaut |
+| `crm.crm_push3` | We added "(title)" for you in the catalog! Let’s play! |
+| `crm.crm_push4` | "(title)" by (composer) is now available on Metronaut for you! Let's play? |
+| `crm.crm_push5` | 🎶 New music sheet: (title), (composer) |
+| `crm.crm_push6` | Recommended Music Sheet for you: (title), (composer) 🎶 |
+| `crm.crm_push6_copy` | 🎶 New music sheet: Discover "(title)" by (composer) on Metronaut! |
+| `crm.crm_push7` | Try our Christmas Music Catalog: Discover "(title), (composer)" 🎄 |
+| `crm.crm_push8` | 🎻 New Orchestra Version 🎻 Play Vivaldi's "Spring" on Metronaut! |
+| `crm.email.Christmasday.text.body` | For our community, there is always music but also joyful moments to cheer up even in toughest times (and what tough year!). Merry Christmas Everyone!<br><br>And don’t miss out our Very Special 50% Discount Expiring on January 4th. |
+| `crm.free.benefits.annotation` | Annotation and print features for every score |
+| `crm.free.benefits.feedbacks` | Real time feedbacks on your performance to improve |
+| `crm.free.benefits.MusicScores` | More than 12 000 Music Sheets with Accompaniment |
+| `crm.free.benefits.tempo` | Accompaniment at the tempo of your choice |
+| `crm.happynewyear.body` | 2020 is over, phew... that was a lot. The Metronaut Team wishes you all the best for 2021! Let's celebrate this brand-new year with a special collection and a selection of the greatest concertos. |
+| `crm.happynewyear.title` | Let's celebrate 2021 with our greatest concertos! |
+| `crm.iam.0110.cta` | Get the offer |
+| `crm.iam.0110.description` | Go Premium now and enjoy your personal practice companion! |
+| `crm.iam.0110.title1` | Fall offer |
+| `crm.iam.0110.title2` | 11 days to get 25% off Metronaut Premium! |
+| `crm.iam.02.25.cta` |  |
+| `crm.iam.02.25.description` |  |
+| `crm.iam.02.25.title1` |  |
+| `crm.iam.02.25.title2` |  |
+| `crm.iam.02.35.cta` |  |
+| `crm.iam.02.35.description` |  |
+| `crm.iam.02.35.title1` |  |
+| `crm.iam.02.35.title2` |  |
+| `crm.iam.02.premium.cta` |  |
+| `crm.iam.02.premium.description` |  |
+| `crm.iam.02.premium.title1` |  |
+| `crm.iam.02.premium.title2` |  |
+| `crm.iam.0312.cta` | Let’s go! |
+| `crm.iam.0312.description` | Get into the Christmas spirit with our Christmas Selection: carols, extracts from the Nutcracker, ballet pieces and more! |
+| `crm.iam.0312.title1` | Christmas collections |
+| `crm.iam.0312.title2` | Get into the Christmas spirit! 🎄 |
+| `crm.iam.0511.china.cta` | See offer |
+| `crm.iam.0511.china.description` | Enjoy 8000+ interactive scores with Metronaut Premium! |
+| `crm.iam.0511.china.title1` | Double 11 Offer |
+| `crm.iam.0511.china.title2` | Save 50% off Premium until 11/12! |
+| `crm.iam.0511.cta` | Play the Piece |
+| `crm.iam.0511.description` | Rediscover Casta Diva on the occasion of Bellini’s birthday. |
+| `crm.iam.0511.title1` | Bellini collection |
+| `crm.iam.0511.title2` | Play Norma’s divine love |
+| `crm.iam.0711.china.cta` | See offer |
+| `crm.iam.0711.china.description` | Enjoy 8000+ interactive scores with Metronaut Premium! |
+| `crm.iam.0711.china.title1` | Double 11 Offer |
+| `crm.iam.0711.china.title2` | Save 35% off Premium until 11/13! |
+| `crm.iam.0810.cta` | Get the offer |
+| `crm.iam.0810.description` | Save 25% and get full access to 9000+ interactive music sheets with high quality backing tracks! |
+| `crm.iam.0810.title1` | Fall offer |
+| `crm.iam.0810.title2` | 4 days left to get 25% off Metronaut Premium! |
+| `crm.iam.0904.subtitle` | Enjoy unlimited access to more than 8,000 interactive scores for all instruments and all levels |
+| `crm.iam.0904.title1` | Earth Day is approaching |
+| `crm.iam.0904.title25` | Save 70% off Metronaut Premium to celebrate with music! |
+| `crm.iam.0904.title50` | Save 80% off Metronaut Premium to celebrate with music!  |
+| `crm.iam.1012.cta` | Discover collection |
+| `crm.iam.1012.description` | Put some rhythm in your winter with a selection of tango pieces for your instrument and level! |
+| `crm.iam.1012.title1` | Special collection |
+| `crm.iam.1012.title2` | A tango before Christmas? |
+| `crm.iam.1604.title1` | Hurry up! |
+| `crm.iam.1712.25.description` | Last Chance to enjoy 25% off to become Premium! Hurry up the offer will expire on December 31st. |
+| `crm.iam.1712.25.title2` | Enjoy our Christmas Offer: -25%! |
+| `crm.iam.1712.50.description` | Last Chance to enjoy 35% off to become Premium! Hurry up the offer will expire on December 31st. |
+| `crm.iam.1712.50.title2` | Enjoy our Christmas Offer: -35%! |
+| `crm.iam.1712.cta` | See offer |
+| `crm.iam.1712.title1` | Our gift for you 🎁 |
+| `crm.iam.1911.cta` | Get the offer |
+| `crm.iam.1911.description` | Become Premium and play your favorite pieces with your personal orchestra! |
+| `crm.iam.1911.title1` | Black Friday Limited Offer |
+| `crm.iam.1911.title2` | Enjoy this year's best offer: -50%! |
+| `crm.iam.2304.title` | Flash Offer |
+| `crm.iam.2409.cta` | Go to collection |
+| `crm.iam.2409.description` | Try out a selection of tango pieces available for your instrument. |
+| `crm.iam.2409.title1` | New Collection |
+| `crm.iam.2409.title2` | Enjoy the best of tango |
+| `crm.iam.2412.25.description` | Get a 25% discount on Metronaut Premium and delight your loved ones with your music for Christmas! |
+| `crm.iam.2412.25.title2` | Quick, get your gift! |
+| `crm.iam.2412.50.description` | Get a 35% discount on Metronaut Premium and delight your loved ones with your music for Christmas! |
+| `crm.iam.2412.50.title2` | Quick, get your gift! |
+| `crm.iam.2412.cta` | See offer |
+| `crm.iam.2412.title1` | Christmas offer |
+| `crm.iam.2611.cta` | Get Offer |
+| `crm.iam.2611.description` | Enjoy the best offer of the year to unlock thousands of play along music sheets and all Premium performance features! |
+| `crm.iam.2611.title1` | Black Friday Mega Offer 🔥 |
+| `crm.iam.2611.title2` | 50% off Metronaut Premium |
+| `crm.iam.3112.25.description` | Christmas is not over yet: Get 25% off Metronaut Premium and unlock thousands of music sheets! Hurry up, the offer expires on January 3rd! |
+| `crm.iam.3112.25.title2` | Extended Offer! |
+| `crm.iam.3112.50.description` | Christmas is not over yet: Get 35% off Metronaut Premium and unlock thousands of music sheets! Hurry up, the offer expires on January 4th! |
+| `crm.iam.3112.50.title2` | Extended Offer! |
+| `crm.iam.3112.cta` | See offer |
+| `crm.iam.3112.title1` | Christmas offer |
+| `crm.iam.chineseNewYear.20.description` | Get a 20% discount on Metronaut Premium and celebrate the Chinese New Year with Metronaut! |
+| `crm.iam.chineseNewYear.20.title2` | Enjoy our Special Offer: -20%! |
+| `crm.iam.chineseNewYear.25.description` | Get a 25% discount on Metronaut Premium and celebrate the Chinese New Year with Metronaut! |
+| `crm.iam.chineseNewYear.25.title2` | Enjoy our Special Offer: -25%! |
+| `crm.iam.chineseNewYear.35.description` | Get a 35% discount on Metronaut Premium and celebrate the Chinese New Year with Metronaut! |
+| `crm.iam.chineseNewYear.35.title2` | Enjoy our Special Offer: -35%! |
+| `crm.iam.chineseNewYear.cta` | See offer |
+| `crm.iam.chineseNewYear.title1` | Chinese New Year Offer |
+| `crm.iam.examPieces.body` | The first book of Chinese Musicians' Association Piano Exam, including pieces and exercises, is now available in two brand-new collections. Check them out with our AI coaching features! |
+| `crm.iam.examPieces.CCOM.body` | The piano exam repertoire (Level 1-4) of the Central Conservatory of Music is now available! Check them out and see how many levels you can play! |
+| `crm.iam.examPieces.cta` | Discover collection |
+| `crm.iam.examPieces.title1` | Brand New Collection |
+| `crm.iam.examPieces.title2` | Prepare your exams with us! |
+| `crm.iam.force_update.description` | Please update in the App Store to continue using the Metronaut. |
+| `crm.iam.halloween_body` | Yes, Halloween is here. We are here to make your Halloween spooky with creepy and dark melodies. Check out our special Halloween collection with music pieces that make us quiver with fear... |
+| `crm.iam.halloween.title` | Boo! |
+| `crm.iam.maintenance_end.cta` | Update Now |
+| `crm.iam.maintenance_end.description` | We just finished the maintenance of our server. Thank you for your patience, please update in the App Store to continue using the Metronaut. &lt;br /><br>We are sorry for any inconvenience. We will make sure this will never happen again. &lt;br /><br>We are working on the compensation plan and will inform you as soon as possible. &lt;br /><br>If you have any questions, please keep in touch with us. |
+| `crm.iam.maintenance_end.title1` | Please update |
+| `crm.iam.maintenance.description` | In order to provide a better user experience, our server is currently under maintenance, sorry for the inconvenience to your practice. |
+| `crm.iam.maintenance.title1` | Under Maintenance |
+| `crm.iam.spring.body` | Enjoy unlimited access to more than 8,000 interactive scores for all instruments and all levels |
+| `crm.iam.spring.cta` | Get the offer |
+| `crm.iam.spring.title1` | It's already Spring on Metronaut! |
+| `crm.iam.spring.title2` | 50% off Premium until 03/28 to celebrate Spring with music! |
+| `crm.iam.survey.description` | Let us know what you think about the new Practice tab! It will only take 2 minutes. |
+| `crm.newsletter.0110.bodyCollection` | A rocking chair, a ranch and a highway crossing the fields: this is the mood our team suggests you this week with our new collection. With country music, blues and even negro spirituals, use your instrument to ride across the sunny plains of America! Open Metronaut and play your favorite pieces with prerecorded accompaniment and many more options that will make your practice easier. Take a spiritual break with the &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=2054">Deep River&lt;/a> blues, or motivate yourself with the lively &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=2056">Yankee Doodle&lt;/a>: the floor is yours! |
+| `crm.newsletter.0110.preheader` | Play country music, blues and gospel with Metronaut. |
+| `crm.newsletter.0110.premium.preheader` | Discover our new collection dedicated to country music, blues and gospel. |
+| `crm.newsletter.0110.premium.subject` | Cross America in music! 🚙 |
+| `crm.newsletter.0110.push.body` | And unlock our new collection to cross America in music! 🚙 |
+| `crm.newsletter.0110.push.premium.body` | Discover our new collection dedicated to country music, blues and gospel 🎸🪕 |
+| `crm.newsletter.0110.push.premium.title` | Discover our new collection |
+| `crm.newsletter.0110.push.title` | Get 25% off until October 12th! |
+| `crm.newsletter.0110.subject` | Get 25% off Metronaut Premium! |
+| `crm.newsletter.0110.titleCollection` | Blues or country music? 🎸🪕 |
+| `crm.newsletter.02.25.offer.body` |  |
+| `crm.newsletter.02.25.offer.subtitle` |  |
+| `crm.newsletter.02.25.preheader` |  |
+| `crm.newsletter.02.25.push.body` |  |
+| `crm.newsletter.02.25.push.title` |  |
+| `crm.newsletter.02.25.subject` |  |
+| `crm.newsletter.02.35.offer.body` |  |
+| `crm.newsletter.02.35.offer.subtitle` |  |
+| `crm.newsletter.02.35.preheader` |  |
+| `crm.newsletter.02.35.push.body` |  |
+| `crm.newsletter.02.35.push.title` |  |
+| `crm.newsletter.02.35.subject` |  |
+| `crm.newsletter.02.bodyCollection` |  |
+| `crm.newsletter.02.ctaOffer` | See offer |
+| `crm.newsletter.02.premium.preheader` |  |
+| `crm.newsletter.02.premium.push.body` |  |
+| `crm.newsletter.02.premium.push.title` |  |
+| `crm.newsletter.02.premium.subject` |  |
+| `crm.newsletter.02.titleCollection` |  |
+| `crm.newsletter.0312.bodyCollections` | Would you find the secret that makes Christmas magical to kids and grown-ups? Music, of course! As the holidays get closer, create every opportunity for joy with Metronaut, your music partner. Discover our Christmas Selection with collections for every mood! Start with some Christmas carols, then play the Nutcracker to share Tchaikovsky’s winter glitter and finally explore some ballet pieces, to make your Christmas most gracious. Play music with us to make this month unique!&nbsp;⛄️ |
+| `crm.newsletter.0312.preheader` | Get prepared for a glittery December with Metronaut! |
+| `crm.newsletter.0312.push.body` | Discover the new Christmas Selection with collections for every mood. |
+| `crm.newsletter.0312.push.title` | 🎄✨🎼 Get into the Christmas Spirit! |
+| `crm.newsletter.0312.subject` | 🎄✨🎼 Get into the Christmas Spirit! |
+| `crm.newsletter.0312.titleCollections` | Ready for some Christmas Magic? 🎅 |
+| `crm.newsletter.0406.push.body` | Become Premium to enjoy access to 4000+ interactive music sheets. |
+| `crm.newsletter.0406.push.premium.body` | Play Scenes from Childhood, his piano concerto and more… |
+| `crm.newsletter.0406.push.premium.title` | Celebrate Schumann’s Birthday 🎉 |
+| `crm.newsletter.0406.push.title` | Last Chance to save 50% ⏰ |
+| `crm.newsletter.0511.bodyPiece` | As the strings gently rise in arpeggios, the soprano’s voice emerges and takes you to a Gallic moonlight: this is &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=983">Casta Diva&lt;/a>. This famous piece comes from Bellini’s opera &lt;i>Norma&lt;/i>, which tells the story of a Gallic priestess facing a dilemma between divine, carnal and maternal love. This aria, a prodigy of calm and purity, has become such a symbol of Italian opera that it has been represented even on banknotes. This week on Metronaut, it’s your turn to play this masterpiece accompanied by an Orchestra, whatever your instrument or level! Ready for the spiritual uplift? |
+| `crm.newsletter.0511.china.push.body` | Save 50% and get full access to 4000+ interactive music sheets! |
+| `crm.newsletter.0511.china.push.title` | Metronaut Double 11 is here! |
+| `crm.newsletter.0511.preheader` | Find Casta Diva and other opera masterpieces on Metronaut! |
+| `crm.newsletter.0511.push.body` | Find Casta Diva and other opera masterpieces on Metronaut! |
+| `crm.newsletter.0511.push.title` | Meet the Gallic goddess 👸 |
+| `crm.newsletter.0511.subject` | Play Norma’s divine love with an Orchestra 🎻 |
+| `crm.newsletter.0511.titlePiece` | Play Norma’s divine love |
+| `crm.newsletter.0608.push.body` | Get access to the full catalog and discover our summer selection, with works that will set you on fire. 🔥 |
+| `crm.newsletter.0608.push.premium.body` | Don't let your instrument sit in a corner and pick up dust: Enjoy this perfect time to get inspired and play something fun! |
+| `crm.newsletter.0608.push.premium.title` | Keep practicing this Summer ☀️ |
+| `crm.newsletter.0608.push.title` | Only 4 days left to get 25% off! 💼 |
+| `crm.newsletter.0705.push.12Month.body` | Save 80% off of Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.0705.push.china.body` | Save 50% off of Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.0705.push.premium.body` | Play Hungarian Dance, Celebrated Waltz, Lullaby and many others! |
+| `crm.newsletter.0705.push.premium.title` | Celebrate Brahms’ Birthday 🎉 |
+| `crm.newsletter.0705.push.title` | Special Offer 🎁 |
+| `crm.newsletter.0705.push.Yearly.body` | Save 50% off of Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.0711.china.push.body` | Save 35% and get full access to 8000+ interactive music sheets! |
+| `crm.newsletter.0711.china.push.title` | Metronaut Double 11 is here! |
+| `crm.newsletter.0810.bodyCollection` | As leaves fall and clouds darken, what about diving into Camille Saint-Saëns’ dreamlike universe? He was the first renowned composer to ever write film music and his works are marked with extraordinary imagination. Remember the xylophone mimicking the sound of bones clinking together in &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1796">Danse Macabre&lt;/a>, or the shimmering, gracious melody in &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=687">The Swan&lt;/a>? On the occasion of the composer’s 186th birthday on October 9th, find many of his scores with accompaniment on Metronaut.<br>And if you're still in the mood to get spooked after playing &lt;i>Danse Macabre&lt;/i>, explore our &lt;a href="https://link.metronaut.app/?$deep_link=true&collectionID=413">Halloween collection&lt;/a> ! |
+| `crm.newsletter.0810.preheader` | Go Premium and unlock our new collection about the French composer. |
+| `crm.newsletter.0810.premium.preheader` | On the occasion of the composer’s birthday, Metronaut selected some of his works for you! |
+| `crm.newsletter.0810.premium.subject` | Make some Saint-Saëns of your life |
+| `crm.newsletter.0810.push.body` | Go Premium and unlock our new Saint-Saëns collection! |
+| `crm.newsletter.0810.push.premium.body` | Discover Metronaut’s selection on the occasion of the composer’s birthday. |
+| `crm.newsletter.0810.push.premium.title` | Make some Saint-Saëns of your life |
+| `crm.newsletter.0810.push.title` | Enjoy 25% off and live Saint-Saëns’ fantasy! 🕯 |
+| `crm.newsletter.0810.subject` | 4 days left to get 25% off and play the best of Saint-Saëns! |
+| `crm.newsletter.0810.titleCollection` | Light up October with Saint-Saëns! 🕯 |
+| `crm.newsletter.1012.bodyCollection` | A seductive pace, a feverish energy and a powerful sorrow, what’s not to like in tango?&nbsp;👠 On the occasion of the International Tango Day, Metronaut team prepared a collection for you. Enjoy performing them no matter which instrument you play! Our accompaniments will take you to twirling Argentina&nbsp;🕺 and follow your own tempo. Get prepared for &lt;em>&lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1943">El Choclo&lt;/a>&lt;/em>'s delicious acidity, or for the repertoire's most gracious triplets in &lt;em>&lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1748">Por Una Cabeza&lt;/a>&lt;/em>. A spicy Christmas lies ahead!&nbsp;🌶🥂 |
+| `crm.newsletter.1012.preheader` | Por Una Cabeza, El Choclo, and many other classics are waiting for you! |
+| `crm.newsletter.1012.push.body` | Por Una Cabeza, El Choclo, and many other classics are waiting for you! |
+| `crm.newsletter.1012.push.title` | 🎄 Ignite Christmas with some tango! 🔥 |
+| `crm.newsletter.1012.subject` | 🔥🎄 Ignite Christmas with some tango! 💃 |
+| `crm.newsletter.1012.titleCollection` | Unleash your flame! |
+| `crm.newsletter.1106.bodyCollection` | Have you ever woken up with Edvard Grieg’s sweet Morning Mood? Or unwound after a tough workday with the massive Hall of the Great Mountain King? On the occasion of his birthday, we invite you to dive into the colorful universe of the Norwegian composer, who was born on June 15th, 1843. From fiddle allegros to vast symphonic tableaus, explore how Grieg was capable of describing every mood with music. Try and smell the burgeoning leaves with To Spring, or make your relatives dance on Norwegian tunes with his Folk Song ! |
+| `crm.newsletter.1106.preheader` | As he is about to complete his 178th birthday, dive into the Norwegian genius’ colorful universe. |
+| `crm.newsletter.1106.push.body` | Let Grieg enchant you with our collection on the occasion of the composer's birthday. |
+| `crm.newsletter.1106.push.title` | Play the Far North! |
+| `crm.newsletter.1106.subject` | This week, celebrate Grieg! 🎉 |
+| `crm.newsletter.1106.titleCollection` | With Grieg’s birthday, celebrate the fun and frolic of Norway! |
+| `crm.newsletter.1308.push.body` | Want to feel like in Vienna this week? Strauss’ iconic Beautiful Blue Danube waltz is waiting for you! |
+| `crm.newsletter.1308.push.title` | A city, a river, an empire |
+| `crm.newsletter.1405.push.12Month.title` | Last Chance to save 80% 🔥 |
+| `crm.newsletter.1405.push.body` | Become Premium to enjoy access to 4000+ interactive music sheets. |
+| `crm.newsletter.1405.push.premium.body` | Embark on an exciting journey to the lands of ragtime, anthems, pop melodies and much more! |
+| `crm.newsletter.1405.push.premium.title` | Let’s take you on a trip 🛫 |
+| `crm.newsletter.1405.push.Yearly.title` | Last Chance to save 50% 🔥 |
+| `crm.newsletter.1604.iam.china.title` | Last 2 days for 75% discount! |
+| `crm.newsletter.1604.push.25.title` | Last 2 days for 70% discount 🔥 |
+| `crm.newsletter.1604.push.50.title` | Last 2 days for 80% discount 🔥 |
+| `crm.newsletter.1604.push.body` | Become Premium to enjoy access to 4000+ interactive music sheets. |
+| `crm.newsletter.1604.push.china.title` | Last 2 days for 75% discount 🔥 |
+| `crm.newsletter.1604.push.premium.body` | Our digital music sheets like you’ve never seen before: full-screen experience, new scroll setting available… |
+| `crm.newsletter.1604.push.premium.title` | Discover our latest version 👀 |
+| `crm.newsletter.1706.subject` | Make Music Day: 25% off Metronaut Premium! 💃 |
+| `crm.newsletter.1712.25.offer.body` | Your gift is ready! 🎁 Get a 25% discount on Metronaut Premium and delight your loved ones for Christmas! ⏳ Don’t delay, the offer is available until December 31st only! |
+| `crm.newsletter.1712.25.offer.subtitle` | 🎅 Get 25% off for Christmas! |
+| `crm.newsletter.1712.25.offer.title` | Last Chance to enjoy 25% off to become Premium! Hurry up the offer will expire on December 31st. |
+| `crm.newsletter.1712.25.push.body` | Save 25% and get full access to our 7000+ titles catalog until December 31st! |
+| `crm.newsletter.1712.25.push.title` | 🎅 Your Christmas gift? 25% off Metronaut Premium! |
+| `crm.newsletter.1712.25.subject` | 🎅 Your Christmas gift? 🎁 25% off Metronaut Premium! |
+| `crm.newsletter.1712.35.offer.title` | Last Chance to enjoy 35% off to become Premium! Hurry up the offer will expire on December 31st. |
+| `crm.newsletter.1712.50.offer.body` | Your gift is ready! 🎁 Get a 50% discount on Metronaut Premium and delight your loved ones for Christmas! ⏳ Don’t delay, the offer is available until December 31st only! |
+| `crm.newsletter.1712.50.offer.subtitle` | 🎅 Get 50% off for Christmas! |
+| `crm.newsletter.1712.50.preheader` | Save 35% and get full access to our 5000+ titles catalog until December 31st! |
+| `crm.newsletter.1712.50.push.body` | Save 35% and get full access to our 5000+ titles catalog until December 31st! |
+| `crm.newsletter.1712.50.push.title` | 🎅 Your Christmas gift? 🎁 35% off Metronaut Premium! |
+| `crm.newsletter.1712.50.subject` | 🎅 Your Christmas gift? 🎁 35% off Metronaut Premium! |
+| `crm.newsletter.1712.bodyCollections` | Family, lights and presents! 🎁 Wouldn’t it be even nicer with you playing Christmas music? Play it for yourself, or prepare for the great upcoming family show 👨‍👩‍👧‍👦: Find your next masterpiece among Metronaut's 7000+ score catalog! Use our Christmas collections to play &lt;i>&lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1063">Jingle Bells&lt;/a>&lt;/i><br> or &lt;i>&lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1062">Silent Night&lt;/a>&lt;/i>, or even classical ballet pieces conveying the Christmas magic, as the &lt;i>&lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1142">Dance of the Sugar Plum Fairy&lt;/a>&lt;/i> from the &lt;i>&lt;a href="https://catalog.metronaut.app/admin/core/collection/538/change/">Nutcracker!&lt;/a>&lt;/i> Make it sound, make it swirl, make it twinkle! ✨ |
+| `crm.newsletter.1712.ctaOffer` | I want it! |
+| `crm.newsletter.1712.premium.preheader` | Discover our Christmas collections and enchant your home with twinkling melodies! |
+| `crm.newsletter.1712.premium.push.body` | Discover our Christmas Selection: Pieces for every level and mood! |
+| `crm.newsletter.1712.premium.push.title` | 🎅 Get music to sparkle 🍾 : Christmas is coming! |
+| `crm.newsletter.1712.premium.subject` | 🎅 Get music to sparkle 🍾 : Christmas is coming! |
+| `crm.newsletter.1712.titleCollections` | Make it twinkle! |
+| `crm.newsletter.1806.push.body` | Get unlimited access to our catalog on the occasion of Make Music Day. |
+| `crm.newsletter.1806.push.china.body` | Save 25% off Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.1806.push.china.Monthly.body` | Upgrade to our annual plan with a 25% discount! |
+| `crm.newsletter.1806.push.china.title` | Celebrate 618 with music 🎁🎶 |
+| `crm.newsletter.1806.push.premium.body` | Discover our selection of festive works to enjoy yourself on Make Music Day. |
+| `crm.newsletter.1806.push.premium.title` | This week, be the one who makes music! 🕺 |
+| `crm.newsletter.1806.push.premiumMonthly.body` | Upgrade to our annual plan with a 25% discount! |
+| `crm.newsletter.1806.push.premiumMonthly.title` | Enjoy our Make Music Day Offer 💃 |
+| `crm.newsletter.1806.push.title` | Make Music Day: 25% off Metronaut Premium! 💃 |
+| `crm.newsletter.1911.50.offer.body` | Become Premium to play all your favorite pieces with your personal digital accompanist! Hurry up the offer is only available until November 30th. |
+| `crm.newsletter.1911.50.offer.subtitle` | Year’s Best Offer: Save 50% |
+| `crm.newsletter.1911.50.preheader` | Enjoy the best offer of the year and discover 5000+ play along music sheets! |
+| `crm.newsletter.1911.50.push.body` | Enjoy the best offer of the year and discover 5000+ play along music sheets! |
+| `crm.newsletter.1911.50.push.title` | Black Friday Offer: 50% off ⚡️ |
+| `crm.newsletter.1911.50.subject` | ⚡️ Enjoy our Black Friday 50% offer and get into the Thanksgiving spirit! |
+| `crm.newsletter.1911.bodyCollection` | Isn’t the picture of the steaming Thanksgiving turkey famous worldwide? 🍗   A symbol of American tradition, Thanksgiving celebrates the harvest and the hope of stable prosperity. Whatever your nationality, Metronaut makes you discover this picture by yourself with interactive scores of American songs. Whichever your instrument, perform the military song &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=2056">Yankee Doodle&lt;/a>  🥁 with a folk accompaniment, whisper &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1064">Amazing Grace&lt;/a>  ⛪️ with a soft piano leading you or even &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1716">Home Sweet Home&lt;/a> 🏠 above an orchestra! |
+| `crm.newsletter.1911.ctaOffer` | Get the offer |
+| `crm.newsletter.1911.offer.title` | Black Friday Limited Offer |
+| `crm.newsletter.1911.premium.preheader` | Play American Traditionals with your own accompanist! |
+| `crm.newsletter.1911.premium.subject` | Get into the Thanksgiving Spirit! 🦃🇺🇸 |
+| `crm.newsletter.1911.push.premium.body` | Play American Traditionals with your own accompanist! |
+| `crm.newsletter.1911.push.premium.title` | Get into the Thanksgiving Spirit 🦃🇺🇸 |
+| `crm.newsletter.1911.titleCollection` | Live an American Holiday! |
+| `crm.newsletter.2008.push.body` | Get access to the full catalog to pay vibrant tribute to Debussy. |
+| `crm.newsletter.2008.push.premium.body` | Pay tribute to the French composer on the occasion of his birthday. From Clair de Lune to Rêverie, immerse yourself in his most famous works! |
+| `crm.newsletter.2008.push.premium.title` | Let Debussy enchant you ! |
+| `crm.newsletter.2008.push.title` | Enjoy 25% off and daydream with Debussy! |
+| `crm.newsletter.2304.25.subtitle` | Only 3 days to save 25% off Premium |
+| `crm.newsletter.2304.70.subtitle` | Only 3 days to save 70% off Premium |
+| `crm.newsletter.2304.push.25.body` | Save 25% off Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.2304.push.70.body` | Save 70% off Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.2304.push.china.body` | Save 75% off Metronaut Premium and become the musician you dream of being. |
+| `crm.newsletter.2304.push.premium.body` | Recreate the magic of the 7th art at home with our selection of the most beautiful classical pieces featured on the big screen! |
+| `crm.newsletter.2304.push.premium.title` | And the Oscar goes to… You 🎬 |
+| `crm.newsletter.2304.push.title` | Flash Offer⚡️ Hurry up! |
+| `crm.newsletter.2403.Spring.push.body` | 25% off Premium until 03/28 to celebrate Spring with music! |
+| `crm.newsletter.2409.bodyCollection` | Who never dreamed of mastering such an elegant and seductive dance? Both refined and brutal, tango conveys intense feelings with inimitable spontaneity. To be able to play some on your own instrument, discover Metronaut’s collection with the best of tango transcribed for almost every instrument. Enjoy interactive scores of your favorite pieces, from Gardel’s mythical &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1748">Por una cabeza&lt;/a> to Villoldo’s melancholic &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1943">El Choclo&lt;/a>, and play it with prerecorded accompaniment at the tempo you like! Ready to ignite the dance floor? |
+| `crm.newsletter.2409.preheader` | Discover the best of the famous Argentinian dance in Metronaut. |
+| `crm.newsletter.2409.push.body` | From Por una Cabeza to El Choclo, find the best of tango on Metronaut! |
+| `crm.newsletter.2409.push.title` | Fancy a tango? 💃 |
+| `crm.newsletter.2409.subject` | Fancy a tango? 💃 |
+| `crm.newsletter.2409.titleCollection` | Let tango blaze in you 🔥 |
+| `crm.newsletter.2412.25.offer.body` | Play concertos, arias or songs with an orchestra! With our 5000+ scores catalog and our smart practice assistance functions, make the stage at a hand’s reach at a discounted price! |
+| `crm.newsletter.2412.25.offer.subtitle` | 🎅 6 days to get 25% off! |
+| `crm.newsletter.2412.25.preheader` | Go Premium to enjoy thousands of scores and all our practice features! |
+| `crm.newsletter.2412.25.push.body` | Go Premium to enjoy thousands of scores and all our practice features! |
+| `crm.newsletter.2412.25.push.title` | 🎅 Only few days left to get 25% off!⏳ |
+| `crm.newsletter.2412.25.subject` | 🎅 Only few days left to get 25% off and play your Christmas favorites! ⏳ |
+| `crm.newsletter.2412.50.offer.body` | Play concertos, arias and songs with an orchestra! With our 5000+ scores catalog and our smart practice assistance functions, make the stage at a hand’s reach at a discounted price! |
+| `crm.newsletter.2412.50.offer.subtitle` | 🎅 6 days to get 50% off! |
+| `crm.newsletter.2412.50.preheader` | Go Premium to enjoy thousands of scores and all our practice features! |
+| `crm.newsletter.2412.50.push.body` | Go Premium to enjoy thousands of scores and all our practice features! |
+| `crm.newsletter.2412.50.push.title` | 🎅 Only few days left to get 35% off!⏳ |
+| `crm.newsletter.2412.50.subject` | 🎅 Only few days left to get 35% off and play your Christmas favorites! ⏳ |
+| `crm.newsletter.2412.bodyCollections` | Hey you! Wherever you are, the Metronaut team wishes you the most delightful Christmas.&nbsp;✨ You cultivate the joy of playing an instrument, and we thank you for that. In exchange, we thrive to provide the most varied catalog of scores, the best accompaniments and the smartest features to guide your practice. If you’d like to try it with Christmassy classical pieces and songs, find our dedicated collections here ⬇️ |
+| `crm.newsletter.2412.ctaOffer` | See offer |
+| `crm.newsletter.2412.offer.title` | Christmas offer |
+| `crm.newsletter.2412.premium.preheader` | With our Christmas collections, fill your home with music for the holidays! |
+| `crm.newsletter.2412.premium.push.body` | With our Christmas collections, fill your home with music for the holidays! |
+| `crm.newsletter.2412.premium.push.title` | 🎅 Play Christmas pieces with an orchestra! |
+| `crm.newsletter.2412.premium.subject` | 🎅 Play Christmas Hits classics with an orchestra! |
+| `crm.newsletter.2412.titleCollections` | You are our Christmas magic! |
+| `crm.newsletter.2506.push.body` | With unlimited access to our catalogue, play all the pieces you’ve always dreamed of. |
+| `crm.newsletter.2506.push.bodyV2` | Only 4 days left: snag our special offer and keep playing music all year! |
+| `crm.newsletter.2506.push.premium.body` | Taste the joy of playing under the sun with our dedicated collections. |
+| `crm.newsletter.2506.push.premium.title` | Put some music in your summer! |
+| `crm.newsletter.2506.push.premiumMonthly.body` | Only 4 days left: snag our special offer and keep playing music all year! |
+| `crm.newsletter.2506.push.premiumMonthly.title` | Get 25% off on a yearly subscription |
+| `crm.newsletter.2506.push.title` | Get 25% off and spend your summer in music! |
+| `crm.newsletter.2506.push.titleV2` | Get 25% off on a yearly subscription |
+| `crm.newsletter.2611.25.offer.body` | test |
+| `crm.newsletter.2611.25.offer.subtitle` | test |
+| `crm.newsletter.2611.25.preheader` | test |
+| `crm.newsletter.2611.25.push.body` |  |
+| `crm.newsletter.2611.25.push.title` | test |
+| `crm.newsletter.2611.25.subject` | test |
+| `crm.newsletter.2611.50.offer.body` | &lt;ul><br>&lt;li>Unlock thousands of &lt;strong>play along music sheets&lt;/strong>&lt;/li><br><br><br>&lt;li>Play &lt;strong>classical hits, blues, tango, Celtic music&lt;/strong> and more&lt;/li><br><br><br>&lt;li>&lt;strong>Adapt the accompaniment tempo&lt;/strong> to your performance&lt;/li><br><br><br>&lt;li>&lt;strong>Annotate and print&lt;/strong> all music sheets&lt;/li><br><br><br>&lt;li>&lt;strong>Record and share&lt;/strong> your best performances&lt;/li>&lt;/ul> |
+| `crm.newsletter.2611.50.offer.subtitle` | Get 50% off Metronaut Premium for Black Friday! |
+| `crm.newsletter.2611.50.preheader` | Best Offer of the Year, only until November 30th |
+| `crm.newsletter.2611.50.push.body` | Enjoy the best offer of the year: 50% off Metronaut Premium! |
+| `crm.newsletter.2611.50.push.title` | 🔥 Black Friday Mega Promo: Last Day ⏳ |
+| `crm.newsletter.2611.50.subject` | 🔥 Black Friday Mega Promo: 4 days left! ⏳ |
+| `crm.newsletter.2611.ctaOffer` | Get Offer |
+| `crm.newsletter.2611.offer.title` | Enjoy 50% off to become Premium, hurry up the offer will expire on November 30th! |
+| `crm.newsletter.2708.push.body` | Get access to the full catalog and discover our practice tips! |
+| `crm.newsletter.2708.push.premium.body` | Get back to good practice habits after a deserved summer break! |
+| `crm.newsletter.2708.push.premium.title` | This fall, play music with your digital partner! |
+| `crm.newsletter.2708.push.title` | Enjoy 25% off and get back smoothly to your instrument! |
+| `crm.newsletter.2804.push.title` | Only few days left to get 25% off!⏳ |
+| `crm.newsletter.3004.push.body` | Play Tchaikovsky’s most beautiful pieces, including his iconic ballets, to celebrate International Dance Day! |
+| `crm.newsletter.3004.push.title` | Dance with Tchaikovsky🕺 |
+| `crm.newsletter.3007.push.body` | Enjoy discounted access to our full catalog, including our Music on the big screen collection! |
+| `crm.newsletter.3007.push.premium.body` | With the Music on the big screen collection, live the adventures of your favorite heroes through music! |
+| `crm.newsletter.3007.push.premium.title` | Light, camera, action! 🎥 |
+| `crm.newsletter.3007.push.title` | Only 12 days to enjoy 25% off 🎁 |
+| `crm.newsletter.3112.25.offer.body` | Christmas is not over yet: Get 25% off Metronaut Premium and unlock thousands of music sheets! Hurry up, the offer expires on January 3rd! |
+| `crm.newsletter.3112.25.offer.subtitle` | 🔥 4 days left to get 25% off |
+| `crm.newsletter.3112.25.preheader` | 4 more days to get 25% off Metronaut Premium and unlock all pieces. |
+| `crm.newsletter.3112.25.push.body` | 4 more days to get 25% off Premium and unlock all pieces. |
+| `crm.newsletter.3112.25.push.title` | Exceptional extended offer 🕐 |
+| `crm.newsletter.3112.25.subject` | Exceptional offer extension 🕐 4 more days to enjoy 25% off! |
+| `crm.newsletter.3112.50.offer.body` | Christmas is not over yet: Get 35% off Metronaut Premium and unlock thousands of music sheets! Hurry up, the offer expires on January 4th! |
+| `crm.newsletter.3112.50.offer.subtitle` | 🔥 4 days left to get 35% off |
+| `crm.newsletter.3112.50.preheader` | 4 more days to get 35% off Metronaut Premium and unlock all pieces. |
+| `crm.newsletter.3112.50.push.body` | 4 more days to get 35% off Metronaut Premium and unlock all pieces. |
+| `crm.newsletter.3112.50.push.title` | Exceptional extended offer 🕐 |
+| `crm.newsletter.3112.50.subject` | Exceptional offer extension 🕐 4 more days to enjoy 35% off! |
+| `crm.newsletter.3112.bodyCollections` | What better way to start the year than with some ballet? Let our collection take you somewhere else, to the fantastic world of dance, where all human movements are united in a beautiful choreography. Discover Metronaut’s ballet collection and enjoy the privilege of playing &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1142">The Nutcracker&lt;/a><br>or &lt;a href="https://link.metronaut.app/?$deep_link=true&amp;pieceID=1864">Swan Lake&lt;/a> accompanied by an entire orchestra that follows your tempo! Ready to give your own New Year concert? |
+| `crm.newsletter.3112.ctaOffer` | See offer |
+| `crm.newsletter.3112.offer.title` | Christmas offer |
+| `crm.newsletter.3112.premium.preheader` | Start the year with beautiful stories with our ballet collection! |
+| `crm.newsletter.3112.premium.push.body` | Start the year with beautiful stories with our ballet collection! |
+| `crm.newsletter.3112.premium.push.title` | Make this year a dance!🕺 |
+| `crm.newsletter.3112.premium.subject` | Make this year a dance! 🕺 |
+| `crm.newsletter.3112.titleCollections` | Start the year with dance!🕺 |
+| `crm.newsletter.chineseNewYear.25.push.body` | Save 25% and get full access to our 5000+ titles catalog until February 8th! |
+| `crm.newsletter.chineseNewYear.25.push.title` | 🇨🇳 Happy Chinese New Year! 🎉 25% off Metronaut Premium! |
+| `crm.newsletter.chineseNewYear.35.push.body` | Save 35% and get full access to our 5000+ titles catalog until February 8th! |
+| `crm.newsletter.chineseNewYear.35.push.title` | 🇨🇳 Happy Chinese New Year! 🎉 35% off Metronaut Premium! |
+| `crm.newsletter.christmasCard.body` | Let your loved ones share their deepest feelings through music: offer them one year of Metronaut for Christmas! Make them discover the experience of a musical digital partner: Playing with accompaniments recorded by professional musicians, taking control of the tempo, annotating, printing, recording themselves and much more! |
+| `crm.newsletter.christmasCard.cta` | Offer Metronaut |
+| `crm.newsletter.christmasCard.title` | Offer your loved ones a year of Metronaut! ✨🎼 |
+| `crm.newsletter.ctaCollections` | Let’s discover! |
+| `crm.nouvelleperformance.body2` | Are you feeling as eager as us to celebrate Christmas? Well, lucky you, our Santa Klaus already has a gift for you: Your favorite Carols Collection to help you wait for Christmas Eve, which is approaching fast! So start training if you want to shine in front of your loved ones! |
+| `crm.nouvelleperformance.title2` | Let's get musical! |
+| `crm.perf.body` | Metronaut’s performing screen had a makeover! (Re)discover it, simple and refined, yet effective as always to support your practice.<br><br><br><br><br>Thanks to all your feedback and our beta tester community (thank you!), the performing screen is evolving to ease your practice:<br><br><br><br><br>&lt;ul><br>&lt;li>With the new &lt;strong>Listen&lt;/strong> button you'll be able to hear your part and the accompaniment with just one tap&lt;/li><br>&lt;li>The &lt;strong>accompaniment tempo customization&lt;/strong> is becoming simpler and clearer: choose your speed, the adaptation level to your performance and whether you’d like feedback or not&lt;/li><br>&lt;li>Your favorite tools like &lt;strong>metronome and loop&lt;/strong> are still available  in just one tap and are joined by the &lt;strong>choice of hand to play&lt;/strong> for pianists&lt;/li><br><br><br>You can learn more about the new performing screen in our dedicated article &lt;a a data-msys-clicktrack="0" href="https://community.metronautapp.com/hc/fr/articles/360002662792">here&lt;/a> |
+| `crm.perf.cta` | Discover on Metronaut |
+| `crm.perf.preheader` | A new design for your performing screen: simple, refined and ideal for your practice. |
+| `crm.perf.push.body` | Enjoy your practice thanks to the new design of your performing screen! |
+| `crm.perf.push.title` | Discover your new digital music sheet 🔥 |
+| `crm.perf.subject` | Metronaut's Digital Music Sheet had a makeover! 👀 |
+| `crm.perf.title` | Discover your new digital music sheet! |
+| `crm.premium.benefits.catalogue` | Take advantage of a catalog adapted to your instrument which continues to expand each week |
+| `crm.premium.benefits.favorites` | Print, annotate, share your recordings and become the musician you dream of being! |
+| `crm.premium.benefits.performance` | Progress with different features that accompany you at each stage of the learning progress |
+| `crm.promo.spring.discount.cta` | Save 20% |
+| `crm.promo.spring.iam.paragraph` | Take advantage of our spring offer to unlock thousands of accompanied scores and all Premium features! |
+| `crm.push.halloween_body` | Check out our special Halloween collection with music pieces that make us quiver with fear... |
+| `crm.reminder.push` | ⏰ Only 2 days left to enjoy your free trial period! Let's play? |
+| `crm.subscriptionoffer2.title` | Renew your trial period for free! |
+| `crm.teacher.surveylink` | https://jae0zxmbxad.typeform.com/to/z8RRzGvh |
+| `crm.teacherSurvey.link` | https://jae0zxmbxad.typeform.com/to/z8RRzGvh |
+| `crm.thanksgiving.mail.subject` | Get into the Thanksgiving Spirit 🦃🇺🇸 |
+| `crm.tutoriel.push` |  |
+| `crm.welcome.video.cta` | Watch Video |
+| `crm.welcome.video.title` | Discover your practice companion in 2 minutes |
+
+<a id="p-practice"></a>
+### practice (286)
+
+| key | value |
+|---|---|
+| `practice.4notesGroups` | 4-note groups |
+| `practice.5notesGroups` | 5-note groups |
+| `practice.amélie1` | Melody - Right Hand |
+| `practice.amélie2` | Melody - Left Hand |
+| `practice.amélie3` | Melody - hands together |
+| `practice.amélie4` | Repeat - right hand |
+| `practice.amélie5` | Repeat - Left hand |
+| `practice.amélie6` | Repeat - Hands together |
+| `practice.amélie7` | Whole piece - both hands |
+| `practice.canon1` | Main Theme |
+| `practice.canon2` | Continuation of the theme |
+| `practice.canon3` | Counterpoint of the theme |
+| `practice.canon4` | Counterpoint in sixteenth notes |
+| `practice.canon5` | Theme in sixteenth notes |
+| `practice.canon6` | Blend in with the orchestra |
+| `practice.canon7` | Role reversal |
+| `practice.canon8` | Slow Tempo |
+| `practice.canon9` | Full piece |
+| `practice.chords.1` | Etude - Right |
+| `practice.chords.2` | Left |
+| `practice.chords.3` | Etude - Right |
+| `practice.chords.4` | Arabesque - Left |
+| `practice.chords.6` | Tchaikovsky's Morning Prayer - Left |
+| `practice.chords.7` | Tchaikovsky's Morning Prayer - Right |
+| `practice.chords.8` | Tchaikovsky's Morning Prayer - Both |
+| `practice.clairdelune1` | Theme - First Part - Right Hand |
+| `practice.clairdelune10` | Entire excerpt - hands together |
+| `practice.clairdelune2` | Theme - First Part - Left Hand |
+| `practice.clairdelune3` | Theme - First Part - Hands Together |
+| `practice.clairdelune4` | Theme - second part - right hand |
+| `practice.clairdelune5` | Theme - second part - left hand |
+| `practice.clairdelune6` | Theme - second part - hands together |
+| `practice.clairdelune7` | Conclusion - right hand |
+| `practice.clairdelune8` | Conclusion - left hand |
+| `practice.clairdelune9` | Conclusion - hands together |
+| `practice.Dviolin1` | D Major Scale |
+| `practice.Dviolin2` | Octave jumps |
+| `practice.Dviolin3` | Scale and octaves. |
+| `practice.Dviolin4` | First Part Melody |
+| `practice.Dviolincorrection4` | Little melody in D |
+| `practice.Dviolinextra` | Modulation to the subdominant key |
+| `practice.eighthNotesWarmUp` | Eighth Notes Warm-up |
+| `practice.experience1` | Theme - right hand |
+| `practice.experience2` | Arpeggios - Left hand |
+| `practice.experience3` | Right Hand Theme - Left Hand Arpeggios |
+| `practice.GMajorViolin5` | Little conclusive melody |
+| `practice.GMajorViolin6` | Complete Melody in D Major |
+| `practice.GMajorViolinadded` |  |
+| `practice.marreDesCroches.1` | Easy study - Part 1 |
+| `practice.onestring1` | A Major scale |
+| `practice.onestring10` | Descent and ascent of thirds as joint notes |
+| `practice.onestring11` | Thirds, fourths and fifths |
+| `practice.onestring12` | Mix of intervals below the fifth |
+| `practice.onestring13` | All exercises in a row |
+| `practice.onestring2` | Second interval |
+| `practice.onestring3` | Descending interval |
+| `practice.onestring4` | Alternative seconds, thirds and fourths |
+| `practice.onestring5` | Repeating is the key to success |
+| `practice.onestring6` | All in a row! |
+| `practice.onestring7` | Accuracy of your fingers |
+| `practice.onestring8` | From the 2nd to the 5th |
+| `practice.onestring9` | Between A and E |
+| `practice.performance.again.button` | Restart |
+| `practice.performance.end.button` | End workout |
+| `practice.performance.full.button` | Exit to Open the Full Piece |
+| `practice.performance.instructions.button` | Instructions |
+| `practice.performance.listen.button` | Listen |
+| `practice.performance.next.button` | Next step |
+| `practice.performance.steps` | Steps |
+| `practice.popup.navigation.next` | Next |
+| `practice.popup.navigation.previous` | Previous |
+| `practice.river.1` | Introduction - Right hand |
+| `practice.river.10` | Melody of the second theme |
+| `practice.river.11` | Accompaniment of the second theme |
+| `practice.river.12` | Second theme - hands together |
+| `practice.river.13` | End of piece |
+| `practice.river.14` | Full piece |
+| `practice.river.2` | Introduction - Left Hand |
+| `practice.river.3` | Introduction - Hands Together |
+| `practice.river.4` | Main Theme Melody |
+| `practice.river.5` | Accompaniment of the main theme |
+| `practice.river.6` | Main Theme - Hands Together |
+| `practice.river.7` | Bridge to the Second Theme - Right Hand |
+| `practice.river.8` | Bridge to the second theme - Left hand |
+| `practice.river.9` | Bridge - hands together |
+| `practice.salutdamour1` | Work the position |
+| `practice.salutdamour10` | Full piece |
+| `practice.salutdamour2` | Working with nuances |
+| `practice.salutdamour3` | Faster |
+| `practice.salutdamour4` | Central part |
+| `practice.salutdamour5` | Central part - Expression |
+| `practice.salutdamour6` | Role reversal |
+| `practice.salutdamour7` | At the heart of expressiveness |
+| `practice.salutdamour8` | Tempo changes |
+| `practice.salutdamour9` | Accompany the piano |
+| `practice.schindler1` | Work on accuracy |
+| `practice.schindler2` | Open strings |
+| `practice.schindler3` | Join the Notes |
+| `practice.schindler4` | First Part Melody |
+| `practice.schindler5` | More vibrato and emotion |
+| `practice.schindler6` | Return of the theme |
+| `practice.schindler7` | Very softly |
+| `practice.schindler8` | Full piece |
+| `practice.section.excerpts` | Skill Focus |
+| `practice.section.excerpts.subtitle` | Develop new music skills while playing famous piece extracts. |
+| `practice.section.exercices` | Daily Routine |
+| `practice.section.exercices.subtitle` | Accompanied exercises to learn the basics and warm up. |
+| `practice.section.pieceLearning` | Learning a Piece |
+| `practice.section.pieceLearning.subtitle` | Apply your technique by learning these famous pieces. |
+| `practice.step.advancement` | Step {{stepNumber}}/{{totalSteps}} |
+| `practice.step.again.cta` | Play again |
+| `practice.step.complete.title` | Step Complete! |
+| `practice.step.end` | End |
+| `practice.step.fail.cta` | Play again |
+| `practice.step.fail.subtitle` | Score above %u%% to validate this step. |
+| `practice.step.fail.title` | Almost there! |
+| `practice.step.navigation` | Step {{stepNumber}} |
+| `practice.step.next.cta` | Next step |
+| `practice.step.score` | Score |
+| `practice.step.skip.cta` | Skip |
+| `practice.step.start.cta` | Start Step |
+| `practice.step.trainingMode.cta` | Switch to Training Mode |
+| `practice.step.tryAgain.cta` | Try again |
+| `practice.swanlake1` | Theme - Slow Version |
+| `practice.swanlake2` | Continuation of the theme |
+| `practice.swanlake3` | Theme at the octave |
+| `practice.swanlake4` | Expressiveness |
+| `practice.swanlake5` | Quarter note triplets |
+| `practice.swanlake6` | More power! |
+| `practice.swanlake7` | Full piece |
+| `practice.tip.1Flat` | While playing, don't forget that the key signature has a flat. |
+| `practice.tip.accompanimentHelp` | Listen carefully to the accompaniment to stay on tempo. |
+| `practice.tip.alberti.2` | Play the left hand only. Follow the fingerings on the score. |
+| `practice.tip.amélie1` | Play only the right hand. The measures are in 3/4 time, press "play" and the count will give you the tempo. There are only white keys, so no accidentals. |
+| `practice.tip.amélie2` | Now play the left hand of this same passage. Metronaut plays the other hand and gives you the starting cue for the first two measures, be ready! |
+| `practice.tip.amélie3` | Press "Play" and play both hands together. You start alone with the right hand on measures 1 and 2. |
+| `practice.tip.amélie4` | Play the right hand of this second part which is similar to the first one. The rhythm is slightly different. Follow the fingerings carefully. |
+| `practice.tip.amélie5` | Same passage but left hand this time. Respect the nuances. |
+| `practice.tip.amélie6` | Now play both hands together. |
+| `practice.tip.amélie7` | Press "Play" and play the entire piece, hands together. |
+| `practice.tip.articulation` | Focus on your articulation during this exercise. |
+| `practice.tip.bothHands` | Now, play both hands together. |
+| `practice.tip.canon0` | We are in D major. After the introduction, play the famous theme consisting of conjoined notes. |
+| `practice.tip.chords.1` | Play the right hand only. Follow the fingerings on the score. |
+| `practice.tip.chords.2` | Play the left hand only. You can tap any note to see how to play it on the keyboard on the bottom of the score. |
+| `practice.tip.chords.3` | Let's try something a little harder! Play the right hand only. It may help to carefully listen to the excerpt before playing. |
+| `practice.tip.chords.4` | Play the left hand only. |
+| `practice.tip.chords.5` | While playing, don't forget that the key signature has a flat. The tempo is slowed down. |
+| `practice.tip.chords.6` | Let's end this workout by learning a piece in 3 steps. Left Hand first: Watch out for the fingerings and accidentals. It may help to carefully listen to the excerpt before playing. |
+| `practice.tip.chords.7` | Same thing with the right hand. |
+| `practice.tip.chords.8` | Last step! Now, play both hands together. |
+| `practice.tip.clairdelune1` | Play the right hand, Metronaut will play the left hand. |
+| `practice.tip.clairdelune10` | Play the entire excerpt hands together, following the fingerings, and without the metronome this time. Slow down at the end of the excerpt to emphasize the cadence. |
+| `practice.tip.clairdelune2` | Now play the left hand starting in G clef. Watch out for the G♯ in measure 3. |
+| `practice.tip.clairdelune3` | Play hands together. Be sure to hold the notes when they are tied. |
+| `practice.tip.clairdelune4` | Jouez la main droite. Attention ça commence sur un silence. Suivez les doigtés |
+| `practice.tip.clairdelune5` | Now play the left hand. We start in treble clef and switch to bass clef after 3 measures: the bass line descends in stepwise motion on the keyboard. |
+| `practice.tip.clairdelune6` | Play hands together following the fingerings. |
+| `practice.tip.clairdelune7` | Play the right hand following the fingerings. It's the concluding melody of the excerpt, ending on a C major chord. |
+| `practice.tip.clairdelune8` | Play the left hand starting alone. Make sure to connect the notes well and follow the fingerings. |
+| `practice.tip.clairdelune9` | Play this passage with hands together. |
+| `practice.tip.Dviolin1` | Play the ascending and descending D major scale. |
+| `practice.tip.Dviolin2` | Play octaves on D arpeggio |
+| `practice.tip.Dviolin3` | Now, we combine the two previous exercises. Play the ascending and descending scale followed by octave jumps. |
+| `practice.tip.Dviolin4` | Watch out for the C♮! |
+| `practice.tip.DViolincorrection4` | Watch out the A-sharp which is not in the key signature! |
+| `practice.tip.Dviolinextra` | Here is a passage in the subdominant key, pay attention to the key signature alterations that have changed, there is one less sharp. |
+| `practice.tip.experience1` | Press "play" and play the melody with your right hand. |
+| `practice.tip.experience2` | Now play the arpeggios with your left hand. There is a sharp in the key signature (F#) |
+| `practice.tip.experience3` | Play this passage with both hands. |
+| `practice.tip.faster` | A little faster! |
+| `practice.tip.fingerings` | Follow the fingerings on the score. |
+| `practice.tip.GMajorViolin5` | You already know this melody. Replay it to hear the key of D major again. |
+| `practice.tip.GMajorViolin6` | Try playing the complete melody in D major that you just made step by step, all in one go and in a slightly faster tempo. |
+| `practice.tip.harder` | Let's try something a little harder! |
+| `practice.tip.keyboard` | The keyboard at the bottom of the screen is here to help you. |
+| `practice.tip.keyboard.obsolete` | The keyboard at the top of the screen is here to help you. |
+| `practice.tip.keyboardExplanation` | You can tap any note to see how to play it on the keyboard on the bottom of the score. |
+| `practice.tip.leftHand` | Play the left hand only. |
+| `practice.tip.listen` | It may help to carefully listen to the excerpt before playing. |
+| `practice.tip.marreDesCroches.4` | While playing, don't forget that the key signature has a sharp. |
+| `practice.tip.marreDesCroches.6` | Play the left hand only. |
+| `practice.tip.nuances.6` | Pay attention to the dynamics while playing the melody! |
+| `practice.tip.onestring1` | We start with 2 bars of rise and fall of the A major scale on a string. |
+| `practice.tip.onestring10` | Play these notes together on two mirrored musical phrases. |
+| `practice.tip.onestring11` | Let's work on larger intervals. Anticipate thirds, fourths and fifths in this new workout. |
+| `practice.tip.onestring12` | A summary of everything you have worked on previously. We start again on a C. |
+| `practice.tip.onestring13` | String all the previous exercises together in one go and at a slower tempo. |
+| `practice.tip.onestring2` | Let's continue by insisting on the interval of a second between C and D and D and E. |
+| `practice.tip.onestring3` | Same as before, varying the notes. |
+| `practice.tip.onestring4` | Play alternating seconds, thirds, descending fourths. The tempo has been further slowed down. |
+| `practice.tip.onestring5` | This time, the intervals are ascending. Read the score by concentrating on the correctness. |
+| `practice.tip.onestring6` | Let's try to start from the beginning but with a faster tempo, try to play everything in one go. |
+| `practice.tip.onestring7` | In the same logic as the previous course, let's start with ascending and descending intervals but with a more lively tempo. Focus on accuracy. |
+| `practice.tip.onestring8` | Same thing with different notes combinations. |
+| `practice.tip.onestring9` | We start on the A note and we go for the E a fifth above. The first two bars are almost identical, as are the next two. |
+| `practice.tip.pizz.1` | Let's begin with these 8 measures in pizzicato. You can use two pizzicato techniques: with your thumb resting on the fingerboard or without resting it. |
+| `practice.tip.pizz.2` | We are in G major and still in 3 beats. The rhythm is repeated: two eighth notes, quarter note, quarter note. |
+| `practice.tip.pizz.3` | Here is the famous theme of Peer Gynt in pizz. There are 4 intro bars to get ready. |
+| `practice.tip.pizz.4` | Same thing as before but at the octave. The tempo is slowed down. Pay attention to fingerings and accidentals. |
+| `practice.tip.pizz.5` | Now we are in D minor. Be sure to respect the fingerings indicated on each note. Focus on intonation on chromatic descents. |
+| `practice.tip.rhythm` | To ace this step, focus on rhythm. |
+| `practice.tip.river1` | We start with the introduction, play the melody with your right hand (the app will play the left hand). |
+| `practice.tip.river10` | Play the second theme with the right hand only. Pay attention, all F notes are sharp. |
+| `practice.tip.river11` | The left hand is identical to that of the bridge and repeats twice. |
+| `practice.tip.river12` | Play the second theme with both hands. |
+| `practice.tip.river13` | Note that this excerpt starts with an upbeat. The excerpt is nearly identical to the introduction. |
+| `practice.tip.river14` | Press play and then play the entire piece without the metronome. |
+| `practice.tip.river2` | Now play the left hand, Metronaut will play the right-hand melody of the introduction you played in the previous step. |
+| `practice.tip.river3` | Play the hands together now. Pay attention to the metronome and the indicated rhythms. |
+| `practice.tip.river4` | Play the melody of the main theme with your right hand. Metronaut accompanies you and plays the other hand. Be sure to observe fingerings and nuances. |
+| `practice.tip.river5` | On the same passage as before, play the left hand. There are alternating intervals of thirds and fifths. Also, follow the pedal indications. |
+| `practice.tip.river6` | Now play hands together. Feel free to use the pedal and add expression to your playing following the dynamics. |
+| `practice.tip.river7` | Play the right hand for these 2 measures. Notice how the eighth notes never fall on the strong beats but only on the weak beats. |
+| `practice.tip.river8` | Now play the left hand and Metronaut will play the right hand. The rhythm is very simple on the left hand. |
+| `practice.tip.river9` | Play the bridge, hands together, leading to the second theme. |
+| `practice.tip.salutdamour1` | Let's start with a slow tempo to replace the bow and place a second finger on B at the end of measure 6. Measure 8, take advantage of the open string to find your first position. |
+| `practice.tip.salutdamour10` | Finally, play the entire piece! |
+| `practice.tip.salutdamour2` | Now, we will try to deepen the nuances to lead this first sentence. |
+| `practice.tip.salutdamour3` | Now that we're comfortable, let's pick up a bit more speed. |
+| `practice.tip.salutdamour4` | The central part is livelier with new accidentals. Care must be taken to ensure the correctness of the first finger in lower extension for B-flat and E-flat. |
+| `practice.tip.salutdamour5` | Let's play a little faster. Pay attention to nuance as it gives movement and expression to this part. |
+| `practice.tip.salutdamour6` | Here, the violin accompanies the piano. He makes the melody so the violin must have soft sounds. |
+| `practice.tip.salutdamour7` | Keep the tempo well and try to follow the musical indications to bring more expressiveness to your playing until bar 82. |
+| `practice.tip.salutdamour8` | Speed up and slow down when indicated on the score. These changes in tempo and nuances give a sense of urgency. |
+| `practice.tip.salutdamour9` | Again, let's take care to accompany the piano by carefully executing the fingerings indicated for the semitones. |
+| `practice.tip.sameDown` | Now the same thing going down! |
+| `practice.tip.sameThing` | Both hands play the same thing. |
+| `practice.tip.sansAltération` | The key has no sharps or flats. |
+| `practice.tip.schindler1` | In this vibrant melody, make each note sing in detached with the bow. Pay attention to the accuracy of A (4th finger) and B-flat. |
+| `practice.tip.schindler2` | In this exercise with open strings, pay attention to the evenness of the sound and the distribution of the bow. |
+| `practice.tip.schindler3` | Bring out the tender character as calmly as possible. You can use a quiet vibrato. |
+| `practice.tip.schindler4` | In this second part, the music comes alive. Tame the rhythm and the many alterations by listening carefully to the orchestra to be in tune with it. |
+| `practice.tip.schindler5` | We can use the different slurs to illustrate this new character and aim for the color change (mp) at bar 29. Don't hesitate to vibrate even more. |
+| `practice.tip.schindler6` | Here is the initial theme but in a strong and expressive nuance. Do not hesitate to use the whole bow to make the strings vibrate. |
+| `practice.tip.schindler7` | Take care of the dolce color by first playing at the tip of the bow then broaden the sound until bar 46 before declaiming the final note. |
+| `practice.tip.schindler8` | Finally, the whole song! Feel free to use vibrato and modulate the speeds and weight of your bow to give greater expressive power to your playing. |
+| `practice.tip.slowTempo` | The tempo is slowed down. |
+| `practice.tip.swanlake1` | Let's learn the theme at a slower tempo to feel comfortable with shifting between first and third position. This way, we can maintain a consistent tone color for this expressive theme. |
+| `practice.tip.swanlake2` | To translate the musical impulses supported by the nuances, do not hesitate to put the bow on the two tied eighth notes. |
+| `practice.tip.swanlake3` | We now come back to our initial theme, this time played one octave higher and with a strong dynamic. Take inspiration from the brass section of the orchestra to achieve a wide and powerful sound. |
+| `practice.tip.swanlake4` | With different articulations, the same melody expresses something else. Unite at the lectern of the strings who sing this phrase using the legato. |
+| `practice.tip.swanlake5` | The triplets give a sense of expansion to the music: use more and more bow by stretching the sound until measure 48. |
+| `practice.tip.swanlake6` | Join the orchestra to play this triple forte theme. The variations of the vibrato and the power of the bow are necessary to support the melody which withers little by little. |
+| `practice.tip.swanlake7` | Finally we can play the famous Swan Lake theme in full! |
+| `practice.tip.travelInTime.3` | Composed in the 1780s, this piano sonata is one of Mozart's best-known pieces. Watch out for sharps in the key signature! |
+| `practice.tip.waltzingviolin1` | Let's start slowly where the violin accompanies the orchestra. Let's ensure the equality of the sound by sharing the bow on the 6 eighth notes. |
+| `practice.tip.waltzingviolin2` | The sway of the waltz to the beat is felt more at a higher tempo. Up to you! |
+| `practice.tip.waltzingviolin3` | Let's play the theme, quietly to start, taking care not to start too late on the second eighth note of measure 8. Watch out, you start with no accompaniment at the beggining! |
+| `practice.tip.waltzingviolin4` | And let it dance! A little more tempo to play this theme and without the click track. |
+| `practice.tip.waltzingviolin5` | Let us now sing a second voice which follows and decorates the theme played in the orchestra. |
+| `practice.tip.waltzingviolin6` | The violin here takes on a more rhythmic role. Let's be careful not to expend too much bow on the quarter note to stay in the lower part of the bow. |
+| `practice.tip.waltzingviolin7` | Let's pick up a bit of speed and think about that waltz rhythm that creates a sway in every bar. Accents allow us to aim for the first beats of each measure. |
+| `practice.tip.waltzingviolin8` | It's time to play the waltz entirely. You can increase the tempo if you feel it's too easy. |
+| `practice.title.alternatingHands` | Alternating Hands |
+| `practice.title.arpèges.1` | White keys Arpeggios |
+| `practice.title.dailyRoutine` | Daily Routine |
+| `practice.title.firstPart` | First part |
+| `practice.title.free` | Free Workout |
+| `practice.title.inversions` | Inversions |
+| `practice.title.leftHand` | Left |
+| `practice.title.LHArpeggios` | Left-Hand Arpeggios |
+| `practice.training.end` | End Training |
+| `practice.training.info.default` | You are now in training mode |
+| `practice.training.onboarding.button.primary` | Got it |
+| `practice.training.onboarding.button.secondary` | Don't show again |
+| `practice.training.onboarding.subtitle` | Training mode allows you to play at a slower tempo until you're ready to beat your best score! |
+| `practice.training.onboarding.title` | Info |
+| `practice.training.success.button.primary` | Leave Training Mode |
+| `practice.training.success.button.secondary` | Dismiss |
+| `practice.training.success.subtitle` | Sounds like you've got it! Try leaving the training mode and beating your best score. |
+| `practice.training.success.title` | You're on the right track |
+| `practice.tripletsExercise` | Triplets Warm-up |
+| `practice.waltzingviolin1` | Warming Up |
+| `practice.waltzingviolin2` | A little faster! |
+| `practice.waltzingviolin3` | Theme - Slow Version |
+| `practice.waltzingviolin4` | Theme, a bit faster |
+| `practice.waltzingviolin5` | The second voice |
+| `practice.waltzingviolin6` | Rhythmic violin |
+| `practice.waltzingviolin7` | The waltz rhythm |
+| `practice.waltzingviolin8` | Throughout an entire piece |
+| `practice.workoutEnd.allWorkoutsButton` | See all workouts |
+| `practice.workoutEnd.cta` | Next Workout |
+| `practice.workoutEnd.default.title` | Congratulations, you finished this workout! |
+| `practice.workoutEnd.next.title` | We recommend next: |
+| `practice.workoutEnd.title` | Congratulations, you finished this workout! |
+
+<a id="p-card"></a>
+### card (149)
+
+| key | value |
+|---|---|
+| `card.adagio` | New! Albinoni's Adagio |
+| `card.Anatomy` | Anatomy of a Fall |
+| `card.bach` | J. S. Bach's Anniversary |
+| `card.bolero` | Ravel: Boléro |
+| `card.china.koc` | Become our content creator! |
+| `card.china.koc.cta` | Details |
+| `card.china.musicchina2023` | Participate in Music China<br>Meet us and get gifts! |
+| `card.china.musicchina2023.cta` | Details |
+| `card.christmas.gift.button` | See gift card |
+| `card.christmas.gift.title` | Give the Gift of Music! |
+| `card.collection.blues.button` | Let’s have a look! |
+| `card.collection.blues.summaryOutside` | Play the best of blues, country music and gospel in this collection! |
+| `card.collection.blues.title` | Blues, country or negro spirituals? |
+| `card.collection.button` | Play |
+| `card.collection.cta` | Discover collection |
+| `card.collection.germany.button` | Discover collection |
+| `card.collection.germany.summaryOutside` | Immerse yourself in masterpieces from German composers! |
+| `card.collection.germany.title` | Celebrate Oktoberfest with Music! |
+| `card.collection.halloween.button` | Discover collection |
+| `card.collection.halloween.summaryOutside` | Celebrate the beginning of this spooky season with the best treat possible: a selection of the best Halloween pieces! |
+| `card.collection.halloween.title` | Ready to get spooked? |
+| `card.collection.saens.button` | Let’s go! |
+| `card.collection.saens.summaryOutside` | Discover our collection of works by French composer Camille Saint-Saëns! |
+| `card.collection.saens.title` | Make some Saint-Saëns of your life! |
+| `card.collection.tango.button` | Let's go! |
+| `card.collection.tango.summaryOutside` | Play the best of tango thanks to our dedicated collection! |
+| `card.collection.tango.title` | Fancy a tango? |
+| `card.collection.thanksgiving.button` | Discover |
+| `card.collection.thanksgiving.summaryOutside` | Explore American traditions thanks to folk, patriotic and spiritual standards! |
+| `card.collection.thanksgiving.title` | Thanksgiving collection |
+| `card.collection.valentine` | New Valentine's special Collection! |
+| `card.collection.valentine.button` |  |
+| `card.collection.valentine.title` | New Valentine's special Collection! |
+| `card.collection.vivaldiautomne` | Autumn in Music! |
+| `card.contest` | About Metronaut Contest |
+| `card.dance` | Celebrate International Dance Day |
+| `card.duparc` | New! Duparc: L'invitation au voyage |
+| `card.earth` | Earth Day |
+| `card.easter` | Egg-cellent Easter |
+| `card.fauré` |  |
+| `card.fauré1` | Composers to Celebrate in 2024 |
+| `card.friends` | Tribute to Chandler |
+| `card.grieg` | Happy birthday Edvard Grieg! |
+| `card.heureExquise` | New! Reynaldo Hahn: L'heure exquise |
+| `card.ipanema` | New! The Girl From Ipanema |
+| `card.JO` | Paris 2024 |
+| `card.lacidaremlamano` | Mozart: Là ci darem la mano |
+| `card.login.button` | Sign Up for Newsletter |
+| `card.login.summaryOutside` | Each week get the latest news and customized piece suggestions in your mailbox! |
+| `card.login.title` | Don't miss any news! |
+| `card.movie` | Celebrating the Oscars! |
+| `card.Nessun` | New! Nessun Dorma (Verdi) |
+| `card.Nimrod` | Elgar: Nimrod |
+| `card.nont'amopiu` | New! Tosti: Non t'amo più |
+| `card.offer.autumn.button` | See offer |
+| `card.offer.autumn.end.button` | See offer |
+| `card.offer.autumn.end.summaryOutside` | Hurry up, the offer is available until October 12th only! |
+| `card.offer.autumn.end.title` | 3 days left to get 25% off! |
+| `card.offer.autumn.summaryOutside` | Hurry up, the offer is available until October 12th only! |
+| `card.offer.autumn.title` | Fall offer: Enjoy -25%! |
+| `card.offer.back2School.end.button` | See Offer |
+| `card.offer.back2School.end.summaryOutside` | Hurry up, the offer is available until September 21st only! |
+| `card.offer.back2School.end.title` | Last Chance: -25% Back to School Offer! |
+| `card.offer.bf.button` | See offer |
+| `card.offer.bf.summaryOutside` | Enjoy the best offer of the year and discover 5000+ play along music sheets! |
+| `card.offer.bf.title` | Black Friday: 50% off |
+| `card.offer.chineseNewYear.button` | See offer |
+| `card.offer.chineseNewYear.title` | Chinese New Year Special Offer ! |
+| `card.offer.christmas.25.title` | Your Christmas gift: 25% off! |
+| `card.offer.christmas.35.title` | Your Christmas gift: 35% off! |
+| `card.offer.christmas.button` | See Offer |
+| `card.offer.christmas.summaryOutside` | Enjoy a digital accompanist for a discounted price! The offer expires on December 31st. |
+| `card.offer.christmas.title` | Our Christmas Gift for You! |
+| `card.offer.single.button` | See offer |
+| `card.offer.single.summaryOutside` | Hurry up, the offer is available until November 12th only! |
+| `card.offer.single.title` | Double 11 Offer: Enjoy -50%! |
+| `card.offer.valentine.button` |  |
+| `card.offer.valentine.title` | Valentine Special Offer : - 25%! |
+| `card.offer.valentine24.title` | Valentine Special Offer : - 20%! |
+| `card.onboarding.button` | See tutorial |
+| `card.onboarding.summaryInside` | Discover your practice companion. |
+| `card.onboarding.summaryOutside` | An overview of Metronaut’s features in 2 minutes. |
+| `card.onboarding.title` | Discover your practice companion. |
+| `card.pavane` | New! Pavane (Fauré) |
+| `card.piece.ballet.button` | Discover collection |
+| `card.piece.ballet.summaryOutside` | Create magic at home by playing some ballet favorites! |
+| `card.piece.ballet.title` | In the mood for Ballet? |
+| `card.piece.button` | Play |
+| `card.piece.castaDiva.button` | Let’s go! |
+| `card.piece.castaDiva.summaryOutside` | Enjoy Bellini’s classic with an orchestra! |
+| `card.piece.castaDiva.title` | Invoke the Casta Diva |
+| `card.piece.christmas.button` | Let’s go! |
+| `card.piece.christmas.summaryOutside` | Find a selection of Christmas carols, dive into the Nutcracker’s fairy and many more ballet pieces evoking winter! |
+| `card.piece.christmas.title` | Make the Christmas magic alive! |
+| `card.piece.christmasOffer.end.button` | See offer |
+| `card.piece.christmasOffer.end.summaryOutside` | Get a musical present for your loved ones: to play with a digital partner thanks to Metronaut Premium! |
+| `card.piece.christmasOffer.end.title` | Extended Christmas Offer! |
+| `card.practice.survey.button` | Take the survey |
+| `card.practice.survey.summaryOutside` | Help us improve workouts by answering a few questions. It will only take two minutes! |
+| `card.practice.survey.title` | Help us improve workouts! |
+| `card.print.button` | Learn more |
+| `card.print.summaryOutside` | Tap the setting icon on the score screen to print your music sheet. |
+| `card.print.title` | Print your scores |
+| `card.push.button` | Activate Notifications |
+| `card.push.summaryOutside` | Get notified when new pieces are added and receive piece suggestions to get you motivated! |
+| `card.push.title` | Stay tuned |
+| `card.rating.button` | Rate the App |
+| `card.rating.summaryOutside` | Your App Store rating helps grow the Metronaut community and motivate our team to make the App even better. Thank you for your support! |
+| `card.rating.title` | Enjoying Metronaut? |
+| `card.recording.button` | Learn more |
+| `card.recording.summaryOutside` |  |
+| `card.recording.title` | Record your performances! |
+| `card.saintpatrick` | Let's Celebrate St. Patrick's Day! |
+| `card.sauvages` | Rameau: Les sauvages (Les Indes galantes) |
+| `card.Schindler` | Schindler's List |
+| `card.schumann` | Play Schumann in His Memory — July 29 |
+| `card.sixto` | Tribute to Sixto Rodriguez |
+| `card.solace` | New! Scott Joplin's Solace |
+| `card.solace_copy` | New! Scott Joplin's Solace |
+| `card.spring` | Spring is Coming |
+| `card.subscription.freeTrial.button` | Try for free |
+| `card.subscription.freeTrial.summaryOutside` | Discover Thousands of Interactive Music Sheets and Unlock All Features. |
+| `card.subscription.freeTrial.summaryOutsideOld` | Become the musician you dream to be thanks to tempo change, loops, AI feedbacks, … |
+| `card.subscription.freeTrial.title` | Take your practice to the next level |
+| `card.subscription.musicOffer.button` | See Offer |
+| `card.subscription.musicOffer.summaryOutside` | Hurry up, the offer will expire on June 29th! |
+| `card.subscription.musicOffer.title` | Make Music Day Offer: Save 25% |
+| `card.subscription.noFreeTrial.button` | See offers |
+| `card.subscription.noFreeTrial.summaryOutside` | Discover Thousands of Interactive Music Sheets and Unlock All Features. |
+| `card.subscription.noFreeTrial.title` | Take your practice to the next level |
+| `card.subscription.summer.button` | See Offer |
+| `card.subscription.summer.summaryOutside` | Hurry up, the offer will expire on July 20th! |
+| `card.subscription.summer.title` | Summer Offer: Save 50%! |
+| `card.symphony25` | Mozart: Symphony No. 25 |
+| `card.symphony3` | Brahms: Symphony No. 3 |
+| `card.tchaikovsky` | Happy Birthday Pyotr Ilyich Tchaikovsky! |
+| `card.tempo.button` | Learn more |
+| `card.tempo.summaryOutside` | Tip: Move the tempo slider while the accompaniment is playing to hear the speed change. |
+| `card.tempo.title` | Choose your tempo! |
+| `card.thanksgiving` | Thanksgiving |
+| `card.vanessacarlton` | Vanessa Carlton |
+| `card.VivaldiSummer` | Vivaldi's summer |
+| `card.Wednesday` | Wednesday Soundtrack |
+| `card.Winter` | Vivaldi: Winter |
+| `card.Women` | International Women's Rights Day |
+| `card.youkali` | New! Kurt Weill: Youkali |
+| `card.zoom.button` | Learn more |
+| `card.zoom.summaryOutside` |  |
+| `card.zoom.title` | Pinch to zoom the score |
+
+<a id="p-exploration"></a>
+### exploration (140)
+
+| key | value |
+|---|---|
+| `exploration.details.continue.cta` | Continue |
+| `exploration.details.cta` | OK |
+| `exploration.details.dontshow.cta` | Don't show again |
+| `exploration.details.title` | Metronaut features |
+| `exploration.details.video.cta` | Watch the video |
+| `exploration.feature.airplay.subtitle` | Project scores on larger screens |
+| `exploration.feature.airplay.summary.subtitle` | Easily cast your iPhone or iPad screen to an AirPlay-enabled TV or larger display. |
+| `exploration.feature.airplay.summary.title` | Your scores on larger screens with AirPlay! |
+| `exploration.feature.airplay.title` | AirPlay |
+| `exploration.feature.annotation.subtitle` | Annotate the scores |
+| `exploration.feature.annotation.summary.subtitle` | Annotate your scores as you would do on paper, using your finger or Apple Pencil. |
+| `exploration.feature.annotation.summary.title` | Annotate as if on paper! |
+| `exploration.feature.annotation.title` | Annotation |
+| `exploration.feature.audioPreview.subtitle` | Audio preview |
+| `exploration.feature.audioPreview.summary.subtitle` | Tap the composer icon on a piece to listen to a preview before opening the score. |
+| `exploration.feature.audioPreview.summary.title` | Listen before you open! |
+| `exploration.feature.audioPreview.title` | Audio preview |
+| `exploration.feature.changeVersion.subtitle` | Access versions and simplifications of a piece |
+| `exploration.feature.changeVersion.summary.subtitle` | Tap the "Change version" button at the top of the score to access all versions and simplifications. |
+| `exploration.feature.changeVersion.summary.title` | Access versions and simplifications of a piece |
+| `exploration.feature.changeVersion.title` | Piece versions |
+| `exploration.feature.clef.subtitle` | Change clef |
+| `exploration.feature.clef.summary.subtitle` | Change the clef in which the score is written, from the transpose menu to better adapt it to your preferences. |
+| `exploration.feature.clef.summary.title` | G, C, F, your choice! |
+| `exploration.feature.clef.title` | Change clef |
+| `exploration.feature.cursor.subtitle` | Choose cursor behavior |
+| `exploration.feature.cursor.summary.subtitle` | Choose from different cursor types: beating (moves in sync with the beats), continuous scrolling, or no cursor. |
+| `exploration.feature.cursor.summary.title` | Choose the cursor type! |
+| `exploration.feature.cursor.title` | Cursor |
+| `exploration.feature.displayaccompaniment.subtitle` | See the accompaniment score |
+| `exploration.feature.displayaccompaniment.summary.subtitle` | Display the accompaniment part alongside your own part on the score. |
+| `exploration.feature.displayaccompaniment.summary.title` | Visualize the accompaniment score! |
+| `exploration.feature.displayaccompaniment.title` | Display accompaniment |
+| `exploration.feature.feedback.subtitle` | Get instant feedback |
+| `exploration.feature.feedback.summary.subtitle` | Metronaut analyzes your playing in real time and displays the pitch of the notes played on the score, to help you identify sections to improve. |
+| `exploration.feature.feedback.summary.title` | Play, visualize and progress with feedback! |
+| `exploration.feature.feedback.title` | AI Feedback |
+| `exploration.feature.landscape.subtitle` | Rotate the device for landscape orientation |
+| `exploration.feature.landscape.summary.subtitle` | Rotate your device according to your preference for a more comfortable reading experience |
+| `exploration.feature.landscape.summary.title` | Try landscape orientation! |
+| `exploration.feature.landscape.title` | Landscape orientation |
+| `exploration.feature.latency.subtitle` | Compensate latency |
+| `exploration.feature.latency.summary.subtitle` | Compensate the latency of Bluetooth devices to ensure a smooth and responsive experience, without any lag between screen and sound. |
+| `exploration.feature.latency.summary.title` | Get rid of any latency! |
+| `exploration.feature.latency.title` | Bluetooth latency |
+| `exploration.feature.loop.subtitle` | Practice difficult parts with the loop |
+| `exploration.feature.loop.summary.subtitle` | Master difficult sections by repeating them with the loop. Select a measure and adjust the loop by dragging the arrows. |
+| `exploration.feature.loop.summary.title` | Loop it up again and again! |
+| `exploration.feature.loop.title` | Loop |
+| `exploration.feature.metronome.subtitle` | Practice with the metronome |
+| `exploration.feature.metronome.summary.subtitle` | Improve your rhythmic precision and perfect your playing using the metronome |
+| `exploration.feature.metronome.summary.title` | Progress thanks to the metronome! |
+| `exploration.feature.metronome.title` | Metronome |
+| `exploration.feature.midi.subtitle` | Connect a MIDI instrument |
+| `exploration.feature.midi.summary.title` | Practice with your MIDI instrument! |
+| `exploration.feature.midi.title` | MIDI Instrument |
+| `exploration.feature.mymusic.subtitle` | See all Metronaut features |
+| `exploration.feature.mymusic.summary.subtitle` | Access the list of all Metronaut features from the Exploration section under My music tab |
+| `exploration.feature.mymusic.summary.title` | Discover all Metronaut features! |
+| `exploration.feature.mymusic.title` | Exploration |
+| `exploration.feature.piecerequest.subtitle` | Suggest a piece to add to the catalog |
+| `exploration.feature.piecerequest.summary.subtitle` | Let us know what pieces you would like to play by submitting your requests and help enrich our catalog. |
+| `exploration.feature.piecerequest.summary.title` | Request your favorite pieces! |
+| `exploration.feature.piecerequest.title` | Piece request |
+| `exploration.feature.playlist.subtitle` | Create playlists |
+| `exploration.feature.playlist.summary.subtitle` | Organize your practice efficiently by grouping your favorite pieces into playlists. Tap the ••• icon on a piece to add it to a playlist. |
+| `exploration.feature.playlist.summary.title` | Create your own playlists! |
+| `exploration.feature.playlist.title` | Playlists |
+| `exploration.feature.practice.title` | Practice tab |
+| `exploration.feature.print.subtitle` | Print music scores |
+| `exploration.feature.print.summary.subtitle` | If you prefer to work on paper, you can print Metronaut scores |
+| `exploration.feature.print.summary.title` | Print your scores! |
+| `exploration.feature.print.title` | Print |
+| `exploration.feature.recording.subtitle` | Record performances |
+| `exploration.feature.recording.summary.subtitle` | Record your practice sessions in audio or video to analyze your performance and perfect your playing positions and techniques. |
+| `exploration.feature.recording.summary.title` | Record your performances! |
+| `exploration.feature.recording.title` | Recordings |
+| `exploration.feature.relatedCollections.subtitle` | View the collections where a piece appears |
+| `exploration.feature.relatedCollections.summary.subtitle` | Tap the ••• icon on a piece to access associated collections and discover new pieces you might enjoy. |
+| `exploration.feature.relatedCollections.summary.title` | View the collections where a piece appears |
+| `exploration.feature.relatedCollections.title` | Related collections |
+| `exploration.feature.rhythmgame.subtitle` | Get to know the rhythm of a piece |
+| `exploration.feature.rhythmgame.summary.subtitle` | Practice without instrument in this interactive game. Tap the button as the cursor reaches each note and get familiar with the rhythm of a piece. |
+| `exploration.feature.rhythmgame.summary.title` | Get to know the rhythm of a piece |
+| `exploration.feature.rhythmgame.title` | Rhythm Game |
+| `exploration.feature.sameComposer.subtitle` | Access the composer's page |
+| `exploration.feature.sameComposer.summary.subtitle` | Tap the ••• icon on a piece to access the list of all pieces by the same composer and discover more. |
+| `exploration.feature.sameComposer.summary.title` | Explore the composer's page! |
+| `exploration.feature.sameComposer.title` | See composer |
+| `exploration.feature.scrollpage.title` | Page scroll |
+| `exploration.feature.search.subtitle` | Find a piece in the catalog |
+| `exploration.feature.search.summary.subtitle` | In Catalog tab, search pieces filtering by genre, difficulty, etc. |
+| `exploration.feature.search.summary.title` | Find Your Next Piece |
+| `exploration.feature.search.title` | Search |
+| `exploration.feature.searchfilters.subtitle` | Refine search results |
+| `exploration.feature.searchfilters.summary.subtitle` | Use search filters to narrow down your results and easily find pieces that match your criteria and level. |
+| `exploration.feature.searchfilters.summary.title` | Refine your searches with filters! |
+| `exploration.feature.searchfilters.title` | Search filters |
+| `exploration.feature.smartTempo.subtitle` | The accompaniment follows your playing |
+| `exploration.feature.smartTempo.summary.subtitle` | Metronaut analyzes your playing in real time and adjusts the accompaniment tempo to synchronize with you |
+| `exploration.feature.smartTempo.summary.title` | Discover AI tempo! |
+| `exploration.feature.smartTempo.title` | AI Tempo |
+| `exploration.feature.solo.subtitle` | Listen to the solo part |
+| `exploration.feature.solo.summary.subtitle` | Listen to the part you are to play, with or without the accompaniment to familiarize yourself with the piece. |
+| `exploration.feature.solo.summary.title` | Listen to the solo part |
+| `exploration.feature.solo.title` | Listen |
+| `exploration.feature.speakersheadphones.subtitle` | Connect earphones or external speakers |
+| `exploration.feature.speakersheadphones.summary.subtitle` | Connect headphones or speakers with bluetooth or with a cable for better sound quality, precise feedbacks and clean recordings. |
+| `exploration.feature.speakersheadphones.summary.title` | Play with your speakers and headphones |
+| `exploration.feature.speakersheadphones.title` | Speakers and headphones |
+| `exploration.feature.speechrecognition.subtitle` | Control Metronaut by voice |
+| `exploration.feature.speechrecognition.summary.subtitle` | Say Play, Stop, Slower and other commands to interact with the accompaniment without leaving your instrument! |
+| `exploration.feature.speechrecognition.summary.title` | Control Metronaut with your voice! |
+| `exploration.feature.speechrecognition.title` | Voice commands |
+| `exploration.feature.stats.subtitle` | Explore the weekly leaderboard |
+| `exploration.feature.stats.summary.subtitle` | Discover other musicians competing in the weekly leaderboard and keep track of the XP you've earned. |
+| `exploration.feature.stats.summary.title` | We Are the Champions |
+| `exploration.feature.stats.title` | Weekly leaderboard |
+| `exploration.feature.tempo.subtitle` | Set a tempo |
+| `exploration.feature.tempo.summary.subtitle` | Adjust the accompaniment tempo and practice at your pace |
+| `exploration.feature.tempo.summary.title` | Each to their own tempo! |
+| `exploration.feature.tempo.title` | Tempo |
+| `exploration.feature.transposition.subtitle` | Transpose any score |
+| `exploration.feature.transposition.summary.subtitle` | Transpose any score to better suit your instrument and preferences. |
+| `exploration.feature.transposition.summary.title` | Transpose any score to your liking! |
+| `exploration.feature.transposition.title` | Transposition |
+| `exploration.feature.tuner.subtitle` | Tune your instrument |
+| `exploration.feature.tuner.summary.subtitle` | Use our built-in tuner to keep your instrument perfectly in tune, or adjust the app's pitch if your piano is out of tune. |
+| `exploration.feature.tuner.summary.title` | Tune your instrument! |
+| `exploration.feature.tuner.title` | Tuner |
+| `exploration.feature.waitmode.subtitle` | Sight-read a score with your instrument |
+| `exploration.feature.waitmode.summary.subtitle` | The cursor advances when you play the indicated note, allowing you to read at your own pace without accompaniment. |
+| `exploration.feature.waitmode.summary.title` | Discover interactive sight-reading in Wait mode! |
+| `exploration.feature.waitmode.title` | Wait mode |
+| `exploration.feature.zoom.subtitle` | Adjust zoom level on the score |
+| `exploration.feature.zoom.summary.subtitle` | Pinch the score to zoom in or out according to your preferences and improve your reading comfort |
+| `exploration.feature.zoom.summary.title` | Zoom on the score! |
+| `exploration.feature.zoom.title` | Zoom |
+| `exploration.subtitle` | Features to discover |
+| `exploration.title` | Exploration |
+
+<a id="p-performance"></a>
+### performance (135)
+
+| key | value |
+|---|---|
+| `performance.0MinutesLeft.freeTrial.title` | Start your free trial to play this piece! |
+| `performance.0MinutesLeft.noFreeTrial.title` | Become Premium to play this piece! |
+| `performance.audioOutput.bluetooth.subtitle` | We recommend that you plug in speakers or headphones for a better experience of the magic mode. |
+| `performance.audioOutput.bluetooth.title` | Bluetooth connection detected |
+| `performance.audioOutput.speaker.subtitle` | We recommend that you plug in speakers or headphones for a better experience of the magic mode. |
+| `performance.audioOutput.speaker.title` | Headphones or Speakers Recommended |
+| `performance.coach.alert.text` | For best experience using AI Feedback prefer using headphones. |
+| `performance.coach.alert.title` | Warning: AI Feedback |
+| `performance.cursorMode.accompNoPuls` | Continuous |
+| `performance.cursorMode.accompPuls` | Continuous with beats |
+| `performance.cursorMode.detectedEvents` | Detected events |
+| `performance.cursorMode.none` | No Cursor |
+| `performance.cursorMode.pulseOnly` | Beats |
+| `performance.feedback.announce` | Let us know if you see or hear an issue with this piece. We'll fix it as fast as we can! |
+| `performance.feedback.freeze.body` | Metronaut is waiting for you… |
+| `performance.feedback.freeze.title` | Are you there?<br> |
+| `performance.feedback.mailContent` | Hi everyone, |
+| `performance.feedback.mailSubject` | User Feedback |
+| `performance.feedback.noRecording` | No recordings |
+| `performance.feedback.noRecordingMessage` | You have not recorded a performance for this piece yet. You can however send us an email or a message! |
+| `performance.feedback.reportProblem` | Evaluate the %@ |
+| `performance.feedback.sendEmail` | Report problems |
+| `performance.feedback.sendFBMessanger` | Message us on Facebook |
+| `performance.feedback.sendFBMessanger.alertMessage` | To chat with us on Facebook, first install Facebook Messenger from AppStore. |
+| `performance.feedback.sendFBMessanger.alertTitle` | Messenger is missing |
+| `performance.feedback.sendiMessage` | Write us a Message |
+| `performance.feedback.sendiMessages.alertMessage` | To send us messages from your device, you need to set up iMessage using your Apple ID in Settings. |
+| `performance.feedback.sendiMessages.alertTitle` | iMessage not set up |
+| `performance.feedback.sendMail.alertMessage` | No email address is set up on your device! Please set up your email account in Settings first. |
+| `performance.feedback.sendMail.alertTitle` | Mail not set up |
+| `performance.feedback.sendTitle` | Give Us Feedback |
+| `performance.feedback.unstable.body` | Something went wrong! Restart? |
+| `performance.feedback.unstable.title` | Oops…<br> |
+| `performance.hands.button` | Hands |
+| `performance.help.conclusion` | If you want to review this tour later, you can tap this button.<br><br>Time to Play! |
+| `performance.help.intro` | Let's have a quick tour of Metronaut.<br><br>Tap anywhere on the screen to continue. |
+| `performance.help.modeControl` | Tap on this button to change the performance mode.<br><br>Choose the "I Follow" Mode if you want to listen or play with the accompaniment at the original recording tempo.<br><br> "Assist Me" and "Follow Me" Modes will adapt the accompaniment to your performance. |
+| `performance.help.perfControl` | Tap here to edit your settings (volumes, transpositions, cursor, score orientation, etc.) |
+| `performance.help.playButton` | Play button will start the accompaniment at cursor's position. |
+| `performance.help.previousRecordings` | Tap here if you'd like to listen to your previous performances.<br><br>Note that only your 20 previous performances are stored. You must select the performances you want to keep. |
+| `performance.help.rewindButton` | Tap on the rewind button to move the cursor to the previous starting position.<br><br>Tap again to set the cursor at the beginning. |
+| `performance.help.score` | This is the piece you will play.<br><br>The cursor shows your current position on the score. You can drag it or tap anywhere to get there. |
+| `performance.help.showLabel` | Show help |
+| `performance.help.speakers` | Plug in your headphones or speakers to enjoy optimal sound quality. |
+| `performance.help.tempo` | Tap here to choose the tempo of the accompaniment. You can slide to the left or to the right to change it. |
+| `performance.listen.button` | Listen |
+| `performance.menu` | Menu |
+| `performance.mode.ear` | listening mode |
+| `performance.mode.earOff` | Listening Mode Off<br> |
+| `performance.mode.earOn` | Listening Mode On<br> |
+| `performance.mode.follow2Message` | Metronaut listens to you and adapts the accompaniment tempo to your performance. |
+| `performance.mode.follow2MessagePrefix` | "Follow Me" Mode<br> |
+| `performance.mode.followMessage` | I synchronize my performances with yours,<br>attracting you to original tempo |
+| `performance.mode.followMessagePrefix` | "Assist Me" Mode<br> |
+| `performance.mode.hands.listen.both` | Hear both hands |
+| `performance.mode.hands.listen.left` | Hear left hand |
+| `performance.mode.hands.listen.right` | Hear right hand |
+| `performance.mode.header.title` | What would you like to do? |
+| `performance.mode.magic` | magic mode |
+| `performance.mode.magicOff` | Magic Mode Off<br> |
+| `performance.mode.magicOn` | Magic Mode On<br> |
+| `performance.mode.magicPlayalong` | Interpret (AI Tempo) |
+| `performance.mode.magicPlayalong.description` | The accompaniment follows your performance like a real musician. |
+| `performance.mode.magicPlayalong.solo.description` | The cursor follows your tempo without accompaniment. |
+| `performance.mode.magicPlayalong.solo.userMessage` | Tap Play when you're ready. The cursor will follow your tempo. |
+| `performance.mode.magicPlayalong.userMessage` | Tap Play when you're ready. The accompaniment will follow your playing. |
+| `performance.mode.metroMessage` | Accompaniment tempo is constant |
+| `performance.mode.metroMessagePrefix` | "I Follow" Mode with Constant Tempo<br> |
+| `performance.mode.mixer.accompaniment` | Accompaniment · {{part}} |
+| `performance.mode.mixer.accompaniment.noDetail` | Accompaniment |
+| `performance.mode.mixer.solo` | Include my part · played by {{part}} |
+| `performance.mode.mixer.solo.noAccompaniment` | Hear my part · {{part}} |
+| `performance.mode.mixer.solo.noAccompaniment.noDetail` | Hear my part |
+| `performance.mode.mixer.solo.noDetail` | Include my part |
+| `performance.mode.mixer.solo.part` | Include my part · {{part}} |
+| `performance.mode.playAlong` | Practice |
+| `performance.mode.playAlong.description` | Practice along with the accompaniment. |
+| `performance.mode.playAlong.solo.description` | Practice at a steady tempo. |
+| `performance.mode.playAlong.userMessage` | Tap Play to practice at a steady tempo. |
+| `performance.mode.playAlong.voice` | Sing |
+| `performance.mode.playAlong.voice.withAccompaniment` | Sing with accompaniment |
+| `performance.mode.playAlong.withAccompaniment` | Practice with accompaniment |
+| `performance.mode.playbackMessage` | Metronaut plays the accompaniment at a tempo of your choice, without listening to you. |
+| `performance.mode.playbackMessagePrefix` | "I Follow" Mode<br> |
+| `performance.mode.reading` | Sight-read |
+| `performance.mode.reading.description` | The cursor advances when you play the right note or chord. |
+| `performance.mode.reading.solo.description` | The cursor advances when you play the right note or chord. |
+| `performance.mode.reading.userMessage` | Tap Play to begin sight-reading. The cursor advances when you play the correct note or chord. |
+| `performance.mode.withSolo` | Listen |
+| `performance.mode.withSolo.description` | Familiarize yourself with the piece before playing. |
+| `performance.mode.withSolo.solo.description` | Familiarize yourself with the piece before playing. |
+| `performance.mode.withSolo.userMessage` | Tap Play to listen to the piece. |
+| `performance.nextPiece.button` | Next piece |
+| `performance.nextPiece.source.collection` | in the collection |
+| `performance.nextPiece.source.playlist` | in your playlist |
+| `performance.onboarding.mode` | Before you start playing, choose how the accompaniment will adapt to your interpretation. Your turn to perform now! |
+| `performance.onboarding.play` | Press Play to start. |
+| `performance.onboarding.settings` | Keep exploring the App to discover all its features: transposition, metronome and many others! |
+| `performance.onboarding.tempo` | Swipe left or right to change the accompaniment tempo. |
+| `performance.PieceMaterialDownloadMessageTextFormat` | accompaniment<br> |
+| `performance.play.button` | Perform |
+| `performance.rate` | Rate your experience on Metronaut. Be honest, your opinion matters! |
+| `performance.rate.button` | Rate |
+| `performance.rate.skip` | Later |
+| `performance.rate.title` | So, what do you think? |
+| `performance.scoreAdaptation.subtitle` | Clef and transposition have been adapted to your instrument. |
+| `performance.scoreAdaptation.title` | Your tailor-made score!<br> |
+| `performance.ScoreViewMessageError` | Cannot display score |
+| `performance.ScoreViewMessageLayout` | Preparing layout |
+| `performance.ScoreViewMessageLoading` | Loading score… |
+| `performance.ScoreViewMessageNotFound` | No score found |
+| `performance.stats.averageTempo` | Average tempo |
+| `performance.stats.caloriesBurned` | Calories burned |
+| `performance.stats.cumulatedPerformanceTime` | Playing time |
+| `performance.stats.disturbedNeighbors` | Disturbed neighbors |
+| `performance.stats.goodGame` | Well done! |
+| `performance.stats.neuralConnections` | Neural connections |
+| `performance.stats.playedNotes` | Played notes |
+| `performance.stats.rewardedNauts` | Nauts gained |
+| `performance.stats.savedTrees` | Saved Trees |
+| `performance.stats.scorePercent` | Score played |
+| `performance.Tempo` | Tempo (%) |
+| `performance.tempo.metronomicLabel` | Constant Tempo |
+| `performance.tempo.pulseLabel` | Listen to pulse |
+| `performance.tempo.subtitle` | Tempo |
+| `performance.tempoFormat` | Tempo %.0f%% |
+| `performance.tempoRegulator` | Tempo Regulator |
+| `performance.tip.button` | Play |
+| `performance.tip.skip` | Later |
+| `performance.tip.speakers` | Use speakers or headphones to fully enjoy Magic Mode. |
+| `performance.tip.speakers_prox` | Magic Mode & Recording on %@ only works with External Speakers or Headphones!<br>PS: Working on it with Apple. |
+| `performance.tip.tempo` | If the piece is challenging, try lowering the tempo! |
+| `performance.tip.title` | Metronaut Tip |
+| `performance.waitStatus.message` | Start playing when you are ready. |
+| `performance.waitStatus.messagePrefix` | I am listening…<br> |
+
+<a id="p-extendedonboarding"></a>
+### extendedOnboarding (134)
+
+| key | value |
+|---|---|
+| `extendedOnboarding.approach.answer1` | I take my time to master a piece |
+| `extendedOnboarding.approach.answer2` | I quickly explore several pieces |
+| `extendedOnboarding.approach.commentary.1.paragraph` | Tempo control, looping, AI Tempo that syncs the accompaniment to your playing in real time, and recording will help you master each piece. |
+| `extendedOnboarding.approach.commentary.1.title` | Master each piece at your own pace |
+| `extendedOnboarding.approach.commentary.2.paragraph` | Sight-read easily with tempo control or AI Tempo that syncs the accompaniment to your playing, and track your progress thanks to recordings. |
+| `extendedOnboarding.approach.commentary.2.title` | Play more new pieces |
+| `extendedOnboarding.approach.title` | Which approach suits you best? |
+| `extendedOnboarding.commitment.concert.paragraph` | To perform well at my concert, I commit to practicing regularly and feeling comfortable with each piece. Each session with Metronaut brings me closer to a successful performance and gives me confidence on the big day. |
+| `extendedOnboarding.commitment.confirmation` | You are committed |
+| `extendedOnboarding.commitment.cta.subtitle` | Committing increases motivation |
+| `extendedOnboarding.commitment.cta.title` | Tap to sign your commitment |
+| `extendedOnboarding.commitment.date.prefix` |  |
+| `extendedOnboarding.commitment.enjoy.paragraph` | To enjoy playing more, I commit to making each session a pleasant musical moment. With Metronaut, I play accompanied and turn my practice into a motivating and immersive experience. |
+| `extendedOnboarding.commitment.motivation.paragraph` | To stay motivated in my practice, I commit to keeping the rhythm, one session after another. With Metronaut, I rediscover the desire to play each time. |
+| `extendedOnboarding.commitment.pieces.paragraph` | To learn new pieces, I commit to practicing regularly and gradually expanding my repertoire. Each session with Metronaut helps me improve and brings me closer to my goal. |
+| `extendedOnboarding.commitment.progress.paragraph` | To make progress, I commit to practicing regularly and progressing step by step. Each session with Metronaut contributes to my progress and brings me closer to my goal. |
+| `extendedOnboarding.commitment.title.bassoon` | My commitment as a bassoonist |
+| `extendedOnboarding.commitment.title.cello` | My commitment as a cellist |
+| `extendedOnboarding.commitment.title.clarinet` | My commitment as a clarinetist |
+| `extendedOnboarding.commitment.title.default` | My musical pact |
+| `extendedOnboarding.commitment.title.doublebass` | My commitment as a double bassist |
+| `extendedOnboarding.commitment.title.euphonium` | My commitment as an euphonium player |
+| `extendedOnboarding.commitment.title.flute` | My commitment as a flutist |
+| `extendedOnboarding.commitment.title.guitar` | My commitment as a guitarist |
+| `extendedOnboarding.commitment.title.harp` | My commitment as a harpist |
+| `extendedOnboarding.commitment.title.horn` | My commitment as a horn player |
+| `extendedOnboarding.commitment.title.mallet` | My commitment as a percussionist |
+| `extendedOnboarding.commitment.title.oboe` | My commitment as an oboist |
+| `extendedOnboarding.commitment.title.piano` | My commitment as a pianist |
+| `extendedOnboarding.commitment.title.saxophone` | My commitment as a saxophonist |
+| `extendedOnboarding.commitment.title.trombone` | My commitment as a trombonist |
+| `extendedOnboarding.commitment.title.trumpet` | My commitment as a trumpeter |
+| `extendedOnboarding.commitment.title.tuba` | My commitment as a tuba player |
+| `extendedOnboarding.commitment.title.viola` | My commitment as a violist |
+| `extendedOnboarding.commitment.title.violin` | My commitment as a violinist |
+| `extendedOnboarding.commitment.title.voice` | My commitment as a singer |
+| `extendedOnboarding.goal.answer1` | I want to make progress |
+| `extendedOnboarding.goal.answer2` | I want to discover more pieces |
+| `extendedOnboarding.goal.answer3` | I want to enjoy playing more |
+| `extendedOnboarding.goal.answer4` | I want to prepare my next concert |
+| `extendedOnboarding.goal.answer5` | I want to be more motivated to practice |
+| `extendedOnboarding.goal.commentary.concert.paragraph` | Metronaut listens to your playing, identifies the passages that need strengthening, and supports you all the way to the big day. |
+| `extendedOnboarding.goal.commentary.concert.title` | Prepare for your concert with confidence |
+| `extendedOnboarding.goal.commentary.enjoy.paragraph` | Metronaut listens to your playing and brings your performance to life by adapting the accompaniment to make every session more immersive. |
+| `extendedOnboarding.goal.commentary.enjoy.title` | Enjoy playing even more |
+| `extendedOnboarding.goal.commentary.motivation.paragraph` | Play with accompaniments that bring the music to life and visualize your progress directly on the score. |
+| `extendedOnboarding.goal.commentary.motivation.title` | Stay motivated with a more interactive practice experience |
+| `extendedOnboarding.goal.commentary.paragraph` | • Interactive accompaniments to never play alone<br>• Simple and effective tools to help you progress faster<br>• Motivating stats to keep you on track |
+| `extendedOnboarding.goal.commentary.pieces.paragraph` | Metronaut guides you through sight-reading, shows you which passages need refining, and adapts to your pace. |
+| `extendedOnboarding.goal.commentary.pieces.title` | Learn new pieces more easily |
+| `extendedOnboarding.goal.commentary.progress.paragraph` | Metronaut listens to your playing, shows you what you have mastered, and highlights the passages you need to work on so you can focus your efforts more effectively. |
+| `extendedOnboarding.goal.commentary.progress.title` | Make progress more easily |
+| `extendedOnboarding.goal.commentary.title` | Reach your goals while having fun with: |
+| `extendedOnboarding.goal.title` | What do you want to achieve with Metronaut? |
+| `extendedOnboarding.instrument.commentary.generic.paragraph` | Discover a catalog designed by professional educators — featuring repertoire, sheet music tailored to your instrument, key, and range, exercises, and more! |
+| `extendedOnboarding.instrument.commentary.generic.title` | Great, we've got everything you need! |
+| `extendedOnboarding.instrument.commentary.piano.paragraph` | Discover a catalog designed by professional educators — featuring repertoire, sheet music adapted for piano, separate hand accompaniments, and more! |
+| `extendedOnboarding.instrument.commentary.piano.title` | Great, we've got everything a pianist needs! |
+| `extendedOnboarding.instrument.commentary.singer.paragraph` | Discover a catalogue designed by professional educators — with repertoire, sheet music tailored to your vocal range, and transposable accompaniments at your fingertips! |
+| `extendedOnboarding.instrument.commentary.singer.title` | Great, we've got everything a singer needs! |
+| `extendedOnboarding.level.commentary.level1.paragraph` | Metronaut tells you whether you played the right note and shows you the passages to work on again. |
+| `extendedOnboarding.level.commentary.level1.title` | Learn pieces one note at a time |
+| `extendedOnboarding.level.commentary.level2.paragraph` | Metronaut listens to your playing and highlights what you’ve mastered and the passages to work on, helping you progress faster in the pieces you love. |
+| `extendedOnboarding.level.commentary.level2.title` | We show you where to focus your efforts |
+| `extendedOnboarding.level.commentary.level3.paragraph` | Metronaut helps you spot the passages to work on, while the accompaniment follows your tempo and lets you lead your interpretation. |
+| `extendedOnboarding.level.commentary.level3.title` | Enjoy yourself, Metronaut follows your lead |
+| `extendedOnboarding.level.commentary.level4.paragraph` | Metronaut helps you spot the passages to work on, while the accompaniment follows your tempo and lets you lead your interpretation. |
+| `extendedOnboarding.level.commentary.level4.title` | Enjoy yourself, Metronaut follows your lead |
+| `extendedOnboarding.level.commentary.paragraph` | We will suggest pieces that match your level. You will also have access to adapted and simplified versions for every level. |
+| `extendedOnboarding.level.commentary.paragraph1` | You can access simplified versions of your favorite pieces to progress at your own pace. |
+| `extendedOnboarding.level.commentary.paragraph2` | You can access simplified versions of your favorite pieces to progress at your own pace. |
+| `extendedOnboarding.level.commentary.paragraph3` | You’ll also be able to access adapted and simplified versions for all levels. |
+| `extendedOnboarding.level.commentary.paragraph4` | We’ll offer scores faithful to the original work, while also giving you access to simplified versions for all levels. |
+| `extendedOnboarding.level.commentary.title` | Got it! |
+| `extendedOnboarding.level.commentary.title1` | We adapt the pieces to your level |
+| `extendedOnboarding.level.commentary.title2` | We adapt the pieces to your level |
+| `extendedOnboarding.level.commentary.title3` | We’ll suggest pieces suited to your level |
+| `extendedOnboarding.level.commentary.title4` | Find pieces that match your level |
+| `extendedOnboarding.level.commentaryV2.paragraph1` | Learn at your own pace with educational pieces and simplified versions of your favorite songs. |
+| `extendedOnboarding.level.commentaryV2.paragraph2` | With Metronaut, play pieces adapted to your progress and simplified versions of your favorite songs. |
+| `extendedOnboarding.level.commentaryV2.paragraph3` | Access a wide repertoire, along with sheet music adapted for your instrument to enrich your practice. |
+| `extendedOnboarding.level.commentaryV2.paragraph4` | Access sheet music faithful to the original works and expand your repertoire with pieces adapted for your instrument. |
+| `extendedOnboarding.level.commentaryV2.title1` | Start with pieces selected for you |
+| `extendedOnboarding.level.commentaryV2.title2` | Progress with accessible pieces |
+| `extendedOnboarding.level.commentaryV2.title3` | Perfect your playing with tailored pieces |
+| `extendedOnboarding.level.commentaryV2.title4` | Play pieces that match your level |
+| `extendedOnboarding.no` | No |
+| `extendedOnboarding.notSure` | I’m not sure |
+| `extendedOnboarding.preference.commentary.paragraph` | We will personalize your suggestions based on your level and musical tastes. |
+| `extendedOnboarding.preference.commentary.title` | Excellent choice! |
+| `extendedOnboarding.preference.commentaryV2.paragraph` | We will suggest pieces tailored to your instrument, level, and preferences, without limiting your access to the catalog. |
+| `extendedOnboarding.preference.commentaryV2.title` | We’re tailoring your recommendations |
+| `extendedOnboarding.screen.commentary.label` | Available on all your devices |
+| `extendedOnboarding.screen.commentary.negative.paragraph` | Enjoy optimal reading comfort with automatic scrolling and zoom on your phone, tablet, and computer — all with a single account. |
+| `extendedOnboarding.screen.commentary.negative.title` | Our sheet music is made for all your screens |
+| `extendedOnboarding.screen.commentary.paragraphsolo` | On phone, tablet, or computer, your sheet music is there whenever you feel like playing. |
+| `extendedOnboarding.screen.commentary.paragraphstudent` | Review on your phone before a session, practice on your tablet at home… Your sheet music follows you everywhere. |
+| `extendedOnboarding.screen.commentary.paragraphv2` | Whether you're on a phone, tablet, or computer, the sheet music adapts for consistently optimal reading comfort. |
+| `extendedOnboarding.screen.commentary.positive.paragraph` | The sheet music adapts to your computer, tablet, and phone, with automatic scrolling and zoom. Enjoy it on all your devices with a single account. |
+| `extendedOnboarding.screen.commentary.positive.title` | Great, you will enjoy optimal reading comfort! |
+| `extendedOnboarding.screen.commentary.titlesolo` | With Metronaut, all your sheet music is at your fingertips |
+| `extendedOnboarding.screen.commentary.titlestudent` | Keep making progress between lessons with Metronaut |
+| `extendedOnboarding.screen.commentary.titlev2` | Read your sheet music comfortably |
+| `extendedOnboarding.screen.lonely.feedback.negative.paragraph` | It’s a real strength to find your practice stimulating. Exploring new ways to play can make it even richer and more dynamic. |
+| `extendedOnboarding.screen.lonely.feedback.negative.title` | Great, that’s an excellent starting point! |
+| `extendedOnboarding.screen.lonely.feedback.neutral.paragraph` | Even enjoyable practice can sometimes lack momentum. Adding more interaction to your sessions can make a real difference. |
+| `extendedOnboarding.screen.lonely.feedback.neutral.title` | It happens to many musicians. |
+| `extendedOnboarding.screen.lonely.feedback.positive.paragraph` | Many musicians feel this lack of stimulation. Playing with an accompaniment can make practice much more engaging. |
+| `extendedOnboarding.screen.lonely.feedback.positive.title` | You’re not alone in this. |
+| `extendedOnboarding.screen.lonely.title` | Do you sometimes find practicing alone less stimulating? |
+| `extendedOnboarding.screen.motivation.feedback.negative.paragraph` | Keeping your practice varied and stimulating helps maintain this momentum over the long term. |
+| `extendedOnboarding.screen.motivation.feedback.negative.title` | Staying motivated is a real strength! |
+| `extendedOnboarding.screen.motivation.feedback.neutral.paragraph` | Motivation can vary from time to time. More immersive sessions can make it easier to stay consistent. |
+| `extendedOnboarding.screen.motivation.feedback.neutral.title` | That’s completely normal. |
+| `extendedOnboarding.screen.motivation.feedback.positive.paragraph` | Lack of motivation is very common among musicians. More stimulating practice often helps bring back the desire to play. |
+| `extendedOnboarding.screen.motivation.feedback.positive.title` | Thank you for your honesty. |
+| `extendedOnboarding.screen.motivation.title` | Do you sometimes find it hard to motivate yourself to practice? |
+| `extendedOnboarding.screen.scoreQuestion.title` | Would you like to play this piece? |
+| `extendedOnboarding.screen.stagnation.feedback.negative.paragraph` | Steady progress is often a sign of effective practice. Continuing to enrich the way you play can help you progress even further. |
+| `extendedOnboarding.screen.stagnation.feedback.negative.title` | Excellent! |
+| `extendedOnboarding.screen.stagnation.feedback.neutral.paragraph` | Progress is not always linear. The right tools can help you get through these phases more easily. |
+| `extendedOnboarding.screen.stagnation.feedback.neutral.title` | It’s a normal stage in the learning process. |
+| `extendedOnboarding.screen.stagnation.feedback.positive.paragraph` | More guided and structured practice can help bring back a sense of progress. |
+| `extendedOnboarding.screen.stagnation.feedback.positive.title` | It’s a frustration that many musicians know well. |
+| `extendedOnboarding.screen.stagnation.title` | Do you sometimes feel like you’re stagnating despite your efforts? |
+| `extendedOnboarding.screen.title` | Are you comfortable with the idea of reading sheet music on a screen? |
+| `extendedOnboarding.sightRead.commentary.negative.paragraph` | The adjustable tempo, metronome, and solo listening features are here to make your progress easier and smoother. |
+| `extendedOnboarding.sightRead.commentary.negative.title` | No problem! |
+| `extendedOnboarding.sightRead.commentary.positive.paragraph` | Metronaut is the ideal tool to expand your repertoire and enhance your sight-reading skills, even with the most challenging pieces. |
+| `extendedOnboarding.sightRead.commentary.positive.title` | Perfect! |
+| `extendedOnboarding.value.paragraph` | Find thousands of interactive sheet music pieces with accompaniment, and all the features you need to improve while having fun. |
+| `extendedOnboarding.value.title` | Practice in a simpler and more motivating way |
+| `extendedOnboarding.video.title` | Discover Metronaut |
+| `extendedOnboarding.yes` | Yes |
+
+<a id="p-settings"></a>
+### settings (134)
+
+| key | value |
+|---|---|
+| `settings.advanced.audio.explanation` | Choose Wireless Audio Output when available, and adjust the delay between audio and cursor. If audio feels late, try increasing the latency. |
+| `settings.advanced.audio.headerTitle` | Audio Output |
+| `settings.advanced.headerTitle` | Expert Settings |
+| `settings.advanced.latency.explanation` | Connecting a Bluetooth device can create a delay between the audio and the cursor. If you feel like the audio is late, try increasing the latency. |
+| `settings.advanced.latency.headerTitle` | Latency compensation settings |
+| `settings.advanced.latency.headerTitle.obsolete` | Latency Setting |
+| `settings.advanced.latency.title` | Latency |
+| `settings.advanced.microphone.choiceTitle` | Source |
+| `settings.advanced.microphone.footerTitle` | Choose the Microphone to use, adjust its gain and watch how Metronaut hears you. |
+| `settings.advanced.microphone.gainTitle` | Gain |
+| `settings.advanced.microphone.headerTitle` | Microphone Settings |
+| `settings.advanced.microphone.inputLevelTitle` | Calibration |
+| `settings.advanced.solo` | Solo |
+| `settings.advanced.solo.audio` | Audio |
+| `settings.advanced.solo.headerTitle` | Solo settings |
+| `settings.advanced.solo.synth` | Synth. |
+| `settings.annotation` | Annotation |
+| `settings.audio.microphone` | Microphone |
+| `settings.audio.midi` | MIDI |
+| `settings.audiomidi` | Audio/MIDI |
+| `settings.clef` | Clef |
+| `settings.clefC3` | Alto |
+| `settings.clefC4` | Tenor |
+| `settings.clefF4` | Bass |
+| `settings.clefF4M8` | Bass<br>-8 |
+| `settings.clefF4P8` | Bass<br>+8 |
+| `settings.clefG2` | Treble |
+| `settings.clefG2M8` | Treble<br>-8 |
+| `settings.clefG2P8` | Treble<br>+8 |
+| `settings.clefOriginal` | Original |
+| `settings.constantTempo.footerTitle` | Activate this mode to play in strict metronomic tempo. |
+| `settings.countdown.acoustic` | Audible |
+| `settings.countdown.none` | None |
+| `settings.countdown.visual` | Visual |
+| `settings.counter.footerTitle` | Adjust the Countdown at the beginning of your performance. |
+| `settings.counter.headerTitle` | Countdown |
+| `settings.counter.segment.long` | Long |
+| `settings.counter.segment.none` | None |
+| `settings.counter.segment.short` | Short |
+| `settings.counter.wSoundTitle` | With sound |
+| `settings.cursorMode.footerTitle` | Choose how the cursor moves through the score. |
+| `settings.cursorMode.headerTitle` | Cursor |
+| `settings.cursorMode.segment.beats` | Beats |
+| `settings.cursorMode.segment.continuous` | Continuous |
+| `settings.cursorMode.segment.none` | None |
+| `settings.cursorMode.title` | Cursor |
+| `settings.display` | Display |
+| `settings.display.accompaniment` | Display accompaniment |
+| `settings.display.fingering` | Show fingerings |
+| `settings.display.headerTitle` | Display |
+| `settings.display.piano` | Display Keyboard |
+| `settings.feedback.footerTitle` | Send us a feedback |
+| `settings.feedbackTitle` | Feedback |
+| `settings.headerTitle` | Parameters |
+| `settings.midi.bluetooth` | MIDI Bluetooth |
+| `settings.midi.connectedTo` | Connected to %@ |
+| `settings.midi.connectionPrompt` | To use a MIDI Instrument, connect it to your device or activate Bluetooth for detection. |
+| `settings.midi.footer` | To play with an acoustic instrument, just disconnect your MIDI device. |
+| `settings.midi.searchAction` | Search other instruments |
+| `settings.midi.searching` | Searching for instruments |
+| `settings.midi.synthMIDI` | Synthesize MIDI |
+| `settings.midi.synthMIDI.footer` | Generate a piano sound when you play on the connected instrument. |
+| `settings.midi.title` | MIDI Instrument |
+| `settings.mode.headerTitle` | Choose your performance mode: |
+| `settings.mode.title` | Modes |
+| `settings.more.multiPart` | Accompaniment |
+| `settings.pageScrolling.segment.continue` | Continuous |
+| `settings.pageScrolling.segment.page` | Page |
+| `settings.pageScrolling.title` | Scroll |
+| `settings.parameters.headerTitle` | Parameters |
+| `settings.performance.headerTitle` | Performance |
+| `settings.playingMode.hands.double` | Both |
+| `settings.playingMode.hands.left` | Left |
+| `settings.playingMode.hands.right` | Right |
+| `settings.playingMode.hands.subtitle_both` |  |
+| `settings.playingMode.hands.subtitle_left` | Metronaut will play the right hand |
+| `settings.playingMode.hands.subtitle_right` | Metronaut will play the left hand |
+| `settings.playingMode.hands.title` | Choose which hand to play |
+| `settings.playingMode.hands.title_both` | Play both hands |
+| `settings.playingMode.hands.title_left` | Play the left hand |
+| `settings.playingMode.hands.title_right` | Play the right hand |
+| `settings.playingMode.title` | Modes |
+| `settings.print` | Print |
+| `settings.recordings` | Recordings |
+| `settings.rewind.headerTitle` | Back |
+| `settings.scoreDisplay.FirstSC0` | By Page |
+| `settings.scoreDisplay.FirstSC1` | Continuous |
+| `settings.scoreScroll.footerTitle` | Choose how early you want the score to scroll ahead as you play. |
+| `settings.scoreScroll.headerTitle` | Scroll Anticipation |
+| `settings.scoreScroll.pulseTitle` | Beat(s) |
+| `settings.scoreView.footerTitle` | Adjust how the Score is displayed. |
+| `settings.scoreView.headerTitle` | Score Presentation |
+| `settings.scoreView.Layout0` | vertical |
+| `settings.scoreView.Layout1` | horizontal |
+| `settings.scoreView.title` | Scroll Mode |
+| `settings.tempo.headerTitle` | Tempo |
+| `settings.tempo.mode.wait.subtitle` | The cursor moves along with you, with no accompaniment. |
+| `settings.tempo.mode.wait.title` | Wait |
+| `settings.tempo.title` | Choose your tempo |
+| `settings.tempoRegulator.footerTitle` | In Magic Mode the tempo regulator helps you maintaining the original tempo. |
+| `settings.toggle.loop` | Loop |
+| `settings.toggle.solo` | With Solo |
+| `settings.tools.title` | Tools |
+| `settings.trans.footerTitle` | Transpose score and accompaniment in semitones and choose your transposing instrument. |
+| `settings.trans.headerTitle` | Transposition |
+| `settings.trans.transPickerTitle` | Global Transposition |
+| `settings.trans.transTitle` | Transposition |
+| `settings.transpo` | Transposition |
+| `settings.transpo.diapason` | Tuning reference |
+| `settings.transpo.instrument` | Transposing instrument |
+| `settings.transpo.intervalle` | Interval |
+| `settings.transpo.octave` | Octaves |
+| `settings.tuner` | Tuner |
+| `settings.tuner.playmessage` | Play a note to Start Tuner |
+| `settings.tuner.playmessage.piano` | Play an A and adjust the Tuning reference |
+| `settings.versions` | Change version |
+| `settings.versions.tip` | Choose your version |
+| `settings.videorecording.title` | Video Recording |
+| `settings.voiceCommands.off` | Off |
+| `settings.voiceCommands.on` | On |
+| `settings.voiceCommands.subtitle` | See all voice commands associated to each action |
+| `settings.voiceCommands.title` | Voice commands |
+| `settings.volume.accompanimentTitle` | Accompaniment |
+| `settings.volume.audioInputTitle` | Audio Input |
+| `settings.volume.feedbackTitle` | Me (feedback)<br>Headphone Only |
+| `settings.volume.footerTitle` | Change how loud you will hear the synthesized solo, accompaniment tracks and your own voice. |
+| `settings.volume.headerTitle` | Volumes |
+| `settings.volume.metronomeTitle` | Metronome |
+| `settings.volume.midiTitle` | Solo |
+| `settings.volume.soloMidiTitle` | Synth Guide |
+| `settings.volumes.balance` | Balance |
+| `settings.volumes.balance.warning` | available only for Listening Mode |
+| `settings.volumes.bluetooth` | Connect a Bluetooth device |
+| `settings.volumes.tip` | Tip: Use speakers or headphones |
+
+<a id="p-subscription"></a>
+### subscription (120)
+
+| key | value |
+|---|---|
+| `subscription.bulletPoint.catalog` | Unlimited access to more than 7,000 pieces |
+| `subscription.bulletPoint.commitment` | Pay only after the trial is over, cancel anytime. |
+| `subscription.button.title` | Start my free trial |
+| `subscription.cancel` | Cancelable at any time |
+| `subscription.change.button` | Change Subscription |
+| `subscription.change.title` | Change Subscription |
+| `subscription.congrats.title.app` | Congratulations! |
+| `subscription.currentOffer` | Your subscription |
+| `subscription.description.month` | %@ for %u days, then %@ per month. |
+| `subscription.description.monthV2` | {{price1}} for {{duration1}} days, then {{price2}} per month. |
+| `subscription.description.year` | %@ for %u days, then %@ per year. |
+| `subscription.description.yearV2` | {{price1}} for {{duration1}} days, then {{price2}} per year. |
+| `subscription.discount` | -%d%% |
+| `subscription.features.bt` | Continue |
+| `subscription.features.cell1` | Explore 12,000+ music sheets |
+| `subscription.features.cell2` | Play with accompaniments |
+| `subscription.features.cell3` | Practice at your tempo |
+| `subscription.features.cell4` | Progress thanks to metronaut AI |
+| `subscription.features.cell5` | Share your recordings |
+| `subscription.features.logo.title` | metronaut |
+| `subscription.features.title` | Unlock Premium features |
+| `subscription.freeTrial.day.subtitle` | Choose the subscription plan that will follow the free trial period. |
+| `subscription.freeTrial.month.button.singular` | Start my 1-month Free Trial |
+| `subscription.freeTrial.subtitle.button` | free for %u days |
+| `subscription.freeTrial.title.button` | Subscribe |
+| `subscription.freeTrial.year.button` | Start my %u year Free Trial |
+| `subscription.freeTrial.year.title` | %u-year Free Trial |
+| `subscription.header` | Become the Musician you Dream to Be! |
+| `subscription.limited_version` | Access limited version |
+| `subscription.loading.error.metronaut.subtitle` | Oops, something's wrong |
+| `subscription.loading.error.metronaut.title` | Oops, something's wrong |
+| `subscription.logo.subtitle` | premium |
+| `subscription.loyalty.subtitle` |  |
+| `subscription.loyalty.title` |  |
+| `subscription.month.button.detail` | %@ / month |
+| `subscription.monthly.price` | %@ / month |
+| `subscription.no_trial_product.bt.primary` | Subscribe |
+| `subscription.no_trial_product.bt.secondary` | Try for free |
+| `subscription.no_trial_product.comment.subtitle` | I have been searching a while for a serious Music App to practice, learn and have fun with my instrument and Metronaut is the one! |
+| `subscription.no_trial_product.comment.title` | John |
+| `subscription.no_trial_product.editors.subtitle` | App of the Day |
+| `subscription.no_trial_product.editors.title` | Editors' Choice |
+| `subscription.no_trial_product.rating` | 4.6/5 App Store rating |
+| `subscription.no_trial_product.subhead` | 2134 people tried Premium this month ❤️ |
+| `subscription.no_trial_product.title` | 100,000+ musicians love playing with metronaut |
+| `subscription.noFreeTrial.button` | Subscribe |
+| `subscription.offer.50offMonth.title` | Save %d%% |
+| `subscription.offer.button.subtitle` | then {{crossedPrice}} {{price}}/year (%@ / month) |
+| `subscription.offer.button.title` | Claim the offer now |
+| `subscription.offer.extendedTrial.7Days.month.subtitle` | 7 extra free days |
+| `subscription.offer.extendedTrial.7Days.subtitle` | Limited offer until %@ |
+| `subscription.offer.extendedTrial.7Days.title` | Keep exploring Metronaut with 7 extra free days! |
+| `subscription.offer.extendedTrial.7Days.year.subtitle` | 7 extra free days |
+| `subscription.offer.payAsYouGo.25off.title` | Flash Offer: -25% on annual subscription |
+| `subscription.offer.payAsYouGo.50off.subtitle` | Limited offer until %@ |
+| `subscription.offer.payAsYouGo.50off.title` | Special offer: -50%% on annual subscription |
+| `subscription.offer.payAsYouGo.50off.year.subtitle` | the first year then %@ per year. |
+| `subscription.offer.payAsYouGo.title` | Save %d%% |
+| `subscription.offer.subtitle` | We have something special just for you! Enjoy full access to our catalog again with this limited offer. |
+| `subscription.offer.year.button.subtitle` | then {{crossedPrice}} {{price}}/year |
+| `subscription.offer.year.timeline.summary` | {{crossedPrice}} {{price}}/year |
+| `subscription.offers.button` | See all offers |
+| `subscription.offers.button.hide` | See less |
+| `subscription.premium1Year.congrats.button.title` | Continue |
+| `subscription.premium1Year.congrats.content.title` | You are eligible to a Premium access. |
+| `subscription.purchase.error.appstore.subtitle` | Your purchase didn’t go through. Your credit card wasn't charged, you can safely try again: Second Time should be the charm. 😉 |
+| `subscription.purchase.error.appstore.title` | Oops, something's wrong |
+| `subscription.purchase.error.message` | Your purchase on the App Store went through but Metronaut didn’t get the information. Please check your connection and try again. Contact us if the problem persists. |
+| `subscription.purchase.error.metronaut.subtitle` | Your purchase on the App Store went through but Metronaut didn’t get the information. Please contact us, so we can solve the issue. |
+| `subscription.purchase.error.metronaut.title` | Oops, something's wrong |
+| `subscription.purchase.error.subtitle` | Your purchase didn’t go through. Your credit card wasn't charged, you can safely try again: Second Time should be the charm. 😉 |
+| `subscription.purchase.error.support.message` | I tried subscribing to Metronaut but something went wrong after the payment. Please help! |
+| `subscription.purchase.error.title` | Oops, something's wrong |
+| `subscription.purchase.inProgress.subtitle` | This process will take only a few moments, please don't close the App. |
+| `subscription.purchase.inProgress.title` | Please wait |
+| `subscription.restore.error.metronaut.subtitle` | It seems that you have no purchase to restore. |
+| `subscription.restore.error.metronaut.title` | Oops, something's wrong |
+| `subscription.restore.error.support.message` | I tried to restore my purchases but something went wrong. Please help! |
+| `subscription.secondarybt.freeTrial.!isOnboarding.canShowTimeline.!hasCustomPromotion` | I waive the 7-days free trial |
+| `subscription.secondarybt.freeTrial.!isOnboarding.canShowTimeline.hasCustomPromotion` | Waive the offer |
+| `subscription.secondarybt.freeTrial.isOnboarding.canShowTimeline.!hasCustomPromotion` | I waive the 7-days free trial |
+| `subscription.secondarybt.freeTrial.isOnboarding.canShowTimeline.hasCustomPromotion` | Waive the offer |
+| `subscription.secondarybt.noFreeTrial.!isOnboarding.!canShowTimeline.!hasCustomPromotion` | Close |
+| `subscription.secondarybt.noFreeTrial.!isOnboarding.!canShowTimeline.hasCustomPromotion` | Waive the offer |
+| `subscription.secondarybt.noFreeTrial.!isOnboarding.canShowTimeline.!hasCustomPromotion` | Close |
+| `subscription.secondarybt.noFreeTrial.!isOnboarding.canShowTimeline.hasCustomPromotion` | Close |
+| `subscription.secondarybt.noFreeTrial.isOnboarding.!canShowTimeline.!hasCustomPromotion` | Close |
+| `subscription.secondarybt.noFreeTrial.isOnboarding.!canShowTimeline.hasCustomPromotion` | Waive the offer |
+| `subscription.secondarybt.noFreeTrial.isOnboarding.canShowTimeline.!hasCustomPromotion` | Try for free |
+| `subscription.secondarybt.noFreeTrial.isOnboarding.canShowTimeline.hasCustomPromotion` | Close |
+| `subscription.seeConditions` | Scroll to read the Terms of Sale. |
+| `subscription.segment.freeTrial` | Free trial |
+| `subscription.segment.noFreeTrial.immediate.purchase` | Buy now: - %@ %% |
+| `subscription.subtitle` | Unlimited access to more than 7,000 pieces |
+| `subscription.switchOff.asterisk` | * If you don't see the "Subscriptions" button, scroll down the Settings app to "iTunes and App Store", tap your AppleID email and select "View AppleID" (You may be asked to log in). |
+| `subscription.switchOff.description` | 1. Open the Settings app on your device.<br><br>2. Tap your name and then "Subscriptions".*<br><br>3. Select the Metronaut subscription and tap "Cancel Subscription" to disable it from auto-renewing at the end of the current billing cycle. If you don't see the cancel option, your subscription has already been cancelled and it won't be renewed. |
+| `subscription.switchOff.title` | To cancel your subscription, follow these steps: |
+| `subscription.switchOffAction.title` | Cancel subscription |
+| `subscription.timeline.step.end.subtitle` | You'll be charged on {{date}}, cancel anytime before. |
+| `subscription.timeline.step.end.title` | Day 7: Trial ends |
+| `subscription.timeline.step.install.subtitle` | You've chosen your instrument and level |
+| `subscription.timeline.step.install.title` | Install the app |
+| `subscription.timeline.step.now.subtitle` | Thousands of music sheets with accompaniment. |
+| `subscription.timeline.step.now.title` | Today: Get full access |
+| `subscription.timeline.step.reminder.subtitle` | We'll notify you that your trial is ending. |
+| `subscription.timeline.step.reminder.title` | Day 5: Reminder |
+| `subscription.timeline.title` | How your free trial works |
+| `subscription.title` | Metronaut Premium |
+| `subscription.trial.button.subtitle` | 2 taps to start, easy to cancel |
+| `subscription.trial.button.title` | Start my free trial |
+| `subscription.trial.button.titleOLD` | Start 7-day Trial |
+| `subscription.upgrade.noOffer.subtitle` |  |
+| `subscription.upgrade.noOffer.title` | Upgrade to Yearly Plan and Save %d%% |
+| `subscription.year.button.detail` | %@ / month |
+| `subscription.year.button.subtitle` | {{price}} per year, billed annually |
+| `subscription.year.button.weekDetail` | %@ / week |
+| `subscription.year.title` | {{price}} per year |
+| `subscription.yearly.price` | %@/year |
+| `subscription.yearly.subtitle` | Save %d%% |
+| `subscription.yearly.subtitleMoreThan` | Save more than %d%% |
+
+<a id="p-instrument"></a>
+### Instrument (117)
+
+| key | value |
+|---|---|
+| `Instrument.33` | Female Voice |
+| `Instrument.33.mixer` | Voice |
+| `Instrument.34` | Flute |
+| `Instrument.34.mixer` | Flute |
+| `Instrument.35` | Violin |
+| `Instrument.35.mixer` | Violin |
+| `Instrument.36` | Soprano Saxophone |
+| `Instrument.36.mixer` | Saxophone |
+| `Instrument.37` | Piano |
+| `Instrument.37.mixer` | Piano |
+| `Instrument.38` | Cello |
+| `Instrument.38.mixer` | Cello |
+| `Instrument.39` | Clarinet in B♭ |
+| `Instrument.39.mixer` | Clarinet |
+| `Instrument.40` | French Horn |
+| `Instrument.40.mixer` | French Horn |
+| `Instrument.41` | Oboe |
+| `Instrument.41.mixer` | Oboe |
+| `Instrument.42` | Viola |
+| `Instrument.42.mixer` | Viola |
+| `Instrument.43` | Mallet |
+| `Instrument.43.mixer` | Mallet |
+| `Instrument.44` | Trumpet in C |
+| `Instrument.44.mixer` | Trumpet |
+| `Instrument.45` | Double Bass |
+| `Instrument.45.mixer` | Double Bass |
+| `Instrument.46` | Tuba |
+| `Instrument.46.mixer` | Tuba |
+| `Instrument.48` | Trombone |
+| `Instrument.48.mixer` | Trombone |
+| `Instrument.49` | Bassoon |
+| `Instrument.49.mixer` | Bassoon |
+| `Instrument.50` | English horn |
+| `Instrument.50.mixer` | English horn |
+| `Instrument.51` | Soprano |
+| `Instrument.51.mixer` | Voice |
+| `Instrument.52` | Bass |
+| `Instrument.52.mixer` | Voice |
+| `Instrument.53` | Baritone |
+| `Instrument.53.mixer` | Voice |
+| `Instrument.54` | Tenor |
+| `Instrument.54.mixer` | Voice |
+| `Instrument.55` | Alto saxophone |
+| `Instrument.55.mixer` | Saxophone |
+| `Instrument.56` | Clarinet in A |
+| `Instrument.56.mixer` | Clarinet |
+| `Instrument.57` | Mezzo-soprano |
+| `Instrument.57.mixer` | Voice |
+| `Instrument.58` | Trumpet in E♭ |
+| `Instrument.58.mixer` | Trumpet |
+| `Instrument.60` | Trumpet in B♭ |
+| `Instrument.60.mixer` | Trumpet |
+| `Instrument.63` | Guitar |
+| `Instrument.63.mixer` | Guitar |
+| `Instrument.64` | Countertenor |
+| `Instrument.64.mixer` | Voice |
+| `Instrument.65` | Euphonium |
+| `Instrument.65.mixer` | Euphonium |
+| `Instrument.66` | Alto |
+| `Instrument.66.mixer` | Voice |
+| `Instrument.67` | Tenor Saxophone |
+| `Instrument.67.mixer` | Saxophone |
+| `Instrument.68` | Male voice |
+| `Instrument.68.mixer` | Voice |
+| `Instrument.69` | Harp |
+| `Instrument.69.mixer` | Harp |
+| `Instrument.70` | Bass Clarinet |
+| `Instrument.bassoon` | Bassoon |
+| `Instrument.cello` | Cello |
+| `Instrument.clarinet` | Clarinet |
+| `Instrument.crm.33` | Voice |
+| `Instrument.crm.34` | Flute |
+| `Instrument.crm.35` | Violin |
+| `Instrument.crm.36` | Saxophone |
+| `Instrument.crm.37` | Piano |
+| `Instrument.crm.38` | Cello |
+| `Instrument.crm.39` | Clarinet |
+| `Instrument.crm.40` | French Horn |
+| `Instrument.crm.41` | Oboe |
+| `Instrument.crm.42` | Viola |
+| `Instrument.crm.43` | mallets |
+| `Instrument.crm.44` | Trumpet |
+| `Instrument.crm.45` | Double Bass |
+| `Instrument.crm.46` | Tuba |
+| `Instrument.crm.48` | Trombone |
+| `Instrument.crm.49` | Bassoon |
+| `Instrument.crm.50` | English horn |
+| `Instrument.crm.51` | Voice |
+| `Instrument.crm.52` | Voice |
+| `Instrument.crm.53` | Voice |
+| `Instrument.crm.54` | Voice |
+| `Instrument.crm.55` | Saxophone |
+| `Instrument.crm.56` | Clarinet |
+| `Instrument.crm.57` | Voice |
+| `Instrument.crm.58` | Trumpet |
+| `Instrument.crm.60` | Trumpet |
+| `Instrument.crm.63` | Guitar |
+| `Instrument.crm.64` | Voice |
+| `Instrument.crm.65` | Euphonium |
+| `Instrument.crm.66` | Voice |
+| `Instrument.crm.67` | Saxophone |
+| `Instrument.crm.68` | Voice |
+| `Instrument.crm.69` | Harp |
+| `Instrument.double_bass` | Double Bass |
+| `Instrument.flute` | Flute |
+| `Instrument.guitar` | Guitar |
+| `Instrument.harp` | Harp |
+| `Instrument.horn` | French Horn |
+| `Instrument.oboe` | Oboe |
+| `Instrument.percussion` | Mallet |
+| `Instrument.piano` | Piano |
+| `Instrument.saxophone` | Saxophone |
+| `Instrument.trombone` | Trombone |
+| `Instrument.trumpet` | Trumpet |
+| `Instrument.viola` | Viola |
+| `Instrument.violin` | Violin |
+| `Instrument.voice` | Voice |
+
+<a id="p-account"></a>
+### account (109)
+
+| key | value |
+|---|---|
+| `account.accountName` | Account |
+| `account.administrator.advantages.confirm` | Continue as an administrator |
+| `account.askpush.approval` | Enable notifications |
+| `account.askpush.description` | Allow notifications for updates about new pieces and features to stay on top of your musical journey. |
+| `account.askpush.title` | Stay tuned |
+| `account.createAccount` | Connect an account |
+| `account.credits` | Credits |
+| `account.deconnexion.action` | Log out |
+| `account.deconnexion.confirm` | Log out |
+| `account.deconnexion.title` | Are you sure you want to log out? |
+| `account.deeplinkinput` | Enter my invitation code |
+| `account.deleteFiles.confirm` | Remove |
+| `account.deleteFiles.title` | This will free %@ of storage. You can't undo this action. |
+| `account.feedbackThreadTitle` | Messages |
+| `account.feedbackTitle` | Contact us |
+| `account.fileDeletionIsComplete` | Data removed successfully! |
+| `account.header.subscription.subtitle` | and get access to thousands of pieces |
+| `account.header.subscription.title` | Unlock the full catalog |
+| `account.header.userLevel` | Level %u |
+| `account.instrument.change` | Change |
+| `account.moreTipsTitle` | Tips |
+| `account.moreTitle` | Get Started |
+| `account.moreVideosTitle` | Watch Tutorials |
+| `account.nonePieces` | No |
+| `account.notificationTitle` | Activate Notifications |
+| `account.numberOfPiecesOwned` | Pieces Purchased |
+| `account.onePieceOwned` | piece purchased |
+| `account.performanceSettingsHeaderTitle` | Performance Settings |
+| `account.privacyPolicyTitle` | Privacy policy |
+| `account.profile.firstname` | First name |
+| `account.profile.lastname` | Last name |
+| `account.profile.nickname` | Nickname |
+| `account.profile.provider` | Connected with |
+| `account.profile.section.identifier` | Identifier |
+| `account.profile.section.identity` | Identifier |
+| `account.profile.section.information` | Information |
+| `account.profile.your_nickname` | Nickname |
+| `account.resetAccount.action` | Delete Account  |
+| `account.resetAccount.confirm` | Delete |
+| `account.resetAccount.title` | Are you sure you want to delete your account? |
+| `account.resetAccountWithSubscription.action` | Delete Account |
+| `account.resetAccountWithSubscription.confirm` | Delete Anyway |
+| `account.resetAccountWithSubscription.message` | WARNING: Deleting your Account will not cancel your Premium subscription! To cancel your subscription go to your device's Settings AppStore Subscription. |
+| `account.resetAccountWithSubscription.title` | Are you sure you want to delete your account? |
+| `account.resetCacheTitle` | Clear All Data |
+| `account.restore.purchases` | Restore purchases |
+| `account.restore.purchases.message` | Your purchased products have been restored! |
+| `account.restore.purchases.nopurchases.message` | It seems that you have no purchase to restore. |
+| `account.settingsSectionHeaderName` | Account settings |
+| `account.settingsSectionInstrumentChoice` | My Instrument |
+| `account.settingsSectionInstrumentSelection` | Select your Main Instrument |
+| `account.status.confirm.text` | By changing your status, you will lose access to your referral link and student list. However, this information will be preserved and will become accessible again if you reactivate your teacher status. |
+| `account.status.confirm.title` | Are you sure you want to change your status? |
+| `account.status.menu.administrator` | Head of an institution |
+| `account.status.menu.other` | Independent practice |
+| `account.status.menu.student` | Student |
+| `account.status.menu.teacher` | Teacher |
+| `account.status.menu.title` | Status |
+| `account.status.other` | Neither |
+| `account.status.other.descr` |  |
+| `account.status.student` | I take lessons |
+| `account.status.student.descr` |  |
+| `account.status.teacher` | I am a teacher |
+| `account.status.teacher.descr` |  |
+| `account.status.title` | In what context do you practice? |
+| `account.storage.available.title` | Available: |
+| `account.storage.removeCache` | Remove pieces |
+| `account.storage.removeCachePieces` | Remove cached pieces |
+| `account.storage.removeOfflinePieces` | Remove offline pieces |
+| `account.storage.removeSavedRecordings` | Remove saved recordings |
+| `account.storage.removeTemporaryRecordings` | Remove temporary recordings |
+| `account.storage.title` | Storage |
+| `account.students.empty.content.cta` | Invite students |
+| `account.students.menu.title` | My students |
+| `account.subscription.label.lifetime` | Lifetime access |
+| `account.subscription.noFreeTrial.button` | See all offers |
+| `account.supportHeaderTitle` | Metronaut Support |
+| `account.supportTitle` | Help |
+| `account.switchoff.comment.placeholder` | Please explain the reasons for your cancellation |
+| `account.switchoff.comment.title` | Would you have a minute to tell us more? |
+| `account.switchoff.how.bullets` | 1. Open the Settings app on your device.<br><br>2. Tap your name and then "Subscriptions".<br><br>3. Select the Metronaut subscription and tap "Cancel Subscription" to disable it from auto-renewing at the end of the current billing cycle. |
+| `account.switchoff.how.info` | If you don't see the cancel option, your subscription has already been cancelled and it won't be renewed. |
+| `account.switchoff.how.title` | How to cancel your subscription? |
+| `account.switchoff.reason.catalog` | I can't find the pieces I want to play |
+| `account.switchoff.reason.expensive` | The subscription is too expensive |
+| `account.switchoff.reason.level` | Metronaut isn't suitable for my level |
+| `account.switchoff.reason.no_time` | I don't have time to play |
+| `account.switchoff.reason.otherAccount` | Other |
+| `account.switchoff.reason.subscribe.notrial` | Avoid unexpected charges if I forget the renewal date |
+| `account.switchoff.reason.subscribe.trial` | I'm not sure if I want to subscribe after the free trial |
+| `account.switchoff.reason.title` | What is the primary reason you wish to cancel your subscription? |
+| `account.teacher.advantages.confirm` | Continue as a teacher |
+| `account.teacher.share.subtitle` | Invite your students |
+| `account.teacher.share.title` | Share your link |
+| `account.teacher.success.textWithDate` | Enjoy unlimited access to all the music scores in the catalog on all your devices.<br><br>Invite your students to join and offer them free Premium access until %1$@. You and your students can also enjoy a 50%% discount on Premium membership.<br><br>Your trial ends on: %2$@ |
+| `account.teacher.success.textWithoutDate` | Enjoy unlimited access to all the music scores in the catalog on all your devices.<br><br>Invite your students to join and offer them free Premium access. You and your students can also enjoy a 50%% discount on Premium membership. |
+| `account.teacher.success.titleWithDate` | Enjoy free Premium access until %@ |
+| `account.teacher.success.titleWithoutDate` | Enjoy free Premium access |
+| `account.termOfServicesTitle` | License Agreement |
+| `account.userEmail` | Email |
+| `account.userGoal.isActive` | Reminders |
+| `account.userGoal.isActive_copy` | Reminders |
+| `account.userGoal.settings` | Define Goal |
+| `account.userGoal.settings_copy` | Define Goal |
+| `account.userGoal.title` | My practice goals |
+| `account.walkthroughTitle` | Replay Onboarding |
+| `account.welcomePeriod.badge` | Welcome Access |
+| `account.welcomePeriod.button` | Extend my Free Trial |
+| `account.welcomePeriod.subtitle` | Keep enjoying Metronaut without limits by extending your free trial. |
+
+<a id="p-home"></a>
+### home (94)
+
+| key | value |
+|---|---|
+| `home.alternativeMainAccount0` | Check out ‘My Account’ |
+| `home.alternativeMainFeatures0` | All we want for Christmas |
+| `home.alternativeMainGenerique` | Time for some music! |
+| `home.alternativeMainNauts1` | Christmas is all around! |
+| `home.alternativeMainPieceRequest0` | Build our Catalog together? |
+| `home.alternativeMainPlayMusic0` | Try New Pieces |
+| `home.alternativeMainUpdate0` | Thank you for updating! |
+| `home.alternativeNewPieces0` | %d new Pieces this week |
+| `home.alternativeNewPieces1` | Give them a try! |
+| `home.alternativeNewPiecesNone0` | New Pieces for you every day |
+| `home.alternativeNewPiecesNone1` | Do not miss the daily updates! |
+| `home.alternativeSubAccount0` | To find video tutorials, tips and more… |
+| `home.alternativeSubFeatures1` | … is your feedback! |
+| `home.alternativeSubGenerique` | Scroll to find pieces to play |
+| `home.alternativeSubNauts1` | Play or Sing your favourite Carols. |
+| `home.alternativeSubPieceRequest0` | Suggest upcoming Pieces |
+| `home.alternativeSubPlayMusic0` | See our Recommendations for you! |
+| `home.alternativeSubUpdate0` | And our catalog gets updated daily |
+| `home.alternativeSubUpdateNewPerf` | We improve Metronaut thanks to your feedbacks 🤙! |
+| `home.appupdateavailable` | New version available. Tap to upgrade! |
+| `home.appupdatecritical` | Update Required before continuing to use Metronaut! |
+| `home.askpush.approval` | Enable notifications |
+| `home.askpush.description` | Allow notifications for updates about new pieces and features to stay on top of your musical journey. |
+| `home.askpush.title` | Stay tuned |
+| `home.christmasSelection` | Christmas Selection |
+| `home.christmasSelection.subtitle` | Play your favorite carols |
+| `home.comingSoon` | Vote for the next hit |
+| `home.comingSoon.subtitle` | Vote for your favorite suggestions |
+| `home.expandButton` | Discover |
+| `home.expandSubtitle` | Discover new pieces thanks to our transposition feature! |
+| `home.expandTitle` | Expand your repertoire |
+| `home.feedbackButton` | Give Us Feedback |
+| `home.feedbackSubtitle` | Help us improve the App by sending us feedbacks and suggestions. We love reading and answering them! |
+| `home.feedbackTitle` | How are we doing? |
+| `home.followButton` | Play |
+| `home.followSubtitle` | Try the Magic mode that adapts the accompaniment tempo to you. |
+| `home.followTitle` | Play at your own Rhythm |
+| `home.inviteButton` | Invite |
+| `home.inviteSubtitle` | If you enjoy playing with Metronaut, recommend the App to your Friends! |
+| `home.inviteTitle` | Invite a friend |
+| `home.inviteWithoutNautsButton` | Invite |
+| `home.inviteWithoutNautsSubtitle` | If you enjoy playing with Metronaut, recommend the App to your Friends! |
+| `home.inviteWithoutNautsTitle` | Invite a friend |
+| `home.lastPlayed` | Recently played |
+| `home.message` | Currently on Metronaut… |
+| `home.myPieces` | Recently played |
+| `home.myPieces.subtitle` | All your pieces a click away |
+| `home.nautsButton` | More Nauts |
+| `home.nautsSubtitle` | Nauts are the virtual currency you use to get new pieces. You gain more each time you complete certain goals. |
+| `home.nautsTitle` | What are Nauts? |
+| `home.offlinePieces` | Available offline |
+| `home.OrchestraPieces` | Play with an Orchestra! |
+| `home.OrchestraPieces.subtitle` |   |
+| `home.originalPieces` | %@ Pieces |
+| `home.piecesFor` | Pieces for |
+| `home.piecesForNotFound` | Pieces for your instrument |
+| `home.playButton` | Play |
+| `home.playSubtitle` | You gain Nauts each time you play a piece from beginning to end! |
+| `home.playTitle` | Play new pieces |
+| `home.PracticeDashboard.booster.button.createUserGoal` | Create a Practice Goal |
+| `home.PracticeDashboard.booster.button.modify` | Define Goal |
+| `home.PracticeDashboard.booster.button.play_duplicate` | Let's Play! |
+| `home.PracticeDashboard.booster.button.play_duplicate_1` | Let's Play! |
+| `home.PracticeDashboard.booster.button.play_duplicate_2` | Let's Play! |
+| `home.PracticeDashboard.booster.button.playUserGoal` | Let's Play! |
+| `home.PracticeDashboard.booster.noUserGoal.caseOne` | Congrats for your motivation! Keep your momentum by setting a practice goal 🚀 |
+| `home.PracticeDashboard.booster.noUserGoal.caseZero` | Track your progress and keep yourself motivated! Practice makes perfect (and happy 😉). |
+| `home.PracticeDashboard.booster.userGoal.caseOne` | Just the one I have been waiting for 😍 Let's pick up where we left off! |
+| `home.PracticeDashboard.booster.userGoal.caseThree` | What a Maestro! Challenge yourself with a higher goal and we’ll see you in Carnegie Hall soon 😎 |
+| `home.PracticeDashboard.booster.userGoal.caseTwo` | You’re doing awesome this week, great job! Play today to stay on track🕺 |
+| `home.PracticeDashboard.booster.userGoal.caseZero` | Track your progress and keep yourself motivated! Let’s make time for Music 🎶 |
+| `home.PracticeDashboard.error` | Houston we have a problem! Our dream team is on it... 🔧 |
+| `home.PracticeDashboard.waiting` | 🛫 Cabin crew - Arm doors and load dashboard |
+| `home.PracticeDashboard.week.current` | This Week |
+| `home.PracticeDashboard.week.current_duplicate` | This Week |
+| `home.PracticeDashboard.week.previous` | Last Week |
+| `home.PracticeDashboard.week.previous_duplicate` | Last Week |
+| `home.PracticeDashboard.week.previous_duplicate_1` | Last Week |
+| `home.recentPieces` | Latest Pieces |
+| `home.recentPieces.subtitle` | Discover new pieces |
+| `home.recommandationForYou` | Recommended for you |
+| `home.recommandationForYou.subtitle` | Tailored for your instrument |
+| `home.selectFirstPiece` | Select a First Piece |
+| `home.selectFirstPiece.subtitle` | Discover how to play with Metronaut |
+| `home.suggestButton` | Suggest a piece |
+| `home.suggestSubtitle` | Propose new additions to Metronaut's catalog! |
+| `home.suggestTitle` | Enrich our catalog |
+| `home.support.button` | Contact us |
+| `home.welcomebackMain` | Welcome back! |
+| `home.welcomebackSub` | Nice to see you again |
+| `home.welcomedemo.subtitle` | More than 500 pieces for 32 instruments in full version. |
+| `home.welcomedemo.title` | Welcome to Metronaut Demo! |
+| `home.welcomeMain` | Welcome! |
+| `home.welcomeSub` | Enjoy your %d Nauts welcome bonus. |
+
+<a id="p-global"></a>
+### global (83)
+
+| key | value |
+|---|---|
+| `global.anonymous` | Anonymous |
+| `global.bravo` | Well done! |
+| `global.Cancel` | Cancel |
+| `global.close` | Close |
+| `global.confirm` | Confirm |
+| `global.continue` | Continue |
+| `global.create` | Create |
+| `global.currentWeek` | Last 7 days |
+| `global.default` | default |
+| `global.delete` | Delete |
+| `global.difficulty1` | Easy |
+| `global.difficulty2` | Intermediate |
+| `global.difficulty3` | Advanced |
+| `global.done` | Done |
+| `global.email` | Email |
+| `global.error.missingPiece.failureReason` | An error occurred! This piece is not currently available. Please try again later! |
+| `global.error.missingProduct.subtitle` | One of our subscription plans is temporarily unavailable. Please try again later. |
+| `global.error.missingProduct.title` | App Store unavailable |
+| `global.error.noConnection.subtitle` | Check your network connection or try later |
+| `global.error.noConnection.title` | No Internet Connection |
+| `global.error.subtitle` | An error occurred! Please try again later. |
+| `global.error.title` | Oops, something's wrong |
+| `global.error.versionLoading.subtitle` | An error occurred! The requested version is not available. Please try again later. |
+| `global.error.versionsListLoading.subtitle` | An error occurred! This piece is not currently available. Please try again later! |
+| `global.error.versionStreaming.subtitle` | An error occurred! Please try again later. |
+| `global.export` | Export |
+| `global.features` | Features |
+| `global.free` | Free |
+| `global.from` | From {{user}} |
+| `global.goBack` | Back |
+| `global.goSettings` | Go to Settings |
+| `global.inKey` | in |
+| `global.instructions` | Instructions |
+| `global.invalidCode` | The code you entered is incorrect. Please check and try again. |
+| `global.invalidEmail` | Invalid Email |
+| `global.later` | Later |
+| `global.league` | League |
+| `global.manageSubscriptions` | Manage Subscriptions |
+| `global.me` | Me |
+| `global.metronaut.name` | Metronaut |
+| `global.metronaut.name_min` | metronaut |
+| `global.musicmeasure` | Measure |
+| `global.newFeature` | New! |
+| `global.next` | Next |
+| `global.OK` | OK |
+| `global.options` | Options |
+| `global.orchestra` | Orchestra |
+| `global.paying` | Paying |
+| `global.piece` | piece |
+| `global.pieces` | pieces |
+| `global.play` | Play |
+| `global.playback` | Playback |
+| `global.preparing` | Preparing |
+| `global.record` | Recordings |
+| `global.record_copy` | Record |
+| `global.recording` | Recording |
+| `global.recordVideo` | Record Video |
+| `global.replay` | Play again |
+| `global.required` | Required |
+| `global.Retry` | Try again |
+| `global.rewind` | Rewind |
+| `global.save` | Save |
+| `global.see` | See |
+| `global.seeAll` | See all |
+| `global.seemore` | See More |
+| `global.selectYourInstrument` | Select your Instrument |
+| `global.settings` | Settings |
+| `global.share` | Share |
+| `global.shareApp` | Share this app |
+| `global.sharePiece` | Share this piece |
+| `global.skip` | Skip |
+| `global.studio` | Studio |
+| `global.submitButton` | Send |
+| `global.teacher` | Teacher |
+| `global.tempo` | Tempo |
+| `global.to` | To {{user}} |
+| `global.totalPoints` | Total points |
+| `global.totalXP` | Total XP |
+| `global.training` | Training |
+| `global.updateavailable` | Update available |
+| `global.updatenow` | Update |
+| `global.video` | Video |
+| `global.welcome` | Welcome! |
+
+<a id="p-popup"></a>
+### popup (73)
+
+| key | value |
+|---|---|
+| `popup.accompanimentUpdate.primary_bt` | Update |
+| `popup.accompanimentUpdate.summary` | Update this piece to access newer version with the latest corrections. |
+| `popup.accompanimentUpdate.title` | Corrections available! |
+| `popup.alreadypublished.action` | See post |
+| `popup.alreadypublished.summary` | You have already posted this recording! 🎉 Care to watch it on the community? |
+| `popup.alreadypublished.title` | Already posted! |
+| `popup.error_loading.primary_bt` |  |
+| `popup.error_loading.summary` |  |
+| `popup.error_loading.title` |  |
+| `popup.hands_both.summary` | Play both hands without accompaniment. Tap 👂 to hear the piece. |
+| `popup.hands_left.summary` | Play the left hand. Metronaut will play the right hand |
+| `popup.hands_right.summary` | Play the right hand. Metronaut will play the left hand |
+| `popup.internalspeaker.warning.message` | For best recording quality, we suggest using external speakers or headphones while recording. |
+| `popup.internalspeaker.warning.title` | Prefer external speakers |
+| `popup.listen_piece.primary_bt` | Got it |
+| `popup.listen_piece.summary` | Listen to the piece with solo by tapping the 👂🏻icon. |
+| `popup.listen_piece.summary_wSFS` | {ear}: listen to the piece with solo<br>{play}: play the piece without solo |
+| `popup.listen_piece.title` | Discover the Piece |
+| `popup.listen_piece.title_wSFS` | Listen or Play |
+| `popup.listen_recording.primary_bt` | See my recordings |
+| `popup.listen_recording.summary` | Listen to your performance and share with friends. |
+| `popup.listen_recording.title` | Discover your First Recordings! |
+| `popup.lowStorage.action` | Manage Storage |
+| `popup.lowStorage.message` | Lack of storage can affect your recordings and overall functionality. |
+| `popup.lowStorage.title` | Low Storage on Device |
+| `popup.midiChooser.action.acoustic` | I have an acoustic instrument |
+| `popup.midiChooser.action.midi` | I have a MIDI instrument |
+| `popup.midiChooser.subtitle` | You can change this later in settings. |
+| `popup.midiChooser.title` | Using acoustic or MIDI instrument? |
+| `popup.newOutputConnected.message` | Indicate whether it's a speaker or headphones to improve AI features and recording quality. |
+| `popup.newOutputConnected.title` | New audio output connected |
+| `popup.perfOrPreview.body` | Unlock our entire catalog or play an excerpt of the piece |
+| `popup.perfOrPreview.noFreeTrial.title` | Unlock the full score |
+| `popup.perfOrPreview.primary_bt` | Unlock the piece |
+| `popup.perfOrPreview.secondary_bt` | Play an excerpt |
+| `popup.perfOrPreview.title` | Unlock the full score for free |
+| `popup.recording_camera.primary_bt` | Continue |
+| `popup.recording_camera.settings.primary_bt` | Go to Settings |
+| `popup.recording_camera.settings.summary` | To enjoy all of Metronaut's video features, enable access to your camera in your device's settings. |
+| `popup.recording_camera.settings.title` | Camera Access Needed |
+| `popup.recording_camera.summary` | Metronaut records you and overlays your video on the score. |
+| `popup.recording_camera.title` | Record and share your performances |
+| `popup.recordingupload.footer` | By posting your recording, you confirm that you are at least 15 years old and agree to our [terms of service](https://www.metronautapp.com/eula). |
+| `popup.recordingupload.footer.eula` | By posting your recording, you confirm that you are at least 15 years old and agree to our [terms of service](/eula). |
+| `popup.recordingupload.share.summary` | Send them an audio or video reference, which they can find in the My Music tab. Your recording will be securely stored on our servers. |
+| `popup.recordingupload.share.title` | Send your recording to your students |
+| `popup.recordingupload.share.to_teacher.summary` | Upload your performance. Your teacher will find it in their My Music tab. Your recording will be securely stored on our servers. |
+| `popup.recordingupload.share.to_teacher.title` | Send your recording to your teacher |
+| `popup.recordingupload.summary` | Publish your recording to make it visible to everyone on the Discover tab. |
+| `popup.recordingupload.title` | Show off your performance |
+| `popup.recordinguploaddone.summary` | Your recording has been uploaded successfully! It will be published on Metronaut once it is moderated. |
+| `popup.recordinguploaddone.title` | Upload successful! |
+| `popup.search_perf.primary_bt` | Try it |
+| `popup.search_perf.summary` | In Catalog tab, search pieces filtering by genre, difficulty, etc. |
+| `popup.search_perf.title` | Find Your Next Piece |
+| `popup.shareForbidden.subtitle` | This piece is under copyright in your country and can not be shared! |
+| `popup.shareForbidden.title` | Cannot share this recording |
+| `popup.solo_piece.primary_bt` | Got it |
+| `popup.solo_piece.summary` | Press Play to start your performance without accompaniment. Tap 👂 to hear the piece. |
+| `popup.solo_piece.summary_helper_ear` | Tap 👂 to hear the piece. |
+| `popup.solo_piece.summary_helper_play` | Press Play to start your performance without accompaniment. |
+| `popup.solo_piece.summary_helper_play_both_hands` | Play both hands without accompaniment. |
+| `popup.solo_piece.title` | Solo Piece |
+| `popup.video_recording.primary_bt` | OK |
+| `popup.video_recording.summary` | Metronaut records you and overlays your video on the score.<br><br>Move or hide the Camera capture.<br><br>Watch, save or share your video after performance. |
+| `popup.video_recording.summary_1` | Metronaut records you and overlays your video on the score. |
+| `popup.video_recording.summary_2` | Move or hide the Camera capture. |
+| `popup.video_recording.summary_3` | Watch, save or share your video after performance. |
+| `popup.video_recording.title` | Video Record Your Performance |
+| `popup.wirelessSpeaker.action1` | I use a speaker |
+| `popup.wirelessSpeaker.action2` | I use a headphone |
+| `popup.wirelessSpeaker.message` | If you are using wireless headphones, there might be a gap between sound and image which can be adjusted. |
+| `popup.wirelessSpeaker.title` | Wireless audio output connected |
+
+<a id="p-nda"></a>
+### nda (68)
+
+| key | value |
+|---|---|
+| `nda.account.premium.subtitle` | Subscribe to play your favorite pieces with no time limit. |
+| `nda.discover.difficulty` | Collections for every level |
+| `nda.discover.generic.subtitle` | Explore our curated collections to find your next favorite piece. |
+| `nda.discover.generic.title` | Discover our catalog! |
+| `nda.discover.mood` | A Mood, a collection |
+| `nda.discover.new` | New on Metronaut |
+| `nda.discover.popular` | Popular collections |
+| `nda.discover.recommended` | Recommended for you |
+| `nda.discover.tip.rhythm.subtitle` | Choose your key and tempo: With Metronaut's help, even harder pieces won't resist you. |
+| `nda.discover.tip.rhythm.title` | Challenge yourself |
+| `nda.discover.tip.transposition.subtitle` | Metronaut will suggest pieces originally composed for other instruments and adapt them to yours. |
+| `nda.discover.tip.transposition.title` | Discover new musical horizons |
+| `nda.discover.welcomeMessage.generic.subtitle` | You are on the Discover Tab: Choose a first piece to start your musical journey. |
+| `nda.discover.welcomeMessage.generic.title` | Welcome to Metronaut! |
+| `nda.discover.welcomeMessage.perfOnboarding.button` | Let's go! |
+| `nda.discover.welcomeMessage.perfOnboarding.subtitle` | Learn how to play with Metronaut with me or explore the Discover tab to have a look at our catalog. |
+| `nda.discover.welcomeMessage.perfOnboarding.title` | Welcome! |
+| `nda.generic.seeAll` | See all |
+| `nda.generic.seeMore` | See More |
+| `nda.global.opusClosed` | See %u movements |
+| `nda.global.opusOpened` | Hide %u movements |
+| `nda.instrumentSelection.custom` | No luck? Select the closest available instrument. |
+| `nda.instrumentSelection.genericVoiceChoice` | What kind of voice do you have? |
+| `nda.instrumentSelection.genericVoiceChoice.female` | Female Voice |
+| `nda.instrumentSelection.genericVoiceChoice.male` | Male voice |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily1` | What is your singing range? |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily2` | What saxophone do you play? |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily3` | What clarinet do you play? |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily4` | What trumpet do you play? |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily5` | What oboe do you play? |
+| `nda.instrumentSelection.rangeChoice.instrumentFamily7` | What harp do you play? |
+| `nda.instrumentSelection.subtitle` | You can change your instrument at any time from your account |
+| `nda.instrumentSelection.title` | Which instrument do you play? |
+| `nda.instrumentSelection.voiceRangeChoice.generic` | I don't know |
+| `nda.internalNotification.favorites` | %@ has been added to your favorites in My music. |
+| `nda.login.email` | With Email |
+| `nda.login.facebook` | With Facebook |
+| `nda.login.form.mail.placeholder` | example@gmail.com |
+| `nda.login.form.password.placeholder` | At least 8 characters, no spaces |
+| `nda.login.newUser.existingAccount` | Already have an account? |
+| `nda.login.newUser.title` | Your Orchestra is waiting for You! Create your Account to Discover it. |
+| `nda.login.returningUser.createAccount` | No account? |
+| `nda.login.returningUser.title` | Welcome Back! Log in to meet up your Orchestra. |
+| `nda.login.sms` | With SMS |
+| `nda.myMusic.favorites` | My Favorites |
+| `nda.myMusic.favorites.explanation` | Tap on Star to add a piece to your favorites. |
+| `nda.myMusic.lastPlayed.explanation` | You'll find the last pieces you've played here. |
+| `nda.onboarding.customInstrument.clef` | Main Clef |
+| `nda.onboarding.customInstrument.range` | Range |
+| `nda.onboarding.customInstrument.title` | Tell us more about your instrument |
+| `nda.onboarding.explore` | Later, let me explore the App first |
+| `nda.onboarding.instrumentSelection.rangeChoice.other` | No luck? Select the closest available instrument. |
+| `nda.onboarding.newUser` | Let's go! |
+| `nda.onboarding.play` | Yes, I'll get my instrument |
+| `nda.onboarding.playExploreChoice` | Welcome aboard! Do you want to play with Metronaut? |
+| `nda.onboarding.returningUser` | Already have an account? |
+| `nda.search.recentSearches` | Recent Searches |
+| `nda.search.suggestedSearches` | Suggestions |
+| `nda.subscription.popularOption` | Most Popular |
+| `nda.tab.account` | Account |
+| `nda.tab.discover` | Discover |
+| `nda.tab.myMusic` | My music |
+| `nda.tab.search` | Catalog |
+| `nda.tab.search.old` | Search |
+| `nda.userLevelSelection.level4.obsolete` | I need some challenge |
+| `nda.userLevelSelection.subtitle` | We will adapt our recommendations to your level. |
+| `nda.userLevelSelection.title` | What is your level? |
+| `nda.welcomeNewVersion.returningUser.title` | Discover Metronaut’s New Look! |
+
+<a id="p--no-prefix-"></a>
+### (no prefix) (67)
+
+| key | value |
+|---|---|
+| `App Preview App Store 1 ` | Choose your Tempo |
+| `App Preview App Store 2` | Magic mode: Metronaut listens to you and adopts your tempo |
+| `arrangedFor` | Arranged for %@ |
+| `automaticListeningModePurchase` | Listening modes automatically included with the purchase |
+| `availableArrangements` | Available arrangements |
+| `CatalogElementWithoutTranslation` | &lt;not translated> |
+| `composerNameConstruction` | {{firstname}} {{lastname}} |
+| `Créa UA Taiwan/HK (vidéo + ad copies)` | -Amour-<br>Are you bored of practicing on your own?  / Meet Metronaut and play accompanied by professional pianists and orchestras! / You will find plenty of music scores for all instruments and levels! /Try it out for free on the App Store!<br><br>-Multi-<br>Discover Metronaut / Access thousands of pieces for all instruments and levels / Play accompanied by professional pianists and orchestras / The score even scrolls with the accompaniment / Try it out for free on the Appstore.<br><br><br>-Catalog-<br>Discover a new way to practice music / Practice with professional orchestras / Explore thousands of play along music sheets for all instruments / Play pieces of your favorite composers / Tchaikovsky / Mozart / Beethoven and many more<br><br>-iPad-<br>Discover a new way to practice music / Download Metronaut / Play with professional orchestras / Explore thousands of play along music sheets for all instruments / Learn to play on time thanks to instant feedback / Download on the appstore<br><br>-Pieces and play-<br>Explore pieces through thematic collections... / Or search for your favorite composer / Play with professional orchestras / The score scrolls with the accompaniment<br><br><br>- Ad copies-<br><br>Skyrocket your progress with Metronaut! Learn to play on time thanks to our feedback during and after your performance  /<br><br>Explore a growing catalog of thousands of classical music sheets and get music recommendations selected by our editorial team for your instrument and level!  /<br><br>Play-along high quality recordings of professional musicians. Playing with piano or orchestra accompaniment will develop your listening skills! /<br><br>Choose any piece to play in our catalog: Metronaut automatically transposes and changes the clef for your instrument, while preserving the audio quality of the accompaniment. /<br><br>Tackle and master difficult passages of the piece by playing them in loop, activating the metronome or the solo to hear the part you are playing /<br><br>Progress with Instant Feedback /<br><br>Play with Orchestras at your tempo /<br><br>Become a rhythm master /<br><br>Explore many genres:, Romantic, Classical, Jazz... /<br><br>20 instruments available : Violin, Viola, Cello, Flute, Piano.. |
+| `Description abonnement App Store` | Unlimited access and play time |
+| `DownloadErrorPerformanceVCMessage` | Check your network connection or try later |
+| `millisecondShort` |  ms |
+| `Open ${target} in ${applicationName}` | Open ${target} in ${applicationName} |
+| `PerformanceIn` | in |
+| `PerformanceIntervalLong0` | Original |
+| `PerformanceIntervalLong1` | minor second |
+| `PerformanceIntervalLong10` | minor seventh |
+| `PerformanceIntervalLong11` | major seventh |
+| `PerformanceIntervalLong2` | major second |
+| `PerformanceIntervalLong3` | minor third |
+| `PerformanceIntervalLong4` | major third |
+| `PerformanceIntervalLong5` | perfect fourth |
+| `PerformanceIntervalLong6` | Tritone |
+| `PerformanceIntervalLong7` | perfect fifth |
+| `PerformanceIntervalLong8` | minor sixth |
+| `PerformanceIntervalLong9` | major sixth |
+| `PerformanceIntervalShort0` | 0 |
+| `PerformanceIntervalShort1` | m2nd |
+| `PerformanceIntervalShort10` | m7th |
+| `PerformanceIntervalShort11` | M7th |
+| `PerformanceIntervalShort12` | 8ve |
+| `PerformanceIntervalShort2` | M2nd |
+| `PerformanceIntervalShort3` | m3rd |
+| `PerformanceIntervalShort4` | M3rd |
+| `PerformanceIntervalShort5` | 4th |
+| `PerformanceIntervalShort6` | tritone |
+| `PerformanceIntervalShort7` | 5th |
+| `PerformanceIntervalShort8` | m6th |
+| `PerformanceIntervalShort9` | M6th |
+| `PerformanceNote0` | C |
+| `PerformanceNote1` | D♭ |
+| `PerformanceNote10` | B♭ |
+| `PerformanceNote11` | B |
+| `PerformanceNote2` | D |
+| `PerformanceNote3` | E♭ |
+| `PerformanceNote4` | E |
+| `PerformanceNote5` | F |
+| `PerformanceNote6` | G♭ |
+| `PerformanceNote7` | G |
+| `PerformanceNote8` | A♭ |
+| `PerformanceNote9` | A |
+| `PerformanceSemitone` | semitone |
+| `PerformanceSemitones` | semitones |
+| `Play ${target} on ${applicationName}` | Play ${target} on ${applicationName} |
+| `Practice in ${applicationName}` | Practice in ${applicationName} |
+| `Screenshot 1 App Store` | Play Accompanied by an Orchestra that Listens to You |
+| `Screenshot 2 App Store ` | Set your Tempo and Transpose scores |
+| `Screenshot 3 App Store ` | Transpose instantly for your Instrument or Voice |
+| `Screenshot 4 App Store` | Record and Share your Performances |
+| `Screenshot 5 App Store` | Explore our Catalog |
+| `Search ${applicationName}` | Search ${applicationName} |
+| `Search ${criteria} in ${applicationName}` | Search ${criteria} in ${applicationName} |
+| `shortHour` | %u h |
+| `shortMinute` | %u min |
+| `shortPercent` | % |
+| `shortSecond` | %u s |
+| `Tierces - 12/8 - Main gauche` | Thirds - 12/8 - Left hand |
+| `waive_the_offer` | Waive the offer |
+
+<a id="p-account23"></a>
+### account23 (59)
+
+| key | value |
+|---|---|
+| `account23.audio` | Audio |
+| `account23.automaticRecording.subtitle` | Temporarily record all performances |
+| `account23.automaticRecording.title` | Automatic recording |
+| `account23.free_premium.subscription_cta` | See offers |
+| `account23.free_premium.subtitle_with_date` | Premium access, expire on %@ |
+| `account23.free_premium.subtitle_without_date` | Premium access |
+| `account23.instrument` | Instrument |
+| `account23.instrument_level_section` | My preferences |
+| `account23.instrumentOLD` | Sheet music instrument |
+| `account23.inviteFriend` | Invite a Friend |
+| `account23.level` | Level |
+| `account23.level1` | Beginner |
+| `account23.level2` | Basic |
+| `account23.level3` | Advanced |
+| `account23.level4` | Expert |
+| `account23.member_since` | Member since %@ |
+| `account23.midi` | MIDI Parameters |
+| `account23.midi.subtitle` | Connect to a MIDI Instrument |
+| `account23.my_subscription` | My subscription |
+| `account23.my_subscription.cancel_free_trial` | Cancel free trial |
+| `account23.my_subscription.cancel_subscription` | Cancel subscription |
+| `account23.my_subscription.expired` | Your subscription will end on %@ |
+| `account23.my_subscription.manage_subscription` | Manage Subscriptions |
+| `account23.my_subscription.monthly` | Monthly subscription |
+| `account23.my_subscription.reactivate` | Reactivate my subscription |
+| `account23.my_subscription.renewal.monthly` | Your plan will renew on {{date}} for the regular price of {{price}} every month until cancelled. |
+| `account23.my_subscription.renewal.yearly` | Your plan will renew on {{date}} for the regular price of {{price}} every year until cancelled. |
+| `account23.my_subscription.see_offers` | See offers |
+| `account23.my_subscription.subscription_start_date.monthly` | Starting on {{date}}, your plan will renew for the regular price of {{price}} every month until cancelled. |
+| `account23.my_subscription.subscription_start_date.yearly` | Starting on {{date}}, your plan will renew for the regular price of {{price}} every year until cancelled. |
+| `account23.my_subscription.title` | Subscription |
+| `account23.my_subscription.trial` | 7 days free trial |
+| `account23.my_subscription.yearly` | Yearly subscription |
+| `account23.pref` | Preference |
+| `account23.pref.both` | Classical & mainstream music |
+| `account23.pref.classical` | Classical music |
+| `account23.pref.pop` | Mainstream music |
+| `account23.premium_cta` | Subscribe |
+| `account23.profile.provider.apple` | Apple |
+| `account23.profile.provider.email` | Email |
+| `account23.profile.provider.facebook` | Facebook |
+| `account23.profile.provider.google` | Google |
+| `account23.profile.provider.phone` | SMS |
+| `account23.profile.provider.wechat` | WeChat |
+| `account23.profile.your_nickname` | Nickname |
+| `account23.recordings` | Recordings |
+| `account23.renewal_date` | Will be renewed on %@ |
+| `account23.score` | Score |
+| `account23.settings` | Settings |
+| `account23.showSummary.hide` | Don't show again |
+| `account23.showSummary.subtitle` | After each session |
+| `account23.showSummary.title` | Show statistics |
+| `account23.social` | Social |
+| `account23.stats` | Statistics |
+| `account23.subscription_end_date` | Will expire on %@ |
+| `account23.subscription_expired` | Subscription expired on %@ |
+| `account23.trial_cta` | 7-day Free Trial |
+| `account23.trial_end_date` | Free trial until %@ |
+| `account23.trial_expired` | Free Trial expired on %@ |
+
+<a id="p-login"></a>
+### Login (55)
+
+| key | value |
+|---|---|
+| `Login.askForget.title` | Forgot Password? |
+| `Login.create.email.title` | Create an Account |
+| `Login.create.password.title` | Set your password |
+| `Login.email.forgetButtonTitle` | Forgot Password? |
+| `Login.email.title` | Login |
+| `Login.error.accountDisabled` | User account is disabled. |
+| `Login.error.badErrorCode` | The code you entered is not valid. |
+| `Login.error.badPhoneFormat` | The given phone number is not valid |
+| `Login.error.badUserInformations` | This email/password combination is not valid. |
+| `Login.error.emailAlreadyUse` | A user is already registered with this e-mail address. |
+| `Login.error.emailAlreadyUse.apple` | You've already created an account with Apple sign-in. Tap the "Already have an account?" button to log in. |
+| `Login.error.emailAlreadyUse.back.apple` | You've already created an account with Apple sign-in. Tap "&lt;" to log in. |
+| `Login.error.emailAlreadyUse.back.facebook` | You've already created an account with Facebook. Tap "&lt;" to log in. |
+| `Login.error.emailAlreadyUse.back.wechat` | You've already created an account with WeChat. Tap "&lt;" to log in. |
+| `Login.error.emailAlreadyUse.email` | You've already created an account with this email. Tap the "Already have an account?" button to log in. |
+| `Login.error.emailAlreadyUse.facebook` | You've already created an account with Facebook. Tap the "Already have an account?" button to log in. |
+| `Login.error.emailAlreadyUse.google` | You've already created an account with this email. Tap the "Already have an account?" button to log in. |
+| `Login.error.emailAlreadyUse.wechat` | You've already created an account with WeChat. Tap the "Already have an account?" button to log in. |
+| `Login.error.emailBadFormat` | Email address is not valid. |
+| `Login.error.internalError` | Oops, something went wrong. Please try again. |
+| `Login.error.methodUnvailable` | This registration method is not available at the moment. |
+| `Login.error.offlineMode` | You need an Internet connection to do this. |
+| `Login.error.passwordBadFormat` | Your password must be at least 8 characters, and cannot contain only numbers. |
+| `Login.error.providerError` | Uh oh, Facebook connection didn't work. Try again? |
+| `Login.error.serverUnavailable` | Sorry, we weren't able to connect to the server. Please try again later. |
+| `Login.forgetPasswordButtontitle` | Forgot Password? |
+| `Login.form.agreement_cgu` | Terms of Service |
+| `Login.form.agreement.help` | By creating an account you agree to the Terms of Service and Privacy policy. |
+| `Login.form.agreement.policies` | Privacy policy |
+| `Login.form.askForget.help` | We'll send you an email to this address with a link to reset your password. |
+| `Login.form.cgu.link` | Terms of Service |
+| `Login.form.mail.placeholder` | Enter your email address here |
+| `Login.form.mail.title` | Email |
+| `Login.form.password.help` | Your password must be at least 8 characters, and cannot contain only numbers. |
+| `Login.form.password.placeholder` | Enter your password here |
+| `Login.form.password.title` | Password |
+| `Login.form.phone.help` | A code has been sent to the number %@. Go back if it is not right. |
+| `Login.form.phone.placeholder` | Enter your number here |
+| `Login.form.phone.title` | Phone number |
+| `Login.form.policies.link` | Privacy policy |
+| `Login.form.validationCode.placeholder` | Enter the code you received by SMS |
+| `Login.form.validationCode.title` | Validation Code |
+| `Login.home.createButtonTitle` | Create account with E-Mail |
+| `Login.home.emailButtonTitle` | Login with Email |
+| `Login.home.emailLinkTitle` | Or continue with an email adress |
+| `Login.home.facebookButtonTitle` | Continue with Facebook |
+| `Login.home.googleButtonTitle` | Continue with Google |
+| `Login.home.newUser.subtitle` | Create an account to enjoy all your music on any device. |
+| `Login.home.newUser.title` | Welcome! |
+| `Login.home.phoneButtonTitle` | Continue with SMS |
+| `Login.home.returningUser.title` | Dear user, |
+| `Login.home.wechatButtonTitle` | Login with WeChat |
+| `Login.phone.number.title` | Connect with Phone |
+| `Login.phone.validationCode.title` | Validate your account |
+| `Login.success.emailSent` | Email has been sent! |
+
+<a id="p-productoffering"></a>
+### productOffering (55)
+
+| key | value |
+|---|---|
+| `productOffering.1111.title` | Metronaut Double 11: -25% |
+| `productOffering.25.b2school.title` | Back to School Offer: Save 25% |
+| `productOffering.25.b2schoolBIS.title` | Back to School Offer: Save 25%% |
+| `productOffering.25.title` | Special Offer: Save 25%% |
+| `productOffering.35.title` | Fall offer: Save 35%% |
+| `productOffering.50.title` | Special Offer: Save 50%% |
+| `productOffering.asax.title` | Special Offer 🎁 |
+| `productOffering.b2school.2023.title` | Back to School Offer! |
+| `productOffering.bf.title` | Black Friday Offer: Save 50%% |
+| `productOffering.chineseNewYear.25.title` | Chinese New Year Offer: Save 25%% |
+| `productOffering.chineseNewYear.35.title` | Chinese New Year Offer: Save 35%% |
+| `productOffering.ChineseNewYear.subtitle` | Limited offer until %@ |
+| `productOffering.ChineseNewYear.title` | Happy New Year! 50%% Off on Annual Subscription |
+| `productOffering.christmas.25.title` | Christmas Offer: Save 25%% |
+| `productOffering.christmas.35.title` | Christmas Offer: Save 35%% |
+| `productOffering.christmas.label` | Christmas Offer: %d%% off Annual Subscription! |
+| `productOffering.christmas.sublabel` | Limited offer until %@ |
+| `productOffering.eam.title` | Offer for École d'Art Musical |
+| `productOffering.earth` | Earth Day Offer: Save 25%% |
+| `productOffering.earth25.title` | Special Offer: Save 70%% |
+| `productOffering.earth50.title` | Special Offer: Save 80%% |
+| `productOffering.earthChina.title` | Special Offer: Save 75%% |
+| `productOffering.fall.25.title` | Fall offer: -25%% |
+| `productOffering.halloween.25.title` | Halloween offer: -25%% |
+| `productOffering.insta25.title` | Lucky Draw Offer! |
+| `productOffering.latraversiere.title` |  |
+| `productOffering.music25.title` | Make Music Day Offer: Save 25%% |
+| `productOffering.musicday.title` | Music Day Offer: Save 50%% |
+| `productOffering.newzikblackfriday.subtitle` | 50% off Metronaut |
+| `productOffering.newzikblackfriday.title` | Exclusive Black Friday offer with Newzik |
+| `productOffering.promo.postConfirmation.label` | Save 50%% on your next subscription renewal |
+| `productOffering.redEnvelope.offerBanner.bottom` | Save 20% right now! |
+| `productOffering.redEnvelope.offerBanner.top` | Limited-time offer |
+| `productOffering.refereeOffer.subtitle` | Save 20%% |
+| `productOffering.refereeOffer.title` | Referral offer |
+| `productOffering.spring.subtitle` | Limited offer until %@ |
+| `productOffering.spring12Months.title` | Spring Offer: Save %d%% |
+| `productOffering.springYearlyNormal.title` | Spring Offer: 50%% Off Annual Subscription |
+| `productOffering.sprint25.title` | Spring Offer |
+| `productOffering.student.subtitle` | Save 50% |
+| `productOffering.student.title` | Special Offer 🎁 |
+| `productOffering.student.title2` | Your teacher is inviting you |
+| `productOffering.teacher.202412Offer.subtitle` | Save 50% |
+| `productOffering.teacher.ambassadorOffer.subtitle` | Save 75% |
+| `productOffering.teacher.chine.subtitle` | Save 25%% |
+| `productOffering.teacher.international.subtitle` | Save 50% |
+| `productOffering.teacher.title` | Special Offer 🎁 |
+| `productOffering.teacher.title2` | Teacher offer |
+| `productOffering.valentinDay.subtitle` | Limited offer until %@ |
+| `productOffering.valentinDay.title` | Valentine's Day Offer: 50%% Off Annual Subscription |
+| `productOffering.valentine.20.title` | Valentine Offer: Save 20%% |
+| `productOffering.valentine.25.title` | Valentine Offer: Save 25%% |
+| `productOffering.wiplaymusic.subtitle` | Metronaut à -20% |
+| `productOffering.wiplaymusic.title` | Offre Wiplay Music ! |
+| `productOffering.woodbrass` | Woodbrass offer! |
+
+<a id="p-onboarding"></a>
+### onboarding (53)
+
+| key | value |
+|---|---|
+| `onboarding.askpush.approval` | Enable notifications |
+| `onboarding.askpush.description` | Allow notifications for updates about new pieces and features to stay on top of your musical journey. |
+| `onboarding.askpush.leave` | Skip |
+| `onboarding.askpush.notification` | New Bach orchestral accompaniments available for your instrument! |
+| `onboarding.askpush.title` | Stay motivated |
+| `onboarding.button.later` | Later |
+| `onboarding.buttonSkip` | Skip |
+| `onboarding.continue` | Continue |
+| `onboarding.descriptionLabel` | Enjoy an Outstanding Digital Music Experience |
+| `onboarding.firstPieceSubtitle` | Choose a first piece among our selection for you or skip to browse the whole catalog. |
+| `onboarding.firstPieceTitle` | Want to try? |
+| `onboarding.instrumentPicker.button` | Confirm |
+| `onboarding.instrumentPicker.title` | Select your Instrument |
+| `onboarding.instrumentQuestion` | Which instrument do you play? |
+| `onboarding.instrumentSubtitle` | Select your Instrument. We will Suggest and Transpose pieces for you! |
+| `onboarding.instrumentTitle` | Select your Main Instrument |
+| `onboarding.launchScreen.subtitle` | Discover thousands of play along music sheets! |
+| `onboarding.launchScreen.title` | Practice, progress, have fun! |
+| `onboarding.level1.subtitle` | I can read the notes on a score. |
+| `onboarding.level1.title` | Beginner |
+| `onboarding.level2.subtitle` | I am able to play easy pieces. |
+| `onboarding.level2.title` | Basic |
+| `onboarding.level3.subtitle` | I know how to sight-read and perform pieces. |
+| `onboarding.level3.title` | Advanced |
+| `onboarding.level4.subtitle` | I easily sight-read any kind of scores. |
+| `onboarding.level4.title` | Expert |
+| `onboarding.level5.subtitle` | I would like to use Metronaut for my classes. |
+| `onboarding.level5.title` | Teacher |
+| `onboarding.myInstrument` | My instrument |
+| `onboarding.othersPieces` | See More |
+| `onboarding.preference.title` | What do you like to play? |
+| `onboarding.preference1.title` | Classical music preferably |
+| `onboarding.preference2.title` | Mainstream music preferably |
+| `onboarding.preference3.title` | Equally |
+| `onboarding.selectFirstPiece` | Select your First Piece |
+| `onboarding.selectFirstPieceSubtitle` | Discover how to play with Metronaut |
+| `onboarding.tip.score` | View here the score you will play. |
+| `onboarding.tip.score.unused` | Upon opening a piece you see a preview of the score you will play. |
+| `onboarding.tip.score.unused2` | This is the part you will play. |
+| `onboarding.tip.version` | Listen to your part with the accompaniment. |
+| `onboarding.tip.version.unused` | Tap Play to listen to an extract of this version (your part + accompaniment). |
+| `onboarding.title` | Thousands of Music Sheets with accompaniment |
+| `onboarding.video.instruments` | All scores will be<br>tailored for your instrument. |
+| `onboarding.video.tempo` | Tempo is adapted to the<br>performance of the musician. |
+| `onboarding.video.waiting` | Magic mode is on.<br>Accompaniment waits for<br>the musician to start. |
+| `onboarding.videoMode.subtitle` | - Press ▶️ to start video recording your performance.<br>- Press ⏸ when you're done to watch, save or share your video.<br>- You can move your picture or remove it (tap the ⓧ) anytime. |
+| `onboarding.videoMode.title` | Video Recording Mode |
+| `onboarding.videoSubtitle` | Check out what you can do with Metronaut in this 1-minute video. |
+| `onboarding.videoTitle` | Introducing the magic of Metronaut |
+| `onboarding.watchVideo` | See the video |
+| `onboarding.welcomeLabel` | Welcome to Metronaut |
+| `onboarding.welcomeSubtitle` | Don’t play music alone, Metronaut plays along with you! |
+| `onboarding.welcomeTitle` | Welcome to Metronaut |
+
+<a id="p-search"></a>
+### search (50)
+
+| key | value |
+|---|---|
+| `search.bestSell` | Best Sellers |
+| `search.collections` | Collections |
+| `search.composers` | Composers |
+| `search.filter` | Filter |
+| `search.filter.accompaniment` | Accompaniment type |
+| `search.filter.arrangementsIncluded` | Include adaptations |
+| `search.filter.button` | Filter |
+| `search.filter.clear` | Reset |
+| `search.filter.confirm` | View results |
+| `search.filter.difficulty` | Difficulty |
+| `search.filter.genre` | Period / Genre |
+| `search.filter.instrument` | Sheet music instrument |
+| `search.filter.myMusic` | My music |
+| `search.filter.onlyOriginal` | Only original compositions |
+| `search.filter.onlyOriginal_new` | Only search for pieces composed for the selected instrument(s) |
+| `search.filter.onlyOriginal2` | Only search for pieces composed for selected instruments |
+| `search.filter.originalComposition` | Original compositions |
+| `search.filter.price` | Price |
+| `search.filter.reset` | Clear filters |
+| `search.importFromFile.button` | Import from a File |
+| `search.importFromMuseScore.button` | Search & Import from MuseScore |
+| `search.noResult` | No luck? Send us a suggestion! |
+| `search.noResult.collection.button` | Suggest a Collection |
+| `search.noResult.composer.button` | Suggest a Composer |
+| `search.otherInstruments` | Explore other Instruments |
+| `search.placeholder` | Search in the catalog |
+| `search.placeholder.default.title` | Search |
+| `search.placeholder.noInternet.subtitle` | However, you can still search for a piece you have already opened. |
+| `search.placeholder.noInternet.title` | You are currently offline. <br>Please connect to the internet to search for a new piece. |
+| `search.placeholder.noResults.title` | No result |
+| `search.popular` | Most Popular |
+| `search.recentPieces` | Latest Pieces |
+| `search.recommandations` | We Recommend |
+| `search.result` | There is %i result for %@ |
+| `search.results` | There are %i results for %@ |
+| `search.searchSong` | Pieces, composers, instruments, difficulties… |
+| `search.sortBy` | Sort by: |
+| `search.sortBy.alphabeticalOrder` | Alphabetical order |
+| `search.sortBy.dateAdded` | Date Added |
+| `search.sortBy.popularity` | Popularity |
+| `search.sortBy.relevance` | Relevance |
+| `search.suggestion.1` | Mozart |
+| `search.suggestion.2` | Ave Maria |
+| `search.suggestion.3` | Concerto |
+| `search.suggestSubtitle` | If the piece you are looking for is not available, feel free to suggest it to us. |
+| `search.widget.offline.title.default` | Recently played |
+| `search.widget.offline.title.result` | Recently played |
+| `search.widget.online.title` |  |
+| `search.widget.online.title.default` | Suggestions |
+| `search.widget.online.title.result` | Best results |
+
+<a id="p-alert"></a>
+### alert (47)
+
+| key | value |
+|---|---|
+| `alert.annotation.delete.subtitle` | Tap "Delete" to erase all annotations from this score. This action cannot be undone. |
+| `alert.annotation.delete.title` | Delete All Annotations? |
+| `alert.autoTranspo` | Clef and transposition have been adapted to your instrument. |
+| `alert.coach.detection` | We're having trouble hearing you play. Try using headphones or speakers. |
+| `alert.coach.newBestScore` | New Best Score: %d |
+| `alert.coach.newBestScoreOld` | New Best Score: %d |
+| `alert.countDown.off` | Countdown Off |
+| `alert.countDown.on` | Countdown On |
+| `alert.countDown.withSound` | Audible Countdown On |
+| `alert.deeplink.failure.title` | Something went wrong. The link could not be loaded. |
+| `alert.deeplink.loading.title` | Opening the link… |
+| `alert.exploration.home.subtitle` | Discover more features, or find them later in “My music”. |
+| `alert.exploration.mainCta` | See more |
+| `alert.exploration.one.title` | Feature discovered:  |
+| `alert.exploration.perf.one.subtitle` | Discover more features, or find them later in “My music”. |
+| `alert.exploration.perf.plural.subtitle` | Discover more features, or find them later in “My music”. |
+| `alert.exploration.plural.title` | Features discovered:  |
+| `alert.exploration.secondaryCta` | Later |
+| `alert.exploration.subtitle` | Discover more features, or find them later in “My music”. |
+| `alert.exploration.title` | New feature discovered! |
+| `alert.listeningMode` | When you are ready to play with your instrument, tap the Play button. |
+| `alert.loop.scrollSwitched` | Loop activated: In this mode the music sheet scroll is continuous. |
+| `alert.midi.disconnected` | %@ was disconnected |
+| `alert.midi.error.summary` | Try again later from Music Sheet tools or Account tab. |
+| `alert.midi.error.title` | No MIDI instrument connected |
+| `alert.midi.synthwarning.summary` | To avoid delays while using wireless audio output, MIDI synthesizer is deactivated. |
+| `alert.midi.synthwarning.title` | MIDI synthesizer turned off |
+| `alert.pressStart` | Tap the Play button to start. |
+| `alert.rating.appstoretitle.default` | Give a 5 ⭐ Rating! |
+| `alert.rating.dismiss.default` | Not now |
+| `alert.rating.feedbacktitle.default` | Contact the team |
+| `alert.rating.message.default` | Your feedback is Music to our ears! |
+| `alert.rating.title.default` | Share your experience 🤘 |
+| `alert.recordingInLoop` | Recording is disabled while Loop is on. |
+| `alert.sightread.detection` | Are you still playing? We can't hear you. |
+| `alert.stopped.detection` | The music stopped because we can't hear you. Let's try again? |
+| `alert.tapgame.synthwarning.summary` | To avoid delays when using wireless audio output, sound generated by your taps are disabled. |
+| `alert.tapgame.synthwarning.title` | Tap sound is disabled |
+| `alert.tempo.changed` | Tempo: %li%% |
+| `alert.versionChanged` | Changing version: |
+| `alert.versionRestored` | Return to version: |
+| `alert.versionsUpdated` | New versions available. Tap on "Change version" to see more. |
+| `alert.volume.changed` | Volume: %li%% |
+| `alert.volume.zero` | The volume of your device is very low. |
+| `alert.volumeMax` | Use speakers or headphones to increase volume. |
+| `alert.waitingUserToStart` | I am listening… Start playing when you are ready. |
+| `alert.workoutTraining` | Training Mode: Tempo has been slowed down. |
+
+<a id="p-discover"></a>
+### discover (47)
+
+| key | value |
+|---|---|
+| `discover.adaptedHits` | Classical hits |
+| `discover.adaptedHits_old` | Hits adapted for you |
+| `discover.bigrep` | Great repertoire |
+| `discover.black` | Celebrate Black music |
+| `discover.carousel.premium.annotate` | Annotate and Print all the Music Sheets |
+| `discover.carousel.premium.catalog` | Enjoy Unlimited Access to 4000+ Interactive Music Sheets |
+| `discover.carousel.premium.coach` | Progress with instant feedback |
+| `discover.carousel.premium.tempo` | Take control over the accompaniment tempo! |
+| `discover.classical` | Classical music |
+| `discover.demoPieces` | Demo Pieces |
+| `discover.exam_china` | Popular in China |
+| `discover.freePieces` | Selection of the week |
+| `discover.freePieces.obsolete` | Free pieces |
+| `discover.freePieces.tempStop` | Free this week |
+| `discover.genreCollections` | Theme Collections |
+| `discover.header.welcomeMessage.freePieces.subtitle` | Enjoy 3 free pieces selected for you, and discover more by exploring our catalog. |
+| `discover.header.welcomeMessage.freePieces.title` | Welcome to Metronaut! |
+| `discover.jazz` | Jazz |
+| `discover.jazzsoulrnb` | Jazz - Soul - R&B |
+| `discover.mainstream` | Mainstream music |
+| `discover.movie` | TV shows & movies soundtracks |
+| `discover.pedago` | Educational Repertoire |
+| `discover.popCards` | Mainstream music |
+| `discover.popCardsOld` | Pop is coming! |
+| `discover.poprock` | Pop rock icons |
+| `discover.post.title` | Trending videos |
+| `discover.post.title2` | Community posts |
+| `discover.recommended.instrument` | Recommended for {{user_instrument}} |
+| `discover.recommended.instrument-level-1` | For {{user_instrument}} {{user_level}} |
+| `discover.recommended.instrument-level-2` | Recommended for {{user_instrument}} {{user_level}} |
+| `discover.repertoireNew` | Classical repertoire |
+| `discover.search.bar` | Search in the catalog |
+| `discover.section.christmas` | Happy Holidays! |
+| `discover.section.rhythmGame` | Rhythm games |
+| `discover.soul` | Soul - R&B |
+| `discover.suzuki` | Japanese Method |
+| `discover.tip.subscription.freeTrial.button` | Try for free! |
+| `discover.tip.subscription.noFreeTrial.button` | See all offers |
+| `discover.tip.subscription.offer.button` | Discover our special offer |
+| `discover.tip.subscription.title` | Get unlimited access to our catalog |
+| `discover.topPieces` | Essential pieces |
+| `discover.topPieces.trad` | Essential pieces |
+| `discover.tradi` | Traditional music |
+| `discover.trendingCollections` | Trending now |
+| `discover.WeeklyfreePieces` | Free this week |
+| `discover.weekPieces` | Selection of the week |
+| `discover.world` | The world through music |
+
+<a id="p-mymusic"></a>
+### mymusic (44)
+
+| key | value |
+|---|---|
+| `mymusic.importedScores.delete.message` | Are you sure you want to delete this imported score? This action cannot be undone. |
+| `mymusic.importedScores.delete.messageWithRecordings` | This imported score has recordings. Deleting it will also delete its recordings. This action cannot be undone. |
+| `mymusic.importedScores.delete.title` | Delete Imported Score? |
+| `mymusic.importedScores.empty` | No imported sheet music yet. |
+| `mymusic.importedScores.error.conversionFailed` | We couldn’t prepare this score for Performance. Please try again. |
+| `mymusic.importedScores.error.duplicate` | This score has already been imported. |
+| `mymusic.importedScores.error.fileTooLarge` | This file is too large to import. |
+| `mymusic.importedScores.error.invalidMusicXML` | This MusicXML file is invalid. |
+| `mymusic.importedScores.error.invalidMXL` | This MXL file is invalid. |
+| `mymusic.importedScores.error.missingFiles` | Some files for this imported score are missing. Please import it again. |
+| `mymusic.importedScores.error.missingPartOne` | This score does not contain a playable first part. |
+| `mymusic.importedScores.error.storageFailed` | We couldn’t save this imported score. |
+| `mymusic.importedScores.error.unreadableFile` | This file could not be read. |
+| `mymusic.importedScores.error.unsupportedFormat` | This file format is not supported. |
+| `mymusic.importedScores.error.unsupportedTimewise` | Timewise MusicXML scores are not supported. |
+| `mymusic.importedScores.import` | Import |
+| `mymusic.importedScores.importing` | Importing… |
+| `mymusic.importedScores.rename.composer` | Rename Composer |
+| `mymusic.importedScores.rename.title` | Rename Title |
+| `mymusic.importedScores.title` | My Imported Sheet Music |
+| `mymusic.offline.placeholder` | Downloaded pieces will appear here |
+| `mymusic.onboarding.button` | Find my first piece |
+| `mymusic.onboarding.summary` | This is where you can find the pieces you recently played and your favorites. |
+| `mymusic.onboarding.title` | Welcome to Metronaut! |
+| `mymusic.placeholder.favorite` | Tap on Star to add a piece to your favorites. |
+| `mymusic.placeholder.recentlyPlayed` | This is where you can find the last pieces you played. |
+| `mymusic.post.placeholder` | You have no published recordings yet. Tap the ⋮ button on a recording to post it. |
+| `mymusic.post.title` | My posts |
+| `mymusic.share.placeholder` | No shares yet. The items you receive or share will appear here. |
+| `mymusic.share.title` | Recently shared |
+| `mymusic.stats.exploration.subtitle` | Discovered features |
+| `mymusic.stats.exploration.title` | Exploration |
+| `mymusic.stats.grade.subtitle` | Current rank |
+| `mymusic.stats.grade.title` | Rank |
+| `mymusic.stats.league.title` | Leaderboard |
+| `mymusic.stats.ranking.subtitle` | Expires in {duration} |
+| `mymusic.stats.ranking.title` | Leaderboard |
+| `mymusic.stats.streak.subtitle` | Weeks in a row |
+| `mymusic.stats.streak.subtitle.none` | No streak |
+| `mymusic.stats.streak.subtitle.plural` | Weeks in a row |
+| `mymusic.stats.streak.subtitle.single` | First week |
+| `mymusic.stats.streak.title` | Streak |
+| `mymusic.stats.time.subtitle` | Last 7 days |
+| `mymusic.stats.time.title` | Practiced time |
+
+<a id="p-songdetails"></a>
+### songDetails (44)
+
+| key | value |
+|---|---|
+| `songDetails.accompagnementType` | Accompaniment type |
+| `songDetails.accompanimentKind.1` | with piano |
+| `songDetails.accompanimentKind.2` | with orchestra |
+| `songDetails.accompanimentKind.3` | solo |
+| `songDetails.accompanimentKind.4` | with violin |
+| `songDetails.accompanimentKind.5` | with guitar |
+| `songDetails.accompanimentKind.6` | with viola |
+| `songDetails.accompanimentKind.7` | with flute |
+| `songDetails.accompanimentKind.8` | with harp |
+| `songDetails.accompanimentPreview` | Accompaniment Preview |
+| `songDetails.adaptedFor` | Auto. adapted for %@ |
+| `songDetails.adaptedFrom` | Auto. adapted (source %@) |
+| `songDetails.arrangedFor` | Version for %@ |
+| `songDetails.arrangments.subtitle` | The score is automatically transposed for you |
+| `songDetails.arrangments.title` | Available versions |
+| `songDetails.audioPreview` | Audio Preview |
+| `songDetails.bottomPopover.buy` | Play this Piece |
+| `songDetails.bottomPopover.listeningMode.title` | Get the listening modes |
+| `songDetails.bottomPopover.nautsAfter` | Your Nauts After |
+| `songDetails.bottomPopover.nautsBefore` | Your Nauts Balance |
+| `songDetails.bottomPopover.play` | Play this Piece |
+| `songDetails.bottomPopover.title` | Get this Piece |
+| `songDetails.composedFor` | Composed for %@ |
+| `songDetails.difficulty` | Level |
+| `songDetails.headerTitle` | Piece details |
+| `songDetails.lyricsLanguage.de` | in German |
+| `songDetails.lyricsLanguage.en` | in English |
+| `songDetails.lyricsLanguage.es` | in Spanish |
+| `songDetails.lyricsLanguage.fr` | in French |
+| `songDetails.lyricsLanguage.it` | in Italian |
+| `songDetails.lyricsLanguage.la` | in Latin |
+| `songDetails.lyricsLanguage.no` | in Norwegian |
+| `songDetails.lyricsLanguage.zh` | in simplified Chinese |
+| `songDetails.originInstrument` | Version for |
+| `songDetails.part.subtitle` | Adapted for %@ |
+| `songDetails.recommended` | Recommended for you |
+| `songDetails.selected` | selected |
+| `songDetails.selectedArrangments.subtitle` | The score is tailored for your instrument |
+| `songDetails.selectedArrangments.title` | Selected Arrangement |
+| `songDetails.selectedPart.subtitle` |  |
+| `songDetails.selectedPart.title` | Selected Part |
+| `songDetails.similarPieces.subtitle` | Our recommendations if you like this piece |
+| `songDetails.similarPieces.title` | You might also like |
+| `songDetails.withOrchestra` | with orchestra |
+
+<a id="p-ph"></a>
+### ph (35)
+
+| key | value |
+|---|---|
+| `ph.piano.4notes` | Group of 4 notes in triplets |
+| `ph.piano.5notes1` | Group of 5 Notes in Eighth Notes |
+| `ph.piano.5notes2` | Group of 5 Notes in Eighth Notes 2 |
+| `ph.piano.5notesnoiresetcroches1` | Group of 5 Notes - 4th and 8th Notes |
+| `ph.piano.5notesnoiresetcroches2` | Group of 5 Notes - 4th and 8th Notes |
+| `ph.piano.5notestriplets` | Group of 5 Notes in Triplets |
+| `ph.piano.accordsrenversés` | Inverted Chords |
+| `ph.piano.airvarié` | Variations on an Air |
+| `ph.piano.allerretour` | Alternating between upstrokes and downstrokes in triplets |
+| `ph.piano.blackandwhite` | Whole and quarter notes |
+| `ph.piano.contrarymotion` | Contrary Motion |
+| `ph.piano.echauffementbh1` | Warm-up - Both Hands 1 |
+| `ph.piano.echauffementbh2` | Warm-up - Both Hands 2 |
+| `ph.piano.echauffementcroches` | Warm-up with eighth notes 1 |
+| `ph.piano.echauffementcroches2` | Warm-up with eighth notes 2 |
+| `ph.piano.echauffementdoublescroches` | Warm-up with Sixteenth Notes |
+| `ph.piano.echauffementmd` | Warm-up - Right hand |
+| `ph.piano.echauffementtriolets` | Warm-up with triplets |
+| `ph.piano.éhauffementtriolets` | Warm-up with triplets |
+| `ph.piano.fingerarticulation` | Fingers articulation |
+| `ph.piano.mainsalternées` | Alternate Hands |
+| `ph.piano.mdnoiresetcroches` | Right Hand - Quarter Notes and Eighth Notes |
+| `ph.piano.mgnoiresetcroches` | Left Hand - Quarter Notes and Eighth Notes |
+| `ph.piano.mixednotes` | Mixed Quarter Notes and Half Notes |
+| `ph.piano.parallelthirds` | Parallel Thirds |
+| `ph.piano.Petitemélodie` | 3 beats little melody |
+| `ph.piano.petitemélodieencroches` | Short melody in eighth notes |
+| `ph.piano.premièrequinte` | The First Fifth |
+| `ph.piano.premièrestierces` | The First Thirds |
+| `ph.piano.renversements.mainsalt` | Inversions. Alternating Hands |
+| `ph.piano.rythmesalternés` | Alternating Rhythms |
+| `ph.piano.secondestierces` | Seconds and Thirds |
+| `ph.piano.thirds` | Thirds |
+| `ph.piano.thirdsalternatinghands` | Thirds - 12/8 - Alternating hands |
+| `ph.piano.thirdscontrarymotion` | Thirds - Contrary motion |
+
+<a id="p-subscriptionprompt"></a>
+### subscriptionPrompt (33)
+
+| key | value |
+|---|---|
+| `subscriptionPrompt.bulletPoint.annotation` | Annotation and print features for every score |
+| `subscriptionPrompt.bulletPoint.catalog` | More than 8,000 Music Sheets with Accompaniment |
+| `subscriptionPrompt.bulletPoint.loop` | Difficult sections practice with the loop |
+| `subscriptionPrompt.bulletPoint.scroll` | Automatic page turn facilitating reading on all screen sizes |
+| `subscriptionPrompt.bulletPoint.tempo` | Accompaniment at the tempo of your choice |
+| `subscriptionPrompt.carousel.onboarding.title` | Boost your progress with Metronaut |
+| `subscriptionPrompt.carousel.practice.title` | Unlock all workouts with Metronaut Premium |
+| `subscriptionPrompt.CTA` | Try for free |
+| `subscriptionPrompt.offer.countdown` | 24h hours left |
+| `subscriptionPrompt.offer.skip` | I waive the 7-days free trial |
+| `subscriptionPrompt.offer.title1` | LIMITED OFFER |
+| `subscriptionPrompt.offer.title2` | 7-DAYS FREE TRIAL |
+| `subscriptionPrompt.practice.catalog` | Enjoy Unlimited Access to 4000+ Interactive Music Sheets |
+| `subscriptionPrompt.practice.CTA` | Try for free |
+| `subscriptionPrompt.practice.learn` | Learn your Favorite Pieces Step by Step |
+| `subscriptionPrompt.practice.skill` | Perfect your Skills with Masterpieces Excerpts |
+| `subscriptionPrompt.practice.skip` | Skip |
+| `subscriptionPrompt.practice.title` | Boost your progress with Metronaut |
+| `subscriptionPrompt.practice.workouts` | Unlock all Workouts |
+| `subscriptionPrompt.skip` | Skip |
+| `subscriptionPrompt.slideTitle.annotate` | Annotate and Print all the Music Sheets |
+| `subscriptionPrompt.slideTitle.annotation` | Personalize Music Sheets with Annotations |
+| `subscriptionPrompt.slideTitle.catalog` | Discover Thousands of Interactive Music Sheets |
+| `subscriptionPrompt.slideTitle.feedback` | Improve thanks to Real-Time Feedback |
+| `subscriptionPrompt.slideTitle.keyboard` | Sight-read Easily with our Dynamic Piano Bar |
+| `subscriptionPrompt.slideTitle.orchestra` | Practice with Orchestra & Piano Accompaniments |
+| `subscriptionPrompt.slideTitle.orchestra.singers` | Sing Accompanied by Professional Musicians |
+| `subscriptionPrompt.slideTitle.practice` | Practice with Guided Workouts created by Musicians |
+| `subscriptionPrompt.slideTitle.print` | Print Every Music Sheet |
+| `subscriptionPrompt.slideTitle.record` | Record and share your performances |
+| `subscriptionPrompt.slideTitle.tempo` | Adjust the Accompaniment Tempo for You |
+| `subscriptionPrompt.slideTitle.transposition.singers` | Transpose Any Piece for your Voice Range |
+| `subscriptionPrompt.title` | Discover Metronaut |
+
+<a id="p-preview"></a>
+### preview (32)
+
+| key | value |
+|---|---|
+| `preview.freeTrial.button` | Start my free trial |
+| `preview.freeTrial.button_copy` | Try Premium for Free |
+| `preview.freeTrial.explanation` | Start your free trial to play this piece. |
+| `preview.freeTrial.footer` | Start your free trial to play this piece. |
+| `preview.generic.explanation` | You still have 70% of the score to discover. |
+| `preview.listenAudio.button` | Play Preview |
+| `preview.message.autoAdapted` | Clef and transposition have been automatically adapted to your instrument. You will be able to change them in the piece settings. |
+| `preview.offer.button` | Discover our special offer |
+| `preview.offeredPiece.button` | Unlock this Piece |
+| `preview.pauseAudio.button` | Pause |
+| `preview.performance.button` | Start Practicing |
+| `preview.performance.button.obsolete` | Start Practicing |
+| `preview.performance.explanation` | Tap "Start Practicing" to discover the rest of the piece. |
+| `preview.performance.explanation.obsolete` | Tap "Start Practicing" to discover the remaining 70% of the score and play the entire piece. |
+| `preview.piecePurchase.explanation.availableVersions` | Included in the purchase price: |
+| `preview.piecePurchase.explanation.otherVersions` | + Upcoming versions of this piece<br>+ Ability to customize your version (transposition, clef) |
+| `preview.piecePurchase.explanation.title` | Unlock {{song}} by {{composer}} |
+| `preview.purchase.button` | Buy - {{price}} |
+| `preview.purchase.explanation` | To access all performance features and play, start a free trial. |
+| `preview.purchase.explanation_withoutPurchasePiece` | To access all performance features and play, start a free trial. |
+| `preview.purchase.explanation.obsolete` | Purchase the piece or start a free trial to discover the remaining 70% and play the entire piece. |
+| `preview.purchase.explanation.obsolete2` | Purchase the piece or start a free trial to discover the rest of the piece. |
+| `preview.purchase.noFreeTrial.explanation` | Become Premium to practice and access all features. |
+| `preview.subscription.button` | Subscribe |
+| `preview.subscription.button_copy` | Subscribe to play |
+| `preview.subscription.description` | or unlock the full catalog: |
+| `preview.subscription.description.obsolete` | or go Premium to unlock the full catalog: |
+| `preview.subscription.explanation.obsolete` | You still have 70% of the score to discover. Subscribe to play the entire piece. |
+| `preview.subtitle.extract` | Excerpt from bar %u |
+| `preview.subtitle.extract.default` | Excerpt |
+| `preview.subtitle.extractWithBarsNumber` | Excerpt: {{previewBarsNumber}} of {{totalBarsNumber}} bars |
+| `preview.subtitle.extractWithPercent` | Excerpt: %li%% |
+
+<a id="p-mode"></a>
+### mode (29)
+
+| key | value |
+|---|---|
+| `mode.beta` | BETA |
+| `mode.coach.noAccompaniment.subtitle` | Evaluate your rhythmic accuracy |
+| `mode.coach.noAccompaniment.title` | Training |
+| `mode.coach.subtitle` | Evaluate your rhythmic accuracy with accompaniment |
+| `mode.coach.subtitle.obsolete` | Improve with feedbacks |
+| `mode.coach.title` | Training |
+| `mode.coach.title.obsolete` | Coach Mode |
+| `mode.magicPlayAlong.noAccompaniment.subtitle` | Play the Piece |
+| `mode.magicPlayAlong.noAccompaniment.title` | Performing |
+| `mode.magicPlayAlong.subtitle` | Accompaniment adapts to your tempo |
+| `mode.magicPlayAlong.title` | Magic Performing |
+| `mode.magicPlayAlong.title.obsolete` | Magic Play Along Mode |
+| `mode.pageTurner.subtitle` | Play the piece at your tempo, Metronaut listens and moves forward with you. |
+| `mode.pageTurner.title` | Page Turner Mode |
+| `mode.playAlong.subtitle` | Play with the accompaniment |
+| `mode.playAlong.subtitle.obsolete` | Play with the accompaniment only |
+| `mode.playAlong.title` | Performing |
+| `mode.playAlong.title.obsolete` | Play Along Mode |
+| `mode.reading.noAccompaniment.subtitle` | Play note by note. |
+| `mode.reading.noAccompaniment.title` | Sight-reading |
+| `mode.reading.subtitle` | Play without accompaniment |
+| `mode.reading.subtitle.obsolete` | Sight-read without accompaniment |
+| `mode.reading.title` | Sight-reading |
+| `mode.reading.title.obsolete` | Note by Note Mode |
+| `mode.withSolo.noAccompaniment.subtitle` | Listen to your part |
+| `mode.withSolo.noAccompaniment.title` | Listening |
+| `mode.withSolo.subtitle` | Listen to your part and accompaniment |
+| `mode.withSolo.title` | Listening |
+| `mode.withSolo.title.obsolete` | Listening Mode |
+
+<a id="p-tempo"></a>
+### tempo (27)
+
+| key | value |
+|---|---|
+| `tempo.feedback.subtitle` | Only with fixed tempo |
+| `tempo.feedback.title` | Train with feedback |
+| `tempo.follow.mode.header` | Choose how the tempo adapts to you |
+| `tempo.follow.mode.none.subtitle` | The accompaniment plays at a fixed tempo, without adapting to you. |
+| `tempo.follow.mode.none.title` | Fixed |
+| `tempo.follow.mode.smart.subtitle` | The accompaniment follows your performance like a real musician. |
+| `tempo.follow.mode.smart.title` | AI Tempo |
+| `tempo.follow.mode.solo.header` | Choose your Page Turning mode: |
+| `tempo.follow.mode.solo.none.subtitle` | The cursor moves at a fixed tempo (no accompaniment). |
+| `tempo.follow.mode.solo.none.title` |  |
+| `tempo.follow.mode.solo.smart.subtitle` | The cursor follows your tempo (no accompaniment). |
+| `tempo.follow.mode.solo.smart.title` |  |
+| `tempo.follow.mode.solo.wait.subtitle` | The cursor moves when you play the note (no accompaniment). |
+| `tempo.follow.mode.solo.wait.title` |  |
+| `tempo.follow.mode.wait.subtitle` | Play without accompaniment. The cursor moves when you play the note. |
+| `tempo.follow.mode.wait.title` | Wait |
+| `tempo.header` | Tempo |
+| `tempo.mode.feedback.subtitle` | Visualize your pitch and rhythm precision. |
+| `tempo.mode.feedback.title` | AI Feedback |
+| `tempo.mode.playalong.subtitle` | Accompaniment plays at a fixed tempo. |
+| `tempo.mode.playalong.title` | Fixed |
+| `tempo.mode.smart.subtitle` | The accompaniment follows your performance like a real musician. |
+| `tempo.mode.smart.title` | AI Tempo |
+| `tempo.mode.title` | Metronaut's reaction |
+| `tempo.mode.wait.subtitle` | The cursor moves along with you, with no accompaniment. |
+| `tempo.mode.wait.title` | Wait |
+| `tempo.solo.header` | Tempo |
+
+<a id="p-gamification"></a>
+### gamification (24)
+
+| key | value |
+|---|---|
+| `gamification.details.grade.button1.title` | Total XP earned |
+| `gamification.details.grade.content.title` | Rank |
+| `gamification.details.grade.description` | Ranks mark your progress. Earn XP by playing to reach the next rank. |
+| `gamification.details.grade.description_login` | Create your account to earn XP and climb the ranks! |
+| `gamification.details.grade.description_new` | You’ve reached a new Rank! Keep playing to reach the next one. |
+| `gamification.details.grade.title` | Rank |
+| `gamification.details.league.content.subtitle` | Play to enter your next leaderboard. |
+| `gamification.details.league.content.subtitle.position` | You finished {{position}} in your last league. |
+| `gamification.details.league.content.title.down` | You have been relegated to {{league}} |
+| `gamification.details.league.content.title.league` | You are joining the {{league}}! |
+| `gamification.details.league.content.title.none` | Unlock the weekly leaderboard |
+| `gamification.details.league.content.title.same` | You remain in {{league}} |
+| `gamification.details.league.content.title.up` | You have been promoted to {{league}}! |
+| `gamification.details.streak.button1.title` | Best streak |
+| `gamification.details.streak.content.subtitle` | Play every week to keep your streak going. |
+| `gamification.details.streak.content.subtitle.active.plural` | Play again in {{days}} days to increase your streak. |
+| `gamification.details.streak.content.subtitle.active.single` | Play again in {{days}} day to increase your streak. |
+| `gamification.details.streak.content.subtitle.active.zeroday` | Play again tomorrow to increase your streak. |
+| `gamification.details.streak.content.subtitle.new` | Play within {{days}} days to keep your streak alive! |
+| `gamification.details.streak.content.subtitle.none` | Play to start your new streak! |
+| `gamification.details.streak.content.title.none` | No active streak |
+| `gamification.details.streak.content.title.plural` | Weeks in a row! |
+| `gamification.details.streak.content.title.single` | New streak |
+| `gamification.details.streak.title` | Streak |
+
+<a id="p-login"></a>
+### login (24)
+
+| key | value |
+|---|---|
+| `login.card.1.description` | Explore the 4,000+ music sheets of our growing catalog. |
+| `login.card.1.title` | Find your favorite pieces and more |
+| `login.card.2.description` | Enjoy playing along high quality recordings of professional orchestras and pianists. |
+| `login.card.2.title` | Play accompanied by professionals |
+| `login.card.3.description` | Choose your key and tempo or ask Metronaut to follow you as you play or sing. |
+| `login.card.3.title` | Give you own interpretation |
+| `login.existingAccount` | Already have an account? |
+| `login.home.emailButtonTitle` | Login with Email |
+| `login.home.facebookButtonTitle` | Continue with Facebook |
+| `login.home.googleButtonTitle` | Continue with Google |
+| `login.home.otherOptionsLink` | Other options |
+| `login.home.phoneButtonTitle` | Continue with SMS |
+| `login.home.purchaser.title` | Create your account to complete your purchase |
+| `login.home.subscriber.title` | Create your account to complete your subscription |
+| `login.home.title` | Create your account to save your settings |
+| `login.home.title.default` | Create your account to save your settings |
+| `login.home.title.error` | Error connecting to your account! Please re-connect. |
+| `login.home.title.existingAccount` | Nice to see you again! |
+| `login.home.title.like` | Login to interact with other users |
+| `login.home.title.playlist` | Create an account to gain access to playlists |
+| `login.home.title.practiceReminders` | Create an account to set practice reminders |
+| `login.home.title.subscription` | Your Premium access is activated! Creating an account is required to enjoy it. |
+| `login.home.title.teacher` | Create your account to access teacher benefits |
+| `login.home.wechatButtonTitle` | Login with WeChat |
+
+<a id="p-previousrecording"></a>
+### previousRecording (24)
+
+| key | value |
+|---|---|
+| `previousRecording.accompaniment.label` | Accompaniment |
+| `previousRecording.dateTime.text` | 00:00:00 |
+| `previousRecording.editAction.title` | Rename |
+| `previousRecording.empty.title` | Your performance recordings appear here! |
+| `previousRecording.feedback.announce` | Did you have an issue with this recording?<br>Let us know what happened so we can fix it for a future release. |
+| `previousRecording.feedback.confirmMessage` | Your problem has been successfully reported. Thanks for your contribution! |
+| `previousRecording.feedback.confirmTitle` | Sent |
+| `previousRecording.feedback.errorMessage` | Sorry we are currently unable to connect to our server. |
+| `previousRecording.feedback.errorTitle` | Can't report the problem |
+| `previousRecording.feedback.title` | Report problems |
+| `previousRecording.filenamePrefix` | Recording |
+| `previousRecording.keepAction.title` | Keep |
+| `previousRecording.main.title` | My recordings |
+| `previousRecording.remove` | Delete |
+| `previousRecording.remove.alertMessage` | Do you really want to delete this recording? |
+| `previousRecording.remove.alertTitle` | Delete recording |
+| `previousRecording.saved.placeholder` | Your saved recordings appear here. |
+| `previousRecording.share.mailSubject` | Listen to my Performance using Metronaut |
+| `previousRecording.solo.label` | Solo |
+| `previousRecording.temporary.placeholder` | Your temporary recordings appear here. |
+| `previousRecording.temporaryTitle` | Temporary recording |
+| `previousRecording.title` | Recording |
+| `previousRecording.titleEdit.alertMessage` | Rename recording Title: |
+| `previousRecording.titleEdit.alertTitle` | Edit title |
+
+<a id="p-app"></a>
+### app (23)
+
+| key | value |
+|---|---|
+| `app.event.1911.title` | Thanksgiving Special Offer |
+| `app.event.carnaval.description.long` | Let’s discover our selection of pieces from the most incredible Carnivals in the world. |
+| `app.event.carnaval.description.short` | Your ticket to the masquerade ball |
+| `app.event.carnaval.title` | The Carnival of the Musicians |
+| `app.event.chineseNewYear.body` | Celebrate Chinese New Year with our special offer and a selection of play along music sheets! |
+| `app.event.chineseNewYear.body_copy` | Celebrate Chinese New Year with our special offer and a selection of play along music sheets! |
+| `app.event.chineseNewYear.short` | Practice with Orchestra & Piano Accompaniments |
+| `app.event.chineseNewYear.title` | Celebrate Chinese New Year! |
+| `app.event.christmas.title` | Ready for Christmas? |
+| `app.event.description.1911.long` | Celebrate Thanksgiving with a limited Black Friday offer and a selection of new play along music sheets! |
+| `app.event.description.1911.short` | Celebrate with New Play Along Music Sheets! |
+| `app.event.description.christmas.long` | Celebrate Christmas with a limited discount on our Premium subscription and a selection of new play along music sheets! |
+| `app.event.description.christmas.long_copy` | Celebrate Holidays by performing Christmas songs for friends and family. Get prepared by practicing on Metronaut! |
+| `app.event.description.christmas.short` | Practice Christmas Pieces with Accompaniment! |
+| `app.event.description.long` | Enjoy unlimited access to all our play along music sheets and celebrate this spooky season with our Halloween playlist! |
+| `app.event.description.short` | Discover thousands of play along music sheets! |
+| `app.event.stPatrick.description.long` | It’s Saint Patrick’s Day ! Dive into Celtic soundscapes and play at the edge of a cliff, in front of the sea... |
+| `app.event.stPatrick.description.short` | A journey to the Celtic world and Irish melodies. |
+| `app.event.stPatrick.title` | Happy St-Patrick’s Day! ☘️ |
+| `app.event.title` | Halloween Special Offer |
+| `app.event.valentine.description.long` | Discover our incredible collection for Valentine's day. You will find pieces that will make your heart beat faster! |
+| `app.event.valentine.description.short` | Play romantic pieces with accompaniments. |
+| `app.event.valentine.title` | Fall in Love with Music |
+
+<a id="p-inapp"></a>
+### inApp (22)
+
+| key | value |
+|---|---|
+| `inApp.BlackFriday.body` | Don't miss 75% off Premium subscription! |
+| `inApp.referral.announcement.freeUser` | Win the Piece of your Choice<br><br>Invite a friend to install the App and you will both get to choose a free piece among our 4,000 music sheets.<br><br>Invite Friends |
+| `inApp.referral.announcement.freeUser.CTA` | Invite Friends |
+| `inApp.referral.announcement.freeUser.subtitle` | Invite a friend to install the App and you will both get to choose a free piece among our 4,000 music sheets. |
+| `inApp.referral.announcement.freeUser.subtitle.obsolete` | Invite a friend to install the App and you will both get 30 days Free Premium access to Metronaut catalog. |
+| `inApp.referral.announcement.freeUser.title` | Win the Piece of your Choice |
+| `inApp.referral.announcement.freeUser.title.obsolete` | Win a 30-Day Free Premium Access |
+| `inApp.referral.announcement.title.premium` | Refer a friend! |
+| `inApp.referral.announcement1.premium` | Bring one friend to Metronaut. Your sponsored friend will choose a free piece among our 4,000 music sheets. You just need to send her/him this link: |
+| `inApp.referral.announcement2.premium` | They need to install the app and sign in from this link. |
+| `inApp.referral.sponsoredUser` | A welcome gift from your friend!<br>A warm welcome from us and your friend: Enjoy a free piece to choose from our music sheets catalog.<br>Choose your free piece |
+| `inApp.referral.sponsoredUser.CTA` | Choose your free piece |
+| `inApp.referral.sponsoredUser.CTA.obsolete` | Start my 30-day Free Trial |
+| `inApp.referral.sponsoredUser.subtitle` | A warm welcome from us and your friend: Enjoy a free piece to choose from our music sheets catalog. |
+| `inApp.referral.sponsoredUser.subtitle.obsolete` | A warm welcome from us and your friend: Try Premium and enjoy unlimited access to our music sheets catalog for free for 30 days. |
+| `inApp.referral.sponsoredUser.title` | A welcome gift from your friend! |
+| `inApp.referral.sponsorGift` | You’ve earned a free piece!<br>Thank you for helping us grow our community of musicians. You can choose the piece of your choice in our catalog and will get it for free forever.<br><br>OK |
+| `inApp.referral.sponsorGift.CTA` | OK |
+| `inApp.referral.sponsorGift.subtitle` | Thank you for helping us grow our community of musicians. You can choose the piece of your choice in our catalog and will get it for free forever. |
+| `inApp.referral.sponsorGift.subtitle.obsolete` | Thank you for helping us grow our community of musicians. You now have unlimited access to our music sheets catalog for free for 30 days. |
+| `inApp.referral.sponsorGift.title` | You’ve earned a free piece! |
+| `inApp.referral.sponsorGift.title.obsolete` | 30 Days Free Premium Access for you! |
+
+<a id="p-foopup"></a>
+### foopup (21)
+
+| key | value |
+|---|---|
+| `foopup.annotationLocked.subtitle` | Buy the piece or start your free trial to annotate the score |
+| `foopup.annotationLocked.title` | Unlock the piece to annotate |
+| `foopup.idfa.subtitle` | By allowing tracking on the next prompt, you are enabling us to help more musicians in their practice. Your data will remain private and won't be shared with any other service. |
+| `foopup.idfa.title` | Help us grow the music community |
+| `foopup.noPrintCredit.freeTrial.title` | No printouts left |
+| `foopup.noPrintCredit.subscriber.title` | No printouts left this month |
+| `foopup.payPerPiece.subtitle` | You can now buy your favorite pieces individually to play with no limit. |
+| `foopup.payPerPiece.title` | Buy your favorite pieces |
+| `foopup.printConfirmation.alreadyPrintedPremium.subtitle` | You've already printed this score: You can print it again as many times as you want. |
+| `foopup.printConfirmation.button` | Print the score |
+| `foopup.printConfirmation.button.alreadyPrintedPremium.subtitle` | unlimited printouts |
+| `foopup.printConfirmation.button.freeTrial.subtitle` | %u printout available |
+| `foopup.printConfirmation.PPP.subtitle` | You can print the pieces you've purchased as many times as you want. |
+| `foopup.printConfirmation.subscriber.subtitle` | You can print %u scores this month. A score can be printed as many times as you want. |
+| `foopup.printConfirmation.title` | Print the entire score: |
+| `foopup.printConfirmation.title.obsolete` | Print the score (full version): |
+| `foopup.printForbidden.subtitle` | Due to copyright issues, this music sheet cannot be printed in your country. |
+| `foopup.printForbidden.title` | Cannot print this music sheet |
+| `foopup.printLocked.subtitle` | Buy the piece or start your free trial to print the score (original version only). |
+| `foopup.printLocked.title` | Unlock the piece to print |
+| `foopup.transpositionWarning` | Transposition changes won't be taken into account when printing. If you go ahead, the original score will be printed. |
+
+<a id="p-vocalcommand"></a>
+### vocalCommand (20)
+
+| key | value |
+|---|---|
+| `vocalCommand.close` | Close the piece |
+| `vocalCommand.closeKeywords` | Close, Exit |
+| `vocalCommand.faster` | Increase tempo by 10% |
+| `vocalCommand.fasterKeywords` | Speed up, Increase tempo, Faster, Quicken |
+| `vocalCommand.listen` | Listen to the solo with accompaniment |
+| `vocalCommand.listenKeywords` | Listen, Solo, Soloist |
+| `vocalCommand.metronome` | Toggle Metronome |
+| `vocalCommand.metronomeKeywords` | Metronome |
+| `vocalCommand.pause` | Pause playback |
+| `vocalCommand.pauseKeywords` | Pause, Stop |
+| `vocalCommand.play` | Play accompaniment |
+| `vocalCommand.playKeywords` | Play, Start, Perform |
+| `vocalCommand.rewind` | Return to previous position |
+| `vocalCommand.rewindKeywords` | Back, back, Return, Start over |
+| `vocalCommand.slower` | Decrease tempo by 10% |
+| `vocalCommand.slowerKeywords` | Slow down, Reduce tempo, Less speed, Slow tempo |
+| `vocalCommand.volumeDown` | Decrease volume by 10% |
+| `vocalCommand.volumeDownKeywords` | Less volume, Decrease volume, Lower, Reduce volume, Volume down, Quieter, Lower, Turn down the volume |
+| `vocalCommand.volumeUp` | Increase volume by 10% |
+| `vocalCommand.volumeUpKeywords` | Louder, Volume up, Increase volume, Raise volume, Turn up the volume, Boost volume |
+
+<a id="p-showcase"></a>
+### Showcase (19)
+
+| key | value |
+|---|---|
+| `Showcase.action.button.next.title` | Let's go! |
+| `Showcase.action.skip` | Skip |
+| `Showcase.ClefTransposition.announce.subtitle` | Choose any piece in our catalog: The clef and transposition of the score will automatically be adapted for your instrument. |
+| `Showcase.ClefTransposition.announce.title` | Metronaut makes your life easier! |
+| `Showcase.specialOffer.announce.action.button.next.title` | Discover |
+| `Showcase.specialOffer.announce.subtitle` | To help you make 2019 a year full of music, we have put together a little surprise for you 😉 |
+| `Showcase.specialOffer.announce.title` | Just for you… |
+| `Showcase.specialOffer.offer.action.button.next.title` | I want it! |
+| `Showcase.specialOffer.offer.subtitle` | Enjoy unlimited play time and save 50% off the first 3 months of your subscription thanks to our special offer until Jan 14th. |
+| `Showcase.specialOffer.offer.title` | Our gift to you ❤️ |
+| `Showcase.subscription.announce.subtitle` | To offer you more pieces and keep accompanying you with new features, we are introducing subscriptions! |
+| `Showcase.subscription.announce.title` | New on Metronaut |
+| `Showcase.subscription.offer.card.paying` | 6 month<br>Unlimited play time<br>free |
+| `Showcase.subscription.offer.card.returning` | 1 month<br>Unlimited play time<br>free |
+| `Showcase.subscription.offer.subtitle.paying` | To thank you for your support since we started, the first six months is on us if you subscribe! 🎁 |
+| `Showcase.subscription.offer.subtitle.returning` | To thank you for your support since we started, the first month is on us if you subscribe! 🎁 |
+| `Showcase.subscription.offer.title` | Just for you! |
+| `Showcase.userGoal.announce.subtitle` | Make music a habit! Stay motivated by planning and tracking your practice sessions with Metronaut and see how you improve. |
+| `Showcase.userGoal.announce.title` | Consistency is key! |
+
+<a id="p-mymusic"></a>
+### myMusic (18)
+
+| key | value |
+|---|---|
+| `myMusic.alreadyPlayed` | Already Played |
+| `myMusic.footer.freeUser.noPurchase.button` | Find more pieces |
+| `myMusic.footer.freeUser.noPurchase.title` | Explore our catalog to discover more pieces. |
+| `myMusic.footer.subscription.freeTrial.button` | Try for free! |
+| `myMusic.footer.subscription.noFreeTrial.button` | See all offers |
+| `myMusic.footer.subscription.title` | Play with No Time Limit |
+| `myMusic.footer.subscriptionV2.offer.button` | Discover our special offer |
+| `myMusic.footer.subscriptionV2.subtitle` | and get access to thousands of pieces |
+| `myMusic.footer.subscriptionV2.title` | Unlock the full catalog |
+| `myMusic.lastPlayed.explanation` | This is where you can find the last pieces you played. |
+| `myMusic.LastPlayed.explanation.button` | Find my first piece |
+| `myMusic.noPiece.explanation` | This is where you can find the pieces you recently played and your favorites. |
+| `myMusic.noPiece.explanation.button` | Find my first piece |
+| `myMusic.noPiece.payPerPiece.explanation` | This is where you can find the pieces you recently played or purchased. |
+| `myMusic.rating.button` | Rate the App |
+| `myMusic.rating.title` | How are we doing so far? |
+| `myMusic.userPieces` | My Scores |
+| `myMusic.userPieces.emptyState` | This is where you can find the pieces you purchased. |
+
+<a id="p-coach"></a>
+### coach (17)
+
+| key | value |
+|---|---|
+| `coach.bestUserScore` | Best score |
+| `coach.bestUserScore.landscape` | Best score: |
+| `coach.endFeedback.fast` | Early |
+| `coach.endFeedback.generic` | Fuzzy |
+| `coach.endFeedback.slow` | Late |
+| `coach.placeholder` | Feedback and score will be displayed here |
+| `coach.playingOnTime` | On time |
+| `coach.playingPlaceholder` | Feedback |
+| `coach.playingTooFast` | Early |
+| `coach.playingTooSlow` | Late |
+| `coach.RTfeedback.early` | A bit early |
+| `coach.RTfeedback.late` | A bit late |
+| `coach.RTfeedback.perfect` | On time |
+| `coach.RTfeedback.veryEarly` | Early |
+| `coach.RTfeedback.veryLate` | Late |
+| `coach.userScore` | Your score |
+| `coach.userScore.landscape` | Your score: |
+
+<a id="p-genre"></a>
+### genre (17)
+
+| key | value |
+|---|---|
+| `genre.1` | Classical |
+| `genre.11` | Gospel |
+| `genre.12` | Christmas |
+| `genre.13` | Country |
+| `genre.14` | Celtic |
+| `genre.15` | Children |
+| `genre.16` | Music of the 20th Century |
+| `genre.17` | Soul - R&B |
+| `genre.18` | Film Music |
+| `genre.2` | Baroque |
+| `genre.3` | Jazz |
+| `genre.4` | Traditional |
+| `genre.5` | Romantic |
+| `genre.6` | Pop Rock |
+| `genre.7` | Anthem |
+| `genre.8` | French Chanson |
+| `genre.9` | Renaissance |
+
+<a id="p-playlist"></a>
+### playlist (17)
+
+| key | value |
+|---|---|
+| `playlist.actions.add` | Add to playlist |
+| `playlist.actions.remove` | Remove from playlist |
+| `playlist.actions.share` | Share |
+| `playlist.delete` | Delete |
+| `playlist.drawer.title` | Save to... |
+| `playlist.error` | An error occurred! Please try again later. |
+| `playlist.favorites` | My Favorites |
+| `playlist.name.defaultValue` | Playlist- |
+| `playlist.name.placeHolder` | Enter playlist name... |
+| `playlist.popupCreation.title` | Name your playlist |
+| `playlist.popupDelete.summary` | Are you sure you want to delete "%@"?<br>Deleting playlists is a permanent action and cannot be undone. |
+| `playlist.popupDelete.summary_1` | Are you sure you want to delete "%@"? |
+| `playlist.popupDelete.title` | Delete this playlist? |
+| `playlist.popupRename.title` | Rename Playlist |
+| `playlist.rename` | Rename |
+| `playlist.section.boutonTitle` | Create a playlist |
+| `playlist.section.title` | My playlists |
+
+<a id="p-preferences"></a>
+### preferences (17)
+
+| key | value |
+|---|---|
+| `preferences.genre.4` | Mainstream music |
+| `preferences.genre.choice.selectAll` | A bit of everything |
+| `preferences.genre.choice.subtitle` | You can change this later |
+| `preferences.genre.choice.title` | What do you like to play? |
+| `preferences.genre.classical` | Classical & Baroque |
+| `preferences.genre.country` | Country & Folk |
+| `preferences.genre.film` | Film music |
+| `preferences.genre.jazz` | Jazz |
+| `preferences.genre.pop` | Pop |
+| `preferences.genre.rock` | Rock |
+| `preferences.genre.romantic` | Romantic & 20th century |
+| `preferences.genre.soul` | Soul & R&B |
+| `preferences.status.administrator` | I am in charge of an educational institution |
+| `preferences.status.other` | I practice alone at home |
+| `preferences.status.student` | I take music lessons |
+| `preferences.status.teacher` | I am a teacher |
+| `preferences.status.title` | What describes you best? |
+
+<a id="p-watchos"></a>
+### watchos (17)
+
+| key | value |
+|---|---|
+| `watchos.appname` | Metronaut |
+| `watchos.comingsoon` | Coming Soon |
+| `watchos.metronome` | Metronome |
+| `watchos.metronome.tapaction` | Tap to Define Tempo |
+| `watchos.metronome.taptempo` | Tap Tempo |
+| `watchos.notename.A` | A |
+| `watchos.notename.B` | B |
+| `watchos.notename.C` | C |
+| `watchos.notename.D` | D |
+| `watchos.notename.E` | E |
+| `watchos.notename.F` | F |
+| `watchos.notename.G` | G |
+| `watchos.tuner` | Tuner |
+| `watchos.tuner.base` | Base |
+| `watchos.tuner.notename` | Name |
+| `watchos.tuner.octave` | Octaves |
+| `watchos.tuner.playtone` | Play Tone |
+
+<a id="p-deeplink"></a>
+### deeplink (16)
+
+| key | value |
+|---|---|
+| `deeplink.congrats.title` | Congratulations! |
+| `deeplink.introStudent.content` | Your teacher has granted you unlimited access to every music score in the catalogue on all your devices. You are also eligible for a 50%% discount on Metronaut Premium. |
+| `deeplink.introStudent.title` | Enjoy free Premium access until %@ |
+| `deeplink.loading.inProgress.subtitle` | This process will take only a few moments, please don't close the App. |
+| `deeplink.loading.inProgress.title` | Please wait |
+| `deeplink.premium.button.title` | Continue |
+| `deeplink.premium.content` | You are eligible to a Premium access. |
+| `deeplink.premium.content.login` | You are eligible to a Premium access.<br><br>Create an account or login to access your special offer. |
+| `deeplink.referral.content` | Thanks to your friend, you get 20% off the Premium subscription. Enjoy it now! |
+| `deeplink.referral.content.login` | Thanks to your friend, you get 20% off the Premium subscription. Create an account or log in to enjoy it! |
+| `deeplink.referral.title` | Good news: you get 20% off! |
+| `deeplink.specialOffer.congrats.button.title` | Continue |
+| `deeplink.specialOffer.congrats.content.premiumUser` | You are eligible to a special offer. Cancel your current subscription to take advantage of it. |
+| `deeplink.specialOffer.congrats.content.title` | You are eligible to a special offer. |
+| `deeplink.specialOffer.content` | You are eligible to a special offer. |
+| `deeplink.specialOffer.content.login` | You are eligible to a special offer.<br><br>Create an account or login to access your special offer. |
+
+<a id="p-endsession"></a>
+### endSession (16)
+
+| key | value |
+|---|---|
+| `endSession.cta` | Done |
+| `endSession.invite.student.cta` | Send to a student |
+| `endSession.invite.student.title` | Have a student practice this piece |
+| `endSession.ranking.comment` | Keep playing to be on top of the leaderboard! |
+| `endSession.ranking.integrate` | Enter your nickname to integrate the leaderboard. The more you play, the more points you will earn. |
+| `endSession.ranking.nickname.placeholder` | Your nickname |
+| `endSession.ranking.pool.title` | Leaderboard (expires in {duration}) |
+| `endSession.recommendations.title` | Similar pieces |
+| `endSession.recordings_other` | New recordings |
+| `endSession.session` | Your session |
+| `endSession.sessionXp` | This session XP |
+| `endSession.sessionXp.new_title` | XP earned: |
+| `endSession.sessionXp.title` | You've earned: |
+| `endSession.sessionXp.wo` |  |
+| `endSession.time` | Session time |
+| `endSession.totalXp` | Total this week |
+
+<a id="p-reminder"></a>
+### Reminder (16)
+
+| key | value |
+|---|---|
+| `Reminder.practice.notification.Steady.Simple.Variante4.Body` | Practice makes perfect, let’s do it! |
+| `Reminder.practice.notification.Steady.Simple.Variante4.Title` | Let the Music begin🕺 |
+| `Reminder.practice.notification.Steady.Simple.Variante5.Body` | A journey of a thousand miles begins with a single step: Start practicing today! |
+| `Reminder.practice.notification.Steady.Simple.Variante5.Title` | Ready to play? 🎶 |
+| `Reminder.specialOffer.long.title` | 50% off Premium |
+| `Reminder.specialOffer.short.title` | -50% |
+| `Reminder.subscription.0MinutesLeft.subtitle` | To keep playing try Metronaut Premium now or see you on the %@. |
+| `Reminder.subscription.XMinutesLeft.freeTrial.button` | Try Premium for Free! |
+| `Reminder.subscription.XMinutesLeft.freeTrial.subtitle` | Try Metronaut Premium for free to play your pieces with no time limit. |
+| `Reminder.subscription.XMinutesLeft.noFreeTrial.button` | Play Without Limit! |
+| `Reminder.subscription.XMinutesLeft.noFreeTrial.subtitle` | Subscribe to Metronaut Premium to play all your pieces with no time limit. |
+| `Reminder.subscription.XMinutesLeft.specialOffer.subtitle` | Go Premium for Unlimited Play: 50% off till Jan 14th! |
+| `Reminder.subscription.XMinutesLeft.specialOffer.zero.subtitle` | Or see you on %@ for more free play time! |
+| `Reminder.subscription.XMinutesLeft.specialOffer.zero.title` | Enjoy 50% off Metronaut Premium! |
+| `Reminder.subscription.XMinutesLeft.subtitle` | Go Premium for Unlimited Play! |
+| `Reminder.subscription.XMinutesLeft.zero.subtitle` | See you on the %@ or subscribe now! |
+
+<a id="p-applestoredemo"></a>
+### applestoredemo (15)
+
+| key | value |
+|---|---|
+| `applestoredemo.featurenotenabled` | Sorry, this feature is not available in the demo version of Metronaut! |
+| `applestoredemo.home.demopieces` | Demo Pieces |
+| `applestoredemo.landingButton.demotext` | Discover The Demo |
+| `applestoredemo.launchscreen.demotext` | This version of Metronaut has been created specifically for demonstration purposes. |
+| `applestoredemo.performance.magic.videoSubtitle` | Check out how Metronaut listens to you and adapts the accompaniment tempo in real-time: Magic! |
+| `applestoredemo.performance.magic.videoTitle` | Magic Mode isn't available in Demo version 🙉 |
+| `applestoredemo.performance.message.noMagicOnDemo.subtitle` | In full version Metronaut listens to you and adapts the accompaniment speed to your tempo in real-time. |
+| `applestoredemo.performance.message.noMagicOnDemo.title` | Magic Mode is off in Demo!<br> |
+| `applestoredemo.performance.pres.videoSubtitle` | Check out what you can do with Metronaut in this 1-minute video. |
+| `applestoredemo.performance.pres.videoTitle` | Introducing the magic of Metronaut |
+| `applestoredemo.performance.presBigTitle` | Play Classical Masterpieces Accompanied by an Orchestra |
+| `applestoredemo.performance.presSubtitle` | Get to know your musical companion with Verdi's La Donna è mobile! And discover more than 500 pieces for 32 instruments in Metronaut's full version. |
+| `applestoredemo.performance.presTitle` | Welcome to Metronaut! |
+| `applestoredemo.previousRecording.temporaryTitle` | Demo Recording |
+| `applestoredemo.recording` | 🎶👆You'll find your Performances' Recordings here in Metronaut full version |
+
+<a id="p-part"></a>
+### part (15)
+
+| key | value |
+|---|---|
+| `part.1` | {{instrument}} {{extra}} |
+| `part.12` | Both Hands |
+| `part.15` | (solo) |
+| `part.16` | (accompaniment) |
+| `part.2` | Prima (4 Hands) |
+| `part.2.obsolete` | Prima (Piano 4 Hands) |
+| `part.3` | Seconda (4 Hands) |
+| `part.3.obsolete` | Seconda |
+| `part.4` | Student |
+| `part.5` | Teacher |
+| `part.6` | Right Hand |
+| `part.6.obsolete` | Right Hand (Piano Solo) |
+| `part.7` | Left Hand |
+| `part.7.obsolete` | Left Hand (Piano Solo) |
+| `part.8` | {{instrument}} {{extra}} |
+
+<a id="p-rewardaction"></a>
+### rewardAction (15)
+
+| key | value |
+|---|---|
+| `rewardAction.didSearch` | Search some Piece |
+| `rewardAction.endPerformanceFinished` | Perform any piece from Beginning to End |
+| `rewardAction.friendInstalledApp` | Your friend installed the app |
+| `rewardAction.goToRecordings` | Find Your Recordings |
+| `rewardAction.PerformanceModeFollow` | First use of Tempo regulator |
+| `rewardAction.PerformanceModeFollow2` | First use of Magic Mode |
+| `rewardAction.PerformanceModeMetro` | First use of Metronomic Tempo |
+| `rewardAction.performanceOver30Seconds` | Perform any piece for at least 30 seconds |
+| `rewardAction.performanceWithTempoChange` | Changing Initial Tempo |
+| `rewardAction.performanceWithTransposition` | Using Transposition |
+| `rewardAction.pieceRequestAccepted` | Your Requested Piece was added! |
+| `rewardAction.pieceRequestSuggested` | Acceptance of your Requested Piece by Metronaut |
+| `rewardAction.pieceRequestUpvote` | Upvote a Requested Piece |
+| `rewardAction.recommandApp` | Recommend this App to your Friends |
+| `rewardAction.replayRecording` | Listen to Your Recordings |
+
+<a id="p-att"></a>
+### att (12)
+
+| key | value |
+|---|---|
+| `att.preprompt.button` | Ok, got it! |
+| `att.prepromptA.cell1.subtitle` | by allowing tracking on the next prompt. |
+| `att.prepromptA.cell1.title` | Help us grow the music community |
+| `att.prepromptA.cell2.subtitle` | and you won't get any ads. |
+| `att.prepromptA.cell2.title` | Your data will remain private |
+| `att.prepromptA.cell3.subtitle` | at anytime in the settings. |
+| `att.prepromptA.cell3.title` | You can disable this option |
+| `att.prepromptA.title` | Why allow tracking? |
+| `att.prepromptB.cell1.summary` | Help us grow the music community by allowing tracking on the next prompt. |
+| `att.prepromptB.cell2.summary` | Your data will remain private and you won't get any ads. |
+| `att.prepromptB.cell3.summary` | You can disable this option at anytime in the settings. |
+| `att.prepromptB.title` | Help us by allowing tracking |
+
+<a id="p-performance"></a>
+### Performance (12)
+
+| key | value |
+|---|---|
+| `Performance.onboarding.clefSubtitle` | Choose the clef you're most comfortable with and adjust pitch if necessary using + and - buttons. |
+| `Performance.onboarding.clefTitle` | Customize your sheet music! |
+| `Performance.onboarding.magicmodeSubtitle` | Activate the magic mode if you want Metronaut to follow you by adapting the accompaniment tempo to your interpretation. |
+| `Performance.onboarding.magicmodeTitle` | Magic Mode |
+| `Performance.onboarding.recordsSubtitle` | Check out the recordings of your performances and share the best ones |
+| `Performance.onboarding.recordsTitle` | Recordings |
+| `Performance.onboarding.speakerSubtitle` | We recommend that you plug in speakers or headphones for a better experience. |
+| `Performance.onboarding.speakerTitle` | Full Immersion Guaranteed! |
+| `Performance.onboarding.tempoSubtitle` | Swipe the wheel while the accompaniment is playing to find your ideal tempo. |
+| `Performance.onboarding.tempoTitle` | Choose your Tempo |
+| `Performance.onboarding.transpoSubtitle` | Use the + and - buttons to adapt the score to your instrument/voice. |
+| `Performance.onboarding.transpoTitle` | Transposition made easy! |
+
+<a id="p-popup"></a>
+### Popup (12)
+
+| key | value |
+|---|---|
+| `Popup.disable` | Not now |
+| `Popup.enable` | Enable notifications |
+| `Popup.notification.changeSettings` | Go to Settings |
+| `Popup.notification.mandatory` | No notification, no motivation 🤔 |
+| `Popup.notification.usergoal` | To enjoy this feature you'll need to turn on notifications (we'll do our best not to annoy you with them, and help you stay motivated!). |
+| `Popup.notificationFromPieceRequestSubtitle` | Stay informed whenever your piece is added to our catalog, As well as pieces you might like, and more |
+| `Popup.notificationFromPieceRequestTitle` | Don't miss your piece! |
+| `Popup.notificationSubtitle` | Keep track of your messages, Get notified of the latest pieces you might like |
+| `Popup.notificationTitle` | Don’t miss out! |
+| `Popup.PiecesMessage` | As well as pieces you might like, and more |
+| `Popup.StayInformedMessage` | Stay informed whenever your piece is added to our catalog |
+| `Popup.Title` | Don't miss your piece! |
+
+<a id="p-tiktok"></a>
+### TikTok (12)
+
+| key | value |
+|---|---|
+| `TikTok.christmas.tagline.1` | Get ready for Christmas: Play your favorite pieces with accompaniment on Metronaut App! |
+| `TikTok.christmas.tagline.2` | All you need for Christmas is… A new practice companion to skyrocket your music progress! |
+| `TikTok.tagline` | Discover thousands of play along music sheets and practice with your own orchestra on Metronaut! |
+| `TikTok.tagline.10` | Stop trying to learn music the hard way! Have fun practicing with accompaniment on Metronaut. |
+| `TikTok.tagline.2` | Skyrocket your music progress with Metronaut! Choose your tempo and get AI feedback while you play. |
+| `TikTok.tagline.3` | Take control of the digital sheet music: Choose the accompaniment tempo, transpose, annotate, print. |
+| `TikTok.tagline.4` | Music sheets for all instruments and levels: Classical repertoire, blues, Latin music and more! |
+| `TikTok.tagline.5` | Download Metronaut App today and become the musician you dream to be! |
+| `TikTok.tagline.6` | Get better and learn pieces you never thought you could play thanks to your new practice companion! |
+| `TikTok.tagline.7` | Don’t lose your motivation and enjoy practicing again with play along music sheets on Metronaut App! |
+| `TikTok.tagline.8` | The only App that reminds you of playing with others! Discover Metronaut, your practice companion. |
+| `TikTok.tagline.9` | Challenge yourself to get better at playing in time with Metronaut. See how many points you can get! |
+
+<a id="p-backend"></a>
+### backend (11)
+
+| key | value |
+|---|---|
+| `backend.key.A#` | A# |
+| `backend.mood.major` | Major |
+| `backend.mood.minor` | Minor |
+| `backend.piece.allegroConBrio` | Allegro con brio |
+| `backend.piece.brokenChords` | Broken Chords |
+| `backend.piece.diminishedSeventhChordArpeggio4Octaves` | Diminished Seventh Chord Arpeggio 4 Octaves |
+| `backend.piece.dominantSeventhChordArpeggio4Octaves` | Dominant Seventh Chord Arpeggio 4 Octaves |
+| `backend.piece.gigue` | Gigue |
+| `backend.piece.mainTheme` | Main Theme |
+| `backend.piece.scherzo` | Scherzo |
+| `backend.piece.triadWithInversions` | Triad with Inversions |
+
+<a id="p-button"></a>
+### button (11)
+
+| key | value |
+|---|---|
+| `button.global.add` | Get |
+| `button.reminder.changePlan.title` | Change Plan |
+| `button.reminder.extendTime.title` | Go Premium |
+| `button.reminder.specialOffer.title` | I subscribe |
+| `button.simple.next.title` | Next |
+| `button.subscription.7freedays` | 7-day Free Trial |
+| `button.subscription.monthly.title` | %@ / month |
+| `button.subscription.monthlyThen.specialOffer.title` | for 3 months then %@ / month |
+| `button.subscription.monthlyThen.title` | then %@ / month |
+| `button.subscription.weekly.title` | %@ / week |
+| `button.subscription.weeklyThen.specialOffer.title` | for 3 weeks then %@ / week |
+
+<a id="p-social"></a>
+### social (11)
+
+| key | value |
+|---|---|
+| `social.sharing.title` | Enjoy Metronaut App |
+| `social.sharingMessage` | Check out this new App, you'll like it: |
+| `social.sharingMessage_copy` | Hi! Check out my Music Sheets & Accompaniments App, Metronaut, I highly recommend it! Tap this link to download the App (it's free ;)): |
+| `social.sharingMessage.obsolete` | Check out this new App, you'll like it: |
+| `social.sharingMessage.referral.default` | Discover Metronaut, the sheet music and accompaniment app! 🎶 With my link, get 20% off your Premium subscription: |
+| `social.sharingMessage.referral.default.obsolete` | Hey! You should check out this music App I’m practicing with, it’s great. Use my link to try all their music sheets for free for %u days: |
+| `social.sharingMessage.referral.obsolete2` | Hey! You should check out this music App I’m practicing with, it’s great. Use my link to get a free music piece: |
+| `social.sharingMessage.referral.subscriber` | Discover Metronaut, the sheet music and accompaniment app! 🎶 With my link, get 20% off your Premium subscription: |
+| `social.sharingMessageFromPiece` | I played "%@" by %@ with accompaniment on my %@ using Metronaut App. Give it a try:   |
+| `social.sharingPiece.contentDescription` | Play this Piece with an accompaniment |
+| `social.sharingSubject` | Bored of playing music alone? |
+
+<a id="p-subscription"></a>
+### Subscription (11)
+
+| key | value |
+|---|---|
+| `Subscription.conditions.title` | Payment will be charged to the iTunes account at confirmation of purchase or at the end of the free trial period if any. Subscriptions automatically renew unless auto-renew is turned off at least 24-hours before the end of the current period, by going to the user’s iTunes Account Settings after purchase. Payment will be charged to iTunes Account within 24-hours prior to the end of the current period. Any unused portion of a free trial period, will be forfeited when the user purchases a subscription. |
+| `Subscription.congrats.button` | Remind me before trial ends |
+| `Subscription.congrats.freeTrialDetail` | Your free trial will end on:<br> |
+| `Subscription.congrats.restore.subtitle` | Your purchased product has been restored! Enjoy unlimited access to our music catalog and upcoming features. |
+| `Subscription.congrats.restore.title` | Congratulations! |
+| `Subscription.congrats.subtitle` | You now have unlimited access to all music scores in the catalog on all platforms. |
+| `Subscription.congrats.title` | Congratulations! |
+| `Subscription.restoreAction.title` | Restore your purchase |
+| `Subscription.specialOffer.title` | Metronaut Premium 50% off! |
+| `Subscription.timelessUser.subtitleXMinutes` | Your monthly free play time is up. Subscribe to Metronaut Premium to play your favorite pieces without limits! |
+| `Subscription.timelessUser.title` | Play Without Limits! |
+
+<a id="p-support"></a>
+### support (11)
+
+| key | value |
+|---|---|
+| `support.askpush.approval` | Enable notifications |
+| `support.askpush.description` | Allow notifications to be informed of new messages. |
+| `support.askpush.title` | Get Notified of our Answer |
+| `support.comments` | Comments |
+| `support.contactUS` | Contact us |
+| `support.helpcenter` | Go to Helpcenter |
+| `support.menu.title` | Need Help? |
+| `support.messageSentTo` | Message sent to %@. You will be contacted shortly. |
+| `support.title` | Metronaut Support |
+| `support.unableToSendMessage` | Unable to send message! |
+| `support.userFullname` | Name |
+
+<a id="p-jtbd"></a>
+### jtbd (10)
+
+| key | value |
+|---|---|
+| `jtbd.cta` | Continue |
+| `jtbd.lessons` | An all-in-one tool to serve my lessons |
+| `jtbd.new` | Learn new pieces |
+| `jtbd.play` | Play pieces with accompaniments |
+| `jtbd.pleasant` | Make practice more pleasant |
+| `jtbd.prepare` | Prepare for rehearsal or concerts |
+| `jtbd.share` | Share performances with friends |
+| `jtbd.skills` | Improve my skills |
+| `jtbd.skip` | Skip |
+| `jtbd.title` | What are you looking for? |
+
+<a id="p-magiclogin"></a>
+### magicLogin (10)
+
+| key | value |
+|---|---|
+| `magicLogin.cta.login` | Continue with this account |
+| `magicLogin.cta.skip` | Skip |
+| `magicLogin.loggedin.cta.cancel` | Cancel |
+| `magicLogin.loggedin.cta.login` | Log out and continue |
+| `magicLogin.loggedin.paragraph` | You are already logged in with:<br>{{account1}}<br><br> To access the account {{account2}}, you must first log out. |
+| `magicLogin.loggedin.title` | A session is already active |
+| `magicLogin.paragraph` | By continuing, you'll be automatically signed in with the account:<br>{{account}} |
+| `magicLogin.paragraph.apple` | By continuing, you will be automatically signed in to your account created with Apple (it may be a private relay):<br>{{account}} |
+| `magicLogin.paragraph.google` | By continuing, you will be automatically signed in to your account created with Google:<br>{{account}} |
+| `magicLogin.title` | Glad to have you back! |
+
+<a id="p-ranking"></a>
+### ranking (10)
+
+| key | value |
+|---|---|
+| `ranking.league.bronze` | Bronze League |
+| `ranking.league.diamond` | Diamond League |
+| `ranking.league.gold` | Gold League |
+| `ranking.league.show.more` | See the full league |
+| `ranking.league.silver` | Silver League |
+| `ranking.league.wood` | Wood League |
+| `ranking.subtitle` | Finish in the promotion zone to reach the higher league |
+| `ranking.subtitle.never` | Play to join a league. |
+| `ranking.zone.danger` | Danger zone |
+| `ranking.zone.promotion` | Promotion zone |
+
+<a id="p-teacher"></a>
+### teacher (10)
+
+| key | value |
+|---|---|
+| `teacher.advantages.student.content` | • Free access for the entire duration of your trial, via your invitation link<br>• No commitment and no payment required<br>• 50%% off Metronaut Premium |
+| `teacher.advantages.student.seemore` | Learn more |
+| `teacher.advantages.student.subtext` | Or contact us to purchase annual licenses for your students. |
+| `teacher.advantages.student.title` | For your students |
+| `teacher.advantages.title` | Your benefits |
+| `teacher.advantages.user.content` | • 30-day free trial<br>• No commitment and no payment required<br>• 50%% off Metronaut Premium |
+| `teacher.advantages.user.subtext` | Exclusive offer for users who have never subscribed to a plan |
+| `teacher.advantages.user.title` | For you |
+| `teacher.preInvite.tip.description` | • Send an invitation link to your students.<br>• They sign up via this link without providing payment information.<br>• Your students are added to your list. |
+| `teacher.preInvite.tip.title` | How does it work? |
+
+<a id="p-message"></a>
+### message (9)
+
+| key | value |
+|---|---|
+| `message.QRcode.freetrial` | Scan to start your free trial |
+| `message.referral1freePiece.freeUser.CTA` | Invite Friends |
+| `message.referral1freePiece.freeUser.subtitle` | Invite a friend to install the App and you will both get to choose a free piece among our 4,000 music sheets. |
+| `message.referral1freePiece.freeUser.title` | Win the Piece of your Choice |
+| `message.referral1freePiece.subscriber.CTA` | Invite Friends |
+| `message.referral1freePiece.subscriber.subtitle` | • Share your referral link with your friends.<br> • Your friends save 20% on their annual subscription.<br> • You earn $10 for each confirmed subscription.<br> You can refer up to 50 friends! |
+| `message.referral1freePiece.subscriber.subtitle_obsolète` | Invite a friend to install the App and they will get the piece of their choice for free. |
+| `message.referral1freePiece.subscriber.title` | Earn $10 for each friend you refer! |
+| `message.referral1freePiece.subscriber.title_obsolete` | Give the gift of music |
+
+<a id="p-perforrhythm"></a>
+### perfOrRhythm (9)
+
+| key | value |
+|---|---|
+| `perfOrRhythm.cta` | Continue |
+| `perfOrRhythm.instruction` | You can change your choice from the "Tools" menu. |
+| `perfOrRhythm.perf.desc` | Listen to the piece, play with the accompaniment, choose the tempo, annotate, record... |
+| `perfOrRhythm.perf.title` | Play the score |
+| `perfOrRhythm.rhythm.desc` | Practice even without your instrument and watch your score increase as you progress. |
+| `perfOrRhythm.rhythm.title` | Rhythm Game |
+| `perfOrRhythm.settings.desc` | Turn on Rhythm Game or off to access all features |
+| `perfOrRhythm.settings.title` | Rhythm Game |
+| `perfOrRhythm.title` | What do yo want to do? |
+
+<a id="p-post"></a>
+### post (9)
+
+| key | value |
+|---|---|
+| `post.awaiting.approval` | Awaiting moderation |
+| `post.piece.recording.action` | Watch on music sheet |
+| `post.popupDelete.summary` | Deleting posts is a permanent action and cannot be undone. |
+| `post.popupDelete.title` | Delete post? |
+| `post.remove` | Delete |
+| `post.report` | Report |
+| `post.share` | Share |
+| `post.swipe.indicator` | Swipe up to see more |
+| `post.unpublish` | Make private |
+
+<a id="p-appstore"></a>
+### appstore (8)
+
+| key | value |
+|---|---|
+| `appstore.description.subscriptionnote` | NOTE: Metronaut is free to download and offers 10 minutes of free play time every month. To enjoy unlimited play time, subscribe to Metronaut Premium (weekly or monthly plan). <br>Payment will be charged to iTunes Account at confirmation of purchase. Subscriptions automatically renew unless auto-renew is turned off at least 24-hours before the end of the current period, by going to the user’s Account Settings after purchase. Payment will be charged to iTunes Account within 24-hours prior to the end of the current period. Any unused portion of a free-trial period, will be forfeited when the user purchases a subscription. |
+| `appstore.monthlySubscription.description` | Unlimited Play Time with 7-day Free Trial |
+| `appstore.monthlySubscription.name` | Monthly subscription |
+| `appstore.pieceIAP.description` | Sheet Music and accompaniments of 1 piece |
+| `appstore.pieceIAP.title` | 1 piece |
+| `appstore.yearlySubscription.description` | Unlimited Play Time with 14-day Free Trial |
+| `appstore.yearlySubscription.name` | Yearly subscription |
+| `appstore.yearlySubscription2.description` | Unlimited Play Time with 1-month Free Trial |
+
+<a id="p-google"></a>
+### google (8)
+
+| key | value |
+|---|---|
+| `google.description.1` | Explore thousands of play-along interactive music sheets for all instruments and levels. |
+| `google.description.2` | Skyrocket your progress with Metronaut AI feedback during and after your performance. |
+| `google.description.3` | Practice new pieces with accompaniment: Classical Repertoire, Blues, Latin music and more. |
+| `google.description.4` | Take control of the play-along sheet music: Choose the tempo, transpose, annotate, print… |
+| `google.description.christmasPromotion` | Christmas Offer: Enjoy our limited discount and improve with 5000+ play along music sheets |
+| `google.headline.1` | 4000+ Play Along Music Sheets |
+| `google.headline.2` | Improve your music skills fast |
+| `google.headline.3` | Play with an orchestra at home |
+
+<a id="p-piece"></a>
+### piece (8)
+
+| key | value |
+|---|---|
+| `piece.actions.seeComposer` | See composer |
+| `piece.makeOffline` | Make available offline |
+| `piece.preview.extract` | Excerpt: %li%% |
+| `piece.preview.features.cell1` | Explore 12,000+ music sheets |
+| `piece.preview.features.cell2` | Play with accompaniments |
+| `piece.preview.features.cell3` | Practice at your tempo |
+| `piece.preview.subscription.button` | Try for free |
+| `piece.removeOffline` | Remove offline access |
+
+<a id="p-setting"></a>
+### setting (8)
+
+| key | value |
+|---|---|
+| `setting.latency.adjust` | Adjust |
+| `setting.latency.footer` | Synchronize audio with the animation. If audio is late, increase the latency. |
+| `setting.latency.title` | Adjust latency |
+| `setting.scoreDisplay.title` | Score Display |
+| `setting.tempo.follow.magic` | Musical adaptation (for interpreting) |
+| `setting.tempo.follow.none` | No adaptation (fixed tempo) |
+| `setting.tempo.follow.read` | Note by note (for sight-reading) |
+| `setting.tempo.follow.title` | Choose how Metronaut follows you: |
+
+<a id="p-speechrecognition"></a>
+### speechRecognition (8)
+
+| key | value |
+|---|---|
+| `speechRecognition.permissionPrompt.cta` | Enable Speech Recognition |
+| `speechRecognition.permissionPrompt.subtitle` | Say Play, Stop, Slower and other commands to interact with the accompaniment without leaving your instrument! |
+| `speechRecognition.permissionPrompt.title` | Control Metronaut with your voice |
+| `speechRecognition.permissionWarning.button` | Go to Settings |
+| `speechRecognition.permissionWarning.subtitle` | Allow to control Metronaut with your voice. |
+| `speechRecognition.permissionWarning.title` | Allow Speech Recognition |
+| `speechRecognition.settings.subtitle` | Say the words listed below to execute the corresponding actions on any music sheet. |
+| `speechRecognition.settings.title` | Voice commands |
+
+<a id="p-accompanimentkind"></a>
+### accompanimentKind (7)
+
+| key | value |
+|---|---|
+| `accompanimentKind.1.mixer` | Piano |
+| `accompanimentKind.2.mixer` | Orchestra |
+| `accompanimentKind.3.mixer` | ... |
+| `accompanimentKind.4.mixer` | Violin |
+| `accompanimentKind.5.mixer` | Guitar |
+| `accompanimentKind.6.mixer` | Viola |
+| `accompanimentKind.7.mixer` | Flute |
+
+<a id="p-ad"></a>
+### ad (7)
+
+| key | value |
+|---|---|
+| `ad.app.ai.headline2` | Become a rhythm master🕺 |
+| `ad.app.ai.primary` | Skyrocket your progress with Metronaut! 🚀 Learn to play on time thanks to our feedback during and after your performance 🐰🐢 |
+| `ad.app.ai.tagline1` | Skyrocket your progress with Metronaut |
+| `ad.app.ai.tagline2` | Learn to play on time thanks to instant feedback |
+| `ad.app.ai.tagline3` | Piano bar provides visual help for sight-reading |
+| `ad.app.ai.tagline4` | Earn points based on your rhythmic accuracy |
+| `ad.app.ai.tagline5` | The score scrolls with the accompaniment |
+
+<a id="p-mic"></a>
+### mic (7)
+
+| key | value |
+|---|---|
+| `mic.permission.button` | Allow Access |
+| `mic.permission.subtitle` | Allow access to the microphone to enjoy all of Metronaut's performance features. |
+| `mic.permission.subtitle.obsolete` | Before choosing which version you will play, allow access to the microphone to enjoy all of Metronaut's features. |
+| `mic.permission.title` | Mic Test... 1, 2, 1, 2 |
+| `mic.permissionWarning.button` | Go to Settings |
+| `mic.permissionWarning.subtitle` | To enjoy all of Metronaut's features, enable access to your microphone in your device's settings. |
+| `mic.permissionWarning.title` | Microphone Access Needed |
+
+<a id="p-nauts"></a>
+### nauts (7)
+
+| key | value |
+|---|---|
+| `nauts.buymore.button` | Get more Nauts |
+| `nauts.buymore.buttonShort` |    MORE NAUTS |
+| `nauts.buyPackName` | Never run short of Nauts! |
+| `nauts.sectionTitleAndMore` | And also… |
+| `nauts.sectionTitleBuyMore` | Get more Nauts |
+| `nauts.sectionTitleGainNauts` | Gain Nauts |
+| `nauts.sectionTitlePlay` | Play a piece |
+
+<a id="p-piecerequest"></a>
+### PieceRequest (7)
+
+| key | value |
+|---|---|
+| `PieceRequest.badTitleTF` | The title is required for the piece request |
+| `PieceRequest.commentTF` | Comment |
+| `PieceRequest.composerTF` | Composer |
+| `PieceRequest.makeRequest` | Your piece is missing? Make a request! |
+| `PieceRequest.Message` | Can't find your piece? Request it! |
+| `PieceRequest.requestedPieces` | Requested Pieces |
+| `PieceRequest.titleTF` | Title |
+
+<a id="p-push"></a>
+### push (7)
+
+| key | value |
+|---|---|
+| `push.referral.announcement.subtitle` | Refer 1 Friend to install Metronaut to get a piece from our catalog for free forever. |
+| `push.referral.announcement.subtitle.obsolete` | Refer 1 Friend to install Metronaut to get 30 days of unlimited access to our catalog for free. |
+| `push.referral.announcement.title` | Win the Piece of your Choice |
+| `push.referral.announcement.title.obsolete` | Get 30 Days Free Premium Access |
+| `push.referral.sponsorGift.subtitle` | Metronaut community grows thanks to you, enjoy a free piece from our catalog as a thank-you. |
+| `push.referral.sponsorGift.subtitle.obsolete` | Metronaut community grows thanks to you, enjoy 30 days of Premium access to our catalog as a thank-you. |
+| `push.referral.sponsorGift.title` | Thank you and Congrats! |
+
+<a id="p-usergoal"></a>
+### UserGoal (7)
+
+| key | value |
+|---|---|
+| `UserGoal.frequencySelector.day` | Day |
+| `UserGoal.frequencySelector.weekday` | Weekday |
+| `UserGoal.frequencySelector.weekend` | Weekend |
+| `UserGoal.regularForm.dueDate.title` | At the following time… |
+| `UserGoal.regularForm.frequency.title` | I set myself the goal to practice every… |
+| `UserGoal.steadyForm.subtitle` | If your habits change, you can change or stop notifications at any time from<br>"Account → My practice goals" |
+| `UserGoal.steadyForm.title` | Let’s make it a date! |
+
+<a id="p-widget"></a>
+### widget (7)
+
+| key | value |
+|---|---|
+| `widget.mostpopular.title` | Trending now |
+| `widget.records.permanent.subtitle` | Private and stored only on this device. |
+| `widget.records.permanent.title` | Saved recordings |
+| `widget.records.temporary.subtitle` | These recordings are temporary. Save them to keep them. |
+| `widget.records.temporary.title` | Automatic recordings |
+| `widget.subtitle` | Start practicing the pieces you’ve recently played with a simple tap! |
+| `widget.title` | Music, a tap away |
+
+<a id="p-contactform"></a>
+### contactForm (6)
+
+| key | value |
+|---|---|
+| `contactForm.input.comment.error` | Please enter a comment. |
+| `contactForm.input.comment.title` | Comments (Required) |
+| `contactForm.input.email.title` | Email |
+| `contactForm.input.name.title` | Name |
+| `contactForm.rating.subtitle` | Help us improve by sending feedbacks and suggestions. |
+| `contactForm.rating.title` | Thanks for rating Metronaut! |
+
+<a id="p-facebook"></a>
+### facebook (6)
+
+| key | value |
+|---|---|
+| `facebook.cello.copy` | Cellists, this App is for you! Practice thousands of pieces with accompaniment and skyrocket your progress with AI feedback 🚀 |
+| `facebook.christmasPromotion.headline` | 🚨Don’t miss out on our Limited Offer 🔥 |
+| `facebook.christmasPromotion.primary` | Christmas Offer ⏰: Enjoy our limited discount and improve your music skills fast with 5000+ play along music sheets 🎻🎄 |
+| `facebook.flute.copy` | Flutists, this App is for you! Practice thousands of pieces with accompaniment and skyrocket your progress with AI feedback 🚀 |
+| `facebook.piano.copy` | Pianists, this App is for you! Practice thousands of pieces with accompaniment and skyrocket your progress with AI feedback 🚀 |
+| `facebook.violin.copy` | Violinists, this App is for you! Practice thousands of pieces with accompaniment and skyrocket your progress with feedback 🚀 |
+
+<a id="p-instrumentfamily"></a>
+### InstrumentFamily (6)
+
+| key | value |
+|---|---|
+| `InstrumentFamily.1` | Voice |
+| `InstrumentFamily.2` | Saxophones |
+| `InstrumentFamily.3` | Clarinets |
+| `InstrumentFamily.4` | Trumpets |
+| `InstrumentFamily.5` | Oboes |
+| `InstrumentFamily.7` | Harp |
+
+<a id="p-nickname"></a>
+### nickname (6)
+
+| key | value |
+|---|---|
+| `nickname.anonymous` | Anonymous |
+| `nickname.error.alreadyTaken` | Sorry, this nickname already exists. |
+| `nickname.error.charactersLong` | It should be between 1 and 30 characters long. |
+| `nickname.error.inappropriate` | This nickname is inappropriate. |
+| `nickname.error.tooLong` | Sorry this nickname is too long. It should be between 1 and 30 characters long. |
+| `nickname.error.tooShort` | Sorry this nickname is too short. It should be between 1 and 30 characters long. |
+
+<a id="p-print"></a>
+### print (6)
+
+| key | value |
+|---|---|
+| `print.error.fail.subtitle` | The score couldn't be printed. Please try again later. |
+| `print.error.fail.title` | Print failure |
+| `print.error.noPDF.subtitle` | Sorry, this score is not available for printing yet. We will let you know as soon as it is. |
+| `print.error.noPDF.title` | Unavailable for printing |
+| `print.inProgress.subtitle` | This process will take only a few moments, please don't close the App. |
+| `print.inProgress.title` | Please wait |
+
+<a id="p-rec"></a>
+### rec (6)
+
+| key | value |
+|---|---|
+| `rec.alert.audio.title` | Audio recording |
+| `rec.alert.erase` | Delete |
+| `rec.alert.listen` | Listen |
+| `rec.alert.startRecording` | When you are ready to record, tap the Play button. |
+| `rec.alert.video.title` | Video Recording |
+| `rec.alert.view` | See |
+
+<a id="p-volume"></a>
+### volume (6)
+
+| key | value |
+|---|---|
+| `volume.mixer.accompaniment` | Accompaniment |
+| `volume.mixer.accompaniment.short` | Accomp. |
+| `volume.mixer.myPart` | My Part |
+| `volume.mixer.playedBy` | played by {{instrument}} |
+| `volume.mixer.solo` | Solo |
+| `volume.mixer.soloSynth` | Solo (Synth.) |
+
+<a id="p-welcomeperiodended"></a>
+### welcomePeriodEnded (6)
+
+| key | value |
+|---|---|
+| `welcomePeriodEnded.popup.button` | Start my Free Trial |
+| `welcomePeriodEnded.popup.button.obsolete` | Extend my Free Trial |
+| `welcomePeriodEnded.popup.subtitle` | Play with no time limit with Metronaut Premium or enjoy your daily free play time. |
+| `welcomePeriodEnded.popup.subtitle.obsolete` | Extend your free trial or enjoy your daily %u minutes of free play time! |
+| `welcomePeriodEnded.popup.title` | Play with No Time Limit |
+| `welcomePeriodEnded.popup.title.obsolete` | Keep playing without limits! |
+
+<a id="p-camerafeedback"></a>
+### cameraFeedback (5)
+
+| key | value |
+|---|---|
+| `cameraFeedback.drawer.alwaysShow` | Always show |
+| `cameraFeedback.drawer.hide` | Hide during recording |
+| `cameraFeedback.drawer.subtitle` | Choose how camera will appear during recording |
+| `cameraFeedback.drawer.title` | Camera Feedback |
+| `cameraFeedback.drawer.transparent` | Transparent during recording |
+
+<a id="p-download"></a>
+### download (5)
+
+| key | value |
+|---|---|
+| `download.building.title` | Loading score… |
+| `download.canceled.title` | Download Cancelled! |
+| `download.errorTryAgain.title` | Something went wrong! Check your connection and Try again. |
+| `download.inprogress.title` | Download in Progress |
+| `download.updating.title` | Checking Updates… |
+
+<a id="p-drawer"></a>
+### drawer (5)
+
+| key | value |
+|---|---|
+| `drawer.post.piece.placeholder` | Be the first to post a recording! |
+| `drawer.post.piece.subtitle` | Other users played this piece |
+| `drawer.post.piece.title` | Posts |
+| `drawer.post.piece.user.placeholder` | You have no published recordings yet. Tap the ⋮ button on a recording to post it. |
+| `drawer.post.piece.user.title` | My posts |
+
+<a id="p-header"></a>
+### header (5)
+
+| key | value |
+|---|---|
+| `header.menu.account` | Account |
+| `header.subscription.XMinutesLeft.freeTrial.button` | Try Premium for Free |
+| `header.subscription.XMinutesLeft.nofreeTrial.button` | Go Premium |
+| `header.subscription.XMinutesLeft.subtitle` | Play with no time limit with Metronaut Premium or enjoy your daily free play time. |
+| `header.subscription.zeroMinute.title` | No free play time left today |
+
+<a id="p-notification"></a>
+### Notification (5)
+
+| key | value |
+|---|---|
+| `Notification.subscription.tenMinutesBack.subtitle` | Sing or play your favorite pieces. |
+| `Notification.subscription.tenMinutesBack.title` | Enjoy 10 minutes of play time again! 🏄 |
+| `Notification.subscription.tenMinutesLeft.title` | Enjoy your 10 minutes of play time! 🎶 |
+| `Notification.subscription.XMinutesBack.subtitle` | Sing or play your favorite pieces. |
+| `Notification.subscription.XMinutesBack.title` | Enjoy %@ minutes of play time again! 🏄 |
+
+<a id="p-omr"></a>
+### omr (5)
+
+| key | value |
+|---|---|
+| `omr.questionnaire.close` | Close |
+| `omr.questionnaire.description` | Help us develop our future score import feature by answering a few questions. It will only take two minutes! |
+| `omr.questionnaire.importScores` | Import a score |
+| `omr.questionnaire.takeTheSurvey` | Take the survey |
+| `omr.questionnaire.title` | We are working on this feature |
+
+<a id="p-onboardingtech"></a>
+### onboardingTech (5)
+
+| key | value |
+|---|---|
+| `onboardingTech.bluetooth` | Metronaut does not work with Bluetooth Speakers |
+| `onboardingTech.button` | Play |
+| `onboardingTech.micro` | Metronaut uses the microphone to synchronize Accompaniments and records your perfomance. |
+| `onboardingTech.speakers` | Use speakers or headphones so you can enjoy optimum sound of audio recording |
+| `onboardingTech.title` | Let's go! |
+
+<a id="p-workout"></a>
+### workout (5)
+
+| key | value |
+|---|---|
+| `workout.locked.button.subtitle` | To unlock all workouts and pieces |
+| `workout.locked.button.title` | Start my free trial |
+| `workout.locked.noFreeTrial.button.subtitle` | To unlock all workouts and pieces |
+| `workout.locked.noFreeTrial.button.title` | Subscribe |
+| `workout.training` | Training |
+
+<a id="p-workoutstep"></a>
+### workoutstep (5)
+
+| key | value |
+|---|---|
+| `workoutstep.1` | Left Hand Bass Line |
+| `workoutstep.182` | Root positions |
+| `workoutstep.69` | Root positions |
+| `workoutstep.70` | Inverted Chords |
+| `workoutstep.71` | Inversions - Alternating Hands |
+
+<a id="p-footer"></a>
+### footer (4)
+
+| key | value |
+|---|---|
+| `footer.language` | Language |
+| `footer.legal` | Legal information |
+| `footer.mobile-application` | Metronaut on the App Store |
+| `footer.support` | Metronaut Support |
+
+<a id="p-opus"></a>
+### opus (4)
+
+| key | value |
+|---|---|
+| `opus.1412` | Thirds - Dotted quarter note - Movements |
+| `opus.1413` | Thirds - 12/8 - Movements |
+| `opus.1414` | Thirds - 12/8 - Right hand |
+| `opus.1415` | Thirds - 12/8 - Left |
+
+<a id="p-order"></a>
+### order (4)
+
+| key | value |
+|---|---|
+| `order.abc` | A - Z |
+| `order.abc2_copy` | Alphabetical |
+| `order.date` | Date Added |
+| `order.lastPlayed` | Last Played |
+
+<a id="p-partkind"></a>
+### partKind (4)
+
+| key | value |
+|---|---|
+| `partKind.15.mixer` | Solo |
+| `partKind.16.mixer` | Accomp. |
+| `partKind.2.mixer` | Prima |
+| `partKind.3.mixer` | Seconda |
+
+<a id="p-piecerequest"></a>
+### pieceRequest (4)
+
+| key | value |
+|---|---|
+| `pieceRequest.askpush.approval` | Enable notifications |
+| `pieceRequest.askpush.description` | Allow notifications to be informed when your piece is added to the catalog. |
+| `pieceRequest.askpush.title` | We'll keep you posted! |
+| `pieceRequest.button` | Suggest a piece |
+
+<a id="p-shortcutitem"></a>
+### shortcutitem (4)
+
+| key | value |
+|---|---|
+| `shortcutitem.subscribeOffer.subtitle` | Tap here to obtain your exclusive offer |
+| `shortcutitem.subscribeOffer.title` | 🎁 Special Offer: -50% right now! |
+| `shortcutitem.support.subtitle` | Tap here to get help! |
+| `shortcutitem.support.title` | 🧐 Need help? |
+
+<a id="p-student"></a>
+### student (4)
+
+| key | value |
+|---|---|
+| `student.advantages.student.content` | • Free access for the entire duration of your teacher's trial, via their invitation link<br>• No commitment or payment method required<br>• 50%% discount on Metronaut Premium |
+| `student.onboardingPrompt.inviteTeacher` | Invite my teacher |
+| `student.onboardingPrompt.title` | Tell your teacher about Metronaut! |
+| `student.teacher.advantages.title` | For your teacher |
+
+<a id="p-trad"></a>
+### trad (4)
+
+| key | value |
+|---|---|
+| `trad.comingSoon` | Vote for the next hit |
+| `trad.discover.difficulty` | Collections for every level |
+| `trad.discover.mood` | A Mood, a collection |
+| `trad.discover.popular` | Popular collections |
+
+<a id="p-user-level"></a>
+### user_level (4)
+
+| key | value |
+|---|---|
+| `user_level.1` | Beginner |
+| `user_level.2` | Intermediate |
+| `user_level.3` | Advanced |
+| `user_level.4` | Expert |
+
+<a id="p-appintent"></a>
+### appIntent (3)
+
+| key | value |
+|---|---|
+| `appIntent.myMusic.title` | My music |
+| `appIntent.openPiece.description` | Open piece in metronaut |
+| `appIntent.practice.title` | Practice Music |
+
+<a id="p-audiorec"></a>
+### audioRec (3)
+
+| key | value |
+|---|---|
+| `audioRec.popup.button` | Listen My Recording |
+| `audioRec.popup.congrats.body` | Listen to your performance and share with friends. |
+| `audioRec.popup.congrats.title` | Great performance! |
+
+<a id="p-common"></a>
+### common (3)
+
+| key | value |
+|---|---|
+| `common.or` | or |
+| `common.pageNotFoundDescription` | Sorry, we couldn’t find the page you’re looking for. |
+| `common.pageNotFoundTitle` | Page not found |
+
+<a id="p-endpreview"></a>
+### endPreview (3)
+
+| key | value |
+|---|---|
+| `endPreview.freeTrial.button` | Try for free |
+| `endPreview.noFreeTrial.button` | Subscribe |
+| `endPreview.title` | Unlock all full music sheets |
+
+<a id="p-error"></a>
+### error (3)
+
+| key | value |
+|---|---|
+| `error.midi.bluetoothNotSupported` | Bluetooth not supported on this device! |
+| `error.midi.bluetoothOff` | Turn on Bluetooth on your device to search for MIDI instruments. |
+| `error.midi.bluetoothUnauthorized` | Bluetooth not authorized to search for MIDI instruments. |
+
+<a id="p-freedurationexplanation"></a>
+### freeDurationExplanation (3)
+
+| key | value |
+|---|---|
+| `freeDurationExplanation.popup.button` | Ok, got it! |
+| `freeDurationExplanation.popup.subtitle` | Every day enjoy %u minutes of free play time to perform all your favorite pieces! |
+| `freeDurationExplanation.popup.title` | Enjoy Metronaut for Free! |
+
+<a id="p-freedurationrenewal"></a>
+### freeDurationRenewal (3)
+
+| key | value |
+|---|---|
+| `freeDurationRenewal.popup.button` | Ok, got it! |
+| `freeDurationRenewal.popup.subtitle` | Every day enjoy %u minutes of free play time to perform all your favorite pieces! |
+| `freeDurationRenewal.popup.title` | Enjoy %u min of play time! |
+
+<a id="p-premiumswitchedoff"></a>
+### premiumSwitchedOff (3)
+
+| key | value |
+|---|---|
+| `premiumSwitchedOff.popup.button` | I subscribe |
+| `premiumSwitchedOff.popup.subtitle` | Or enjoy %u minutes of free play time each day! |
+| `premiumSwitchedOff.popup.title` | Stay Premium for Unlimited Play |
+
+<a id="p-share"></a>
+### share (3)
+
+| key | value |
+|---|---|
+| `share.popupDelete.mainCTA` | Remove |
+| `share.popupDelete.summary` | Are you sure you want to remove “%s”? This won’t delete the original item. |
+| `share.popupDelete.title` | Remove the shared item? |
+
+<a id="p-sharesent"></a>
+### shareSent (3)
+
+| key | value |
+|---|---|
+| `shareSent.message` | You just gained %d Nauts! You'll gain %d more when your friend installs the App. |
+| `shareSent.messageWithoutNauts` | Metronaut Community grows thanks to you 😉 |
+| `shareSent.title` | Thank you! |
+
+<a id="p-storage"></a>
+### storage (3)
+
+| key | value |
+|---|---|
+| `storage.lowdisk.warning.action` | Free Storage |
+| `storage.lowdisk.warning.hint` | You can also optimize storage on your device! |
+| `storage.lowdisk.warning.message` | Only %@ left on your device! |
+
+<a id="p-upvote"></a>
+### upvote (3)
+
+| key | value |
+|---|---|
+| `upvote.askpush.approval` | Enable notifications |
+| `upvote.askpush.description` | Allow notifications to be informed when the piece is added to the catalog. |
+| `upvote.askpush.title` | We'll keep you posted! |
+
+<a id="p-usergoal"></a>
+### userGoal (3)
+
+| key | value |
+|---|---|
+| `userGoal.askpush.approval` | Activate reminders |
+| `userGoal.askpush.description` | Allow notifications, so we can remind you to practice and help you reach your goals. |
+| `userGoal.askpush.title` | Stay motivated |
+
+<a id="p-usergoals"></a>
+### UserGoals (3)
+
+| key | value |
+|---|---|
+| `UserGoals.congrats.button.title` | Let's go! |
+| `UserGoals.congrats.subtitle` | "The progress you'll make by setting goals is not as important as the musician you'll become by achieving them." Master Naut 🐼 |
+| `UserGoals.congrats.title` | Got it! 😉 |
+
+<a id="p-videorec"></a>
+### videoRec (3)
+
+| key | value |
+|---|---|
+| `videoRec.popup.button` | View My Video |
+| `videoRec.popup.congrats.body` | View your performance and share with friends. |
+| `videoRec.popup.congrats.title` | Great performance! |
+
+<a id="p-videorecording"></a>
+### videoRecording (3)
+
+| key | value |
+|---|---|
+| `videoRecording.dismiss.alert.message` | Use the share button to save or share your video recording. |
+| `videoRecording.dismiss.alert.title` | Delete Recording? |
+| `videoRecording.export.success.title` | Video saved in Photos App! |
+
+<a id="p-annotation"></a>
+### annotation (2)
+
+| key | value |
+|---|---|
+| `annotation.onboarding.tip.scroll` | In Annotation Mode, scroll with two fingers to move through the music sheet |
+| `annotation.onboarding.tip.zoom` | Zoom-In to annotate with more precision. |
+
+<a id="p-community"></a>
+### community (2)
+
+| key | value |
+|---|---|
+| `community.publish.shortTitle` | Post |
+| `community.publish.title` | Post on Metronaut |
+
+<a id="p-deeplinkinput"></a>
+### deeplinkinput (2)
+
+| key | value |
+|---|---|
+| `deeplinkinput.message` | If you have an invitation code, type the letters and digits of the code then press OK. |
+| `deeplinkinput.title` | Enter my invitation code |
+
+<a id="p-education"></a>
+### education (2)
+
+| key | value |
+|---|---|
+| `education.actions.student.send` | Send to a student |
+| `education.actions.teacher.send` | Send to a teacher |
+
+<a id="p-explicitrec"></a>
+### explicitRec (2)
+
+| key | value |
+|---|---|
+| `explicitRec.alert.congrats.text` | Recording has been saved in your Library. |
+| `explicitRec.alert.text` | Recording has been saved in your Library. |
+
+<a id="p-freetrialbanner"></a>
+### FreeTrialBanner (2)
+
+| key | value |
+|---|---|
+| `FreeTrialBanner.59,94€_/_year` | $ 59,99 / year * |
+| `FreeTrialBanner.9,99€_/_month` | $ 9,99 / month * |
+
+<a id="p-general"></a>
+### general (2)
+
+| key | value |
+|---|---|
+| `general.download` | Download |
+| `general.recommendations` | Related collections |
+
+<a id="p-howtocancel"></a>
+### howToCancel (2)
+
+| key | value |
+|---|---|
+| `howToCancel.description` | It’s easy! Open the Settings app. Tap your profile icon then Subscriptions. Select Metronaut, “Cancel Trial” and confirm. |
+| `howToCancel.title` | How can I cancel? |
+
+<a id="p-inapp"></a>
+### InApp (2)
+
+| key | value |
+|---|---|
+| `InApp.BlackFriday.title` | It's a Musical Black Friday! |
+| `InApp.Christmasoffer.subtitle` | Enjoy unlimited access to more than 8,000 interactive scores for all instruments and all levels |
+
+<a id="p-internalnotification"></a>
+### internalNotification (2)
+
+| key | value |
+|---|---|
+| `internalNotification.messageUpdateTitle` | You have %d new message(s) in your Account! |
+| `internalNotification.nautsTitle` | Well done, you earned %d Nauts! |
+
+<a id="p-loadingapp"></a>
+### loadingApp (2)
+
+| key | value |
+|---|---|
+| `loadingApp.summary` | Finding pieces for your instrument |
+| `loadingApp.title` | Personalizing content... |
+
+<a id="p-mixer"></a>
+### mixer (2)
+
+| key | value |
+|---|---|
+| `mixer.solo.subtitle` | Played by %@ |
+| `mixer.solo.subtitle.short` | By |
+
+<a id="p-part-simplified"></a>
+### part_simplified (2)
+
+| key | value |
+|---|---|
+| `part_simplified.1` | simplified |
+| `part_simplified.2` | very simplified |
+
+<a id="p-piecedownload"></a>
+### pieceDownload (2)
+
+| key | value |
+|---|---|
+| `pieceDownload.end` | Download complete! |
+| `pieceDownload.start` | Download in progress... |
+
+<a id="p-recording"></a>
+### recording (2)
+
+| key | value |
+|---|---|
+| `recording.popupDelete.summary` | Deleting a recording is permanent and cannot be undone. |
+| `recording.popupDelete.title` | Delete the recording? |
+
+<a id="p-recordingdrawer"></a>
+### recordingDrawer (2)
+
+| key | value |
+|---|---|
+| `recordingDrawer.explanation` | Choose the recording type you want to make. |
+| `recordingDrawer.title` | New recording |
+
+<a id="p-test"></a>
+### test (2)
+
+| key | value |
+|---|---|
+| `test.igor` | Igor plays music out of tune and very bad |
+| `test.key` | fdfd |
+
+<a id="p-workoutstepconfig"></a>
+### workoutstepconfig (2)
+
+| key | value |
+|---|---|
+| `workoutstepconfig.1` | It's a 3/4 time signature. Be careful, the key signature indicates that Bs are flat, but they sometimes become natural. |
+| `workoutstepconfig.104` | Play the left hand only. |
+
+<a id="p-92042fcb-3c9b-412c-a2b4-cc70474bfb37-symbols"></a>
+### 92042fcb-3c9b-412c-a2b4-cc70474bfb37-Symbols (1)
+
+| key | value |
+|---|---|
+| `92042fcb-3c9b-412c-a2b4-cc70474bfb37-Symbols.CarrouselTitle` | New pieces with Orchestra |
+
+<a id="p-accompaniment"></a>
+### accompaniment (1)
+
+| key | value |
+|---|---|
+| `accompaniment.part.1968` | with orchestra |
+
+<a id="p-availableparts"></a>
+### availableParts (1)
+
+| key | value |
+|---|---|
+| `availableParts.title` | Available parts |
+
+<a id="p-discovery"></a>
+### discovery (1)
+
+| key | value |
+|---|---|
+| `discovery.pieceRequests.xVotes` | %d votes |
+
+<a id="p-fundamental-position1"></a>
+### fundamental_position1 (1)
+
+| key | value |
+|---|---|
+| `fundamental_position1.1493` | Fundamental Position |
+
+<a id="p-generic"></a>
+### generic (1)
+
+| key | value |
+|---|---|
+| `generic.comingSoon` | Coming Soon |
+
+<a id="p-gift"></a>
+### gift (1)
+
+| key | value |
+|---|---|
+| `gift.email.subject` | Your Metronaut Gift is here! |
+
+<a id="p-global"></a>
+### Global (1)
+
+| key | value |
+|---|---|
+| `Global.action.create` | Let's go! |
+
+<a id="p-idfa"></a>
+### idfa (1)
+
+| key | value |
+|---|---|
+| `idfa.private_data` | Your data will remain private |
+
+<a id="p-inappevent"></a>
+### inappevent (1)
+
+| key | value |
+|---|---|
+| `inappevent.shortDescription.accompaniment` | Play accompanied by professional musicians |
+
+<a id="p-listen"></a>
+### listen (1)
+
+| key | value |
+|---|---|
+| `listen.mixer.title` | Balance |
+
+<a id="p-morenauts"></a>
+### moreNauts (1)
+
+| key | value |
+|---|---|
+| `moreNauts.restorePurchases` | Restore Purchases |
+
+<a id="p-notification"></a>
+### notification (1)
+
+| key | value |
+|---|---|
+| `notification.offer.50off` | Enjoy 50% off Metronaut Premium! |
+
+<a id="p-originalversion"></a>
+### originalVersion (1)
+
+| key | value |
+|---|---|
+| `originalVersion.translate` | (original version only). |
+
+<a id="p-piececell"></a>
+### PieceCell (1)
+
+| key | value |
+|---|---|
+| `PieceCell.select` | Select |
+
+<a id="p-pieceversions"></a>
+### pieceVersions (1)
+
+| key | value |
+|---|---|
+| `pieceVersions.play.title` | Choose Version |
+
+<a id="p-pompemg"></a>
+### pompeMG (1)
+
+| key | value |
+|---|---|
+| `pompeMG.4` | Play the left hand only. |
+
+<a id="p-preview"></a>
+### Preview (1)
+
+| key | value |
+|---|---|
+| `Preview.loadingForm` | Downloading |
+
+<a id="p-producterror"></a>
+### ProductError (1)
+
+| key | value |
+|---|---|
+| `ProductError.missingProduct` | One of our subscription plans is temporarily unavailable. Please try again later. |
+
+<a id="p-punctuationmark"></a>
+### punctuationMark (1)
+
+| key | value |
+|---|---|
+| `punctuationMark.colon` | : |
+
+<a id="p-recordings"></a>
+### recordings (1)
+
+| key | value |
+|---|---|
+| `recordings.warning` | Your performances are only being recorded when using an external speaker or headphones. |
+
+<a id="p-rhythmgame"></a>
+### rhythmGame (1)
+
+| key | value |
+|---|---|
+| `rhythmGame.tap` | Tap here 👇 to play notes when cursor reaches them |
+
+<a id="p-scorepreview"></a>
+### scorePreview (1)
+
+| key | value |
+|---|---|
+| `scorePreview.title` | Score Preview for |
+
+<a id="p-section"></a>
+### section (1)
+
+| key | value |
+|---|---|
+| `section.contest` | Metronaut Contest |
+
+<a id="p-specialoffer"></a>
+### SpecialOffer (1)
+
+| key | value |
+|---|---|
+| `SpecialOffer.noMoreDaysLeft.title` | Only %@ days left! |
+
+<a id="p-students"></a>
+### students (1)
+
+| key | value |
+|---|---|
+| `students.invite.cta` | Invite students |
+
+<a id="p-subscriptionoffer"></a>
+### subscriptionOffer (1)
+
+| key | value |
+|---|---|
+| `subscriptionOffer.payAsYouGo.25off.subtitle` | Limited offer until %@ |
+
+<a id="p-swanlake"></a>
+### swanlake (1)
+
+| key | value |
+|---|---|
+| `swanlake.description` | The Swan Lake is a romantic ballet composed by Pyotr Ilyich Tchaikovsky, first performed in 1877. Despite the fact that this melodious music did not achieve success during the first performance, Swan Lake is one of the greatest masterpieces in today's world. Indeed, Pyotr Ilyich Tchaikovsky's creation seems to transcend time, and all the generations as well. We should also thank Marius Petipa for the revised version of the score ! <br>If the first act opens with a beautiful piano sound, our ears are then seduced by a rather long cadenza by the flute, which represents all the bird songs throughout the ballet. Violin, flute, piano, harp, clarinet, bass drum... all of these musical instruments produce the most romantic ballet music ever, a music combining love, supernatural, tragedy and some kind of sinister. Whether you have some basic knowledge or you are new in the world of music, do you want to play Swan Lake using a flute ? You are in the right place to learn to play the flute, especially when our app provides the Swan Lake digital music sheet. What is the story of this easy on the ear music ? What are the tips to get better at flute ? Here you are !<br>The story behind Tchaikovsky's Swan Lake ballet music<br>Inspired from Russian and German folk tales, this enchanting music narrates the story of the doomed love of Odette, a princess transformed into a swan by an evil wizard's curse, and of Prince Siegfried. One night, when the latter went out hunting, he encountered a flock of swans. One of them, Odette, the Swan Queen, turned into a young woman. The Princess explains that an evil sorcerer, the Baron Von Rothbart cursed her and her companions, who were transformed into swans. <br>However, there is one and only way to break this spell, that is, if someone whose heart has never been taken before swears his allegiance and undying love for the Swan Queen. Prince Siegfried declares his feelings to the Swan Queen and promises to marry her.<br>A reception was organized to celebrate the Prince's birthday. The latter has also to choose a bride among the girls present during that particular reception. To mislead the Prince and to prevent Odette from becoming a human again, Von Rothbart turned Odile, his own daughter, into a swan. Misled, the Prince thought that Odile was Odette. Filled in with love and seduction, he asked her hand. The Swan Queen, Odette, witnessed the scene ! Nevertheless, when the Prince realized his mistake, it was too late.<br>He begged for forgiveness and Odette, also fully in love with him, forgave the Prince. Yet, the fact that the Prince broke his vow, the spell cannot be broken any more. They throw themselves into the lake to die together.<br>How to transpose a score on your Swan Lake digital music sheet<br>If you wish to play Swan Lake on flute and if you are a beginner, it is important to transpose the score according to your level. This indeed will help you to progress and eventually to produce amazing sound. Here are some guidelines to transpose a score on our amazing music app :<br>•	Above all, make sure you download Metronaut app.<br>•	Choose the music score that suits your musical instrument, here the flute.<br>•	Among the setting features, you will see the option Transposition Parameters (for example, this setting will help you to change a key or an interval on Swan Lake digital music sheet) as well as Display Parameters. Use them to select and adjust the features of your choice. This personalization will help you to progress and to play flute at your own pace.<br>•	What is interesting with Metronaut digital music sheet, is that it allows you to add indications and annotate a score. Moreover, if ever you prefer to work on paper, download and print the digital music sheet. <br>Swan Lake music : some flute playing tips to improve yourself<br>Even though the flute is one of the most amazing musical instruments to play, learning the flute is not that easy. It's all about patience and getting the right techniques to enhance your music skills. These tips will be of great help, whether you are a beginner or an advanced flute player, aspiring to play at another level :<br>Flute playing : work on your breath<br>Your breath plays a key role in the way your flute produces sound. You must take a deep breath and when you breathe out, it should be like a slight smile which makes a "too" sound. While doing so, you must not change the shape of your lips. This is the secret to produce quality sound while playing Swan Lake melodious music. Moreover, it is good to know that the speed of your breath defines the pitch. For example, faster breath will definitely give you a higher pitch and the same applies for slower breath.<br>Practice as much as you can<br>Whether you are a solo player or you are playing in a group (with other musical instruments like piano and violin) if you want to play Swan Lake perfectly, practice as much as you can. If you can practice on a daily basis, feel free to do so, but do enjoy yourself. <br> |
+
+<a id="p-tab"></a>
+### tab (1)
+
+| key | value |
+|---|---|
+| `tab.practice` | Practice |
+
+<a id="p-teaching"></a>
+### teaching (1)
+
+| key | value |
+|---|---|
+| `teaching.teacherOfferSection.button` | Claim the offer now |
+
+<a id="p-temprec"></a>
+### tempRec (1)
+
+| key | value |
+|---|---|
+| `tempRec.alert.congrats.text` | A temporary recording has been saved in your Library. |
+
+<a id="p-tonality"></a>
+### tonality (1)
+
+| key | value |
+|---|---|
+| `tonality.template` | {title} {work_number} in {key} {accidental} {mood} |
+
+<a id="p-unit"></a>
+### unit (1)
+
+| key | value |
+|---|---|
+| `unit.XP` | %u XP |
+
+<a id="p-welcomeperiod"></a>
+### welcomePeriod (1)
+
+| key | value |
+|---|---|
+| `welcomePeriod.popup.button` | Ok, got it! |
+

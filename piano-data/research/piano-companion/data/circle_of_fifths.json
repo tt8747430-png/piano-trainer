@@ -1,0 +1,458 @@
+{
+ "source": "NoteService (majorCircleOfFifths, minorCircleOfFifths), ChordService.InitScales (key table), ScaleService.BuildCircleOfFifths / GetMajorAccidentals (exact); majorScale computed",
+ "majorCircleOfFifthsPcs": [
+  0,
+  7,
+  2,
+  9,
+  4,
+  11,
+  6,
+  1,
+  8,
+  3,
+  10,
+  5
+ ],
+ "minorCircleOfFifthsPcs": [
+  9,
+  4,
+  11,
+  6,
+  1,
+  8,
+  3,
+  10,
+  5,
+  0,
+  7,
+  2
+ ],
+ "chordServiceKeyTable": [
+  {
+   "key": "C",
+   "accidentalType": "Default",
+   "blackKeysInKey": []
+  },
+  {
+   "key": "G",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6
+   ]
+  },
+  {
+   "key": "D",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6,
+    1
+   ]
+  },
+  {
+   "key": "A",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6,
+    1,
+    8
+   ]
+  },
+  {
+   "key": "E",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6,
+    1,
+    8,
+    3
+   ]
+  },
+  {
+   "key": "B",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6,
+    1,
+    8,
+    3,
+    10
+   ]
+  },
+  {
+   "key": "F♯",
+   "accidentalType": "Sharp",
+   "blackKeysInKey": [
+    6,
+    1,
+    8,
+    3,
+    10,
+    5
+   ]
+  },
+  {
+   "key": "F",
+   "accidentalType": "Flat",
+   "blackKeysInKey": [
+    10
+   ]
+  },
+  {
+   "key": "B♭",
+   "accidentalType": "Flat",
+   "blackKeysInKey": [
+    10,
+    3
+   ]
+  },
+  {
+   "key": "E♭",
+   "accidentalType": "Flat",
+   "blackKeysInKey": [
+    10,
+    3,
+    8
+   ]
+  },
+  {
+   "key": "A♭",
+   "accidentalType": "Flat",
+   "blackKeysInKey": [
+    10,
+    3,
+    8,
+    1
+   ]
+  },
+  {
+   "key": "C♯ (value 1, used as D♭)",
+   "accidentalType": "Flat",
+   "blackKeysInKey": [
+    10,
+    3,
+    8,
+    1,
+    6
+   ]
+  }
+ ],
+ "buildCircleOfFifths": "For a scale: format it on all 21 spellings; scales with no accidentals go first; then sharps 1..7 (priority Sharp) or 1..4 (priority Flat), then flats counting down from 4 (or 7) to 1. Counting excludes the octave root by subtracting 1 when the tonic has an accidental.",
+ "keys": [
+  {
+   "key": "C♭",
+   "majorScale": [
+    "C♭",
+    "D♭",
+    "E♭",
+    "F♭",
+    "G♭",
+    "A♭",
+    "B♭"
+   ],
+   "sharps": 0,
+   "flats": 7,
+   "majorAccidentalsScore": 7
+  },
+  {
+   "key": "C",
+   "majorScale": [
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "A",
+    "B"
+   ],
+   "sharps": 0,
+   "flats": 0,
+   "majorAccidentalsScore": 0
+  },
+  {
+   "key": "C♯",
+   "majorScale": [
+    "C♯",
+    "D♯",
+    "E♯",
+    "F♯",
+    "G♯",
+    "A♯",
+    "B♯"
+   ],
+   "sharps": 7,
+   "flats": 0,
+   "majorAccidentalsScore": 7
+  },
+  {
+   "key": "D♭",
+   "majorScale": [
+    "D♭",
+    "E♭",
+    "F",
+    "G♭",
+    "A♭",
+    "B♭",
+    "C"
+   ],
+   "sharps": 0,
+   "flats": 5,
+   "majorAccidentalsScore": 5
+  },
+  {
+   "key": "D",
+   "majorScale": [
+    "D",
+    "E",
+    "F♯",
+    "G",
+    "A",
+    "B",
+    "C♯"
+   ],
+   "sharps": 2,
+   "flats": 0,
+   "majorAccidentalsScore": 2
+  },
+  {
+   "key": "D♯",
+   "majorScale": [
+    "D♯",
+    "E♯",
+    "Fx",
+    "G♯",
+    "A♯",
+    "B♯",
+    "Cx"
+   ],
+   "sharps": 9,
+   "flats": 0,
+   "majorAccidentalsScore": 9
+  },
+  {
+   "key": "E♭",
+   "majorScale": [
+    "E♭",
+    "F",
+    "G",
+    "A♭",
+    "B♭",
+    "C",
+    "D"
+   ],
+   "sharps": 0,
+   "flats": 3,
+   "majorAccidentalsScore": 3
+  },
+  {
+   "key": "E",
+   "majorScale": [
+    "E",
+    "F♯",
+    "G♯",
+    "A",
+    "B",
+    "C♯",
+    "D♯"
+   ],
+   "sharps": 4,
+   "flats": 0,
+   "majorAccidentalsScore": 4
+  },
+  {
+   "key": "E♯",
+   "majorScale": [
+    "E♯",
+    "Fx",
+    "Gx",
+    "A♯",
+    "B♯",
+    "Cx",
+    "Dx"
+   ],
+   "sharps": 11,
+   "flats": 0,
+   "majorAccidentalsScore": 11
+  },
+  {
+   "key": "F♭",
+   "majorScale": [
+    "F♭",
+    "G♭",
+    "A♭",
+    "B♭♭",
+    "C♭",
+    "D♭",
+    "E♭"
+   ],
+   "sharps": 0,
+   "flats": 8,
+   "majorAccidentalsScore": 8
+  },
+  {
+   "key": "F",
+   "majorScale": [
+    "F",
+    "G",
+    "A",
+    "B♭",
+    "C",
+    "D",
+    "E"
+   ],
+   "sharps": 0,
+   "flats": 1,
+   "majorAccidentalsScore": 1
+  },
+  {
+   "key": "F♯",
+   "majorScale": [
+    "F♯",
+    "G♯",
+    "A♯",
+    "B",
+    "C♯",
+    "D♯",
+    "E♯"
+   ],
+   "sharps": 6,
+   "flats": 0,
+   "majorAccidentalsScore": 6
+  },
+  {
+   "key": "G♭",
+   "majorScale": [
+    "G♭",
+    "A♭",
+    "B♭",
+    "C♭",
+    "D♭",
+    "E♭",
+    "F"
+   ],
+   "sharps": 0,
+   "flats": 6,
+   "majorAccidentalsScore": 6
+  },
+  {
+   "key": "G",
+   "majorScale": [
+    "G",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F♯"
+   ],
+   "sharps": 1,
+   "flats": 0,
+   "majorAccidentalsScore": 1
+  },
+  {
+   "key": "G♯",
+   "majorScale": [
+    "G♯",
+    "A♯",
+    "B♯",
+    "C♯",
+    "D♯",
+    "E♯",
+    "Fx"
+   ],
+   "sharps": 8,
+   "flats": 0,
+   "majorAccidentalsScore": 8
+  },
+  {
+   "key": "A♭",
+   "majorScale": [
+    "A♭",
+    "B♭",
+    "C",
+    "D♭",
+    "E♭",
+    "F",
+    "G"
+   ],
+   "sharps": 0,
+   "flats": 4,
+   "majorAccidentalsScore": 4
+  },
+  {
+   "key": "A",
+   "majorScale": [
+    "A",
+    "B",
+    "C♯",
+    "D",
+    "E",
+    "F♯",
+    "G♯"
+   ],
+   "sharps": 3,
+   "flats": 0,
+   "majorAccidentalsScore": 3
+  },
+  {
+   "key": "A♯",
+   "majorScale": [
+    "A♯",
+    "B♯",
+    "Cx",
+    "D♯",
+    "E♯",
+    "Fx",
+    "Gx"
+   ],
+   "sharps": 10,
+   "flats": 0,
+   "majorAccidentalsScore": 10
+  },
+  {
+   "key": "B♭",
+   "majorScale": [
+    "B♭",
+    "C",
+    "D",
+    "E♭",
+    "F",
+    "G",
+    "A"
+   ],
+   "sharps": 0,
+   "flats": 2,
+   "majorAccidentalsScore": 2
+  },
+  {
+   "key": "B",
+   "majorScale": [
+    "B",
+    "C♯",
+    "D♯",
+    "E",
+    "F♯",
+    "G♯",
+    "A♯"
+   ],
+   "sharps": 5,
+   "flats": 0,
+   "majorAccidentalsScore": 5
+  },
+  {
+   "key": "B♯",
+   "majorScale": [
+    "B♯",
+    "Cx",
+    "Dx",
+    "E♯",
+    "Fx",
+    "Gx",
+    "Ax"
+   ],
+   "sharps": 12,
+   "flats": 0,
+   "majorAccidentalsScore": 12
+  }
+ ]
+}

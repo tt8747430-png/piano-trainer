@@ -1,0 +1,102 @@
+[
+ {
+  "name": "2:1 swing 16ths (fixed)",
+  "entityID": "rhythmicfeel.swing.2_1_fixed.16ths",
+  "type": "kSemiquaverSwing",
+  "unit": "kSemiQuaver",
+  "lowTempo": "1000000",
+  "lowStrength": "2.000000"
+ },
+ {
+  "name": "2:1 swing 8ths (fixed)",
+  "entityID": "rhythmicfeel.swing.2_1_fixed",
+  "type": "kQuaverSwing",
+  "unit": "kQuaver",
+  "lowTempo": "500000",
+  "lowStrength": "2.000000"
+ },
+ {
+  "name": "3:1 swing 16ths (fixed)",
+  "entityID": "rhythmicfeel.swing.3_1_fixed.16ths",
+  "type": "kSemiquaverSwing",
+  "unit": "kSemiQuaver",
+  "lowTempo": "1000000",
+  "lowStrength": "3.000000"
+ },
+ {
+  "name": "3:1 swing 8ths (fixed)",
+  "entityID": "rhythmicfeel.swing.3_1_fixed",
+  "type": "kQuaverSwing",
+  "unit": "kQuaver",
+  "lowTempo": "500000",
+  "lowStrength": "3.000000"
+ },
+ {
+  "name": "Heavy swing 16ths",
+  "entityID": "rhythmicfeel.swing.heavy.16ths",
+  "type": "kSemiquaverSwing",
+  "unit": "kSemiQuaver",
+  "lowTempo": "1333333",
+  "lowStrength": "3.000000",
+  "highTempo": "480000",
+  "highStrength": "1.500000"
+ },
+ {
+  "name": "Heavy swing 8ths",
+  "entityID": "rhythmicfeel.swing.heavy",
+  "type": "kQuaverSwing",
+  "unit": "kQuaver",
+  "lowTempo": "666666",
+  "lowStrength": "3.000000",
+  "highTempo": "240000",
+  "highStrength": "1.500000"
+ },
+ {
+  "name": "Light swing 16ths",
+  "entityID": "rhythmicfeel.swing.light.16ths",
+  "type": "kSemiquaverSwing",
+  "unit": "kSemiQuaver",
+  "lowTempo": "1333333",
+  "lowStrength": "1.500000",
+  "highTempo": "571428",
+  "highStrength": "1.000000"
+ },
+ {
+  "name": "Light swing 8ths",
+  "entityID": "rhythmicfeel.swing.light",
+  "type": "kQuaverSwing",
+  "unit": "kQuaver",
+  "lowTempo": "666666",
+  "lowStrength": "1.500000",
+  "highTempo": "285714",
+  "highStrength": "1.000000"
+ },
+ {
+  "name": "Medium swing 16ths",
+  "entityID": "rhythmicfeel.swing.medium.16ths",
+  "type": "kSemiquaverSwing",
+  "unit": "kSemiQuaver",
+  "lowTempo": "1333333",
+  "lowStrength": "2.000000",
+  "highTempo": "480000",
+  "highStrength": "1.500000"
+ },
+ {
+  "name": "Medium swing 8ths",
+  "entityID": "rhythmicfeel.swing.medium",
+  "type": "kQuaverSwing",
+  "unit": "kQuaver",
+  "lowTempo": "666666",
+  "lowStrength": "2.000000",
+  "highTempo": "240000",
+  "highStrength": "1.500000"
+ },
+ {
+  "name": "Straight (no swing)",
+  "entityID": "rhythmicfeel.straight",
+  "type": "kStraight",
+  "unit": "kQuaver",
+  "lowTempo": "500000",
+  "lowStrength": "1.000000"
+ }
+]

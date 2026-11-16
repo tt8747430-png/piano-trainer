@@ -1,0 +1,4169 @@
+[
+ {
+  "id": "Application.Preferences",
+  "name": "Preferences...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+,"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Copy",
+  "name": "Copy",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.CreateFrameBreak",
+  "name": "Create Frame Break",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.CreateMarker",
+  "name": "Create Marker",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+M"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.CreateSystemBreak",
+  "name": "Stop Slur",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.CrossStaffAbove",
+  "name": "Cross to Staff Above",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "N"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.CrossStaffBelow",
+  "name": "Cross to Staff Below",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "M"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Cut",
+  "name": "Cut",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+X"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Delete",
+  "name": "Delete",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Del",
+     "Backspace"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.FlipItem",
+  "name": "Input Pitch [Pitch=F]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.GoTo",
+  "name": "Go To",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Paste",
+  "name": "Paste",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+V"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Redo",
+  "name": "Redo",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+Z",
+     "Ctrl+Y"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.SelectAll",
+  "name": "Select All",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.SelectMore",
+  "name": "Select More",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.SelectNone",
+  "name": "Select None",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+D"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Edit.Undo",
+  "name": "Undo",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Z"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Engrave.EnterEdit",
+  "name": "Start Note Input [Set=true]",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Return"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Engrave.Options",
+  "name": "Engraving Options...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+E"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.DurationLengthen",
+  "name": "Duration Lengthen",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Shift+Alt+Right",
+     "Num+Ctrl+Shift+Alt+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.DurationLengthenByGrid",
+  "name": "Lengthen Duration [UseRhythmicGridValue=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Right",
+     "Num+Shift+Alt+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.DurationShorten",
+  "name": "Duration Shorten",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Shift+Alt+Left",
+     "Num+Ctrl+Shift+Alt+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.DurationShortenByGrid",
+  "name": "Shorten Duration [UseRhythmicGridValue=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Left",
+     "Num+Shift+Alt+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.EditExistingOrEnterStepTimeInput",
+  "name": "Start Note Input [Set=true]",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Return"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveLeft",
+  "name": "Move [Direction=Left]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Left",
+     "Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveLeftByGrid",
+  "name": "Move Left By Grid",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Alt+Left",
+     "Ctrl+Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveRight",
+  "name": "Move [Direction=Right]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Right",
+     "Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveRightByGrid",
+  "name": "Move Right By Grid",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Alt+Right",
+     "Ctrl+Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveToStaveAbove",
+  "name": "Move To Stave Above",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+N"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.MoveToStaveBelow",
+  "name": "Move To Stave Below",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+M"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateDown",
+  "name": "Navigate Down",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Down",
+     "Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateDownExtend",
+  "name": "Navigate Down Extend",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Down",
+     "Shift+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateDownExtendBottom",
+  "name": "Navigate Down Extend Bottom",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Ctrl+Down",
+     "Shift+Ctrl+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateDownNextStave",
+  "name": "Navigate Down Next Stave",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Down",
+     "Num+Ctrl+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateLeft",
+  "name": "Select Left",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Left",
+     "Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateLeftBar",
+  "name": "Select Left by Bar",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Left",
+     "Ctrl+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateLeftExtend",
+  "name": "Extend Selection Left",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Left",
+     "Shift+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateLeftExtendBar",
+  "name": "Navigate Left Extend Bar",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Ctrl+Left",
+     "Shift+Ctrl+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateNextFragment",
+  "name": "Navigate to the Next Fragment",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateNextItemSamePosition",
+  "name": "Navigate to the Next Fragment",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigatePreviousFragment",
+  "name": "Navigate Previous Fragment",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigatePreviousItemSamePosition",
+  "name": "Navigate Previous Item Same Position",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateRight",
+  "name": "Select Right",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Right",
+     "Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateRightBar",
+  "name": "Select Right by Bar",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Right",
+     "Ctrl+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateRightExtend",
+  "name": "Extend Selection Right",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Right",
+     "Shift+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateRightExtendBar",
+  "name": "Navigate Right Extend Bar",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Ctrl+Right",
+     "Shift+Ctrl+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateUp",
+  "name": "Navigate Up",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Up",
+     "Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateUpExtend",
+  "name": "Navigate Up Extend",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Up",
+     "Shift+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateUpExtendTop",
+  "name": "Navigate Up Extend Top",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Ctrl+Up",
+     "Shift+Ctrl+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.NavigateUpNextStave",
+  "name": "Navigate Up Next Stave",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Up",
+     "Num+Ctrl+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kALittle",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+Down",
+     "Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kALittle&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Down, Amount=kALittle, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+J"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kALot",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+Down",
+     "Ctrl+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kALot&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Down, Amount=kALot, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+J"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kATinyAmount",
+  "name": "Nudge (Direction=Down, Amount=kATinyAmount)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Shift+Alt+Down",
+     "Ctrl+Shift+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Down&Amount=kModerate",
+  "name": "Pitch",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+Alt+Down",
+     "Shift+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kALittle",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+Left",
+     "Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kALittle&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Left, Amount=kALittle, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kALot",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+Left",
+     "Ctrl+Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kALot&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Left, Amount=kALot, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kATinyAmount",
+  "name": "Nudge (Direction=Left, Amount=kATinyAmount)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Shift+Alt+Left",
+     "Ctrl+Shift+Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Left&Amount=kModerate",
+  "name": "Shorten Duration",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+Alt+Left",
+     "Shift+Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kALittle",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+Right",
+     "Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kALittle&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Right, Amount=kALittle, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kALot",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+Right",
+     "Ctrl+Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kALot&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Right, Amount=kALot, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kATinyAmount",
+  "name": "Nudge (Direction=Right, Amount=kATinyAmount)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Shift+Alt+Right",
+     "Ctrl+Shift+Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Right&Amount=kModerate",
+  "name": "Lengthen Duration",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+Alt+Right",
+     "Shift+Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kALittle",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+Up",
+     "Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kALittle&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Up, Amount=kALittle, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Alt+K"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kALot",
+  "name": "Nudge",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+Up",
+     "Ctrl+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kALot&AlternateNudgeMode=true",
+  "name": "Nudge (Direction=Up, Amount=kALot, AlternateNudgeMode=true)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Alt+K"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kATinyAmount",
+  "name": "Nudge (Direction=Up, Amount=kATinyAmount)",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Ctrl+Shift+Alt+Up",
+     "Ctrl+Shift+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.Nudge?Direction=Up&Amount=kModerate",
+  "name": "Pitch",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "Shift+Alt+Up",
+     "Shift+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.ShowAllChordDiagramVariantsForPlayer",
+  "name": "Show All Chord Diagram Variants For Player",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Q"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "EventEdit.ShowNextChordDiagramVariant",
+  "name": "Show Next Chord Diagram Variant",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Q"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.CloseProject",
+  "name": "Close Project",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+W"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.Exit",
+  "name": "Quit",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Q"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.New",
+  "name": "New",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+N"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.Open",
+  "name": "Open...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+O"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.Open?FilterID=MusicXMLImportFilter",
+  "name": "Open...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+O"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.Save",
+  "name": "Save",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.SaveAs",
+  "name": "Save As...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "File.ScoreInfo",
+  "name": "Score Info",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Help.ShowOverlay",
+  "name": "Show Overlay",
+  "shortcuts": [
+   {
+    "context": "kHelpOverlay",
+    "keys": [
+     "Ctrl+/",
+     "F1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "JumpBar.CommandsMode",
+  "name": "Commands Mode",
+  "shortcuts": [
+   {
+    "context": "kJumpBar",
+    "keys": [
+     "Meta+1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "JumpBar.GotoMode",
+  "name": "Goto Mode",
+  "shortcuts": [
+   {
+    "context": "kJumpBar",
+    "keys": [
+     "Meta+2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchDown",
+  "name": "Pitch [Direction=Down]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Down",
+     "Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchDownChromatic",
+  "name": "Pitch [Direction=Down&Chromatic=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Down",
+     "Shift+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchDownOctave",
+  "name": "Pitch [Direction=Down&Octave=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Alt+Down",
+     "Ctrl+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchUp",
+  "name": "Pitch [Direction=Up]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Up",
+     "Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchUpChromatic",
+  "name": "Pitch [Direction=Up&Chromatic=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Up",
+     "Shift+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.PitchUpOctave",
+  "name": "Pitch [Direction=Up&Octave=true]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Alt+Up",
+     "Ctrl+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.RespellUsingNoteNameAbove",
+  "name": "Respell Using Note Name Above",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+="
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteEdit.RespellUsingNoteNameBelow",
+  "name": "Respell Using Note Name Below",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+-"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateBarLine",
+  "name": "Create Bar or Barline",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+B"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateClef",
+  "name": "Create Clef",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateCue",
+  "name": "Create Cue",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+U"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateDynamic",
+  "name": "Create Dynamic",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+D"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateGraceNote",
+  "name": "Create Grace Note",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "/"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateKeySignature",
+  "name": "Create Key Signature",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+K"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateOrnament",
+  "name": "Create Ornament",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+O"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreatePause",
+  "name": "Create Hold or Pause",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreatePlayingTechnique",
+  "name": "Create Playing Technique",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateRehearsalMark",
+  "name": "Create Rehearsal Mark",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateSlashedVoice",
+  "name": "Create Slashed Voice",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+Alt+V"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateSystemText?ParagraphStyleID=paragraph.defaulttext",
+  "name": "Create System Text (ParagraphStyleID=paragraph.defaulttext)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+Alt+X"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateTempo",
+  "name": "Create Tempo",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+T"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateText?ParagraphStyleID=paragraph.defaulttext",
+  "name": "Create Text",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+X"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateTimeSignature",
+  "name": "Create Time Signature",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+M"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CreateVoice",
+  "name": "Create Voice",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+V"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.CycleNumDots",
+  "name": "Cycle Num Dots",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.DeleteLeft",
+  "name": "Delete Left",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Backspace"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.DeleteRight",
+  "name": "Delete Right",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Del"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.EditLockPosition",
+  "name": "Edit Lock Position",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+Alt+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.EndTupletRun",
+  "name": "End Tuplet Input",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     ":"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Enter",
+  "name": "Start Note Input [Set=true]",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+N"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Exit",
+  "name": "Stop Note Input",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Esc"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ExtendDown",
+  "name": "Extend Down",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Down",
+     "Shift+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ExtendUp",
+  "name": "Extend Up",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Up",
+     "Shift+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ForceDuration",
+  "name": "Force Note Durations",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "O"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=0",
+  "name": "Fret (FretPosition=0)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "0",
+     "Num+0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=1",
+  "name": "Fret (FretPosition=1)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "1",
+     "Num+1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=2",
+  "name": "Fret (FretPosition=2)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "2",
+     "Num+2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=3",
+  "name": "Fret (FretPosition=3)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "3",
+     "Num+3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=4",
+  "name": "Fret (FretPosition=4)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "4",
+     "Num+4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=5",
+  "name": "Fret (FretPosition=5)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "5",
+     "Num+5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=6",
+  "name": "Fret (FretPosition=6)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "6",
+     "Num+6"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=7",
+  "name": "Fret (FretPosition=7)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "7",
+     "Num+7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=8",
+  "name": "Fret (FretPosition=8)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "8",
+     "Num+8"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Fret?FretPosition=9",
+  "name": "Fret (FretPosition=9)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "9",
+     "Num+9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.GraceNoteSlashToggle",
+  "name": "Grace Note Slash Toggle",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+/"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.GridResolutionDecrease",
+  "name": "Previous Layout",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+["
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.GridResolutionIncrease",
+  "name": "Next Layout",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+]"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.HairpinStart?Type=kGradualDynamicDown&GradualDynamicType=kCrescOrDim",
+  "name": "Hairpin Start (Type=kGradualDynamicDown, GradualDynamicType=kCrescOrDim)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     ">"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.HairpinStart?Type=kGradualDynamicDown&GradualDynamicType=kMessaDiVoce",
+  "name": "Hairpin Start (Type=kGradualDynamicDown, GradualDynamicType=kMessaDiVoce)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+Shift+."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.HairpinStart?Type=kGradualDynamicUp&GradualDynamicType=kCrescOrDim",
+  "name": "Hairpin Start (Type=kGradualDynamicUp, GradualDynamicType=kCrescOrDim)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "<"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.HairpinStart?Type=kGradualDynamicUp&GradualDynamicType=kMessaDiVoce",
+  "name": "Hairpin Start (Type=kGradualDynamicUp, GradualDynamicType=kMessaDiVoce)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+Shift+,"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.HairpinStop",
+  "name": "Hairpin Stop",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "?"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.InsertScopeCycle",
+  "name": "Insert Scope Cycle",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Locked",
+  "name": "Lock Note Durations",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Mode",
+  "name": "Note input mode",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "I",
+     "Ins"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveAdvance",
+  "name": "Advance Caret",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveDown",
+  "name": "Move Down",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Down",
+     "Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveDownBottom",
+  "name": "Move Down Bottom",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Ctrl+Down",
+     "Ctrl+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveLeft",
+  "name": "Move Left",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Left",
+     "Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveLeftBar",
+  "name": "Move Caret Left by Bar",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Ctrl+Left",
+     "Ctrl+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveRight",
+  "name": "Move Right",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Right",
+     "Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveRightBar",
+  "name": "Move Caret Right by Bar",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Ctrl+Right",
+     "Ctrl+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveUp",
+  "name": "Move Up",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Up",
+     "Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.MoveUpTop",
+  "name": "Move Up Top",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Ctrl+Up",
+     "Ctrl+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NextVoice",
+  "name": "Next Voice",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "V"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=k128Note",
+  "name": "Note Value (LogDuration=k128Note)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kBreve",
+  "name": "Note Value (LogDuration=kBreve)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kCrotchet",
+  "name": "Note Value (LogDuration=kCrotchet)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "6"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kDemiSemiQuaver",
+  "name": "Note Value (LogDuration=kDemiSemiQuaver)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kHemiDemiSemiQuaver",
+  "name": "Note Value (LogDuration=kHemiDemiSemiQuaver)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kMinim",
+  "name": "Note Value (LogDuration=kMinim)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kQuaver",
+  "name": "Note Value (LogDuration=kQuaver)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kSemiQuaver",
+  "name": "Note Value (LogDuration=kSemiQuaver)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValue?LogDuration=kSemibreve",
+  "name": "Note Value (LogDuration=kSemibreve)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "8"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValueLonger",
+  "name": "Note Value Longer",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "="
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.NoteValueShorter",
+  "name": "Note Value Shorter",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInputOnTab",
+    "keys": [
+     "-"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.PedalLineStop",
+  "name": "Pedal Line Stop",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=A",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=A&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=A&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=B",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "B"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=B&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+B"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=B&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+B"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=C",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=C&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=C&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=D",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "D"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=D&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+D"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=D&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+D"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=E",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "E"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=E&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+E"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=E&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+E"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=F",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=F&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=F&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=G",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=G&Down=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Meta+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=G&Up=true",
+  "name": "Input Pitch",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+Alt+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Pitch?Pitch=X",
+  "name": "Pitch (Pitch=X)",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Y"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.PitchBeforeDurationToggle",
+  "name": "Pitch Before Duration Toggle",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "K"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.RepeatLast",
+  "name": "Repeat Item",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ReplyToComment",
+  "name": "Reply To Comment",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.RestMode",
+  "name": "Rests",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     ","
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Scissor",
+  "name": "Scissor",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "U"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ScissorWithMultipleSplits",
+  "name": "Scissor With Multiple Splits",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Alt+U"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetAccidental?Type=kFlat",
+  "name": "Set Accidental (Type=kFlat)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "-"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetAccidental?Type=kNatural",
+  "name": "Set Accidental (Type=kNatural)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetAccidental?Type=kSharp",
+  "name": "Set Accidental (Type=kSharp)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "="
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kAccent",
+  "name": "Set Articulation",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "["
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kMarcato",
+  "name": "Set Articulation (Value=kMarcato)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "'"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kStaccatissimo",
+  "name": "Set Articulation (Value=kStaccatissimo)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "}"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kStaccato",
+  "name": "Set Articulation",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "]"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kStaccatoTenuto",
+  "name": "Set Articulation (Value=kStaccatoTenuto)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "|"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kStress",
+  "name": "Set Articulation (Value=kStress)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "{"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kTenuto",
+  "name": "Set Articulation",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "\\"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetArticulation?Value=kUnstress",
+  "name": "Set Articulation (Value=kUnstress)",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "\""
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SetDotted",
+  "name": "Set Dotted",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowCommentDialog",
+  "name": "Show Comment Dialog",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+C"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowFingeringPopover",
+  "name": "Show Fingering Popover",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowMIDITriggerRegionPopover",
+  "name": "Show MIDI Trigger Region Popover",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     ")"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowNoteInputOptions",
+  "name": "Show Note Input Options",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowPopoverForTransposingOrAddingNotes",
+  "name": "Show Popover For Transposing Or Adding Notes",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.ShowRepeatsPopover",
+  "name": "Show Repeats Popover",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SlurStart",
+  "name": "Start Slur",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.SlurStop",
+  "name": "Stop Slur",
+  "shortcuts": [
+   {
+    "context": "kStepTimeInput",
+    "keys": [
+     "Shift+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.StartChordSymbolInput",
+  "name": "Start Chord Symbol Input",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+Q"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.StartEndChord",
+  "name": "Chord Input",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Q"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.StartFiguredBassInput",
+  "name": "Start Figured Bass Input",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.StartLyricInput",
+  "name": "Create Lyrics",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "Shift+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.StartTupletRun",
+  "name": "Start Tuplet Input",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     ";"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "NoteInput.Tie",
+  "name": "Tie",
+  "shortcuts": [
+   {
+    "context": "kWriteMode",
+    "keys": [
+     "T"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "OptionsDialog.CloseFind",
+  "name": "Escape",
+  "shortcuts": [
+   {
+    "context": "kOptionsDialog",
+    "keys": [
+     "Esc"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "OptionsDialog.Filter",
+  "name": "Filter",
+  "shortcuts": [
+   {
+    "context": "kOptionsDialog",
+    "keys": [
+     "Ctrl+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "OptionsDialog.Find",
+  "name": "Find",
+  "shortcuts": [
+   {
+    "context": "kOptionsDialog",
+    "keys": [
+     "Ctrl+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "OptionsDialog.NextResult",
+  "name": "Next Result",
+  "shortcuts": [
+   {
+    "context": "kOptionsDialog",
+    "keys": [
+     "Ctrl+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "OptionsDialog.PreviousResult",
+  "name": "Previous Result",
+  "shortcuts": [
+   {
+    "context": "kOptionsDialog",
+    "keys": [
+     "Ctrl+Shift+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Page.MoveBarsToNextSystem",
+  "name": "Move Bars To Next System",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     "."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Page.MoveBarsToPreviousSystem",
+  "name": "Rests",
+  "shortcuts": [
+   {
+    "context": "kEngraveMode",
+    "keys": [
+     ","
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.Forward",
+  "name": "Forward",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Num++",
+     "F9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.LaneSizeDecrease",
+  "name": "Lane Size Decrease",
+  "shortcuts": [
+   {
+    "context": "kPlayMode",
+    "keys": [
+     "Shift+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.LaneSizeIncrease",
+  "name": "Create Hold or Pause",
+  "shortcuts": [
+   {
+    "context": "kPlayMode",
+    "keys": [
+     "Shift+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.NavigateBackwards",
+  "name": "Navigate Backwards",
+  "shortcuts": [
+   {
+    "context": "kPlayMode",
+    "keys": [
+     "Ctrl+["
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.NavigateForwards",
+  "name": "Navigate Forwards",
+  "shortcuts": [
+   {
+    "context": "kPlayMode",
+    "keys": [
+     "Ctrl+]"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.NextFrame",
+  "name": "Next Frame",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Num++",
+     "Ctrl+F9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.PreviousFrame",
+  "name": "Previous Frame",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Num+-",
+     "Ctrl+F7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.Record",
+  "name": "Record",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.Refresh",
+  "name": "Refresh",
+  "shortcuts": [
+   {
+    "context": "kPlayMode",
+    "keys": [
+     "F5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.RetrospectiveRecord",
+  "name": "Retrospective Record",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Ctrl+Alt+R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.Rewind",
+  "name": "Rewind",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Num+-",
+     "F7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool1",
+  "name": "Set Key Editor Tool1",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool2",
+  "name": "Set Key Editor Tool2",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool3",
+  "name": "Set Key Editor Tool3",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool4",
+  "name": "Set Key Editor Tool4",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool5",
+  "name": "Set Key Editor Tool5",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetKeyEditorTool6",
+  "name": "Set Key Editor Tool6",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+6"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetPlayheadTo?PlayFromLocation=kSelection",
+  "name": "Set Playhead To (PlayFromLocation=kSelection)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SetPlayheadToFlowStart",
+  "name": "Set Playhead To Flow Start",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Num+."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.ShowPlaybackOptions",
+  "name": "Show Playback Options",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.SoloFromSelection",
+  "name": "Solo From Selection",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartOrStop?PlayFromLocation=kLastStartPosition",
+  "name": "Start or Stop Playback",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartOrStop?PlayFromLocation=kPlayhead",
+  "name": "Start or Stop Playback",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Space",
+     "Enter",
+     "F8"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartOrStop?PlayFromLocation=kSelection",
+  "name": "Start or Stop Playback",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartOrStop?PlayFromLocation=kStartOfFlow",
+  "name": "Start or Stop Playback",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Alt+Space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartScrubPlayback",
+  "name": "Start Scrub Playback",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Alt+Space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.StartScrubSoloPlayback",
+  "name": "Start or Stop Playback [PlayFromLocation=kStartOfFlow]",
+  "shortcuts": [
+   {
+    "context": "kMusicEditable",
+    "keys": [
+     "Shift+Alt+Space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.Stop",
+  "name": "Stop",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Num+0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.UnMuteAll",
+  "name": "Un Mute All",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+U"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Play.UnSoloAll",
+  "name": "Un Solo All",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Alt+S"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Print.LayoutsPanelSelectAll",
+  "name": "Select All",
+  "shortcuts": [
+   {
+    "context": "kPrintMode",
+    "keys": [
+     "Ctrl+A"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Print.PrintPreviewEnd",
+  "name": "Move View Right",
+  "shortcuts": [
+   {
+    "context": "kPrintMode",
+    "keys": [
+     "End"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Print.PrintPreviewHome",
+  "name": "Move View Left",
+  "shortcuts": [
+   {
+    "context": "kPrintMode",
+    "keys": [
+     "Home"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Print.PrintPreviewPageDown",
+  "name": "Move View Down",
+  "shortcuts": [
+   {
+    "context": "kPrintMode",
+    "keys": [
+     "PgDown"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Print.PrintPreviewPageUp",
+  "name": "Move View Up",
+  "shortcuts": [
+   {
+    "context": "kPrintMode",
+    "keys": [
+     "PgUp"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Ensemble.Choose",
+  "name": "Ensemble \u203a Choose",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+E"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Flow.New",
+  "name": "New Flow",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Flow.NotationOptions",
+  "name": "Notation Options...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+N"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Instrument.New",
+  "name": "Add Instrument to Player...",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Layout.New?Type=kCustomScoreLayout",
+  "name": "New Layout",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.Layout.Options",
+  "name": "Layout Options...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+L"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.SectionPlayer.New",
+  "name": "New Section Player...",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+Alt+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Project.SoloPlayer.New",
+  "name": "New Solo Player...",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Shift+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Script.RunLastScript",
+  "name": "Run Last Script",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+Alt+R"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ScrubPlayback.StepBackwards",
+  "name": "Select Left",
+  "shortcuts": [
+   {
+    "context": "kScrubPlayback",
+    "keys": [
+     "Left",
+     "Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ScrubPlayback.StepForwards",
+  "name": "Select Right",
+  "shortcuts": [
+   {
+    "context": "kScrubPlayback",
+    "keys": [
+     "Right",
+     "Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.Delete",
+  "name": "Delete Player/Instrument/Flow/Layout",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Del",
+     "Backspace"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.Insert",
+  "name": "Insert",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Ins"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveDown",
+  "name": "Move Player Down",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Alt+Down",
+     "Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveLeft",
+  "name": "Move Flow Left",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Alt+Left",
+     "Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveRight",
+  "name": "Move Flow Right",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Alt+Right",
+     "Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveToBottom",
+  "name": "Move Player to Right",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Ctrl+Alt+Down",
+     "Ctrl+Alt+Num+Down"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveToEnd",
+  "name": "Move Flow to End",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Ctrl+Alt+Right",
+     "Ctrl+Alt+Num+Right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveToStart",
+  "name": "Move Flow to Start",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Ctrl+Alt+Left",
+     "Ctrl+Alt+Num+Left"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveToTop",
+  "name": "Move Player to Top",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Ctrl+Alt+Up",
+     "Ctrl+Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Setup.MoveUp",
+  "name": "Move Player Up",
+  "shortcuts": [
+   {
+    "context": "kSetupMode",
+    "keys": [
+     "Alt+Up",
+     "Alt+Num+Up"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.ConvertUnicode",
+  "name": "Convert Unicode",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Alt+X"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.DecreaseFontSize",
+  "name": "Decrease Font Size",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Ctrl+Shift+,"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.IncreaseFontSize",
+  "name": "Increase Font Size",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Ctrl+Shift+."
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.ToggleBold",
+  "name": "Toggle Bold",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Ctrl+B"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.ToggleItalic",
+  "name": "Toggle Italic",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Ctrl+I"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "TextEditor.ToggleUnderline",
+  "name": "Toggle Underline",
+  "shortcuts": [
+   {
+    "context": "kTextEditor",
+    "keys": [
+     "Ctrl+U"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.Escape",
+  "name": "Escape",
+  "shortcuts": [
+   {
+    "context": "kHelpOverlay",
+    "keys": [
+     "Esc"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.SetFocus?Value=kBottomPane",
+  "name": "Set Focus",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+8",
+     "Alt+Return"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.SetFocus?Value=kLeftPane",
+  "name": "Set Focus (Value=kLeftPane)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.SetFocus?Value=kRightPane",
+  "name": "Set Focus (Value=kRightPane)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.SetFocus?Value=kScoreView",
+  "name": "Set Focus (Value=kScoreView)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.ShowJumpBar",
+  "name": "Show Jump Bar",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "J"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "UI.ToggleDefaultMouseClickTool",
+  "name": "Toggle Default Mouse Click Tool",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Video.ShowWindow",
+  "name": "Show Window",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "F4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.FullScreen",
+  "name": "Full Screen",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Meta+F"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.HideInvisibles",
+  "name": "Hide Invisibles",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "`"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportDown",
+  "name": "Move View Down",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "PgDown"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportLeft",
+  "name": "Move View Left",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Home"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportNextPage",
+  "name": "Select Right",
+  "shortcuts": [
+   {
+    "context": "kReadMode",
+    "keys": [
+     "Right",
+     "Num+Right",
+     "Down",
+     "Num+Down",
+     "PgDown"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportPreviousPage",
+  "name": "Select Left",
+  "shortcuts": [
+   {
+    "context": "kReadMode",
+    "keys": [
+     "Left",
+     "Num+Left",
+     "Up",
+     "Num+Up",
+     "PgUp"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportRight",
+  "name": "Move View Right",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "End"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportToEnd",
+  "name": "Move View to End",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+End"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportToStart",
+  "name": "Move View to Start",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Home"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.MoveViewportUp",
+  "name": "Move View Up",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "PgUp"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.OptionsShowDialog",
+  "name": "Paste Special...",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+V"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.ShowSystemTrack",
+  "name": "Show System Track",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+T"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.ZoomDialog",
+  "name": "Zoom Dialog",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Alt+Z"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.ZoomIn",
+  "name": "Zoom In",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+=",
+     "Z"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.ZoomOut",
+  "name": "Zoom Out",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+-",
+     "X"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "View.ZoomWholePage",
+  "name": "Zoom Whole Page",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Alt+0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.CloseTab",
+  "name": "Close Tab",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+W"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.HideAllPanels",
+  "name": "Hide All Panels",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+0"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.KeyEditorZoomInHorizontal",
+  "name": "Toggle between Hand and Marquee Tool",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.KeyEditorZoomInVertical",
+  "name": "Key Editor Zoom In Vertical",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+H"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.KeyEditorZoomOutHorizontal",
+  "name": "Input Pitch [Pitch=G]",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.KeyEditorZoomOutVertical",
+  "name": "Key Editor Zoom Out Vertical",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+G"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.Minimise",
+  "name": "Minimise",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+M"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.Mixer",
+  "name": "Mixer Window",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "F3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.NewTab",
+  "name": "New Tab",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+T"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.NewWindow",
+  "name": "New Window",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Shift+T"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.NextLayout",
+  "name": "Next Layout",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Alt+]"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.NextTab",
+  "name": "Next Tab",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Meta+Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.PreviousLayout",
+  "name": "Previous Layout",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Alt+["
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.PreviousTab",
+  "name": "Previous Tab",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Shift+Meta+Tab"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.ShowBottomPanel",
+  "name": "Show Bottom Panel",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+8"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.ShowLeftPanel",
+  "name": "Show Left Panel",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+7"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.ShowRightPanel",
+  "name": "Show Right Panel",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+9"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.ShowToolbar",
+  "name": "Show Toolbar",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+6"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchLayoutAspectType?LayoutAspectType=kContinuousVerticalViewAspect",
+  "name": "Switch Layout Aspect Type (LayoutAspectType=kContinuousVerticalViewAspect)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Alt+3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchLayoutAspectType?LayoutAspectType=kGalleyViewAspect",
+  "name": "Switch Layout Aspect Type (LayoutAspectType=kGalleyViewAspect)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Alt+2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchLayoutAspectType?LayoutAspectType=kPageViewAspect",
+  "name": "Switch Layout Aspect Type (LayoutAspectType=kPageViewAspect)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+Alt+1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchMode?WindowMode=kEngraveMode",
+  "name": "Switch Mode (WindowMode=kEngraveMode)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchMode?WindowMode=kPlayMode",
+  "name": "Switch Mode (WindowMode=kPlayMode)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchMode?WindowMode=kPrintMode",
+  "name": "Switch Mode",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+5",
+     "Ctrl+P"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchMode?WindowMode=kSetupMode",
+  "name": "Switch Mode (WindowMode=kSetupMode)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.SwitchMode?WindowMode=kWriteMode",
+  "name": "Switch Mode (WindowMode=kWriteMode)",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "Ctrl+2"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.ToggleScoreAndPartLayout",
+  "name": "Toggle Score And Part Layout",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "W"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Window.Transport",
+  "name": "Transport Window",
+  "shortcuts": [
+   {
+    "context": "kGlobal",
+    "keys": [
+     "F2"
+    ]
+   }
+  ]
+ }
+]

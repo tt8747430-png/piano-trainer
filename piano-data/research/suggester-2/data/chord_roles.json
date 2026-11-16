@@ -1,0 +1,67 @@
+{
+ "_source": "MRMusicSuite ChordRole enum + localisation literals. exact.",
+ "nullValueTitle": {
+  "en": "None / Diatonic",
+  "fr": "Aucune / Diatonique"
+ },
+ "roles": [
+  {
+   "name": "SecondaryDominant",
+   "en": "Secondary Dominant",
+   "fr": "Dominante secondaire",
+   "help_en": "Secondary Dominant : V/x",
+   "rule_exact": "root = target root + Perfect5; ChordType.Seventh (Chord#<get-secondaryDominant>)"
+  },
+  {
+   "name": "SecondaryLeadingTone",
+   "en": "Secondary Leading Tone",
+   "fr": "Sensible secondaire",
+   "help_en": "Secondary Leading Tone : vii°/x",
+   "rule_exact": "root = target root + Major7; ChordType.Diminished7"
+  },
+  {
+   "name": "Naepolitan",
+   "en": "Naepolitan chord",
+   "fr": "Accord de sixte napolitaine",
+   "rule_exact": "ScaleDegree.FlatSuperTonic, ChordType.Major (Scale.ChromaticChords)"
+  },
+  {
+   "name": "Italian",
+   "en": "Italian Sixth",
+   "fr": "Sixte italienne",
+   "rule_exact": "ScaleDegree.FlatSubMediant, ChordType.ItalianAugmented6"
+  },
+  {
+   "name": "French",
+   "en": "French Sixth",
+   "fr": "Sixte française",
+   "rule_exact": "ScaleDegree.FlatSubMediant, ChordType.FrenchAugmented6"
+  },
+  {
+   "name": "German",
+   "en": "German Sixth",
+   "fr": "Sixte allemande",
+   "rule_exact": "ScaleDegree.FlatSubMediant, ChordType.GermanAugmented6"
+  },
+  {
+   "name": "TritoneSubstitution",
+   "en": "Tritone Substitute",
+   "fr": "Substitut tritonique",
+   "rule_exact": "only when the chord type equals Seventh (otherwise null). Root + semitones of a fixed Interval constant (tritone, inferred); other fields copied; role set to TritoneSubstitution unless the source already had it, in which case the role is cleared (toggle)."
+  },
+  {
+   "name": "TertiaryDominant",
+   "en": "Tertiary Dominant",
+   "fr": "Dominante tertiaire",
+   "help_en": "Tertiary Dominant : V/V/x",
+   "rule_exact": "root = target root + Perfect5 + Perfect5; ChordType.Seventh"
+  },
+  {
+   "name": "SecondarySupertonic",
+   "en": "Secondary Supertonic",
+   "fr": "Sus-tonique secondaire",
+   "help_en": "Secondary Supertonic : ii/x",
+   "rule_exact": "root = target root + Major2; ChordType.Minor7, but ChordType.Diminished7 when the target chord type is ChordType.Minor (ordinal 1)"
+  }
+ ]
+}

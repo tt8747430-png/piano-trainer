@@ -1,0 +1,2386 @@
+[
+ {
+  "id": "pt.accent",
+  "name": "Accent",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.alternativeFingering",
+  "name": "Alternative fingering",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.arpeggioDown",
+  "name": "Arpeggio down",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.arpeggioUp",
+  "name": "Arpeggio up",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.artificialHarmonic",
+  "name": "Artificial harmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.backstick",
+  "name": "Backstick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bartoksnapPizzicato",
+  "name": "Bartok/snap pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bassTone",
+  "name": "Bass tone",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bell",
+  "name": "Bell",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bellMute",
+  "name": "Bell mute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.bend",
+  "name": "Bend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bowOnBridge",
+  "name": "Bow on bridge",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bowOnTailpiece",
+  "name": "Bow on tailpiece",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bowed",
+  "name": "Bowed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryString"
+ },
+ {
+  "id": "pt.hitBowl",
+  "name": "Bowl hit",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.bucketMute",
+  "name": "Bucket mute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.buzzPizzicato",
+  "name": "Buzz pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.buzzRoll",
+  "name": "Buzz roll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hitCage",
+  "name": "Cage hit",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.centre",
+  "name": "Centre",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.choke",
+  "name": "Choke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.chorus",
+  "name": "Chorus",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.circularRoll",
+  "name": "Circular roll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.click",
+  "name": "Click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.closed",
+  "name": "Closed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.primaryPerc"
+ },
+ {
+  "id": "pt.closedEnd",
+  "name": "Closed end",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.closedHole",
+  "name": "Closed hole",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.colLegnoBattuto",
+  "name": "Col legno battuto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryString"
+ },
+ {
+  "id": "pt.colLegnoTratto",
+  "name": "Col legno tratto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryString"
+ },
+ {
+  "id": "pt.colle",
+  "name": "Coll\u00e9",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.conVibrato",
+  "name": "Con vibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.vibrato"
+ },
+ {
+  "id": "pt.crescendo",
+  "name": "Crescendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crescendoDiminuendo",
+  "name": "Crescendo-diminuendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crossStick",
+  "name": "Cross stick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crunch",
+  "name": "Crunch",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crunchChoke",
+  "name": "Crunch choke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crush",
+  "name": "Crush",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crushDry",
+  "name": "Crush (dry)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.crushFat",
+  "name": "Crush (fat)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.cuivre",
+  "name": "Cuivr\u00e9",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.cupMute",
+  "name": "Cup mute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.damp",
+  "name": "Damp",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.deadStroke",
+  "name": "Dead stroke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.delay",
+  "name": "Delay",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.diminuendo",
+  "name": "Diminuendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.diminuendoCrescendo",
+  "name": "Diminuendo-crescendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.ding",
+  "name": "Ding",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.dipbend",
+  "name": "Dip/bend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.distortion",
+  "name": "Distortion",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.doit",
+  "name": "Doit",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.doubleTongue",
+  "name": "Double-tongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.down",
+  "name": "Down",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.downbow",
+  "name": "Downbow",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.beaterDreads",
+  "name": "Dreads (beater)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.beaters"
+ },
+ {
+  "id": "pt.harnessHit",
+  "name": "Dress harness hit",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.vocalDut",
+  "name": "Dut (vocal)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.detache",
+  "name": "D\u00e9tach\u00e9",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.detacheLance",
+  "name": "D\u00e9tach\u00e9 lanc\u00e9",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.edgeCymbals",
+  "name": "Edge (cymbals)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.edgeDrums",
+  "name": "Edge (drums)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.edgeRebound",
+  "name": "Edge rebound",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.fadeIn",
+  "name": "Fade in",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.fadeOut",
+  "name": "Fade out",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.fallDrop",
+  "name": "Fall (drop)",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.beaterFelt",
+  "name": "Felt (beater)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.beaters"
+ },
+ {
+  "id": "pt.fingerClick",
+  "name": "Finger click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flange",
+  "name": "Flange",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flatCrash",
+  "name": "Flat crash",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flatRoll",
+  "name": "Flat roll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flautando",
+  "name": "Flautando",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flip",
+  "name": "Flip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.flutterTongue",
+  "name": "Flutter-tongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.foot",
+  "name": "Foot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.fouette",
+  "name": "Fouett\u00e9",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.frame",
+  "name": "Frame",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.frictionSlide1",
+  "name": "Friction slide 1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.frictionSlide2",
+  "name": "Friction slide 2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-ga",
+  "name": "Ga (open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-ge",
+  "name": "Ge (open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.ghostNote",
+  "name": "Ghost note",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-gi",
+  "name": "Gi (muted open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.glissandoDown",
+  "name": "Glissando down",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.glissandoUp",
+  "name": "Glissando up",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.growl",
+  "name": "Growl",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.guitarPizzicato",
+  "name": "Guitar pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.halfHarmonic",
+  "name": "Half-harmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.halfMuted",
+  "name": "Half-muted",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.halfOpen",
+  "name": "Half-open",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.primaryPerc"
+ },
+ {
+  "id": "pt.harmonMuteStemExtended",
+  "name": "Harmon mute, stem extended",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.harmonMuteStemIn",
+  "name": "Harmon mute, stem in",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.harmonMuteStemOut",
+  "name": "Harmon mute, stem out",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.harpHarmonic",
+  "name": "Harp harmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hiHat",
+  "name": "Hi-hat",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hitLoose",
+  "name": "Hit (loose)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hitMedium",
+  "name": "Hit (medium)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hitTight",
+  "name": "Hit (tight)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.jazzTurn",
+  "name": "Jazz turn",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.jetWhistle",
+  "name": "Jet whistle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.jete",
+  "name": "Jet\u00e9",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-ke",
+  "name": "Ke (closed)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.keyClick",
+  "name": "Key click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.keyClickWithPitch",
+  "name": "Key click with pitch",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.lhPizzicato",
+  "name": "LH pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.laissezVibrer",
+  "name": "Laissez vibrer",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.left",
+  "name": "Left (LH)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.leftHandTap",
+  "name": "Left-hand tap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.legato",
+  "name": "Legato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.legato"
+ },
+ {
+  "id": "pt.loose",
+  "name": "Loose",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.marcato",
+  "name": "Marcato",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.martellato",
+  "name": "Martellato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.martele",
+  "name": "Martel\u00e9",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.motorOff",
+  "name": "Motor off",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.motor"
+ },
+ {
+  "id": "pt.motorOn",
+  "name": "Motor on",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.motor"
+ },
+ {
+  "id": "pt.mouthClosed",
+  "name": "Mouth closed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.mouthOpen",
+  "name": "Mouth open",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.mouthPursed",
+  "name": "Mouth pursed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.mouthSlightlyOpen",
+  "name": "Mouth slightly open",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.mouthWideOpen",
+  "name": "Mouth wide open",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.mouthpiecePop",
+  "name": "Mouthpiece pop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.muffledStrings",
+  "name": "Muffled strings",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.muffledDamped",
+  "name": "Muffled/Damped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.multiphonic",
+  "name": "Multiphonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.muted",
+  "name": "Muted",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.tabla-na",
+  "name": "Na (open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.nail",
+  "name": "Nail",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.nailPizzicato",
+  "name": "Nail pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.nasalVoice",
+  "name": "Nasal voice",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.natural",
+  "name": "Natural",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass, ptmg.primaryKeyboard, ptmg.primaryPerc, ptmg.primaryString, ptmg.primaryWind"
+ },
+ {
+  "id": "pt.naturalHarmonic1",
+  "name": "Natural harmonic 1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.naturalHarmonic2",
+  "name": "Natural harmonic 2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.nonLegato",
+  "name": "Non legato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.legato"
+ },
+ {
+  "id": "pt.nonVibrato",
+  "name": "Non vibrato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.vibrato"
+ },
+ {
+  "id": "pt.open1",
+  "name": "Open 1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.open2",
+  "name": "Open 2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.primaryPerc"
+ },
+ {
+  "id": "pt.openEnd",
+  "name": "Open end",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.openHole",
+  "name": "Open hole",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.doubleShotOverTheHeader",
+  "name": "Over the head double shot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.hitOverTheHead",
+  "name": "Over the head hit",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.shotOverTheHead",
+  "name": "Over the head shot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.overdrive",
+  "name": "Overdrive ",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.overpressure",
+  "name": "Overpressure",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pdlt",
+  "name": "P.d.l.t.",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.palmMuting",
+  "name": "Palm muting",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pedal",
+  "name": "Pedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.primaryPerc"
+ },
+ {
+  "id": "pt.phaser",
+  "name": "Phaser",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pickScrape",
+  "name": "Pick scrape",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pinchHarmonic",
+  "name": "Pinch harmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pince",
+  "name": "Pinc\u00e9",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.ping",
+  "name": "Ping",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pizzicato",
+  "name": "Pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryString"
+ },
+ {
+  "id": "pt.pizzicatoAllaChitarra",
+  "name": "Pizzicato alla chitarra",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pizzicatoSecco",
+  "name": "Pizzicato secco",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.plop",
+  "name": "Plop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.plucked",
+  "name": "Plucked",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.plungerMute",
+  "name": "Plunger mute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.pop",
+  "name": "Pop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.portCrash",
+  "name": "Port crash",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.portamentoDown",
+  "name": "Portamento down",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.portamentoUp",
+  "name": "Portamento up",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.portatoloure",
+  "name": "Portato/Lour\u00e9",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.preBend",
+  "name": "Pre-bend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.pressRoll",
+  "name": "Press roll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.beaterPuffy",
+  "name": "Puffy (beater)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.beaters"
+ },
+ {
+  "id": "pt.pull",
+  "name": "Pull",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.push",
+  "name": "Push",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rake",
+  "name": "Rake",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.release",
+  "name": "Release",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.ricochet",
+  "name": "Ricochet",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.right",
+  "name": "Right (RH)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rightHandTap",
+  "name": "Right hand tap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rightHandTapTapping",
+  "name": "Right-hand tap (tapping)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rim",
+  "name": "Rim",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rimKnock",
+  "name": "Rim knock",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rimOnly",
+  "name": "Rim only",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rimShot",
+  "name": "Rim shot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.rip",
+  "name": "Rip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.beaterRods",
+  "name": "Rods (beater)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.beaters"
+ },
+ {
+  "id": "pt.roll",
+  "name": "Roll",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.saltando",
+  "name": "Saltando",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sautille",
+  "name": "Sautill\u00e9",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scoop",
+  "name": "Scoop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scrape",
+  "name": "Scrape",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scrapeLeft",
+  "name": "Scrape (left)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scrapeRight",
+  "name": "Scrape (right)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scratchIn",
+  "name": "Scratch in",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.scratchOut",
+  "name": "Scratch out",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.shake",
+  "name": "Shake",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.shell",
+  "name": "Shell",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sideStick",
+  "name": "Side stick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.simile",
+  "name": "Simile",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sizzle",
+  "name": "Sizzle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sizzleSuck",
+  "name": "Sizzle suck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.skank",
+  "name": "Skank",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.skin",
+  "name": "Skin",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.slap",
+  "name": "Slap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.slapCongas",
+  "name": "Slap (congas)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.slapTongue",
+  "name": "Slap tongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.slide",
+  "name": "Slide",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.slightBend",
+  "name": "Slight bend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.smear",
+  "name": "Smear",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.snareOff",
+  "name": "Snares off",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.snare"
+ },
+ {
+  "id": "pt.snareOn",
+  "name": "Snares on",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.snare"
+ },
+ {
+  "id": "pt.snenor",
+  "name": "Snenor",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.soft",
+  "name": "Soft",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sonsXylophoniques",
+  "name": "Sons xylophoniques",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sostenutoPedal",
+  "name": "Sostenuto pedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.spiccato",
+  "name": "Spiccato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryString"
+ },
+ {
+  "id": "pt.spoken",
+  "name": "Spoken",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.squeeze",
+  "name": "Squeeze",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.staccatissimo",
+  "name": "Staccatissimo",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.staccato",
+  "name": "Staccato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.standClick",
+  "name": "Stand click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sticks",
+  "name": "Sticks",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickButt",
+  "name": "Stick (butt)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft",
+  "name": "Stick (shaft)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft1",
+  "name": "Stick (shaft 1)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft2",
+  "name": "Stick (shaft 2)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft3",
+  "name": "Stick (shaft 3)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft4",
+  "name": "Stick (shaft 4)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaft5",
+  "name": "Stick (shaft 5)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShaftOpen",
+  "name": "Stick (shaft open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShoulder",
+  "name": "Stick (shoulder)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip",
+  "name": "Stick (tip)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickClick",
+  "name": "Stick click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickShot",
+  "name": "Stick shot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickSnap",
+  "name": "Stick snap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip1",
+  "name": "Stick (tip 1)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip2",
+  "name": "Stick (tip 2)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip3",
+  "name": "Stick (tip 3)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip4",
+  "name": "Stick (tip 4)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stickTip5",
+  "name": "Stick (tip 5)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sticksIn",
+  "name": "Sticks in",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stir",
+  "name": "Stir",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.stopped",
+  "name": "Stopped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.straightMute",
+  "name": "Straight mute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.primaryBrass"
+ },
+ {
+  "id": "pt.strumDown",
+  "name": "Strum down",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.strumUp",
+  "name": "Strum up",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.suck",
+  "name": "Suck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sulPonticello",
+  "name": "Sul ponticello",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sulTasto",
+  "name": "Sul tasto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.sustainPedal",
+  "name": "Sustain pedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.swish",
+  "name": "Swish",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.swooshRoll",
+  "name": "Swoosh roll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-ta",
+  "name": "Ta (muted open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tap",
+  "name": "Tap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tapEdge",
+  "name": "Tap at edge",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tapChoke",
+  "name": "Tap choke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tapHalfway",
+  "name": "Tap halfway",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-te",
+  "name": "Te (closed)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tenuto",
+  "name": "Tenuto",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.throw",
+  "name": "Throw",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.throwoffOff",
+  "name": "Throwoff off",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.throwoffOn",
+  "name": "Throwoff on",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-ti",
+  "name": "Ti (muted closed)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tongueFingerClick",
+  "name": "Tongue and finger click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tongueClick",
+  "name": "Tongue click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tongueStop",
+  "name": "Tongue stop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tremblement",
+  "name": "Tremblement",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tremolo",
+  "name": "Tremolo",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.trill",
+  "name": "Trill",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.trill.half",
+  "name": "Trill (half-step)",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.trill.whole",
+  "name": "Trill (whole step)",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tripleTongue",
+  "name": "Triple-tongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.tabla-tu",
+  "name": "Tu (open)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.unaCorda",
+  "name": "Una corda",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.up",
+  "name": "Up",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.upbow",
+  "name": "Upbow",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.vacuumSuck",
+  "name": "Vacuum suck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.vibrato",
+  "name": "Vibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.vibrato"
+ },
+ {
+  "id": "pt.vibratoBarDip",
+  "name": "Vibrato bar dip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.vibratoBarLine",
+  "name": "Vibrato bar line",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.vibratoBarScoop",
+  "name": "Vibrato bar scoop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.volumeSwell",
+  "name": "Volume swell",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.wahWahGuitar",
+  "name": "Wah-wah",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.wah"
+ },
+ {
+  "id": "pt.wahWahOpen",
+  "name": "Wah-wah open",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.wah"
+ },
+ {
+  "id": "pt.wahWahStopped",
+  "name": "Wah-wah stopped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.wah"
+ },
+ {
+  "id": "pt.whaleCall",
+  "name": "Whale call",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.whisper",
+  "name": "Whisper",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.whistle",
+  "name": "Whistle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.whistleTone",
+  "name": "Whistle tone",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.wideVibrato",
+  "name": "Wide vibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.vibrato"
+ },
+ {
+  "id": "pt.zing",
+  "name": "Zing",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.zingFast",
+  "name": "Zing (fast)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.zingSlow",
+  "name": "Zing (slow)",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": null
+ },
+ {
+  "id": "pt.f",
+  "name": "f",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.ff",
+  "name": "ff",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.fff",
+  "name": "fff",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.ffp",
+  "name": "ffp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.fp",
+  "name": "fp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.mf",
+  "name": "mf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.mp",
+  "name": "mp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.p",
+  "name": "p",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.pf",
+  "name": "pf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.pp",
+  "name": "pp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.ppp",
+  "name": "ppp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.sf",
+  "name": "sf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.sfp",
+  "name": "sfp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ },
+ {
+  "id": "pt.sfz",
+  "name": "sfz",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "mutualExclusionGroups": "ptmg.dynamicLevel"
+ }
+]

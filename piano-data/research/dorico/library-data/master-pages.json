@@ -1,0 +1,694 @@
+[
+ {
+  "id": "pageset.fullscore",
+  "name": "Default Full Score",
+  "type": "kFullScore",
+  "pages": {
+   "firstPageDefinition": {
+    "name": null,
+    "sides": {
+     "left": [
+      {
+       "chain": "1",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.title",
+         "text": "{@projectTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 36.0
+       }
+      },
+      {
+       "chain": "3",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.copyright",
+         "text": "{@projectCopyright@}"
+        }
+       ],
+       "verticalAlignment": "kBottom",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 20.0,
+        "top": 60.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "4",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.lyricist",
+         "text": "{@projectLyricist@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "top": 36.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "5",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.composer",
+         "text": "{@projectComposer@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "right": 0.0,
+        "top": 36.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      }
+     ],
+     "right": [
+      {
+       "chain": "1",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.title",
+         "text": "{@projectTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 36.0
+       }
+      },
+      {
+       "chain": "3",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.copyright",
+         "text": "{@projectCopyright@}"
+        }
+       ],
+       "verticalAlignment": "kBottom",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 20.0,
+        "top": 60.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "4",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.lyricist",
+         "text": "{@projectLyricist@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "top": 36.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "5",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.composer",
+         "text": "{@projectComposer@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "right": 0.0,
+        "top": 36.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      }
+     ]
+    }
+   },
+   "normalPageDefinition": {
+    "name": null,
+    "sides": {
+     "left": [
+      {
+       "chain": "2",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.pagenumber",
+         "text": "{@page@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "width": 20.0,
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0,
+        "top": 20.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "6",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.header",
+         "text": "{@flowTitle@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      }
+     ],
+     "right": [
+      {
+       "chain": "2",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.pagenumber",
+         "text": "{@page@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "width": 20.0,
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0,
+        "top": 20.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "6",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.header",
+         "text": "{@flowTitle@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      }
+     ]
+    }
+   },
+   "flowHeadingDefinition": {
+    "name": "Default",
+    "sides": {
+     "heading": [
+      {
+       "chain": "7",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.flowtitle",
+         "text": "{@flowNumber@}. {@flowTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 24.0
+       }
+      }
+     ]
+    }
+   }
+  }
+ },
+ {
+  "id": "pageset.part",
+  "name": "Default Part",
+  "type": "kPart",
+  "pages": {
+   "firstPageDefinition": {
+    "name": null,
+    "sides": {
+     "left": [
+      {
+       "chain": "1",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.title",
+         "text": "{@projectTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 20.0
+       },
+       "size": {
+        "height": 36.0
+       }
+      },
+      {
+       "chain": "3",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.copyright",
+         "text": "{@projectCopyright@}"
+        }
+       ],
+       "verticalAlignment": "kBottom",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 20.0,
+        "top": 80.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "4",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.lyricist",
+         "text": "{@projectLyricist@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "top": 56.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "5",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.composer",
+         "text": "{@projectComposer@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "right": 0.0,
+        "top": 56.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "7",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.layoutname",
+         "text": "{@layoutName@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 20.0
+       }
+      }
+     ],
+     "right": [
+      {
+       "chain": "1",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.title",
+         "text": "{@projectTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 20.0
+       },
+       "size": {
+        "height": 36.0
+       }
+      },
+      {
+       "chain": "3",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.copyright",
+         "text": "{@projectCopyright@}"
+        }
+       ],
+       "verticalAlignment": "kBottom",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 20.0,
+        "top": 80.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "4",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.lyricist",
+         "text": "{@projectLyricist@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "top": 56.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "5",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.composer",
+         "text": "{@projectComposer@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "right": 0.0,
+        "top": 56.0
+       },
+       "size": {
+        "width": 255.0,
+        "height": 24.0
+       }
+      },
+      {
+       "chain": "7",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.layoutname",
+         "text": "{@layoutName@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 20.0
+       }
+      }
+     ]
+    }
+   },
+   "normalPageDefinition": {
+    "name": null,
+    "sides": {
+     "left": [
+      {
+       "chain": "2",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.pagenumber",
+         "text": "{@page@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "width": 20.0,
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0,
+        "top": 20.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "6",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.header",
+         "text": "{@layoutName@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      }
+     ],
+     "right": [
+      {
+       "chain": "2",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.pagenumber",
+         "text": "{@page@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "width": 20.0,
+        "height": 15.0
+       }
+      },
+      {
+       "chain": "0",
+       "kind": "music",
+       "flowInclusionPolicy": "kFollowFlowFilter",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "bottom": 0.0,
+        "top": 20.0
+       },
+       "size": {}
+      },
+      {
+       "chain": "6",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.header",
+         "text": "{@layoutName@}"
+        }
+       ],
+       "verticalAlignment": "kTop",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 15.0
+       }
+      }
+     ]
+    }
+   },
+   "flowHeadingDefinition": {
+    "name": "Default",
+    "sides": {
+     "heading": [
+      {
+       "chain": "8",
+       "kind": "text",
+       "paragraphs": [
+        {
+         "style": "paragraph.flowtitle",
+         "text": "{@flowNumber@}. {@flowTitle@}"
+        }
+       ],
+       "verticalAlignment": "kCentre",
+       "position": {
+        "left": 0.0,
+        "right": 0.0,
+        "top": 0.0
+       },
+       "size": {
+        "height": 24.0
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+]

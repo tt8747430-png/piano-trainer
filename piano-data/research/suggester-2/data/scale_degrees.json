@@ -1,0 +1,318 @@
+{
+ "_source": "MRMusicSuite ScaleDegree enum ($init_global order = exact). literalsFollowingName = string literals stored right after the name in the binary: caret degree (e.g. 1̂), upper-case Roman numeral, lower-case Roman numeral. Where a literal equals an earlier one the binary de-duplicates it, so it can be missing here (e.g. Tonic lower-case \"i\", Dominant \"V\"/\"v\"). exact strings; per-degree assignment inferred from order.",
+ "degrees": [
+  {
+   "ordinal": 0,
+   "name": "Tonic",
+   "literalsFollowingName": [
+    "1̂",
+    "I"
+   ]
+  },
+  {
+   "ordinal": 1,
+   "name": "SuperTonic",
+   "literalsFollowingName": [
+    "2̂",
+    "II",
+    "ii"
+   ]
+  },
+  {
+   "ordinal": 2,
+   "name": "Mediant",
+   "literalsFollowingName": [
+    "3̂",
+    "III",
+    "iii"
+   ]
+  },
+  {
+   "ordinal": 3,
+   "name": "SubDominant",
+   "literalsFollowingName": [
+    "4̂",
+    "IV",
+    "iv"
+   ]
+  },
+  {
+   "ordinal": 4,
+   "name": "Dominant",
+   "literalsFollowingName": [
+    "5̂"
+   ]
+  },
+  {
+   "ordinal": 5,
+   "name": "SubMediant",
+   "literalsFollowingName": [
+    "6̂",
+    "VI",
+    "vi"
+   ]
+  },
+  {
+   "ordinal": 6,
+   "name": "Leading",
+   "literalsFollowingName": [
+    "7̂",
+    "VII",
+    "vii"
+   ]
+  },
+  {
+   "ordinal": 7,
+   "name": "Eighth",
+   "literalsFollowingName": [
+    "8̂",
+    "VIII",
+    "viii"
+   ]
+  },
+  {
+   "ordinal": 8,
+   "name": "Ninth",
+   "literalsFollowingName": []
+  },
+  {
+   "ordinal": 9,
+   "name": "Tenth",
+   "literalsFollowingName": [
+    "1̂0̂",
+    "X",
+    "x"
+   ]
+  },
+  {
+   "ordinal": 10,
+   "name": "Eleventh",
+   "literalsFollowingName": []
+  },
+  {
+   "ordinal": 11,
+   "name": "Twelfth",
+   "literalsFollowingName": [
+    "1̂2̂",
+    "XII",
+    "xii"
+   ]
+  },
+  {
+   "ordinal": 12,
+   "name": "FlatTonic",
+   "literalsFollowingName": [
+    "♭1̂",
+    "♭I",
+    "♭i"
+   ]
+  },
+  {
+   "ordinal": 13,
+   "name": "FlatSuperTonic",
+   "literalsFollowingName": [
+    "♭2̂",
+    "♭II",
+    "♭ii"
+   ]
+  },
+  {
+   "ordinal": 14,
+   "name": "FlatMediant",
+   "literalsFollowingName": [
+    "♭3̂",
+    "♭III",
+    "♭iii"
+   ]
+  },
+  {
+   "ordinal": 15,
+   "name": "FlatSubDominant",
+   "literalsFollowingName": [
+    "♭4̂",
+    "♭IV",
+    "♭iv"
+   ]
+  },
+  {
+   "ordinal": 16,
+   "name": "FlatDominant",
+   "literalsFollowingName": [
+    "♭5̂",
+    "♭V",
+    "♭v"
+   ]
+  },
+  {
+   "ordinal": 17,
+   "name": "FlatSubMediant",
+   "literalsFollowingName": [
+    "♭6̂",
+    "♭VI",
+    "♭vi"
+   ]
+  },
+  {
+   "ordinal": 18,
+   "name": "FlatLeading",
+   "literalsFollowingName": [
+    "♭7̂",
+    "♭VII",
+    "♭vii"
+   ]
+  },
+  {
+   "ordinal": 19,
+   "name": "FlatEighth",
+   "literalsFollowingName": [
+    "♭8̂",
+    "♭VIII",
+    "♭viii"
+   ]
+  },
+  {
+   "ordinal": 20,
+   "name": "FlatNinth",
+   "literalsFollowingName": [
+    "♭9̂",
+    "♭IX",
+    "♭ix"
+   ]
+  },
+  {
+   "ordinal": 21,
+   "name": "FlatTenth",
+   "literalsFollowingName": [
+    "♭10̂",
+    "♭X",
+    "♭x"
+   ]
+  },
+  {
+   "ordinal": 22,
+   "name": "FlatEleventh",
+   "literalsFollowingName": [
+    "♭1̂1̂",
+    "♭XI",
+    "♭xi"
+   ]
+  },
+  {
+   "ordinal": 23,
+   "name": "FlatTwelfth",
+   "literalsFollowingName": [
+    "♭1̂2̂",
+    "♭XII",
+    "♭xii"
+   ]
+  },
+  {
+   "ordinal": 24,
+   "name": "SharpTonic",
+   "literalsFollowingName": [
+    "♯1̂",
+    "♯I",
+    "♯i"
+   ]
+  },
+  {
+   "ordinal": 25,
+   "name": "SharpSuperTonic",
+   "literalsFollowingName": [
+    "♯2̂",
+    "♯II",
+    "♯ii"
+   ]
+  },
+  {
+   "ordinal": 26,
+   "name": "SharpMediant",
+   "literalsFollowingName": [
+    "♯3̂",
+    "♯III",
+    "♯iii"
+   ]
+  },
+  {
+   "ordinal": 27,
+   "name": "SharpSubDominant",
+   "literalsFollowingName": [
+    "♯4̂",
+    "♯IV",
+    "♯iv"
+   ]
+  },
+  {
+   "ordinal": 28,
+   "name": "SharpDominant",
+   "literalsFollowingName": [
+    "♯5̂",
+    "♯V",
+    "♯v"
+   ]
+  },
+  {
+   "ordinal": 29,
+   "name": "SharpSubMediant",
+   "literalsFollowingName": [
+    "♯6̂",
+    "♯VI",
+    "♯vi"
+   ]
+  },
+  {
+   "ordinal": 30,
+   "name": "SharpLeading",
+   "literalsFollowingName": [
+    "♯7̂",
+    "♯VII",
+    "♯vii"
+   ]
+  },
+  {
+   "ordinal": 31,
+   "name": "SharpEighth",
+   "literalsFollowingName": [
+    "♯8̂",
+    "♯VIII",
+    "♯viii"
+   ]
+  },
+  {
+   "ordinal": 32,
+   "name": "SharpNinth",
+   "literalsFollowingName": [
+    "♯9̂",
+    "♯IX",
+    "♯ix"
+   ]
+  },
+  {
+   "ordinal": 33,
+   "name": "SharpTenth",
+   "literalsFollowingName": [
+    "♯10̂",
+    "♯X",
+    "♯x"
+   ]
+  },
+  {
+   "ordinal": 34,
+   "name": "SharpEleventh",
+   "literalsFollowingName": [
+    "♯1̂1̂",
+    "♯XI",
+    "♯xi"
+   ]
+  },
+  {
+   "ordinal": 35,
+   "name": "SharpTwelfth",
+   "literalsFollowingName": [
+    "♯12̂̂",
+    "♯XII",
+    "♯xii"
+   ]
+  }
+ ]
+}

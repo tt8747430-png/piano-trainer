@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ChordyCollection version="1" name="Beginner">
+  <VoicingLibrary>
+    <Voicing id="0d76b2cc1e744e6e994f97048f16dcd4" name="Minor Triad" quality="1"
+             alterations="" rootPitchClass="0" intervals="0,3,7" velocities="70,58,77"
+             octaveRef="60" folderId="e34eb6675225492a8fc33cc22de56be7" createdAt="1783626920643"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="3954ffd4874549bcbd141049e382e503" name="Augmented Triad"
+             quality="3" alterations="" rootPitchClass="0" intervals="0,4,8"
+             velocities="76,76,71" octaveRef="60" folderId="e34eb6675225492a8fc33cc22de56be7"
+             createdAt="1783626932931" targetBpm="110" profSet="0" profOrder=""
+             profTimed="0" profBpm="0" profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="5e6b84a3e3554a6aaddd84b281420e2a" name="Diminished Triad"
+             quality="2" alterations="" rootPitchClass="0" intervals="0,3,6"
+             velocities="85,72,61" octaveRef="60" folderId="e34eb6675225492a8fc33cc22de56be7"
+             createdAt="1783626941105" targetBpm="110" profSet="0" profOrder=""
+             profTimed="0" profBpm="0" profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="51f9d1ec00f94782aeba82c019f2eccb" name="Major Triad" quality="0"
+             alterations="" rootPitchClass="0" intervals="0,4,7" velocities="65,79,72"
+             octaveRef="60" folderId="e34eb6675225492a8fc33cc22de56be7" createdAt="1783626881224"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="be139f1e913e4eeb8631918b485b8a87" name="Major 7" quality="7"
+             alterations="" rootPitchClass="0" intervals="0,4,7,11" velocities="33,65,61,85"
+             octaveRef="60" folderId="72b8782644834524819e3aa645bb8ea8" createdAt="1783690814620"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="652ea80f7c8e4fba98151069d62d1624" name="Minor 7" quality="8"
+             alterations="" rootPitchClass="0" intervals="0,3,7,10" velocities="65,52,85,53"
+             octaveRef="60" folderId="72b8782644834524819e3aa645bb8ea8" createdAt="1783690988209"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="ac7e307da023419aabe126cf27fc70b2" name="Dominant 7" quality="6"
+             alterations="" rootPitchClass="0" intervals="0,4,7,10" velocities="58,71,47,81"
+             octaveRef="60" folderId="72b8782644834524819e3aa645bb8ea8" createdAt="1783691032383"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="fb7bc3daf51643769d5fbbfea7870df3" name="Half Diminished"
+             quality="11" alterations="" rootPitchClass="0" intervals="0,3,6,10"
+             velocities="54,55,41,51" octaveRef="60" folderId="72b8782644834524819e3aa645bb8ea8"
+             createdAt="1783691052583" targetBpm="110" profSet="0" profOrder=""
+             profTimed="0" profBpm="0" profInv="0" profDrop="" builtin="0"/>
+    <Voicing id="227bdef606b64b5a8e38b46f4c5f550c" name="Diminished" quality="10"
+             alterations="" rootPitchClass="0" intervals="0,3,6,9" velocities="61,47,60,83"
+             octaveRef="60" folderId="72b8782644834524819e3aa645bb8ea8" createdAt="1783691081836"
+             targetBpm="110" profSet="0" profOrder="" profTimed="0" profBpm="0"
+             profInv="0" profDrop="" builtin="0"/>
+    <Folders>
+      <Folder id="a32409877f014624b7589f016807cca4" name="Beginner" sortOrder="0"
+              parentId="" retention="0.0" builtin="0"/>
+      <Folder id="72b8782644834524819e3aa645bb8ea8" name="7th Chords" sortOrder="4"
+              parentId="a32409877f014624b7589f016807cca4" retention="0.0" builtin="0"/>
+      <Folder id="e34eb6675225492a8fc33cc22de56be7" name="Triads" sortOrder="3"
+              parentId="a32409877f014624b7589f016807cca4" retention="0.0" builtin="0"/>
+    </Folders>
+  </VoicingLibrary>
+  <ProgressionLibrary>
+    <Progression id="fe08ee1a294440768310d8a88895c36b" name="The Pop Special"
+                 keyPitchClass="0" mode="Major" totalBeats="8.0" bpm="80.0" timeSigNum="4"
+                 timeSigDen="4" rawMidi="0.000000:144:57:76;0.000000:144:64:80;0.000333:144:60:89;1.754860:128:57:42;1.759063:128:64:52;1.840726:128:60:27;2.098624:144:60:80;2.105276:144:57:68;2.106243:144:53:68;3.638730:128:53:44;3.643265:128:60:41;3.657113:128:57:36;4.014694:144:64:83;4.016780:144:55:77;4.018110:144:60:94;5.597853:128:64:32;5.725624:128:60:38;5.727589:128:55:41;6.016236:144:55:77;6.022857:144:62:76;6.023855:144:59:84;7.686712:128:62:80;7.699017:128:59:84;7.709358:128:55:76;8.715344:144:71:1"
+                 quantizeResolution="1.0" swingAmount="0.5" notesEdited="1" folderId="cef151b72caa4183b7ccf6d9645b7ae9"
+                 createdAt="1783628167584" targetBpm="100" builtin="0">
+      <ProgNote midiNote="57" velocity="76" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="60" velocity="89" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="64" velocity="80" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="60" velocity="80" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="53" velocity="68" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="57" velocity="68" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="64" velocity="83" startBeat="4.0" durationBeats="2.0"/>
+      <ProgNote midiNote="55" velocity="77" startBeat="4.0" durationBeats="2.0"/>
+      <ProgNote midiNote="60" velocity="94" startBeat="4.0" durationBeats="2.0"/>
+      <ProgNote midiNote="55" velocity="77" startBeat="6.0" durationBeats="2.0"/>
+      <ProgNote midiNote="59" velocity="84" startBeat="6.0" durationBeats="2.0"/>
+      <ProgNote midiNote="62" velocity="76" startBeat="6.0" durationBeats="2.0"/>
+    </Progression>
+    <Progression id="8fcfbd8da11d4464b19cbe0e22d14773" name="2-5-1" keyPitchClass="0"
+                 mode="Major" totalBeats="12.0" bpm="120.0" timeSigNum="4" timeSigDen="4"
+                 rawMidi="0.058821:144:72:89;0.069660:144:69:108;0.075011:144:62:85;0.078186:144:65:96;1.486077:128:72:60;1.523673:128:65:55;1.532517:128:69:61;1.639184:128:62:37;2.133787:144:71:85;2.141678:144:67:94;2.149252:144:62:85;2.152336:144:65:93;3.530703:128:71:51;3.541134:128:65:67;3.541633:128:67:66;3.575873:128:62:69;4.165850:144:67:91;4.171701:144:64:94;4.172472:144:71:99;4.179592:144:60:87;7.294104:128:71:65;7.315329:128:67:88;7.320771:128:60:80;7.325986:128:64:88"
+                 quantizeResolution="1.0" swingAmount="0.5" notesEdited="1" folderId="cef151b72caa4183b7ccf6d9645b7ae9"
+                 createdAt="1783628233547" targetBpm="100" builtin="0">
+      <ProgNote midiNote="72" velocity="89" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="69" velocity="108" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="62" velocity="85" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="65" velocity="96" startBeat="0.0" durationBeats="2.0"/>
+      <ProgNote midiNote="71" velocity="85" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="67" velocity="94" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="62" velocity="85" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="65" velocity="93" startBeat="2.0" durationBeats="2.0"/>
+      <ProgNote midiNote="67" velocity="91" startBeat="4.0" durationBeats="4.0"/>
+      <ProgNote midiNote="64" velocity="94" startBeat="4.0" durationBeats="4.0"/>
+      <ProgNote midiNote="71" velocity="99" startBeat="4.0" durationBeats="4.0"/>
+      <ProgNote midiNote="60" velocity="87" startBeat="4.0" durationBeats="4.0"/>
+    </Progression>
+    <Folders>
+      <Folder id="cef151b72caa4183b7ccf6d9645b7ae9" name="Beginner" sortOrder="1"
+              parentId="" retention="0.0" builtin="0"/>
+    </Folders>
+  </ProgressionLibrary>
+  <MelodyLibrary>
+    <Melody id="e044d3956d084f3881c855ce881acbff" name="The Lick" keyPitchClass="2"
+            totalBeats="8.0" bpm="100.0" timeSigNum="4" timeSigDen="4" rawMidi="0.036659:144:62:71;0.483749:128:62:50;0.483749:144:64:62;0.974074:144:65:79;1.001965:128:64:68;1.467120:128:65:67;1.500718:144:67:66;2.021202:128:67:76;2.021920:144:64:70;3.099887:144:60:68;3.122109:128:64:52;3.594218:144:62:64;3.613228:128:60:75;7.958466:128:62:75"
+            quantizeResolution="0.5" swingAmount="0.5" notesEdited="1" folderId="1f78cda5099d499eb8aa1bef55cfb82d"
+            createdAt="1783692327565" targetBpm="100" builtin="0">
+      <MelodyNote intervalFromKeyRoot="0" startBeat="0.0" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="0.5" durationBeats="0.5" velocity="62"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="1.0" durationBeats="0.5" velocity="79"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="1.5" durationBeats="0.5" velocity="66"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="2.0" durationBeats="1.0" velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-2" startBeat="3.0" durationBeats="0.5"
+                  velocity="68"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="3.5" durationBeats="4.5" velocity="64"/>
+    </Melody>
+    <Melody id="d957217e1536483d8d988bf41bf54a82" name="Major Scale" keyPitchClass="0"
+            totalBeats="16.0" bpm="90.0" timeSigNum="4" timeSigDen="4" rawMidi="0.057687:144:60:63;0.525782:144:62:57;0.572823:128:60:64;1.060646:144:64:64;1.097143:128:62:68;1.576122:128:64:73;1.581361:144:65:50;2.080986:128:65:61;2.096293:144:67:71;2.579048:144:69:76;2.594932:128:67:74;3.082755:144:71:70;3.100204:128:69:73;3.557993:128:71:62;3.680748:144:72:64;4.165578:144:74:69;4.210476:128:72:61;4.627925:144:76:65;4.633810:128:74:64;5.110918:128:76:88;5.151088:144:77:56;5.588333:144:79:69;5.636905:128:77:52;6.088401:144:81:80;6.134898:128:79:59;6.572007:128:81:79;6.579456:144:83:74;7.098605:144:84:79;7.105714:128:83:79;7.556122:144:83:84;7.596259:128:84:48;8.035238:144:81:80;8.064898:128:83:69;8.530646:144:79:67;8.555204:128:81:72;9.060442:144:77:67;9.092245:128:79:80;9.531156:144:76:86;9.601088:128:77:63;10.036735:144:74:80;10.092755:128:76:70;10.541327:144:72:73;10.565204:128:74:80;11.093912:144:71:11;11.197823:128:72:61;11.533469:144:69:39;11.598878:128:71:85;12.043197:144:67:71;12.086122:128:69:74;12.486905:144:65:53;12.572109:128:67:58;13.006156:144:64:68;13.074524:128:65:75;13.474014:144:62:76;13.481973:128:64:81;13.984932:144:60:71;13.999014:128:62:83;14.702551:128:60:101"
+            quantizeResolution="0.5" swingAmount="0.5" notesEdited="1" folderId="1f78cda5099d499eb8aa1bef55cfb82d"
+            createdAt="1783692402987" targetBpm="100" builtin="0">
+      <MelodyNote intervalFromKeyRoot="0" startBeat="0.0" durationBeats="0.5" velocity="63"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="0.5" durationBeats="0.5" velocity="57"/>
+      <MelodyNote intervalFromKeyRoot="4" startBeat="1.0" durationBeats="0.5" velocity="64"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="1.5" durationBeats="0.5" velocity="50"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="2.0" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="9" startBeat="2.5" durationBeats="0.5" velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="3.0" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="12" startBeat="3.5" durationBeats="0.5"
+                  velocity="64"/>
+      <MelodyNote intervalFromKeyRoot="14" startBeat="4.0" durationBeats="0.5"
+                  velocity="69"/>
+      <MelodyNote intervalFromKeyRoot="16" startBeat="4.5" durationBeats="0.5"
+                  velocity="65"/>
+      <MelodyNote intervalFromKeyRoot="17" startBeat="5.0" durationBeats="0.5"
+                  velocity="56"/>
+      <MelodyNote intervalFromKeyRoot="19" startBeat="5.5" durationBeats="0.5"
+                  velocity="69"/>
+      <MelodyNote intervalFromKeyRoot="21" startBeat="6.0" durationBeats="0.5"
+                  velocity="80"/>
+      <MelodyNote intervalFromKeyRoot="23" startBeat="6.5" durationBeats="0.5"
+                  velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="24" startBeat="7.0" durationBeats="0.5"
+                  velocity="79"/>
+      <MelodyNote intervalFromKeyRoot="23" startBeat="7.5" durationBeats="0.5"
+                  velocity="84"/>
+      <MelodyNote intervalFromKeyRoot="21" startBeat="8.0" durationBeats="0.5"
+                  velocity="80"/>
+      <MelodyNote intervalFromKeyRoot="19" startBeat="8.5" durationBeats="0.5"
+                  velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="17" startBeat="9.0" durationBeats="0.5"
+                  velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="16" startBeat="9.5" durationBeats="0.5"
+                  velocity="86"/>
+      <MelodyNote intervalFromKeyRoot="14" startBeat="10.0" durationBeats="0.5"
+                  velocity="80"/>
+      <MelodyNote intervalFromKeyRoot="12" startBeat="10.5" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="11.0" durationBeats="0.5"
+                  velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="9" startBeat="11.5" durationBeats="0.5"
+                  velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="12.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="12.5" durationBeats="0.5"
+                  velocity="53"/>
+      <MelodyNote intervalFromKeyRoot="4" startBeat="13.0" durationBeats="0.5"
+                  velocity="68"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="13.5" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="14.0" durationBeats="0.5"
+                  velocity="71"/>
+    </Melody>
+    <Melody id="717a77f6868a4cc881542d5ce4398e74" name="Harmonic Minor" keyPitchClass="0"
+            totalBeats="16.0" bpm="90.0" timeSigNum="4" timeSigDen="4" rawMidi="0.009694:144:48:81;0.460272:144:50:74;0.505034:128:48:56;0.970680:144:51:62;1.014116:128:50:80;1.472653:128:51:58;1.484898:144:53:66;1.921769:128:53:54;1.941463:144:55:52;2.427789:144:56:46;2.463776:128:55:72;2.970306:128:56:44;2.985510:144:59:48;3.460272:144:60:65;3.467619:128:59:52;3.940578:144:62:82;3.961497:128:60:87;4.405986:144:63:53;4.464660:128:62:68;4.947687:128:63:69;4.953912:144:65:60;5.433639:144:67:91;5.472925:128:65:50;5.958741:144:68:70;5.969490:128:67:81;6.433367:144:71:94;6.475340:128:68:42;6.921327:144:72:87;6.935612:128:71:61;7.433946:144:71:87;7.518980:128:72:71;7.967789:144:68:64;7.999796:128:71:76;8.450476:144:67:71;8.515918:128:68:51;8.988061:144:65:79;9.008435:128:67:99;9.484320:144:63:74;9.571939:128:65:63;9.990204:144:62:85;10.068435:128:63:61;10.476122:144:60:82;10.489320:128:62:89;11.013741:144:59:107;11.035748:128:60:84;11.479456:144:56:61;11.529796:128:59:91;11.969354:144:55:82;12.013333:128:56:50;12.469116:144:53:68;12.471156:128:55:85;13.010510:144:51:61;13.082687:128:53:70;13.488163:144:50:82;13.545748:128:51:59;14.011327:128:50:80;14.021769:144:48:85;14.698231:128:48:94"
+            quantizeResolution="0.5" swingAmount="0.5" notesEdited="1" folderId="1f78cda5099d499eb8aa1bef55cfb82d"
+            createdAt="1783693544476" targetBpm="100" builtin="0">
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="0.0" durationBeats="0.5"
+                  velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="0.5" durationBeats="0.5"
+                  velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="1.0" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="1.5" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="2.0" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="2.5" durationBeats="0.5"
+                  velocity="72"/>
+      <MelodyNote intervalFromKeyRoot="-1" startBeat="3.0" durationBeats="0.5"
+                  velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="3.5" durationBeats="0.5" velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="4.0" durationBeats="0.5" velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="4.5" durationBeats="0.5" velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="5.0" durationBeats="0.5" velocity="60"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="5.5" durationBeats="0.5" velocity="67"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="6.0" durationBeats="0.5" velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="6.5" durationBeats="0.5"
+                  velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="12" startBeat="7.0" durationBeats="0.5"
+                  velocity="87"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="7.5" durationBeats="0.5"
+                  velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="8.0" durationBeats="0.5" velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="8.5" durationBeats="0.5" velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="9.0" durationBeats="0.5" velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="9.5" durationBeats="0.5" velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="10.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="10.5" durationBeats="0.5"
+                  velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="-1" startBeat="11.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="11.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="12.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="12.5" durationBeats="0.5"
+                  velocity="75"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="13.0" durationBeats="0.5"
+                  velocity="61"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="13.5" durationBeats="0.5"
+                  velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="14.0" durationBeats="0.5"
+                  velocity="85"/>
+    </Melody>
+    <Melody id="38f10dda7ad047caa5d9617f594b7901" name="Natural Minor (Aolian)"
+            keyPitchClass="9" totalBeats="16.0" bpm="90.0" timeSigNum="4"
+            timeSigDen="4" rawMidi="0.057619:144:57:70;0.533197:144:59:74;0.542959:128:57:55;1.010068:144:60:75;1.058163:128:59:67;1.474524:144:62:54;1.536088:128:60:76;1.978027:144:64:77;1.988503:128:62:59;2.459456:144:65:79;2.526463:128:64:77;2.963027:144:67:83;3.038367:128:65:70;3.438776:128:67:100;3.495748:144:69:67;3.970612:144:71:78;4.041871:128:69:55;4.458231:144:72:74;4.487653:128:71:62;4.907551:128:72:79;4.935646:144:74:48;5.382109:144:76:74;5.436327:128:74:56;5.854592:144:77:77;5.911939:128:76:65;6.357517:144:79:81;6.357823:128:77:87;6.862721:144:81:101;6.878912:128:79:69;7.317245:144:79:100;7.366531:128:81:74;7.830544:144:77:101;7.856293:128:79:58;8.317143:144:76:79;8.345918:128:77:68;8.864218:144:74:82;8.892585:128:76:75;9.356224:144:72:83;9.453503:128:74:47;9.869150:144:71:86;9.925238:128:72:80;10.366633:144:69:56;10.397993:128:71:76;10.871871:144:67:110;10.923741:128:69:66;11.337483:144:65:78;11.385204:128:67:69;11.864558:144:64:91;11.905612:128:65:70;12.373741:144:62:66;12.413707:128:64:64;12.830102:144:60:92;12.914762:128:62:76;13.306224:144:59:76;13.362619:128:60:81;13.832993:128:59:86;13.837177:144:57:84;14.458571:128:57:88"
+            quantizeResolution="0.5" swingAmount="0.5" notesEdited="1" folderId="1f78cda5099d499eb8aa1bef55cfb82d"
+            createdAt="1783693487377" targetBpm="100" builtin="0">
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="0.0" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="0.5" durationBeats="0.5"
+                  velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="1.0" durationBeats="0.5"
+                  velocity="75"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="1.5" durationBeats="0.5"
+                  velocity="79"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="2.0" durationBeats="0.5"
+                  velocity="77"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="2.5" durationBeats="0.5"
+                  velocity="79"/>
+      <MelodyNote intervalFromKeyRoot="-2" startBeat="3.0" durationBeats="0.5"
+                  velocity="83"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="3.5" durationBeats="0.5" velocity="69"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="4.0" durationBeats="0.5" velocity="78"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="4.5" durationBeats="0.5" velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="5.0" durationBeats="0.5" velocity="69"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="5.5" durationBeats="0.5" velocity="74"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="6.0" durationBeats="0.5" velocity="77"/>
+      <MelodyNote intervalFromKeyRoot="10" startBeat="6.5" durationBeats="0.5"
+                  velocity="81"/>
+      <MelodyNote intervalFromKeyRoot="12" startBeat="7.0" durationBeats="0.5"
+                  velocity="101"/>
+      <MelodyNote intervalFromKeyRoot="10" startBeat="7.5" durationBeats="0.5"
+                  velocity="100"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="8.0" durationBeats="0.5" velocity="101"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="8.5" durationBeats="0.5" velocity="79"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="9.0" durationBeats="0.5" velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="9.5" durationBeats="0.5" velocity="83"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="10.0" durationBeats="0.5"
+                  velocity="86"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="10.5" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="-2" startBeat="11.0" durationBeats="0.5"
+                  velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="11.5" durationBeats="0.5"
+                  velocity="78"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="12.0" durationBeats="0.5"
+                  velocity="91"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="12.5" durationBeats="0.5"
+                  velocity="66"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="13.0" durationBeats="0.5"
+                  velocity="92"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="13.5" durationBeats="0.5"
+                  velocity="76"/>
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="14.0" durationBeats="0.5"
+                  velocity="84"/>
+    </Melody>
+    <Melody id="10a167141f4148828e78ad389c97604e" name="Chromatic" keyPitchClass="0"
+            totalBeats="28.0" bpm="90.0" timeSigNum="4" timeSigDen="4" rawMidi="0.038741:144:48:82;0.517483:144:49:69;0.558299:128:48:67;1.038401:128:49:70;1.040408:144:50:77;1.481871:144:51:63;1.536361:128:50:69;1.977789:144:52:67;1.983367:128:51:56;2.428333:144:53:72;2.441803:128:52:54;2.948367:144:54:54;3.008027:128:53:71;3.485986:128:54:50;3.507245:144:55:52;3.970612:144:56:56;4.030816:128:55:63;4.499218:144:57:70;4.507143:128:56:47;4.975170:144:58:69;5.042891:128:57:47;5.501497:128:58:61;5.505306:144:59:77;5.967449:144:60:80;6.009048:128:59:63;6.430102:128:60:99;6.437483:144:61:75;6.910986:144:62:61;6.923265:128:61:68;7.349422:144:63:55;7.421054:128:62:63;7.862993:144:64:76;7.879082:128:63:56;8.341803:144:65:64;8.370068:128:64:36;8.916463:144:66:54;8.970272:128:65:68;9.419524:144:67:69;9.422993:128:66:78;9.935918:144:68:88;10.022925:128:67:71;10.436020:128:68:60;10.450340:144:69:61;10.932517:144:70:110;10.976837:128:69:58;11.393673:144:71:87;11.405000:128:70:61;11.911837:144:72:115;11.914966:128:71:64;12.398129:128:72:105;12.434286:144:71:83;12.944150:144:70:114;12.983027:128:71:38;13.409524:128:70:75;13.418912:144:69:76;13.949388:144:68:110;13.995340:128:69:32;14.416429:128:68:70;14.433878:144:67:81;14.935986:144:66:110;14.986701:128:67:45;15.419014:144:65:66;15.432143:128:66:36;15.899864:144:64:69;15.914354:128:65:67;16.384150:144:63:95;16.457313:128:64:42;16.890544:144:62:72;16.894660:128:63:67;17.385034:144:61:66;17.475850:128:62:56;17.904116:144:60:74;17.918095:128:61:66;18.370374:144:59:97;18.450646:128:60:49;18.905408:144:58:45;18.923844:128:59:78;19.382857:144:57:44;19.400850:128:58:54;19.877551:144:56:54;19.935272:128:57:61;20.338435:144:55:64;20.342551:128:56:57;20.855646:144:54:75;20.909252:128:55:64;21.368673:144:53:71;21.401667:128:54:47;21.870068:128:53:89;21.871122:144:52:80;22.340476:144:51:74;22.442959:128:52:53;22.875374:144:50:83;22.883265:128:51:65;23.349150:144:49:59;23.425578:128:50:67;23.838503:128:49:70;23.839320:144:48:94;24.665952:128:48:88"
+            quantizeResolution="0.5" swingAmount="0.5" notesEdited="1" folderId="1f78cda5099d499eb8aa1bef55cfb82d"
+            createdAt="1783693604014" targetBpm="100" builtin="0">
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="0.0" durationBeats="0.5"
+                  velocity="82"/>
+      <MelodyNote intervalFromKeyRoot="-11" startBeat="0.5" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="1.0" durationBeats="0.5"
+                  velocity="77"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="1.5" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-8" startBeat="2.0" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="2.5" durationBeats="0.5"
+                  velocity="72"/>
+      <MelodyNote intervalFromKeyRoot="-6" startBeat="3.0" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="3.5" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="4.0" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-3" startBeat="4.5" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-2" startBeat="5.0" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="-1" startBeat="5.5" durationBeats="0.5"
+                  velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="6.0" durationBeats="0.5" velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="1" startBeat="6.5" durationBeats="0.5" velocity="75"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="7.0" durationBeats="0.5" velocity="73"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="7.5" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="4" startBeat="8.0" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="8.5" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="6" startBeat="9.0" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="9.5" durationBeats="0.5" velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="10.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="9" startBeat="10.5" durationBeats="0.5"
+                  velocity="61"/>
+      <MelodyNote intervalFromKeyRoot="10" startBeat="11.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="11.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="12" startBeat="12.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="11" startBeat="12.5" durationBeats="0.5"
+                  velocity="83"/>
+      <MelodyNote intervalFromKeyRoot="10" startBeat="13.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="9" startBeat="13.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="8" startBeat="14.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="7" startBeat="14.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="6" startBeat="15.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="5" startBeat="15.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="4" startBeat="16.0" durationBeats="0.5"
+                  velocity="69"/>
+      <MelodyNote intervalFromKeyRoot="3" startBeat="16.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="2" startBeat="17.0" durationBeats="0.5"
+                  velocity="72"/>
+      <MelodyNote intervalFromKeyRoot="1" startBeat="17.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="0" startBeat="18.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-1" startBeat="18.5" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-2" startBeat="19.0" durationBeats="0.5"
+                  velocity="75"/>
+      <MelodyNote intervalFromKeyRoot="-3" startBeat="19.5" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-4" startBeat="20.0" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-5" startBeat="20.5" durationBeats="0.5"
+                  velocity="64"/>
+      <MelodyNote intervalFromKeyRoot="-6" startBeat="21.0" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-7" startBeat="21.5" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-8" startBeat="22.0" durationBeats="0.5"
+                  velocity="70"/>
+      <MelodyNote intervalFromKeyRoot="-9" startBeat="22.5" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-10" startBeat="23.0" durationBeats="0.5"
+                  velocity="71"/>
+      <MelodyNote intervalFromKeyRoot="-11" startBeat="23.5" durationBeats="0.5"
+                  velocity="68"/>
+      <MelodyNote intervalFromKeyRoot="-12" startBeat="24.0" durationBeats="1.0"
+                  velocity="71"/>
+    </Melody>
+    <Folders>
+      <Folder id="1f78cda5099d499eb8aa1bef55cfb82d" name="Beginner" sortOrder="1"
+              parentId="" retention="0.0" builtin="0"/>
+    </Folders>
+  </MelodyLibrary>
+</ChordyCollection>
