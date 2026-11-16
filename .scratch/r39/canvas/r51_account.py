@@ -81,7 +81,7 @@ def _secs(block):
 PRIV = _secs(_L[_L.index('\n  privacy: {'):_L.index('\n  terms: {')]); TERMS = _secs(_L[_L.index('\n  terms: {'):])
 LEGAL_JS = js('const DOCS = ' + json.dumps({'Privacy Policy': PRIV, 'Terms of Service': TERMS}, ensure_ascii=False) + r''';
     const S = (o) => set(o), d = st.doc ?? 'Privacy Policy';
-    return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i, href: '#s' + i, bg: i ? 'transparent' : 'var(--fill, #EEE9E2)', fw: i ? 450 : 600 })),
+    return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i, href: '#s' + i, bg: i ? 'transparent' : 'var(--fill, #EEE9E2)', fw: i ? 400 : 600 })),
       states: [['Terms of Service', d === 'Terms of Service', { doc: 'Terms of Service' }, { doc: 'Privacy Policy' }]]
         .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => S(on ? off : o) })) };''')
 SECS = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><section id="{{{{s.id}}}}" style="display: flex; flex-direction: column; gap: 6px; scroll-margin-top: 16px"><h2 style="margin: 0; font-size: 19px; font-weight: 700">{{{{s.h}}}}</h2>'
