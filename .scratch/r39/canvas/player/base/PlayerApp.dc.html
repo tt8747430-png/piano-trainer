@@ -840,7 +840,7 @@ dim: () => { if (cur !== 'hide') this.setState({ [key]: cur === 'dim' ? 'show' :
 // Switching a hand off mutes it and on unmutes it; while off its volume can still be set and heard.
 const SPK_MUTED = 'M11 5 6 9H2v6h4l5 4zM22 9l-6 6M16 9l6 6', SPK_1 = 'M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7', SPK_2 = 'M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14';
 const volOf = (H, dflt) => { const key = 'vol' + H, mk = 'mute' + H, hand = H === 'R' ? 'right hand' : 'left hand', v = s[key] ?? dflt, muted = s[mk] ?? (s['show' + H] ?? 'show') === 'hide';
-return { [key]: muted ? 0 : v, [key + 'Icon']: muted ? SPK_MUTED : v < 50 ? SPK_1 : SPK_2, [key + 'Muted']: muted ? 'true' : 'false', [key + 'MuteLabel']: (muted ? 'Unmute the ' : 'Mute the ') + hand,
+return { [key]: muted ? 0 : v, [key + 'Icon']: muted ? SPK_MUTED : SPK_1, [key + 'Muted']: muted ? 'true' : 'false', [key + 'MuteLabel']: (muted ? 'Unmute the ' : 'Mute the ') + hand,
 ['setVol' + H]: (e) => { const n = Number(e.target.value); this.setState(n > 0 ? { [key]: n, [mk]: false } : { [mk]: true }); },
 [key + 'Down']: () => this.setState({ [mk]: !muted }), [key + 'Up']: () => this.setState({ [key]: muted ? v : Math.min(100, v + 10), [mk]: false }) }; };
 const handsSeen = (ghost) => { const r = ghost ? showOf.rh !== 'hide' : showOf.rh === 'show', l = ghost ? showOf.lh !== 'hide' : showOf.lh === 'show'; return r && l ? 'both' : r ? 'rh' : l ? 'lh' : 'none'; };
