@@ -123,7 +123,7 @@ _PES = SEC(CAPS('Style'), WRAPCHIPS('styles'))
 _PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET))
 PEEDIT = _PEH + _PEN + _PEP + _PES + _PEL
 # on a laptop what the progression is called stands left, the progression itself and its lines right
-PEEDIT_L = _PEH + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_PEN}{_PES}</div><div style="display: flex; flex-direction: column; gap: 16px">{_PEP}{_PEL}</div></div>'
+PEEDIT_L = PEEDIT  # one column on a laptop too, in the phone's order (loop round 58)
 PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'), ('action', 'Share link', 'share'), bg=SHEET))
          + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET)))
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
@@ -136,7 +136,7 @@ PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
 peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', 'Edit progression', IB('Settings', GEARI, 'goSet'), 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
         + IF('isLearner', TOP('Progression.dc.html', '', '', 'Axis of Awesome') + NARROW(PEGATE)) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPE = lambda s: s.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html').replace('Progression.dc.html', 'ProgressionLaptop.dc.html')
-pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', IB('Settings', GEARI, 'goSet'), back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 1180), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
+pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', IB('Settings', GEARI, 'goSet'), back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 704), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
         + IF('isLearner', LTOP('ProgressionLaptop.dc.html', '') + WIDE(LPE(PEGATE), 640)) + STRIP() + TOASTL)
 detail('ProgressionEdit', 'Edit a progression (editors)', js(PE_SRC), peph, pelm, '', PESHEETS, LAPSHEET(PESHEETS), 'Practice')
 
