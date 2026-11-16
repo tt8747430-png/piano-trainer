@@ -70,7 +70,7 @@ SGSTRIP = f'<div aria-label="Canvas: show a state" style="display: none"><sc-for
 SECTS = GROUP(('link', 'Verse', '2× · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 13–16', 'Section.dc.html'), bg=SHEET)
 PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Perfect cadence', 'I – IV – V – I', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
-SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
+SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), bg=SHEET)
 CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
