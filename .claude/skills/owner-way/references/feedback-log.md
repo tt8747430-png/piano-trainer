@@ -355,6 +355,7 @@ owner's, typos fixed.
 
 ## Learn and the editors
 
+- **Loop round 44, Learn's own lessons agree with Your lessons (Learn, LearnLaptop):** the overview showed two of Sunday service set's lessons as loose ones and their learned marks swapped; it now lists the course and the learner's two loose lessons, Pedalling in slow hymns and Notes from my teacher, as Your lessons holds them (2026-11-16).
 - **Loop round 44, a course wears the course's glyph (LearnCourses):** the Courses page's rows wore the lesson's square glyph; they now wear the shelf of books a course wears on Learn (Your lessons and courses), so one thing has one icon (2026-11-16).
 - **Learn and a level draw their states (2026-11-15):** First visit (nothing learned: every level 0 of n, Continue becomes "Start · Foundations") and Foundations learned (every lesson ticked, the meter full, "Review · Foundations"), phone and laptop.
 - **Loop round 38, a course counts its lessons:** "0 of 7 learned" beside "7 lessons", as the Course board's "3 of 8 learned" (it counted the guided songs too, "0 of 9"), on the course's page and wherever Continue names a course.

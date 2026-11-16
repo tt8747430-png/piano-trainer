@@ -151,7 +151,7 @@ def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
     head = H2("Your lessons and courses", SEEALL("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
     return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course")}'
-            f'{OWNROW("The ii–V–I in my hymns", "Lesson · 3 sections", lh)}{OWNROW("Warm-up before church", "Lesson · 2 sections · learned", lh, "learned")}{NEWROW("New lesson or course", "openNew")}</div>')
+            f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}{NEWROW("New lesson or course", "openNew")}</div>')
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 # canvas 167 (owner: "popups with meaningful information … show more things with less ui"): About the courses says
 # what a course is in one line, then the shelves themselves with their counts, each a tap to its shelf
