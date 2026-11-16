@@ -189,6 +189,30 @@ describe('Your courses (R30-5)', () => {
     expect(ownLessonsStore.getState().courses[1]?.title).toBe('Reading four voices')
   })
 
+  it('starts a course from the two weeks: its lessons copied into Your lessons, the course holding them', async () => {
+    const user = userEvent.setup()
+    const { router, ownLessonsStore } = await renderApp('/your-lessons', { storage: withOwn() })
+    await user.click((await screen.findAllByRole('button', { name: 'New' }))[0]!)
+    await user.click(await screen.findByRole('menuitem', { name: 'New course' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New course' })
+    expect(within(sheet).getByRole('radio', { name: 'Empty course' })).toBeChecked()
+    await user.click(
+      within(sheet).getByRole('radio', { name: 'Two weeks: F major and accompaniment' }),
+    )
+    expect(within(sheet).getByRole('textbox', { name: 'Name' })).toHaveValue(
+      'Two weeks: F major and accompaniment',
+    )
+    await user.click(within(sheet).getByRole('button', { name: 'Create course' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses/own-course-2/edit'))
+    const { lessons, courses } = ownLessonsStore.getState()
+    const course = courses[1]!
+    expect(course.title).toBe('Two weeks: F major and accompaniment')
+    expect(course.lessons).toHaveLength(15)
+    expect(lessons.find((lesson) => lesson.id === course.lessons[1])?.title.en).toBe(
+      'Day 1: the map of the key',
+    )
+  })
+
   it('reads as a course: its lessons, the learner’s and the app’s, each read in the course', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/courses/own-course-1', { storage: withOwn() })

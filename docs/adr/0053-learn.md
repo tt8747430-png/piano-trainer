@@ -54,7 +54,11 @@ the courses, its title in the bar.
   with Undo), and New: on a phone the floating + is a dial (Songs' `SpeedDial`) of New lesson and New
   course, on a laptop a New menu beside the search (canvas 167). Each opens its own sheet (`NewOwnSheet`,
   New lesson or New course): the name, then the course a lesson goes in or a course's cover, and Create
-  opens what was made in its editor. They go up to their page, and it to Learn. An own lesson is
+  opens what was made in its editor. New course's **Start from** chips (Empty course, then the courses in
+  `entities/own-lessons/content`, today the owner's two weeks in F major) fill the name and cover from the one
+  chosen; Create copies its lessons whole into Your lessons under new ids and makes the course of them, all of
+  it or nothing (`createOwnCourseFrom`). Those lessons are held to every rule the app's lessons are
+  (`app/content/worksheets.test.ts`). They go up to their page, and it to Learn. An own lesson is
   the app's lesson document under `own-lesson-n`, read at `/lessons/own-lesson-n` as any lesson, its
   progress the same step (`lesson:<id>`), never part of a level's journey or of Continue; it is written
   once in the learner's language and reads the same in the other (`inBothLanguages`). An own course

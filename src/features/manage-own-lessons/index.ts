@@ -1,5 +1,6 @@
 export { addToCourse } from './add-to-course'
 export { createOwnCourse } from './create-course'
+export { createOwnCourseFrom } from './create-from-template'
 export { createOwnLesson } from './create-lesson'
 export {
   deleteOwnCourse,

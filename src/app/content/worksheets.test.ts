@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
+import { OWN_COURSE_TEMPLATES } from '@/entities/own-lessons'
 import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import { isDrill, isTrainerId } from '@/features/trainer'
@@ -33,7 +34,12 @@ import {
 import { stepIdOf } from '@/entities/step'
 
 /** Every lesson a learner reads: the journeys', then each course's own. */
-const WORKSHEETS: readonly Lesson[] = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
+/** Every lesson the app ships: the Lessons, the courses', and those of the courses New course starts from. */
+const WORKSHEETS: readonly Lesson[] = [
+  ...LESSONS,
+  ...COURSES.flatMap((course) => course.lessons),
+  ...OWN_COURSE_TEMPLATES.flatMap((template) => template.lessons),
+]
 
 /** Every text a learner reads in a lesson. */
 const texts = (lesson: Lesson) => [
