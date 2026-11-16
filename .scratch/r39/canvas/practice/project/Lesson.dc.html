@@ -75,7 +75,7 @@ const LS = {"place": "Lesson 7 of 13", "title": "How major scales work", "titleR
 
     const editing = !!st.editing, ru = st.lang === 'RU', preview = !!st.preview, sheet = st.sheet ?? null, pub = st.pub ?? 'changed';
     const T = (o, k) => ru ? o[k + 'Ru'] || o[k] : o[k];
-    const secs = LS.secs.map((s, i) => ({ n: String(i + 1), h: T(s, 'h'), p: T(s, 'p') || '', hasP: !!s.p, steps: (s.steps || []).map((x) => ({ x })), hasSteps: !!s.steps,
+    const secs = LS.secs.map((s, i) => ({ n: String(i + 1), navBg: i === 0 ? '#EEE9E2' : 'transparent', navFw: i === 0 ? 600 : 400, navDot: i === 0 ? '#FEFDFB' : '#EEE9E2', h: T(s, 'h'), p: T(s, 'p') || '', hasP: !!s.p, steps: (s.steps || []).map((x) => ({ x })), hasSteps: !!s.steps,
       isScale: s.ex === 'scale', isQ: s.ex === 'question', take: s.take, sel: st.sel === i, pick: () => set({ sel: i }) }));
     const D = [62, 64, 66, 67, 69, 71, 73, 74], Cm = [60, 62, 64, 65, 67, 69, 71, 72], marks = {}, qm = {};
     Cm.forEach((m, i) => { marks[m] = [i === 2 || i === 6 ? '#E8C67D' : '#9BC093', ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'][i]]; });
