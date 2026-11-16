@@ -74,7 +74,7 @@ export function LibrarySearchRow({
           screen={screen}
         />
       </div>
-      <SongsFilterSheet page={page} filter={filter} sorted={!wide} />
+      <SongsFilterSheet page={page} filter={filter} />
     </div>
   )
 }

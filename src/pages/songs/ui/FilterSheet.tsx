@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { LIBRARY_SORTS } from '@/entities/library'
 import { STAGES, type Stage } from '@/entities/step'
 import { useSetSearch } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
@@ -10,41 +9,17 @@ import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * The Sort and filter button and its sheet (ADR 0106, canvas 133): the library's `FilterSheet` of
- * folding groups, on a phone the sort first, then Key (each key the songs here are in, with how many), Level (the levels they hold)
+ * The Filter button and its sheet (ADR 0106, canvas 133): the library's `FilterSheet` of folding
+ * groups (the sort is the list's own, `CountSort`, R72): Key (each key the songs here are in, with how many), Level (the levels they hold)
  * and Favourites, each change taken at once; at its foot Clear filters and Show, which counts the
  * songs the filters keep and closes.
  */
-export function SongsFilterSheet({
-  page,
-  filter,
-  sorted,
-}: {
-  page: LibraryPage
-  filter: SongsFilter
-  /** Its first group the sort (a phone's; a laptop's table headings sort). */
-  sorted: boolean
-}) {
-  const { t } = useTranslation('songs')
+export function SongsFilterSheet({ page, filter }: { page: LibraryPage; filter: SongsFilter }) {
   return (
     <FilterSheet
       count={filtersOn(filter) - placesOn(filter)}
-      sorted={sorted}
       foot={(close) => <SongsFilterFoot page={page} filter={filter} onShow={close} />}
     >
-      {sorted ? (
-        <FilterGroup title={t('sort.label')}>
-          {LIBRARY_SORTS.map((sort) => (
-            <FilterChoice
-              key={sort}
-              pressed={page.sort === sort}
-              onPress={() => page.setSort(sort)}
-            >
-              {t(`sort.${sort}`)}
-            </FilterChoice>
-          ))}
-        </FilterGroup>
-      ) : null}
       <FilterFields page={page} filter={filter} />
     </FilterSheet>
   )

@@ -85,6 +85,9 @@ details.
   ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started"); ··· at its end on every pointer holds its acts,
   Favourite among them, so the row carries no heart. The cards stand 12 apart, two across on a laptop, in All songs
   and a folder alike; a folder shows no place chips. The List style keeps one card with hairlines.
+- **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
+  in the link's colour with ⇅ at the end, a menu of Manual · Name · Recently played · Key; the Filter sheet holds only
+  the filters. A folder's name is its bar's title beside Back (no head under the bar), Select and its gear beside it.
 
 ## Consequences
 

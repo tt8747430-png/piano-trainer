@@ -386,6 +386,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 - **Loop round 61, a song's row as R72's SONGROW:** each song its own card 88 tall, a 56 tile, "Bar 9 of 16 · Today" its third line, ··· only (Favourite in its menu), 12 apart and two across on a laptop; no place chips in a folder (2026-11-16).
+- **Loop round 61, the count and its sort as R72's COUNTROW:** "5 songs" then the sort ⇅ as a menu over the cards, the sort gone from the Filter sheet; a folder's name in its bar, no head (2026-11-16).
 
 ## Learn and the editors
 - **Your lessons and courses: search and New in the laptop bar (loop round 60, 2026-11-16):** the laptop page put its search, Recent and + New in a row under the title, where the Practice libraries carry theirs in the bar; they stand in the bar now, and the New menu, Sort and the New sheet open under them.
