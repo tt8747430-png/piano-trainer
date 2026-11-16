@@ -176,14 +176,19 @@ def ASK(cond, t, b, ok, go):
             f'<span style="font-size: 18px; font-weight: 700">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">{b}</span><div style="display: flex; gap: 8px; margin-top: 8px"><button type="button" onClick="{{{{closeSheet}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Cancel</button>'
             f'<button type="button" onClick="{{{{{go}}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: #B3261E; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 700">{ok}</button></div></div></sc-if>')
 ASKS = ASK('delOn', 'Delete How major scales work?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete lesson', 'closeSheet')
+def SPLIT2(page, first, second):
+    a, b, c = page.index(first), page.index(second), len(page)
+    col = '<div style="min-width: 0; display: flex; flex-direction: column; gap: 14px">'
+    return page[:a] + '<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">' + col + page[a:b] + '</div>' + col + page[b:] + '</div></div>'
+SETPAGE_L = SPLIT2(SETPAGE, CAPS('Lessons read as'), CAPS('Share'))
 def PAGEOVER(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
-    inner_w = 'width: 704px; ' if lap else ''
+    inner_w = 'width: 1180px; ' if lap else ''
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">'
             + (f'<div style="height: {54 if not lap else 0}px; flex: none"></div>' if not lap else '')
             + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; {pad}"><div style="{inner_w}display: flex; flex-direction: column; gap: 14px">'
-            f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE}</sc-if><sc-if value="{{{{isPubPage}}}}" hint-placeholder-val="{{{{false}}}}">{PUBPAGE}</sc-if></div></main></div></sc-if>')
+            f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE_L if lap else SETPAGE}</sc-if><sc-if value="{{{{isPubPage}}}}" hint-placeholder-val="{{{{false}}}}">{('<div style="width: 704px; align-self: center; display: flex; flex-direction: column; gap: 14px">' + PUBPAGE + '</div>') if lap else PUBPAGE}</sc-if></div></main></div></sc-if>')
 lph = SHOWSTATES() + lph + PAGEOVER(False) + ASKS
 llm = SHOWSTATES() + llm + PAGEOVER(True) + ASKS
 lsh = lsh + BSHEET('toolsOn', 'Tools', TOOLSBODY) + BSHEET('pmOn', 'Publishing', PMBODY) + BSHEET('verOn', 'Versions of How major scales work', VERBODY) + BSHEET('styleOn', 'Style: Scale', STYLEBODY)
