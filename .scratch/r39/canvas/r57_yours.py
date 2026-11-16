@@ -117,7 +117,7 @@ detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
 OSET_JS = js(r'''
     const sheet = st.sheet ?? null, mode = st.mode ?? 'One page', ins = st.ins ?? { 'Sunday service set': true };
     const cs = ['Sunday service set', 'Jazz on the side'];
-    return { ...common(st, set), closeSheet: () => set({ sheet: null }), readCards: ['One page', 'A section at a time'].map((r) => ({ r, on: r === mode, ring: r === mode ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => set({ mode: r }) })),
+    return { ...common(st, set), closeSheet: () => set({ sheet: null }), cover: st.cover ?? 'Sage', coverBg: { Sage: '#DCE9D6', Sky: '#D3E5F2', Honey: '#F6E7C8', Lilac: '#E4DCF1', Peach: '#F3D2C8' }[st.cover ?? 'Sage'], covers: ['Sage', 'Sky', 'Honey', 'Lilac', 'Peach'].map((c, i) => ({ c, bg: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1', '#F3D2C8'][i], on: c === (st.cover ?? 'Sage'), ring: c === (st.cover ?? 'Sage') ? '0 0 0 2.5px #332921' : 'inset 0 0 0 1px rgba(51,41,33,.08)', pick: () => set({ cover: c }) })), readCards: ['One page', 'A section at a time'].map((r) => ({ r, on: r === mode, ring: r === mode ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => set({ mode: r }) })),
       nameOn: sheet === 'name', openName: () => set({ sheet: 'name' }), insOn: sheet === 'ins', openIns: () => set({ sheet: 'ins' }),
       insL: cs.filter((c) => ins[c]).join(', ') || 'None', inCourses: cs.map((c) => ({ c, on: !!ins[c], mark: ins[c] ? '✓' : '', pick: () => set({ ins: { ...ins, [c]: !ins[c] } }) })),
       rename: () => set({ sheet: null, toast: 'Renamed' }), dup: () => set({ toast: 'Copy made' }), reset: () => set({ toast: 'Progress reset' }), del: () => set({ toast: isLesson ? 'Lesson deleted' : 'Course deleted' }),
@@ -139,8 +139,15 @@ def SETTINGS(lesson, lap):
         rows = (READCARDS + CAPS('The lesson') + GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET))
     else:
         rows = (CAPS('The course') + GROUP(('link', 'Name', name, 'openName'), ('action', 'Duplicate', 'dup'), bg=SHEET))
-    # on a laptop the name stands under the large title; a phone's centred bar says Settings alone, the Name row names it
-    sub = f'<span style="margin: -8px 4px 0; font-size: 15px; color: {SOFT}">{name}</span>' if lap else ''
+    # the head names what these settings are for, as a song's Settings does (HEADCARD): its picture, its name, its kind;
+    # a lesson wears Learn's lesson picture, a course its cover (picked below, as on the New course sheet)
+    pic = (f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 32px; background: {SHEET}; box-shadow: inset 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>' if lesson else
+           f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {{{{coverBg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI.replace('width="20" height="20"', 'width="26" height="26"')}</span>')
+    sub = (f'<div style="display: flex; gap: 14px; align-items: center; padding: 4px 0">{pic}<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 20px; font-weight: 700">{name}</span>'
+           f'<span style="font-size: 14px; color: {SOFT}">{"Your lesson · 2 sections" if lesson else "Your course · 4 lessons"}</span></div></div>')
+    if not lesson:
+        rows += (f'{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 10px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
+                 f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div>')
     rest = f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "reset"), bg=SHEET)}<div style="height: 8px"></div>{GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)}'
     # on a laptop the page's groups stand in two columns: what it is on the left, its progress and Delete on the right
     body = (sub + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{rows}</div><div style="display: flex; flex-direction: column; gap: 14px">{rest}</div></div>') if lap else sub + rows + rest
