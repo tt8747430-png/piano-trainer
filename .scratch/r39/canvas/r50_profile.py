@@ -8,10 +8,10 @@ BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row: a day coun
            ('Scale Master', '', 0, 'Finish a scale’s practice run on Scales and keys with every key correct.', [('Bronze', '3 scales', '1 to go'), ('Silver', '12 scales', 'Locked'), ('Gold', '24 scales', 'Locked'), ('Platinum', '30 scales', 'Locked')], '2 scales'),
            ('Daily Devotion', 'Silver', 2, 'Practise for a long stretch in one day.', [('Bronze', '15 minutes', 'Reached 20 October'), ('Silver', '30 minutes', 'Reached 9 November'), ('Gold', '60 minutes', '20 to go'), ('Platinum', '120 minutes', 'Locked')], '40 minutes'),
            ('Library Builder', 'Gold', 3, 'Keep songs in your library: added, imported or written.', [('Bronze', '5 songs', 'Reached 2 March 2025'), ('Silver', '20 songs', 'Reached 4 June 2025'), ('Gold', '50 songs', 'Reached 1 October'), ('Platinum', '100 songs', '42 to go')], '58 songs')]
-RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Practice time', '2 h 5 min'), ('Best accuracy', '94 %'), ('Songs learned', '4'), ('Days practised', '38')]
+RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Practice time', '12 h 40 min'), ('Best accuracy', '94%'), ('Songs learned', '4'), ('Days practised', '38')]
 MILES = [('First song learned', 'Earned 3 November 2026', 'Learn every section of one song.'), ('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
          ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a song on a MIDI keyboard.'), ('A perfect run', '', 'Play a whole song in Wait mode with no wrong notes.')]
-NOTES9 = [('Today', [('Level 7 reached', '2 h ago', 'lvl', True), ('Best accuracy: 94 %', '5 h ago', 'acc', True)]), ('Yesterday', [('Silver Streak Keeper', 'Yesterday, 19:40', 'badge', False)]),
+NOTES9 = [('Today', [('Level 7 reached', '2 h ago', 'lvl', True), ('Best accuracy: 94%', '5 h ago', 'acc', True)]), ('Yesterday', [('Silver Streak Keeper', 'Yesterday, 19:40', 'badge', False)]),
           ('Earlier', [('Gold Library Builder', '1 October', 'badge', False), ('First song learned', '3 November', 'mile', False), ('New longest streak: 16 days', '22 September', 'streak', False)])]
 # Practice history (canvas 160): every practice run, by day; opens its results
 RUNS9 = [('Today', [('Cmaj7', 'Inversions', '92%', '72 BPM', '14:20'), ('C Am F G', 'Chord changes', '88%', '66 BPM', '13:55')]),
@@ -59,7 +59,7 @@ BELL9 = (f'<button type="button" aria-label="{{{{bellL}}}}" onClick="{{{{goNotes
 def TILE9(icon, v, l, act):
     t = TILE(icon, v, l)
     return t.replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="border: 0; font: inherit; text-align: left; ', 1)[:-4] + '</button>' if act else t.replace('<a href="#"', '<div', 1)[:-4] + '</div>'
-TILES9 = f'<div style="display: flex; gap: 8px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE9(NOTE, "4", "Songs learned", "")}{TILE9(CLOCK, "2 h 5 min", "Practice time", "goHistory")}</div>'
+TILES9 = f'<div style="display: flex; gap: 8px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE9(NOTE, "4", "Songs learned", "")}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
 SEEALL9 = lambda act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; border: 0; background: transparent; padding: 0; font: inherit; font-size: 15px; font-weight: 600; color: {LINK}">See all</button>'
 def BROW9(name, tier, sub, act):
     return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'

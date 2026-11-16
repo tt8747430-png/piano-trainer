@@ -1054,6 +1054,7 @@ are reference only, but progressions are facts.
   "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
 
 ## Profile and Settings
+- **Loop round 48, the practice time adds up (Profile):** the Practice time tile said 2 h 5 min in all, less than the 152 min of the last seven days; over 38 days practised it is 12 h 40 min in the records, and the tile, which must fit a 393 phone, says 12 h. Best accuracy reads 94%, as every other percentage (2026-11-16).
 - **Loop round 47, a switch that is off still shows its track:** on a sheet's filled group (Metronome settings › Flash on the beat) the off track, sand on sand, vanished and left a lone knob; every switch now carries a faint inset ring, so off reads as a switch on any ground (2026-11-16).
 - **Loop round 46, Profile's pages on a laptop keep the phone's bar (Profile):** Streak, Badges, Achievements, Practice history and Notifications each carried the bell and the gear beside Back, so Notifications' own bar held the bell that opened it; the bar is Back, and ··· on Notifications, as on a phone. The bell and the gear stay on Profile itself (2026-11-16).
 - **Loop round 46, a badge reads one way everywhere (Profile, Badges):** Profile said "Silver · next: Gold at 14 days" for one badge and "Bronze · 4 songs learned" for the next, the Badges page "Silver, 2 of 4"; every badge row now says its tier and the next one from its own tiers, "Bronze · next: Silver at 5 songs", one not started "Not started · Bronze at 3 scales" (2026-11-16).
