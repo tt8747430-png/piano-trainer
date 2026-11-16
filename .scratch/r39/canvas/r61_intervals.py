@@ -3,16 +3,22 @@
 # buttons (Back · title · Settings · Piano), the interval's name with its ⓘ, its two notes on the staff with what it
 # sounds like and Hear it, Simple · Compound over the tiles (the chosen one filled in ink), and one floating bar as
 # Scales': From (the root) · Play P5 ⌄ (Ascending, Descending, Harmonic) · Play all.
+# One grid, no Simple · Compound tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow
+# merge them"): the tab hid thirteen tiles behind a switch; the compound intervals follow the simple ones in the same
+# grid, the ninth to the double octave, four rows of seven.
+IV = (IV.replace("const comp = st.size === 'Compound', CAB", "const CAB")
+        .replace("const TL = comp ? TIL.map((x, i) => [CAB[i], x[1] + 12, x[2] + 7]) : TIL;", "const TL = TIL.concat(TIL.slice(1).map((x, i) => [CAB[i + 1], x[1] + 12, x[2] + 7])), comp = (st.tile ?? 8) >= 14;")
+        .replace("comp ? CWORDS[tile] : WORDS[tile]", "comp ? CWORDS[tile - 13] : WORDS[tile]"))
+assert 'comp = (st.tile' in IV and 'CWORDS[tile - 13]' in IV, 'Interval tiles not found'
 IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
       ab: AB[tile], playL: 'Play ' + AB[tile], wayL: way,
       ways: ['Ascending', 'Descending', 'Harmonic'].map((d) => ({ d, on: d === way, mark: d === way ? '✓' : '', pick: () => set({ way: d, menu: null }) })),
       ivs: TL.map(([a, semis], i) => ({ a, s: String(semis), on: i === tile, bg: i === tile ? '#332921' : '#FEFDFB', fg: i === tile ? '#FEFDFB' : '#332921', sub: i === tile ? '#FEFDFB' : '#685E56', op: i === tile ? 0.72 : 1, pick: () => set({ tile: i }) })),
-      tabs: ['Simple', 'Compound'].map((l) => { const on = l === (st.size ?? 'Simple'); return { l, on, bg: on ? '#FEFDFB' : 'transparent', sh: on ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: on ? 700 : 500, pick: () => set({ size: l }) }; }),
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, allP: false, menu: null }),
       allPlaying: !!st.allP, notAllPlaying: !st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
-      states: [['Playing', !!st.playing, { playing: true, allP: false }], ['Every interval in turn', !!st.allP, { allP: true, playing: false }], ['Compound intervals', st.size === 'Compound', { size: 'Compound' }]]
-        .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, allP: false, size: null } : o) })),
+      states: [['Playing', !!st.playing, { playing: true, allP: false }], ['Every interval in turn', !!st.allP, { allP: true, playing: false }], ['A compound interval (major ninth)', (st.tile ?? 8) === 15, { tile: 15 }]]
+        .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, allP: false, tile: null } : o) })),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
       kbE: calmKeys(comp ? lo - 2 : lo - 7, comp ? lo + 26 : lo + 17, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 402, 150),
       kbLE: calmKeys(lo - 12, lo + 36, { [lo]: [ROLE[1], NN[lo % 12]], [hi]: [ROLE[5], HIN] }, 1462, 180),
@@ -41,11 +47,7 @@ TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display:
 HEAR61 = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: {SOFT}">Sounds like</span><span style="font-size: 16px; font-weight: 600">{{{{song}}}}</span></span>'
           f'<button type="button" aria-label="Hear it" data-tip="Hear it" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</button></div>')
 MUSIC61 = CARD(STAFF61 + '<div style="height: 12px"></div>' + HEAR61, '16px 16px 14px')
-# the one segmented tab control, Intervals' own since Scales lost its tabs (loop round 58)
-SEG60 = ('<style data-seg60>[data-seg60] { position: relative } [data-seg60]::before { content: ""; position: absolute; inset: -3px 0 }</style>' + f'<div role="tablist" aria-label="Scales and keys" style="flex: none; display: flex; height: 44px; box-sizing: border-box; padding: 3px; border-radius: 22px; background: {FILL}"><sc-for list="{{{{tabs}}}}" as="v" hint-placeholder-count="3">'
-         f'<button type="button" role="tab" data-seg60 aria-selected="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 38px; padding: 0 4px; border: 0; border-radius: 19px; background: {{{{v.bg}}}}; box-shadow: {{{{v.sh}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{v.fw}}}}">{{{{v.l}}}}</button></sc-for></div>')
-SEG61 = SEG60.replace('aria-label="Scales and keys"', 'aria-label="Intervals"').replace('hint-placeholder-count="3"', 'hint-placeholder-count="2"')
-GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="13">'
+GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="27">'
           f'<button type="button" role="radio" aria-checked="{{{{i.on}}}}" onClick="{{{{i.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{i.fg}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">'
           f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; opacity: {{{{i.op}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button></sc-for></div>')
 # the floating bar, as Scales': the left is where the interval is played from, the centre Play with how, the right all of them
@@ -61,17 +63,17 @@ SHEETS61 = BSHEET('rootOn', 'From', ROOTGRID()) + BSHEET('setOn', 'Interval sett
 POPS61 = POPOVER('rootOn', 'From', ROOTGRID(), 'left: calc(50% - 400px); bottom: 100px; top: auto') + POPOVER('setOn', 'Interval settings', IV_SET) + POPOVER('keysOn', 'Piano', IV_KEYS61, 'right: 40px; top: 70px')
 
 ph61 = (TOP61 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE61 + MUSIC61 + SEG61 + GRID61 + '</main>'
+        + TITLE61 + MUSIC61 + GRID61 + '</main>'
         + BAR61('left: 12px; right: 12px; bottom: 30px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 104px'))
 lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP61)
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 0 120px">'
         + f'<div style="margin: 0 0 28px">{KB60("kbLE", 180)}</div><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE61}{MUSIC61}'
-        + f'<div style="display: flex; flex-direction: column; gap: 16px">{SEG61}{GRID61}</div></div></div>'
+        + f'<div style="display: flex; flex-direction: column; gap: 16px">{GRID61}</div></div></div>'
         + BAR61('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
 # on a laptop the way down and the inversion stand under the grid (Sounds like is the way up); its ⓘ keeps the meaning alone
 SONGS61 = '<div style="flex: none; margin-top: 8px">' + GROUP(('val', 'Down', '{{downS}}'), ('val', 'Inverts to', '{{inv}}'), bg=SHEET) + '</div>'
 ABOUT61L = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>', 'left: 0; top: 56px')
-lm61 = lm61.replace(SEG61 + GRID61 + '</div></div>', SEG61 + GRID61 + SONGS61 + '</div></div>').replace(ABOUT61, ABOUT61L)
+lm61 = lm61.replace(GRID61 + '</div></div>', GRID61 + SONGS61 + '</div></div>').replace(ABOUT61, ABOUT61L)
 phone('Intervals', 'Intervals, phone', ph61, IV61, SHEETS61)
 laptop('IntervalsLaptop', 'Intervals, laptop', lm61, '', IV61, POPS61, 'Practice')
 print('r61 intervals ok')

@@ -6,7 +6,7 @@ sounds like and the songs that open with it, as musicca's interval pages and the
 ## The rulings as they stand
 
 - "Every control says what it belongs to": From (the root) and Play as (Ascending · Descending · Harmonic, the exam
-  syllabi's names) are labelled; Intervals: Simple · Compound.
+  syllabi's names) are labelled.
 - "No strip hides options": the root opens the root grid, never a strip.
 - "Every Practice page has its own Settings page": the gear opens Interval settings (Play all: In order · Shuffled;
   Speed: Slow · Medium · Fast; All piano settings ›).
@@ -22,12 +22,15 @@ sounds like and the songs that open with it, as musicca's interval pages and the
 - **Intervals in the Chords page's shape (canvas 176, loop, 2026-11-14):** one piano, one bar, one shape across
   Practice, as Scales. The keys edge to edge at the top under Back · Intervals · Settings · Piano (glass); the name
   (serif, its ⓘ) and "7 semitones · C up to G"; one card of its two notes on the staff, Sounds like and Hear it;
-  Simple · Compound over the tiles, the chosen tile filled in ink (honey is Play's alone). One floating bar as Scales':
+  the tiles, the chosen filled in ink (honey is Play's alone). One floating bar as Scales':
   From (the root, a value over its caption, opening the root grid) · Play P5 ⌄ (Play as: Ascending · Descending ·
   Harmonic, as Scales' Up · Up and down · Down) · Play all. From and Play as stay named: From is the piece's caption,
   Play as the menu's heading. The gear opens Interval settings (Play all: In order · Shuffled; Speed); the piano's
   own button its Piano sheet. Never a From · Play as group under the tiles, a keyboard pinned at the foot, or honey
   on a chosen tile.
+- **One grid, no Simple · Compound tabs** (loop round 58; owner, 2026-11-16: "are the tabs correct? do we need them …
+  should we somehow merge them"): the switch hid thirteen tiles; the compound intervals follow the simple ones in the
+  same grid, m9 to P15, four rows of seven (P1 to P8, then m9 to P15), the chosen one named and drawn as any other.
 ## Today
 
 `src/pages/intervals` → `widgets/interval-explorer` (the rows, `interval-songs.ts`); strings `practice.ts`
