@@ -267,10 +267,10 @@ def kit(t, phone):
             '<span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{g.l}}</span>'
             '<span aria-hidden="true" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px"><sc-for list="{{g.cells}}" as="c" hint-placeholder-count="4"><span style="height: 12px; border-radius: 3px; background: {{c.bg}}"></span></sc-for></span>'
             '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span></button></sc-for></div>'
-            '<span style="flex: none; padding: 0 4px; font-size: 13px; color: #4A433C">{{doneBarsLine}}</span>', flags=re.S)
+            '', flags=re.S)
     t = t.replace('>Each bar</p>', '>Bars</p>')
     t = lit(t, "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap a bar to practise its four.',",
-            "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap four bars to practise them.',\n"
+            ""
             "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5;\n"
             "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56',\n"
             "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
