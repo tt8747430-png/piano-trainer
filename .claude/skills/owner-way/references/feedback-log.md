@@ -103,6 +103,7 @@ owner's, typos fixed.
 
 ## Player views and settings
 
+- **Loop round 45, a view starts under the bar with the keys shown (PlayerViewLyrics, PlayerViewGrid, every Player board with keys):** with the keys on, Lyrics and the Grid started 16 from the screen's top, from before the bar was a band, so the beat strip and Verse 1 ran under the status bar and the bar; they start under the bar now (a phone 128, a laptop 80), as without the keys (2026-11-16).
 - **Loop round 39, Parts' hand tiles as the board's PART:** 40 square at 4 corners, the hand 24 in its deep paint (brick #9A4B3A, lilac #6A5988) on its wash, by Day and by Night; it was 10 corners and the light paint, faint on the wash by Night (2026-11-15).
 - **Loop round 39, the gear's Share link and ··· as the PlayerApp board:** white circles with a 6% ring and a 1px shade (`0 0 0 1px`, `0 1px 2px` at 8%), not the floating elevation (12% and a 3px 8px shade); by Night the hairline alone (2026-11-15).
 - **Loop round 35, Arrangement or Accompaniment (owner, 2026-11-07; the PlayerApp board):** the gear's head is two radio cards, each holding its own choice in 48-tall rows: Arrangement, the song's own pattern, with its Level; Accompaniment, played from the chords by a pattern you choose, its Pattern › opening the Accompaniment page (the pattern and its hands, Inversion, Swing), no longer a row of its own and no longer heading itself twice. Choosing Arrangement or a level brings the song's own pattern back; choosing Accompaniment opens its page (2026-11-15).

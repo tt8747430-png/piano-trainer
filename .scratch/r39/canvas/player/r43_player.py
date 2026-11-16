@@ -463,6 +463,10 @@ def headed(t, phone):
         t = t.replace("on: on ? 'true' : 'false', bg: on ? '#332921' : 'transparent',", "on: on ? 'true' : 'false', tick: on ? 1 : 0, bg: on ? '#332921' : 'transparent',", 1)
     # the score prints no title: it is the bar's
     t = re.sub(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Words: John Newton · Music: New Britain</p>', '', t)
+    # with the keys shown the views still start under the bar (they started at 16, from before the bar was a band)
+    old, new = ('topKeys: 16', 'topKeys: 128') if phone else ('topKeys: 36', 'topKeys: 80')
+    assert old in t
+    t = t.replace(old, new, 1)
     t = t.replace('padding: 78px 0 132px', 'padding: 20px 0 132px').replace('padding: 120px 0 140px', 'padding: 24px 0 140px')
     return t
 
