@@ -72,7 +72,7 @@ ph62 = (TOP62 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + BAR62('left: 12px; right: 12px; bottom: 30px') + PMENU62('left: 50%; translate: -50% 0; bottom: 104px'))
 lm62 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP62)
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
-        + f'<div style="flex: none; margin: -8px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE62}{TILES62.replace("height: 96px", "height: 120px").replace("font-size: 26px", "font-size: 34px")}{MUSIC62}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{WALKS62}{BETWEEN62}{SONGS62}</div></div></div>'
