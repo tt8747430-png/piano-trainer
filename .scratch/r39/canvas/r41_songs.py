@@ -67,7 +67,7 @@ ACTS_OF = lambda pl: f'<div style="display: flex; gap: 8px">{BTN(PLAY.replace("2
 FIRST_OF = lambda pl: f'<sc-if value="{{{{fresh}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex">{BTN(PLAY.replace("22", "18") + " Practise", href=pl)}</div></sc-if>'  # before a first play: one honey Practise, the column's width
 ACTS, ACTS_L = [f'<sc-if value="{{{{played}}}}" hint-placeholder-val="{{{{true}}}}">{ACTS_OF(p)}</sc-if>{FIRST_OF(p)}' for p in ('Player.dc.html', 'PlayerLaptop.dc.html')]
 SGSTRIP = f'<div aria-label="Canvas: show a state" style="display: none"><sc-for list="{{{{states}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="background: {{{{p.bg}}}}">{{{{p.l}}}}</button></sc-for></div>'
-SECTS = GROUP(('link', 'Verse', '2 × · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 17–20', 'Section.dc.html'), bg=SHEET)
+SECTS = GROUP(('link', 'Verse', '2× · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 13–16', 'Section.dc.html'), bg=SHEET)
 PROGS = GROUP(('link', 'Gospel hymn', '<span style="font-family: ' + SERIF + '">I – IV – I – V</span>', 'Progression.dc.html'), ('link', 'Authentic cadence', '<span style="font-family: ' + SERIF + '">I – V – I</span>', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
 SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
