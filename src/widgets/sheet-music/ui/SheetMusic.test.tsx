@@ -28,6 +28,7 @@ function renderSheet({
   const onLoopChange = vi.fn()
   const view = render(
     <SheetMusic
+      title="Amazing Grace"
       performance={performance}
       headings={['Verse']}
       current={current}
@@ -250,6 +251,7 @@ describe('SheetMusic', () => {
   it('keeps the playhead out of sight while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0096)', async () => {
     const sheet = (current: number) => (
       <SheetMusic
+        title="Amazing Grace"
         performance={TWO_BARS}
         headings={['Verse']}
         current={current}
@@ -274,6 +276,7 @@ describe('SheetMusic', () => {
     let heard = 0
     const sheet = (clock: (() => number) | null) => (
       <SheetMusic
+        title="Amazing Grace"
         performance={TWO_BARS}
         headings={['Verse']}
         current={0}
@@ -310,6 +313,7 @@ describe('SheetMusic', () => {
     act(() =>
       rerender(
         <SheetMusic
+          title="Amazing Grace"
           performance={TWO_BARS}
           headings={['Verse']}
           current={7}

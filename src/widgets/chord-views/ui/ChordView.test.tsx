@@ -51,6 +51,7 @@ function renderSummary(bar: number) {
       }}
     >
       <ChordView
+        title="Amazing Grace"
         view="diagrams"
         mode="summary"
         performance={performance}
@@ -143,6 +144,7 @@ function renderPair(bar: number) {
       }}
     >
       <ChordView
+        title="Amazing Grace"
         view="diagrams"
         mode="animated"
         performance={performance}
@@ -273,6 +275,7 @@ function renderView(
       }}
     >
       <ChordView
+        title="Amazing Grace"
         view={view}
         mode="animated"
         performance={sungPerformance}
@@ -381,6 +384,7 @@ describe('the loop’s grips (R37)', () => {
         }}
       >
         <ChordView
+          title="Amazing Grace"
           view={view}
           mode="animated"
           performance={performance}
