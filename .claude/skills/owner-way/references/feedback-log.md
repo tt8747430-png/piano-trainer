@@ -368,6 +368,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Loop round 48, a lesson's sections follow the page (Lesson):** the phone's In this lesson bar said Section 1 of 2 with Building D major in view, and its arrows changed the number without moving the page; the arrows and the laptop's contents now scroll the lesson to the section, the count and the contents' mark follow the scroll, and on the last section the arrow rests grey, so Next lesson is the one honey control (2026-11-16).
 - **Loop round 48, the next course still says its level (Learn, Courses):** the Next badge took the place of the card's level, so Intro to Music Reading alone of its shelf said no BEGINNER; the badge now stands before the level, 8 apart (2026-11-16).
 - **Loop round 47, a chapter's ··· opens the chapter (LearnLevel, editing):** the ··· beside a chapter only showed a toast reading "Chapter: Rename · Remove chapter"; it opens a Chapter sheet on a phone and a popover under it on a laptop, its Name in a field and Remove chapter in red, which happens at once with Undo ("The keyboard and the staff removed from Foundations") (2026-11-16).
 - **Loop round 47, one title for a song:** a course and the intervals' songs called it "Twinkle, Twinkle" where the library, its page and Intervals' Sounds like call it "Twinkle, Twinkle, Little Star"; the full title everywhere, and the course row takes its cover (2026-11-16).
