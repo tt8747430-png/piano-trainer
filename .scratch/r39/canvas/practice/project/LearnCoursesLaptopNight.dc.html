@@ -112,7 +112,7 @@ const COURSES = [["Beginner courses", [["Introduction to the Piano", "The keys, 
         .concat([{ l: 'Edited by an editor', bg: editing ? '#EDE9E1' : '#2E2924', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t + ' · ' + x.n + ' lessons', got: x.done + ' of ' + x.n, ring: 'conic-gradient(#7FAF78 ' + Math.round(100 * x.done / x.n) + '%, #3A332D 0)' })),
-      coursesHome: COURSES.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h, now: k === 'now', later: k !== 'now', paint: ['#2C3A2B', '#24323D', '#3E3420', '#2F2A3A'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
+      coursesHome: COURSES.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h.replace(/ courses$/, ''), now: k === 'now', later: k !== 'now', paint: ['#2C3A2B', '#24323D', '#3E3420', '#2F2A3A'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
       courses: COURSES.map(([h, cs]) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: 'Removed: ' + t }); }, done: k === 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: k === 'done' ? '#2C3A2B' : '#3E3420', ring: k === 'now' ? '0 0 0 2.5px #D4B176' : 'none' })) })) };
   }
