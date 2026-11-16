@@ -373,6 +373,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **The next lesson looks the same in a level and a course** (loop round 50, Course): a level ringed its next lesson in honey around the lesson mark, a course around its number; the course's next now wears the lesson mark too, its number still in the line under the title (Course, CourseLaptop).
 - **One way to count lessons** (loop round 50, LearnLevel): a level's chapter heads and the laptop's Levels column said "3/3" and "6/13" where Learn's level rows say "6 of 13"; every count of lessons reads "n of m".
 - **Learn on a laptop: Continue across the page, then Levels beside Your lessons and courses** (loop round 49; scan-first 1, edges): Continue sat in the left column, so the right column's heading stood level with it and Levels 126px lower, and no edge met. Continue now spans both columns as the page's one focal thing, and the two sections start on one line, headings and cards level.
 - **Loop round 48, a lesson's sections follow the page (Lesson):** the phone's In this lesson bar said Section 1 of 2 with Building D major in view, and its arrows changed the number without moving the page; the arrows and the laptop's contents now scroll the lesson to the section, the count and the contents' mark follow the scroll, and on the last section the arrow rests grey, so Next lesson is the one honey control (2026-11-16).
