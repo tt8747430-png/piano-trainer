@@ -44,7 +44,7 @@ describe('chromaticChart', () => {
       'Gmaj9',
       'G9',
       'G#m9',
-      'A♭Maj9',
+      'A♭maj9',
       'A♭9',
     ])
   })
