@@ -43,7 +43,7 @@ def _staff63():
         s += f'<ellipse cx="96" cy="{cy:.1f}" rx="6.4" ry="4.2" transform="rotate(-20 96 {cy:.1f})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
     s += f'<path d="M86 {yb(-2):.1f}H106M86 {yb(-4):.1f}H106" stroke="{INK}" stroke-width="1"></path>'
     return f'<svg viewBox="0 0 360 132" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; max-width: 460px; margin: 0 auto">{s}</svg>'
-MUSIC63 = CARD(_staff63() + f'<p style="margin: 12px 4px 0; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</p>', '16px 16px 14px')
+MUSIC63 = CARD(_staff63() + f'<p style="margin: 12px 4px 0; max-width: 65ch; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</p>', '16px 16px 14px')
 H3_63 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
 DESC63 = 'The left hand holds the octave. The right hand keeps its chord under the fingers and rocks in 8ths: the upper notes together, then the lowest note alone. For a G chord after C, that is D and G together, then B.'
 # The hands' ⓘ (loop, 2026-11-15): the pattern's longer description, out of the way until asked for, as InfoTip draws it.
