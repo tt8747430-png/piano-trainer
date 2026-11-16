@@ -95,10 +95,13 @@ POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px
 ph60 = (TOP60 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE60 + VIEW60(4) + PRACT60 + '</main>'
         + BAR60('left: 12px; right: 12px; bottom: 30px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
+# One focus (owner, 2026-11-16: "the floating controls … should be centerd by the main focus content … the practices on
+# the right robs the focus"): on a laptop the scale leads one centred column, the key's rows and Practise follow it in
+# that column, and the floating bar is centred on it.
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px 40px; align-content: start; padding: 8px 40px 120px 56px">'
-        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">') + '</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 4px">{PRACT60}{KEYG60}</div></div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 0 120px">'
+        + f'<div style="margin: 0 0 28px">{KB60("kbLE", 180)}</div><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
+        + f'{KEYG60}{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)
 laptop('ScalesLaptop', 'Scales and keys, laptop', lm60, '', SC60, POPS60, 'Practice')
