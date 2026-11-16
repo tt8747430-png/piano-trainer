@@ -71,7 +71,7 @@ def _script(lists, buttons, playing=False):
             + (', ' if lists and buttons else '')
             + ', '.join('[{ l: %r, on: false, pick: v.%s }]' % (l, a) for l, a in buttons)
             + ((', ' if lists or buttons else '') + '[{ l: "Playing", on: !!v.playing, pick: v.%s }]' % playing if playing else '') + ');\n'
-            '  const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l) === i);\n'
+            '  const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l || (r.l === "Playing" && q.l.startsWith("Playing"))) === i);\n'
             '  const none = !once.some((r) => r.on);\n'
             '  const list = [{ l: "As designed", on: none, pick: () => once.filter((r) => r.on).forEach((r) => r.pick()) }].concat(once);\n'
             '  return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),\n'

@@ -120,7 +120,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
   const rows = [].concat((v.states || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), [{ l: "Playing", on: !!v.playing, pick: v.toggle }]);
-  const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l) === i);
+  const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l || (r.l === "Playing" && q.l.startsWith("Playing"))) === i);
   const none = !once.some((r) => r.on);
   const list = [{ l: "As designed", on: none, pick: () => once.filter((r) => r.on).forEach((r) => r.pick()) }].concat(once);
   return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
