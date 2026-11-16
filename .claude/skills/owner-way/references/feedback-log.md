@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **The editor's save status on both sizes, and the Takes row a value row** (loop round 49, phone and laptop carry the same things): the laptop said "Saved on this device" beside Close and the phone said it nowhere; the phone's bar has no room, so it heads the ··· Score settings sheet, under the title (a status goes in the bar or its menu). "Takes: 3" reads Takes with 3 on the right, as every row there. The laptop's Takes link opened the phone's board; it opens TakesLaptop (Editor, EditorLaptop, EditorDraftLaptop).
 - **Loop round 48, the chosen note is the note on the staff (EditorDraft):** "sweet" sits on the G line under the C chord, yet the input bar said C5 · half note and the piano lit C5; it says G4 · half note and lights G4, on the phone and the laptop (2026-11-16).
 - **Loop round 46, the draft's gear opens Score settings (EditorDraft):** an editor's draft of a built-in song drew the editor's ··· but carried none of its sheets, so the gear and its "Score settings open" state did nothing on both sizes; the draft now opens the same Score settings, a sheet on a phone and a popover on a laptop (2026-11-16).
 

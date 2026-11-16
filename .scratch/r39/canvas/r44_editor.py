@@ -118,6 +118,8 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
           + CATBAR +
           f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{KEYS(112).replace("border-radius: 14px;", "border-radius: 0;")}</div></sc-if>'
           f'<sc-if value="{{{{notKeys}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 26px"></div></sc-if></section>')
+# the phone's bar has no room for the save status the laptop shows beside Close: it heads the ··· sheet (a status goes in the bar or its menu)
+ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
 ED4 = ED4.replace("keysOn: keys,", "keysOn: keys, keysShown: keys && !open, notKeys: !keys || open,", 1)
 eph4 = (TIP_CSS + EBAR('Song.dc.html', 'Player.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "16px 12px 8px")}</div>' + SHEETP)
@@ -135,7 +137,7 @@ elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True)
 # ··· Score settings: what the score does not print (the printed things open from the score itself)
 ED_MORE4 = (f'<div style="{PS.CARD}">' + PS.LINK('Instruments and staves', 'stv') + PS.LINK('Page layout', 'lay', PS.SEP) + PS.LINK('Playback sound', 'snd', PS.SEP) + PS.LINK('MIDI keyboard', 'midi', PS.SEP) + '</div>'
             f'<div style="{PS.CARD}">' + PS.LINK('Export', 'exp') + PS.LINK('Print', 'prn', PS.SEP) + '</div>'
-            f'<div style="{PS.CARD}"><a href="Takes.dc.html" style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: {INK}; text-decoration: none; font-size: 16px"><span style="flex: 1">Takes: 3</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></div>'
+            f'<div style="{PS.CARD}"><a href="Takes.dc.html" style="min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 16px; color: {INK}; text-decoration: none; font-size: 16px"><span style="flex: 1">Takes</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">3</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></div>'
             f'<p style="margin: 0; padding: 0 16px; font-size: 13px; color: {SOFT}">Title, key, time signature and tempo are edited where they print: tap them on the score.</p>')
 ED4 = ED4.replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', " + ", ".join(
     f"{k}: '', {k}On: false, {k}Val: '{v}', {k}ValC: '#685E56'" for k, v in (('stv', 'Piano'), ('lay', 'Pages'), ('snd', 'Grand piano'), ('midi', 'None'), ('exp', ''), ('prn', ''))) + ",", 1)
@@ -157,6 +159,6 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, BSHEET('moreOn', 'Score settings', ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1))
-full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Take.dc.html', 'TakeLaptop.dc.html'), 'right: 24px; top: 76px', 380))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, BSHEET('moreOn', 'Score settings', ED_SAVED + ED_MORE4).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1))
+full_laptop('EditorLaptop', 'Score editor, laptop', SHOWSTATES() + elm4, ED4, POPOVER('moreOn', 'Score settings', ED_MORE4.replace('Takes.dc.html', 'TakesLaptop.dc.html'), 'right: 24px; top: 76px', 380))
 print('r44 editor ok')
