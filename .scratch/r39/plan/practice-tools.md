@@ -13,7 +13,7 @@ settings behind its own gear, as Soundbrenner's metronome and a hardware tuner a
 - The Tools menu in the bar stays (`widgets/tools-sheet`); these are the tools' own pages.
 
 - Tuner (canvas 180, ported): Back · Tuner, no gear; the note, its distance in words and Hz over an arc gauge ±50 cents; Reference pitch stepped in one group; no floating bar.
-- Chord finder (canvas 181, ported): keys at the top; the name, Spelled in, the notes as tiles with degrees; Also read as · Played · In these keys; floating Clear · Play · Chords; settings behind the gear (Connect a piano among them).
+- Chord finder (canvas 181, ported): keys at the top; the name with what it is in words ("C major 7th, 1st inversion"), its numeral in the key it is spelled in as one picker ("Imaj7 in C major ⌃", the one home of that key: the settings no longer repeat Spelled in), the notes as tiles with degrees; Also read as · Played · In these keys; floating Clear · Play · Chords; settings behind the gear (Connect a piano among them).
 - Circle of fifths (canvas 182; loop round 58, owner 2026-11-16: "duplicate content", "the page has one focus"): Back · Circle of fifths, no gear or ⓘ; the wheel large and alone, centred on both sizes, majors outside, relative minors inside, no signatures or second spellings on it, the key and its neighbours lit; the key's name and signature ("G major", "1 sharp") in the wheel's empty centre. No "relative E minor" line and no chord tiles: the wheel lights both, and Scales and keys holds the key's chords with their keys drawn. One floating bar Play the chords (honey) · Scales, centred on the wheel.
 
 ## Today

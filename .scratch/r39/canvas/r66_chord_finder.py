@@ -1,7 +1,7 @@
 # R66: the Chord finder in the Practice pages' language (loop, 2026-11-14). Run from r41.py after r65 (it replaces
 # the ChordFinder boards r41_practice writes). The bar of glass buttons (Back · Chord finder · Piano · Settings);
-# the keys edge to edge under it, the input; the chord's name large with what it is in words, and Spelled in (the key
-# it is spelled in) as the progression's Key; its notes as tiles with their degrees, the bass marked; one group: Also
+# the keys edge to edge under it, the input; the chord's name large with what it is in words, and its numeral in the
+# key it is spelled in ("Imaj7 in C major ⌃"), the one home of that key (the settings no longer repeat it); its notes as tiles with their degrees, the bass marked; one group: Also
 # read as, Played, In these keys; one floating bar of glass pieces: Clear · Play (honey) · Chords (open it there).
 # Empty: Play a chord, the line saying how, three chords to try.
 CF66 = CF.replace("kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, marks, 860, 200), clear: () => set({ held: [] }) };",
@@ -14,7 +14,7 @@ CHEVS66 = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5
 TITLE66 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; flex-direction: column; gap: 4px">'
            f'<h2 aria-live="polite" style="margin: 0; font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em">{{{{name}}}}</h2>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}; text-wrap: pretty">{{{{sub}}}}</p></div>'
-           f'<button type="button" aria-label="Spelled in C major" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Spelled in</span><b>C major</b><span style="color: {SOFT}; display: flex">{CHEVS66}</span></button></div>')
+           f'<button type="button" aria-label="Imaj7 in C major: the key it is spelled in" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Imaj7 in</span><b>C major</b><span style="color: {SOFT}; display: flex">{CHEVS66}</span></button></div>')
 TRY66 = (f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><div role="list" aria-label="Chords to try" style="display: flex; flex-wrap: wrap; gap: 8px">'
          + ''.join(f'<button type="button" role="listitem" onClick="{{{{tryIt}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">{t}</button>' for t in ('C major', 'A minor 7th', 'D dominant 7th'))
          + '</div></sc-if>')
