@@ -50,7 +50,7 @@ def scale_staff(w, fingers):
     for i in range(8):
         x = x0 + i * dx; y = base - (2 + i) * sp / 2
         o += f'<ellipse cx="{x:.1f}" cy="{y}" rx="5" ry="3.7" transform="rotate(-20 {x:.1f} {y})" fill="{INK}"></ellipse><path d="M{x + 4.6:.1f} {y}V{y - 24}" stroke="{INK}" stroke-width="1.1"></path>'
-        o += f'<text x="{x:.1f}" y="{min(top - 10, y - 30)}" text-anchor="middle" font-size="12" font-weight="700" fill="#5A4C8C">{fingers[i]}</text>'
+        o += f'<text x="{x:.1f}" y="{min(top - 10, y - 30)}" text-anchor="middle" font-size="12" font-weight="700" fill="{INK}">{fingers[i]}</text>'
     return f'<svg viewBox="0 0 {w} 96" width="100%" role="img" aria-label="G major, up one octave, right-hand fingering over the notes" style="display: block">{o}</svg>'
 def SCALESTAFF(label):
     # the chosen scale up one octave on a treble staff with its own key signature (R42 v68); glyphs as literal text
@@ -61,7 +61,7 @@ def SCALESTAFF(label):
     o += f'<sc-for list="{{{{ss.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
     o += (f'<sc-for list="{{{{ss.notes}}}}" as="z" hint-placeholder-count="8"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="5" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="{INK}"></ellipse><path d="{{{{z.stem}}}}" stroke="{INK}" stroke-width="1.1"></path>'
           + gl('z.a1', '♯', 16) + gl('z.a2', '♭', 16) + gl('z.a3', '♮', 16) + gl('z.a4', '𝄪', 16) + gl('z.a5', '𝄫', 16)
-          + ''.join(f'<sc-if value="{{{{z.f{d}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.x}}}}" y="{{{{z.fy}}}}" text-anchor="middle" font-size="12" font-weight="700" fill="#5A4C8C">{d}</text></sc-if>' for d in range(1, 6))
+          + ''.join(f'<sc-if value="{{{{z.f{d}}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.x}}}}" y="{{{{z.fy}}}}" text-anchor="middle" font-size="12" font-weight="700" fill="{INK}">{d}</text></sc-if>' for d in range(1, 6))
           + '</sc-for>')
     return f'<svg viewBox="0 0 360 96" width="100%" role="img" aria-label="{label}" style="display: block">{o}</svg>'
 SC = js(r'''
