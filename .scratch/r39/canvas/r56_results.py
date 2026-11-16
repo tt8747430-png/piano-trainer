@@ -29,7 +29,7 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
     if last:
         lines += f'<path d="M{w - .6} 16V48" stroke="{INK}" stroke-width="1.2"></path>'
     if clef:
-        return f'<svg viewBox="0 0 {w} 72" width="{w}" height="72" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text></svg>'
+        return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}<text x="2" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text></svg>'
     # round 41: a note may carry its accidental, (letter, octave, '♯' or '♭'), set left of the chord as an engraver does
     accs = {RS_STEP(n[0], n[1]): n[2] for n in notes if len(n) > 2}
     steps = sorted(RS_STEP(n[0], n[1]) for n in notes)
@@ -44,7 +44,7 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
         c = RS_RED if red and RS_STEP(*red) == s else INK
         out += f'<ellipse cx="{x:.1f}" cy="{y(s)}" rx="5.4" ry="3.9" transform="rotate(-24 {x:.1f} {y(s)})" fill="none" stroke="{c}" stroke-width="{2.4 if c == RS_RED else 1.7}"></ellipse>'
         prev = s
-    return f'<svg viewBox="0 0 {w} 72" width="{w}" height="72" aria-hidden="true" style="display: block; flex: none">{lines}{out}</svg>'
+    return f'<svg viewBox="0 -6 {w} 82" width="{w}" height="82" aria-hidden="true" style="display: block; flex: none">{lines}{out}</svg>'
 
 
 def RS_CAP(i, perfect):

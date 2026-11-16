@@ -1,7 +1,7 @@
 // Layout check for a canvas board, run in the page before every publish (R42 v82): every visible control sits inside
 // the screen with a margin unless its strip scrolls, is at least 44px to tap, and a toolbar's parts keep equal gaps
 // around a centred middle. Returns the problems as lines; an empty list is a pass.
-(() => {
+(() => { const ell = (n) => { for (let e = n.parentElement, k = 0; e && k < 4; e = e.parentElement, k++) if (getComputedStyle(e).textOverflow === 'ellipsis') return true; return false };
   const out = []
   const screen = [...document.querySelectorAll('div')].find((d) => /border-radius: (62px|0px 0px 16px 16px)/.test(d.getAttribute('style') || '') && d.clientWidth > 300)
   if (!screen) return ['no screen found']
@@ -22,16 +22,18 @@
     // no word runs past its control's edge, filled or bare (owner, v107: "alway check that the text is not exceeding its barrier")
     { const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n
       while ((n = w.nextNode())) { if (!n.textContent.trim()) continue; const g = document.createRange(); g.selectNodeContents(n); const t = g.getBoundingClientRect()
-        if (t.width && (t.left < r.left - 0.5 || t.right > r.right + 0.5)) { out.push(`text past its edge: "${name(el)}"`); break } } }
+        if (t.width && !ell(n) && (t.left < r.left - 0.5 || t.right > r.right + 0.5)) { out.push(`text past its edge: "${name(el)}"`); break } } }
     if (Math.min(r.width, r.height) < 30 && !el.closest('svg')) out.push(`small target ${Math.round(r.width)}×${Math.round(r.height)}: "${name(el)}"`)
   }
   for (const bar of screen.querySelectorAll('[role=toolbar]')) {
     const kids = [...bar.children].map((k) => k.getBoundingClientRect()).filter((r) => r.width)
     if (kids.length === 3) {
-      const g1 = kids[1].left - kids[0].right, g2 = kids[2].left - kids[1].right, mid = (kids[1].left + kids[1].right) / 2, c = (S.left + S.right) / 2
+      const g1 = kids[1].left - kids[0].right, g2 = kids[2].left - kids[1].right, mid = (kids[1].left + kids[1].right) / 2, pc = bar.parentElement.getBoundingClientRect(), c = (pc.left + pc.right) / 2
       if (Math.abs(g1 - g2) > 1) out.push(`toolbar gaps differ: ${g1.toFixed(1)} and ${g2.toFixed(1)}`)
       if (Math.abs(mid - c) > 1.5) out.push(`toolbar's middle is ${(mid - c).toFixed(1)}px off centre`)
-      if (Math.abs(kids[0].top - kids[2].top) > 1 || Math.abs(kids[0].height - kids[1].height) > 1) out.push('toolbar parts differ in height or baseline')
+      // an empty third slot is the spacer that keeps the middle centred; only parts with content are compared
+      const full = [...bar.children].filter((k) => k.getBoundingClientRect().width && (k.children.length || k.textContent.trim())).map((k) => k.getBoundingClientRect())
+      if (full.some((r) => Math.abs(r.top - full[0].top) > 1 || Math.abs(r.height - full[0].height) > 1)) out.push('toolbar parts differ in height or baseline')
     }
   }
   // nothing drawn is cut off (owner, v108: "the staff is clipped in the key signature. make sure this doenst happen"):
@@ -45,6 +47,8 @@
   }
   { const w = document.createTreeWalker(screen, NodeFilter.SHOW_TEXT); let n; const seen = new Set()
     while ((n = w.nextNode())) { if (!n.textContent.trim() || !n.parentElement || !vis(n.parentElement)) continue; const g = document.createRange(); g.selectNodeContents(n); const t = g.getBoundingClientRect(); if (!t.width) continue
+      // an ellipsis is a truncation drawn on purpose (craft-details: truncate in dense rows)
+      if (ell(n)) continue
       for (let p = n.parentElement; p && p !== screen; p = p.parentElement) { const o = getComputedStyle(p), cx = /(hidden|clip)/.test(o.overflowX), cy = /(hidden|clip)/.test(o.overflowY); if (!cx && !cy) continue
         // a strip that scrolls one way is only checked the other way
         const r = p.getBoundingClientRect(); if ((cx && (t.left < r.left - 1 || t.right > r.right + 1)) || (cy && (t.top < r.top - 1 || t.bottom > r.bottom + 1))) { const k = n.textContent.trim().slice(0, 30); if (!seen.has(k)) { seen.add(k); out.push(`text cut by its box: "${k}"`) } } break } } }
