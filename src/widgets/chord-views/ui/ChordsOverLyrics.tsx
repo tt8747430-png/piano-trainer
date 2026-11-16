@@ -1,3 +1,4 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TextSize } from '@/entities/settings'
@@ -13,7 +14,6 @@ import {
 import { useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
-import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
 import { footRoom, inSight, lineScroll } from '../model/in-sight'
@@ -22,6 +22,7 @@ import { BackToPlayhead } from './BackToPlayhead'
 import { lyricLines, shownLines, soundingChip, type Span } from '../model/lyric-lines'
 import { foldRepeats } from '../model/repeated-lines'
 import { BeatStrip } from './BeatStrip'
+import { ViewTitle } from './ViewTitle'
 import { LyricRow } from './LyricRow'
 
 /**
@@ -37,6 +38,7 @@ import { LyricRow } from './LyricRow'
  */
 export function ChordsOverLyrics({
   title,
+  credits,
   performance,
   headings,
   bars,
@@ -51,6 +53,7 @@ export function ChordsOverLyrics({
   onSymbol,
 }: {
   title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   /** Every bar as played, in beats. */
@@ -122,7 +125,7 @@ export function ChordsOverLyrics({
       aria-label={t('views.lyrics')}
       className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
-      <SheetTitle title={title} place="lines" />
+      <ViewTitle title={title} credits={credits} />
       <div
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"

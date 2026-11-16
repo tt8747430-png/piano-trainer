@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { printedChord, type Chord, type Key } from '@/shared/lib/music'
+import { LeadSymbol } from '@/shared/ui'
 import { keyDragId } from '../model/sheet-dnd'
-import { ChordName } from './ChordName'
 
 /** One of the key's chords, picked up to drop into a bar, or tapped to add it after the last. */
 function KeyTile({ chord, at, onAdd }: { chord: Chord; at: number; onAdd(): void }) {
@@ -26,7 +26,7 @@ function KeyTile({ chord, at, onAdd }: { chord: Chord; at: number; onAdd(): void
         {...attributes}
         {...listeners}
       >
-        <ChordName text={name} />
+        <LeadSymbol text={name} />
       </button>
     </li>
   )

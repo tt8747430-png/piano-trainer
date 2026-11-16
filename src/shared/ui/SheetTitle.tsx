@@ -7,8 +7,8 @@ import { usePageHeading } from './use-page-heading'
  * head of one line across, where the line starts.
  */
 const PLACES = {
-  page: 'text-center text-3xl',
-  lines: 'text-center text-[1.3125rem] sm:text-3xl landscape-phone:text-xl',
+  page: 'text-center text-3xl font-normal',
+  lines: 'text-center text-2xl font-normal sm:text-4xl landscape-phone:text-xl',
   across: 'text-xl',
 } as const
 export type TitlePlace = keyof typeof PLACES

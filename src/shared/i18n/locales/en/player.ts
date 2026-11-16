@@ -130,6 +130,8 @@ export const player = {
   },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
+  diagramsRow: 'Chords, one at a time',
+  noChordShort: 'N.C.',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
   line: {
     one: 'Bar {{n}}',

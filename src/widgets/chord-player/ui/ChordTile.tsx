@@ -6,9 +6,9 @@ import type { ProgressionNames } from '@/entities/settings'
 import { cn } from '@/shared/lib'
 import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import { chordSymbol, printedSymbol, type Chord, type Key } from '@/shared/lib/music'
+import { LeadSymbol } from '@/shared/ui'
 import { boxName } from '../model/box-name'
 import type { BoxPlace } from '../model/engine'
-import { ChordName } from './ChordName'
 
 /** What a chord's tile asks of the sheet. */
 export interface TileActs {
@@ -35,7 +35,7 @@ export function ChordFace({
 }) {
   return (
     <span className="grid min-h-[60px] min-w-16 place-items-start rounded-[6px] bg-card px-2 pt-1 text-[21px] font-medium whitespace-nowrap text-foreground elevation-3">
-      <ChordName text={boxName(chord, musicKey, names)} />
+      <LeadSymbol text={boxName(chord, musicKey, names)} />
     </span>
   )
 }
@@ -189,7 +189,7 @@ export function ChordTile({
         )}
       >
         <span className="max-w-full truncate text-[21px] leading-[1.25] font-medium text-foreground lg:text-[28px]">
-          <ChordName text={boxName(chord, musicKey, names)} />
+          <LeadSymbol text={boxName(chord, musicKey, names)} />
         </span>
         <span aria-hidden className="absolute inset-x-0 bottom-0 flex h-2.5">
           {Array.from({ length: shown }, (_, tick) => (

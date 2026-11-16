@@ -25,16 +25,22 @@ and the Diagrams view scrolling and jumping under a finger.
 - **Beats.** The chord views count a bar in beat cells as its meter counts, follow the cursor and Listen's clock, and
   a tap on any chord (a diagram, a card, a chip, a beat) takes the cursor there, sounding it while nothing plays. No
   chord view opens a chord's sheet; a laptop shows a chip's diagram on hover.
-- **The beat strip** names a chord only where it changes and a rest where the music turns to none; it follows the
-  clock beat by beat and stands still, turning a page (a line of the chart, split where the room is short) when the
-  box leaves it; it is not dragged to scrub.
+- **The beat strip** names a chord only where it changes and a rest where the music turns to none: every beat as
+  played in one row of small white cells 3 apart (36 on a phone, 52 on a laptop), a bar's first after a 3px ink
+  line, the beat sounding filled in ink and kept a third of the way in; it scrolls by hand too, and is not dragged
+  to scrub.
 - **Diagrams on one keyboard.** Every chord diagram is drawn on F3–B4, its tones folded into F3–E4: a slash chord's
   bass lowest, or a ring where it is not a tone; a chord of five notes or more with its root not lowest. A chord of
   three or four notes is drawn in the inversion the learner chose on its sheet, kept for that chord in that song
   (`pt-diagram-inversions`). It changes the picture, not what the Player plays.
-- **Diagrams** shows the chord sounding and the next, the same size (Animated), or the song's chords at once with
-  the one sounding outlined (Summary), the words sung lit under them. Nothing in the view scrolls; the pair slides
-  half a beat before each change and is swiped to the next or previous chord; both run into the gutters and fade.
+- **Diagrams**, Animated, is the Player's Diagrams board: under the title and its credits, a row of every change of
+  chord in played order, each slot half the room, a framed tile (154 wide on a phone, 304 on a laptop) over its
+  name in the sans at 500; the one sounding at the row's start, the rest at 38%, so the next shows beside it; where
+  the music has no chord, an empty tile named N.C. The row slides to each change; swiped, it snaps a chord at a time
+  and the music goes where it rests; a tap goes there too. Under it the strip, then the line sung and the next, all
+  three together in the middle of the room. Summary shows the song's chords at once with the one sounding outlined.
+- **One chord tile app-wide** (`KeyDiagram`): a white tile in a 2px ink frame with a 6px corner, the keys parted by
+  ink lines, the black keys ink and 60% long, a dot half a white key across, ink on white and white on black.
 - **Chords over lyrics**: each line's chords over its words, verses stacked; a line of chords alone played again
   straight after itself shown once with ×N; the diagrams pinned under the strip; the text sized 80–150%; the playing
   line kept in the top third.
@@ -48,3 +54,9 @@ and the Diagrams view scrolling and jumping under a finger.
 
 The View's choices are saved in `pt-settings`' `scoreView`; the inversions in their own store, in the backup. A walk,
 a progression and an exercise keep no inversion choice.
+
+## History
+
+- 2026-11-16, loop round 61: Diagrams ported to its board, value for value: the pair that slid between two fixed
+  slots and the strip that turned pages gave way to the board's row of every change and one strip following the
+  beat; the chord tile took the board's frame; the title's credits print under it in every view but the sheet.

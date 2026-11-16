@@ -19,9 +19,16 @@ import {
   type ChordQuality,
   type Key,
 } from '@/shared/lib/music'
-import { MenuPicker, NotePicker, Sheet, SheetContent, Stepper, TypedField } from '@/shared/ui'
+import {
+  LeadSymbol,
+  MenuPicker,
+  NotePicker,
+  Sheet,
+  SheetContent,
+  Stepper,
+  TypedField,
+} from '@/shared/ui'
 import { likeliestChords } from '../model/key-chords'
-import { ChordName } from './ChordName'
 
 /** The bass a chord's choices offer: its root, or one of its other tones under it. */
 const BASS_ROLES = ['root', '3rd', '5th', '7th'] as const
@@ -197,7 +204,7 @@ export function ChordDialog({
                     onClick={() => take(each)}
                     className="h-11 min-w-0 flex-1 rounded-[10px] bg-card text-[17px] font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
                   >
-                    <ChordName text={printedChord(each)} />
+                    <LeadSymbol text={printedChord(each)} />
                   </button>
                 </li>
               ))}

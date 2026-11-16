@@ -242,6 +242,7 @@ owner's, typos fixed.
 - **Diagrams** animate; strip and diagrams swipe by themselves, the page never moves; no odd scroll bar; a swipe goes to the
   next chord.
 - **Taps on chords** move the player there and open no dialog.
+- **Diagrams as its board draws it (owner, 2026-11-16: "why did you wrongly refactored and implemented the flow and the functions of the diagram view of the player"; loop round 61):** the app had kept its older pair of two fixed slots and a strip that turned pages, and its unframed diagram, instead of porting the board's code. Now: a row of every change, the one sounding at the start and the rest at 38%, swiped a chord at a time (the music follows) or tapped; the beat strip one row of 36px cells (52 on a laptop) following the beat a third of the way in; the line sung under it; the title's credits under the title; one framed chord tile app-wide.
 - **Settings:** a song with written staves plays its staves; patterns, inversion and voice leading belong to a chord chart
   alone; "Melody" goes. A section can have its own pattern. Old settings nobody needs go.
 - **Drum grooves:** Chordify's.

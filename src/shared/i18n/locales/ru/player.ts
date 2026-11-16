@@ -121,6 +121,8 @@ export const player: LocaleResources['player'] = {
     chordSize: 'В упрощённой версии каждый аккорд звучит трезвучием.',
   },
   nextChord: 'Дальше: {{symbol}}',
+  diagramsRow: 'Аккорды по одному',
+  noChordShort: 'N.C.',
   line: {
     one: 'Такт {{n}}',
     many: 'Такты {{first}}–{{last}}',

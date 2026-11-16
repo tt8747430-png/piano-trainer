@@ -1,16 +1,18 @@
+import type { ScoreHeader } from '@/entities/piece'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practice'
 import { barUnder, useElementSize, useScrollMotion } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
-import { LoopGrip, SheetTitle } from '@/shared/ui'
+import { LoopGrip } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { loopedBars, playedOf } from '../model/beat-span'
 import { inSight } from '../model/in-sight'
 import { useFollow } from '../model/use-follow'
 import { BackToPlayhead } from './BackToPlayhead'
 import { gridWords } from '../model/lyric-lines'
+import { ViewTitle } from './ViewTitle'
 
 /**
  * The Grid (ADR 0108): the music's chord chart in beats under its title, its sections headed,
@@ -23,6 +25,7 @@ import { gridWords } from '../model/lyric-lines'
  */
 export function GridView({
   title,
+  credits,
   performance,
   headings,
   beat,
@@ -33,6 +36,7 @@ export function GridView({
   onLoop,
 }: {
   title: string
+  credits?: ScoreHeader | undefined
   performance: Performance
   headings: readonly string[]
   beat: PlayedBeat
@@ -72,7 +76,7 @@ export function GridView({
       aria-label={t('views.grid')}
       className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
-      <SheetTitle title={title} place="lines" />
+      <ViewTitle title={title} credits={credits} />
       <div className="relative mx-auto w-full">
         <ChordChart
           tap="go"

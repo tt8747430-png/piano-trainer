@@ -4,9 +4,10 @@ const PARTS = /^([A-G][♭♯]?m?(?!aj))([^/]*)(\/.+)?$/
 /**
  * A chord's name as Musicca and a lead sheet set it (canvas 173): its root and minor's m on the line,
  * the rest of its quality raised and smaller (Cm⁷, B♭sus2, F⁷/A), its bass after the slash on the line.
- * A numeral or a Nashville number is set as it is.
+ * A numeral or a Nashville number is set as it is. The Chord player's tiles and the Player's Diagrams
+ * set their names with it.
  */
-export function ChordName({ text }: { text: string }) {
+export function LeadSymbol({ text }: { text: string }) {
   const parts = PARTS.exec(text)
   if (!parts) return <>{text}</>
   const [, root, raised, bass] = parts

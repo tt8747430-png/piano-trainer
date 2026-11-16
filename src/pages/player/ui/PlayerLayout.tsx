@@ -383,6 +383,7 @@ export function PlayerLayout({
           <ChordView
             view={shown}
             title={title}
+            credits={credits}
             performance={performance}
             headings={headings}
             practice={practice}
