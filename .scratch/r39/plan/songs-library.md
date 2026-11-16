@@ -8,6 +8,18 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 
 ## The rulings as they stand (carried over; feedback-log "Library, adding, publishing" and "Song page")
 
+- **My songs is Flat's library, new, with no backwards compatibility** (owner, 2026-11-16: "look at the example apps
+  and improve the design with no backwards compatibility … I want new completely new design"; `flat-score-editor`
+  091–097). The overview: the title (My songs · Explore) and a glass Search; Recently played as a shelf of engraved
+  covers with See all; Folders as cards (Favourites first, a heart on rose; the learner's folders; Shared with me);
+  Archive and Trash as one card of two rows with their counts; the floating New. A first-run library says "Your songs
+  live here" with one New song. **All songs** (See all, Search) is its own page: Back, All songs, Select; a search field;
+  the count and a sort menu (Last played, Title, Composer, Added · Ascending, Descending, Apple's pull-down menu, as
+  Flat); each song a card (its first notes, title on two lines, composer · key, progress · last played) with ··· for
+  Practise, Edit score, Add to a folder, Favourite, Settings, Archive. Select puts a check before each card and a glass
+  bar of Add to folder, Favourite and Archive in the New's place. New folder is a sheet: a name and Create.
+  This replaces, for Songs: the place chips and the Sort and filter page (Favourites is a folder now; Learning and
+  Learned show on each card), the Archive icon in the bar, and Continue as the shelf's name.
 - "A real library" like Mindscape: built-in and own folders nested to any depth; a real archive in the header; deleting a
   folder deletes its songs; Move at any depth. Swipe actions on rows; drag into folders and onto the Archive.
 - Filter by key. No "Chords I know" or "With chords" chips.
