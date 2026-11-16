@@ -49,12 +49,15 @@ DESC63 = 'The left hand holds the octave. The right hand keeps its chord under t
 # The hands' ⓘ (loop, 2026-11-15): the pattern's longer description, out of the way until asked for, as InfoTip draws it.
 INFO63 = INFOB('About the hands', 'openDesc', 'descOn') + INFOTIP('descOn', 'closeSheet', 'The hands', DESC63, 'left: 0; top: 36px')
 HANDS63 = f'<section style="flex: none; position: relative; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 6px">{H3_63("The hands")}{INFO63}</div>' + GROUP(('val', 'Right hand', '{{rhT}}'), ('val', 'Left hand', '{{lhT}}'), bg=SHEET) + '</section>'
+PRACT63 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("Practise in the Player")}'
+           f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
+           + ''.join(f'<a href="Player.dc.html" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
+                     f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {ACCENT}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{d}</span></span>{CHEV_RS}</a>'
+                     for t, d in [('In C major', 'C F G C, round and round'), ('Chromatically, rising', 'C D♭ D E♭ …')]) + '</div></section>')
 USED63 = f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("Used in")}' + GROUP(('link', 'Amazing Grace', 'Verse', 'Song.dc.html'), ('link', 'Called to Play, lesson 12', '', 'Lesson.dc.html'), bg=SHEET) + '</section>'
 HIDDEN63 = IF('hidden', CARD(f'<span style="font-size: 15px; line-height: 1.45">Hidden from the Player’s list and from its book. You can still find it under Hidden.</span>'))
-PRACTI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path></svg>'
-PRACTP63 = f'<a href="Player.dc.html" aria-label="Practise in the Player" style="pointer-events: auto; justify-self: start; flex: none; min-width: 56px; padding: 0 12px; {GLASSGRP}; color: {INK}; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{PRACTI}<span style="font-size: 11px; font-weight: 600; color: {SOFT}">Practise</span></a>'
 PLAYPA = PLAYPR.replace('aria-label="What it plays"', 'aria-label="Play over"')
-BAR63 = lambda pos: f'<div role="toolbar" aria-label="Loop, play and practise" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{LOOPP}{PLAYPA}{PRACTP63}</div>'
+BAR63 = lambda pos: f'<div role="toolbar" aria-label="Loop and play" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{LOOPP}{PLAYPA}<span></span></div>'
 def PMENU63(pos):
     item = f'<sc-for list="{{{{overs}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: transparent; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; text-align: left"><span style="flex: 1">{{{{o.d}}}}</span><span style="font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span></button></sc-for>'
     return (f'<sc-if value="{{{{playMenu}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeMenu}}}}" style="position: absolute; inset: 0; z-index: 50"></div><div role="menu" aria-label="Play over" style="position: absolute; {pos}; z-index: 51; width: 240px; padding: 6px; border-radius: 18px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
@@ -63,14 +66,14 @@ SHEETS63 = BSHEET('moreOn', '{{name}}', PA_MORE) + BSHEET('keysOn', 'Piano', SC_
 POPS63 = POPOVER('moreOn', '{{name}}', LPA(PA_MORE), 'right: 40px; top: 64px', 320) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 90px; top: 64px')
 DELETED63 = IF('deleted', EMPTY('deleted', '♪', 'Pattern deleted', 'It left your patterns and the Player’s list. Undo brings it back.'))
 ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE63 + HIDDEN63 + MUSIC63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 30px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
+        + TITLE63 + HIDDEN63 + MUSIC63 + PRACT63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 30px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
 lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
         + f'<div style="flex: none; margin: -8px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE63}{HIDDEN63}{MUSIC63}</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(USED63)}</div></div></div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(PRACT63)}{LPA(USED63)}</div></div></div>'
         + BAR63('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + PMENU63('left: 50%; translate: -50% 0; bottom: 100px')) + '</div>', 'true')
         + IF('notPattern', LTITLEBAR('{{pageT}}', backact='back') + LCOL(LPA(IF('isEditor', PATED) + IF('isPublish', PATPUB)), 640)) + TOASTL)
 phone('Pattern', 'A pattern, phone', ph63, js(PA63.replace('__ROOT__', "'pattern'")), SHEETS63)
