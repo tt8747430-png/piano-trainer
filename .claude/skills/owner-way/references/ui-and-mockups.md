@@ -95,8 +95,8 @@ flow's phone boards in order, their Night boards, the laptop boards, their Night
   drawn where a question depends on the browser's bars.
 - **Real parts:** `DESIGN.md`'s tokens copied in as CSS variables, Literata and Onest, the app's real 44px sizes, corners,
   icons and honey. It must read as our app.
-- **Real content:** a real song, real chords, the exact English label each control will carry, one Russian check of the
-  longest string. No lorem ipsum, no "Hymn 1", no internal names.
+- **Real content:** a real song, real chords, the exact English label each control will carry; checked in English
+  only (owner, 2026-11-16). No lorem ipsum, no "Hymn 1", no internal names.
 - **Both themes,** Night as its own boards in its own row, never a toggle. Options the owner settles by eye are drawn
   side by side, labelled A and B.
 - **What does not change** is drawn too, so the owner sees the option in place.

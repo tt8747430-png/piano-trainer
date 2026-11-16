@@ -104,7 +104,7 @@ Before every publish, and again before a port is called done:
    the screen's edge (R42 v81).
 
 1. **Walk every state** of what changed: rest, hover, focus, pressed, open, loading, empty, error, offline, a long
-   title, Russian, phone and laptop, Day and Night. Replay any motion at 10% speed (the browser's Animations panel).
+   title, phone and laptop, Day and Night, in English only (owner, 2026-11-16). Replay any motion at 10% speed (the browser's Animations panel).
 2. **On the phone,** the screen does one thing, and each section scrolls in one direction. Type and targets are
    no smaller than on the laptop. There is no card in a card. A choice made in context is a bottom sheet; something
    new opens a page. Both empty states are drawn: the first run points at the main action, and no results says so,

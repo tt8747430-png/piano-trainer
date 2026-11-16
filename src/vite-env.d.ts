@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL: string
   /** The project's publishable key: public, held in check by row-level security. */
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string
+  /** `true` skips the welcome in a development build, never in production (`.env.example`). */
+  readonly VITE_SKIP_WELCOME?: string
 }
 
 interface ImportMeta {

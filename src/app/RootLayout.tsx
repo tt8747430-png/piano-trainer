@@ -4,6 +4,7 @@ import { ReloadOnRestore } from '@/features/backup-data'
 import { useFirstMidiSession } from '@/features/record-practised'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
 import { useTrackAchievements } from '@/features/track-achievements'
+import { SKIP_WELCOME } from '@/shared/config'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
 import { AppUpdateProvider, createAppUpdate } from '@/shared/lib/app-update'
 import { Welcome } from '@/widgets/welcome'
@@ -53,7 +54,7 @@ export function RootLayout() {
         </div>
         <ReloadOnRestore />
         <DeletionGate />
-        <Welcome shown={!onAccountPages} />
+        <Welcome shown={!onAccountPages && !SKIP_WELCOME} />
       </ShortcutsHelp>
     </AppUpdateProvider>
   )

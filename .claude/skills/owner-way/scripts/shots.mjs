@@ -10,7 +10,7 @@
 // option of that name; `type=<text>` types into the field focused (a sheet's name); `scroll` shoots
 // the page part way and at its end; `wait=<ms>`.
 //   "/play/hot-cross-buns >> click=Original"   "/songs/folders/f1/settings >> click=Card style >> scroll"
-// SIZES=iphone-app,macbook-safari THEMES=light LANGUAGES=en narrow the matrix while iterating;
+// SIZES=iphone-app,macbook-safari THEMES=light narrow the matrix while iterating;
 // the whole matrix is the pass.
 import { mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -34,7 +34,8 @@ const LANGUAGES = pick(
     { name: 'en', locale: 'en-GB' },
     { name: 'ru', locale: 'ru-RU' },
   ],
-  process.env.LANGUAGES,
+  // English only by default (owner, 2026-11-16: "stop testing in russian ... only in english"); LANGUAGES=ru still shoots it.
+  process.env.LANGUAGES ?? 'en',
 )
 
 const [base, out, ...steps] = process.argv.slice(2)
