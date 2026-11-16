@@ -25,7 +25,7 @@ ph65 = (TOP65 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
 lm65 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
         + LPAD(TOP65).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px">'
-        + f'<div style="width: min(560px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 32px">{HEARD65(140, 560)}{MICOFF65}{ROWS65}</div></div></div>')
+        + f'<div style="width: min(720px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 32px">{HEARD65(168, 720)}{MICOFF65}{ROWS65}</div></div></div>')
 phone('Tuner', 'Tuner, phone', ph65, TU65)
 laptop('TunerLaptop', 'Tuner, laptop', lm65, '', TU65, '', 'Practice')
 print('r65 tuner ok')
