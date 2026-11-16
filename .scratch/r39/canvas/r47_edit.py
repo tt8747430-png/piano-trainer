@@ -23,8 +23,9 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
     const goSec = (k) => { const h = document.querySelectorAll('[data-sec]')[k]; const m = h && h.closest('main'); if (m) m.scrollTo({ top: m.scrollTop + h.getBoundingClientRect().top - m.getBoundingClientRect().top - 16, behavior: 'smooth' }); set({ secAt: k, sheet: null }); };
     const secs = LS.secs.map((s, i) => ({ n: String(i + 1), menu: () => set({ sheet: 'block', blk: i }), navBg: i === (st.secAt ?? 0) ? '#EEE9E2' : 'transparent', navFw: i === (st.secAt ?? 0) ? 600 : 400, navDot: i === (st.secAt ?? 0) ? '#FEFDFB' : '#EEE9E2', go: (e) => { e && e.preventDefault && e.preventDefault(); goSec(i); }, h: T(s, 'h'), p: T(s, 'p') || '', hasP: !!s.p, steps: (s.steps || []).map((x) => ({ x })), hasSteps: !!s.steps,
       isScale: s.ex === 'scale', isQ: s.ex === 'question', take: s.take, sel: st.sel === i, pick: () => set({ sel: i }) }));
-    const D = [62, 64, 66, 67, 69, 71, 73, 74], Cm = [60, 62, 64, 65, 67, 69, 71, 72], marks = {}, qm = {};
-    Cm.forEach((m, i) => { marks[m] = [i === 2 || i === 6 ? '#E8C67D' : '#9BC093', ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'][i]]; });
+    const ver = st.ver ?? 'C major', VER = { 'C major': [60, ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C']], 'G major': [55, ['G', 'A', 'B', 'C', 'D', 'E', 'F♯', 'G']], 'F major': [53, ['F', 'G', 'A', 'B♭', 'C', 'D', 'E', 'F']] }[ver];
+    const D = [62, 64, 66, 67, 69, 71, 73, 74], root = VER[0], marks = {}, qm = {};
+    [0, 2, 4, 5, 7, 9, 11, 12].forEach((o, i) => { marks[root + o] = [i === 2 || i === 6 ? '#E8C67D' : '#9BC093', VER[1][i]]; });
     (st.chosen || []).forEach((m) => { qm[m] = ['#85B8DC', '']; });
     const chosen = st.chosen || [], right = chosen.length === 8 && D.every((m) => chosen.includes(m));
     const states = [['Edited by an editor', editing, { editing: true, sel: 0, preview: false }, { editing: false }], ['The lesson’s Russian text', ru, { lang: 'RU' }, { lang: 'EN' }],
@@ -33,7 +34,7 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
     return { ...common(st, set), states, editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
       edit: () => set({ editing: true, sel: 0 }), done: () => set({ editing: false, sheet: null }), langs: seg(['EN', 'RU'], ru ? 'RU' : 'EN', (l) => set({ lang: l })),
       place: LS.place, title: T(LS, 'title'), summary: T(LS, 'summary'), secs, status: st.saving ? 'Saving…' : 'Saved · not published',
-      kb: calmKeys(60, 76, marks, 362, 96), kbL: calmKeys(60, 76, marks, 680, 120), qkb: calmKeys(60, 76, qm, 362, 96), qkbL: calmKeys(60, 76, qm, 680, 120),
+      kb: calmKeys(root, root + 16, marks, 362, 96), kbL: calmKeys(root, root + 16, marks, 680, 120), verName: ver, qkb: calmKeys(60, 76, qm, 362, 96), qkbL: calmKeys(60, 76, qm, 680, 120),
       notRight: !right, qLine: right ? 'Correct' : (chosen.length + ' of 8 notes'), qInk: right ? '#2F5A35' : '#685E56', showAns: () => set({ chosen: D }), resetQ: () => set({ chosen: [] }),
       insOn: sheet === 'insert', openIns: () => set({ sheet: 'insert' }), ins: INS.map(([g, ks]) => ({ g, ks: ks.map((k) => ({ k, add: () => set({ sheet: null, toast: k + ' added' }) })) })),
       legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
@@ -67,7 +68,7 @@ def DOC(lap=False):
               f'<button type="button" aria-label="Move: {{{{s.h}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center; cursor: grab">{GRIP}</button>'
               f'<button type="button" aria-label="More: {{{{s.h}}}}" onClick="{{{{s.menu}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{DOTS}</button></span></sc-if>')
     ex = (f'<sc-if value="{{{{s.isScale}}}}" hint-placeholder-val="{{{{true}}}}"><figure style="position: relative; margin: 0; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; gap: 10px">'
-          f'<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 15px; font-weight: 700">C major · <span style="font-weight: 500; color: {SOFT}">W W H W W W H</span></span>'
+          f'<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 15px; font-weight: 700">{{{{verName}}}}</span>'
           f'<button type="button" aria-label="The colours" aria-expanded="{{{{legendOn}}}}" data-tip="The colours" onClick="{{{{toggleLegend}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace('22', '20')}</button>'
           f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
           f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 14px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
