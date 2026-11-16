@@ -383,6 +383,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Your lessons and courses: search and New in the laptop bar (loop round 60, 2026-11-16):** the laptop page put its search, Recent and + New in a row under the title, where the Practice libraries carry theirs in the bar; they stand in the bar now, and the New menu, Sort and the New sheet open under them.
 - **The next lesson looks the same in a level and a course** (loop round 50, Course): a level ringed its next lesson in honey around the lesson mark, a course around its number; the course's next now wears the lesson mark too, its number still in the line under the title (Course, CourseLaptop).
 - **One way to count lessons** (loop round 50, LearnLevel): a level's chapter heads and the laptop's Levels column said "3/3" and "6/13" where Learn's level rows say "6 of 13"; every count of lessons reads "n of m".
 - **Learn on a laptop: Continue across the page, then Levels beside Your lessons and courses** (loop round 49; scan-first 1, edges): Continue sat in the left column, so the right column's heading stood level with it and Levels 126px lower, and no edge met. Continue now spans both columns as the page's one focal thing, and the two sections start on one line, headings and cards level.
