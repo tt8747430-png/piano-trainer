@@ -67,7 +67,8 @@ BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(BROW9('Streak Keeper', 'Silve
 def AROW9(name, sub, got, act):
     return AROW(name, sub, got).replace('<div style="min-height: 60px;', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px;', 1)[:-6] + f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
 ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First song learned', 'Earned 3 November 2026', True, 'goM0') + AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
-MILE9 = MILE.replace('<div style="border-radius: 16px;', '<button type="button" onClick="{{goB0}}" style="width: 100%; border: 0; font: inherit; text-align: left; color: ' + INK + '; border-radius: 16px;', 1)[:-6] + '</button>'
+assert MILE.startswith('<div style="border-radius: 14px;')
+MILE9 = MILE.replace('<div style="border-radius: 14px;', '<button type="button" onClick="{{goB0}}" style="width: 100%; border: 0; font: inherit; text-align: left; color: ' + INK + '; border-radius: 16px;', 1)[:-6] + '</button>'
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'

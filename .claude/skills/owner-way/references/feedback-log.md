@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 43, Profile's sections stand on the page again (Profile, ProfileLaptop):** the "Almost there" card had swallowed Badges, Achievements and Practice history, a card round cards, and on the laptop the right column with them (the card's opening no longer matched after cards went to 14, so its close was cut); now each section is its own, and the laptop holds Badges and Achievements in its right column, as drawn (2026-11-16).
 - **Loop round 43, the laptop editor's bar holds no title (EditorLaptop):** "Amazing Grace" beside Close is gone, as round 30 ruled (the score prints it where it is edited); the save status, "Saved on this device", stays beside Close alone (2026-11-16).
 - **Loop round 35, the phone's printed title as the Editor board's:** 21 in the book serif over the lines (it was 24), 30 from a tablet up as the EditorLaptop board's 29 (2026-11-15).
 - **Loop round 34, the keys under the sheet alone beside the docked panel (EditorLaptop):** on a laptop the keys run from the screen's edge to the panel's hairline, and the panel runs on to the screen's foot, as the board draws them; they no longer pass under the panel (2026-11-15).
