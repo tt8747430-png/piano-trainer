@@ -7,6 +7,13 @@ that is a real instrument (Flat's categories and tiles), not two toolbars and a 
 
 ## Rulings (feedback-log "Score editor")
 
+- **The editor's ··· is Flat's ≡ menu** (owner, 2026-11-16: "new completely new design"; `flat-score-editor` 083–090):
+  headed by the song's name and its save status; one card of Credits, Instruments, Version history, Layout, Playback
+  sound, MIDI keyboard and Takes, each with its value; one of Export and Print; then Publish in Explore as its own card
+  (one line on what it means, Publish to the song's Publish page). Credits is a form (Title, Subtitle, Words, Music,
+  Arranged by, Copyright) with Save; Instruments lists each instrument with Solo and Show, and Add an instrument. The
+  same menu on the editor and a built-in song's draft. It replaces "Score settings".
+
 One home for each thing; only what applies shown, hidden not greyed; the palette and its menus as Flat's, every section
 in one scroll; the piano from the editor's bar on a phone; professional terms; laptop a docked side panel, phone a
 bottom sheet that shrinks the score; everything printed is edited on the score (the title opens Title and credits, the
