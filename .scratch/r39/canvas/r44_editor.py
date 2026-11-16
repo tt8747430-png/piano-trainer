@@ -50,7 +50,7 @@ ED4 = js(r'''
     const fill = (ts) => { const n = ts.reduce((a, t) => a + t.span, 0) % 8; return n ? ts.concat(Array.from({ length: 8 - n }, () => ({ g: '', name: '', isSvg: false, isTxt: true, tip: '', on: 'false', gbg: '#FEFDFB', bg: 'transparent', fg: '#685E56', span: 1, hid: 'true', ti: '-1' }))) : ts; };
     const sections = PAL.map(([c, ts]) => ({ c, tools: fill(ts.map(tile)) }));
     const NAME = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t[3].toLowerCase()])));
-    const noteL = rest ? DUR[dur].replace('note', 'rest') : 'C' + ACC[acc] + '5 · ' + DUR[dur].toLowerCase();
+    const noteL = rest ? DUR[dur].replace('note', 'rest') : 'G' + ACC[acc] + '4 · ' + DUR[dur].toLowerCase();
     return { ...common(st, set),
       cats: seg(PAL.map((p) => p[0]), cat, (l) => set({ cat: l })), catsI: PAL.map(([c]) => { const [g, f] = CATI[c]; return { c, g, ff: FF[f], fs: f === 'music' ? 22 : f === 'serif' ? 18 : 15, fst: f === 'serif' ? 'italic' : 'normal', fw: f === 'serif' ? 700 : 600, on: c === cat ? 'true' : 'false', bg: c === cat ? '#FEFDFB' : 'transparent', sh: c === cat ? '0 1px 2px rgba(51,41,33,.12)' : 'none', fg: c === cat ? '#332921' : '#685E56', pick: () => set({ cat: c }) }; }), tools: sections.find((s) => s.c === cat).tools, sections,
       open, folded: !open, toggleOpen: () => set({ open: !open }), openLabel: open ? 'Fold the palette' : 'Open the palette', openRot: open ? '180deg' : '0deg',
@@ -61,7 +61,7 @@ ED4 = js(r'''
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
         ['Score settings open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
-      kb: calmKeys(48, 79, { 72: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 72: ['#85B8DC', ''] }, 1330, 170) };''')
+      kb: calmKeys(48, 79, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, 170) };''')
 
 # the bar: ✕, the Play · Edit switch, Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
 def MODESW(play_href):

@@ -110,7 +110,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     const fill = (ts) => { const n = ts.reduce((a, t) => a + t.span, 0) % 8; return n ? ts.concat(Array.from({ length: 8 - n }, () => ({ g: '', name: '', isSvg: false, isTxt: true, tip: '', on: 'false', gbg: '#FEFDFB', bg: 'transparent', fg: '#685E56', span: 1, hid: 'true', ti: '-1' }))) : ts; };
     const sections = PAL.map(([c, ts]) => ({ c, tools: fill(ts.map(tile)) }));
     const NAME = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t[3].toLowerCase()])));
-    const noteL = rest ? DUR[dur].replace('note', 'rest') : 'C' + ACC[acc] + '5 · ' + DUR[dur].toLowerCase();
+    const noteL = rest ? DUR[dur].replace('note', 'rest') : 'G' + ACC[acc] + '4 · ' + DUR[dur].toLowerCase();
 
     const toast = (t, undo) => set({ toast: t, toastUndo: !!undo });
     if (st.toast && this._tt !== st.toast) { this._tt = st.toast; const t = st.toast; setTimeout(() => { if ((this.state || {}).toast === t) set({ toast: null }); this._tt = null; }, 2800); }
@@ -140,7 +140,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
         ['Score settings open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
-      kb: calmKeys(48, 79, { 72: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 72: ['#85B8DC', ''] }, 1330, 170) };
+      kb: calmKeys(48, 79, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, 170) };
   }
 }
 

@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **Loop round 48, the chosen note is the note on the staff (EditorDraft):** "sweet" sits on the G line under the C chord, yet the input bar said C5 · half note and the piano lit C5; it says G4 · half note and lights G4, on the phone and the laptop (2026-11-16).
 - **Loop round 46, the draft's gear opens Score settings (EditorDraft):** an editor's draft of a built-in song drew the editor's ··· but carried none of its sheets, so the gear and its "Score settings open" state did nothing on both sizes; the draft now opens the same Score settings, a sheet on a phone and a popover on a laptop (2026-11-16).
 
 - **Loop round 46, the editor draws its Record (Editor, EditorDraft, Takes):** the record-take feature had no button on any editor board, while Takes' empty state sent the learner to "Record under the score"; Record, a crimson dot in a ring, stands beside Play in the note's band (on a phone over the keys, on a laptop at the palette's head), and Takes says "Press Record beside Play in the editor, play, then Stop" (2026-11-16).
