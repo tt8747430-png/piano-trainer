@@ -2,6 +2,7 @@ import { Ellipsis, Redo2, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt } from '@/features/score-editor'
+import { modifierCaps, useShortcutsPlatform } from '@/shared/lib/shortcuts'
 import { Button } from '@/shared/ui/primitives/button'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -55,6 +56,10 @@ export function EditorActions() {
   const canUndo = useEditorState((state) => state.past.length > 0)
   const canRedo = useEditorState((state) => state.future.length > 0)
   const recording = takes.stage !== 'idle'
+  // Each tooltip names its key too (Flat's; the owner: "Shortcuts in every tooltip").
+  const mac = useShortcutsPlatform()
+  const { mod, shift } = modifierCaps(mac)
+  const join = (...caps: string[]) => caps.join(mac ? '' : '+')
   return (
     // Undo, redo and More in one glass pill, floating over the music as the editor board draws them.
     <div className="flex items-center rounded-pill glass">
@@ -62,7 +67,7 @@ export function EditorActions() {
         variant="tool"
         size="icon"
         aria-label={t('undo')}
-        title={t('undo')}
+        title={`${t('undo')} (${join(mod, 'Z')})`}
         disabled={!canUndo || recording}
         onClick={() => actions.dispatch({ type: 'undo' })}
       >
@@ -72,7 +77,7 @@ export function EditorActions() {
         variant="tool"
         size="icon"
         aria-label={t('redo')}
-        title={t('redo')}
+        title={`${t('redo')} (${join(shift, mod, 'Z')})`}
         disabled={!canRedo || recording}
         onClick={() => actions.dispatch({ type: 'redo' })}
       >

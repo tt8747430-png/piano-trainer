@@ -554,6 +554,8 @@ export const editor: LocaleResources['editor'] = {
   },
   shortcuts: {
     group: 'Редактор нот',
+    space: 'Пробел',
+    play: 'Играть отсюда или остановить',
     value: 'Длительность (от целой до 1/64)',
     dot: 'С точкой',
     tuplet: 'Группа (от 2 до 8)',

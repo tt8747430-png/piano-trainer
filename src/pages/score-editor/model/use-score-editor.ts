@@ -212,6 +212,22 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (!(event.target instanceof Element)) return
     if (event.target.closest(OWN_KEYS)) return
     if (ARROWS.has(event.key) && event.target.closest(OWN_ARROWS)) return
+    // Space plays from the caret and stops, as the Player's and Flat's and Dorico's (F3); on a
+    // control it is that control's.
+    if (
+      event.key === ' ' &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey &&
+      !event.shiftKey &&
+      !event.target.closest(
+        'button,input,textarea,select,[role=switch],[role=radio],[contenteditable]',
+      )
+    ) {
+      event.preventDefault()
+      togglePlay()
+      return
+    }
     const shortcut = shortcutOf(event, store.getState().layer)
     if (!shortcut) return
     if (shortcut.type === 'field') {

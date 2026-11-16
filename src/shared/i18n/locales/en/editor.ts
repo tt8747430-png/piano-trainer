@@ -606,6 +606,8 @@ export const editor = {
   // The editor's keys, as the shortcuts' sheet lists them.
   shortcuts: {
     group: 'Score editor',
+    space: 'Space',
+    play: 'Play from here, or stop',
     value: 'Note value (whole to 64th)',
     dot: 'Dotted',
     tuplet: 'Tuplet (2 to 8)',

@@ -18,6 +18,7 @@ export function useEditorShortcutList(): void {
       return i === 0 ? each : each.slice(-1)
     })
   useShortcuts(t('shortcuts.group'), [
+    { label: t('shortcuts.play'), shown: [t('shortcuts.space')] },
     { label: t('shortcuts.value'), shown: ['1', '–', '7'] },
     { label: t('shortcuts.dot'), shown: keys('dot') },
     { label: t('shortcuts.rest'), shown: keys('rest') },

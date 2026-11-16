@@ -68,7 +68,7 @@ export function SelectionStrip({ className }: { className?: string }) {
         variant="tool"
         size="icon"
         aria-label={t(chords ? 'chord.delete' : 'deleteNotes')}
-        title={t(chords ? 'chord.delete' : 'deleteNotes')}
+        title={`${t(chords ? 'chord.delete' : 'deleteNotes')} (⌫)`}
         disabled={recording}
         className={ROUND}
         onClick={() => actions.dispatch({ type: 'delete', back: true })}
@@ -92,7 +92,7 @@ export function SelectionStrip({ className }: { className?: string }) {
       <Button
         size="icon"
         aria-label={play}
-        title={play}
+        title={`${play} (${t('shortcuts.space')})`}
         disabled={recording}
         className={ROUND}
         onClick={actions.togglePlay}
