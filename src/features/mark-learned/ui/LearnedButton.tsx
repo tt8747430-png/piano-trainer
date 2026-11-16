@@ -42,7 +42,13 @@ export function LearnedButton({
           !worded && 'max-sm:px-0',
         )}
       >
-        <Check aria-hidden className="size-4" strokeWidth={2.75} />
+        {/* The tick is earned (loop round 46): off it says Learned alone, unless the check is all a
+            phone's bar shows. */}
+        <Check
+          aria-hidden
+          className={cn('size-4', !learned && (worded ? 'hidden' : 'sm:hidden'))}
+          strokeWidth={2.75}
+        />
         {/* A phone's bar keeps its room for the title: the check alone, named still. */}
         <span className={cn(!worded && 'max-sm:sr-only')}>{t('learned.done')}</span>
       </Toggle>
