@@ -63,7 +63,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
-      contSub: 'Lesson ' + Math.min(L.done + 1, L.n) + ' of ' + L.n, levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
+      contSub: 'Lesson ' + Math.min(L.done + 1, L.n) + ' of ' + L.n, levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned', levelGo: (L.done === 0 ? 'Start: ' : L.done === L.n ? 'Review: ' : 'Continue: ') + (nxt ? nxt.t : L.ch[0].rows[0].t),
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t, got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
       coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h.replace(/ courses$/, ''), now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
@@ -163,8 +163,10 @@ llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons
-LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 4px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{levelSub}}}}</span>{METER}'
-          f'<p contenteditable="{{{{editing}}}}" style="margin: 4px 0 0; max-width: 65ch; outline: none; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p></div>')
+# loop round 59: a level reads as its sibling the course: what it teaches, its count over the meter, then the one honey act
+LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 4px"><p contenteditable="{{{{editing}}}}" style="margin: 0 0 4px; max-width: 65ch; outline: none; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p>'
+          f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{levelSub}}}}</span>{METER}'
+          f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; margin-top: 4px">{BTN("{{levelGo}}", "", "Lesson.dc.html", "primary", 52)}</div></sc-if></div>')
 vph = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("{{jt}}", IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 48px; display: flex; flex-direction: column; gap: 16px">{LVHEAD}{PATHF(False)}</main>{LTOAST.replace("bottom: 112px", "bottom: 40px")}')
 LBACK = lambda back, label, title, right: (f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 44px"><a href="{back}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{CHEV_L}</a>'
@@ -173,7 +175,7 @@ vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholde
        # one centred column, as the phone (owner, 2026-11-16: "the page has one focus"): the side column's Continue repeated the
        # lesson marked Next in the path, and its Levels repeated Learn's, one Back away
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 40px">'
-       f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{LVHEAD}{PATHF(True)}</div></main>'
+       f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{LVHEAD.replace('flex: 1; min-width: 0; height: 52px', 'flex: none; min-width: 360px; height: 52px')}{PATHF(True)}</div></main>'
        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('pubOn', 'Publish Foundations', LPUBBODY) + BSHEET('moreOn', 'Foundations', MOREL) + BSHEET('chapOn', 'Chapter', CHAPBODY), POPOVER('pubOn', 'Publish Foundations', LPUBBODY, 'right: 40px; top: 72px', 360) + POPOVER('moreOn', 'Foundations', MOREL, 'right: 40px; top: 72px', 300) + POPOVER('chapOn', 'Chapter', CHAPBODY, 'left: 600px; top: 240px', 380), 'Learn')
 
