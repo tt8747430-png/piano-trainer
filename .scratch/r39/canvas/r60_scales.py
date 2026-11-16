@@ -9,7 +9,7 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       fingSeg: seg(['As the scale', 'From the thumb'], st.fing ?? 'As the scale', (l) => set({ fing: l })),
       tonicL: tonic, kindLow: KINDS[kind].charAt(0).toLowerCase() + KINDS[kind].slice(1),
       noteLine: ivs.map((_, i) => spell(i)).join(' '), sigLine: kind <= 5 ? SIGW.charAt(0).toUpperCase() + SIGW.slice(1) : ivs.length + ' notes',
-      fingRH: fingOk && ivs.length === 7 ? '1 2 3 1 2 3 4 5' : '', fingLH: fingOk && ivs.length === 7 ? '5 4 3 2 1 3 2 1' : '',
+      fingRH: fingOk && ivs.length === 7 ? FGP[0].split('').join(' ') : '', fingLH: fingOk && ivs.length === 7 ? FGP[1].split('').join(' ') : '',
       rhOn: fingOk && ivs.length === 7 && hands !== 'Left', lhOn: fingOk && ivs.length === 7 && hands !== 'Right', noFing: !(fingOk && ivs.length === 7) && kind > 5,
       tempo: st.tempo ?? 72, tDn: () => set({ tempo: Math.max(40, (st.tempo ?? 72) - 4) }), tUp: () => set({ tempo: Math.min(200, (st.tempo ?? 72) + 4) }),
       menu: st.menu || '', playMenu: st.menu === 'play', handsMenu: st.menu === 'hands', tempoMenu: st.menu === 'tempo',

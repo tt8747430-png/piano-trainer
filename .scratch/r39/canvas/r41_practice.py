@@ -94,7 +94,9 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const SHO = [8, 5, 9, 6, 3, 7, 4], FLO = [4, 7, 3, 6, 2, 5, 1], SHL = [3, 0, 4, 1, 5, 2, 6], FLL = [6, 2, 5, 1, 4, 0, 3];
     const nS = Math.abs(sg), Y = (k) => 58 - k * 3.5, keyAcc = (L) => sg > 0 && SHL.slice(0, sg).includes(L) ? 1 : (sg < 0 && FLL.slice(0, -sg).includes(L) ? -1 : 0);
     const sig = Array.from({ length: nS }, (_, i) => ({ s: sg > 0, f: sg < 0, ax: 34 + i * 8, ay: Y(sg > 0 ? SHO[i] : FLO[i]) + (sg > 0 ? 6 : 4) }));
-    const nN = ivs.length + 1, x0 = 34 + nS * 8 + 22, dx = (350 - x0) / nN, FG = '12312345', fingOk = ra === 0 && rl !== 3 && kind <= 5;
+    const nN = ivs.length + 1, x0 = 34 + nS * 8 + 22, dx = (350 - x0) / nN, W5 = ['12312345', '54321321'], MAJF = { 0: W5, 7: W5, 2: W5, 9: W5, 4: W5, 11: ['12312345', '43214321'], 5: ['12341234', '54321321'], 6: ['23412312', '43213214'], 1: ['23123412', '32143213'], 8: ['34123123', '32143213'], 3: ['31234123', '32143213'], 10: ['41231234', '32143213'] };
+    // the major keys' standard fingerings (RH up, LH up), as the scale books give them; the modes keep C's on a white tonic
+    const FGP = kind === 0 ? MAJF[root] : (ra === 0 && rl !== 3 && kind <= 5 ? W5 : null), FG = FGP ? FGP[0] : '', fingOk = !!FGP;
     const led = [], notesS = Array.from({ length: nN }, (_, i) => { const dl = i === ivs.length ? 7 : DL[kind][i], L = (rl + dl) % 7, k = rl + dl - 2, x = +(x0 + dx * (i + 0.5)).toFixed(1), y = Y(k);
       const pc = (root + (i === ivs.length ? 12 : ivs[i])) % 12, d = ((pc - NP[L] + 18) % 12) - 6, show = d !== keyAcc(L);
       for (let j = -2; j >= k; j -= 2) led.push({ d: 'M' + (x - 9) + ' ' + Y(j) + 'H' + (x + 9) }); for (let j = 10; j <= k; j += 2) led.push({ d: 'M' + (x - 9) + ' ' + Y(j) + 'H' + (x + 9) });
