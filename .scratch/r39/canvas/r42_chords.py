@@ -857,8 +857,8 @@ CHEV_UD = '<svg viewBox="0 0 12 18" width="10" height="15" fill="none" stroke="c
 PART = f'border: 0; background: {FILL}; margin: 0; min-height: 48px; padding: 2px 9px 4px 12px; border-radius: 14px; color: {INK}; font: inherit; white-space: nowrap; display: inline-flex; align-items: baseline; gap: 6px'
 # A: the name is the control: three pop-up buttons read as one chord symbol (chord-trainer's row; Apple's pop-up button)
 def NAME_A(fs):
-    return (f'<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">'
-      f'<div role="group" aria-label="Chord: {{{{symFull}}}}" style="display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 6px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">'
+    return (f'<div style="flex: none; display: flex; flex-direction: column; align-items: flex-start; gap: 8px">'  # on the column's left edge, as Scales' name (round 58)
+      f'<div role="group" aria-label="Chord: {{{{symFull}}}}" style="display: flex; flex-wrap: wrap; align-items: stretch; justify-content: flex-start; gap: 6px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">'
       f'<button type="button" aria-haspopup="dialog" aria-label="Root: {{{{rootName}}}}" onClick="{{{{openMRoot}}}}" style="{PART}">{{{{rootName}}}}{CHEV_UD}</button>'
       f'<button type="button" aria-haspopup="dialog" aria-label="Chord type: {{{{qName}}}}, {{{{fullName}}}}" data-tip="{{{{fullName}}}}" onClick="{{{{openMType}}}}" style="{PART}"><span style="font-size: {{{{nmTypeFs}}}}; color: {{{{nmTypeC}}}}; align-self: center">{{{{nmType}}}}</span>{CHEV_UD}</button>'
       f'<button type="button" aria-haspopup="dialog" aria-label="In the bass: {{{{invLabel}}}}" onClick="{{{{openMBass}}}}" style="{PART}"><span style="font-size: {{{{nmBassFs}}}}; color: {{{{nmBassC}}}}; align-self: center">{{{{nmBass}}}}</span>{CHEV_UD}</button></div>'
@@ -922,7 +922,7 @@ STAFFCARD = lambda w: f'<div style="position: relative; flex: none; border-radiu
 # ── A, phone and laptop ──
 phone('Chords', 'Chords', PH_HEAD('Chords') + '<div aria-hidden="true" style="flex: none; height: 56px"></div>' + STAGE3D(220) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 120px; display: flex; flex-direction: column; gap: 16px">{NAME_A(44)}{STAFFCARD(330)}{PRACTISE("PlayChord.dc.html")}</main>' + DOCK_A_PHONE,
       ch_js({'root': 0, 'q': 14}, 402, 168, 2, 150), LAYERS(True, 'A'))
-write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + '<div aria-hidden="true" style="flex: none; height: 56px"></div>' + STAGE3D(286) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 820px; max-width: 100%; display: flex; flex-direction: column; gap: 18px">{NAME_A(56)}{STAFFCARD(440)}{PRACTISE("PlayChordLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 16}, 'A')
+write_laptop('ChordsLaptop', 'Chords, laptop', LP_HEAD('Chords') + '<div aria-hidden="true" style="flex: none; height: 56px"></div>' + STAGE3D(286) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 40px 130px; display: flex; flex-direction: column; align-items: center; gap: 20px"><div style="width: 880px; max-width: 100%; display: flex; flex-direction: column; gap: 24px">{NAME_A(56)}{STAFFCARD(440)}{PRACTISE("PlayChordLaptop.dc.html")}</div></main>' + DOCK_A_LAPTOP, {'root': 3, 'q': 16}, 'A')
 for f in ('RandomChords', 'RandomChordsLaptop', 'ChordTrainer', 'ChordTrainerLaptop'):  # the Chord trainer removed (canvas 160)
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
 for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chord shelf, was drawn in v80 and not chosen
