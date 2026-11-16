@@ -69,7 +69,7 @@ describe('nameChords', () => {
     const [minorEleventh] = found(48, 63, 70, 77)
     expect(minorEleventh?.symbol).toBe('Cm11')
     expect(minorEleventh?.leftOut).toEqual(['5th', '9th'])
-    expect(named(48, 64, 71, 81)[0]).toBe('CMaj13')
+    expect(named(48, 64, 71, 81)[0]).toBe('Cmaj13')
     expect(named(40, 45, 50, 55, 59)[0]).toBe('Em11')
     expect(named(48, 64, 70, 78, 81)[0]).toBe('C13#11')
   })
@@ -84,7 +84,7 @@ describe('nameChords', () => {
     const [seventh] = found(48, 55, 58)
     expect(seventh?.symbol).toBe('C7')
     expect(seventh?.leftOut).toEqual(['3rd'])
-    expect(named(48, 55, 59)[0]).toBe('CMaj7')
+    expect(named(48, 55, 59)[0]).toBe('Cmaj7')
   })
 
   it('reads the key a tritone over the root as the #11 from a 9th up, and as the ♭5 of a 7th chord', () => {
@@ -126,7 +126,7 @@ describe('nameChords', () => {
     expect(named(48, 52, 55, 58, 62)).toEqual(['C9'])
     expect(named(48, 52, 55, 62)).toEqual(['Cadd9'])
     expect(named(48, 52, 55, 69)).toEqual(['C6', 'Am7/C'])
-    expect(named(48, 52, 55, 59, 62)).toEqual(['CMaj9'])
+    expect(named(48, 52, 55, 59, 62)).toEqual(['Cmaj9'])
   })
 
   it('leaves the 5th out of a suspended chord only as a 7sus4', () => {
@@ -147,7 +147,7 @@ describe('nameChords', () => {
 
   it('keeps the 9th of an 11th chord over a major 3rd, where the 11th clashes with it', () => {
     expect(named(48, 52, 53, 58)).not.toContain('C11')
-    expect(named(48, 52, 53, 59)).not.toContain('CMaj11')
+    expect(named(48, 52, 53, 59)).not.toContain('Cmaj11')
     expect(named(48, 52, 55, 58, 62, 65)[0]).toBe('C11')
   })
 

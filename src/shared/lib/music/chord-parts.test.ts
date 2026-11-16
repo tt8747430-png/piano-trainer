@@ -65,16 +65,16 @@ describe('buildChord', () => {
 
   it.each([
     [{ size: 7 }, 'C7: C E G B♭'],
-    [{ size: 7, seventh: 'major' }, 'CMaj7: C E G B'],
+    [{ size: 7, seventh: 'major' }, 'Cmaj7: C E G B'],
     [{ triad: 'dim', size: 7, seventh: 'diminished' }, 'C°7: C E♭ G♭ B𝄫'],
-    [{ triad: 'sus2', size: 7, seventh: 'major' }, 'CMaj7sus2: C D G B'],
+    [{ triad: 'sus2', size: 7, seventh: 'major' }, 'Cmaj7sus2: C D G B'],
     [{ triad: 'sus4', size: 9 }, 'C9sus4: C F G B♭ D'],
     [{ triad: 'sus4', size: 13 }, 'C13sus4: C F G B♭ D A'],
     [{ size: 11 }, 'C11: C E G B♭ D F'],
     [{ triad: 'min', size: 11, seventh: 'major' }, 'Cm(maj11): C E♭ G B D F'],
     [{ triad: 'dim', size: 11 }, 'Cm11♭5: C E♭ G♭ B♭ D F'],
     [{ triad: 'min', size: 13 }, 'Cm13: C E♭ G B♭ D F A'],
-    [{ size: 13, seventh: 'major' }, 'CMaj13: C E G B D A'],
+    [{ size: 13, seventh: 'major' }, 'Cmaj13: C E G B D A'],
     [{ triad: 'aug', size: 9 }, 'C9#5: C E G# B♭ D'],
   ] as const)(
     'stacks a size, the 11th left out of a 13th over a major 3rd: %o → %s',
@@ -92,7 +92,7 @@ describe('buildChord', () => {
     [{ size: 13, alterations: ['b9'] }, 'C13♭9: C E G B♭ D♭ A'],
     [{ size: 13, alterations: ['s11'] }, 'C13#11: C E G B♭ D F# A'],
     [{ size: 13, alterations: ['b9', 'b13'] }, 'C7♭9♭13: C E G B♭ D♭ A♭'],
-    [{ size: 13, seventh: 'major', alterations: ['s11'] }, 'CMaj13#11: C E G B D F# A'],
+    [{ size: 13, seventh: 'major', alterations: ['s11'] }, 'Cmaj13#11: C E G B D F# A'],
     [{ triad: 'aug', size: 7, alterations: ['s9'] }, 'C7#5#9: C E G# B♭ D#'],
     [{ triad: 'sus4', size: 7, alterations: ['b9'] }, 'C7sus4♭9: C F G B♭ D♭'],
     [{ triad: 'sus4', size: 13, alterations: ['b9'] }, 'C13sus4♭9: C F G B♭ D♭ A'],
@@ -102,7 +102,7 @@ describe('buildChord', () => {
 
   it.each([
     [{ size: 7, added: ['add13'] }, 'C7(add13): C E G B♭ A'],
-    [{ size: 7, seventh: 'major', added: ['add13'] }, 'CMaj7(add13): C E G B A'],
+    [{ size: 7, seventh: 'major', added: ['add13'] }, 'Cmaj7(add13): C E G B A'],
     [{ triad: 'min', size: 7, added: ['add11'] }, 'Cm7(add11): C E♭ G B♭ F'],
     [{ triad: 'min', size: 7, added: ['add11', 'add13'] }, 'Cm7(add11,add13): C E♭ G B♭ F A'],
     [{ triad: 'min', size: 9, added: ['add13'] }, 'Cm9(add13): C E♭ G B♭ D A'],

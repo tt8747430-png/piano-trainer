@@ -142,7 +142,7 @@ describe('spellChord', () => {
 describe('chordSymbol', () => {
   it.each([
     [{ root: note('C', 1), quality: 'm7' as const }, 'C#m7'],
-    [{ root: note('B', -1), quality: 'maj7' as const }, 'B♭Maj7'],
+    [{ root: note('B', -1), quality: 'maj7' as const }, 'B♭maj7'],
     [{ root: note('D', 1), quality: 'maj' as const, bass: note('F', 2) }, 'D#/F𝄪'],
     [{ root: note('C'), quality: 'maj' as const }, 'C'],
   ])('%j → %s', (chord, symbol) => {

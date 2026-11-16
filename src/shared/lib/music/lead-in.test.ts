@@ -25,8 +25,8 @@ describe('withLeadIns', () => {
   it('leads into each chord of the key by its own dominant, the chord matrix’s secondary dominants', () => {
     expect(led('I ii iii IV V vi', 'v')).toBe('V I V/ii ii V/iii iii V/IV IV V/V V V/vi vi')
     expect(chords('I ii iii IV V vi', 'v', C_MAJOR, 'sevenths')).toEqual([
-      ...['G7', 'CMaj7', 'A7', 'Dm7', 'B7', 'Em7'],
-      ...['C7', 'FMaj7', 'D7', 'G7', 'E7', 'Am7'],
+      ...['G7', 'Cmaj7', 'A7', 'Dm7', 'B7', 'Em7'],
+      ...['C7', 'Fmaj7', 'D7', 'G7', 'E7', 'Am7'],
     ])
   })
 
@@ -35,7 +35,7 @@ describe('withLeadIns', () => {
       'ii V I ii°/ii V/ii ii ii°/iii V/iii iii ii/IV V/IV IV ii/V V/V V ii°/vi V/vi vi ii°/vii V/vii vii°',
     )
     expect(chords('I ii vii°', 'ii-v', C_MAJOR, 'sevenths')).toEqual([
-      ...['Dm7', 'G7', 'CMaj7'],
+      ...['Dm7', 'G7', 'Cmaj7'],
       ...['Em7♭5', 'A7', 'Dm7'],
       ...['C#m7♭5', 'F#7', 'Bm7♭5'],
     ])
@@ -51,7 +51,7 @@ describe('withLeadIns', () => {
     expect(led('i III', 'ii-v', C_MINOR)).toBe('ii° V i ii/III V/III III')
     expect(chords('i III', 'ii-v', C_MINOR, 'sevenths')).toEqual([
       ...['Dm7♭5', 'G7', 'Cm7'],
-      ...['Fm7', 'B♭7', 'E♭Maj7'],
+      ...['Fm7', 'B♭7', 'E♭maj7'],
     ])
   })
 
