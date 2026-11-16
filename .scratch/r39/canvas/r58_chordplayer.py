@@ -34,7 +34,7 @@ r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
     const ar = st.ar || { acmp: true, sync: false, syncStop: false, autoFill: true, ots: false, main: 'A', next: null, intro: null, ending: null, fade: false };
     const lamp = (on, next) => ({ bg: on ? '#C2412D' : next ? '#E8A090' : '#FEFDFB', fg: on ? '#FEFDFB' : '#332921', ring: on ? 'none' : '0 0 0 1px #DAD1C8' });
     const arSet = (o) => set({ ar: { ...ar, ...o } });''', 1)
-CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
+CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...common(st, set), draftOn: !!st.draft, addSec: () => { editSecs((c) => { const L = 'ABCDEFGH'[c.length] || 'X'; c.push([L, 'Section ' + L, 1, [['C'], ['F'], ['G'], ['C']]]); }); set({ tags: [...TAGS, JSON.parse(JSON.stringify(TAGS[TAGS.length - 1] || { mains: [] }))] }); }, copyL: st.copied ? 'Link copied' : 'Copy link', copyLink: () => set({ copied: true }), saveProg: () => set({ sheet: null, toast: 'Saved to My progressions' }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, saveDraft: () => set({ draft: false, sheet: null }), discardDraft: () => set({ draft: false, secs: null, len: null, tags: null, sheet: null }),
       tagOnSheet: st.sheet === 'tag', tagTitle: SECS[tagAt] ? SECS[tagAt][1] + ' on the Genos' : '', tagIsFirst: tagAt === 0, tagIsLast: tagAt === SECS.length - 1,
       introSeg: SEGT(['None', 'Intro I', 'Intro II', 'Intro III'], tg.intro || 'None', (l) => setTag({ intro: l })),
       passes: (tg.mains.length ? tg.mains : ['None']).map((mv, pi) => ({ n: 'Pass ' + (pi + 1), seg: SEGT(['None', 'A', 'B', 'C', 'D'], mv === 'None' ? 'None' : mv.slice(-1), (l) => setTag({ mains: tg.mains.map((x, i) => (i === pi ? (l === 'None' ? 'None' : 'Main ' + l) : x)) })) })),
@@ -76,12 +76,12 @@ CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}
           + f'<p style="margin: 0 4px; font-size: 14px; color: {SOFT}">None sends nothing: the Genos plays as its panel says.</p>')
 
 # ── ··· : the draft, sharing, the sheets ──
-CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {FILL}; overflow: hidden">'
+CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
              + ACTROW(CHECK.replace('16', '20'), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
-             + GROUP(('link', 'Share', 'View only', 'openShare'), ('link', 'Chord sheets', '', ''), ('link', 'Save as my chord sheet', '', ''), ('link', 'Open in Progressions', '', 'Progressions.dc.html')))
+             + GROUP(('link', 'Share', 'View only', 'openShare'), ('action', 'Save to my progressions', 'saveProg'), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), bg=SHEET))
 CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Everyone with the link sees each change as it is made, and the chord playing.</p>'
             + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
-            + BTN('Copy link', kind='primary', h=50))
+            + BTN('{{copyL}}', 'copyLink', kind='primary', h=50))
 
 # ── settings: Follow a MIDI arranger beside Connect a piano ──
 CP_SET58 = CP_SET + GROUP(('toggle', 'Follow a MIDI arranger', 'followSw', 'toggleFollow'), ('val', 'Arranger', 'Genos · USB'))
@@ -138,7 +138,7 @@ def CHART59(cols, gap, bh, bf, plus):
             f'<div style="display: flex; align-items: baseline; gap: 8px"><span style="font-size: 22px; font-weight: 600">My verse and chorus</span><sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; font-weight: 600; color: #7A5418">Draft</span></sc-if><span style="display: inline-flex; align-items: center; gap: 6px; align-self: center; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="width: 8px; height: 8px; border-radius: 4px; background: #3F7A4A"></span>Live</span></div>'
             f'<sc-for list="{{{{sec59}}}}" as="x" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{head}{tag}'
             f'<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: {gap}px">{box}{plusb}</div></section></sc-for>'
-            f'<button type="button" style="align-self: flex-start; height: 44px; padding: 0 8px; margin: -4px 0 -4px -8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
+            f'<button type="button" onClick="{{{{addSec}}}}" style="align-self: flex-start; height: 44px; padding: 0 8px; margin: -4px 0 -4px -8px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">+ Add section</button></div>')
 
 POP59 = lambda lbl, act, w, name: f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{name}: {{{{{lbl}}}}}" style="flex: none; min-width: {w}px; height: 44px; padding: 0 10px 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px">{{{{{lbl}}}}}<span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>'
 ROW59 = lambda label, inner: ('raw', f'<div style="min-height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 16px"><span style="flex: 1; font-size: 16px">{label}</span>{inner}</div>')
@@ -197,5 +197,5 @@ lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
 # the playing piano runs the window's width at its foot, under the chart and the Style column, as on every board
 lm58 += '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(170).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') + '</div></sc-if>'
 SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
-detail('ChordPlayer', 'Chord player', CP58, ph58, lm58, '', SH58(BSHEET, CP_PSHEET),
+detail('ChordPlayer', 'Chord player', CP58, ph58 + TOASTS.replace('bottom: 40px', 'bottom: 256px'), lm58 + TOASTL.replace('bottom: 28px', 'bottom: 296px'), '', SH58(BSHEET, CP_PSHEET),
        SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 140px; top: 160px', 460), CP_PPOP, lambda c, t, b: POPOVER(c, t, b, 'left: 580px; bottom: 300px', 320)).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html'))
