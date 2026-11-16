@@ -11,7 +11,7 @@ def _picurl(kind):
     svg = re.sub(r' style="[^"]*"', '', svg, count=1).replace('aria-hidden="true">', 'aria-hidden="true"><rect width="44" height="44" fill="%s"/>' % bg, 1)
     return 'url("data:image/svg+xml,' + _q(svg) + '")'
 SRCH = [('Practice', [('C major', 'Scale', 'Scales.dc.html', _picurl('drill')), ('Cmaj7', 'Chord', 'Chords.dc.html', _picurl('keys')), ('ii–V–I in C', 'Progression', 'Progression.dc.html', _picurl('roman'))]),
-        ('Songs', [(t, sub, 'Song.dc.html', INCIPIT(INC.get(t, {'Canon in D': (5, 4, 3, 2, 1, 0)}.get(t, (2, 4))))) for t, sub in [('Amazing Grace', 'John Newton · C major'), ('Canon in D', 'Pachelbel · D major'), ('Clair de lune', 'Debussy · D♭ major · Archived')]]),
+        ('Songs', [(t, sub, 'Song.dc.html', INCIPIT(INC.get(t, {'Canon in D': (5, 4, 3, 2, 1, 0)}.get(t, (2, 4))))) for t, sub in [('Amazing Grace', 'John Newton · G major'), ('Canon in D', 'Pachelbel · D major'), ('Clair de lune', 'Debussy · D♭ major')]]),
         ('Folders', [('Hymns', '6 songs', 'Folder.dc.html', STACK(SKY)), ('Classical', '8 songs', 'Songs.dc.html', STACK(LILAC))]),
         ('Lessons', [(t, sub, 'Lesson.dc.html', _picurl('staff')) for t, sub in [('How major scales work', 'Foundations · Lesson 7')]])]
 G_JS = js('const SRCH = ' + json.dumps(SRCH, ensure_ascii=False) + r''';

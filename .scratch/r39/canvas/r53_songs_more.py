@@ -175,7 +175,7 @@ print('r53 explore, groups ok')
 # ════ Folder and Archive: a folder, its settings, card style, archived; Archive; Trash ════
 SP_SRC = (r'''
     const S = (o) => set(o), ROOT = __ROOT__, page = st.page === undefined ? ROOT : st.page;''' + TOAST_JS + r'''
-    const arch = st.arch ?? [['Silent Night', 'Gruber · Christmas', '__PIC_Silent_Night__', '12 November'], ['Ode to Joy', 'Beethoven · Classical', '__PIC_Ode_to_Joy__', '3 November'], ['Christmas', 'Folder · 6 songs', '__PIC_Christmas__', '28 October']];
+    const arch = st.arch ?? [['Silent Night', 'Gruber · Christmas', '__PIC_Silent_Night__', '12 November'], ['Greensleeves', 'Traditional · Folk', '__PIC_Greensleeves__', '3 November'], ['Christmas', 'Folder · 6 songs', '__PIC_Christmas__', '28 October']];
     const trash = st.trash ?? [['My first song', 'Deleted 9 November', '__PIC_My_first_song__', '9 November', 'Your song · C major'], ['Jingle Bells (my version)', 'Deleted 2 November', '__PIC_Jingle_Bells_(my_version)__', '2 November', 'Pierpont · Christmas']];
     const fArch = st.fArch ?? [['Holy, Holy, Holy', 'Dykes · D major'], ['Rock of Ages', 'Hastings · E♭ major']];
     const cs = st.cs ?? 'Soft', lay = st.lay ?? 'List';
@@ -267,7 +267,7 @@ spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FO
 splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS + NEWBTN('openAdd')) + POPOVER('addOn', 'New', NEWMENU(list(_FNEW)), 'right: 40px; top: 72px', 300) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', LTOP('SongsLaptop.dc.html', '') + IF('notArch', WIDE(SPBODY_L, 704), 'true') + IF('isArchive', WIDE(SPBODY_L, 1180)))
         + IF('isSubPage', PAGEHEAD_L('back', '{{backT}}') + IF('notArch', WIDE(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', WIDE(SPBODY_L, 1180))) + TOASTL)
 SP_LAP = SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
-for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Ode to Joy', INCIPIT(INC['Ode to Joy'])), ('Christmas', STACK('#F6E7C8')), ('My first song', INCIPIT(INC['My first song'])), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
+for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIPIT((2, 4, 5, 6, 5, 4))), ('Christmas', STACK('#F6E7C8')), ('My first song', INCIPIT(INC['My first song'])), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
     SP_SRC = SP_SRC.replace("'__PIC_%s__'" % _t.replace(' ', '_'), json.dumps(_pic + ' center / cover'))
 for stem, root, ttl in (('Folder', 'null', 'A folder'), ('Archive', "'archive'", 'Archive and Trash')):
     detail(stem, ttl, js(SP_SRC.replace('__ROOT__', root)), spph, splm, '', SP_SHEETS, SP_LAP, 'Songs')

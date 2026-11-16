@@ -276,6 +276,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **Loop round 47, the Archive holds what My songs does not (Archive, Search):** Ode to Joy stood in the Archive while My songs and Continue had it at Bar 5 of 12; the Archive holds Greensleeves (Traditional · Folk) instead. Search's Clair de lune no longer says Archived (My songs lists it), and Amazing Grace reads G major there as everywhere else (2026-11-16).
 - **Loop round 46, Groups: a shared folder wears the folder cover; the invite toggle says what it does (Groups):** Choir hymns, shared with me, showed a "C" tile like a group; it wears the folder's stack of pages in its paint, as every folder in Songs. The invite toggle, a card inside a card over the line "Anyone with the link can join.", is one row labelled "Anyone with the link can join" with Share invite link under it, no line beneath a control (2026-11-16).
 - **Loop round 46, Continue and the table say one progress (My songs):** Continue showed Für Elise at "Bar 3 of 24" while its row said "Learning", and offered Twinkle, Twinkle, which the table calls Learned; Für Elise's row now reads Bar 3 of 24, and the third song in progress is Ode to Joy at Bar 5 of 12, on both sizes (2026-11-16).
 
