@@ -29,7 +29,7 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const cells = []; for (let i = 0; i < M.first; i++) cells.push({ d: '', bg: 'transparent', ink: '#332921', ring: 'none', a: '' });
     for (let d = 1; d <= M.len; d++) { const on = M.done(d), fut = mon === 0 && d > 11; cells.push({ d: String(d), bg: on ? '#E8B48F' : 'transparent', ink: fut ? '#B4AAA0' : '#332921', ring: d === M.today ? '0 0 0 2px #C26A2E' : 'none', a: d + ': ' + (on ? 'practised' : 'not practised') }); }
     const badge = BADGES.find((b) => b[0] === page);
-    const badges = BADGES.map(([n, tier, k]) => ({ n, sub: ((nx) => (tier || 'Not started') + (nx ? (tier ? ' · next: ' : ' · ') + nx[0] + ' at ' + nx[1] : ' · every tier reached'))(BADGES.find((b) => b[0] === n)[4].find((x) => !x[2].startsWith('Reached'))), med: MEDC[tier], open: () => S({ page: n }) }));
+    const badges = BADGES.map(([n, tier, k]) => ({ n, sub: ((nx) => { if (!nx) return (tier || 'Not started') + ' · every tier reached'; const k = parseInt(nx[2], 10), u = nx[1].split(' ').slice(1).join(' '), one = k === 1 ? u.replace(/s$/, '') : u; return (tier ? tier + ' · ' : '') + k + ' more ' + one + ' to ' + nx[0]; })(BADGES.find((b) => b[0] === n)[4].find((x) => !x[2].startsWith('Reached'))), med: MEDC[tier], open: () => S({ page: n }) }));
     const tiers = badge ? badge[4].map(([t, goal, s]) => ({ t, goal, s, med: MEDC[t], dim: s === 'Locked' ? 0.45 : 1, ink: s.startsWith('Reached') ? '#44684A' : '#685E56' })) : [];
     const mile = MILES.find((m) => m[0] === page);
     const read = !!st.read, cleared = !!st.cleared, gone = st.gone ?? [];
@@ -65,13 +65,14 @@ def BROW9(name, tier, sub, act):
     return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'
 def _BSUB(n):
     b = next(x for x in BADGES9 if x[0] == n); nx = next((t for t in b[4] if not t[2].startswith('Reached')), None)
-    return (b[1] or 'Not started') + (f' · {"next: " if b[1] else ""}{nx[0]} at {nx[1]}' if nx else ' · every tier reached')
+    # how near the next tier is, in its own unit: "Silver · 2 more days to Gold" (the Almost there card said this again)
+    if not nx: return (b[1] or 'Not started') + ' · every tier reached'
+    k = int(nx[2].split()[0]); u = nx[1].split(' ', 1)[1]; u = u[:-1] if k == 1 and u.endswith('s') else u
+    return (f'{b[1]} · ' if b[1] else '') + f'{k} more {u} to {nx[0]}'
 BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW9(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
 def AROW9(name, sub, got, act):
     return AROW(name, sub, got).replace('<div style="min-height: 60px;', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px;', 1)[:-6] + f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
 ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First song learned', 'Earned 3 November 2026', True, 'goM0') + AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
-assert MILE.startswith('<div style="border-radius: 14px;')
-MILE9 = MILE.replace('<div style="border-radius: 14px;', '<button type="button" onClick="{{goB0}}" style="width: 100%; border: 0; font: inherit; text-align: left; color: ' + INK + '; border-radius: 16px;', 1)[:-6] + '</button>'
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
@@ -149,11 +150,11 @@ WHO9 = (f'<div aria-label="Canvas: show a state" style="flex: none; display: fle
         f'<sc-for list="{{{{whoDemo}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="height: 32px; padding: 0 10px; border: 0; border-radius: 16px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 13px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>')
 HEROX = IF9('isSigned', HERO_P, 'true') + IF9('isGuest', GUEST_P)
 p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="Settings.dc.html"))}'
-        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + MILE9 + BADGES9H + ACH9 + HIST9H, "true")}</main>{TABBAR("Profile")}</sc-if>'
+        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + BADGES9H + ACH9 + HIST9H, "true")}</main>{TABBAR("Profile")}</sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{pageT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">'
-        f'<div style="display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + MILE9 + HIST9H, "true")}</div><div style="display: flex; flex-direction: column; gap: 12px">{IF9("notLoading", BADGES9H + ACH9, "true")}</div></main></sc-if>'
+        f'<div style="display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + HIST9H, "true")}</div><div style="display: flex; flex-direction: column; gap: 12px">{IF9("notLoading", BADGES9H + ACH9, "true")}</div></main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LPAD(TOP('', '', MOREB9, left=IB('Back to {{backT}}', CHEV_L, 'goBack'))) + f''
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; justify-content: center"><div style="width: {{{{subW}}}}px; display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{showH1}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 4px; font-size: 30px; font-weight: 700">{{{{pageT}}}}</h1></sc-if>{SUBS9L}</div></main></sc-if>' + P9_ASK)
 detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
