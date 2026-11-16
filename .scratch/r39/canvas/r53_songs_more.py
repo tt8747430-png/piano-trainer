@@ -185,7 +185,7 @@ _GSPLIT = GPAGE.rindex('<section', 0, GPAGE.index(CAPS('Members')))
 GPAGE_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-items: start">'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[:_GSPLIT]}</div>'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[_GSPLIT:]}</div></div>')
-grlm = (IF('isList', LTOP('SongsLaptop.dc.html', f'{BTN("Join with a link", "openJoin", "", "quiet", 44, False)}<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}') + WIDE(H1('Groups') + GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 1180) + STRIP(), 'true')
+grlm = (IF('isList', LTITLEBAR('Groups', f'{BTN("Join with a link", "openJoin", "", "quiet", 44, False)}<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 1180) + STRIP(), 'true')
         + IF('isGroup', PAGEHEAD_L('back', 'Groups', '') + WIDE(GPAGE_L, 1180))
         + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)
@@ -265,7 +265,8 @@ ATABLE = lambda lst, when: (f'<div style="display: flex; flex-direction: column"
                             f'<span style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
                             f'<span style="flex: 3; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.t}}}}</span><span style="flex: 3; min-width: 0; font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.k}}}}</span><span style="flex: 2; min-width: 0; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{x.w}}}}</span>'
                             f'<span style="width: 140px; display: flex; justify-content: flex-end; align-items: center; gap: 4px"><button type="button" onClick="{{{{x.restore}}}}" aria-label="Restore {{{{x.t}}}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">Restore</button><button type="button" aria-label="More" onClick="{{{{x.more}}}}" style="width: 40px; height: 40px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></span></div></sc-for></div>')
-_AHEAD = lambda act: f'<div style="display: flex; align-items: center; gap: 16px"><div style="flex: 1">{H1("{{pageT}}")}</div>{act}</div>'
+_AHEAD = lambda act: ''  # the title and its act stand in the laptop bar (SPACT)
+SPACT = IF('isArchive', IF('archAny', BTN("Restore all", "restoreAll", "", "quiet", 44, False)), 'true') + IF('isTrash', IF('trashAny', BTN("Empty Trash", "askEmpty", "", "quiet", 44, False).replace("color: " + INK, "color: " + RED)))
 ARCHIVEP_L = (_AHEAD(IF('archAny', BTN("Restore all", "restoreAll", "", "quiet", 44, False))) + IF('archAny', ATABLE('arch', 'Archived'), 'true')
               + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.') + f'<div style="margin-left: -4px">{_TRASHROW}</div>')
 TRASHP_L = (_AHEAD(IF('trashAny', BTN("Empty Trash", "askEmpty", "", "quiet", 44, False).replace("color: " + INK, "color: " + RED))) + IF('trashAny', ATABLE('trash', 'Deleted'), 'true')
@@ -278,14 +279,14 @@ SP_SHEETS = (BSHEET('amoreOn', '{{whoT}}', GROUP(('action', 'Delete', 'delArch',
              + ASK('allOn', 'Apply to all folders?', 'This style will replace the current style of all 9 places, including Library home.', 'Apply', 'doAll')
              + ASK('delfOn', 'Delete “Hymns”?', 'The folder will be permanently deleted. Its 6 songs will be moved to the Trash.', 'Delete', 'doDelF'))
 SPBODY = (IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH) + IF('isArchive', ARCHIVEP) + IF('isTrash', TRASHP))
-SPBODY_L = IF('notArch', H1('{{pageT}}') + IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH), 'true') + IF('isArchive', ARCHIVEP_L) + IF('isTrash', TRASHP_L)
+SPBODY_L = IF('notArch', IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH), 'true') + IF('isArchive', ARCHIVEP_L) + IF('isTrash', TRASHP_L)
 # a folder makes what Songs makes, there: the same New, less New group (a group is not in a folder)
 _FNEW = (('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'))
 SPICONS = IB('Settings for Hymns', GEARI, 'goSettings')
 spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FOLDER).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + NEWDIAL(list(_FNEW)[::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')) + IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', '', 'My songs') + NARROW(SPBODY))
         + IF('isSubPage', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back')) + NARROW(SPBODY)) + TOASTS)
-splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS + NEWBTN('openAdd')) + POPOVER('addOn', 'New', NEWMENU(list(_FNEW)), 'right: 40px; top: 72px', 300) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', LTOP('SongsLaptop.dc.html', '') + IF('notArch', WIDE(SPBODY_L, 704), 'true') + IF('isArchive', WIDE(SPBODY_L, 1180)))
-        + IF('isSubPage', PAGEHEAD_L('back', '{{backT}}') + IF('notArch', WIDE(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', WIDE(SPBODY_L, 1180))) + TOASTL)
+splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS + NEWBTN('openAdd')) + POPOVER('addOn', 'New', NEWMENU(list(_FNEW)), 'right: 40px; top: 72px', 300) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html') + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)))
+        + IF('isSubPage', LTITLEBAR('{{pageT}}', SPACT, backact='back') + IF('notArch', LCOL(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', LCOL(SPBODY_L, 9999))) + TOASTL)
 SP_LAP = SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
 for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIPIT((2, 4, 5, 6, 5, 4))), ('Christmas', STACK('#F6E7C8')), ('Waltz sketch', INCIPIT((5, 4, 2, 4, 5, 4))), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
     SP_SRC = SP_SRC.replace("'__PIC_%s__'" % _t.replace(' ', '_'), json.dumps(_pic + ' center / cover'))
