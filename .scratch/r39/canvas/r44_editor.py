@@ -66,7 +66,7 @@ ED4 = js(r'''
       redo: () => { const u = st.undone ?? []; if (!u.length) return; const x = u[u.length - 1]; set(x.r ? { rest: true, undone: u.slice(0, -1) } : { marks: [...marks, x.m], undone: u.slice(0, -1) }); },
       delNote: () => set({ rest: true, undone: [] }),
       doneOn: !!st.done, doneL: st.done ? st.done + ': tap the score where it goes' : '', clearDone: () => set({ done: null }),
-      moreOn: st.sheet === 'more', openMore: () => set({ sheet: 'more' }),
+      moreOn: st.sheet === 'more', tipPubOn: !!st.tipPub, tipPub: () => set({ tipPub: !st.tipPub }), openMore: () => set({ sheet: 'more' }),
       states: [['The palette open', open, { open: true }, { open: false }], ['A rest chosen', rest, { rest: true }, { rest: false }],
         ['A clef waiting for its place', st.done === 'Treble clef', { done: 'Treble clef' }, { done: null }], ['The piano hidden', !keys, { keys: false }, { keys: true }],
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
@@ -150,8 +150,11 @@ SOLOI = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><cir
 MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
 ED_MENU = lambda sfx: (MENUCARD(('link', 'Credits', 'Amazing Grace', 'openCredits'), ('link', 'Instruments', 'Piano', 'openInst'), ('link', 'Version history', 'Today', ''), ('link', 'Layout', 'Pages', ''), ('link', 'Playback sound', 'Grand piano', ''), ('link', 'MIDI keyboard', 'None', ''), ('link', 'Takes', '3', 'Takes' + sfx))
                        + MENUCARD(('link', 'Export', 'MusicXML, MIDI, PDF', ''), ('link', 'Print', '', ''))
-                       + f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 17px; font-weight: 700">Publish in Explore</span>'
-                       f'<span style="margin-top: -6px; font-size: 15px; line-height: 1.45; color: {SOFT}">Anyone can find, play and save it. You can take it down at any time.</span><div style="display: flex">{BTN("Publish", href="SongSettings" + sfx, h=48)}</div></div>')
+                       + f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px">'
+                       # what publishing means sits behind its ⓘ, never under the control (loop round 60)
+                       f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding-right: 12px"><span style="font-size: 17px; font-weight: 700">Publish in Explore</span>' + INFOB('About publishing', 'tipPub', 'tipPubOn')
+                       + INFOTIP('tipPubOn', 'tipPub', 'About publishing', 'Anyone can find, play and save it. You can take it down at any time.', 'right: 0; top: 32px') + '</div>'
+                       f'<div style="display: flex">{BTN("Publish", href="SongSettings" + sfx, h=48)}</div></div>')
 FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span>'
                             f'<input value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')
