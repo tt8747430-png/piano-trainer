@@ -56,7 +56,7 @@ def CARDV(v, pic, name, inner=''):
 
 
 def LINK(label, sub, sep=''):
-    return (f'<a href="#" style="{ROW}; {sep + "; " if sep else ""}text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span>{label}</span>'
+    return (f'<a href="Settings.dc.html" style="{ROW}; {sep + "; " if sep else ""}text-decoration: none"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span>{label}</span>'
             f'<sc-if value="{{{{{sub}On}}}}" hint-placeholder-val="{{{{false}}}}"><span style="font-size: 13px; color: {SOFT}">{{{{{sub}}}}}</span></sc-if></span>'
             f'<span style="flex: none; display: flex; align-items: center; gap: 4px; color: {{{{{sub}ValC}}}}">{{{{{sub}Val}}}}<span style="display: flex; color: {SOFT}">{CHEV_R}</span></span></a>')
 
