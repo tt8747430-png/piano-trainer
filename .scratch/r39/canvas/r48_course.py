@@ -63,8 +63,8 @@ CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro
         f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("link", "Publish…", "Published", "openPub"), ("action", "Share link", "copyLink"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
 CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
-        f'{CAPS("What changed")}<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Changes made since the last publication are saved and ready to publish.</p>'
-        f'{GROUP(("link", "Learner preview", "8 lessons", "Course.dc.html"), ("action", "Copy link", "copyLink"), ("link", "View", "", "Course.dc.html"), ("val", "Versions", "3"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
+        + CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Summary, Lessons</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>') +
+        f'{GROUP(("link", "Learner preview", "8 lessons", "Course.dc.html"), ("val", "Versions", "3"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
         f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
 CPROPS = f'{CAPS("Shelf")}{WCHIPS("shelves")}{CAPS("Level")}{WCHIPS("levels")}'
