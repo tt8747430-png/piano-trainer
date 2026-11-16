@@ -10,7 +10,7 @@ def cover(title, by, w=150, notes=(2, 4, 4, 3, 2, 0, -1)):
             f'{st}<text x="9" y="70" font-family="Noto Music, serif" font-size="24" fill="{INK}">𝄞</text>{n}</svg>')
 SHELF = [('Amazing Grace', 'John Newton', 'Bar 9 of 16', '56%'), ('Ode to Joy', 'Beethoven', 'Bar 5 of 12', '40%'), ('Für Elise', 'Beethoven', 'Bar 3 of 24', '12%')]
 def shelf(w, n=3):
-    cards = ''.join(f'<a href="{{SONG}}" style="flex: none; width: {w}px; display: flex; flex-direction: column; gap: 6px; color: {INK}; text-decoration: none">{cover(t, b)}<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="height: 3px; border-radius: 2px; background: {FILL}"><span style="display: block; width: {p}; height: 3px; border-radius: 2px; background: #C26A2E"></span></span><span style="font-size: 13px; color: {SOFT}">{s}</span></a>' for t, b, s, p in SHELF[:n])
+    cards = ''.join(f'<a href="{{SONG}}" style="flex: none; width: {w}px; display: flex; flex-direction: column; gap: 6px; color: {INK}; text-decoration: none">{cover(t, b, notes=INC.get(t, (2, 4, 4, 3, 2, 0, -1)))}<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="height: 3px; border-radius: 2px; background: {FILL}"><span style="display: block; width: {p}; height: 3px; border-radius: 2px; background: #C26A2E"></span></span><span style="font-size: 13px; color: {SOFT}">{s}</span></a>' for t, b, s, p in SHELF[:n])
     return f'<section style="display: flex; flex-direction: column; gap: 8px">{H2("Continue")}<div class="nos" style="display: flex; gap: 12px; overflow-x: auto">{cards}</div></section>'
 
 from urllib.parse import quote as _q
