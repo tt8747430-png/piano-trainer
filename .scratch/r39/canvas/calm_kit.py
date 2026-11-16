@@ -124,13 +124,18 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-def laptop(fname, title, main, aside, js, pops='', section='Practice'):
+def SIDEBAR(section):
+    """The app's laptop sidebar with its place current: one drawing for every laptop board."""
     side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1).replace('font-weight: 700">G</span>', 'font-weight: 700">A</span>', 1).replace('font-weight: 600">Guest</span>', 'font-weight: 600">Ana Popescu</span>', 1)
     for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
         side = re.sub(r'<a href="[^"]*"( aria-current="page")? style="(height: 44px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; )[^"]*">((?:(?!</a>).)*?)' + word + '</a>',
                       lambda m: f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="{m.group(2)}{st}">{m.group(3)}{word}</a>', side, count=1, flags=re.S)
+    return side
+
+def laptop(fname, title, main, aside, js, pops='', section='Practice'):
+    side = SIDEBAR(section)
     asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 18px">{aside}</aside>' if aside else ''
     cols = 'minmax(0, 1fr) 440px' if aside else 'minmax(0, 1fr)'
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">

@@ -1038,7 +1038,7 @@ SHELF_PHONE = (f'<section aria-label="Chord" style="position: absolute; left: 0;
 SHELF_LAPTOP = (f'<aside aria-label="Chord" class="nos" style="flex: none; width: 400px; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; background: {PAGE}; box-shadow: -1px 0 0 {LINE}; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 12px">{SHELF_HEAD}{SHELF_BODY}</aside>')
 
 def write_laptop(stem, title, inner, D, concept):
-    open(OUT + stem + '.dc.html', 'w').write(HEAD % title + LAPFRAME_TOP + f'<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: flex; flex-direction: column">{inner}{LAYERS(False, concept)}</div>' + f"""
+    open(OUT + stem + '.dc.html', 'w').write(HEAD % title + LAPFRAME_TOP + f'<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)"><!--sidebar--><div style="position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column">{inner}{LAYERS(False, concept)}</div></div>' + f"""
 <img src="{LAPTOP_FRAME}" alt="" aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 2143px; height: 1299px; pointer-events: none">
 </div>
 </x-dc>
@@ -1122,6 +1122,10 @@ for f in ('Chords', 'ChordsLaptop'):
     h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)
     open(OUT + f + '.dc.html', 'w').write(h)
 # Night (canvas 95): each board again in the app's dark roles (src/styles/tokens.css, html[data-theme='dark']); the
+# the app's sidebar goes in last, after this page's own type and spacing passes, so it is every board's drawing
+_h = open(OUT + 'ChordsLaptop.dc.html').read()
+assert '<!--sidebar-->' in _h
+open(OUT + 'ChordsLaptop.dc.html', 'w').write(_h.replace('<!--sidebar-->', SIDEBAR('Practice'), 1))
 # chord paints stay, the keys take the dusk ivory, ink on honey stays dark, shadows deepen
 import night as NT; night = NT.night
 for f in ('Chords', 'ChordsLaptop'):
