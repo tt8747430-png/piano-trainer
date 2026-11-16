@@ -17,7 +17,12 @@ what they changed.
   their names (Chordio, Metronaut): an octave doubled wants both keys, and the right name in another octave is a
   slip that says "Play it an octave higher" or "lower"; the first right key starts the music, the other hand's key
   is no slip, one wrong key slips once a step. Play in both; ‹ › step in either. A loop over bars, each lap
-  played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111).
+  played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111). A pass ends with its
+  score, the share of steps (beat groups the practised hands play in) played without a slip, full from 96 %
+  (Metronaut): "Played through · Score 82%", or "Played through without a slip"; beside it New best, or the best to
+  beat (a whole pass's best is kept per song and hands in the progress's `songs`), Again, and Loop bars n–m where the
+  takes' one rule (`weakestBars`) finds a bar or two under 70 %. Wait mode's line stands under the floating transport,
+  and the keys' window rises by its height (`--status-room`), so the transport never covers the keys.
 - **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
   right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the
   Keyboard." where none is there to play ("…show the Keyboard instead of the hands." where the hands stand in the

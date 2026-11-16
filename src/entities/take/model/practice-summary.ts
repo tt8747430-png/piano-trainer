@@ -68,7 +68,7 @@ export type NextStep =
   | { readonly kind: 'tempo'; readonly speed: number }
 
 /** A pair of bars under this share right is looped. */
-const WEAK = 0.8
+export const WEAK = 0.8
 /** The speed a weak passage is looped at. */
 const LOOP_SPEED = 0.7
 
@@ -79,8 +79,13 @@ export function nextStep(summary: Pick<PracticeSummary, 'bars' | 'speed'>): Next
   return null
 }
 
-/** The weakest bar, or pair of bars side by side, of those judged: the lowest share right. */
-function weakestBars(bars: readonly (number | null)[]): { bars: Bars; share: number } | null {
+/**
+ * The weakest bar, or pair of bars side by side, of those judged: the lowest share right. The one
+ * rule for a take's next step and a Wait pass's hardest bars (CLAUDE.md, one implementation).
+ */
+export function weakestBars(
+  bars: readonly (number | null)[],
+): { bars: Bars; share: number } | null {
   let worst: { bars: Bars; share: number } | null = null
   for (const [bar, share] of bars.entries()) {
     if (share === null) continue

@@ -60,8 +60,6 @@ export function TransportPiano({
         <FloatingBarButton
           label={t('common:keyboardTools.keyboard')}
           caption={t(`common:keyboardTools.short.${keys ? (hands ? 'hands' : 'keys') : 'off'}`)}
-          // On a laptop the sheet it opens, by name (the PlayerDesk board's Piano).
-          captionWide={t('player:pianoSheet.title')}
           aria-haspopup="dialog"
           className={DOCK_CAPTIONED}
           onClick={open}

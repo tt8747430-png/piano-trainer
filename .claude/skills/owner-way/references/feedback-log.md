@@ -125,7 +125,7 @@ owner's, typos fixed.
 - **Loop round 35, the gear's Arrangement card (owner, 2026-11-07; the PlayerApp board):** what you play heads the Player's Settings under the song: the Arrangement card, chosen, its Level row under it, Easy · Simplified · Original, easiest first (Simplified greyed with its reason where it changes no chord), and a Scoring row (your own version, the piano alone, with the voice) where the song has more than one; the Version page and its row are gone. A radio card without a picture takes no tile (2026-11-15).
 - **Loop round 34, no double gap in Player settings:** an empty column for the screen's own choices stood between the song's head and the first group, so they stood 41 apart; empty, it now takes no room, and they stand the sheet's 20 apart (2026-11-15).
 - **Loop round 34, Play wears the board's metronome (`METRO`):** the Practice button and its Play card draw the board's case, pendulum and bar (`PlayAlongIcon`), not Lucide's metronome; Wait keeps the hourglass (2026-11-15).
-- **Loop round 34, the laptop's keys button says Piano:** the sheet it opens, by name, as the PlayerDesk board; a phone's caption keeps the mode (3D, 2D, Off) (2026-11-15).
+- **The keys button says what the keys show, phone and laptop (loop round 46, 61):** 3D, 2D or Off under the keys glyph at every size, as the PlayerDesk board's `kbCap`; the laptop's "Piano" is gone (2026-11-16).
 - **Loop round 34, the laptop's transport names the hands in full:** Both hands, Right hand, Left hand (Обе руки…) beside the picture, as the PlayerDesk board; a phone keeps Both under it (`captionWide` on the bar's button) (2026-11-15).
 - **Loop round 33, the Player's bar band as its board:** 12 over the buttons and 8 under them, a 64 band under the status bar (it was 8 and 4, 56); the editor's floating bar keeps no band (2026-11-15).
 - **Loop round 29, the laptop's views pill as the PlayerDesk board:** a 44 glass pill padded 4 holding four 112 × 34 segments at 14, 600 (Sheet · Diagrams · Grid · Lyrics), the shown filled in ink; the one pill (`ViewPill`) takes a size, the editor's Play · Edit keeping its 44 segments.
@@ -253,6 +253,7 @@ owner's, typos fixed.
   touching; the page is a column with the sheet's 16 between its cards.
 
 - **Loop round 61, Wait mode waits for keys:** the keys as written, not their names; the right name in another octave says "Play it an octave higher" or "lower" (Chordio, Metronaut; 2026-11-16).
+- **Loop round 61, a Wait pass's score and best (research items 2, 4):** a pass ends "Played through · Score 40%" with New best or Best n% beside it, one hardest-bars rule with the takes'; the line under the transport lifts the keys' window by its height, where it had slid the transport over the keys (2026-11-16).
 
 ## Song page
 - **The score on a song's page prints the editor's credit** (loop round 50, Song, SongLaptop): its corner said "John Newton" where the editor prints the same score "Words: John Newton · Music: New Britain"; the cover now prints that, right-aligned on its own line under the centred title, as an engraver sets it (a long one ends in an ellipsis, never over the title).

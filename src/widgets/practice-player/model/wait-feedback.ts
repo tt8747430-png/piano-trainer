@@ -5,6 +5,7 @@ import {
   type BarRange,
   type PracticeState,
 } from '@/features/practice'
+import { WEAK, weakestBars } from '@/entities/take'
 import type { Performance } from '@/shared/lib/arrangement'
 import { noteName, pitchClass } from '@/shared/lib/music'
 
@@ -17,15 +18,17 @@ export type WaitFeedback =
   | { readonly kind: 'octave'; readonly way: 'lower' | 'higher' }
   | {
       readonly kind: 'finished'
-      /** The wrong keys of the pass, and the bar or two that had the most. */
-      readonly slips: number
+      /** The pass's score, its share of steps played with no slip, a whole percent. */
+      readonly score: number
+      /** The weakest bar or two, where they are under `WEAK` (the takes' rule). */
       readonly hardest: BarRange | null
     }
 
 /** Wait mode's line now: the notes to play as written, a wrong key, right, or finished; nothing while stopped. */
 export function waitFeedback(performance: Performance, state: PracticeState): WaitFeedback | null {
   if (!waitsForNotes(state.mode)) return null
-  if (state.outcome === 'finished') return { kind: 'finished', ...passReport(state.slips) }
+  if (state.outcome === 'finished')
+    return { kind: 'finished', ...passReport(performance, state.hands, state.slips) }
   if (!state.playing) return null
   if (state.outcome === 'correct') return { kind: 'right' }
   const group = performance.beatGroups[state.beatGroup]
@@ -54,32 +57,37 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
   return notes.length > 0 ? { kind: 'play', notes } : null
 }
 
+/** A score this close to full is full (Metronaut's `computeScore`: over 96 % counts as 100). */
+const FULL_FROM = 96
+
 /**
- * A pass's slips in a line: how many, and where most fell: the bar with the most,
- * with the neighbour beside it that had more of the rest, so a hard passage is looped whole.
+ * A pass's score and its hardest bars (the research's items 2 and 4): each step is a beat group the
+ * practised hands play in; a step with a slip is not clean. The score is the share of clean steps,
+ * full from 96 %; the hardest bars are the takes' rule (`weakestBars`) over each bar's share.
  */
-export function passReport(slips: PracticeState['slips']): {
-  slips: number
-  hardest: BarRange | null
-} {
-  const bars = Object.entries(slips).map(([bar, count]) => ({
-    bar: Number(bar),
-    count: count ?? 0,
-  }))
-  const total = bars.reduce((sum, { count }) => sum + count, 0)
-  const most = bars.reduce<(typeof bars)[number] | null>(
-    (best, each) => (best === null || each.count > best.count ? each : best),
-    null,
+export function passReport(
+  performance: Performance,
+  hands: PracticeState['hands'],
+  slips: PracticeState['slips'],
+): { score: number; hardest: BarRange | null } {
+  const practised = practisedHands(hands)
+  const steps = performance.bars.map(() => 0)
+  for (const group of performance.beatGroups) {
+    const played = group.notes.some((index) => {
+      const note = performance.notes[index]
+      return note !== undefined && practised[note.hand]
+    })
+    if (played) steps[group.bar] = (steps[group.bar] ?? 0) + 1
+  }
+  const total = steps.reduce((sum, count) => sum + count, 0)
+  const slipped = steps.reduce((sum, count, bar) => sum + Math.min(count, slips[bar] ?? 0), 0)
+  const percent = total === 0 ? 100 : Math.round((100 * (total - slipped)) / total)
+  const shares = steps.map((count, bar) =>
+    count === 0 ? null : 1 - Math.min(count, slips[bar] ?? 0) / count,
   )
-  if (!most || most.count === 0) return { slips: total, hardest: null }
-  const at = (bar: number) => slips[bar] ?? 0
-  const before = at(most.bar - 1)
-  const after = at(most.bar + 1)
-  const hardest =
-    after > 0 && after >= before
-      ? { first: most.bar, last: most.bar + 1 }
-      : before > 0
-        ? { first: most.bar - 1, last: most.bar }
-        : { first: most.bar, last: most.bar }
-  return { slips: total, hardest }
+  const worst = weakestBars(shares)
+  return {
+    score: percent >= FULL_FROM ? 100 : percent,
+    hardest: worst && worst.share < WEAK ? worst.bars : null,
+  }
 }

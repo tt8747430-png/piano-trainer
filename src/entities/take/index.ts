@@ -19,6 +19,8 @@ export {
 export {
   barShares,
   nextStep,
+  WEAK,
+  weakestBars,
   practiceSummary,
   type NextStep,
   type PracticeSummary,

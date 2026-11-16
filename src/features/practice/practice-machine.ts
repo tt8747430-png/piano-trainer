@@ -37,7 +37,7 @@ export interface PracticeState {
   readonly wrong: Midi | null
   /** Wait mode: the wrong keys already counted at this beat group: one key slips once a step. */
   readonly wrongHere: readonly Midi[]
-  /** Wait mode: the wrong keys of this pass, by bar (from 0): what its report says. */
+  /** Wait mode: the steps of this pass with a slip, by bar (from 0): what its score counts. */
   readonly slips: Readonly<Partial<Record<number, number>>>
   /**
    * Wait mode: the passes played to their end while it played, a loop's every lap: what a piece's
@@ -242,8 +242,10 @@ function noteOn(given: PracticeState, key: Midi): PracticeState {
     if (accompaniedAt(state.performance, state.beatGroup, state.hands).includes(key)) return state
     // The same wrong key again at this step says so again, but slips once.
     if (state.wrongHere.includes(key)) return { ...state, outcome: 'wrong', wrong: key }
+    // A step slips once, whatever wrong keys fall in it: the pass's score counts clean steps.
     const bar = state.performance.beatGroups[state.beatGroup]?.bar ?? 0
-    const slips = { ...state.slips, [bar]: (state.slips[bar] ?? 0) + 1 }
+    const first = state.wrongHere.length === 0
+    const slips = first ? { ...state.slips, [bar]: (state.slips[bar] ?? 0) + 1 } : state.slips
     return { ...state, outcome: 'wrong', wrong: key, wrongHere: [...state.wrongHere, key], slips }
   }
   const received = state.received.includes(key) ? state.received : [...state.received, key]

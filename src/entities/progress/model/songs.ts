@@ -1,4 +1,5 @@
 import type { PieceId } from '@/entities/piece'
+import { HANDS, type Hands } from '@/shared/lib/schedule'
 
 /**
  * A song as the learner has played it in the Player (canvas 125): the bars played through, by their
@@ -12,6 +13,8 @@ export interface SongPlay {
   readonly seconds: number
   /** How many bars the song has as written, when it was last played. */
   readonly bars: number
+  /** The best Wait-mode pass, per cent, by the hands it was played with (research item 4). */
+  readonly best: Readonly<Partial<Record<Hands, number>>>
 }
 
 /** How many songs keep their place: the latest played. */
@@ -20,14 +23,29 @@ export const SONGS_KEPT = 100
 const isPlace = (value: unknown): value is number =>
   typeof value === 'number' && Number.isInteger(value) && value >= 0
 
+const isScore = (value: unknown): value is number => isPlace(value) && value <= 100
+
+function bestOf(value: unknown): SongPlay['best'] {
+  if (typeof value !== 'object' || value === null) return {}
+  const saved = value as Partial<Record<string, unknown>>
+  return Object.fromEntries(
+    HANDS.flatMap((hands) => {
+      const score = saved[hands]
+      return isScore(score) ? [[hands, score]] : []
+    }),
+  )
+}
+
 /** A saved song's play as it can be read; nothing where it cannot. */
 export function songPlay(value: unknown): SongPlay | undefined {
   if (typeof value !== 'object' || value === null) return undefined
-  const { played, at, times, seconds, bars } = value as Partial<Record<keyof SongPlay, unknown>>
+  const { played, at, times, seconds, bars, best } = value as Partial<
+    Record<keyof SongPlay, unknown>
+  >
   if (!Array.isArray(played) || !isPlace(at) || !isPlace(times) || !isPlace(bars)) return undefined
   if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) return undefined
   const sorted = [...new Set(played.filter(isPlace))].sort((a, b) => a - b)
-  return { played: sorted, at, times, seconds, bars }
+  return { played: sorted, at, times, seconds, bars, best: bestOf(best) }
 }
 
 /** What a stretch in the Player adds to a song's play. */
@@ -61,11 +79,38 @@ export function withSongStretch(
     times: (was?.times ?? 0) + (stretch.started ? 1 : 0),
     seconds: (was?.seconds ?? 0) + Math.max(0, stretch.seconds),
     bars: stretch.bars,
+    best: was?.best ?? {},
   }
+  return withSong(songs, pieceId, next)
+}
+
+/** `songs` with `pieceId`'s play replaced, that song last; the oldest dropped past SONGS_KEPT. */
+function withSong(
+  songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
+  pieceId: PieceId,
+  next: SongPlay,
+): Readonly<Partial<Record<PieceId, SongPlay>>> {
   const kept = Object.entries(songs)
     .filter(([id]) => id !== pieceId)
     .slice(-(SONGS_KEPT - 1))
   return { ...Object.fromEntries(kept), [pieceId]: next }
+}
+
+/**
+ * `songs` with a Wait pass's `score` kept as `pieceId`'s best with `hands` where it beats it. The same
+ * object where it does not.
+ */
+export function withWaitScore(
+  songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
+  pieceId: PieceId,
+  hands: Hands,
+  score: number,
+  bars: number,
+): Readonly<Partial<Record<PieceId, SongPlay>>> {
+  const was = songs[pieceId]
+  if ((was?.best[hands] ?? -1) >= score) return songs
+  const base: SongPlay = was ?? { played: [], at: 0, times: 0, seconds: 0, bars, best: {} }
+  return withSong(songs, pieceId, { ...base, best: { ...base.best, [hands]: score } })
 }
 
 /**

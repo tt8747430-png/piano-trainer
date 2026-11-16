@@ -16,28 +16,38 @@ function lineOf(feedback: WaitFeedback, t: TFunction<'player'>): string {
     case 'right':
       return t('right')
     case 'finished':
-      return feedback.slips === 0
+      return feedback.score === 100
         ? t('finishedClean')
-        : t('finishedSlips', { count: feedback.slips })
+        : t('finishedScore', { score: feedback.score })
   }
 }
 
 /**
  * Wait mode's one line: what to play, a wrong key, Right, or Finished. A pass finished
- * says how many slips it had, offers Again, and the loop of the bars that had the most. With nothing
+ * says its score and the song's best, offers Again, and the loop of the bars that had the most. With nothing
  * to say (stopped) it takes no room, its live region kept for what it says next (R32).
  */
 export function WaitLine({
   feedback,
+  bestBefore = null,
   onAgain,
   onLoop,
 }: {
   feedback: WaitFeedback | null
+  /** The song's best pass before this one, when there was one: New best, or the best to beat. */
+  bestBefore?: number | null
   onAgain: () => void
   onLoop: (bars: BarRange) => void
 }) {
   const { t } = useTranslation('player')
   const hardest = feedback?.kind === 'finished' ? feedback.hardest : null
+  const score = feedback?.kind === 'finished' ? feedback.score : null
+  const best =
+    score === null || bestBefore === null || score === bestBefore
+      ? null
+      : score > bestBefore
+        ? t('newBest')
+        : t('bestScore', { score: bestBefore })
   return (
     <div
       className={cn(
@@ -54,6 +64,7 @@ export function WaitLine({
       >
         {feedback ? lineOf(feedback, t) : null}
       </p>
+      {best ? <span className="text-sm text-muted-foreground tabular-nums">{best}</span> : null}
       {feedback?.kind === 'finished' ? (
         <Button variant="soft" onClick={onAgain}>
           {t('again')}

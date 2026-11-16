@@ -70,7 +70,7 @@ const NO_ACTS_MORE: readonly MenuAction[] = []
 const NO_PAGES: readonly SettingsPageRow[] = []
 
 /** Where the keys' window stands until moved: over the transport at the screen's foot. */
-const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem)'
+const PLAYER_FOOT = 'calc(env(safe-area-inset-bottom) + 5.5rem + var(--status-room, 0px))'
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
@@ -110,7 +110,10 @@ export function PlayerLayout({
   moreActs = NO_ACTS_MORE,
   annotations,
   annotating,
+  bestBefore = null,
 }: {
+  /** A song's best Wait pass before the one just finished, said beside its score; none elsewhere. */
+  bestBefore?: number | null
   /** The learner's typed marks, written on the score (R29 B8); none for a walk. */
   annotations?: readonly ScoreAnnotation[] | undefined
   /** The Annotate bar over the score while it is on (R29 B8). */
@@ -408,7 +411,12 @@ export function PlayerLayout({
           )}
         >
           {view.mode !== 'listen' ? (
-            <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
+            <WaitLine
+              feedback={player.feedback}
+              bestBefore={bestBefore}
+              onAgain={practice.play}
+              onLoop={player.setLoop}
+            />
           ) : null}
           {status}
         </PlayerArea>

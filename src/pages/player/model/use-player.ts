@@ -1,5 +1,5 @@
 import { usePatternBook } from '@/entities/pattern'
-import { useEffect, useEffectEvent, useMemo } from 'react'
+import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import {
   hasWrittenStaves,
   keyShift,
@@ -10,7 +10,7 @@ import {
   usePiecesStoreApi,
   type Piece,
 } from '@/entities/piece'
-import { useProgressStoreApi } from '@/entities/progress'
+import { useProgressStoreApi, withWaitScore } from '@/entities/progress'
 import {
   arrangePiece,
   readStaves,
@@ -56,6 +56,8 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   readonly recordingSync: number
   /** Moves it: later where positive. */
   syncRecording(ms: number): void
+  /** The song's best Wait pass with these hands before the pass just finished; none before the first. */
+  readonly bestBefore: number | null
 }
 
 /** The piece as the Player plays it: its URL's choices arranged, practised from the widget's hook. */
@@ -152,9 +154,18 @@ export function usePlayer(
     writtenBarAt(performance, player.practice.state.beatGroup),
     lastBar,
   )
+  // A whole pass's score kept as the song's best with these hands (research item 4); the best before
+  // it said beside the score, so the line can say New best.
+  const [bestBefore, setBestBefore] = useState<number | null>(null)
   const recordFinished = useEffectEvent(() => {
     const whole = { first: 0, last: performance.bars.length - 1 }
     recordPass(progress, piece.id, player.loop ?? whole, new Date())
+    const { feedback } = player
+    if (player.loop || feedback?.kind !== 'finished') return
+    const { songs } = progress.getState()
+    setBestBefore(songs[piece.id]?.best[state.hands] ?? null)
+    const next = withWaitScore(songs, piece.id, state.hands, feedback.score, lastBar + 1)
+    if (next !== songs) progress.setState({ songs: next })
   })
   useEffect(() => {
     if (passes > 0) recordFinished()
@@ -166,6 +177,7 @@ export function usePlayer(
     choice,
     performance,
     player,
+    bestBefore,
     fit,
     headings,
     controls,
