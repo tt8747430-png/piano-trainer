@@ -1017,6 +1017,7 @@ are reference only, but progressions are facts.
 
 ## Profile and Settings
 
+- **Loop round 44, Settings has its Back on a laptop too (SettingsLaptop):** the list pane's title stood alone, so the laptop had no way back to Profile, where its gear opens it; Back to Profile now stands beside the title, as the phone's bar and the Administration pane hold theirs (2026-11-16).
 - **Loop round 44, the piano sound says its state once (Settings › Storage and backup):** a part-downloaded grand shows "54 of 88 downloaded" over its bar alone; "Partly downloaded" under it said the same again. Downloading…, Available offline and Not downloaded still show, since the count does not say them (2026-11-16).
 - **Loop round 44, Practice history's chart reads its axis true (Profile › Practice history):** 0, 30 and 60 min each stand on their own line (the 60 had none, and the labels were spread down the column rather than set on their lines) (2026-11-16).
 - **Administration's states in the States box, and its empty states the one empty state (loop, 2026-11-15):** Accounts with nobody found ("No account matches “zz”", Clear search), Content reports all dealt with (a tick: "No open reports"), removing an administrator asked, an error's stack open. The bare grey line in an empty card is gone from both.
