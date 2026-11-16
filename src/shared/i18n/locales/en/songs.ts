@@ -64,6 +64,8 @@ export const songs = {
     bar: 'Bar {{bar}} of {{total}}',
     seeAll: 'See all {{count}}',
   },
+  // A song's row (R72): where it stands, when nothing has been played.
+  row: { notStarted: 'Not started' },
   // All songs (R72, Flat's library): every song in one list.
   all: { title: 'All songs', search: 'Search your songs' },
   // Groups and the folders shared with them (R30 S6).

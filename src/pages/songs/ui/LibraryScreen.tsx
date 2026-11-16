@@ -55,7 +55,7 @@ export function LibraryScreen({
   const q = useDeferredValue(filter.q)
   // A laptop's two panes (R30 S2): the library's tree on the left, the place's songs on the right.
   const laptop = useMediaQuery(LIBRARY_PANES)
-  // All songs has no tree beside it: one column, its songs a table on a laptop.
+  // All songs has no tree beside it: one column, its songs cards two across on a laptop (R72).
   const wide = laptop && !all
   const page = useLibraryPage(folder, { ...filter, q }, { tree: laptop || all })
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
@@ -109,7 +109,7 @@ export function LibraryScreen({
         filter={filter}
         screen={folder ? nameOf(folder) : all ? t('all.title') : t('title')}
         wide={laptop}
-        all={all}
+        all={all || folder !== null}
       />
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
@@ -125,7 +125,7 @@ export function LibraryScreen({
           <LibraryBrowse
             page={page}
             place={folder?.id ?? 'home'}
-            table={laptop}
+            table={laptop && folder === null && !all}
             noFolders={all}
             moreFolders={
               folder === null && !wide && !all && !view.filtering ? (

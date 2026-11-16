@@ -385,6 +385,8 @@ owner's, typos fixed.
 - **A public song opened offline (loop 23, 2026-11-15):** it says what Explore says offline, "Explore needs the internet.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
+- **Loop round 61, a song's row as R72's SONGROW:** each song its own card 88 tall, a 56 tile, "Bar 9 of 16 · Today" its third line, ··· only (Favourite in its menu), 12 apart and two across on a laptop; no place chips in a folder (2026-11-16).
+
 ## Learn and the editors
 - **Your lessons and courses: search and New in the laptop bar (loop round 60, 2026-11-16):** the laptop page put its search, Recent and + New in a row under the title, where the Practice libraries carry theirs in the bar; they stand in the bar now, and the New menu, Sort and the New sheet open under them.
 - **The next lesson looks the same in a level and a course** (loop round 50, Course): a level ringed its next lesson in honey around the lesson mark, a course around its number; the course's next now wears the lesson mark too, its number still in the line under the title (Course, CourseLaptop).

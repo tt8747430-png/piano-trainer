@@ -47,7 +47,7 @@ export function LibraryBrowse({
   const { view } = page
   const styled = cardLookProps(look)
   // A laptop's pane draws its songs as a table in List, as the style's cards in Cards and Grid.
-  const asTable = table && (look?.style.layout ?? 'list') === 'list'
+  const asTable = table && (look ?? DEFAULT_CARD_LOOK).style.layout === 'list'
   // Home's every song folds after its first (a calm page, never thousands of pixels): Show all n.
   const [unfolded, setUnfolded] = useState(false)
   const headed = view.groups.some((group) => group.key === 'all')

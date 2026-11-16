@@ -54,6 +54,7 @@ export const songs: LocaleResources['songs'] = {
     },
   },
   continue: { title: 'Недавние', bar: 'Такт {{bar}} из {{total}}', seeAll: 'Все {{count}}' },
+  row: { notStarted: 'Не начата' },
   all: { title: 'Все песни', search: 'Поиск по вашим песням' },
   groups: {
     title: 'Группы',

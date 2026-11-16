@@ -80,12 +80,12 @@ details.
   Search is the bar's round button and opens **All songs** (`/songs/all`): every song in one list, searched, sorted
   and filtered by the Sort and filter sheet, Select in its bar. A search or filter carried in Home's URL still shows
   what it finds there. The laptop's overview has no tree beside it: the folder cards three across.
+- **A song's row is a card of its own** (R72's SONGROW, the default Card style): 88 tall, its first notes in a 56
+  tile, its title over its composer and key and a third line saying where it stands and when it was last played
+  ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started"); ··· at its end on every pointer holds its acts,
+  Favourite among them, so the row carries no heart. The cards stand 12 apart, two across on a laptop, in All songs
+  and a folder alike; a folder shows no place chips. The List style keeps one card with hairlines.
 
 ## Consequences
 
 A study, practised on Practice, is in no library. A folder played song after song is a later round's.
-
-## History
-
-- 2026-11-16, loop round 61: My songs became the R72 board's overview and All songs its own page; the Archive left
-  the bar for a row beside the Trash, which left the bar's ···.
