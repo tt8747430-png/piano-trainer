@@ -103,7 +103,9 @@ wins there.
   component … so that we dont have unneded components unneded pages, duplicate content"): the current design is not
   the spec. Each round, before polishing a page, every page, tab, section, control and explanation on it is asked:
   needed? said elsewhere? merge, move, or show it as a picture? already known to the learner? What fails goes the same
-  turn ([ui-and-mockups](references/ui-and-mockups.md), Building a screen, step 2).
+  turn, and the same is asked between pages and across the whole app (owner, 2026-11-16: "check between the pages
+  for these thigns and across the app"): one home per thing, a link from the others
+  ([ui-and-mockups](references/ui-and-mockups.md), Building a screen, step 2).
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.

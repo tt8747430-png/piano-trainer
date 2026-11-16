@@ -24,6 +24,12 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
    it merge with a neighbour or move to where it is used; could a picture or the music show it more simply; does the
    learner already know it. Remove, merge or move what fails, in the same turn, and say in the spec what went and
    why. Polish only what survives.
+   **Between pages and across the app too** (owner, 2026-11-16: "you should also check between the pages for these
+   thigns and across the app"): the same questions are asked of the page against its neighbours and the whole app:
+   two pages that show the same thing (a key's facts on Scales and on the Circle of fifths, a chord's tiles on Chords
+   and on Scales), a page that only repeats a section of another, a tab or a page that could be a section of its
+   parent, the same content explained in two places, the same act reachable two ways. One home is kept for each
+   thing; the others link to it or go.
 3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
    reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
 4. **Build what the board's code draws** (`SKILL.md`, Port from the board's code): read the board's generator and
