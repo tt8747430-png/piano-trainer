@@ -125,7 +125,7 @@ PEEDIT = _PEH + _PEN + _PEP + _PES + _PEL
 # on a laptop what the progression is called stands left, the progression itself and its lines right
 PEEDIT_L = _PEH + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_PEN}{_PES}</div><div style="display: flex; flex-direction: column; gap: 16px">{_PEP}{_PEL}</div></div>'
 PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'), ('action', 'Share link', 'share'), bg=SHEET))
-         + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET), FOOT('Only a progression an editor made can be removed; those shipped with the app stay.')))
+         + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET)))
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
          + FOOT('Publishing replaces the version learners see. They get it on their next visit; nothing they saved is lost.')
          + f'<div style="display: flex; gap: 8px">{BTN("Discard changes", "discard", "", "quiet", 50)}{BTN("Publish", "publish", "", "primary", 50)}</div>')
