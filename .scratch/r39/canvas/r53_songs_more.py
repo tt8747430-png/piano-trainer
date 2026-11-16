@@ -41,7 +41,7 @@ EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + ';\n' + r'''
     const mine = st.mine ?? 3, inLib = !!st.inLib, sh = st.shelf ?? null;
     return { ...common(st, set), q: st.q ?? '', setQ: (e) => S({ q: e.target.value }), clearQ: () => S({ q: '', cat: 'All' }), cats: chipsOf(['All', 'Classical', 'Folk', 'Pop', 'Studies', 'Patterns', 'Other'], cat, (x) => S({ cat: x })),
       isList: !page && !sh, isShelf: !page && !!sh, shelfT: sh || '', seeNew: () => S({ shelf: 'New' }), seeSaved: () => S({ shelf: 'Most saved' }), seeTop: () => S({ shelf: 'Top rated' }), backList: () => S({ shelf: null }),
-      sNew: shelf([5, 4, 6, 2]), sSaved: shelf([0, 1, 7, 3]), sTop: shelf([6, 0, 7, 1]), all: pick.map(card), any: pick.length > 0 && !demo, none: pick.length === 0 && !demo, noneT: 'No songs match “' + (st.q ?? '') + '”.',
+      sNew: shelf([5, 4, 6, 2, 3, 7]), sSaved: shelf([0, 1, 7, 3, 2, 5]), sTop: shelf([6, 0, 7, 1, 4, 3]), all: pick.map(card), any: pick.length > 0 && !demo, none: pick.length === 0 && !demo, noneT: 'No songs match “' + (st.q ?? '') + '”.',
       offline: demo === 'Offline', failed: demo === 'Failed', loading: demo === 'Loading', empty: demo === 'Nothing published', demo: demoOf(['Loading', 'Offline', 'Failed', 'Nothing published'], demo, 'demo'),
       isSong: page === 'song', isShared: page === 'shared', isMain: !page, notMain: !!page, goShared: () => S({ page: 'shared' }), back: () => S({ page: null }), backT: 'Explore',
       sT: song[0], sBy: song[1], sCat: song[2], sCol: song[3], sR: song[4], sS: song[5] + ' saves', inLib, notInLib: !inLib, libT: inLib ? 'In your library' : 'From Explore · not in your library', libB: inLib ? 'Open in my library' : 'Add to my library',
@@ -91,7 +91,7 @@ exph = (IF('isMain', IF('isList', f'<header style="flex: none; min-height: 56px;
            + IF('isShelf', TOP('', '', '', 'Explore', IB('Explore', CHEV_L, 'backList')) + NARROW(H1('{{shelfT}}') + GRID('all', 2))), 'true')
         + IF('isSong', TOP('', '', REPORTB, 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(PUBSONG))
         + IF('isShared', TOP('', 'A shared song', '', 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(SHARED)) + TOASTS)
-exlm = (IF('isMain', IF('isList', WIDE(f'<header style="flex: none; display: flex; align-items: center; gap: 12px; padding-top: 20px"><a href="SongsLaptop.dc.html" style="font-size: 30px; font-weight: 700; color: {LINE}; text-decoration: none">My songs</a><h1 style="margin: 0; font-size: 30px; font-weight: 700">Explore</h1></header>' + EXLIST.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 1000) + STRIP(), 'true')
+exlm = (IF('isMain', IF('isList', WIDE(f'<header style="flex: none; display: flex; align-items: center; gap: 12px; padding-top: 20px"><a href="SongsLaptop.dc.html" style="font-size: 30px; font-weight: 700; color: {LINE}; text-decoration: none">My songs</a><h1 style="margin: 0; font-size: 30px; font-weight: 700">Explore</h1></header>' + EXLIST.replace('Songs.dc.html', 'SongsLaptop.dc.html').replace('display: flex; gap: 14px; overflow-x: auto; margin: -4px -16px 4px; padding: 0 16px"', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin: -4px 0 4px"'), 1180) + STRIP(), 'true')
            + IF('isShelf', LTOP('', '') + WIDE(EXSHELF + GRID('all', 5), 1000)), 'true')
         + IF('isSong', PAGEHEAD_L('back', 'Explore', REPORTB) + WIDE(PUBSONG, 704))
         + IF('isShared', PAGEHEAD_L('back', 'Explore') + WIDE(H1('A shared song') + SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)

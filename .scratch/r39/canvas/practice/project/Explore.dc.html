@@ -84,7 +84,7 @@ const PUB = [["Amazing Grace", "John Newton", "Other", "#F6E7C8", "4.8", "312"],
     const mine = st.mine ?? 3, inLib = !!st.inLib, sh = st.shelf ?? null;
     return { ...common(st, set), q: st.q ?? '', setQ: (e) => S({ q: e.target.value }), clearQ: () => S({ q: '', cat: 'All' }), cats: chipsOf(['All', 'Classical', 'Folk', 'Pop', 'Studies', 'Patterns', 'Other'], cat, (x) => S({ cat: x })),
       isList: !page && !sh, isShelf: !page && !!sh, shelfT: sh || '', seeNew: () => S({ shelf: 'New' }), seeSaved: () => S({ shelf: 'Most saved' }), seeTop: () => S({ shelf: 'Top rated' }), backList: () => S({ shelf: null }),
-      sNew: shelf([5, 4, 6, 2]), sSaved: shelf([0, 1, 7, 3]), sTop: shelf([6, 0, 7, 1]), all: pick.map(card), any: pick.length > 0 && !demo, none: pick.length === 0 && !demo, noneT: 'No songs match “' + (st.q ?? '') + '”.',
+      sNew: shelf([5, 4, 6, 2, 3, 7]), sSaved: shelf([0, 1, 7, 3, 2, 5]), sTop: shelf([6, 0, 7, 1, 4, 3]), all: pick.map(card), any: pick.length > 0 && !demo, none: pick.length === 0 && !demo, noneT: 'No songs match “' + (st.q ?? '') + '”.',
       offline: demo === 'Offline', failed: demo === 'Failed', loading: demo === 'Loading', empty: demo === 'Nothing published', demo: demoOf(['Loading', 'Offline', 'Failed', 'Nothing published'], demo, 'demo'),
       isSong: page === 'song', isShared: page === 'shared', isMain: !page, notMain: !!page, goShared: () => S({ page: 'shared' }), back: () => S({ page: null }), backT: 'Explore',
       sT: song[0], sBy: song[1], sCat: song[2], sCol: song[3], sR: song[4], sS: song[5] + ' saves', inLib, notInLib: !inLib, libT: inLib ? 'In your library' : 'From Explore · not in your library', libB: inLib ? 'Open in my library' : 'Add to my library',
