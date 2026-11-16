@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 43, the laptop editor's bar holds no title (EditorLaptop):** "Amazing Grace" beside Close is gone, as round 30 ruled (the score prints it where it is edited); the save status, "Saved on this device", stays beside Close alone (2026-11-16).
 - **Loop round 35, the phone's printed title as the Editor board's:** 21 in the book serif over the lines (it was 24), 30 from a tablet up as the EditorLaptop board's 29 (2026-11-15).
 - **Loop round 34, the keys under the sheet alone beside the docked panel (EditorLaptop):** on a laptop the keys run from the screen's edge to the panel's hairline, and the panel runs on to the screen's foot, as the board draws them; they no longer pass under the panel (2026-11-15).
 - **Loop round 31, the tools stay in place, greyed, as Flat's (owner, 2026-11-15: "make the design exactly like the flat editor"; replaces R32-B's "only the tools that act on what is chosen are drawn"):** with no note chosen, Pitch, Articulations, Ornaments, Dynamics and the tempo marks keep every key in their place at 40%, disabled, "Choose a note" their tooltip; the phone's row the same; no line of text stands in their place (2026-11-15).

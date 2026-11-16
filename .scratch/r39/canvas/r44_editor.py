@@ -77,7 +77,7 @@ def GBTN(label, svg, act='', href='', tip=''):
 def EBAR(close_href, play_href, title=False):
     left = f'<a href="{close_href}" aria-label="Close the editor" data-tip="Close · Esc" style="flex: none; width: 44px; height: 44px; border-radius: 22px; {GL}; color: {INK}; display: flex; align-items: center; justify-content: center; position: relative">{XI}</a>'
     if title:
-        left += f'<div style="display: flex; flex-direction: column; gap: 0; min-width: 0"><span style="font-size: 17px; font-weight: 600; white-space: nowrap">Amazing Grace</span><span style="font-size: 13px; color: {SOFT}">Saved on this device</span></div>'
+        left += f'<div style="display: flex; align-items: center; min-width: 0"><span style="font-size: 13px; color: {SOFT}">Saved on this device</span></div>'
     right = f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("Undo", UNDO, tip="Undo · ⌘Z")}{GBTN("Redo", REDO, tip="Redo · ⇧⌘Z")}{GBTN("Score settings", MORE, "openMore")}</div>'
     return (f'<header style="flex: none; position: relative; z-index: 20; height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px">'
             f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW(play_href)}<div style="display: flex; justify-content: flex-end">{right}</div></header>')
