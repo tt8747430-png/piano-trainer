@@ -50,7 +50,7 @@ def IB(label, svg, act='', href='', pressed=''):
     if href: return f'<a href="{href}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{svg}</a>'
     return f'<button type="button" aria-label="{label}" data-tip="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} style="{GLASSST}">{svg}</button>'
 # A word in the bar (Edit, Learned): the same glass, as a capsule 44 tall.
-TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap'
+TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap'
 def TB(label, act):
     return f'<button type="button" onClick="{{{{{act}}}}}" style="{TBST}">{label}</button>'
 # Learned, on a song and a lesson: the glass capsule, a grass wash once learned (JS gives learnedBg, learnedLine, learnedFg).
@@ -69,7 +69,7 @@ def TITLEBAR(title, right='', back='', backlabel='Back', soft='', wrap=False):
     fs = 26 if soft else 24 if wrap else 28  # two titles side by side (My songs · Explore) take a step down so neither is cut
     # a page's own name (a course's, a lesson's Settings') takes a second line before it is ever cut
     s = f'<span style="flex: none; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}; white-space: nowrap">{soft}</span>' if soft else ''
-    return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 12px 4px 16px">{b}'
+    return (f'<header data-float style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 12px 4px 16px">{b}'
             f'<h1 data-bar-title style="margin: 0; min-width: 0; flex: {"none" if soft else "0 1 auto"}; font-size: {fs}px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; ' + ('display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: balance' if wrap else 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis') + f'">{title}</h1>{s}'
             f'<span style="flex: 1"></span><div style="flex: none; display: flex; align-items: center; gap: 8px">{right}</div></header>')
 def LTITLEBAR(title, right='', back='', backact=''):
@@ -87,7 +87,7 @@ def INFOB(label, act, on):
     return f'<button type="button" aria-label="{label}" data-tip="{label}" aria-expanded="{{{{{on}}}}}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; margin: -12px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
 def INFOTIP(on, close, label, body, pos='left: 0; top: 32px'):
     return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: fixed; inset: 0; z-index: 60"></div>'
-            f'<div role="dialog" aria-label="{label}" style="position: absolute; {pos}; z-index: 61; width: 300px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 14px 16px; border-radius: 16px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 15px; line-height: 1.45; text-wrap: pretty; display: flex; flex-direction: column; gap: 10px">{body}</div></sc-if>')
+            f'<div role="dialog" aria-label="{label}" style="position: absolute; {pos}; z-index: 61; width: 300px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 16px; border-radius: 16px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 15px; line-height: 1.45; text-wrap: pretty; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>')
 def SUBJECT(name, sub, size=40, align='left'):
     return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
 H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
@@ -95,9 +95,9 @@ CAPS = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 13px; font-weight: 6
 
 # ── controls ──
 def SEGC(lst, h=32, fs=14):
-    return f'<div role="radiogroup" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 10px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
+    return f'<div role="radiogroup" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
 def CHIPS(lst):
-    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 6px; overflow-x: auto; margin: -5px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 14px; border: solid transparent; border-width: 5px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
+    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -5px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 5px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 KCHIPS = CHIPS
 # In a sheet the choices wrap, never cut at its edge ("nothing is cut")
 WCHIPS = lambda lst: CHIPS(lst).replace('overflow-x: auto; margin: -5px -16px; padding: 0 16px', 'flex-wrap: wrap; row-gap: 0; margin: -5px 0', 1)
@@ -112,7 +112,7 @@ def GROUP(*rows, bg=FILL):
         sep = f'box-shadow: inset 0 -1px 0 {FILL};' if i < len(rows) - 1 else ''
         k = r[0]
         lab = f'<span style="flex: 1; min-width: 0; font-size: 16px">{r[1]}</span>'
-        base = f'min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 16px; {sep}'
+        base = f'min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 12px 6px 16px; {sep}'
         if k == 'link':  # label, value, href or act
             val = f'<span style="font-size: 16px; color: {SOFT}; white-space: nowrap">{r[2]}</span>' if r[2] else ''
             tgt = r[3] if len(r) > 3 else ''
@@ -120,7 +120,7 @@ def GROUP(*rows, bg=FILL):
                 out.append(f'<a href="{tgt}" style="{base} color: {INK}; text-decoration: none">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
             else:
                 out.append(f'<button type="button" {("onClick=\"{{" + tgt + "}}\"") if tgt else ""} style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
-        elif k == 'seg': out.append(f'<div style="{base.replace("align-items: center; gap: 10px; padding: 6px 12px 6px 16px", "flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 12px 12px 16px")}"><span style="font-size: 16px">{r[1]}</span>{SEGC(r[2], 44, 14)}</div>')
+        elif k == 'seg': out.append(f'<div style="{base.replace("align-items: center; gap: 12px; padding: 6px 12px 6px 16px", "flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 12px 12px 16px")}"><span style="font-size: 16px">{r[1]}</span>{SEGC(r[2], 44, 14)}</div>')
         elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5])}</div>')
         # a switch row is one control: the row is the switch and carries its name; the drawn switch is its picture
         elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2]).replace(f'role="switch" aria-checked="{{{{{r[2]}}}}}"', 'aria-hidden="true"', 1)}</button>')
@@ -150,11 +150,11 @@ def ROOTGRID(lst='roots'):
         return (f'<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 14px; background: {FILL}">'
                 f'<sc-for list="{{{{{lst}.{half}}}}}" as="r" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" '
                 f'style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
-    return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 6px">{track("a")}{track("b")}</div>'
+    return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
 def BSHEET(cond, title, body, done='Done'):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 14px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 14px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
 
 def js(body):
     return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
@@ -223,7 +223,7 @@ def _track(lst, n, label):
     return (f'<div role="radiogroup" aria-label="{label}" style="display: grid; grid-template-columns: repeat({n}, minmax(0, 1fr)); gap: 2px; padding: 3px; border-radius: 14px; background: {FILL}"><sc-for list="{{{{roots.{lst}}}}}" as="r" hint-placeholder-count="{n}"><button type="button" role="radio" aria-checked="{{{{r.on}}}}" aria-label="{{{{r.aria}}}}" onClick="{{{{r.pick}}}}" style="height: 48px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 19px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
 HINT = (f'<sc-if value="{{{{rootHint.on}}}}" hint-placeholder-val="{{{{true}}}}"><div aria-hidden="true" style="position: relative; height: 34px; margin-top: -4px">'
         f'<span style="position: absolute; top: 0; {{{{rootHint.tip}}}}; width: 12px; height: 12px; background: {INK}; transform: translateY(2px) rotate(45deg); border-radius: 2px"></span>'
-        f'<span style="position: absolute; top: 6px; {{{{rootHint.box}}}}; height: 26px; padding: 0 10px; border-radius: 13px; background: {INK}; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 26px; white-space: nowrap">{{{{rootHint.t}}}}</span></div></sc-if>')
+        f'<span style="position: absolute; top: 6px; {{{{rootHint.box}}}}; height: 26px; padding: 0 12px; border-radius: 13px; background: {INK}; color: #FEFDFB; font-size: 13px; font-weight: 600; line-height: 26px; white-space: nowrap">{{{{rootHint.t}}}}</span></div></sc-if>')
 NOTEPICK = '<div style="display: flex; flex-direction: column; gap: 4px">' + _track('a', 7, 'Root') + HINT + '</div>'
 
 # ── New: one dial on a phone's floating +, one menu from a laptop's New ▾ (canvas 169) ──
@@ -262,7 +262,7 @@ def NEWFAB(label, act, bottom):
 def NEWMENU(items):
     """The same New as a menu: from a laptop's New ▾, or a row."""
     return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'
-NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">'
+NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">'
                                 f'{_NEWPLUS.replace("26", "20")}New{CHEV_D}</button>')
 # A board's states for the canvas's States box: a hidden list states_tool.py lifts out of the screen (each row's
 # {l, bg, pick}; bg ink marks the one shown). The board draws each state itself.
@@ -284,5 +284,5 @@ EMPTYICON = {
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
 
 # Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
-PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
+PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
                         f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')

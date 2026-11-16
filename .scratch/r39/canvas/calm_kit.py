@@ -91,7 +91,7 @@ def ROWS(*rows):
             out.append(label)
     return f'<div style="flex: none; border-radius: 12px; background: {FILL}; overflow: hidden">{"".join(out)}</div>'
 def FLOAT(change, mids='', play=True, bottom=34, sticky=True):
-    ch = f'<button type="button" onClick="{{{{openChange}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; background: transparent; padding: 0 12px; display: flex; align-items: center; gap: 6px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; white-space: nowrap">{change}<span style="display: flex">{CHEV_U}</span></button>' if change else '<span style="flex: 1"></span>'
+    ch = f'<button type="button" onClick="{{{{openChange}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; background: transparent; padding: 0 12px; display: flex; align-items: center; gap: 8px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; white-space: nowrap">{change}<span style="display: flex">{CHEV_U}</span></button>' if change else '<span style="flex: 1"></span>'
     pl = f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: 52px; height: 52px; border: 0; border-radius: 26px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>' if play else ''
     pos = f'position: absolute; left: 16px; right: 16px; bottom: {bottom}px; z-index: 40;' if sticky else 'position: relative;'
     return f'<div role="toolbar" style="{pos} height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{ch}{mids}{pl}</div>'
@@ -127,6 +127,7 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
 def SIDEBAR(section):
     """The app's laptop sidebar with its place current: one drawing for every laptop board."""
     side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1).replace('font-weight: 700">G</span>', 'font-weight: 700">A</span>', 1).replace('font-weight: 600">Guest</span>', 'font-weight: 600">Ana Popescu</span>', 1)
+    side = side.replace('gap: 12px; padding: 0 10px', 'gap: 12px; padding: 0 12px')  # on the 4/8 scale, the avatar on the icons' edge
     for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
@@ -159,7 +160,7 @@ def laptop(fname, title, main, aside, js, pops='', section='Practice'):
     open(OUT + fname + '.dc.html', 'w').write(html)
 
 def POP_L(cond, body, pos='right: 470px; bottom: 120px', w=420):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" style="position: absolute; {pos}; z-index: 61; width: {w}px; box-sizing: border-box; border-radius: 16px; background: {SHEET}; padding: 14px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" style="position: absolute; {pos}; z-index: 61; width: {w}px; box-sizing: border-box; border-radius: 16px; background: {SHEET}; padding: 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
 
 # A page in the calm shape: phone and laptop from one description
 def calm_page(stem, title, js, stage_phone, stage_laptop, tabs=True, rows='', change='', mids='', more='', more_title='', more_foot='', wheel_cols=None, wheel_head='', back='Main.dc.html', back_l='Laptop.dc.html', hero=60, aside_extra='', play=True, section='Practice', heart=False):
@@ -177,7 +178,7 @@ def calm_page(stem, title, js, stage_phone, stage_laptop, tabs=True, rows='', ch
     phone(stem, title + ', phone', body, js, sheets)
     main = f"""<header style="flex: none; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px"><a href="{back_l}" aria-label="Back" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a><div style="display: flex; gap: 4px">{right}<button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></header>
 {HERO(hero + 28, 8)}
-<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 22px 64px 28px">
+<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px; padding: 22px 64px 28px">
 <div style="flex: 1; min-height: 0; position: relative">{stage_laptop}</div>
 {TABS() if tabs else ''}
 <div style="flex: none; display: flex; justify-content: center"><div style="width: 560px">{FLOAT('', mids, play, sticky=False)}</div></div>

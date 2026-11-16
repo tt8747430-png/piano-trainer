@@ -20,8 +20,8 @@ TRY66 = (f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><di
          + '</div></sc-if>')
 NOTES66 = CF_NOTES.replace('height: 64px', 'height: 72px').replace('font-size: 22px', 'font-size: 24px')
 ROWS66 = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}">' + GROUP(
-    ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'),
-    ('raw', f'<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'),
+    ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'),
+    ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'),
     ('link', 'In these keys', '{{inKeys}}', ''), bg=SHEET) + '</sc-if>'
 ERASEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path><path d="M22 21H7"></path><path d="m5 11 9 9"></path></svg>'
 CHORDSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'

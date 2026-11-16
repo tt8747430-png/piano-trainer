@@ -54,7 +54,7 @@ REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span s
                     + CARD(RESULT(w), '8px 12px') + CARD(SPLIT(w), '8px 12px')
                     + f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Quantize</span><div style="display: grid">{SEGC("grids", 44, 14)}</div></div>'
                     + GROUP(('toggle', 'Hide raw notes', 'rawOn', 'toggleRaw'), ('link', 'Into', '{{intoV}}', 'openInto'), bg=SHEET)
-                    + f'<div style="display: flex; gap: 10px; margin-top: 4px">{BTN("Discard", "discard", "", "quiet")}{BTN("Save to score", "save")}</div>')
+                    + f'<div style="display: flex; gap: 12px; margin-top: 4px">{BTN("Discard", "discard", "", "quiet")}{BTN("Save to score", "save")}</div>')
 BACKB = f'<button type="button" aria-label="Back" onClick="{{{{toList}}}}" data-tip="Back" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button>'
 TKS_MORE = GROUP(('action', 'Review', 'doReview'), ('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
 TKS_INTO = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{intoList}}}}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{o.l}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{o.mark}}}}</span></button></sc-for></div>'

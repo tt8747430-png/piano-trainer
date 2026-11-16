@@ -122,9 +122,9 @@ def RS_ACTIONS(perfect, from_profile, lap=False):
     return f'<div style="display: grid; gap: 8px">{main}<div style="display: flex; gap: 8px">{rest}</div></div>'
 
 
-RS_SHOW = (f'<div aria-label="Canvas: show a state" style="flex: none; align-self: center; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}">'
+RS_SHOW = (f'<div aria-label="Canvas: show a state" style="flex: none; align-self: center; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}">'
            f'<span style="font-size: 12px; font-weight: 700; color: {SOFT}; padding: 0 4px">CANVAS · SHOW</span>'
-           f'<sc-for list="{{{{shows}}}}" as="p" hint-placeholder-count="2"><button type="button" onClick="{{{{p.pick}}}}" style="height: 32px; padding: 0 10px; border: 0; border-radius: 16px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 13px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>')
+           f'<sc-for list="{{{{shows}}}}" as="p" hint-placeholder-count="2"><button type="button" onClick="{{{{p.pick}}}}" style="height: 32px; padding: 0 12px; border: 0; border-radius: 16px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 13px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>')
 
 
 def RS_RESULTS(per_row, cw, from_profile, lap=False):

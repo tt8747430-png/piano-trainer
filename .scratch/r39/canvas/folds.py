@@ -23,7 +23,7 @@ def folds(h, stem):
         i = n[0]; n[0] += 1
         return ('<div data-foldhead data-folded="{{fold%d}}" style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px">'
                 '<h2 style="margin: 0; font-size: 20px; font-weight: 700"><button type="button" data-foldbtn aria-expanded="{{foldOpen%d}}" onClick="{{foldT%d}}" '
-                'style="min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; display: inline-flex; align-items: center; gap: 6px; cursor: pointer">'
+                'style="min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; display: inline-flex; align-items: center; gap: 8px; cursor: pointer">'
                 '%s%s</button></h2>' % (i, i, i, m.group(1), _FOLDCHEV))
     h = re.sub(re.escape(_FOLDROW) + r'([^<]*)</h2>', one, h)
     js = ('\n{ const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {\n'
