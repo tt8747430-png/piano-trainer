@@ -88,6 +88,10 @@ details.
 - **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
   in the link's colour with ⇅ at the end, a menu of Manual · Name · Recently played · Key; the Filter sheet holds only
   the filters. A folder's name is its bar's title beside Back (no head under the bar), Select and its gear beside it.
+- **Explore is a feed** (R72, Flat's community): the search, the categories as chips, the count and its order (New,
+  Most saved, Top rated, `CountSort`), then a card per item (`ExploreFeedCard`): who shared it at its head, its tile
+  on its paint with its title and key and meter, a link to its page; at its foot its saves, its stars where enough
+  rated it, and its category. One column on a phone, three across on a laptop; no shelves.
 
 ## Consequences
 

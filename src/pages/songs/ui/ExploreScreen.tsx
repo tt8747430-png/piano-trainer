@@ -3,20 +3,17 @@ import { useSetSearch } from '@/shared/lib'
 import { ChoiceChips, ScreenHeader, SearchField, TitleTabs } from '@/shared/ui'
 import { EXPLORE_CATEGORIES, type SongsHome } from '../model/explore-view'
 import { ExploreResults } from './ExploreResults'
-import { ExploreShelves } from './ExploreShelves'
 import { useSongsViews } from './SongsSwitch'
 
 /**
  * Explore (B3, D1, Noji's library page): Songs' second view, what learners published. Its bar the
- * library's with the switch; the search; the categories as chips (Patterns the patterns); then,
- * with nothing searched, the shelves New, Most saved and Top rated, each with See all; searched or
- * a shelf opened, a grid of cards in an order of the learner's.
+ * library's with the switch; the search; the categories as chips (Patterns the patterns); then the
+ * feed (R72, Flat's community): its count and order, a card per item.
  */
 export function ExploreScreen({ home }: { home: SongsHome }) {
   const { t } = useTranslation('songs')
   const show = useSetSearch<SongsHome>()
   const views = useSongsViews('explore')
-  const listing = home.q.trim() !== '' || home.shelf !== ''
   return (
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader title={t('title')} large views={<TitleTabs {...views} />} />
@@ -40,16 +37,11 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
           scroll
         />
       </div>
-      {listing ? (
-        <ExploreResults
-          home={home}
-          onSort={(shelf) => show({ shelf })}
-          onClear={() => show({ q: '' })}
-          onShelves={() => show({ shelf: '', q: '' })}
-        />
-      ) : (
-        <ExploreShelves cat={home.cat} onSeeAll={(shelf) => show({ shelf })} />
-      )}
+      <ExploreResults
+        home={home}
+        onSort={(shelf) => show({ shelf })}
+        onClear={() => show({ q: '' })}
+      />
     </div>
   )
 }

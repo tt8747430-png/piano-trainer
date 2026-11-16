@@ -513,8 +513,6 @@ export const songs = {
       other: 'Other',
     },
     shelves: { new: 'New', saved: 'Most saved', rated: 'Top rated' },
-    seeAll: 'See all',
-    shelvesBack: 'All shelves',
     sort: 'Sort',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',

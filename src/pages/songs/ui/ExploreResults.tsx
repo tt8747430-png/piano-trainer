@@ -1,28 +1,26 @@
-import { ArrowDownUp, SearchX } from 'lucide-react'
+import { SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicSort } from '@/shared/api/public-library'
-import { BackMark, CardGrid, Dropdown, Said } from '@/shared/ui'
+import { CountSort, Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { ExploreCard } from '@/widgets/song-preview'
+import { ExploreFeedCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
 import { useExploreBrowse } from '../model/use-explore-browse'
 import { CardsLoading, ExploreEmpty, ExploreFailed } from './ExploreStates'
 
 /**
- * Explore searched, or a shelf's See all: a grid of cards, its count at its head and its order
- * (New, Most saved, Top rated) at the head's end; a shelf opened has the way back to the shelves.
- * While asked, grey cards; a search with no match says so, with Clear.
+ * Explore's feed (the R72 board, Flat's community): its count and its order (New, Most saved, Top
+ * rated) at its head, then a card per item, one column on a phone, three across on a laptop. While
+ * asked, grey cards; a search with no match says so, with Clear; nothing published, how to publish.
  */
 export function ExploreResults({
   home,
   onSort,
   onClear,
-  onShelves,
 }: {
   home: SongsHome
   onSort: (sort: PublicSort) => void
   onClear: () => void
-  onShelves: () => void
 }) {
   const { t } = useTranslation('songs')
   const sort = home.shelf || 'new'
@@ -30,24 +28,21 @@ export function ExploreResults({
   const patterns = home.cat === 'patterns'
   const query = home.q.trim()
   return (
-    <section className="flex flex-col gap-2">
-      <div className="flex min-h-9 items-center justify-between gap-2">
-        {home.shelf && !query ? (
-          <Button variant="ghost" className="-ml-3" onClick={onShelves}>
-            <BackMark />
-            {t('explore.shelvesBack')}
-          </Button>
-        ) : (
-          <h2 className="font-sans text-sm font-semibold text-muted-foreground">
-            {browse.kind === 'found'
-              ? t(patterns ? 'explore.patternCount' : 'explore.songCount', {
-                  count: browse.entries.length,
-                })
-              : null}
-          </h2>
-        )}
-        <SortChoice value={sort} onChange={onSort} />
-      </div>
+    <section className="flex flex-col gap-3">
+      {browse.kind === 'found' && browse.entries.length > 0 ? (
+        <CountSort
+          count={t(patterns ? 'explore.patternCount' : 'explore.songCount', {
+            count: browse.entries.length,
+          })}
+          label={t('explore.sort')}
+          sort={sort}
+          sorts={EXPLORE_SHELVES.map((value) => ({
+            value,
+            label: t(`explore.shelves.${value}`),
+          }))}
+          onSort={onSort}
+        />
+      ) : null}
       {browse.kind === 'loading' ? (
         <CardsLoading count={6} />
       ) : browse.kind === 'failed' ? (
@@ -65,45 +60,17 @@ export function ExploreResults({
       ) : browse.entries.length === 0 ? (
         <ExploreEmpty />
       ) : (
-        <CardGrid min="tile" label={t('explore.views.explore')}>
+        <ul
+          aria-label={t('explore.views.explore')}
+          className="grid items-start gap-3 lg:grid-cols-3 lg:gap-4"
+        >
           {browse.entries.map((entry) => (
-            <li key={entry.id}>
-              <ExploreCard entry={entry} />
+            <li key={entry.id} className="min-w-0">
+              <ExploreFeedCard entry={entry} />
             </li>
           ))}
-        </CardGrid>
+        </ul>
       )}
     </section>
-  )
-}
-
-/** The grid's order, at its head's end: its value in a word or two, every one in its list. */
-function SortChoice({
-  value,
-  onChange,
-}: {
-  value: PublicSort
-  onChange: (sort: PublicSort) => void
-}) {
-  const { t } = useTranslation('songs')
-  return (
-    <Dropdown<PublicSort>
-      label={t('explore.sort')}
-      value={value}
-      onChange={onChange}
-      options={EXPLORE_SHELVES.map((sort) => ({
-        value: sort,
-        label: t(`explore.shelves.${sort}`),
-      }))}
-      bare
-      align="end"
-      face={(sort) => (
-        <span className="flex items-center gap-1.5">
-          <ArrowDownUp aria-hidden className="size-4 shrink-0 text-muted-foreground" />
-          <span className="whitespace-nowrap">{t(`explore.shelves.${sort}`)}</span>
-        </span>
-      )}
-      className="h-9 gap-1.5 rounded-pill border-0 bg-transparent px-3 text-sm font-semibold text-muted-foreground shadow-none hover:bg-muted hover:text-foreground"
-    />
   )
 }

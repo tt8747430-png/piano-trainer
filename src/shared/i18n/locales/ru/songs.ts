@@ -502,8 +502,6 @@ export const songs: LocaleResources['songs'] = {
       other: 'Другое',
     },
     shelves: { new: 'Новое', saved: 'Чаще сохраняют', rated: 'Лучшие по оценкам' },
-    seeAll: 'Все',
-    shelvesBack: 'Все подборки',
     sort: 'Сортировка',
     songCount_one: '{{count}} песня',
     songCount_few: '{{count}} песни',

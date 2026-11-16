@@ -33,9 +33,6 @@ export function askOf(cat: ExploreCategory): { kind: PublicKind; category?: Publ
   return { kind: 'song', category: cat }
 }
 
-/** What a browse found; none while it is asked or where it failed. */
-export const entriesOf = (browse: Browse) => (browse.kind === 'found' ? browse.entries : [])
-
 /**
  * Explore's items for what is asked (`ask`), asked again as it changes, once typing rests, when the
  * device comes back online, and on `retry`; what was shown stays until the answer. Nothing to show
