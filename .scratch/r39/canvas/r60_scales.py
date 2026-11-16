@@ -19,7 +19,7 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       handItems: ['Both hands', 'Right hand', 'Left hand'].map((d) => ({ d, on: d.startsWith(hands), mark: d.startsWith(hands) ? '✓' : '', pick: () => set({ hands: d.split(' ')[0], menu: null }) })),
       handsLabel: hands === 'Both' ? 'Both hands' : hands + ' hand', hB: hands === 'Both', hR: hands === 'Right', hL: hands === 'Left',
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }),
-      practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'In ' + tonic + ' ' + KINDS[kind].toLowerCase()]].map(([t, s]) => ({ t, s })),
+      practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'The Virtuoso Pianist, part one']].map(([t, s]) => ({ t, s })),
       states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
       // the left hand two octaves under the right, on its own bass staff, its fingers under it (piano-chords-and-scales-app 006)
@@ -48,8 +48,7 @@ assert SC60 != SC, 'SC return not found'
 PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 64px; padding: 0 12px 0 16px; border: 0; border-radius: 14px; background: {FILL}; color: {INK}; '
                                   f'display: flex; align-items: center; gap: 8px; font: inherit"><span style="font-family: {SERIF}; font-size: 40px; font-weight: 700; line-height: 1; white-space: nowrap">{{{{{val}}}}}</span>'
                                   f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
-TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div>'
-           f'<p style="margin: 0 0 0 4px; font-size: 15px; color: {SOFT}"><span>{{{{sigLine}}}}</span></p></div>')
+TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
 def GRANDSTAFF(label):
     """The scale on a grand staff, each hand on its staff with its fingers, as the books print a scale (and the example's 006)."""
     tre = SCALESTAFF(label)
