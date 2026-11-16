@@ -132,12 +132,12 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
     body = both(lambda p: RS_BODY(per_row, cw, p, from_profile, lap))
     acts = both(lambda p: RS_ACTIONS(p, from_profile, lap))
     if lap:
-        # on a laptop the verdict, its figures and what to do next stand left, the run written out large beside them
+        # on a laptop one centred column, as the phone reads: the verdict, its figures, the run, what to do next
         def side(p):
             h, t, r, f = RS_BODY(per_row, cw, p, from_profile, lap, parts=True)
-            return (f'<div style="display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 56px; align-items: center">'
-                    f'<div style="display: flex; flex-direction: column; gap: 24px">{h}{t}{f}<div>{RS_ACTIONS(p, from_profile, lap)}</div></div>{r}</div>')
-        return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 32px; display: flex; flex-direction: column; justify-content: center; gap: 24px">'
+            return (f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
+                    f'{h}{t}{r}<div style="width: min(400px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{RS_ACTIONS(p, from_profile, lap)}{f}</div></div>')
+        return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px; display: flex; flex-direction: column; gap: 24px">'
                 f'{RS_SHOW}{both(side)}</main>')
     return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: {8 if from_profile else 16}px 16px 24px; display: flex; flex-direction: column; gap: 20px">{RS_SHOW}{body}</main>'
             f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>')
