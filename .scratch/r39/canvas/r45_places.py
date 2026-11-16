@@ -171,7 +171,7 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 18px">'
-       f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{CONT}{H2("Levels")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 14px">{OWNGROUP(True)}</div></div>'
+       f'{CONT}<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">{H2("Levels")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 14px">{OWNGROUP(True)}</div></div>'
        f'{H2("Courses", SEEALL("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
