@@ -29,7 +29,7 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const cells = []; for (let i = 0; i < M.first; i++) cells.push({ d: '', bg: 'transparent', ink: '#332921', ring: 'none', a: '' });
     for (let d = 1; d <= M.len; d++) { const on = M.done(d), fut = mon === 0 && d > 11; cells.push({ d: String(d), bg: on ? '#E8B48F' : 'transparent', ink: fut ? '#B4AAA0' : '#332921', ring: d === M.today ? '0 0 0 2px #C26A2E' : 'none', a: d + ': ' + (on ? 'practised' : 'not practised') }); }
     const badge = BADGES.find((b) => b[0] === page);
-    const badges = BADGES.map(([n, tier, k]) => ({ n, sub: tier ? tier + ', ' + k + ' of 4' : 'Not started', med: MEDC[tier], open: () => S({ page: n }) }));
+    const badges = BADGES.map(([n, tier, k]) => ({ n, sub: ((nx) => (tier || 'Not started') + (nx ? (tier ? ' · next: ' : ' · ') + nx[0] + ' at ' + nx[1] : ' · every tier reached'))(BADGES.find((b) => b[0] === n)[4].find((x) => !x[2].startsWith('Reached'))), med: MEDC[tier], open: () => S({ page: n }) }));
     const tiers = badge ? badge[4].map(([t, goal, s]) => ({ t, goal, s, med: MEDC[t], dim: s === 'Locked' ? 0.45 : 1, ink: s.startsWith('Reached') ? '#44684A' : '#685E56' })) : [];
     const mile = MILES.find((m) => m[0] === page);
     const read = !!st.read, cleared = !!st.cleared, gone = st.gone ?? [];
@@ -63,7 +63,10 @@ TILES9 = f'<div style="display: flex; gap: 8px">{TILE9(FLAME, "12", "Day streak"
 SEEALL9 = lambda act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; border: 0; background: transparent; padding: 0; font: inherit; font-size: 15px; font-weight: 600; color: {LINK}">See all</button>'
 def BROW9(name, tier, sub, act):
     return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'
-BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(BROW9('Streak Keeper', 'Silver', 'Silver · next: Gold at 14 days', 'goB0') + BROW9('Repertoire', 'Bronze', 'Bronze · 4 songs learned', 'goB1') + BROW9('Lesson Finisher', 'Bronze', 'Bronze · 6 lessons learned', 'goB2'))
+def _BSUB(n):
+    b = next(x for x in BADGES9 if x[0] == n); nx = next((t for t in b[4] if not t[2].startswith('Reached')), None)
+    return (b[1] or 'Not started') + (f' · {"next: " if b[1] else ""}{nx[0]} at {nx[1]}' if nx else ' · every tier reached')
+BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW9(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
 def AROW9(name, sub, got, act):
     return AROW(name, sub, got).replace('<div style="min-height: 60px;', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px;', 1)[:-6] + f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
 ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First song learned', 'Earned 3 November 2026', True, 'goM0') + AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
