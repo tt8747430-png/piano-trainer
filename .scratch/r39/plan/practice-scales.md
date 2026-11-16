@@ -8,7 +8,14 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
 - "fingerings as the printed books give them, more kinds, Hanon 1–20, a tempo ladder": fingering by hand from the
   books for every major and white-key minor, the honest note where none is standard; twenty scale kinds in five
   families; Hanon 1–20 and the tempo ladder under Practise this scale.
-- "The tabs say what is in them": Scale (7 notes) · Chords (I–vii°) · Key (2 flats).
+- **One page, no tabs** (owner, 2026-11-16: "are the tabs correct? do we need them. should we migrate them, should we
+  somehow merge them … what is already know by the user"; piano-chords-and-scales-app `006`–`013`, one scroll of the
+  staff, Triads and Sevenths): Scale · Chords · Key is gone. The Key tab repeated the Scale tab's staff to show two
+  rows, and the three tabs hid less than a screen between them. The page reads down once: the name and its signature
+  ("1 sharp"; the note names left, the keys and the staff name them), the run with its fingers, "Chords in G major" as
+  the song page's chord cards (the keys drawn, the name, the numeral; a row that scrolls on a phone, seven across on a
+  laptop), Relative minor and On the circle of fifths, then Practise in the Player (on a laptop the key's rows stand
+  under Practise in the right column). Replaces "The tabs say what is in them".
 - "Every control says what it belongs to; octaves are a stepper; formulas are computed": Tonic, Scale, On the staff,
   Hands, Octaves (− 1 octave +), Direction; the notes and steps computed from the scale.
 - "No finger numbers on or under keys": fingers are on the staff and in the table, never on the keys.
@@ -18,7 +25,7 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
 - **The Chords page's shape** (loop, 2026-11-14; owner: "components consistent across the app (one piano, one dial,
   one sheet shape)"; canvas v174, `r60_scales.py`): the keys edge to edge under a bar of glass buttons (Back ·
   Scales and keys · Settings · Piano); the scale's name as its two pickers, tonic ⌄ and scale ⌄, as the chord's
-  are, with its signature and notes under them; Scale · Chords · Key as one segmented control; the run engraved
+  are, with its signature and notes under them; the run engraved
   with its fingers over the notes and "Right hand 1 2 3 1 2 3 4 5", "Left hand …" under it (or "No standard
   fingering for this scale"); Practise G major in the Player as rows (Up and down hands together, Hands
   separately, Tempo ladder, Contrary motion, Hanon 1–20); one floating bar as Chords': Tempo (72 BPM, − +) ·

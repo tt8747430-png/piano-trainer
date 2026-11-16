@@ -22,6 +22,10 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'In ' + tonic + ' ' + KINDS[kind].toLowerCase()]].map(([t, s]) => ({ t, s })),
       states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
+      hasChords: tri.length > 0,
+      chordCards: tri.map((t, i) => { const a = (PIV[(i + 2) % 7] - PIV[i] + 12) % 12, b = (PIV[(i + 4) % 7] - PIV[i] + 12) % 12, bs = 53 + ((root + PIV[i] - 5 + 120) % 12), on = (st.hear ?? -1) === i;
+        const kb = calmKeys(53, 76, Object.fromEntries([bs, bs + a, bs + b].map((n) => [n, [on ? '#EDC684' : '#E9C4B8', '']])), 104, 46);
+        return { c: t.c, r: t.c, x: '', d: t.d, kb, ring: on ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }), chordsT: 'Chords in ' + tonic + ' ' + KINDS[kind].toLowerCase(),
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
 
@@ -29,16 +33,22 @@ PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {
                                   f'display: flex; align-items: center; gap: 8px; font: inherit"><span style="font-family: {SERIF}; font-size: 40px; font-weight: 700; line-height: 1; white-space: nowrap">{{{{{val}}}}}</span>'
                                   f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
 TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div>'
-           f'<p style="margin: 0 0 0 4px; font-size: 15px; color: {SOFT}"><span>{{{{sigLine}}}}</span> · <span style="color: {INK}">{{{{noteLine}}}}</span></p></div>')
-SEG60 = ('<style data-seg60>[data-seg60] { position: relative } [data-seg60]::before { content: ""; position: absolute; inset: -3px 0 }</style>' + f'<div role="tablist" aria-label="Scales and keys" style="flex: none; display: flex; height: 44px; box-sizing: border-box; padding: 3px; border-radius: 22px; background: {FILL}"><sc-for list="{{{{tabs}}}}" as="v" hint-placeholder-count="3">'
-         f'<button type="button" role="tab" data-seg60 aria-selected="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="flex: 1 1 0; min-width: 0; height: 38px; padding: 0 4px; border: 0; border-radius: 19px; background: {{{{v.bg}}}}; box-shadow: {{{{v.sh}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{v.fw}}}}">{{{{v.l}}}}</button></sc-for></div>')
+           f'<p style="margin: 0 0 0 4px; font-size: 15px; color: {SOFT}"><span>{{{{sigLine}}}}</span></p></div>')
 FING60 = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 15px; color: {SOFT}">'
           f'<sc-if value="{{{{rhOn}}}}" hint-placeholder-val="{{{{true}}}}"><p style="margin: 0">Right hand <b style="margin-left: 6px; color: {INK}; font-size: 17px; letter-spacing: .12em">{{{{fingRH}}}}</b></p></sc-if>'
           f'<sc-if value="{{{{lhOn}}}}" hint-placeholder-val="{{{{true}}}}"><p style="margin: 0">Left hand <b style="margin-left: 6px; color: {INK}; font-size: 17px; letter-spacing: .12em">{{{{fingLH}}}}</b></p></sc-if>'
           f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0">No standard fingering for this scale</p></sc-if></div>')
-VIEW60 = lambda cols: (f'<sc-if value="{{{{isScale}}}}" hint-placeholder-val="{{{{true}}}}">{CARD(SCALESTAFF("The scale up one octave, its fingers over the notes") + "<div style=\"height: 12px\"></div>" + FING60, "16px 12px")}</sc-if>'
-    f'<sc-if value="{{{{isChords}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{chords}}}}" as="c" hint-placeholder-count="7"><button type="button" aria-label="Play {{{{c.c}}}}" style="height: 80px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: {INK}; font: inherit"><span style="font-family: {SERIF}; font-size: 24px; font-weight: 700">{{{{c.c}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></button></sc-for></div></sc-if>'
-    f'<sc-if value="{{{{isKey}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; gap: 12px">{CARD(SCALESTAFF("The key signature"), "16px 12px")}{GROUP(("link", "Relative minor", "E minor", "Scales.dc.html"), ("link", "On the circle", "Between C and D", "CircleOfFifths.dc.html"), bg=SHEET)}</div></sc-if>')
+SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
+    .replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>')
+    if cols < 7 else CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"').replace('class="nos" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px"', 'style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; padding: 2px"').replace('style="flex: none; border: 0;', 'style="min-width: 0; border: 0;').replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>'))
+KEYG60 = GROUP(("link", "Relative minor", "E minor", "Scales.dc.html"), ("link", "On the circle of fifths", "Between C and D", "CircleOfFifths.dc.html"), bg=SHEET)
+# One page, no tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow merge them"): the
+# Key tab repeated the Scale tab's staff for two rows, and the three tabs hid less than a screen between them; the
+# run, the scale's chords and its key now read down one page, each once.
+VIEW60 = lambda cols: (CARD(SCALESTAFF("The scale up one octave, its fingers over the notes") + "<div style=\"height: 12px\"></div>" + FING60, "16px 12px")
+    + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
+    + (KEYG60 if cols < 7 else ''))
+
 PLAYM = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" fill="currentColor"></path></svg>'
 PRACT60 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{practiseT}}}}</h3>'
            f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{practise}}}}" as="p" hint-placeholder-count="5"><a href="Exercise.dc.html" style="min-height: 60px; padding: 8px 14px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
@@ -67,12 +77,12 @@ SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
 
 ph60 = (TOP60 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE60 + SEG60 + VIEW60(4) + PRACT60 + '</main>'
+        + TITLE60 + VIEW60(4) + PRACT60 + '</main>'
         + BAR60('left: 12px; right: 12px; bottom: 30px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px 40px; align-content: start; padding: 8px 40px 120px 56px">'
-        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE60}{SEG60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">') + '</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 4px">{PRACT60}</div></div>'
+        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">') + '</div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px; padding-top: 4px">{PRACT60}{KEYG60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)
 laptop('ScalesLaptop', 'Scales and keys, laptop', lm60, '', SC60, POPS60, 'Practice')
