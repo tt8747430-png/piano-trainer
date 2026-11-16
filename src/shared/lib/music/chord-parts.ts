@@ -137,10 +137,13 @@ const SIZES: Readonly<Record<Triad, readonly BuiltSize[]>> = {
 }
 export const sizesOf = (triad: Triad): readonly BuiltSize[] => SIZES[triad]
 
-/** The 7ths over a triad at a size: a diminished 7th only over a diminished triad, and only as a 7th chord. */
+/**
+ * The 7ths over a triad at a size: a diminished 7th only over a diminished triad, and only as a 7th
+ * chord, as is a major 7th over it (`°(maj7)`).
+ */
 export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
   if (triad !== 'dim') return ['minor', 'major']
-  return size === 7 ? ['minor', 'diminished'] : ['minor']
+  return size === 7 ? ['minor', 'diminished', 'major'] : ['minor']
 }
 
 /**
@@ -176,14 +179,21 @@ export function addedOf({ triad, size }: Pick<ChordParts, 'triad' | 'size'>): re
 
 /**
  * The alterations a chord takes, its available tensions: a dominant 7th (a major 3rd under a minor
- * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its #11; a 7sus4 its ♭9;
- * the rest none.
+ * 7th) every one but a ♭13 over a raised 5th, which is that 5th; a major 7th its ♭5 and #11 (an
+ * augmented one its #11); a 7sus4 its ♭9; a minor 7th its ♭9 (the Phrygian `m7♭9`) and a minor 9th its
+ * #11 (the Dorian `m9#11`); the major triad its ♭5 (`(♭5)`); the rest none. A minor chord and a
+ * triad are altered only with no tone added.
  */
 export function alterationsOf(parts: ChordParts): readonly Alteration[] {
-  if (parts.size === 5) return []
+  const plain = parts.added.length === 0
+  if (parts.size === 5) return parts.triad === 'maj' && plain ? ['b5'] : []
   if (parts.triad === 'sus4') return parts.seventh === 'minor' ? ['b9'] : []
+  if (parts.triad === 'min') {
+    if (!plain || parts.seventh !== 'minor') return []
+    return parts.size === 7 ? ['b9'] : parts.size === 9 ? ['s11'] : []
+  }
   if (parts.triad !== 'maj' && parts.triad !== 'aug') return []
-  if (parts.seventh === 'major') return ['s11']
+  if (parts.seventh === 'major') return parts.triad === 'maj' ? ['b5', 's11'] : ['s11']
   return parts.triad === 'aug' ? ALTERATIONS.filter((each) => each !== 'b13') : ALTERATIONS
 }
 
@@ -298,10 +308,10 @@ export function builtIntervals(parts: ChordParts): LabelledInterval[] {
       names.add('P11')
     }
     if (parts.size === 13) names.add('M13')
-    for (const alteration of parts.alterations) {
-      names.delete(ALTERED[alteration].takes)
-      names.add(ALTERED[alteration].adds)
-    }
+  }
+  for (const alteration of parts.alterations) {
+    names.delete(ALTERED[alteration].takes)
+    names.add(ALTERED[alteration].adds)
   }
   for (const tone of parts.added) names.add(ADDED_INTERVAL[tone])
   return [...names].map((name) => INTERVALS[name]).sort((a, b) => a.semitones - b.semitones)
@@ -333,9 +343,14 @@ function withAddedTones(name: string, tones: readonly AddedTone[]): string {
 
 /**
  * A triad's suffix with the tones it adds: its 6th written first, with its 9th as `6/9` (`6`, `m6/9`,
- * `6sus4`), then the rest (`add9`, `m(add9)`, `6(add11)`).
+ * `6sus4`), then the rest (`add9`, `m(add9)`, `6(add11)`); an altered triad its alteration in
+ * brackets (`(♭5)`).
  */
 function triadRuleSuffix(parts: ChordParts): string {
+  if (parts.alterations.length > 0) {
+    const signs = parts.alterations.map((each) => ALTERATION_SIGN[each]).join(',')
+    return `${triadSuffix(parts.triad)}(${signs})`
+  }
   const six = parts.added.includes('add6') ? SIX[parts.triad] : undefined
   if (!six) return withAddedTones(triadSuffix(parts.triad), parts.added)
   const sixNine = parts.added.includes('add9')

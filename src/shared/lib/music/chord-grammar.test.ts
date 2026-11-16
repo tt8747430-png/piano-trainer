@@ -75,6 +75,12 @@ describe("reading a chord by the builder's grammar", () => {
     ['Cs4', 'Csus4'],
     ['C7sus4b9', 'C7sus4♭9'],
     ['Cm7b5(add11)', 'Cm7♭5(add11)'],
+    ['C(b5)', 'C(♭5)'],
+    ['Cdim(maj7)', 'C°(maj7)'],
+    ['CmMaj7b5', 'C°(maj7)'],
+    ['Cm7(b9)', 'Cm7♭9'],
+    ['Cm9(#11)', 'Cm9#11'],
+    ['CΔ7♭5', 'Cmaj7♭5'],
   ])('reads %s as %s', (symbol, written) => {
     expect(chordSymbol(parseChordSymbol(symbol))).toBe(written)
   })
@@ -277,11 +283,11 @@ describe('the spellings of other apps', () => {
     ['13+11', 'C13#11'],
     ['13#11', 'C13#11'],
     ['m13', 'Cm13'],
-    // A flat after the root is the root's: C♭5.
+    // A flat after the root is the root's (C♭5); a minus before a number its flat (Chordio: a 5th alone).
     ['b5', 'C♭5'],
+    ['-5', 'C(♭5)'],
     // An interval, Chordio's underscores, a root letter in the suffix, or a chord no chart writes.
     ['3', null],
-    ['-5', null],
     ['7_5', null],
     ['6_9', null],
     ['7_6', null],
@@ -294,8 +300,6 @@ describe('the spellings of other apps', () => {
     ['add13', null],
     ['madd13', null],
     ['m13+11', null],
-    ['maj7b5', null],
-    ['m9+11', null],
   ])
 
   it.each(CHORDIO)("reads Chordio's C%s as its tones", (spelling, tones) => {

@@ -41,7 +41,7 @@ const ADDED_PARAM: Readonly<Record<AddedTone, string>> = {
   add13: '13',
 }
 
-/** A `colour` param read at a size: its alterations (a 7th chord's) and added tones, unknown words left out. */
+/** A `colour` param read at a size: its alterations (a 7th chord's, a triad's ♭5) and added tones, unknown words left out. */
 export function readColour(
   value: unknown,
   size: BuiltSize,
@@ -49,8 +49,10 @@ export function readColour(
   // A URL reads a lone number as one: `colour=9`.
   const text = typeof value === 'number' ? String(value) : value
   const words = typeof text === 'string' ? text.split(',') : []
-  const alterations =
-    size === 5 ? [] : ALTERATIONS.filter((each) => words.includes(ALTERATION_PARAM[each]))
+  // A triad's one alteration is its ♭5 (`(♭5)`); its `#11` is added.
+  const alterations = ALTERATIONS.filter(
+    (each) => words.includes(ALTERATION_PARAM[each]) && (size > 5 || each === 'b5'),
+  )
   const added = ADDED_TONES.filter(
     (tone) =>
       words.includes(ADDED_PARAM[tone]) && !(tone === 'addS11' && alterations.includes('s11')),

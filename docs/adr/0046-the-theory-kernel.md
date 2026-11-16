@@ -95,9 +95,22 @@ something to play, and the root goes to the left hand.
   9th the key has over it; a half-diminished chord's 9th is its natural one (`m9♭5`). A numeral may be applied
   (`V/ii`, `ii°/vi`), read in the key on that degree. A chord typed is its numeral, whatever its quality.
 - **Naming what is played** (`nameChords`): every chord the builder makes, on each pitch class played as its root,
-  in any inversion over its bass; a 7th chord or larger may leave out its perfect 5th, as hands do. Two notes are an
-  interval, a perfect 5th also a power chord (`C5`). A reading says its voicing (close, open, drop 2, a shell, 4ths)
-  and a dominant with two altered tensions is written `C7alt`.
+  in any inversion over its bass; a 7th chord or larger may leave out its perfect 5th, as hands do. A 13th over a
+  major 3rd with its 11th played, all seven tones, is still the 13th (`C13`, `Cmaj13`). Two notes are an interval, a
+  perfect 5th also a power chord (`C5`); two keys are never a rootless chord. A reading says its voicing (close,
+  open, drop 2, a shell, 4ths) and a dominant with two altered tensions is written `C7alt`.
+- **A chord over a foreign bass** (r61, after Piano Companion's ForeignBass, Chordio's bass penalty and ChordLab's
+  slash rule): where the lowest key sounds nowhere above it and the notes above are a whole plain chord with a 3rd
+  (major, minor, 6, m6, add9, m(add9), 7, maj7, m7, m(maj7); no suspended or symmetric one), it is read over that
+  bass: `D C E G` is C/D, `C F B♭ D A` B♭maj7/C. Those readings go first where the best root-position reading has no
+  3rd and is no whole 7sus4 (`C/D` before D9sus4 with no 5th, `Gm/C` before C7sus2, `C9sus4` kept), else after the
+  inversions, the fewest tones first (`Am7 · C6/A · C/A`). With no key the bass is spelled by the chord's side of
+  the circle (`Dm/A♭`, `E/A♯`); in a key, as the key writes it.
+- **Readings worth showing:** three at most; after the best, only a whole one with one alteration at most (an
+  augmented 7th chord's raised 5th counts), so C13#11's notes offer `D9♭13/C`, never `F#7(♭5,#9,♭13)/C`.
+- **The research's qualities:** the major triad with its ♭5 (`C(♭5)`), `C°(maj7)`, the Phrygian `Cm7♭9`, the
+  Dorian `Cm9#11` and `Cmaj7♭5`; a °(maj7) is read in root position only. The builder alters a triad or a minor
+  chord only with no tone added. Its 183 chords and the research's cases (r61 research-theory 1.4) are tests.
 - **The tools' rules:** the chords that hold a melody note are the owner's table as roles (`chordsHolding`); passing
   chords are rules from the target's root in The Ultimate Piano's six categories (`passingChords`); the keys a line of
   chords is in are scored from the chords alone (`keysOfChords`), and each chord read there (`readInKey`), an

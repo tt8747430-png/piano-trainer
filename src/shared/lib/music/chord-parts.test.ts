@@ -102,6 +102,16 @@ describe('buildChord', () => {
   })
 
   it.each([
+    [{ alterations: ['b5'] }, 'C(♭5): C E G♭'],
+    [{ triad: 'dim', size: 7, seventh: 'major' }, 'C°(maj7): C E♭ G♭ B'],
+    [{ triad: 'min', size: 7, alterations: ['b9'] }, 'Cm7♭9: C E♭ G B♭ D♭'],
+    [{ triad: 'min', size: 9, alterations: ['s11'] }, 'Cm9#11: C E♭ G B♭ D F#'],
+    [{ size: 7, seventh: 'major', alterations: ['b5'] }, 'Cmaj7♭5: C E G♭ B'],
+  ] as const)('builds the qualities the research adds: %o → %s', (change, expected) => {
+    expect(built(change)).toBe(expected)
+  })
+
+  it.each([
     [{ size: 7, added: ['add13'] }, 'C7(add13): C E G B♭ A'],
     [{ size: 7, seventh: 'major', added: ['add13'] }, 'Cmaj7(add13): C E G B A'],
     [{ triad: 'min', size: 7, added: ['add11'] }, 'Cm7(add11): C E♭ G B♭ F'],
@@ -136,10 +146,10 @@ describe('partsOf', () => {
 })
 
 describe('CHORD_PARTS', () => {
-  it('makes 173 chords, each once', () => {
+  it('makes 183 chords, each once', () => {
     const suffixes = CHORD_PARTS.map((each) => buildChord(note('C'), each).suffix)
     expect(new Set(suffixes).size).toBe(suffixes.length)
-    expect(suffixes).toHaveLength(173)
+    expect(suffixes).toHaveLength(183)
   })
 
   it('holds only parts that fit', () => {
@@ -164,15 +174,30 @@ describe('what a triad and size offer', () => {
     )
   })
 
-  it('alters a dominant every way, a major 7th only by its #11, a 7sus4 by its ♭9, a minor chord not at all', () => {
+  it('alters a dominant every way, a major 7th by its ♭5 and #11, a 7sus4 by its ♭9, a minor 7th by its ♭9 and a minor 9th by its #11', () => {
     expect(alterationsOf(parts({ size: 9 }))).toEqual(['b5', 'b9', 's9', 's11', 'b13'])
     expect(alterationsOf(parts({ triad: 'aug', size: 7 }))).toEqual(['b5', 'b9', 's9', 's11'])
-    expect(alterationsOf(parts({ size: 7, seventh: 'major' }))).toEqual(['s11'])
+    expect(alterationsOf(parts({ size: 7, seventh: 'major' }))).toEqual(['b5', 's11'])
+    expect(alterationsOf(parts({ triad: 'aug', size: 7, seventh: 'major' }))).toEqual(['s11'])
     expect(alterationsOf(parts({ triad: 'sus4', size: 7 }))).toEqual(['b9'])
     expect(alterationsOf(parts({ triad: 'sus4', size: 13 }))).toEqual(['b9'])
     expect(alterationsOf(parts({ triad: 'sus4' }))).toEqual([])
-    expect(alterationsOf(parts({ triad: 'min', size: 9 }))).toEqual([])
-    expect(alterationsOf(parts({}))).toEqual([])
+    expect(alterationsOf(parts({ triad: 'min', size: 7 }))).toEqual(['b9'])
+    expect(alterationsOf(parts({ triad: 'min', size: 9 }))).toEqual(['s11'])
+    expect(alterationsOf(parts({ triad: 'min', size: 11 }))).toEqual([])
+    expect(alterationsOf(parts({ triad: 'min', size: 7, seventh: 'major' }))).toEqual([])
+    expect(alterationsOf(parts({ triad: 'min', size: 7, added: ['add11'] }))).toEqual([])
+  })
+
+  it('alters only the major triad, by its ♭5, and only with no tone added', () => {
+    expect(alterationsOf(parts({}))).toEqual(['b5'])
+    expect(alterationsOf(parts({ added: ['add9'] }))).toEqual([])
+    expect(alterationsOf(parts({ triad: 'min' }))).toEqual([])
+  })
+
+  it('takes a major 7th over a diminished triad as a 7th chord: °(maj7)', () => {
+    expect(seventhsOf('dim', 7)).toEqual(['minor', 'diminished', 'major'])
+    expect(seventhsOf('dim', 9)).toEqual(['minor'])
   })
 })
 

@@ -30,6 +30,7 @@ const SEVENTHS = new Map<string, SeventhName>([
   ['4 7 10', { lead: '', trail: '', mark: '' }],
   ['3 6 10', { lead: 'm', trail: '♭5', mark: 'ø' }],
   ['3 6 9', { lead: '°', trail: '', mark: '°' }],
+  ['3 6 11', { lead: '°(maj', trail: ')', mark: '°' }],
   ['3 7 11', { lead: 'm(maj', trail: ')', mark: '' }],
   ['4 8 11', { lead: '+maj', trail: '', mark: '+' }],
   ['4 8 10', { lead: '', trail: '#5', mark: '+' }],
