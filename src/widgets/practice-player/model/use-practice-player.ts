@@ -178,7 +178,6 @@ export function usePracticePlayer(
     loop,
     metronome: click,
     countIn: playback.countdown !== 'none',
-    countInHeard: playback.countdown === 'audible',
     speedStep: playback.speedStep,
     voicing,
     rest: view.rest ?? 0,

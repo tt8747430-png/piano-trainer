@@ -49,8 +49,6 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
-  /** Whether the count-in's clicks sound, true unless said: one seen alone counts unheard (B7). */
-  readonly countInHeard?: boolean
   /** The Metronome's sound and squares the click and count-in play in (A35, A39). */
   readonly voicing?: ClickVoicing
   /** Speed training's step, a share of the piece's tempo each pass; 5% unless said (B7). */
@@ -90,8 +88,6 @@ export interface Practice {
   next(): void
   prev(): void
   jumpToBeatGroup(beatGroup: number): void
-  /** Back to the start (R29 B8, Restart): bar 1, or the loop's first bar. */
-  restart(): void
   /** An on-screen key: the same as a MIDI note-on. */
   press(midi: Midi): void
 }
@@ -175,7 +171,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   const passFrom = useEffectEvent(() => ({
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
     countIn,
-    countInHeard: setup.countInHeard !== false,
     voicing: setup.voicing,
   }))
 
@@ -204,7 +199,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             ? undefined
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
-        countInHeard: from.countInHeard,
         voicing: from.voicing,
         metronome,
         clicks,
@@ -327,7 +321,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     next: () => move({ type: 'next' }),
     prev: () => move({ type: 'prev' }),
     jumpToBeatGroup: (beatGroup: number) => move({ type: 'jumpToBeatGroup', beatGroup }),
-    restart: () => move({ type: 'jumpToBeatGroup', beatGroup: state.loop?.first ?? 0 }),
     press: (key: Midi) => dispatch({ type: 'noteOn', midi: key }),
   }
 

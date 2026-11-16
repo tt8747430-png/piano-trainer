@@ -41,7 +41,6 @@ export const player = {
     },
   },
   // The row of tools under the Player's bar (ADR 0108), as a screen reader names it.
-  restart: 'Restart',
   foot: { label: 'Practice tools' },
   version: {
     change: 'Change version',
@@ -420,7 +419,7 @@ export const player = {
   // The Settings' head (its canvas): Edit score, the whole row under the song's name.
   play: 'Play',
   stop: 'Stop',
-  /** The transport (Loop, Restart, ‹ Play ›, Pace, the metronome), as a screen reader names it. */
+  /** The transport (Pace, Loop, ‹ Play ›, Hands, the keyboard), as a screen reader names it. */
   transport: 'Playback',
   playThese: 'Play {{notes}}',
   right: 'Correct',

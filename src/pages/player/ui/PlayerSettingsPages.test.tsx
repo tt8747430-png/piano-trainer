@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { setMetronome, setPlayback } from '@/features/set-preference'
+import { setMetronome } from '@/features/set-preference'
 
 /** Opens the Player's gear at one of its pages, by its row's name (R32: the gear is their home). */
 async function openPage(user: ReturnType<typeof userEvent.setup>, row: RegExp) {
@@ -48,17 +48,6 @@ describe('the Player as its settings say (B7, A27)', () => {
       .flatMap((pass) => pass.sounds)
       .filter((sound) => sound.kind === 'pedal')
     expect(pedals.length).toBeGreaterThan(0)
-  })
-
-  it('counts in on the screen alone, unheard, where the count-in is Visual', async () => {
-    const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/play/bz5')
-    act(() => setPlayback(settingsStore, { countdown: 'visual' }))
-    await user.click(await screen.findByRole('button', { name: 'Play' }))
-    const sounds = audio.played[0]?.sounds ?? []
-    expect(sounds.filter((sound) => sound.kind === 'click')).toEqual([])
-    // The music waits the bar counted in.
-    expect(sounds.find((sound) => sound.kind === 'note')?.at).toBeGreaterThan(0)
   })
 
   it('clicks in the Metronome’s sound, its squares set for the song’s meter (A35, A39)', async () => {

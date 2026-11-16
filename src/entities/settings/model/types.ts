@@ -78,10 +78,10 @@ export interface OtherHandSettings {
 export const DEFAULT_OTHER_HAND: OtherHandSettings = { look: 'dim' }
 
 /**
- * How the Player's count-in goes (B7, the reference's Countdown): none; a bar of clicks counted down
- * on the screen; or counted down on the screen alone, unheard.
+ * How the Player's count-in goes (Flat's metronome: Off · Count-in): none, or a bar of clicks counted
+ * down on the screen. New learners start without, as Flat's.
  */
-export const COUNTDOWNS = ['none', 'audible', 'visual'] as const
+export const COUNTDOWNS = ['none', 'audible'] as const
 export type Countdown = (typeof COUNTDOWNS)[number]
 /** How much faster each pass of speed training plays, a share of the piece's tempo in percent. */
 export const SPEED_STEPS = [2, 5, 10] as const

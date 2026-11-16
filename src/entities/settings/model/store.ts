@@ -101,7 +101,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 50
+export const SETTINGS_VERSION = 51
 
 export type SettingsStore = StoreApi<SettingsState>
 
