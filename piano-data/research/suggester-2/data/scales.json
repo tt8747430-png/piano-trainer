@@ -1,0 +1,1558 @@
+{
+ "_source": "MRMusicSuite.framework, kfun:com.mathieurouthier.music2.scale.ScaleType.$init_global (Ghidra decompile, Interval references resolved through the alphabetically sorted Interval VALUES array). Intervals exclude the implicit Perfect1. exact unless marked.",
+ "_count": 31,
+ "scales": [
+  {
+   "name": "Ionian",
+   "ordinal": 0,
+   "title_en": "major",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Major6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "title_fr": "majeur",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    2,
+    1,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  {
+   "name": "Aeolian",
+   "ordinal": 1,
+   "title_en": "natural minor",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "mineur naturel",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "Dorian",
+   "ordinal": 2,
+   "title_en": "dorian",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Major6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "5",
+    "6",
+    "♭7"
+   ],
+   "title_fr": "dorien",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    2,
+    2,
+    1,
+    2
+   ]
+  },
+  {
+   "name": "Phrygian",
+   "ordinal": 3,
+   "title_en": "phrygian",
+   "intervals": [
+    "Minor2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "♭3",
+    "4",
+    "5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "phrygien",
+   "pitchClassSet": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    2,
+    2,
+    2,
+    1,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "Lydian",
+   "ordinal": 4,
+   "title_en": "lydian",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Augmented4",
+    "Perfect5",
+    "Major6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    9,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "♯4",
+    "5",
+    "6",
+    "7"
+   ],
+   "title_fr": "lydien",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    9,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    2,
+    2,
+    1,
+    2,
+    2,
+    1
+   ]
+  },
+  {
+   "name": "Mixolydian",
+   "ordinal": 5,
+   "title_en": "mixolydian",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Major6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "♭7"
+   ],
+   "title_fr": "myxolydien",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    2,
+    1,
+    2,
+    2,
+    1,
+    2
+   ]
+  },
+  {
+   "name": "Locrian",
+   "ordinal": 6,
+   "title_en": "locrian",
+   "intervals": [
+    "Minor2",
+    "Minor3",
+    "Perfect4",
+    "Diminished5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    3,
+    5,
+    6,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "♭3",
+    "4",
+    "♭5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "locrien",
+   "pitchClassSet": [
+    0,
+    1,
+    3,
+    5,
+    6,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "WholeTone",
+   "ordinal": 7,
+   "title_en": "whole tone",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Augmented4",
+    "Augmented5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "♯4",
+    "♯5",
+    "♭7"
+   ],
+   "title_fr": "unitonique",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "HarmonicMinor",
+   "ordinal": 8,
+   "title_en": "harmonic minor",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "mineur harmonique",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    2,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "JazzMinor",
+   "ordinal": 9,
+   "title_en": "jazz minor",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Major6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "title_fr": "mineur jazz",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  {
+   "name": "MinorBluesFlat5",
+   "ordinal": 10,
+   "title_en": "minor blues (♭5)",
+   "intervals": [
+    "Minor3",
+    "Perfect4",
+    "Diminished5",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    5,
+    6,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "4",
+    "♭5",
+    "5",
+    "♭7"
+   ],
+   "title_fr": "mineur blues (♭5)",
+   "pitchClassSet": [
+    0,
+    3,
+    5,
+    6,
+    7,
+    10
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    3,
+    2,
+    1,
+    1,
+    3,
+    2
+   ]
+  },
+  {
+   "name": "Prometheus",
+   "ordinal": 11,
+   "title_en": "Prometheus",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Diminished5",
+    "Major6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    6,
+    9,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "♭5",
+    "6",
+    "♭7"
+   ],
+   "title_fr": "de Prométhée",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    6,
+    9,
+    10
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    2,
+    2,
+    2,
+    3,
+    1,
+    2
+   ]
+  },
+  {
+   "name": "Augmented",
+   "ordinal": 12,
+   "title_en": "augmented",
+   "intervals": [
+    "Minor3",
+    "Major3",
+    "Perfect5",
+    "Augmented5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    4,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "3",
+    "5",
+    "♯5",
+    "7"
+   ],
+   "title_fr": "augmenté",
+   "pitchClassSet": [
+    0,
+    3,
+    4,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    3,
+    1,
+    3,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "Diminished",
+   "ordinal": 13,
+   "title_en": "diminished",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Diminished5",
+    "Minor6",
+    "Major6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "♭5",
+    "♭6",
+    "6",
+    "7"
+   ],
+   "title_fr": "diminué",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    11
+   ],
+   "noteCount": 8,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1
+   ]
+  },
+  {
+   "name": "HarmonicMajor",
+   "ordinal": 14,
+   "title_en": "harmonic major",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "majeur harmonique",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    2,
+    1,
+    2,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "HungarianMinor",
+   "ordinal": 15,
+   "title_en": "hungarian minor",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Augmented4",
+    "Perfect5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "♯4",
+    "5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "mineur hongrois",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    3,
+    1,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "PhrygianDominant",
+   "ordinal": 16,
+   "title_en": "phrygian dominant",
+   "intervals": [
+    "Minor2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "3",
+    "4",
+    "5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "dominant phrygien",
+   "pitchClassSet": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    3,
+    1,
+    2,
+    1,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "NeapolitanMinor",
+   "ordinal": 17,
+   "title_en": "neapolitan minor",
+   "intervals": [
+    "Minor2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "♭3",
+    "4",
+    "5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "mineur napolitain",
+   "pitchClassSet": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    2,
+    2,
+    2,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "NeapolitanMajor",
+   "ordinal": 18,
+   "title_en": "neapolitan major",
+   "intervals": [
+    "Minor2",
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Major6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    9,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "♭3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "title_fr": "majeur napolitain",
+   "pitchClassSet": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    9,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  {
+   "name": "Persian",
+   "ordinal": 19,
+   "title_en": "persian",
+   "intervals": [
+    "Minor2",
+    "Major3",
+    "Perfect4",
+    "Diminished5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "3",
+    "4",
+    "♭5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "persien",
+   "pitchClassSet": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    3,
+    1,
+    1,
+    2,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "DoubleHarmonicMajor",
+   "ordinal": 20,
+   "title_en": "double harmonic major",
+   "intervals": [
+    "Minor2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "3",
+    "4",
+    "5",
+    "♭6",
+    "7"
+   ],
+   "title_fr": "majeur harmonique double",
+   "pitchClassSet": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    8,
+    11
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    3,
+    1,
+    2,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "name": "AlteredDominant",
+   "ordinal": 21,
+   "title_en": "altered dominant",
+   "intervals": [
+    "Minor2",
+    "Minor3",
+    "Diminished4",
+    "Diminished5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    1,
+    3,
+    4,
+    6,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭2",
+    "♭3",
+    "♭4",
+    "♭5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "dominant altéré",
+   "pitchClassSet": [
+    0,
+    1,
+    3,
+    4,
+    6,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "MajorBluesFlat3",
+   "ordinal": 22,
+   "title_en": "major blues (♭3)",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Major3",
+    "Perfect5",
+    "Major6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    4,
+    7,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "3",
+    "5",
+    "6"
+   ],
+   "title_fr": "majeur blues (♭3)",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    4,
+    7,
+    9
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    2,
+    1,
+    1,
+    3,
+    2,
+    3
+   ]
+  },
+  {
+   "name": "MajorPentatonic",
+   "ordinal": 23,
+   "title_en": "major pentatonic",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect5",
+    "Major6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    7,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "5",
+    "6"
+   ],
+   "title_fr": "pentatonique majeur",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    7,
+    9
+   ],
+   "noteCount": 5,
+   "stepPattern": [
+    2,
+    2,
+    3,
+    2,
+    3
+   ]
+  },
+  {
+   "name": "MinorPentatonic",
+   "ordinal": 24,
+   "title_en": "minor pentatonic",
+   "intervals": [
+    "Minor3",
+    "Perfect4",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    5,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "4",
+    "5",
+    "♭7"
+   ],
+   "title_fr": "pentatonique mineur",
+   "pitchClassSet": [
+    0,
+    3,
+    5,
+    7,
+    10
+   ],
+   "noteCount": 5,
+   "stepPattern": [
+    3,
+    2,
+    2,
+    3,
+    2
+   ]
+  },
+  {
+   "name": "MajorBluesSharp2",
+   "ordinal": 25,
+   "title_en": "major blues (♯2)",
+   "intervals": [
+    "Major2",
+    "Augmented2",
+    "Major3",
+    "Perfect5",
+    "Major6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    4,
+    7,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♯2",
+    "3",
+    "5",
+    "6"
+   ],
+   "title_fr": "majeur blues (♯2)",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    4,
+    7,
+    9
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    2,
+    1,
+    1,
+    3,
+    2,
+    3
+   ]
+  },
+  {
+   "name": "MinorBluesSharp4",
+   "ordinal": 26,
+   "title_en": "minor blues (♯4)",
+   "intervals": [
+    "Minor3",
+    "Perfect4",
+    "Augmented4",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    5,
+    6,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "4",
+    "♯4",
+    "5",
+    "♭7"
+   ],
+   "title_fr": "mineur blues (♯4)",
+   "pitchClassSet": [
+    0,
+    3,
+    5,
+    6,
+    7,
+    10
+   ],
+   "noteCount": 6,
+   "stepPattern": [
+    3,
+    2,
+    1,
+    1,
+    3,
+    2
+   ]
+  },
+  {
+   "name": "AeolianDominant",
+   "ordinal": 27,
+   "title_en": "aeolian dominant",
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect4",
+    "Perfect5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "dominant éolien",
+   "pitchClassSet": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    2,
+    1,
+    2,
+    1,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "LocrianSharp2",
+   "ordinal": 28,
+   "title_en": "locrian (♯2)",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect4",
+    "Diminished5",
+    "Minor6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "4",
+    "♭5",
+    "♭6",
+    "♭7"
+   ],
+   "title_fr": "locrien (♯2)",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    8,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    2,
+    1,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "name": "DorianSharp4",
+   "ordinal": 29,
+   "title_en": "dorian (♯4)",
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Augmented4",
+    "Perfect5",
+    "Major6",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "♯4",
+    "5",
+    "6",
+    "♭7"
+   ],
+   "title_fr": "dorien (♯4)",
+   "pitchClassSet": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    9,
+    10
+   ],
+   "noteCount": 7,
+   "stepPattern": [
+    2,
+    1,
+    3,
+    1,
+    2,
+    1,
+    2
+   ]
+  },
+  {
+   "name": "NeutralPentatonic",
+   "ordinal": 30,
+   "title_en": "neutral pentatonic",
+   "intervals": [
+    "Major2",
+    "Perfect4",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    5,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "4",
+    "5",
+    "♭7"
+   ],
+   "title_fr": "pentatonique neutre",
+   "pitchClassSet": [
+    0,
+    2,
+    5,
+    7,
+    10
+   ],
+   "noteCount": 5,
+   "stepPattern": [
+    2,
+    3,
+    2,
+    3,
+    2
+   ]
+  }
+ ]
+}

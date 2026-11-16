@@ -1,0 +1,374 @@
+{
+ "_source": "MRMusicSuite.framework, kfun:com.mathieurouthier.music2.interval.Interval.$init_global (Ghidra decompile). exact.",
+ "_fields": "name=enum entry; ordinal=declaration order; semitones=semitone distance from root (can be -1 for Diminished1); generic=GenericInterval (Number1..13); symbol=degree label used in UI.",
+ "intervals": [
+  {
+   "name": "Diminished1",
+   "ordinal": 0,
+   "semitones": -1,
+   "generic": "Number1",
+   "symbol": "♭1",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect1",
+   "ordinal": 1,
+   "semitones": 0,
+   "generic": "Number1",
+   "symbol": "1",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented1",
+   "ordinal": 2,
+   "semitones": 1,
+   "generic": "Number1",
+   "symbol": "♯1",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished2",
+   "ordinal": 3,
+   "semitones": 0,
+   "generic": "Number2",
+   "symbol": "♭♭2",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor2",
+   "ordinal": 4,
+   "semitones": 1,
+   "generic": "Number2",
+   "symbol": "♭2",
+   "fr_generic": null
+  },
+  {
+   "name": "Major2",
+   "ordinal": 5,
+   "semitones": 2,
+   "generic": "Number2",
+   "symbol": "2",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented2",
+   "ordinal": 6,
+   "semitones": 3,
+   "generic": "Number2",
+   "symbol": "♯2",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished3",
+   "ordinal": 7,
+   "semitones": 2,
+   "generic": "Number3",
+   "symbol": "♭♭3",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor3",
+   "ordinal": 8,
+   "semitones": 3,
+   "generic": "Number3",
+   "symbol": "♭3",
+   "fr_generic": null
+  },
+  {
+   "name": "Major3",
+   "ordinal": 9,
+   "semitones": 4,
+   "generic": "Number3",
+   "symbol": "3",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented3",
+   "ordinal": 10,
+   "semitones": 5,
+   "generic": "Number3",
+   "symbol": "♯3",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished4",
+   "ordinal": 11,
+   "semitones": 4,
+   "generic": "Number4",
+   "symbol": "♭4",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect4",
+   "ordinal": 12,
+   "semitones": 5,
+   "generic": "Number4",
+   "symbol": "4",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented4",
+   "ordinal": 13,
+   "semitones": 6,
+   "generic": "Number4",
+   "symbol": "♯4",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished5",
+   "ordinal": 14,
+   "semitones": 6,
+   "generic": "Number5",
+   "symbol": "♭5",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect5",
+   "ordinal": 15,
+   "semitones": 7,
+   "generic": "Number5",
+   "symbol": "5",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented5",
+   "ordinal": 16,
+   "semitones": 8,
+   "generic": "Number5",
+   "symbol": "♯5",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished6",
+   "ordinal": 17,
+   "semitones": 7,
+   "generic": "Number6",
+   "symbol": "♭♭6",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor6",
+   "ordinal": 18,
+   "semitones": 8,
+   "generic": "Number6",
+   "symbol": "♭6",
+   "fr_generic": null
+  },
+  {
+   "name": "Major6",
+   "ordinal": 19,
+   "semitones": 9,
+   "generic": "Number6",
+   "symbol": "6",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented6",
+   "ordinal": 20,
+   "semitones": 10,
+   "generic": "Number6",
+   "symbol": "♯6",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished7",
+   "ordinal": 21,
+   "semitones": 9,
+   "generic": "Number7",
+   "symbol": "♭♭7",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor7",
+   "ordinal": 22,
+   "semitones": 10,
+   "generic": "Number7",
+   "symbol": "♭7",
+   "fr_generic": null
+  },
+  {
+   "name": "Major7",
+   "ordinal": 23,
+   "semitones": 11,
+   "generic": "Number7",
+   "symbol": "7",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented7",
+   "ordinal": 24,
+   "semitones": 12,
+   "generic": "Number7",
+   "symbol": "♯7",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished8",
+   "ordinal": 25,
+   "semitones": 11,
+   "generic": "Number8",
+   "symbol": "♭8",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect8",
+   "ordinal": 26,
+   "semitones": 12,
+   "generic": "Number8",
+   "symbol": "8",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented8",
+   "ordinal": 27,
+   "semitones": 13,
+   "generic": "Number8",
+   "symbol": "♯8",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished9",
+   "ordinal": 28,
+   "semitones": 12,
+   "generic": "Number9",
+   "symbol": "♭♭9",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor9",
+   "ordinal": 29,
+   "semitones": 13,
+   "generic": "Number9",
+   "symbol": "♭9",
+   "fr_generic": null
+  },
+  {
+   "name": "Major9",
+   "ordinal": 30,
+   "semitones": 14,
+   "generic": "Number9",
+   "symbol": "9",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented9",
+   "ordinal": 31,
+   "semitones": 15,
+   "generic": "Number9",
+   "symbol": "♯9",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished10",
+   "ordinal": 32,
+   "semitones": 14,
+   "generic": "Number10",
+   "symbol": "♭♭10",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor10",
+   "ordinal": 33,
+   "semitones": 15,
+   "generic": "Number10",
+   "symbol": "♭10",
+   "fr_generic": null
+  },
+  {
+   "name": "Major10",
+   "ordinal": 34,
+   "semitones": 16,
+   "generic": "Number10",
+   "symbol": "10",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented10",
+   "ordinal": 35,
+   "semitones": 17,
+   "generic": "Number10",
+   "symbol": "♯10",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished11",
+   "ordinal": 36,
+   "semitones": 16,
+   "generic": "Number11",
+   "symbol": "♭11",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect11",
+   "ordinal": 37,
+   "semitones": 17,
+   "generic": "Number11",
+   "symbol": "11",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented11",
+   "ordinal": 38,
+   "semitones": 18,
+   "generic": "Number11",
+   "symbol": "♯11",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished12",
+   "ordinal": 39,
+   "semitones": 18,
+   "generic": "Number12",
+   "symbol": "♭12",
+   "fr_generic": null
+  },
+  {
+   "name": "Perfect12",
+   "ordinal": 40,
+   "semitones": 19,
+   "generic": "Number12",
+   "symbol": "12",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented12",
+   "ordinal": 41,
+   "semitones": 20,
+   "generic": "Number12",
+   "symbol": "♯12",
+   "fr_generic": null
+  },
+  {
+   "name": "Diminished13",
+   "ordinal": 42,
+   "semitones": 19,
+   "generic": "Number13",
+   "symbol": "♭♭13",
+   "fr_generic": null
+  },
+  {
+   "name": "Minor13",
+   "ordinal": 43,
+   "semitones": 20,
+   "generic": "Number13",
+   "symbol": "♭13",
+   "fr_generic": null
+  },
+  {
+   "name": "Major13",
+   "ordinal": 44,
+   "semitones": 21,
+   "generic": "Number13",
+   "symbol": "13",
+   "fr_generic": null
+  },
+  {
+   "name": "Augmented13",
+   "ordinal": 45,
+   "semitones": 22,
+   "generic": "Number13",
+   "symbol": "♯13",
+   "fr_generic": null
+  }
+ ]
+}

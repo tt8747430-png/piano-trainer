@@ -1,0 +1,135 @@
+[
+ {
+  "name": "A3",
+  "width_pt": 841.0,
+  "height_pt": 1189.0,
+  "width_mm": 296.7,
+  "height_mm": 419.5
+ },
+ {
+  "name": "A4",
+  "width_pt": 594.0,
+  "height_pt": 841.0,
+  "width_mm": 209.5,
+  "height_mm": 296.7
+ },
+ {
+  "name": "A5",
+  "width_pt": 419.0,
+  "height_pt": 594.0,
+  "width_mm": 147.8,
+  "height_mm": 209.5
+ },
+ {
+  "name": "B4",
+  "width_pt": 708.0,
+  "height_pt": 999.0,
+  "width_mm": 249.8,
+  "height_mm": 352.4
+ },
+ {
+  "name": "B5",
+  "width_pt": 498.0,
+  "height_pt": 708.0,
+  "width_mm": 175.7,
+  "height_mm": 249.8
+ },
+ {
+  "name": "Band (5\" x 7\")",
+  "width_pt": 360.0,
+  "height_pt": 504.0,
+  "width_mm": 127.0,
+  "height_mm": 177.8
+ },
+ {
+  "name": "C4",
+  "width_pt": 649.0,
+  "height_pt": 918.0,
+  "width_mm": 229.0,
+  "height_mm": 323.8
+ },
+ {
+  "name": "Concert (9\" x 12\")",
+  "width_pt": 648.0,
+  "height_pt": 864.0,
+  "width_mm": 228.6,
+  "height_mm": 304.8
+ },
+ {
+  "name": "Executive (7.25\" x 10.5\")",
+  "width_pt": 522.0,
+  "height_pt": 756.0,
+  "width_mm": 184.1,
+  "height_mm": 266.7
+ },
+ {
+  "name": "Folio (8.5\" x 13\")",
+  "width_pt": 612.0,
+  "height_pt": 936.0,
+  "width_mm": 215.9,
+  "height_mm": 330.2
+ },
+ {
+  "name": "Hymn (5.25\" x 8.75\")",
+  "width_pt": 378.0,
+  "height_pt": 630.0,
+  "width_mm": 133.3,
+  "height_mm": 222.2
+ },
+ {
+  "name": "Legal (8.5\" x 14\")",
+  "width_pt": 612.0,
+  "height_pt": 1008.0,
+  "width_mm": 215.9,
+  "height_mm": 355.6
+ },
+ {
+  "name": "Letter",
+  "width_pt": 612.0,
+  "height_pt": 792.0,
+  "width_mm": 215.9,
+  "height_mm": 279.4
+ },
+ {
+  "name": "Octavo (6.75\" x 10.5\")",
+  "width_pt": 486.0,
+  "height_pt": 756.0,
+  "width_mm": 171.4,
+  "height_mm": 266.7
+ },
+ {
+  "name": "Part (10\" x 13\")",
+  "width_pt": 720.0,
+  "height_pt": 936.0,
+  "width_mm": 254.0,
+  "height_mm": 330.2
+ },
+ {
+  "name": "Part (9.5\" x 12.5\")",
+  "width_pt": 684.0,
+  "height_pt": 900.0,
+  "width_mm": 241.3,
+  "height_mm": 317.5
+ },
+ {
+  "name": "Quarto (Metric Demy)",
+  "width_pt": 620.0,
+  "height_pt": 781.0,
+  "width_mm": 218.7,
+  "height_mm": 275.5
+ },
+ {
+  "name": "Statement (5.5\" x 8.5\")",
+  "width_pt": 396.0,
+  "height_pt": 612.0,
+  "width_mm": 139.7,
+  "height_mm": 215.9
+ },
+ {
+  "name": "Tabloid",
+  "width_pt": 792.0,
+  "height_pt": 1224.0,
+  "width_mm": 279.4,
+  "height_mm": 431.8
+ }
+]

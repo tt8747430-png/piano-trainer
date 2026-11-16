@@ -1,0 +1,60 @@
+{
+ "_source": "MetronautPreviewCoreKit disassembly (exact constants)",
+ "timingLevels": [
+  "veryEarly",
+  "early",
+  "perfect",
+  "late",
+  "veryLate"
+ ],
+ "thresholds": {
+  "withSeverity": {
+   "veryEarly": ">0.2",
+   "early": "(0.1,0.2]",
+   "perfect": "(-0.1,0.1]",
+   "late": "(-0.2,-0.1]",
+   "veryLate": "<=-0.2"
+  },
+  "withoutSeverity": {
+   "veryEarly": ">0.5",
+   "early": "(0.25,0.5]",
+   "perfect": "(-0.25,0.25]",
+   "late": "(-0.5,-0.25]",
+   "veryLate": "<=-0.5"
+  },
+  "units": "beats (inferred); positive = early"
+ },
+ "penalty": {
+  "withSeverity": [
+   1,
+   0.5,
+   0,
+   0.3,
+   1
+  ],
+  "withoutSeverity": [
+   0.66,
+   0.33,
+   0,
+   0.33,
+   0.66
+  ]
+ },
+ "levelColors": {
+  "early": "#F87026 (0.97,0.44,0.15)",
+  "perfect": "#008A6E (0.00,0.54,0.43)",
+  "late": "#36B0F7 (0.21,0.69,0.97)"
+ },
+ "zoneColors": {
+  "slow": "#36B0F7",
+  "fast": "#F87026",
+  "irregular": "#FFBF00",
+  "missed": "#FFBF00",
+  "none": "#FFBF00"
+ },
+ "score": {
+  "formula": "ceil(maximumScore * ((pos-startPosition)/scoreDuration) * (1 - penalities/eventCount)); snap to maximumScore if > 0.96*maximumScore; clamp >= 0; only when pos > lastPosition",
+  "snapRatio": 0.96,
+  "startNewPerf": "lastPosition = startPos - 1"
+ }
+}

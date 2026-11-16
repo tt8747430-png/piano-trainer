@@ -1,0 +1,54 @@
+{
+ "_source": "MRMusicSuite.framework: kfun:com.mathieurouthier.music2.pattern.group.ClassicPatternGroups$2.invoke and ClassicalGroup$2.invoke (Ghidra decompile). Titles and group order are exact. Steps are exact unless the step has \"inferred\": true.",
+ "_stepKinds": {
+  "DiatonicTriad": "triad built on the given degree of the CURRENT scale (pattern.Diatonic object, fields 1-7). Quality follows the scale.",
+  "DiatonicSeventh": "seventh chord built on the given degree of the current scale (pattern.Diatonic fields 8-14).",
+  "Degree": "explicit ScaleDegree + explicit ChordType (+ optional voicing, octave shift, ChordRole, semitone shift).",
+  "DegreeOfMajor": "ScaleDegree measured against the MAJOR scale on the same tonic (used for modal borrowing), explicit ChordType.",
+  "Semitones": "root = tonic + N semitones, explicit ChordType."
+ },
+ "groups": [
+  {"title": {"en": "Basic Cadences", "fr": "Cadences de base"}, "patterns": [
+    {"title": {"en": "Perfect Authentic Cadence", "fr": "Cadence authentique parfaite"}, "steps": [["DiatonicTriad","V"],["DiatonicTriad","I"]]},
+    {"title": {"en": "Plagal Cadence", "fr": "Cadence plagale"}, "steps": [["DiatonicTriad","IV"],["DiatonicTriad","I"]]},
+    {"title": {"en": "Minor Plagal Cadence", "fr": "Cadence plagale mineure"}, "steps": [["Degree","SubDominant","ChordType.Major (stack value at ChordType VALUES+0x98)"],["Degree","SubDominant","ChordType.Minor (ChordType VALUES+0xe8)"],["DiatonicTriad","I"]], "readable": "IV – iv – I"}
+  ]},
+  {"title": {"en": "Popular", "fr": "Populaire"}, "patterns": [
+    {"title": {"en": "50's Progression", "fr": "Progression des années 50"}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","vi"],["DiatonicTriad","IV"],["DiatonicTriad","V"]]},
+    {"title": {"en": "Pop-Punk Progression", "fr": "Progression pop-punk"}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","V"],["DiatonicTriad","vi"],["DiatonicTriad","IV"]]},
+    {"title": {"en": "Royal Road Progression", "fr": "Progression Royal Road"}, "steps": [["DiatonicSeventh","IV"],["DiatonicSeventh","V"],["DiatonicSeventh","iii"],["DiatonicTriad","vi"]]},
+    {"title": {"en": "II–V–I Turnaround", "fr": null}, "steps": [["DiatonicTriad","ii"],["DiatonicTriad","V"],["DiatonicTriad","I"]]},
+    {"title": {"en": "V–IV-I Turnaround", "fr": null}, "steps": [["DiatonicTriad","V"],["DiatonicTriad","IV"],["DiatonicTriad","I"]]},
+    {"title": {"en": "I-VI-II-V", "fr": null}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","vi"],["DiatonicTriad","ii"],["DiatonicTriad","V"]]},
+    {"title": {"en": "12 Bar Blues", "fr": "Blues à 12 mesures"}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","I"],["DiatonicTriad","I"],["DiatonicTriad","I"],["DiatonicTriad","IV"],["DiatonicTriad","IV"],["DiatonicTriad","I"],["DiatonicTriad","I"],["DiatonicTriad","V"],["DiatonicTriad","IV"],["DiatonicTriad","I"],["DiatonicTriad","I"]]}
+  ]},
+  {"title": {"en": "Jazz", "fr": "Jazz"}, "patterns": [
+    {"title": {"en": "Jazz 251", "fr": null}, "steps": [["DiatonicSeventh","ii"],["Degree","Dominant","ChordType.Seventh (ChordType VALUES+0x198)"],["DiatonicSeventh","I"]]},
+    {"title": {"en": "Jazz 251 Tritone Substitution", "fr": "Jazz 251 avec substitution tritonique"}, "steps": [["DiatonicSeventh","ii"],["Degree","Dominant","ChordType.Seventh","role: TritoneSubstitution (inferred from the role argument)","semitoneShift: semitones of a fixed Interval (tritone, inferred)"],["DiatonicSeventh","I"]], "readable": "ii7 – subV7 (♭II7) – Imaj7"},
+    {"title": {"en": "Jazz I-VI-II-V", "fr": null}, "steps": [["DiatonicSeventh","I"],["DiatonicSeventh","vi"],["DiatonicSeventh","ii"],["DiatonicSeventh","V"]]},
+    {"title": {"en": "Jazz III-VI-II-V", "fr": null}, "steps": [["DiatonicSeventh","iii"],["DiatonicSeventh","vi"],["DiatonicSeventh","ii"],["DiatonicSeventh","V"]]},
+    {"title": {"en": "Jazz I-II-III-IV", "fr": null}, "steps": [["DiatonicSeventh","I"],["DiatonicSeventh","ii"],["DiatonicSeventh","iii"],["DiatonicSeventh","vi"]], "note": "The 4th step decodes as Diatonic field 13 = DiatonicSeventh(vi) although the title says IV. exact as decoded."}
+  ]},
+  {"title": {"en": "Andalusian", "fr": "Andalous"}, "patterns": [
+    {"title": {"en": "Andalusian Cadence", "fr": "Cadence andalouse"}, "steps": [["DegreeOfMajor","Tonic","ChordType.Minor"],["DegreeOfMajor","FlatLeading","ChordType: stack value, Major inferred"],["DegreeOfMajor","FlatSubMediant","ChordType: stack value, Major inferred"],["DegreeOfMajor","Dominant","ChordType: stack value, Major inferred"]], "readable": "i – ♭VII – ♭VI – V"},
+    {"title": {"en": "Retrograde Andalusian Cadence", "fr": "Cadence andalouse rétrograde"}, "steps": [["DegreeOfMajor","Dominant"],["DegreeOfMajor","FlatSubMediant"],["DegreeOfMajor","FlatLeading"],["DegreeOfMajor","Tonic","ChordType.Minor"]], "readable": "V – ♭VI – ♭VII – i"},
+    {"title": {"en": "Super Mario Cadence", "fr": "Cadence Super Mario"}, "steps": [["DegreeOfMajor","Dominant"],["DegreeOfMajor","FlatSubMediant"],["DegreeOfMajor","FlatLeading"],["DegreeOfMajor","Tonic","ChordType.Major"]], "readable": "V – ♭VI – ♭VII – I"}
+  ]},
+  {"title": {"en": "Augmented Sixth Resolution", "fr": "Résolution de sixte augmentée"}, "patterns": [
+    {"title": {"en": "Italian Augmented Sixth Resolution", "fr": "Résolution de sixte augmentée italienne"}, "steps": [["DiatonicTriad","IV"],["Degree","FlatSubMediant","ChordType.ItalianAugmented6","role (stack value; Italian inferred)"],["DiatonicTriad","V"]]},
+    {"title": {"en": "French Augmented Sixth Resolution", "fr": "Résolution de sixte augmentée française"}, "steps": [["DiatonicTriad","IV"],["Degree","FlatSubMediant","ChordType.FrenchAugmented6","role (French inferred)"],["DiatonicTriad","I"],["DiatonicTriad","V"]]},
+    {"title": {"en": "German Augmented Sixth Resolution", "fr": "Résolution de sixte augmentée allemande"}, "steps": [["DiatonicTriad","IV"],["Degree","FlatSubMediant","ChordType.GermanAugmented6","role (German inferred)"],["DiatonicTriad","I"],["DiatonicTriad","V"]]}
+  ]},
+  {"title": {"en": "Others", "fr": "Autres"}, "patterns": [
+    {"title": {"en": "Ragtime Progression", "fr": "Progression ragtime"}, "steps": [["Semitones","3 × s","ChordType.Seventh"],["Semitones","2 × s","ChordType.Seventh"],["Semitones","s","ChordType (stack value; Seventh inferred)"],["DiatonicTriad","I"]], "note": "s = semitone value of one Interval constant (Perfect5 = 7 inferred), giving roots +21≡9, +14≡2, +7 → VI7 – II7 – V7 – I (inferred).", "inferred": true},
+    {"title": {"en": "Backdoor Progression A", "fr": "Porte dérobée A"}, "steps": [["DiatonicSeventh","ii"],["Degree","FlatLeading","ChordType.Seventh","octaveShift -1"],["DiatonicTriad","I"]]},
+    {"title": {"en": "Backdoor Progression B", "fr": "Porte dérobée B"}, "steps": [["DiatonicSeventh","IV"],["Degree","FlatLeading","ChordType.Seventh","octaveShift -1"],["DiatonicTriad","I"]]},
+    {"title": {"en": "Root Movement Hotline", "fr": null}, "steps": [["DiatonicSeventh","I"],["DiatonicSeventh","IV"],["DiatonicSeventh","vii"],["DiatonicSeventh","iii"],["DiatonicSeventh","vi"],["DiatonicSeventh","ii"],["DiatonicSeventh","V"],["DiatonicSeventh","I"]]}
+  ]},
+  {"title": {"en": "Classical", "fr": "Classique"}, "patterns": [
+    {"title": {"en": "Circle Progression", "fr": "Progression en cercle"}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","IV"],["DiatonicTriad","vii","octaveShift -1"],["DiatonicTriad","iii"],["DiatonicTriad","vi","octaveShift -1"],["DiatonicTriad","ii"],["DiatonicTriad","V","octaveShift -1"],["DiatonicTriad","I"]], "note": "octave shifts keep the voice-leading compact (exact: copies with octave field 0xffffffff = -1)."},
+    {"title": {"en": "Pachelbel's Canon", "fr": "Canon de Pachelbel"}, "steps": [["DiatonicTriad","I"],["DiatonicTriad","V"],["DiatonicTriad","vi"],["DiatonicTriad","iii"],["DiatonicTriad","IV"],["DiatonicTriad","I"],["DiatonicTriad","IV"],["DiatonicTriad","V"]]},
+    {"title": {"en": "Neapolitan Harmony", "fr": "Harmonie napolitaine"}, "steps": [["Degree","FlatSuperTonic","ChordType.Major","role Naepolitan"],["DiatonicTriad","V","octaveShift -1"],["DiatonicTriad","I"]]}
+  ]}
+ ]
+}

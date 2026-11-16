@@ -1,0 +1,996 @@
+[
+ {
+  "id": "ensemble.percussion.harpkeyboard",
+  "name": "2 Harps, Celeste, Piano",
+  "category": "Pitched Perc./Keyboards",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.pitchedpercussion.harp",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.keyboard.celesta.alias.celeste",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.keyboard.piano",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.string.violins-cello",
+  "name": "2 Violins, Cello",
+  "category": "Strings",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.strings.violin",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.violoncello",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind-brass.pophorns.3",
+  "name": "3 Pop Horns",
+  "category": "Woodwind/Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.threetrombones",
+  "name": "3 Trombones",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.trombonetuba",
+  "name": "3 Trombones, Tuba",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.tuba",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.threetrumpets",
+  "name": "3 Trumpets",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 3,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.fourhorns",
+  "name": "4 Horns",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 4,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind-brass.pophorns.4",
+  "name": "4 Pop Horns",
+  "category": "Woodwind/Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.baritone",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.fourtrumpets",
+  "name": "4 Trumpets",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 4,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.choir.4part",
+  "name": "4-part Choir (SATB)",
+  "category": "Singers",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.singers.soprano",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.alto",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.tenor",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.bass",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind-brass.pophorns.5",
+  "name": "5 Pop Horns",
+  "category": "Woodwind/Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.alto",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.sixhorns",
+  "name": "6 Horns",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 6,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind-brass.pophorns.6",
+  "name": "6 Pop Horns",
+  "category": "Woodwind/Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.alto",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.baritone",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.choir.8part",
+  "name": "8-part Choir (SSAATTBB)",
+  "category": "Singers",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.singers.soprano",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.alto",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.tenor",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.bass",
+      "count": 2,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind-brass.bigband",
+  "name": "Big Band Horns",
+  "category": "Woodwind/Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.saxophone.alto",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.baritone",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 4,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 4,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.brass4230",
+  "name": "Brass: 4230",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 4,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.brass4331",
+  "name": "Brass: 4331",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 4,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 3,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.tuba",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.brass6341",
+  "name": "Brass: 6341",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 6,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 3,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.tuba",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.brass.brass8341",
+  "name": "Brass: 8341",
+  "category": "Brass",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.brass.horn.f",
+      "count": 8,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trumpet.bflat",
+      "count": 3,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.trombone.bass",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.brass.tuba",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind.clarinet-choir",
+  "name": "Clarinet Choir",
+  "category": "Woodwind",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.clarinet.eflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bflat",
+      "count": 4,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.alto.eflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bass.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.contra.alto.eflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.contrabass.bflat",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.choir.double",
+  "name": "Double Choir",
+  "category": "Singers",
+  "groups": [
+   {
+    "name": "Choir 1",
+    "players": [
+     {
+      "instrument": "instrument.singers.soprano",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.alto",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.tenor",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.bass",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   },
+   {
+    "name": "Choir 2",
+    "players": [
+     {
+      "instrument": "instrument.singers.soprano",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.alto",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.tenor",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.singers.bass",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind.double",
+  "name": "Double Woodwind",
+  "category": "Woodwind",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.flute",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.oboe",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.bassoon",
+      "count": 2,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.rhythm.jazz",
+  "name": "Jazz Rhythm Section",
+  "category": "Rhythm Section",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.keyboard.piano",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.fretted.electric-guitar",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.strings.uprightbass",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.kit.drum.set.basic",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.rhythm.pit",
+  "name": "Pit Rhythm Section",
+  "category": "Rhythm Section",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.keyboard.piano",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.fretted.electric-guitar",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.fretted.4-string-bass-guitar",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.kit.drum.set.basic",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.rhythm.pop",
+  "name": "Pop Rhythm Section",
+  "category": "Rhythm Section",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.keyboard.piano",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.fretted.electric-guitar",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.fretted.4-string-bass-guitar",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.kit.drum.set.basic",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind.saxophone-quartet",
+  "name": "Saxophone Quartet",
+  "category": "Woodwind",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.saxophone.soprano.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.alto",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.tenor",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.saxophone.baritone",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind.single",
+  "name": "Single Woodwind",
+  "category": "Woodwind",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.flute",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.oboe",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.bassoon",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.string.section",
+  "name": "String Section",
+  "category": "Strings",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.strings.violin",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.viola",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.violoncello",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.contrabass",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.string.section.no-bass",
+  "name": "String Section (No Bass)",
+  "category": "Strings",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.strings.violin",
+      "count": 2,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.viola",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.violoncello",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.percussion.timpanipercussion",
+  "name": "Timp., B.D., Cym.",
+  "category": "Percussion",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.pitchedpercussion.timpani",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.orchestral.unpitched.bass.drum",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.orchestral.unpitched.clash.cymbals",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.wind.triple",
+  "name": "Triple Woodwind",
+  "category": "Woodwind",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.wind.piccolo",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.flute",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.oboe",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.coranglais",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bflat",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.clarinet.bass.bflat",
+      "count": 1,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.bassoon",
+      "count": 2,
+      "solo": true
+     },
+     {
+      "instrument": "instrument.wind.contrabassoon",
+      "count": 1,
+      "solo": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ensemble.string.violin-viola-cello",
+  "name": "Violin, Viola, Cello",
+  "category": "Strings",
+  "groups": [
+   {
+    "name": null,
+    "players": [
+     {
+      "instrument": "instrument.strings.violin",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.viola",
+      "count": 1,
+      "solo": false
+     },
+     {
+      "instrument": "instrument.strings.violoncello",
+      "count": 1,
+      "solo": false
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,37 @@
+[
+ {
+  "name": "Loco",
+  "entityID": "line.ottava.loco",
+  "transpositionForIntersectingNotes": "0"
+ },
+ {
+  "name": "Octave down",
+  "entityID": "line.ottava.down.8",
+  "transpositionForIntersectingNotes": "1"
+ },
+ {
+  "name": "Octave up",
+  "entityID": "line.ottava.up.8",
+  "transpositionForIntersectingNotes": "-1"
+ },
+ {
+  "name": "Three octaves down",
+  "entityID": "line.ottava.down.22",
+  "transpositionForIntersectingNotes": "3"
+ },
+ {
+  "name": "Three octaves up",
+  "entityID": "line.ottava.up.22",
+  "transpositionForIntersectingNotes": "-3"
+ },
+ {
+  "name": "Two octaves down",
+  "entityID": "line.ottava.down.15",
+  "transpositionForIntersectingNotes": "2"
+ },
+ {
+  "name": "Two octaves up",
+  "entityID": "line.ottava.up.15",
+  "transpositionForIntersectingNotes": "-2"
+ }
+]

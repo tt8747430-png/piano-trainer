@@ -1,0 +1,13 @@
+{
+  "NSMicrophoneUsageDescription": "This will allow us to adapt the accompaniment tempo to you and record your performance.",
+  "NSUserTrackingUsageDescription_NEW_2": "You won't see any ads in our App.",
+  "NSCameraUsageDescription": "Metronaut uses your camera for video recording of your performances.",
+  "CFBundleName": "Metronaut",
+  "CFBundleDisplayName": "Metronaut",
+  "NSBluetoothAlwaysUsageDescription": "Metronaut uses Bluetooth to connect MIDI instruments.",
+  "NSUserTrackingUsageDescription_NEW_1": "This will help us to bring more musicians like you to Metronaut community.",
+  "NSSpeechRecognitionUsageDescription": "Allow to control Metronaut with your voice.",
+  "NSUserTrackingUsageDescription": "This will help us to bring more musicians like you to Metronaut community. You won't see any ads in our App.",
+  "watchos.NSMicrophoneUsageDescription": "This enables using Live Tuner Analysis.",
+  "NSPhotoLibraryUsageDescription": "Allow to save your recordings in your Photo Library."
+}

@@ -1,0 +1,2386 @@
+[
+ {
+  "name": "Accent",
+  "id": "pt.accent",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Alternative fingering",
+  "id": "pt.alternativeFingering",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Arpeggio down",
+  "id": "pt.arpeggioDown",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Arpeggio up",
+  "id": "pt.arpeggioUp",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Artificial harmonic",
+  "id": "pt.artificialHarmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Backstick",
+  "id": "pt.backstick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bartok/snap pizzicato",
+  "id": "pt.bartoksnapPizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bass tone",
+  "id": "pt.bassTone",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bell",
+  "id": "pt.bell",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bell mute",
+  "id": "pt.bellMute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Bend",
+  "id": "pt.bend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bow on bridge",
+  "id": "pt.bowOnBridge",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Bow on tailpiece",
+  "id": "pt.bowOnTailpiece",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Bowed",
+  "id": "pt.bowed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Bowl hit",
+  "id": "pt.hitBowl",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Bucket mute",
+  "id": "pt.bucketMute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Buzz pizzicato",
+  "id": "pt.buzzPizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Buzz roll",
+  "id": "pt.buzzRoll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Cage hit",
+  "id": "pt.hitCage",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Centre",
+  "id": "pt.centre",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Choke",
+  "id": "pt.choke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Chorus",
+  "id": "pt.chorus",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Circular roll",
+  "id": "pt.circularRoll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Click",
+  "id": "pt.click",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Closed",
+  "id": "pt.closed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Closed end",
+  "id": "pt.closedEnd",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Closed hole",
+  "id": "pt.closedHole",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Col legno battuto",
+  "id": "pt.colLegnoBattuto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Col legno tratto",
+  "id": "pt.colLegnoTratto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Collé",
+  "id": "pt.colle",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Con vibrato",
+  "id": "pt.conVibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Crescendo",
+  "id": "pt.crescendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Crescendo-diminuendo",
+  "id": "pt.crescendoDiminuendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Cross stick",
+  "id": "pt.crossStick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Crunch",
+  "id": "pt.crunch",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Crunch choke",
+  "id": "pt.crunchChoke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Crush",
+  "id": "pt.crush",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Crush (dry)",
+  "id": "pt.crushDry",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Crush (fat)",
+  "id": "pt.crushFat",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Cuivré",
+  "id": "pt.cuivre",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Cup mute",
+  "id": "pt.cupMute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Damp",
+  "id": "pt.damp",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Dead stroke",
+  "id": "pt.deadStroke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Delay",
+  "id": "pt.delay",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Diminuendo",
+  "id": "pt.diminuendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Diminuendo-crescendo",
+  "id": "pt.diminuendoCrescendo",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Ding",
+  "id": "pt.ding",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Dip/bend",
+  "id": "pt.dipbend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Distortion",
+  "id": "pt.distortion",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Doit",
+  "id": "pt.doit",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Double-tongue",
+  "id": "pt.doubleTongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Down",
+  "id": "pt.down",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Downbow",
+  "id": "pt.downbow",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Dreads (beater)",
+  "id": "pt.beaterDreads",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Dress harness hit",
+  "id": "pt.harnessHit",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Dut (vocal)",
+  "id": "pt.vocalDut",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Détaché",
+  "id": "pt.detache",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Détaché lancé",
+  "id": "pt.detacheLance",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Edge (cymbals)",
+  "id": "pt.edgeCymbals",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Edge (drums)",
+  "id": "pt.edgeDrums",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Edge rebound",
+  "id": "pt.edgeRebound",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Fade in",
+  "id": "pt.fadeIn",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Fade out",
+  "id": "pt.fadeOut",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Fall (drop)",
+  "id": "pt.fallDrop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Felt (beater)",
+  "id": "pt.beaterFelt",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Finger click",
+  "id": "pt.fingerClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Flange",
+  "id": "pt.flange",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Flat crash",
+  "id": "pt.flatCrash",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Flat roll",
+  "id": "pt.flatRoll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Flautando",
+  "id": "pt.flautando",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Flip",
+  "id": "pt.flip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Flutter-tongue",
+  "id": "pt.flutterTongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Foot",
+  "id": "pt.foot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Fouetté",
+  "id": "pt.fouette",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Frame",
+  "id": "pt.frame",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Friction slide 1",
+  "id": "pt.frictionSlide1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Friction slide 2",
+  "id": "pt.frictionSlide2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ga (open)",
+  "id": "pt.tabla-ga",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ge (open)",
+  "id": "pt.tabla-ge",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ghost note",
+  "id": "pt.ghostNote",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Gi (muted open)",
+  "id": "pt.tabla-gi",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Glissando down",
+  "id": "pt.glissandoDown",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Glissando up",
+  "id": "pt.glissandoUp",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Growl",
+  "id": "pt.growl",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Guitar pizzicato",
+  "id": "pt.guitarPizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Half-harmonic",
+  "id": "pt.halfHarmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Half-muted",
+  "id": "pt.halfMuted",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Half-open",
+  "id": "pt.halfOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Harmon mute, stem extended",
+  "id": "pt.harmonMuteStemExtended",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Harmon mute, stem in",
+  "id": "pt.harmonMuteStemIn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Harmon mute, stem out",
+  "id": "pt.harmonMuteStemOut",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Harp harmonic",
+  "id": "pt.harpHarmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Hi-hat",
+  "id": "pt.hiHat",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Hit (loose)",
+  "id": "pt.hitLoose",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Hit (medium)",
+  "id": "pt.hitMedium",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Hit (tight)",
+  "id": "pt.hitTight",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Jazz turn",
+  "id": "pt.jazzTurn",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Jet whistle",
+  "id": "pt.jetWhistle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Jeté",
+  "id": "pt.jete",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ke (closed)",
+  "id": "pt.tabla-ke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Key click",
+  "id": "pt.keyClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Key click with pitch",
+  "id": "pt.keyClickWithPitch",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "LH pizzicato",
+  "id": "pt.lhPizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Laissez vibrer",
+  "id": "pt.laissezVibrer",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Left (LH)",
+  "id": "pt.left",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Left-hand tap",
+  "id": "pt.leftHandTap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Legato",
+  "id": "pt.legato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Loose",
+  "id": "pt.loose",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Marcato",
+  "id": "pt.marcato",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Martellato",
+  "id": "pt.martellato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Martelé",
+  "id": "pt.martele",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Motor off",
+  "id": "pt.motorOff",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Motor on",
+  "id": "pt.motorOn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouth closed",
+  "id": "pt.mouthClosed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouth open",
+  "id": "pt.mouthOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouth pursed",
+  "id": "pt.mouthPursed",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouth slightly open",
+  "id": "pt.mouthSlightlyOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouth wide open",
+  "id": "pt.mouthWideOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Mouthpiece pop",
+  "id": "pt.mouthpiecePop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Muffled strings",
+  "id": "pt.muffledStrings",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Muffled/Damped",
+  "id": "pt.muffledDamped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Multiphonic",
+  "id": "pt.multiphonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Muted",
+  "id": "pt.muted",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Na (open)",
+  "id": "pt.tabla-na",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Nail",
+  "id": "pt.nail",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Nail pizzicato",
+  "id": "pt.nailPizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Nasal voice",
+  "id": "pt.nasalVoice",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Natural",
+  "id": "pt.natural",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Natural harmonic 1",
+  "id": "pt.naturalHarmonic1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Natural harmonic 2",
+  "id": "pt.naturalHarmonic2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Non legato",
+  "id": "pt.nonLegato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Non vibrato",
+  "id": "pt.nonVibrato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Open 1",
+  "id": "pt.open1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Open 2",
+  "id": "pt.open2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Open end",
+  "id": "pt.openEnd",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Open hole",
+  "id": "pt.openHole",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Over the head double shot",
+  "id": "pt.doubleShotOverTheHeader",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Over the head hit",
+  "id": "pt.hitOverTheHead",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Over the head shot",
+  "id": "pt.shotOverTheHead",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Overdrive ",
+  "id": "pt.overdrive",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Overpressure",
+  "id": "pt.overpressure",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "P.d.l.t.",
+  "id": "pt.pdlt",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Palm muting",
+  "id": "pt.palmMuting",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pedal",
+  "id": "pt.pedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Phaser",
+  "id": "pt.phaser",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Pick scrape",
+  "id": "pt.pickScrape",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Pinch harmonic",
+  "id": "pt.pinchHarmonic",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pincé",
+  "id": "pt.pince",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Ping",
+  "id": "pt.ping",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Pizzicato",
+  "id": "pt.pizzicato",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Pizzicato alla chitarra",
+  "id": "pt.pizzicatoAllaChitarra",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pizzicato secco",
+  "id": "pt.pizzicatoSecco",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Plop",
+  "id": "pt.plop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Plucked",
+  "id": "pt.plucked",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Plunger mute",
+  "id": "pt.plungerMute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pop",
+  "id": "pt.pop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Port crash",
+  "id": "pt.portCrash",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Portamento down",
+  "id": "pt.portamentoDown",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Portamento up",
+  "id": "pt.portamentoUp",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Portato/Louré",
+  "id": "pt.portatoloure",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pre-bend",
+  "id": "pt.preBend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Press roll",
+  "id": "pt.pressRoll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Puffy (beater)",
+  "id": "pt.beaterPuffy",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Pull",
+  "id": "pt.pull",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Push",
+  "id": "pt.push",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rake",
+  "id": "pt.rake",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Release",
+  "id": "pt.release",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ricochet",
+  "id": "pt.ricochet",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Right (RH)",
+  "id": "pt.right",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Right hand tap",
+  "id": "pt.rightHandTap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Right-hand tap (tapping)",
+  "id": "pt.rightHandTapTapping",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rim",
+  "id": "pt.rim",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rim knock",
+  "id": "pt.rimKnock",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rim only",
+  "id": "pt.rimOnly",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rim shot",
+  "id": "pt.rimShot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rip",
+  "id": "pt.rip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Rods (beater)",
+  "id": "pt.beaterRods",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Roll",
+  "id": "pt.roll",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Saltando",
+  "id": "pt.saltando",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Sautillé",
+  "id": "pt.sautille",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Scoop",
+  "id": "pt.scoop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Scrape",
+  "id": "pt.scrape",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Scrape (left)",
+  "id": "pt.scrapeLeft",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Scrape (right)",
+  "id": "pt.scrapeRight",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Scratch in",
+  "id": "pt.scratchIn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Scratch out",
+  "id": "pt.scratchOut",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Shake",
+  "id": "pt.shake",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Shell",
+  "id": "pt.shell",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Side stick",
+  "id": "pt.sideStick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Simile",
+  "id": "pt.simile",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Sizzle",
+  "id": "pt.sizzle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Sizzle suck",
+  "id": "pt.sizzleSuck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Skank",
+  "id": "pt.skank",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Skin",
+  "id": "pt.skin",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Slap",
+  "id": "pt.slap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Slap (congas)",
+  "id": "pt.slapCongas",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Slap tongue",
+  "id": "pt.slapTongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Slide",
+  "id": "pt.slide",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Slight bend",
+  "id": "pt.slightBend",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Smear",
+  "id": "pt.smear",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Snares off",
+  "id": "pt.snareOff",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Snares on",
+  "id": "pt.snareOn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Snenor",
+  "id": "pt.snenor",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Soft",
+  "id": "pt.soft",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Sons xylophoniques",
+  "id": "pt.sonsXylophoniques",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Sostenuto pedal",
+  "id": "pt.sostenutoPedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Spiccato",
+  "id": "pt.spiccato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Spoken",
+  "id": "pt.spoken",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Squeeze",
+  "id": "pt.squeeze",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Staccatissimo",
+  "id": "pt.staccatissimo",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Staccato",
+  "id": "pt.staccato",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Stand click",
+  "id": "pt.standClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Sticks",
+  "id": "pt.sticks",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (butt)",
+  "id": "pt.stickButt",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft)",
+  "id": "pt.stickShaft",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft 1)",
+  "id": "pt.stickShaft1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft 2)",
+  "id": "pt.stickShaft2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft 3)",
+  "id": "pt.stickShaft3",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft 4)",
+  "id": "pt.stickShaft4",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft 5)",
+  "id": "pt.stickShaft5",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shaft open)",
+  "id": "pt.stickShaftOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (shoulder)",
+  "id": "pt.stickShoulder",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip)",
+  "id": "pt.stickTip",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick click",
+  "id": "pt.stickClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick shot",
+  "id": "pt.stickShot",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick snap",
+  "id": "pt.stickSnap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip 1)",
+  "id": "pt.stickTip1",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip 2)",
+  "id": "pt.stickTip2",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip 3)",
+  "id": "pt.stickTip3",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip 4)",
+  "id": "pt.stickTip4",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stick (tip 5)",
+  "id": "pt.stickTip5",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Sticks in",
+  "id": "pt.sticksIn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stir",
+  "id": "pt.stir",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Stopped",
+  "id": "pt.stopped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Straight mute",
+  "id": "pt.straightMute",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Strum down",
+  "id": "pt.strumDown",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Strum up",
+  "id": "pt.strumUp",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Suck",
+  "id": "pt.suck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Sul ponticello",
+  "id": "pt.sulPonticello",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Sul tasto",
+  "id": "pt.sulTasto",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Sustain pedal",
+  "id": "pt.sustainPedal",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Swish",
+  "id": "pt.swish",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Swoosh roll",
+  "id": "pt.swooshRoll",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Ta (muted open)",
+  "id": "pt.tabla-ta",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tap",
+  "id": "pt.tap",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tap at edge",
+  "id": "pt.tapEdge",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tap choke",
+  "id": "pt.tapChoke",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tap halfway",
+  "id": "pt.tapHalfway",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Te (closed)",
+  "id": "pt.tabla-te",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tenuto",
+  "id": "pt.tenuto",
+  "text": null,
+  "group": "kLengths",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Throw",
+  "id": "pt.throw",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Throwoff off",
+  "id": "pt.throwoffOff",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Throwoff on",
+  "id": "pt.throwoffOn",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Ti (muted closed)",
+  "id": "pt.tabla-ti",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tongue and finger click",
+  "id": "pt.tongueFingerClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tongue click",
+  "id": "pt.tongueClick",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tongue stop",
+  "id": "pt.tongueStop",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Tremblement",
+  "id": "pt.tremblement",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Tremolo",
+  "id": "pt.tremolo",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Trill",
+  "id": "pt.trill",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "Trill (half-step)",
+  "id": "pt.trill.half",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Trill (whole step)",
+  "id": "pt.trill.whole",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Triple-tongue",
+  "id": "pt.tripleTongue",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Tu (open)",
+  "id": "pt.tabla-tu",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Una corda",
+  "id": "pt.unaCorda",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "Up",
+  "id": "pt.up",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Upbow",
+  "id": "pt.upbow",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Vacuum suck",
+  "id": "pt.vacuumSuck",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Vibrato",
+  "id": "pt.vibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Vibrato bar dip",
+  "id": "pt.vibratoBarDip",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Vibrato bar line",
+  "id": "pt.vibratoBarLine",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Vibrato bar scoop",
+  "id": "pt.vibratoBarScoop",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Volume swell",
+  "id": "pt.volumeSwell",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Wah-wah",
+  "id": "pt.wahWahGuitar",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Wah-wah open",
+  "id": "pt.wahWahOpen",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Wah-wah stopped",
+  "id": "pt.wahWahStopped",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Whale call",
+  "id": "pt.whaleCall",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Whisper",
+  "id": "pt.whisper",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Whistle",
+  "id": "pt.whistle",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Whistle tone",
+  "id": "pt.whistleTone",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kDirection",
+  "onPiano": false
+ },
+ {
+  "name": "Wide vibrato",
+  "id": "pt.wideVibrato",
+  "text": null,
+  "group": "kOrnaments",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Zing",
+  "id": "pt.zing",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Zing (fast)",
+  "id": "pt.zingFast",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "Zing (slow)",
+  "id": "pt.zingSlow",
+  "text": null,
+  "group": "kTechniques",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "f",
+  "id": "pt.f",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "ff",
+  "id": "pt.ff",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "fff",
+  "id": "pt.fff",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "ffp",
+  "id": "pt.ffp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "fp",
+  "id": "pt.fp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "mf",
+  "id": "pt.mf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "mp",
+  "id": "pt.mp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "p",
+  "id": "pt.p",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "pf",
+  "id": "pt.pf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": false
+ },
+ {
+  "name": "pp",
+  "id": "pt.pp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "ppp",
+  "id": "pt.ppp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kDirection",
+  "onPiano": true
+ },
+ {
+  "name": "sf",
+  "id": "pt.sf",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "sfp",
+  "id": "pt.sfp",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ },
+ {
+  "name": "sfz",
+  "id": "pt.sfz",
+  "text": null,
+  "group": "kDynamics",
+  "articulationType": "kAttribute",
+  "onPiano": true
+ }
+]

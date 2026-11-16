@@ -1,0 +1,179 @@
+useMainToolbar | Digit1+Meta, Digit1+Ctrl, Numpad1+Meta, Numpad1+Ctrl
+useNoteToolbar | Digit2+Meta, Digit2+Ctrl, Numpad2+Meta, Numpad2+Ctrl
+useArticulationToolbar | Digit3+Meta, Digit3+Ctrl, Numpad3+Meta, Numpad3+Ctrl
+useOrnamentToolbar | Digit4+Meta, Numpad4+Ctrl
+useDynamicToolbar | Digit5+Meta, Digit5+Ctrl, Numpad5+Meta, Numpad5+Ctrl
+useMeasureToolbar | Digit6+Meta, Digit6+Ctrl, Numpad6+Meta, Numpad6+Ctrl
+useTextToolbar | Digit7+Meta, Digit7+Ctrl, Numpad7+Meta, Numpad7+Ctrl
+goRight | ArrowRight
+goLeft | ArrowLeft
+goPreviousMeasure | ArrowLeft+Meta, ArrowLeft+Ctrl
+goNextMeasure | ArrowRight+Meta, ArrowRight+Ctrl
+goPartBeginning | Home
+goPartEnd | End
+promptAndGoMeasure | KeyG+Meta, KeyG+Ctrl
+goPreviousStaff | ArrowUp+Shift+Meta, ArrowUp+Shift+Ctrl
+goNextStaff | ArrowDown+Shift+Meta, ArrowDown+Shift+Ctrl
+goUpString | ArrowUp [tab]
+goDownString | ArrowDown [tab]
+shiftDiatonicUp | ArrowUp, ArrowUp [unpitched]
+shiftDiatonicDown | ArrowDown, ArrowDown [unpitched]
+rangeSelectUp | ArrowUp+Shift
+rangeSelectDown | ArrowDown+Shift
+rangeSelectNextNote | ArrowRight+Shift
+rangeSelectPrevNote | ArrowLeft+Shift
+togglePlayStopResume | Space
+resumePlayback | Space+Shift
+goToBeginning | Space+Ctrl
+toggleLoopMode | KeyL
+toggleMidiInputNotation | KeyM+Shift
+copy | KeyC+Meta, KeyC+Ctrl
+selectCompletePart | KeyA+Meta, KeyA+Ctrl
+selectAllDisplayedParts | KeyA+Shift+Meta, KeyA+Shift+Ctrl
+selectCurrentMeasure | KeyA+Alt
+selectCurrentMeasureAllParts | KeyA+Alt+Shift
+rangeSelectNextMeasure | ArrowRight+Shift+Meta, ArrowRight+Shift+Ctrl
+rangeSelectPrevMeasure | ArrowLeft+Shift+Meta, ArrowLeft+Shift+Ctrl
+shiftOctaveUp | ArrowUp+Meta, ArrowUp+Ctrl
+shiftOctaveDown | ArrowDown+Meta, ArrowDown+Ctrl
+moveNoteToLowerString | ArrowUp+Meta [tab], ArrowUp+Ctrl [tab]
+moveNoteToUpperString | ArrowDown+Meta [tab], ArrowDown+Ctrl [tab]
+toggle8va | Digit8+Shift+Meta, Digit8+Shift+Ctrl
+toggle8ba | Digit9+Shift+Meta, Digit9+Shift+Ctrl
+remove | Delete
+removeThenGoLeft | Backspace
+removeMeasure | Backspace+Meta, Backspace+Ctrl
+addMeasureToEnd | Enter+Shift+Meta, Enter+Shift+Ctrl
+insertMeasureAfter | Enter+Alt
+paste | KeyV+Meta, KeyV+Ctrl
+cut | KeyX+Meta, KeyX+Ctrl
+toggleLyricMode | KeyL+Meta, KeyL+Ctrl
+toggleAnnotationMode | KeyE+Meta, KeyE+Ctrl
+toggleChordMode | KeyK+Meta, KeyK+Ctrl
+toggleFiguredBassMode | KeyB+Meta, KeyB+Ctrl
+toggleClassicChordMode | KeyK+Meta+Shift, KeyK+Ctrl+Shift
+unselect | Escape
+toggleSystemBreak | Enter+Meta, Enter+Ctrl
+save | KeyS+Meta, KeyS+Ctrl
+print | KeyP+Meta, KeyP+Ctrl
+undo | KeyZ+Meta, KeyZ+Ctrl
+redo | KeyY+Meta, KeyY+Ctrl
+resetZoom | Digit0+Meta, Digit0+Ctrl
+zoomIn | Equal+Meta, Equal+Ctrl
+zoomOut | Minus+Meta, Minus+Ctrl
+fullscreen | KeyF+Shift+Ctrl, KeyF+Shift+Meta
+changeDurationWhole | Digit1, Numpad1, Shift+Digit1 [tab], Shift+Numpad1 [tab], Digit1 [unpitched], Numpad1 [unpitched]
+changeDurationHalf | Digit2, Numpad2, Shift+Digit2 [tab], Shift+Numpad2 [tab], Digit2 [unpitched], Numpad2 [unpitched]
+changeDurationQuarter | Digit3, Numpad3, Shift+Digit3 [tab], Shift+Numpad3 [tab], Digit3 [unpitched], Numpad3 [unpitched]
+changeDurationEighth | Digit4, Numpad4, Shift+Digit4 [tab], Shift+Numpad4 [tab], Digit4 [unpitched], Numpad4 [unpitched]
+changeDurationSixteenth | Digit5, Numpad5, Shift+Digit5 [tab], Shift+Numpad5 [tab], Digit5 [unpitched], Numpad5 [unpitched]
+changeDurationThirtySecond | Digit6, Numpad6, Shift+Digit6 [tab], Shift+Numpad6 [tab], Digit6 [unpitched], Numpad6 [unpitched]
+changeDurationSixtyFourth | Digit7, Numpad7, Shift+Digit7 [tab], Shift+Numpad7 [tab], Digit7 [unpitched], Numpad7 [unpitched]
+shortenDuration | ArrowLeft+Alt+Shift
+lengthenDuration | ArrowRight+Alt+Shift
+tie | Comma
+addOneDot | Period, NumpadDecimal
+addTwoDots | Period+Alt
+cycleEditionMode | KeyI
+toggleNoteA | KeyA
+toggleNoteB | KeyB
+toggleNoteC | KeyC
+toggleNoteD | KeyD
+toggleNoteE | KeyE
+toggleNoteF | KeyF
+toggleNoteG | KeyG
+addPreviousNoteA | KeyA+Shift
+addPreviousNoteB | KeyB+Shift
+addPreviousNoteC | KeyC+Shift
+addPreviousNoteD | KeyD+Shift
+addPreviousNoteE | KeyE+Shift
+addPreviousNoteF | KeyF+Shift
+addPreviousNoteG | KeyG+Shift
+typeNoteTab0 | Digit0 [tab], Numpad0 [tab]
+typeNoteTab1 | Digit1 [tab], Numpad1 [tab]
+typeNoteTab2 | Digit2 [tab], Numpad2 [tab]
+typeNoteTab3 | Digit3 [tab], Numpad3 [tab]
+typeNoteTab4 | Digit4 [tab], Numpad4 [tab]
+typeNoteTab5 | Digit5 [tab], Numpad5 [tab]
+typeNoteTab6 | Digit6 [tab], Numpad6 [tab]
+typeNoteTab7 | Digit7 [tab], Numpad7 [tab]
+typeNoteTab8 | Digit8 [tab], Numpad8 [tab]
+typeNoteTab9 | Digit9 [tab], Numpad9 [tab]
+flat | Minus
+flatLastNote | Minus+Shift
+sharp | Equal
+sharpLastNote | Equal+Shift
+addQuarterFlatOrToggleCourtesy | Minus+Alt
+addThreeQuarterFlatOrToggleCourtesy | Minus+Alt+Shift
+addQuarterSharpOrToggleCourtesy | Equal+Alt
+addThreeQuarterSharpOrToggleCourtesy | Equal+Alt+Shift
+natural | Digit0
+naturalLastNote | Digit0+Shift
+switchEnharmonic | KeyJ
+toggleSlurAtNote | KeyS
+toggleTrill | KeyT+Shift, Digit1 [tb=ornament]
+customizeTimeSignature | KeyT
+toggleDeadNote | KeyX, KeyX [tab]
+ghostNote | KeyX+Shift, KeyX+Shift [tab]
+insertRest | Digit8 [tb=note], Numpad8 [tb=note], Digit8 [tb=note,unpitched], Numpad8 [tb=note,unpitched]
+insertGrace | Digit9 [tb=note], Numpad9 [tb=note]
+toggleStaccato | Digit1 [tb=articulation]
+toggleStaccatissimo | Digit2 [tb=articulation]
+toggleTenuto | Digit3 [tb=articulation]
+toggleDetachedLegato | Digit4 [tb=articulation]
+toggleStrongAccent | Digit5 [tb=articulation]
+toggleAccent | Digit6 [tb=articulation]
+toggleFermata | Digit7 [tb=articulation]
+toggleUpBow | Digit8 [tb=articulation]
+toggleDownBow | Digit9 [tb=articulation]
+toggleMordent | Digit2 [tb=ornament]
+toggleInvertedMordent | Digit3 [tb=ornament]
+toggleTurn | Digit4 [tb=ornament]
+toggleInvertedTurn | Digit5 [tb=ornament]
+toggleTremolo | Digit6 [tb=ornament]
+toggleGlissando | Digit7 [tb=ornament]
+toggleArpeggio | Digit8 [tb=ornament]
+toggleDynamicsPpp | Digit1 [tb=dynamic]
+toggleDynamicsPp | Digit2 [tb=dynamic]
+toggleDynamicsP | Digit3 [tb=dynamic]
+toggleDynamicsMp | Digit4 [tb=dynamic]
+toggleDynamicsMf | Digit5 [tb=dynamic]
+toggleDynamicsF | Digit6 [tb=dynamic]
+toggleDynamicsFf | Digit7 [tb=dynamic]
+toggleDynamicsFff | Digit8 [tb=dynamic]
+toggleDynamicsSfz | Digit9 [tb=dynamic]
+togglePedal | KeyP
+duplicate | KeyR
+recordLiveMIDI | KeyR+Shift
+toggleCrescendoBelow | Comma+Shift
+toggleDiminuendoBelow | Period+Shift
+toggleLeftRepeatBarline | BracketLeft
+toggleRightRepeatBarline | BracketRight
+circleVoice | KeyV
+goVoice2 | KeyV+Shift
+showHelp | Slash, Slash+Shift
+showKeyboardShortcuts | Slash+Alt
+addNoteInterval1 | Digit2+Alt
+addNoteInterval2 | Digit3+Alt
+addNoteInterval3 | Digit4+Alt
+addNoteInterval4 | Digit5+Alt
+addNoteInterval5 | Digit6+Alt
+addNoteInterval6 | Digit7+Alt
+addNoteInterval7 | Digit8+Alt
+addNoteIntervalMinus1 | Digit2+Alt+Shift
+addNoteIntervalMinus2 | Digit3+Alt+Shift
+addNoteIntervalMinus3 | Digit4+Alt+Shift
+addNoteIntervalMinus4 | Digit5+Alt+Shift
+addNoteIntervalMinus5 | Digit6+Alt+Shift
+addNoteIntervalMinus6 | Digit7+Alt+Shift
+addNoteIntervalMinus7 | Digit8+Alt+Shift
+addDuplet | Digit2+Shift
+addTriplet | Digit3+Shift
+addQuadruplet | Digit4+Shift
+addQuintuplet | Digit5+Shift
+addSextuplet | Digit6+Shift
+addSeptuplet | Digit7+Shift
+addNonuplet | Digit9+Shift
+goUpperHead | ArrowUp+Alt, PageUp
+goLowerHead | ArrowDown+Alt, PageDown
+addUnpitchedNote | i[a [unpitched]

@@ -1,0 +1,662 @@
+[
+ {
+  "name": "1 comma flat",
+  "entityID": "accidental.53et.turkish-folk.flat1",
+  "compositeID": "comp.accidental1CommaFlat",
+  "pitchDeltaFromNatural": "-1/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.708, 0.32)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "1 comma sharp",
+  "entityID": "accidental.53et.turkish-folk.sharp1",
+  "compositeID": "comp.accidental1CommaSharp",
+  "pitchDeltaFromNatural": "1/53",
+  "cutOutNW": "(0.896, 2.904)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1.088, 2.28)",
+  "cutOutSW": "(0.112, 0.464)"
+ },
+ {
+  "name": "2 commas flat",
+  "entityID": "accidental.53et.turkish-folk.flat2",
+  "compositeID": "comp.accidental2CommaFlat",
+  "pitchDeltaFromNatural": "-2/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1, 1.468)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "2 commas sharp",
+  "entityID": "accidental.53et.turkish-folk.sharp2",
+  "compositeID": "comp.accidental2CommaSharp",
+  "pitchDeltaFromNatural": "2/53",
+  "cutOutNW": "(0.908, 2.908)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1.108, 2.24)",
+  "cutOutSW": "(0.1, 0.464)"
+ },
+ {
+  "name": "3 commas flat",
+  "entityID": "accidental.53et.turkish-folk.flat3",
+  "compositeID": "comp.accidental3CommaFlat",
+  "pitchDeltaFromNatural": "-3/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.988, 1.444)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "3 commas sharp",
+  "entityID": "accidental.53et.turkish-folk.sharp3",
+  "compositeID": "comp.accidental3CommaSharp",
+  "pitchDeltaFromNatural": "3/53",
+  "cutOutNW": "(0.888, 2.908)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1.108, 2.248)",
+  "cutOutSW": "(0.108, 0.436)"
+ },
+ {
+  "name": "4 commas flat",
+  "entityID": "accidental.53et.turkish-folk.flat4",
+  "compositeID": "comp.accidental4CommaFlat",
+  "pitchDeltaFromNatural": "-4/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1.008, 1.5)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "5 commas sharp",
+  "entityID": "accidental.53et.turkish-folk.sharp5",
+  "compositeID": "comp.accidental5CommaSharp",
+  "pitchDeltaFromNatural": "5/53",
+  "cutOutNW": "(0.9, 2.888)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(1.132, 2.24)",
+  "cutOutSW": "(0.112, 0.452)"
+ },
+ {
+  "name": "Arrow down (quarter-tone flat)",
+  "entityID": "accidental.24et.western.arrow-down.gould",
+  "compositeID": "comp.accidentalArrowDown",
+  "pitchDeltaFromNatural": "-1/24",
+  "cutOutNW": "(0.22, 0.892)",
+  "cutOutNE": "(0.512, 0.892)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Arrow up (quarter-tone sharp)",
+  "entityID": "accidental.24et.western.arrow-up.gould",
+  "compositeID": "comp.accidentalArrowUp",
+  "pitchDeltaFromNatural": "1/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.532, 1.156)",
+  "cutOutSW": "(0.2, 1.156)"
+ },
+ {
+  "name": "Bakiye flat",
+  "entityID": "accidental.53et.aeu.flat.bakiye",
+  "compositeID": "comp.accidentalBakiyeFlat",
+  "pitchDeltaFromNatural": "-4/53",
+  "cutOutNW": "(0.156, 1.812)",
+  "cutOutNE": "(0.54, 2.092)",
+  "cutOutSE": "(0.82, 0.256)",
+  "cutOutSW": "(0.156, 1.2)"
+ },
+ {
+  "name": "Bakiye sharp",
+  "entityID": "accidental.53et.aeu.sharp.bakiye",
+  "compositeID": "comp.accidentalBakiyeSharp",
+  "pitchDeltaFromNatural": "4/53",
+  "cutOutNW": "(0.12, 2.008)",
+  "cutOutNE": "(0.86, 2.332)",
+  "cutOutSE": "(0.86, 0.776)",
+  "cutOutSW": "(0.124, 0.468)"
+ },
+ {
+  "name": "Buyuk mucenneb flat",
+  "entityID": "accidental.53et.aeu.flat.buyuk-mucenneb",
+  "compositeID": "comp.accidentalBuyukMucennebFlat",
+  "pitchDeltaFromNatural": "-8/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.808, 0.276)",
+  "cutOutSW": "(0.176, 1.232)"
+ },
+ {
+  "name": "Buyuk mucenneb sharp",
+  "entityID": "accidental.53et.aeu.sharp.buyuk-mucenneb",
+  "compositeID": "comp.accidentalBuyukMucennebSharp",
+  "pitchDeltaFromNatural": "8/53",
+  "cutOutNW": "(0.26, 2.028)",
+  "cutOutNE": "(1.052, 2.34)",
+  "cutOutSE": "(1.048, 0.776)",
+  "cutOutSW": "(0.264, 0.444)"
+ },
+ {
+  "name": "Double flat",
+  "entityID": "accidental.12et.western.double-flat",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-2/12",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double flat",
+  "entityID": "accidental.17et.persian.double-flat",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-3/17",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double flat",
+  "entityID": "accidental.24et.western.double-flat.gould",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-4/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double flat",
+  "entityID": "accidental.24et.western.double-flat.stein",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-4/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double sharp",
+  "entityID": "accidental.12et.western.double-sharp",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "2/12",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double sharp",
+  "entityID": "accidental.17et.persian.double-sharp",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "3/17",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double sharp",
+  "entityID": "accidental.24et.western.double-sharp.gould",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "4/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Double sharp",
+  "entityID": "accidental.24et.western.double-sharp.stein",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "4/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Fazla flat",
+  "entityID": "accidental.53et.aeu.flat.fazla",
+  "compositeID": "comp.accidentalKomaFlat",
+  "pitchDeltaFromNatural": "-1/53",
+  "cutOutNW": "(0.604, 1.424)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.356, 0.252)"
+ },
+ {
+  "name": "Fazla sharp",
+  "entityID": "accidental.53et.aeu.sharp.fazla",
+  "compositeID": "comp.accidentalKomaSharp",
+  "pitchDeltaFromNatural": "1/53",
+  "cutOutNW": "(0.28, 2.056)",
+  "cutOutNE": "(0.596, 2.228)",
+  "cutOutSE": "(0.596, 0.572)",
+  "cutOutSW": "(0.28, 0.428)"
+ },
+ {
+  "name": "Five-quarter-tones flat",
+  "entityID": "accidental.24et.western.double-flat-down.gould",
+  "compositeID": "comp.accidentalDoubleFlatArrowDown",
+  "pitchDeltaFromNatural": "-5/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(1.26, 2.34)",
+  "cutOutSE": "(0.816, 0.892)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Five-quarter-tones sharp",
+  "entityID": "accidental.24et.western.double-sharp-up.gould",
+  "compositeID": "comp.accidentalDoubleSharpArrowUp",
+  "pitchDeltaFromNatural": "5/24",
+  "cutOutNW": "(0.372, 1.136)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Flat",
+  "entityID": "accidental.12et.western.flat",
+  "compositeID": "comp.accidentalFlat",
+  "pitchDeltaFromNatural": "-1/12",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.252, 1.356)",
+  "cutOutSE": "(0.504, 0.224)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Flat",
+  "entityID": "accidental.17et.persian.flat",
+  "compositeID": "comp.accidentalFlat",
+  "pitchDeltaFromNatural": "-2/17",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.252, 1.356)",
+  "cutOutSE": "(0.504, 0.224)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Flat",
+  "entityID": "accidental.24et.western.flat.gould",
+  "compositeID": "comp.accidentalFlat",
+  "pitchDeltaFromNatural": "-2/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.252, 1.356)",
+  "cutOutSE": "(0.504, 0.224)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Flat",
+  "entityID": "accidental.24et.western.flat.stein",
+  "compositeID": "comp.accidentalFlat",
+  "pitchDeltaFromNatural": "-2/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.252, 1.356)",
+  "cutOutSE": "(0.504, 0.224)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Koron",
+  "entityID": "accidental.17et.persian",
+  "compositeID": "comp.accidentalKoron",
+  "pitchDeltaFromNatural": "-1/17",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.264, 1.22)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Kucuk mucenneb flat",
+  "entityID": "accidental.53et.aeu.flat.kucuk-mucenneb",
+  "compositeID": "comp.accidentalKucukMucennebFlat",
+  "pitchDeltaFromNatural": "-5/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.284, 1.404)",
+  "cutOutSE": "(0.576, 0.276)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Kucuk mucenneb sharp",
+  "entityID": "accidental.53et.aeu.sharp.kucuk-mucenneb",
+  "compositeID": "comp.accidentalKucukMucennebSharp",
+  "pitchDeltaFromNatural": "5/53",
+  "cutOutNW": "(0.496, 2.06)",
+  "cutOutNE": "(0.824, 2.228)",
+  "cutOutSE": "(0.84, 0.584)",
+  "cutOutSW": "(0.508, 0.404)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.12et.western.natural",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.17et.persian.natural",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/17",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.24et.western.natural.gould",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.24et.western.natural.stein",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.53et.aeu.natural",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Natural",
+  "entityID": "accidental.53et.turkish-folk.natural",
+  "compositeID": "comp.accidentalNatural",
+  "pitchDeltaFromNatural": "0/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.192, 2.116)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.476, 0.512)"
+ },
+ {
+  "name": "Quarter-tone flat",
+  "entityID": "accidental.24et.western.quarter-flat.stein",
+  "compositeID": "comp.accidentalQuarterToneFlat4",
+  "pitchDeltaFromNatural": "-1/24",
+  "cutOutNW": "(0.624, 1.376)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.332, 0.272)"
+ },
+ {
+  "name": "Quarter-tone flat (flat)",
+  "entityID": "accidental.24et.western.flat-up.gould",
+  "compositeID": "comp.accidentalQuarterToneFlatArrowUp",
+  "pitchDeltaFromNatural": "-1/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.772, 1.372)",
+  "cutOutSE": "(0.788, 0.256)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Quarter-tone flat (natural)",
+  "entityID": "accidental.24et.western.natural-down.gould",
+  "compositeID": "comp.accidentalQuarterToneFlatNaturalArrowDown",
+  "pitchDeltaFromNatural": "-1/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.22, 2.96)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Quarter-tone sharp",
+  "entityID": "accidental.24et.western.quarter-sharp.stein",
+  "compositeID": "comp.accidentalQuarterToneSharp4",
+  "pitchDeltaFromNatural": "1/24",
+  "cutOutNW": "(0.224, 2.016)",
+  "cutOutNE": "(0.476, 2.16)",
+  "cutOutSE": "(0.492, 0.612)",
+  "cutOutSW": "(0.224, 0.492)"
+ },
+ {
+  "name": "Quarter-tone sharp (natural)",
+  "entityID": "accidental.24et.western.natural-up.gould",
+  "compositeID": "comp.accidentalQuarterToneSharpNaturalArrowUp",
+  "pitchDeltaFromNatural": "1/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0.72, 0.492)"
+ },
+ {
+  "name": "Quarter-tone sharp (sharp)",
+  "entityID": "accidental.24et.western.sharp-down.gould",
+  "compositeID": "comp.accidentalQuarterToneSharpArrowDown",
+  "pitchDeltaFromNatural": "1/24",
+  "cutOutNW": "(0.244, 2.744)",
+  "cutOutNE": "(0.968, 3.044)",
+  "cutOutSE": "(0.968, 1.548)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Sharp",
+  "entityID": "accidental.12et.western.sharp",
+  "compositeID": "comp.accidentalSharp",
+  "pitchDeltaFromNatural": "1/12",
+  "cutOutNW": "(0.144, 1.96)",
+  "cutOutNE": "(0.84, 2.288)",
+  "cutOutSE": "(0.84, 0.796)",
+  "cutOutSW": "(0.144, 0.496)"
+ },
+ {
+  "name": "Sharp",
+  "entityID": "accidental.17et.persian.sharp",
+  "compositeID": "comp.accidentalSharp",
+  "pitchDeltaFromNatural": "2/17",
+  "cutOutNW": "(0.144, 1.96)",
+  "cutOutNE": "(0.84, 2.288)",
+  "cutOutSE": "(0.84, 0.796)",
+  "cutOutSW": "(0.144, 0.496)"
+ },
+ {
+  "name": "Sharp",
+  "entityID": "accidental.24et.western.sharp.gould",
+  "compositeID": "comp.accidentalSharp",
+  "pitchDeltaFromNatural": "2/24",
+  "cutOutNW": "(0.144, 1.96)",
+  "cutOutNE": "(0.84, 2.288)",
+  "cutOutSE": "(0.84, 0.796)",
+  "cutOutSW": "(0.144, 0.496)"
+ },
+ {
+  "name": "Sharp",
+  "entityID": "accidental.24et.western.sharp.stein",
+  "compositeID": "comp.accidentalSharp",
+  "pitchDeltaFromNatural": "2/24",
+  "cutOutNW": "(0.144, 1.96)",
+  "cutOutNE": "(0.84, 2.288)",
+  "cutOutSE": "(0.84, 0.796)",
+  "cutOutSW": "(0.144, 0.496)"
+ },
+ {
+  "name": "Sori",
+  "entityID": "accidental.17et.persian.sori",
+  "compositeID": "comp.accidentalSori",
+  "pitchDeltaFromNatural": "1/17",
+  "cutOutNW": "(0.264, 2.1)",
+  "cutOutNE": "(1.188, 1.664)",
+  "cutOutSE": "(1.188, 0.868)",
+  "cutOutSW": "(0.264, 0.456)"
+ },
+ {
+  "name": "Tanini flat",
+  "entityID": "accidental.53et.aeu.flat.tanini",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-9/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Tanini flat",
+  "entityID": "accidental.53et.turkish-folk.flat.tanini",
+  "compositeID": "comp.accidentalDoubleFlat",
+  "pitchDeltaFromNatural": "-9/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0.988, 1.344)",
+  "cutOutSE": "(1.336, 0.304)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Tanini sharp",
+  "entityID": "accidental.53et.aeu.sharp.tanini",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "9/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Tanini sharp",
+  "entityID": "accidental.53et.turkish-folk.sharp.tanini",
+  "compositeID": "comp.accidentalDoubleSharp",
+  "pitchDeltaFromNatural": "9/53",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Three-quarter-tones flat",
+  "entityID": "accidental.24et.western.double-flat-up.gould",
+  "compositeID": "comp.accidentalDoubleFlatArrowUp",
+  "pitchDeltaFromNatural": "-3/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(1.264, 1.388)",
+  "cutOutSE": "(1.296, 0.244)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Three-quarter-tones flat",
+  "entityID": "accidental.24et.western.three-quarters-flat.stein",
+  "compositeID": "comp.accidentalThreeQuartersFlat2",
+  "pitchDeltaFromNatural": "-3/24",
+  "cutOutNW": "(0.632, 1.368)",
+  "cutOutNE": "(1.216, 1.368)",
+  "cutOutSE": "(0, 0)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Three-quarter-tones flat (flat)",
+  "entityID": "accidental.24et.western.flat-down.gould",
+  "compositeID": "comp.accidentalThreeQuarterTonesFlatArrowDown",
+  "pitchDeltaFromNatural": "-3/24",
+  "cutOutNW": "(0.188, 0.872)",
+  "cutOutNE": "(0.512, 2.32)",
+  "cutOutSE": "(0.804, 1.172)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Three-quarter-tones sharp",
+  "entityID": "accidental.24et.western.double-sharp-down.gould",
+  "compositeID": "comp.accidentalDoubleSharpArrowDown",
+  "pitchDeltaFromNatural": "3/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.82, 0.812)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Three-quarter-tones sharp",
+  "entityID": "accidental.24et.western.three-quarters-sharp.stein",
+  "compositeID": "comp.accidentalThreeQuartersSharp2",
+  "pitchDeltaFromNatural": "3/24",
+  "cutOutNW": "(0.132, 1.992)",
+  "cutOutNE": "(1.116, 2.388)",
+  "cutOutSE": "(1.116, 0.888)",
+  "cutOutSW": "(0.132, 0.492)"
+ },
+ {
+  "name": "Three-quarter-tones sharp (sharp)",
+  "entityID": "accidental.24et.western.sharp-up.gould",
+  "compositeID": "comp.accidentalThreeQuartersSharpArrowUp",
+  "pitchDeltaFromNatural": "3/24",
+  "cutOutNW": "(0.272, 2.692)",
+  "cutOutNE": "(0, 0)",
+  "cutOutSE": "(0.86, 0.804)",
+  "cutOutSW": "(0.132, 0.5)"
+ },
+ {
+  "name": "Triple flat",
+  "entityID": "accidental.12et.western.triple-flat",
+  "compositeID": "comp.accidentalTripleFlat",
+  "pitchDeltaFromNatural": "-3/12",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(1.748, 1.356)",
+  "cutOutSE": "(2.048, 0.264)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Triple flat",
+  "entityID": "accidental.24et.western.triple-flat.gould",
+  "compositeID": "comp.accidentalTripleFlat",
+  "pitchDeltaFromNatural": "-6/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(1.748, 1.356)",
+  "cutOutSE": "(2.048, 0.264)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Triple flat",
+  "entityID": "accidental.24et.western.triple-flat.stein",
+  "compositeID": "comp.accidentalTripleFlat",
+  "pitchDeltaFromNatural": "-6/24",
+  "cutOutNW": "(0, 0)",
+  "cutOutNE": "(1.748, 1.356)",
+  "cutOutSE": "(2.048, 0.264)",
+  "cutOutSW": "(0, 0)"
+ },
+ {
+  "name": "Triple sharp",
+  "entityID": "accidental.12et.western.triple-sharp",
+  "compositeID": "comp.accidentalTripleSharp",
+  "pitchDeltaFromNatural": "3/12",
+  "cutOutNW": "(1.208, 1.988)",
+  "cutOutNE": "(1.936, 2.308)",
+  "cutOutSE": "(1.936, 0.804)",
+  "cutOutSW": "(1.208, 0.492)"
+ },
+ {
+  "name": "Triple sharp",
+  "entityID": "accidental.24et.western.triple-sharp.gould",
+  "compositeID": "comp.accidentalTripleSharp",
+  "pitchDeltaFromNatural": "6/24",
+  "cutOutNW": "(1.208, 1.988)",
+  "cutOutNE": "(1.936, 2.308)",
+  "cutOutSE": "(1.936, 0.804)",
+  "cutOutSW": "(1.208, 0.492)"
+ },
+ {
+  "name": "Triple sharp",
+  "entityID": "accidental.24et.western.triple-sharp.stein",
+  "compositeID": "comp.accidentalTripleSharp",
+  "pitchDeltaFromNatural": "6/24",
+  "cutOutNW": "(1.208, 1.988)",
+  "cutOutNE": "(1.936, 2.308)",
+  "cutOutSE": "(1.936, 0.804)",
+  "cutOutSW": "(1.208, 0.492)"
+ }
+]

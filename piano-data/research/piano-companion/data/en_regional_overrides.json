@@ -1,0 +1,3182 @@
+{
+ "en-GB": {
+  "beats": {
+   "value": "(beats)",
+   "en": "(beats)"
+  },
+  "beats_per_bar": {
+   "value": "Beats per bar",
+   "en": "Beats per bar"
+  },
+  "chord_symbols": {
+   "value": "Chord symbols",
+   "en": "Chord symbols"
+  },
+  "chord_symbols_asian": {
+   "value": "Asian (Japan, Korea, China)",
+   "en": "Asian (Japan, Korea, China)"
+  },
+  "chord_symbols_automatic": {
+   "value": "Automatic",
+   "en": "Automatic"
+  },
+  "chord_symbols_brazilian": {
+   "value": "Brazilian",
+   "en": "Brazilian"
+  },
+  "chord_symbols_french": {
+   "value": "French",
+   "en": "French"
+  },
+  "chord_symbols_international": {
+   "value": "International",
+   "en": "International"
+  },
+  "chord_symbols_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "duplicate": {
+   "value": "Duplicate",
+   "en": "Duplicate"
+  },
+  "email": {
+   "value": "Email",
+   "en": "Email"
+  },
+  "favourites": {
+   "value": "Favourites",
+   "en": "Favourites"
+  },
+  "feature_chord_pads_sub": {
+   "value": "Play chords with pads",
+   "en": "Play chords with pads"
+  },
+  "feature_chords": {
+   "value": "Chords",
+   "en": "Chords"
+  },
+  "feature_chords_home_sub": {
+   "value": "Find, identify & listen",
+   "en": "Find, identify & listen"
+  },
+  "feature_chords_sub": {
+   "value": "Find and identify chords",
+   "en": "Find and identify chords"
+  },
+  "feature_circle_sub": {
+   "value": "Explore keys and harmony",
+   "en": "Explore keys and harmony"
+  },
+  "feature_collections": {
+   "value": "My collections",
+   "en": "My collections"
+  },
+  "feature_collections_sub": {
+   "value": "Your saved chords and scales",
+   "en": "Your saved chords and scales"
+  },
+  "feature_courses_sub": {
+   "value": "Follow music lessons",
+   "en": "Follow music lessons"
+  },
+  "feature_flashcards_sub": {
+   "value": "Practise chords and scales",
+   "en": "Practice chords and scales"
+  },
+  "feature_knowledge_base": {
+   "value": "Knowledge Base",
+   "en": "Knowledge Base"
+  },
+  "feature_knowledge_base_sub": {
+   "value": "Guides and video tutorials",
+   "en": "Guides and video tutorials"
+  },
+  "feature_metronome_sub": {
+   "value": "Keep time while you practise",
+   "en": "Keep time while you practice"
+  },
+  "feature_new_song": {
+   "value": "New song",
+   "en": "New song"
+  },
+  "feature_new_song_sub": {
+   "value": "Write chords and lyrics",
+   "en": "Write chords and lyrics"
+  },
+  "feature_piano_sub": {
+   "value": "Play the keyboard",
+   "en": "Play the keyboard"
+  },
+  "feature_practice_songs": {
+   "value": "Practice songs",
+   "en": "Practice songs"
+  },
+  "feature_practice_songs_sub": {
+   "value": "Play along with falling notes",
+   "en": "Play along with falling notes"
+  },
+  "feature_progression_builder": {
+   "value": "Progression Builder",
+   "en": "Progression Builder"
+  },
+  "feature_progression_builder_sub": {
+   "value": "Build a chord progression",
+   "en": "Build a chord progression"
+  },
+  "feature_progression_library_sub": {
+   "value": "Browse chord progressions",
+   "en": "Browse chord progressions"
+  },
+  "feature_recent_sub": {
+   "value": "Chords and scales you opened",
+   "en": "Chords and scales you opened"
+  },
+  "feature_scales": {
+   "value": "Scales",
+   "en": "Scales"
+  },
+  "feature_scales_home_sub": {
+   "value": "Explore notes & patterns",
+   "en": "Explore notes & patterns"
+  },
+  "feature_scales_sub": {
+   "value": "Explore scales and their notes",
+   "en": "Explore scales and their notes"
+  },
+  "feature_songs_sub": {
+   "value": "Your songs with chords and lyrics",
+   "en": "Your songs with chords and lyrics"
+  },
+  "feature_symbols": {
+   "value": "Musical Symbols",
+   "en": "Musical Symbols"
+  },
+  "feature_symbols_sub": {
+   "value": "Look up music notation",
+   "en": "Look up music notation"
+  },
+  "home_recent_chord": {
+   "value": "Chord · {0}",
+   "en": "Chord · {0}"
+  },
+  "home_recent_chord_short": {
+   "value": "Chord",
+   "en": "Chord"
+  },
+  "home_recent_scale_short": {
+   "value": "Scale",
+   "en": "Scale"
+  },
+  "home_recent_unavailable": {
+   "value": "This item is no longer available. Remove it from Recent?",
+   "en": "This item is no longer available. Remove it from Recent?"
+  },
+  "home_remove": {
+   "value": "Remove",
+   "en": "Remove"
+  },
+  "home_section_explore": {
+   "value": "Explore",
+   "en": "Explore"
+  },
+  "home_section_quick_tools": {
+   "value": "Quick tools",
+   "en": "Quick tools"
+  },
+  "home_section_recent": {
+   "value": "Recent",
+   "en": "Recent"
+  },
+  "home_see_all": {
+   "value": "See all",
+   "en": "See all"
+  },
+  "kb_channel": {
+   "value": "More videos on our YouTube channel",
+   "en": "More videos on our YouTube channel"
+  },
+  "kb_clear_filters": {
+   "value": "Clear filters",
+   "en": "Clear filters"
+  },
+  "kb_empty": {
+   "value": "Guides and video tutorials will appear here",
+   "en": "Guides and video tutorials will appear here"
+  },
+  "kb_filter_all": {
+   "value": "All",
+   "en": "All"
+  },
+  "kb_filter_guides": {
+   "value": "Guides",
+   "en": "Guides"
+  },
+  "kb_filter_videos": {
+   "value": "Videos",
+   "en": "Videos"
+  },
+  "kb_language_english": {
+   "value": "English",
+   "en": "English"
+  },
+  "kb_latest": {
+   "value": "Latest guides & videos",
+   "en": "Latest guides & videos"
+  },
+  "kb_no_matches": {
+   "value": "No matching guides or videos",
+   "en": "No matching guides or videos"
+  },
+  "kb_search_hint": {
+   "value": "Search guides and videos",
+   "en": "Search guides and videos"
+  },
+  "kb_start_here": {
+   "value": "Start here",
+   "en": "Start here"
+  },
+  "kb_topic_general": {
+   "value": "Getting started",
+   "en": "Getting started"
+  },
+  "kb_topic_progressions": {
+   "value": "Progressions",
+   "en": "Progressions"
+  },
+  "kb_topic_purchases": {
+   "value": "PRO & purchases",
+   "en": "PRO & purchases"
+  },
+  "kb_topic_troubleshooting": {
+   "value": "Troubleshooting",
+   "en": "Troubleshooting"
+  },
+  "kb_type_guide": {
+   "value": "Guide",
+   "en": "Guide"
+  },
+  "kb_type_video": {
+   "value": "Video",
+   "en": "Video"
+  },
+  "kb_watch_on_youtube": {
+   "value": "Watch on YouTube",
+   "en": "Watch on YouTube"
+  },
+  "lang_arabic": {
+   "value": "العربية",
+   "en": "العربية"
+  },
+  "lang_brazilian_portuguese": {
+   "value": "Português (Brasil)",
+   "en": "Português (Brasil)"
+  },
+  "lang_bulgarian": {
+   "value": "Български",
+   "en": "Български"
+  },
+  "lang_catalan": {
+   "value": "Català",
+   "en": "Català"
+  },
+  "lang_chinese": {
+   "value": "简体中文",
+   "en": "简体中文"
+  },
+  "lang_chinese_traditional": {
+   "value": "繁體中文",
+   "en": "繁體中文"
+  },
+  "lang_croatian": {
+   "value": "Hrvatski",
+   "en": "Hrvatski"
+  },
+  "lang_czech": {
+   "value": "Čeština",
+   "en": "Čeština"
+  },
+  "lang_danish": {
+   "value": "Dansk",
+   "en": "Dansk"
+  },
+  "lang_dutch": {
+   "value": "Nederlands",
+   "en": "Nederlands"
+  },
+  "lang_english": {
+   "value": "English (American)",
+   "en": "English (American)"
+  },
+  "lang_english_au": {
+   "value": "English (Australian)",
+   "en": "English (Australian)"
+  },
+  "lang_english_br": {
+   "value": "English (British)",
+   "en": "English (British)"
+  },
+  "lang_estonian": {
+   "value": "Eesti",
+   "en": "Eesti"
+  },
+  "lang_finnish": {
+   "value": "Suomi",
+   "en": "Suomi"
+  },
+  "lang_french": {
+   "value": "Français",
+   "en": "Français"
+  },
+  "lang_german": {
+   "value": "Deutsch",
+   "en": "Deutsch"
+  },
+  "lang_greek": {
+   "value": "Ελληνικά",
+   "en": "Ελληνικά"
+  },
+  "lang_hebrew": {
+   "value": "עברית",
+   "en": "עברית"
+  },
+  "lang_hindi": {
+   "value": "हिंदी",
+   "en": "हिंदी"
+  },
+  "lang_hungarian": {
+   "value": "Magyar",
+   "en": "Magyar"
+  },
+  "lang_indonesian": {
+   "value": "Bahasa Indonesia",
+   "en": "Bahasa Indonesia"
+  },
+  "lang_italian": {
+   "value": "Italiano",
+   "en": "Italiano"
+  },
+  "lang_japanese": {
+   "value": "日本語",
+   "en": "日本語"
+  },
+  "lang_korean": {
+   "value": "한국어",
+   "en": "한국어"
+  },
+  "lang_latvian": {
+   "value": "Latviešu",
+   "en": "Latviešu"
+  },
+  "lang_lithuanian": {
+   "value": "Lietuvių",
+   "en": "Lietuvių"
+  },
+  "lang_malay": {
+   "value": "Bahasa Melayu",
+   "en": "Bahasa Melayu"
+  },
+  "lang_norwegian": {
+   "value": "Norsk",
+   "en": "Norsk"
+  },
+  "lang_polish": {
+   "value": "Polski",
+   "en": "Polski"
+  },
+  "lang_portuguese": {
+   "value": "Português (Portugal)",
+   "en": "Português (Portugal)"
+  },
+  "lang_romanian": {
+   "value": "Română",
+   "en": "Română"
+  },
+  "lang_russian": {
+   "value": "Русский",
+   "en": "Русский"
+  },
+  "lang_serbian": {
+   "value": "Srpski",
+   "en": "Srpski"
+  },
+  "lang_slovak": {
+   "value": "Slovenčina",
+   "en": "Slovenčina"
+  },
+  "lang_slovenian": {
+   "value": "Slovenščina",
+   "en": "Slovenščina"
+  },
+  "lang_spanish": {
+   "value": "Español",
+   "en": "Español"
+  },
+  "lang_swedish": {
+   "value": "Svenska",
+   "en": "Svenska"
+  },
+  "lang_thai": {
+   "value": "ไทย",
+   "en": "ไทย"
+  },
+  "lang_turkish": {
+   "value": "Türkçe",
+   "en": "Türkçe"
+  },
+  "lang_ukrainian": {
+   "value": "Українська",
+   "en": "Українська"
+  },
+  "lang_vietnamese": {
+   "value": "Tiếng Việt",
+   "en": "Tiếng Việt"
+  },
+  "my_apps": {
+   "value": "My apps",
+   "en": "My apps"
+  },
+  "nav_create": {
+   "value": "Create",
+   "en": "Create"
+  },
+  "nav_explore": {
+   "value": "Explore",
+   "en": "Explore"
+  },
+  "nav_home": {
+   "value": "Home",
+   "en": "Home"
+  },
+  "nav_library": {
+   "value": "Library",
+   "en": "Library"
+  },
+  "nav_practice": {
+   "value": "Practice",
+   "en": "Practice"
+  },
+  "note_1": {
+   "value": "Semibreve",
+   "en": "Whole Note"
+  },
+  "note_128": {
+   "value": "Semihemidemisemiquaver, Quasihemidemisemiquaver",
+   "en": "One Hundred and Twenty-eighth Note"
+  },
+  "note_16": {
+   "value": "Semiquaver",
+   "en": "Sixteenth Note"
+  },
+  "note_1dbl": {
+   "value": "Breve, Brevis",
+   "en": "Double-whole Note"
+  },
+  "note_2": {
+   "value": "Minim",
+   "en": "Half Note"
+  },
+  "note_2_dotted": {
+   "value": "Dotted Minim",
+   "en": "Dotted Half Note"
+  },
+  "note_32": {
+   "value": "Demisemiquaver",
+   "en": "Thirty-second Note"
+  },
+  "note_4": {
+   "value": "Crotchet",
+   "en": "Quarter Note"
+  },
+  "note_4_dotted": {
+   "value": "Dotted Crotchet",
+   "en": "Dotted Quarter Note"
+  },
+  "note_64": {
+   "value": "Hemidemisemiquaver",
+   "en": "Sixty-fourth Note"
+  },
+  "note_8": {
+   "value": "Quaver",
+   "en": "Eighth Note"
+  },
+  "note_8_dotted": {
+   "value": "Dotted Quaver",
+   "en": "Dotted Eighth Note"
+  },
+  "oa_follow_x": {
+   "value": "Follow @desunit on X",
+   "en": "Follow @desunit on X"
+  },
+  "oa_get": {
+   "value": "Get",
+   "en": "Get"
+  },
+  "oa_intro": {
+   "value": "Hi! I'm Sergey, the author of Piano Companion. I love building apps, and I hope you'll love my other apps too — millions of people around the world use them. Thank you!",
+   "en": "Hi! I'm Sergey, the author of Piano Companion. I love building apps, and I hope you'll love my other apps too — millions of people around the world use them. Thank you!"
+  },
+  "oa_tagline_chordiq": {
+   "value": "Ear training and music theory games: notes, chords, scales and rhythm.",
+   "en": "Ear training and music theory games: notes, chords, scales and rhythm."
+  },
+  "oa_tagline_ear_hop": {
+   "value": "Arcade ear training: hear the sound, sing the note, flap on the beat.",
+   "en": "Arcade ear training: hear the sound, sing the note, flap on the beat."
+  },
+  "oa_tagline_kidteller": {
+   "value": "Personalised storybooks starring your child.",
+   "en": "Personalized storybooks starring your child."
+  },
+  "oa_tagline_mathit": {
+   "value": "Maths practice and games for kids.",
+   "en": "Math practice and games for kids."
+  },
+  "onboarding_fd_dict_h1": {
+   "value": "Any chord, in two taps",
+   "en": "Any chord, in two taps"
+  },
+  "onboarding_fd_dict_sub": {
+   "value": "Pick a root and a chord type. See the notes and hear it.",
+   "en": "Pick a root and a chord type. See the notes and hear it."
+  },
+  "onboarding_fd_dict_where": {
+   "value": "In the app: Explore → Chords",
+   "en": "In the app: Explore → Chords"
+  },
+  "onboarding_fd_jazz_251": {
+   "value": "▶ Play ii–V–I",
+   "en": "▶ Play ii–V–I"
+  },
+  "onboarding_fd_jazz_h1": {
+   "value": "Jazz chords, voiced for you",
+   "en": "Jazz chords, voiced for you"
+  },
+  "onboarding_fd_jazz_sub": {
+   "value": "Tap a chord to see and hear it. Then play a ii–V–I.",
+   "en": "Tap a chord to see and hear it. Then play a ii–V–I."
+  },
+  "onboarding_fd_jazz_where": {
+   "value": "In the app: Explore → Chords · search “Cmaj9”",
+   "en": "In the app: Explore → Chords · search “Cmaj9”"
+  },
+  "onboarding_fd_listen": {
+   "value": "▶ Listen first",
+   "en": "▶ Listen first"
+  },
+  "onboarding_fd_pads_h1": {
+   "value": "One finger, full chords",
+   "en": "One finger, full chords"
+  },
+  "onboarding_fd_pads_sub": {
+   "value": "Tap the pads to play a song's chords. Every pad is in the same key.",
+   "en": "Tap the pads to play a song's chords. Every pad is in the same key."
+  },
+  "onboarding_fd_pads_where": {
+   "value": "In the app: Create → Chord Pads",
+   "en": "In the app: Create → Chord Pads"
+  },
+  "onboarding_fd_practice_done": {
+   "value": "You played the first line!",
+   "en": "You played the first line!"
+  },
+  "onboarding_fd_practice_done_sub": {
+   "value": "Find more songs in Practice songs.",
+   "en": "Find more songs in Practice songs."
+  },
+  "onboarding_fd_practice_h1": {
+   "value": "Play your first song",
+   "en": "Play your first song"
+  },
+  "onboarding_fd_practice_progress": {
+   "value": "{0} of {1} notes",
+   "en": "{0} of {1} notes"
+  },
+  "onboarding_fd_practice_song": {
+   "value": "Ode to Joy",
+   "en": "Ode to Joy"
+  },
+  "onboarding_fd_practice_sub": {
+   "value": "Tap the lit key. The song waits for you.",
+   "en": "Tap the lit key. The song waits for you."
+  },
+  "onboarding_fd_practice_where": {
+   "value": "In the app: Practice → Practice songs",
+   "en": "In the app: Practice → Practice songs"
+  },
+  "onboarding_fd_reverse_where": {
+   "value": "In the app: Chords → By keys",
+   "en": "In the app: Chords → By keys"
+  },
+  "onboarding_fd_scales_h1": {
+   "value": "See and hear any scale",
+   "en": "See and hear any scale"
+  },
+  "onboarding_fd_scales_sub": {
+   "value": "Tap a scale. Its notes light up and it plays.",
+   "en": "Tap a scale. Its notes light up and it plays."
+  },
+  "onboarding_fd_scales_where": {
+   "value": "In the app: Explore → Scales",
+   "en": "In the app: Explore → Scales"
+  },
+  "onboarding_fd_song_emotional": {
+   "value": "Emotional",
+   "en": "Emotional"
+  },
+  "onboarding_fd_song_fifties": {
+   "value": "50s",
+   "en": "50s"
+  },
+  "onboarding_fd_song_h1": {
+   "value": "Start a song from a progression",
+   "en": "Start a song from a progression"
+  },
+  "onboarding_fd_song_hint": {
+   "value": "Change the key, edit the chords, save it to a song.",
+   "en": "Change the key, edit the chords, save it to a song."
+  },
+  "onboarding_fd_song_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "onboarding_fd_song_pop": {
+   "value": "Pop",
+   "en": "Pop"
+  },
+  "onboarding_fd_song_sub": {
+   "value": "Tap a progression to hear it. Hits are built on these.",
+   "en": "Tap a progression to hear it. Hits are built on these."
+  },
+  "onboarding_fd_song_where": {
+   "value": "In the app: Explore → Progression Library",
+   "en": "In the app: Explore → Progression Library"
+  },
+  "onboarding_fd_transcribe_example": {
+   "value": "▶ Hear an example",
+   "en": "▶ Hear an example"
+  },
+  "onboarding_fd_transcribe_h1": {
+   "value": "From any song to notes",
+   "en": "From any song to notes"
+  },
+  "onboarding_fd_transcribe_result": {
+   "value": "Example: Ode to Joy",
+   "en": "Example: Ode to Joy"
+  },
+  "onboarding_fd_transcribe_result_sub": {
+   "value": "Notes · Sheet music · MIDI",
+   "en": "Notes · Sheet music · MIDI"
+  },
+  "onboarding_fd_transcribe_step1": {
+   "value": "Find a piano video on TikTok, Instagram or Facebook, or use an audio file",
+   "en": "Find a piano video on TikTok, Instagram or Facebook, or use an audio file"
+  },
+  "onboarding_fd_transcribe_step2": {
+   "value": "Tap Share → Piano Companion",
+   "en": "Tap Share → Piano Companion"
+  },
+  "onboarding_fd_transcribe_step3": {
+   "value": "Get the notes, sheet music and a MIDI file, and play it here",
+   "en": "Get the notes, sheet music and a MIDI file, and play it here"
+  },
+  "onboarding_fd_transcribe_sub": {
+   "value": "Piano Companion listens to a piano video and writes the notes for you.",
+   "en": "Piano Companion listens to a piano video and writes the notes for you."
+  },
+  "onboarding_fd_transcribe_where": {
+   "value": "In the app: Practice → Transcribe a song",
+   "en": "In the app: Practice → Transcribe a song"
+  },
+  "onboarding_fd_type_major": {
+   "value": "Major",
+   "en": "Major"
+  },
+  "onboarding_fd_type_minor": {
+   "value": "Minor",
+   "en": "Minor"
+  },
+  "onboarding_genre_classical": {
+   "value": "Classical",
+   "en": "Classical"
+  },
+  "onboarding_genre_electronic": {
+   "value": "Electronic",
+   "en": "Electronic"
+  },
+  "onboarding_genre_film": {
+   "value": "Film & games",
+   "en": "Film & games"
+  },
+  "onboarding_genre_folk": {
+   "value": "Folk / Country",
+   "en": "Folk / Country"
+  },
+  "onboarding_genre_h1": {
+   "value": "What music do you play?",
+   "en": "What music do you play?"
+  },
+  "onboarding_genre_hiphop": {
+   "value": "Hip-hop",
+   "en": "Hip-hop"
+  },
+  "onboarding_genre_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "onboarding_genre_latin": {
+   "value": "Latin",
+   "en": "Latin"
+  },
+  "onboarding_genre_pop": {
+   "value": "Pop",
+   "en": "Pop"
+  },
+  "onboarding_genre_rnb": {
+   "value": "R&B / Soul",
+   "en": "R&B / Soul"
+  },
+  "onboarding_genre_rock": {
+   "value": "Rock",
+   "en": "Rock"
+  },
+  "onboarding_genre_worship": {
+   "value": "Gospel / Worship",
+   "en": "Gospel / Worship"
+  },
+  "onboarding_instr_bass": {
+   "value": "Bass",
+   "en": "Bass"
+  },
+  "onboarding_instr_daw": {
+   "value": "Music software",
+   "en": "Music software"
+  },
+  "onboarding_instr_digital": {
+   "value": "Digital piano",
+   "en": "Digital piano"
+  },
+  "onboarding_instr_guitar": {
+   "value": "Guitar",
+   "en": "Guitar"
+  },
+  "onboarding_instr_h1": {
+   "value": "What do you play?",
+   "en": "What do you play?"
+  },
+  "onboarding_instr_midi": {
+   "value": "MIDI keyboard",
+   "en": "MIDI keyboard"
+  },
+  "onboarding_instr_none": {
+   "value": "Nothing yet",
+   "en": "Nothing yet"
+  },
+  "onboarding_instr_piano": {
+   "value": "Piano",
+   "en": "Piano"
+  },
+  "onboarding_instr_ukulele": {
+   "value": "Ukulele",
+   "en": "Ukulele"
+  },
+  "onboarding_instr_voice": {
+   "value": "Voice",
+   "en": "Voice"
+  },
+  "onboarding_int_dictionary": {
+   "value": "Look up any chord",
+   "en": "Look up any chord"
+  },
+  "onboarding_int_dictionary_sub": {
+   "value": "1,500+ chords: notes, fingering and sound",
+   "en": "1,500+ chords: notes, fingering and sound"
+  },
+  "onboarding_int_jazz": {
+   "value": "Jazz & advanced chords",
+   "en": "Jazz & advanced chords"
+  },
+  "onboarding_int_jazz_sub": {
+   "value": "9ths, 11ths, 13ths, altered chords, ii–V–I",
+   "en": "9ths, 11ths, 13ths, altered chords, ii–V–I"
+  },
+  "onboarding_int_pads": {
+   "value": "Make music with Chord Pads",
+   "en": "Make music with Chord Pads"
+  },
+  "onboarding_int_pads_sub": {
+   "value": "Play full chords with one finger",
+   "en": "Play full chords with one finger"
+  },
+  "onboarding_int_practice": {
+   "value": "Learn songs on piano",
+   "en": "Learn songs on piano"
+  },
+  "onboarding_int_practice_sub": {
+   "value": "Follow the lit keys at your own pace",
+   "en": "Follow the lit keys at your own pace"
+  },
+  "onboarding_int_reverse": {
+   "value": "Name the chord I play",
+   "en": "Name the chord I play"
+  },
+  "onboarding_int_reverse_sub": {
+   "value": "Tap keys and get the chord name",
+   "en": "Tap keys and get the chord name"
+  },
+  "onboarding_int_scales": {
+   "value": "Scales & modes",
+   "en": "Scales & modes"
+  },
+  "onboarding_int_scales_sub": {
+   "value": "See and hear any scale in any key",
+   "en": "See and hear any scale in any key"
+  },
+  "onboarding_int_songwriting": {
+   "value": "Write songs",
+   "en": "Write songs"
+  },
+  "onboarding_int_songwriting_sub": {
+   "value": "Chord progressions, keys and song sheets",
+   "en": "Chord progressions, keys and song sheets"
+  },
+  "onboarding_int_transcribe": {
+   "value": "Turn a song into notes",
+   "en": "Turn a song into notes"
+  },
+  "onboarding_int_transcribe_sub": {
+   "value": "From a video or audio file to notes and sheet music",
+   "en": "From a video or audio file to notes and sheet music"
+  },
+  "onboarding_interests_h1": {
+   "value": "What do you want to do with Piano Companion?",
+   "en": "What do you want to do with Piano Companion?"
+  },
+  "onboarding_interests_sub": {
+   "value": "Pick all that fit. We'll show you how each one works.",
+   "en": "Pick all that fit. We'll show you how each one works."
+  },
+  "onboarding_multi_sub": {
+   "value": "Pick all that fit.",
+   "en": "Pick all that fit."
+  },
+  "onboarding_opt_other": {
+   "value": "Other",
+   "en": "Other"
+  },
+  "onboarding_plan_first": {
+   "value": "Opens first · {0}",
+   "en": "Opens first · {0}"
+  },
+  "onboarding_plan_h1": {
+   "value": "Your Piano Companion is ready",
+   "en": "Your Piano Companion is ready"
+  },
+  "onboarding_plan_sub": {
+   "value": "Here is where to find what you picked.",
+   "en": "Here is where to find what you picked."
+  },
+  "onboarding_role_h1": {
+   "value": "What describes you best?",
+   "en": "What describes you best?"
+  },
+  "onboarding_role_parent": {
+   "value": "Parent",
+   "en": "Parent"
+  },
+  "onboarding_role_parent_sub": {
+   "value": "I help my child learn",
+   "en": "I help my child learn"
+  },
+  "onboarding_role_performer": {
+   "value": "Performer",
+   "en": "Performer"
+  },
+  "onboarding_role_performer_sub": {
+   "value": "I play in a band, a church or at gigs",
+   "en": "I play in a band, a church or at gigs"
+  },
+  "onboarding_role_producer": {
+   "value": "Producer / beatmaker",
+   "en": "Producer / beatmaker"
+  },
+  "onboarding_role_producer_sub": {
+   "value": "I make music on a computer or phone",
+   "en": "I make music on a computer or phone"
+  },
+  "onboarding_role_self_taught": {
+   "value": "Self-taught",
+   "en": "Self-taught"
+  },
+  "onboarding_role_self_taught_sub": {
+   "value": "I learn on my own",
+   "en": "I learn on my own"
+  },
+  "onboarding_role_songwriter": {
+   "value": "Songwriter",
+   "en": "Songwriter"
+  },
+  "onboarding_role_songwriter_sub": {
+   "value": "I write my own songs",
+   "en": "I write my own songs"
+  },
+  "onboarding_role_student": {
+   "value": "Student",
+   "en": "Student"
+  },
+  "onboarding_role_student_sub": {
+   "value": "I take lessons or study music",
+   "en": "I take lessons or study music"
+  },
+  "onboarding_role_sub": {
+   "value": "This helps us make Piano Companion better for people like you.",
+   "en": "This helps us make Piano Companion better for people like you."
+  },
+  "onboarding_role_teacher": {
+   "value": "Teacher",
+   "en": "Teacher"
+  },
+  "onboarding_role_teacher_sub": {
+   "value": "I teach music",
+   "en": "I teach music"
+  },
+  "other_names": {
+   "value": "Other names",
+   "en": "Other names"
+  },
+  "paywall_review_1": {
+   "value": "Every chord I need for lessons, right at my fingertips.",
+   "en": "Every chord I need for lessons, right at my fingertips."
+  },
+  "paywall_review_2": {
+   "value": "Finally understood scales thanks to this app. Worth it.",
+   "en": "Finally understood scales thanks to this app. Worth it."
+  },
+  "paywall_review_3": {
+   "value": "Progression builder saved me hours of noodling.",
+   "en": "Progression builder saved me hours of noodling."
+  },
+  "paywall_review_4": {
+   "value": "Scale library is unreal. Modes, jazz, ethnic — all there.",
+   "en": "Scale library is unreal. Modes, jazz, ethnic — all there."
+  },
+  "paywall_review_5": {
+   "value": "Hit any chord, see every extension. 7ths, 9ths, 13ths — brilliant.",
+   "en": "Hit any chord, see every extension. 7ths, 9ths, 13ths — brilliant."
+  },
+  "paywall_review_6": {
+   "value": "Connect MIDI keyboard, reverse-lookup chords live. Game changer.",
+   "en": "Connect MIDI keyboard, reverse-lookup chords live. Game changer."
+  },
+  "paywall_review_7": {
+   "value": "The inversions feature helped me play smoother.",
+   "en": "The inversions feature helped me play smoother."
+  },
+  "pno_brace": {
+   "value": "Grand stave",
+   "en": "Grand staff"
+  },
+  "pno_brace_desc": {
+   "value": "Treble and bass staves joined by a brace",
+   "en": "Treble and bass staff joined by a brace"
+  },
+  "practice_again": {
+   "value": "Practice again",
+   "en": "Practice again"
+  },
+  "practice_attribution": {
+   "value": "Arrangement: {0}",
+   "en": "Arrangement: {0}"
+  },
+  "practice_difficulty_1": {
+   "value": "Easy",
+   "en": "Easy"
+  },
+  "practice_difficulty_2": {
+   "value": "Intermediate",
+   "en": "Intermediate"
+  },
+  "practice_difficulty_3": {
+   "value": "Advanced",
+   "en": "Advanced"
+  },
+  "practice_download_failed": {
+   "value": "The song did not download. Try again.",
+   "en": "The song did not download. Try again."
+  },
+  "practice_file_failed": {
+   "value": "This file cannot be opened. Choose a standard MIDI file (.mid).",
+   "en": "This file cannot be opened. Choose a standard MIDI file (.mid)."
+  },
+  "practice_hands": {
+   "value": "Hands",
+   "en": "Hands"
+  },
+  "practice_hands_both": {
+   "value": "Both hands",
+   "en": "Both hands"
+  },
+  "practice_hands_left": {
+   "value": "Left hand",
+   "en": "Left hand"
+  },
+  "practice_hands_right": {
+   "value": "Right hand",
+   "en": "Right hand"
+  },
+  "practice_hide_keyboard": {
+   "value": "Hide keyboard",
+   "en": "Hide keyboard"
+  },
+  "practice_load_failed": {
+   "value": "The songs did not load. Check the connection and try again.",
+   "en": "The songs did not load. Check the connection and try again."
+  },
+  "practice_midi_hint": {
+   "value": "The keyboard is hidden. Play on a MIDI keyboard.",
+   "en": "The keyboard is hidden. Play on a MIDI keyboard."
+  },
+  "practice_no_results": {
+   "value": "No song for “{0}” yet. We keep a note of every search to choose the next songs.",
+   "en": "No song for “{0}” yet. We keep a note of every search to choose the next songs."
+  },
+  "practice_open_file": {
+   "value": "Open MIDI file",
+   "en": "Open MIDI file"
+  },
+  "practice_other_song": {
+   "value": "Choose another song",
+   "en": "Choose another song"
+  },
+  "practice_popular": {
+   "value": "Popular",
+   "en": "Popular"
+  },
+  "practice_restart": {
+   "value": "Start again",
+   "en": "Start again"
+  },
+  "practice_result_notes": {
+   "value": "{0} of {1} notes correct on the first try",
+   "en": "{0} of {1} notes correct on the first try"
+  },
+  "practice_result_time": {
+   "value": "Time {0}",
+   "en": "Time {0}"
+  },
+  "practice_results": {
+   "value": "Results",
+   "en": "Results"
+  },
+  "practice_search_hint": {
+   "value": "Search a song or a composer",
+   "en": "Search a song or a composer"
+  },
+  "practice_show_keyboard": {
+   "value": "Show keyboard",
+   "en": "Show keyboard"
+  },
+  "practice_songs": {
+   "value": "Practice",
+   "en": "Practice"
+  },
+  "practice_speed": {
+   "value": "Speed",
+   "en": "Speed"
+  },
+  "practice_try_again": {
+   "value": "Try again",
+   "en": "Try again"
+  },
+  "practice_wait_hint": {
+   "value": "Play the marked keys. The song waits for you.",
+   "en": "Play the marked keys. The song waits for you."
+  },
+  "pro_feat_circle_desc": {
+   "value": "Every related key, chord, and scale — one tap on the wheel.",
+   "en": "Every related key, chord, and scale — one tap on the wheel."
+  },
+  "pro_feat_circle_title": {
+   "value": "Interactive Circle of Fifths",
+   "en": "Interactive Circle of Fifths"
+  },
+  "pro_feat_custom_desc": {
+   "value": "Invent voicings, tweak any chord or scale, save them to your library.",
+   "en": "Invent voicings, tweak any chord or scale, save them to your library."
+  },
+  "pro_feat_custom_title": {
+   "value": "Your Chords, Your Scales",
+   "en": "Your Chords, Your Scales"
+  },
+  "pro_feat_progressions_desc": {
+   "value": "Drop chords in-key, loop them, export MIDI to your DAW.",
+   "en": "Drop chords in-key, loop them, export MIDI to your DAW."
+  },
+  "pro_feat_progressions_title": {
+   "value": "Progressions That Fit the Key",
+   "en": "Progressions That Fit the Key"
+  },
+  "pro_feat_reverse_desc": {
+   "value": "Play the keys or hook up MIDI — we name the chord instantly.",
+   "en": "Play the keys or hook up MIDI — we name the chord instantly."
+  },
+  "pro_feat_reverse_title": {
+   "value": "What Chord Is That?",
+   "en": "What Chord Is That?"
+  },
+  "pro_feat_scales_desc": {
+   "value": "Jazz, modal, ethnic — with fingering for both hands, right on the staff.",
+   "en": "Jazz, modal, ethnic — with fingering for both hands, right on the staff."
+  },
+  "pro_feat_scales_title": {
+   "value": "10,000+ Scales & Modes",
+   "en": "10,000+ Scales & Modes"
+  },
+  "pro_feat_voicings_desc": {
+   "value": "Triads to 13ths, 1st–6th inversions — the voicing you need, instantly.",
+   "en": "Triads to 13ths, 1st–6th inversions — the voicing you need, instantly."
+  },
+  "pro_feat_voicings_title": {
+   "value": "Every Inversion, Every Extension",
+   "en": "Every Inversion, Every Extension"
+  },
+  "promo_badge": {
+   "value": "−{0}%",
+   "en": "−{0}%"
+  },
+  "promo_countdown_days": {
+   "value": "{0}d {1}",
+   "en": "{0}d {1}"
+  },
+  "promo_cta": {
+   "value": "Get {0}% off — {1}",
+   "en": "Get {0}% off — {1}"
+  },
+  "promo_ends_in_caption": {
+   "value": "Ends in",
+   "en": "Ends in"
+  },
+  "promo_ends_on": {
+   "value": "Ends {0}",
+   "en": "Ends {0}"
+  },
+  "promo_note_months_one": {
+   "value": "first month, then {1}/month",
+   "en": "first month, then {1}/month"
+  },
+  "promo_note_months_other": {
+   "value": "first {0} months, then {1}/month",
+   "en": "first {0} months, then {1}/month"
+  },
+  "promo_note_weeks_one": {
+   "value": "first week, then {1}/week",
+   "en": "first week, then {1}/week"
+  },
+  "promo_note_weeks_other": {
+   "value": "first {0} weeks, then {1}/week",
+   "en": "first {0} weeks, then {1}/week"
+  },
+  "promo_note_years_one": {
+   "value": "first year, then {1}/year",
+   "en": "first year, then {1}/year"
+  },
+  "promo_note_years_other": {
+   "value": "first {0} years, then {1}/year",
+   "en": "first {0} years, then {1}/year"
+  },
+  "promo_summary": {
+   "value": "{0} now, {1}",
+   "en": "{0} now, {1}"
+  },
+  "promo_title_back_to_school": {
+   "value": "Back-to-school sale",
+   "en": "Back-to-school sale"
+  },
+  "promo_title_birthday": {
+   "value": "Piano Companion birthday sale",
+   "en": "Piano Companion birthday sale"
+  },
+  "promo_title_black_friday": {
+   "value": "Black Friday",
+   "en": "Black Friday"
+  },
+  "promo_title_cyber_monday": {
+   "value": "Cyber Monday",
+   "en": "Cyber Monday"
+  },
+  "promo_title_flash": {
+   "value": "Flash sale",
+   "en": "Flash sale"
+  },
+  "promo_title_holiday": {
+   "value": "Holiday sale",
+   "en": "Holiday sale"
+  },
+  "promo_title_limited": {
+   "value": "Limited-time offer",
+   "en": "Limited-time offer"
+  },
+  "promo_title_new_year": {
+   "value": "New Year sale",
+   "en": "New Year sale"
+  },
+  "promo_title_special": {
+   "value": "Special offer",
+   "en": "Special offer"
+  },
+  "promo_title_spring": {
+   "value": "Spring sale",
+   "en": "Spring sale"
+  },
+  "promo_title_summer": {
+   "value": "Summer sale",
+   "en": "Summer sale"
+  },
+  "promo_title_weekend": {
+   "value": "Weekend deal",
+   "en": "Weekend deal"
+  },
+  "quick_tools_add": {
+   "value": "Add a tool",
+   "en": "Add a tool"
+  },
+  "quick_tools_edit_title": {
+   "value": "Edit quick tools",
+   "en": "Edit quick tools"
+  },
+  "quick_tools_hint_many": {
+   "value": "Choose up to six tools for your home screen",
+   "en": "Choose up to six tools for your home screen"
+  },
+  "quick_tools_remove": {
+   "value": "Remove {0}",
+   "en": "Remove {0}"
+  },
+  "quick_tools_restore": {
+   "value": "Restore default shortcuts",
+   "en": "Restore default shortcuts"
+  },
+  "quick_tools_slot": {
+   "value": "Slot {0}",
+   "en": "Slot {0}"
+  },
+  "rating_badge": {
+   "value": "Rating\n★ 4.7",
+   "en": "Rating\n★ 4.7"
+  },
+  "recent": {
+   "value": "Recent",
+   "en": "Recent"
+  },
+  "reminder_day1_body": {
+   "value": "30 seconds. Tap to hear it and see what sounds great with it.",
+   "en": "30 seconds. Tap to hear it and see what sounds great with it."
+  },
+  "reminder_day1_title": {
+   "value": "Today's chord: {0}",
+   "en": "Today's chord: {0}"
+  },
+  "rest_1": {
+   "value": "Semibreve Rest",
+   "en": "Whole Rest"
+  },
+  "rest_128": {
+   "value": "Semihemidemisemiquaver Rest, Quasihemidemisemiquaver Rest",
+   "en": "One Hundred and Twenty-eighth Rest"
+  },
+  "rest_16": {
+   "value": "Semiquaver Rest",
+   "en": "Sixteenth Rest"
+  },
+  "rest_1dbl": {
+   "value": "Breve Rest, Brevis Rest",
+   "en": "Double-whole Rest"
+  },
+  "rest_2": {
+   "value": "Minim Rest",
+   "en": "Half Rest"
+  },
+  "rest_32": {
+   "value": "Demisemiquaver Rest",
+   "en": "Thirty-second Rest"
+  },
+  "rest_4": {
+   "value": "Crotchet Rest",
+   "en": "Quarter Rest"
+  },
+  "rest_64": {
+   "value": "Hemidemisemiquaver Rest",
+   "en": "Sixty-fourth Rest"
+  },
+  "rest_8": {
+   "value": "Quaver Rest",
+   "en": "Eighth Rest"
+  },
+  "rhythm_ledger_desc": {
+   "value": "Short lines for notes above or below the stave",
+   "en": "Short lines for notes above or below the staff"
+  },
+  "section_learn_help": {
+   "value": "Learn & help",
+   "en": "Learn & help"
+  },
+  "settings_about_app": {
+   "value": "About Piano Companion",
+   "en": "About Piano Companion"
+  },
+  "settings_advanced": {
+   "value": "Advanced",
+   "en": "Advanced"
+  },
+  "settings_appearance": {
+   "value": "Appearance",
+   "en": "Appearance"
+  },
+  "settings_contact_support": {
+   "value": "Contact support",
+   "en": "Contact support"
+  },
+  "settings_help_info": {
+   "value": "Help & information",
+   "en": "Help & information"
+  },
+  "settings_help_sub": {
+   "value": "Questions and answers",
+   "en": "Questions and answers"
+  },
+  "settings_home": {
+   "value": "Home screen",
+   "en": "Home screen"
+  },
+  "settings_purchases": {
+   "value": "Purchases",
+   "en": "Purchases"
+  },
+  "settings_purchases_sub": {
+   "value": "Plans, PRO features and your purchase",
+   "en": "Plans, PRO features and your purchase"
+  },
+  "settings_reset_purchases": {
+   "value": "Reset test purchases",
+   "en": "Reset test purchases"
+  },
+  "settings_share_app": {
+   "value": "Share Piano Companion",
+   "en": "Share Piano Companion"
+  },
+  "settings_theme": {
+   "value": "Theme",
+   "en": "Theme"
+  },
+  "show_chord_names": {
+   "value": "Show chord names",
+   "en": "Show chord names"
+  },
+  "songbook": {
+   "value": "Songs",
+   "en": "Songs"
+  },
+  "songbook_add_chord": {
+   "value": "Add chord",
+   "en": "Add chord"
+  },
+  "songbook_add_line": {
+   "value": "Add line",
+   "en": "Add line"
+  },
+  "songbook_add_section": {
+   "value": "Add section",
+   "en": "Add section"
+  },
+  "songbook_author_hint": {
+   "value": "Author",
+   "en": "Author"
+  },
+  "songbook_autoscroll": {
+   "value": "Auto-scroll",
+   "en": "Auto-scroll"
+  },
+  "songbook_autoscroll_speed": {
+   "value": "Speed",
+   "en": "Speed"
+  },
+  "songbook_autoscroll_start": {
+   "value": "Start",
+   "en": "Start"
+  },
+  "songbook_autoscroll_stop": {
+   "value": "Stop auto-scroll",
+   "en": "Stop auto-scroll"
+  },
+  "songbook_beats_default": {
+   "value": "Default ({0})",
+   "en": "Default ({0})"
+  },
+  "songbook_by_author": {
+   "value": "Words & Music by {0}",
+   "en": "Words & Music by {0}"
+  },
+  "songbook_change_chord": {
+   "value": "Change chord",
+   "en": "Change chord"
+  },
+  "songbook_copy_title": {
+   "value": "{0} (copy)",
+   "en": "{0} (copy)"
+  },
+  "songbook_date": {
+   "value": "Date",
+   "en": "Date"
+  },
+  "songbook_delete_confirm": {
+   "value": "Delete \"{0}\"?",
+   "en": "Delete \"{0}\"?"
+  },
+  "songbook_delete_section": {
+   "value": "Delete section",
+   "en": "Delete section"
+  },
+  "songbook_delete_section_confirm": {
+   "value": "Delete this section and its lines?",
+   "en": "Delete this section and its lines?"
+  },
+  "songbook_empty": {
+   "value": "No songs yet — tap \"New song\" to write one",
+   "en": "No songs yet — tap \"New song\" to write one"
+  },
+  "songbook_key_none": {
+   "value": "—",
+   "en": "—"
+  },
+  "songbook_lyrics_hint": {
+   "value": "Type lyrics…",
+   "en": "Type lyrics…"
+  },
+  "songbook_new_song": {
+   "value": "New song",
+   "en": "New song"
+  },
+  "songbook_print": {
+   "value": "Print",
+   "en": "Print"
+  },
+  "songbook_search_hint": {
+   "value": "Search songs",
+   "en": "Search songs"
+  },
+  "songbook_section_bridge": {
+   "value": "Bridge",
+   "en": "Bridge"
+  },
+  "songbook_section_chorus": {
+   "value": "Chorus",
+   "en": "Chorus"
+  },
+  "songbook_section_custom": {
+   "value": "Custom…",
+   "en": "Custom…"
+  },
+  "songbook_section_hint": {
+   "value": "Section (e.g. Verse 1)",
+   "en": "Section (e.g. Verse 1)"
+  },
+  "songbook_section_intro": {
+   "value": "Intro",
+   "en": "Intro"
+  },
+  "songbook_section_outro": {
+   "value": "Outro",
+   "en": "Outro"
+  },
+  "songbook_section_prechorus": {
+   "value": "Pre-Chorus",
+   "en": "Pre-Chorus"
+  },
+  "songbook_section_solo": {
+   "value": "Solo",
+   "en": "Solo"
+  },
+  "songbook_section_verse": {
+   "value": "Verse",
+   "en": "Verse"
+  },
+  "songbook_share_pdf": {
+   "value": "Share as PDF",
+   "en": "Share as PDF"
+  },
+  "songbook_title_hint": {
+   "value": "Title",
+   "en": "Title"
+  },
+  "songbook_untitled": {
+   "value": "Untitled song",
+   "en": "Untitled song"
+  },
+  "songbook_view_diagrams": {
+   "value": "Show diagrams",
+   "en": "Show diagrams"
+  },
+  "songbook_view_names": {
+   "value": "Show chord names",
+   "en": "Show chord names"
+  },
+  "sounds_great_with": {
+   "value": "Sounds great with",
+   "en": "Sounds great with"
+  },
+  "symbol_bar_line_desc": {
+   "value": "Divides the stave into bars",
+   "en": "Divides the staff into measures"
+  },
+  "symbol_double_flat_desc": {
+   "value": "Lowers a note by a tone",
+   "en": "Lowers a note by a whole step"
+  },
+  "symbol_double_sharp_desc": {
+   "value": "Raises a note by a tone",
+   "en": "Raises a note by a whole step"
+  },
+  "symbol_flat_desc": {
+   "value": "Lowers a note by a semitone",
+   "en": "Lowers a note by a half step"
+  },
+  "symbol_sharp_desc": {
+   "value": "Raises a note by a semitone",
+   "en": "Raises a note by a half step"
+  },
+  "symbol_staff": {
+   "value": "Stave",
+   "en": "Staff"
+  },
+  "terms_of_use": {
+   "value": "Terms of Use",
+   "en": "Terms of Use"
+  },
+  "thank_you": {
+   "value": "Thank you!",
+   "en": "Thank you!"
+  },
+  "theme_dark": {
+   "value": "Dark",
+   "en": "Dark"
+  },
+  "theme_light": {
+   "value": "Light",
+   "en": "Light"
+  },
+  "theme_system": {
+   "value": "Same as device",
+   "en": "Same as device"
+  },
+  "time_2_4_desc": {
+   "value": "2 crotchet beats in each bar (march)",
+   "en": "2 quarter-note beats in each measure (march)"
+  },
+  "time_3_4_desc": {
+   "value": "3 crotchet beats in each bar (waltz)",
+   "en": "3 quarter-note beats in each measure (waltz)"
+  },
+  "time_4_4_desc": {
+   "value": "4 crotchet beats in each bar",
+   "en": "4 quarter-note beats in each measure"
+  },
+  "time_6_8_desc": {
+   "value": "6 quavers, felt as 2 beats",
+   "en": "6 eighth notes, felt as 2 beats"
+  },
+  "time_cut_desc": {
+   "value": "The same as 2/2: two minim beats",
+   "en": "The same as 2/2: two half-note beats"
+  }
+ },
+ "en-AU": {
+  "beats": {
+   "value": "(beats)",
+   "en": "(beats)"
+  },
+  "beats_per_bar": {
+   "value": "Beats per bar",
+   "en": "Beats per bar"
+  },
+  "chord_symbols": {
+   "value": "Chord symbols",
+   "en": "Chord symbols"
+  },
+  "chord_symbols_asian": {
+   "value": "Asian (Japan, Korea, China)",
+   "en": "Asian (Japan, Korea, China)"
+  },
+  "chord_symbols_automatic": {
+   "value": "Automatic",
+   "en": "Automatic"
+  },
+  "chord_symbols_brazilian": {
+   "value": "Brazilian",
+   "en": "Brazilian"
+  },
+  "chord_symbols_french": {
+   "value": "French",
+   "en": "French"
+  },
+  "chord_symbols_international": {
+   "value": "International",
+   "en": "International"
+  },
+  "chord_symbols_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "duplicate": {
+   "value": "Duplicate",
+   "en": "Duplicate"
+  },
+  "email": {
+   "value": "Email",
+   "en": "Email"
+  },
+  "favourites": {
+   "value": "Favourites",
+   "en": "Favourites"
+  },
+  "feature_chord_pads_sub": {
+   "value": "Play chords with pads",
+   "en": "Play chords with pads"
+  },
+  "feature_chords": {
+   "value": "Chords",
+   "en": "Chords"
+  },
+  "feature_chords_home_sub": {
+   "value": "Find, identify & listen",
+   "en": "Find, identify & listen"
+  },
+  "feature_chords_sub": {
+   "value": "Find and identify chords",
+   "en": "Find and identify chords"
+  },
+  "feature_circle_sub": {
+   "value": "Explore keys and harmony",
+   "en": "Explore keys and harmony"
+  },
+  "feature_collections": {
+   "value": "My collections",
+   "en": "My collections"
+  },
+  "feature_collections_sub": {
+   "value": "Your saved chords and scales",
+   "en": "Your saved chords and scales"
+  },
+  "feature_courses_sub": {
+   "value": "Follow music lessons",
+   "en": "Follow music lessons"
+  },
+  "feature_flashcards_sub": {
+   "value": "Practise chords and scales",
+   "en": "Practice chords and scales"
+  },
+  "feature_knowledge_base": {
+   "value": "Knowledge Base",
+   "en": "Knowledge Base"
+  },
+  "feature_knowledge_base_sub": {
+   "value": "Guides and video tutorials",
+   "en": "Guides and video tutorials"
+  },
+  "feature_metronome_sub": {
+   "value": "Keep time while you practise",
+   "en": "Keep time while you practice"
+  },
+  "feature_new_song": {
+   "value": "New song",
+   "en": "New song"
+  },
+  "feature_new_song_sub": {
+   "value": "Write chords and lyrics",
+   "en": "Write chords and lyrics"
+  },
+  "feature_piano_sub": {
+   "value": "Play the keyboard",
+   "en": "Play the keyboard"
+  },
+  "feature_practice_songs": {
+   "value": "Practice songs",
+   "en": "Practice songs"
+  },
+  "feature_practice_songs_sub": {
+   "value": "Play along with falling notes",
+   "en": "Play along with falling notes"
+  },
+  "feature_progression_builder": {
+   "value": "Progression Builder",
+   "en": "Progression Builder"
+  },
+  "feature_progression_builder_sub": {
+   "value": "Build a chord progression",
+   "en": "Build a chord progression"
+  },
+  "feature_progression_library_sub": {
+   "value": "Browse chord progressions",
+   "en": "Browse chord progressions"
+  },
+  "feature_recent_sub": {
+   "value": "Chords and scales you opened",
+   "en": "Chords and scales you opened"
+  },
+  "feature_scales": {
+   "value": "Scales",
+   "en": "Scales"
+  },
+  "feature_scales_home_sub": {
+   "value": "Explore notes & patterns",
+   "en": "Explore notes & patterns"
+  },
+  "feature_scales_sub": {
+   "value": "Explore scales and their notes",
+   "en": "Explore scales and their notes"
+  },
+  "feature_songs_sub": {
+   "value": "Your songs with chords and lyrics",
+   "en": "Your songs with chords and lyrics"
+  },
+  "feature_symbols": {
+   "value": "Musical Symbols",
+   "en": "Musical Symbols"
+  },
+  "feature_symbols_sub": {
+   "value": "Look up music notation",
+   "en": "Look up music notation"
+  },
+  "home_recent_chord": {
+   "value": "Chord · {0}",
+   "en": "Chord · {0}"
+  },
+  "home_recent_chord_short": {
+   "value": "Chord",
+   "en": "Chord"
+  },
+  "home_recent_scale_short": {
+   "value": "Scale",
+   "en": "Scale"
+  },
+  "home_recent_unavailable": {
+   "value": "This item is no longer available. Remove it from Recent?",
+   "en": "This item is no longer available. Remove it from Recent?"
+  },
+  "home_remove": {
+   "value": "Remove",
+   "en": "Remove"
+  },
+  "home_section_explore": {
+   "value": "Explore",
+   "en": "Explore"
+  },
+  "home_section_quick_tools": {
+   "value": "Quick tools",
+   "en": "Quick tools"
+  },
+  "home_section_recent": {
+   "value": "Recent",
+   "en": "Recent"
+  },
+  "home_see_all": {
+   "value": "See all",
+   "en": "See all"
+  },
+  "kb_channel": {
+   "value": "More videos on our YouTube channel",
+   "en": "More videos on our YouTube channel"
+  },
+  "kb_clear_filters": {
+   "value": "Clear filters",
+   "en": "Clear filters"
+  },
+  "kb_empty": {
+   "value": "Guides and video tutorials will appear here",
+   "en": "Guides and video tutorials will appear here"
+  },
+  "kb_filter_all": {
+   "value": "All",
+   "en": "All"
+  },
+  "kb_filter_guides": {
+   "value": "Guides",
+   "en": "Guides"
+  },
+  "kb_filter_videos": {
+   "value": "Videos",
+   "en": "Videos"
+  },
+  "kb_language_english": {
+   "value": "English",
+   "en": "English"
+  },
+  "kb_latest": {
+   "value": "Latest guides & videos",
+   "en": "Latest guides & videos"
+  },
+  "kb_no_matches": {
+   "value": "No matching guides or videos",
+   "en": "No matching guides or videos"
+  },
+  "kb_search_hint": {
+   "value": "Search guides and videos",
+   "en": "Search guides and videos"
+  },
+  "kb_start_here": {
+   "value": "Start here",
+   "en": "Start here"
+  },
+  "kb_topic_general": {
+   "value": "Getting started",
+   "en": "Getting started"
+  },
+  "kb_topic_progressions": {
+   "value": "Progressions",
+   "en": "Progressions"
+  },
+  "kb_topic_purchases": {
+   "value": "PRO & purchases",
+   "en": "PRO & purchases"
+  },
+  "kb_topic_troubleshooting": {
+   "value": "Troubleshooting",
+   "en": "Troubleshooting"
+  },
+  "kb_type_guide": {
+   "value": "Guide",
+   "en": "Guide"
+  },
+  "kb_type_video": {
+   "value": "Video",
+   "en": "Video"
+  },
+  "kb_watch_on_youtube": {
+   "value": "Watch on YouTube",
+   "en": "Watch on YouTube"
+  },
+  "lang_arabic": {
+   "value": "العربية",
+   "en": "العربية"
+  },
+  "lang_brazilian_portuguese": {
+   "value": "Português (Brasil)",
+   "en": "Português (Brasil)"
+  },
+  "lang_bulgarian": {
+   "value": "Български",
+   "en": "Български"
+  },
+  "lang_catalan": {
+   "value": "Català",
+   "en": "Català"
+  },
+  "lang_chinese": {
+   "value": "简体中文",
+   "en": "简体中文"
+  },
+  "lang_chinese_traditional": {
+   "value": "繁體中文",
+   "en": "繁體中文"
+  },
+  "lang_croatian": {
+   "value": "Hrvatski",
+   "en": "Hrvatski"
+  },
+  "lang_czech": {
+   "value": "Čeština",
+   "en": "Čeština"
+  },
+  "lang_danish": {
+   "value": "Dansk",
+   "en": "Dansk"
+  },
+  "lang_dutch": {
+   "value": "Nederlands",
+   "en": "Nederlands"
+  },
+  "lang_english": {
+   "value": "English (American)",
+   "en": "English (American)"
+  },
+  "lang_english_au": {
+   "value": "English (Australian)",
+   "en": "English (Australian)"
+  },
+  "lang_english_br": {
+   "value": "English (British)",
+   "en": "English (British)"
+  },
+  "lang_estonian": {
+   "value": "Eesti",
+   "en": "Eesti"
+  },
+  "lang_finnish": {
+   "value": "Suomi",
+   "en": "Suomi"
+  },
+  "lang_french": {
+   "value": "Français",
+   "en": "Français"
+  },
+  "lang_german": {
+   "value": "Deutsch",
+   "en": "Deutsch"
+  },
+  "lang_greek": {
+   "value": "Ελληνικά",
+   "en": "Ελληνικά"
+  },
+  "lang_hebrew": {
+   "value": "עברית",
+   "en": "עברית"
+  },
+  "lang_hindi": {
+   "value": "हिंदी",
+   "en": "हिंदी"
+  },
+  "lang_hungarian": {
+   "value": "Magyar",
+   "en": "Magyar"
+  },
+  "lang_indonesian": {
+   "value": "Bahasa Indonesia",
+   "en": "Bahasa Indonesia"
+  },
+  "lang_italian": {
+   "value": "Italiano",
+   "en": "Italiano"
+  },
+  "lang_japanese": {
+   "value": "日本語",
+   "en": "日本語"
+  },
+  "lang_korean": {
+   "value": "한국어",
+   "en": "한국어"
+  },
+  "lang_latvian": {
+   "value": "Latviešu",
+   "en": "Latviešu"
+  },
+  "lang_lithuanian": {
+   "value": "Lietuvių",
+   "en": "Lietuvių"
+  },
+  "lang_malay": {
+   "value": "Bahasa Melayu",
+   "en": "Bahasa Melayu"
+  },
+  "lang_norwegian": {
+   "value": "Norsk",
+   "en": "Norsk"
+  },
+  "lang_polish": {
+   "value": "Polski",
+   "en": "Polski"
+  },
+  "lang_portuguese": {
+   "value": "Português (Portugal)",
+   "en": "Português (Portugal)"
+  },
+  "lang_romanian": {
+   "value": "Română",
+   "en": "Română"
+  },
+  "lang_russian": {
+   "value": "Русский",
+   "en": "Русский"
+  },
+  "lang_serbian": {
+   "value": "Srpski",
+   "en": "Srpski"
+  },
+  "lang_slovak": {
+   "value": "Slovenčina",
+   "en": "Slovenčina"
+  },
+  "lang_slovenian": {
+   "value": "Slovenščina",
+   "en": "Slovenščina"
+  },
+  "lang_spanish": {
+   "value": "Español",
+   "en": "Español"
+  },
+  "lang_swedish": {
+   "value": "Svenska",
+   "en": "Svenska"
+  },
+  "lang_thai": {
+   "value": "ไทย",
+   "en": "ไทย"
+  },
+  "lang_turkish": {
+   "value": "Türkçe",
+   "en": "Türkçe"
+  },
+  "lang_ukrainian": {
+   "value": "Українська",
+   "en": "Українська"
+  },
+  "lang_vietnamese": {
+   "value": "Tiếng Việt",
+   "en": "Tiếng Việt"
+  },
+  "my_apps": {
+   "value": "My apps",
+   "en": "My apps"
+  },
+  "nav_create": {
+   "value": "Create",
+   "en": "Create"
+  },
+  "nav_explore": {
+   "value": "Explore",
+   "en": "Explore"
+  },
+  "nav_home": {
+   "value": "Home",
+   "en": "Home"
+  },
+  "nav_library": {
+   "value": "Library",
+   "en": "Library"
+  },
+  "nav_practice": {
+   "value": "Practice",
+   "en": "Practice"
+  },
+  "note_1": {
+   "value": "Semibreve",
+   "en": "Whole Note"
+  },
+  "note_128": {
+   "value": "Semihemidemisemiquaver, Quasihemidemisemiquaver",
+   "en": "One Hundred and Twenty-eighth Note"
+  },
+  "note_16": {
+   "value": "Semiquaver",
+   "en": "Sixteenth Note"
+  },
+  "note_1dbl": {
+   "value": "Breve, Brevis",
+   "en": "Double-whole Note"
+  },
+  "note_2": {
+   "value": "Minim",
+   "en": "Half Note"
+  },
+  "note_2_dotted": {
+   "value": "Dotted Minim",
+   "en": "Dotted Half Note"
+  },
+  "note_32": {
+   "value": "Demisemiquaver",
+   "en": "Thirty-second Note"
+  },
+  "note_4": {
+   "value": "Crotchet",
+   "en": "Quarter Note"
+  },
+  "note_4_dotted": {
+   "value": "Dotted Crotchet",
+   "en": "Dotted Quarter Note"
+  },
+  "note_64": {
+   "value": "Hemidemisemiquaver",
+   "en": "Sixty-fourth Note"
+  },
+  "note_8": {
+   "value": "Quaver",
+   "en": "Eighth Note"
+  },
+  "note_8_dotted": {
+   "value": "Dotted Quaver",
+   "en": "Dotted Eighth Note"
+  },
+  "oa_follow_x": {
+   "value": "Follow @desunit on X",
+   "en": "Follow @desunit on X"
+  },
+  "oa_get": {
+   "value": "Get",
+   "en": "Get"
+  },
+  "oa_intro": {
+   "value": "Hi! I'm Sergey, the author of Piano Companion. I love building apps, and I hope you'll love my other apps too — millions of people around the world use them. Thank you!",
+   "en": "Hi! I'm Sergey, the author of Piano Companion. I love building apps, and I hope you'll love my other apps too — millions of people around the world use them. Thank you!"
+  },
+  "oa_tagline_chordiq": {
+   "value": "Ear training and music theory games: notes, chords, scales and rhythm.",
+   "en": "Ear training and music theory games: notes, chords, scales and rhythm."
+  },
+  "oa_tagline_ear_hop": {
+   "value": "Arcade ear training: hear the sound, sing the note, flap on the beat.",
+   "en": "Arcade ear training: hear the sound, sing the note, flap on the beat."
+  },
+  "oa_tagline_kidteller": {
+   "value": "Personalised storybooks starring your child.",
+   "en": "Personalized storybooks starring your child."
+  },
+  "oa_tagline_mathit": {
+   "value": "Maths practice and games for kids.",
+   "en": "Math practice and games for kids."
+  },
+  "onboarding_fd_dict_h1": {
+   "value": "Any chord, in two taps",
+   "en": "Any chord, in two taps"
+  },
+  "onboarding_fd_dict_sub": {
+   "value": "Pick a root and a chord type. See the notes and hear it.",
+   "en": "Pick a root and a chord type. See the notes and hear it."
+  },
+  "onboarding_fd_dict_where": {
+   "value": "In the app: Explore → Chords",
+   "en": "In the app: Explore → Chords"
+  },
+  "onboarding_fd_jazz_251": {
+   "value": "▶ Play ii–V–I",
+   "en": "▶ Play ii–V–I"
+  },
+  "onboarding_fd_jazz_h1": {
+   "value": "Jazz chords, voiced for you",
+   "en": "Jazz chords, voiced for you"
+  },
+  "onboarding_fd_jazz_sub": {
+   "value": "Tap a chord to see and hear it. Then play a ii–V–I.",
+   "en": "Tap a chord to see and hear it. Then play a ii–V–I."
+  },
+  "onboarding_fd_jazz_where": {
+   "value": "In the app: Explore → Chords · search “Cmaj9”",
+   "en": "In the app: Explore → Chords · search “Cmaj9”"
+  },
+  "onboarding_fd_listen": {
+   "value": "▶ Listen first",
+   "en": "▶ Listen first"
+  },
+  "onboarding_fd_pads_h1": {
+   "value": "One finger, full chords",
+   "en": "One finger, full chords"
+  },
+  "onboarding_fd_pads_sub": {
+   "value": "Tap the pads to play a song's chords. Every pad is in the same key.",
+   "en": "Tap the pads to play a song's chords. Every pad is in the same key."
+  },
+  "onboarding_fd_pads_where": {
+   "value": "In the app: Create → Chord Pads",
+   "en": "In the app: Create → Chord Pads"
+  },
+  "onboarding_fd_practice_done": {
+   "value": "You played the first line!",
+   "en": "You played the first line!"
+  },
+  "onboarding_fd_practice_done_sub": {
+   "value": "Find more songs in Practice songs.",
+   "en": "Find more songs in Practice songs."
+  },
+  "onboarding_fd_practice_h1": {
+   "value": "Play your first song",
+   "en": "Play your first song"
+  },
+  "onboarding_fd_practice_progress": {
+   "value": "{0} of {1} notes",
+   "en": "{0} of {1} notes"
+  },
+  "onboarding_fd_practice_song": {
+   "value": "Ode to Joy",
+   "en": "Ode to Joy"
+  },
+  "onboarding_fd_practice_sub": {
+   "value": "Tap the lit key. The song waits for you.",
+   "en": "Tap the lit key. The song waits for you."
+  },
+  "onboarding_fd_practice_where": {
+   "value": "In the app: Practice → Practice songs",
+   "en": "In the app: Practice → Practice songs"
+  },
+  "onboarding_fd_reverse_where": {
+   "value": "In the app: Chords → By keys",
+   "en": "In the app: Chords → By keys"
+  },
+  "onboarding_fd_scales_h1": {
+   "value": "See and hear any scale",
+   "en": "See and hear any scale"
+  },
+  "onboarding_fd_scales_sub": {
+   "value": "Tap a scale. Its notes light up and it plays.",
+   "en": "Tap a scale. Its notes light up and it plays."
+  },
+  "onboarding_fd_scales_where": {
+   "value": "In the app: Explore → Scales",
+   "en": "In the app: Explore → Scales"
+  },
+  "onboarding_fd_song_emotional": {
+   "value": "Emotional",
+   "en": "Emotional"
+  },
+  "onboarding_fd_song_fifties": {
+   "value": "50s",
+   "en": "50s"
+  },
+  "onboarding_fd_song_h1": {
+   "value": "Start a song from a progression",
+   "en": "Start a song from a progression"
+  },
+  "onboarding_fd_song_hint": {
+   "value": "Change the key, edit the chords, save it to a song.",
+   "en": "Change the key, edit the chords, save it to a song."
+  },
+  "onboarding_fd_song_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "onboarding_fd_song_pop": {
+   "value": "Pop",
+   "en": "Pop"
+  },
+  "onboarding_fd_song_sub": {
+   "value": "Tap a progression to hear it. Hits are built on these.",
+   "en": "Tap a progression to hear it. Hits are built on these."
+  },
+  "onboarding_fd_song_where": {
+   "value": "In the app: Explore → Progression Library",
+   "en": "In the app: Explore → Progression Library"
+  },
+  "onboarding_fd_transcribe_example": {
+   "value": "▶ Hear an example",
+   "en": "▶ Hear an example"
+  },
+  "onboarding_fd_transcribe_h1": {
+   "value": "From any song to notes",
+   "en": "From any song to notes"
+  },
+  "onboarding_fd_transcribe_result": {
+   "value": "Example: Ode to Joy",
+   "en": "Example: Ode to Joy"
+  },
+  "onboarding_fd_transcribe_result_sub": {
+   "value": "Notes · Sheet music · MIDI",
+   "en": "Notes · Sheet music · MIDI"
+  },
+  "onboarding_fd_transcribe_step1": {
+   "value": "Find a piano video on TikTok, Instagram or Facebook, or use an audio file",
+   "en": "Find a piano video on TikTok, Instagram or Facebook, or use an audio file"
+  },
+  "onboarding_fd_transcribe_step2": {
+   "value": "Tap Share → Piano Companion",
+   "en": "Tap Share → Piano Companion"
+  },
+  "onboarding_fd_transcribe_step3": {
+   "value": "Get the notes, sheet music and a MIDI file, and play it here",
+   "en": "Get the notes, sheet music and a MIDI file, and play it here"
+  },
+  "onboarding_fd_transcribe_sub": {
+   "value": "Piano Companion listens to a piano video and writes the notes for you.",
+   "en": "Piano Companion listens to a piano video and writes the notes for you."
+  },
+  "onboarding_fd_transcribe_where": {
+   "value": "In the app: Practice → Transcribe a song",
+   "en": "In the app: Practice → Transcribe a song"
+  },
+  "onboarding_fd_type_major": {
+   "value": "Major",
+   "en": "Major"
+  },
+  "onboarding_fd_type_minor": {
+   "value": "Minor",
+   "en": "Minor"
+  },
+  "onboarding_genre_classical": {
+   "value": "Classical",
+   "en": "Classical"
+  },
+  "onboarding_genre_electronic": {
+   "value": "Electronic",
+   "en": "Electronic"
+  },
+  "onboarding_genre_film": {
+   "value": "Film & games",
+   "en": "Film & games"
+  },
+  "onboarding_genre_folk": {
+   "value": "Folk / Country",
+   "en": "Folk / Country"
+  },
+  "onboarding_genre_h1": {
+   "value": "What music do you play?",
+   "en": "What music do you play?"
+  },
+  "onboarding_genre_hiphop": {
+   "value": "Hip-hop",
+   "en": "Hip-hop"
+  },
+  "onboarding_genre_jazz": {
+   "value": "Jazz",
+   "en": "Jazz"
+  },
+  "onboarding_genre_latin": {
+   "value": "Latin",
+   "en": "Latin"
+  },
+  "onboarding_genre_pop": {
+   "value": "Pop",
+   "en": "Pop"
+  },
+  "onboarding_genre_rnb": {
+   "value": "R&B / Soul",
+   "en": "R&B / Soul"
+  },
+  "onboarding_genre_rock": {
+   "value": "Rock",
+   "en": "Rock"
+  },
+  "onboarding_genre_worship": {
+   "value": "Gospel / Worship",
+   "en": "Gospel / Worship"
+  },
+  "onboarding_instr_bass": {
+   "value": "Bass",
+   "en": "Bass"
+  },
+  "onboarding_instr_daw": {
+   "value": "Music software",
+   "en": "Music software"
+  },
+  "onboarding_instr_digital": {
+   "value": "Digital piano",
+   "en": "Digital piano"
+  },
+  "onboarding_instr_guitar": {
+   "value": "Guitar",
+   "en": "Guitar"
+  },
+  "onboarding_instr_h1": {
+   "value": "What do you play?",
+   "en": "What do you play?"
+  },
+  "onboarding_instr_midi": {
+   "value": "MIDI keyboard",
+   "en": "MIDI keyboard"
+  },
+  "onboarding_instr_none": {
+   "value": "Nothing yet",
+   "en": "Nothing yet"
+  },
+  "onboarding_instr_piano": {
+   "value": "Piano",
+   "en": "Piano"
+  },
+  "onboarding_instr_ukulele": {
+   "value": "Ukulele",
+   "en": "Ukulele"
+  },
+  "onboarding_instr_voice": {
+   "value": "Voice",
+   "en": "Voice"
+  },
+  "onboarding_int_dictionary": {
+   "value": "Look up any chord",
+   "en": "Look up any chord"
+  },
+  "onboarding_int_dictionary_sub": {
+   "value": "1,500+ chords: notes, fingering and sound",
+   "en": "1,500+ chords: notes, fingering and sound"
+  },
+  "onboarding_int_jazz": {
+   "value": "Jazz & advanced chords",
+   "en": "Jazz & advanced chords"
+  },
+  "onboarding_int_jazz_sub": {
+   "value": "9ths, 11ths, 13ths, altered chords, ii–V–I",
+   "en": "9ths, 11ths, 13ths, altered chords, ii–V–I"
+  },
+  "onboarding_int_pads": {
+   "value": "Make music with Chord Pads",
+   "en": "Make music with Chord Pads"
+  },
+  "onboarding_int_pads_sub": {
+   "value": "Play full chords with one finger",
+   "en": "Play full chords with one finger"
+  },
+  "onboarding_int_practice": {
+   "value": "Learn songs on piano",
+   "en": "Learn songs on piano"
+  },
+  "onboarding_int_practice_sub": {
+   "value": "Follow the lit keys at your own pace",
+   "en": "Follow the lit keys at your own pace"
+  },
+  "onboarding_int_reverse": {
+   "value": "Name the chord I play",
+   "en": "Name the chord I play"
+  },
+  "onboarding_int_reverse_sub": {
+   "value": "Tap keys and get the chord name",
+   "en": "Tap keys and get the chord name"
+  },
+  "onboarding_int_scales": {
+   "value": "Scales & modes",
+   "en": "Scales & modes"
+  },
+  "onboarding_int_scales_sub": {
+   "value": "See and hear any scale in any key",
+   "en": "See and hear any scale in any key"
+  },
+  "onboarding_int_songwriting": {
+   "value": "Write songs",
+   "en": "Write songs"
+  },
+  "onboarding_int_songwriting_sub": {
+   "value": "Chord progressions, keys and song sheets",
+   "en": "Chord progressions, keys and song sheets"
+  },
+  "onboarding_int_transcribe": {
+   "value": "Turn a song into notes",
+   "en": "Turn a song into notes"
+  },
+  "onboarding_int_transcribe_sub": {
+   "value": "From a video or audio file to notes and sheet music",
+   "en": "From a video or audio file to notes and sheet music"
+  },
+  "onboarding_interests_h1": {
+   "value": "What do you want to do with Piano Companion?",
+   "en": "What do you want to do with Piano Companion?"
+  },
+  "onboarding_interests_sub": {
+   "value": "Pick all that fit. We'll show you how each one works.",
+   "en": "Pick all that fit. We'll show you how each one works."
+  },
+  "onboarding_multi_sub": {
+   "value": "Pick all that fit.",
+   "en": "Pick all that fit."
+  },
+  "onboarding_opt_other": {
+   "value": "Other",
+   "en": "Other"
+  },
+  "onboarding_plan_first": {
+   "value": "Opens first · {0}",
+   "en": "Opens first · {0}"
+  },
+  "onboarding_plan_h1": {
+   "value": "Your Piano Companion is ready",
+   "en": "Your Piano Companion is ready"
+  },
+  "onboarding_plan_sub": {
+   "value": "Here is where to find what you picked.",
+   "en": "Here is where to find what you picked."
+  },
+  "onboarding_role_h1": {
+   "value": "What describes you best?",
+   "en": "What describes you best?"
+  },
+  "onboarding_role_parent": {
+   "value": "Parent",
+   "en": "Parent"
+  },
+  "onboarding_role_parent_sub": {
+   "value": "I help my child learn",
+   "en": "I help my child learn"
+  },
+  "onboarding_role_performer": {
+   "value": "Performer",
+   "en": "Performer"
+  },
+  "onboarding_role_performer_sub": {
+   "value": "I play in a band, a church or at gigs",
+   "en": "I play in a band, a church or at gigs"
+  },
+  "onboarding_role_producer": {
+   "value": "Producer / beatmaker",
+   "en": "Producer / beatmaker"
+  },
+  "onboarding_role_producer_sub": {
+   "value": "I make music on a computer or phone",
+   "en": "I make music on a computer or phone"
+  },
+  "onboarding_role_self_taught": {
+   "value": "Self-taught",
+   "en": "Self-taught"
+  },
+  "onboarding_role_self_taught_sub": {
+   "value": "I learn on my own",
+   "en": "I learn on my own"
+  },
+  "onboarding_role_songwriter": {
+   "value": "Songwriter",
+   "en": "Songwriter"
+  },
+  "onboarding_role_songwriter_sub": {
+   "value": "I write my own songs",
+   "en": "I write my own songs"
+  },
+  "onboarding_role_student": {
+   "value": "Student",
+   "en": "Student"
+  },
+  "onboarding_role_student_sub": {
+   "value": "I take lessons or study music",
+   "en": "I take lessons or study music"
+  },
+  "onboarding_role_sub": {
+   "value": "This helps us make Piano Companion better for people like you.",
+   "en": "This helps us make Piano Companion better for people like you."
+  },
+  "onboarding_role_teacher": {
+   "value": "Teacher",
+   "en": "Teacher"
+  },
+  "onboarding_role_teacher_sub": {
+   "value": "I teach music",
+   "en": "I teach music"
+  },
+  "other_names": {
+   "value": "Other names",
+   "en": "Other names"
+  },
+  "paywall_review_1": {
+   "value": "Every chord I need for lessons, right at my fingertips.",
+   "en": "Every chord I need for lessons, right at my fingertips."
+  },
+  "paywall_review_2": {
+   "value": "Finally understood scales thanks to this app. Worth it.",
+   "en": "Finally understood scales thanks to this app. Worth it."
+  },
+  "paywall_review_3": {
+   "value": "Progression builder saved me hours of noodling.",
+   "en": "Progression builder saved me hours of noodling."
+  },
+  "paywall_review_4": {
+   "value": "Scale library is unreal. Modes, jazz, ethnic — all there.",
+   "en": "Scale library is unreal. Modes, jazz, ethnic — all there."
+  },
+  "paywall_review_5": {
+   "value": "Hit any chord, see every extension. 7ths, 9ths, 13ths — brilliant.",
+   "en": "Hit any chord, see every extension. 7ths, 9ths, 13ths — brilliant."
+  },
+  "paywall_review_6": {
+   "value": "Connect MIDI keyboard, reverse-lookup chords live. Game changer.",
+   "en": "Connect MIDI keyboard, reverse-lookup chords live. Game changer."
+  },
+  "paywall_review_7": {
+   "value": "The inversions feature helped me play smoother.",
+   "en": "The inversions feature helped me play smoother."
+  },
+  "pno_brace": {
+   "value": "Grand stave",
+   "en": "Grand staff"
+  },
+  "pno_brace_desc": {
+   "value": "Treble and bass staves joined by a brace",
+   "en": "Treble and bass staff joined by a brace"
+  },
+  "practice_again": {
+   "value": "Practice again",
+   "en": "Practice again"
+  },
+  "practice_attribution": {
+   "value": "Arrangement: {0}",
+   "en": "Arrangement: {0}"
+  },
+  "practice_difficulty_1": {
+   "value": "Easy",
+   "en": "Easy"
+  },
+  "practice_difficulty_2": {
+   "value": "Intermediate",
+   "en": "Intermediate"
+  },
+  "practice_difficulty_3": {
+   "value": "Advanced",
+   "en": "Advanced"
+  },
+  "practice_download_failed": {
+   "value": "The song did not download. Try again.",
+   "en": "The song did not download. Try again."
+  },
+  "practice_file_failed": {
+   "value": "This file cannot be opened. Choose a standard MIDI file (.mid).",
+   "en": "This file cannot be opened. Choose a standard MIDI file (.mid)."
+  },
+  "practice_hands": {
+   "value": "Hands",
+   "en": "Hands"
+  },
+  "practice_hands_both": {
+   "value": "Both hands",
+   "en": "Both hands"
+  },
+  "practice_hands_left": {
+   "value": "Left hand",
+   "en": "Left hand"
+  },
+  "practice_hands_right": {
+   "value": "Right hand",
+   "en": "Right hand"
+  },
+  "practice_hide_keyboard": {
+   "value": "Hide keyboard",
+   "en": "Hide keyboard"
+  },
+  "practice_load_failed": {
+   "value": "The songs did not load. Check the connection and try again.",
+   "en": "The songs did not load. Check the connection and try again."
+  },
+  "practice_midi_hint": {
+   "value": "The keyboard is hidden. Play on a MIDI keyboard.",
+   "en": "The keyboard is hidden. Play on a MIDI keyboard."
+  },
+  "practice_no_results": {
+   "value": "No song for “{0}” yet. We keep a note of every search to choose the next songs.",
+   "en": "No song for “{0}” yet. We keep a note of every search to choose the next songs."
+  },
+  "practice_open_file": {
+   "value": "Open MIDI file",
+   "en": "Open MIDI file"
+  },
+  "practice_other_song": {
+   "value": "Choose another song",
+   "en": "Choose another song"
+  },
+  "practice_popular": {
+   "value": "Popular",
+   "en": "Popular"
+  },
+  "practice_restart": {
+   "value": "Start again",
+   "en": "Start again"
+  },
+  "practice_result_notes": {
+   "value": "{0} of {1} notes correct on the first try",
+   "en": "{0} of {1} notes correct on the first try"
+  },
+  "practice_result_time": {
+   "value": "Time {0}",
+   "en": "Time {0}"
+  },
+  "practice_results": {
+   "value": "Results",
+   "en": "Results"
+  },
+  "practice_search_hint": {
+   "value": "Search a song or a composer",
+   "en": "Search a song or a composer"
+  },
+  "practice_show_keyboard": {
+   "value": "Show keyboard",
+   "en": "Show keyboard"
+  },
+  "practice_songs": {
+   "value": "Practice",
+   "en": "Practice"
+  },
+  "practice_speed": {
+   "value": "Speed",
+   "en": "Speed"
+  },
+  "practice_try_again": {
+   "value": "Try again",
+   "en": "Try again"
+  },
+  "practice_wait_hint": {
+   "value": "Play the marked keys. The song waits for you.",
+   "en": "Play the marked keys. The song waits for you."
+  },
+  "pro_feat_circle_desc": {
+   "value": "Every related key, chord, and scale — one tap on the wheel.",
+   "en": "Every related key, chord, and scale — one tap on the wheel."
+  },
+  "pro_feat_circle_title": {
+   "value": "Interactive Circle of Fifths",
+   "en": "Interactive Circle of Fifths"
+  },
+  "pro_feat_custom_desc": {
+   "value": "Invent voicings, tweak any chord or scale, save them to your library.",
+   "en": "Invent voicings, tweak any chord or scale, save them to your library."
+  },
+  "pro_feat_custom_title": {
+   "value": "Your Chords, Your Scales",
+   "en": "Your Chords, Your Scales"
+  },
+  "pro_feat_progressions_desc": {
+   "value": "Drop chords in-key, loop them, export MIDI to your DAW.",
+   "en": "Drop chords in-key, loop them, export MIDI to your DAW."
+  },
+  "pro_feat_progressions_title": {
+   "value": "Progressions That Fit the Key",
+   "en": "Progressions That Fit the Key"
+  },
+  "pro_feat_reverse_desc": {
+   "value": "Play the keys or hook up MIDI — we name the chord instantly.",
+   "en": "Play the keys or hook up MIDI — we name the chord instantly."
+  },
+  "pro_feat_reverse_title": {
+   "value": "What Chord Is That?",
+   "en": "What Chord Is That?"
+  },
+  "pro_feat_scales_desc": {
+   "value": "Jazz, modal, ethnic — with fingering for both hands, right on the staff.",
+   "en": "Jazz, modal, ethnic — with fingering for both hands, right on the staff."
+  },
+  "pro_feat_scales_title": {
+   "value": "10,000+ Scales & Modes",
+   "en": "10,000+ Scales & Modes"
+  },
+  "pro_feat_voicings_desc": {
+   "value": "Triads to 13ths, 1st–6th inversions — the voicing you need, instantly.",
+   "en": "Triads to 13ths, 1st–6th inversions — the voicing you need, instantly."
+  },
+  "pro_feat_voicings_title": {
+   "value": "Every Inversion, Every Extension",
+   "en": "Every Inversion, Every Extension"
+  },
+  "promo_badge": {
+   "value": "−{0}%",
+   "en": "−{0}%"
+  },
+  "promo_countdown_days": {
+   "value": "{0}d {1}",
+   "en": "{0}d {1}"
+  },
+  "promo_cta": {
+   "value": "Get {0}% off — {1}",
+   "en": "Get {0}% off — {1}"
+  },
+  "promo_ends_in_caption": {
+   "value": "Ends in",
+   "en": "Ends in"
+  },
+  "promo_ends_on": {
+   "value": "Ends {0}",
+   "en": "Ends {0}"
+  },
+  "promo_note_months_one": {
+   "value": "first month, then {1}/month",
+   "en": "first month, then {1}/month"
+  },
+  "promo_note_months_other": {
+   "value": "first {0} months, then {1}/month",
+   "en": "first {0} months, then {1}/month"
+  },
+  "promo_note_weeks_one": {
+   "value": "first week, then {1}/week",
+   "en": "first week, then {1}/week"
+  },
+  "promo_note_weeks_other": {
+   "value": "first {0} weeks, then {1}/week",
+   "en": "first {0} weeks, then {1}/week"
+  },
+  "promo_note_years_one": {
+   "value": "first year, then {1}/year",
+   "en": "first year, then {1}/year"
+  },
+  "promo_note_years_other": {
+   "value": "first {0} years, then {1}/year",
+   "en": "first {0} years, then {1}/year"
+  },
+  "promo_summary": {
+   "value": "{0} now, {1}",
+   "en": "{0} now, {1}"
+  },
+  "promo_title_back_to_school": {
+   "value": "Back-to-school sale",
+   "en": "Back-to-school sale"
+  },
+  "promo_title_birthday": {
+   "value": "Piano Companion birthday sale",
+   "en": "Piano Companion birthday sale"
+  },
+  "promo_title_black_friday": {
+   "value": "Black Friday",
+   "en": "Black Friday"
+  },
+  "promo_title_cyber_monday": {
+   "value": "Cyber Monday",
+   "en": "Cyber Monday"
+  },
+  "promo_title_flash": {
+   "value": "Flash sale",
+   "en": "Flash sale"
+  },
+  "promo_title_holiday": {
+   "value": "Holiday sale",
+   "en": "Holiday sale"
+  },
+  "promo_title_limited": {
+   "value": "Limited-time offer",
+   "en": "Limited-time offer"
+  },
+  "promo_title_new_year": {
+   "value": "New Year sale",
+   "en": "New Year sale"
+  },
+  "promo_title_special": {
+   "value": "Special offer",
+   "en": "Special offer"
+  },
+  "promo_title_spring": {
+   "value": "Spring sale",
+   "en": "Spring sale"
+  },
+  "promo_title_summer": {
+   "value": "Summer sale",
+   "en": "Summer sale"
+  },
+  "promo_title_weekend": {
+   "value": "Weekend deal",
+   "en": "Weekend deal"
+  },
+  "quick_tools_add": {
+   "value": "Add a tool",
+   "en": "Add a tool"
+  },
+  "quick_tools_edit_title": {
+   "value": "Edit quick tools",
+   "en": "Edit quick tools"
+  },
+  "quick_tools_hint_many": {
+   "value": "Choose up to six tools for your home screen",
+   "en": "Choose up to six tools for your home screen"
+  },
+  "quick_tools_remove": {
+   "value": "Remove {0}",
+   "en": "Remove {0}"
+  },
+  "quick_tools_restore": {
+   "value": "Restore default shortcuts",
+   "en": "Restore default shortcuts"
+  },
+  "quick_tools_slot": {
+   "value": "Slot {0}",
+   "en": "Slot {0}"
+  },
+  "rating_badge": {
+   "value": "Rating\n★ 4.7",
+   "en": "Rating\n★ 4.7"
+  },
+  "recent": {
+   "value": "Recent",
+   "en": "Recent"
+  },
+  "reminder_day1_body": {
+   "value": "30 seconds. Tap to hear it and see what sounds great with it.",
+   "en": "30 seconds. Tap to hear it and see what sounds great with it."
+  },
+  "reminder_day1_title": {
+   "value": "Today's chord: {0}",
+   "en": "Today's chord: {0}"
+  },
+  "rest_1": {
+   "value": "Semibreve Rest",
+   "en": "Whole Rest"
+  },
+  "rest_128": {
+   "value": "Semihemidemisemiquaver Rest, Quasihemidemisemiquaver Rest",
+   "en": "One Hundred and Twenty-eighth Rest"
+  },
+  "rest_16": {
+   "value": "Semiquaver Rest",
+   "en": "Sixteenth Rest"
+  },
+  "rest_1dbl": {
+   "value": "Breve Rest, Brevis Rest",
+   "en": "Double-whole Rest"
+  },
+  "rest_2": {
+   "value": "Minim Rest",
+   "en": "Half Rest"
+  },
+  "rest_32": {
+   "value": "Demisemiquaver Rest",
+   "en": "Thirty-second Rest"
+  },
+  "rest_4": {
+   "value": "Crotchet Rest",
+   "en": "Quarter Rest"
+  },
+  "rest_64": {
+   "value": "Hemidemisemiquaver Rest",
+   "en": "Sixty-fourth Rest"
+  },
+  "rest_8": {
+   "value": "Quaver Rest",
+   "en": "Eighth Rest"
+  },
+  "rhythm_ledger_desc": {
+   "value": "Short lines for notes above or below the stave",
+   "en": "Short lines for notes above or below the staff"
+  },
+  "section_learn_help": {
+   "value": "Learn & help",
+   "en": "Learn & help"
+  },
+  "settings_about_app": {
+   "value": "About Piano Companion",
+   "en": "About Piano Companion"
+  },
+  "settings_advanced": {
+   "value": "Advanced",
+   "en": "Advanced"
+  },
+  "settings_appearance": {
+   "value": "Appearance",
+   "en": "Appearance"
+  },
+  "settings_contact_support": {
+   "value": "Contact support",
+   "en": "Contact support"
+  },
+  "settings_help_info": {
+   "value": "Help & information",
+   "en": "Help & information"
+  },
+  "settings_help_sub": {
+   "value": "Questions and answers",
+   "en": "Questions and answers"
+  },
+  "settings_home": {
+   "value": "Home screen",
+   "en": "Home screen"
+  },
+  "settings_purchases": {
+   "value": "Purchases",
+   "en": "Purchases"
+  },
+  "settings_purchases_sub": {
+   "value": "Plans, PRO features and your purchase",
+   "en": "Plans, PRO features and your purchase"
+  },
+  "settings_reset_purchases": {
+   "value": "Reset test purchases",
+   "en": "Reset test purchases"
+  },
+  "settings_share_app": {
+   "value": "Share Piano Companion",
+   "en": "Share Piano Companion"
+  },
+  "settings_theme": {
+   "value": "Theme",
+   "en": "Theme"
+  },
+  "show_chord_names": {
+   "value": "Show chord names",
+   "en": "Show chord names"
+  },
+  "songbook": {
+   "value": "Songs",
+   "en": "Songs"
+  },
+  "songbook_add_chord": {
+   "value": "Add chord",
+   "en": "Add chord"
+  },
+  "songbook_add_line": {
+   "value": "Add line",
+   "en": "Add line"
+  },
+  "songbook_add_section": {
+   "value": "Add section",
+   "en": "Add section"
+  },
+  "songbook_author_hint": {
+   "value": "Author",
+   "en": "Author"
+  },
+  "songbook_autoscroll": {
+   "value": "Auto-scroll",
+   "en": "Auto-scroll"
+  },
+  "songbook_autoscroll_speed": {
+   "value": "Speed",
+   "en": "Speed"
+  },
+  "songbook_autoscroll_start": {
+   "value": "Start",
+   "en": "Start"
+  },
+  "songbook_autoscroll_stop": {
+   "value": "Stop auto-scroll",
+   "en": "Stop auto-scroll"
+  },
+  "songbook_beats_default": {
+   "value": "Default ({0})",
+   "en": "Default ({0})"
+  },
+  "songbook_by_author": {
+   "value": "Words & Music by {0}",
+   "en": "Words & Music by {0}"
+  },
+  "songbook_change_chord": {
+   "value": "Change chord",
+   "en": "Change chord"
+  },
+  "songbook_copy_title": {
+   "value": "{0} (copy)",
+   "en": "{0} (copy)"
+  },
+  "songbook_date": {
+   "value": "Date",
+   "en": "Date"
+  },
+  "songbook_delete_confirm": {
+   "value": "Delete \"{0}\"?",
+   "en": "Delete \"{0}\"?"
+  },
+  "songbook_delete_section": {
+   "value": "Delete section",
+   "en": "Delete section"
+  },
+  "songbook_delete_section_confirm": {
+   "value": "Delete this section and its lines?",
+   "en": "Delete this section and its lines?"
+  },
+  "songbook_empty": {
+   "value": "No songs yet — tap \"New song\" to write one",
+   "en": "No songs yet — tap \"New song\" to write one"
+  },
+  "songbook_key_none": {
+   "value": "—",
+   "en": "—"
+  },
+  "songbook_lyrics_hint": {
+   "value": "Type lyrics…",
+   "en": "Type lyrics…"
+  },
+  "songbook_new_song": {
+   "value": "New song",
+   "en": "New song"
+  },
+  "songbook_print": {
+   "value": "Print",
+   "en": "Print"
+  },
+  "songbook_search_hint": {
+   "value": "Search songs",
+   "en": "Search songs"
+  },
+  "songbook_section_bridge": {
+   "value": "Bridge",
+   "en": "Bridge"
+  },
+  "songbook_section_chorus": {
+   "value": "Chorus",
+   "en": "Chorus"
+  },
+  "songbook_section_custom": {
+   "value": "Custom…",
+   "en": "Custom…"
+  },
+  "songbook_section_hint": {
+   "value": "Section (e.g. Verse 1)",
+   "en": "Section (e.g. Verse 1)"
+  },
+  "songbook_section_intro": {
+   "value": "Intro",
+   "en": "Intro"
+  },
+  "songbook_section_outro": {
+   "value": "Outro",
+   "en": "Outro"
+  },
+  "songbook_section_prechorus": {
+   "value": "Pre-Chorus",
+   "en": "Pre-Chorus"
+  },
+  "songbook_section_solo": {
+   "value": "Solo",
+   "en": "Solo"
+  },
+  "songbook_section_verse": {
+   "value": "Verse",
+   "en": "Verse"
+  },
+  "songbook_share_pdf": {
+   "value": "Share as PDF",
+   "en": "Share as PDF"
+  },
+  "songbook_title_hint": {
+   "value": "Title",
+   "en": "Title"
+  },
+  "songbook_untitled": {
+   "value": "Untitled song",
+   "en": "Untitled song"
+  },
+  "songbook_view_diagrams": {
+   "value": "Show diagrams",
+   "en": "Show diagrams"
+  },
+  "songbook_view_names": {
+   "value": "Show chord names",
+   "en": "Show chord names"
+  },
+  "sounds_great_with": {
+   "value": "Sounds great with",
+   "en": "Sounds great with"
+  },
+  "symbol_bar_line_desc": {
+   "value": "Divides the stave into bars",
+   "en": "Divides the staff into measures"
+  },
+  "symbol_double_flat_desc": {
+   "value": "Lowers a note by a tone",
+   "en": "Lowers a note by a whole step"
+  },
+  "symbol_double_sharp_desc": {
+   "value": "Raises a note by a tone",
+   "en": "Raises a note by a whole step"
+  },
+  "symbol_flat_desc": {
+   "value": "Lowers a note by a semitone",
+   "en": "Lowers a note by a half step"
+  },
+  "symbol_sharp_desc": {
+   "value": "Raises a note by a semitone",
+   "en": "Raises a note by a half step"
+  },
+  "symbol_staff": {
+   "value": "Stave",
+   "en": "Staff"
+  },
+  "terms_of_use": {
+   "value": "Terms of Use",
+   "en": "Terms of Use"
+  },
+  "thank_you": {
+   "value": "Thank you!",
+   "en": "Thank you!"
+  },
+  "theme_dark": {
+   "value": "Dark",
+   "en": "Dark"
+  },
+  "theme_light": {
+   "value": "Light",
+   "en": "Light"
+  },
+  "theme_system": {
+   "value": "Same as device",
+   "en": "Same as device"
+  },
+  "time_2_4_desc": {
+   "value": "2 crotchet beats in each bar (march)",
+   "en": "2 quarter-note beats in each measure (march)"
+  },
+  "time_3_4_desc": {
+   "value": "3 crotchet beats in each bar (waltz)",
+   "en": "3 quarter-note beats in each measure (waltz)"
+  },
+  "time_4_4_desc": {
+   "value": "4 crotchet beats in each bar",
+   "en": "4 quarter-note beats in each measure"
+  },
+  "time_6_8_desc": {
+   "value": "6 quavers, felt as 2 beats",
+   "en": "6 eighth notes, felt as 2 beats"
+  },
+  "time_cut_desc": {
+   "value": "The same as 2/2: two minim beats",
+   "en": "The same as 2/2: two half-note beats"
+  }
+ }
+}

@@ -1,0 +1,1875 @@
+[
+ {
+  "file": "anim_success.json",
+  "bytes": 65772,
+  "name": "lottie (mobile)",
+  "version": "5.5.6",
+  "fr": 70,
+  "ip": 0,
+  "op": 370,
+  "durationSec": 5.286,
+  "w": 609,
+  "h": 812,
+  "ddd": 0,
+  "layerCount": 3,
+  "layers": [
+   {
+    "name": "cannon (small - left)",
+    "type": "precomp",
+    "ip": 0,
+    "op": 300,
+    "refId": "comp_0"
+   },
+   {
+    "name": "cannon (small - right)",
+    "type": "precomp",
+    "ip": 0,
+    "op": 300,
+    "refId": "comp_2"
+   },
+   {
+    "name": "cannon (small - top)",
+    "type": "precomp",
+    "ip": 0,
+    "op": 300,
+    "refId": "comp_3"
+   }
+  ],
+  "assets": [
+   {
+    "id": "comp_0",
+    "layers": 1,
+    "layerNames": [
+     "_small-side"
+    ]
+   },
+   {
+    "id": "comp_1",
+    "layers": 20,
+    "layerNames": [
+     "streamer b",
+     "streamer a",
+     "circle a",
+     "circle b",
+     "star a",
+     "star b",
+     "rec a",
+     "rec b",
+     "square a",
+     "square b",
+     "streamer b 2",
+     "streamer a 2",
+     "circle a 2",
+     "circle b 2",
+     "star a 2",
+     "star b 2",
+     "rec a 2",
+     "rec b 2",
+     "square a 2",
+     "square b 2"
+    ]
+   },
+   {
+    "id": "comp_2",
+    "layers": 1,
+    "layerNames": [
+     "_small-side"
+    ]
+   },
+   {
+    "id": "comp_3",
+    "layers": 2,
+    "layerNames": [
+     "left",
+     "right"
+    ]
+   },
+   {
+    "id": "comp_4",
+    "layers": 20,
+    "layerNames": [
+     "streamer a 4",
+     "streamer b 4",
+     "circle a 4",
+     "circle b 4",
+     "star a 4",
+     "star b 4",
+     "rec a 4",
+     "rec b 4",
+     "square a 4",
+     "square b 4",
+     "streamer a 3",
+     "streamer b 3",
+     "circle a 3",
+     "circle b 3",
+     "star a 3",
+     "star b 3",
+     "rec a 3",
+     "rec b 3",
+     "square a 3",
+     "square b 3"
+    ]
+   }
+  ],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#D08002": 4,
+   "#DA1E1E": 3,
+   "#EE9234": 4,
+   "#BE5E30": 4,
+   "#F07213": 4,
+   "#F5A623": 4,
+   "#F35532": 4,
+   "#F37312": 5,
+   "#FAD2B4": 4,
+   "#E55B22": 4
+  }
+ },
+ {
+  "file": "anim_training.json",
+  "bytes": 18068,
+  "name": "Training",
+  "version": "5.7.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 64,
+  "durationSec": 2.133,
+  "w": 300,
+  "h": 250,
+  "ddd": 0,
+  "layerCount": 4,
+  "layers": [
+   {
+    "name": "Nul 2",
+    "type": "null",
+    "ip": 0,
+    "op": 64
+   },
+   {
+    "name": "Altere",
+    "type": "shape",
+    "ip": 0,
+    "op": 64,
+    "parent": 1,
+    "shapes": [
+     "Thumb:gr",
+     "Fingers:gr",
+     "Groupe 13:gr",
+     "Groupe 14:gr",
+     "Groupe 15:gr",
+     "Groupe 17:gr",
+     "Groupe 18:gr"
+    ]
+   },
+   {
+    "name": "Veines",
+    "type": "shape",
+    "ip": 0,
+    "op": 64,
+    "parent": 1,
+    "shapes": [
+     "Bras:gr"
+    ]
+   },
+   {
+    "name": "Bras",
+    "type": "shape",
+    "ip": 0,
+    "op": 64,
+    "parent": 1,
+    "shapes": [
+     "Bras:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFBE00": 3,
+   "#B22D24": 2,
+   "#F77026": 3,
+   "#00033A": 1
+  }
+ },
+ {
+  "file": "anim_trainingSuccess.json",
+  "bytes": 25206,
+  "name": "Training Success",
+  "version": "5.7.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 34,
+  "durationSec": 1.133,
+  "w": 300,
+  "h": 250,
+  "ddd": 0,
+  "layerCount": 5,
+  "layers": [
+   {
+    "name": "Etoiles",
+    "type": "shape",
+    "ip": 0,
+    "op": 34,
+    "shapes": [
+     "Etoile 1:gr",
+     "Etoile2:gr",
+     "Etoile3:gr",
+     "Etoile 4:gr",
+     "Etoile 5:gr",
+     "Etoile 6:gr"
+    ]
+   },
+   {
+    "name": "Nul 2",
+    "type": "null",
+    "ip": 0,
+    "op": 34
+   },
+   {
+    "name": "Altere",
+    "type": "shape",
+    "ip": 0,
+    "op": 34,
+    "parent": 2,
+    "shapes": [
+     "Thumb:gr",
+     "Fingers:gr",
+     "Groupe 9:gr",
+     "Groupe 10:gr",
+     "Groupe 11:gr",
+     "Groupe 12:gr",
+     "Groupe 13:gr",
+     "Groupe 14:gr",
+     "Groupe 15:gr",
+     "Groupe 17:gr",
+     "Groupe 18:gr"
+    ]
+   },
+   {
+    "name": "Bras 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 34,
+    "parent": 2,
+    "shapes": [
+     "Bras:gr"
+    ]
+   },
+   {
+    "name": "Bras",
+    "type": "shape",
+    "ip": 0,
+    "op": 34,
+    "parent": 2,
+    "shapes": [
+     "Bras:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFBE00": 9,
+   "#B22D24": 4,
+   "#F77026": 5,
+   "#00033A": 1
+  }
+ },
+ {
+  "file": "playing.json",
+  "bytes": 6145,
+  "name": "Comp 1",
+  "version": "5.5.8",
+  "fr": 30,
+  "ip": 0,
+  "op": 60,
+  "durationSec": 2,
+  "w": 128,
+  "h": 128,
+  "ddd": 0,
+  "layerCount": 3,
+  "layers": [
+   {
+    "name": "Shape Layer 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 61,
+    "shapes": [
+     "Path 1:sh",
+     "Fill 1:fl"
+    ]
+   },
+   {
+    "name": "Shape Layer 3",
+    "type": "shape",
+    "ip": 0,
+    "op": 61,
+    "shapes": [
+     "Path 1:sh",
+     "Fill 1:fl"
+    ]
+   },
+   {
+    "name": "Shape Layer 4",
+    "type": "shape",
+    "ip": 0,
+    "op": 61,
+    "shapes": [
+     "Path 1:sh",
+     "Fill 1:fl"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#3EB0F4": 3
+  }
+ },
+ {
+  "file": "playing_new.json",
+  "bytes": 7942,
+  "name": "Comp 1",
+  "version": "4.8.0",
+  "fr": 30,
+  "ip": 0,
+  "op": 90,
+  "durationSec": 3,
+  "w": 128,
+  "h": 128,
+  "ddd": 0,
+  "layerCount": 3,
+  "layers": [
+   {
+    "name": "Shape Layer 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 90,
+    "shapes": [
+     "Tracé 1:sh",
+     "Fill 1:fl"
+    ]
+   },
+   {
+    "name": "Shape Layer 3",
+    "type": "shape",
+    "ip": 0,
+    "op": 90,
+    "shapes": [
+     "Tracé 1:sh",
+     "Fill 1:fl"
+    ]
+   },
+   {
+    "name": "Shape Layer 4",
+    "type": "shape",
+    "ip": 0,
+    "op": 90,
+    "shapes": [
+     "Tracé 1:sh",
+     "Fill 1:fl"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#35AFF7": 3
+  }
+ },
+ {
+  "file": "showcase_announce_animation.json",
+  "bytes": 96024,
+  "name": "Master 12",
+  "version": "5.1.16",
+  "fr": 25,
+  "ip": 0,
+  "op": 76,
+  "durationSec": 3.04,
+  "w": 375,
+  "h": 340,
+  "ddd": 0,
+  "layerCount": 25,
+  "layers": [
+   {
+    "name": "ParentPot",
+    "type": "null",
+    "ip": 0,
+    "op": 49
+   },
+   {
+    "name": "Logo Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr"
+    ]
+   },
+   {
+    "name": "Masque Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Plante1 Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Tracé 2:sh",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "Plante2 Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Tracé 2:sh",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "plante3 Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Tracé 1:sh",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "TextContainer",
+    "type": "shape",
+    "ip": 55,
+    "op": 76,
+    "parent": 8,
+    "shapes": [
+     "Rectangle Path 1:rc"
+    ]
+   },
+   {
+    "name": "Carte",
+    "type": "shape",
+    "ip": 40,
+    "op": 76,
+    "shapes": [
+     "Groupe 1:gr",
+     "Carte:gr"
+    ]
+   },
+   {
+    "name": "Motifs",
+    "type": "shape",
+    "ip": 57,
+    "op": 76,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr",
+     "Groupe 8:gr",
+     "Groupe 9:gr",
+     "Groupe 10:gr",
+     "Groupe 11:gr",
+     "Groupe 12:gr"
+    ]
+   },
+   {
+    "name": "NoteComplete",
+    "type": "shape",
+    "ip": 0,
+    "op": 40,
+    "parent": 1,
+    "shapes": [
+     "Tracé 1:sh",
+     "Grandient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "NoteSansCroche",
+    "type": "shape",
+    "ip": 40,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Tracé 1:sh",
+     "Grandient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "Pot Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "OmbrePot:gr"
+    ]
+   },
+   {
+    "name": "Parent",
+    "type": "null",
+    "ip": 0,
+    "op": 49
+   },
+   {
+    "name": "Tete",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 19,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "MainArchet",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 17,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Instrument",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 21,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr",
+     "Groupe 8:gr",
+     "Groupe 9:gr",
+     "Groupe 10:gr"
+    ]
+   },
+   {
+    "name": "BrasArchet",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 19,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Cou",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 19,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Buste",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 13,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "MainViolon",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 21,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "BrasViolon",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 19,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Pantalon",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 13,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr"
+    ]
+   },
+   {
+    "name": "PiedsGauche",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 13,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "PiedsDroite",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 13,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Ombre",
+    "type": "shape",
+    "ip": 0,
+    "op": 48,
+    "parent": 13,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFFFFF": 12,
+   "#E8E3DD": 2,
+   "gradient": 6,
+   "#FF73A6": 12,
+   "#FFCC73": 12,
+   "#33C1FF": 12,
+   "#A59A95": 1,
+   "#DAEFF7": 2,
+   "#292B33": 1,
+   "#FFE9CC": 3,
+   "#CC9466": 1,
+   "#7F5233": 2,
+   "#B27440": 3,
+   "#B2B2B2": 2,
+   "#DD8C4A": 3,
+   "#279B71": 3,
+   "#2BBF8E": 1,
+   "#FFD9B3": 1,
+   "#24B283": 4,
+   "#1355B7": 2,
+   "#006EFF": 1
+  }
+ },
+ {
+  "file": "showcase_transposition_animation.json",
+  "bytes": 163263,
+  "name": "Composition 6",
+  "version": "5.3.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 180,
+  "durationSec": 6,
+  "w": 1000,
+  "h": 850,
+  "ddd": 0,
+  "layerCount": 23,
+  "layers": [
+   {
+    "name": "ParentInstruments",
+    "type": "null",
+    "ip": 0,
+    "op": 181
+   },
+   {
+    "name": "Parent Clefs",
+    "type": "null",
+    "ip": 0,
+    "op": 184
+   },
+   {
+    "name": "ClefSol",
+    "type": "shape",
+    "ip": 144,
+    "op": 183,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Clarinette",
+    "type": "shape",
+    "ip": 139,
+    "op": 183,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr"
+    ]
+   },
+   {
+    "name": "B",
+    "type": "shape",
+    "ip": 118,
+    "op": 184,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "ClefFa",
+    "type": "shape",
+    "ip": 118,
+    "op": 183,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr"
+    ]
+   },
+   {
+    "name": "Tuba",
+    "type": "shape",
+    "ip": 113,
+    "op": 177,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "# 3",
+    "type": "shape",
+    "ip": 93,
+    "op": 145,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "# 2",
+    "type": "shape",
+    "ip": 93,
+    "op": 146,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "ClefUt",
+    "type": "shape",
+    "ip": 93,
+    "op": 144,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Basson",
+    "type": "shape",
+    "ip": 88,
+    "op": 145,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "#",
+    "type": "shape",
+    "ip": 67,
+    "op": 117,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "ClefSol",
+    "type": "shape",
+    "ip": 67,
+    "op": 114,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Trompette",
+    "type": "shape",
+    "ip": 62,
+    "op": 114,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "ClefFa",
+    "type": "shape",
+    "ip": 40,
+    "op": 82,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr"
+    ]
+   },
+   {
+    "name": "Contrebasse",
+    "type": "shape",
+    "ip": 35,
+    "op": 82,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr"
+    ]
+   },
+   {
+    "name": "B 3",
+    "type": "shape",
+    "ip": 16,
+    "op": 51,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "B 2",
+    "type": "shape",
+    "ip": 16,
+    "op": 57,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "ClefUt",
+    "type": "shape",
+    "ip": 16,
+    "op": 50,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Violon",
+    "type": "shape",
+    "ip": 11,
+    "op": 48,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr"
+    ]
+   },
+   {
+    "name": "ClefSol",
+    "type": "shape",
+    "ip": 0,
+    "op": 19,
+    "parent": 2,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Clarinette",
+    "type": "shape",
+    "ip": 0,
+    "op": 19,
+    "parent": 1,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr"
+    ]
+   },
+   {
+    "name": "Blanc uni 1",
+    "type": "solid",
+    "ip": 0,
+    "op": 184
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#000000": 19,
+   "gradient": 17,
+   "#FFFFFF": 1
+  }
+ },
+ {
+  "file": "showcase_usergoal_announce_animation.json",
+  "bytes": 47243,
+  "name": "Calendar 7",
+  "version": "5.3.4",
+  "fr": 60,
+  "ip": 0,
+  "op": 72,
+  "durationSec": 1.2,
+  "w": 375,
+  "h": 320,
+  "ddd": 0,
+  "layerCount": 6,
+  "layers": [
+   {
+    "name": "Anneau",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Groupe 9:gr",
+     "Groupe 10:gr"
+    ]
+   },
+   {
+    "name": "Calendar",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr",
+     "Groupe 37:gr",
+     "Groupe 11:gr",
+     "Groupe 12:gr",
+     "Groupe 13:gr",
+     "Groupe 14:gr"
+    ]
+   },
+   {
+    "name": "MaskFill",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Tracé rectangulaire 1:rc",
+     "GradientFill 1:gf"
+    ]
+   },
+   {
+    "name": "CurveFill",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Path 2:gr"
+    ]
+   },
+   {
+    "name": "MaskLigne",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Tracé rectangulaire 1:rc",
+     "Fond 1:fl"
+    ]
+   },
+   {
+    "name": "CurveLigne",
+    "type": "shape",
+    "ip": 0,
+    "op": 73,
+    "shapes": [
+     "Path 2:gr",
+     "Contour 1:st"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#D8D8D8": 22,
+   "#FFFFFF": 11,
+   "gradient": 3,
+   "#1DBF60": 8,
+   "#CCCCCC": 3,
+   "#0DA6FF": 1
+  }
+ },
+ {
+  "file": "AnimationAssets/ClapAnimation.json",
+  "bytes": 20156,
+  "name": "Clap 4",
+  "version": "5.6.3",
+  "fr": 60,
+  "ip": 0,
+  "op": 41,
+  "durationSec": 0.683,
+  "w": 375,
+  "h": 200,
+  "ddd": 0,
+  "layerCount": 6,
+  "layers": [
+   {
+    "name": "Traits 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "shapes": [
+     "pupitre:gr"
+    ]
+   },
+   {
+    "name": "Traits",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "shapes": [
+     "pupitre:gr"
+    ]
+   },
+   {
+    "name": "RIghtHand Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "RightThumb Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "parent": 3,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "LeftHand Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "LeftThumb Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 83,
+    "parent": 5,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFE8BD": 8,
+   "#FFC41C": 2,
+   "#F5AE14": 2
+  }
+ },
+ {
+  "file": "AnimationAssets/ErrorAnimation.json",
+  "bytes": 17836,
+  "name": "ErrorAnimation",
+  "version": "5.7.4",
+  "fr": 60,
+  "ip": 0,
+  "op": 120,
+  "durationSec": 2,
+  "w": 110,
+  "h": 140,
+  "ddd": 0,
+  "layerCount": 1,
+  "layers": [
+   {
+    "name": "New Shape",
+    "type": "shape",
+    "ip": 0,
+    "op": 133,
+    "shapes": [
+     "Hand:gr",
+     "Mouth:gr",
+     "EyeBrow:gr",
+     "EyeBrow2:gr",
+     "Eye:gr",
+     "Eye2:gr",
+     "Head:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFBF00": 2,
+   "#000000": 1,
+   "#00033B": 3,
+   "#000047": 2
+  }
+ },
+ {
+  "file": "AnimationAssets/game_particles.json",
+  "bytes": 30389,
+  "name": "confettis2",
+  "version": "4.12.0",
+  "fr": 45,
+  "ip": 0,
+  "op": 58,
+  "durationSec": 1.289,
+  "w": 800,
+  "h": 800,
+  "ddd": 0,
+  "layerCount": 10,
+  "layers": [
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 9.00000036657752,
+    "op": 369.000015029678,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 7.00000028511585,
+    "op": 367.000014948216,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 5.00000020365417,
+    "op": 365.000014866755,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 3.00000012219251,
+    "op": 363.000014785293,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 1.00000004073083,
+    "op": 361.000014703831,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 8.00000032584668,
+    "op": 368.000014988947,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 6.00000024438501,
+    "op": 366.000014907486,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 4.00000016292334,
+    "op": 364.000014826024,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 2.00000008146167,
+    "op": 362.000014744562,
+    "refId": "comp_1"
+   },
+   {
+    "name": "confettis1",
+    "type": "precomp",
+    "ip": 0,
+    "op": 360.000014663101,
+    "refId": "comp_1"
+   }
+  ],
+  "assets": [
+   {
+    "id": "comp_1",
+    "layers": 20,
+    "layerNames": [
+     "p20",
+     "p19",
+     "p18",
+     "p17",
+     "p16",
+     "p15",
+     "p14",
+     "p13",
+     "p12",
+     "p11",
+     "p10",
+     "p9",
+     "p8",
+     "p7",
+     "p6",
+     "p5",
+     "p4",
+     "p3",
+     "p2",
+     "p1"
+    ]
+   }
+  ],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFFFFF": 5,
+   "#FFCA27": 7,
+   "#FEE18B": 4,
+   "#F7EAC5": 4
+  }
+ },
+ {
+  "file": "AnimationAssets/Grade.json",
+  "bytes": 10753,
+  "name": "Grade",
+  "version": "5.12.1",
+  "fr": 30,
+  "ip": 0,
+  "op": 90,
+  "durationSec": 3,
+  "w": 150,
+  "h": 150,
+  "ddd": 0,
+  "layerCount": 5,
+  "layers": [
+   {
+    "name": "Sparkle_left",
+    "type": "shape",
+    "ip": 0,
+    "op": 98,
+    "shapes": [
+     "Groupe 1:gr"
+    ]
+   },
+   {
+    "name": "Sparkle_right",
+    "type": "shape",
+    "ip": 0,
+    "op": 99,
+    "shapes": [
+     "Groupe 2:gr"
+    ]
+   },
+   {
+    "name": "Shine_Mask",
+    "type": "shape",
+    "ip": 0,
+    "op": 99,
+    "shapes": [
+     "Groupe 6:gr"
+    ]
+   },
+   {
+    "name": "Shine",
+    "type": "shape",
+    "ip": 0,
+    "op": 99,
+    "shapes": [
+     "Tracé rectangulaire 1:rc",
+     "Fond 1:fl"
+    ]
+   },
+   {
+    "name": "New Shape",
+    "type": "shape",
+    "ip": 0,
+    "op": 97,
+    "shapes": [
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFFFFF": 3,
+   "#FFBF00": 2,
+   "#FFF7F0": 2,
+   "#FA9612": 1
+  }
+ },
+ {
+  "file": "AnimationAssets/Particles.json",
+  "bytes": 43222,
+  "name": "star_composition",
+  "version": "5.5.7",
+  "fr": 60,
+  "ip": 0,
+  "op": 600,
+  "durationSec": 10,
+  "w": 1131,
+  "h": 2436,
+  "ddd": 0,
+  "layerCount": 29,
+  "layers": [
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 9,
+    "op": 609,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 140,
+    "op": 740,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 384,
+    "op": 984,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 322,
+    "op": 922,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 33,
+    "op": 633,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 303,
+    "op": 848,
+    "refId": "comp_0"
+   },
+   {
+    "name": "bigstar",
+    "type": "precomp",
+    "ip": 179,
+    "op": 779,
+    "refId": "comp_0"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 355,
+    "op": 955,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 83,
+    "op": 683,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 221,
+    "op": 821,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": -78,
+    "op": 522,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 190,
+    "op": 790,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 71,
+    "op": 671,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 279,
+    "op": 879,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 28,
+    "op": 628,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 257,
+    "op": 857,
+    "refId": "comp_1"
+   },
+   {
+    "name": "medstar",
+    "type": "precomp",
+    "ip": 372,
+    "op": 972,
+    "refId": "comp_1"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 360,
+    "op": 960,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 68,
+    "op": 668,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 0,
+    "op": 600,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 368,
+    "op": 968,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 157,
+    "op": 757,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 81,
+    "op": 681,
+    "refId": "comp_2"
+   },
+   {
+    "name": "smallstar",
+    "type": "precomp",
+    "ip": 0,
+    "op": 600,
+    "refId": "comp_2"
+   },
+   {
+    "name": "tinystar",
+    "type": "precomp",
+    "ip": 256,
+    "op": 856,
+    "refId": "comp_3"
+   },
+   {
+    "name": "tinystar",
+    "type": "precomp",
+    "ip": 46,
+    "op": 646,
+    "refId": "comp_3"
+   },
+   {
+    "name": "tinystar",
+    "type": "precomp",
+    "ip": 277,
+    "op": 877,
+    "refId": "comp_3"
+   },
+   {
+    "name": "tinystar",
+    "type": "precomp",
+    "ip": 60,
+    "op": 660,
+    "refId": "comp_3"
+   },
+   {
+    "name": "allover",
+    "type": "precomp",
+    "ip": 0,
+    "op": 600,
+    "refId": "comp_4"
+   }
+  ],
+  "assets": [
+   {
+    "id": "comp_0",
+    "name": "",
+    "layers": 1,
+    "layerNames": [
+     "Vector"
+    ]
+   },
+   {
+    "id": "comp_1",
+    "name": "",
+    "layers": 1,
+    "layerNames": [
+     "Vector"
+    ]
+   },
+   {
+    "id": "comp_2",
+    "name": "",
+    "layers": 1,
+    "layerNames": [
+     "Vector"
+    ]
+   },
+   {
+    "id": "comp_3",
+    "name": "",
+    "layers": 1,
+    "layerNames": [
+     "Vector"
+    ]
+   },
+   {
+    "id": "comp_4",
+    "name": "",
+    "layers": 18,
+    "layerNames": [
+     "blue 6",
+     "purple 6",
+     "pink 6",
+     "blue 5",
+     "pink 5",
+     "purple 5",
+     "blue 4",
+     "purple 4",
+     "pink 4",
+     "blue 3",
+     "pink 3",
+     "purple 3",
+     "blue 2",
+     "purple 2",
+     "pink 2",
+     "blue",
+     "pink",
+     "purple"
+    ]
+   }
+  ],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFFFFF": 16,
+   "gradient": 6
+  }
+ },
+ {
+  "file": "AnimationAssets/RocketLoadingAnim.json",
+  "bytes": 44133,
+  "name": "LoadingAnim",
+  "version": "5.7.4",
+  "fr": 60,
+  "ip": 0,
+  "op": 120,
+  "durationSec": 2,
+  "w": 230,
+  "h": 230,
+  "ddd": 0,
+  "layerCount": 6,
+  "layers": [
+   {
+    "name": "Personnage",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr",
+     "Groupe 8:gr",
+     "Groupe 9:gr",
+     "Groupe 10:gr",
+     "Groupe 11:gr",
+     "Groupe 12:gr"
+    ]
+   },
+   {
+    "name": "Mask",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Groupe 38:gr"
+    ]
+   },
+   {
+    "name": "Cloud 1",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Cloud 1:gr"
+    ]
+   },
+   {
+    "name": "Mask 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Groupe 38:gr"
+    ]
+   },
+   {
+    "name": "Cloud 2",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Cloud 2:gr"
+    ]
+   },
+   {
+    "name": "Circle",
+    "type": "shape",
+    "ip": 0,
+    "op": 123,
+    "shapes": [
+     "Groupe 38:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#F58CC9": 3,
+   "#FCE3AB": 6,
+   "#000047": 14,
+   "#00033B": 4,
+   "#FF7A36": 2,
+   "#B0B3F5": 3,
+   "#FFBF00": 1,
+   "#F77026": 1,
+   "#36B0F7": 3,
+   "#FFFFFF": 2
+  }
+ },
+ {
+  "file": "AnimationAssets/Streak.json",
+  "bytes": 11593,
+  "name": "Streak",
+  "version": "5.12.1",
+  "fr": 30,
+  "ip": 0,
+  "op": 60,
+  "durationSec": 2,
+  "w": 150,
+  "h": 150,
+  "ddd": 0,
+  "layerCount": 1,
+  "layers": [
+   {
+    "name": "New Shape",
+    "type": "shape",
+    "ip": 0,
+    "op": 60,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "#FFBF00": 1,
+   "#F77026": 1
+  }
+ },
+ {
+  "file": "AnimationAssets/subscription_congrats_animation.json",
+  "bytes": 22148,
+  "name": "Composition 7",
+  "version": "5.1.16",
+  "fr": 25,
+  "ip": 0,
+  "op": 25,
+  "durationSec": 1,
+  "w": 600,
+  "h": 600,
+  "ddd": 0,
+  "layerCount": 3,
+  "layers": [
+   {
+    "name": "validationIcon Silhouettes 3",
+    "type": "shape",
+    "ip": 0,
+    "op": 25.025025025025,
+    "shapes": [
+     "Groupe 1:gr",
+     "Gradient Fill 1:gf"
+    ]
+   },
+   {
+    "name": "Spark02/validationIcon Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 25,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr"
+    ]
+   },
+   {
+    "name": "Spark01/validationIcon Silhouettes",
+    "type": "shape",
+    "ip": 0,
+    "op": 25,
+    "shapes": [
+     "Groupe 1:gr",
+     "Groupe 2:gr",
+     "Groupe 3:gr",
+     "Groupe 4:gr",
+     "Groupe 5:gr",
+     "Groupe 6:gr",
+     "Groupe 7:gr",
+     "Groupe 8:gr",
+     "Groupe 9:gr"
+    ]
+   }
+  ],
+  "assets": [],
+  "markers": [],
+  "fonts": [],
+  "chars": 0,
+  "colors": {
+   "gradient": 1,
+   "#00A661": 7,
+   "#62F255": 9
+  }
+ }
+]

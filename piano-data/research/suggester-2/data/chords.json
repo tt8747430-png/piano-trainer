@@ -1,0 +1,1609 @@
+{
+ "_source": "MRMusicSuite.framework, kfun:com.mathieurouthier.music2.chord.ChordType.$init_global. intervals = ChordFormula.intervals (Perfect1 implicit); omittable = ChordFormula second argument (intervals that may be dropped when matching/voicing). exact. chordClass_inferred = inferred from enum ordering and ChordClass names (Triad, SuspendedTriad, Seventh, SuspendedSeventh, AddedNote, Extended, Dyad, Monad, Special).",
+ "_count": 64,
+ "chordTypes": [
+  {
+   "name": "Major",
+   "ordinal": 0,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5"
+   ],
+   "chordClass_inferred": "Triad"
+  },
+  {
+   "name": "Minor",
+   "ordinal": 1,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5"
+   ],
+   "chordClass_inferred": "Triad"
+  },
+  {
+   "name": "Diminished",
+   "ordinal": 2,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Diminished5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    6
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "♭5"
+   ],
+   "chordClass_inferred": "Triad"
+  },
+  {
+   "name": "Augmented",
+   "ordinal": 3,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    8
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯5"
+   ],
+   "chordClass_inferred": "Triad"
+  },
+  {
+   "name": "Sus2",
+   "ordinal": 4,
+   "title_en": null,
+   "intervals": [
+    "Major2",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "5"
+   ],
+   "chordClass_inferred": "SuspendedTriad"
+  },
+  {
+   "name": "Sus4",
+   "ordinal": 5,
+   "title_en": null,
+   "intervals": [
+    "Perfect4",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    5,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "4",
+    "5"
+   ],
+   "chordClass_inferred": "SuspendedTriad"
+  },
+  {
+   "name": "Seventh",
+   "ordinal": 6,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "Minor7",
+   "ordinal": 7,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "Major7",
+   "ordinal": 8,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "MinorMajor7",
+   "ordinal": 9,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "SeventhFlat5",
+   "ordinal": 10,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Diminished5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    6,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♭5",
+    "♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "HalfDiminished7",
+   "ordinal": 11,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Diminished5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    6,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "Major7Flat5",
+   "ordinal": 12,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Diminished5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    6,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♭5",
+    "7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "MinorMajor7Flat5",
+   "ordinal": 13,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Diminished5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    6,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "♭5",
+    "7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "Diminished7",
+   "ordinal": 14,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Diminished5",
+    "Diminished7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    6,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "Augmented7",
+   "ordinal": 15,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    8,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯5",
+    "♭7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "AugmentedMajor7",
+   "ordinal": 16,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    8,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯5",
+    "7"
+   ],
+   "chordClass_inferred": "Seventh"
+  },
+  {
+   "name": "SeventhSus2",
+   "ordinal": 17,
+   "title_en": null,
+   "intervals": [
+    "Major2",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "5",
+    "♭7"
+   ],
+   "chordClass_inferred": "SuspendedSeventh"
+  },
+  {
+   "name": "SeventhSus4",
+   "ordinal": 18,
+   "title_en": null,
+   "intervals": [
+    "Perfect4",
+    "Perfect5",
+    "Minor7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    5,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "4",
+    "5",
+    "♭7"
+   ],
+   "chordClass_inferred": "SuspendedSeventh"
+  },
+  {
+   "name": "Major7sus2",
+   "ordinal": 19,
+   "title_en": null,
+   "intervals": [
+    "Major2",
+    "Perfect5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    7,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "5",
+    "7"
+   ],
+   "chordClass_inferred": "SuspendedSeventh"
+  },
+  {
+   "name": "Major7sus4",
+   "ordinal": 20,
+   "title_en": null,
+   "intervals": [
+    "Perfect4",
+    "Perfect5",
+    "Major7"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    5,
+    7,
+    11
+   ],
+   "degreeSymbols": [
+    "1",
+    "4",
+    "5",
+    "7"
+   ],
+   "chordClass_inferred": "SuspendedSeventh"
+  },
+  {
+   "name": "Ninth",
+   "ordinal": 21,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Minor9",
+   "ordinal": 22,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Minor7",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    10,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Major9",
+   "ordinal": 23,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    11,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MinorMajor9",
+   "ordinal": 24,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major7",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    11,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "7",
+    "9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "SeventhFlat9",
+   "ordinal": 25,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MinorSeventhFlat9",
+   "ordinal": 26,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Minor7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    10,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MajorSeventhFlat9",
+   "ordinal": 27,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    11,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MinorMajorSeventhFlat9",
+   "ordinal": 28,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    11,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "SeventhSharp9",
+   "ordinal": 29,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Augmented9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    15
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MajorSeventhSharp9",
+   "ordinal": 30,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7",
+    "Augmented9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    11,
+    15
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "♯9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "SeventhFlat5Flat9",
+   "ordinal": 31,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Diminished5",
+    "Minor7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    6,
+    10,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "SeventhFlat5Sharp9",
+   "ordinal": 32,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Diminished5",
+    "Minor7",
+    "Augmented9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    6,
+    10,
+    15
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "♯9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Augmented7Flat9",
+   "ordinal": 33,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented5",
+    "Minor7",
+    "Minor9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    8,
+    10,
+    13
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "♭9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Augmented7Sharp9",
+   "ordinal": 34,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented5",
+    "Minor7",
+    "Augmented9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    8,
+    10,
+    15
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "♯9"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Eleventh",
+   "ordinal": 35,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Perfect11"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9"
+   ],
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Minor11",
+   "ordinal": 36,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Perfect11"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9"
+   ],
+   "semitones": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Major11",
+   "ordinal": 37,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7",
+    "Major9",
+    "Perfect11"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9"
+   ],
+   "semitones": [
+    0,
+    4,
+    7,
+    11,
+    14,
+    17
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9",
+    "11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MinorMajor11",
+   "ordinal": 38,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major7",
+    "Major9",
+    "Perfect11"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9"
+   ],
+   "semitones": [
+    0,
+    3,
+    7,
+    11,
+    14,
+    17
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "7",
+    "9",
+    "11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "NinthSharp11",
+   "ordinal": 39,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Augmented11"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    18
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "NinthFlat11",
+   "ordinal": 40,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Diminished11"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    16
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♭11"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Thirteenth",
+   "ordinal": 41,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Perfect11",
+    "Major13"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9",
+    "Perfect11"
+   ],
+   "semitones": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Minor13",
+   "ordinal": 42,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Minor7",
+    "Major9",
+    "Perfect11",
+    "Major13"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9",
+    "Perfect11"
+   ],
+   "semitones": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Major13",
+   "ordinal": 43,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major7",
+    "Major9",
+    "Perfect11",
+    "Major13"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9",
+    "Perfect11"
+   ],
+   "semitones": [
+    0,
+    4,
+    7,
+    11,
+    14,
+    17,
+    21
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9",
+    "11",
+    "13"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "MinorMajor13",
+   "ordinal": 44,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major7",
+    "Major9",
+    "Perfect11",
+    "Major13"
+   ],
+   "omittable": [
+    "Perfect5",
+    "Major9",
+    "Perfect11"
+   ],
+   "semitones": [
+    0,
+    3,
+    7,
+    11,
+    14,
+    17,
+    21
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "7",
+    "9",
+    "11",
+    "13"
+   ],
+   "chordClass_inferred": "Extended"
+  },
+  {
+   "name": "Add2",
+   "ordinal": 45,
+   "title_en": null,
+   "intervals": [
+    "Major2",
+    "Major3",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    4,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "3",
+    "5"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "MinorAdd2",
+   "ordinal": 46,
+   "title_en": null,
+   "intervals": [
+    "Major2",
+    "Minor3",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    2,
+    3,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "2",
+    "♭3",
+    "5"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "Add4",
+   "ordinal": 47,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect4",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    5,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "4",
+    "5"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "MinorAdd4",
+   "ordinal": 48,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect4",
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    5,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "4",
+    "5"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "Sixth",
+   "ordinal": 49,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "6"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "Minor6",
+   "ordinal": 50,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    9
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "6"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "Add9",
+   "ordinal": 51,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "9"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "MinorAdd9",
+   "ordinal": 52,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "9"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "Sixth9",
+   "ordinal": 53,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Major6",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    9,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "6",
+    "9"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "MinorSixth9",
+   "ordinal": 54,
+   "title_en": null,
+   "intervals": [
+    "Minor3",
+    "Perfect5",
+    "Major6",
+    "Major9"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    3,
+    7,
+    9,
+    14
+   ],
+   "degreeSymbols": [
+    "1",
+    "♭3",
+    "5",
+    "6",
+    "9"
+   ],
+   "chordClass_inferred": "AddedNote"
+  },
+  {
+   "name": "ItalianAugmented6",
+   "ordinal": 55,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯6"
+   ],
+   "chordClass_inferred": "Special"
+  },
+  {
+   "name": "FrenchAugmented6",
+   "ordinal": 56,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Augmented4",
+    "Augmented6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    6,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "♯4",
+    "♯6"
+   ],
+   "chordClass_inferred": "Special"
+  },
+  {
+   "name": "GermanAugmented6",
+   "ordinal": 57,
+   "title_en": null,
+   "intervals": [
+    "Major3",
+    "Perfect5",
+    "Augmented6"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "degreeSymbols": [
+    "1",
+    "3",
+    "5",
+    "♯6"
+   ],
+   "chordClass_inferred": "Special"
+  },
+  {
+   "name": "Fifth",
+   "ordinal": 58,
+   "title_en": null,
+   "intervals": [
+    "Perfect5"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    7
+   ],
+   "degreeSymbols": [
+    "1",
+    "5"
+   ],
+   "chordClass_inferred": "Dyad"
+  },
+  {
+   "name": "Fourth",
+   "ordinal": 59,
+   "title_en": null,
+   "intervals": [
+    "Perfect4"
+   ],
+   "omittable": null,
+   "semitones": [
+    0,
+    5
+   ],
+   "degreeSymbols": [
+    "1",
+    "4"
+   ],
+   "chordClass_inferred": "Dyad"
+  },
+  {
+   "name": "Monad",
+   "ordinal": 60,
+   "title_en": null,
+   "intervals": [],
+   "omittable": null,
+   "semitones": [
+    0
+   ],
+   "degreeSymbols": [
+    "1"
+   ],
+   "chordClass_inferred": "Monad",
+   "note": "Monad = single note (no interval list built; root only)."
+  },
+  {
+   "name": "Rest",
+   "ordinal": 61,
+   "title_en": null,
+   "intervals": [],
+   "omittable": null,
+   "semitones": [],
+   "degreeSymbols": [],
+   "chordClass_inferred": "(non-chord song item)",
+   "note": "Not a chord: used for song items (rest, section marker, text). Formula is empty (exact: no interval list built in ChordType init)."
+  },
+  {
+   "name": "SongSection",
+   "ordinal": 62,
+   "title_en": null,
+   "intervals": [],
+   "omittable": null,
+   "semitones": [],
+   "degreeSymbols": [],
+   "chordClass_inferred": "(non-chord song item)",
+   "note": "Not a chord: used for song items (rest, section marker, text). Formula is empty (exact: no interval list built in ChordType init)."
+  },
+  {
+   "name": "Text",
+   "ordinal": 63,
+   "title_en": null,
+   "intervals": [],
+   "omittable": null,
+   "semitones": [],
+   "degreeSymbols": [],
+   "chordClass_inferred": "(non-chord song item)",
+   "note": "Not a chord: used for song items (rest, section marker, text). Formula is empty (exact: no interval list built in ChordType init)."
+  }
+ ]
+}

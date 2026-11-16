@@ -1,0 +1,13695 @@
+[
+ {
+  "name": "AppIcon2",
+  "catalog": "app",
+  "types": [
+   "Icon Image",
+   "MultiSized Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x1024"
+  ]
+ },
+ {
+  "name": "ATT illustration",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "157x105",
+   "314x210"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Avance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Chanteur",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Debutant",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountEmail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountMIDI",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountProvider",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountStatus",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountStudent",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountSubscription",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountTeacher",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AccountTeacherLink",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age6",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Age7",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Annotation",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Annotation Avance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Annotation Chanteur",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Annotation&print",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "320x200",
+   "640x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AppIconSvg",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "102x102",
+   "204x204"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AppSettings",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Apprendre",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Audio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AudioRecLandscape",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "144x80",
+   "288x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AudioRecording_thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "182x272",
+   "364x544"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "70x70",
+   "140x140"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "70x70",
+   "140x140"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "70x70",
+   "140x140"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "70x70",
+   "140x140"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar6",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar7",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Avatar8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Badge",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "13x18",
+   "26x36"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Balance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "BestStreak",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "BestStreakOrange",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Bullet",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x16",
+   "32x32"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "CardBackground",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "355x130",
+   "710x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Catalogue Avance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "CatalogueCard",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "320x200",
+   "640x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Challenge",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Clap",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "255x176",
+   "510x352"
+  ]
+ },
+ {
+  "name": "Classique",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x44",
+   "88x88"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Clavier Piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "CloseIcon",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Contact",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Delete",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Download_status_error",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "54x54",
+   "108x108"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Download_status_valid",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "54x54",
+   "108x108"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Etablissement_accountCell",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Export",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feeback",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feedback",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "320x200",
+   "640x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feedback Debutant",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feedback Piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_10",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_11",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_12",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_13",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_14",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_15",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_16",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x453"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_17",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x453"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_18",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x453"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_19",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x453"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_20",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x453"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_6",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_7",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Grade_9",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "HandsClap",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "245x162",
+   "490x324"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Hands_Both",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Hands_Left",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Hands_Right",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Help",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "HowToSwitchOff",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "107x139",
+   "214x278"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "IconRythme",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x27",
+   "56x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Instrument",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Interpretation",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "137x189",
+   "274x378"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Invite",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Kandinsky",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Kandinsky_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Klimt",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Klimt_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Latency",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "LaurelLeft",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "19x38",
+   "38x76"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "LaurelRight",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "19x38",
+   "38x76"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Level",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Level1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Level2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Level3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Level4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MIDI_bluetooth_connection",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "148x140",
+   "296x280"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MIDI_wait_connection",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "144x140",
+   "288x280"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MIDI_wired_connection",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "148x140",
+   "296x280"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Miro",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Miro2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Miro2_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Miro_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Mondiran",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Mondiran_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Munch",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Munch_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MusicScore",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "777x480",
+   "1554x960"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Musician-Trumpet",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "160x210",
+   "320x420"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MusicienReve",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objectif1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objectif2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objectif3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objectif4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objectif5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Objective",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreClassical",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreCountry",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreJazz",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenrePop",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreRock",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreRomantic",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreSoul",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingGenreSoundtracks",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingLevelAIComment",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1092x510"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Orchestra",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "744x320",
+   "1488x640"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Pact",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "750x270"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Partitions",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "275x170",
+   "550x340"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PieceMenuAddToPlaylist",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PieceMenuOffline",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PieceMenuShare",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PlayPiece",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "144x80",
+   "288x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Pop",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x44",
+   "88x88"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Pop_Classique",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PracticeHelper Piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Preference",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PresentStats",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print Avance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print Chanteur",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print Debutant",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ProfIcon",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Publish",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Avance",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Chanteur",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Debutant",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "RecordingAlert",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x24",
+   "60x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "RecordingAudio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "RecordingVideo",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Reminders",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Rename",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "RhythmGame",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "RhythmeGame",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "144x80",
+   "288x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ScoreSettings",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SendStudent",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareCell_Collection",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "132x132"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareCell_Piece",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "132x132"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareCell_Playlist",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "132x132"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareCell_Recording_Audio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "132x132"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareCell_Recording_Video",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "132x132"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ShareStudent",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Signal",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "84x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SouscriptionBackground",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "415x897",
+   "829x1793"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Steps",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "54x23",
+   "108x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Storage",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Streak",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "450x450"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Students_accountCell",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x28",
+   "60x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Subscription_home_crossDevice",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x16",
+   "32x32"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Subscription_home_engagement",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x16",
+   "32x32"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Subscription_home_illimited",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x16",
+   "32x32"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwipeGesture-VideoFeed",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "95x145",
+   "190x290"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOffForm_1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOffForm_2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOffForm_3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOffForm_4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOffForm_5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SwitchOff_Offer_Gift",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "278x194",
+   "556x388"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Tempo",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "320x200",
+   "640x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Tempo Debutant",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Tempo Piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoNormal",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoNormalFilled",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoSmart",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoSmartFilled",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoWait",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TempoWaitFilled",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TimePlayed",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Transposition Chanteur",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VanGogh",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VanGogh2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1366x230",
+   "2732x460"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VanGogh2_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VanGogh_Thumbnail",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VideoRecLandscape",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "145x80",
+   "290x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "XP",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "actionlist-close-button",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ]
+ },
+ {
+  "name": "alto",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "appUpdate",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "arrow.triangle.2.circlepath.circle",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "arrow.triangle.2.circlepath.circle.fill",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "att_avatar",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x54",
+   "110x108"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "att_hands",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "295x169",
+   "590x338"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "att_icon1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "att_icon2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "att_icon3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x55",
+   "110x110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_input_invalid",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "14x14",
+   "28x28"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_input_valid",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "18x14",
+   "36x28"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_secure_input_isInvisible",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "auth_form_secure_input_isVisible",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "60x60",
+   "120x120"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "auth_form_submit_highlited",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "52x52",
+   "104x104"
+  ]
+ },
+ {
+  "name": "auth_form_submit_normal",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "52x52",
+   "104x104"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step0",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step10",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step11",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step12",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step13",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step14",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step15",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step16",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step17",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step5",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step6",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step7",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "auth_form_submit_step9",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "avatar_none_dark",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "180x180"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "avatar_none_light",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "180x180"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "back-button",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "13x20",
+   "26x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "bass",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "bass+8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "bass-8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "chevron.up",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "36x22"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "chevron.up.circle",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "christmasTheme",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1367x191",
+   "2733x381"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "clearButton",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "18x18",
+   "36x36"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "close_bt",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "cloud",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentaryLevel1",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "750x480"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentaryLevel2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "750x480"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentaryLevel3",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "750x480"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentaryLevel4",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "750x480"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_bassoon",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_cello",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_clarinet",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_double_bass",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_flute",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_guitar",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_horn",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_oboe",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_other",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_piano",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_saxophone",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_singer",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trombone",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trumpet",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_viola",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_violin",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_platform_icons",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "252x123"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_screen",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x466"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "composer1",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "200x200",
+   "400x400"
+  ]
+ },
+ {
+  "name": "composer2",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "200x200",
+   "400x400"
+  ]
+ },
+ {
+  "name": "composer3",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "200x200",
+   "400x400"
+  ]
+ },
+ {
+  "name": "congrats-subscription",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "266x268",
+   "532x536",
+   "301x303",
+   "602x606"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "connect-facebook",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "57x53",
+   "114x106"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "connect-illustration",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "311x170",
+   "622x340"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "connect-mail",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "69x41",
+   "138x82"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "connect-phone",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "58x53",
+   "116x106"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "connectExternalAudio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "crown",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "705x534"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "discovery-welcomeUser",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "100x123",
+   "200x246"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear.fill",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "error_popup",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "externalLinkWeb_close",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "externalLinkWeb_retry",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "facebook_logo_highlited",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ]
+ },
+ {
+  "name": "facebook_logo_normal",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ]
+ },
+ {
+  "name": "fav-off",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x22",
+   "48x44"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "fav-on",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x22",
+   "48x44"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "fav-placeholder",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "343x73",
+   "686x146"
+  ]
+ },
+ {
+  "name": "feedback_negative",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_neutral",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_positive",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "flag",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "35x38"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "flag.fill",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "35x38"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "friends-button",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x25",
+   "100x50"
+  ]
+ },
+ {
+  "name": "global-tuner",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x23",
+   "46x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "hands",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "header-trombone",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "111x165",
+   "222x330"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "header-violin",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "115x165",
+   "230x330"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "help-button",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "23x23",
+   "46x46"
+  ]
+ },
+ {
+  "name": "home.practiceDashboad.chrono",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "96x74",
+   "192x148"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon-detoured",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "102x102",
+   "204x204"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon-free",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "20x23",
+   "40x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon-purchased",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x27",
+   "58x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon_opus",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "400x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon_pause",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "88x88",
+   "176x176"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon_piece",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "400x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "icon_play",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "88x88",
+   "176x176"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "institution_status",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x165"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "internal_toast_error",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "internal_toast_success",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "isOriginalChecked",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "isOriginalUnChecked",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x24",
+   "48x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "landing-orchestra",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x550",
+   "2048x1100"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "launch-horizontal",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x555",
+   "2048x1110"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "launch-horizontal-iPad",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "2048x888",
+   "4096x1776"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "launch-vertical",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "375x423",
+   "750x846"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "launch-vertical-iPad",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "768x678",
+   "1536x1356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_bronze",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "168x168"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_diamond",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "168x168"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_down",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "126x126"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_gold",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "168x168"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_none",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "726x360"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_silver",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "168x168"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_up",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "126x126"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "league_wood",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "168x168"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "listen_hint",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronaut_footer",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "78x20",
+   "156x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome.fill",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "microphone_access",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "midi_instrument",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "mymusic-emptyview",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "225x216",
+   "450x432"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "mymusic-piece-placeholder-left",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "mymusic-piece-placeholder-middle",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "200x63",
+   "400x126"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "mymusic-returningUser",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "75x94",
+   "150x188"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "notification",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "705x534"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "notificationpermission",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "229x244",
+   "458x488"
+  ]
+ },
+ {
+  "name": "onboarding_commitment_fingerprint",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "126x150"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_commitment_illustration",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "960x441"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_concert",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_discover",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_enjoy",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_motivation",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_progress",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-feedback-off",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-feedback-on",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-hands-selector-both",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-hands-selector-left",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-hands-selector-right",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-mode-listen",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-magic",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-magic-hands-both",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-magic-hands-left",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-magic-hands-right",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-mute",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "24x17",
+   "48x34"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-play",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-play-euphonium",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-flute",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-guitar",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-hands-both",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-hands-left",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-hands-right",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-harp",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-horn",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-piano",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-saxophone",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-trombone",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-trumpet",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-violin",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-voice",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-play-wind",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ]
+ },
+ {
+  "name": "performance-mode-volume",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "24x17",
+   "48x34"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-wait",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-mode-wait-hands-both",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-wait-hands-left",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-mode-wait-hands-right",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ]
+ },
+ {
+  "name": "performance-modes",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance.navBar_close",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "88x88",
+   "176x176"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "piano_keys",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "47x37"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "popup.notificationsAsk",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "415x297",
+   "830x594"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "popup_workout_start",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "popup_workout_success",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1200x357"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pref_both",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1065x741"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pref_classical",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1062x747"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pref_pop",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1065x738"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "preview-end",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "482x220",
+   "964x440"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "print_popup",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "push-illustration",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "718x522",
+   "1436x1044"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "rating-close",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "rating-left-image",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "163x140",
+   "326x280"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "rating-off",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "36x34",
+   "72x68"
+  ]
+ },
+ {
+  "name": "rating-on",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "36x34",
+   "72x68"
+  ]
+ },
+ {
+  "name": "rating-right-image",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "150x141",
+   "300x282"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "record.circle",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x27",
+   "76x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "record_videoFilm",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "43x28",
+   "86x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "recording-empty",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "241x158",
+   "482x316"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "recording_audio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "recording_camera",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "705x534"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "recording_uploaded",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "recording_video",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "reminder_offert_bandeau",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "174x28",
+   "348x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "sad-singer",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "142x326",
+   "284x652"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "searchIcon",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x26",
+   "44x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "search_perf",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "see-more",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x18",
+   "46x36"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "settings_add_collection",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_anotate",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_audio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_fullperf",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_partition",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_practiceInstructions",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_print",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_problem",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_rec_audio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_rec_camera",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "25x17",
+   "50x34"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "settings_share",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_transpose",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_tuner",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "settings_version",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "solo",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "solo_status",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x165"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "speaker.wave.2",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x34"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "speaker.wave.2.fill",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x34"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "speechrecognition_popup",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "student_status",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x165"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "studio",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "129x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "studio_active",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "129x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription.product.selected",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "19x18",
+   "38x36"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscriptionMusicians",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "271x162",
+   "542x324"
+  ]
+ },
+ {
+  "name": "tab-discover",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "27x27",
+   "54x54"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "tab-mymusic",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "18x24",
+   "36x48"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "tab-profile",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "25x24",
+   "50x48"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "tab-search",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "27x26",
+   "54x52"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "tab_practice",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x23",
+   "56x46"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "teacher_status",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x165"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "tenor",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "thumb-up",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x34",
+   "58x68"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "thumpUp",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "training_start",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "training_success",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "treble",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "treble+8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "treble-8",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "350x350",
+   "700x700"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "upvote_grey",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "vocal_commands",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "27x24",
+   "54x48"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "waiting",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "wechat-login",
+  "catalog": "app",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "57x53",
+   "114x106"
+  ]
+ },
+ {
+  "name": "wechat_logo_highlighted",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x24",
+   "60x48"
+  ]
+ },
+ {
+  "name": "wechat_logo_normal",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x24",
+   "60x48"
+  ]
+ },
+ {
+  "name": "workout_notachieved",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "workout_start",
+  "catalog": "app",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "235x178",
+   "470x356"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.0-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "160x236",
+   "130x270",
+   "186x174",
+   "180x174",
+   "174x174",
+   "222x170",
+   "250x136",
+   "180x122",
+   "204x192",
+   "176x118",
+   "176x172",
+   "172x116",
+   "174x116",
+   "202x140",
+   "180x138",
+   "182x122",
+   "162x152",
+   "162x156",
+   "160x152",
+   "294x84",
+   "152x152",
+   "170x144",
+   "264x88",
+   "210x106",
+   "204x108"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.1-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "188x148",
+   "182x168",
+   "182x122",
+   "184x164",
+   "42x40"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-1.1.0-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "270x136",
+   "136x136"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.0-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "296x192",
+   "286x144",
+   "226x226",
+   "374x220",
+   "290x198",
+   "248x166",
+   "264x210",
+   "252x246",
+   "266x176",
+   "494x144",
+   "256x174",
+   "266x190",
+   "250x180",
+   "250x176",
+   "234x176",
+   "234x232",
+   "286x190",
+   "218x186",
+   "246x246",
+   "238x238",
+   "230x230",
+   "230x224",
+   "132x84"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.1-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "358x180",
+   "374x180",
+   "246x238",
+   "226x226",
+   "242x224"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.1.0-gamut0",
+  "catalog": "app",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "270x270",
+   "270x136"
+  ]
+ },
+ {
+  "name": "Accompagnement",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Chanteur",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement_Piano",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Apprendre",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AudioRec",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "144x80",
+   "288x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Catalogue",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Challenge",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_0",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_1",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_10",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_11",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_2",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_3",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_4",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_5",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_6",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_7",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_8",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_9",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Clavier",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feeback",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feedback",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "IconRythme",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x27",
+   "56x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MusicienReve",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingTraining",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x122",
+   "330x244"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PracticeHelper_Piano",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Chanteur",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Chanteur Copy",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SuccessTraining",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "243x131",
+   "486x262"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Tempo",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TimePlayed",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Transposition Chanteur",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VideoRec",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "145x80",
+   "290x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "XP",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-34",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-35",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-37",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-38",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-40",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-42",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-43",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-45",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-46",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-48",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-49",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-63",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-65",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-1",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-2",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-3",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-4",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-5",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-7",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "advertiserTracking-header",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "294x162",
+   "588x324"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "authorisePushNotif-header",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "195x148",
+   "390x296"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "button-arrowUp",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x10",
+   "32x20"
+  ]
+ },
+ {
+  "name": "button-seeMore",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x18",
+   "46x36"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "button-seeMore-compact",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "9x13",
+   "18x26"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "circularPlayButton-pause",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "14x15",
+   "28x30"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-play",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "12x14",
+   "24x28"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-play-loading",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-retry",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "21x21",
+   "42x42"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "circularPlayButton-warning",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ]
+ },
+ {
+  "name": "commentary_instrument_bassoon",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_cello",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_clarinet",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_double_bass",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_flute",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_guitar",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_horn",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_oboe",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_other",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_piano",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_saxophone",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_singer",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trombone",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trumpet",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_viola",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_violin",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_platform_icons",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "252x123"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_screen",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x466"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "congratulationInfo-header-bottom",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "congratulationInfo-header-text",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x45"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear.fill",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x45"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-appStore",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-default",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-network",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_negative",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_neutral",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_positive",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-close",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-close-gray",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-defaultComposer",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "200x200",
+   "400x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-iconSelected",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "global-tuner",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x23",
+   "46x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x39"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome.fill",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x39"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "micaccess-illustration",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "218x182",
+   "436x364"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_commitment_fingerprint",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "126x150"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_commitment_illustration",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "960x441"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_concert",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_discover",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_enjoy",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_motivation",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_progress",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-handsSettings-double",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-handsSettings-left",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-handsSettings-right",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-reducedPiano",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x20",
+   "76x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-settings",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-volume-general",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x26",
+   "58x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-volume-metronome",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "36x30",
+   "72x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "piano_keys",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "47x37"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pieceCell-icon-free",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "20x23",
+   "40x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pieceCell-icon-purchased",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x27",
+   "58x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "popup_workout_success",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "321x119",
+   "642x238"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "preview-close",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ]
+ },
+ {
+  "name": "preview-retry",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "21x21",
+   "42x42"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "print-close",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "print-warning",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ]
+ },
+ {
+  "name": "socialsharing-header",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "313x127",
+   "626x254"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-appstore-reward",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "232x40",
+   "464x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-background-header",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "274x75",
+   "548x150"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-background-header-promotion",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "327x137",
+   "654x274"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-close",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "19x19",
+   "38x38"
+  ]
+ },
+ {
+  "name": "unsubscribe-bottom",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "286x179",
+   "572x358"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "widget-appLogo",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.0-gamut0",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "294x84",
+   "236x130",
+   "166x152",
+   "186x174",
+   "172x134",
+   "204x134",
+   "92x88"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.1-gamut0",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "154x106"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.0-gamut0",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "226x264",
+   "256x220",
+   "284x192",
+   "188x156",
+   "228x264",
+   "178x170"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.1-gamut0",
+  "catalog": "MetronautResourceKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "212x200"
+  ]
+ },
+ {
+  "name": "Accompagnement",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement Chanteur",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Accompagnement_Piano",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Apprendre",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "AudioRec",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "144x80",
+   "288x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Catalogue",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Challenge",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_0",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_1",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_10",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_11",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_2",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_3",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_4",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_5",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_6",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_7",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_8",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ChefOrchestre_9",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "390x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Clavier",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feeback",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Feedback",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "IconRythme",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x27",
+   "56x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "MusicienReve",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "OnboardingTraining",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "165x122",
+   "330x244"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "PracticeHelper_Piano",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Print",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x500",
+   "828x1000"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Chanteur",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Recording Chanteur Copy",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "SuccessTraining",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "243x131",
+   "486x262"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Tempo",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "TimePlayed",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "Transposition Chanteur",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "414x470",
+   "828x940"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "VideoRec",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "145x80",
+   "290x160"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "XP",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "40x40",
+   "80x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-34",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-35",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-37",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-38",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-40",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-42",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-43",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-45",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-46",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-48",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-49",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-63",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-65",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-1",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-2",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-3",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-4",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-5",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "account-instrument-family-7",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "55x130",
+   "110x260"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "advertiserTracking-header",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "294x162",
+   "588x324"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "authorisePushNotif-header",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "195x148",
+   "390x296"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "button-arrowUp",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "16x10",
+   "32x20"
+  ]
+ },
+ {
+  "name": "button-seeMore",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x18",
+   "46x36"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "button-seeMore-compact",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "9x13",
+   "18x26"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "circularPlayButton-pause",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "14x15",
+   "28x30"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-play",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "12x14",
+   "24x28"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-play-loading",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "circularPlayButton-retry",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "21x21",
+   "42x42"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "circularPlayButton-warning",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ]
+ },
+ {
+  "name": "commentary_instrument_bassoon",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_cello",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_clarinet",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_double_bass",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_flute",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_guitar",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_horn",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_oboe",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_other",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_piano",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_saxophone",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_singer",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trombone",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_trumpet",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_viola",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_instrument_violin",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "900x574"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_platform_icons",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "252x123"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "commentary_screen",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "1024x466"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "congratulationInfo-header-bottom",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "56x56",
+   "112x112"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "congratulationInfo-header-text",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x45"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ear.fill",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "30x45"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-appStore",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-default",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "errorInfo-network",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "240x280",
+   "480x560"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_negative",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_neutral",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "feedback_positive",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image",
+   "Vector"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "44x36",
+   "88x72"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-close",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-close-gray",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "26x26",
+   "52x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-defaultComposer",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "200x200",
+   "400x400"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "global-iconSelected",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "global-tuner",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "23x23",
+   "46x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x39"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "metronome.fill",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x39"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "micaccess-illustration",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "218x182",
+   "436x364"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_commitment_fingerprint",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "126x150"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_commitment_illustration",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "960x441"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_concert",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_discover",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_enjoy",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_motivation",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "onboarding_goal_progress",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "90x84"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-handsSettings-double",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-handsSettings-left",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-handsSettings-right",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "50x30",
+   "100x60"
+  ],
+  "templateMode": "template"
+ },
+ {
+  "name": "performance-reducedPiano",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "38x20",
+   "76x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-settings",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-volume-general",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x26",
+   "58x52"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "performance-volume-metronome",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "36x30",
+   "72x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "piano_keys",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "47x37"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pieceCell-icon-free",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "20x23",
+   "40x46"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "pieceCell-icon-purchased",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "29x27",
+   "58x54"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "popup_workout_success",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "321x119",
+   "642x238"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "preview-close",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "32x32",
+   "64x64"
+  ]
+ },
+ {
+  "name": "preview-retry",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "21x21",
+   "42x42"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "print-close",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "28x28",
+   "56x56"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "print-warning",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "22x22",
+   "44x44"
+  ]
+ },
+ {
+  "name": "socialsharing-header",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "313x127",
+   "626x254"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-appstore-reward",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "232x40",
+   "464x80"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-background-header",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "274x75",
+   "548x150"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-background-header-promotion",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "327x137",
+   "654x274"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "subscription-close",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "19x19",
+   "38x38"
+  ]
+ },
+ {
+  "name": "unsubscribe-bottom",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "286x179",
+   "572x358"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "widget-appLogo",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "30x30",
+   "60x60"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.0-gamut0",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "294x84",
+   "236x130",
+   "166x152",
+   "186x174",
+   "172x134",
+   "204x134",
+   "92x88"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.1-gamut0",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "154x106"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.0-gamut0",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any",
+   "UIAppearanceDark"
+  ],
+  "sizes": [
+   "226x264",
+   "256x220",
+   "284x192",
+   "188x156",
+   "228x264",
+   "178x170"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.1-gamut0",
+  "catalog": "MetronautPreviewUIKit",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "212x200"
+  ]
+ },
+ {
+  "name": "ContentCard/pin",
+  "catalog": "BrazeUI",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "20x20",
+   "40x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ContentCard/retry",
+  "catalog": "BrazeUI",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "63x58",
+   "126x116"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "InAppMessage/chevron",
+  "catalog": "BrazeUI",
+  "types": [
+   "Image"
+  ],
+  "scales": [
+   1,
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "12x20",
+   "24x40"
+  ],
+  "templateMode": "automatic"
+ },
+ {
+  "name": "ZZZZPackedAsset-1.0.1-gamut0",
+  "catalog": "BrazeUI",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   1
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "88x62"
+  ]
+ },
+ {
+  "name": "ZZZZPackedAsset-2.0.1-gamut0",
+  "catalog": "BrazeUI",
+  "types": [
+   "PackedImage"
+  ],
+  "scales": [
+   2
+  ],
+  "appearances": [
+   "any"
+  ],
+  "sizes": [
+   "172x120"
+  ]
+ }
+]

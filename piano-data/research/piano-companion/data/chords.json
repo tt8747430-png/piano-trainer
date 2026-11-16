@@ -1,0 +1,13470 @@
+{
+ "source": "PianoCompanion.Engine.OSX.dll: ChordService.GenerateChords/AddChord, ChordSymbols.Table, ChordNamer.Difficulty (exact; derived fields computed by chord-detection.ts)",
+ "notes": [
+  "ids 1-9 are scale-function chords with rootAdjustment (circle-of-fifths offset); they are never listed in the dictionary (Id > 9 filter).",
+  "ids >= 1000 are Alts variants: id = base*100 + n, n counts sus2, sus4, b5, #5, n7, b9, #9 in that order, only for flags the base sets.",
+  "inDictionary=false rows (aliases) are hidden from dictionary, search and reverse lookup.",
+  "degrees: 1-based letter distance from root with accidental relative to the major scale of the root."
+ ],
+ "count": 113,
+ "dictionaryCount": 89,
+ "chords": [
+  {
+   "id": 1,
+   "shortName": "I",
+   "buttonName": "I",
+   "name": "Tonic",
+   "group": "principal",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "I",
+    "Jazz": "I",
+    "French": "I",
+    "Asian": "I",
+    "Brazilian": "I"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 2,
+   "shortName": "IV",
+   "buttonName": "IV",
+   "name": "Sub-Dominant",
+   "group": "principal",
+   "variantOf": null,
+   "rootAdjustment": -1,
+   "formula": [
+    0,
+    4,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "IV",
+    "Jazz": "IV",
+    "French": "IV",
+    "Asian": "IV",
+    "Brazilian": "IV"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 3,
+   "shortName": "V",
+   "buttonName": "V",
+   "name": "Dominant",
+   "group": "principal",
+   "variantOf": null,
+   "rootAdjustment": 1,
+   "formula": [
+    0,
+    4,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "V",
+    "Jazz": "V",
+    "French": "V",
+    "Asian": "V",
+    "Brazilian": "V"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 4,
+   "shortName": "V7",
+   "buttonName": "V7",
+   "name": "Dominant 7th",
+   "group": "principal",
+   "variantOf": null,
+   "rootAdjustment": 1,
+   "formula": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "V7",
+    "Jazz": "V7",
+    "French": "V7",
+    "Asian": "V7",
+    "Brazilian": "V7"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 5,
+   "shortName": "VIm",
+   "buttonName": "VIm",
+   "name": "Tonic",
+   "group": "relativeminor",
+   "variantOf": null,
+   "rootAdjustment": 0,
+   "formula": [
+    0,
+    3,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "VIm",
+    "Jazz": "VIm",
+    "French": "VIm",
+    "Asian": "VIm",
+    "Brazilian": "VIm"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 6,
+   "shortName": "IIm",
+   "buttonName": "IIm",
+   "name": "Sub-Dominant",
+   "group": "relativeminor",
+   "variantOf": null,
+   "rootAdjustment": -1,
+   "formula": [
+    0,
+    3,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "IIm",
+    "Jazz": "IIm",
+    "French": "IIm",
+    "Asian": "IIm",
+    "Brazilian": "IIm"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 7,
+   "shortName": "III",
+   "buttonName": "III",
+   "name": "Mediant",
+   "group": "relativeminor",
+   "variantOf": null,
+   "rootAdjustment": 1,
+   "formula": [
+    0,
+    3,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "III",
+    "Jazz": "III",
+    "French": "III",
+    "Asian": "III",
+    "Brazilian": "III"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 8,
+   "shortName": "III7",
+   "buttonName": "III7",
+   "name": "Mediant 7th",
+   "group": "relativeminor",
+   "variantOf": null,
+   "rootAdjustment": 1,
+   "formula": [
+    0,
+    3,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "III7",
+    "Jazz": "III7",
+    "French": "III7",
+    "Asian": "III7",
+    "Brazilian": "III7"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 9,
+   "shortName": "VII°7",
+   "buttonName": "VII°7",
+   "name": "Leading tone 7th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": 5,
+   "formula": [
+    0,
+    3,
+    6,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7"
+   ],
+   "symbols": {
+    "International": "VII°7",
+    "Jazz": "VII°7",
+    "French": "VII°7",
+    "Asian": "VII°7",
+    "Brazilian": "VII°7"
+   },
+   "isAlias": false,
+   "inDictionary": false,
+   "difficulty": null,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": null,
+   "inversionsInC": []
+  },
+  {
+   "id": 10,
+   "shortName": "M",
+   "buttonName": "M",
+   "name": "Major",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "",
+    "Jazz": "",
+    "French": "",
+    "Asian": "",
+    "Brazilian": ""
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 0,
+   "maxInversions": 2,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7
+     ],
+     "label": "C"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      12
+     ],
+     "label": "C/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      16
+     ],
+     "label": "C/G"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "shortName": "m",
+   "buttonName": "m",
+   "name": "Minor",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5"
+   ],
+   "symbols": {
+    "International": "m",
+    "Jazz": "−",
+    "French": "m",
+    "Asian": "m",
+    "Brazilian": "m"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 1,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7
+     ],
+     "label": "Cm"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      12
+     ],
+     "label": "Cm/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      15
+     ],
+     "label": "Cm/G"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "shortName": "°",
+   "buttonName": "°",
+   "name": "Diminished",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    6
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT"
+   ],
+   "symbols": {
+    "International": "dim",
+    "Jazz": "°",
+    "French": "dim",
+    "Asian": "dim",
+    "Brazilian": "°"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 4,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6
+     ],
+     "label": "Cdim"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      12
+     ],
+     "label": "Cdim/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      12,
+      15
+     ],
+     "label": "Cdim/G♭"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "shortName": "⁺",
+   "buttonName": "+",
+   "name": "Augmented",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    8
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5"
+   ],
+   "symbols": {
+    "International": "+",
+    "Jazz": "+",
+    "French": "5+",
+    "Asian": "aug",
+    "Brazilian": "5+"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8
+     ],
+     "label": "C+"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      12
+     ],
+     "label": "C+/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      12,
+      16
+     ],
+     "label": "C+/G♯"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "shortName": "sus2",
+   "buttonName": "sus2",
+   "name": "Suspended 2nd",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    2,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    7
+   ],
+   "degrees": [
+    "1",
+    "2",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "M2",
+    "P5"
+   ],
+   "symbols": {
+    "International": "sus2",
+    "Jazz": "sus2",
+    "French": "sus2",
+    "Asian": "sus2",
+    "Brazilian": "sus2"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 4,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "D",
+    "G"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      2,
+      7
+     ],
+     "label": "Csus2"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      2,
+      7,
+      12
+     ],
+     "label": "Csus2/D"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      14
+     ],
+     "label": "Csus2/G"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "shortName": "sus4",
+   "buttonName": "sus4",
+   "name": "Suspended 4th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    5,
+    7
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5"
+   ],
+   "symbols": {
+    "International": "sus4",
+    "Jazz": "sus4",
+    "French": "sus4",
+    "Asian": "sus4",
+    "Brazilian": "sus4"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 3,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7
+     ],
+     "label": "Csus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      12
+     ],
+     "label": "Csus4/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      17
+     ],
+     "label": "Csus4/G"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "shortName": "⁻5",
+   "buttonName": "⁻5",
+   "name": "Flat Fifth",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    6
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT"
+   ],
+   "symbols": {
+    "International": "(♭5)",
+    "Jazz": "(♭5)",
+    "French": "(♭5)",
+    "Asian": "(♭5)",
+    "Brazilian": "(♭5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 7,
+   "maxInversions": 2,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6
+     ],
+     "label": "C(♭5)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      12
+     ],
+     "label": "C(♭5)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      12,
+      16
+     ],
+     "label": "C(♭5)/G♭"
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "shortName": "5",
+   "buttonName": "5",
+   "name": "Fifth",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    7
+   ],
+   "pitchClasses": [
+    0,
+    7
+   ],
+   "degrees": [
+    "1",
+    "5"
+   ],
+   "intervalNames": [
+    "U",
+    "P5"
+   ],
+   "symbols": {
+    "International": "5",
+    "Jazz": "5",
+    "French": "5",
+    "Asian": "5",
+    "Brazilian": "5"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 1,
+   "maxInversions": 1,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "G"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      7
+     ],
+     "label": "C5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      7,
+      12
+     ],
+     "label": "C5/G"
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "shortName": "6",
+   "buttonName": "6",
+   "name": "Sixth",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    9
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "6"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M6"
+   ],
+   "symbols": {
+    "International": "6",
+    "Jazz": "6",
+    "French": "6",
+    "Asian": "6",
+    "Brazilian": "6"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 4,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      9
+     ],
+     "label": "C6"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      9,
+      12
+     ],
+     "label": "C6/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      9,
+      12,
+      16
+     ],
+     "label": "C6/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      12,
+      16,
+      19
+     ],
+     "label": "C6/A"
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "shortName": "m6",
+   "buttonName": "m6",
+   "name": "Minor 6th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    9
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "6"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "M6"
+   ],
+   "symbols": {
+    "International": "m6",
+    "Jazz": "−6",
+    "French": "m6",
+    "Asian": "m6",
+    "Brazilian": "m6"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      9
+     ],
+     "label": "Cm6"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      9,
+      12
+     ],
+     "label": "Cm6/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      9,
+      12,
+      15
+     ],
+     "label": "Cm6/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      12,
+      15,
+      19
+     ],
+     "label": "Cm6/A"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "shortName": "7",
+   "buttonName": "7",
+   "name": "Seventh",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7",
+    "Jazz": "7",
+    "French": "7",
+    "Asian": "7",
+    "Brazilian": "7"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 2,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10
+     ],
+     "label": "C7"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12
+     ],
+     "label": "C7/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      16
+     ],
+     "label": "C7/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      16,
+      19
+     ],
+     "label": "C7/B♭"
+    }
+   ]
+  },
+  {
+   "id": 1900,
+   "shortName": "7sus2",
+   "buttonName": "7sus2",
+   "name": "Seventh sus2",
+   "group": "common_chords",
+   "variantOf": 19,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    2,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "2",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M2",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7sus2",
+    "Jazz": "7sus2",
+    "French": "7sus2",
+    "Asian": "7sus2",
+    "Brazilian": "7sus2"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "D",
+    "G",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      2,
+      7,
+      10
+     ],
+     "label": "C7sus2"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      2,
+      7,
+      10,
+      12
+     ],
+     "label": "C7sus2/D"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "C7sus2/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      19
+     ],
+     "label": "C7sus2/B♭"
+    }
+   ]
+  },
+  {
+   "id": 1901,
+   "shortName": "7sus4",
+   "buttonName": "7sus4",
+   "name": "Seventh sus4",
+   "group": "common_chords",
+   "variantOf": 19,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7sus4",
+    "Jazz": "7sus4",
+    "French": "7sus4",
+    "Asian": "7sus4",
+    "Brazilian": "7sus4"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7,
+      10
+     ],
+     "label": "C7sus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C7sus4/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      17
+     ],
+     "label": "C7sus4/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      17,
+      19
+     ],
+     "label": "C7sus4/B♭"
+    }
+   ]
+  },
+  {
+   "id": 1902,
+   "shortName": "7⁻5",
+   "buttonName": "7⁻5",
+   "name": "Seventh ⁻5",
+   "group": "common_chords",
+   "variantOf": 19,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7♭5",
+    "Jazz": "7♭5",
+    "French": "7(♭5)",
+    "Asian": "7(♭5)",
+    "Brazilian": "7(♭5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10
+     ],
+     "label": "C7♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12
+     ],
+     "label": "C7♭5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      16
+     ],
+     "label": "C7♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      16,
+      18
+     ],
+     "label": "C7♭5/B♭"
+    }
+   ]
+  },
+  {
+   "id": 1903,
+   "shortName": "7⁺5",
+   "buttonName": "7⁺5",
+   "name": "Seventh ⁺5",
+   "group": "common_chords",
+   "variantOf": 19,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7♯5",
+    "Jazz": "7♯5",
+    "French": "7(♯5)",
+    "Asian": "7(♯5)",
+    "Brazilian": "7(♯5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10
+     ],
+     "label": "C7♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12
+     ],
+     "label": "C7♯5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      16
+     ],
+     "label": "C7♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      16,
+      20
+     ],
+     "label": "C7♯5/B♭"
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "shortName": "m7",
+   "buttonName": "m7",
+   "name": "Minor 7th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "m7",
+    "Jazz": "−7",
+    "French": "m7",
+    "Asian": "m7",
+    "Brazilian": "m7"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 3,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10
+     ],
+     "label": "Cm7"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm7/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15
+     ],
+     "label": "Cm7/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      19
+     ],
+     "label": "Cm7/B♭"
+    }
+   ]
+  },
+  {
+   "id": 2000,
+   "shortName": "m7⁻5",
+   "buttonName": "m7⁻5",
+   "name": "Minor 7th ⁻5, ø",
+   "group": "common_chords",
+   "variantOf": 20,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7"
+   ],
+   "symbols": {
+    "International": "m7♭5",
+    "Jazz": "ø7",
+    "French": "m7(♭5)",
+    "Asian": "m7(♭5)",
+    "Brazilian": "m7(♭5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10
+     ],
+     "label": "Cm7♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12
+     ],
+     "label": "Cm7♭5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      15
+     ],
+     "label": "Cm7♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      18
+     ],
+     "label": "Cm7♭5/B♭"
+    }
+   ]
+  },
+  {
+   "id": 2001,
+   "shortName": "m7⁺5",
+   "buttonName": "m7⁺5",
+   "name": "Minor 7th ⁺5",
+   "group": "common_chords",
+   "variantOf": 20,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7"
+   ],
+   "symbols": {
+    "International": "m7♯5",
+    "Jazz": "−7♯5",
+    "French": "m7(♯5)",
+    "Asian": "m7(♯5)",
+    "Brazilian": "m7(♯5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10
+     ],
+     "label": "Cm7♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12
+     ],
+     "label": "Cm7♯5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      15
+     ],
+     "label": "Cm7♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      20
+     ],
+     "label": "Cm7♯5/B♭"
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "shortName": "°7",
+   "buttonName": "°7",
+   "name": "Diminished 7th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    9
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    6,
+    9
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "d7"
+   ],
+   "symbols": {
+    "International": "dim7",
+    "Jazz": "°7",
+    "French": "dim7",
+    "Asian": "dim7",
+    "Brazilian": "°7"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      9
+     ],
+     "label": "Cdim7"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      9,
+      12
+     ],
+     "label": "Cdim7/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      9,
+      12,
+      15
+     ],
+     "label": "Cdim7/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      12,
+      15,
+      18
+     ],
+     "label": "Cdim7/B♭♭"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "shortName": "M7",
+   "buttonName": "M7",
+   "name": "Major 7th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "maj7",
+    "Jazz": "Δ7",
+    "French": "7M",
+    "Asian": "M7",
+    "Brazilian": "7M"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 3,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      11
+     ],
+     "label": "Cmaj7"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      11,
+      12
+     ],
+     "label": "Cmaj7/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      16
+     ],
+     "label": "Cmaj7/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      16,
+      19
+     ],
+     "label": "Cmaj7/B"
+    }
+   ]
+  },
+  {
+   "id": 2200,
+   "shortName": "M7sus2",
+   "buttonName": "M7sus2",
+   "name": "Major 7th sus2",
+   "group": "common_chords",
+   "variantOf": 22,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    2,
+    7,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "2",
+    "5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "M2",
+    "P5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "maj7sus2",
+    "Jazz": "Δ7sus2",
+    "French": "7Msus2",
+    "Asian": "M7sus2",
+    "Brazilian": "7Msus2"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "D",
+    "G",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      2,
+      7,
+      11
+     ],
+     "label": "Cmaj7sus2"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      2,
+      7,
+      11,
+      12
+     ],
+     "label": "Cmaj7sus2/D"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      14
+     ],
+     "label": "Cmaj7sus2/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      14,
+      19
+     ],
+     "label": "Cmaj7sus2/B"
+    }
+   ]
+  },
+  {
+   "id": 2201,
+   "shortName": "M7sus4",
+   "buttonName": "M7sus4",
+   "name": "Major 7th sus4",
+   "group": "common_chords",
+   "variantOf": 22,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    5,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "maj7sus4",
+    "Jazz": "Δ7sus4",
+    "French": "7Msus4",
+    "Asian": "M7sus4",
+    "Brazilian": "7Msus4"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7,
+      11
+     ],
+     "label": "Cmaj7sus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      11,
+      12
+     ],
+     "label": "Cmaj7sus4/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      17
+     ],
+     "label": "Cmaj7sus4/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      17,
+      19
+     ],
+     "label": "Cmaj7sus4/B"
+    }
+   ]
+  },
+  {
+   "id": 2202,
+   "shortName": "M7⁻5",
+   "buttonName": "M7⁻5",
+   "name": "Major 7th ⁻5",
+   "group": "common_chords",
+   "variantOf": 22,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    6,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "M7"
+   ],
+   "symbols": {
+    "International": "maj7♭5",
+    "Jazz": "Δ7♭5",
+    "French": "7M(♭5)",
+    "Asian": "M7(♭5)",
+    "Brazilian": "7M(♭5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      11
+     ],
+     "label": "Cmaj7♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      11,
+      12
+     ],
+     "label": "Cmaj7♭5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      11,
+      12,
+      16
+     ],
+     "label": "Cmaj7♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      16,
+      18
+     ],
+     "label": "Cmaj7♭5/B"
+    }
+   ]
+  },
+  {
+   "id": 2203,
+   "shortName": "M7⁺5",
+   "buttonName": "M7⁺5",
+   "name": "Major 7th ⁺5",
+   "group": "common_chords",
+   "variantOf": 22,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    8,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "maj7♯5",
+    "Jazz": "Δ7♯5",
+    "French": "7M(♯5)",
+    "Asian": "M7(♯5)",
+    "Brazilian": "7M(♯5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      11
+     ],
+     "label": "Cmaj7♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      11,
+      12
+     ],
+     "label": "Cmaj7♯5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      11,
+      12,
+      16
+     ],
+     "label": "Cmaj7♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      16,
+      20
+     ],
+     "label": "Cmaj7♯5/B"
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "shortName": "m,M7",
+   "buttonName": "m,M7",
+   "name": "Minor, Major 7th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "m(maj7)",
+    "Jazz": "−Δ7",
+    "French": "m7M",
+    "Asian": "mM7",
+    "Brazilian": "m7M"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 7,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      11
+     ],
+     "label": "Cm(maj7)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      11,
+      12
+     ],
+     "label": "Cm(maj7)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      15
+     ],
+     "label": "Cm(maj7)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      15,
+      19
+     ],
+     "label": "Cm(maj7)/B"
+    }
+   ]
+  },
+  {
+   "id": 2300,
+   "shortName": "m,M7⁻5",
+   "buttonName": "m,M7⁻5",
+   "name": "Minor, Major 7th ⁻5",
+   "group": "common_chords",
+   "variantOf": 23,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    6,
+    11
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "M7"
+   ],
+   "symbols": {
+    "International": "m(maj7,♭5)",
+    "Jazz": "−Δ7♭5",
+    "French": "m7M(♭5)",
+    "Asian": "mM7(♭5)",
+    "Brazilian": "m7M(♭5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      11
+     ],
+     "label": "Cm(maj7,♭5)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      11,
+      12
+     ],
+     "label": "Cm(maj7,♭5)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      11,
+      12,
+      15
+     ],
+     "label": "Cm(maj7,♭5)/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      15,
+      18
+     ],
+     "label": "Cm(maj7,♭5)/B"
+    }
+   ]
+  },
+  {
+   "id": 2301,
+   "shortName": "m,M7⁺5",
+   "buttonName": "m,M7⁺5",
+   "name": "Minor, Major 7th ⁺5",
+   "group": "common_chords",
+   "variantOf": 23,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    11
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    8,
+    11
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "7"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "M7"
+   ],
+   "symbols": {
+    "International": "m(maj7,♯5)",
+    "Jazz": "−Δ7♯5",
+    "French": "m7M(♯5)",
+    "Asian": "mM7(♯5)",
+    "Brazilian": "m7M(♯5)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      11
+     ],
+     "label": "Cm(maj7,♯5)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      11,
+      12
+     ],
+     "label": "Cm(maj7,♯5)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      11,
+      12,
+      15
+     ],
+     "label": "Cm(maj7,♯5)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      15,
+      20
+     ],
+     "label": "Cm(maj7,♯5)/B"
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "shortName": "7/6",
+   "buttonName": "7/6",
+   "name": "Seven-Six",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    9,
+    10
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "6",
+    "♭7"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M6",
+    "m7"
+   ],
+   "symbols": {
+    "International": "7(13)",
+    "Jazz": "7(13)",
+    "French": "7(13)",
+    "Asian": "7(13)",
+    "Brazilian": "7(13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "A",
+    "B♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      9,
+      10
+     ],
+     "label": "C7(13)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C7(13)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      9,
+      10,
+      12,
+      16
+     ],
+     "label": "C7(13)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      10,
+      12,
+      16,
+      19
+     ],
+     "label": "C7(13)/A"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      10,
+      12,
+      16,
+      19,
+      21
+     ],
+     "label": "C7(13)/B♭"
+    }
+   ]
+  },
+  {
+   "id": 104,
+   "shortName": "add9",
+   "buttonName": "add9",
+   "name": "Added 9th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M9"
+   ],
+   "symbols": {
+    "International": "add9",
+    "Jazz": "add9",
+    "French": "add9",
+    "Asian": "add9",
+    "Brazilian": "(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 5,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      14
+     ],
+     "label": "Cadd9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      12,
+      14
+     ],
+     "label": "Cadd9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      14,
+      16
+     ],
+     "label": "Cadd9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      7
+     ],
+     "label": "Cadd9/C"
+    }
+   ]
+  },
+  {
+   "id": 105,
+   "shortName": "madd9",
+   "buttonName": "madd9",
+   "name": "Minor Added 9th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m(add9)",
+    "Jazz": "−(add9)",
+    "French": "m(add9)",
+    "Asian": "madd9",
+    "Brazilian": "m(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 6,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      14
+     ],
+     "label": "Cm(add9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      12,
+      14
+     ],
+     "label": "Cm(add9)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm(add9)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      7
+     ],
+     "label": "Cm(add9)/C"
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "shortName": "9",
+   "buttonName": "9",
+   "name": "Ninth",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "9",
+    "Jazz": "9",
+    "French": "9",
+    "Asian": "9",
+    "Brazilian": "7(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 6,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14
+     ],
+     "label": "C9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "C9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16
+     ],
+     "label": "C9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      19
+     ],
+     "label": "C9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      7,
+      10
+     ],
+     "label": "C9/C"
+    }
+   ]
+  },
+  {
+   "id": 2500,
+   "shortName": "9sus4",
+   "buttonName": "9sus4",
+   "name": "Ninth sus4",
+   "group": "ninths",
+   "variantOf": 25,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "9sus4",
+    "Jazz": "9sus4",
+    "French": "9sus4",
+    "Asian": "9sus4",
+    "Brazilian": "7sus4(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7,
+      10,
+      14
+     ],
+     "label": "C9sus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "C9sus4/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C9sus4/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      17,
+      19
+     ],
+     "label": "C9sus4/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      5,
+      7,
+      10
+     ],
+     "label": "C9sus4/C"
+    }
+   ]
+  },
+  {
+   "id": 2501,
+   "shortName": "9⁻5",
+   "buttonName": "9⁻5",
+   "name": "Ninth ⁻5",
+   "group": "ninths",
+   "variantOf": 25,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "9♭5",
+    "Jazz": "9♭5",
+    "French": "9(♭5)",
+    "Asian": "9(♭5)",
+    "Brazilian": "7(♭5,9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10,
+      14
+     ],
+     "label": "C9♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12,
+      14
+     ],
+     "label": "C9♭5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      16
+     ],
+     "label": "C9♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18
+     ],
+     "label": "C9♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      10
+     ],
+     "label": "C9♭5/C"
+    }
+   ]
+  },
+  {
+   "id": 2502,
+   "shortName": "9⁺5",
+   "buttonName": "9⁺5",
+   "name": "Ninth ⁺5",
+   "group": "ninths",
+   "variantOf": 25,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "9♯5",
+    "Jazz": "9♯5",
+    "French": "9(♯5)",
+    "Asian": "9(♯5)",
+    "Brazilian": "7(♯5,9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      14
+     ],
+     "label": "C9♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      14
+     ],
+     "label": "C9♯5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      16
+     ],
+     "label": "C9♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      20
+     ],
+     "label": "C9♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      8,
+      10
+     ],
+     "label": "C9♯5/C"
+    }
+   ]
+  },
+  {
+   "id": 2503,
+   "shortName": "97",
+   "buttonName": "97",
+   "name": "Ninth 7",
+   "group": "ninths",
+   "variantOf": 25,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "9",
+    "Jazz": "9",
+    "French": "9",
+    "Asian": "9",
+    "Brazilian": "7(9)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14
+     ],
+     "label": "C9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "C9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16
+     ],
+     "label": "C9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      19
+     ],
+     "label": "C9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      7,
+      10
+     ],
+     "label": "C9/C"
+    }
+   ]
+  },
+  {
+   "id": 101,
+   "shortName": "M9",
+   "buttonName": "M9",
+   "name": "Major Ninth",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    11,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "maj9",
+    "Jazz": "Δ9",
+    "French": "7M(9)",
+    "Asian": "M9",
+    "Brazilian": "7M(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 6,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      11,
+      14
+     ],
+     "label": "Cmaj9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      11,
+      12,
+      14
+     ],
+     "label": "Cmaj9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      14,
+      16
+     ],
+     "label": "Cmaj9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      14,
+      16,
+      19
+     ],
+     "label": "Cmaj9/B"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      7,
+      11
+     ],
+     "label": "Cmaj9/C"
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "shortName": "m9",
+   "buttonName": "m9",
+   "name": "Minor Ninth",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m9",
+    "Jazz": "−9",
+    "French": "m9",
+    "Asian": "m9",
+    "Brazilian": "m7(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 6,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14
+     ],
+     "label": "Cm9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      19
+     ],
+     "label": "Cm9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      7,
+      10
+     ],
+     "label": "Cm9/C"
+    }
+   ]
+  },
+  {
+   "id": 2600,
+   "shortName": "m9⁻5",
+   "buttonName": "m9⁻5",
+   "name": "Minor Ninth ⁻5",
+   "group": "ninths",
+   "variantOf": 26,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m9♭5",
+    "Jazz": "ø9",
+    "French": "m9(♭5)",
+    "Asian": "m9(♭5)",
+    "Brazilian": "m7(♭5,9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10,
+      14
+     ],
+     "label": "Cm9♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm9♭5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm9♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18
+     ],
+     "label": "Cm9♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      10
+     ],
+     "label": "Cm9♭5/C"
+    }
+   ]
+  },
+  {
+   "id": 2601,
+   "shortName": "m9⁺5",
+   "buttonName": "m9⁺5",
+   "name": "Minor Ninth ⁺5",
+   "group": "ninths",
+   "variantOf": 26,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m9♯5",
+    "Jazz": "−9♯5",
+    "French": "m9(♯5)",
+    "Asian": "m9(♯5)",
+    "Brazilian": "m7(♯5,9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10,
+      14
+     ],
+     "label": "Cm9♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm9♯5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm9♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      20
+     ],
+     "label": "Cm9♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      8,
+      10
+     ],
+     "label": "Cm9♯5/C"
+    }
+   ]
+  },
+  {
+   "id": 2602,
+   "shortName": "m97",
+   "buttonName": "m97",
+   "name": "Minor Ninth 7",
+   "group": "ninths",
+   "variantOf": 26,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m9",
+    "Jazz": "−9",
+    "French": "m9",
+    "Asian": "m9",
+    "Brazilian": "m7(9)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14
+     ],
+     "label": "Cm9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      19
+     ],
+     "label": "Cm9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      7,
+      10
+     ],
+     "label": "Cm9/C"
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "shortName": "⁻9",
+   "buttonName": "⁻9",
+   "name": "Flat Ninth",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "7♭9",
+    "Jazz": "7♭9",
+    "French": "7(♭9)",
+    "Asian": "7(♭9)",
+    "Brazilian": "7(♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13
+     ],
+     "label": "C7♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13
+     ],
+     "label": "C7♭9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16
+     ],
+     "label": "C7♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      19
+     ],
+     "label": "C7♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      7,
+      10
+     ],
+     "label": "C7♭9/C"
+    }
+   ]
+  },
+  {
+   "id": 2700,
+   "shortName": "⁻9sus4",
+   "buttonName": "⁻9sus4",
+   "name": "Flat Ninth sus4",
+   "group": "ninths",
+   "variantOf": 27,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "7sus4(♭9)",
+    "Jazz": "7sus4(♭9)",
+    "French": "7sus4(♭9)",
+    "Asian": "7sus4(♭9)",
+    "Brazilian": "7sus4(♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7,
+      10,
+      13
+     ],
+     "label": "C7sus4(♭9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      10,
+      12,
+      13
+     ],
+     "label": "C7sus4(♭9)/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      17
+     ],
+     "label": "C7sus4(♭9)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      17,
+      19
+     ],
+     "label": "C7sus4(♭9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      5,
+      7,
+      10
+     ],
+     "label": "C7sus4(♭9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2701,
+   "shortName": "⁻9⁻5",
+   "buttonName": "⁻9⁻5",
+   "name": "Flat Ninth ⁻5",
+   "group": "ninths",
+   "variantOf": 27,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "7(♭5,♭9)",
+    "Jazz": "7(♭5,♭9)",
+    "French": "7(♭5,♭9)",
+    "Asian": "7(♭5,♭9)",
+    "Brazilian": "7(♭5,♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10,
+      13
+     ],
+     "label": "C7(♭5,♭9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12,
+      13
+     ],
+     "label": "C7(♭5,♭9)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      13,
+      16
+     ],
+     "label": "C7(♭5,♭9)/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      18
+     ],
+     "label": "C7(♭5,♭9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      6,
+      10
+     ],
+     "label": "C7(♭5,♭9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2702,
+   "shortName": "⁻9⁺5",
+   "buttonName": "⁻9⁺5",
+   "name": "Flat Ninth ⁺5",
+   "group": "ninths",
+   "variantOf": 27,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "7(♯5,♭9)",
+    "Jazz": "7(♯5,♭9)",
+    "French": "7(♯5,♭9)",
+    "Asian": "7(♯5,♭9)",
+    "Brazilian": "7(♯5,♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      13
+     ],
+     "label": "C7(♯5,♭9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      13
+     ],
+     "label": "C7(♯5,♭9)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      13,
+      16
+     ],
+     "label": "C7(♯5,♭9)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      20
+     ],
+     "label": "C7(♯5,♭9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      8,
+      10
+     ],
+     "label": "C7(♯5,♭9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2703,
+   "shortName": "⁻97",
+   "buttonName": "⁻97",
+   "name": "Flat Ninth 7",
+   "group": "ninths",
+   "variantOf": 27,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "7♭9",
+    "Jazz": "7♭9",
+    "French": "7(♭9)",
+    "Asian": "7(♭9)",
+    "Brazilian": "7(♭9)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13
+     ],
+     "label": "C7♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13
+     ],
+     "label": "C7♭9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16
+     ],
+     "label": "C7♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      19
+     ],
+     "label": "C7♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      7,
+      10
+     ],
+     "label": "C7♭9/C"
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "shortName": "m⁻9",
+   "buttonName": "m⁻9",
+   "name": "Minor, Flat 9th",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "m7♭9",
+    "Jazz": "−7♭9",
+    "French": "m7(♭9)",
+    "Asian": "m7(♭9)",
+    "Brazilian": "m7(♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13
+     ],
+     "label": "Cm7♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm7♭9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15
+     ],
+     "label": "Cm7♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      19
+     ],
+     "label": "Cm7♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      7,
+      10
+     ],
+     "label": "Cm7♭9/C"
+    }
+   ]
+  },
+  {
+   "id": 2800,
+   "shortName": "m⁻9⁻5",
+   "buttonName": "m⁻9⁻5",
+   "name": "Minor, Flat 9th ⁻5",
+   "group": "ninths",
+   "variantOf": 28,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "m7(♭5,♭9)",
+    "Jazz": "ø7♭9",
+    "French": "m7(♭5,♭9)",
+    "Asian": "m7(♭5,♭9)",
+    "Brazilian": "m7(♭5,♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10,
+      13
+     ],
+     "label": "Cm7(♭5,♭9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm7(♭5,♭9)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      13,
+      15
+     ],
+     "label": "Cm7(♭5,♭9)/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      18
+     ],
+     "label": "Cm7(♭5,♭9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      6,
+      10
+     ],
+     "label": "Cm7(♭5,♭9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2801,
+   "shortName": "m⁻9⁺5",
+   "buttonName": "m⁻9⁺5",
+   "name": "Minor, Flat 9th ⁺5",
+   "group": "ninths",
+   "variantOf": 28,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "m7(♯5,♭9)",
+    "Jazz": "−7(♯5,♭9)",
+    "French": "m7(♯5,♭9)",
+    "Asian": "m7(♯5,♭9)",
+    "Brazilian": "m7(♯5,♭9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10,
+      13
+     ],
+     "label": "Cm7(♯5,♭9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm7(♯5,♭9)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      13,
+      15
+     ],
+     "label": "Cm7(♯5,♭9)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      20
+     ],
+     "label": "Cm7(♯5,♭9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      8,
+      10
+     ],
+     "label": "Cm7(♯5,♭9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2802,
+   "shortName": "m⁻97",
+   "buttonName": "m⁻97",
+   "name": "Minor, Flat 9th 7",
+   "group": "ninths",
+   "variantOf": 28,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9"
+   ],
+   "symbols": {
+    "International": "m7♭9",
+    "Jazz": "−7♭9",
+    "French": "m7(♭9)",
+    "Asian": "m7(♭9)",
+    "Brazilian": "m7(♭9)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13
+     ],
+     "label": "Cm7♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm7♭9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15
+     ],
+     "label": "Cm7♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      19
+     ],
+     "label": "Cm7♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      7,
+      10
+     ],
+     "label": "Cm7♭9/C"
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "shortName": "9⁺",
+   "buttonName": "9⁺",
+   "name": "Augmented Ninth",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9"
+   ],
+   "symbols": {
+    "International": "7♯9",
+    "Jazz": "7♯9",
+    "French": "7(♯9)",
+    "Asian": "7(♯9)",
+    "Brazilian": "7(♯9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15
+     ],
+     "label": "C7♯9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15
+     ],
+     "label": "C7♯9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16
+     ],
+     "label": "C7♯9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      19
+     ],
+     "label": "C7♯9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      7,
+      10
+     ],
+     "label": "C7♯9/C"
+    }
+   ]
+  },
+  {
+   "id": 2900,
+   "shortName": "9⁺sus4",
+   "buttonName": "9⁺sus4",
+   "name": "Augmented Ninth sus4",
+   "group": "ninths",
+   "variantOf": 29,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    5,
+    7,
+    10,
+    15
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "4",
+    "5",
+    "♭7",
+    "♯9"
+   ],
+   "intervalNames": [
+    "U",
+    "P4",
+    "P5",
+    "m7",
+    "A9"
+   ],
+   "symbols": {
+    "International": "7sus4(♯9)",
+    "Jazz": "7sus4(♯9)",
+    "French": "7sus4(♯9)",
+    "Asian": "7sus4(♯9)",
+    "Brazilian": "7sus4(♯9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "F",
+    "G",
+    "B♭",
+    "D♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      5,
+      7,
+      10,
+      15
+     ],
+     "label": "C7sus4(♯9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      5,
+      7,
+      10,
+      12,
+      15
+     ],
+     "label": "C7sus4(♯9)/F"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      17
+     ],
+     "label": "C7sus4(♯9)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      17,
+      19
+     ],
+     "label": "C7sus4(♯9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      5,
+      7,
+      10
+     ],
+     "label": "C7sus4(♯9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2901,
+   "shortName": "9⁺⁻5",
+   "buttonName": "9⁺⁻5",
+   "name": "Augmented Ninth ⁻5",
+   "group": "ninths",
+   "variantOf": 29,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10,
+    15
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "♯9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7",
+    "A9"
+   ],
+   "symbols": {
+    "International": "7(♭5,♯9)",
+    "Jazz": "7(♭5,♯9)",
+    "French": "7(♭5,♯9)",
+    "Asian": "7(♭5,♯9)",
+    "Brazilian": "7(♭5,♯9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭",
+    "D♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10,
+      15
+     ],
+     "label": "C7(♭5,♯9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12,
+      15
+     ],
+     "label": "C7(♭5,♯9)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      15,
+      16
+     ],
+     "label": "C7(♭5,♯9)/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      18
+     ],
+     "label": "C7(♭5,♯9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      6,
+      10
+     ],
+     "label": "C7(♭5,♯9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2902,
+   "shortName": "9⁺⁺5",
+   "buttonName": "9⁺⁺5",
+   "name": "Augmented Ninth ⁺5",
+   "group": "ninths",
+   "variantOf": 29,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    15
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "♯9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "A9"
+   ],
+   "symbols": {
+    "International": "7(♯5,♯9)",
+    "Jazz": "7(♯5,♯9)",
+    "French": "7(♯5,♯9)",
+    "Asian": "7(♯5,♯9)",
+    "Brazilian": "7(♯5,♯9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      15
+     ],
+     "label": "C7(♯5,♯9)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      15
+     ],
+     "label": "C7(♯5,♯9)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      15,
+      16
+     ],
+     "label": "C7(♯5,♯9)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      20
+     ],
+     "label": "C7(♯5,♯9)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      8,
+      10
+     ],
+     "label": "C7(♯5,♯9)/C"
+    }
+   ]
+  },
+  {
+   "id": 2903,
+   "shortName": "9⁺7",
+   "buttonName": "9⁺7",
+   "name": "Augmented Ninth 7",
+   "group": "ninths",
+   "variantOf": 29,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9"
+   ],
+   "symbols": {
+    "International": "7♯9",
+    "Jazz": "7♯9",
+    "French": "7(♯9)",
+    "Asian": "7(♯9)",
+    "Brazilian": "7(♯9)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 11,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15
+     ],
+     "label": "C7♯9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15
+     ],
+     "label": "C7♯9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16
+     ],
+     "label": "C7♯9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      19
+     ],
+     "label": "C7♯9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      7,
+      10
+     ],
+     "label": "C7♯9/C"
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "shortName": "9/6",
+   "buttonName": "9/6",
+   "name": "Nine-Six",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    9,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "6",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M6",
+    "M9"
+   ],
+   "symbols": {
+    "International": "6/9",
+    "Jazz": "6/9",
+    "French": "6/9",
+    "Asian": "6(9)",
+    "Brazilian": "6(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 7,
+   "maxInversions": 4,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "A",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      9,
+      14
+     ],
+     "label": "C6/9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      9,
+      12,
+      14
+     ],
+     "label": "C6(9)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      9,
+      12,
+      14,
+      16
+     ],
+     "label": "C6(9)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      12,
+      14,
+      16,
+      19
+     ],
+     "label": "C6(9)/A"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      7,
+      9
+     ],
+     "label": "C6(9)/C"
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "shortName": "m9/6",
+   "buttonName": "m9/6",
+   "name": "Minor Nine-Six",
+   "group": "ninths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    9,
+    14
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "6",
+    "9"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "M6",
+    "M9"
+   ],
+   "symbols": {
+    "International": "m6/9",
+    "Jazz": "−6/9",
+    "French": "m6/9",
+    "Asian": "m6(9)",
+    "Brazilian": "m6(9)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "A",
+    "D"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      9,
+      14
+     ],
+     "label": "Cm6/9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      9,
+      12,
+      14
+     ],
+     "label": "Cm6(9)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      9,
+      12,
+      14,
+      15
+     ],
+     "label": "Cm6(9)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      9,
+      12,
+      14,
+      15,
+      19
+     ],
+     "label": "Cm6(9)/A"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      7,
+      9
+     ],
+     "label": "Cm6(9)/C"
+    }
+   ]
+  },
+  {
+   "id": 106,
+   "shortName": "add11",
+   "buttonName": "add11",
+   "name": "Added 11th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    5,
+    7
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "P11"
+   ],
+   "symbols": {
+    "International": "add11",
+    "Jazz": "add11",
+    "French": "add11",
+    "Asian": "add11",
+    "Brazilian": "(11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 8,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      17
+     ],
+     "label": "Cadd11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      12,
+      17
+     ],
+     "label": "Cadd11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      16,
+      17
+     ],
+     "label": "Cadd11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      4,
+      5,
+      7
+     ],
+     "label": "Cadd11/C"
+    }
+   ]
+  },
+  {
+   "id": 107,
+   "shortName": "madd11",
+   "buttonName": "madd11",
+   "name": "Minor Added 11th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    5,
+    7
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m(add11)",
+    "Jazz": "−(add11)",
+    "French": "m(add11)",
+    "Asian": "madd11",
+    "Brazilian": "m(11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 8,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      17
+     ],
+     "label": "Cm(add11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      12,
+      17
+     ],
+     "label": "Cm(add11)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      15,
+      17
+     ],
+     "label": "Cm(add11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      3,
+      5,
+      7
+     ],
+     "label": "Cm(add11)/C"
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "shortName": "11",
+   "buttonName": "11",
+   "name": "Eleventh",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11",
+    "Jazz": "11",
+    "French": "11",
+    "Asian": "11",
+    "Brazilian": "7(9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      17
+     ],
+     "label": "C11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      17
+     ],
+     "label": "C11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      19
+     ],
+     "label": "C11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      10
+     ],
+     "label": "C11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C11/D"
+    }
+   ]
+  },
+  {
+   "id": 3200,
+   "shortName": "11⁻5",
+   "buttonName": "11⁻5",
+   "name": "Eleventh ⁻5",
+   "group": "elevenths",
+   "variantOf": 32,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11♭5",
+    "Jazz": "11♭5",
+    "French": "11(♭5)",
+    "Asian": "11(♭5)",
+    "Brazilian": "7(♭5,9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10,
+      14,
+      17
+     ],
+     "label": "C11♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C11♭5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      16,
+      17
+     ],
+     "label": "C11♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      18
+     ],
+     "label": "C11♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      6,
+      10
+     ],
+     "label": "C11♭5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      6,
+      10,
+      12
+     ],
+     "label": "C11♭5/D"
+    }
+   ]
+  },
+  {
+   "id": 3201,
+   "shortName": "11⁺5",
+   "buttonName": "11⁺5",
+   "name": "Eleventh ⁺5",
+   "group": "elevenths",
+   "variantOf": 32,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11♯5",
+    "Jazz": "11♯5",
+    "French": "11(♯5)",
+    "Asian": "11(♯5)",
+    "Brazilian": "7(♯5,9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      14,
+      17
+     ],
+     "label": "C11♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C11♯5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      17
+     ],
+     "label": "C11♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      20
+     ],
+     "label": "C11♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      8,
+      10
+     ],
+     "label": "C11♯5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      8,
+      10,
+      12
+     ],
+     "label": "C11♯5/D"
+    }
+   ]
+  },
+  {
+   "id": 3202,
+   "shortName": "117",
+   "buttonName": "117",
+   "name": "Eleventh 7",
+   "group": "elevenths",
+   "variantOf": 32,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11",
+    "Jazz": "11",
+    "French": "11",
+    "Asian": "11",
+    "Brazilian": "7(9,11)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      17
+     ],
+     "label": "C11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      17
+     ],
+     "label": "C11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      19
+     ],
+     "label": "C11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      10
+     ],
+     "label": "C11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C11/D"
+    }
+   ]
+  },
+  {
+   "id": 3203,
+   "shortName": "11⁻9",
+   "buttonName": "11⁻9",
+   "name": "Eleventh ⁻9",
+   "group": "elevenths",
+   "variantOf": 32,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11♭9",
+    "Jazz": "11♭9",
+    "French": "11(♭9)",
+    "Asian": "11(♭9)",
+    "Brazilian": "7(♭9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13,
+      17
+     ],
+     "label": "C11♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13,
+      17
+     ],
+     "label": "C11♭9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16,
+      17
+     ],
+     "label": "C11♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      17,
+      19
+     ],
+     "label": "C11♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      5,
+      7,
+      10
+     ],
+     "label": "C11♭9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      4,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C11♭9/D♭"
+    }
+   ]
+  },
+  {
+   "id": 3204,
+   "shortName": "11⁺9",
+   "buttonName": "11⁺9",
+   "name": "Eleventh ⁺9",
+   "group": "elevenths",
+   "variantOf": 32,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "11♯9",
+    "Jazz": "11♯9",
+    "French": "11(♯9)",
+    "Asian": "11(♯9)",
+    "Brazilian": "7(♯9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15,
+      17
+     ],
+     "label": "C11♯9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15,
+      17
+     ],
+     "label": "C11♯9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16,
+      17
+     ],
+     "label": "C11♯9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      17,
+      19
+     ],
+     "label": "C11♯9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      5,
+      7,
+      10
+     ],
+     "label": "C11♯9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      3,
+      4,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C11♯9/D♯"
+    }
+   ]
+  },
+  {
+   "id": 102,
+   "shortName": "M11",
+   "buttonName": "M11",
+   "name": "Major 11th",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    11,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "maj11",
+    "Jazz": "Δ11",
+    "French": "7M(11)",
+    "Asian": "M11",
+    "Brazilian": "7M(9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      11,
+      14,
+      17
+     ],
+     "label": "Cmaj11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      11,
+      12,
+      14,
+      17
+     ],
+     "label": "Cmaj11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      14,
+      16,
+      17
+     ],
+     "label": "Cmaj11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      14,
+      16,
+      17,
+      19
+     ],
+     "label": "Cmaj11/B"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      11
+     ],
+     "label": "Cmaj11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      11,
+      12
+     ],
+     "label": "Cmaj11/D"
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "shortName": "m11",
+   "buttonName": "m11",
+   "name": "Minor Eleventh",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m11",
+    "Jazz": "−11",
+    "French": "m11",
+    "Asian": "m11",
+    "Brazilian": "m7(9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      17
+     ],
+     "label": "Cm11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "Cm11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      17
+     ],
+     "label": "Cm11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      19
+     ],
+     "label": "Cm11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      10
+     ],
+     "label": "Cm11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm11/D"
+    }
+   ]
+  },
+  {
+   "id": 3300,
+   "shortName": "m11⁻5",
+   "buttonName": "m11⁻5",
+   "name": "Minor Eleventh ⁻5",
+   "group": "elevenths",
+   "variantOf": 33,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m11♭5",
+    "Jazz": "ø11",
+    "French": "m11(♭5)",
+    "Asian": "m11(♭5)",
+    "Brazilian": "m7(♭5,9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10,
+      14,
+      17
+     ],
+     "label": "Cm11♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "Cm11♭5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      15,
+      17
+     ],
+     "label": "Cm11♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      18
+     ],
+     "label": "Cm11♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      6,
+      10
+     ],
+     "label": "Cm11♭5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      6,
+      10,
+      12
+     ],
+     "label": "Cm11♭5/D"
+    }
+   ]
+  },
+  {
+   "id": 3301,
+   "shortName": "m11⁺5",
+   "buttonName": "m11⁺5",
+   "name": "Minor Eleventh ⁺5",
+   "group": "elevenths",
+   "variantOf": 33,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m11♯5",
+    "Jazz": "−11♯5",
+    "French": "m11(♯5)",
+    "Asian": "m11(♯5)",
+    "Brazilian": "m7(♯5,9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10,
+      14,
+      17
+     ],
+     "label": "Cm11♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "Cm11♯5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      15,
+      17
+     ],
+     "label": "Cm11♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      20
+     ],
+     "label": "Cm11♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      8,
+      10
+     ],
+     "label": "Cm11♯5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      8,
+      10,
+      12
+     ],
+     "label": "Cm11♯5/D"
+    }
+   ]
+  },
+  {
+   "id": 3302,
+   "shortName": "m117",
+   "buttonName": "m117",
+   "name": "Minor Eleventh 7",
+   "group": "elevenths",
+   "variantOf": 33,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m11",
+    "Jazz": "−11",
+    "French": "m11",
+    "Asian": "m11",
+    "Brazilian": "m7(9,11)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      17
+     ],
+     "label": "Cm11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "Cm11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      17
+     ],
+     "label": "Cm11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      19
+     ],
+     "label": "Cm11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      10
+     ],
+     "label": "Cm11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm11/D"
+    }
+   ]
+  },
+  {
+   "id": 3303,
+   "shortName": "m11⁻9",
+   "buttonName": "m11⁻9",
+   "name": "Minor Eleventh ⁻9",
+   "group": "elevenths",
+   "variantOf": 33,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "m11♭9",
+    "Jazz": "−11♭9",
+    "French": "m11(♭9)",
+    "Asian": "m11(♭9)",
+    "Brazilian": "m7(♭9,11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13,
+      17
+     ],
+     "label": "Cm11♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13,
+      17
+     ],
+     "label": "Cm11♭9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15,
+      17
+     ],
+     "label": "Cm11♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      17,
+      19
+     ],
+     "label": "Cm11♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      5,
+      7,
+      10
+     ],
+     "label": "Cm11♭9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      3,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm11♭9/D♭"
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "shortName": "11⁺",
+   "buttonName": "11⁺",
+   "name": "Augmented 11th",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "9♯11",
+    "Jazz": "9♯11",
+    "French": "9(♯11)",
+    "Asian": "9(♯11)",
+    "Brazilian": "7(9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      18
+     ],
+     "label": "C9♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "C9♯11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      18
+     ],
+     "label": "C9♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      19
+     ],
+     "label": "C9♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      10
+     ],
+     "label": "C9♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "C9♯11/D"
+    }
+   ]
+  },
+  {
+   "id": 3400,
+   "shortName": "11⁺⁺5",
+   "buttonName": "11⁺⁺5",
+   "name": "Augmented 11th ⁺5",
+   "group": "elevenths",
+   "variantOf": 34,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "9(♯5,♯11)",
+    "Jazz": "9(♯5,♯11)",
+    "French": "9(♯5,♯11)",
+    "Asian": "9(♯5,♯11)",
+    "Brazilian": "7(♯5,9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      14,
+      18
+     ],
+     "label": "C9(♯5,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "C9(♯5,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      18
+     ],
+     "label": "C9(♯5,♯11)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+     ],
+     "label": "C9(♯5,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10
+     ],
+     "label": "C9(♯5,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+     ],
+     "label": "C9(♯5,♯11)/D"
+    }
+   ]
+  },
+  {
+   "id": 3401,
+   "shortName": "11⁺7",
+   "buttonName": "11⁺7",
+   "name": "Augmented 11th 7",
+   "group": "elevenths",
+   "variantOf": 34,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "9♯11",
+    "Jazz": "9♯11",
+    "French": "9(♯11)",
+    "Asian": "9(♯11)",
+    "Brazilian": "7(9,♯11)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      18
+     ],
+     "label": "C9♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "C9♯11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      18
+     ],
+     "label": "C9♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      19
+     ],
+     "label": "C9♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      10
+     ],
+     "label": "C9♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "C9♯11/D"
+    }
+   ]
+  },
+  {
+   "id": 3402,
+   "shortName": "11⁺⁻9",
+   "buttonName": "11⁺⁻9",
+   "name": "Augmented 11th ⁻9",
+   "group": "elevenths",
+   "variantOf": 34,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "7(♭9,♯11)",
+    "Jazz": "7(♭9,♯11)",
+    "French": "7(♭9,♯11)",
+    "Asian": "7(♭9,♯11)",
+    "Brazilian": "7(♭9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13,
+      18
+     ],
+     "label": "C7(♭9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13,
+      18
+     ],
+     "label": "C7(♭9,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16,
+      18
+     ],
+     "label": "C7(♭9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      18,
+      19
+     ],
+     "label": "C7(♭9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      6,
+      7,
+      10
+     ],
+     "label": "C7(♭9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      4,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "C7(♭9,♯11)/D♭"
+    }
+   ]
+  },
+  {
+   "id": 3403,
+   "shortName": "11⁺⁺9",
+   "buttonName": "11⁺⁺9",
+   "name": "Augmented 11th ⁺9",
+   "group": "elevenths",
+   "variantOf": 34,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "7(♯9,♯11)",
+    "Jazz": "7(♯9,♯11)",
+    "French": "7(♯9,♯11)",
+    "Asian": "7(♯9,♯11)",
+    "Brazilian": "7(♯9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15,
+      18
+     ],
+     "label": "C7(♯9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15,
+      18
+     ],
+     "label": "C7(♯9,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16,
+      18
+     ],
+     "label": "C7(♯9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      18,
+      19
+     ],
+     "label": "C7(♯9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      6,
+      7,
+      10
+     ],
+     "label": "C7(♯9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      3,
+      4,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "C7(♯9,♯11)/D♯"
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "shortName": "m11⁺",
+   "buttonName": "m11⁺",
+   "name": "Minor Augm. 11th",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "m9♯11",
+    "Jazz": "−9♯11",
+    "French": "m9(♯11)",
+    "Asian": "m9(♯11)",
+    "Brazilian": "m7(9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 10,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      18
+     ],
+     "label": "Cm9♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "Cm9♯11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      18
+     ],
+     "label": "Cm9♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      19
+     ],
+     "label": "Cm9♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      7,
+      10
+     ],
+     "label": "Cm9♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm9♯11/D"
+    }
+   ]
+  },
+  {
+   "id": 3500,
+   "shortName": "m11⁺⁺5",
+   "buttonName": "m11⁺⁺5",
+   "name": "Minor Augm. 11th ⁺5",
+   "group": "elevenths",
+   "variantOf": 35,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    8,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "m9(♯5,♯11)",
+    "Jazz": "−9(♯5,♯11)",
+    "French": "m9(♯5,♯11)",
+    "Asian": "m9(♯5,♯11)",
+    "Brazilian": "m7(♯5,9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10,
+      14,
+      18
+     ],
+     "label": "Cm9(♯5,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "Cm9(♯5,♯11)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      15,
+      18
+     ],
+     "label": "Cm9(♯5,♯11)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      20
+     ],
+     "label": "Cm9(♯5,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      8,
+      10
+     ],
+     "label": "Cm9(♯5,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      8,
+      10,
+      12
+     ],
+     "label": "Cm9(♯5,♯11)/D"
+    }
+   ]
+  },
+  {
+   "id": 3501,
+   "shortName": "m11⁺7",
+   "buttonName": "m11⁺7",
+   "name": "Minor Augm. 11th 7",
+   "group": "elevenths",
+   "variantOf": 35,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "m9♯11",
+    "Jazz": "−9♯11",
+    "French": "m9(♯11)",
+    "Asian": "m9(♯11)",
+    "Brazilian": "m7(9,♯11)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      18
+     ],
+     "label": "Cm9♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      18
+     ],
+     "label": "Cm9♯11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      18
+     ],
+     "label": "Cm9♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      19
+     ],
+     "label": "Cm9♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      7,
+      10
+     ],
+     "label": "Cm9♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm9♯11/D"
+    }
+   ]
+  },
+  {
+   "id": 3502,
+   "shortName": "m11⁺⁻9",
+   "buttonName": "m11⁺⁻9",
+   "name": "Minor Augm. 11th ⁻9",
+   "group": "elevenths",
+   "variantOf": 35,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13,
+    18
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    6,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9",
+    "♯11"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9",
+    "A11"
+   ],
+   "symbols": {
+    "International": "m7(♭9,♯11)",
+    "Jazz": "−7(♭9,♯11)",
+    "French": "m7(♭9,♯11)",
+    "Asian": "m7(♭9,♯11)",
+    "Brazilian": "m7(♭9,♯11)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭",
+    "F♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13,
+      18
+     ],
+     "label": "Cm7(♭9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13,
+      18
+     ],
+     "label": "Cm7(♭9,♯11)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15,
+      18
+     ],
+     "label": "Cm7(♭9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      18,
+      19
+     ],
+     "label": "Cm7(♭9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      6,
+      7,
+      10
+     ],
+     "label": "Cm7(♭9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      3,
+      6,
+      7,
+      10,
+      12
+     ],
+     "label": "Cm7(♭9,♯11)/D♭"
+    }
+   ]
+  },
+  {
+   "id": 110,
+   "shortName": "11sus",
+   "buttonName": "11sus",
+   "name": "11th Suspended, 9sus4",
+   "group": "elevenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    7,
+    10,
+    14,
+    17
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "5",
+    "♭7",
+    "9",
+    "11"
+   ],
+   "intervalNames": [
+    "U",
+    "P5",
+    "m7",
+    "M9",
+    "P11"
+   ],
+   "symbols": {
+    "International": "9sus4",
+    "Jazz": "9sus4",
+    "French": "9sus4",
+    "Asian": "9sus4",
+    "Brazilian": "9sus4"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 9,
+   "maxInversions": 4,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "G",
+    "B♭",
+    "D",
+    "F"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      7,
+      10,
+      14,
+      17
+     ],
+     "label": "C9sus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      17
+     ],
+     "label": "C9sus4/G"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      17,
+      19
+     ],
+     "label": "C9sus4/B♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      2,
+      5,
+      7,
+      10
+     ],
+     "label": "C9sus4/C"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      2,
+      5,
+      7,
+      10,
+      12
+     ],
+     "label": "C9sus4/D"
+    }
+   ]
+  },
+  {
+   "id": 108,
+   "shortName": "add13",
+   "buttonName": "add13",
+   "name": "Added 13th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    4,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M13"
+   ],
+   "symbols": {
+    "International": "add13",
+    "Jazz": "add13",
+    "French": "add13",
+    "Asian": "add13",
+    "Brazilian": "(13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 8,
+   "maxInversions": 3,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      21
+     ],
+     "label": "Cadd13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      12,
+      21
+     ],
+     "label": "Cadd13/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      16,
+      21
+     ],
+     "label": "Cadd13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      9
+     ],
+     "label": "Cadd13/C"
+    }
+   ]
+  },
+  {
+   "id": 109,
+   "shortName": "madd13",
+   "buttonName": "madd13",
+   "name": "Minor Added 13th",
+   "group": "common_chords",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    7,
+    9
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m(add13)",
+    "Jazz": "−(add13)",
+    "French": "m(add13)",
+    "Asian": "madd13",
+    "Brazilian": "m(13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 8,
+   "maxInversions": 3,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      21
+     ],
+     "label": "Cm(add13)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      12,
+      21
+     ],
+     "label": "Cm(add13)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      12,
+      15,
+      21
+     ],
+     "label": "Cm(add13)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      9
+     ],
+     "label": "Cm(add13)/C"
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "shortName": "13",
+   "buttonName": "13",
+   "name": "Thirteenth",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13",
+    "Jazz": "13",
+    "French": "13",
+    "Asian": "13",
+    "Brazilian": "7(9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "C13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "C13/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      17,
+      21
+     ],
+     "label": "C13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      19,
+      21
+     ],
+     "label": "C13/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "C13/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13/E"
+    }
+   ]
+  },
+  {
+   "id": 3600,
+   "shortName": "13⁻5",
+   "buttonName": "13⁻5",
+   "name": "Thirteenth ⁻5",
+   "group": "thirteenths",
+   "variantOf": 36,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    6,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    6,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♭5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "TT",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♭5",
+    "Jazz": "13♭5",
+    "French": "13(♭5)",
+    "Asian": "13(♭5)",
+    "Brazilian": "7(♭5,9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♭",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      6,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "C13♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      6,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "C13♭5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      16,
+      17,
+      21
+     ],
+     "label": "C13♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      18,
+      21
+     ],
+     "label": "C13♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      6,
+      9,
+      10
+     ],
+     "label": "C13♭5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      6,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♭5/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      6,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13♭5/E"
+    }
+   ]
+  },
+  {
+   "id": 3601,
+   "shortName": "13⁺5",
+   "buttonName": "13⁺5",
+   "name": "Thirteenth ⁺5",
+   "group": "thirteenths",
+   "variantOf": 36,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    8,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♯5",
+    "Jazz": "13♯5",
+    "French": "13(♯5)",
+    "Asian": "13(♯5)",
+    "Brazilian": "7(♯5,9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "C13♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "C13♯5/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      17,
+      21
+     ],
+     "label": "C13♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      20,
+      21
+     ],
+     "label": "C13♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      8,
+      9,
+      10
+     ],
+     "label": "C13♯5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      8,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♯5/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      8,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13♯5/E"
+    }
+   ]
+  },
+  {
+   "id": 3602,
+   "shortName": "137",
+   "buttonName": "137",
+   "name": "Thirteenth 7",
+   "group": "thirteenths",
+   "variantOf": 36,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13",
+    "Jazz": "13",
+    "French": "13",
+    "Asian": "13",
+    "Brazilian": "7(9,13)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "C13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "C13/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      17,
+      21
+     ],
+     "label": "C13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      17,
+      19,
+      21
+     ],
+     "label": "C13/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "C13/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13/E"
+    }
+   ]
+  },
+  {
+   "id": 3603,
+   "shortName": "13⁻9",
+   "buttonName": "13⁻9",
+   "name": "Thirteenth ⁻9",
+   "group": "thirteenths",
+   "variantOf": 36,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♭9",
+    "Jazz": "13♭9",
+    "French": "13(♭9)",
+    "Asian": "13(♭9)",
+    "Brazilian": "7(♭9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13,
+      17,
+      21
+     ],
+     "label": "C13♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13,
+      17,
+      21
+     ],
+     "label": "C13♭9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16,
+      17,
+      21
+     ],
+     "label": "C13♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      17,
+      19,
+      21
+     ],
+     "label": "C13♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "C13♭9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      4,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♭9/D♭"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      7,
+      9,
+      10,
+      12,
+      13
+     ],
+     "label": "C13♭9/E"
+    }
+   ]
+  },
+  {
+   "id": 3604,
+   "shortName": "13⁺9",
+   "buttonName": "13⁺9",
+   "name": "Thirteenth ⁺9",
+   "group": "thirteenths",
+   "variantOf": 36,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♯9",
+    "Jazz": "13♯9",
+    "French": "13(♯9)",
+    "Asian": "13(♯9)",
+    "Brazilian": "7(♯9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15,
+      17,
+      21
+     ],
+     "label": "C13♯9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15,
+      17,
+      21
+     ],
+     "label": "C13♯9/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16,
+      17,
+      21
+     ],
+     "label": "C13♯9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      17,
+      19,
+      21
+     ],
+     "label": "C13♯9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "C13♯9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      3,
+      4,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♯9/D♯"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      7,
+      9,
+      10,
+      12,
+      15
+     ],
+     "label": "C13♯9/E"
+    }
+   ]
+  },
+  {
+   "id": 103,
+   "shortName": "M13",
+   "buttonName": "M13",
+   "name": "Major 13th",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    11,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    5,
+    7,
+    9,
+    11
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "M7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "maj13",
+    "Jazz": "Δ13",
+    "French": "7M(13)",
+    "Asian": "M13",
+    "Brazilian": "7M(9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      11,
+      14,
+      17,
+      21
+     ],
+     "label": "Cmaj13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      11,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "Cmaj13/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      11,
+      12,
+      14,
+      16,
+      17,
+      21
+     ],
+     "label": "Cmaj13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      11,
+      12,
+      14,
+      16,
+      17,
+      19,
+      21
+     ],
+     "label": "Cmaj13/B"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+     ],
+     "label": "Cmaj13/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      5,
+      7,
+      9,
+      11,
+      12
+     ],
+     "label": "Cmaj13/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      5,
+      7,
+      9,
+      11,
+      12,
+      14
+     ],
+     "label": "Cmaj13/E"
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "shortName": "m13",
+   "buttonName": "m13",
+   "name": "Minor Thirteenth",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13",
+    "Jazz": "−13",
+    "French": "m13",
+    "Asian": "m13",
+    "Brazilian": "m7(9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      17,
+      21
+     ],
+     "label": "Cm13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      19,
+      21
+     ],
+     "label": "Cm13/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      5,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3700,
+   "shortName": "m13⁻5",
+   "buttonName": "m13⁻5",
+   "name": "Minor Thirteenth ⁻5",
+   "group": "thirteenths",
+   "variantOf": 37,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    6,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13♭5",
+    "Jazz": "ø13",
+    "French": "m13(♭5)",
+    "Asian": "m13(♭5)",
+    "Brazilian": "m7(♭5,9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13♭5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13♭5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      15,
+      17,
+      21
+     ],
+     "label": "Cm13♭5/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      18,
+      21
+     ],
+     "label": "Cm13♭5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      6,
+      9,
+      10
+     ],
+     "label": "Cm13♭5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      6,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13♭5/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      5,
+      6,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13♭5/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3701,
+   "shortName": "m13⁺5",
+   "buttonName": "m13⁺5",
+   "name": "Minor Thirteenth ⁺5",
+   "group": "thirteenths",
+   "variantOf": 37,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    8,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    8,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♯5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "A5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13♯5",
+    "Jazz": "−13♯5",
+    "French": "m13(♯5)",
+    "Asian": "m13(♯5)",
+    "Brazilian": "m7(♯5,9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♯",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      8,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13♯5"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      8,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13♯5/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      15,
+      17,
+      21
+     ],
+     "label": "Cm13♯5/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      20,
+      21
+     ],
+     "label": "Cm13♯5/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      8,
+      9,
+      10
+     ],
+     "label": "Cm13♯5/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      8,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13♯5/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      5,
+      8,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13♯5/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3702,
+   "shortName": "m137",
+   "buttonName": "m137",
+   "name": "Minor Thirteenth 7",
+   "group": "thirteenths",
+   "variantOf": 37,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13",
+    "Jazz": "−13",
+    "French": "m13",
+    "Asian": "m13",
+    "Brazilian": "m7(9,13)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      17,
+      21
+     ],
+     "label": "Cm13/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      17,
+      21
+     ],
+     "label": "Cm13/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      17,
+      19,
+      21
+     ],
+     "label": "Cm13/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      5,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3703,
+   "shortName": "m13⁻9",
+   "buttonName": "m13⁻9",
+   "name": "Minor Thirteenth ⁻9",
+   "group": "thirteenths",
+   "variantOf": 37,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13,
+    17,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    5,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9",
+    "11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9",
+    "P11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13♭9",
+    "Jazz": "−13♭9",
+    "French": "m13(♭9)",
+    "Asian": "m13(♭9)",
+    "Brazilian": "m7(♭9,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭",
+    "F",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13,
+      17,
+      21
+     ],
+     "label": "Cm13♭9"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13,
+      17,
+      21
+     ],
+     "label": "Cm13♭9/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15,
+      17,
+      21
+     ],
+     "label": "Cm13♭9/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      17,
+      19,
+      21
+     ],
+     "label": "Cm13♭9/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      5,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13♭9/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13♭9/D♭"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      5,
+      7,
+      9,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm13♭9/E♭"
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "shortName": "13#11",
+   "buttonName": "13#11",
+   "name": "13th Augm. 11th",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♯11",
+    "Jazz": "13♯11",
+    "French": "13(♯11)",
+    "Asian": "13(♯11)",
+    "Brazilian": "7(9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "C13♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "C13♯11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      18,
+      21
+     ],
+     "label": "C13♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      19,
+      21
+     ],
+     "label": "C13♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "C13♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♯11/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      6,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13♯11/E"
+    }
+   ]
+  },
+  {
+   "id": 3800,
+   "shortName": "13#11⁺5",
+   "buttonName": "13#11⁺5",
+   "name": "13th Augm. 11th ⁺5",
+   "group": "thirteenths",
+   "variantOf": 38,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    8,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    8,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "♯5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "A5",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13(♯5,♯11)",
+    "Jazz": "13(♯5,♯11)",
+    "French": "13(♯5,♯11)",
+    "Asian": "13(♯5,♯11)",
+    "Brazilian": "7(♯5,9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": true
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G♯",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      8,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "C13(♯5,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      8,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "C13(♯5,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      21
+     ],
+     "label": "C13(♯5,♯11)/G♯"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      21
+     ],
+     "label": "C13(♯5,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      9,
+      10
+     ],
+     "label": "C13(♯5,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      8,
+      9,
+      10,
+      12
+     ],
+     "label": "C13(♯5,♯11)/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      6,
+      8,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13(♯5,♯11)/E"
+    }
+   ]
+  },
+  {
+   "id": 3801,
+   "shortName": "13#117",
+   "buttonName": "13#117",
+   "name": "13th Augm. 11th 7",
+   "group": "thirteenths",
+   "variantOf": 38,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    4,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13♯11",
+    "Jazz": "13♯11",
+    "French": "13(♯11)",
+    "Asian": "13(♯11)",
+    "Brazilian": "7(9,♯11,13)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "C13♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "C13♯11/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      16,
+      18,
+      21
+     ],
+     "label": "C13♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      16,
+      18,
+      19,
+      21
+     ],
+     "label": "C13♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      4,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "C13♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      4,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13♯11/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      6,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "C13♯11/E"
+    }
+   ]
+  },
+  {
+   "id": 3802,
+   "shortName": "13#11⁻9",
+   "buttonName": "13#11⁻9",
+   "name": "13th Augm. 11th ⁻9",
+   "group": "thirteenths",
+   "variantOf": 38,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    13,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    4,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♭9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "m9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13(♭9,♯11)",
+    "Jazz": "13(♭9,♯11)",
+    "French": "13(♭9,♯11)",
+    "Asian": "13(♭9,♯11)",
+    "Brazilian": "7(♭9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♭",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      13,
+      18,
+      21
+     ],
+     "label": "C13(♭9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      13,
+      18,
+      21
+     ],
+     "label": "C13(♭9,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      16,
+      18,
+      21
+     ],
+     "label": "C13(♭9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      16,
+      18,
+      19,
+      21
+     ],
+     "label": "C13(♭9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      4,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "C13(♭9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      4,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13(♭9,♯11)/D♭"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13
+     ],
+     "label": "C13(♭9,♯11)/E"
+    }
+   ]
+  },
+  {
+   "id": 3803,
+   "shortName": "13#11⁺9",
+   "buttonName": "13#11⁺9",
+   "name": "13th Augm. 11th ⁺9",
+   "group": "thirteenths",
+   "variantOf": 38,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    4,
+    7,
+    10,
+    15,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    3,
+    4,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "3",
+    "5",
+    "♭7",
+    "♯9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "M3",
+    "P5",
+    "m7",
+    "A9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "13(♯9,♯11)",
+    "Jazz": "13(♯9,♯11)",
+    "French": "13(♯9,♯11)",
+    "Asian": "13(♯9,♯11)",
+    "Brazilian": "7(♯9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": true,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E",
+    "G",
+    "B♭",
+    "D♯",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      4,
+      7,
+      10,
+      15,
+      18,
+      21
+     ],
+     "label": "C13(♯9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      4,
+      7,
+      10,
+      12,
+      15,
+      18,
+      21
+     ],
+     "label": "C13(♯9,♯11)/E"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      15,
+      16,
+      18,
+      21
+     ],
+     "label": "C13(♯9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      15,
+      16,
+      18,
+      19,
+      21
+     ],
+     "label": "C13(♯9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      3,
+      4,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "C13(♯9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      3,
+      4,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "C13(♯9,♯11)/D♯"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      4,
+      6,
+      7,
+      9,
+      10,
+      12,
+      15
+     ],
+     "label": "C13(♯9,♯11)/E"
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "shortName": "m13#11",
+   "buttonName": "m13#11",
+   "name": "Min. 13th Augm. 11th",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13♯11",
+    "Jazz": "−13♯11",
+    "French": "m13(♯11)",
+    "Asian": "m13(♯11)",
+    "Brazilian": "m7(9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 11,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13♯11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      18,
+      21
+     ],
+     "label": "Cm13♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      19,
+      21
+     ],
+     "label": "Cm13♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13♯11/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      6,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13♯11/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3900,
+   "shortName": "m13#11⁻5",
+   "buttonName": "m13#11⁻5",
+   "name": "Min. 13th Augm. 11th ⁻5",
+   "group": "thirteenths",
+   "variantOf": 39,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    6,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "♭5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "TT",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13(♭5,♯11)",
+    "Jazz": "ø13♯11",
+    "French": "m13(♭5,♯11)",
+    "Asian": "m13(♭5,♯11)",
+    "Brazilian": "m7(♭5,9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 12,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": true,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G♭",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      6,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13(♭5,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      6,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13(♭5,♯11)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      6,
+      10,
+      12,
+      14,
+      15,
+      18,
+      21
+     ],
+     "label": "Cm13(♭5,♯11)/G♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      18,
+      21
+     ],
+     "label": "Cm13(♭5,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      6,
+      9,
+      10
+     ],
+     "label": "Cm13(♭5,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      6,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13(♭5,♯11)/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      6,
+      6,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13(♭5,♯11)/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3901,
+   "shortName": "m13#117",
+   "buttonName": "m13#117",
+   "name": "Min. 13th Augm. 11th 7",
+   "group": "thirteenths",
+   "variantOf": 39,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    14,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    3,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "M9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13♯11",
+    "Jazz": "−13♯11",
+    "French": "m13(♯11)",
+    "Asian": "m13(♯11)",
+    "Brazilian": "m7(9,♯11,13)"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13♯11"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      14,
+      18,
+      21
+     ],
+     "label": "Cm13♯11/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      15,
+      18,
+      21
+     ],
+     "label": "Cm13♯11/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      15,
+      18,
+      19,
+      21
+     ],
+     "label": "Cm13♯11/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      2,
+      3,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13♯11/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      2,
+      3,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13♯11/D"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      6,
+      7,
+      9,
+      10,
+      12,
+      14
+     ],
+     "label": "Cm13♯11/E♭"
+    }
+   ]
+  },
+  {
+   "id": 3902,
+   "shortName": "m13#11⁻9",
+   "buttonName": "m13#11⁻9",
+   "name": "Min. 13th Augm. 11th ⁻9",
+   "group": "thirteenths",
+   "variantOf": 39,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    3,
+    7,
+    10,
+    13,
+    18,
+    21
+   ],
+   "pitchClasses": [
+    0,
+    1,
+    3,
+    6,
+    7,
+    9,
+    10
+   ],
+   "degrees": [
+    "1",
+    "♭3",
+    "5",
+    "♭7",
+    "♭9",
+    "♯11",
+    "13"
+   ],
+   "intervalNames": [
+    "U",
+    "m3",
+    "P5",
+    "m7",
+    "m9",
+    "A11",
+    "M13"
+   ],
+   "symbols": {
+    "International": "m13(♭9,♯11)",
+    "Jazz": "−13(♭9,♯11)",
+    "French": "m13(♭9,♯11)",
+    "Asian": "m13(♭9,♯11)",
+    "Brazilian": "m7(♭9,♯11,13)"
+   },
+   "isAlias": false,
+   "inDictionary": true,
+   "difficulty": 13,
+   "maxInversions": 6,
+   "quality": {
+    "major": false,
+    "minor": true,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": true,
+   "exampleInC": [
+    "C",
+    "E♭",
+    "G",
+    "B♭",
+    "D♭",
+    "F♯",
+    "A"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      3,
+      7,
+      10,
+      13,
+      18,
+      21
+     ],
+     "label": "Cm13(♭9,♯11)"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      3,
+      7,
+      10,
+      12,
+      13,
+      18,
+      21
+     ],
+     "label": "Cm13(♭9,♯11)/E♭"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      13,
+      15,
+      18,
+      21
+     ],
+     "label": "Cm13(♭9,♯11)/G"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      10,
+      12,
+      13,
+      15,
+      18,
+      19,
+      21
+     ],
+     "label": "Cm13(♭9,♯11)/B♭"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      0,
+      1,
+      3,
+      6,
+      7,
+      9,
+      10
+     ],
+     "label": "Cm13(♭9,♯11)/C"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      1,
+      3,
+      6,
+      7,
+      9,
+      10,
+      12
+     ],
+     "label": "Cm13(♭9,♯11)/D♭"
+    },
+    {
+     "inversion": 6,
+     "formulaInC": [
+      3,
+      6,
+      7,
+      9,
+      10,
+      12,
+      13
+     ],
+     "label": "Cm13(♭9,♯11)/E♭"
+    }
+   ]
+  },
+  {
+   "id": 111,
+   "shortName": "11sus#13",
+   "buttonName": "11sus#13",
+   "name": "11th Suspended, Sharp 13th",
+   "group": "thirteenths",
+   "variantOf": null,
+   "rootAdjustment": null,
+   "formula": [
+    0,
+    7,
+    10,
+    14,
+    17,
+    22
+   ],
+   "pitchClasses": [
+    0,
+    2,
+    5,
+    7,
+    10
+   ],
+   "degrees": [
+    "1",
+    "5",
+    "♭7",
+    "9",
+    "11",
+    "♯13"
+   ],
+   "intervalNames": [
+    "U",
+    "P5",
+    "m7",
+    "M9",
+    "P11",
+    "A13"
+   ],
+   "symbols": {
+    "International": "9sus4",
+    "Jazz": "9sus4",
+    "French": "9sus4",
+    "Asian": "9sus4",
+    "Brazilian": "9sus4"
+   },
+   "isAlias": true,
+   "inDictionary": false,
+   "difficulty": 9,
+   "maxInversions": 5,
+   "quality": {
+    "major": false,
+    "minor": false,
+    "diminished": false,
+    "augmented": false
+   },
+   "isCommon": false,
+   "exampleInC": [
+    "C",
+    "G",
+    "B♭",
+    "D",
+    "F",
+    "A♯"
+   ],
+   "inversionsInC": [
+    {
+     "inversion": 0,
+     "formulaInC": [
+      0,
+      7,
+      10,
+      14,
+      17,
+      22
+     ],
+     "label": "C9sus4"
+    },
+    {
+     "inversion": 1,
+     "formulaInC": [
+      7,
+      10,
+      12,
+      14,
+      17,
+      22
+     ],
+     "label": "C9sus4/G"
+    },
+    {
+     "inversion": 2,
+     "formulaInC": [
+      10,
+      12,
+      14,
+      17,
+      19,
+      22
+     ],
+     "label": "C9sus4/B♭"
+    },
+    {
+     "inversion": 3,
+     "formulaInC": [
+      0,
+      2,
+      5,
+      7,
+      10,
+      10
+     ],
+     "label": "C9sus4/C"
+    },
+    {
+     "inversion": 4,
+     "formulaInC": [
+      2,
+      5,
+      7,
+      10,
+      10,
+      12
+     ],
+     "label": "C9sus4/D"
+    },
+    {
+     "inversion": 5,
+     "formulaInC": [
+      5,
+      7,
+      10,
+      10,
+      12,
+      14
+     ],
+     "label": "C9sus4/F"
+    }
+   ]
+  }
+ ]
+}
