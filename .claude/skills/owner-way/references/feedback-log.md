@@ -1214,6 +1214,7 @@ are reference only, but progressions are facts.
   "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
 
 ## Profile and Settings
+- **The Profile's tiles even (loop round 60, 2026-11-16):** "Songs learned" and "Practice time" wrapped to two lines beside their icons while "Day streak" took one, so the three tiles read uneven. Each icon now sits at the right of its figure, and the label is one line under it, on phone and laptop.
 - **Settings › General's groups read apart** (loop round 49; proximity, seven-questions 2): Appearance's and Language's labels sat 16px from their own choices and 16px from the group above, so nothing grouped; each is a section now, its label 8px over its choices and 32px below the group before, Computer keyboard too on a laptop (Settings, SettingsLaptop).
 - **Last 7 days reads as a chart** (loop round 49; craft-details, Charts: "a value axis, flat bar ends"): the week's bars had no scale; a value axis at 0, 20 and 40 minutes with hairline gridlines and a baseline, the minutes in the header, and the bars' ends flat (2px, was 6), on Profile at both sizes from the one WEEK drawing.
 - **Loop round 48, the practice time adds up (Profile):** the Practice time tile said 2 h 5 min in all, less than the 152 min of the last seven days; over 38 days practised it is 12 h 40 min in the records, and the tile, which must fit a 393 phone, says 12 h. Best accuracy reads 94%, as every other percentage (2026-11-16).
