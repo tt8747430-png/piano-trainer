@@ -196,7 +196,7 @@ library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recent
                {'g': 'Classical', 'rows': [Rw('Pachelbel', 'I – V – vi – iii – IV – I – IV – V', '', 'I V', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Andalusian cadence', 'i – ♭VII – ♭VI – V', '', 'i', SAGE, 'Progression.dc.html', (), ('Minor key',))]},
                {'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', '', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]}]},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('', 'v', .4)),
-  add_items=(('Type numerals or chords', '#'), ('Build from chords', '#'), ('New folder', '#')))
+  add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', '#')))
 library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, '400 Piano Chord Progressions': False, 'Classical': False, 'Rhythm styles': False},
   'filters': [{'name': 'Level', 'opts': [['Level 1', 9], ['Level 2', 6], ['Level 3', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
   'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Level 1', '♩♩', LILAC, 'Pattern.dc.html', ('Recently used',), ('Level 1', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Level 1', '♫', LILAC, 'Pattern.dc.html', ('Recently used',), ('Level 1', 'Broken', 'Straight'))]},
