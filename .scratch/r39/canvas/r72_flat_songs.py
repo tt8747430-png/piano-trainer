@@ -11,9 +11,9 @@ SONGS_ALL = [  # title, composer · key, progress, last played, added order
     ('Ode to Joy', 'Beethoven · D major', 'Bar 5 of 12', '2 days ago', 5),
     ('Twinkle, Twinkle, Little Star', 'Traditional · C major', 'Learned', '3 days ago', 1),
     ('Let It Be', 'The Beatles · C major', 'Learned', '12 Nov', 3),
-    ('Clair de lune', 'Debussy · D♭ major', 'Not started', '4 Nov', 7),
-    ('Jingle Bells', 'James Lord Pierpont · G major', 'Not started', '28 Oct', 2),
-    ('My first song', 'Written by you · C major', 'Not started', '23 Oct', 8),
+    ('Clair de lune', 'Debussy · D♭ major', 'Not started', 'Added 4 Nov', 7),
+    ('Jingle Bells', 'James Lord Pierpont · G major', 'Not started', 'Added 28 Oct', 2),
+    ('My first song', 'Written by you · C major', 'Not started', 'Added 23 Oct', 8),
 ]
 FOLDERS_ALL = [('Favourites', '2 songs', PEACH, 'heart'), ('Songs to learn', '23 songs · 4 learned', HONEY, ''), ('Hymns', '6 songs · 2 learned', SKY, ''),
                ('Called to Play', '15 songs · Book 1', LILAC, ''), ('Shared with me', "4 songs · From Maria's group", SAGE, 'shared')]
@@ -95,7 +95,7 @@ EXPLORE_SOFT = lambda href: f'<a href="{href}" style="color: inherit; text-decor
 
 ovph = f'''{TITLEBAR('My songs', SEARCHB('AllSongs.dc.html'), soft=EXPLORE_SOFT('Explore.dc.html'))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 190px; display: flex; flex-direction: column; gap: 28px">{SHOWSTATES()}{BAREP.replace('{EXPL}', 'Explore.dc.html')}
-<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('Recently played', SEEALL('AllSongs.dc.html'))}<div class="nos" style="display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px">{RECENT(132, 5).replace('{SONG}', 'Song.dc.html')}</div></section>
+<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('Recently played', SEEALL('AllSongs.dc.html', ' 8'))}<div class="nos" style="display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px">{RECENT(132, 5).replace('{SONG}', 'Song.dc.html')}</div></section>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Folders')}<div style="display: flex; flex-direction: column; gap: 10px">{FOLDERCARDS('Folder.dc.html')}</div></section>
 {KEEPROWS('Archive.dc.html')}</sc-if>
 </main>{NEWDIAL([(l, g) for l, g in _NEW][::-1], 112, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}{TABBAR('Songs')}'''
@@ -179,6 +179,6 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1] + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
 HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
-         ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', '30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', '12 Oct', 1)]
+         ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', 'Added 30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', 'Added 12 Oct', 1)]
 LISTPAGE('Folder', 'Hymns', [{'t': a, 's': b, 'v': c, 'when': d, 'add': e, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d, e in HYMNS], 'Songs', 'My songs', folder=True)
 print('flat songs ok')
