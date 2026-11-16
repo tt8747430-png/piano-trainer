@@ -121,14 +121,13 @@ TBROW_OFF = (f'<div style="min-height: 52px; display: flex; align-items: center;
              f'<span style="flex: 1; font-size: 16px; color: {{{{a.ink}}}}">{{{{a.l}}}}</span></div>')
 P_TOOLBAR = (TBPREVIEW + SEC(CAPS('Songs and folders'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{tbOn}}}}" as="a" hint-placeholder-count="4">{TBROW_ON}</sc-for></div>')
              + SEC(CAPS('Available'), f'<sc-if value="{{{{tbFull}}}}" hint-placeholder-val="{{{{false}}}}">{FOOT("All slots are in use. Remove an action to add another.")}</sc-if><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{tbOff}}}}" as="a" hint-placeholder-count="2">{TBROW_OFF}</sc-for></div>')
-             + SEC(GROUP(('action', 'Restore defaults', 'tbReset'), bg=SHEET), FOOT('Up to four actions appear in the toolbar when you select songs or folders.')))
+             + SEC(GROUP(('action', 'Restore defaults', 'tbReset'), bg=SHEET)))
 SWPREVIEW = (f'<div role="img" aria-label="A swiped row" style="position: relative; height: 64px; border-radius: 14px; overflow: hidden; background: {{{{swBg}}}}; box-shadow: 0 0 0 1px {LINE}">'
              f'<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 96px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 14px; font-weight: 700">{{{{swL}}}}</span>'
              f'<div style="position: absolute; left: 96px; right: -96px; top: 0; bottom: 0; background: {SHEET}; display: flex; align-items: center; gap: 12px; padding: 0 16px; box-shadow: -1px 0 0 {LINE}"><span style="width: 40px; height: 40px; border-radius: 8px; background: {SKY}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 20px">𝄞</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{swName}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{swSub}}}}</span></span></div></div>')
 P_SWIPE = (f'<div style="display: grid">{SEGC("swKind", 44, 15)}</div>' + SWPREVIEW
            + SEC(CAPS('Leading swipe (right)'), GROUP(('link', 'First', '{{swR1}}', 'pickR1'), ('link', 'Second', '{{swR2}}', 'pickR2'), bg=SHEET))
-           + SEC(CAPS('Trailing swipe (left)'), GROUP(('link', 'First', '{{swL1}}', 'pickL1'), ('link', 'Second', '{{swL2}}', 'pickL2'), bg=SHEET))
-           + FOOT('Up to two actions on each side. Archive and Delete happen at once, with Undo.'))
+           + SEC(S9CAPS('Trailing swipe (left)', 'swp'), TIPCARD('swp', 'Archive and Delete happen at once, with Undo in the toast.'), GROUP(('link', 'First', '{{swL1}}', 'pickL1'), ('link', 'Second', '{{swL2}}', 'pickL2'), bg=SHEET)))
 SWPICK = f'<div role="radiogroup" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{swOpts}}}}" as="o" hint-placeholder-count="5"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 52px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; gap: 10px; padding: 6px 16px"><span style="flex: 1">{{{{o.l}}}}</span><sc-if value="{{{{o.on}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if></button></sc-for></div>'
 
 # ── User guide, Report a problem, About ──
@@ -175,7 +174,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     tog('pos', false); const minOn = tog('min', true); v.minOff = !minOn;
     v.prevOn = prev; v.prevOnBg = prev ? '#44684A' : '#DAD1C8'; v.prevOnX = prev ? 22 : 2; v.prevT = () => S({ prev: !prev });
     // ⓘ tips
-    ['prev', 'sync', 'priv', 'store', 'offl', 'ckb', 'dev'].forEach((k) => { v['tipOn_' + k] = st.tip === k; v['tip_' + k] = () => S({ tip: st.tip === k ? null : k }); });
+    ['prev', 'sync', 'priv', 'store', 'offl', 'ckb', 'dev', 'swp'].forEach((k) => { v['tipOn_' + k] = st.tip === k; v['tip_' + k] = () => S({ tip: st.tip === k ? null : k }); });
     // pages
     PAGES.forEach((p) => { const s = p.replace(/[ -]/g, '_'); v['p_' + s] = page === p; v['l_' + s] = cur === p; v['go_' + s] = () => S({ page: p, tip: null }); });
     const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'General' ? (st.theme ?? 'Match system') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') : l === 'About' ? (st.upd === 'avail' ? 'Update available' : 'Up to date') : val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
