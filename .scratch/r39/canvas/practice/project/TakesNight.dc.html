@@ -85,7 +85,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#2E2924' : 'transparent', pbg: t.id === at.id ? '#24201C' : '#2E2924', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#2E2924' : 'transparent', pbg: '#2E2924', pbgL: t.id === at.id ? '#24201C' : '#2E2924', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
       moreOn: st.sheet === 'more', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved.', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),

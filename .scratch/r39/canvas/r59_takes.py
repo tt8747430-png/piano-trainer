@@ -16,7 +16,7 @@ TKS_SRC = r'''
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
       moreOn: st.sheet === 'more', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved.', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),
@@ -61,7 +61,7 @@ TKS_INTO = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hid
 tksph = (IF('isList', TOP('Editor.dc.html', 'Takes', '', 'Amazing Grace'), 'true') + IF('isReview', TOP('', 'Review your recording', '', 'Takes', BACKB))
          + NARROW(IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(340))) + TOASTS)
 TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type="button" aria-current="{{r.cur}}" onClick="{{r.pick}}" style="flex: 1; border: 0; background: transparent; padding: 0; font: inherit; text-align: left;', 1)
-          .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1))
+          .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1).replace('background: {{r.pbg}}', 'background: {{r.pbgL}}', 1))
 assert TKROWL != TKROW and '</a>' not in TKROWL
 TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL}</sc-for></div>', 'true'))
 tkslm = (LTOP('EditorLaptop.dc.html') + SHOWSTATES()
