@@ -671,7 +671,7 @@ return {
   playing: !!st.playing, notPlaying: !st.playing, playWord: scope === 'All' ? 'Play all' : (playMode === 'Block' ? 'Play chord' : 'Arpeggiate'),
   // what teachers drill (R42 v74): blocked through the inversions, then broken with the metronome, then every key
   // (piano/067 @12:41, @36:21; piano/519 @09:27); with several chords, each change on its own, then the whole
-  // progression (reference-apps/chordify IMG_4562 "Individual transitions: From E to C♯m")
+  // progression (reference-apps/chordify 011-toolkit-learn-bridge-sequences "Individual transitions: From E to C♯m")
   practiseT: seq.length > 1 ? 'Practise these chords in the Player' : 'Practise ' + sym + ' in the Player',
   practise: (() => {
     // canvas 160 (owner: "I dont want this from c to am… but I do want more chords pratice", "I like shuffle"):
@@ -898,7 +898,7 @@ def LAYERS(phone_like, concept):
             out += POPOVER(cond, title, body, pos, 400)
         out += DRAWERS(False)
     return out
-# B: the chord shelf: one docked panel is the chord's home (new-app's root strip; pianochord.org's types and C/E pictures)
+# B: the chord shelf: one docked panel is the chord's home (piano-chords-and-scales-app's root strip; pianochord.org's types and C/E pictures)
 STRIP = 'display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px'
 
 def write_laptop(stem, title, inner, D, concept):

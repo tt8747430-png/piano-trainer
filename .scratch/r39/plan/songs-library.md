@@ -49,7 +49,7 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 - MuseScore's app: Library tab › Scores, with Favourites for quick access
   ([help](https://intercom.help/musescore/en/articles/8535960)).
 - Flat for Education: folders or list view ([help.flat.io](https://help.flat.io/en/education/resource-library)).
-- Noji (`piano-data/reference-apps/new_app_2`): a Continue card first, then My decks; Recently Deleted at the top of the
+- Noji (`piano-data/reference-apps/noji`): a Continue card first, then My decks; Recently Deleted at the top of the
   library; Edit mode with drag handles; Explore with category chips and shelves with counts and See all.
 - Chordify (`reference-apps/chordify`): Discover's "Get right into it" shelf of big pictures, then the lists.
 - Lessons from the videos (UX Peak, list and filters): pictures big enough to want; one shape language; chips plus one

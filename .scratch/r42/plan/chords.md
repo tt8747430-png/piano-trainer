@@ -459,7 +459,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     still cannot be drawn the page shows the flat keys.
   - **Hands:** one round button at the right of Play, its icon the hands that play; it opens **Both hands · Right
     hand · Left hand**, each with its icon and a check: flowkey's "Select a Hand" ("Practice right and left hands
-    separately", flowkey.com; piano-data/reference-apps/flowkey/08-player-hands-menu.png: Right Hand · Left Hand ·
+    separately", flowkey.com; piano-data/reference-apps/flowkey/008-player-hands-menu.png: Right Hand · Left Hand ·
     Both Hands). The dock reads chord · Play · hands, Play at the centre.
   - **Root and chord is a voicing:** how a chord is shared between the hands lives in one place, the Voicing list,
     beside Spread and So What: **Root and chord**, "Root in the left hand, the rest in the right" (Gm9 = G | B♭maj7;
@@ -488,9 +488,9 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     the fingers move to their new keys. The learner sees which finger goes on which key, not a hand beside a keyboard
     to be matched by eye.
   - **Sources:** flowkey and the courses app film the hands on the keys with the note over the lit key
-    (piano-data/reference-apps/flowkey/08-player-hands-menu.png, courses-app/03-playing-with-both-hands/01.png);
+    (piano-data/reference-apps/flowkey/008-player-hands-menu.png, courses-app/03-playing-with-both-hands/01.png);
     Pianote's overhead photo puts the numerals at the fingertips on the keys; Hoffman repeats the fingertip circles
-    on the keys; Vita Piano draws the fingers over the keys they play (web-references/new_apps). Every chord source
+    on the keys; Vita Piano draws the fingers over the keys they play (web-references/saved-pages/vita-piano). Every chord source
     read puts fingering at the keys (Pianote, Yamaha, pianochord.org).
   - **The standing rule holds:** no finger numbers printed on or under keys; the number is on the fingertip, which
     sits on the key.
@@ -503,7 +503,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     (primerguide.pianoadventures.com/units/finger-numbers), Hoffman Academy's Finger Numbers sheet, Pianote's
     beginner pages, pianoscales.org/fingerings.html, pianochord.org, Yamaha Hub's keyboard-fingering page, Synthesia,
     Soundslice and LilyPond's manuals, WCAG 1.4.1; and the owner's saved Vita Piano pages
-    (piano-data/web-references/new_apps) and reference apps (flowkey 08, courses-app 03). Not readable: Skoove,
+    (piano-data/web-references/saved-pages) and reference apps (flowkey 08, courses-app 03). Not readable: Skoove,
     Yousician, MuseScore's forum, Dorico's manual (403), Gould's _Behind Bars_.
   - **What three or more agree on, and what we draw:** hands from above, thumbs inward (Faber, Hoffman, pianoscales,
     Pianote); 1 is the thumb in both hands; the numeral **upright and bold, never italic**, about a finger wide, on or
@@ -541,7 +541,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
     metronome** · **In all 12 keys** (piano/067 @12:41, @36:21, @44:19: blocked through the inversions, then broken
     in eighths at 100–120; piano/519 @09:27: "move up in half steps", or the circle of fifths). Several chords:
     **From C to F** for each change (up to four), **All 4 chords, looped**, **In all 12 keys** (reference-apps/chordify
-    IMG_4562 "Individual transitions: From E to C♯m", IMG_4566 count-in and loop; watch-later/003 @10:42: learn the
+    chordify 011-toolkit-learn-bridge-sequences "Individual transitions: From E to C♯m", 015-player-playing-csharpm-fsharpm-diagrams count-in and loop; watch-later/003 @10:42: learn the
     chord-to-chord moves). Replaces the three fixed rows.
   - **Fingering, checked:** triads match Nikolaev's table (books/nikolaev/scales-chords-and-arpeggios-table.pdf p. 1:
     RH 1-3-5, 1-2-5, 1-3-5; LH 5-3-1, 5-3-1, 5-2-1) and Pianote (watch-later/036 @01:04). **Open:** no source in
@@ -867,7 +867,7 @@ ChordsLaptop. Generator: `.scratch/r39/canvas/r42_chords.py` (run by `r41.py`, l
 
 - **v35: fingering settings; the numbers beside the notes, per inversion.** Owner: "i want fingering settings, and
   research more and look at the examples where the fingering should be".
-  - Reference: Vita Piano's chord pages (`piano-data/web-references/new_apps/The D Major Chord …webarchive`;
+  - Reference: Vita Piano's chord pages (`piano-data/web-references/saved-pages/vita-piano/the-d-major-chord.webarchive`;
     drawing `ref-vita-piano-d-major.png`). Each inversion has its own chart: the grand staff with the right hand's
     chord on the treble and the same chord an octave lower in the left hand on the bass, a finger number beside each
     note to the right of the chord; the keys carry the numbers too. Its table: root RH 1 3 5 / LH 5 3 1; 1st inversion

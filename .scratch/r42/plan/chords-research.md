@@ -28,7 +28,7 @@ settings and the piano settings". Local paths are under `piano-data/reference-ap
 
 ## How chord tools choose and show a chord
 
-- Root first, then type, in five sources (chord-trainer, new-app, Ultimate Piano, musicca, pianochord.org).
+- Root first, then type, in five sources (chord-trainer, piano-chords-and-scales-app, Ultimate Piano, musicca, pianochord.org).
 - Controls show their value as words: chord-trainer's row of pop-up buttons `C · Natural · Major · Triads`; Ultimate
   Piano's `ROOT C · TYPE Major`; Chordify's `PIANO ⌄ · TRANSPOSE · SIMPLIFY`.
 - Inversion: chips (chord-trainer), separate diagrams named as slash chords "C/E (1st inversion)" with each hand's
@@ -40,7 +40,7 @@ settings and the piano settings". Local paths are under `piano-data/reference-ap
 ## Piano settings in other apps
 
 - Ultimate Piano (18): range as "Start octave" and "Octaves" with a "C2 – B5" readout and a miniature 88-key strip
-  with the visible window lit. new-app: "Key Size" with the caption "Showing 36 keys (C3 – B5)".
+  with the visible window lit. piano-chords-and-scales-app: "Key Size" with the caption "Showing 36 keys (C3 – B5)".
 - OnlinePianist: Sounds, Sustain, Visible Keys, Octave Shift, Transpose, letter notes, Metronome, MIDI.
 - Yamaha Smart Pianist: a gear for the current function's settings and a global "Utility".
 
