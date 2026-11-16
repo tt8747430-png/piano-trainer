@@ -25,7 +25,7 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS =
       page: st.page ?? null, onPage: !!st.page, isSet: st.page === 'settings', isPub: st.page === 'publish', openSettings: () => set({ page: 'settings', sheet: null }), openPub: () => set({ page: 'publish', sheet: null }), closePage: () => set({ page: null }),
       pageT: st.page === 'settings' ? 'Settings' : 'Publish', resetOn: sheet === 'reset', askReset: () => set({ sheet: 'reset' }), doReset: () => set({ sheet: null, toast: 'Progress reset' }), delOn: sheet === 'delete', askDel: () => set({ sheet: 'delete' }),
       publish: () => set({ page: null, toast: 'Published. Learners will receive it the next time they open the app.' }),
-      toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), undoRemove: () => set({ gone: {}, toast: null }) };''')
+      toastOn: !!st.toast, toastUndo: /deleted|removed|reset/i.test(st.toast || ''), copyLink: () => set({ toast: 'Link copied' }), toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), undoRemove: () => set({ gone: {}, toast: null }) };''')
 COVER = (f'<div aria-hidden="true" style="height: 132px; border-radius: 14px; background: {SAGE}; position: relative; overflow: hidden">'
          f'<svg viewBox="0 0 400 132" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><g stroke="#9DBA92" stroke-width="1.6">' + ''.join(f'<line x1="0" x2="400" y1="{44 + i * 11}" y2="{44 + i * 11}"></line>' for i in range(5)) + '</g>'
          + ''.join(f'<ellipse cx="{70 + i * 46}" cy="{88 - (i % 4) * 5.5}" rx="7.5" ry="5.6" fill="#3F6B45" transform="rotate(-20 {70 + i * 46} {88 - (i % 4) * 5.5})"></ellipse><line x1="{77 + i * 46}" x2="{77 + i * 46}" y1="{86 - (i % 4) * 5.5}" y2="{52 - (i % 4) * 5.5}" stroke="#3F6B45" stroke-width="1.6"></line>' for i in range(7)) + '</svg></div>')
@@ -60,15 +60,15 @@ CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; gap: 2px; padding: 0 16px 6px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>{IB("Publishing", DOTS, "openPm")}'
          f'<button type="button" onClick="{{{{openPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish…</button></div><div style="display: flex; justify-content: center">{DSTATUS}</div></header>')
 CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro to Music Reading</span>'
-        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner courses", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("link", "Publish…", "Published", "openPub"), ("link", "Share link", "", "#"), bg=SHEET)}'
+        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner courses", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("link", "Publish…", "Published", "openPub"), ("action", "Share link", "copyLink"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
 CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
         f'{CAPS("What changed")}<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Changes made since the last publication are saved and ready to publish.</p>'
-        f'{GROUP(("link", "Learner preview", "8 lessons", "#"), ("link", "Link", "pianotrainer.app/courses/intro-reading", "#"), ("link", "View", "", "#"), ("link", "Versions", "3", "#"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
+        f'{GROUP(("link", "Learner preview", "8 lessons", "Course.dc.html"), ("action", "Copy link", "copyLink"), ("link", "View", "", "Course.dc.html"), ("val", "Versions", "3"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
 CNEW = (f'{CAPS("Name")}<input placeholder="New lesson" aria-label="Name" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
         f'<div style="display: flex">{BTN("Create lesson", "create", "", "primary", 50)}</div>')
 CPROPS = f'{CAPS("Shelf")}{KCHIPS("shelves")}{CAPS("Level")}{KCHIPS("levels")}'
-CPM = GROUP(('link', 'Versions', '3', '#'), bg=SHEET) + GROUP(('action', 'Discard changes', 'closeSheet', '#B3261E'), bg=SHEET)
+CPM = GROUP(('val', 'Versions', '3'), bg=SHEET) + GROUP(('action', 'Discard changes', 'closeSheet', '#B3261E'), bg=SHEET)
 def CPAGE(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">' + ('' if lap else '<div style="height: 54px; flex: none"></div>')
