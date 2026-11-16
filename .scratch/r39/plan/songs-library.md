@@ -20,6 +20,11 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
   bar of Add to folder, Favourite and Archive in the New's place. New folder is a sheet: a name and Create.
   A folder is the same page under its own name (Flat's playlist, 095–096), with ··· for Rename, Colour, Share and
   Archive folder; an empty folder is one card: "Nothing in this folder yet" and Add songs, which opens All songs.
+- **Explore is Flat's feed** (owner, 2026-11-16, the same words; `flat-score-editor` 080–082, 098): the search
+  (songs and people), Songs | People, the kinds as chips, then a card per song: who shared it with ··· (Report), the
+  song's first notes with Play, title, composer · level, then its saves, its rating and Original or Arrangement. People
+  lists who publishes, with their count. No comments: the app has none. This replaces the New, Most saved and Top
+  rated shelves below; a public song's page, the shared link and Explore's states stay.
   This replaces, for Songs: the place chips and the Sort and filter page (Favourites is a folder now; Learning and
   Learned show on each card), the Archive icon in the bar, and Continue as the shelf's name.
 - "A real library" like Mindscape: built-in and own folders nested to any depth; a real archive in the header; deleting a
