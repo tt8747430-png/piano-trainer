@@ -366,6 +366,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Loop round 47, one title for a song:** a course and the intervals' songs called it "Twinkle, Twinkle" where the library, its page and Intervals' Sounds like call it "Twinkle, Twinkle, Little Star"; the full title everywhere, and the course row takes its cover (2026-11-16).
 - **Loop round 47, a course's guided songs wear their covers (a course):** Ode to Joy, Twinkle and Amazing Grace each showed a note glyph on a blue tile; each wears its own first notes, as every song in Songs, and Amazing Grace is credited to John Newton, as on its page, not "Traditional" (2026-11-16).
 - **Loop round 47, a lesson's contents marks the section in view (a lesson on a laptop):** In this lesson listed its sections all alike; the one in view now stands on sand in semibold, its number on white, as Legal's On this page marks its own (2026-11-16).
 - **Loop round 46, a lesson's question answered shows itself (Lesson):** the state "The question answered" changed a card below the fold, so choosing it seemed to do nothing; it now scrolls the question into view, and once the answer is right, Show the answer goes, leaving Correct and Again (2026-11-16).

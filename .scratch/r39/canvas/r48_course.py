@@ -4,7 +4,7 @@
 CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, one clef at a time, then together.',
        'about': 'Eight short lessons, each with a song to read at the end. Read a little every day: reading grows by repetition more than by length.',
        'lessons': [['The staff and the treble clef', 'learned'], ['Notes on the lines', 'learned'], ['Notes in the spaces', 'learned'], ['The bass clef', 'next'], ['Ledger lines', ''], ['The grand staff', ''], ['Reading both hands', ''], ['Sight-reading a little every day', 'unpub']],
-       'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
+       'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle, Little Star', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
 CRPICS = {t: INCIPIT(INC.get(t, (2, 4))) for t, _ in CRS['songs']}
 COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS = ' + json.dumps(CRPICS) + ';\n' + r'''
     const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner courses', level = st.level ?? 'Beginner';
