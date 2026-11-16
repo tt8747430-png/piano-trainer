@@ -47,7 +47,7 @@ def IB(label, svg, act='', href='', pressed=''):
     if href: return f'<a href="{href}" aria-label="{label}" data-tip="{label}" style="{GLASSST}">{svg}</a>'
     return f'<button type="button" aria-label="{label}" data-tip="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} {("aria-pressed=\"{{" + pressed + "}}\"") if pressed else ""} style="{GLASSST}">{svg}</button>'
 # A word in the bar (Edit, Learned): the same glass, as a capsule 44 tall.
-TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; border-radius: 22px; border: 1px solid {LINE}; background: {GLASS}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap'
+TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap'
 def TB(label, act):
     return f'<button type="button" onClick="{{{{{act}}}}}" style="{TBST}">{label}</button>'
 # Learned, on a song and a lesson: the glass capsule, a grass wash once learned (JS gives learnedBg, learnedLine, learnedFg).

@@ -52,6 +52,23 @@ json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/lapwin.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/folds.py').read())
+
+_FX = ('background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); '
+       'box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)')
+_GEL = re.compile(r'<(a|button)\b[^>]*?style="[^"]*?width: 44px; height: 44px;[^"]*?' + re.escape(_FX) + r'[^"]*"[^>]*>(?:(?!</?(?:a|button)\b).)*?</\1>', re.S)
+def _glassgroups(h):
+    ms = list(_GEL.finditer(h)); runs = []; cur = []
+    for m in ms:
+        if cur and h[cur[-1].end():m.start()].strip() == '': cur.append(m)
+        else:
+            if len(cur) > 1: runs.append(cur)
+            cur = [m]
+    if len(cur) > 1: runs.append(cur)
+    for run in reversed(runs):
+        inner = ''.join(m.group(0).replace(_FX, 'background: transparent', 1) for m in run)
+        h = h[:run[0].start()] + f'<div data-glassgroup style="flex: none; display: flex; border-radius: 22px; {_FX}">' + inner + '</div>' + h[run[-1].end():]
+    return h
+
 for b in boards:
     if os.path.exists(P + b):
         h0 = open(P + b).read(); h1 = folds(lapwin(keyface(h0)), b[:-8])
@@ -82,6 +99,9 @@ for b in boards:
         if 'data-sheetcss' not in h1:
             h1 = h1.replace('</head>', '<style data-sheetcss>[role=dialog], [role=dialog] .nos { overscroll-behavior: contain }'
                             ' button, a, [role=switch], [role=radio], [role=slider] { touch-action: manipulation }</style></head>', 1)
+        # icons side by side in a bar share one glass (Apple HIG, Toolbars: "Group toolbar items logically by function";
+        # a text button keeps its own capsule): a run of 44 glass circles becomes one capsule, each keeping its 44 target
+        h1 = _glassgroups(h1)
         if '<!--piano2d-->' in h1 and 'PIANO2D' not in h1:
             import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as _PS
             k = h1.rindex('</script>'); h1 = h1[:k] + '/*PIANO2D*/' + _PS.PIANO2D_JS + h1[k:]
