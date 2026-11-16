@@ -65,6 +65,10 @@ lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE61}{MUSIC61}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{SEG61}{GRID61}</div></div>'
         + BAR61('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
+# on a laptop the way down and the inversion stand under the grid (Sounds like is the way up); its ⓘ keeps the meaning alone
+SONGS61 = '<div style="flex: none; margin-top: 8px">' + GROUP(('val', 'Down', '{{downS}}'), ('val', 'Inverts to', '{{inv}}'), bg=SHEET) + '</div>'
+ABOUT61L = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>', 'left: 0; top: 56px')
+lm61 = lm61.replace(SEG61 + GRID61 + '</div></div>', SEG61 + GRID61 + SONGS61 + '</div></div>').replace(ABOUT61, ABOUT61L)
 phone('Intervals', 'Intervals, phone', ph61, IV61, SHEETS61)
 laptop('IntervalsLaptop', 'Intervals, laptop', lm61, '', IV61, POPS61, 'Practice')
 for f in ('Intervals', 'IntervalsLaptop'):
