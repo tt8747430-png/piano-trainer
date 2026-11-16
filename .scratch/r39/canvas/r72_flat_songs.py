@@ -164,7 +164,7 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET + SONGSHEET
     if folder:
         sheets += BSHEET('moreOn', title, FOLDERMORE('.dc.html')); pops += POPOVER('moreOn', title, FOLDERMORE('Laptop.dc.html'), 'right: 200px; top: 72px', 320)
-    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1], 'Songs')
+    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1] + _LAPSHEET(SONGSHEET), 'Songs')
 LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
 HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
          ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', '30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', '12 Oct', 1)]
