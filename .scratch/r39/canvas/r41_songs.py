@@ -52,7 +52,7 @@ SG = js(r'''
     const CH = [['G', [55, 59, 62]], ['G7', [55, 59, 62, 65]], ['C', [60, 64, 67]], ['D', [62, 66, 69]], ['D7', [62, 66, 69, 72]], ['Em', [64, 67, 71]]];
     const demo = st.demo ?? null, fresh = demo === 'new', long = demo === 'long', bare = demo === 'nochords';
     const states = [['new', 'Never played'], ['long', 'A long title'], ['nochords', 'No chord symbols']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', fg: demo === k ? '#FEFDFB' : '#332921', pick: () => set({ demo: demo === k ? null : k }) }));
-    return { ...common(st, set), states, played: !fresh, fresh, hasChords: !bare, titleT: long ? 'Fantaisie-Impromptu in C♯ minor, Op. 66' : 'Amazing Grace', coverBy: long ? 'Chopin' : 'John Newton', creditT: long ? 'Frédéric Chopin · published after his death, 1855' : 'Words by John Newton · Music: New Britain, an American folk tune', creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
+    return { ...common(st, set), states, played: !fresh, fresh, hasChords: !bare, titleT: long ? 'Fantaisie-Impromptu in C♯ minor, Op. 66' : 'Amazing Grace', coverBy: long ? 'Chopin' : 'John Newton', creditT: long ? 'Frédéric Chopin · published after his death, 1855' : 'Words: John Newton · Music: New Britain, an American folk tune', creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
       learned, notLearned: !learned, toggleLearned: () => set({ learned: !learned }), learnedBg: learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: learned ? '#9BC093' : '#DAD1C8', learnedFg: learned ? '#2F5A35' : '#332921',
       fav, heartFill: fav ? '#B84A3E' : 'none', heartStroke: fav ? '#B84A3E' : '#332921', toggleFav: () => set({ fav: !fav }),
       chords: CH.map(([c, ns], i) => { const kb = calmKeys(53, 76, Object.fromEntries(ns.map((n) => [n, [i === hear ? '#EDC684' : '#E9C4B8', '']])), 104, 46); return { c, kb, ring: i === hear ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }) };''')
@@ -71,7 +71,7 @@ SECTS = GROUP(('link', 'Verse', '2 × · bars 1–16', 'Section.dc.html'), ('lin
 PROGS = GROUP(('link', 'Gospel hymn', '<span style="font-family: ' + SERIF + '">I – IV – I – V</span>', 'Progression.dc.html'), ('link', 'Authentic cadence', '<span style="font-family: ' + SERIF + '">I – V – I</span>', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
 SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), ('link', 'Share', '', ''), ('link', 'Export…', 'MusicXML, MIDI, PDF', ''), ('action', 'Archive', 'closeSheet', '#B3261E'), bg=SHEET)
-CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words by', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
+CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
 {COVER_BIG(330, 17)}{TITLE}{FACTS}{ACTS}
