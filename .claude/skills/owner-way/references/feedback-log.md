@@ -431,6 +431,7 @@ owner's, typos fixed.
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
 ## Practice
+- **Loop round 46, Play all says it is playing (Intervals):** pressed, Play all looked the same as at rest, so "Every interval in turn" showed nothing and nothing said how to stop it; while it plays the button is a stop square over "Stop", as the transport's Play turns to Stop (2026-11-16).
 - **Loop round 46, the Tuner's No microphone is the one empty state (Tuner):** a bare grey line and a sand Try again, where every said state has the EMPTY shape; now the microphone struck through on a 64 sand mark, No microphone, "Allow the microphone in the browser to use the tuner." and Try again as the honey 48 pill (2026-11-16).
 
 - **Loop round 44, the exercise books' counts are true (Practice, JazzVocabulary):** Barry Harris and Piano With Jonny each said 5 exercises on the overview while their page holds 2; each now says 2, and Barry Harris's rows wear the overview's lilac (6°) where they wore sky (2026-11-16).
