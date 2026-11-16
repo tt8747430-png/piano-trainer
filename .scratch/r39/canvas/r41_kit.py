@@ -31,6 +31,20 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 # one glass for every control that floats over the page (bars, floating actions, the transport): DESIGN.md, Placement
 GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
 GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
+# The one switch between the Player and the editor (owner, 2026-11-16: "proper way to switch from the player to editor not
+# like this two different controls in the editor and in the player"): Play · Edit in one glass capsule at the centre of
+# both bars, the same pixels in each; each half 65 wide so nothing moves when the mode changes; the mode shown is ink.
+# MODEBAR is the bar both screens share: Close leading, the switch, the screen's own glass group trailing (its column
+# held to the editor's three buttons, so the switch stands where the editor's does).
+def MODESW(on, other_href):
+    seg_ = 'width: 65px; height: 44px; padding: 0; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 15px; text-decoration: none; border: 0; font-family: inherit'
+    def half(label):
+        if label.lower() == on:
+            return f'<span role="radio" aria-checked="true" style="{seg_}; color: {SHEET}; font-weight: 600; background: {INK}">{label}</span>'
+        return f'<a href="{other_href}" role="radio" aria-checked="false" style="{seg_}; color: {SOFT}; font-weight: 500; background: transparent">{label}</a>'
+    return f'<div role="radiogroup" aria-label="Mode" style="display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{half("Play")}{half("Edit")}</div>'
+MODEBAR_P = 'height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
+MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px'
 # The one bar (owner, 2026-11-15: "the headers" inconsistent; Apple HIG, Toolbars: "Use the standard Back and Close
 # buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons
 # are 44 glass circles 8 apart (IB), Back the same glass circle at the leading edge. A page under a page: 56 tall,

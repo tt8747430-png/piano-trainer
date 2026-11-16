@@ -72,12 +72,7 @@ ED4 = js(r'''
         ['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]].map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => set(on2 ? off : o) })),
       kb: calmKeys(48, 79, { 67: ['#85B8DC', ''] }, 402, 112), kbL: calmKeys(36, 96, { 67: ['#85B8DC', ''] }, 1330, 170) };''')
 
-# the bar: ✕, the Play · Edit switch, Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
-def MODESW(play_href):
-    seg_ = 'height: 44px; padding: 0 18px; border-radius: 22px; display: flex; align-items: center; font-size: 15px; text-decoration: none; border: 0; font-family: inherit'
-    return (f'<div role="radiogroup" aria-label="Mode" style="display: flex; gap: 0; padding: 0; border-radius: 22px; {GL}">'
-            f'<a href="{play_href}" role="radio" aria-checked="false" style="{seg_}; color: {SOFT}; font-weight: 500; background: transparent">Play</a>'
-            f'<span role="radio" aria-checked="true" style="{seg_}; color: {SHEET}; font-weight: 600; background: {INK}">Edit</span></div>')
+# the bar: ✕, the Play · Edit switch (the kit's MODESW), Undo · Redo · ··· (the Player's glass, CLAUDE.md "sharing its bar")
 def GBTN(label, svg, act='', href='', tip=''):
     st = f'width: 44px; height: 44px; border: 0; padding: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; position: relative'
     t = f' data-tip="{tip or label}"'
@@ -88,8 +83,8 @@ def EBAR(close_href, play_href, title=False):
     if title:
         left += f'<div style="display: flex; align-items: center; min-width: 0"><span style="font-size: 13px; color: {SOFT}">Saved on this device</span></div>'
     right = f'<div style="flex: none; display: flex; border-radius: 22px; {GL}">{GBTN("Undo", UNDO, "undo", tip="Undo · ⌘Z")}{GBTN("Redo", REDO, "redo", tip="Redo · ⇧⌘Z")}{GBTN("More", MORE, "openMore")}</div>'
-    return (f'<header style="flex: none; position: relative; z-index: 20; height: 60px; box-sizing: border-box; padding: 8px 16px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px">'
-            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW(play_href)}<div style="display: flex; justify-content: flex-end">{right}</div></header>')
+    return (f'<header style="flex: none; position: relative; z-index: 20; {MODEBAR_P}">'
+            f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{left}</div>{MODESW("edit", play_href)}<div style="display: flex; justify-content: flex-end">{right}</div></header>')
 
 # the selection strip: what is chosen, and what acts on it
 def STRIP(play=True):
@@ -134,7 +129,7 @@ eph4 = (TIP_CSS + EBAR('Song.dc.html', 'Player.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "16px 12px 8px")}</div>' + SHEETP)
 
 # the laptop: full screen as the Player; the score, the keys under it; the palette docked at the right
-elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace('padding: 8px 16px;', 'padding: 12px 24px; height: 72px;')
+elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L)
         + f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px">'
         f'<div style="min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 800px">{SCOREPAGE(760, 1.3, "32px 40px 16px")}</div></div>'

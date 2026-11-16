@@ -14,6 +14,7 @@ Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)
 Careful: the built PlayerApp and PlayerDesk boards carry passes made after this script (the States
 tool, the keys' faces), which a fresh run drops; for a small change, patch the two built boards in place too."""
 import re, pathlib
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r41_kit.py').read())  # MODESW, MODEBAR_P/L, GLASSFX: the bar shared with the editor
 
 HERE = pathlib.Path(__file__).resolve().parent
 OUT = HERE.parent / 'practice' / 'project'
@@ -433,12 +434,6 @@ def headed(t, phone):
                r'\1border: 0; border-radius: 9999px; background: transparent; color: #332921', t, count=1)
     t = re.sub(r'(aria-label="Settings" data-tip="Settings" aria-expanded="\{\{isMore\}\}" onClick="\{\{openMore\}\}" style="[^"]*?)border: 1px solid \{\{glassLine\}\}; border-radius: 9999px; background: \{\{setBg\}\}; backdrop-filter: blur\(12px\); color: \{\{glassFg\}\}',
                r'\1border: 0; border-radius: 9999px; background: {{setBgPlain}}; color: #332921', t, count=1)
-    band = (f'<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: {54 if phone else 0}px; height: {(top + 52) - (54 if phone else 0)}px; '
-            'background: #FEFDFB; box-shadow: inset 0 -1px 0 #DAD1C8"></div>')
-    title = (f'<div style="position: absolute; z-index: 47; left: {left}px; right: {108 if phone else 520}px; top: {top}px; height: 44px; display: flex; flex-direction: column; justify-content: center; min-width: 0">'
-             f'<span style="font-size: {16 if phone else 17}px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amazing Grace</span>'
-             '<span style="font-size: 12px; line-height: 1.3; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Words: John Newton · Music: New Britain</span></div>')
-    t = t.replace('<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n<a href=', '<sc-if value="{{showControls}}" hint-placeholder-val="{{true}}">\n' + band + title + '\n<a href=', 1)
     # each view button only shows its view
     t = t.replace("pick: () => (id !== view ? this.setState({ view: id, open: 'none' }) : this.setState({ open: open === 'view' ? 'none' : 'view' })),",
                   "pick: () => this.setState({ view: id, open: 'none' }),", 1)
@@ -460,13 +455,64 @@ def headed(t, phone):
                 '<span style="flex: 1">{{v.label}}</span><span aria-hidden="true" style="opacity: {{v.tick}}; font-weight: 700">✓</span></button></sc-for></div></sc-if>')
         t = t[:nav0] + menu + t[nav1:]
         t = t.replace("on: on ? 'true' : 'false', bg: on ? '#332921' : 'transparent',", "on: on ? 'true' : 'false', tick: on ? 1 : 0, bg: on ? '#332921' : 'transparent',", 1)
-    # the score prints no title: it is the bar's
-    t = re.sub(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px;[^"]*">Words: John Newton · Music: New Britain</p>', '', t)
     # with the keys shown the views still start under the bar (they started at 16, from before the bar was a band)
     old, new = ('topKeys: 16', 'topKeys: 128') if phone else ('topKeys: 36', 'topKeys: 80')
     assert old in t
     t = t.replace(old, new, 1)
-    t = t.replace('padding: 78px 0 132px', 'padding: 20px 0 132px').replace('padding: 120px 0 140px', 'padding: 24px 0 140px')
+    return t
+
+
+def onebar(t, phone):
+    """Loop round 61 (owner, 2026-11-16: "the headers should be properly with no background and glass buttons … proper way
+    to switch from the player to editor not like this two different controls in the editor and in the player"): the
+    Player's bar is the editor's, from the kit: no band; Close a glass circle leading; the Play · Edit switch (Play
+    chosen) where the editor's stands; the Player's own controls one glass group trailing (on a phone View and
+    Settings, on a laptop the four views beside Settings). The title is the score's, printed on the page as the editor
+    prints it; the other views print the same head above their content."""
+    close = re.search(r'<a href="(Song(?:Laptop)?\.dc\.html)" aria-label="Close" data-tip="Close" style="[^"]*">\s*(<svg.*?</svg>)\s*</a>\n?', t, re.S)
+    sett = re.search(r'<div style="position: absolute; right: \d+px; top: \d+px; display: flex; gap: 8px">\s*(<button type="button" aria-label="Settings".*?</button>)\s*</div>\n?', t, re.S)
+    assert close and sett, 'bar parts'
+    gear = re.sub(r'style="width: 44px; height: 44px; border: 0; border-radius: 9999px;', 'style="position: relative; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 22px;', sett.group(1), count=1)
+    if phone:
+        vb = re.search(r'<button type="button" aria-label="View: \{\{viewNowName\}\}".*?</button>', t, re.S)
+        view = vb.group(0).replace('position: absolute; z-index: 48; right: 60px; top: 66px; ', 'position: relative; padding: 0; ').replace('border-radius: 9999px', 'border-radius: 22px')
+        t = t[:vb.start()] + t[vb.end():]
+        # the views' menu hangs from the bar's foot, at its trailing edge
+        t = t.replace('right: 12px; top: 116px; width: 220px;', 'right: 16px; top: 112px; width: 220px;', 1)
+        right = f'<div style="display: flex; justify-content: flex-end; min-width: 132px"><div role="group" aria-label="View and settings" style="flex: none; display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{view}{gear}</div></div>'
+    else:
+        nb = re.search(r'<nav aria-label="View".*?</nav>\n?', t, re.S)
+        nav = re.sub(r'style="z-index: 48; position: absolute; left: 50%; top: 16px; transform: translateX\(-50%\); height: 44px; box-sizing: border-box; padding: 4px; display: flex; gap: 2px; border-radius: 9999px; border: 1px solid \{\{glassLine\}\}; background: \{\{glass\}\}; backdrop-filter: blur\(12px\)"',
+                     f'style="flex: none; height: 44px; box-sizing: border-box; padding: 4px; display: flex; gap: 2px; border-radius: 22px; {GLASSFX}; pointer-events: auto"', nb.group(0), count=1)
+        assert nav != nb.group(0), 'nav'
+        t = t[:nb.start()] + t[nb.end():]
+        right = f'<div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 132px">{nav}<div style="flex: none; display: flex; border-radius: 22px; {GLASSFX}; pointer-events: auto">{gear}</div></div>'
+    sett = re.search(r'<div style="position: absolute; right: \d+px; top: \d+px; display: flex; gap: 8px">\s*<button type="button" aria-label="Settings".*?</button>\s*</div>\n?', t, re.S)
+    t = t[:sett.start()] + t[sett.end():]
+    href, xsvg = close.group(1), close.group(2)
+    x = (f'<a href="{href}" aria-label="Close" data-tip="Close · Esc" style="flex: none; position: relative; width: 44px; height: 44px; border-radius: 22px; {GLASSFX}; '
+         f'color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; pointer-events: auto">{xsvg}</a>')
+    bar = (f'<header style="position: absolute; z-index: 48; left: 0; right: 0; top: {54 if phone else 0}px; {MODEBAR_P if phone else MODEBAR_L}; pointer-events: none">'
+           f'<div style="display: flex; align-items: center; gap: 12px; min-width: 0">{x}</div>'
+           f'{MODESW("play", "Editor.dc.html" if phone else "EditorLaptop.dc.html")}{right}</header>\n')
+    close = re.search(r'<a href="Song(?:Laptop)?\.dc\.html" aria-label="Close" data-tip="Close" style="[^"]*">\s*<svg.*?</svg>\s*</a>\n?', t, re.S)
+    t = t[:close.start()] + bar + t[close.end():]
+    # the title prints as the editor prints it: the book serif at its regular weight (the editor's page, scaled to the Player's staves)
+    t = re.sub(r"(<h2 style=\"position: absolute; left: 0; right: 0; top: \d+px; margin: 0; text-align: center; )font-family: Georgia, 'Times New Roman', serif; font-size: (26|40)px; font-weight: 700;",
+               lambda m: m.group(1) + f"font-family: {SERIF}; font-size: {24 if phone else 36}px; font-weight: 400;", t)
+    # one way to the editor: the bar's Edit (the song sheet's Edit score went with it, "one way to each action")
+    t, n = re.subn(r'<button type="button" style="flex: 1 1 100%; order: 1;[^"]*"><svg[^>]*><path d="M12 20h9M16\.5[^"]*"></path></svg>Edit score</button>', '', t)
+    assert n == 1, 'edit score'
+    # the other views print the score's head, and start under it
+    h2 = re.search(r'<h2 style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Amazing Grace</h2><p style="position: absolute; left: 0; right: 0; top: \d+px; ([^"]*)">Words: John Newton · Music: New Britain</p>', t)
+    assert h2, 'title'
+    headH = 52 if phone else 72
+    head = (f'<sc-if value="{{{{notSheet}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; left: 16px; right: 16px; top: {{{{viewHeadTop}}}}px; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none">'
+            f'<h2 style="{h2.group(1)}">Amazing Grace</h2><p style="{h2.group(2)}">Words: John Newton · Music: New Britain</p></div></sc-if>\n')
+    t = t.replace('<sc-if value="{{isDiagrams}}"', head + '<sc-if value="{{isDiagrams}}"', 1)
+    old = 'viewTop: keys ? DEV.topKeys : DEV.top,'
+    assert old in t, 'viewTop'
+    t = t.replace(old, f"viewTop: (keys ? DEV.topKeys : DEV.top) + {headH}, viewHeadTop: keys ? DEV.topKeys : DEV.top, notSheet: view !== 'sheet',", 1)
     return t
 
 
@@ -512,7 +558,7 @@ def floating(t, phone):
     return t
 
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
-    t = floating(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone)
+    t = floating(onebar(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone), phone)
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
