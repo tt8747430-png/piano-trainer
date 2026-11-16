@@ -163,6 +163,7 @@ def PAGEBODIES(pre, lap=False):
     out = []
     for p, body in PAGES:
         b = body.replace('aspect-ratio: 0.72', 'aspect-ratio: 1.4').replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('Legal.dc.html', 'LegalLaptop.dc.html') if lap else body
+        if p == 'General' and not lap: b = THEMES  # a phone has no letter keys: the computer keyboard is the laptop's alone (show only what works here)
         out.append(f'<sc-if value="{{{{{pre}{SLUG(p)}}}}}" hint-placeholder-val="{{{{{"true" if (lap and p == "General") else "false"}}}}}">{b}</sc-if>')
     return ''.join(out)
 
