@@ -34,10 +34,10 @@ describe('walkChart', () => {
 
   it('grows each chord to its 9th only where the 9th is available', () => {
     expect(symbols(walkChart(note('C'), 'major', 'ninths')).slice(0, 7)).toEqual([
-      'CMaj9',
+      'Cmaj9',
       'Dm9',
       'Em7',
-      'FMaj9',
+      'Fmaj9',
       'G9',
       'Am9',
       'Bm7♭5',

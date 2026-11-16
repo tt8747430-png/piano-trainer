@@ -108,9 +108,10 @@ describe('the practice machine', () => {
       expect(initialPractice(ONE_BAR, 'wait', hands).expected).toEqual(expected)
     })
 
-    it('takes keys only while playing', () => {
+    it('stopped, ignores a wrong key, and starts on the first right one', () => {
       const stopped = initialPractice(ONE_BAR, 'wait', 'rh')
-      expect(run(stopped, ...press(60, 64, 67))).toBe(stopped)
+      expect(run(stopped, ...press(61))).toBe(stopped)
+      expect(run(stopped, ...press(60))).toMatchObject({ playing: true, received: [0] })
     })
 
     it('counts a key in any octave, and is right once every note is in', () => {
@@ -132,7 +133,7 @@ describe('the practice machine', () => {
         { type: 'play' },
         ...answer([61, 48]),
         ...answer([48]),
-        ...answer([62, 63, 55]),
+        ...answer([66, 70, 55]),
         ...answer([55]),
       )
       expect(pass).toMatchObject({ outcome: 'finished', slips: { 0: 1, 1: 2 } })

@@ -74,7 +74,7 @@ describe('arrangeProgression', () => {
       'A♭7',
       'D♭Maj7',
     ])
-    expect(performance.chords.at(-1)?.symbol).toBe('CMaj7')
+    expect(performance.chords.at(-1)?.symbol).toBe('Cmaj7')
   })
 
   it('names each walked key’s chords as the key alone names them, never C♭7', () => {
