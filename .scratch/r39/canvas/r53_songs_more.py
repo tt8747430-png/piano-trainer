@@ -315,7 +315,7 @@ SM_SRC = (r'''
 HEADCARD = f'<div style="display: flex; gap: 14px; align-items: center">{COV("Amazing Grace", HONEY, 64)}<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 20px; font-weight: 700">Amazing Grace</span><span style="font-size: 14px; color: {SOFT}">John Newton · Your song</span></div></div>'
 _SLIB = SEC(CAPS('Library'), GROUP(('link', 'Folder', 'Hymns', ''), ('action', 'Duplicate', 'askDup'), ('action', 'Archive', 'archive'), bg=SHEET))
 _SSHARE = SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{pubV}}', 'goPublish'), ('action', 'Share link', 'share'), ('link', 'Export…', 'MusicXML, MIDI', 'openExport'), bg=SHEET))
-_SDEL = SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET), FOOT('The song moves to the Trash in Songs, to be restored until the Trash is emptied.'))
+_SDEL = SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET), FOOT('The song moves to the Trash, under Archive in Songs, to be restored until the Trash is emptied.'))
 SSET = HEADCARD + _SLIB + _SSHARE + _SDEL
 # on a laptop the song's groups stand in two columns, as every object's Settings: the library left, sharing and Delete right
 SSET_L = HEADCARD + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_SLIB}</div><div style="display: flex; flex-direction: column; gap: 16px">{_SSHARE}{_SDEL}</div></div>'

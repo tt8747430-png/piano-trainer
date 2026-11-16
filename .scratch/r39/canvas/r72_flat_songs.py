@@ -83,7 +83,7 @@ def FOLDERCARDS(href):
     return ''.join(f'<a href="{href if k != "shared" else href.replace("Folder", "Groups")}" style="{CARDROW}; min-height: 80px; box-sizing: border-box; padding: 12px 12px 12px 12px; display: flex; align-items: center; gap: 14px; color: {INK}; text-decoration: none">{FTILE(c, k)}'
                    f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
                    f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>' for t, s, c, k in FOLDERS_ALL)
-KEEPROWS = lambda href: GROUP(('link', 'Archive', '3', href), ('link', 'Trash', '2', href), bg=SHEET)
+KEEPROWS = lambda href: GROUP(('link', 'Archive', '3', href), bg=SHEET)
 _NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 64px 24px; text-align: center">'
