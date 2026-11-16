@@ -39,10 +39,9 @@ ACC_IN = (f'<button type="button" onClick="{{{{go_Edit_profile}}}}" style="width
                      f'<div style="min-height: 48px; display: flex; align-items: center; padding: 6px 16px"><span style="flex: 1; font-size: 16px">Changes pending</span><span style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pending}}}}</span></div>',
                      f'<button type="button" onClick="{{{{syncNow}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; padding: 6px 16px">{{{{syncBtn}}}}</button>'))
           + SEC(REDBTN('Sign out', 'askSignOut'))
-          + SEC(REDBTN('Delete account…', 'askDelete'), FOOT('Your account and synced data are deleted after 30 days.')))
-ACC_OUT = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 16px 8px; text-align: center">{AVA(64, 28).replace("{{avatar}}", "?")}<span style="font-size: 18px; font-weight: 700">You are not signed in.</span><span style="font-size: 15px; color: {SOFT}; max-width: 300px">Your songs and progress stay on this device.</span></div>'
-           + GROUP(('link', 'Sign in', '', 'SignIn.dc.html'), ('link', 'Create account', '', 'SignIn.dc.html'), bg=SHEET)
-           + FOOT('Sign in to sync your library across your devices.'))
+          + SEC(REDBTN('Delete account…', 'askDelete')))
+ACC_OUT = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 16px 8px; text-align: center">{AVA(64, 28).replace("{{avatar}}", "?")}<span style="font-size: 18px; font-weight: 700">You are not signed in.</span><span style="font-size: 15px; color: {SOFT}; max-width: 300px">Your songs and progress stay on this device. Sign in to sync them across your devices.</span></div>'
+           + GROUP(('link', 'Sign in', '', 'SignIn.dc.html'), ('link', 'Create account', '', 'SignIn.dc.html'), bg=SHEET))
 P_ACCOUNT = f'<sc-if value="{{{{signedIn}}}}" hint-placeholder-val="{{{{true}}}}">{ACC_IN}</sc-if><sc-if value="{{{{signedOut}}}}" hint-placeholder-val="{{{{false}}}}">{ACC_OUT}</sc-if>'
 
 _SV = lambda d: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>'
