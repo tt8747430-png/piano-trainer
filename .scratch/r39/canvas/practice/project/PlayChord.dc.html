@@ -87,8 +87,9 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
   const rows = [].concat((v.shows || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), [{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]);
-  const none = !rows.some((r) => r.on);
-  const list = [{ l: "As designed", on: none, pick: () => rows.filter((r) => r.on).forEach((r) => r.pick()) }].concat(rows);
+  const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l) === i);
+  const none = !once.some((r) => r.on);
+  const list = [{ l: "As designed", on: none, pick: () => once.filter((r) => r.on).forEach((r) => r.pick()) }].concat(once);
   return Object.assign({}, v, { statesOpen: !!st.statesOpen, toggleStates: () => set({ statesOpen: !st.statesOpen }),
     stateList: list.map((r) => ({ l: r.l, on: r.on ? "true" : "false", fw: r.on ? 700 : 450, mark: r.on ? "✓" : "", pick: close(r.pick) })) });
 }; }
