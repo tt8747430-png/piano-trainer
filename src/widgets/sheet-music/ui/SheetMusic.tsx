@@ -5,8 +5,8 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, useLatestCallback, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
 import { noteIds, type ScoreAnnotation, type StaffId } from '@/shared/lib/notation'
-import type { PieceLayout } from '@/entities/piece'
-import type { VerdictMark } from '@/shared/ui'
+import type { PieceLayout, ScoreHeader } from '@/entities/piece'
+import { SheetTitle, type VerdictMark } from '@/shared/ui'
 import { labelRow, ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
@@ -85,11 +85,11 @@ function EngravedSize({
 }
 
 /**
- * A Performance as sheet music, its title the bar's (loop round 24):
+ * A Performance as sheet music: its title at its head, the page's heading (ADR 0114);
  * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
  * Listen plays, ADR 0096), the loop, bars to jump to; its single staves over the piano, each named by
  * its own name (ADR 0097), the piano's left out of a lead sheet, the staves the view hides left out.
- * Laid out across (the default), on one scrolling line
+ * Laid out across (the default), on one scrolling line under the title
  * that takes the height left and engraves the staff to fill it (`fitScale`) while two of its bars
  * still show, so music read from a stand is as large as the screen allows; or in the chart's lines,
  * down the screen or on A4 pages (`SheetLines`).
@@ -111,11 +111,17 @@ export function SheetMusic({
   verdicts,
   annotations,
   view = ACROSS,
+  title,
+  credits,
   layout,
   piano = true,
   staffNames = NO_NAMES,
 }: {
   view?: SheetViewChoice
+  /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0114). */
+  title: string
+  /** Printed under the title in lines and on pages (ADR 0114): its subtitle, composer, lyricist, arranger. */
+  credits?: ScoreHeader | undefined
   /** The score's staff size and the most bars a line holds, in lines and on pages (ADR 0114). */
   layout?: PieceLayout | undefined
   /** Whether the piano's staves are written: not on a lead sheet (ADR 0114). */
@@ -159,7 +165,7 @@ export function SheetMusic({
   // An exercise's line prints no chord symbol (A41): its harmony is the chord views'.
   const chordNames = view.chordNames && score.plain !== true
   const scroller = useRef<HTMLDivElement>(null)
-  // The room under the bar, the labels' row's and the engraving's to fill.
+  // The room under the title, the labels' row's and the engraving's to fill.
   const room = useElementSize(scroller)
   // The music's own measures, once engraved: a line of plain bars grows where a busy one cannot, and
   // a line whose notes go far over or under its staves (anywhere in the piece) is drawn smaller, so
@@ -250,6 +256,8 @@ export function SheetMusic({
           staves={staves}
           staffNames={labels}
           pages={view.layout === 'page'}
+          title={title}
+          credits={credits}
           layout={layout}
           headings={headings}
           current={current}
@@ -272,9 +280,10 @@ export function SheetMusic({
       </>
     )
   return (
-    // The line scrolling sideways in the height the bar leaves; the title is the bar's.
+    // The title at the line's head (ADR 0114), the line scrolling sideways under it in the height left.
     <section aria-label={t('sheet.label')} className="flex h-full flex-col">
       {pedalMarks}
+      <SheetTitle title={title} place="across" />
       <div
         ref={scroller}
         className="relative -mx-gutter min-h-0 flex-1 overflow-x-auto overscroll-x-contain px-gutter scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"

@@ -12,6 +12,7 @@ import {
 import { useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
+import { SheetTitle } from '@/shared/ui'
 import { chordsFrom } from '../model/chords-from'
 import { lyricLines, type Span } from '../model/lyric-lines'
 import { sungPlace } from '../model/sung-place'
@@ -25,13 +26,14 @@ import { SungLines } from './SungLines'
  * its piece chose. Animated, the pair (`ChordPair`): the chord sounding and the next beside it,
  * sliding with Listen's clock and swiped to the next chord or the one before, the page itself still.
  * Under them the beat strip, a page at a time, and under it, with the View's Lyrics on, the line sung
- * (`SungLines`). On a phone on its side, the strip and the words beside the chords. All of
+ * (`SungLines`). On a phone on its side, the title, the strip and the words beside the chords. All of
  * it stands in the room above the transport, in the middle of it, the chords shrinking where it is
  * short (`diagrams-view`), nothing scrolling. In its summary mode, the strip and the words over the
  * song's chords at once (`SummaryGrid`), the one sounding marked, scrolling down. A diagram, a card
  * or a beat tapped takes the cursor there (`onGo`).
  */
 export function ChordDiagrams({
+  title,
   performance,
   bars,
   beat,
@@ -43,6 +45,7 @@ export function ChordDiagrams({
   onGo,
   onLoop,
 }: {
+  title: string
   performance: Performance
   /** Every bar as played, in beats. */
   bars: readonly CellBar[]
@@ -87,6 +90,7 @@ export function ChordDiagrams({
         aria-label={t('views.diagrams')}
         className="-mx-gutter flex h-full flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain px-gutter pb-(--float-room) *:shrink-0 landscape-phone:mx-0 landscape-phone:px-0"
       >
+        <SheetTitle title={title} place="lines" />
         <div className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0">
           {strip}
         </div>
@@ -108,6 +112,9 @@ export function ChordDiagrams({
       aria-label={t('views.diagrams')}
       className="diagrams-view -mx-gutter h-full overflow-hidden px-gutter pb-(--float-room) landscape-phone:mx-0 landscape-phone:px-0"
     >
+      <div data-area="title">
+        <SheetTitle title={title} place="lines" />
+      </div>
       <ChordPair
         performance={performance}
         played={span.played}

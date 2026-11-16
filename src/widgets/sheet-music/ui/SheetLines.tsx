@@ -4,8 +4,8 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { LANDSCAPE_PHONE, PAGE, PRINT_SCALE, useElementSize, useMediaQuery } from '@/shared/lib'
-import { staffScale, type PieceLayout } from '@/entities/piece'
-import { PageCanvas, type VerdictMark } from '@/shared/ui'
+import { staffScale, type PieceLayout, type ScoreHeader } from '@/entities/piece'
+import { hasCredits, PageCanvas, SheetCredits, SheetTitle, type VerdictMark } from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -25,7 +25,7 @@ const LEAST_SCALE = 0.62
 
 /**
  * The score in the chart's lines (ADR 0096): down the screen, or dealt onto A4 pages as it will print,
- * each chart line cut by width where it is wider
+ * its title at the head of the first line (ADR 0114), each chart line cut by width where it is wider
  * than the screen holds. Each line is justified to the width and carries its labels, the loop's part
  * and its bars to jump to; the playhead stands on the line playing, which comes into sight as it
  * starts (ADR 0096). On a phone on its side, a line down the screen is drawn small enough that its
@@ -37,6 +37,8 @@ export function SheetLines({
   staves,
   staffNames,
   pages,
+  title,
+  credits,
   layout,
   headings,
   current,
@@ -65,6 +67,10 @@ export function SheetLines({
   staffNames: StaffLabels
   /** On A4 pages; else lines down the screen. */
   pages: boolean
+  /** Printed at the head of the first line, the page's heading. */
+  title: string
+  /** Printed under the title (ADR 0114): its subtitle, composer, lyricist and arranger. */
+  credits?: ScoreHeader | undefined
   /** The score's staff size and the most bars a line holds (ADR 0114). */
   layout?: PieceLayout | undefined
   headings: readonly string[]
@@ -177,6 +183,10 @@ export function SheetLines({
         className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain px-3"
         style={{ gap: LINE_GAP }}
       >
+        <div>
+          <SheetTitle title={title} place="lines" />
+          {hasCredits(credits) ? <SheetCredits credits={credits} align="center" /> : null}
+        </div>
         {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),
             a part of the list, so the sheet's own height is all it shows. */}
@@ -191,6 +201,8 @@ export function SheetLines({
           lines={lines}
           // A line's height as engraved: its staves and the verses under its tune (ADR 0097).
           height={(each) => labels + scoreHeight(each.score, staves) * scale}
+          title={title}
+          credits={credits}
           line={line}
         />
       </section>

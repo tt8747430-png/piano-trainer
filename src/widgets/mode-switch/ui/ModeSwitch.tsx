@@ -1,37 +1,34 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { ViewPill } from '@/shared/ui'
 
 /**
- * A piece's score played or edited (its canvas, the editor's bar): Play · Edit as one pill in the
- * bar's middle, Edit filled. Play opens the Player at `bar` (as printed, from 1), in the editor's
- * place in the history, so Close still goes back where the learner came from. While a take
- * records, Play waits for Stop (`waiting`, the tooltip saying so).
+ * A piece's score played or edited (loop round 61, the one switch between the Player and the
+ * editor): Play · Edit as one glass pill in the middle of both bars, the mode shown filled, in the
+ * same place in each so nothing moves between them. Choosing the other mode calls `onSwitch`, which
+ * takes the learner there in this screen's place in the history. While a take records, Play waits
+ * for Stop (`waiting`, the tooltip saying so).
  */
 export function ModeSwitch({
-  pieceId,
-  bar,
+  mode,
+  onSwitch,
   waiting,
 }: {
-  pieceId: string
-  bar: number
+  mode: 'play' | 'edit'
+  onSwitch: () => void
   waiting?: string | undefined
 }) {
   const { t } = useTranslation('common')
-  const navigate = useNavigate()
-  // The first bar is where the Player opens: a URL never says so.
-  const at = bar > 1 ? { bar } : {}
   return (
     <ViewPill
       label={t('editMode.label')}
-      value="edit"
+      value={mode}
       views={[
-        { value: 'play', label: t('editMode.play'), reason: waiting },
+        { value: 'play', label: t('editMode.play'), reason: mode === 'edit' ? waiting : undefined },
         { value: 'edit', label: t('editMode.editing') },
       ]}
-      onChange={() =>
-        void navigate({ to: '/play/$pieceId', params: { pieceId }, search: at, replace: true })
-      }
+      onChange={(next) => {
+        if (next !== mode) onSwitch()
+      }}
     />
   )
 }

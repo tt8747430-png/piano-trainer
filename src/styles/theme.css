@@ -966,14 +966,6 @@
   /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
      row kept empty. */
   --float-room: 5.5rem;
-  /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
-  --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
-  /* The Player's band (its board): 12 over its buttons; the editor's glass buttons stand 8 under the
-     status bar, as theirs. */
-  &:has(.score-bar:not([data-floating])) {
-    padding-top: --spacing(3);
-    --bar-above: calc(--spacing(3) + max(--spacing(4), env(safe-area-inset-top)));
-  }
   & > [data-area='bar'] {
     grid-area: bar;
   }
@@ -1040,7 +1032,6 @@
       'bar bar bar bar'
       'sheet sheet sheet sheet'
       'keys keys keys keys';
-    --bar-above: max(--spacing(4), env(safe-area-inset-top));
     /* Along the sheet's foot, as upright and as the editor's dock (ADR 0115): the sheet between the
        bar and the keys is shorter than an upright transport, which covered the bar and the keys. */
     --float-room: 4rem;
@@ -1077,13 +1068,12 @@
   }
 }
 
-/* The score's bar, the Player's and the editor's one surface (ADR 0115, R31-E): Close, the title
-   and Practise · Edit at its start, the screen's own buttons at its end, one row at every size. Its
-   band, the card's paper with one hairline under the whole, reaches the screen's edges (the gutters
-   and the top), drawn behind it; its buttons are round and stand inside it, clear of its hairline. */
+/* The score's bar, the Player's and the editor's one surface (ADR 0115; their boards, loop round 61):
+   Close at its start, Play · Edit in its middle, the screen's own glass group at its end; glass
+   buttons over the music, no band and no hairline. The end's column holds at least the editor's three
+   buttons, so the switch stands in the same place in both bars and nothing moves between them. */
 @utility score-bar {
   position: relative;
-  isolation: isolate;
   /* Over the music, whose area is positioned for what floats on it. */
   z-index: 25;
   display: grid;
@@ -1092,40 +1082,18 @@
   align-items: center;
   column-gap: --spacing(2);
   padding-bottom: --spacing(1);
-  &::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: calc(-1 * var(--bar-above, 0px));
-    bottom: 0;
-    left: calc(-1 * max(var(--gutter), env(safe-area-inset-left)));
-    right: calc(-1 * max(var(--gutter), env(safe-area-inset-right)));
-    border-bottom: 1px solid var(--color-hairline);
-    background: var(--color-card);
-  }
-  /* The editor's bar (its board): glass buttons over the music, no band of paper, no hairline. */
-  &[data-floating]::before {
-    display: none;
-  }
-  /* The band's 8 under its buttons, as the Player board's bar (12 over them, 44, 8 under). */
-  &:not([data-floating]) {
-    padding-bottom: --spacing(2);
-  }
   & > [data-area='lead'] {
     grid-area: lead;
   }
   & > [data-area='actions'] {
     grid-area: actions;
   }
-  /* The Player's and the editor's bar (their canvases, loop round 24): Close and the title, a pill in
-     the bar's middle, the end's buttons; a band of paper with its hairline, as every bar. */
   &:has(> [data-area='middle']) {
     grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
     grid-template-areas: 'lead middle actions';
-    /* On a phone the views live in the gear, the middle is empty: the title takes all the room the
-       end's buttons leave, as the Player board's bar sets it. */
-    @variant max-sm {
-      grid-template-columns: minmax(0, 1fr) auto auto;
+    /* Three 44px buttons: the editor's Undo, Redo and More. */
+    & > [data-area='actions'] {
+      min-width: --spacing(33);
     }
   }
   & > [data-area='middle'] {
@@ -1175,15 +1143,19 @@
    it. Down the screen the title at the head, then the chords, the beat strip and the words sung, in
    the middle of the room under the title (the rows either side share what is left); on a phone on
    its side, where the bar and the keys leave a short room, the chords down its whole height, and
-   beside them the strip and the words, in the middle of it. A short room keeps the line
+   beside them the title, the strip and the words, in the middle of it. A short room keeps the line
    sung and leaves out the next before the chords give anything up; then the chords take what the
    rest leaves them, never more than they are drawn at: their diagrams shrink to it (`max-h-full`). */
 @utility diagrams-view {
   container-type: size;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) minmax(5rem, auto) auto auto minmax(0, 1fr);
-  grid-template-areas: '.' 'chords' 'strip' 'words' '.';
+  grid-template-rows: auto minmax(0, 1fr) minmax(5rem, auto) auto auto minmax(0, 1fr);
+  grid-template-areas: 'title' '.' 'chords' 'strip' 'words' '.';
+  & > [data-area='title'] {
+    grid-area: title;
+    margin-bottom: --spacing(2);
+  }
   & > [data-area='chords'] {
     grid-area: chords;
     min-height: 0;
@@ -1206,9 +1178,20 @@
   }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr);
-    grid-template-areas: 'chords .' 'chords strip' 'chords words' 'chords .';
+    grid-template-rows: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+    grid-template-areas: 'chords .' 'chords title' 'chords strip' 'chords words' 'chords .';
     column-gap: --spacing(4);
+    /* One line of the title beside the chords, cut short where it is longer: with the strip and
+       the line sung, it fits the room a 375px-tall phone on its side leaves. */
+    & > [data-area='title'] {
+      margin-bottom: 0;
+      & > h1 {
+        overflow: hidden;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
     & > [data-area='strip'] {
       margin-top: --spacing(0.5);
     }

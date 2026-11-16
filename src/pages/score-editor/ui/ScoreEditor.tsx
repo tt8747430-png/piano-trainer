@@ -176,7 +176,6 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
         )}
       >
         <ScoreBar
-          floating
           lead={<EditorLead />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}

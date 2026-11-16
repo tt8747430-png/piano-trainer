@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { Ellipsis, Redo2, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -34,11 +35,21 @@ export function EditorMode({ done }: { done?: ReactNode }) {
   const { meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const recording = takes.stage !== 'idle'
+  const navigate = useNavigate()
+  // The first bar is where the Player opens: a URL never says so. The Player takes the editor's
+  // place in the history, so Close still goes back where the learner came from.
+  const play = () =>
+    void navigate({
+      to: '/play/$pieceId',
+      params: { pieceId: meta.id },
+      search: bar > 1 ? { bar } : {},
+      replace: true,
+    })
   return (
     done ?? (
       <ModeSwitch
-        pieceId={meta.id}
-        bar={bar}
+        mode="edit"
+        onSwitch={play}
         waiting={recording ? t('recordingBar.label') : undefined}
       />
     )

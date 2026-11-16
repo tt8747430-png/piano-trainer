@@ -20,12 +20,11 @@ import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
-import { useCreditLine, type MenuAction } from '@/shared/ui'
+import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
   TransportPiano,
-  BarTitle,
   CountInBeat,
   HandsSheet,
   LoopButton,
@@ -41,6 +40,7 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { ModeSwitch } from '@/widgets/mode-switch'
 import { SongPrint } from '@/widgets/song-print'
 import { PianoHands } from '@/widgets/piano-hands'
 import { PlayerPlayback } from '@/widgets/player-settings'
@@ -148,7 +148,7 @@ export function PlayerLayout({
   setup: ReactNode
   /** The music's own pages of the Settings: a piece's Transpose and Version; none for a walk. */
   pages?: readonly SettingsPageRow[]
-  /** Edit score, in the Settings' head under the song (its canvas): a piece's own, none for a walk. */
+  /** The bar's Play · Edit (loop round 61): a piece's own, none for a walk. */
   onEdit?: (() => void) | undefined
   /** The music's own acts in Settings, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
@@ -162,8 +162,6 @@ export function PlayerLayout({
   display?: ReactNode
 }) {
   const { t } = useTranslation(['player', 'songs', 'settings', 'music', 'common'])
-  // Who wrote it, under the title in the bar (loop round 24): the sheet prints no title of its own.
-  const creditLine = useCreditLine(credits)
   const { practice } = player
   const scoreView = useSettings(selectScoreView)
   const held = useHeldKeys()
@@ -235,7 +233,6 @@ export function PlayerLayout({
         detail={[...(about ?? []), t('music:bpm', { tempo: player.tempo })].join(' · ')}
         share={share?.onSelect}
         acts={moreMenu}
-        onEdit={onEdit}
       />
     ),
     pages: [
@@ -328,32 +325,29 @@ export function PlayerLayout({
       panel={panel}
       docked
     >
-      {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
-          Piano keys, MIDI and Settings; the View and the music's tools. The loop is the transport's (ADR
+      {/* The score's bar, the editor's (ADR 0115, loop round 61): Close; Play · Edit where the
+          editor's stands; the views and Settings at the end, one glass group on a phone, the views'
+          pill beside Settings on a laptop. The title is the score's. The loop is the transport's (ADR
           0108). */}
       <ScoreBar
-        lead={
-          <>
-            <PlayerClose onClose={onClose} />
-            <BarTitle title={title} credit={creditLine} />
-          </>
-        }
-        middle={
-          <div className="max-sm:hidden">
-            <PickView shown={shown} needs={needs} />
-          </div>
-        }
+        lead={<PlayerClose onClose={onClose} />}
+        middle={onEdit ? <ModeSwitch mode="play" onSwitch={onEdit} /> : undefined}
         actions={
           <>
-            <div className="sm:hidden">
-              <ViewMenu shown={shown} needs={needs} />
+            <div className="max-sm:hidden">
+              <PickView shown={shown} needs={needs} />
             </div>
-            {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
-                connected from Settings › Connect a piano. */}
-            {isMidiConnected(connection) || connection.kind === 'connecting' ? (
-              <MidiButton variant="tool" />
-            ) : null}
-            <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
+            <div className="flex items-center rounded-pill glass">
+              <div className="sm:hidden">
+                <ViewMenu shown={shown} needs={needs} />
+              </div>
+              {/* MIDI only while a keyboard is connected or connecting (R31-P, R32); it is
+                  connected from Settings › Connect a piano. */}
+              {isMidiConnected(connection) || connection.kind === 'connecting' ? (
+                <MidiButton variant="tool" />
+              ) : null}
+              <SettingsExtrasContext value={extras}>{setup}</SettingsExtrasContext>
+            </div>
           </>
         }
       />
@@ -368,6 +362,8 @@ export function PlayerLayout({
             view={sheetView}
             piano={piano}
             staffNames={names}
+            title={title}
+            credits={credits}
             layout={layout}
             // The pedal as it plays (A27): its Ped. marks the ones heard, lit as they pass.
             performance={player.performance}
@@ -386,6 +382,7 @@ export function PlayerLayout({
         ) : (
           <ChordView
             view={shown}
+            title={title}
             performance={performance}
             headings={headings}
             practice={practice}
