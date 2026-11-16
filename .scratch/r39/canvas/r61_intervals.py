@@ -71,6 +71,4 @@ ABOUT61L = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">
 lm61 = lm61.replace(SEG61 + GRID61 + '</div></div>', SEG61 + GRID61 + SONGS61 + '</div></div>').replace(ABOUT61, ABOUT61L)
 phone('Intervals', 'Intervals, phone', ph61, IV61, SHEETS61)
 laptop('IntervalsLaptop', 'Intervals, laptop', lm61, '', IV61, POPS61, 'Practice')
-for f in ('Intervals', 'IntervalsLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r61 intervals ok')

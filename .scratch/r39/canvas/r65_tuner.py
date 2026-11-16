@@ -29,6 +29,4 @@ lm65 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS65}</div></div></div>')
 phone('Tuner', 'Tuner, phone', ph65, TU65)
 laptop('TunerLaptop', 'Tuner, laptop', lm65, '', TU65, '', 'Practice')
-for f in ('Tuner', 'TunerLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r65 tuner ok')

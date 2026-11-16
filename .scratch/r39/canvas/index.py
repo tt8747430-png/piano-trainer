@@ -18,29 +18,24 @@ PRACTICE = [('Main', 'Laptop', 'Practice'), ('Chords', 'ChordsLaptop', 'Chords')
             ('ChordFinder', 'ChordFinderLaptop', 'Chord finder'), ('CircleOfFifths', 'CircleOfFifthsLaptop', 'Circle of fifths')]
 # R42 canvas 100 (owner: "group the screens by page and by device and not so scattered"): one canvas page per area;
 # on it one row per screen, every laptop board in the left column and every phone board in the right, in step down the
-# page; a row's variants (a state, Night) sit beside its main board
+# page; a row's variants (a state) sit beside its main board
 LW, PW, GAP, DEVGAP, TITLE, ROWGAP = 2143, 450, 80, 240, 300, 200
 def L(stem, name): return (stem, name)
-# owner, 2026-11-16: "remove all the night versions": the canvas draws Day only; no row carries a Night board
-def NIGHT(stem): return False
 PAGES = [
-  ('songs', 'Songs', [(n, [L(lp, n + ', laptop')] + ([L(lp + 'Night', n + ', Night, laptop')] if NIGHT(ph) else []), [L(ph, n + ', phone')] + ([L(ph + 'Night', n + ', Night, phone')] if NIGHT(ph) else [])) for ph, lp, n in SONGS]),
+  ('songs', 'Songs', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in SONGS]),
   ('player', 'The Player', [
     ('The Player', [L(lp, n + ', laptop') for ph, lp, n in PLAYER], [L(ph, n + ', phone') for ph, lp, n in PLAYER]),
     ('The Player’s layers, phone', [], [L(ph, 'The Player, ' + n + ', phone') for ph, n in PLAYER_PHONES])]),
-  ('practice', 'Practice', [(n, [L(lp, n + ', laptop')] + ([L(lp + 'Night', n + ', Night, laptop')] if NIGHT(ph) else []),
-                                [L(ph, n + ', phone')] + ([L(ph + 'Night', n + ', Night, phone')] if NIGHT(ph) else [])) for ph, lp, n in PRACTICE]),
-  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')] + ([L(lp + 'Night', n + ', Night, laptop')] if NIGHT(ph) else []), [L(ph, n + ', phone')] + ([L(ph + 'Night', n + ', Night, phone')] if NIGHT(ph) else [])) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('LearnLevel', 'LearnLevelLaptop', 'A level'), ('LearnCourses', 'LearnCoursesLaptop', 'Courses'), ('LearnYours', 'LearnYoursLaptop', 'Your lessons and courses'), ('Profile', 'ProfileLaptop', 'Profile'), ('PracticeResult', 'PracticeResultLaptop', 'A practice run’s results, from Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('YourLessonSettings', 'YourLessonSettingsLaptop', 'Your own lesson’s Settings'), ('YourCourseSettings', 'YourCourseSettingsLaptop', 'Your own course’s Settings'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
+  ('practice', 'Practice', [(n, [L(lp, n + ', laptop')],
+                                [L(ph, n + ', phone')]) for ph, lp, n in PRACTICE]),
+  ('places', 'Learn, Profile and Settings', [(n, [L(lp, n + ', laptop')], [L(ph, n + ', phone')]) for ph, lp, n in [('Learn', 'LearnLaptop', 'Learn'), ('LearnLevel', 'LearnLevelLaptop', 'A level'), ('LearnCourses', 'LearnCoursesLaptop', 'Courses'), ('LearnYours', 'LearnYoursLaptop', 'Your lessons and courses'), ('Profile', 'ProfileLaptop', 'Profile'), ('PracticeResult', 'PracticeResultLaptop', 'A practice run’s results, from Profile'), ('Settings', 'SettingsLaptop', 'Settings'), ('Admin', 'AdminLaptop', 'Administration'), ('Lesson', 'LessonLaptop', 'A lesson, read and edited'), ('Course', 'CourseLaptop', 'A course, read and edited'), ('YourLessonSettings', 'YourLessonSettingsLaptop', 'Your own lesson’s Settings'), ('YourCourseSettings', 'YourCourseSettingsLaptop', 'Your own course’s Settings'), ('SignIn', 'SignInLaptop', 'Sign in and the account pages'), ('Legal', 'LegalLaptop', 'Privacy Policy and Terms'), ('AppLayers', 'AppLayersLaptop', 'Across the app: search, MIDI, shortcuts, notices, route states')]])]
 d = json.load(open(P + 'canvas.json'))
 boards, order, notes = {}, [], {}
-# canvas 101 (owner: "put them in a row like the all the flows screens pages in one row for phone then the dark mode
-# and after that the same for laptop"): on each page, the flow's phone screens in one row in the flow's order, then
-# their Night boards, then the laptop screens, then theirs
-def night(stem): return stem.endswith('Night')
+# canvas 101: on each page, the flow's phone screens in one row in the flow's order, then the laptop screens (Day only:
+# owner, 2026-11-16, "remove all the night versions")
 for pid, pname, rows in PAGES:
     phones = [b for r in rows for b in r[2]]; laps = [b for r in rows for b in r[1]]
-    bands = [('Phone', [b for b in phones if not night(b[0])], PW, 920), ('Phone, Night', [b for b in phones if night(b[0])], PW, 920),
-             ('Laptop', [b for b in laps if not night(b[0])], LW, 1299), ('Laptop, Night', [b for b in laps if night(b[0])], LW, 1299)]
+    bands = [('Phone', phones, PW, 920), ('Laptop', laps, LW, 1299)]
     y = 0
     for name, items, w, h in bands:
         if not items: continue
@@ -59,7 +54,7 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/lapwin.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/folds.py').read())
 for b in boards:
     if os.path.exists(P + b):
-        h0 = open(P + b).read(); h1 = folds(lapwin(keyface(h0), night(b[:-8])), b[:-8])
+        h0 = open(P + b).read(); h1 = folds(lapwin(keyface(h0)), b[:-8])
         # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
         # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
         if 'header data-float' in h1 and 'data-floatcss' not in h1:

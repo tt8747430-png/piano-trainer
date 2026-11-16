@@ -26,7 +26,4 @@ lm67 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR67('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('CircleOfFifths', 'Circle of fifths, phone', ph67, CO67)
 laptop('CircleOfFifthsLaptop', 'Circle of fifths, laptop', lm67, '', CO67, '', 'Practice')
-for f in ('CircleOfFifths', 'CircleOfFifthsLaptop'):
-    # the wheel's lit minors and their neighbours, which the night map does not hold
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()).replace('#FAF0DC', '#332B1E').replace('#F3D9A8', '#5A4628'))
 print('r67 circle ok')

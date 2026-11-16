@@ -34,8 +34,3 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r67_circle.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r68_exercise.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r70_scrim.py').read())
 exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r71_tips.py").read())
-# owner, 2026-11-16: "remove all the night versions": the canvas draws Day only. r69_night.py is no longer run, and
-# whatever Night board an area's generator still writes beside its Day one is removed here, so none is ever published
-for _f in os.listdir('/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'):
-    if _f.endswith('Night.dc.html'):
-        os.remove('/home/user/piano-trainer/.scratch/r39/canvas/practice/project/' + _f)

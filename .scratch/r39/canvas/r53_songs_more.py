@@ -11,7 +11,6 @@ def COV(t, c, w=56, folder=False):
     """A song's cover is its first notes on a staff, a folder's a stack of pages in its paint: as the library draws them."""
     pic = (STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))).replace('url("', "url('").replace('")', "')")
     return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: {w // 6}px; background: {pic} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
-STAR = lambda fill: f'<svg viewBox="0 0 24 24" width="22" height="22" fill="{fill}" stroke="#C26A2E" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg>'
 def STRIP(lst='demo'):
     return (f'<div aria-label="Canvas: show a state" style="flex: none; margin: 0 12px 6px; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}; display: flex; flex-wrap: wrap; gap: 6px; align-items: center"><span style="font-size: 12px; font-weight: 700; color: {SOFT}; padding: 0 4px">CANVAS · SHOW</span>'
             f'<sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="height: 32px; padding: 0 10px; border: 0; border-radius: 16px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 13px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>')

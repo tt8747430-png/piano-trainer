@@ -76,6 +76,4 @@ lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)
 laptop('ScalesLaptop', 'Scales and keys, laptop', lm60, '', SC60, POPS60, 'Practice')
-for f in ('Scales', 'ScalesLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r60 scales ok')

@@ -3,7 +3,7 @@ player or chords play"): every 2D keyboard on every board wears the app's keys (
 key-felt; src/shared/ui/piano-keyboard/Key.tsx): the felt along the far end, ivory keys lit from the player's side
 with a lip, ebony keys bevelled with a sheen and a sloped front, both with rounded feet, on the key bed. A board's
 keyboard only names its keys (sc-for over *.whites / *.blacks, kbw / kbb); this pass gives them their faces, once,
-for every board, Day and Night."""
+for every board."""
 import re
 KEYCSS = ('<style data-keys>'
   '.pk { background: #CBC2B9 !important; isolation: isolate }'
@@ -22,12 +22,6 @@ KEYCSS = ('<style data-keys>'
   '.pk-b::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; border-radius: 0 0 3px 3px; pointer-events: none;'
   ' background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(51,41,33,.3)) }'
   '.pk-w > *, .pk-b > * { position: relative; z-index: 1 }'
-  '[data-night] .pk { background: #787069 !important } [data-night] .pk-w { border-right-color: #787069 !important;'
-  ' box-shadow: inset 1px 0 0 rgba(255,255,255,.22), inset -1px 0 0 rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.45) !important }'
-  '[data-night] .pk::before { background: linear-gradient(to bottom, #5A2422, #3A1716); box-shadow: 0 2px 3px rgba(0,0,0,.45) }'
-  '[data-night] .pk-w::before { background: linear-gradient(to bottom, rgba(0,0,0,.35) 0, transparent 16%, transparent 80%, rgba(0,0,0,.12) 100%) }'
-  '[data-night] .pk-w::after { background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(0,0,0,.3)) }'
-  '[data-night] .pk-b { box-shadow: inset 2px 0 0 rgba(255,255,255,.1), inset -2px 0 0 rgba(0,0,0,.45), 1px 3px 4px rgba(0,0,0,.45) !important }'
   '</style>')
 LIST = r'\{\{[\w.]*?(?:\.|\b)(whites|blacks|kbw|kbb)\}\}'
 FELT = re.compile(r'<div style="position: absolute; left: 0; right: 0; top: 0; height: [34]px; background: #(?:7C302C|5A2422)"></div>')

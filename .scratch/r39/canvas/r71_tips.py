@@ -1,7 +1,7 @@
 # One tooltip (loop round 49; scan-first 8, HIG "help tags", Material 3 plain tooltips): every icon-only control names
 # itself on a pointer after a short wait, on every board, with the one style the Chords page set (canvas 99). A
 # control is icon-only when it holds an icon and no words; piano keys and beat cells hold no icon and get none.
-# Runs after every Day generator, before the Night boards are drawn from them.
+# Runs after every generator.
 import os, re
 _d = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
 _TIPCSS = ('<style data-tips>@media (hover: hover) { [data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); z-index: 90;'
@@ -25,7 +25,7 @@ def _tip(m):
     return '<%s%s data-tip="%s"%s>%s</%s>' % (tag, attrs, al.group(1), up, inner, tag)
 _n_ctl = 0
 for _f in sorted(os.listdir(_d)):
-    if not _f.endswith('.dc.html') or 'Night' in _f:
+    if not _f.endswith('.dc.html'):
         continue
     _h = open(_d + _f).read()
     _n = _ctl.sub(_tip, _h)

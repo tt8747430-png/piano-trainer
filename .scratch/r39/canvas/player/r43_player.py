@@ -11,8 +11,8 @@ Reads the merged Player pages from player/base/ (written by merge_player.py) and
 - the chord names over the staff in the Chords page's book serif; the Chords page's tap, focus and tooltip rules.
 Run: python3 -I player/r43_player.py  (from .scratch/r39/canvas)
 
-Careful: the built PlayerApp and PlayerDesk boards (and their Night) carry passes made after this script (the States
-tool, the keys' faces), which a fresh run drops; for a small change, patch the four built boards in place too."""
+Careful: the built PlayerApp and PlayerDesk boards carry passes made after this script (the States
+tool, the keys' faces), which a fresh run drops; for a small change, patch the two built boards in place too."""
 import re, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -180,8 +180,6 @@ def patch(t, phone):
 CHEV_R = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>'
 CHEV_L = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>'
 CARD = 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
-ICON3D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 6h30l7 18H2z"></path><path d="M14.5 6 11 24M20 6l-2 18M26 6v18M31.5 6l3 18M37 6l5 18"></path><path d="M12.6 6h3l-1.2 9h-3.4zM18.3 6h3l-.7 9h-3.3zM27.6 6h3l1 9h-3.3zM33.3 6h3l1.9 9h-3.4z" fill="currentColor"></path></svg>'
-ICON2D = '<svg width="40" height="24" viewBox="0 0 48 28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3 4v20M14.6 4v20M20.9 4v20M27.1 4v20M33.4 4v20M39.7 4v20"></path><path d="M6.5 4h3.6v11H6.5zM12.8 4h3.6v11h-3.6zM25.3 4h3.6v11h-3.6zM31.6 4h3.6v11h-3.6zM37.9 4h3.6v11h-3.6z" fill="currentColor"></path></svg>'
 ROW = 'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
 SEP = 'border-top: 1px solid #E9E2D8; margin-top: -1px'
 def SWITCH(v):  # the Chords page's switch (R42 v85): 51 by 31, green when on
@@ -194,8 +192,6 @@ def VCARD(v, icon, name, inner=''):
 def SEGROW(label, lst, w):
     return (f'<div style="{ROW}; {SEP}"><span>{label}</span><div role="group" style="flex: none; width: {w}px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; padding: 2px; border-radius: 9px; background: #EEE9E2">'
             f'<sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="2"><button type="button" aria-pressed="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 30px; padding: 0 6px; border: 0; border-radius: 7px; background: {{{{o.bg}}}}; box-shadow: {{{{o.shadow}}}}; color: #332921; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap">{{{{o.name}}}}</button></sc-for></div></div>')
-def LINKROW(label, val, first=False):
-    return (f'<a href="#" style="{ROW}; {"" if first else SEP + "; "}text-decoration: none"><span>{label}</span><span style="display: flex; align-items: center; gap: 4px; color: #685E56">{val}<span style="display: flex; color: #685E56">{CHEV_R}</span></span></a>')
 # one Piano sheet, the very markup the Chords page uses (piano_sheet.py; owner, canvas 121: "merge them and make proper
 # one piano settings"). Only its choices follow the page: a song fits the song or the learner's own piano.
 import sys; sys.path.insert(0, str(HERE.parent)); import piano_sheet as PS
@@ -529,17 +525,4 @@ for v, name in (('sheet', 'Sheet'), ('diagrams', 'Diagrams'), ('grid', 'Grid'), 
 lk = (OUT / 'PlayerLaptopKeyboard.dc.html').read_text()
 (OUT / 'PlayerLaptopParts.dc.html').write_text(lk.replace('open="keys"', 'open="hands"').replace('Keyboard</title>', 'Parts</title>'))
 (OUT / 'PlayerLaptopSheet.dc.html').write_text(lk.replace('open="keys"', 'open="view"').replace('Keyboard</title>', 'Sheet settings</title>'))
-# Night (owner, canvas 122: "3. 3. yes"): the Player in the app's dark roles, through the one map the Chords page uses
-import night as NT
-for name in ('PlayerApp', 'PlayerDesk'):
-    # the Player draws its surfaces in pure white (the Chords page keeps #FFFFFF for ink on colour), and its piano
-    # pictures are lit for the day: by night they are surfaces, and the pictures dim to the dusk keys' level
-    h = (OUT / f'{name}.dc.html').read_text().replace('background: #FFFFFF', 'background: #FEFDFB').replace('background: #fff;', 'background: #FEFDFB;')
-    h = h.replace('<img src="{{kbImg}}" alt="{{kbAlt}}" style="', '<img src="{{kbImg}}" alt="{{kbAlt}}" style="filter: brightness(.8); ', 1)
-    (OUT / f'{name}Night.dc.html').write_text(NT.night(h))
-for w, comp in (('Player', 'PlayerApp'), ('PlayerLaptop', 'PlayerDesk'), ('PlayerKeyboard', 'PlayerApp'), ('PlayerLaptopKeyboard', 'PlayerDesk'), ('PlayerDone', 'PlayerApp')):
-    h = (OUT / f'{w}.dc.html').read_text()
-    assert f'name="{comp}"' in h, w
-    h = h.replace(f'name="{comp}"', f'name="{comp}Night"', 1).replace('</title>', ', Night</title>', 1).replace('<html', '<html data-theme="dark"', 1).replace('body{margin:0}', 'body{margin:0;background:#191512}', 1)
-    (OUT / f'{w}Night.dc.html').write_text(h)
 print('r43 player ok')

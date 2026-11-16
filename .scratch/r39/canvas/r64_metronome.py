@@ -23,6 +23,4 @@ lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR64('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST) + BSHEET('setOn', 'Metronome settings', ME_SET))
 laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 40px; top: 160px') + POPOVER('setOn', 'Metronome settings', ME_SET, 'right: 40px; top: 64px'), 'Practice')
-for f in ('Metronome', 'MetronomeLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r64 metronome ok')

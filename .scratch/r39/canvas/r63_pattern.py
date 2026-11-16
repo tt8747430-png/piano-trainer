@@ -74,6 +74,4 @@ lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative
         + IF('notPattern', PAGEHEAD_L('back', 'Back') + WIDE(H1('{{pageT}}') + LPA(IF('isEditor', PATED) + IF('isPublish', PATPUB)), 640)) + TOASTL)
 phone('Pattern', 'A pattern, phone', ph63, js(PA63.replace('__ROOT__', "'pattern'")), SHEETS63)
 laptop('PatternLaptop', 'A pattern, laptop', lm63, '', js(PA63.replace('__ROOT__', "'pattern'")), POPS63, 'Practice')
-for f in ('Pattern', 'PatternLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r63 pattern ok')

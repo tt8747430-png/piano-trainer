@@ -25,8 +25,6 @@ def FIELD(label, val, key='', typ='text', note='', noteC=SOFT, eye=False):
             f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 4px 0 12px">{inp}{e}</span>{n}</label>')
 AVA = lambda s, fs: f'<span style="flex: none; width: {s}px; height: {s}px; border-radius: {s // 2}px; background: #E9D8C4; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: {fs}px; color: {INK}">{{{{avatar}}}}</span>'
 DOT = lambda c: f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {c}"></span>'
-ROWBTN = lambda label, act, val='', color=INK: (f'<button type="button" onClick="{{{{{act}}}}}" style="min-height: 52px; width: 100%; border: 0; background: transparent; color: {color}; font: inherit; text-align: left; display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 16px">'
-                                              f'<span style="flex: 1; font-size: 16px">{label}</span><span style="font-size: 16px; color: {SOFT}">{val}</span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
 BOXG = lambda *rows: '<div style="border-radius: 14px; background: ' + SHEET + '; box-shadow: 0 0 0 1px ' + LINE + '; overflow: hidden">' + ''.join(f'<div style="box-shadow: inset 0 {"-1px" if i < len(rows) - 1 else "0"} 0 {FILL}">{r}</div>' for i, r in enumerate(rows)) + '</div>'
 REDBTN = lambda label, act: GROUP(('action', label, act, RED), bg=SHEET)
 

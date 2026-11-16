@@ -48,9 +48,8 @@ def _lift(h):
     return h, lists, buttons
 
 
-def _tool(night, laptop):
-    line, ink, card, text, ring = (('#7D7368', '#BBB3A8', '#2B2621', '#EDE7DF', '#453E38') if night
-                                   else ('#8A8178', '#685E56', '#FEFDFB', INK, '#DAD1C8'))
+def _tool(laptop):
+    line, ink, card, text, ring = '#8A8178', '#685E56', '#FEFDFB', INK, '#DAD1C8'
     left, top = ('24px', '24px') if laptop else ('2px', '0px')
     return ('<div data-canvas-tool style="position: absolute; left: %s; top: %s; z-index: 300; font-family: ui-monospace, Menlo, monospace">' % (left, top)
             + '<button type="button" aria-label="Canvas tool: show a state" aria-expanded="{{statesOpen}}" onClick="{{toggleStates}}" '
@@ -96,7 +95,7 @@ def run():
         stem = f[:-8]
         root = re.compile(r'<div style="[^"]*position: relative[^"]*">').search(h, h.index('</helmet>'))
         assert root, f
-        h = h[:root.end()] + _tool('Night' in stem, 'Laptop' in stem) + h[root.end():]
+        h = h[:root.end()] + _tool('Laptop' in stem) + h[root.end():]
         k = h.rindex('</script>')
         h = h[:k] + _script(lists, buttons, playing) + h[k:]
         open(p, 'w').write(h)

@@ -51,14 +51,13 @@ _LAPJS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.ren
        '}; }\n')
 
 
-def lapwin(h, night):
+def lapwin(h):
     if 'data-lapwin' in h or _LAPHEAD_OLD not in h:
         return h
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)
     if not m:
         return h
-    glass = ('background: rgba(43, 38, 33, 0.78); color: #EDE7DF; box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 10px 28px -8px rgba(0,0,0,0.6)' if night
-             else 'background: rgba(254, 253, 251, 0.78); color: #332921; box-shadow: 0 0 0 1px rgba(51,41,33,0.08), 0 10px 28px -8px rgba(51,41,33,0.28)')
+    glass = ('background: rgba(254, 253, 251, 0.78); color: #332921; box-shadow: 0 0 0 1px rgba(51,41,33,0.08), 0 10px 28px -8px rgba(51,41,33,0.28)')
     exitb = ('<button type="button" data-focusexit onClick="{{lapFocusT}}" style="position: absolute; left: 24px; bottom: 24px; z-index: 40; height: 44px; '
              'padding: 0 18px 0 14px; border: 0; border-radius: 22px; %s; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); '
              'align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600">%sExit focus</button>' % (glass, _EXIT))

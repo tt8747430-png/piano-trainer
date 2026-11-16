@@ -61,7 +61,6 @@ UNDO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="curr
 REDO = UNDO.replace('<path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path>', '<path d="m15 14 5-5-5-5"></path><path d="M20 9H9a5 5 0 0 0 0 10h3"></path>')
 def KEYSOF(lst, h):
     return KEYS(h).replace('kb.', lst + '.')
-EDITABLE = 'border-radius: 6px; box-shadow: {{editRing}}'
 def DOC(lap=False):
     kbn, qn, kh = ('kbL', 'qkbL', 120) if lap else ('kb', 'qkb', 96)
     handle = (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><span style="position: absolute; left: -44px; top: 0; display: flex; flex-direction: column">'
@@ -132,8 +131,6 @@ llm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTO
        f'{PREVBAR}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 40px 60px; display: grid; grid-template-columns: 260px 704px; justify-content: center; gap: 72px; align-items: start">{CONTENTS}<div style="display: flex; flex-direction: column; gap: 32px">{DOC(True)}</div></main>{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}')
 lpops = (POPOVER('insOn', 'Insert', INSBODY, 'right: 300px; top: 72px', 420) + POPOVER('exOn', 'Scale', EXBODY, 'right: 260px; top: 260px', 460) + POPOVER('menuOn', 'One pattern for every key', BLOCKBODY, 'left: 600px; top: 180px', 320)
          + POPOVER('pubOn', 'Publish', PUBBODY, 'right: 28px; top: 72px', 400) + POPOVER('moreOn', 'How major scales work', MOREBODY, 'right: 28px; top: 64px', 320))
-# ── canvas 130: the lesson's real bar, its Settings and Publish pages, the Publishing menu, Versions, Style, Tools ──
-CHECKS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"></path></svg>'
 TOOLSI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8L13.5 3h-3ZM12 15l5-7"></path></svg>'
 # canvas 164: Learned says itself (scan-first 3: an icon alone left the learner guessing): a pill, grass once learned
 LEARNEDB = LEARNEDT

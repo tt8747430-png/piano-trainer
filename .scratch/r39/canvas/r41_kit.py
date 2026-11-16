@@ -50,17 +50,12 @@ def TB(label, act):
     return f'<button type="button" onClick="{{{{{act}}}}}" style="{TBST}">{label}</button>'
 # Learned, on a song and a lesson: the glass capsule, a grass wash once learned (JS gives learnedBg, learnedLine, learnedFg).
 LEARNEDT = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="{TBST}; background: {{{{learnedBg}}}}; border-color: {{{{learnedLine}}}}; color: {{{{learnedFg}}}}"><sc-if value="{{{{learned}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>Learned</button>'
-LEARNED_JS = "learnedBg: learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: learned ? '#9BC093' : '#DAD1C8', learnedFg: learned ? '#2F5A35' : '#332921',"
 # A modal task (a run, sign-in) leaves by the standard Close (HIG): the same glass circle, a ✕, at the leading edge.
 def CLOSEB(href='', act='', label='Close'):
     return IB(label, CLOSE, act, href)
 GEAR = lambda: IB('Settings', GEARI, 'openSet')
 DOTS = lambda: IB('More', MORE, 'openMore')
 
-# ── type ──
-def LARGE(title, right='', soft=''):
-    s = f'<span style="font-size: 34px; font-weight: 700; letter-spacing: -0.01em; color: {LINE}">{soft}</span>' if soft else ''
-    return f'<div style="flex: none; display: flex; align-items: center; gap: 12px; padding: 2px 16px 10px"><h1 style="margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -0.01em">{title}</h1>{s}<span style="flex: 1"></span>{right}</div>'
 # A place's bar (owner, 2026-11-13: "I dont like that the header is occupied only by these two buttons no the right and the
 # rest is just empty"): the title sits in the bar itself, at its left, the actions at its right; never an empty bar
 # over a title on its own line. Back, where there is one, before the title.
@@ -149,11 +144,9 @@ def BSHEET(cond, title, body, done='Done'):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 14px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 14px 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
-TABBAR_PH = lambda cur: TABBAR(cur)
 
 def js(body):
     return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
-COMMON = "...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }),"
 
 def detail(stem, title, script, phone_body, laptop_main, laptop_aside, sheets_phone='', pops_laptop='', section='Practice'):
     phone(stem, title + ', phone', phone_body, script, sheets_phone)

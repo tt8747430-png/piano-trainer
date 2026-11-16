@@ -4,7 +4,7 @@
 # heading stays where it was, so a folded page is a short list of what the learner can open again.
 import re
 
-FOLD_BOARDS = ('Learn', 'LearnNight', 'LearnLaptop', 'LearnLaptopNight', 'Main', 'Laptop', 'Profile', 'ProfileLaptop')
+FOLD_BOARDS = ('Learn', 'LearnLaptop', 'Main', 'Laptop', 'Profile', 'ProfileLaptop')
 _FOLDROW = '<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">'
 _FOLDCHEV = ('<svg data-foldchev viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" '
          'stroke-linejoin="round" aria-hidden="true" style="flex: none; opacity: 0.55"><path d="m6 9 6 6 6-6"></path></svg>')

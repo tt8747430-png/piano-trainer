@@ -77,6 +77,4 @@ lm62 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR62('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + PMENU62('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
 phone('Progression', 'A progression, phone', ph62, PR62, SHEETS62)
 laptop('ProgressionLaptop', 'A progression, laptop', lm62, '', PR62, POPS62, 'Practice')
-for f in ('Progression', 'ProgressionLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r62 progression ok')

@@ -2,10 +2,8 @@
 # drawn, the next badge, badges and achievements), Settings (app-wide only; Appearance chosen by its picture). Real
 # content: the journeys from src/entities/lesson/content/journeys.ts, the app's en strings. Exec'd by r41.py.
 _J = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/journeys.json'))
-_KIND = {'scales': 'Scales', 'chords': 'Chords', 'intervals': 'Intervals', 'progressions': 'Progressions'}
 _SCALE = {'major': 'Major', 'natural': 'Natural minor', 'harmonic': 'Harmonic minor', 'melodic': 'Melodic minor', 'pent': 'Major pentatonic', 'mpent': 'Minor pentatonic', 'majorBlues': 'Major blues', 'blues': 'Blues', 'dorian': 'Dorian', 'phrygian': 'Phrygian', 'lydian': 'Lydian', 'mixolydian': 'Mixolydian', 'locrian': 'Locrian'}
 _FAMILY = {'tri': ('Triads', 7), 'six': ('6th & add', 7), 'sev': ('7th chords', 9), 'nin': ('9ths & more', 14), 'alt': ('Altered 7ths', 9)}
-_NAME = {"'major'": 'Major scales', "'tri'": 'Triads', "'minor'": 'Minor scales', "'seventh'": 'Seventh chords', "'sev'": 'Seventh chords'}
 LEVELS = []
 for li, j in enumerate(_J):
     n = 0; chs = []
@@ -70,7 +68,6 @@ LEARN_JS = js(PLACES_PRE + r'''
       coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h.replace(/ courses$/, ''), now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
       courses: CRS.map(([h, cs]) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: t + ' removed' }); }, done: k === 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: k === 'done' ? '#DCE9D6' : '#F6E7C8', ring: k === 'now' ? '0 0 0 2.5px #EDC684' : 'none' })) })) };''')
-LCHIPS = KCHIPS('levels')
 def PATHROW(laptop=False):
     href = 'LessonLaptop.dc.html' if laptop else 'Lesson.dc.html'
     return (f'<sc-for list="{{{{c.rows}}}}" as="r" hint-placeholder-count="3"><a href="{href}" style="position: relative; min-height: 68px; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 0; color: {INK}; text-decoration: none">'
@@ -92,8 +89,6 @@ def PATHF(lap):
 METER = f'<span style="display: block; height: 6px; border-radius: 3px; background: {FILL}"><span style="display: block; width: {{{{meter}}}}; height: 6px; border-radius: 3px; background: #44684A"></span></span>'
 CONT = CARD(f'<div style="display: flex; align-items: center; gap: 16px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">{{{{contT}}}}</span><span style="font-family: {SERIF}; font-size: 22px">{{{{nextT}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{contSub}}}}</span></div>'
             f'<a href="#" aria-label="Open the lesson" style="flex: none; width: 56px; height: 56px; border-radius: 28px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</a></div><div style="margin-top: 12px">{METER}</div>')
-HEADJ = f'<div style="display: flex; flex-direction: column; gap: 6px; margin: 0 4px"><h2 contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{jt}}}}</h2><p contenteditable="{{{{editing}}}}" style="margin: 0; outline: none; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p></div>'
-OWN = GROUP(('link', 'The ii–V–I in my hymns', '3 sections', '#'), ('link', 'Warm-up before church', '2 sections', '#'), ('link', 'New lesson', '', 'openNewLesson'), bg=SHEET)
 COURSEROWS = (f'<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 14px; background: {HONEY}"><span style="font-size: 13px; font-weight: 700; color: #8A5A1C">About the courses</span><p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 15px; line-height: 1.45; outline: none">Each course is a few weeks of lessons with songs to read at the end. Start with one on your shelf; the Lessons keep going beside it.</p></div>'
               f'<sc-for list="{{{{courses}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 6px"><h3 style="margin: 0 4px; font-size: 14px; font-weight: 600; color: {SOFT}">{{{{g.h}}}}</h3><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
               f'<sc-for list="{{{{g.cs}}}}" as="k" hint-placeholder-count="3"><a href="Course.dc.html" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none"><span style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{k.tileBg}}}}; box-shadow: {{{{k.ring}}}}; display: flex; align-items: center; justify-content: center; color: {INK}">{FOLDI}</span>'
@@ -127,10 +122,6 @@ def LEVELLIST(lap=False):
             f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">{RING}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.l}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.sub}}}}</span></span>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap">{{{{p.got}}}}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a></sc-for></div>')
-def LEVELCARDS():
-    return (f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px"><sc-for list="{{{{levelsHome}}}}" as="p" hint-placeholder-count="4">'
-            f'<a href="LearnLevelLaptop.dc.html" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; align-items: center; gap: 14px; color: {INK}; text-decoration: none">{RING}'
-            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{{{{p.l}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.sub}}}}</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{p.got}}}} learned</span></span></a></sc-for></div>')
 NEXTPILL = f'<span style="flex: none; height: 24px; padding: 0 10px; border-radius: 12px; background: {ACCENT}; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center">Next</span>'
 def COURSECARD(w, href):
     # a course's cover is its name printed on its shelf's paint, the shelf above it, as a book's cover; under it its line
@@ -203,9 +194,6 @@ clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placehold
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY),
        POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + POPOVER('ncOn', 'New course', NCBODY, 'right: 40px; top: 72px', 480), 'Learn')
 
-# Learn by Night (loop round 10): every area has its Night boards beside its Day ones
-for _f in ('Learn', 'LearnLaptop', 'LearnLevel', 'LearnLevelLaptop', 'LearnCourses', 'LearnCoursesLaptop'):
-    open(OUT + _f + 'Night.dc.html', 'w').write(night(open(OUT + _f + '.dc.html').read()))
 
 # ── Profile ──
 BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>'

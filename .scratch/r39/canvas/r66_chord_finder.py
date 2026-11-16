@@ -43,6 +43,4 @@ lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR66('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('ChordFinder', 'Chord finder, phone', ph66, CF66, BSHEET('setOn', 'Chord finder settings', CF_SET66) + BSHEET('keysOn', 'Piano', SC_KEYS60))
 laptop('ChordFinderLaptop', 'Chord finder, laptop', lm66, '', CF66, POPOVER('setOn', 'Chord finder settings', CF_SET66) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 90px; top: 64px'), 'Practice')
-for f in ('ChordFinder', 'ChordFinderLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r66 chord finder ok')

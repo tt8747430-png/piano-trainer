@@ -153,5 +153,3 @@ for lesson in (True, False):
     pp = sh.replace('<div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'.replace('{LINE}', LINE), '').replace('position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px')
     detail(stem, 'Settings · ' + nm, OSET_JS.replace('const cs =', 'const isLesson = %s, cs =' % ('true' if lesson else 'false'), 1), SHOWSTATES() + SETTINGS(lesson, False), SHOWSTATES() + SETTINGS(lesson, True), '', sh, pp, 'Learn')
 print('r57 yours ok')
-for _f in ('LearnYours', 'LearnYoursLaptop'):
-    open(OUT + _f + 'Night.dc.html', 'w').write(night(open(OUT + _f + '.dc.html').read()))

@@ -42,6 +42,4 @@ lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + BAR68('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + '</div>')
 phone('Exercise', 'An exercise, phone', ph68, EX68, SHEETS68)
 laptop('ExerciseLaptop', 'An exercise, laptop', lm68, '', EX68, POPS68, 'Practice')
-for f in ('Exercise', 'ExerciseLaptop'):
-    open(OUT + f + 'Night.dc.html', 'w').write(night(open(OUT + f + '.dc.html').read()))
 print('r68 exercise ok')
