@@ -889,6 +889,7 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+- **Loop round 46, Search counts the lessons as Learn does:** its Continue suggestion said "Lesson 7 of 18" where Learn, the lesson and Continue say Foundations has 13; it reads "Continue · Lesson 7 of 13" (2026-11-16).
 - **Loop round 46, every said state is the one empty state (Explore, Groups, Archive, the editor's draft, a pattern, a progression, the app's route pages):** their marks were text glyphs (⌁ ! ♪ ? ◎ ⌫ ✎ …) where the rest draw Lucide icons, some titles ended in a full stop ("Explore didn’t load.", "You’re offline.") and the route pages drew a second, larger shape (a 72 tinted mark, a 22 title); now each mark is its Lucide icon (wifi off, alert, music, help, users, trash, pencil, loader) on the 64 sand mark, no title takes a full stop, and the route pages use the 18 title and 15 line; Groups offline says what Explore offline says (2026-11-16).
 
 - **Loop round 45, the page under the app's layers is today's Learn (AppLayers):** the Search, MIDI and shortcuts boards stood over an old Learn ("Beginner · 7 of 18 learned", "Chapter 3: Scales and keys" with lessons no level has); it reads as the Learn and level boards do: Continue · Foundations, Lesson 7 · 6 of 13 learned, and Foundations' last lessons (2026-11-16).
