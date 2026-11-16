@@ -52,9 +52,10 @@ def CBODY(lap):
     go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
           f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
     about = f'{H2("About")}<p contenteditable="{{{{editing}}}}" style="margin: 0 4px; font-size: 16px; line-height: 1.55; outline: none">{{{{about}}}}</p>'
-    if lap:  # canvas 164: no narrow column in a wide screen; the course's card held in view, its lessons beside it
-        return (f'<div style="width: 400px; flex: none; position: sticky; top: 0; display: flex; flex-direction: column; gap: 16px">{COVER}{head}{go}{about}</div>'
-                f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px">{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}</div>')
+    if lap:  # one centred column (owner, 2026-11-16: "the page has one focus"): the cover beside the name and Continue as
+        # its head, then About, the lessons and the guided songs under it, as a song's page; never a rival column
+        return (f'<div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: center; margin-bottom: 8px">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
+                f'{about}{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
     return COVER + head + go + about + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; gap: 2px; padding: 0 16px 6px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>{IB("Publishing", DOTS, "openPm")}'
@@ -79,7 +80,7 @@ cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('pmOn', 'Publishing', CPM) + BSHEET('propOn', 'Properties', CPROPS)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Intro to Music Reading", CBAR_R, "LearnCoursesLaptop.dc.html")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT.replace("padding: 0 16px 6px", "padding: 6px 40px 6px")}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; align-items: flex-start"><div style="flex: 1; max-width: 1180px; display: flex; gap: 48px; align-items: flex-start">{CBODY(True)}</div></main>'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 60px"><div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 14px">{CBODY(True)}</div></main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
 cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + POPOVER('pmOn', 'Publishing', CPM, 'right: 160px; top: 60px', 320) + POPOVER('propOn', 'Properties', CPROPS, 'left: 460px; top: 300px', 460)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
