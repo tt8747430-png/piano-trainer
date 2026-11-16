@@ -7,7 +7,7 @@ CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, 
        'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle, Little Star', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
 CRPICS = {t: INCIPIT(INC.get(t, (2, 4))) for t, _ in CRS['songs']}
 COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS = ' + json.dumps(CRPICS) + ';\n' + r'''
-    const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner courses', level = st.level ?? 'Beginner';
+    const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner', level = st.level ?? 'Beginner';
     const lessons = CR.lessons.filter(([t]) => !gone[t]).map(([t, k], i) => ({ t, n: 'Lesson ' + (i + 1), learned: k === 'learned', next: k === 'next', unpub: k === 'unpub', todo: k !== 'learned' && k !== 'next',
       num: String(i + 1), tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', ring: k === 'next' ? '0 0 0 2.5px #EDC684' : (k === 'learned' ? 'none' : '0 0 0 1px #DAD1C8'),
       remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: t + ' removed from the course' }); } }));
@@ -17,7 +17,7 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS =
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     return { ...common(st, set), states, editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
       t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d, pic: CRPICS[t] })), removed, hasRemoved: removed.length > 0,
-      shelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
+      shelves: chipsOf(['Beginner', 'Intermediate', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
       weeksL: weeks + ' weeks', fewer: () => set({ weeks: Math.max(1, weeks - 1) }), more: () => set({ weeks: Math.min(52, weeks + 1) }),
       newOn: sheet === 'new', openNew: () => set({ sheet: 'new' }), create: () => set({ sheet: null, toast: 'New lesson added' }),
@@ -61,7 +61,7 @@ CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; gap: 2px; padding: 0 16px 6px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>{IB("Publishing", DOTS, "openPm")}'
          f'<button type="button" onClick="{{{{openPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish…</button></div><div style="display: flex; justify-content: center">{DSTATUS}</div></header>')
 CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro to Music Reading</span>'
-        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner courses", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("link", "Publish…", "Published", "openPub"), ("action", "Share link", "copyLink"), bg=SHEET)}'
+        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("link", "Publish…", "Published", "openPub"), ("action", "Share link", "copyLink"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
 CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
         f'{CAPS("What changed")}<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Changes made since the last publication are saved and ready to publish.</p>'

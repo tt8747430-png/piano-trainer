@@ -23,8 +23,8 @@ for li, j in enumerate(_J):
                 n -= 1
         chs.append({'t': ct, 'rows': rows})
     LEVELS.append({'chip': ['Beginner', 'Intermediate', 'Advanced', 'Professional'][li], 't': j['t'], 'goal': j['goal'], 'ch': chs, 'n': n, 'done': 6 if li == 0 else 0})
-COURSES = [('Beginner courses', [('Introduction to the Piano', 'The keys, posture and your first tunes', 'done'), ('Intro to Music Reading', 'Notes on both staves, at sight', 'now'), ('Rhythm Basics', 'Count, clap and play in time', ''), ('Playing with Both Hands', 'Two hands, one piece', '')]),
-           ('Intermediate courses', [('The Sustain Pedal', 'When to press, when to change', ''), ('Major Scales', 'All twelve, fingered as the books do', ''), ('Minor Arpeggios', 'Every minor key, hands together', '')]),
+COURSES = [('Beginner', [('Introduction to the Piano', 'The keys, posture and your first tunes', 'done'), ('Intro to Music Reading', 'Notes on both staves, at sight', 'now'), ('Rhythm Basics', 'Count, clap and play in time', ''), ('Playing with Both Hands', 'Two hands, one piece', '')]),
+           ('Intermediate', [('The Sustain Pedal', 'When to press, when to change', ''), ('Major Scales', 'All twelve, fingered as the books do', ''), ('Minor Arpeggios', 'Every minor key, hands together', '')]),
            ('Chords and improvisation', [('Mastering Chords', 'Triads to sevenths in every key', ''), ('Improvising with Chords', 'Melody over the changes', '')]),
            ('Method books', [('Gorshkov: a course in accompaniment', 'After A. Gorshkov', ''), ('Called to Play for Him', 'Hymns and worship songs', '')])]
 PLACES_PRE = 'const LEVELS = ' + json.dumps(LEVELS, ensure_ascii=False) + ';\nconst COURSES = ' + json.dumps(COURSES, ensure_ascii=False) + ';\n'
@@ -53,7 +53,7 @@ LEARN_JS = js(PLACES_PRE + r'''
     const sh = st.sheet ?? null, wk = st.wk ?? 4;
     return { ...common(st, set), chapOn: sh === 'chap', chapT: st.chap ?? '', dropChap: () => set({ sheet: null, gone: { ...gone, ['ch:' + st.chap]: true }, toast: st.chap + ' removed from ' + L.t }), ncOn: sh === 'newCourse', openNewCourse: () => set({ sheet: 'newCourse' }), ''' + NEWJS + r'''
       created: (w) => () => set({ sheet: null, toast: w }), mkLesson: () => set({ sheet: null, toast: 'New lesson created' }), mkCourse: () => set({ sheet: null, toast: 'New course created' }),
-      ncShelves: chipsOf(['Beginner courses', 'Intermediate courses', 'Technique and exercises', 'Chords and improvisation', 'Method books'], st.ncShelf ?? 'Beginner courses', (x) => set({ ncShelf: x })), ncLevels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], st.ncLevel ?? 'Beginner', (x) => set({ ncLevel: x })),
+      ncShelves: chipsOf(['Beginner', 'Intermediate', 'Technique and exercises', 'Chords and improvisation', 'Method books'], st.ncShelf ?? 'Beginner', (x) => set({ ncShelf: x })), ncLevels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], st.ncLevel ?? 'Beginner', (x) => set({ ncLevel: x })),
       wkL: wk + ' weeks', fewerW: () => set({ wk: Math.max(1, wk - 1) }), moreW: () => set({ wk: wk + 1 }), editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false }), addChapter: () => set({ toast: 'Chapter 6 added' }), status: st.pub ? 'Published' : 'Saved · not published', pubOn: sh === 'pub', openPub: () => set({ sheet: 'pub' }), publish: () => set({ sheet: null, pub: true, toast: 'Published for every learner' }), toastOn: !!st.toast, toastUndo: /deleted|removed|reset/i.test(st.toast || ''), toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }), isLessons: view === 'Lessons', isCourses: view === 'Courses', toLessons: () => set({ view: 'Lessons' }), toCourses: () => set({ view: 'Courses' }),
       lessonsInk: view === 'Lessons' ? '#332921' : '#DAD1C8', coursesInk: view === 'Courses' ? '#332921' : '#DAD1C8',
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'], own ? 'Your lessons' : L.chip, (l) => set({ lv: ['Beginner', 'Intermediate', 'Advanced', 'Professional', 'Your lessons'].indexOf(l) })),
@@ -148,10 +148,7 @@ def OWNGROUP(lap=False):
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 # canvas 167 (owner: "popups with meaningful information … show more things with less ui"): About the courses says
 # what a course is in one line, then the shelves themselves with their counts, each a tap to its shelf
-INFOBODY = (f'<p style="margin: 0; font-size: 16px; line-height: 1.5">A course teaches one skill in a few weeks, with songs to read at its end. The levels keep going beside it.</p>'
-            f'<ul style="margin: 0; padding: 0; list-style: none; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-            + ''.join(f'<li style="min-height: 48px; display: flex; align-items: center; gap: 12px; padding: 0 16px; {"box-shadow: inset 0 -1px 0 " + LINE if i < len(COURSES) - 1 else ""}"><span style="flex: 1; font-size: 16px">{sh}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{len(cs)} {"course" if len(cs) == 1 else "courses"}</span></li>' for i, (sh, cs) in enumerate(COURSES))
-            + '</ul>')
+INFOBODY = (f'<p style="margin: 0; font-size: 16px; line-height: 1.5">A course teaches one skill in a few weeks, with songs to read at its end. The levels keep going beside it.</p>')
 CHAPBODY = (f'{CAPS("Name")}<input aria-label="Name" value="{{{{chapT}}}}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
             + GROUP(('action', 'Remove chapter', 'dropChap', RED), bg=SHEET))
 MOREL = GROUP(('action', 'Edit', 'editOn'), bg=SHEET)
