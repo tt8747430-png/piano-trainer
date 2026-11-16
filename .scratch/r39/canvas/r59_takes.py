@@ -64,12 +64,12 @@ TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type=
           .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1).replace('background: {{r.pbg}}', 'background: {{r.pbgL}}', 1))
 assert TKROWL != TKROW and '</a>' not in TKROWL
 TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL}</sc-for></div>', 'true'))
-tkslm = (LTOP('EditorLaptop.dc.html') + SHOWSTATES()
+tkslm = (LTITLEBAR('Takes', '', 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
          + IF('some', f'<main style="flex: 1; min-height: 0; padding: 0 40px 32px; display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 40px; align-items: start">'
-              f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{H1("Takes")}{TKLISTL}</div>'
+              f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'
               f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px">'
               f'<h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Review your recording</h2>{REVIEW(900)}</section></main>', 'true')
-         + IF('none', WIDE(H1('Takes') + EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
+         + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TOASTL)
 TKS_MOREL = GROUP(('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
 detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
