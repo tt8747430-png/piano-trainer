@@ -103,7 +103,7 @@ const PUB = [["Amazing Grace", "John Newton", "Other", "#3E3420", "4.8", "312"],
       stars: [1, 2, 3, 4, 5].map((n) => ({ n, fill: n <= mine ? '#F2B33D' : 'transparent', l: n + (n === 1 ? ' star' : ' stars'), pick: () => S({ mine: n }) })), myT: mine ? 'Your rating: ' + mine + (mine === 1 ? ' star' : ' stars') : 'Not rated',
       openReport: () => S({ sheet: 'report', reason: null }), reportOn: st.sheet === 'report', reasons: chipsOf(['Not theirs to share', 'Offensive', 'Spam', 'Doesn’t play'], st.reason, (x) => S({ reason: x })),
       sendReport: () => { if (st.reason) { S({ sheet: null }); toast('Thanks: the song is reported.'); } }, repBg: st.reason ? '#F2867C' : '#2E2924', repInk: st.reason ? '#EDE9E1' : '#9A9089', repNot: !st.reason,
-      sharedAdd: () => toast('Added to your library.'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad }),
+      sharedAdd: () => toast('Added to your library.'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad, page: st.bad ? (st.page ?? null) : 'shared' }),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, inLib: false }) };
   }
 }

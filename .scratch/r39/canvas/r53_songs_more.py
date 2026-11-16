@@ -50,7 +50,7 @@ EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + ';\n' + r'''
       stars: [1, 2, 3, 4, 5].map((n) => ({ n, fill: n <= mine ? '#F2B33D' : 'transparent', l: n + (n === 1 ? ' star' : ' stars'), pick: () => S({ mine: n }) })), myT: mine ? 'Your rating: ' + mine + (mine === 1 ? ' star' : ' stars') : 'Not rated',
       openReport: () => S({ sheet: 'report', reason: null }), reportOn: st.sheet === 'report', reasons: chipsOf(['Not theirs to share', 'Offensive', 'Spam', 'Doesn’t play'], st.reason, (x) => S({ reason: x })),
       sendReport: () => { if (st.reason) { S({ sheet: null }); toast('Thanks: the song is reported.'); } }, repBg: st.reason ? '#B3261E' : '#EEE9E2', repInk: st.reason ? '#FFFFFF' : '#9A9089', repNot: !st.reason,
-      sharedAdd: () => toast('Added to your library.'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad }),
+      sharedAdd: () => toast('Added to your library.'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad, page: st.bad ? (st.page ?? null) : 'shared' }),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, inLib: false }) };''')
 _STAFF = INCIPIT((0, 2, 4, 3, 5, 4)).replace('url("', "url('").replace('")', "')")
 _PAGE = lambda w, h: (f'<span style="width: {w}px; height: {h}px; box-sizing: border-box; border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(51,41,33,.12), 0 6px 14px -8px rgba(51,41,33,.35); padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px">'
