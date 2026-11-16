@@ -27,7 +27,7 @@ LIBJS = r'''
 '''
 HEARTI = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="{{{{r.heartFill}}}}" stroke="{{{{r.heart}}}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
 def LIB_ROW(laptop=False):
-    return (f'<div style="min-height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {LINE}">'
+    return (f'<div style="min-height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">'
             f'<a href="{{{{r.href}}}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none"><span style="flex: none; width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: {{{{r.c}}}}; background-image: {{{{r.pic}}}}; background-size: cover; box-shadow: {{{{r.ring}}}}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: {{{{r.ic}}}}">{{{{r.i}}}}</span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.t}}}}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.s}}}}</span></span>'
             f'<span style="flex: none; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.v}}}}</span></a>'

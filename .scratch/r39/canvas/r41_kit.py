@@ -103,7 +103,7 @@ def TOGGLE(on):
 def GROUP(*rows, bg=FILL):
     out = []
     for i, r in enumerate(rows):
-        sep = f'box-shadow: inset 0 -1px 0 {LINE};' if i < len(rows) - 1 else ''
+        sep = f'box-shadow: inset 0 -1px 0 {FILL};' if i < len(rows) - 1 else ''
         k = r[0]
         lab = f'<span style="flex: 1; min-width: 0; font-size: 16px">{r[1]}</span>'
         base = f'min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 16px; {sep}'

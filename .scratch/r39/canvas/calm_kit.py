@@ -76,7 +76,7 @@ def TABS(lst='tabs'):
 def ROWS(*rows):
     out = []
     for i, r in enumerate(rows):
-        sep = f'box-shadow: inset 0 -1px 0 {LINE};' if i < len(rows) - 1 else ''
+        sep = f'box-shadow: inset 0 -1px 0 {FILL};' if i < len(rows) - 1 else ''
         kind, label = r[0], r[1]
         if kind == 'step':
             out.append(f'<div style="min-height: 48px; display: flex; align-items: center; padding: 0 6px 0 16px; {sep}"><span style="flex: 1; font-size: 16px; color: {INK}">{label}</span><button type="button" aria-label="{label}: before" onClick="{{{{{r[3]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L.replace("24", "20")}</button><span style="min-width: 70px; text-align: center; font-size: 16px; font-weight: 600; color: {INK}; font-variant-numeric: tabular-nums">{{{{{r[2]}}}}}</span><button type="button" aria-label="{label}: after" onClick="{{{{{r[4]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_R.replace("18", "20")}</button></div>')
