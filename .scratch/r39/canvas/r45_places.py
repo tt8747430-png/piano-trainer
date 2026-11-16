@@ -126,7 +126,7 @@ def LEVELLIST(lap=False):
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap">{{{{p.got}}}}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a></sc-for></div>')
 def LEVELCARDS():
     return (f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px"><sc-for list="{{{{levelsHome}}}}" as="p" hint-placeholder-count="4">'
-            f'<a href="LearnLevelLaptop.dc.html" style="border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; align-items: center; gap: 14px; color: {INK}; text-decoration: none">{RING}'
+            f'<a href="LearnLevelLaptop.dc.html" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; align-items: center; gap: 14px; color: {INK}; text-decoration: none">{RING}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{{{{p.l}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.sub}}}}</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{p.got}}}} learned</span></span></a></sc-for></div>')
 NEXTPILL = f'<span style="flex: none; height: 24px; padding: 0 10px; border-radius: 12px; background: {ACCENT}; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center">Next</span>'
 def COURSECARD(w, href):

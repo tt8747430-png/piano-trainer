@@ -76,7 +76,7 @@ RS_LEGEND = (f'<div style="display: flex; flex-wrap: wrap; justify-content: cent
 def RS_TILE(fig, unit, sub, label):
     u = f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}"> {unit}</span>' if unit else ''
     s = f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{sub}</span>' if sub else ''
-    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 2px">'
+    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 2px">'
             f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>{s}'
             f'<span style="margin-top: auto; padding-top: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span></div>')
 

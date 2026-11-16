@@ -8,7 +8,7 @@ def PROW(p, t, s, v='', href='#'):
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap">{v}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 PLIST = lambda rows: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(PROW(*r) for r in rows) + '</div>'
 def PCARD(p, t, s, v, href):
-    return f'<a href="{href}" style="border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 14px; display: flex; flex-direction: column; gap: 10px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="font-size: 13px; color: {SOFT}">{v}</span></a>'
+    return f'<a href="{href}" style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 14px; display: flex; flex-direction: column; gap: 10px; color: {INK}; text-decoration: none">{pic(p, 96)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">{t}</span><span style="font-size: 14px; color: {SOFT}">{s}</span></span><span style="font-size: 13px; color: {SOFT}">{v}</span></a>'
 def L(href, lap):  # a phone board's laptop twin
     return href.replace('.dc.html', 'Laptop.dc.html') if lap and href != '#' else href
 def body(top, inner, dock='', pad_bottom=118):

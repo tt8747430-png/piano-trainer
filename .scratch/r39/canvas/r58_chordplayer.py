@@ -200,7 +200,7 @@ HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height
 MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
 INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
 END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
-STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="{pos} z-index: 40; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
+STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Genos style controls" style="{pos} z-index: 40; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; padding: 8px 12px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
     + HEAD59 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
 CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
