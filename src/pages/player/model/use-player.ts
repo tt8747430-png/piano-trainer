@@ -11,6 +11,7 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { useProgressStoreApi, withWaitScore } from '@/entities/progress'
+import { WEAK } from '@/entities/take'
 import {
   arrangePiece,
   readStaves,
@@ -36,7 +37,12 @@ import {
   useSongPlayRecord,
 } from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
-import { controlsFor, usePracticePlayer, type PlayerControl } from '@/widgets/practice-player'
+import {
+  controlsFor,
+  passReport,
+  usePracticePlayer,
+  type PlayerControl,
+} from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
 import type { WalkingPlayerOf } from './player-of'
 
@@ -59,6 +65,9 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   /** The song's best Wait pass with these hands before the pass just finished; none before the first. */
   readonly bestBefore: number | null
 }
+
+/** A pass good enough to count a lesson done, per cent: the takes' weak share (ADR 0111). */
+const GOOD_PASS = WEAK * 100
 
 /** The piece as the Player plays it: its URL's choices arranged, practised from the widget's hook. */
 export function usePlayer(
@@ -154,17 +163,20 @@ export function usePlayer(
     writtenBarAt(performance, player.practice.state.beatGroup),
     lastBar,
   )
-  // A whole pass's score kept as the song's best with these hands (research item 4); the best before
-  // it said beside the score, so the line can say New best.
+  // A pass's score (research items 2, 4): a lesson is done from a good one, 80 % as the takes'
+  // weak bar (ADR 0111, research item 15); a whole pass's kept as the song's best with these hands,
+  // the best before it said beside the score, so the line can say New best.
   const [bestBefore, setBestBefore] = useState<number | null>(null)
   const recordFinished = useEffectEvent(() => {
+    const { lastPassSlips, loop, hands } = state
+    if (lastPassSlips === null) return
+    const { score } = passReport(performance, hands, lastPassSlips, loop)
     const whole = { first: 0, last: performance.bars.length - 1 }
-    recordPass(progress, piece.id, player.loop ?? whole, new Date())
-    const { feedback } = player
-    if (player.loop || feedback?.kind !== 'finished') return
+    if (score >= GOOD_PASS) recordPass(progress, piece.id, player.loop ?? whole, new Date())
+    if (loop) return
     const { songs } = progress.getState()
-    setBestBefore(songs[piece.id]?.best[state.hands] ?? null)
-    const next = withWaitScore(songs, piece.id, state.hands, feedback.score, lastBar + 1)
+    setBestBefore(songs[piece.id]?.best[hands] ?? null)
+    const next = withWaitScore(songs, piece.id, hands, score, lastBar + 1)
     if (next !== songs) progress.setState({ songs: next })
   })
   useEffect(() => {

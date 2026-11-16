@@ -36,8 +36,9 @@ no card on top.
     sequence, the click on for that visit), **One change at a time** (Wait mode on the bars two chords span) and
     **Pattern** (a bar of it on one chord, the keys out for that visit, each note lit as it sounds).
   - A row names what it plays (`Em · C · D`, `Em → D/F♯`), checked once done. One change alone is its sequence's.
-- **Progress is what was played.** `pt-progress` keeps the lessons done by key (a chord held three times; a Wait-mode
-  pass over a run of bars, which the Player records for any loop or the whole piece) and the holds counted so far.
+- **Progress is what was played.** `pt-progress` keeps the lessons done by key (a chord held three times; a good
+  Wait-mode pass over a run of bars, its score 80 % or more, the takes' weak share, which the Player records for any
+  loop's lap or the whole piece: Metronaut's "Score above n % to validate this step") and the holds counted so far.
   A section's lessons are computed from the music as the Player plays it, so a chord the learner's version changes
   is a new lesson. Listen does not hear the learner: a sequence, a change or a pattern is done in Wait mode.
 - **The whole piece's Learned mark** stays the learner's own: lessons never set it.

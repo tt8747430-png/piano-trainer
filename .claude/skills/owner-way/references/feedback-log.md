@@ -254,6 +254,7 @@ owner's, typos fixed.
 
 - **Loop round 61, Wait mode waits for keys:** the keys as written, not their names; the right name in another octave says "Play it an octave higher" or "lower" (Chordio, Metronaut; 2026-11-16).
 - **Loop round 61, a Wait pass's score and best (research items 2, 4):** a pass ends "Played through · Score 40%" with New best or Best n% beside it, one hardest-bars rule with the takes'; the line under the transport lifts the keys' window by its height, where it had slid the transport over the keys (2026-11-16).
+- **Loop round 61, a lesson done from a good pass (research item 15):** a Wait pass counts a lesson done only at 80 % or more, a loop's lap scored on its own bars; a pass with 30 slips no longer ticks it (2026-11-16).
 
 ## Song page
 - **The score on a song's page prints the editor's credit** (loop round 50, Song, SongLaptop): its corner said "John Newton" where the editor prints the same score "Words: John Newton · Music: New Britain"; the cover now prints that, right-aligned on its own line under the centred title, as an engraver sets it (a long one ends in an ellipsis, never over the title).

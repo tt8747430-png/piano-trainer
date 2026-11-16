@@ -95,7 +95,9 @@ export function useExercisePlayer(
   )
   // The ladder climbs by itself (its ⓘ's promise; the research's item 5): a rung up after four
   // clean Wait-mode passes in a row, a rung down after a pass with a slip.
-  const { passes, lastPassClean } = player.practice.state
+  const { passes, lastPassSlips } = player.practice.state
+  const lastPassClean =
+    lastPassSlips === null ? null : Object.values(lastPassSlips).every((count) => !count)
   const cleanRun = useRef(0)
   const counted = useRef(passes)
   useEffect(() => {

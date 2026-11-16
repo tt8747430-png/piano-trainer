@@ -63,16 +63,19 @@ const FULL_FROM = 96
 /**
  * A pass's score and its hardest bars (the research's items 2 and 4): each step is a beat group the
  * practised hands play in; a step with a slip is not clean. The score is the share of clean steps,
- * full from 96 %; the hardest bars are the takes' rule (`weakestBars`) over each bar's share.
+ * full from 96 %; the hardest bars are the takes' rule (`weakestBars`) over each bar's share. A
+ * loop's lap counts its own beat groups.
  */
 export function passReport(
   performance: Performance,
   hands: PracticeState['hands'],
   slips: PracticeState['slips'],
+  groups: PracticeState['loop'] = null,
 ): { score: number; hardest: BarRange | null } {
   const practised = practisedHands(hands)
   const steps = performance.bars.map(() => 0)
-  for (const group of performance.beatGroups) {
+  const { first, last } = groups ?? { first: 0, last: performance.beatGroups.length - 1 }
+  for (const group of performance.beatGroups.slice(first, last + 1)) {
     const played = group.notes.some((index) => {
       const note = performance.notes[index]
       return note !== undefined && practised[note.hand]
