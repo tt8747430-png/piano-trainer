@@ -6,6 +6,11 @@ r6 content edited in the app, r21 the lesson editor as one document), the en str
 
 ## The rulings as they stand
 
+- **Groups as groups, actions in place** (owner, 2026-11-16: "the actions should be properly placed and the groups
+  dont look like groups at all"; "why add member is not at the bottom, and have you looked the examples?"): the list
+  is rows of three faces, name, count, chevron; New group and New flag are the bar's +, each a New sheet. A group
+  opens its page: Members (avatar, name, email, ··· › Remove from group), Show all n, Add member last; Feature flags;
+  Delete group alone at the foot. Reference: Noji 007, 008, 011.
 - **Three roles, set by the server only:** Learner, Editor, Administrator (`app_metadata.role`). An editor edits the
   app's own content; an administrator also has Administration. Nothing on a learner's screen hints at either.
 - **Administration** is in Settings for administrators (its own group, "Administration · 2 reports"): a list on a

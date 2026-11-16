@@ -27,6 +27,9 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - A screen's own actions go in its bar. What floats is the + that creates, or a page's one primary action at its foot
   (Play on a detail page, `DESIGN.md`; owner 2026-11-13). One gear per screen, Edit beside the title.
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
+- In a list of people or things, Add is the list's last row; a row's own acts sit behind its ···; the loss of the
+  whole thing is its own card at the page's foot (Noji's Participants and deck settings; owner 2026-11-16). Never a
+  New field inline above a list, nor loose Add or Delete links.
 - Reorder by dragging a handle, by mouse and held finger, never Move up or Move down.
 - Menu items are short ("Remove"); the menu's label names the thing.
 - Undo instead of asking: a loss that can be undone happens at once with Undo in its toast; only what can't be undone, or

@@ -58,10 +58,14 @@ SORTSHEET_BODY = (f'{CAPS("Sort by")}{SEGC("sorts", 34, 13)}<sc-for list="{{{{fi
                   f'<div style="display: flex; gap: 10px; margin-top: 6px">{BTN("Reset", "reset", kind="quiet", grow=False)}{BTN("{{showN}}", "closeSheet")}</div>')
 
 # The one New folder sheet: a name and Create (Songs, every Practice library)
-LFOLDERSHEET = BSHEET('folderOn', 'New folder', f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
-                     f'<input value="{{{{fname}}}}" onInput="{{{{named}}}}" placeholder="Folder name" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
-                     f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{createBg}}}}; color: {{{{createFg}}}}; font: inherit; font-size: 16px; font-weight: 700">Create</button>', 'Cancel')
-LFOLDERSHEET_L = LFOLDERSHEET.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
+# The one sheet that names something new (New folder, New group, New flag): a name and Create at its foot
+def NEWNAME(cond, title, ph, val, inp, go, bg, fg, label='Create'):
+    return BSHEET(cond, title, f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
+                  f'<input value="{{{{{val}}}}}" onInput="{{{{{inp}}}}}" placeholder="{ph}" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
+                  f'<button type="button" onClick="{{{{{go}}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{{bg}}}}}; color: {{{{{fg}}}}}; font: inherit; font-size: 16px; font-weight: 700">{label}</button>', 'Cancel')
+NEWNAME_L = lambda html: html.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
+LFOLDERSHEET = NEWNAME('folderOn', 'New folder', 'Folder name', 'fname', 'named', 'closeSheet', 'createBg', 'createFg')
+LFOLDERSHEET_L = NEWNAME_L(LFOLDERSHEET)
 def library(stem, title, D, back='', back_l='', soft='', right_extra='', soft_href='', root='', section='Practice', shelf_phone='', shelf_laptop='', table_cols=(('Name', 't', 3), ('', 's', 4), ('', 'v', 1.4)), add_items=(), more_rows=()):
     noun = {'My songs': 'songs', 'Accompaniment': 'patterns', 'Progressions': 'progressions'}.get(title, 'exercises')
     D = dict(D, noun=noun, miss='Chopin' if noun == 'songs' else 'Ragtime', hint='Check the spelling, or try a song’s title or its composer.' if noun == 'songs' else 'Check the spelling, or try another word.')
