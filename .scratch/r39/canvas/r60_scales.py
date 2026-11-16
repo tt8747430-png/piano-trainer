@@ -22,6 +22,15 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       practise: [['Up and down, hands together', 'Two octaves, 72 BPM'], ['Hands separately', 'Right, then left'], ['Tempo ladder', '60 to 120 BPM, 8 at a time'], ['Contrary motion', 'From the tonic, outwards'], ['Hanon 1–20', 'In ' + tonic + ' ' + KINDS[kind].toLowerCase()]].map(([t, s]) => ({ t, s })),
       states: [['Playing', !!st.playing, { playing: true }], ['F♯ major, six sharps', rl === 3 && ra === 1 && kind === 0, { rl: 3, ra: 1, kind: 0 }], ['Minor pentatonic (five notes, no fingering)', kind === 7, { kind: 7 }]]
         .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? { playing: false, rl: null, ra: null, kind: null } : o) })),
+      // the left hand two octaves under the right, on its own bass staff, its fingers under it (piano-chords-and-scales-app 006)
+      ssB: (() => { const ledB = [], Yb = (k) => 127 - k * 3.5;
+        const notes = notesS.map((z, i) => { const k = Math.round((58 - z.y) / 3.5), kb = k - 2, y = z.y + 69, up = kb < 4, f = fingOk && nN === 8 ? FGP[1][i] : '';
+          for (let j = 0; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 12; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
+          return { ...z, y, ay: z.ay + 69, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
+        return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),
+      // the key's facts from the scale itself: its relative and its neighbours on the circle (IV and V); a mode has neither
+      hasKey: kind <= 3, relL: kind === 0 ? 'Relative minor' : 'Relative major', relV: kind === 0 ? spell(5) + ' minor' : spell(2) + ' major',
+      circleV: 'Between ' + spell(3) + (kind === 0 ? '' : 'm') + ' and ' + spell(4) + (kind === 0 ? '' : 'm'),
       hasChords: tri.length > 0,
       chordCards: tri.map((t, i) => { const a = (PIV[(i + 2) % 7] - PIV[i] + 12) % 12, b = (PIV[(i + 4) % 7] - PIV[i] + 12) % 12, bs = 53 + ((root + PIV[i] - 5 + 120) % 12), on = (st.hear ?? -1) === i;
         const kb = calmKeys(53, 76, Object.fromEntries([bs, bs + a, bs + b].map((n) => [n, [on ? '#EDC684' : '#E9C4B8', '']])), 104, 46);
@@ -34,18 +43,25 @@ PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {
                                   f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
 TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div>'
            f'<p style="margin: 0 0 0 4px; font-size: 15px; color: {SOFT}"><span>{{{{sigLine}}}}</span></p></div>')
-FING60 = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 15px; color: {SOFT}">'
-          f'<sc-if value="{{{{rhOn}}}}" hint-placeholder-val="{{{{true}}}}"><p style="margin: 0">Right hand <b style="margin-left: 6px; color: {INK}; font-size: 17px; letter-spacing: .12em">{{{{fingRH}}}}</b></p></sc-if>'
-          f'<sc-if value="{{{{lhOn}}}}" hint-placeholder-val="{{{{true}}}}"><p style="margin: 0">Left hand <b style="margin-left: 6px; color: {INK}; font-size: 17px; letter-spacing: .12em">{{{{fingLH}}}}</b></p></sc-if>'
-          f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0">No standard fingering for this scale</p></sc-if></div>')
+def GRANDSTAFF(label):
+    """The scale on a grand staff, each hand on its staff with its fingers, as the books print a scale (and the example's 006)."""
+    tre = SCALESTAFF(label)
+    inner = tre[tre.index('>') + 1:tre.rindex('</svg>')]
+    bass = inner.replace('{{ss.', '{{ssB.')
+    for i in range(5): bass = bass.replace(f'<path d="M4 {30 + i * 7}H356"', f'<path d="M4 {92 + i * 7}H356"', 1)
+    bass = bass.replace('<text x="6" y="64" font-size="44" font-family="Noto Music, serif" fill="' + INK + '">𝄞</text>', '<text x="8" y="113" font-size="40" font-family="Noto Music, serif" fill="' + INK + '">𝄢</text>')
+    brace = f'<path d="M4 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M356 30V120" stroke="{INK}" stroke-width=".9"></path>'
+    return f'<svg viewBox="0 0 360 168" width="100%" role="img" aria-label="{label}" style="display: block">{inner}{bass}{brace}</svg>'
+# the two hands' figures stand on their staves; only the honest note for a scale with no standard fingering stays under them
+FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><p style="margin: 0; text-align: center; font-size: 15px; color: {SOFT}">No standard fingering for this scale</p></sc-if>')
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
     .replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>')
     if cols < 7 else CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"').replace('class="nos" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px"', 'style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; padding: 2px"').replace('style="flex: none; border: 0;', 'style="min-width: 0; border: 0;').replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>'))
-KEYG60 = GROUP(("link", "Relative minor", "E minor", "Scales.dc.html"), ("link", "On the circle of fifths", "Between C and D", "CircleOfFifths.dc.html"), bg=SHEET)
+KEYG60 = '<sc-if value="{{hasKey}}" hint-placeholder-val="{{true}}">' + GROUP(("link", "{{relL}}", "{{relV}}", "Scales.dc.html"), ("link", "On the circle of fifths", "{{circleV}}", "CircleOfFifths.dc.html"), bg=SHEET) + '</sc-if>'
 # One page, no tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow merge them"): the
 # Key tab repeated the Scale tab's staff for two rows, and the three tabs hid less than a screen between them; the
 # run, the scale's chords and its key now read down one page, each once.
-VIEW60 = lambda cols: (CARD(SCALESTAFF("The scale up one octave, its fingers over the notes") + "<div style=\"height: 12px\"></div>" + FING60, "16px 12px")
+VIEW60 = lambda cols: (CARD(GRANDSTAFF("The scale up one octave, each hand on its staff with its fingers") + FING60, "16px 12px")
     + f'<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{{{{chordsT}}}}</h3>' + SCCARDS(cols) + '</section></sc-if>'
     + (KEYG60 if cols < 7 else ''))
 

@@ -18,7 +18,7 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
   under Practise in the right column). Replaces "The tabs say what is in them".
 - "Every control says what it belongs to; octaves are a stepper; formulas are computed": Tonic, Scale, On the staff,
   Hands, Octaves (− 1 octave +), Direction; the notes and steps computed from the scale.
-- "No finger numbers on or under keys": fingers are on the staff and in the table, never on the keys.
+- "No finger numbers on or under keys": fingers are on the staff, each hand's on its own staff of the grand staff, never on the keys.
 - "Every Practice page has its own Settings page": the gear opens Scale settings (Fingering: As the scale · From the
   thumb; Rhythm; Count-in; All piano settings ›).
 - Today's bar of four icons goes; the gear is the only control at the right of the bar.
