@@ -36,8 +36,9 @@ GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; borde
 # its title 17 semibold centred; a place: TITLEBAR, its large title at the leading edge.
 def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
     b = left or (f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}">{CHEV_L}</a>' if back else '')
-    n = n or max(1, b.count('width: 44px; height: 44px'), right.count('width: 44px; height: 44px'))  # the title is centred between equal insets as wide as the fuller side
-    t = f'<span data-bar-title style="position: absolute; left: {12 + 52 * n}px; right: {12 + 52 * n}px; text-align: center; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
+    # bars.md: a title sits after Back or Close, 8 from its glass, never centred between the bar's sides (Apple,
+    # Toolbars: "keep the title under 15 characters"; a long one ends in an ellipsis)
+    t = f'<span data-bar-title style="flex: 0 1 auto; min-width: 0; margin-left: {8 if b else 4}px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
     return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
 def LPAD(h):
     """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, the title's insets 28 wider."""

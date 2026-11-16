@@ -39,3 +39,4 @@ Glass), read 2026-11-16.
 - 2026-11-16: icons side by side in a bar share one glass capsule on every board (`index.py`, `_glassgroups`): the song's Favourite and More, Songs' Archive and More, the Chord player's Undo, Settings and More, a lesson's Metronome and Settings, the theory pages' Settings and Piano, Learn's Search and MIDI keyboard, Profile's bell and Settings; text buttons (Learned, Edit) keep their own capsules in the same glass.
 - 2026-11-16: the Player's bar drops its band; Close is glass, View and Settings share one glass; the laptop's Close,
   Settings and view switch use the same glass. Then the rules above, from Apple's guidelines, held against every board.
+- 2026-11-16: the kit's `TOP` centred its title between the bar's sides; it now leads after Back or Close, 8 from its glass, on every board that draws it.
