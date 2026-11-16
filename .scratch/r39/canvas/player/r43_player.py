@@ -252,7 +252,7 @@ def kit(t, phone):
     t = sub(t, r"const kbNames = s\.kbNames \?\? true;", "const kbLabel = s.kbLabel ?? 'names', kbNames = kbLabel !== 'none';\nconst DEG = ['1', '♭2', '2', '♭3', '3', '4', '♯4', '5', '♭6', '6', '♭7', '7'], labelOf = (m) => kbLabel === 'degrees' ? DEG[(m - keyPc + 120) % 12] : NOTE[m % 12];")
     t = lit(t, "t: mine ? NOTE[k.m % 12] :", "t: mine ? labelOf(k.m) :")
     t = lit(t, "const name = NOTE[m % 12];", "const name = labelOf(m);")
-    t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>Piano</span></button>')
+    t = t.replace('aria-label="Keyboard', 'aria-label="Piano').replace('>Keyboard</h2>', '>Piano</h2>').replace('data-tip="Keyboard"', 'data-tip="Piano"').replace('<span>Keyboard</span></button>', '<span>{{kbCap}}</span></button>')
     # a phone's sheet stops below the bar (Close, the views, the gear), never under it (owner, canvas 122: "the piano
     # settings in the player are not correct height")
     if phone:

@@ -104,6 +104,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Loop round 46, the laptop's keyboard button says what the keys show (PlayerDesk):** it read "Piano" while the phone's reads 3D, 2D or Off under the same keys glyph (loop round 32's ruling); the laptop now says 3D, 2D or Off too (2026-11-16).
 
 - **Loop round 45, a view starts under the bar with the keys shown (PlayerViewLyrics, PlayerViewGrid, every Player board with keys):** with the keys on, Lyrics and the Grid started 16 from the screen's top, from before the bar was a band, so the beat strip and Verse 1 ran under the status bar and the bar; they start under the bar now (a phone 128, a laptop 80), as without the keys (2026-11-16).
 - **Loop round 39, Parts' hand tiles as the board's PART:** 40 square at 4 corners, the hand 24 in its deep paint (brick #9A4B3A, lilac #6A5988) on its wash, by Day and by Night; it was 10 corners and the light paint, faint on the wash by Night (2026-11-15).
