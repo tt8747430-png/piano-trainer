@@ -28,9 +28,16 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
           for (let j = 0; j >= k; j -= 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) }); for (let j = 12; j <= k; j += 2) ledB.push({ d: 'M' + (z.x - 9) + ' ' + Yb(j) + 'H' + (z.x + 9) });
           return { ...z, y, ay: z.ay + 69, stem: up ? 'M' + (z.x + 4.6) + ' ' + y + 'V' + (y - 24) : 'M' + (z.x - 4.6) + ' ' + y + 'V' + (y + 24), fy: 160, f1: f === '1', f2: f === '2', f3: f === '3', f4: f === '4', f5: f === '5' }; });
         return { sig: sig.map((z) => ({ ...z, ay: z.ay + 69 })), notes, led: ledB }; })(),
-      // the key's facts from the scale itself: its relative and its neighbours on the circle (IV and V); a mode has neither
-      hasKey: kind <= 3, relL: kind === 0 ? 'Relative minor' : 'Relative major', relV: kind === 0 ? spell(5) + ' minor' : spell(2) + ' major',
-      circleV: 'Between ' + spell(3) + (kind === 0 ? '' : 'm') + ' and ' + spell(4) + (kind === 0 ? '' : 'm'),
+      // the key's place on the circle of fifths, drawn as the circle draws it (owner, 2026-11-16: "what is with this relative
+      // minor … and on the circle of fifths. this doenst make any sense"): its slice, IV · I · V, each major over its
+      // relative minor, the scale's own lit; a tap goes to that key. Counted by fifths from the signature, so a raised
+      // seventh (harmonic, melodic) never misspells a neighbour; a mode or a pentatonic has no place on it.
+      hasKey: kind <= 3,
+      fifths: [sg - 1, sg, sg + 1].filter((f) => Math.abs(f) <= 7).map((f) => { const FL = 'FCGDAEB', nm = (g) => FL[((g + 1) % 7 + 7) % 7] + A7[String(Math.floor((g + 1) / 7))], maj = nm(f), min = nm(f + 3) + 'm', me = f === sg;
+        const at = (n) => ({ rl: L7.indexOf(n.charAt(0)), ra: n.includes('♯') ? 1 : n.includes('♭') ? -1 : 0 });
+        return { maj, min, minA: min.slice(0, -1) + ' minor', sig: f === 0 ? '' : Math.abs(f) + (f > 0 ? '♯' : '♭'), majOn: me && kind === 0, minOn: me && kind > 0,
+          majBg: me && kind === 0 ? '#F3E3C4' : 'transparent', minBg: me && kind > 0 ? '#F3E3C4' : 'transparent',
+          goMaj: () => set(Object.assign({ kind: 0 }, at(maj))), goMin: () => set(Object.assign({ kind: kind > 0 ? kind : 1 }, at(min))) }; }),
       hasChords: tri.length > 0,
       chordCards: tri.map((t, i) => { const a = (PIV[(i + 2) % 7] - PIV[i] + 12) % 12, b = (PIV[(i + 4) % 7] - PIV[i] + 12) % 12, bs = 53 + ((root + PIV[i] - 5 + 120) % 12), on = (st.hear ?? -1) === i;
         const kb = calmKeys(53, 76, Object.fromEntries([bs, bs + a, bs + b].map((n) => [n, [on ? '#EDC684' : '#E9C4B8', '']])), 104, 46);
@@ -57,7 +64,13 @@ FING60 = (f'<sc-if value="{{{{noFing}}}}" hint-placeholder-val="{{{{false}}}}"><
 SCCARDS = lambda cols: (CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"')
     .replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>')
     if cols < 7 else CHORDS_ROW.replace('{{chords}}', '{{chordCards}}').replace('hint-placeholder-count="6"', 'hint-placeholder-count="7"').replace('class="nos" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px"', 'style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; padding: 2px"').replace('style="flex: none; border: 0;', 'style="min-width: 0; border: 0;').replace('</sup></span></button>', '</sup></span><span style="margin-top: -4px; font-size: 13px; color: ' + SOFT + '">{{c.d}}</span></button>'))
-KEYG60 = '<sc-if value="{{hasKey}}" hint-placeholder-val="{{true}}">' + GROUP(("link", "{{relL}}", "{{relV}}", "Scales.dc.html"), ("link", "On the circle of fifths", "{{circleV}}", "CircleOfFifths.dc.html"), bg=SHEET) + '</sc-if>'
+KEYG60 = (f'<sc-if value="{{{{hasKey}}}}" hint-placeholder-val="{{{{true}}}}"><section style="flex: none; display: flex; flex-direction: column; gap: 8px">'
+          f'<a href="CircleOfFifths.dc.html" style="align-self: flex-start; min-height: 32px; margin: -6px 0 -6px 4px; display: flex; align-items: center; gap: 2px; font-size: 14px; font-weight: 600; color: {INK}; text-decoration: none">On the circle of fifths{CHEV_R}</a>'
+          f'<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
+          f'<sc-for list="{{{{fifths}}}}" as="f" hint-placeholder-count="3"><div style="display: flex; flex-direction: column; box-shadow: inset 1px 0 0 {LINE}; margin-left: -1px">'
+          f'<button type="button" aria-label="{{{{f.maj}}}} major" aria-pressed="{{{{f.majOn}}}}" onClick="{{{{f.goMaj}}}}" style="position: relative; height: 60px; border: 0; background: {{{{f.majBg}}}}; color: {INK}; font-family: {SERIF}; font-size: 22px; font-weight: 700; box-shadow: inset 0 -1px 0 {LINE}">{{{{f.maj}}}}<span style="position: absolute; top: 6px; right: 8px; font-family: inherit; font-size: 12px; font-weight: 500; color: {SOFT}">{{{{f.sig}}}}</span></button>'
+          f'<button type="button" aria-label="{{{{f.minA}}}}" aria-pressed="{{{{f.minOn}}}}" onClick="{{{{f.goMin}}}}" style="height: 48px; border: 0; background: {{{{f.minBg}}}}; color: {INK}; font-family: {SERIF}; font-size: 17px; font-weight: 600">{{{{f.min}}}}</button>'
+          f'</div></sc-for></div></section></sc-if>')
 # One page, no tabs (owner, 2026-11-16: "are the tabs correct? do we need them … should we somehow merge them"): the
 # Key tab repeated the Scale tab's staff for two rows, and the three tabs hid less than a screen between them; the
 # run, the scale's chords and its key now read down one page, each once.

@@ -14,8 +14,14 @@ the key's facts and chords one tab away, and the run playing at a tempo you can 
   rows, and the three tabs hid less than a screen between them. The page reads down once: the name and its signature
   ("1 sharp"; the note names left, the keys and the staff name them), the run with its fingers, "Chords in G major" as
   the song page's chord cards (the keys drawn, the name, the numeral; a row that scrolls on a phone, seven across on a
-  laptop), Relative minor and On the circle of fifths, then Practise in the Player (on a laptop the key's rows stand
+  laptop), On the circle of fifths, then Practise in the Player (on a laptop the key's rows stand
   under Practise in the right column). Replaces "The tabs say what is in them".
+- **The key on the circle of fifths, drawn** (owner, 2026-11-16: "what is with this relative minor, refactor htis. and
+  on the circle of fifths. this doenst make any sense"): the rows "Relative minor · E minor" and "On the circle of fifths ·
+  Between C and D" said in words what the circle shows. They are now the key's slice of the circle: three cells, IV ·
+  I · V, each major over its relative minor (C/Am · G/Em · D/Bm), the signature in each cell's corner, the scale's own
+  cell lit; a tap goes to that key; the heading "On the circle of fifths ›" opens the Circle of fifths. Counted by
+  fifths from the signature, so a harmonic or melodic minor names its neighbours rightly; modes and pentatonics have none.
 - "Every control says what it belongs to; octaves are a stepper; formulas are computed": Tonic, Scale, On the staff,
   Hands, Octaves (− 1 octave +), Direction; the notes and steps computed from the scale.
 - "No finger numbers on or under keys": fingers are on the staff, each hand's on its own staff of the grand staff, never on the keys.

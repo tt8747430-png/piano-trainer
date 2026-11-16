@@ -17,8 +17,7 @@ TITLE68 = (f'<div style="flex: none; display: flex; flex-direction: column; gap:
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">Hanon No. 1</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{fav}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">The Virtuoso Pianist · Finger technique</p></div>')
-MUSIC68 = lambda w: CARD(hanon(w) + f'<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: {SOFT}; margin: 6px 2px 0"><span>Bars 1–2 of 30</span></div>'
-                         + f'<p style="margin: 12px 4px 0; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">A figure climbs two octaves and comes back, for even, independent fingers.</p>', '16px 16px 14px')
+MUSIC68 = lambda w: CARD(hanon(w) + f'<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: {SOFT}; margin: 6px 2px 0"><span>Bars 1–2 of 30</span></div>', '16px 16px 14px')
 H3_68 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
 ROWS68 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_68("The exercise")}'
           + GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('seg', 'Hands', 'handsSeg'), ('seg', 'Rhythm', 'rhythmSeg'), ('seg', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET) + '</section>')
