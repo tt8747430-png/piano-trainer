@@ -48,7 +48,7 @@ TBST = f'flex: none; height: 44px; box-sizing: border-box; padding: 0 16px; bord
 def TB(label, act):
     return f'<button type="button" onClick="{{{{{act}}}}}" style="{TBST}">{label}</button>'
 # Learned, on a song and a lesson: the glass capsule, a grass wash once learned (JS gives learnedBg, learnedLine, learnedFg).
-LEARNEDT = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="{TBST}; padding-left: 12px; background: {{{{learnedBg}}}}; border-color: {{{{learnedLine}}}}; color: {{{{learnedFg}}}}">{CHECK}Learned</button>'
+LEARNEDT = f'<button type="button" aria-pressed="{{{{learned}}}}" onClick="{{{{toggleLearned}}}}" style="{TBST}; background: {{{{learnedBg}}}}; border-color: {{{{learnedLine}}}}; color: {{{{learnedFg}}}}"><sc-if value="{{{{learned}}}}" hint-placeholder-val="{{{{false}}}}">{CHECK}</sc-if>Learned</button>'
 LEARNED_JS = "learnedBg: learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: learned ? '#9BC093' : '#DAD1C8', learnedFg: learned ? '#2F5A35' : '#332921',"
 # A modal task (a run, sign-in) leaves by the standard Close (HIG): the same glass circle, a ✕, at the leading edge.
 def CLOSEB(href='', act='', label='Close'):

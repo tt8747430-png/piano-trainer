@@ -240,6 +240,7 @@ owner's, typos fixed.
   touching; the page is a column with the sheet's 16 between its cards.
 
 ## Song page
+- **Loop round 46, Learned shows its tick only once learned (a song, a lesson):** off, the capsule still wore "✓ Learned", so Amazing Grace, at bar 9 of 16, read as learned; off it now says Learned alone on the glass, and on it takes the tick and the grass wash (scan-first: the off state is plain, the on state earns the mark) (2026-11-16).
 
 - **Loop round 44, one credit line (Song, SongLaptop):** the song's page credits "Words: John Newton · Music: New Britain…" as the score, the Player and the editor print it, no longer "Words by"; its Title and credits row reads Words beside Music (2026-11-16).
 - **A song's Settings, a section, the takes and a take draw their states (2026-11-15):** Settings: Published, and Offline (Publish greyed under the ochre line "You’re offline. Publishing needs a connection.", the app's words); a section on one chord (its card says G, one Learn row, no One change at a time); Takes: No takes yet; a take: Playing from bar 4, Bars 3–10 kept, Deleted. One kit part, `SHOWSTATES`, hands each board's list to the States box.
