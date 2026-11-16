@@ -99,6 +99,7 @@ const COURSES = [["Beginner courses", [["Introduction to the Piano", "The keys, 
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#3A332D' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
       nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#EDE9E1' : '#2E2924', pick: () => set({ demo: demo === k ? null : k }) })),
+      crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#EDE9E1' : '#2E2924', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#EDE9E1' : '#2E2924', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#EDE9E1' : '#2E2924', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
@@ -113,7 +114,7 @@ const COURSES = [["Beginner courses", [["Introduction to the Piano", "The keys, 
 { const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
-  const rows = [].concat((v.edStates || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })));
+  const rows = [].concat((v.crStates || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })));
   const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l || (r.l === "Playing" && q.l.startsWith("Playing"))) === i);
   const none = !once.some((r) => r.on);
   const list = [{ l: "As designed", on: none, pick: () => once.filter((r) => r.on).forEach((r) => r.pick()) }].concat(once);

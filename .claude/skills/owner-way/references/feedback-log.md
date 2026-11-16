@@ -362,6 +362,7 @@ owner's, typos fixed.
   Your own songs are all here.", and its way out is My songs; Explore, which also needs the network, was a dead end.
 
 ## Learn and the editors
+- **Loop round 46, Courses lists only the states it shows:** its States box offered "Foundations learned", which changes nothing on the Courses page (a level's progress is not a course's); Courses keeps "First visit: nothing learned" alone, on both sizes (2026-11-16).
 - **Loop round 46, a first visit starts at the first course (Learn, LearnCourses, LearnLevel):** the First visit state, nothing learned, still marked Intro to Music Reading as Next and Introduction to the Piano finished; now nothing is finished and Introduction to the Piano is Next, first on Learn's strip and ringed on Courses (2026-11-16).
 
 - **Loop round 44, Learn's own lessons agree with Your lessons (Learn, LearnLaptop):** the overview showed two of Sunday service set's lessons as loose ones and their learned marks swapped; it now lists the course and the learner's two loose lessons, Pedalling in slow hymns and Notes from my teacher, as Your lessons holds them (2026-11-16).

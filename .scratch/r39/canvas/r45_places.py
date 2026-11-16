@@ -62,6 +62,7 @@ LEARN_JS = js(PLACES_PRE + r'''
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
       nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
+      crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
@@ -187,14 +188,14 @@ vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholde
 detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('moreOn', 'Foundations', MOREL), POPOVER('moreOn', 'Foundations', MOREL, 'right: 40px; top: 72px', 300), 'Learn')
 
 # Courses: every shelf
-cph2 = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
+cph2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 48px; display: flex; flex-direction: column; gap: 16px">{COURSELIST}</main>{LTOAST.replace("bottom: 112px", "bottom: 40px")}')
 cl2 = COURSELIST.replace('href="Course.dc.html"', 'href="CourseLaptop.dc.html"')
 # on a laptop the shelves stand side by side, Beginner to Chords and improvisation, every course in sight (owner,
 # 2026-11-15: "the empty space should be properly used")
 _k = cl2.index('</section></sc-for>') + len('</section></sc-for>')
 cl2 = '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start">' + cl2[:_k] + '</div>' + cl2[_k:]
-clm2 = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
+clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + IB("More", MORE, "openMore"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
         f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY),

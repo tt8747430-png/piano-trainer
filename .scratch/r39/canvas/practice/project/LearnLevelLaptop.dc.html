@@ -110,6 +110,7 @@ const COURSES = [["Beginner courses", [["Introduction to the Piano", "The keys, 
       tree: LV.map((x, i) => ({ l: x.chip, t: x.t, n: x.done + '/' + x.n, bg: i === lv ? '#E8E1D8' : 'transparent', fw: i === lv ? 700 : 500, pick: () => set({ lv: i, view: 'Lessons' }) })),
       isOwn: own, isJourney: !own, jt: L.t, goal: L.goal, learned: L.done + ' of ' + L.n + ' learned', meter: Math.round(100 * L.done / L.n) + '%', chapters,
       nextT: nxt ? nxt.t : L.ch[0].rows[0].t, contT: (L.done === 0 ? 'Start · ' : L.done === L.n ? 'Review · ' : 'Continue · ') + L.t, states: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
+      crStates: [['fresh', 'First visit: nothing learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) })),
       edStates: [['fresh', 'First visit: nothing learned'], ['finished', 'Foundations learned']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', pick: () => set({ demo: demo === k ? null : k }) }))
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + (L.done + 1) + ' · ' + L.done + ' of ' + L.n + ' learned', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned',
