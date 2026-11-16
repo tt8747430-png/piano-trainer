@@ -185,9 +185,21 @@ def _rollurl(t):
     bars = ''.join(f'<rect x="{6 + 32 * a / beats:.1f}" y="{33 - h * 3.5:.1f}" width="{max(1.6, 32 * d / beats - .6):.1f}" height="2.6" rx="1.3" fill="{"%23332921" if h >= 4 else "%237A6BB0"}"/>' for a, d, h in notes)
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{LILAC.replace("#", "%23")}"/><path d="M6 21.5h32" stroke="%23332921" stroke-opacity=".12"/>{bars}</svg>'
     return 'url("data:image/svg+xml,' + svg.replace('"', "'").replace('<', '%3C').replace('>', '%3E').replace(' ', '%20') + '")'
+# A progression's picture (loop round 58): its chords as columns in their roles' paints, the page's tiles in small
+# (Tonic peach, Predominant sky, Dominant sage), where the tile repeated the numerals the row's line already prints.
+def _role(n):
+    b = n.replace('♭', '').replace('♯', '').replace('maj7', '').replace('7', '')
+    return '#DCE9D6' if b.upper() in ('V', 'VII') and not n.startswith('♭') else '#D3E5F2' if b.upper() in ('II', 'IV') else '#F3D2C8'
+def _progurl(s):
+    ch = [c.strip() for c in s.split('–')]
+    w = (36 - 2 * (len(ch) - 1)) / len(ch)
+    cols = ''.join(f'<rect x="{4 + k * (w + 2):.2f}" y="8" width="{w:.2f}" height="28" rx="{min(3, w / 2):.1f}" fill="{_role(c).replace("#", "%23")}" stroke="%23332921" stroke-opacity=".14"/>' for k, c in enumerate(ch))
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="%23FEFDFB"/>{cols}</svg>'
+    return 'url("data:image/svg+xml,' + svg.replace('"', "'").replace('<', '%3C').replace('>', '%3E').replace(' ', '%20') + '")'
 def Rw(t, s, v, i, c, href, places=(), tags=(), ic=INK):
     r = {'t': t, 's': s, 'v': v, 'i': i, 'c': c, 'ic': ic, 'href': href, 'places': list(places), 'tags': list(tags)}
     if t in ROLLS: r.update(i='', pic=_rollurl(t))
+    if href == 'Progression.dc.html': r.update(i='', pic=_progurl(s))
     return r
 library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Recently used'], 'favs': ['Axis of Awesome'], 'open': {},
   'filters': [{'name': 'Key', 'opts': [['Major key', 18], ['Minor key', 8]]}],
