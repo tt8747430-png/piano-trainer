@@ -18,7 +18,7 @@
   | `ToolbarGroup.css`, `ToolbarSimpleIcon.css` | cells, states, badge |
   | `bottomSheets.css` | phone sheet and its motion |
   | Flat's token definitions | `--radius-standard: 8px`, the neutral and accent scales |
-  | `editorPanelSystem` | panel rail; see `~/Downloads/research/flat/FLAT_UI_SHELL_AND_MOTION.md` |
+  | `editorPanelSystem` | panel rail; see `piano-data/research/flat/FLAT_UI_SHELL_AND_MOTION.md` |
 
 ## What Flat's palette is (measured from the code and the shots)
 
