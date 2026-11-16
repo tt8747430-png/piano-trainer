@@ -12,7 +12,7 @@ def _picurl(kind):
     return 'url("data:image/svg+xml,' + _q(svg) + '")'
 SRCH = [('Practice', [('C major', 'Scale', 'Scales.dc.html', _picurl('drill')), ('Cmaj7', 'Chord', 'Chords.dc.html', _picurl('keys')), ('ii–V–I in C', 'Progression', 'Progression.dc.html', _picurl('roman'))]),
         ('Songs', [(t, sub, 'Song.dc.html', INCIPIT(INC.get(t, {'Canon in D': (5, 4, 3, 2, 1, 0)}.get(t, (2, 4))))) for t, sub in [('Amazing Grace', 'John Newton · C major'), ('Canon in D', 'Pachelbel · D major'), ('Clair de lune', 'Debussy · D♭ major · Archived')]]),
-        ('Folders', [('Church', '12 songs', 'Songs.dc.html', STACK(SKY)), ('Classical', '8 songs', 'Songs.dc.html', STACK(LILAC))]),
+        ('Folders', [('Hymns', '6 songs', 'Folder.dc.html', STACK(SKY)), ('Classical', '8 songs', 'Songs.dc.html', STACK(LILAC))]),
         ('Lessons', [(t, sub, 'Lesson.dc.html', _picurl('staff')) for t, sub in [('How major scales work', 'Beginner · Chapter 3'), ('Chords in a major key', 'Beginner · Chapter 4')]])]
 G_JS = js('const SRCH = ' + json.dumps(SRCH, ensure_ascii=False) + r''';
     const S = (o) => set(o), q = (st.q ?? '').trim().toLowerCase(), layer = st.layer ?? null, midi = st.midi ?? 'idle';
