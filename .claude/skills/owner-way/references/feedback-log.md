@@ -242,6 +242,7 @@ owner's, typos fixed.
   touching; the page is a column with the sheet's 16 between its cards.
 
 ## Song page
+- **The score on a song's page prints the editor's credit** (loop round 50, Song, SongLaptop): its corner said "John Newton" where the editor prints the same score "Words: John Newton · Music: New Britain"; the cover now prints that, right-aligned on its own line under the centred title, as an engraver sets it (a long one ends in an ellipsis, never over the title).
 - **Loop round 48, the sections fit the song (Song):** Amazing Grace is 16 bars (Bar 9 of 16, the strip to Bar 16), yet its Ending read bars 17–20; the Ending is its last phrase, bars 13–16, and the Verse's count reads 2× with no space, on the song page and the section's page (2026-11-16).
 - **Loop round 46, Learned shows its tick only once learned (a song, a lesson):** off, the capsule still wore "✓ Learned", so Amazing Grace, at bar 9 of 16, read as learned; off it now says Learned alone on the glass, and on it takes the tick and the grass wash (scan-first: the off state is plain, the on state earns the mark) (2026-11-16).
 
