@@ -7,7 +7,7 @@ DS_KEYS = r'''
       isLive: live, isOpening: ds === 'Opening', isOpenOff: ds === 'Opening offline', isFailed: ds === 'Can’t open', isLearner: ds === 'Not an editor',
       saveT: { Editing: chg ? 'Saved · not published' : 'Published · no changes', Saving: 'Saving…', Offline: 'Offline: not saved yet', 'Not saved': 'Not saved. It will retry with your next change.' }[ds] || '',
       saveC: ds === 'Not saved' ? '#B3261E' : '#685E56',
-      pubOn: st.sheet === 'pub', openPub: () => set({ sheet: 'pub' }), closeSheet: () => set({ sheet: st.sheet === 'rest' ? 'vers' : null }),
+      closeSheet: () => set({ sheet: st.sheet === 'rest' ? 'vers' : null }),
       askPub: () => { if (ds === 'Offline') { set({ sheet: null }); toast('You’re offline. Try again when you reconnect.'); } else if (!chg) { set({ sheet: null }); toast('No changes since the last publication'); } else set({ sheet: 'pubAsk' }); },
       pubAskOn: st.sheet === 'pubAsk', doPub: () => { set({ sheet: null, chg: false }); toast('Published. Learners will receive it the next time they open the app.'); },
       versOn: st.sheet === 'vers', openVers: () => set({ sheet: 'vers' }),
@@ -19,16 +19,17 @@ DS_KEYS = r'''
 DJS = ED4.replace("    return { ...common(st, set),", DS_JS + "\n    return { ...common(st, set)," + DS_KEYS, 1)
 assert DJS != ED4
 
-PUBPILL = ('<style data-reach44>[data-reach44]::before { content: ""; position: absolute; inset: -4px 0 } [data-reach44][style*="height: 32px"]::before { inset: -6px 0 }</style>' + f'<button type="button" onClick="{{{{openPub}}}}" aria-haspopup="dialog" data-reach44 style="flex: none; position: relative; height: 36px; padding: 0 12px 0 14px; border: 0; border-radius: 18px; background: {HONEY}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 4px">Publishing{CHEV_D}</button>')
 SAVET = f'<span role="status" style="min-width: 0; font-size: 13px; color: {{{{saveC}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{saveT}}}}</span>'
-DROW = (f'<div style="flex: none; display: flex; align-items: center; gap: 12px; padding: 0 16px 8px">{PUBPILL}{SAVET}</div>')
+PUBCARD = f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px">'
+def DMENU(sfx):
+    # nothing hangs under the bar (loop round 60): the draft's status and its publishing acts live in the bar's ··· menu
+    m = ED_MENU(sfx, ('3', 'openVers')); i = m.index(PUBCARD)  # one row for the versions: Version history opens the published ones
+    return m[:i] + GROUP(('link', 'Publish…', '', 'askPub'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
+DSAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {{{{saveC}}}}">{{{{saveT}}}}</p>'
 ASKP = lambda c, t, b, ok, go: ASK(c, t, b, ok, go).replace('background: #B3261E', f'background: {INK}')
 VROW = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{vers}}}}" as="v" hint-placeholder-count="3"><div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
         f'<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-variant-numeric: tabular-nums">{{{{v.t}}}}</span>{IF("v.newest", f"<span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">Newest · what learners have</span>")}</span>'
         + IF('v.older', f'<button type="button" onClick="{{{{v.restore}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 15px; font-weight: 600; color: {INK}">Restore</button>') + '</div></sc-for></div>')
-PUBBODY = (f'<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 4px"><span style="font-size: 16px; font-weight: 600">Amazing Grace · the original</span>{SAVET}</div>'
-           + GROUP(('link', 'Publish…', '', 'askPub'), ('link', 'Versions', '3', 'openVers'), ('action', 'Discard changes', 'askDisc', RED), bg=SHEET)
-           + f'')
 VERSBODY = f'' + VROW
 DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.', 'Publish', 'doPub')
          + ASKP('restOn', 'Restore this version?', 'This version will be republished for all learners, replacing the current one.', 'Restore', 'doRest')
@@ -40,17 +41,17 @@ def GATES(back):
             + EMPTY('isLearner', '✎', 'Only editors can modify this.', 'A built-in song is changed by the app’s editors. Make your own copy from its ··· menu.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Songs", "", back, "primary", 48, False)}</div>'))
 GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; align-items: center; padding: 8px 16px"><a href="{back}" aria-label="Close the editor" style="width: 44px; height: 44px; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</a></header>'
 
-edph = (IF('isLive', eph4.replace('</header>', '</header>' + DROW, 1), 'true')
+edph = (IF('isLive', eph4, 'true')
         + IF('notLive', GHEAD('Song.dc.html') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("Songs.dc.html")}</main>')
         + STRIP('dsDemo') + STRIP('states') + '<div style="height: 22px; flex: none"></div>' + TOASTS)
 DJS = DJS.replace("isLive: live,", "isLive: live, notLive: !live,", 1)
 LTITLE = f'<span style="font-size: 13px; color: {SOFT}">Saved on this device</span>'
 assert LTITLE in elm4
-edlm = (IF('isLive', elm4.replace(LTITLE, f'<span style="display: flex; align-items: center; gap: 8px">{PUBPILL.replace("height: 36px", "height: 32px").replace("font-size: 14px", "font-size: 13px")}{SAVET}</span>', 1), 'true')
+edlm = (IF('isLive', elm4.replace(LTITLE, SAVET, 1), 'true')
         + IF('notLive', GHEAD('SongLaptop.dc.html').replace('padding: 8px 16px', 'padding: 12px 24px') + f'<main style="flex: 1; display: flex; flex-direction: column; justify-content: center">{GATES("SongsLaptop.dc.html")}</main>')
         + f'<div style="position: absolute; left: 24px; bottom: 148px; z-index: 40; width: 760px; padding-top: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 4px 14px -6px rgba(51,41,33,.25)">{STRIP("dsDemo")}{STRIP("states")}</div>' + TOASTL)
-DSH = (BSHEET('moreOn', 'Amazing Grace', ED_MENU('.dc.html')) + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel') + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('pubOn', 'Publishing', PUBBODY) + BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY) + DASKS
-DSL = POPOVER('moreOn', 'Amazing Grace', ED_MENU('Laptop.dc.html'), 'right: 24px; top: 76px', 400) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px', 420) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px', 420) + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px', 420) + POPOVER('pubOn', 'Publishing', PUBBODY, 'left: 80px; top: 80px', 380) + LAPSHEET(BSHEET('versOn', 'Versions of Amazing Grace', VERSBODY), 480) + DASKS
+DSH = (BSHEET('moreOn', 'Amazing Grace', DSAVED + DMENU('.dc.html')) + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel') + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1) + BSHEET('versOn', 'Version history', VERSBODY) + DASKS
+DSL = POPOVER('moreOn', 'Amazing Grace', DMENU('Laptop.dc.html'), 'right: 24px; top: 76px', 400) + POPOVER('creditsOn', 'Credits', ED_CREDITS, 'right: 24px; top: 76px', 420) + POPOVER('instOn', 'Instruments', ED_INST, 'right: 24px; top: 76px', 420) + POPOVER('pickInstOn', 'Add an instrument', ED_PICK, 'right: 24px; top: 76px', 420) + LAPSHEET(BSHEET('versOn', 'Version history', VERSBODY), 480) + DASKS
 phone('EditorDraft', 'Score editor, a built-in song’s draft (editors)', edph, DJS, DSH)
 full_laptop('EditorDraftLaptop', 'Score editor, a built-in song’s draft (editors), laptop', edlm, DJS, DSL)
 print('r55 editor draft ok')
