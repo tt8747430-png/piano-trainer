@@ -164,7 +164,7 @@ detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons
 # loop round 59: a level reads as its sibling the course: what it teaches, its count over the meter, then the one honey act
-LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 4px"><p contenteditable="{{{{editing}}}}" style="margin: 0 0 4px; max-width: 65ch; outline: none; font-size: 15px; line-height: 1.45; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p>'
+LVHEAD = (f'<div style="display: flex; flex-direction: column; gap: 8px; margin: 0 4px"><p contenteditable="{{{{editing}}}}" style="margin: 0 0 4px; max-width: 65ch; outline: none; font-size: 16px; line-height: 1.5; color: {SOFT}; text-wrap: pretty">{{{{goal}}}}</p>'
           f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{levelSub}}}}</span>{METER}'
           f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; margin-top: 4px">{BTN("{{levelGo}}", "", "Lesson.dc.html", "primary", 52)}</div></sc-if></div>')
 vph = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("{{jt}}", IB("More", MORE, "openMore"), "Learn.dc.html", "Learn")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH}</sc-if>'

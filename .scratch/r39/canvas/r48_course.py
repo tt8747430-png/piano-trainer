@@ -1,8 +1,7 @@
 # R48: a course (pages/course, the course editor): its page for a learner, the same page in an editor's Edit mode
-# (title and summary in place, Properties: Shelf, Level, Length; About; Lessons dragged, removed, "Or add one back", Add
+# (title and summary in place, Properties: Shelf, Level, Length; Lessons dragged, removed, "Or add one back", Add
 # lesson), its Settings page and Publish. Labels from learn.ts (course, own, edit.course, settings). Exec'd by r41.py.
-CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, one clef at a time, then together.',
-       'about': 'Each lesson ends with a song to read. Read a little every day: reading grows by repetition more than by length.',
+CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, one clef at a time, then together. Each lesson ends with a song to read.',
        'lessons': [['The staff and the treble clef', 'learned'], ['Notes on the lines', 'learned'], ['Notes in the spaces', 'learned'], ['The bass clef', 'next'], ['Ledger lines', ''], ['The grand staff', ''], ['Reading both hands', ''], ['Sight-reading a little every day', 'unpub']],
        'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle, Little Star', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
 CRPICS = {t: INCIPIT(INC.get(t, (2, 4))) for t, _ in CRS['songs']}
@@ -16,7 +15,7 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS =
       ['A lesson removed, with Undo', !!gone[lost], { editing: true, gone: { [lost]: true }, toast: lost + ' removed from the course' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     return { ...common(st, set), states, editing, reading: !editing, edit: () => set({ editing: true }), done: () => set({ editing: false, sheet: null }), status: 'Saved · not published',
-      t: CR.t, s: CR.s, about: CR.about, lessons, songs: CR.songs.map(([t, d]) => ({ t, d, pic: CRPICS[t] })), removed, hasRemoved: removed.length > 0,
+      t: CR.t, s: CR.s, lessons, songs: CR.songs.map(([t, d]) => ({ t, d, pic: CRPICS[t] })), removed, hasRemoved: removed.length > 0,
       shelves: chipsOf(['Beginner', 'Intermediate', 'Technique and exercises', 'Chords and improvisation', 'Method books'], shelf, (x) => set({ shelf: x })),
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
       weeksL: weeks + ' weeks', fewer: () => set({ weeks: Math.max(1, weeks - 1) }), more: () => set({ weeks: Math.min(52, weeks + 1) }),
@@ -47,16 +46,16 @@ SONGROWS = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 
             f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: {{{{g.pic}}}} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{g.d}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for></div>')
 def CBODY(lap):
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><h1 contenteditable="true" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; outline: none">{{{{t}}}}</h1></sc-if>'
-            f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
+            f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 16px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
             f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{FACTS}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{PROPS}</sc-if></div>')
     go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
           f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
-    about = f'{H2("About")}<p contenteditable="{{{{editing}}}}" style="margin: 0 4px; font-size: 16px; line-height: 1.55; outline: none">{{{{about}}}}</p>'
+    # loop round 59: no About: what the course teaches is said once, in the summary under its name, as a level's goal
     if lap:  # one centred column (owner, 2026-11-16: "the page has one focus"): the cover beside the name and Continue as
-        # its head, then About, the lessons and the guided songs under it, as a song's page; never a rival column
+        # its head, then the lessons and the guided songs under it, as a song's page; never a rival column
         return (f'<div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: center; margin-bottom: 8px">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
-                f'{about}{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
-    return COVER + head + go + about + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
+                f'{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
+    return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; gap: 2px; padding: 0 16px 6px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>{IB("Publishing", DOTS, "openPm")}'
          f'<button type="button" onClick="{{{{openPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish…</button></div><div style="display: flex; justify-content: center">{DSTATUS}</div></header>')
