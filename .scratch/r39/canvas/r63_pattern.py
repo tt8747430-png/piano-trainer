@@ -51,7 +51,8 @@ INFO63 = INFOB('About the hands', 'openDesc', 'descOn') + INFOTIP('descOn', 'clo
 HANDS63 = f'<section style="flex: none; position: relative; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; gap: 6px">{H3_63("The hands")}{INFO63}</div>' + GROUP(('val', 'Right hand', '{{rhT}}'), ('val', 'Left hand', '{{lhT}}'), bg=SHEET) + '</section>'
 USED63 = f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("Used in")}' + GROUP(('link', 'Amazing Grace', 'Verse', 'Song.dc.html'), ('link', 'Called to Play, lesson 12', '', 'Lesson.dc.html'), bg=SHEET) + '</section>'
 HIDDEN63 = IF('hidden', CARD(f'<span style="font-size: 15px; line-height: 1.45">Hidden from the Player’s list and from its book. You can still find it under Hidden.</span>'))
-PRACTP63 = PRACTP.replace('href="PlayProgression.dc.html"', 'href="Player.dc.html"')
+PRACTI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M8 5v8M12 5v14M16 5v8"></path></svg>'
+PRACTP63 = f'<a href="Player.dc.html" aria-label="Practise in the Player" style="pointer-events: auto; justify-self: start; flex: none; min-width: 56px; padding: 0 12px; {GLASSGRP}; color: {INK}; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{PRACTI}<span style="font-size: 11px; font-weight: 600; color: {SOFT}">Practise</span></a>'
 PLAYPA = PLAYPR.replace('aria-label="What it plays"', 'aria-label="Play over"')
 BAR63 = lambda pos: f'<div role="toolbar" aria-label="Loop, play and practise" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{LOOPP}{PLAYPA}{PRACTP63}</div>'
 def PMENU63(pos):
