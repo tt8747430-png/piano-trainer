@@ -28,11 +28,10 @@ const filled = (Icon: LucideIcon) => (Icon === Play || Icon === Square ? 'fill-c
  */
 const ALIGN = 'flex-row items-center aside:flex-col'
 /**
- * A dial opens as a card over its button at the foot, growing from it, centred on it. Beside the
+ * A dial opens as a card over its button at the foot, growing from its bottom right. Beside the
  * page, where the height is short, it opens beside its button towards the page, from its top down.
  */
-const DIAL_ALIGN =
-  'left-1/2 -translate-x-1/2 origin-bottom aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:origin-top-right'
+const DIAL_ALIGN = 'right-0 origin-bottom-right aside:right-full aside:mr-3 aside:origin-top-right'
 const DIAL_ASIDE = 'aside:top-0 aside:bottom-auto aside:mb-0'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
@@ -109,7 +108,7 @@ export function FloatingHost({
         data-hidden={hidden || undefined}
         className={cn(
           'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
-          'justify-center lg:justify-end',
+          'justify-end',
         )}
       >
         <div
@@ -117,7 +116,7 @@ export function FloatingHost({
           data-slot="floating-actions"
           inert={hidden}
           className={cn(
-            'vt-floating flex w-full justify-center gap-3 aside:w-auto lg:justify-end',
+            'vt-floating flex w-full justify-end gap-3 aside:w-auto',
             !hidden && '[&>*>*]:pointer-events-auto',
             ALIGN,
           )}
@@ -128,8 +127,8 @@ export function FloatingHost({
 }
 
 /**
- * A screen's actions in the thumb's reach, floating at the foot of the screen over the page (centred
- * on a phone, as the canvas's New, at the right from a laptop's width): its
+ * A screen's actions in the thumb's reach, floating at the foot of the screen over the page, at its bottom right as the
+ * canvas's New (Material 3's FAB, owner 2026-11-15): its
  * main one a large round `Fab`, the rest folded into a `SpeedDial` beside it. Every part of a screen
  * that floats an action stands in the host's one column, the first to come highest, so none covers
  * another. The page under it pads its foot clear of them.
@@ -153,7 +152,7 @@ export function FloatingActions({
   return createPortal(
     <div
       className={cn(
-        'flex w-full justify-center gap-3 aside:w-auto lg:justify-end',
+        'flex w-full justify-end gap-3 aside:w-auto',
         ALIGN,
         last && 'order-last',
         className,
