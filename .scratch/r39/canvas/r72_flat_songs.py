@@ -31,7 +31,7 @@ FL_JS = r'''
     return { ...common(st, set), rows, count: bare ? '0 songs' : list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
       sortOn: st.sheet === 'sort', openSort: () => S({ sheet: 'sort' }), sorts: ['Last played', 'Title', 'Composer', 'Added'].map((l) => ({ l, on: l === sort, mark: l === sort ? 1 : 0, pick: () => S({ sort: l, dir: l === 'Title' || l === 'Composer' ? 'Ascending' : 'Descending', sheet: null }) })), dirs: menu(['Ascending', 'Descending'], dir, 'dir'),
       rowOn: st.sheet === 'row', rowT: st.row ?? 'Amazing Grace', q: st.q ?? '', typed: (e) => S({ q: e.target.value }),
-      none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare,
+      none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare, canSel: !selOn && list.length > 0 && !bare,
       selOn, selOff: !selOn, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: picked.length + ' selected', selNone: picked.length === 0, selSome: picked.length > 0,
       addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: () => S({ sheet: st.sheet === 'add' ? null : 'add' }),
       folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76',
@@ -88,8 +88,8 @@ _NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFol
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 64px 24px; text-align: center">'
          f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
-         f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Write a song, import MusicXML or MIDI, or add one from Explore.</span>'
-         f'<div style="display: flex; gap: 8px; margin-top: 8px">{BTN("New song", "openAdd", h=48, grow=False)}</div></div></sc-if>')
+         f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Write one with +, import MusicXML or MIDI, or find one in Explore.</span>'
+         f'<a href="Explore.dc.html" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a></div></sc-if>')
 SEARCHB = lambda href: IB('Search your songs', SEARCH.replace('width="18" height="18"', 'width="22" height="22"'), href=href)
 EXPLORE_SOFT = lambda href: f'<a href="{href}" style="color: inherit; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">Explore</a>'
 
@@ -155,12 +155,12 @@ SELBAR = lambda bottom: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{
     f'<button type="button" onClick="{{{{closeSheet}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Favourite</button>'
     f'<button type="button" onClick="{{{{toggleSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {RED}; font: inherit; font-size: 15px; font-weight: 600">Archive</button>', bottom) + '</sc-if>')
 ROWSHEET = lambda sfx: GROUP(('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit score', '', 'Editor' + sfx), ('action', 'Add to a folder', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK), ('link', 'Settings', '', 'SongSettings' + sfx), ('action', 'Archive', 'closeSheet', RED), bg=SHEET)
-SELTB = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
+SELTB = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div style="{grid}"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for></div></sc-if>'
 FEMPTY = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="{CARDROW}; flex: 1; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 48px 24px; text-align: center">'
           f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {SKY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
-          f'<span style="font-size: 20px; font-weight: 700">Nothing in this folder yet</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Add songs from your library, or find one in Explore.</span>'
-          f'<div style="margin-top: 8px">{BTN("Add songs", href="{ALL}", h=48, grow=False)}</div></div></sc-if>')
+          f'<span style="font-size: 20px; font-weight: 700">Nothing in this folder yet</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">The songs you put in this folder show here.</span>'
+          f'<a href="{{ALL}}" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a></div></sc-if>')
 FOLDERMORE = lambda sfx: GROUP(('action', 'Rename', 'closeSheet', INK), ('action', 'Colour', 'closeSheet', INK), ('link', 'Share', '', 'Groups' + sfx), ('action', 'Archive folder', 'closeSheet', RED), bg=SHEET)
 def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
