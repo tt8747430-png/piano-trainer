@@ -35,6 +35,8 @@ FL_JS = r'''
       selOn, selOff: !selOn, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: picked.length + ' selected', selNone: picked.length === 0, selSome: picked.length > 0,
       addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: () => S({ sheet: st.sheet === 'add' ? null : 'add' }),
       folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76',
+      recOn: st.sheet === 'rec', openRec: () => S({ sheet: 'rec' }), clickOn: st.click ?? true, clickOnBg: (st.click ?? true) ? '#44684A' : '#DAD1C8', clickOnX: (st.click ?? true) ? 22 : 2, clickT: () => S({ click: !(st.click ?? true) }),
+      cins: seg(['None', '1 bar', '2 bars'], st.cin ?? '1 bar', (x) => S({ cin: x })),
       impOn: st.sheet === 'imp', openImp: () => S({ sheet: 'imp', imp: false }), impPick: () => S({ imp: true }), impNot: !st.imp, impDone: !!st.imp,
       songOn: st.sheet === 'song', openSong: () => S({ sheet: 'song' }), sname: st.sname ?? '', snamed: (e) => S({ sname: e.target.value }), sReady: !!(st.sname ?? '').trim(),
       sBg: (st.sname ?? '').trim() ? '#EDC684' : '#EEE9E2', sFg: (st.sname ?? '').trim() ? '#332921' : '#8A7F76',
@@ -82,7 +84,7 @@ def FOLDERCARDS(href):
                    f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{s}</span></span>'
                    f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>' for t, s, c, k in FOLDERS_ALL)
 KEEPROWS = lambda href: GROUP(('link', 'Archive', '3', href), ('link', 'Trash', '2', href), bg=SHEET)
-_NEW = (('New song', 'openSong'), ('Record', '#'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
+_NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
 FOLDERSHEET = BSHEET('folderOn', 'New folder', f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
                      f'<input value="{{{{fname}}}}" onInput="{{{{named}}}}" placeholder="Folder name" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
                      f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{createBg}}}}; color: {{{{createFg}}}}; font: inherit; font-size: 16px; font-weight: 700">Create</button>', 'Cancel')
@@ -120,11 +122,16 @@ IMPFORM = (IF('impNot', f'<div style="display: flex; flex-direction: column; gap
       + GROUP(('val', 'Notes, tuplets and ties', 'All'), ('val', 'Tempo and metre changes', '6'), ('val', 'Pedal marks', '41'), bg=SHEET)
       + f'<div style="border-radius: 14px; background: #F6E7C8; padding: 12px 14px; font-size: 15px; line-height: 1.45"><b>Kept as text: 2 marks.</b> The ossia in bars 83–84 and a fingering for the left hand print as written, not as notes.</div>'
       + f'<a href="Song.dc.html" style="height: 50px; border-radius: 25px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">Open song</a></div>'))
+RECFORM = (f'<div style="display: flex; flex-direction: column; gap: 16px">'
+    + GROUP(('link', 'Input', 'Yamaha P-125', 'Settings.dc.html'), bg=SHEET)
+    + GROUP(('step', 'Tempo', 'tempoV', 'tDn', 'tUp'), ('toggle', 'Click', 'clickOn', 'clickT'), ('seg', 'Count-in', 'cins'), bg=SHEET)
+    + f'<a href="Editor.dc.html" style="height: 56px; border-radius: 28px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px"><span style="width: 14px; height: 14px; border-radius: 7px; background: #B84A3E"></span>Start recording</a></div>')
+RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
 ovpops = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + FOLDERSHEET.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
-detail('Songs', 'My songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET + SONGSHEET + IMPSHEET, ovpops + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html'), 'Songs')
+detail('Songs', 'My songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET + SONGSHEET + IMPSHEET + RECSHEET, ovpops + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
 # ── All songs ──
 CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
@@ -168,10 +175,10 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
           + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 56px 120px; display: flex; flex-direction: column; gap: 14px">{SHOWSTATES()}<div style="display: flex; align-items: center; gap: 24px"><div style="width: 520px; display: flex; flex-direction: column">{SEARCHFIELD}</div><div style="flex: 1">{COUNTROW}</div></div>{NOMATCH}{fe('Laptop.dc.html')}{LIST('SongLaptop.dc.html', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px')}</main>
 {SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')}''')
     pops = SORTMENU('right: 56px; top: 124px') + POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 120px; top: 220px', 320)
-    sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET + SONGSHEET + IMPSHEET
+    sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET + SONGSHEET + IMPSHEET + RECSHEET
     if folder:
         sheets += BSHEET('moreOn', title, FOLDERMORE('.dc.html')); pops += POPOVER('moreOn', title, FOLDERMORE('Laptop.dc.html'), 'right: 200px; top: 72px', 320)
-    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1] + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html'), 'Songs')
+    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1] + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
 HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
          ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', '30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', '12 Oct', 1)]
