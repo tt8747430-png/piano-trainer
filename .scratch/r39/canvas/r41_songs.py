@@ -83,7 +83,7 @@ sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('creditsOn', 'Title a
 lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 520px minmax(0, 1fr); gap: 48px; padding: 4px 56px 40px; align-items: start">
 <div style="display: flex; flex-direction: column; gap: 18px">{COVER_BIG(480, 22)}{TITLE}{FACTS}{ACTS_L}</div>
-<div style="display: flex; flex-direction: column; gap: 24px; padding-top: 4px">{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'flex-wrap: wrap; padding: 2px')}{PROGS}</section></sc-if>
+<div style="display: flex; flex-direction: column; gap: 24px; padding-top: 4px">{SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 2px')}{PROGS}</section></sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section></div>
 </div>'''
