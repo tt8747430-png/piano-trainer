@@ -7,7 +7,7 @@
 
 TKS_SRC = r'''
     const S = (o) => set(o);''' + TOAST_JS + r'''
-    const ALL = [{ id: 3, n: 'Take 3', d: '0:41 · 92 BPM' }, { id: 2, n: '9 November, 18:20', d: '0:52 · 92 BPM' }, { id: 1, n: '9 November, 18:02', d: '0:38 · 88 BPM' }];
+    const ALL = [{ id: 3, n: 'Take 3', d: '9 November, 18:41 · 0:41 · 92 BPM' }, { id: 2, n: '9 November, 18:20', d: '0:52 · 92 BPM' }, { id: 1, n: '9 November, 18:02', d: '0:38 · 88 BPM' }];
     const gone = st.gone || [], takes = ALL.filter((t) => !gone.includes(t.id)), at = ALL.find((t) => t.id === st.at) || ALL[0];
     const review = st.page === 'review', grid = st.grid || '1/8', raw = !!st.hideRaw, into = st.into || 'Both staves';
     const drop = (id) => S({ gone: gone.concat([id]), sheet: null, page: null, last: id, toast: 'Take deleted', toastUndo: true });
