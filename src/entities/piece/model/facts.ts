@@ -4,9 +4,10 @@ import {
   noteName,
   numeralReadings,
   playOrder,
+  qualitySuffix,
   sameKey,
   type Chord,
-  type ChordQuality,
+  type ChordKind,
   type Key,
   type Numeral,
   type SpelledNote,
@@ -31,7 +32,7 @@ export interface ChordStretch {
  */
 export interface PieceFacts {
   /** Each chord it writes once, its root as spelled and its quality, in the order it first comes. */
-  readonly chords: readonly { readonly root: SpelledNote; readonly quality: ChordQuality }[]
+  readonly chords: readonly { readonly root: SpelledNote; readonly quality: ChordKind }[]
   /** The built-in patterns it plays. */
   readonly patterns: readonly PatternId[]
   /** Its chords in stretches, each in its key. */
@@ -41,9 +42,9 @@ export interface PieceFacts {
 }
 
 function chordsOnce(chords: readonly Chord[]): PieceFacts['chords'] {
-  const seen = new Map<string, { root: SpelledNote; quality: ChordQuality }>()
+  const seen = new Map<string, { root: SpelledNote; quality: ChordKind }>()
   for (const { root, quality } of chords) {
-    const name = `${noteName(root)} ${quality}`
+    const name = noteName(root) + qualitySuffix(quality)
     if (!seen.has(name)) seen.set(name, { root, quality })
   }
   return [...seen.values()]

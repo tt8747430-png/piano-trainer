@@ -1,4 +1,5 @@
-import type { Chord, ChordQuality } from './chord'
+import type { Chord } from './chord'
+import type { ChordQuality } from './chord-quality'
 import { CIRCLE_OF_FIFTHS } from './circle'
 import type { Key } from './key'
 import { pitchClassOf, type SpelledNote } from './note'

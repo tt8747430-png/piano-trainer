@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CHORD_QUALITIES, chordSymbol, qualityIntervals } from './chord'
+import { chordSymbol, qualityIntervals } from './chord'
+import { CHORD_QUALITIES } from './chord-quality'
 import { parseChordSymbol } from './chord-symbol'
 import type { Key } from './key'
 import { note } from './note'
@@ -28,7 +29,7 @@ describe('parseNumerals', () => {
     expect((parseNumerals('ii7, V7, IMaj7 bVII #iv° viiø7') ?? []).map(numeralText)).toEqual([
       'ii7',
       'V7',
-      'IMaj7',
+      'Imaj7',
       '♭VII',
       '#iv°',
       'viiø7',
@@ -54,15 +55,15 @@ describe('parseNumerals', () => {
   })
 
   it('reads a degree with its chord as the sheets write it', () => {
-    expect(texts('IIm7 – V7 – Imaj7')).toEqual(['ii7', 'V7', 'IMaj7'])
+    expect(texts('IIm7 – V7 – Imaj7')).toEqual(['ii7', 'V7', 'Imaj7'])
     expect(texts('Im7 IVm9 Vsus4 Im7')).toEqual(['i7', 'iv9', 'Vsus4', 'i7'])
     expect(texts('IIm7b5 V7b9 Im6')).toEqual(['iiø7', 'V7♭9', 'i6'])
-    expect(texts('iim7 V7 IMaj7')).toEqual(['ii7', 'V7', 'IMaj7'])
+    expect(texts('iim7 V7 IMaj7')).toEqual(['ii7', 'V7', 'Imaj7'])
     expect(texts('Imadd2 V13b9 Iadd2')).toEqual(['iadd9', 'V13♭9', 'Iadd9'])
   })
 
   it('still reads a line written the old way', () => {
-    expect(texts('III+7 iMaj7 viio7 viiø')).toEqual(['III7#5', 'iMaj7', 'vii°7', 'viiø7'])
+    expect(texts('III+7 iMaj7 viio7 viiø')).toEqual(['III7#5', 'imaj7', 'vii°7', 'viiø7'])
   })
 
   it('reads no token that is neither grammar', () => {
@@ -89,7 +90,7 @@ describe('parseNumerals', () => {
 describe('numeralChord', () => {
   it('reads the key’s own chords, growing with the chord size as the scale’s do', () => {
     expect(chords('I vi ii V', C, 'triads')).toEqual(['C', 'Am', 'Dm', 'G'])
-    expect(chords('I vi ii V', C, 'sevenths')).toEqual(['CMaj7', 'Am7', 'Dm7', 'G7'])
+    expect(chords('I vi ii V', C, 'sevenths')).toEqual(['Cmaj7', 'Am7', 'Dm7', 'G7'])
     expect(chords('iii', C, 'ninths')).toEqual(['Em7'])
   })
 
@@ -124,7 +125,7 @@ describe('numeralChord', () => {
     expect(chords('i ♭VI ♭III ♭VII', A_MINOR, 'sevenths')).toEqual(
       chords('i VI III VII', A_MINOR, 'sevenths'),
     )
-    expect(chords('♭VI ♭III', A_MINOR, 'sevenths')).toEqual(['FMaj7', 'CMaj7'])
+    expect(chords('♭VI ♭III', A_MINOR, 'sevenths')).toEqual(['Fmaj7', 'Cmaj7'])
   })
 
   it('puts a minor key’s diminished vii on its leading tone, a °7 when it grows', () => {
@@ -152,12 +153,12 @@ describe('numeralChord', () => {
 
   it('keeps what is written', () => {
     expect(chords('I7 IV7 V7', C, 'triads')).toEqual(['C7', 'F7', 'G7'])
-    expect(chords('IMaj7 vii°7', C, 'triads')).toEqual(['CMaj7', 'B°7'])
+    expect(chords('IMaj7 vii°7', C, 'triads')).toEqual(['Cmaj7', 'B°7'])
   })
 
   it('keeps a written ♭9 at every size, the chord it leads to growing as ever', () => {
     expect(chords('V7♭9 I', C, 'triads')).toEqual(['G7♭9', 'C'])
-    expect(chords('V7♭9 I', C, 'ninths')).toEqual(['G7♭9', 'CMaj9'])
+    expect(chords('V7♭9 I', C, 'ninths')).toEqual(['G7♭9', 'Cmaj9'])
     expect(chords('V7♭9 i', A_MINOR, 'ninths')).toEqual(['E7♭9', 'Am9'])
   })
 
@@ -168,7 +169,7 @@ describe('numeralChord', () => {
 
   it('counts a minor key from natural minor', () => {
     expect(chords('i iv V i', A_MINOR, 'triads')).toEqual(['Am', 'Dm', 'E', 'Am'])
-    expect(chords('i VI III VII', A_MINOR, 'sevenths')).toEqual(['Am7', 'FMaj7', 'CMaj7', 'G7'])
+    expect(chords('i VI III VII', A_MINOR, 'sevenths')).toEqual(['Am7', 'Fmaj7', 'Cmaj7', 'G7'])
   })
 })
 
@@ -209,7 +210,7 @@ describe('an applied numeral', () => {
       'Dm7',
       'Gm7',
       'C7',
-      'FMaj7',
+      'Fmaj7',
     ])
     expect(chords('ii°/vi V/vi vi', C, 'ninths')).toEqual(['Bm9♭5', 'E7♭9', 'Am9'])
     expect(chords('ii°/vii V/vii vii°', C, 'sevenths')).toEqual(['C#m7♭5', 'F#7', 'Bm7♭5'])
@@ -241,7 +242,7 @@ describe('a numeral over its bass', () => {
   it('plays the chord over that tone, at every chord size', () => {
     expect(chords('IV I/5', C, 'triads')).toEqual(['F', 'C/G'])
     expect(chords('I/3 V7/7', C, 'triads')).toEqual(['C/E', 'G7/F'])
-    expect(chords('I/5', C, 'sevenths')).toEqual(['CMaj7/G'])
+    expect(chords('I/5', C, 'sevenths')).toEqual(['Cmaj7/G'])
     expect(chords('V7/3/ii', C, 'triads')).toEqual(['A7/C#'])
   })
 
@@ -291,7 +292,7 @@ describe('numeralOf', () => {
         return numeral ? numeralText(numeral) : null
       })
     expect(written(['Dm7', 'G7', 'C6'], C)).toEqual(['ii7', 'V7', 'I6'])
-    expect(written(['Dm9', 'G9', 'CMaj9'], C)).toEqual(['ii9', 'V9', 'IMaj9'])
+    expect(written(['Dm9', 'G9', 'CMaj9'], C)).toEqual(['ii9', 'V9', 'Imaj9'])
     expect(written(['Dm7', 'Gm9', 'Asus4'], D_MINOR)).toEqual(['i7', 'iv9', 'Vsus4'])
   })
 

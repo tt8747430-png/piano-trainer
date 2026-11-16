@@ -33,6 +33,7 @@ import {
   type ScaleKind,
   type SkillId,
   type SpelledNote,
+  isTableQuality,
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
@@ -328,6 +329,8 @@ function cadenceRound(asks: Extract<Asks, { kind: 'cadences' }>, random: () => n
       const [numeral] = parseNumerals(played.numeral) ?? []
       if (!numeral) throw new RangeError(`${played.numeral} is not a numeral`)
       const { root, quality } = numeralChord(numeral, key, 'triads')
+      if (!isTableQuality(quality))
+        throw new RangeError(`${played.numeral} is no chord of the table`)
       return {
         mode: 'build-chord',
         ...chordQuestion({ root, quality, inversion }, undefined),

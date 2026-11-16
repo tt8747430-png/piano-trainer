@@ -6,6 +6,7 @@ import { CHORD_BEATS } from '@/shared/lib/arrangement'
 import {
   chordBass,
   chordSymbol,
+  isTableQuality,
   printedChord,
   printedNote,
   printedSymbol,
@@ -14,6 +15,7 @@ import {
   sameNote,
   spellChord,
   type Chord,
+  type ChordKind,
   type ChordQuality,
   type Key,
 } from '@/shared/lib/music'
@@ -82,7 +84,10 @@ export function ChordDialog({
     chord.bass === undefined
       ? 'root'
       : (tones.find((tone) => tone.note.letter === chord.bass?.letter)?.role ?? 'root')
-  const qualities = QUALITIES.includes(chord.quality) ? QUALITIES : [...QUALITIES, chord.quality]
+  const kinds: readonly ChordKind[] =
+    isTableQuality(chord.quality) && QUALITIES.includes(chord.quality)
+      ? QUALITIES
+      : [...QUALITIES, chord.quality]
   const suggested = likeliestChords(musicKey)
     .filter((each) => !sameChord(each, chord))
     .slice(0, SUGGESTED)
@@ -121,9 +126,9 @@ export function ChordDialog({
                 label={t('chordPlayer.chord.quality')}
                 bare
                 className={cn(POP, 'min-w-28')}
-                value={chord.quality}
-                options={qualities.map((quality) => ({
-                  value: quality,
+                value={qualitySuffix(chord.quality)}
+                options={kinds.map((quality) => ({
+                  value: qualitySuffix(quality),
                   label:
                     quality === 'maj'
                       ? t('chordPlayer.chord.major')
@@ -131,7 +136,10 @@ export function ChordDialog({
                         ? t('chordPlayer.chord.minor')
                         : printedSymbol(qualitySuffix(quality)),
                 }))}
-                onChange={(quality) => take({ root: chord.root, quality })}
+                onChange={(suffix) => {
+                  const quality = kinds.find((each) => qualitySuffix(each) === suffix)
+                  if (quality) take({ root: chord.root, quality })
+                }}
               />
             </DialogRow>
             <DialogRow label={t('chordPlayer.chord.bass')}>

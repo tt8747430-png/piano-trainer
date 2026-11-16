@@ -13,6 +13,7 @@ import {
   CHORD_QUALITIES,
   chordsOfLine,
   chordSymbol,
+  isTableQuality,
   keyFromParam,
   note,
   numeralsLine,
@@ -26,7 +27,9 @@ import {
   SCALE_KINDS,
   scaleIntervals,
   spellAbove,
+  spellChord,
   writtenSymbol,
+  type ChordKind,
   type ChordQuality,
   type Key,
   type KeyParam,
@@ -60,7 +63,7 @@ export type IndexTarget =
   | { readonly opens: 'lesson'; readonly lesson: string }
   | { readonly opens: 'course'; readonly course: string }
   | { readonly opens: 'course-lesson'; readonly course: string; readonly lesson: string }
-  | { readonly opens: 'chord'; readonly root: SpelledNote; readonly quality: ChordQuality }
+  | { readonly opens: 'chord'; readonly root: SpelledNote; readonly quality: ChordKind }
   /** A scale kind's page, on a tonic where one was typed ("D minor"). */
   | { readonly opens: 'scale'; readonly scale: ScaleKind; readonly root?: SpelledNote }
   /** A progression of the library or the learner's own, on its page (R30-4). */
@@ -289,13 +292,18 @@ export function indexEntries({
 export function typedEntry(query: string, names: IndexNames): IndexEntry | undefined {
   const chord = readChordSymbol(query)
   if (chord) {
-    if (pitchClassOf(chord.root) === pitchClassOf(C)) return undefined
     const { root, quality } = chord
+    if (pitchClassOf(root) === pitchClassOf(C) && isTableQuality(quality)) return undefined
     return {
       id: 'chords:typed',
       kind: 'chords',
       title: chordSymbol({ root, quality }),
-      detail: names.quality(quality),
+      // A chord the table names by its name, any other by its notes.
+      detail: isTableQuality(quality)
+        ? names.quality(quality)
+        : spellChord(root, quality)
+            .map((tone) => printedNote(tone.note))
+            .join(' '),
       words: [],
       target: { opens: 'chord', root, quality },
     }

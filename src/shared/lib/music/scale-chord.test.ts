@@ -36,19 +36,19 @@ describe('ROMAN_NUMERALS', () => {
 describe('scaleChords', () => {
   it.each([
     [3, 'C Dm Em F G Am B°'],
-    [4, 'CMaj7 Dm7 Em7 FMaj7 G7 Am7 Bm7♭5'],
-    [5, 'CMaj9 Dm9 Em7♭9 FMaj9 G9 Am9 Bm7♭5♭9'],
-    [6, 'CMaj11 Dm11 Em11♭9 FMaj9#11 G11 Am11 Bm11♭5♭9'],
-    [7, 'CMaj13(11) Dm13 Em11♭9♭13 FMaj13#11 G13(11) Am11♭13 Bm11♭5♭9♭13'],
+    [4, 'Cmaj7 Dm7 Em7 Fmaj7 G7 Am7 Bm7♭5'],
+    [5, 'Cmaj9 Dm9 Em7♭9 Fmaj9 G9 Am9 Bm7♭5♭9'],
+    [6, 'Cmaj11 Dm11 Em11♭9 Fmaj9#11 G11 Am11 Bm11♭5♭9'],
+    [7, 'Cmaj13(11) Dm13 Em11♭9♭13 Fmaj13#11 G13(11) Am11♭13 Bm11♭5♭9♭13'],
   ] as const)('stacks C major’s chords of %i notes: %s', (notes, expected) => {
     expect(symbols(note('C'), 'major', notes)).toBe(expected)
   })
 
   it('stacks A harmonic and melodic minor’s 9ths', () => {
     expect(symbols(note('A'), 'harmonic', 5)).toBe(
-      'Am(maj9) Bm7♭5♭9 C+Maj9 Dm9 E7♭9 FMaj7#9 G#°7♭9',
+      'Am(maj9) Bm7♭5♭9 C+maj9 Dm9 E7♭9 Fmaj7#9 G#°7♭9',
     )
-    expect(symbols(note('A'), 'melodic', 5)).toBe('Am(maj9) Bm7♭9 C+Maj9 D9 E9 F#m9♭5 G#m7♭5♭9')
+    expect(symbols(note('A'), 'melodic', 5)).toBe('Am(maj9) Bm7♭9 C+maj9 D9 E9 F#m9♭5 G#m7♭5♭9')
   })
 
   it('numbers the degrees, marking diminished, half-diminished and augmented', () => {
@@ -158,9 +158,9 @@ describe('scaleChordAt', () => {
       .join(' ')
 
   it('adds a 9th only where it is an available tension', () => {
-    expect(chart('major')).toBe('CMaj9 Dm9 Em7 FMaj9 G9 Am9 Bm7♭5')
-    expect(chart('harmonic', note('A'))).toBe('Am(maj9) Bm7♭5 C+Maj9 Dm9 E7♭9 FMaj7 G#°7')
-    expect(chart('melodic', note('C'))).toBe('Cm(maj9) Dm7 E♭+Maj9 F9 G9 Am9♭5 Bm7♭5')
+    expect(chart('major')).toBe('Cmaj9 Dm9 Em7 Fmaj9 G9 Am9 Bm7♭5')
+    expect(chart('harmonic', note('A'))).toBe('Am(maj9) Bm7♭5 C+maj9 Dm9 E7♭9 Fmaj7 G#°7')
+    expect(chart('melodic', note('C'))).toBe('Cm(maj9) Dm7 E♭+maj9 F9 G9 Am9♭5 Bm7♭5')
   })
 
   it('plays a triad or a 7th chord as the scale stacks it', () => {
@@ -177,7 +177,7 @@ describe('borrowedChords', () => {
     expect(chords.map((chord) => writtenSymbol(chord))).toEqual(['E♭', 'Fm', 'A♭', 'B♭'])
     expect(
       borrowedChords({ tonic: note('C'), minor: false }, 4).map((c) => writtenSymbol(c)),
-    ).toEqual(['E♭Maj7', 'Fm7', 'A♭Maj7', 'B♭7'])
+    ).toEqual(['E♭maj7', 'Fm7', 'A♭maj7', 'B♭7'])
   })
 
   it('names a borrowed root plainly: E, A and B in D♭ major, never F♭, B𝄫 and C♭', () => {
@@ -196,9 +196,9 @@ describe('borrowedChords', () => {
       'B',
     ])
     expect(borrowedChords(key, 4).map((chord) => writtenSymbol(chord))).toEqual([
-      'EMaj7',
+      'Emaj7',
       'G♭m7',
-      'AMaj7',
+      'Amaj7',
       'B7',
     ])
   })

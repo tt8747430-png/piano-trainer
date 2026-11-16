@@ -1,4 +1,4 @@
-import type { ChordQuality } from './chord'
+import type { ChordQuality } from './chord-quality'
 import { buildChord, partsOf, type BuiltChord, type ChordParts } from './chord-parts'
 import { INTERVALS, spellBelow, type IntervalName, type LabelledInterval } from './interval'
 import type { Key } from './key'

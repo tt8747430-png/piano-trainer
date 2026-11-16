@@ -1,12 +1,12 @@
 import {
   ADDED_TONES,
   ALTERATIONS,
-  partsOf,
+  partsOfKind,
   type AddedTone,
   type Alteration,
   type BuiltSize,
+  type ChordKind,
   type ChordParts,
-  type ChordQuality,
   type Seventh,
   type Triad,
 } from '@/shared/lib/music'
@@ -41,7 +41,7 @@ const ADDED_PARAM: Readonly<Record<AddedTone, string>> = {
   add13: '13',
 }
 
-/** A `colour` param read at a size: its alterations (a 7th chord's) and added tones, unknown words left out. */
+/** A `colour` param read at a size: its alterations (a 7th chord's, a triad's ♭5) and added tones, unknown words left out. */
 export function readColour(
   value: unknown,
   size: BuiltSize,
@@ -49,8 +49,10 @@ export function readColour(
   // A URL reads a lone number as one: `colour=9`.
   const text = typeof value === 'number' ? String(value) : value
   const words = typeof text === 'string' ? text.split(',') : []
-  const alterations =
-    size === 5 ? [] : ALTERATIONS.filter((each) => words.includes(ALTERATION_PARAM[each]))
+  // A triad's one alteration is its ♭5 (`(♭5)`); its `#11` is added.
+  const alterations = ALTERATIONS.filter(
+    (each) => words.includes(ALTERATION_PARAM[each]) && (size > 5 || each === 'b5'),
+  )
   const added = ADDED_TONES.filter(
     (tone) =>
       words.includes(ADDED_PARAM[tone]) && !(tone === 'addS11' && alterations.includes('s11')),
@@ -66,8 +68,8 @@ export const partsParams = ({ added, alterations, ...parts }: ChordParts): Parts
   ].join(','),
 })
 
-/** The URL params that open the builder on a table quality: a skill's or a chord family's way in. */
-export const qualityParams = (quality: ChordQuality): PartsParams => partsParams(partsOf(quality))
+/** The URL params that open the builder on a chord's kind: a skill's, a chord family's or a typed chord's way in. */
+export const qualityParams = (quality: ChordKind): PartsParams => partsParams(partsOfKind(quality))
 
 export const partsFromParams = ({ colour, ...params }: PartsParams): ChordParts => ({
   ...params,

@@ -22,11 +22,11 @@ describe('chordsHolding', () => {
 
   it('gives the owner’s table for a melody G', () => {
     expect(symbols('major')).toEqual([
-      'E♭Maj7 3',
-      'A♭Maj7 7',
-      'FMaj9 9',
-      'D♭Maj7#11 #11',
-      'B♭Maj13 13',
+      'E♭maj7 3',
+      'A♭maj7 7',
+      'Fmaj9 9',
+      'D♭maj7#11 #11',
+      'B♭maj13 13',
     ])
     expect(symbols('minor')).toEqual(['Em7 ♭3', 'Am7 ♭7', 'Fm9 9', 'Dm11 11', 'B♭m13 13'])
     expect(symbols('dominant')).toEqual([

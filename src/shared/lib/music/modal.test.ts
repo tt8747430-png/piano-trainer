@@ -47,7 +47,7 @@ describe('a progression in a mode', () => {
   })
 
   it('grows each chord as the mode does: Mixolydian’s I a dominant 7th, its ♭VII a major 7th', () => {
-    expect(inMode('I VII IV', 'C', 'mixolydian', 'sevenths').chords).toBe('C7 B♭Maj7 FMaj7')
+    expect(inMode('I VII IV', 'C', 'mixolydian', 'sevenths').chords).toBe('C7 B♭maj7 Fmaj7')
     expect(inMode('I IV', 'D', 'dorian', 'sevenths').chords).toBe('Dm7 G7')
   })
 

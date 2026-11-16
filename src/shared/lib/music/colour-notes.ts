@@ -1,4 +1,4 @@
-import type { ChordQuality } from './chord'
+import type { ChordQuality } from './chord-quality'
 import { buildChord, CHORD_PARTS, type ChordParts } from './chord-parts'
 import {
   INTERVALS,

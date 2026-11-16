@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { spellChord, type ChordQuality } from './chord'
+import { spellChord } from './chord'
+import { type ChordQuality } from './chord-quality'
 import { note, noteName, type SpelledNote } from './note'
 import type { PlacedTone } from './place'
 import { VOICINGS, voiceChord, voicingBar, type Voicing } from './voicing'

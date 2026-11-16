@@ -1,4 +1,4 @@
-import { qualityIntervals, type ChordQuality } from './chord'
+import { qualityIntervals, type ChordKind } from './chord'
 import { letterIndex, type SpelledNote } from './note'
 import type { Numeral } from './numerals'
 
@@ -10,15 +10,15 @@ import type { Numeral } from './numerals'
 export const HARMONIC_FUNCTIONS = ['tonic', 'subdominant', 'dominant'] as const
 export type HarmonicFunction = (typeof HARMONIC_FUNCTIONS)[number]
 
-const hasSemitones = (quality: ChordQuality, ...semitones: number[]): boolean => {
+const hasSemitones = (quality: ChordKind, ...semitones: number[]): boolean => {
   const own = qualityIntervals(quality).map((interval) => interval.semitones % 12)
   return semitones.every((each) => own.includes(each))
 }
 
 /** A dominant 7th's frame (a major 3rd and a minor 7th): V7, V9, V7♭9, a backdoor ♭VII7. */
-const isDominantSeventh = (quality: ChordQuality): boolean => hasSemitones(quality, 4, 10)
+const isDominantSeventh = (quality: ChordKind): boolean => hasSemitones(quality, 4, 10)
 /** A diminished 5th over a minor 3rd: vii°, vii°7, viiø7. */
-const isDiminished = (quality: ChordQuality): boolean => hasSemitones(quality, 3, 6)
+const isDiminished = (quality: ChordKind): boolean => hasSemitones(quality, 3, 6)
 
 /**
  * A numeral's function in a major or minor key, by its degree: I, iii and vi (i, III, VI) tonic; ii

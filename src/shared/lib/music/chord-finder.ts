@@ -8,8 +8,8 @@ import {
   type BuiltChord,
   type ChordParts,
 } from './chord-parts'
-import type { Key } from './key'
-import { note, pitchClassOf, plainRoot, type SpelledNote } from './note'
+import { keySignature, type Key } from './key'
+import { note, pitchClassOf, plainRoot, plainSpelling, type SpelledNote } from './note'
 import { pitchClass, type Midi, type PitchClass } from './pitch'
 import { keyTones, spellInKey } from './scale'
 import { TWO_HANDS_FROM } from './place'
@@ -23,7 +23,10 @@ export type LeftOut = (typeof LEFT_OUT)[number]
 export interface FoundChord {
   readonly chord: BuiltChord
   readonly parts: ChordParts
-  /** The lowest note when it is not the root: the part after the slash. */
+  /**
+   * The lowest note when it is not the root: the part after the slash. A chord tone (`C/E`), or a
+   * note under the chord that is none of its tones (`C/D`).
+   */
   readonly bass?: SpelledNote
   readonly symbol: string
   /** The tones the hand left out, as `LEFT_OUT` orders them: none when every tone is there. */
@@ -95,17 +98,39 @@ interface Shape {
   readonly leftOut: readonly LeftOut[]
 }
 
+/** The natural 11th over a root, in semitones. */
+const ELEVENTH = 17
+
+/**
+ * A 13th over a major 3rd, plain: its name leaves its 11th out, where it clashes with the 3rd, but a
+ * hand that plays all seven tones still plays the 13th (`C E G B♭ D F A` is C13, as every chord
+ * dictionary names it).
+ */
+const playsItsEleventh = (parts: ChordParts): boolean =>
+  parts.triad === 'maj' &&
+  parts.size === 13 &&
+  parts.alterations.length === 0 &&
+  parts.added.length === 0
+
 /**
  * Every chord the builder makes, whole and with each way of leaving tones out, by its notes above its
- * root (`shapeKey`): the chords a set of pitch classes over a root may be.
+ * root (`shapeKey`): the chords a set of pitch classes over a root may be. A 13th over a major 3rd is
+ * also taken with its 11th played, whole or with its 5th left out.
  */
 const SHAPES = CHORD_PARTS.reduce((byKey, parts) => {
   const tones = buildChord(note('C'), parts).tones
+  const add = (semitones: readonly number[], shape: Shape) => {
+    const key = shapeKey(semitones)
+    byKey.set(key, [...(byKey.get(key) ?? []), shape])
+  }
   for (const leftOut of waysToLeaveOut(leavable(parts, tones))) {
     const kept = tones.filter((tone) => !leftOut.some((role) => isPlain(tone, role)))
     if (kept.length < FEWEST_TONES) continue
-    const key = shapeKey(kept.map((tone) => tone.semitones))
-    byKey.set(key, [...(byKey.get(key) ?? []), { parts, leftOut }])
+    const semitones = kept.map((tone) => tone.semitones)
+    add(semitones, { parts, leftOut })
+    if (playsItsEleventh(parts) && leftOut.every((role) => role === '5th')) {
+      add([...semitones, ELEVENTH], { parts, leftOut })
+    }
   }
   return byKey
 }, new Map<string, Shape[]>())
@@ -145,7 +170,9 @@ function plainInversion({ parts, leftOut }: Shape, bass: Tone): boolean {
       parts.seventh === 'minor' &&
       (bass.role === '3rd' || bass.role === '7th'))
   const suspended = parts.triad === 'sus2' || parts.triad === 'sus4'
-  return standsOn(bass) && added && whole && !(suspended && parts.size >= 7)
+  // A °(maj7) over its 7th is a diminished triad with a ♭9 over the bass, a clash no chart writes.
+  const diminishedMajor = parts.triad === 'dim' && parts.seventh === 'major'
+  return standsOn(bass) && added && whole && !(suspended && parts.size >= 7) && !diminishedMajor
 }
 
 /** A slash chord's bass written as a reader looks for it: C, not B# or D𝄫, under an E+ or an E♭°7. */
@@ -155,47 +182,141 @@ const bassSpelling = (bass: SpelledNote, key: Key | undefined): SpelledNote =>
 /** The Chords explorer shows root position and three inversions. */
 const MOST_INVERSIONS = 3
 
+/** A reading as it is ranked: how its added tones fit the keys, and whether its bass is a foreign one. */
+interface Reading extends FoundChord {
+  readonly voicedAs: number
+  readonly foreign: boolean
+}
+
+/** Every chord the keys make on this pitch class as its root: in root position, or over a chord tone. */
+function readingsOn(rootPc: PitchClass, keys: readonly Midi[], key: Key | undefined): Reading[] {
+  const pcs = [...new Set(keys.map((each) => pitchClass(each)))]
+  const bassPc = pitchClass(Math.min(...keys))
+  const shapes = SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? []
+  return shapes.flatMap((shape) => {
+    const chord = spelledChord(rootPc, shape.parts, key)
+    const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
+    const bassTone = chord.tones[bassAt]
+    if (rootPc !== bassPc && !(bassTone && plainInversion(shape, bassTone))) return []
+    const bass = rootPc === bassPc || !bassTone ? undefined : bassSpelling(bassTone.note, key)
+    return [
+      {
+        chord,
+        parts: shape.parts,
+        ...(bass ? { bass } : {}),
+        symbol: writtenSymbol(chord, bass),
+        leftOut: shape.leftOut,
+        // The Chords explorer reads a chord of five notes or more by hands, not inversions.
+        ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS && chord.tones.length < TWO_HANDS_FROM
+          ? { inversion: bassAt }
+          : {}),
+        voicedAs: voicing(shape.parts, rootKeyOf(rootPc, keys), keys),
+        foreign: false,
+      },
+    ]
+  })
+}
+
+/** The lowest key of the root played: an added tone within an octave above it is a 2nd or 4th. */
+const rootKeyOf = (rootPc: PitchClass, keys: readonly Midi[]): number =>
+  Math.min(...keys.filter((each) => pitchClass(each) === rootPc))
+
 /**
- * The chords three or more keys make, best first: every chord the builder makes, on each pitch class
- * played as its root, the root spelled by the builder's one rule (or as `key` spells it, where the
- * notes are written in a key). Root position first, then a ♭5 read
- * as a #11 from a 9th up, then a stacked chord before a 7th chord with an added tone, then the fewest
- * tones left out, then an added 2nd or 4th named as played (within the octave of the root, else a 9th
- * or 11th), then one the table names, then fewer notes; each chord once.
+ * The chords a lead sheet writes over a bass that is none of their tones: whole, with a 3rd, plain
+ * (major, minor, 6, m6, add9, m(add9), 7, maj7, m7, m(maj7)). Not the symmetric chords, which read
+ * better from their own roots, nor the suspended ones (`Esus2/C` is Cmaj7♭5's notes).
  */
-export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
+const overForeignBass = (parts: ChordParts): boolean =>
+  (parts.triad === 'maj' || parts.triad === 'min') &&
+  parts.alterations.length === 0 &&
+  (parts.size === 7
+    ? parts.added.length === 0
+    : parts.size === 5 &&
+      parts.added.length <= 1 &&
+      parts.added.every((tone) => tone === 'add6' || tone === 'add9' || tone === 'add2'))
+
+/**
+ * A bass that is none of the chord's tones, with no key to spell it: by the chord's side of the
+ * circle, flats under a chord whose key has flats, else sharps (Piano Companion's `ForeignNoteName`).
+ */
+const foreignBassSpelling = (pc: PitchClass, chord: BuiltChord, parts: ChordParts): SpelledNote =>
+  plainSpelling(pc, keySignature({ tonic: chord.root, minor: parts.triad === 'min' }) >= 0)
+
+/**
+ * The chords over a bass that sounds nowhere above it, the notes above it a whole chord of three
+ * notes or more (`overForeignBass`): `D C E G` is C/D, `C F B♭ D A` B♭maj7/C.
+ */
+function foreignReadings(keys: readonly Midi[], key: Key | undefined): Reading[] {
   const lowest = Math.min(...keys)
-  const pcs = [...new Set(keys.map((key) => pitchClass(key)))]
-  if (pcs.length < 3) return []
   const bassPc = pitchClass(lowest)
-  const found = pcs.flatMap((rootPc: PitchClass) => {
-    const shapes = SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? []
-    // The lowest key of the root played: an added tone within an octave above it is a 2nd or 4th.
-    const rootKey = Math.min(...keys.filter((each) => pitchClass(each) === rootPc))
-    return shapes.flatMap((shape) => {
-      const chord = spelledChord(rootPc, shape.parts, key)
-      const bassAt = chord.tones.findIndex((tone) => tone.pitchClass === bassPc)
-      const bassTone = chord.tones[bassAt]
-      if (rootPc !== bassPc && !(bassTone && plainInversion(shape, bassTone))) return []
-      const bass = rootPc === bassPc || !bassTone ? undefined : bassSpelling(bassTone.note, key)
-      return [
-        {
+  const above = keys.filter((each) => each !== lowest)
+  if (above.some((each) => pitchClass(each) === bassPc)) return []
+  const pcs = [...new Set(above.map((each) => pitchClass(each)))]
+  if (pcs.length < FEWEST_TONES) return []
+  return pcs.flatMap((rootPc) =>
+    (SHAPES.get(shapeKey(pcs.map((pc) => pc - rootPc))) ?? [])
+      .filter((shape) => shape.leftOut.length === 0 && overForeignBass(shape.parts))
+      .map((shape): Reading => {
+        const chord = spelledChord(rootPc, shape.parts, key)
+        const bass = key ? spellInKey(bassPc, key) : foreignBassSpelling(bassPc, chord, shape.parts)
+        return {
           chord,
           parts: shape.parts,
-          ...(bass ? { bass } : {}),
+          bass,
           symbol: writtenSymbol(chord, bass),
-          leftOut: shape.leftOut,
-          // The Chords explorer reads a chord of five notes or more by hands, not inversions.
-          ...(bassAt >= 0 && bassAt <= MOST_INVERSIONS && chord.tones.length < TWO_HANDS_FROM
-            ? { inversion: bassAt }
-            : {}),
-          voicedAs: voicing(shape.parts, rootKey, keys),
-        },
-      ]
-    })
-  })
-  const rank = (each: (typeof found)[number]) => [
-    each.bass ? 1 : 0,
+          leftOut: [],
+          voicedAs: voicing(shape.parts, rootKeyOf(rootPc, above), above),
+          foreign: true,
+        }
+      }),
+  )
+}
+
+/**
+ * A root-position reading a foreign bass goes before: one with no 3rd, unless it is a whole 7sus4 (a
+ * minor 7th over a 4th: 7sus4, 9sus4, 13sus4, 7sus4♭9). `D C E G` is C/D before D9sus4 with no 5th,
+ * `C D G B♭` Gm/C before C7sus2; `C F G B♭ D` stays C9sus4. A reading with its 3rd is never weak,
+ * whatever it leaves out: `E A D G B` stays the quartal Em11.
+ */
+const isWeak = ({ parts, leftOut }: Reading): boolean => {
+  const noThird = parts.triad === 'sus2' || parts.triad === 'sus4' || parts.triad === 'power'
+  const sevenSus = parts.triad === 'sus4' && parts.size >= 7 && parts.seventh === 'minor'
+  return noThird && !(sevenSus && leftOut.length === 0)
+}
+
+/** A chord's alterations, an augmented 7th chord's raised 5th among them (`+maj7#11` has two). */
+const alterationCount = (parts: ChordParts): number =>
+  parts.alterations.length + (parts.triad === 'aug' && parts.size > 5 ? 1 : 0)
+
+/**
+ * A reading worth showing after the best: whole, with one alteration at most (a symmetric chord's
+ * other roots are: `E+/C`, `D#°7/C`), not `F#7(♭5,#9,♭13)/C` for C13#11's notes.
+ */
+const worthShowing = (reading: Reading): boolean =>
+  reading.leftOut.length === 0 && alterationCount(reading.parts) <= 1
+
+/** The most readings the keys are named by. */
+const MOST_READINGS = 3
+
+/**
+ * The chords three or more keys make, best first, three at most: every chord the builder makes, on
+ * each pitch class played as its root, the root spelled by the builder's one rule (or as `key` spells
+ * it, where the notes are written in a key), and the chords over a bass that is none of their tones.
+ * Root position first, then a ♭5 read as a #11 from a 9th up, then a stacked chord before a 7th chord
+ * with an added tone, then the fewest tones left out, then an added 2nd or 4th named as played (within
+ * the octave of the root, else a 9th or 11th), then one the table names, then fewer notes; then the
+ * inversions, then the chords over a foreign bass, the fewest tones first. Those go first where the
+ * best root-position reading is weak (`isWeak`). After the best, only readings worth showing; each
+ * chord once.
+ */
+export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
+  const pcs = [...new Set(keys.map((each) => pitchClass(each)))]
+  if (pcs.length < FEWEST_TONES) return []
+  const found = [
+    ...pcs.flatMap((rootPc) => readingsOn(rootPc, keys, key)),
+    ...foreignReadings(keys, key),
+  ]
+  const rank = (each: Reading) => [
     flatFiveOverTensions(each.parts) ? 1 : 0,
     addsOverSeventh(each.parts) ? 1 : 0,
     each.leftOut.length,
@@ -208,8 +329,16 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
     const at = ra.findIndex((value, i) => value !== rb[i])
     return at < 0 ? 0 : (ra[at] ?? 0) - (rb[at] ?? 0)
   })
+  const best = ranked.find((each) => !each.bass)
+  const foreignFirst = best !== undefined && isWeak(best)
+  const group = (each: Reading) => (each.foreign ? (foreignFirst ? 0 : 3) : each.bass ? 2 : 1)
+  const placed = ranked.toSorted(
+    (a, b) =>
+      group(a) - group(b) ||
+      (a.foreign && b.foreign ? a.chord.tones.length - b.chord.tones.length : 0),
+  )
   // One name a chord: by its symbol, and by its tones over its bass (add2 or add9, as it is voiced).
-  const sameChord = (a: (typeof ranked)[number], b: (typeof ranked)[number]) =>
+  const sameChord = (a: Reading, b: Reading) =>
     a.symbol === b.symbol ||
     (a.chord.root.letter === b.chord.root.letter &&
       a.chord.root.accidental === b.chord.root.accidental &&
@@ -218,9 +347,13 @@ export function nameChords(keys: readonly Midi[], key?: Key): FoundChord[] {
       a.parts.triad === b.parts.triad &&
       a.parts.size === b.parts.size &&
       octaveTones(a.parts) === octaveTones(b.parts))
-  return ranked
-    .filter((each, i) => ranked.findIndex((other) => sameChord(other, each)) === i)
-    .map(({ voicedAs: _voicedAs, ...chord }) => chord)
+  const [first, ...others] = placed.filter(
+    (each, i) => placed.findIndex((other) => sameChord(other, each)) === i,
+  )
+  if (!first) return []
+  return [first, ...others.filter(worthShowing)]
+    .slice(0, MOST_READINGS)
+    .map(({ voicedAs: _voicedAs, foreign: _foreign, ...chord }) => chord)
 }
 
 /** An added tone and the one an octave from it: the same note, named by where it is played. */
