@@ -89,6 +89,8 @@ export const learn = {
     new: 'New',
     newLesson: 'New lesson',
     newCourse: 'New course',
+    startFrom: 'Start from',
+    emptyCourse: 'Empty course',
     inCourse: 'In a course',
     noCourse: 'No course',
     inCourses: 'In courses',

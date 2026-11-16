@@ -32,3 +32,5 @@ export {
   type CourseLesson,
 } from './model/selectors'
 export { OwnLessonsStoreProvider, useOwnLessons, useOwnLessonsStoreApi } from './model/context'
+export type { OwnCourseTemplate } from './model/template'
+export { OWN_COURSE_TEMPLATES } from './content'

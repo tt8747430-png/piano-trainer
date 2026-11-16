@@ -83,6 +83,8 @@ export const learn: LocaleResources['learn'] = {
     new: 'Создать',
     newLesson: 'Новый урок',
     newCourse: 'Новый курс',
+    startFrom: 'Начать с',
+    emptyCourse: 'Пустой курс',
     inCourse: 'В курсе',
     noCourse: 'Без курса',
     inCourses: 'В курсах',
