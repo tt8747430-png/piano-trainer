@@ -11,6 +11,8 @@ function lineOf(feedback: WaitFeedback, t: TFunction<'player'>): string {
       return t('playThese', { notes: feedback.notes.join(' ') })
     case 'not':
       return t('notThat', { note: feedback.note })
+    case 'octave':
+      return t(feedback.way === 'lower' ? 'octaveLower' : 'octaveHigher')
     case 'right':
       return t('right')
     case 'finished':
@@ -45,7 +47,10 @@ export function WaitLine({
     >
       <p
         aria-live="polite"
-        className={cn('text-lg font-semibold', feedback?.kind === 'not' && 'text-destructive')}
+        className={cn(
+          'text-lg font-semibold',
+          (feedback?.kind === 'not' || feedback?.kind === 'octave') && 'text-destructive',
+        )}
       >
         {feedback ? lineOf(feedback, t) : null}
       </p>

@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { pitchClass, type Midi, type PitchClass } from '@/shared/lib/music'
+import type { Midi } from '@/shared/lib/music'
 import { audibleHands, type Audible, type Hands } from '@/shared/lib/schedule'
 import type { BeatGroupRange } from './loop'
 import { waitsForNotes, type PracticeMode } from './practice-mode'
@@ -21,14 +21,17 @@ export interface PracticeState {
   readonly arrival: number
   /** Listen: the transport runs. Wait mode: the app waits for notes. */
   readonly playing: boolean
-  /** Wait mode: the pitch classes the practised hands play here, lowest first. */
-  readonly expected: readonly PitchClass[]
-  readonly received: readonly PitchClass[]
+  /**
+   * Wait mode: the keys the practised hands play here, lowest first (Chordio, Metronaut: the keys, not
+   * their pitch classes, so an octave doubled wants both and a key an octave off is a slip).
+   */
+  readonly expected: readonly Midi[]
+  readonly received: readonly Midi[]
   /**
    * Wait mode: keys played before their beat group, while the app plays the other hand or a rest;
    * the app's move on counts them, a learner's move forgets them.
    */
-  readonly ahead: readonly PitchClass[]
+  readonly ahead: readonly Midi[]
   readonly outcome: Outcome
   /** The last wrong key, to show. */
   readonly wrong: Midi | null
@@ -78,14 +81,14 @@ export function accompanyingHands(hands: Hands): Audible {
   return { rh: !practised.rh, lh: !practised.lh, staff: true }
 }
 
-function expectedAt(performance: Performance, beatGroup: number, hands: Hands): PitchClass[] {
+function expectedAt(performance: Performance, beatGroup: number, hands: Hands): Midi[] {
   const practised = practisedHands(hands)
-  const pcs = new Set<PitchClass>()
+  const keys = new Set<Midi>()
   for (const index of performance.beatGroups[beatGroup]?.notes ?? []) {
     const played = performance.notes[index]
-    if (played && practised[played.hand]) pcs.add(pitchClass(played.midi))
+    if (played && practised[played.hand]) keys.add(played.midi)
   }
-  return [...pcs].sort((a, b) => a - b)
+  return [...keys].sort((a, b) => a - b)
 }
 
 /** The beat groups the cursor may be on: the loop's, or the whole piece's. */
@@ -131,15 +134,15 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
   }
 }
 
-const isComplete = (expected: readonly PitchClass[], received: readonly PitchClass[]) =>
-  expected.every((pc) => received.includes(pc))
+const isComplete = (expected: readonly Midi[], received: readonly Midi[]) =>
+  expected.every((key) => received.includes(key))
 
 /** On by itself: the keys played ahead count toward the beat group arrived at, or wait through a rest. */
 function advance(state: PracticeState): PracticeState {
   const moved = next(state)
   if (moved.outcome === 'finished' || state.ahead.length === 0) return moved
   if (moved.expected.length === 0) return { ...moved, ahead: state.ahead }
-  const received = moved.expected.filter((pc) => state.ahead.includes(pc))
+  const received = moved.expected.filter((key) => state.ahead.includes(key))
   return {
     ...moved,
     received,
@@ -207,36 +210,35 @@ function prev(state: PracticeState): PracticeState {
   return moveTo(state, waitsForNotes(state.mode) ? first : last)
 }
 
-/** The pitch classes the hands not practised play at a beat group: the app's to play, not a slip. */
-function accompaniedAt(performance: Performance, beatGroup: number, hands: Hands): PitchClass[] {
+/** The keys the hands not practised play at a beat group: the app's to play, not a slip. */
+function accompaniedAt(performance: Performance, beatGroup: number, hands: Hands): Midi[] {
   const practised = practisedHands(hands)
   return (performance.beatGroups[beatGroup]?.notes ?? []).flatMap((index) => {
     const played = performance.notes[index]
-    return played && !practised[played.hand] ? [pitchClass(played.midi)] : []
+    return played && !practised[played.hand] ? [played.midi] : []
   })
 }
 
 function noteOn(given: PracticeState, key: Midi): PracticeState {
   if (!waitsForNotes(given.mode) || given.outcome === 'finished') return given
-  const pc = pitchClass(key)
   // Stopped, the first right key starts the music (Metronaut's "Start playing when you are ready",
   // Flat's take on its first note); any other key is only heard.
-  if (!given.playing && !given.expected.includes(pc)) return given
+  if (!given.playing && !given.expected.includes(key)) return given
   const state = given.playing ? given : { ...given, playing: true }
   // Played while the app plays the other hand or a rest: it belongs to a beat group to come.
   if (state.outcome === 'correct' || state.expected.length === 0) {
-    return state.ahead.includes(pc) ? state : { ...state, ahead: [...state.ahead, pc] }
+    return state.ahead.includes(key) ? state : { ...state, ahead: [...state.ahead, key] }
   }
-  if (!state.expected.includes(pc)) {
+  if (!state.expected.includes(key)) {
     // The other hand's note here, played along, is no slip (Chordio, Metronaut): it only sounds.
-    if (accompaniedAt(state.performance, state.beatGroup, state.hands).includes(pc)) return state
+    if (accompaniedAt(state.performance, state.beatGroup, state.hands).includes(key)) return state
     // The same wrong key again at this step says so again, but slips once.
     if (state.wrongHere.includes(key)) return { ...state, outcome: 'wrong', wrong: key }
     const bar = state.performance.beatGroups[state.beatGroup]?.bar ?? 0
     const slips = { ...state.slips, [bar]: (state.slips[bar] ?? 0) + 1 }
     return { ...state, outcome: 'wrong', wrong: key, wrongHere: [...state.wrongHere, key], slips }
   }
-  const received = state.received.includes(pc) ? state.received : [...state.received, pc]
+  const received = state.received.includes(key) ? state.received : [...state.received, key]
   const outcome = isComplete(state.expected, received) ? 'correct' : 'waiting'
   return { ...state, received, outcome, wrong: null }
 }

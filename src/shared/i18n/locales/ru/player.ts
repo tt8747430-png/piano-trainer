@@ -388,6 +388,8 @@ export const player: LocaleResources['player'] = {
   playThese: 'Сыграйте {{notes}}',
   right: 'Верно',
   notThat: 'Не {{note}}',
+  octaveLower: 'На октаву ниже',
+  octaveHigher: 'На октаву выше',
   finishedClean: 'Конец, без единой ошибки',
   finishedSlips: 'Конец · ошибок: {{count}}',
   loopBar: 'Повторять такт {{first}}',

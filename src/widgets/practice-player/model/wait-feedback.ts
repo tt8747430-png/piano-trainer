@@ -6,13 +6,15 @@ import {
   type PracticeState,
 } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { noteName, pitchClass, type PitchClass } from '@/shared/lib/music'
+import { noteName, pitchClass } from '@/shared/lib/music'
 
 /** What Wait mode's line says. */
 export type WaitFeedback =
   | { readonly kind: 'play'; readonly notes: readonly string[] }
   | { readonly kind: 'right' }
   | { readonly kind: 'not'; readonly note: string }
+  /** A key of the right name in the wrong octave: which way the written one lies. */
+  | { readonly kind: 'octave'; readonly way: 'lower' | 'higher' }
   | {
       readonly kind: 'finished'
       /** The wrong keys of the pass, and the bar or two that had the most. */
@@ -29,22 +31,26 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
   const group = performance.beatGroups[state.beatGroup]
   if (!group) return null
   if (state.outcome === 'wrong' && state.wrong !== null) {
-    return { kind: 'not', note: spellPitchClass(performance, group.chord, pitchClass(state.wrong)) }
+    const wrong = state.wrong
+    // The right name an octave or more off: the nearest written key of that name says which way.
+    const named = state.expected
+      .filter((key) => pitchClass(key) === pitchClass(wrong))
+      .toSorted((a, b) => Math.abs(a - wrong) - Math.abs(b - wrong))[0]
+    if (named !== undefined) return { kind: 'octave', way: named < wrong ? 'lower' : 'higher' }
+    return { kind: 'not', note: spellPitchClass(performance, group.chord, pitchClass(wrong)) }
   }
-  // The notes of the beat as written, lowest first: each pitch class is named by its lowest key, and
-  // named in that order (B D F♯ for a B minor chord over its bass), as the hands read it.
+  // The keys of the beat as written, lowest first, each named as it is spelled (B D F♯ for a B minor
+  // chord over its bass), as the hands read it.
   const practised = practisedHands(state.hands)
   const played = group.notes
     .flatMap((index) => performance.notes[index] ?? [])
     .filter((note) => practised[note.hand])
-    .toSorted((a, b) => a.midi - b.midi)
-  const lowest = (pc: PitchClass) => played.find((n) => pitchClass(n.midi) === pc)
-  const notes = state.expected
-    .map((pc) => ({ pc, written: lowest(pc) }))
-    .toSorted((a, b) => (a.written?.midi ?? Infinity) - (b.written?.midi ?? Infinity))
-    .map(({ pc, written }) =>
-      written ? noteName(written.spelled) : spellPitchClass(performance, group.chord, pc),
-    )
+  const notes = state.expected.map((key) => {
+    const written = played.find((note) => note.midi === key)
+    return written
+      ? noteName(written.spelled)
+      : spellPitchClass(performance, group.chord, pitchClass(key))
+  })
   return notes.length > 0 ? { kind: 'play', notes } : null
 }
 

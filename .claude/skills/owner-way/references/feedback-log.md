@@ -252,6 +252,8 @@ owner's, typos fixed.
 - **Player settings › Playback keeps its gap (loop 22, 2026-11-15):** the metronome's card and Speed training's stood
   touching; the page is a column with the sheet's 16 between its cards.
 
+- **Loop round 61, Wait mode waits for keys:** the keys as written, not their names; the right name in another octave says "Play it an octave higher" or "lower" (Chordio, Metronaut; 2026-11-16).
+
 ## Song page
 - **The score on a song's page prints the editor's credit** (loop round 50, Song, SongLaptop): its corner said "John Newton" where the editor prints the same score "Words: John Newton · Music: New Britain"; the cover now prints that, right-aligned on its own line under the centred title, as an engraver sets it (a long one ends in an ellipsis, never over the title).
 - **Loop round 48, the sections fit the song (Song):** Amazing Grace is 16 bars (Bar 9 of 16, the strip to Bar 16), yet its Ending read bars 17–20; the Ending is its last phrase, bars 13–16, and the Verse's count reads 2× with no space, on the song page and the section's page (2026-11-16).

@@ -11,10 +11,12 @@ what they changed.
 
 ## Decision
 
-- **It plays any Performance** (`usePractice` over a pure practice machine) in three modes: **Listen**, the app
+- **It plays any Performance** (`usePractice` over a pure practice machine) in two modes: **Listen**, the app
   playing passes queued on the audio clock at a speed the learner plays along at; **Wait mode**, the app waiting for
-  the chosen hands' notes from MIDI or the keys and playing the other; **Interpret**, the music following the
-  learner's tempo, the other hand sounding at each onset. Play in all; ‹ › step in any. A loop over bars, each lap
+  the chosen hands' keys from MIDI or the keys and playing the other. Wait mode waits for the keys as written, not
+  their names (Chordio, Metronaut): an octave doubled wants both keys, and the right name in another octave is a
+  slip that says "Play it an octave higher" or "lower"; the first right key starts the music, the other hand's key
+  is no slip, one wrong key slips once a step. Play in both; ‹ › step in either. A loop over bars, each lap
   played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111).
 - **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
   right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the
@@ -25,7 +27,7 @@ what they changed.
   while speed training climbs), else the mode's picture, its name beside it from 640px; its name says the pace.
 - **Hands** (R36, flowkey's hands menu): the foot's Hands, where the music has both, says the hands played (Both ·
   Right · Left) and opens "Which hands do you play?": `HandsSegmented`, and with one hand chosen **Hear the other
-  hand**, its one home. The hands count in every mode: Wait mode waits for them, Interpret follows them, Listen plays
+  hand**, its one home. The hands count in every mode: Wait mode waits for them, Listen plays
   them and the other only where it is heard; the keys mark them, the music shows the other hand as Settings › Hands
   says (Show · Dim · Hide), the hands at the keys fade it (ADR 0117).
 - **Keys** (`PLAYER_KEYS`): Space Play, the arrows, R the loop, Home; Shift with ← → Home End the loop's far end;

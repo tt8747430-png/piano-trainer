@@ -425,6 +425,8 @@ export const player = {
   playThese: 'Play {{notes}}',
   right: 'Correct',
   notThat: 'Not {{note}}',
+  octaveLower: 'Play it an octave lower',
+  octaveHigher: 'Play it an octave higher',
   finishedClean: 'Finished without a slip',
   finishedSlips: 'Finished · slips: {{count}}',
   loopBar: 'Loop bar {{first}}',

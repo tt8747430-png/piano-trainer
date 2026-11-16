@@ -1,7 +1,7 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { pieceById } from '@/entities/piece'
-import { midi, note, noteName, pitchClass, TICKS_PER_BEAT } from '@/shared/lib/music'
+import { midi, note, noteName, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { diagramChord } from './chord-diagram'
@@ -70,7 +70,7 @@ describe('practiceMarks', () => {
     if (!first) throw new Error('empty group')
     const marks = practiceMarks(performance, 0, {
       hands: BOTH,
-      received: [pitchClass(first.midi)],
+      received: [first.midi],
     })
     expect(marks.get(first.midi)?.label).toBe('✓')
   })
