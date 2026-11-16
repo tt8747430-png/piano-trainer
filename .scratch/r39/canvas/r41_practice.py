@@ -158,7 +158,7 @@ IV_ABOUT = lambda size: (f'<div style="position: relative; flex: none; display: 
     + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px; font-size: 15px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Up', 'upS'), ('Down', 'downS'), ('Inverts to', 'inv')))
     + '</div></sc-if></div>')
 IV_ROWS = GROUP(('link', 'From', '{{fromL}}', 'openRoot'), ('seg', 'Play as', 'waySeg', 250), ('seg', 'Intervals', 'sizeSeg', 180))
-IV_SET = GROUP(('seg', 'Play all', 'allSeg', 190), ('seg', 'Speed', 'speedSeg', 200), ('link', 'All piano settings', '', ''))
+IV_SET = GROUP(('seg', 'Play all', 'allSeg', 190), ('seg', 'Speed', 'speedSeg', 200))
 ph = body(TOP('Main.dc.html', 'Intervals', GEAR()), IV_ABOUT(34) + IV_PIC('kb', 120) + IVGRID + IV_ROWS, PLAYBTN())
 lm = lapbody(LTOP('Laptop.dc.html', GEAR()), IV_ABOUT(44) + IV_PIC('kbL', 190) + IVGRID, IV_ROWS, PLAYBTN())
 detail('Intervals', 'Intervals', IV, ph, lm, '', BSHEET('rootOn', 'From', ROOTGRID()) + BSHEET('setOn', 'Interval settings', IV_SET), POPOVER('rootOn', 'From', ROOTGRID()) + POPOVER('setOn', 'Interval settings', IV_SET))
