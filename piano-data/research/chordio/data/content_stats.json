@@ -1,0 +1,6398 @@
+{
+ "chordpacks": [
+  {
+   "file": "Classical Progressions 1.chordpack",
+   "title": "Classical Progressions 1",
+   "subtitle": "Timeless Harmony with Cinematic Depth",
+   "sku": "CP-CLASSICALPROGRESSION1-P01-GB-CHORDIO",
+   "versionNumber": 18,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2023-08-28T19:00:31.747Z",
+   "playlists": 67,
+   "imageBytes": 727308,
+   "videoBytes": 680848,
+   "highlights": "{count} Classical Chord Progressions\nFrom Baroque Classics to Film Scores\nPerfect for Cinematic & Emotive Music",
+   "chords": 886,
+   "genres": {
+    "F. Chopin": 1,
+    "Classical": 52,
+    "Hollywood CP": 4,
+    "null": 2,
+    "Film": 1,
+    "Planet Earth II Main Theme": 1,
+    "Time from Inception": 1,
+    "Cinematic chord progression": 1,
+    "He's rate": 1,
+    "Classical Pop": 1,
+    "Cinematic": 2
+   }
+  },
+  {
+   "file": "Free Chord Pack.chordpack",
+   "title": "Free Chord Pack",
+   "subtitle": "Sample the Best of Every Pack",
+   "sku": "CP-FREECHORDPACK-P01-GB-CHORDIO",
+   "versionNumber": 31,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-07-28T19:49:09.854Z",
+   "playlists": 16,
+   "imageBytes": 383765,
+   "videoBytes": 281894,
+   "highlights": "{count} Hand-Picked Chord Progressions\nA Taste of Every Chordio Pack\nNeo-Soul, Jazz, Classical & R&B",
+   "chords": 322,
+   "genres": {
+    "RnB": 1,
+    "Neo-Soul": 4,
+    "R&B": 1,
+    "Jazz": 4,
+    "Neo-Soul ": 1,
+    "Jazz / Hip-Hop": 1,
+    "Classical": 3,
+    "Jazz Exercises ": 1
+   }
+  },
+  {
+   "file": "II-V-I Progressions.chordpack",
+   "title": "II-V-I Progressions",
+   "subtitle": "Master the Heart of Jazz in Every Key",
+   "sku": "CP-251PROGRESSION-P01-GB-CHORDIO",
+   "versionNumber": 29,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-06-08T21:22:02.884Z",
+   "playlists": 79,
+   "imageBytes": 60289,
+   "videoBytes": 278218,
+   "highlights": "{count} II-V-I Progressions\nMajor & Minor Forms in All 12 Keys\nEar-Training & Improvisation Drills",
+   "chords": 1158,
+   "genres": {
+    "Jazz": 53,
+    "Study Exercise": 12,
+    "null": 7,
+    "Any": 3,
+    "Neo-Soul": 1,
+    "Gospel": 2,
+    "Study": 1
+   }
+  },
+  {
+   "file": "Jazz Progressions 1.chordpack",
+   "title": "Jazz Progressions 1",
+   "subtitle": "Rich Jazz Voicings for Lo-Fi and Beyond",
+   "sku": "CP-JAZZPROGRESSION1-P01-GB-CHORDIO",
+   "versionNumber": 28,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-03-31T13:07:45.649Z",
+   "playlists": 96,
+   "imageBytes": 107425,
+   "videoBytes": 308866,
+   "highlights": "{count} Jazz Chord Progressions\nRich Voicings & Classic Jazz Exercises\nPerfect for Lo-Fi, Chill-Hop & Trap",
+   "chords": 1134,
+   "genres": {
+    "Jazz": 91,
+    "Neo-Soul": 1,
+    "null": 1,
+    "Gospel / Jazz": 1,
+    "Soul": 1,
+    "Jazz / Pop": 1
+   }
+  },
+  {
+   "file": "Neo-Soul Progressions 1.chordpack",
+   "title": "Neo-Soul Progressions 1",
+   "subtitle": "Create Lush Harmonies Like a Pro",
+   "sku": "CP-NEOSOULPROGRESSION1-P01-GB-CHORDIO",
+   "versionNumber": 40,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-06-24T17:09:07.253Z",
+   "playlists": 114,
+   "imageBytes": 451775,
+   "videoBytes": 328477,
+   "highlights": "{count} Neo-Soul Chord Progressions\nIncludes 9ths, 11ths, & 13ths\nPerfect for R&B, Hip-Hop",
+   "chords": 862,
+   "genres": {
+    "Neo-Soul": 104,
+    "House": 1,
+    "Neo-Soul House": 1,
+    "null": 3,
+    "Neo Style": 1,
+    "Neo Sou": 1,
+    "Neo Soul Poly Chords": 1,
+    "Neo Soul": 1,
+    "Dark Deep House ": 1
+   }
+  },
+  {
+   "file": "Neo-Soul Tunes 1.chordpack",
+   "title": "Neo-Soul Tunes 1",
+   "subtitle": "Play the Soulful Chords Behind the Hits",
+   "sku": "CP-NEOSOULTUNES1-P01-GB-CHORDIO",
+   "versionNumber": 33,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-04-05T14:34:55.086Z",
+   "playlists": 106,
+   "imageBytes": 847019,
+   "videoBytes": 406045,
+   "highlights": "{count} Neo-Soul Song Progressions\nFamous Changes Used in Hit Songs\nIncludes 6ths, 9ths, 11ths, & 13ths",
+   "chords": 1159,
+   "genres": {
+    "Neo-Soul": 77,
+    "Gospel": 2,
+    "Neo-Soul ": 3,
+    "Hip-Hop": 1,
+    "null": 7,
+    "KAYTRANADA, SYD": 1,
+    "Hip Hop": 4,
+    "": 1,
+    "Neo-Soul / Theory": 1,
+    "Neo-Sou": 1,
+    "Pop": 3,
+    "Neo-Soul / Hip Hop": 1,
+    "Neo-Soul / Pop": 1,
+    " Neo-Soul": 1,
+    "Latin / Pop": 1,
+    "R&B": 1
+   }
+  },
+  {
+   "file": "RnB Progressions 1.chordpack",
+   "title": "RnB Progressions 1",
+   "subtitle": "Smooth R&B Chords for Modern Producers",
+   "sku": "CP-RANDB1-P01-GB-CHORDIO",
+   "versionNumber": 23,
+   "isPurchased": true,
+   "isStorePack": true,
+   "dateCreated": "2022-06-09T08:58:00.233Z",
+   "playlists": 78,
+   "imageBytes": 63549,
+   "videoBytes": 288605,
+   "highlights": "{count} R&B Chord Progressions\nClassic R&B & Soul Voicings\nPerfect for R&B, Hip-Hop & Soul",
+   "chords": 628,
+   "genres": {
+    "RnB": 63,
+    "Hip Hop": 1,
+    "Latin": 1,
+    "Soulful RnB": 1,
+    "R&B": 2,
+    "Jazzy": 1,
+    "Pop RnB": 1,
+    "Neo-Soul": 1,
+    "Pop": 2,
+    "null": 2,
+    "RnB Gospel": 1,
+    "R&B Soul": 1,
+    "RnB / Hip Hop": 1
+   }
+  }
+ ],
+ "sheetmusicpacks": [
+  {
+   "file": "Beginner Essentials.sheetmusicpack",
+   "title": "Beginner Essentials",
+   "sku": "SP-BEGINNERESSENTIALS-P01-GB-CHORDIO",
+   "sortOrder": 9,
+   "versionNumber": 22,
+   "proficiencyPackLevel": 0,
+   "isStorePack": true,
+   "isPurchased": false,
+   "dateCreated": "2024-08-23T14:43:49.268Z",
+   "items": 13,
+   "imageBytes": 383148,
+   "videoBytes": 1320962,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Passacaglia",
+     "author": "Handel / Halvorsen",
+     "level": 1,
+     "key": "C",
+     "tempo": 130,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 486,
+       "ch": "0",
+       "range": "57-84"
+      },
+      {
+       "name": "Track 2",
+       "notes": 536,
+       "ch": "1",
+       "range": "36-68"
+      }
+     ]
+    },
+    {
+     "title": "The Old Abbey",
+     "author": "Thomas F. Dunhill",
+     "level": 1,
+     "key": "C",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 76,
+       "ch": "0",
+       "range": "60-79"
+      },
+      {
+       "name": "Track 2",
+       "notes": 56,
+       "ch": "1",
+       "range": "48-69"
+      }
+     ]
+    },
+    {
+     "title": "Swan Lake Theme (Easy Piano)",
+     "author": "Pyotr Ilyich Tchaikovsky",
+     "level": 0,
+     "key": "D major, B minor",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 116,
+       "ch": "0",
+       "range": "66-85"
+      },
+      {
+       "name": "Track 2",
+       "notes": 210,
+       "ch": "1",
+       "range": "48-67"
+      }
+     ]
+    },
+    {
+     "title": "Canon In D Major (Easy Piano)",
+     "author": "Johann Pachelbel",
+     "level": 0,
+     "key": "D major, B minor",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 294,
+       "ch": "0",
+       "range": "59-86"
+      },
+      {
+       "name": "Track 2",
+       "notes": 177,
+       "ch": "1",
+       "range": "38-62"
+      }
+     ]
+    },
+    {
+     "title": "Jingle Bells",
+     "author": "James Lord Pierpont",
+     "level": 0,
+     "key": "C major, A minor",
+     "tempo": 141,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Easy_Songs__Jingle_Bells",
+       "notes": 50,
+       "ch": "0",
+       "range": "60-67"
+      },
+      {
+       "name": "Easy_Songs__Jingle_Bells",
+       "notes": 16,
+       "ch": "1",
+       "range": "43-50"
+      }
+     ]
+    },
+    {
+     "title": "Happy Birthday To You",
+     "author": "Patty Hill and Mildred J. Hill",
+     "level": 0,
+     "key": "C major, A minor",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 62,
+       "ch": "0",
+       "range": "67-82"
+      },
+      {
+       "name": "Track 2",
+       "notes": 83,
+       "ch": "1",
+       "range": "48-65"
+      }
+     ]
+    },
+    {
+     "title": "Greensleeves",
+     "author": "Traditional English folk song",
+     "level": 0,
+     "key": "C major, D minor",
+     "tempo": 141,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Easy_Songs__Greensleeves",
+       "notes": 74,
+       "ch": "0",
+       "range": "64-79"
+      },
+      {
+       "name": "Easy_Songs__Greensleeves",
+       "notes": 32,
+       "ch": "1",
+       "range": "48-60"
+      }
+     ]
+    },
+    {
+     "title": "The Clergy's Lamentation",
+     "author": "Turlough O'Carolan",
+     "level": 0,
+     "key": "G major, E minor",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 242,
+       "ch": "0",
+       "range": "57-81"
+      },
+      {
+       "name": "Piano",
+       "notes": 80,
+       "ch": "1",
+       "range": "40-57"
+      }
+     ]
+    },
+    {
+     "title": "Ode to Joy",
+     "author": "Ludwig Van Beethoven",
+     "level": 0,
+     "key": "B♭ major, G minor",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 122,
+       "ch": "0",
+       "range": "70-77"
+      },
+      {
+       "name": "Piano",
+       "notes": 132,
+       "ch": "1",
+       "range": "46-60"
+      }
+     ]
+    },
+    {
+     "title": "First Year Pieces",
+     "author": "Thomas F. Dunhill",
+     "level": 0,
+     "key": "C",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 39,
+       "ch": "0",
+       "range": "59-69"
+      },
+      {
+       "name": "Track 2",
+       "notes": 17,
+       "ch": "1",
+       "range": "43-59"
+      }
+     ]
+    },
+    {
+     "title": "Brahms Lullaby",
+     "author": "Johannes Brahms",
+     "level": 0,
+     "key": "F major, D minor",
+     "tempo": 141,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Easy_Songs__Brahms_Lullaby",
+       "notes": 51,
+       "ch": "0",
+       "range": "65-77"
+      },
+      {
+       "name": "Easy_Songs__Brahms_Lullaby",
+       "notes": 48,
+       "ch": "1",
+       "range": "52-64"
+      }
+     ]
+    },
+    {
+     "title": "White Christmas",
+     "author": "Irving Berlin",
+     "level": 0,
+     "key": "B♭ major, G minor",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 68,
+       "ch": "0",
+       "range": "57-72"
+      },
+      {
+       "name": "Track 2",
+       "notes": 127,
+       "ch": "1",
+       "range": "39-65"
+      }
+     ]
+    },
+    {
+     "title": "Silent Night",
+     "author": "Franz Xaver Gruber",
+     "level": 0,
+     "key": "C major, A minor",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Easy_Songs__Silent_Night",
+       "notes": 46,
+       "ch": "0",
+       "range": "60-77"
+      },
+      {
+       "name": "Easy_Songs__Silent_Night",
+       "notes": 70,
+       "ch": "1",
+       "range": "43-60"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Classical Collection_Vol_1.sheetmusicpack",
+   "title": "Classical Collection, Vol. 1",
+   "sku": "SP-CLASSICALCOLLECTION1-P01-GB-CHORDIO",
+   "sortOrder": 4,
+   "versionNumber": 41,
+   "proficiencyPackLevel": 2,
+   "isStorePack": true,
+   "isPurchased": true,
+   "dateCreated": "2024-10-27T20:42:14.231Z",
+   "items": 12,
+   "imageBytes": 655078,
+   "videoBytes": 1493180,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Serenade in D Minor",
+     "author": "Franz Schubert",
+     "level": 0,
+     "key": "F major, D minor",
+     "tempo": 55,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Schubert__Serenade_in_D_minor",
+       "notes": 204,
+       "ch": "0",
+       "range": "54-81"
+      },
+      {
+       "name": "Schubert__Serenade_in_D_minor",
+       "notes": 417,
+       "ch": "1",
+       "range": "31-67"
+      }
+     ]
+    },
+    {
+     "title": "Sonata No. 16, 1st Movement K. 545",
+     "author": "Wolfgang Amadeus Mozart",
+     "level": 1,
+     "key": "",
+     "tempo": 123,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Mozart__Sonata_K.545_in_C_major",
+       "notes": 667,
+       "ch": "0",
+       "range": "55-89"
+      },
+      {
+       "name": "Mozart__Sonata_K.545_in_C_major",
+       "notes": 677,
+       "ch": "1",
+       "range": "36-74"
+      }
+     ]
+    },
+    {
+     "title": "Musette in D Major",
+     "author": "Johann Sebastian Bach",
+     "level": 1,
+     "key": "D major, B minor",
+     "tempo": 68,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Bach__Musette_in_D_major",
+       "notes": 128,
+       "ch": "0",
+       "range": "57-81"
+      },
+      {
+       "name": "Bach__Musette_in_D_major",
+       "notes": 113,
+       "ch": "1",
+       "range": "38-57"
+      }
+     ]
+    },
+    {
+     "title": "Moonlight Sonata 1st Movement",
+     "author": "Ludwig Van Beethoven",
+     "level": 1,
+     "key": "E major, C♯ minor",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Beethoven__Moonlight_Sonata",
+       "notes": 896,
+       "ch": "0",
+       "range": "48-87"
+      },
+      {
+       "name": "Beethoven__Moonlight_Sonata",
+       "notes": 245,
+       "ch": "1",
+       "range": "29-57"
+      }
+     ]
+    },
+    {
+     "title": "Gymnopédie No. 1",
+     "author": "Erik Satie",
+     "level": 0,
+     "key": "D major, B minor",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Satie__Gymnopedie_No._1",
+       "notes": 213,
+       "ch": "0",
+       "range": "53-81"
+      },
+      {
+       "name": "Satie__Gymnopedie_No._1",
+       "notes": 242,
+       "ch": "1",
+       "range": "33-69"
+      }
+     ]
+    },
+    {
+     "title": "Waltz No. 9 in D minor, Op. 39",
+     "author": "Johannes Brahms",
+     "level": 1,
+     "key": "F major, D minor",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Brahms__Waltz_No._9_in_D_minor",
+       "notes": 111,
+       "ch": "0",
+       "range": "61-86"
+      },
+      {
+       "name": "Brahms__Waltz_No._9_in_D_minor",
+       "notes": 153,
+       "ch": "1",
+       "range": "33-70"
+      }
+     ]
+    },
+    {
+     "title": "Minuet I In G Major",
+     "author": "Christian Petzold",
+     "level": 1,
+     "key": "G maj",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Bach__Minuet_in_G_major",
+       "notes": 128,
+       "ch": "0",
+       "range": "59-83"
+      },
+      {
+       "name": "Bach__Minuet_in_G_major",
+       "notes": 75,
+       "ch": "1",
+       "range": "43-64"
+      }
+     ]
+    },
+    {
+     "title": "Hungarian Dance No. 5",
+     "author": "Johannes Brahms",
+     "level": 1,
+     "key": "A major, F♯ minor",
+     "tempo": 93,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Brahms__Hungarian_Dance_No._5",
+       "notes": 178,
+       "ch": "0",
+       "range": "54-85"
+      },
+      {
+       "name": "Brahms__Hungarian_Dance_No._5",
+       "notes": 314,
+       "ch": "1",
+       "range": "41-62"
+      }
+     ]
+    },
+    {
+     "title": "Prélude No. 4 in E Minor",
+     "author": "Frederic Chopin",
+     "level": 1,
+     "key": "G major, E minor",
+     "tempo": 48,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Piano",
+       "notes": 89,
+       "ch": "0",
+       "range": "51-84"
+      },
+      {
+       "name": "Piano",
+       "notes": 519,
+       "ch": "0",
+       "range": "28-69"
+      }
+     ]
+    },
+    {
+     "title": "Canon in D major ",
+     "author": "Pachelbel",
+     "level": 1,
+     "key": "D major, B minor",
+     "tempo": 80,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Pachelbel__Canon_in_D_major",
+       "notes": 229,
+       "ch": "0",
+       "range": "57-83"
+      },
+      {
+       "name": "Pachelbel__Canon_in_D_major",
+       "notes": 226,
+       "ch": "1",
+       "range": "38-66"
+      }
+     ]
+    },
+    {
+     "title": "Valse Mélancolique, Op. 2, No. 3",
+     "author": "Vladimir Rebikov",
+     "level": 1,
+     "key": "D major, B minor",
+     "tempo": 86,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Rebikov__Valse_Melancolique_Op._2_No._3",
+       "notes": 284,
+       "ch": "0",
+       "range": "57-102"
+      },
+      {
+       "name": "Rebikov__Valse_Melancolique_Op._2_No._3",
+       "notes": 194,
+       "ch": "1",
+       "range": "35-76"
+      }
+     ]
+    },
+    {
+     "title": "Requiem in D Minor, K. 626: Lacrimosa",
+     "author": "Wolfgang Amadeus Mozart",
+     "level": 1,
+     "key": "F major",
+     "tempo": 65,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 362,
+       "ch": "0",
+       "range": "53-86"
+      },
+      {
+       "name": "Track 2",
+       "notes": 338,
+       "ch": "1",
+       "range": "33-74"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Classical Collection_Vol_2.sheetmusicpack",
+   "title": "Classical Collection, Vol. 2",
+   "sku": "SP-CLASSICALCOLLECTION2-P01-GB-CHORDIO",
+   "sortOrder": 5,
+   "versionNumber": 20,
+   "proficiencyPackLevel": 2,
+   "isStorePack": true,
+   "isPurchased": true,
+   "dateCreated": "2025-01-18T21:51:49.616Z",
+   "items": 12,
+   "imageBytes": 748538,
+   "videoBytes": 1526915,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Prélude in C Minor",
+     "author": "Frédéric François Chopin",
+     "level": 1,
+     "key": "E♭ major, C minor",
+     "tempo": 43,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Chopin__Prelude_Op._28_No._20_in_C_minor",
+       "notes": 185,
+       "ch": "0",
+       "range": "48-75"
+      },
+      {
+       "name": "Chopin__Prelude_Op._28_No._20_in_C_minor",
+       "notes": 100,
+       "ch": "1",
+       "range": "24-60"
+      }
+     ]
+    },
+    {
+     "title": "Rondo alla turca",
+     "author": "Wolfgang Amadeus Mozart",
+     "level": 1,
+     "key": "C major, A minor",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Mozart__Rondo_Alla_Turca",
+       "notes": 833,
+       "ch": "0",
+       "range": "64-88"
+      },
+      {
+       "name": "Mozart__Rondo_Alla_Turca",
+       "notes": 775,
+       "ch": "1",
+       "range": "38-66"
+      }
+     ]
+    },
+    {
+     "title": "Waltz No. 15 in A flat",
+     "author": "Johannes Brahms",
+     "level": 1,
+     "key": "A♭ major, F minor",
+     "tempo": 106,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Brahms__Waltz_No._15_in_A-flat_major",
+       "notes": 378,
+       "ch": "0",
+       "range": "60-92"
+      },
+      {
+       "name": "Brahms__Waltz_No._15_in_A-flat_major",
+       "notes": 293,
+       "ch": "1",
+       "range": "32-66"
+      }
+     ]
+    },
+    {
+     "title": "Sarabande in D Minor",
+     "author": "Handel, George Frideric",
+     "level": 1,
+     "key": "Fmajor, D minor",
+     "tempo": 80,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Handel__Sarabande_in_D_minor",
+       "notes": 230,
+       "ch": "0",
+       "range": "57-77"
+      },
+      {
+       "name": "Handel__Sarabande_in_D_minor",
+       "notes": 102,
+       "ch": "1",
+       "range": "38-58"
+      }
+     ]
+    },
+    {
+     "title": "Polovtsian Dances (Solo Piano)",
+     "author": "Alexander Borodin",
+     "level": 1,
+     "key": "C",
+     "tempo": 70,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Borodin__Polovstian_Dance",
+       "notes": 360,
+       "ch": "0",
+       "range": "54-97"
+      },
+      {
+       "name": "Borodin__Polovstian_Dance",
+       "notes": 558,
+       "ch": "1",
+       "range": "40-76"
+      }
+     ]
+    },
+    {
+     "title": "Minute Waltz in D♭ Major",
+     "author": "Frédéric François Chopin",
+     "level": 1,
+     "key": "D♭ major",
+     "tempo": 150,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Chopin__Minute_Waltz_Op._64_No._1_in_D-flat_major",
+       "notes": 633,
+       "ch": "0",
+       "range": "60-101"
+      },
+      {
+       "name": "Chopin__Minute_Waltz_Op._64_No._1_in_D-flat_major",
+       "notes": 609,
+       "ch": "1",
+       "range": "36-70"
+      }
+     ]
+    },
+    {
+     "title": "Prélude No. 1 in C Major",
+     "author": "Johann Sebastian Bach",
+     "level": 1,
+     "key": "C major, A minor",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Bach__Prelude_in_C_major",
+       "notes": 415,
+       "ch": "0",
+       "range": "50-81"
+      },
+      {
+       "name": "Bach__Prelude_in_C_major",
+       "notes": 134,
+       "ch": "1",
+       "range": "36-64"
+      }
+     ]
+    },
+    {
+     "title": "The Blue Danube Waltz",
+     "author": "Johann Strauss Jr.",
+     "level": 1,
+     "key": "D major, B minor",
+     "tempo": 152,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Strauss__The_Blue_Danube_Waltz",
+       "notes": 302,
+       "ch": "0",
+       "range": "61-90"
+      },
+      {
+       "name": "Strauss__The_Blue_Danube_Waltz",
+       "notes": 464,
+       "ch": "1",
+       "range": "40-64"
+      }
+     ]
+    },
+    {
+     "title": "Peter and the Wolf",
+     "author": "Sergei Prokofiev",
+     "level": 1,
+     "key": "B♭ major, G minor",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Prokofiev__Peter_and_the_Wolf",
+       "notes": 252,
+       "ch": "0",
+       "range": "48-87"
+      },
+      {
+       "name": "Prokofiev__Peter_and_the_Wolf",
+       "notes": 247,
+       "ch": "1",
+       "range": "36-72"
+      }
+     ]
+    },
+    {
+     "title": "Dance Of the Sugar Plum Fairy",
+     "author": "Pyotr Ilyich Tchaikovsky",
+     "level": 1,
+     "key": "C",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Tchaikovsky__Nutcracker_-_Dance_of_the_Sugar_Plum_Fairies",
+       "notes": 600,
+       "ch": "0",
+       "range": "54-96"
+      },
+      {
+       "name": "Tchaikovsky__Nutcracker_-_Dance_of_the_Sugar_Plum_Fairies",
+       "notes": 448,
+       "ch": "1",
+       "range": "35-84"
+      }
+     ]
+    },
+    {
+     "title": "Sonate No. 8, “Pathétique” 2nd Movement",
+     "author": "Beethoven",
+     "level": 1,
+     "key": "A♭ major, F minor",
+     "tempo": 36,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "up:VA",
+       "notes": 1042,
+       "ch": "0",
+       "range": "44-89"
+      },
+      {
+       "name": "down:",
+       "notes": 587,
+       "ch": "1",
+       "range": "29-68"
+      }
+     ]
+    },
+    {
+     "title": "O mio babbino caro",
+     "author": "Giacomo Puccini",
+     "level": 1,
+     "key": "A♭ major, F minor",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Puccini__O_Mio_Babbino_Caro",
+       "notes": 238,
+       "ch": "0",
+       "range": "53-92"
+      },
+      {
+       "name": "Puccini__O_Mio_Babbino_Caro",
+       "notes": 290,
+       "ch": "1",
+       "range": "34-73"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "II-V-I Jazz Progressions.sheetmusicpack",
+   "title": "II-V-I Jazz Progressions",
+   "sku": "SP-251JAZZPROGRESSIONS-P01-GB-CHORDIO",
+   "sortOrder": 3,
+   "versionNumber": 55,
+   "proficiencyPackLevel": 2,
+   "isStorePack": true,
+   "isPurchased": false,
+   "dateCreated": "2024-11-08T20:11:19.096Z",
+   "items": 14,
+   "imageBytes": null,
+   "videoBytes": 1519614,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "3-Note Shell Voicings, Part 1",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 17,
+       "ch": "0",
+       "range": "59-72"
+      },
+      {
+       "name": "Track 2",
+       "notes": 34,
+       "ch": "1",
+       "range": "43-65"
+      },
+      {
+       "name": "Jazz Piano Practice Session - Shell Voicings.5",
+       "notes": 33,
+       "ch": "5",
+       "range": "38-57"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 45,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "3-Note Shell Voicings, Part 2",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 17,
+       "ch": "0",
+       "range": "52-65"
+      },
+      {
+       "name": "Track 2",
+       "notes": 34,
+       "ch": "1",
+       "range": "36-58"
+      },
+      {
+       "name": "Jazz Piano Practice Session - Shell Voicings.5",
+       "notes": 33,
+       "ch": "5",
+       "range": "38-60"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 45,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I Open Voicings, Part 1",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 136,
+       "ch": "0",
+       "range": "54-77"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 92,
+       "ch": "0",
+       "range": "38-61"
+      },
+      {
+       "name": "II V I with Open Voicings.19 (Bass)",
+       "notes": 114,
+       "ch": "5",
+       "range": "41-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 258,
+       "ch": "10",
+       "range": "39-90"
+      }
+     ]
+    },
+    {
+     "title": "Minor II-V-I with Open Voicings - Part 1",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 150,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 111,
+       "ch": "0",
+       "range": "54-77"
+      },
+      {
+       "name": "Track 2",
+       "notes": 74,
+       "ch": "1",
+       "range": "39-62"
+      },
+      {
+       "name": "Minor II V I With Open Voicings.3 (Bass)",
+       "notes": 110,
+       "ch": "5",
+       "range": "40-60"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 133,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I progression (Minor keys), Part 1",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 46,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Inst 1",
+       "notes": 78,
+       "ch": "0",
+       "range": "48-68"
+      },
+      {
+       "name": "Inst 1",
+       "notes": 18,
+       "ch": "0",
+       "range": "26-43"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 24,
+       "ch": "5",
+       "range": "38-58"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 120,
+       "ch": "10",
+       "range": "31-73"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I Open Voicings, Part 2",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 255,
+       "ch": "0",
+       "range": "55-75"
+      },
+      {
+       "name": "Track 2",
+       "notes": 170,
+       "ch": "1",
+       "range": "39-59"
+      },
+      {
+       "name": "II V I with Open Voicings.21 (Bass)",
+       "notes": 99,
+       "ch": "5",
+       "range": "40-60"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 403,
+       "ch": "10",
+       "range": "36-93"
+      }
+     ]
+    },
+    {
+     "title": "Minor II-V-I with Open Voicings - Part 2",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 252,
+       "ch": "0",
+       "range": "53-78"
+      },
+      {
+       "name": "Track 2",
+       "notes": 144,
+       "ch": "1",
+       "range": "40-61"
+      },
+      {
+       "name": "Minor II V I With Open Voicings.7 (Bass)",
+       "notes": 135,
+       "ch": "5",
+       "range": "40-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 260,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I with Tension voicing A",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "D.min9",
+       "notes": 145,
+       "ch": "0",
+       "range": "55-78"
+      },
+      {
+       "name": "D.min9",
+       "notes": 36,
+       "ch": "0",
+       "range": "39-57"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 36,
+       "ch": "5",
+       "range": "48-62"
+      },
+      {
+       "name": "Acoustic Grand Piano",
+       "notes": 238,
+       "ch": "10",
+       "range": "31-57"
+      }
+     ]
+    },
+    {
+     "title": "Jazz Piano Voicings – Major Keys",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 90,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 327,
+       "ch": "0",
+       "range": "58-81"
+      },
+      {
+       "name": "Track 2",
+       "notes": 84,
+       "ch": "1",
+       "range": "39-66"
+      },
+      {
+       "name": "Track 2",
+       "notes": 84,
+       "ch": "5",
+       "range": "39-66"
+      },
+      {
+       "name": "Latin Drums",
+       "notes": 623,
+       "ch": "10",
+       "range": "0-13"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I Open Voicings, Part 3",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 114,
+       "ch": "0",
+       "range": "54-77"
+      },
+      {
+       "name": "Track 2",
+       "notes": 76,
+       "ch": "1",
+       "range": "38-61"
+      },
+      {
+       "name": "II V I with Open Voicings.19 (Bass)",
+       "notes": 114,
+       "ch": "5",
+       "range": "41-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 258,
+       "ch": "10",
+       "range": "39-90"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I Open Voicings, Part 4",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 75,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 150,
+       "ch": "0",
+       "range": "55-76"
+      },
+      {
+       "name": "Track 2",
+       "notes": 100,
+       "ch": "1",
+       "range": "39-60"
+      },
+      {
+       "name": "II V I with Open Voicings.23 (Bass)",
+       "notes": 66,
+       "ch": "5",
+       "range": "40-63"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 220,
+       "ch": "10",
+       "range": "31-93"
+      }
+     ]
+    },
+    {
+     "title": "3-Note Shell Voicings, Part 3",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 17,
+       "ch": "0",
+       "range": "55-68"
+      },
+      {
+       "name": "Track 2",
+       "notes": 34,
+       "ch": "1",
+       "range": "39-61"
+      },
+      {
+       "name": "Jazz Piano Practice Session - Shell Voicings.5",
+       "notes": 33,
+       "ch": "5",
+       "range": "46-68"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 45,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "II-V-I progression (Minor keys), Part 2",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 157,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 6,
+       "ch": "0",
+       "range": "69-77"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 168,
+       "ch": "0",
+       "range": "48-72"
+      },
+      {
+       "name": "How to play 2-5-1 in Minor Keys Jazz Piano Lesson (part 2).4 (Bass)",
+       "notes": 98,
+       "ch": "5",
+       "range": "36-60"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 134,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "Practical II-V-I Exercise",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 100,
+       "ch": "0",
+       "range": "54-76"
+      },
+      {
+       "name": "Track 2",
+       "notes": 50,
+       "ch": "1",
+       "range": "38-60"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 51,
+       "ch": "5",
+       "range": "46-68"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 108,
+       "ch": "10",
+       "range": "31-53"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Jazz Lick Exercises_Vol_1.sheetmusicpack",
+   "title": "Jazz Lick Exercises, Vol. 1",
+   "sku": "SP-JAZZLICKEXERCISESVOL1-P01-GB-CHORDIO",
+   "sortOrder": 2,
+   "versionNumber": 58,
+   "proficiencyPackLevel": 2,
+   "isStorePack": true,
+   "isPurchased": true,
+   "dateCreated": "2024-06-26T11:53:12.185Z",
+   "items": 15,
+   "imageBytes": null,
+   "videoBytes": 1526191,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Bebop Piano Workout No. 03",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 168,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 75,
+       "ch": "0",
+       "range": "50-71"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 36,
+       "ch": "0",
+       "range": "32-55"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 39,
+       "ch": "5",
+       "range": "48-65"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 62,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "Bebop Piano Workout No. 02",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 166,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Piano",
+       "notes": 342,
+       "ch": "0",
+       "range": "55-86"
+      },
+      {
+       "name": "Track 2",
+       "notes": 102,
+       "ch": "1",
+       "range": "48-60"
+      },
+      {
+       "name": "How to Use Bebop for Modern Improvisation - Bebop Part 2.9 (Bass)",
+       "notes": 165,
+       "ch": "5",
+       "range": "38-52"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 555,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "I-V Riffs in B♭",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 146,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 235,
+       "ch": "1",
+       "range": "55-89"
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 182,
+       "ch": "0",
+       "range": "57-67"
+      },
+      {
+       "name": "2 5 1 Jazz Licks To Practice In 12keys 16.1 (Bass)",
+       "notes": 142,
+       "ch": "5",
+       "range": "41-65"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 493,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Herbie Hancock Lines No. 01",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 97,
+       "ch": "0",
+       "range": "57-86"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 46,
+       "ch": "0",
+       "range": "31-60"
+      },
+      {
+       "name": "10-Step Jazz Piano Improvisation Exercise Shapes. Herbie Hancock Line #jazztutorial.2 (Bass)",
+       "notes": 50,
+       "ch": "5",
+       "range": "38-57"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 68,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "Giant Steps Workout 02",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "E♭ Major",
+     "tempo": 180,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "6",
+       "notes": 294,
+       "ch": "0",
+       "range": "59-86"
+      },
+      {
+       "name": "Track 2",
+       "notes": 170,
+       "ch": "1",
+       "range": "39-63"
+      },
+      {
+       "name": "Giant Steps Backing Track (BPM 180).2 (Bass)",
+       "notes": 223,
+       "ch": "5",
+       "range": "39-67"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 479,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Rhythm Changes riffs in B♭",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "B♭ Major",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 222,
+       "ch": "0",
+       "range": "53-82"
+      },
+      {
+       "name": "Track 2",
+       "notes": 153,
+       "ch": "1",
+       "range": "46-64"
+      },
+      {
+       "name": "Rhythm Changes Bb Backing Track Swing 180 bpm Brushes - FULL BAND.2 (Bass)",
+       "notes": 142,
+       "ch": "5",
+       "range": "42-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 325,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Oscar Peterson Lines No. 01",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "1",
+       "notes": 320,
+       "ch": "0",
+       "range": "48-89"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 76,
+       "ch": "0",
+       "range": "36-58"
+      },
+      {
+       "name": "005-DoubleBassC",
+       "notes": 104,
+       "ch": "5",
+       "range": "36-65"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 243,
+       "ch": "10",
+       "range": "44-51"
+      }
+     ]
+    },
+    {
+     "title": "Bebop Piano Workout No. 01",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 173,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 234,
+       "ch": "0",
+       "range": "66-89"
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 116,
+       "ch": "1",
+       "range": "53-67"
+      },
+      {
+       "name": "Bebop Lines You Should Know No.21 (Bill Evans) | Sheet Music | 12-Key Workout | Backing Track.2 (Bass)",
+       "notes": 134,
+       "ch": "5",
+       "range": "36-58"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 331,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Bebop Piano Workout No. 05",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 173,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Pno.",
+       "notes": 340,
+       "ch": "0",
+       "range": "52-87"
+      },
+      {
+       "name": "Track 2",
+       "notes": 180,
+       "ch": "0",
+       "range": "45-70"
+      },
+      {
+       "name": "Bebop Piano Workout - 11 Best Exercises to Improve Soloing Technique - Bebop Part 3.2 (Bass)",
+       "notes": 174,
+       "ch": "5",
+       "range": "40-57"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 545,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Minor 2-5-1 Exercise 01",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 129,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 154,
+       "ch": "0",
+       "range": "60-83"
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 51,
+       "ch": "1",
+       "range": "52-60"
+      },
+      {
+       "name": "ii-7b5 V7alt i minor killer improv hack.3 (Bass)",
+       "notes": 61,
+       "ch": "5",
+       "range": "40-57"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 146,
+       "ch": "10",
+       "range": "73-115"
+      }
+     ]
+    },
+    {
+     "title": "Exercises for “All The Things You Are”",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 177,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 457,
+       "ch": "0",
+       "range": "53-88"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 155,
+       "ch": "3",
+       "range": "36-58"
+      },
+      {
+       "name": "All the things you are b2.2 (Bass)",
+       "notes": 324,
+       "ch": "5",
+       "range": "40-64"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 457,
+       "ch": "10",
+       "range": "57-113"
+      }
+     ]
+    },
+    {
+     "title": "Guided Tones Etude #1",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "F major",
+     "tempo": 150,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Chord Tone Etude",
+       "notes": 248,
+       "ch": "0",
+       "range": "55-84"
+      },
+      {
+       "name": "Chord Tone Etude",
+       "notes": 60,
+       "ch": "0",
+       "range": "36-59"
+      },
+      {
+       "name": "There Will Never Be Another You  200 bpm  Jazz Swing  Play-Along Backing Track.1 (Bass)",
+       "notes": 90,
+       "ch": "5",
+       "range": "43-65"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 105,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Giant Steps Workout 01",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "E♭ Major",
+     "tempo": 181,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 280,
+       "ch": "0",
+       "range": "55-85"
+      },
+      {
+       "name": "Track 2",
+       "notes": 172,
+       "ch": "1",
+       "range": "39-63"
+      },
+      {
+       "name": "Giant Steps Backing Track (BPM 180).2 (Bass)",
+       "notes": 223,
+       "ch": "5",
+       "range": "39-67"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 479,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "Building Your Jazz Vocabulary",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 125,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 200,
+       "ch": "0",
+       "range": "59-81"
+      },
+      {
+       "name": "PIANO",
+       "notes": 130,
+       "ch": "1",
+       "range": "45-63"
+      },
+      {
+       "name": "Jazz Backing Track  II-V-I  C major.2 (Bass)",
+       "notes": 206,
+       "ch": "5",
+       "range": "36-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 390,
+       "ch": "10",
+       "range": "55-100"
+      }
+     ]
+    },
+    {
+     "title": "Bebop Piano Workout No. 04",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C maj / A min",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 761,
+       "ch": "0",
+       "range": "53-77"
+      },
+      {
+       "name": "Track 2",
+       "notes": 372,
+       "ch": "1",
+       "range": "36-62"
+      },
+      {
+       "name": "II V I with Open Voicings.19 (Bass)",
+       "notes": 554,
+       "ch": "5",
+       "range": "39-70"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 1374,
+       "ch": "10",
+       "range": "68-83"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Jazz Progression_Vol_1.sheetmusicpack",
+   "title": "Jazz Progression, Vol. 1",
+   "sku": "SP-JAZZPROGRESSIONVOL1-P01-GB-CHORDIO",
+   "sortOrder": 1,
+   "versionNumber": 35,
+   "proficiencyPackLevel": 2,
+   "isStorePack": true,
+   "isPurchased": true,
+   "dateCreated": "2025-01-24T19:08:27.672Z",
+   "items": 12,
+   "imageBytes": null,
+   "videoBytes": 1519231,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Bebop Block Chords",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 100,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 2",
+       "notes": 156,
+       "ch": "0",
+       "range": "50-68"
+      },
+      {
+       "name": "Track 2",
+       "notes": 39,
+       "ch": "1",
+       "range": "46-57"
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 48,
+       "ch": "5",
+       "range": "41-53"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 95,
+       "ch": "10",
+       "range": "44-88"
+      }
+     ]
+    },
+    {
+     "title": "Rhythm Changes in B♭",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 166,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 198,
+       "ch": "0",
+       "range": "55-76"
+      },
+      {
+       "name": "Track 2",
+       "notes": 80,
+       "ch": "1",
+       "range": "39-59"
+      },
+      {
+       "name": "Rhythm Changes Bb Backing Track Swing 180 bpm Brushes - FULL BAND.2 (Bass)",
+       "notes": 137,
+       "ch": "5",
+       "range": "42-62"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 328,
+       "ch": "10",
+       "range": "32-83"
+      }
+     ]
+    },
+    {
+     "title": "All the things changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "A♭ major",
+     "tempo": 0,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 298,
+       "ch": "0",
+       "range": "51-74"
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 103,
+       "ch": "0",
+       "range": "38-64"
+      },
+      {
+       "name": "All The Things You Are   180 bpm   Bass & Drums Only   Jazz Swing   Play-Along Backing Track.1 (Bass)",
+       "notes": 271,
+       "ch": "5",
+       "range": "41-64"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 457,
+       "ch": "10",
+       "range": "57-113"
+      }
+     ]
+    },
+    {
+     "title": "There Will Never Be Changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "E♭ major",
+     "tempo": 191,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 136,
+       "ch": "0",
+       "range": "53-75"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 75,
+       "ch": "0",
+       "range": "39-62"
+      },
+      {
+       "name": "There Will Never Be Another You  200 bpm  Jazz Swing  Play-Along Backing Track.2 (Bass)",
+       "notes": 92,
+       "ch": "5",
+       "range": "39-63"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 261,
+       "ch": "10",
+       "range": "55-109"
+      }
+     ]
+    },
+    {
+     "title": "Giant Steps changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 181,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 170,
+       "ch": "0",
+       "range": "52-82"
+      },
+      {
+       "name": "Track 2",
+       "notes": 111,
+       "ch": "0",
+       "range": "39-67"
+      },
+      {
+       "name": "Giant Steps Backing Track (BPM 180).2 (Bass)",
+       "notes": 149,
+       "ch": "5",
+       "range": "39-67"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 309,
+       "ch": "10",
+       "range": "59-83"
+      }
+     ]
+    },
+    {
+     "title": "Blues Progression in F",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "F major",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 137,
+       "ch": "0",
+       "range": "53-68"
+      },
+      {
+       "name": "Track 1",
+       "notes": 2,
+       "ch": "0",
+       "range": "53-63"
+      },
+      {
+       "name": "Track 2",
+       "notes": 97,
+       "ch": "5",
+       "range": "48-67"
+      },
+      {
+       "name": "Acoustic Grand Piano",
+       "notes": 220,
+       "ch": "10",
+       "range": "31-57"
+      }
+     ]
+    },
+    {
+     "title": "Body and Soul Changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "D♭ major",
+     "tempo": 80,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 262,
+       "ch": "0",
+       "range": "50-77"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 152,
+       "ch": "0",
+       "range": "37-62"
+      },
+      {
+       "name": "Body and Soul   80 bpm   Bass & Drums Only   Play-Along Backing Track.1 (Bass)",
+       "notes": 96,
+       "ch": "5",
+       "range": "40-63"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 165,
+       "ch": "10",
+       "range": "59-112"
+      }
+     ]
+    },
+    {
+     "title": "When I Fall in Love Changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "E♭ major",
+     "tempo": 56,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "0:03",
+       "notes": 100,
+       "ch": "0",
+       "range": "57-81"
+      },
+      {
+       "name": "Track 2",
+       "notes": 93,
+       "ch": "1",
+       "range": "41-65"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 59,
+       "ch": "5",
+       "range": "39-61"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 159,
+       "ch": "10",
+       "range": "34-73"
+      }
+     ]
+    },
+    {
+     "title": "Like Someone In Love Changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C major",
+     "tempo": 90,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 121,
+       "ch": "0",
+       "range": "53-76"
+      },
+      {
+       "name": "Track 2",
+       "notes": 76,
+       "ch": "1",
+       "range": "38-64"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 38,
+       "ch": "5",
+       "range": "39-57"
+      }
+     ]
+    },
+    {
+     "title": "Blue in Green (Reharmonization)",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 80,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "PIANO",
+       "notes": 149,
+       "ch": "0",
+       "range": "53-81"
+      },
+      {
+       "name": "Track 2",
+       "notes": 103,
+       "ch": "0",
+       "range": "36-65"
+      },
+      {
+       "name": "Track 2",
+       "notes": 51,
+       "ch": "5",
+       "range": "41-64"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 79,
+       "ch": "10",
+       "range": "31-73"
+      }
+     ]
+    },
+    {
+     "title": "Stella Chord Tones Changes",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "C",
+     "tempo": 133,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 23,
+       "ch": "0",
+       "range": "62-74"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 127,
+       "ch": "0",
+       "range": "48-65"
+      },
+      {
+       "name": "How to play 2-5-1 in Minor Keys Jazz Piano Lesson (part 2).2 (Bass)",
+       "notes": 88,
+       "ch": "5",
+       "range": "40-58"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 175,
+       "ch": "10",
+       "range": "59-88"
+      }
+     ]
+    },
+    {
+     "title": "Someday: A Jazz Waltz Piano Study",
+     "author": "Jazz Piano Practice Session",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 181,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 200,
+       "ch": "0",
+       "range": "53-77"
+      },
+      {
+       "name": "Melodyne #1",
+       "notes": 129,
+       "ch": "0",
+       "range": "38-63"
+      },
+      {
+       "name": "Someday My Prince Will Come   200 bpm   Bass & Drums Only   Play-Along Backing Track.1 (Bass)",
+       "notes": 107,
+       "ch": "5",
+       "range": "40-60"
+      },
+      {
+       "name": "JazzDrumsA",
+       "notes": 401,
+       "ch": "10",
+       "range": "32-107"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Nineteenth Century Piano Songs.sheetmusicpack",
+   "title": "19th Century Piano Songs",
+   "sku": "SP-NINETEENTHCENTURYPIANOSONGS-P01-GB-CHORDIO",
+   "sortOrder": 8,
+   "versionNumber": 18,
+   "proficiencyPackLevel": 0,
+   "isStorePack": true,
+   "isPurchased": false,
+   "dateCreated": "2024-10-18T13:39:27.826Z",
+   "items": 6,
+   "imageBytes": 1298375,
+   "videoBytes": 1446338,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Sally in Our Alley",
+     "author": "Henry Carey",
+     "level": 1,
+     "key": "B♭ major, G minor",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 114,
+       "ch": "3",
+       "range": "57-75"
+      },
+      {
+       "name": "lower:",
+       "notes": 82,
+       "ch": "4",
+       "range": "34-62"
+      }
+     ]
+    },
+    {
+     "title": "Les Deux Anges",
+     "author": "Jacques Blumenthal",
+     "level": 1,
+     "key": "G major, E minor",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Studio Grand",
+       "notes": 663,
+       "ch": "0",
+       "range": "57-91"
+      },
+      {
+       "name": "lower",
+       "notes": 375,
+       "ch": "1",
+       "range": "31-74"
+      }
+     ]
+    },
+    {
+     "title": "Good King Wenceslas",
+     "author": "Piae Cantiones",
+     "level": 0,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": null,
+       "notes": 100,
+       "ch": "1",
+       "range": "57-76"
+      },
+      {
+       "name": null,
+       "notes": 106,
+       "ch": "2",
+       "range": "45-66"
+      }
+     ]
+    },
+    {
+     "title": "Alice, Where Art Thou?",
+     "author": "Joseph Ascher",
+     "level": 1,
+     "key": "B♭ major, G minor",
+     "tempo": 90,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "upper:",
+       "notes": 229,
+       "ch": "1",
+       "range": "58-87"
+      },
+      {
+       "name": "lower:",
+       "notes": 320,
+       "ch": "2",
+       "range": "34-63"
+      }
+     ]
+    },
+    {
+     "title": "I Cannot Sing the Old Songs",
+     "author": "Charlotte Alington Barnard",
+     "level": 0,
+     "key": "G major, E minor",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "upper:",
+       "notes": 110,
+       "ch": "4",
+       "range": "59-78"
+      },
+      {
+       "name": "lower:",
+       "notes": 89,
+       "ch": "5",
+       "range": "38-60"
+      }
+     ]
+    },
+    {
+     "title": "Home, Sweet Home",
+     "author": "Henry Rowley Bishop",
+     "level": 1,
+     "key": "F major, D minor",
+     "tempo": 90,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "upper:",
+       "notes": 144,
+       "ch": "0",
+       "range": "57-77"
+      },
+      {
+       "name": "lower:",
+       "notes": 189,
+       "ch": "1",
+       "range": "36-62"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "RnB Progressions_Vol_1.sheetmusicpack",
+   "title": "RnB Progressions, Vol. 1",
+   "sku": "SP-RNBPROGRESSIONSVOL1-P01-GB-CHORDIO",
+   "sortOrder": 7,
+   "versionNumber": 24,
+   "proficiencyPackLevel": 1,
+   "isStorePack": true,
+   "isPurchased": false,
+   "dateCreated": "2024-12-31T16:51:24.895Z",
+   "items": 6,
+   "imageBytes": null,
+   "videoBytes": 1517465,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Velvet Groove",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 87,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Inst 1",
+       "notes": 150,
+       "ch": "0",
+       "range": "54-73"
+      },
+      {
+       "name": "Inst 1",
+       "notes": 84,
+       "ch": "0",
+       "range": "39-58"
+      },
+      {
+       "name": "Untitled.1 (Bass)",
+       "notes": 98,
+       "ch": "5",
+       "range": "39-66"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 234,
+       "ch": "10",
+       "range": "43-46"
+      }
+     ]
+    },
+    {
+     "title": "Moody’s Chords for Groove",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 62,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 271,
+       "ch": "0",
+       "range": "51-87"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 131,
+       "ch": "0",
+       "range": "39-63"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 134,
+       "ch": "5",
+       "range": "36-60"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 468,
+       "ch": "10",
+       "range": "48-61"
+      }
+     ]
+    },
+    {
+     "title": "Soulful Journeys",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 98,
+       "ch": "0",
+       "range": "52-79"
+      },
+      {
+       "name": "GrandPianoC",
+       "notes": 80,
+       "ch": "0",
+       "range": "38-67"
+      },
+      {
+       "name": "Inst 5",
+       "notes": 52,
+       "ch": "5",
+       "range": "38-57"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 281,
+       "ch": "10",
+       "range": "46-60"
+      }
+     ]
+    },
+    {
+     "title": "Chords of Serenity",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 75,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 56,
+       "ch": "0",
+       "range": "56-72"
+      },
+      {
+       "name": "Track 2",
+       "notes": 44,
+       "ch": "1",
+       "range": "39-58"
+      },
+      {
+       "name": "808Bass02",
+       "notes": 29,
+       "ch": "5",
+       "range": "41-61"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 194,
+       "ch": "10",
+       "range": "27-63"
+      }
+     ]
+    },
+    {
+     "title": "Feel the Soul",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 120,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Classic Electric Piano",
+       "notes": 285,
+       "ch": "0",
+       "range": "52-76"
+      },
+      {
+       "name": "Classic Electric Piano",
+       "notes": 153,
+       "ch": "0",
+       "range": "36-61"
+      },
+      {
+       "name": "RnBChordsNo1 (Bass).2",
+       "notes": 117,
+       "ch": "5",
+       "range": "40-64"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 880,
+       "ch": "10",
+       "range": "41-66"
+      }
+     ]
+    },
+    {
+     "title": "Erykah’s Echo",
+     "author": "R&B Practice Session",
+     "level": 1,
+     "key": "",
+     "tempo": 60,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "DevantePad",
+       "notes": 106,
+       "ch": "0",
+       "range": "54-69"
+      },
+      {
+       "name": "DevantePad",
+       "notes": 32,
+       "ch": "0",
+       "range": "41-51"
+      },
+      {
+       "name": "808Bass02",
+       "notes": 46,
+       "ch": "5",
+       "range": "37-54"
+      },
+      {
+       "name": "Jimindorothy Kit",
+       "notes": 572,
+       "ch": "10",
+       "range": "25-60"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "file": "Salsa Montuno Exercises_Vol_1.sheetmusicpack",
+   "title": "Salsa Montuno Exercises, Vol. 1",
+   "sku": "SP-SALSAMONTUNOEXERCISESVOL1-P01-GB-CHORDIO",
+   "sortOrder": 6,
+   "versionNumber": 34,
+   "proficiencyPackLevel": 1,
+   "isStorePack": true,
+   "isPurchased": true,
+   "dateCreated": "2026-08-13T20:07:04.563Z",
+   "items": 18,
+   "imageBytes": 895899,
+   "videoBytes": 1534724,
+   "videoHasAudio": false,
+   "itemList": [
+    {
+     "title": "Salsa Piano Montuno 04",
+     "author": "Chordio",
+     "level": 1,
+     "key": "E♭ major",
+     "tempo": 190,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 144,
+       "ch": "0",
+       "range": "62-80"
+      },
+      {
+       "name": "Track 2",
+       "notes": 94,
+       "ch": "1",
+       "range": "50-63"
+      },
+      {
+       "name": "Demo.2 (Bass)",
+       "notes": 33,
+       "ch": "5",
+       "range": "41-58"
+      },
+      {
+       "name": "Conga",
+       "notes": 626,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno (I-V7-I)",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C",
+     "tempo": 190,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 39,
+       "ch": "0",
+       "range": "60-77"
+      },
+      {
+       "name": "Track 2",
+       "notes": 37,
+       "ch": "1",
+       "range": "48-65"
+      },
+      {
+       "name": "Key of C.1 (Bass)",
+       "notes": 23,
+       "ch": "5",
+       "range": "43-67"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 05",
+     "author": "Chordio",
+     "level": 1,
+     "key": "D minor",
+     "tempo": 170,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 256,
+       "ch": "0",
+       "range": "62-81"
+      },
+      {
+       "name": "Track 2",
+       "notes": 234,
+       "ch": "1",
+       "range": "48-64"
+      },
+      {
+       "name": "PIANO SALSA   MONTUNO EN Dm.2 (Bass).1",
+       "notes": 95,
+       "ch": "5",
+       "range": "50-64"
+      },
+      {
+       "name": "Conga",
+       "notes": 1250,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Sample Guaracha 01",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C",
+     "tempo": 200,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 112,
+       "ch": "0",
+       "range": "65-81"
+      },
+      {
+       "name": "Track 2",
+       "notes": 76,
+       "ch": "1",
+       "range": "53-64"
+      },
+      {
+       "name": "SAMPLE GUARACHA 1 (clave 2-3).2 (Bass)",
+       "notes": 48,
+       "ch": "5",
+       "range": "48-62"
+      },
+      {
+       "name": "Conga",
+       "notes": 624,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 01",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C minor",
+     "tempo": 160,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 72,
+       "ch": "0",
+       "range": "65-80"
+      },
+      {
+       "name": "Track 2",
+       "notes": 52,
+       "ch": "1",
+       "range": "53-63"
+      },
+      {
+       "name": "Tumbao # 5 - Piano - Como tocar tumbaos en el piano.1 (Bass)",
+       "notes": 17,
+       "ch": "5",
+       "range": "43-51"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Tumbao 2-3 (Tumbao Base)",
+     "author": "Chordio",
+     "level": 1,
+     "key": "F major",
+     "tempo": 140,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 148,
+       "ch": "0",
+       "range": "69-82"
+      },
+      {
+       "name": "Track 2",
+       "notes": 96,
+       "ch": "1",
+       "range": "57-65"
+      },
+      {
+       "name": "Tumbao 2-3 (Tumbao Base).2 (Bass)",
+       "notes": 42,
+       "ch": "5",
+       "range": "40-57"
+      },
+      {
+       "name": "Conga",
+       "notes": 586,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Vámonos pal Monte",
+     "author": "Chordio",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 185,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "BASIC-PRACTICE-2---Va-monos-pal-Monte---clave-2-3 RH",
+       "notes": 142,
+       "ch": "0",
+       "range": "67-86"
+      },
+      {
+       "name": "BASIC-PRACTICE-2---Va-monos-pal-Monte---clave-2-3 LH",
+       "notes": 98,
+       "ch": "1",
+       "range": "43-69"
+      },
+      {
+       "name": "practice_1.1 (Bass)",
+       "notes": 36,
+       "ch": "5",
+       "range": "48-57"
+      },
+      {
+       "name": "Conga",
+       "notes": 628,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 02",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C",
+     "tempo": 170,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 74,
+       "ch": "0",
+       "range": "59-74"
+      },
+      {
+       "name": "Track 2",
+       "notes": 51,
+       "ch": "1",
+       "range": "47-59"
+      },
+      {
+       "name": "Salsa Piano Montuno from the book Salsa and Afro Cuban Montunos for PianoKeyboards.1 (Bass)",
+       "notes": 18,
+       "ch": "5",
+       "range": "48-60"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 03",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C",
+     "tempo": 190,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 80,
+       "ch": "0",
+       "range": "65-81"
+      },
+      {
+       "name": "Track 1",
+       "notes": 56,
+       "ch": "0",
+       "range": "53-64"
+      },
+      {
+       "name": " MONTUNO DE LA SEMANA NÂº80   Â¿Sabes que cancioÌn es   pianosalsa.com  #pianosalsa.3 (Bass)",
+       "notes": 23,
+       "ch": "0",
+       "range": "48-62"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Piano Descarga 01",
+     "author": "Chordio",
+     "level": 1,
+     "key": "F major",
+     "tempo": 190,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "DESCARGA 1",
+       "notes": 68,
+       "ch": "0",
+       "range": "70-86"
+      },
+      {
+       "name": "DESCARGA 1",
+       "notes": 42,
+       "ch": "1",
+       "range": "58-67"
+      },
+      {
+       "name": "Practice.5 (Bass)",
+       "notes": 19,
+       "ch": "5",
+       "range": "48-60"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Piano Montuno with Tumbao Bass 01",
+     "author": "Chordio",
+     "level": 1,
+     "key": "D minor",
+     "tempo": 190,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 76,
+       "ch": "0",
+       "range": "53-70"
+      },
+      {
+       "name": "Track 2",
+       "notes": 18,
+       "ch": "1",
+       "range": "34-50"
+      },
+      {
+       "name": "Track 2",
+       "notes": 18,
+       "ch": "5",
+       "range": "46-62"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 07",
+     "author": "Chordio",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 208,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 194,
+       "ch": "0",
+       "range": "59-92"
+      },
+      {
+       "name": "Track 2",
+       "notes": 137,
+       "ch": "0",
+       "range": "43-63"
+      },
+      {
+       "name": "Track 2",
+       "notes": 104,
+       "ch": "5",
+       "range": "39-56"
+      },
+      {
+       "name": "Conga",
+       "notes": 1248,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Montunos Básicos que debes conocer",
+     "author": "Chordio",
+     "level": 1,
+     "key": "C",
+     "tempo": 170,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 100,
+       "ch": "0",
+       "range": "60-79"
+      },
+      {
+       "name": "PnNo.",
+       "notes": 105,
+       "ch": "1",
+       "range": "48-62"
+      },
+      {
+       "name": "Ex 1/ Guajira I IV V IV I (Do Mayor).3 (Bass)_bip",
+       "notes": 33,
+       "ch": "5",
+       "range": "48-55"
+      },
+      {
+       "name": "Conga",
+       "notes": 626,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Pa' Gozar",
+     "author": "Chordio",
+     "level": 1,
+     "key": "G major",
+     "tempo": 140,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Piano",
+       "notes": 169,
+       "ch": "0",
+       "range": "67-74"
+      },
+      {
+       "name": "Piano",
+       "notes": 160,
+       "ch": "1",
+       "range": "52-64"
+      },
+      {
+       "name": "Bass",
+       "notes": 62,
+       "ch": "5",
+       "range": "50-62"
+      },
+      {
+       "name": "Conga",
+       "notes": 898,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Besame Mucho",
+     "author": "Chordio",
+     "level": 1,
+     "key": "E♭ major",
+     "tempo": 140,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 289,
+       "ch": "0",
+       "range": "59-81"
+      },
+      {
+       "name": "Track 3",
+       "notes": 418,
+       "ch": "2",
+       "range": "43-63"
+      },
+      {
+       "name": "Here is the goal.1 (Bass)",
+       "notes": 150,
+       "ch": "5",
+       "range": "41-65"
+      },
+      {
+       "name": "Conga",
+       "notes": 2576,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 06",
+     "author": "Chordio",
+     "level": 2,
+     "key": "C",
+     "tempo": 170,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 42,
+       "ch": "0",
+       "range": "67-79"
+      },
+      {
+       "name": "Track 2",
+       "notes": 58,
+       "ch": "1",
+       "range": "52-62"
+      },
+      {
+       "name": "Practice.1 (Bass)",
+       "notes": 18,
+       "ch": "5",
+       "range": "43-55"
+      },
+      {
+       "name": "Conga",
+       "notes": 314,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Salsa Piano Montuno 08",
+     "author": "Chordio",
+     "level": 1,
+     "key": "B♭ major",
+     "tempo": 180,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 143,
+       "ch": "0",
+       "range": "60-94"
+      },
+      {
+       "name": "Track 2",
+       "notes": 107,
+       "ch": "0",
+       "range": "43-67"
+      },
+      {
+       "name": "DoubleBassC",
+       "notes": 35,
+       "ch": "5",
+       "range": "48-57"
+      },
+      {
+       "name": "Conga",
+       "notes": 624,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    },
+    {
+     "title": "Mambo Influenciado Montuno",
+     "author": "Chordio",
+     "level": 1,
+     "key": "F major",
+     "tempo": 170,
+     "instrument": "Piano",
+     "tracks": [
+      {
+       "name": null,
+       "notes": 0,
+       "ch": "",
+       "range": null
+      },
+      {
+       "name": "Track 1",
+       "notes": 220,
+       "ch": "0",
+       "range": "65-82"
+      },
+      {
+       "name": "Track 2",
+       "notes": 51,
+       "ch": "1",
+       "range": "31-45"
+      },
+      {
+       "name": "Track 2",
+       "notes": 51,
+       "ch": "5",
+       "range": "43-57"
+      },
+      {
+       "name": "Conga",
+       "notes": 937,
+       "ch": "10",
+       "range": "48-96"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "aggregate": {
+  "chordpack": {
+   "chordResultsFirst": {
+    "Cmin": 35,
+    "Fmin7": 26,
+    "G#5": 5,
+    "G7": 39,
+    "Cmin7": 48,
+    "Ab": 26,
+    "Db": 27,
+    "Eb13": 17,
+    "Eb7": 12,
+    "C7": 21,
+    "Fmin9": 67,
+    "D7": 22,
+    "G": 50,
+    "D13": 13,
+    "Cmin#5": 9,
+    "Bmin6": 9,
+    "Bmin": 13,
+    "Bb6": 10,
+    "Amin7": 67,
+    "Ab7b5": 5,
+    "C6 add omit3": 5,
+    "F6sus2b5": 6,
+    "Eb6": 15,
+    "Bmin#5": 17,
+    "Bdim#5": 10,
+    "G7#5": 12,
+    "Fmin": 13,
+    "E": 21,
+    "Abmin#5": 9,
+    "F#min6 add11": 3,
+    "B7": 16,
+    "Bbdim#5": 2,
+    "B": 18,
+    "Dbmin6 add11": 1,
+    "Ebmin#5": 8,
+    "Fdim#5": 2,
+    "F#min7": 18,
+    "A6/9": 2,
+    "B6sus4": 4,
+    "D": 41,
+    "Bsus4#5": 6,
+    "Emin": 26,
+    "A": 27,
+    "F#min": 8,
+    "Emin7": 32,
+    "G6": 13,
+    "Abmin7b5": 8,
+    "A7": 16,
+    "Emin6": 3,
+    "F#min#5": 15,
+    "F": 49,
+    "Gmin7": 58,
+    "Csus4": 5,
+    "C": 51,
+    "E( omit3, b5, #5)": 1,
+    "BbMaj7": 38,
+    "Bb6sus2b5": 2,
+    "Amin#5": 9,
+    "Gmin": 28,
+    "G6sus2b5": 3,
+    "Dmin": 33,
+    "Bb": 25,
+    "Amin": 36,
+    "F#": 18,
+    "Amin add9": 2,
+    "FMaj7": 30,
+    "Dmin add9": 5,
+    "Dmin7": 50,
+    "Dmin11": 69,
+    "Eb": 12,
+    "Db6sus2b5": 4,
+    "Bbsus2b5": 2,
+    "Ab6": 8,
+    "Gsus4": 4,
+    "Eb6( omit3, b5)": 1,
+    "Dmin#5": 4,
+    "Bbmin": 10,
+    "Ab6( omit3, b5)": 2,
+    "Gmin#5": 3,
+    "Bb7": 10,
+    "Db9": 17,
+    "Abmin": 8,
+    "Bbmin7b5": 11,
+    "E6": 5,
+    "Ebsus4#5": 1,
+    "Bbminb13": 2,
+    "B9": 8,
+    "B6/9sus4": 2,
+    "Bbsus4(b9, #5)": 4,
+    "Ddim#5": 2,
+    "Edim#5": 3,
+    "Cdim#5": 1,
+    "Fmin#5": 6,
+    "Gdim#5": 2,
+    "Adim#5": 2,
+    "Gminb13": 2,
+    "F9sus4": 15,
+    "Bb6/9": 2,
+    "Cmin11": 38,
+    "C9sus4": 16,
+    "F7sus2": 3,
+    "Bbsus4(9, b13)": 1,
+    "Bb add9": 2,
+    "Bbsus4(9, #5)": 2,
+    "Amin7b5": 12,
+    "Eb5#11": 1,
+    "EbMaj7": 16,
+    "AMaj9sus4": 1,
+    "E( omit3, #5)": 2,
+    "F6": 16,
+    "Eminb13": 2,
+    "Dmin6": 7,
+    "Esus4#5": 2,
+    "E7": 13,
+    "Ebmin": 7,
+    "Ab7": 10,
+    "Dbsus4 add9": 3,
+    "Db7": 11,
+    "Bbmin#5": 1,
+    "Db7sus4": 3,
+    "C6sus4": 12,
+    "G56": 1,
+    "G7sus4": 8,
+    "G6sus4": 8,
+    "C6": 18,
+    "CMaj7": 49,
+    "Gsus2b5": 2,
+    "A6sus4": 2,
+    "A6( omit3, b5)": 1,
+    "D6sus4": 10,
+    "Cdim": 1,
+    "Bmin7": 20,
+    "Amin6": 3,
+    "F#dim": 3,
+    "Dbmin": 5,
+    "Db5": 3,
+    "B5": 2,
+    "Absus4": 2,
+    "Amin6 add11": 3,
+    "F#6": 11,
+    "F6sus4": 2,
+    "Eb6sus2b5": 3,
+    "Dmin7#5": 4,
+    "F#6sus4": 5,
+    "F#Maj7#5": 3,
+    "F#9sus4": 16,
+    "F#13b9": 4,
+    "Bbmin6 add11": 1,
+    "E6sus2b5": 2,
+    "GMaj7#5": 1,
+    "G9sus4": 19,
+    "FdimMaj7": 1,
+    "C add9": 9,
+    "Esus4": 4,
+    "Dbmin#5": 3,
+    "Emin#5": 9,
+    "C add omit3": 3,
+    "G57": 2,
+    "C5": 4,
+    "Fmin6": 6,
+    "C5Maj7": 1,
+    "C6/9sus4": 3,
+    "C6sus2b5": 3,
+    "Bsus4(b9, #5)": 2,
+    "Gdim7": 4,
+    "Fdim7": 7,
+    "Esus4(b9, #5)": 2,
+    "F#dim7": 6,
+    "Ab6(#9, b5)": 2,
+    "GMaj9sus4#5": 2,
+    "CMaj9sus4": 2,
+    "Dbsus4(b9, #5)": 2,
+    "A6/9sus4": 4,
+    "GMaj7": 14,
+    "G6/9": 9,
+    "Ebdim#5": 2,
+    "Bsus4": 2,
+    "D6/9sus4": 3,
+    "Dbdim#5": 2,
+    "Asus4": 1,
+    "Abmin7": 27,
+    "DMaj13": 5,
+    "E7sus4": 2,
+    "Dmin7b5": 11,
+    "C9": 16,
+    "E#5": 3,
+    "Emin7b5": 10,
+    "A57": 1,
+    "C57": 1,
+    "BbMaj13": 13,
+    "AbMaj7b5": 2,
+    "Abdim#5": 5,
+    "Amin(9, 11)": 3,
+    "Dsus4": 2,
+    "F add9": 12,
+    "Csus2": 2,
+    "CMaj7sus2": 5,
+    "Esus2": 2,
+    "E5": 1,
+    "Emin add9": 1,
+    "Dsus4 add9": 1,
+    "Gsus4 add9": 1,
+    "G add9": 6,
+    "D6 add omit3": 1,
+    "F#sus4b9": 1,
+    "C( omit3, b5)": 1,
+    "Esus4 add9": 1,
+    "F#sus4#5": 1,
+    "D6": 5,
+    "E7b9": 5,
+    "F#min7#5": 2,
+    "Cdim7": 1,
+    "Dbdim": 5,
+    "Dbmin7": 20,
+    "Dbsus4#5": 1,
+    "C6b5": 2,
+    "Ebmin7b5": 1,
+    "Fmin6 add11": 1,
+    "FminMaj11#5": 1,
+    "Ebmin11": 46,
+    "Eb6sus4": 1,
+    "Db6sus4": 2,
+    "Csus4(b5, #5)": 1,
+    "Cmin(11, #5)": 3,
+    "B7b5": 2,
+    "C6/9": 9,
+    "Dmin6/9": 7,
+    "FMaj9": 50,
+    "G add11": 1,
+    "Amin9": 57,
+    "F#min7b5": 8,
+    "Fmin#11": 1,
+    "Fmin add9": 2,
+    "Bbmin6": 1,
+    "Eb add9": 6,
+    "Bbmin7": 31,
+    "F add omit3": 1,
+    "Dsus4#5": 4,
+    "Bb5": 1,
+    "D7sus4": 2,
+    "A5": 1,
+    "F#5": 2,
+    "D5": 1,
+    "G7b5": 2,
+    "CMaj9": 45,
+    "FMaj13": 13,
+    "E7b5": 2,
+    "AMaj13": 6,
+    "Bb6( omit3, b5)": 1,
+    "Edim": 2,
+    "E6 add omit3": 1,
+    "E5Maj7": 1,
+    "E6sus4": 1,
+    "E6/9sus4": 2,
+    "Amin11": 32,
+    "Emin11": 49,
+    "Gmin11": 40,
+    "A9sus4": 20,
+    "GMaj13": 12,
+    "C6/9b5": 4,
+    "B9sus4": 26,
+    "Abmin11": 25,
+    "EMaj7": 28,
+    "Eb7#9": 4,
+    "Abmin9": 46,
+    "A13b5": 3,
+    "BbMaj9#11": 4,
+    "A7(#9, #5)": 17,
+    "Db7(#9, b5)": 4,
+    "F13b9": 4,
+    "BbMaj7sus2#11": 2,
+    "E7(#9, #5)": 9,
+    "Dmin9": 70,
+    "AbMaj7": 29,
+    "G13sus4": 15,
+    "Bb13sus4": 29,
+    "Ab13sus4": 22,
+    "DbMaj9": 41,
+    "C13sus4": 16,
+    "C7#5": 5,
+    "E13sus4": 11,
+    "E7#5": 5,
+    "AMaj9": 26,
+    "Eb13sus4": 6,
+    "Ebmin9": 55,
+    "Eb7sus4(b9, b5)": 2,
+    "Eb(#9, #5)": 3,
+    "Bb13b9": 9,
+    "Bb6(#9, b5)": 1,
+    "Bb(#9, #5)": 1,
+    "Bb7sus4(b9, b5)": 1,
+    "F9": 11,
+    "A13sus4": 19,
+    "Dbb5": 2,
+    "G13": 23,
+    "FMaj7sus2": 5,
+    "BbMaj9": 41,
+    "Eb9sus4": 18,
+    "Fmin11": 42,
+    "DbMaj7": 26,
+    "BMaj7": 19,
+    "E7sus4b5": 4,
+    "F13#11": 2,
+    "Eb6/9": 8,
+    "Ab13": 20,
+    "D7b9": 7,
+    "Ab13( omit3, b5)": 2,
+    "AbMaj9": 34,
+    "GMaj9": 21,
+    "A7b9": 19,
+    "Bbmin11": 25,
+    "A7(b9, #5)": 12,
+    "Dbmin6#5": 2,
+    "D9sus4": 8,
+    "Ab6sus2b5": 2,
+    "C13sus2b5": 5,
+    "A7sus4": 6,
+    "G11(b9, #5)": 2,
+    "Ab13sus2b5": 3,
+    "Emin11b5": 14,
+    "Cmin7(b5, b9)": 4,
+    "F7(b9, #5)": 9,
+    "D6( omit3, b5)": 2,
+    "A6": 5,
+    "F7": 10,
+    "F#Maj7": 32,
+    "DMaj7": 11,
+    "B13sus4": 13,
+    "Dbmin11": 29,
+    "Abmin7b13": 3,
+    "B(9, 11)": 2,
+    "G6/9sus4": 5,
+    "G6/9 add11": 2,
+    "CMaj13sus2": 3,
+    "Bmin7b13": 5,
+    "CMaj13": 20,
+    "D6 add11": 8,
+    "Emin11#5": 4,
+    "C6/9#11": 3,
+    "F7(#9, #5)": 28,
+    "Bbmin9": 59,
+    "Bb7b9": 11,
+    "F#Maj9": 34,
+    "AMaj7sus2": 7,
+    "D6/9": 7,
+    "Dmin add11": 2,
+    "EbMaj7(#9, b5, #5)": 1,
+    "Cmin9": 59,
+    "F13sus2b5": 1,
+    "Dbmin9": 25,
+    "F#13": 11,
+    "BMaj9": 41,
+    "Bmin9": 27,
+    "E13": 4,
+    "Gmin9": 61,
+    "C13": 15,
+    "Bb13": 22,
+    "EbMaj9": 39,
+    "Bb6/9sus4": 3,
+    "Ab6/9": 4,
+    "Bb9": 6,
+    "Bb6 add11": 2,
+    "D7sus4(b5, #5)": 1,
+    "Eb6 add11": 1,
+    "Fmin6/9": 3,
+    "Gmin7#5": 14,
+    "A7(b9, #9, #5)": 4,
+    "Dmin11b5": 8,
+    "G7(b9, #9, #5)": 5,
+    "Cmin11b5": 9,
+    "F7(b9, #9, #5)": 4,
+    "Bbmin11b5": 6,
+    "Eb7(b9, #9, #5)": 4,
+    "Abmin11b5": 4,
+    "Db7(b9, #9, #5)": 3,
+    "F#min11b5": 5,
+    "B7(b9, #9, #5)": 3,
+    "C13b9": 4,
+    "F7#9": 2,
+    "Ab13b9": 5,
+    "Db7#9": 5,
+    "B7#9": 3,
+    "E13b9": 1,
+    "A7#9": 3,
+    "D13b9": 3,
+    "G7#9": 3,
+    "Bmin7b5": 15,
+    "A9": 8,
+    "G7(b9, #5)": 10,
+    "Eb7(b9, #5)": 6,
+    "Db7(b9, #5)": 5,
+    "F#min11": 31,
+    "B7(b9, #5)": 10,
+    "D7#5": 4,
+    "Bb7#5": 5,
+    "Ebmin7": 20,
+    "Ab7#5": 6,
+    "F#7#5": 3,
+    "F13": 23,
+    "F#min9": 40,
+    "Emin9": 40,
+    "G7(#9, #5)": 17,
+    "A13": 14,
+    "Ab7( omit3, b9, b5)": 4,
+    "Fmin7#5": 1,
+    "Db13": 6,
+    "B13": 6,
+    "EMaj9": 18,
+    "DMaj9": 33,
+    "E7b13": 1,
+    "G9": 8,
+    "F6/9": 13,
+    "BbMaj13sus2#11": 1,
+    "Dmin6/9 add11": 2,
+    "DbMaj7(b5, #5)": 1,
+    "C13b5": 5,
+    "FMaj7b5": 3,
+    "EbMaj7(b5, #5)": 1,
+    "BbMaj7sus2": 4,
+    "Db7sus2(b5, #5)": 1,
+    "Cmin6/9": 5,
+    "Cmin7b5": 12,
+    "Bbmin6/9": 5,
+    "Eb7(#9, #5)": 9,
+    "Abmin6/9": 4,
+    "Db7(#9, #5)": 14,
+    "F#min6/9": 2,
+    "B7(#9, #5)": 13,
+    "Emin6/9": 4,
+    "Db6": 5,
+    "F#7": 8,
+    "B6": 9,
+    "AMaj7": 6,
+    "Emin7#5": 7,
+    "G7b9": 5,
+    "Amin7#5": 9,
+    "C7b9": 2,
+    "F7b9": 4,
+    "Cmin add9": 2,
+    "Bbmin add9": 2,
+    "Abmin add9": 1,
+    "BbminMaj11": 2,
+    "Eb9": 6,
+    "E9sus4": 17,
+    "G13b5": 5,
+    "Ab9": 6,
+    "E7#9": 6,
+    "Bmin7#5": 16,
+    "Bb9sus4": 21,
+    "Db13b5": 3,
+    "D13b5": 4,
+    "Db6/9": 3,
+    "Eb13b5": 2,
+    "E13b5": 2,
+    "F9#5": 1,
+    "F7#5": 10,
+    "G9#5": 2,
+    "A9#5": 2,
+    "A7#5": 3,
+    "B9#5": 1,
+    "B7#5": 5,
+    "Db9#5": 2,
+    "Db7#5": 4,
+    "B11": 1,
+    "A11": 1,
+    "Ab13#9": 1,
+    "Fmin7b5": 5,
+    "Bb7(#9, #5)": 4,
+    "F#13sus2b5": 2,
+    "CminMaj9": 2,
+    "D9sus4b5": 1,
+    "G7(b5, #5)": 1,
+    "C13(b9, b5)": 2,
+    "Eb7(b9, b5)": 3,
+    "Eb7b9": 2,
+    "F#7(b9, b5)": 3,
+    "F#7b9": 1,
+    "B add9": 1,
+    "B6/9": 4,
+    "A7(b9, b5)": 4,
+    "D add9": 4,
+    "Gmin9b5": 1,
+    "Gmin7b5": 4,
+    "C7(b9, b5)": 1,
+    "Bbmin9b5": 2,
+    "Abmin6": 6,
+    "Dbmin9b5": 1,
+    "Dbmin7b5": 4,
+    "F#13(b9, b5)": 2,
+    "Bmin6/9": 1,
+    "Emin9b5": 2,
+    "A13(b9, b5)": 1,
+    "F#7#9": 3,
+    "E7#11": 1,
+    "D7#11": 1,
+    "Cb5": 1,
+    "FMaj7#11": 2,
+    "Bmin11": 21,
+    "Eb7#5": 2,
+    "Gmin11(b9, #5)": 1,
+    "G6(b9, #9)": 1,
+    "Gmin9b13": 1,
+    "Amin11(b9, #5)": 1,
+    "A6(b9, #9)": 1,
+    "Amin9b13": 1,
+    "Db7b9": 2,
+    "B7b9": 3,
+    "AbMaj9#11": 4,
+    "DbMaj9#11": 3,
+    "A6sus4b9": 1,
+    "C6sus4b9": 1,
+    "G6sus4b9": 1,
+    "Bb6sus4b9": 1,
+    "F6sus4b9": 1,
+    "F#9": 1,
+    "E9": 3,
+    "D9": 7,
+    "Dmin9b5": 1,
+    "Cmin9b5": 1,
+    "Abmin9b5": 2,
+    "F#min9b5": 1,
+    "C7(b9, #5)": 3,
+    "Bb7(b9, #5)": 4,
+    "Ab7(b9, #5)": 6,
+    "F#7(b9, #5)": 2,
+    "E7(b9, #5)": 2,
+    "D7(b9, #5)": 5,
+    "Amin13": 2,
+    "F13b5": 2,
+    "B13b5": 1,
+    "Bb13b5": 5,
+    "Ab13b5": 2,
+    "F#13b5": 2,
+    "F6sus2#11": 1,
+    "C13( omit3, b9, b5)": 1,
+    "F#Maj13": 8,
+    "Db13sus4": 7,
+    "Eb6sus2#11": 2,
+    "Db7sus2#11": 1,
+    "Dmin13b5": 1,
+    "Gb13": 1,
+    "Db13b9": 2,
+    "B13b9": 3,
+    "A13b9": 4,
+    "D7#9": 7,
+    "G13b9": 5,
+    "C7#9": 3,
+    "Bb7#9": 1,
+    "Eb13b9": 1,
+    "Ab7#9": 1,
+    "EMaj13": 9,
+    "B13(b9, b5)": 1,
+    "Ab add9": 3,
+    "Gmin11b5": 4,
+    "Bb13(b9, b5)": 2,
+    "E9b5": 3,
+    "EbMaj7#11": 2,
+    "Db7sus2b5": 1,
+    "B#5": 1,
+    "AdimMaj7": 1,
+    "AbMaj13": 8,
+    "DbMaj13": 14,
+    "Emin(11, #5)": 5,
+    "B9b5": 1,
+    "Bb6/9 add11": 1,
+    "Amin7b13": 3,
+    "Aminb13": 2,
+    "Dbmin7#5": 5,
+    "Cmin7#5": 8,
+    "C13sus2": 1,
+    "D13#11": 2,
+    "Csus4(9, #5)": 1,
+    "C7(#9, #5)": 13,
+    "G7sus4b9": 1,
+    "Cmin13": 4,
+    "Dmin11#5": 3,
+    "EbMaj13b5": 1,
+    "Gmin11#5": 1,
+    "Amin11#5": 2,
+    "Abdim7": 6,
+    "Bdim7": 6,
+    "Ddim7": 10,
+    "Db6/9 add11": 1,
+    "C6/9sus4b5": 1,
+    "F#6/9 add11": 2,
+    "F6/9sus4b5": 1,
+    "B6/9 add11": 1,
+    "Bb6/9sus4b5": 1,
+    "Bb13#11": 1,
+    "Cmin6": 4,
+    "Eb6b5": 2,
+    "Gsus4(9, #5)": 2,
+    "C13(b9, #11)": 2,
+    "Bmin11#5": 1,
+    "Bbmin13": 1,
+    "Cmin11#5": 1,
+    "Bmin13": 2,
+    "Dbmin11#5": 2,
+    "Dbmin13": 1,
+    "Ebmin11#5": 1,
+    "Dmin13": 1,
+    "Ebmin13": 1,
+    "Fmin11#5": 1,
+    "Emin13": 1,
+    "F#min11#5": 1,
+    "Fmin13": 1,
+    "Abmin11#5": 1,
+    "Gmin13": 3,
+    "Abmin13": 2,
+    "Bbmin11#5": 3,
+    "Gmin(11, #5)": 2,
+    "CMaj9#11": 2,
+    "FMaj9#11": 1,
+    "EbMaj9#11": 1,
+    "F#Maj9#11": 1,
+    "BMaj9#11": 3,
+    "EMaj9#11": 1,
+    "AMaj9#11": 1,
+    "DMaj9#11": 1,
+    "GMaj9#11": 1,
+    "Csus2#5": 1,
+    "D7(#9, #5)": 13,
+    "Bb7b13": 1,
+    "E13#11": 2,
+    "Amin7#11": 1,
+    "Eb6/9#11": 1,
+    "E add9": 3,
+    "Emin add11": 1,
+    "F# add11": 2,
+    "Bb13sus2": 1,
+    "Bb7sus2": 1,
+    "Dbdim7": 5,
+    "C6 add11": 3,
+    "Csus2b13": 2,
+    "AbMaj7sus2": 3,
+    "DbMaj7sus2": 1,
+    "F6sus2": 2,
+    "Db7#11": 1,
+    "Bb6sus2#11": 1,
+    "Bmin6(b9, #5)": 1,
+    "AminMaj13": 1,
+    "B9sus4b5": 1,
+    "C9b5": 1,
+    "F11": 2,
+    "F#dim#5": 1,
+    "Eb11": 2,
+    "Eb11b9": 1,
+    "AbMaj7#5": 1,
+    "D7b5": 1,
+    "Bb13sus2b5": 5,
+    "Asus4#5": 1,
+    "Amin7b9": 1,
+    "G9sus4b5": 2,
+    "D9b5": 1,
+    "F6/9sus4": 1,
+    "E9sus4b5": 1,
+    "Eb7#11": 1,
+    "BbMaj13sus2": 1,
+    "E6sus2": 1,
+    "D11": 1,
+    "F#7(#9, #5)": 8,
+    "Ab7(#9, #5)": 2,
+    "Eb(b9, #5)": 1,
+    "AbdimMaj7": 2,
+    "DbMaj7b5": 4,
+    "Ab6/9b5": 1,
+    "F#sus4 add9": 1,
+    "Amin11b5": 1,
+    "BbMaj11": 1,
+    "D6/9b5": 1,
+    "E7(b9, #9, b5)": 1,
+    "AbminMaj13": 1,
+    "C7sus2": 2,
+    "FdimMaj13": 1,
+    "Eb7sus2#11": 1,
+    "G7sus4b5": 1,
+    "D7sus2": 4,
+    "D7( omit3, b9, b5)": 1,
+    "D7(b9, #9, #5)": 1,
+    "A7( omit3, b9, b5, #5)": 1,
+    "A(b9, #5)": 1,
+    "Bbmin7#5": 2,
+    "Eb7sus2b5": 2,
+    "C7sus4b9": 1,
+    "EdimMaj7": 1,
+    "B6 add11": 1,
+    "Bb7sus4(b5, #5)": 1,
+    "Ebmin(11, #5)": 2,
+    "F#6/9sus4": 3,
+    "C6sus2": 1,
+    "C7sus4": 5,
+    "Ebdim11": 1,
+    "Dbminb13": 1,
+    "Bb7(b9, b5)": 1,
+    "Bb6(b9, b5)": 1,
+    "EbMaj13": 7,
+    "F7(b9, b5)": 1,
+    "Gb5": 2,
+    "Ab7sus2b5": 1,
+    "Gb9": 2,
+    "Bbb9": 2,
+    "Dbb9": 2,
+    "Db7b13": 1,
+    "Db7sus4b5": 1,
+    "B5b13": 1,
+    "Asus2": 1,
+    "G5Maj7": 1,
+    "E7(#9, b13)": 1,
+    "AbMaj7(b5, #5)": 1,
+    "Abdim13": 1,
+    "Ab6b5": 1,
+    "F#7#11": 1,
+    "D(9, #5)": 1,
+    "Eb6/9sus4": 1,
+    "Ab6/9 add11": 3,
+    "F6/9 add11": 3,
+    "F#Maj7sus2": 2,
+    "Amin6#5": 1,
+    "A( omit3, b9)": 1,
+    "A9sus4b5": 1,
+    "G7( omit3, b5)": 1,
+    "Asus4(b9, b13)": 1,
+    "Eb9#11": 1,
+    "F#Maj13sus2": 1,
+    "A6sus2#11": 1,
+    "Abmin7#5": 3,
+    "F#Maj7(#9, b5)": 1,
+    "Gmin7b13": 3,
+    "F#Maj13#11": 2,
+    "G9sus4(b9, b5, #5)": 2,
+    "Ab6b9": 2,
+    "F#7sus2": 1,
+    "Dbsus2#11": 1,
+    "Gdim": 1,
+    "Bb add omit3": 2,
+    "Abmin6#5": 1,
+    "Db9sus4": 5,
+    "Db6b9": 1,
+    "E7(b9, b5)": 1,
+    "F#6b9": 1,
+    "BMaj13sus2": 1,
+    "E6/9": 1,
+    "DMaj7sus2": 1,
+    "Eb7sus2": 1,
+    "Adim": 2,
+    "Ddim": 2,
+    "Bmin(9, 11)": 2,
+    "Bb7sus4": 6,
+    "F#13sus4": 6,
+    "F#Maj13sus2#11": 1,
+    "F13sus4": 4,
+    "Ab9sus4": 11,
+    "FMaj7sus2#11": 1,
+    "Fmin7b13": 1,
+    "Ebminb13": 1,
+    "Eb7(#9, b13)": 1,
+    "DMaj7#11": 2,
+    "F7(#9, b13)": 1,
+    "BMaj13": 7,
+    "Cmin7b13": 1,
+    "AMaj7#11": 2,
+    "D13(b9, b5)": 1,
+    "GMaj9#5": 1,
+    "CMaj13#11": 1,
+    "EbMaj9#5": 1,
+    "Db add9": 2,
+    "F# add9": 2,
+    "Ebdim7": 3,
+    "GdimMaj7": 1,
+    "Fmin(9, 11)": 1,
+    "Csus4b9": 1,
+    "D7sus4b5": 1,
+    "Db7(b9, #9)": 1,
+    "Emin7b13": 2,
+    "Db11": 1,
+    "B6sus2#11": 1,
+    "Db6/9sus4": 3,
+    "Eb7(#9, #11)": 2,
+    "B7(#9, b5)": 2,
+    "A#5": 1,
+    "G6 add11": 4,
+    "Bmin(b9, 11, #5)": 1,
+    "Db6/9#11": 2,
+    "AbMaj13sus2": 2,
+    "F#min13": 3,
+    "Db56": 1,
+    "AbminMaj9": 2,
+    "EMaj7b5": 2,
+    "Gmin(b9, 11, #5)": 1,
+    "Fmin(11, #5)": 1,
+    "D6sus2b5": 2,
+    "F#7sus4": 2,
+    "D#min11": 1,
+    "C#min7": 2,
+    "BMaj7sus2": 1,
+    "C#7sus2": 1,
+    "G#7sus2": 1,
+    "G#7 add omit3": 1,
+    "Ebmin6/9": 2,
+    "Ebmin(9, #5)": 4,
+    "Ebmin add9": 2,
+    "DminMaj13#5": 1,
+    "E13sus2": 1,
+    "Bbdim": 2,
+    "F7sus4": 4,
+    "AminMaj7": 1,
+    "Gsus4#5": 1,
+    "B7sus2": 1,
+    "D13sus4": 3,
+    "C6sus2#11": 1,
+    "Ab7sus4": 5,
+    "A7sus2": 1,
+    "Fsus2": 1,
+    "Bbsus4": 1,
+    "EMaj13sus2#11": 1,
+    "F#Maj7b5": 2,
+    "F#Maj9b5": 1,
+    "F#13sus2": 1,
+    "F#min(b9, 11, #5)": 1,
+    "F#7(b9, b13)": 1,
+    "A add11": 1,
+    "BminMaj11": 1,
+    "A9b5": 1,
+    "F13sus2": 1,
+    "D57": 1,
+    "D57b9": 1,
+    "BminMaj7": 1,
+    "G#7(b9, #5)": 1,
+    "C#min9": 1,
+    "GMaj7b5": 1,
+    "G13sus2b5": 1,
+    "Ab6/9sus4": 1,
+    "Bb7b5": 1,
+    "Ab7(b9, #9, #5)": 1,
+    "Bbsus4#5": 1,
+    "Ebmin(9, 11)": 1,
+    "Dbmin6/9": 1,
+    "Db6sus2": 1,
+    "D7(#9, b5)": 1,
+    "EMaj13#11": 1,
+    "Ab6 add11": 3,
+    "GMaj7sus2": 1,
+    "F#Maj7#11": 1,
+    "F#6#11": 1,
+    "Db6b5": 2,
+    "A( omit3, b5, #5)": 1,
+    "F#min add9": 2,
+    "F##5": 1,
+    "F#6b5": 1,
+    "Ab#5": 1,
+    "Ab7b9": 1,
+    "Eb7sus4": 2,
+    "B13sus2b5": 1,
+    "Eb13sus2b5": 1,
+    "Ebmin6": 1,
+    "Ab6sus2#11": 1,
+    "Dmin7b13": 1,
+    "B6sus2b5": 1,
+    "Bbmin7b13": 1,
+    "A13#11": 1,
+    "Ab7sus4b9": 1,
+    "Ab6sus4": 1,
+    "Gmin7#11": 1,
+    "F#7b5": 1,
+    "Adim7": 1,
+    "Bsus4b9": 1,
+    "C#7(b9, #5)": 2
+   },
+   "chordNameSuffix": {
+    "7": 188,
+    "min": 204,
+    "min7": 404,
+    "Aug": 10,
+    "Maj": 322,
+    "9(13)": 174,
+    "min9": 604,
+    "/ C": 26,
+    "dim / B": 6,
+    "min / B♭": 6,
+    "7♭5": 12,
+    "Major 6th": 7,
+    "7 / F": 8,
+    "min / E♭": 11,
+    "/ B": 26,
+    "7 / B": 11,
+    "7♯5": 64,
+    "/ A♭": 18,
+    "7 / F♯": 4,
+    "7 / B♭": 5,
+    "7 / D♭": 4,
+    "/ E♭": 12,
+    "min7(11) / A": 2,
+    "6sus4": 2,
+    "min / B": 10,
+    "Maj6": 77,
+    "min / A♭": 4,
+    "min6": 28,
+    "/ F♯": 21,
+    "sus4": 15,
+    "Major 3rd": 43,
+    "7 / E": 5,
+    "Maj7": 295,
+    "/ B♭": 12,
+    "/ A": 22,
+    "7 / G": 5,
+    "min(add2)": 18,
+    "min9(11)": 435,
+    "/ D♭": 9,
+    "Perfect 4th": 5,
+    "dim / E♭": 1,
+    "/ D": 20,
+    "dim / A♭": 3,
+    "/ G": 17,
+    "7(9)": 91,
+    "min7♭5": 94,
+    "Maj7 / B♭": 10,
+    "7 / D": 4,
+    "7 / C": 3,
+    "/ F": 12,
+    "7 / A": 7,
+    "Maj7 / G": 9,
+    "9sus4": 180,
+    "6/9": 57,
+    "Maj(add2) / F": 2,
+    "min11♭5 / B♭": 1,
+    "Maj(add2)": 49,
+    "min6 / B♭": 3,
+    "min / A": 6,
+    "n.c.": 1,
+    "-": 133,
+    "minor 6th": 2,
+    "Maj7 / E": 6,
+    "min / E": 3,
+    "minor 3rd": 18,
+    "min7(11) / D♭": 6,
+    "7sus4": 43,
+    "min7 / G": 4,
+    "min / F": 5,
+    "||:": 100,
+    ":||": 99,
+    "dim / E": 2,
+    "Maj7 / C": 8,
+    "dim / A": 2,
+    "dim": 18,
+    "Perfect 5th": 14,
+    "min / F♯": 4,
+    "Maj(add2) / D": 4,
+    "Maj7♯5": 4,
+    "13(♭9)": 45,
+    "min / G": 4,
+    "/ E": 17,
+    "dim(Maj7)": 4,
+    "dim / D": 3,
+    "Octave": 6,
+    "7(no3)": 5,
+    "Maj7(no3)": 3,
+    "min / C": 5,
+    "dim7": 47,
+    "6(♯9, ♭5)": 2,
+    "dim7 / G": 2,
+    "Maj(add2) / G": 16,
+    "7 / E♭": 2,
+    "min / D": 6,
+    "Maj7(13)": 105,
+    "min7 / E": 2,
+    "Maj7♭5": 12,
+    "7 / A♭": 5,
+    "min(add2/4)": 6,
+    "sus2": 5,
+    "Tritone": 1,
+    "7(♭9)": 62,
+    "min7♯5": 4,
+    "min7 / F": 1,
+    "min / D♭": 6,
+    "min6 / C": 3,
+    "Maj6 / E♭": 1,
+    "min6 / F": 4,
+    "min7(4)": 14,
+    "Maj(add2) / D♭": 5,
+    "13 / C": 4,
+    "min7 / C": 7,
+    "min6/9": 32,
+    "Maj9": 419,
+    "add11": 1,
+    "Maj7(13) / F": 3,
+    "Maj(add2) / C": 10,
+    "7♭5 / B": 1,
+    "dim / B♭": 1,
+    "Maj6 / E": 6,
+    "9 / C": 2,
+    "7♯9": 27,
+    "9(13)♯11": 22,
+    "Maj9♯11": 2,
+    "7(♯9, ♯5)": 147,
+    "7(♯9, ♭5)": 7,
+    "13sus4": 146,
+    "Maj7 / E♭": 3,
+    "13 / E♭": 1,
+    "min7(13)♭5 / B♭": 1,
+    "Maj7♯5 / B♭": 2,
+    "Maj(♭5)": 7,
+    "6/9sus4": 4,
+    "13♯11": 7,
+    "min6♭9 / A♭": 2,
+    "7(♭9, ♯5)": 77,
+    "dim(Maj7) / D♭": 4,
+    "Maj9♯5 / C": 2,
+    "11(♭9, ♯5)": 2,
+    "Maj9♯5 / A♭": 3,
+    "min7♭5(11)": 48,
+    "Maj9 / A♭": 2,
+    "min9(11) / B": 4,
+    "min9(11) / G": 5,
+    "Maj9 / B": 7,
+    "Maj9 / D": 10,
+    "Maj(add2) / E": 9,
+    "min9(11) / C": 3,
+    "add11 / A": 3,
+    "min(add11)": 3,
+    "min7♭13 / E♭": 1,
+    "Maj9♯5 / F": 1,
+    "min7 / B♭": 4,
+    "min7(11) / A♭": 2,
+    "7(♭9, ♯9, ♯5)": 25,
+    "7(♯9)": 14,
+    "Maj7(13)sus4 / A♭": 1,
+    "7(♯11) / A♭": 3,
+    "7♭13": 2,
+    "Maj9 / B♭": 3,
+    "min6/9 add11": 2,
+    "Maj7 / D": 1,
+    "Maj7(♭5, ♯5)": 3,
+    "min9(11)♭5": 2,
+    "9♯5 / D♭": 1,
+    "Maj(add2) / A": 7,
+    "minMaj11": 3,
+    "Maj(add2) / B": 15,
+    "9(♯5)": 8,
+    "9(11)": 8,
+    "13(♯9)": 1,
+    "♭13 / F♯": 2,
+    "min(Maj9)": 4,
+    "min11(♭5)": 4,
+    "7(♭5, ♯5)": 1,
+    "13(♭9, ♭5)": 9,
+    "7(♭9, ♭5)": 14,
+    "min9(♭5)": 11,
+    "7♯11": 5,
+    "Maj7(♯11)": 8,
+    "Maj7(13) / G": 2,
+    "dimMaj9♯5 / G": 1,
+    "Maj7(13) / A": 2,
+    "dimMaj9♯5 / A": 1,
+    "Maj9(♯11)": 21,
+    "Maj7♯5 / A": 1,
+    "Maj7♯5 / C": 1,
+    "Maj7♯5 / G": 2,
+    "Maj7♯5 / F": 1,
+    "Maj(add ♭9)": 4,
+    "min7(13)": 22,
+    "13(♯11)": 13,
+    "6/9(no3)♯11": 2,
+    "♯9 / C": 1,
+    "min7(13) / E♭": 1,
+    "7sus2♯11": 1,
+    "6/9♯11": 3,
+    "min7(13)♭5": 1,
+    "♭13": 1,
+    "9(♯11)": 7,
+    "Maj7♯11": 1,
+    "Aug / D♭": 1,
+    "Aug / B": 1,
+    "Maj6 / G": 3,
+    "Maj7(13) / B♭": 1,
+    "Maj9 / A": 3,
+    "Maj7 / A": 2,
+    "Maj9 / C": 2,
+    "min6 / G": 3,
+    "min9(11) / D": 2,
+    "min9(11) / E♭": 2,
+    "Maj11 / F": 1,
+    "min9(11) / A": 2,
+    "Maj7♭5 / B♭": 1,
+    "min9 / D♭": 1,
+    "7(♯9) / C": 1,
+    "min9 / F♯": 1,
+    "7(♯9) / F": 1,
+    "min9 / B": 1,
+    "7(♯9) / B♭": 1,
+    "min6 / E♭": 2,
+    "13(♭9, ♯11)": 2,
+    "min9(11)♯5": 1,
+    "min9(11) / E": 1,
+    "min9(11) / F": 1,
+    "min9(11) / F♯": 1,
+    "min9(11) / A♭": 2,
+    "min9(11) / B♭": 2,
+    "min7 / E♭": 8,
+    "Maj(♭5) / C": 1,
+    "Maj9♯5 / B♭": 3,
+    "11 / E♭": 1,
+    "min7♯11": 1,
+    "min9 / E♭": 1,
+    "Maj7♯11 / E♭": 1,
+    "Maj7♯5 / E♭": 1,
+    "Maj9(♯11) / A": 1,
+    "Maj7sus2 / F♯": 2,
+    "13sus2": 4,
+    "7sus2": 7,
+    "Maj7♭5 / C": 3,
+    "Maj7sus2": 8,
+    "6/9(no3)": 4,
+    "Maj7♭5 / B": 1,
+    "minMaj7(13)": 2,
+    "min7♭5 / D": 1,
+    "Maj7♯5 / B": 1,
+    "11♭9": 1,
+    "Maj6 / C": 2,
+    "13 / B♭": 3,
+    "Maj6 / A": 1,
+    "min7(♭9)": 1,
+    "7sus4 / E": 1,
+    "6/9(♯11)": 4,
+    "min7 / F♯": 5,
+    "Maj11": 1,
+    "Maj(add2) / A♭": 5,
+    "7(♭9, ♯9, ♭5)": 1,
+    "dimMaj7(13)": 1,
+    "min(Maj7) / E♭": 1,
+    "min6/9 / G": 1,
+    "Maj6 / D": 3,
+    "Maj7♭5 / E": 2,
+    "11 / A": 1,
+    "Maj(add2) / F♯": 3,
+    "sus4 / D♭": 1,
+    "Maj(add2) / B♭": 2,
+    "7♯5 / E♭": 2,
+    "min7♭5 / C": 1,
+    "min7(11) / B♭": 2,
+    "min7(11) / D": 1,
+    ":|| ": 2,
+    "dim7(11)": 1,
+    "Maj7 / D♭": 2,
+    "dim / F": 1,
+    "Aug / A♭": 2,
+    "dim(Maj7) / G": 2,
+    "dim(Maj7) / B♭": 2,
+    "dim(Maj7) / D": 1,
+    "dim(Maj7) / E": 1,
+    "(♯9, ♯5)": 1,
+    "Maj7 / B": 1,
+    "7(♯9, ♭13)": 3,
+    "dim13": 1,
+    "min6 / A♭": 1,
+    "Maj7(13) / A♭": 3,
+    "13sus4 / F♯": 1,
+    "Maj7(13) / F♯": 1,
+    "9sus4 / C": 1,
+    "dim(Maj7) / A": 1,
+    "minor 2nd": 1,
+    "Maj7♯11 / A": 1,
+    "9♯11": 1,
+    "min7(11) / F♯": 3,
+    "min7(13) / A": 1,
+    "Maj7(♯9, ♭5)": 1,
+    "Maj9 / G": 6,
+    "9(♯9,♭13) / G": 2,
+    "9sus4 / B": 2,
+    "Maj9(13)": 13,
+    "Maj7(no3) / D♭": 1,
+    "min6♯5": 1,
+    "Maj9 / F♯": 4,
+    "min7(11) / C": 2,
+    "Maj7 / F": 1,
+    "min7♭13": 4,
+    "min(9,11) / D": 1,
+    "Maj9(♯5)": 2,
+    "Maj7(13)♯11": 2,
+    "Maj7♭5 / D": 1,
+    "7(♭9, ♯9)": 1,
+    "Maj9 / E": 2,
+    "min7(13) / B": 1,
+    "Maj6 / D♭": 1,
+    "7(♯9, ♯11)": 2,
+    "Aug / A": 1,
+    "9sus4 / E": 1,
+    "min7 / D♭": 2,
+    "Maj6 / B": 1,
+    "Maj6 / F": 1,
+    "min / C♯": 1,
+    "/ G♯": 1,
+    "minor 7th": 1,
+    "n.c. / E♭": 2,
+    "7(♯11) / E♭": 4,
+    "dimMaj9 / D": 1,
+    "min(Maj7)": 2,
+    "11 / C": 1,
+    "dim7 / D": 1,
+    "Maj9♭5": 1,
+    "7(♭9, ♭13)": 1,
+    "Maj7sus2 / A": 1,
+    "min6 / D": 1,
+    "min9 / F": 1,
+    "13 / G": 1,
+    "sus4♯5": 1,
+    "7(♯9,♯5) / A": 1,
+    "min11♭9 / E♭": 1,
+    "Maj7 / A♭": 3,
+    "6 (♯11)": 1,
+    "min7♭5 / D♭": 1,
+    "min7(♭5, ♭9)": 1,
+    "dim♯5": 1,
+    "Maj9(♯5) / B": 1,
+    "Maj9♯5 / E♭": 1,
+    "Maj9sus4 / A♭": 1,
+    "minMaj7(13) / A": 1,
+    "Maj7(13)♭5 / A♭": 1,
+    "6♯9 / G": 1,
+    "add11 / C": 1
+   },
+   "compatibleScaleNames": {
+    "Minor": 1319,
+    "Harmonic Minor": 1325,
+    "Melodic Minor": 1337,
+    "Dorian": 1647,
+    "Phrygian": 1623,
+    "Augmented": 10,
+    "Whole Tone (WT)": 40,
+    "Mixolydian": 905,
+    "Major Pentatonic": 961,
+    "Minor Blues": 309,
+    "Diminished WT": 327,
+    "Major": 1251,
+    "Lydian": 883,
+    "Ionian": 14,
+    "Aeolian": 313,
+    "Locrian ♯2": 59,
+    "Locrian": 115,
+    "Diminished": 106,
+    "Pentatonic Major": 193,
+    "Blues": 74,
+    "Diminished Whole Tone": 89,
+    "Locrian #2": 46,
+    "Enigmatic": 4,
+    "Oriental": 4,
+    "Whole Tone": 5
+   },
+   "modalChordGroups": {
+    "Triad": 2293,
+    "Tetrad": 2293,
+    "Ninth": 2293,
+    "Eleventh": 2293,
+    "Thirteenth": 2293
+   },
+   "durationFraction": {
+    "1/1": 3039,
+    "1/2": 2652,
+    "1/4": 315,
+    "3/2": 71,
+    "3/4": 47,
+    "1/8": 14,
+    "1/16": 2,
+    "3/8": 9
+   },
+   "chordNoteDurationType": {
+    "0": 3039,
+    "1": 71,
+    "2": 2652,
+    "3": 47,
+    "4": 315,
+    "5": 9,
+    "6": 14,
+    "8": 2
+   },
+   "backingRhythmGenreIndex": {
+    "0": 542,
+    "1": 2,
+    "4": 9,
+    "5": 3
+   },
+   "backingRhythmSubGenre": {
+    "-": 366,
+    "Hip Hop Soul": 9,
+    "null": 176,
+    "8ths Hats & Click": 2,
+    "Beat 01 (No Clap)": 3
+   },
+   "instrument": {
+    "Strings": 64,
+    "Grand Piano": 187,
+    "Dream Key": 52,
+    "Guitar": 7,
+    "Electric Piano": 141,
+    "Rhodes": 79,
+    "RnB Pads": 19,
+    "Vibes": 2,
+    "Piano": 5
+   },
+   "instrumentIndex": {
+    "0": 188,
+    "1": 138,
+    "2": 14,
+    "3": 130,
+    "4": 2,
+    "5": 32,
+    "6": 52
+   },
+   "exsfileName": {
+    "StringsA": 64,
+    "GrandPianoC": 187,
+    "DreamKey": 52,
+    "GuitarC": 7,
+    "RhodesB": 141,
+    "RhodesMixA": 79,
+    "DevantePad": 19,
+    "VibeA": 2,
+    "GrandPianoA": 5
+   },
+   "chordPatternIndex": {
+    "0": 421,
+    "1": 132,
+    "4": 1,
+    "5": 2
+   },
+   "chordPatternPlaybackRateIndex": {
+    "0": 233,
+    "1": 291,
+    "2": 14,
+    "3": 18
+   },
+   "tempo": {
+    "58": 1,
+    "60": 3,
+    "62": 1,
+    "64": 1,
+    "65": 1,
+    "68": 1,
+    "70": 1,
+    "71": 1,
+    "72": 5,
+    "75": 2,
+    "76": 1,
+    "78": 1,
+    "79": 1,
+    "80": 5,
+    "82": 2,
+    "83": 2,
+    "84": 3,
+    "85": 4,
+    "87": 1,
+    "88": 2,
+    "90": 25,
+    "91": 2,
+    "92": 4,
+    "93": 1,
+    "94": 4,
+    "95": 6,
+    "96": 1,
+    "97": 6,
+    "98": 2,
+    "99": 1,
+    "100": 13,
+    "102": 1,
+    "103": 2,
+    "104": 5,
+    "105": 2,
+    "106": 4,
+    "107": 2,
+    "108": 2,
+    "109": 4,
+    "110": 3,
+    "111": 1,
+    "112": 4,
+    "114": 1,
+    "115": 1,
+    "118": 1,
+    "119": 3,
+    "120": 339,
+    "122": 1,
+    "123": 6,
+    "124": 2,
+    "125": 6,
+    "126": 4,
+    "127": 1,
+    "128": 4,
+    "129": 2,
+    "130": 18,
+    "131": 1,
+    "132": 6,
+    "133": 4,
+    "134": 1,
+    "135": 2,
+    "136": 3,
+    "138": 1,
+    "140": 4,
+    "141": 1,
+    "144": 1,
+    "145": 1,
+    "149": 1,
+    "150": 1,
+    "152": 1,
+    "154": 1,
+    "164": 1,
+    "180": 1,
+    "209": 1,
+    "250": 1
+   },
+   "key": {
+    "C Minor": 1,
+    "null": 504,
+    "E": 1,
+    "Eb ": 1,
+    "C": 22,
+    "D": 1,
+    "A": 2,
+    "F": 4,
+    "D min": 1,
+    "C Major": 1,
+    "E♭": 2,
+    "A♭": 1,
+    "In all 12 Keys": 1,
+    "": 7,
+    "All Keys": 2,
+    "G": 2,
+    "B Major": 1,
+    "B Major. ": 1,
+    "Any": 1
+   },
+   "keySignatureIndex": {
+    "0": 460,
+    "undefined": 96
+   },
+   "chordsPerPlaylist": {
+    "3": 4,
+    "4": 77,
+    "5": 53,
+    "6": 44,
+    "7": 24,
+    "8": 80,
+    "9": 28,
+    "10": 29,
+    "11": 16,
+    "12": 37,
+    "13": 19,
+    "14": 19,
+    "15": 18,
+    "16": 15,
+    "17": 9,
+    "18": 22,
+    "19": 5,
+    "20": 7,
+    "21": 6,
+    "22": 3,
+    "23": 1,
+    "24": 5,
+    "25": 3,
+    "26": 6,
+    "28": 2,
+    "29": 2,
+    "30": 6,
+    "33": 2,
+    "35": 4,
+    "36": 2,
+    "39": 1,
+    "41": 1,
+    "42": 1,
+    "44": 2,
+    "53": 1,
+    "61": 2
+   },
+   "notesPerChord": {
+    "1": 334,
+    "2": 31,
+    "3": 322,
+    "4": 1122,
+    "5": 2120,
+    "6": 1515,
+    "7": 609,
+    "8": 83,
+    "9": 4,
+    "10": 1,
+    "11": 2,
+    "12": 3,
+    "14": 1,
+    "15": 1,
+    "16": 1
+   },
+   "numberOfChordResults": {
+    "0": 2422,
+    "1": 3,
+    "2": 21,
+    "3": 612,
+    "4": 1128,
+    "5": 1521,
+    "6": 426,
+    "7": 16
+   },
+   "noteChannelNumbers": {
+    "0": 25028,
+    "1": 75,
+    "2": 24,
+    "3": 10,
+    "9": 6247,
+    "10": 16
+   },
+   "intervalTokens": {
+    "1": 24298,
+    "2": 1081,
+    "3": 8034,
+    "4": 5701,
+    "5": 12028,
+    "6": 5756,
+    "7": 3201,
+    "8": 681,
+    "9": 7751,
+    "10": 551,
+    "11": 5861,
+    "13": 2783,
+    "b3": 8597,
+    "b7": 8700,
+    "#5": 6102,
+    "b5": 3488,
+    "b9": 2792,
+    "b13": 2135,
+    "#11": 205,
+    "#9": 424,
+    "bb7": 338,
+    "b6": 10
+   },
+   "modalChordQualityStrings": {
+    "Minor": 6704,
+    "Minor Diminished": 2476,
+    "Major": 6657,
+    "Minor  Dominant 7th": 6619,
+    "Minor Diminished Dominant 7th": 2356,
+    "Major  Major 7th": 4316,
+    "Major  Dominant 7th": 2341,
+    "Minor  Dominant 7th  9th": 4356,
+    "Minor Diminished Dominant 7th ♭ 9th": 2268,
+    "Major  Major 7th  9th": 4310,
+    "Minor  Dominant 7th ♭ 9th": 2263,
+    "Major  Dominant 7th  9th": 2335,
+    "Minor  Dominant 7th  9th  11th": 4350,
+    "Minor Diminished Dominant 7th ♭ 9th  11th": 2180,
+    "Major  Major 7th  9th  11th": 2175,
+    "Minor  Dominant 7th ♭ 9th  11th": 2263,
+    "Major  Major 7th  9th ♯ 11th": 2135,
+    "Major  Dominant 7th  9th  11th": 2260,
+    "Minor  Dominant 7th  9th  11th ♭ 13th": 2175,
+    "Minor Diminished Dominant 7th ♭ 9th  11th ♭ 13th": 2174,
+    "Major  Major 7th  9th  11th  13th": 2175,
+    "Minor  Dominant 7th  9th  11th  13th": 2175,
+    "Minor  Dominant 7th ♭ 9th  11th ♭ 13th": 2175,
+    "Major  Major 7th  9th ♯ 11th  13th": 2135,
+    "Major  Dominant 7th  9th  11th  13th": 2175,
+    "Major Augmented": 166,
+    "Major Augmented Added ♭ 11th": 38,
+    "Major Augmented ♭ 11th ♭ 13th": 76,
+    "Minor  Major 7th": 85,
+    "Major Augmented Major 7th": 90,
+    "Minor Diminished Dominant 7th  9th": 88,
+    "Minor  Major 7th  9th": 85,
+    "Major Augmented Major 7th  9th": 90,
+    "Minor Diminished Dominant 7th  9th  11th": 88,
+    "Minor Diminished Dominant 7th ♭ 9th ♭ 11th": 88,
+    "Minor  Major 7th  9th  11th": 85,
+    "Major Augmented Major 7th  9th ♯ 11th": 84,
+    "Major  Dominant 7th  9th ♯ 11th": 75,
+    "Minor Diminished Dominant 7th  9th  11th ♭ 13th": 88,
+    "Minor Diminished Dominant 7th ♭ 9th ♭ 11th ♭ 13th": 88,
+    "Minor  Major 7th  9th  11th  13th": 79,
+    "Minor  Dominant 7th ♭ 9th  11th  13th": 88,
+    "Major Augmented Major 7th  9th ♯ 11th  13th": 84,
+    "Major  Dominant 7th  9th ♯ 11th  13th": 75,
+    "Major  Dominant 7th  9th  11th ♭ 13th": 85,
+    "Minor Diminished Sixth": 234,
+    "Minor Diminished Sixth Added ♯ 9th": 114,
+    "Minor Diminished Sixth ♯ 9th ♯ 11th": 114,
+    "G𝄪 Major Augmented": 2,
+    "C𝄪 Major Augmented": 2,
+    "G𝄪 Major Augmented Added ♭ 11th": 1,
+    "C𝄪 Major Augmented Added ♭ 11th": 1,
+    "G𝄪 Major Augmented ♭ 11th ♭ 13th": 2,
+    "C𝄪 Major Augmented ♭ 11th ♭ 13th": 2,
+    "F𝄪 Major Augmented": 4,
+    "F𝄪 Major Augmented Added ♭ 11th": 2,
+    "F𝄪 Major Augmented ♭ 11th ♭ 13th": 4,
+    "B𝄫 Major": 47,
+    "B𝄫 Major  Dominant 7th": 7,
+    "B𝄫 Major  Dominant 7th  9th": 7,
+    "B𝄫 Major  Dominant 7th  9th ♯ 11th": 4,
+    "B𝄫 Major  Dominant 7th  9th ♯ 11th  13th": 4,
+    "E𝄫 Minor": 3,
+    "A𝄫 Major": 3,
+    "E𝄫 Minor  Major 7th": 3,
+    "A𝄫 Major  Dominant 7th": 3,
+    "E𝄫 Minor  Major 7th  9th": 3,
+    "A𝄫 Major  Dominant 7th  9th": 3,
+    "E𝄫 Minor  Major 7th  9th  11th": 3,
+    "A𝄫 Major  Dominant 7th  9th ♯ 11th": 3,
+    "B𝄫 Major  Dominant 7th  9th  11th": 3,
+    "E𝄫 Minor  Major 7th  9th  11th  13th": 3,
+    "A𝄫 Major  Dominant 7th  9th ♯ 11th  13th": 3,
+    "B𝄫 Major  Dominant 7th  9th  11th ♭ 13th": 3,
+    "Major  Dominant 7th ♭ 9th": 6,
+    "Major  Major 7th ♯ 9th": 6,
+    "Minor Diminished Sixth Added ♭ 9th": 6,
+    "Major Augmented Major 7th  9th  11th": 6,
+    "Minor  Dominant 7th  9th ♯ 11th": 6,
+    "Major  Dominant 7th ♭ 9th  11th": 6,
+    "Major  Major 7th ♯ 9th ♯ 11th": 6,
+    "Minor Diminished Sixth ♭ 9th ♭ 11th": 6,
+    "Minor  Major 7th  9th  11th ♭ 13th": 6,
+    "Minor Diminished Dominant 7th ♭ 9th  11th  13th": 6,
+    "Major Augmented Major 7th  9th  11th  13th": 6,
+    "Minor  Dominant 7th  9th ♯ 11th  13th": 6,
+    "Major  Dominant 7th ♭ 9th  11th ♭ 13th": 6,
+    "Major  Major 7th ♯ 9th ♯ 11th  13th": 6,
+    "Minor Diminished Sixth ♭ 9th ♭ 11th ♭ 13th": 6,
+    "B𝄫 Minor": 6,
+    "E𝄫 Major": 6,
+    "B𝄫 Minor  Major 7th": 6,
+    "E𝄫 Major  Dominant 7th": 6,
+    "B𝄫 Minor  Major 7th  9th": 6,
+    "E𝄫 Major  Dominant 7th  9th": 6,
+    "B𝄫 Minor  Major 7th  9th  11th": 6,
+    "E𝄫 Major  Dominant 7th  9th ♯ 11th": 6,
+    "B𝄫 Minor  Major 7th  9th  11th  13th": 6,
+    "E𝄫 Major  Dominant 7th  9th ♯ 11th  13th": 6,
+    "B𝄫 Major  Major 7th": 40,
+    "B𝄫 Major  Major 7th  9th": 40,
+    "B𝄫 Major  Major 7th  9th ♯ 11th": 40,
+    "B𝄫 Major  Major 7th  9th ♯ 11th  13th": 40,
+    "A𝄫 Minor Diminished": 2,
+    "B𝄫 Minor Diminished": 3,
+    "A𝄫 Minor Diminished Sixth": 4,
+    "B𝄫 Minor Diminished Sixth": 6,
+    "A𝄫 Minor Diminished Sixth Added ♯ 9th": 2,
+    "B𝄫 Minor Diminished Sixth Added ♯ 9th": 3,
+    "A𝄫 Minor Diminished Sixth ♯ 9th ♯ 11th": 2,
+    "B𝄫 Minor Diminished Sixth ♯ 9th ♯ 11th": 3,
+    "A𝄫 Major Augmented": 1,
+    "A𝄫 Major Augmented Major 7th": 1,
+    "A𝄫 Major Augmented Major 7th  9th": 1,
+    "A𝄫 Major Augmented Major 7th  9th ♯ 11th": 1,
+    "A𝄫 Major Augmented Major 7th  9th ♯ 11th  13th": 1,
+    "F𝄪 Minor Diminished": 1,
+    "F𝄪 Minor Diminished Dominant 7th": 1,
+    "F𝄪 Minor Diminished Dominant 7th ♭ 9th": 1,
+    "F𝄪 Minor Diminished Dominant 7th ♭ 9th  11th": 1,
+    "F𝄪 Minor Diminished Dominant 7th ♭ 9th  11th ♭ 13th": 1,
+    "E𝄫 Major Augmented": 3,
+    "E𝄫 Major Augmented Major 7th": 3,
+    "E𝄫 Major Augmented Major 7th  9th": 3,
+    "E𝄫 Major Augmented Major 7th  9th ♯ 11th": 3,
+    "E𝄫 Major Augmented Major 7th  9th ♯ 11th  13th": 3
+   },
+   "isSlashChord": {
+    "false": 5576,
+    "true": 573
+   },
+   "isChordRest": {
+    "false": 6016,
+    "true": 133
+   },
+   "repeats": 201,
+   "drumsIsActive": {
+    "true": 368,
+    "false": 188
+   },
+   "bassIsActive": {
+    "true": 368,
+    "false": 188
+   },
+   "basslineSettingsDataPresent": 0,
+   "chordExtention": {
+    "5": 12,
+    "7": 135,
+    "56": 1,
+    "null": 1996,
+    "Aug": 8,
+    "9(13)": 139,
+    "min9": 466,
+    "min7": 290,
+    "/ B": 48,
+    "min": 136,
+    "Maj": 229,
+    "6 add omit3": 7,
+    "dim♯5": 6,
+    "7♯5": 57,
+    "min♯5": 30,
+    "min6 add11": 6,
+    "6/9": 32,
+    "6sus4": 19,
+    "sus4♯5": 10,
+    "Maj6": 49,
+    "min7♭5": 79,
+    "min6": 19,
+    "sus4": 14,
+    "": 181,
+    "n.c.": 5,
+    "Maj7": 177,
+    "6/9(no3)♭5": 3,
+    "min(add2)": 15,
+    "min9(11)": 266,
+    "/ D♭": 24,
+    "7(9)": 63,
+    "min♭13": 2,
+    "6/9sus4": 7,
+    "sus4(♭9, ♯5)": 1,
+    "/ C": 43,
+    "/ D": 37,
+    "/ E": 27,
+    "/ B♭": 28,
+    "/ F": 15,
+    "/ G": 39,
+    "/ A": 39,
+    "9sus4": 116,
+    "Maj(add2)": 32,
+    "Maj9sus4": 1,
+    "( omit3, ♯5)": 2,
+    "sus4 add9": 4,
+    "7sus4": 29,
+    "/ F♯": 22,
+    "dim": 17,
+    "13(♭9)": 33,
+    "dim(Maj7)": 5,
+    " add omit3": 5,
+    "7(no3)": 5,
+    "Maj7(no3)": 2,
+    "dim7": 41,
+    "6(♯9, ♭5)": 2,
+    "/ A♭": 34,
+    "/ E♭": 36,
+    "Maj7(13)": 50,
+    "sus2♭5": 1,
+    "min(add2/4)": 3,
+    "sus2": 3,
+    "Maj7sus2": 5,
+    "sus4♭9": 2,
+    "( omit3, ♭5)": 1,
+    "7(♭9)": 44,
+    "Maj(♭5)": 7,
+    "minMaj11♯5": 1,
+    "min7(4)": 8,
+    "sus4(♭5, ♯5)": 1,
+    "min(11, ♯5)": 1,
+    "7♭5": 3,
+    "min6/9": 27,
+    "Maj9": 236,
+    " add11": 1,
+    "min♯11": 1,
+    "7♯9": 16,
+    "9(13)♯11": 18,
+    "Maj9♯11": 2,
+    "7(♯9, ♯5)": 120,
+    "7(♯9, ♭5)": 5,
+    "13sus4": 94,
+    "13♯11": 4,
+    "7(♭9, ♯5)": 66,
+    "13sus2♭5": 6,
+    "min7♭5(11)": 39,
+    "7(♭9, ♯9, ♯5)": 23,
+    "7(♯9)": 14,
+    "7♭13": 2,
+    "minMaj11": 2,
+    "9(♯5)": 8,
+    "9(11)": 8,
+    "13(♯9)": 1,
+    "min11(♭5)": 2,
+    "7(♭5, ♯5)": 1,
+    "13(♭9, ♭5)": 7,
+    "7(♭9, ♭5)": 10,
+    "min9(♭5)": 10,
+    "7♯11": 5,
+    "Maj9(♯11)": 6,
+    "min7(13)": 20,
+    "13(♯11)": 13,
+    "6/9(no3)♯11": 2,
+    "7sus2♯11": 1,
+    "6/9♯11": 2,
+    "min7(13)♭5": 1,
+    "♭13": 1,
+    "9(♯11)": 3,
+    "Maj7♯11": 1,
+    "Maj(add ♭9)": 2,
+    "6/9 Maj(add4)": 1,
+    "13(♭9, ♯11)": 2,
+    "min9(11)♯5": 1,
+    "13sus2": 2,
+    "7sus2": 6,
+    "11♭9": 1,
+    "Maj7♯5": 3,
+    "min7(♭9)": 1,
+    "Maj7(♯11)": 4,
+    "min9(11)♭5": 1,
+    "Maj11": 1,
+    "Maj7♭5": 5,
+    "min7♯5": 6,
+    "6/9(♯11)": 2,
+    "7(♭9, ♯9, ♭5)": 1,
+    "minMaj7(13)": 1,
+    "dimMaj7(13)": 1,
+    "7sus4♭5": 1,
+    "(♭9, ♯5)": 1,
+    "min11♯5": 4,
+    "6 add11": 1,
+    "7sus4(♭5, ♯5)": 1,
+    "(♯9, ♯5)": 1,
+    "7(♯9, ♭13)": 3,
+    "Maj7(♭5, ♯5)": 1,
+    "dim13": 1,
+    "6/9 add11": 5,
+    "( omit3, ♭9)": 1,
+    "Maj9(13)": 13,
+    "min6♯5": 1,
+    "min7♭13": 7,
+    "7(♯9, ♯11)": 2,
+    "min(♭9, 11, ♯5)": 1,
+    "6 Maj(add4)": 2,
+    "/ C♯": 1,
+    "/ G♯": 1,
+    "7 add omit3": 1,
+    "min(Maj7)": 2,
+    "7(♭9, ♭13)": 1,
+    "min7(♭5, ♭9)": 1,
+    "6/9(no3)": 1
+   },
+   "genreField": {}
+  },
+  "sheetmusic": {
+   "proficiencyItemLevel": {
+    "0": 15,
+    "1": 92,
+    "2": 1
+   },
+   "instrument": {
+    "Piano": 108
+   },
+   "instrumentIndex": {
+    "0": 103,
+    "3": 3,
+    "7": 1,
+    "8": 1
+   },
+   "key": {
+    "C": 19,
+    "D major, B minor": 7,
+    "C major, A minor": 5,
+    "C major, D minor": 1,
+    "G major, E minor": 4,
+    "B♭ major, G minor": 5,
+    "F major, D minor": 4,
+    "": 21,
+    "E major, C♯ minor": 1,
+    "G maj": 1,
+    "A major, F♯ minor": 1,
+    "F major": 6,
+    "E♭ major, C minor": 1,
+    "A♭ major, F minor": 3,
+    "Fmajor, D minor": 1,
+    "D♭ major": 2,
+    "C maj / A min": 6,
+    "B♭ major": 7,
+    "E♭ Major": 2,
+    "B♭ Major": 1,
+    "A♭ major": 1,
+    "E♭ major": 4,
+    "C major": 1,
+    "D minor": 2,
+    "C minor": 1,
+    "G major": 1
+   },
+   "tempo": {
+    "0": 6,
+    "36": 1,
+    "43": 1,
+    "46": 1,
+    "48": 1,
+    "55": 1,
+    "56": 1,
+    "60": 6,
+    "62": 1,
+    "65": 1,
+    "68": 1,
+    "70": 1,
+    "75": 2,
+    "80": 4,
+    "86": 1,
+    "87": 1,
+    "90": 4,
+    "93": 1,
+    "100": 7,
+    "106": 1,
+    "120": 17,
+    "123": 1,
+    "125": 1,
+    "129": 1,
+    "130": 1,
+    "133": 1,
+    "140": 3,
+    "141": 3,
+    "146": 1,
+    "150": 3,
+    "152": 1,
+    "157": 1,
+    "160": 6,
+    "166": 2,
+    "168": 1,
+    "170": 5,
+    "173": 2,
+    "177": 1,
+    "180": 2,
+    "181": 3,
+    "185": 1,
+    "190": 5,
+    "191": 1,
+    "200": 1,
+    "208": 1
+   },
+   "timeConstantMultiplier": {
+    "0": 40,
+    "2": 68
+   },
+   "reverbPresetIndex": {
+    "0": 98,
+    "3": 2,
+    "4": 5,
+    "5": 1,
+    "6": 1,
+    "7": 1
+   },
+   "exsInstrumentBassFileName": {
+    "No File Selected": 24,
+    "null": 19,
+    "DoubleBassC": 61,
+    "BassBouquetCombo": 1,
+    "808Bass01": 3
+   },
+   "exsInstrumentDrumsFileName": {
+    "No File Selected": 25,
+    "null": 19,
+    "JazzDrumsA": 39,
+    "JazzDrumsBrushesA": 1,
+    "Jimindorothy Kit": 6,
+    "SalsaPercussionB": 18
+   },
+   "noteSizeIndex": {
+    "0": 108
+   },
+   "showNoteLetterIndex": {
+    "0": 108
+   },
+   "middleCSplitPointNumber": {
+    "0": 108
+   },
+   "cursorHeightMultiplier": {
+    "1": 84,
+    "0.8999999761581421": 8,
+    "1.0499999523162842": 1,
+    "0.800000011920929": 1,
+    "0.699999988079071": 1,
+    "0.8399999737739563": 1,
+    "1.2000000476837158": 2,
+    "1.100000023841858": 6,
+    "1.5": 1,
+    "1.1299999952316284": 1,
+    "0.8500000238418579": 2
+   },
+   "repeatBarsEnabled": {
+    "false": 68,
+    "undefined": 26,
+    "true": 14
+   },
+   "chordProgressionNonEmpty": 0,
+   "midiTracks": {
+    "3": 43,
+    "4": 1,
+    "5": 64
+   },
+   "midiFormat": {
+    "1": 108
+   },
+   "trackNames": {
+    "1": 1,
+    "6": 1,
+    "null": 110,
+    "Track 1": 50,
+    "Track 2": 50,
+    "Easy_Songs__Jingle_Bells": 2,
+    "Easy_Songs__Greensleeves": 2,
+    "Piano": 7,
+    "Easy_Songs__Brahms_Lullaby": 2,
+    "Easy_Songs__Silent_Night": 2,
+    "Schubert__Serenade_in_D_minor": 2,
+    "Mozart__Sonata_K.545_in_C_major": 2,
+    "Bach__Musette_in_D_major": 2,
+    "Beethoven__Moonlight_Sonata": 2,
+    "Satie__Gymnopedie_No._1": 2,
+    "Brahms__Waltz_No._9_in_D_minor": 2,
+    "Bach__Minuet_in_G_major": 2,
+    "Brahms__Hungarian_Dance_No._5": 2,
+    "Pachelbel__Canon_in_D_major": 2,
+    "Rebikov__Valse_Melancolique_Op._2_No._3": 2,
+    "Studio Grand": 8,
+    "Chopin__Prelude_Op._28_No._20_in_C_minor": 2,
+    "Mozart__Rondo_Alla_Turca": 2,
+    "Brahms__Waltz_No._15_in_A-flat_major": 2,
+    "Handel__Sarabande_in_D_minor": 2,
+    "Borodin__Polovstian_Dance": 2,
+    "Chopin__Minute_Waltz_Op._64_No._1_in_D-flat_major": 2,
+    "Bach__Prelude_in_C_major": 2,
+    "Strauss__The_Blue_Danube_Waltz": 2,
+    "Prokofiev__Peter_and_the_Wolf": 2,
+    "Tchaikovsky__Nutcracker_-_Dance_of_the_Sugar_Plum_Fairies": 2,
+    "up:VA": 1,
+    "down:": 1,
+    "Puccini__O_Mio_Babbino_Caro": 2,
+    "Jazz Piano Practice Session - Shell Voicings.5": 3,
+    "JazzDrumsA": 37,
+    "Melodyne #1": 12,
+    "II V I with Open Voicings.19 (Bass)": 3,
+    "Minor II V I With Open Voicings.3 (Bass)": 1,
+    "Inst 1": 4,
+    "DoubleBassC": 8,
+    "II V I with Open Voicings.21 (Bass)": 1,
+    "Minor II V I With Open Voicings.7 (Bass)": 1,
+    "D.min9": 2,
+    "Acoustic Grand Piano": 2,
+    "Latin Drums": 1,
+    "II V I with Open Voicings.23 (Bass)": 1,
+    "How to play 2-5-1 in Minor Keys Jazz Piano Lesson (part 2).4 (Bass)": 1,
+    "GrandPianoC": 10,
+    "How to Use Bebop for Modern Improvisation - Bebop Part 2.9 (Bass)": 1,
+    "2 5 1 Jazz Licks To Practice In 12keys 16.1 (Bass)": 1,
+    "10-Step Jazz Piano Improvisation Exercise Shapes. Herbie Hancock Line #jazztutorial.2 (Bass)": 1,
+    "Giant Steps Backing Track (BPM 180).2 (Bass)": 3,
+    "Rhythm Changes Bb Backing Track Swing 180 bpm Brushes - FULL BAND.2 (Bass)": 2,
+    "005-DoubleBassC": 1,
+    "Bebop Lines You Should Know No.21 (Bill Evans) | Sheet Music | 12-Key Workout | Backing Track.2 (Bass)": 1,
+    "Pno.": 1,
+    "Bebop Piano Workout - 11 Best Exercises to Improve Soloing Technique - Bebop Part 3.2 (Bass)": 1,
+    "ii-7b5 V7alt i minor killer improv hack.3 (Bass)": 1,
+    "All the things you are b2.2 (Bass)": 1,
+    "Chord Tone Etude": 2,
+    "There Will Never Be Another You  200 bpm  Jazz Swing  Play-Along Backing Track.1 (Bass)": 1,
+    "PIANO": 2,
+    "Jazz Backing Track  II-V-I  C major.2 (Bass)": 1,
+    "All The Things You Are   180 bpm   Bass & Drums Only   Jazz Swing   Play-Along Backing Track.1 (Bass)": 1,
+    "There Will Never Be Another You  200 bpm  Jazz Swing  Play-Along Backing Track.2 (Bass)": 1,
+    "Body and Soul   80 bpm   Bass & Drums Only   Play-Along Backing Track.1 (Bass)": 1,
+    "0:03": 1,
+    "How to play 2-5-1 in Minor Keys Jazz Piano Lesson (part 2).2 (Bass)": 1,
+    "Someday My Prince Will Come   200 bpm   Bass & Drums Only   Play-Along Backing Track.1 (Bass)": 1,
+    "lower:": 4,
+    "lower": 1,
+    "upper:": 3,
+    "Untitled.1 (Bass)": 1,
+    "Jimindorothy Kit": 6,
+    "Inst 5": 1,
+    "808Bass02": 2,
+    "Classic Electric Piano": 2,
+    "RnBChordsNo1 (Bass).2": 1,
+    "DevantePad": 2,
+    "Demo.2 (Bass)": 1,
+    "Conga": 18,
+    "Key of C.1 (Bass)": 1,
+    "PIANO SALSA   MONTUNO EN Dm.2 (Bass).1": 1,
+    "SAMPLE GUARACHA 1 (clave 2-3).2 (Bass)": 1,
+    "Tumbao # 5 - Piano - Como tocar tumbaos en el piano.1 (Bass)": 1,
+    "Tumbao 2-3 (Tumbao Base).2 (Bass)": 1,
+    "BASIC-PRACTICE-2---Va-monos-pal-Monte---clave-2-3 RH": 1,
+    "BASIC-PRACTICE-2---Va-monos-pal-Monte---clave-2-3 LH": 1,
+    "practice_1.1 (Bass)": 1,
+    "Salsa Piano Montuno from the book Salsa and Afro Cuban Montunos for PianoKeyboards.1 (Bass)": 1,
+    " MONTUNO DE LA SEMANA NÂº80   Â¿Sabes que cancioÌn es   pianosalsa.com  #pianosalsa.3 (Bass)": 1,
+    "DESCARGA 1": 2,
+    "Practice.5 (Bass)": 1,
+    "PnNo.": 1,
+    "Ex 1/ Guajira I IV V IV I (Do Mayor).3 (Bass)_bip": 1,
+    "Bass": 1,
+    "Track 3": 1,
+    "Here is the goal.1 (Bass)": 1,
+    "Practice.1 (Bass)": 1
+   },
+   "timeSigs": {
+    "4/4": 84,
+    "3/4": 16,
+    "2/4": 6,
+    "12/8": 1,
+    "6/8": 1
+   },
+   "detailDescriptionHasMarkdown": 16,
+   "items": 108
+  },
+  "schema": {
+   "chordPackKeys": [
+    "$class",
+    "dateCreated",
+    "highlights",
+    "imageData",
+    "infoText",
+    "isPurchased",
+    "isStorePack",
+    "isUserCreated",
+    "playlists",
+    "selectedImageIndex",
+    "sku",
+    "subtitle",
+    "title",
+    "versionNumber",
+    "videoData"
+   ],
+   "playlistKeys": [
+    "$class",
+    "author",
+    "backingRhythmGenreIndex",
+    "backingRhythmSubGenre",
+    "bassIsActive",
+    "basslineSettingsData",
+    "chordBackingMuteIsActive",
+    "chordModelsData",
+    "chordPatternIndex",
+    "chordPatternPlayOnKeyboard",
+    "chordPatternPlaybackRateIndex",
+    "chordProgression",
+    "dateCreated",
+    "detailDescription",
+    "drumsIsActive",
+    "exsfileName",
+    "genre",
+    "instrument",
+    "instrumentIndex",
+    "isFavorite",
+    "isMinorKeySignature",
+    "isPurchased",
+    "isStorePack",
+    "key",
+    "keySignatureIndex",
+    "midiData",
+    "tempo",
+    "title",
+    "versionNumber"
+   ],
+   "chordModelKeys": [
+    "$class",
+    "bassNoteColorRGBAs",
+    "channel",
+    "chordExtention",
+    "chordIntervalResults",
+    "chordNoteDurationType",
+    "chordResults",
+    "compatibleModalChords",
+    "compatibleScales",
+    "displayIndex",
+    "duration",
+    "durationFraction",
+    "durationFractionFloat",
+    "endRepeatCount",
+    "index",
+    "isACopy",
+    "isChordRest",
+    "isDisplayIndexSwapped",
+    "isEndRepeat",
+    "isSlashChord",
+    "isStartRepeat",
+    "melodyNoteColorRGBAs",
+    "midiNumbers",
+    "modeName",
+    "name",
+    "noteChannelNumbers",
+    "noteColourIndex",
+    "numberOfChordResults",
+    "numberOfSemitones",
+    "primaryScaleNotes",
+    "releaseVelocity",
+    "rootNoteName",
+    "shouldAddEndRepeat",
+    "shouldAddStartRepeat",
+    "slashCount",
+    "splitPointNumber",
+    "startRepeatCount",
+    "startRepeatIndex",
+    "tickCount",
+    "timeStamp",
+    "track1MidiNumbers",
+    "track2MidiNumbers",
+    "transpose"
+   ],
+   "sheetMusicPackKeys": [
+    "$class",
+    "dateCreated",
+    "imageData",
+    "infoText",
+    "initialContentCount",
+    "isPurchased",
+    "isStorePack",
+    "isUserCreated",
+    "pData",
+    "price",
+    "productID",
+    "proficiencyPackLevel",
+    "selectedImageIndex",
+    "sheetMusicItems",
+    "sku",
+    "sortOrder",
+    "title",
+    "versionNumber",
+    "videoData",
+    "videoHasAudio"
+   ],
+   "sheetMusicItemKeys": [
+    "$class",
+    "author",
+    "chordProgression",
+    "cursorHeightMultiplier",
+    "dateCreated",
+    "detailDescription",
+    "exsInstrumentBassFileName",
+    "exsInstrumentDrumsFileName",
+    "genre",
+    "instrument",
+    "instrumentIndex",
+    "isFavorite",
+    "isPurchased",
+    "isStorePack",
+    "isUserCreated",
+    "key",
+    "lowerStaveClefIndex",
+    "middleCSplitPointNumber",
+    "midiData",
+    "noteSizeIndex",
+    "proficiencyItemLevel",
+    "repeatBarsData",
+    "repeatBarsEnabled",
+    "reverbPresetIndex",
+    "reverbWetDryMixAmount",
+    "showNoteLetterIndex",
+    "subtitle",
+    "swingClefTarget",
+    "swingPresetIndex",
+    "tempo",
+    "timeConstantMultiplier",
+    "title",
+    "upperStaveClefIndex",
+    "versionNumber"
+   ]
+  }
+ }
+}

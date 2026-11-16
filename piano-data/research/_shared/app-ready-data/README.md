@@ -2,7 +2,7 @@
 
 These are data and facts from the installed Dorico 6.2.31 and Flat 26.11.0, cleaned into small JSON files that can be used directly. Each file's use in Piano Trainer is noted below.
 
-**Excluded on purpose:** proprietary media and writing (icons, GIFs, sounds, tutorial and onboarding text, Flat's sentences). See `~/Downloads/research/dorico/RESOURCES_CATALOGUE.md`.
+**Excluded on purpose:** proprietary media and writing (icons, GIFs, sounds, tutorial and onboarding text, Flat's sentences). See `piano-data/research/dorico/RESOURCES_CATALOGUE.md`.
 
 | File | Contents | From | Use in Piano Trainer |
 |---|---|---|---|
@@ -26,5 +26,5 @@ These are data and facts from the installed Dorico 6.2.31 and Flat 26.11.0, clea
 - **Fonts and sounds:** take them from their upstream sources (see `RESOURCES_CATALOGUE.md`).
 
 **Fuller references:**
-- `~/Downloads/research/dorico/`: options, settings, palettes, UI flow, comparison with Piano Trainer.
-- `~/Downloads/research/flat/`: Flat's shell and motion, settings, tools, flows, onboarding, player, libraries.
+- `piano-data/research/dorico/`: options, settings, palettes, UI flow, comparison with Piano Trainer.
+- `piano-data/research/flat/`: Flat's shell and motion, settings, tools, flows, onboarding, player, libraries.

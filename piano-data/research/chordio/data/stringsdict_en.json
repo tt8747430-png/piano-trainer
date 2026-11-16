@@ -1,0 +1,119 @@
+{
+ "%ld sources": {
+  "value": {
+   "one": "%ld source",
+   "other": "%ld sources",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%lu inputs": {
+  "value": {
+   "one": "%lu input",
+   "other": "%lu inputs",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld notes": {
+  "value": {
+   "one": "%ld note",
+   "other": "%ld notes",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%lu outputs": {
+  "value": {
+   "one": "%lu output",
+   "other": "%lu outputs",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "Passthrough · %lu outputs": {
+  "value": {
+   "one": "Passthrough · %lu output",
+   "other": "Passthrough · %lu outputs",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld chords": {
+  "value": {
+   "one": "%ld chord",
+   "other": "%ld chords",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "Items: %lu": {
+  "value": {
+   "one": "Items: %lu",
+   "other": "Items: %lu",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld More Scores Inside": {
+  "value": {
+   "one": "%ld More Score Inside",
+   "other": "%ld More Scores Inside",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "Enable any combination of inputs to play with several MIDI keyboards at once. %lu inputs active.": {
+  "value": {
+   "one": "Enable any combination of inputs to play with several MIDI keyboards at once. %lu input active.",
+   "other": "Enable any combination of inputs to play with several MIDI keyboards at once. %lu inputs active.",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld ports": {
+  "value": {
+   "one": "%ld port",
+   "other": "%ld ports",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld with backing tracks": {
+  "value": {
+   "one": "%ld with a backing track",
+   "other": "%ld with backing tracks",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%ld scores": {
+  "value": {
+   "one": "%ld score",
+   "other": "%ld scores",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "ld"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ },
+ "%lu active": {
+  "value": {
+   "one": "%lu active",
+   "other": "%lu active",
+   "NSStringFormatSpecTypeKey": "NSStringPluralRuleType",
+   "NSStringFormatValueTypeKey": "lu"
+  },
+  "NSStringLocalizedFormatKey": "%#@value@"
+ }
+}

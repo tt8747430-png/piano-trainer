@@ -1,0 +1,752 @@
+{
+ "abseil-cpp": [
+  "Apache-2.0",
+  "other"
+ ],
+ "accessibility": [
+  "BSD",
+  "other"
+ ],
+ "angle": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "ansicolor": [
+  "Apache-2.0"
+ ],
+ "app_links": [
+  "Apache-2.0"
+ ],
+ "app_links_linux": [
+  "Apache-2.0"
+ ],
+ "app_links_platform_interface": [
+  "Apache-2.0"
+ ],
+ "app_links_web": [
+  "Apache-2.0"
+ ],
+ "archive": [
+  "MIT"
+ ],
+ "args": [
+  "BSD"
+ ],
+ "async": [
+  "BSD"
+ ],
+ "audioplayers": [
+  "MIT"
+ ],
+ "audioplayers_android": [
+  "MIT"
+ ],
+ "audioplayers_darwin": [
+  "MIT"
+ ],
+ "audioplayers_linux": [
+  "MIT"
+ ],
+ "audioplayers_platform_interface": [
+  "MIT"
+ ],
+ "audioplayers_web": [
+  "MIT"
+ ],
+ "audioplayers_windows": [
+  "MIT"
+ ],
+ "benchmark": [
+  "Apache-2.0"
+ ],
+ "bluez": [
+  "other"
+ ],
+ "boolean_selector": [
+  "BSD"
+ ],
+ "boringssl": [
+  "Apache-2.0"
+ ],
+ "brotli": [
+  "MIT",
+  "other"
+ ],
+ "ceval": [
+  "MIT"
+ ],
+ "characters": [
+  "BSD"
+ ],
+ "checked_yaml": [
+  "BSD"
+ ],
+ "cli_util": [
+  "BSD"
+ ],
+ "clock": [
+  "Apache-2.0"
+ ],
+ "code_assets": [
+  "BSD"
+ ],
+ "collection": [
+  "BSD"
+ ],
+ "convert": [
+  "BSD"
+ ],
+ "cpu_features": [
+  "Apache-2.0",
+  "BSD"
+ ],
+ "cross_file": [
+  "BSD"
+ ],
+ "crypto": [
+  "BSD"
+ ],
+ "csslib": [
+  "BSD"
+ ],
+ "cupertino_icons": [
+  "MIT"
+ ],
+ "dart": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "dart_jsonwebtoken": [
+  "MIT"
+ ],
+ "dawn": [
+  "other"
+ ],
+ "dbus": [
+  "other"
+ ],
+ "device_manager": [
+  "MIT"
+ ],
+ "devtools": [
+  "BSD",
+  "other"
+ ],
+ "double-conversion": [
+  "BSD"
+ ],
+ "equatable": [
+  "MIT"
+ ],
+ "etc1": [
+  "Apache-2.0"
+ ],
+ "etc_decoder": [
+  "MIT"
+ ],
+ "expat": [
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "fake_async": [
+  "Apache-2.0"
+ ],
+ "fallback_root_certificates": [
+  "other"
+ ],
+ "ffi": [
+  "BSD"
+ ],
+ "ffx_spd": [
+  "MIT"
+ ],
+ "fiat": [
+  "Apache-2.0"
+ ],
+ "file": [
+  "BSD"
+ ],
+ "firebase_core": [
+  "BSD"
+ ],
+ "firebase_core_platform_interface": [
+  "BSD"
+ ],
+ "firebase_core_web": [
+  "BSD"
+ ],
+ "fixnum": [
+  "BSD"
+ ],
+ "flatbuffers": [
+  "Apache-2.0"
+ ],
+ "flutter": [
+  "BSD",
+  "other"
+ ],
+ "flutter_launcher_icons": [
+  "MIT"
+ ],
+ "flutter_lints": [
+  "BSD"
+ ],
+ "flutter_local_notifications": [
+  "BSD"
+ ],
+ "flutter_local_notifications_linux": [
+  "BSD"
+ ],
+ "flutter_local_notifications_platform_interface": [
+  "BSD"
+ ],
+ "flutter_local_notifications_web": [
+  "BSD"
+ ],
+ "flutter_local_notifications_windows": [
+  "BSD"
+ ],
+ "flutter_midi_command": [
+  "BSD"
+ ],
+ "flutter_midi_command_linux": [
+  "BSD"
+ ],
+ "flutter_midi_command_platform_interface": [
+  "BSD"
+ ],
+ "flutter_midi_command_windows": [
+  "BSD"
+ ],
+ "flutter_native_splash": [
+  "MIT"
+ ],
+ "flutter_timezone": [
+  "Apache-2.0"
+ ],
+ "flutter_web_bluetooth": [
+  "MIT"
+ ],
+ "freetype2": [
+  "BSD",
+  "MIT",
+  "other",
+  "zlib-like"
+ ],
+ "fuchsia_sdk": [
+  "Apache-2.0",
+  "BSD",
+  "MIT"
+ ],
+ "functions_client": [
+  "MIT"
+ ],
+ "glfw": [
+  "MIT",
+  "other",
+  "zlib-like"
+ ],
+ "glslang": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "google_identity_services_web": [
+  "BSD"
+ ],
+ "google_sign_in": [
+  "BSD"
+ ],
+ "google_sign_in_android": [
+  "BSD"
+ ],
+ "google_sign_in_ios": [
+  "BSD"
+ ],
+ "google_sign_in_platform_interface": [
+  "BSD"
+ ],
+ "google_sign_in_web": [
+  "BSD"
+ ],
+ "gotrue": [
+  "MIT"
+ ],
+ "gtest-parallel": [
+  "Apache-2.0"
+ ],
+ "gtk": [
+  "other"
+ ],
+ "harfbuzz": [
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "hooks": [
+  "BSD"
+ ],
+ "html": [
+  "MIT"
+ ],
+ "http": [
+  "BSD"
+ ],
+ "http_parser": [
+  "BSD"
+ ],
+ "icu": [
+  "MIT",
+  "Unicode",
+  "other"
+ ],
+ "image": [
+  "MIT"
+ ],
+ "include": [
+  "MIT",
+  "other",
+  "zlib-like"
+ ],
+ "inja": [
+  "MIT"
+ ],
+ "io": [
+  "BSD",
+  "other"
+ ],
+ "jni": [
+  "BSD"
+ ],
+ "jni_flutter": [
+  "BSD"
+ ],
+ "json": [
+  "Apache-2.0",
+  "MIT",
+  "other"
+ ],
+ "json_annotation": [
+  "BSD"
+ ],
+ "jwt_decode": [
+  "BSD"
+ ],
+ "khronos": [
+  "MIT"
+ ],
+ "leak_tracker": [
+  "BSD"
+ ],
+ "leak_tracker_flutter_testing": [
+  "BSD"
+ ],
+ "leak_tracker_testing": [
+  "BSD"
+ ],
+ "libXNVCtrl": [
+  "MIT"
+ ],
+ "libcxx": [
+  "Apache-2.0",
+  "MIT"
+ ],
+ "libcxxabi": [
+  "Apache-2.0",
+  "MIT"
+ ],
+ "libjpeg-turbo": [
+  "BSD",
+  "other",
+  "zlib-like"
+ ],
+ "libjxl": [
+  "other"
+ ],
+ "libpng": [
+  "other"
+ ],
+ "libtess2": [
+  "MIT",
+  "zlib-like"
+ ],
+ "libwebp": [
+  "BSD",
+  "other"
+ ],
+ "lints": [
+  "BSD"
+ ],
+ "llvm_libc": [
+  "Apache-2.0",
+  "MIT"
+ ],
+ "logging": [
+  "BSD"
+ ],
+ "lunarg-vulkantools": [
+  "Apache-2.0",
+  "other"
+ ],
+ "matcher": [
+  "BSD"
+ ],
+ "material_color_utilities": [
+  "Apache-2.0"
+ ],
+ "meta": [
+  "BSD"
+ ],
+ "midi": [
+  "BSD"
+ ],
+ "mime": [
+  "BSD"
+ ],
+ "node_preamble": [
+  "BSD",
+  "MIT"
+ ],
+ "objective_c": [
+  "BSD"
+ ],
+ "package_config": [
+  "BSD"
+ ],
+ "package_info_plus": [
+  "BSD"
+ ],
+ "package_info_plus_platform_interface": [
+  "BSD"
+ ],
+ "passkeys_platform_interface": [
+  "BSD"
+ ],
+ "path": [
+  "BSD"
+ ],
+ "path_provider": [
+  "BSD"
+ ],
+ "path_provider_android": [
+  "BSD"
+ ],
+ "path_provider_foundation": [
+  "BSD"
+ ],
+ "path_provider_linux": [
+  "BSD"
+ ],
+ "path_provider_platform_interface": [
+  "BSD"
+ ],
+ "path_provider_windows": [
+  "BSD"
+ ],
+ "perfetto": [
+  "Apache-2.0",
+  "other"
+ ],
+ "petitparser": [
+  "MIT"
+ ],
+ "platform": [
+  "BSD"
+ ],
+ "plugin_platform_interface": [
+  "BSD"
+ ],
+ "pointycastle": [
+  "MIT"
+ ],
+ "posix": [
+  "MIT"
+ ],
+ "postgrest": [
+  "MIT"
+ ],
+ "process": [
+  "BSD"
+ ],
+ "process_runner": [
+  "BSD",
+  "other"
+ ],
+ "pub_semver": [
+  "BSD"
+ ],
+ "purchases_flutter": [
+  "MIT"
+ ],
+ "rapidjson": [
+  "MIT",
+  "other"
+ ],
+ "re2": [
+  "BSD",
+  "other"
+ ],
+ "realtime_client": [
+  "MIT"
+ ],
+ "record_use": [
+  "BSD"
+ ],
+ "retry": [
+  "Apache-2.0"
+ ],
+ "rxdart": [
+  "Apache-2.0"
+ ],
+ "shaderc": [
+  "Apache-2.0"
+ ],
+ "share_plus": [
+  "BSD"
+ ],
+ "share_plus_platform_interface": [
+  "BSD"
+ ],
+ "shared_preferences": [
+  "BSD"
+ ],
+ "shared_preferences_android": [
+  "BSD"
+ ],
+ "shared_preferences_foundation": [
+  "BSD"
+ ],
+ "shared_preferences_linux": [
+  "BSD"
+ ],
+ "shared_preferences_platform_interface": [
+  "BSD"
+ ],
+ "shared_preferences_web": [
+  "BSD"
+ ],
+ "shared_preferences_windows": [
+  "BSD"
+ ],
+ "sign_in_with_apple": [
+  "MIT"
+ ],
+ "sign_in_with_apple_platform_interface": [
+  "MIT"
+ ],
+ "sign_in_with_apple_web": [
+  "MIT"
+ ],
+ "skia": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "source_span": [
+  "BSD"
+ ],
+ "spirv-cross": [
+  "Apache-2.0",
+  "MIT",
+  "other"
+ ],
+ "spirv-tools": [
+  "Apache-2.0",
+  "MIT"
+ ],
+ "spring_animation": [
+  "MIT",
+  "other"
+ ],
+ "sqlite": [
+  "other"
+ ],
+ "stack_trace": [
+  "BSD"
+ ],
+ "storage_client": [
+  "MIT"
+ ],
+ "stream_channel": [
+  "BSD"
+ ],
+ "string_scanner": [
+  "BSD"
+ ],
+ "supabase": [
+  "MIT"
+ ],
+ "supabase_flutter": [
+  "MIT"
+ ],
+ "swiftshader": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "sync_http": [
+  "BSD"
+ ],
+ "synchronized": [
+  "MIT"
+ ],
+ "term_glyph": [
+  "BSD"
+ ],
+ "test_api": [
+  "BSD"
+ ],
+ "test_shaders": [
+  "MIT"
+ ],
+ "timezone": [
+  "BSD"
+ ],
+ "tonic": [
+  "BSD",
+  "other"
+ ],
+ "tuple": [
+  "BSD"
+ ],
+ "typed_data": [
+  "BSD"
+ ],
+ "universal_ble": [
+  "BSD"
+ ],
+ "universal_io": [
+  "Apache-2.0"
+ ],
+ "url_launcher": [
+  "BSD"
+ ],
+ "url_launcher_android": [
+  "BSD"
+ ],
+ "url_launcher_ios": [
+  "BSD"
+ ],
+ "url_launcher_linux": [
+  "BSD"
+ ],
+ "url_launcher_macos": [
+  "BSD"
+ ],
+ "url_launcher_platform_interface": [
+  "BSD"
+ ],
+ "url_launcher_web": [
+  "BSD"
+ ],
+ "url_launcher_windows": [
+  "BSD"
+ ],
+ "uuid": [
+  "MIT"
+ ],
+ "vector_math": [
+  "BSD"
+ ],
+ "vm_service": [
+  "BSD"
+ ],
+ "volk": [
+  "MIT"
+ ],
+ "vulkan": [
+  "BSD",
+  "other"
+ ],
+ "vulkan-deps": [
+  "other"
+ ],
+ "vulkan-headers": [
+  "Apache-2.0",
+  "other"
+ ],
+ "vulkan-tools": [
+  "Apache-2.0",
+  "other"
+ ],
+ "vulkan-utility-libraries": [
+  "Apache-2.0",
+  "other"
+ ],
+ "vulkan-validation-layers": [
+  "Apache-2.0",
+  "BSD",
+  "MIT",
+  "other"
+ ],
+ "vulkan_memory_allocator": [
+  "MIT"
+ ],
+ "wakelock_plus": [
+  "BSD"
+ ],
+ "wakelock_plus_platform_interface": [
+  "BSD"
+ ],
+ "web": [
+  "BSD"
+ ],
+ "web_locale_keymap": [
+  "MIT"
+ ],
+ "web_socket": [
+  "BSD"
+ ],
+ "web_socket_channel": [
+  "BSD"
+ ],
+ "web_test_fonts": [
+  "other"
+ ],
+ "webdriver": [
+  "Apache-2.0"
+ ],
+ "win32": [
+  "BSD"
+ ],
+ "wuffs": [
+  "Apache-2.0"
+ ],
+ "wycheproof_testvectors": [
+  "Apache-2.0"
+ ],
+ "xdg_directories": [
+  "BSD"
+ ],
+ "xml": [
+  "MIT"
+ ],
+ "xxhash": [
+  "BSD",
+  "other"
+ ],
+ "yaml": [
+  "MIT"
+ ],
+ "yapf": [
+  "Apache-2.0"
+ ],
+ "yapf_diff": [
+  "Apache-2.0"
+ ],
+ "yet_another_json_isolate": [
+  "MIT"
+ ],
+ "zlib": [
+  "other",
+  "zlib-like"
+ ]
+}

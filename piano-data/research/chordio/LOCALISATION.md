@@ -1,0 +1,9 @@
+# Localisation
+
+- **App locales** (`*.lproj`, **exact**): `en` (en-GB overrides, 280 strings), `en-US` (152 overrides), `de`, `es`, `fr`, `ja`, `zh-Hans` (2525 strings each), and `Base` (LaunchScreen). Each locale also has `Localizable.stringsdict` (13 plural rules) and `InfoPlist.strings`.
+- **Russian: not present in the app.** The only `ru.lproj` is inside `LinkKitResources.bundle` (Ableton's Link settings UI, 18 strings, also in de/es/fr/it/ja/zh). **exact**.
+- **Key scheme**: keys are the base US-English source strings, so the full English table is the union of keys. A few keys are symbolic: `scaleSteps.half`, `midiImport.advanced`, `keySelection.keyName`, `keySelection.accidentalSummary`, `harmony.detectedScale`. The `en` table is a British respelling layer: colour, analyse, catalogue, semitone/tone for half/whole step, Bar Numbers for Measure Numbers, Semibreve (1/1) for Whole Note, Quaver Swing, Bin for Trash, Stave for Staff. The en-US table holds plain US values for a subset. **exact**.
+- **Full English table**: `data/strings_en.json`, 2525 keys, each with `en_GB` and `en_US` override values (null = key used verbatim). Plurals are in `data/stringsdict_en.json`: `%ld chords`, `%ld More Scores Inside`, `%ld notes`, `%ld ports` and 9 others.
+- Translator comments are embedded in the binary, e.g. "Harmony Explorer: cadence name; keep the Roman numerals in brackets as they are" and "Harmony Explorer: mood of a chord progression (one lower-case adjective, shown after its name)". **exact**.
+- Note-name localisation is a separate setting, independent of UI language: English / German / French (Ut Ré Mi…) / Do Re Mi fixed-Do / Solfège. Interval names can be "Localized (e.g. Quinta Justa)".
+- Some UI text is not localised: debug and log strings, and the "Chord Pack Creator" developer screen.

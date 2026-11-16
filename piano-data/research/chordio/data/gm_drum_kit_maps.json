@@ -1,0 +1,3043 @@
+{
+ "note": "GM note -> FluidR3 GM sample file per kit, from Chordio kit.json manifests (factual mapping; samples exported under MIT in export/GM Drum Kits)",
+ "kits": {
+  "Brush": {
+   "source_instrument": "Hi Hats Treb",
+   "bank": 128,
+   "program": 40,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Std Kick 7_L_.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Std Kick 7_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Brush Snr 1_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Brush Swirl_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "Low Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "Low Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a70.wav",
+     "atten": 70,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "Md Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "MdHi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "Hi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "Electronic": {
+   "source_instrument": "Hi Hats",
+   "bank": 128,
+   "program": 24,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Elec Kick1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Elec Kick2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Electronic Snr 1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Electronic Snr 2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": -4
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": -2
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": 2
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": 6
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "ElectTom_L_.wav",
+     "atten": 0,
+     "shift": 11
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "Jazz": {
+   "source_instrument": "Hi Hats",
+   "bank": 128,
+   "program": 32,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Std Kick 7_L_.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Std Kick 7_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Snr 2-1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Snr 2-2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "Low Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "Low Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "Md Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "MdHi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "Hi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "Power": {
+   "source_instrument": "Hi Hats",
+   "bank": 128,
+   "program": 16,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Power Bass Drum 1_L.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Power Bass Drum 2_L.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Power Snare 1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Power Snare 2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "Tom Floor_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "Tom Floor_L_.wav",
+     "atten": 0,
+     "shift": 2
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a250.wav",
+     "atten": 250,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "Tom Low_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "Tom Med_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "Tom Hi_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "Tom Hi_L_.wav",
+     "atten": 0,
+     "shift": 3
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "Room": {
+   "source_instrument": "Hi Hats Treb",
+   "bank": 128,
+   "program": 8,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Std Kick 6_L_.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Std Kick 6_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Std Snr 1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Std Snr 2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "Low Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "Low Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a70.wav",
+     "atten": 70,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "Md Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "MdHi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "Hi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "Standard": {
+   "source_instrument": "Hi Hats Treb",
+   "bank": 128,
+   "program": 0,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "Std Kick_L_.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "Std Kick_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "Std Snr 1_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "Std Snr 2_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "Low Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "Hi-Hat Closed_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "Flr Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "Hi-Hat Foot_L__a170.wav",
+     "atten": 170,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "Low Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "Hi-Hat Half-Open_L__a70.wav",
+     "atten": 70,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "Md Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "MdHi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "Hi Studio_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  },
+  "TR-808": {
+   "source_instrument": "TR-808",
+   "bank": 128,
+   "program": 25,
+   "zones": [
+    {
+     "key": 27,
+     "gm": "High Q",
+     "file": "High Q_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 28,
+     "gm": "Slap",
+     "file": "Slap_a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 29,
+     "gm": "Scratch Push",
+     "file": "Scratch Push_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 30,
+     "gm": "Scratch Pull",
+     "file": "Scratch Pull_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 31,
+     "gm": "Sticks",
+     "file": "Sticks_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 32,
+     "gm": "Square Click",
+     "file": "Square Click_L__a200.wav",
+     "atten": 200,
+     "shift": 0
+    },
+    {
+     "key": 33,
+     "gm": "Metronome Click",
+     "file": "Metronome Click_a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 34,
+     "gm": "Metronome Bell",
+     "file": "Metronome Bell_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 35,
+     "gm": "Acoustic Bass Drum",
+     "file": "808 Kick 1.wav",
+     "atten": 0,
+     "shift": -1
+    },
+    {
+     "key": 36,
+     "gm": "Bass Drum 1",
+     "file": "808 Kick 2.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 37,
+     "gm": "Side Stick",
+     "file": "Rim Tap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 38,
+     "gm": "Acoustic Snare",
+     "file": "808 Snare 1.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 39,
+     "gm": "Hand Clap",
+     "file": "Clap_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 40,
+     "gm": "Electric Snare",
+     "file": "808 Snare 2.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 41,
+     "gm": "Low Floor Tom",
+     "file": "808 Tom 1.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 42,
+     "gm": "Closed Hi-Hat",
+     "file": "808 Closed Hat.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 43,
+     "gm": "High Floor Tom",
+     "file": "808 Tom 2.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 44,
+     "gm": "Pedal Hi-Hat",
+     "file": "808 Open Hat.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 45,
+     "gm": "Low Tom",
+     "file": "808 Tom 3.wav",
+     "atten": 0,
+     "shift": -2
+    },
+    {
+     "key": 46,
+     "gm": "Open Hi-Hat",
+     "file": "808 Open Hat.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 47,
+     "gm": "Low-Mid Tom",
+     "file": "808 Tom 4.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 48,
+     "gm": "Hi-Mid Tom",
+     "file": "808 Tom 5.wav",
+     "atten": 0,
+     "shift": 1
+    },
+    {
+     "key": 49,
+     "gm": "Crash Cymbal 1",
+     "file": "Crsh 1_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 50,
+     "gm": "High Tom",
+     "file": "808 Tom 6.wav",
+     "atten": 0,
+     "shift": 1
+    },
+    {
+     "key": 51,
+     "gm": "Ride Cymbal 1",
+     "file": "Ride1_L__a115.wav",
+     "atten": 115,
+     "shift": 0
+    },
+    {
+     "key": 52,
+     "gm": "Chinese Cymbal",
+     "file": "China Crash_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 53,
+     "gm": "Ride Bell",
+     "file": "BellRide_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 54,
+     "gm": "Tambourine",
+     "file": "Tambourine_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 55,
+     "gm": "Splash Cymbal",
+     "file": "Splash_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 56,
+     "gm": "Cowbell",
+     "file": "Cow Bell_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 57,
+     "gm": "Crash Cymbal 2",
+     "file": "Crsh 2_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 58,
+     "gm": "Vibraslap",
+     "file": "Vibra Slap.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 59,
+     "gm": "Ride Cymbal 2",
+     "file": "Ride2_L__a130.wav",
+     "atten": 130,
+     "shift": 0
+    },
+    {
+     "key": 60,
+     "gm": "Hi Bongo",
+     "file": "Bongo Rim_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 61,
+     "gm": "Low Bongo",
+     "file": "Low Bongo_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 62,
+     "gm": "Mute Hi Conga",
+     "file": "Closed Slap_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 63,
+     "gm": "Open Hi Conga",
+     "file": "High Conga_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 64,
+     "gm": "Low Conga",
+     "file": "Low Tumba_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 65,
+     "gm": "High Timbale",
+     "file": "High Timbale_L__a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 66,
+     "gm": "Low Timbale",
+     "file": "Low Timbale_L__a80.wav",
+     "atten": 80,
+     "shift": 0
+    },
+    {
+     "key": 67,
+     "gm": "High Agogo",
+     "file": "High Agogo_L__a120.wav",
+     "atten": 120,
+     "shift": 0
+    },
+    {
+     "key": 68,
+     "gm": "Low Agogo",
+     "file": "Low Agogo_L__a150.wav",
+     "atten": 150,
+     "shift": 0
+    },
+    {
+     "key": 69,
+     "gm": "Cabasa",
+     "file": "Cabasa_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 70,
+     "gm": "Maracas",
+     "file": "Maracas_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 71,
+     "gm": "Short Whistle",
+     "file": "Short Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 72,
+     "gm": "Long Whistle",
+     "file": "Long Whistle_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 73,
+     "gm": "Short Guiro",
+     "file": "Guiro Down_L__a100.wav",
+     "atten": 100,
+     "shift": 0
+    },
+    {
+     "key": 74,
+     "gm": "Long Guiro",
+     "file": "Guiro Up_L__a20.wav",
+     "atten": 20,
+     "shift": 0
+    },
+    {
+     "key": 75,
+     "gm": "Claves",
+     "file": "Clave_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 76,
+     "gm": "Hi Wood Block",
+     "file": "High Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 77,
+     "gm": "Low Wood Block",
+     "file": "Low Woodblock_L_.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 78,
+     "gm": "Mute Cuica",
+     "file": "Quica Hi_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 79,
+     "gm": "Open Cuica",
+     "file": "Quica Low_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 80,
+     "gm": "Mute Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 81,
+     "gm": "Open Triangle",
+     "file": "Triangle.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 82,
+     "gm": "Shaker",
+     "file": "Small Shaker _L__a15.wav",
+     "atten": 15,
+     "shift": 0
+    },
+    {
+     "key": 83,
+     "gm": "Jingle Bell",
+     "file": "Sleigh Bells.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 84,
+     "gm": "Bell Tree",
+     "file": "Bell Tree.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 85,
+     "gm": "Castanets",
+     "file": "Castanet.wav",
+     "atten": 0,
+     "shift": 0
+    },
+    {
+     "key": 86,
+     "gm": "Mute Surdo",
+     "file": "Short Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    },
+    {
+     "key": 87,
+     "gm": "Open Surdo",
+     "file": "Long Taiko Hit_a50.wav",
+     "atten": 50,
+     "shift": 0
+    }
+   ]
+  }
+ }
+}

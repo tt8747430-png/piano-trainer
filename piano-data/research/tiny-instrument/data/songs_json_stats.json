@@ -1,0 +1,1209 @@
+{
+ "stats": {
+  "genre": {
+   "rock": 3,
+   "movies": 19,
+   "pop": 7,
+   "classical": 11,
+   "games": 1,
+   "Folk": 11,
+   "electronic": 2,
+   "Traditional_Gospel": 3,
+   "Classical": 4,
+   "Patriotic": 1,
+   "Christmas_Carols": 5,
+   "Jazz": 1,
+   "videoGames": 3,
+   "hip-hop": 1,
+   "anime": 1
+  },
+  "source": {
+   "easterEgg": 44,
+   "publicDomain": 29
+  },
+  "difficultyTier": {
+   "intermediate": 44,
+   "advanced": 8,
+   "beginner": 21
+  },
+  "instrumentName": {
+   "Distortion Guitar (30)": 1,
+   "Lead 1 (square) (80)": 2,
+   "Music Box (10)": 1,
+   "Trumpet (56)": 6,
+   "String Ensemble 1 (48)": 2,
+   "Piano Upright (0)": 23,
+   "French Horn (60)": 3,
+   "Flute (73)": 5,
+   "Clarinet (71)": 2,
+   "Celesta (8)": 1,
+   "Brass Section (61)": 1,
+   "Overdriven Guitar (29)": 2,
+   "Cello (42)": 1,
+   "Lead 2 Sawtooth (81)": 2,
+   "Vibraphone (11)": 1,
+   "Lead 1 (Square) (80)": 1,
+   "Violin (40)": 2,
+   "Pipe Organ (19)": 2,
+   "Banjo (105)": 1,
+   "Fast Strings (48)": 1,
+   "Nylon Guitar (24)": 4,
+   "Tenor Sax (66)": 1,
+   "Lead 2 (Sawtooth) (81)": 2,
+   "Slap Bass 1 (36)": 1,
+   "Alto Sax (65)": 1,
+   "Harmonica (22)": 1,
+   "Harpsichord (6)": 1,
+   "Honky-Tonk Piano (3)": 1,
+   "Glockenspiel (9)": 1
+  },
+  "key": {
+   "C major": 53,
+   "Bb major": 1,
+   "D major": 3,
+   "A minor": 4,
+   "D minor": 2,
+   "C# minor": 2,
+   "G major": 3,
+   "F major": 2,
+   "G minor": 1,
+   "C minor": 1,
+   "A major": 1
+  },
+  "timeSig": {
+   "4/4": 60,
+   "3/8": 2,
+   "3/4": 7,
+   "2/4": 2,
+   "12/8": 1,
+   "6/8": 1
+  },
+  "eventKeys": {
+   "pitches": 2291,
+   "duration": 2291,
+   "restAfter": 2291,
+   "velocity": 2291,
+   "lyric": 26,
+   "fingers": 26
+  },
+  "barKeys": {
+   "barNumber": 527,
+   "events": 527
+  },
+  "topKeys": {
+   "id:string": 73,
+   "title:string": 73,
+   "composer:string": 73,
+   "genre:string": 73,
+   "tempo:number": 73,
+   "timeSignature:object": 73,
+   "keySignature:object": 73,
+   "difficultyTier:string": 73,
+   "instrumentProgram:number": 73,
+   "instrumentName:string": 73,
+   "trivia:string": 73,
+   "source:string": 73,
+   "bars:array": 73,
+   "sections:array": 27,
+   "relatedLessonId:string": 15,
+   "attribution:string": 3
+  }
+ },
+ "rows": [
+  {
+   "file": "all-star.json",
+   "id": "all-star",
+   "source": "easterEgg",
+   "genre": "rock",
+   "tier": "intermediate",
+   "tempo": 104,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    68,
+    71
+   ]
+  },
+  {
+   "file": "axel-f.json",
+   "id": "axel-f",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 105,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    61,
+    72
+   ]
+  },
+  {
+   "file": "baby-shark.json",
+   "id": "baby-shark",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 115,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    74,
+    78
+   ]
+  },
+  {
+   "file": "back-to-the-future.json",
+   "id": "back-to-the-future",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 126,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    63,
+    70
+   ]
+  },
+  {
+   "file": "beethovens-fifth.json",
+   "id": "beethovens-fifth",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 108,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    62,
+    67
+   ]
+  },
+  {
+   "file": "bohemian-rhapsody.json",
+   "id": "bohemian-rhapsody",
+   "source": "easterEgg",
+   "genre": "rock",
+   "tier": "advanced",
+   "tempo": 72,
+   "bars": 5,
+   "events": 20,
+   "chordEvents": 0,
+   "range": [
+    68,
+    75
+   ]
+  },
+  {
+   "file": "canon-in-d.json",
+   "id": "canon-in-d",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 72,
+   "bars": 8,
+   "events": 35,
+   "chordEvents": 0,
+   "range": [
+    66,
+    78
+   ]
+  },
+  {
+   "file": "circle-of-life.json",
+   "id": "circle-of-life",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 80,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    56,
+    65
+   ]
+  },
+  {
+   "file": "concerning-hobbits.json",
+   "id": "concerning-hobbits",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "beginner",
+   "tempo": 104,
+   "bars": 8,
+   "events": 28,
+   "chordEvents": 0,
+   "range": [
+    62,
+    74
+   ]
+  },
+  {
+   "file": "fur-elise.json",
+   "id": "fur-elise",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "beginner",
+   "tempo": 130,
+   "bars": 8,
+   "events": 35,
+   "chordEvents": 0,
+   "range": [
+    60,
+    76
+   ]
+  },
+  {
+   "file": "godfather.json",
+   "id": "godfather",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 69,
+   "bars": 4,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    64,
+    72
+   ]
+  },
+  {
+   "file": "hall-of-mountain-king.json",
+   "id": "hall-of-mountain-king",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 4,
+   "events": 16,
+   "chordEvents": 0,
+   "range": [
+    64,
+    76
+   ]
+  },
+  {
+   "file": "happy-birthday.json",
+   "id": "happy-birthday",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 80,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    67,
+    74
+   ]
+  },
+  {
+   "file": "hedwigs-theme.json",
+   "id": "hedwigs-theme",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 140,
+   "bars": 4,
+   "events": 14,
+   "chordEvents": 0,
+   "range": [
+    71,
+    83
+   ]
+  },
+  {
+   "file": "imperial-march.json",
+   "id": "imperial-march",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 104,
+   "bars": 3,
+   "events": 9,
+   "chordEvents": 0,
+   "range": [
+    51,
+    58
+   ]
+  },
+  {
+   "file": "indiana-jones.json",
+   "id": "indiana-jones",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 104,
+   "bars": 7,
+   "events": 20,
+   "chordEvents": 0,
+   "range": [
+    64,
+    81
+   ]
+  },
+  {
+   "file": "james-bond.json",
+   "id": "james-bond",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "beginner",
+   "tempo": 138,
+   "bars": 1,
+   "events": 8,
+   "chordEvents": 0,
+   "range": [
+    64,
+    66
+   ]
+  },
+  {
+   "file": "jaws.json",
+   "id": "jaws",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    40,
+    41
+   ]
+  },
+  {
+   "file": "jurassic-park.json",
+   "id": "jurassic-park",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 72,
+   "bars": 3,
+   "events": 9,
+   "chordEvents": 0,
+   "range": [
+    65,
+    72
+   ]
+  },
+  {
+   "file": "mary-had-a-little-lamb.json",
+   "id": "mary-had-a-little-lamb",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 90,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "megalovania.json",
+   "id": "megalovania",
+   "source": "easterEgg",
+   "genre": "games",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 6,
+   "events": 30,
+   "chordEvents": 0,
+   "range": [
+    59,
+    74
+   ]
+  },
+  {
+   "file": "merrily-we-roll-along.json",
+   "id": "merrily-we-roll-along",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 8,
+   "events": 26,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "mission-impossible.json",
+   "id": "mission-impossible",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    58,
+    65
+   ]
+  },
+  {
+   "file": "moonlight-sonata.json",
+   "id": "moonlight-sonata",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "advanced",
+   "tempo": 56,
+   "bars": 6,
+   "events": 36,
+   "chordEvents": 0,
+   "range": [
+    56,
+    68
+   ]
+  },
+  {
+   "file": "my-heart-will-go-on.json",
+   "id": "my-heart-will-go-on",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 96,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    68,
+    76
+   ]
+  },
+  {
+   "file": "nyan-cat.json",
+   "id": "nyan-cat",
+   "source": "easterEgg",
+   "genre": "electronic",
+   "tier": "intermediate",
+   "tempo": 140,
+   "bars": 3,
+   "events": 11,
+   "chordEvents": 0,
+   "range": [
+    63,
+    71
+   ]
+  },
+  {
+   "file": "ode-to-joy.json",
+   "id": "ode-to-joy",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 4,
+   "events": 15,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "old-macdonald.json",
+   "id": "old-macdonald",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 100,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "pd-amazing-grace.json",
+   "id": "pd-amazing-grace",
+   "source": "publicDomain",
+   "genre": "Traditional_Gospel",
+   "tier": "beginner",
+   "tempo": 80,
+   "bars": 8,
+   "events": 17,
+   "chordEvents": 0,
+   "range": [
+    62,
+    74
+   ]
+  },
+  {
+   "file": "pd-andre-sonatine.json",
+   "id": "pd-andre-sonatine",
+   "source": "publicDomain",
+   "genre": "Classical",
+   "tier": "intermediate",
+   "tempo": 104,
+   "bars": 83,
+   "events": 241,
+   "chordEvents": 51,
+   "range": [
+    59,
+    79
+   ]
+  },
+  {
+   "file": "pd-auld-lang-syne.json",
+   "id": "pd-auld-lang-syne",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 96,
+   "bars": 9,
+   "events": 28,
+   "chordEvents": 0,
+   "range": [
+    55,
+    69
+   ]
+  },
+  {
+   "file": "pd-bach-wtc1-prelude-11.json",
+   "id": "pd-bach-wtc1-prelude-11",
+   "source": "publicDomain",
+   "genre": "Classical",
+   "tier": "advanced",
+   "tempo": 104,
+   "bars": 18,
+   "events": 319,
+   "chordEvents": 1,
+   "range": [
+    55,
+    84
+   ]
+  },
+  {
+   "file": "pd-bach-wtc1-prelude-16.json",
+   "id": "pd-bach-wtc1-prelude-16",
+   "source": "publicDomain",
+   "genre": "Classical",
+   "tier": "advanced",
+   "tempo": 90,
+   "bars": 19,
+   "events": 308,
+   "chordEvents": 24,
+   "range": [
+    57,
+    84
+   ]
+  },
+  {
+   "file": "pd-battle-hymn.json",
+   "id": "pd-battle-hymn",
+   "source": "publicDomain",
+   "genre": "Patriotic",
+   "tier": "intermediate",
+   "tempo": 108,
+   "bars": 8,
+   "events": 24,
+   "chordEvents": 0,
+   "range": [
+    60,
+    72
+   ]
+  },
+  {
+   "file": "pd-camptown-races.json",
+   "id": "pd-camptown-races",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 132,
+   "bars": 8,
+   "events": 23,
+   "chordEvents": 0,
+   "range": [
+    60,
+    69
+   ]
+  },
+  {
+   "file": "pd-canon-in-d.json",
+   "id": "pd-canon-in-d",
+   "source": "publicDomain",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 72,
+   "bars": 8,
+   "events": 16,
+   "chordEvents": 0,
+   "range": [
+    66,
+    78
+   ]
+  },
+  {
+   "file": "pd-danny-boy.json",
+   "id": "pd-danny-boy",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "intermediate",
+   "tempo": 80,
+   "bars": 8,
+   "events": 26,
+   "chordEvents": 0,
+   "range": [
+    60,
+    74
+   ]
+  },
+  {
+   "file": "pd-deck-the-halls.json",
+   "id": "pd-deck-the-halls",
+   "source": "publicDomain",
+   "genre": "Christmas_Carols",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 8,
+   "events": 30,
+   "chordEvents": 0,
+   "range": [
+    65,
+    72
+   ]
+  },
+  {
+   "file": "pd-frere-jacques.json",
+   "id": "pd-frere-jacques",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 112,
+   "bars": 8,
+   "events": 32,
+   "chordEvents": 0,
+   "range": [
+    55,
+    69
+   ]
+  },
+  {
+   "file": "pd-fur-elise.json",
+   "id": "pd-fur-elise",
+   "source": "publicDomain",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 130,
+   "bars": 9,
+   "events": 35,
+   "chordEvents": 0,
+   "range": [
+    60,
+    76
+   ]
+  },
+  {
+   "file": "pd-greensleeves.json",
+   "id": "pd-greensleeves",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "intermediate",
+   "tempo": 96,
+   "bars": 16,
+   "events": 37,
+   "chordEvents": 0,
+   "range": [
+    52,
+    72
+   ]
+  },
+  {
+   "file": "pd-jingle-bells.json",
+   "id": "pd-jingle-bells",
+   "source": "publicDomain",
+   "genre": "Christmas_Carols",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 8,
+   "events": 24,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "pd-la-cucaracha.json",
+   "id": "pd-la-cucaracha",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 8,
+   "events": 30,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "pd-maple-leaf-rag.json",
+   "id": "pd-maple-leaf-rag",
+   "source": "publicDomain",
+   "genre": "Jazz",
+   "tier": "advanced",
+   "tempo": 100,
+   "bars": 8,
+   "events": 40,
+   "chordEvents": 0,
+   "range": [
+    60,
+    74
+   ]
+  },
+  {
+   "file": "pd-minuet-in-g.json",
+   "id": "pd-minuet-in-g",
+   "source": "publicDomain",
+   "genre": "classical",
+   "tier": "intermediate",
+   "tempo": 108,
+   "bars": 8,
+   "events": 32,
+   "chordEvents": 0,
+   "range": [
+    66,
+    79
+   ]
+  },
+  {
+   "file": "pd-moonlight-sonata.json",
+   "id": "pd-moonlight-sonata",
+   "source": "publicDomain",
+   "genre": "Classical",
+   "tier": "advanced",
+   "tempo": 60,
+   "bars": 8,
+   "events": 64,
+   "chordEvents": 0,
+   "range": [
+    37,
+    61
+   ]
+  },
+  {
+   "file": "pd-o-come-all-ye-faithful.json",
+   "id": "pd-o-come-all-ye-faithful",
+   "source": "publicDomain",
+   "genre": "Christmas_Carols",
+   "tier": "intermediate",
+   "tempo": 100,
+   "bars": 8,
+   "events": 28,
+   "chordEvents": 0,
+   "range": [
+    60,
+    74
+   ]
+  },
+  {
+   "file": "pd-ode-to-joy.json",
+   "id": "pd-ode-to-joy",
+   "source": "publicDomain",
+   "genre": "classical",
+   "tier": "beginner",
+   "tempo": 108,
+   "bars": 8,
+   "events": 30,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "pd-row-row-row.json",
+   "id": "pd-row-row-row",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 100,
+   "bars": 8,
+   "events": 27,
+   "chordEvents": 0,
+   "range": [
+    60,
+    72
+   ]
+  },
+  {
+   "file": "pd-scarborough-fair.json",
+   "id": "pd-scarborough-fair",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 88,
+   "bars": 12,
+   "events": 25,
+   "chordEvents": 0,
+   "range": [
+    57,
+    69
+   ]
+  },
+  {
+   "file": "pd-silent-night.json",
+   "id": "pd-silent-night",
+   "source": "publicDomain",
+   "genre": "Christmas_Carols",
+   "tier": "beginner",
+   "tempo": 72,
+   "bars": 8,
+   "events": 16,
+   "chordEvents": 0,
+   "range": [
+    64,
+    74
+   ]
+  },
+  {
+   "file": "pd-swing-low.json",
+   "id": "pd-swing-low",
+   "source": "publicDomain",
+   "genre": "Traditional_Gospel",
+   "tier": "beginner",
+   "tempo": 76,
+   "bars": 8,
+   "events": 20,
+   "chordEvents": 0,
+   "range": [
+    60,
+    72
+   ]
+  },
+  {
+   "file": "pd-twinkle-twinkle.json",
+   "id": "pd-twinkle-twinkle",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 100,
+   "bars": 12,
+   "events": 42,
+   "chordEvents": 0,
+   "range": [
+    60,
+    69
+   ]
+  },
+  {
+   "file": "pd-we-wish-you-a-merry-christmas.json",
+   "id": "pd-we-wish-you-a-merry-christmas",
+   "source": "publicDomain",
+   "genre": "Christmas_Carols",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 8,
+   "events": 26,
+   "chordEvents": 0,
+   "range": [
+    60,
+    69
+   ]
+  },
+  {
+   "file": "pd-when-the-saints.json",
+   "id": "pd-when-the-saints",
+   "source": "publicDomain",
+   "genre": "Traditional_Gospel",
+   "tier": "beginner",
+   "tempo": 110,
+   "bars": 8,
+   "events": 19,
+   "chordEvents": 0,
+   "range": [
+    60,
+    67
+   ]
+  },
+  {
+   "file": "pd-yankee-doodle.json",
+   "id": "pd-yankee-doodle",
+   "source": "publicDomain",
+   "genre": "Folk",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 8,
+   "events": 28,
+   "chordEvents": 0,
+   "range": [
+    55,
+    65
+   ]
+  },
+  {
+   "file": "pink-panther.json",
+   "id": "pink-panther",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    49,
+    69
+   ]
+  },
+  {
+   "file": "pirates-of-caribbean.json",
+   "id": "pirates-of-caribbean",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 138,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    64,
+    76
+   ]
+  },
+  {
+   "file": "rickroll.json",
+   "id": "rickroll",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 113,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    69,
+    76
+   ]
+  },
+  {
+   "file": "sandstorm.json",
+   "id": "sandstorm",
+   "source": "easterEgg",
+   "genre": "electronic",
+   "tier": "intermediate",
+   "tempo": 138,
+   "bars": 3,
+   "events": 9,
+   "chordEvents": 0,
+   "range": [
+    71,
+    76
+   ]
+  },
+  {
+   "file": "seinfeld.json",
+   "id": "seinfeld",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 120,
+   "bars": 3,
+   "events": 11,
+   "chordEvents": 0,
+   "range": [
+    62,
+    72
+   ]
+  },
+  {
+   "file": "simpsons-theme.json",
+   "id": "simpsons-theme",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "advanced",
+   "tempo": 160,
+   "bars": 5,
+   "events": 17,
+   "chordEvents": 0,
+   "range": [
+    61,
+    70
+   ]
+  },
+  {
+   "file": "smoke-on-the-water.json",
+   "id": "smoke-on-the-water",
+   "source": "easterEgg",
+   "genre": "rock",
+   "tier": "intermediate",
+   "tempo": 112,
+   "bars": 3,
+   "events": 12,
+   "chordEvents": 0,
+   "range": [
+    55,
+    61
+   ]
+  },
+  {
+   "file": "song-of-storms.json",
+   "id": "song-of-storms",
+   "source": "easterEgg",
+   "genre": "videoGames",
+   "tier": "intermediate",
+   "tempo": 160,
+   "bars": 4,
+   "events": 14,
+   "chordEvents": 0,
+   "range": [
+    62,
+    77
+   ]
+  },
+  {
+   "file": "star-wars.json",
+   "id": "star-wars",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 108,
+   "bars": 3,
+   "events": 10,
+   "chordEvents": 0,
+   "range": [
+    55,
+    72
+   ]
+  },
+  {
+   "file": "still-dre.json",
+   "id": "still-dre",
+   "source": "easterEgg",
+   "genre": "hip-hop",
+   "tier": "intermediate",
+   "tempo": 93,
+   "bars": 4,
+   "events": 16,
+   "chordEvents": 16,
+   "range": [
+    60,
+    70
+   ]
+  },
+  {
+   "file": "super-mario.json",
+   "id": "super-mario",
+   "source": "easterEgg",
+   "genre": "videoGames",
+   "tier": "beginner",
+   "tempo": 180,
+   "bars": 1,
+   "events": 7,
+   "chordEvents": 0,
+   "range": [
+    67,
+    79
+   ]
+  },
+  {
+   "file": "superman.json",
+   "id": "superman",
+   "source": "easterEgg",
+   "genre": "movies",
+   "tier": "intermediate",
+   "tempo": 112,
+   "bars": 4,
+   "events": 13,
+   "chordEvents": 0,
+   "range": [
+    60,
+    74
+   ]
+  },
+  {
+   "file": "take-on-me.json",
+   "id": "take-on-me",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 168,
+   "bars": 6,
+   "events": 24,
+   "chordEvents": 0,
+   "range": [
+    71,
+    83
+   ]
+  },
+  {
+   "file": "tetris.json",
+   "id": "tetris",
+   "source": "easterEgg",
+   "genre": "videoGames",
+   "tier": "intermediate",
+   "tempo": 160,
+   "bars": 4,
+   "events": 15,
+   "chordEvents": 0,
+   "range": [
+    69,
+    79
+   ]
+  },
+  {
+   "file": "the-entertainer.json",
+   "id": "the-entertainer",
+   "source": "easterEgg",
+   "genre": "classical",
+   "tier": "advanced",
+   "tempo": 140,
+   "bars": 6,
+   "events": 21,
+   "chordEvents": 0,
+   "range": [
+    64,
+    76
+   ]
+  },
+  {
+   "file": "totoro.json",
+   "id": "totoro",
+   "source": "easterEgg",
+   "genre": "anime",
+   "tier": "beginner",
+   "tempo": 120,
+   "bars": 7,
+   "events": 22,
+   "chordEvents": 0,
+   "range": [
+    67,
+    76
+   ]
+  },
+  {
+   "file": "twinkle-twinkle.json",
+   "id": "twinkle-twinkle",
+   "source": "easterEgg",
+   "genre": "pop",
+   "tier": "intermediate",
+   "tempo": 100,
+   "bars": 4,
+   "events": 14,
+   "chordEvents": 0,
+   "range": [
+    60,
+    69
+   ]
+  }
+ ]
+}

@@ -1,0 +1,832 @@
+{
+ "compiler": 25436,
+ "xcode": 270200,
+ "entities": {
+  "ChordPack": {
+   "className": "ChordPack",
+   "attributes": {
+    "dateCreated": {
+     "type": "Date",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSDate"
+    },
+    "highlights": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "imageData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "infoText": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "initialContentCount": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isPurchased": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isStorePack": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isUserCreated": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "pData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "price": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "productID": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "selectedImageIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "sku": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "subtitle": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "versionNumber": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "videoData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData",
+     "allowsExternalStorage": 4
+    }
+   },
+   "relationships": {
+    "playlists": {
+     "to": "Playlist",
+     "inverse": "theChordPack",
+     "toMany": true,
+     "deleteRule": "Cascade"
+    }
+   }
+  },
+  "LessonPack": {
+   "className": "LessonPack",
+   "attributes": {
+    "author": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "fileName": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "fileSize": {
+     "type": "Float",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "genre": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "instrumentIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isAvailable": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isBlankLesson": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isPurchased": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "keySignatureIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "lessonAssetData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "lessonDescription": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "levelName": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "pianoRollOffset": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "price": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "productID": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "sku": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "subtitle": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    }
+   },
+   "relationships": {
+    "markers": {
+     "to": "LessonPackMarker",
+     "inverse": "theLessonPack",
+     "toMany": true,
+     "deleteRule": "Nullify"
+    }
+   }
+  },
+  "LessonPackMarker": {
+   "className": "LessonPackMarker",
+   "attributes": {
+    "markerDescription": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "name": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "timeInSeconds": {
+     "type": "Double",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    }
+   },
+   "relationships": {
+    "theLessonPack": {
+     "to": "LessonPack",
+     "inverse": "markers",
+     "toMany": false,
+     "deleteRule": "Nullify"
+    }
+   }
+  },
+  "Playlist": {
+   "className": "Playlist",
+   "attributes": {
+    "author": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "backingRhythmGenreIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "backingRhythmSubGenre": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "bassIsActive": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "basslineSettingsData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "chordBackingMuteIsActive": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "chordModels": {
+     "type": "Transformable",
+     "default": null,
+     "optional": true,
+     "transformer": "TBArrayTransformer",
+     "valueClass": "NSArray"
+    },
+    "chordModelsData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "chordPatternIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "chordPatternPlayOnKeyboard": {
+     "type": "Boolean",
+     "default": false,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "chordPatternPlaybackRateIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "chordProgression": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "dateCreated": {
+     "type": "Date",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSDate"
+    },
+    "detailDescription": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "drumsIsActive": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "exsfileName": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "genre": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "instrument": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "instrumentIndex": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isFavorite": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isMinorKeySignature": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isPurchased": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isStorePack": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isTempSave": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isUserCreated": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "key": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "keySignatureIndex": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "midiData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "tempo": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "versionNumber": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    }
+   },
+   "relationships": {
+    "theChordPack": {
+     "to": "ChordPack",
+     "inverse": "playlists",
+     "toMany": false,
+     "deleteRule": "Nullify"
+    },
+    "theTrash": {
+     "to": "Trash",
+     "inverse": "playlists",
+     "toMany": false,
+     "deleteRule": "Nullify"
+    }
+   }
+  },
+  "SheetMusicItem": {
+   "className": "SheetMusicItem",
+   "attributes": {
+    "author": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "chordProgression": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "cursorHeightMultiplier": {
+     "type": "Float",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "dateCreated": {
+     "type": "Date",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSDate"
+    },
+    "detailDescription": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "exsInstrumentBassFileName": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "exsInstrumentDrumsFileName": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "genre": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "instrument": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "instrumentIndex": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isFavorite": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isPurchased": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isStorePack": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isUserCreated": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "key": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "lowerStaveClefIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "middleCSplitPointNumber": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "midiData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "noteSizeIndex": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "proficiencyItemLevel": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "repeatBarsData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "repeatBarsEnabled": {
+     "type": "Boolean",
+     "default": false,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "reverbPresetIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "reverbWetDryMixAmount": {
+     "type": "Float",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "showNoteLetterIndex": {
+     "type": "Integer16",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "subtitle": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "swingClefTarget": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "swingPresetIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "tempo": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "timeConstantMultiplier": {
+     "type": "Float",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "upperStaveClefIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "versionNumber": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    }
+   },
+   "relationships": {
+    "theSheetMusicPack": {
+     "to": "SheetMusicPack",
+     "inverse": "sheetMusicItems",
+     "toMany": false,
+     "deleteRule": "Nullify"
+    }
+   }
+  },
+  "SheetMusicPack": {
+   "className": "SheetMusicPack",
+   "attributes": {
+    "dateCreated": {
+     "type": "Date",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSDate"
+    },
+    "imageData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "infoText": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "initialContentCount": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isPurchased": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isStorePack": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "isUserCreated": {
+     "type": "Boolean",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "pData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData"
+    },
+    "price": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "productID": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "proficiencyPackLevel": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "selectedImageIndex": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "sku": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "sortOrder": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    },
+    "versionNumber": {
+     "type": "Integer32",
+     "default": 0,
+     "optional": true,
+     "valueClass": "NSNumber"
+    },
+    "videoData": {
+     "type": "Binary",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSData",
+     "allowsExternalStorage": 4
+    },
+    "videoHasAudio": {
+     "type": "Boolean",
+     "default": false,
+     "optional": true,
+     "valueClass": "NSNumber"
+    }
+   },
+   "relationships": {
+    "sheetMusicItems": {
+     "to": "SheetMusicItem",
+     "inverse": "theSheetMusicPack",
+     "toMany": true,
+     "deleteRule": "Cascade"
+    }
+   }
+  },
+  "Trash": {
+   "className": "Trash",
+   "attributes": {
+    "title": {
+     "type": "String",
+     "default": null,
+     "optional": true,
+     "valueClass": "NSString"
+    }
+   },
+   "relationships": {
+    "playlists": {
+     "to": "Playlist",
+     "inverse": "theTrash",
+     "toMany": true,
+     "deleteRule": "Nullify"
+    }
+   }
+  }
+ }
+}

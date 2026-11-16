@@ -14,3 +14,5 @@
 - The author also warns that some samples came from other free banks of uncertain origin. For a commercial product, prefer the upstream release and read its full licence.
 - Attribution line to use: "Piano sound: GeneralUser GS by S. Christian Collins."
 - For the web: a browser needs an SF2 player (e.g. a WebAudio SoundFont synth) or pre-rendered per-note samples. Rendering samples from this bank is a modification the licence allows.
+
+**Update:** the complete GeneralUser GS License v2.0 text was found intact in Tiny Instrument's copy of GeneralUser-GS.sf2 and is saved here as `LICENSE-full-v2.0.txt`. The truncation caveat above no longer applies.

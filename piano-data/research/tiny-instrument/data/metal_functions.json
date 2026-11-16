@@ -1,0 +1,24 @@
+{
+ "file": "Resources/default.metallib (127068 bytes)",
+ "functions": [
+  "fluid_vs",
+  "fluid_advect",
+  "fluid_divergence",
+  "fluid_curl",
+  "fluid_vorticity",
+  "fluid_pressure",
+  "fluid_gradient",
+  "fluid_clear",
+  "fluid_splat",
+  "fluid_display",
+  "strandsField",
+  "strandsGlass",
+  "stemWobble",
+  "Ripple",
+  "ariaBorderWobble",
+  "tapRipple",
+  "ariaBorderChroma",
+  "ariaBorder"
+ ],
+ "note": "fluid_* = GPU stable-fluids sim (KeyEffectStyle.fluid); Ripple/tapRipple/stemWobble/strands* = SwiftUI layerEffect/colorEffect shaders; ariaBorder* = AI assistant glowing border"
+}

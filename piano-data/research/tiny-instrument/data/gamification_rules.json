@@ -1,0 +1,92 @@
+{
+ "source": "DesignSystem.XPCalculator (0x1011d50c8), LevelCurve (0x1011d3a6c, 0x1011d3960), level titles (0x1011d3998); repeat table __DATA,__data @0x10196e440",
+ "xpSources": [
+  "base",
+  "accuracy",
+  "completedFull",
+  "combo",
+  "personalBest",
+  "firstOfTypeToday",
+  "dailyGoal",
+  "firstEver",
+  "challenge"
+ ],
+ "gamifiedTypes": [
+  "lesson",
+  "earTraining",
+  "scale",
+  "chord",
+  "drills",
+  "other"
+ ],
+ "repeatMultiplier": {
+  "0": 1,
+  "1": 0.6,
+  "2": 0.3,
+  "sameTypeRepeatIndexToday<0": 1,
+  ">=3": 0.1
+ },
+ "rows": {
+  "base": "trunc(m*10)",
+  "accuracy": "if accuracyPercent>0: a=trunc(min(acc,100)/100*20); if a>=1 -> trunc(m*a)",
+  "completedFull": "if completedFull: trunc(m*10)",
+  "combo": "if bestCombo>0: trunc(m*min(bestCombo,25))",
+  "firstEver": "30 (if isFirstEverCompletion; type != other); not multiplied",
+  "personalBest": "20 if !firstEver && priorBest<newValue (both present; type != other)",
+  "firstOfTypeToday": "15 (type != other)",
+  "dailyGoal": "25 if dailyGoalMetFirstTimeToday (all types)",
+  "challenge": "Challenge.xpReward when a challenge completes"
+ },
+ "maxPerSessionFirstRun": "10+20+10+25 +30 +15 +25 = 135",
+ "levelCurve": {
+  "totalXpToReachLevel": "50*(L-1)*L",
+  "xpForLevelLtoLplus1": "100*L",
+  "examples": {
+   "1": 0,
+   "2": 100,
+   "3": 300,
+   "4": 600,
+   "5": 1000,
+   "10": 4500,
+   "20": 19000,
+   "30": 43500
+  }
+ },
+ "levelTitles": [
+  {
+   "levels": "1-4",
+   "title": "Novice"
+  },
+  {
+   "levels": "5-9",
+   "title": "Apprentice"
+  },
+  {
+   "levels": "10-14",
+   "title": "Player"
+  },
+  {
+   "levels": "15-19",
+   "title": "Musician"
+  },
+  {
+   "levels": "20-24",
+   "title": "Performer"
+  },
+  {
+   "levels": "25-29",
+   "title": "Virtuoso"
+  },
+  {
+   "levels": "30+",
+   "title": "Maestro"
+  }
+ ],
+ "perTypeLevels": "perTypeXP [String:Int] in settings; achievement mastery-5-<type> = \"Reach level 5 in the <Type> track\" (same curve assumed: inferred)",
+ "streak": {
+  "habit": "≥5 minutes a day (habit-N achievements)",
+  "streakMilestonesTracked": "_lastStreakMilestone in GamificationEngine"
+ },
+ "drillTiers": "MusicCharts.DrillTier none/bronze/silver/gold with Thresholds{silverBPM,goldBPM}",
+ "earTraining": "EarTrainingRecord: accuracyPercent, points, bestStreak, starsEarned; session has lives/maxLives, streak, points"
+}

@@ -1,0 +1,989 @@
+{
+ "version": 1,
+ "comment": "Backing Rhythm style library. Every pattern is written on the General MIDI percussion map (note 36 = Bass Drum, 38 = Snare, 42 = Closed Hi-Hat…) and rendered against a GM drum kit from Sounds/GM Drum Kits. Step strings: '.' = rest, 'g' = ghost, 'o' = soft, 'x' = normal, 'X' = accent. Each track's string is bars × beatsPerBar × stepsPerBeat characters long. 'swing' (0…0.33) delays every off-beat subdivision by that fraction of a subdivision pair — 0.167 is a triplet feel. 'tempo' is the style's suggested BPM; playback follows the app tempo.",
+ "genres": [
+  {
+   "name": "None",
+   "styles": []
+  },
+  {
+   "name": "Simple",
+   "styles": [
+    {
+     "name": "8ths Hats",
+     "kit": "Standard",
+     "tempo": 100,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 42,
+       "steps": "X.x.x.x.X.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "16ths Hats",
+     "kit": "Standard",
+     "tempo": 90,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 42,
+       "steps": "XoxoXoxoXoxoXoxo"
+      }
+     ]
+    },
+    {
+     "name": "8ths Hats & Click",
+     "kit": "Standard",
+     "tempo": 100,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 42,
+       "steps": "x.x.x.x.x.x.x.x."
+      },
+      {
+       "note": 76,
+       "steps": "X...x...x...x..."
+      }
+     ]
+    },
+    {
+     "name": "Kick & Snare",
+     "kit": "Standard",
+     "tempo": 100,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x......."
+      },
+      {
+       "note": 38,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "X.x.x.x.X.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Songwriter 1",
+     "kit": "Standard",
+     "tempo": 100,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.........x....."
+      },
+      {
+       "note": 37,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 82,
+       "steps": "x.o.x.o.x.o.x.o."
+      },
+      {
+       "note": 54,
+       "steps": "....o.......o..."
+      }
+     ]
+    },
+    {
+     "name": "Groove 1",
+     "kit": "Standard",
+     "tempo": 100,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x......x..x....."
+      },
+      {
+       "note": 38,
+       "steps": "....X.......X..."
+      },
+      {
+       "note": 42,
+       "steps": "XoxoxoxoXoxoxox."
+      },
+      {
+       "note": 46,
+       "steps": "..............x."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Latin",
+   "styles": [
+    {
+     "name": "Bossa Nova",
+     "kit": "Standard",
+     "tempo": 140,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.....x.x.....x.x.....x.x.....x."
+      },
+      {
+       "note": 37,
+       "steps": "....x.....x.....x.....x.....x..."
+      },
+      {
+       "note": 42,
+       "steps": "o.o.o.o.o.o.o.o.o.o.o.o.o.o.o.o."
+      },
+      {
+       "note": 69,
+       "steps": "x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Samba",
+     "kit": "Standard",
+     "tempo": 104,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "o.......X.....o.o.......X.....o."
+      },
+      {
+       "note": 82,
+       "steps": "oxxXoxxXoxxXoxxXoxxXoxxXoxxXoxxX"
+      },
+      {
+       "note": 67,
+       "steps": "x..x..x....x....x..x..x........."
+      },
+      {
+       "note": 68,
+       "steps": "........x.....x.........x...x..."
+      }
+     ]
+    },
+    {
+     "name": "Salsa",
+     "kit": "Standard",
+     "tempo": 95,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 75,
+       "steps": "....x...x.......x.....x.....x..."
+      },
+      {
+       "note": 65,
+       "steps": "x.....x.x.....x.....x...x...x..."
+      },
+      {
+       "note": 56,
+       "steps": "X...x...x...x...X...x...x...x..."
+      },
+      {
+       "note": 62,
+       "steps": "....x...............x..........."
+      },
+      {
+       "note": 63,
+       "steps": "............x.x.............x.x."
+      },
+      {
+       "note": 64,
+       "steps": "........o...............o......."
+      }
+     ]
+    },
+    {
+     "name": "Congas",
+     "kit": "Standard",
+     "tempo": 110,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 62,
+       "steps": "....x...............x..........."
+      },
+      {
+       "note": 63,
+       "steps": "............x.x.............x.x."
+      },
+      {
+       "note": 64,
+       "steps": "........o...............o......."
+      },
+      {
+       "note": 69,
+       "steps": "x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Cha Cha Cha",
+     "kit": "Standard",
+     "tempo": 116,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 56,
+       "steps": "X...x...x...x..."
+      },
+      {
+       "note": 74,
+       "steps": "x.......x......."
+      },
+      {
+       "note": 73,
+       "steps": "....x.x.....x.x."
+      },
+      {
+       "note": 63,
+       "steps": "............x.x."
+      },
+      {
+       "note": 36,
+       "steps": "o.......o......."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Jazz",
+   "styles": [
+    {
+     "name": "Swing Ride",
+     "kit": "Jazz",
+     "tempo": 120,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 3,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 51,
+       "steps": "X..x.xX..x.xX..x.xX..x.x"
+      },
+      {
+       "note": 44,
+       "steps": "...x.....x.....x.....x.."
+      },
+      {
+       "note": 36,
+       "steps": "o.....o.....o.....o....."
+      },
+      {
+       "note": 38,
+       "steps": ".......................g"
+      }
+     ]
+    },
+    {
+     "name": "Swing Brushes",
+     "kit": "Brush",
+     "tempo": 110,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 3,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 51,
+       "steps": "x..o.xx..o.xx..o.xx..o.x"
+      },
+      {
+       "note": 38,
+       "steps": "o..o..o..o..o..o..o..o.."
+      },
+      {
+       "note": 44,
+       "steps": "...x.....x.....x.....x.."
+      }
+     ]
+    },
+    {
+     "name": "Jazz Waltz",
+     "kit": "Jazz",
+     "tempo": 140,
+     "beatsPerBar": 3,
+     "stepsPerBeat": 3,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 51,
+       "steps": "X..x.xx..X..x.xx.."
+      },
+      {
+       "note": 44,
+       "steps": "...x..x.....x..x.."
+      },
+      {
+       "note": 36,
+       "steps": "o........o........"
+      }
+     ]
+    },
+    {
+     "name": "Ride Cymbals",
+     "kit": "Jazz",
+     "tempo": 120,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 3,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 51,
+       "steps": "x..x..x..x.."
+      },
+      {
+       "note": 44,
+       "steps": "...x.....x.."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Hip Hop",
+   "styles": [
+    {
+     "name": "Trap Soul",
+     "kit": "TR-808",
+     "tempo": 70,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 8,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x...................x...........x.............x.....x..........."
+      },
+      {
+       "note": 38,
+       "steps": "................X...............................X..............."
+      },
+      {
+       "note": 42,
+       "steps": "X...x...x...x...x...x...x...x...X...x...x...x...x...x...xxxxxxxx"
+      },
+      {
+       "note": 46,
+       "steps": "............................................................o..."
+      }
+     ]
+    },
+    {
+     "name": "Trap 808",
+     "kit": "TR-808",
+     "tempo": 140,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 8,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.........x...........x.........x.........x.....x...x..........."
+      },
+      {
+       "note": 38,
+       "steps": "................X...............................X..............."
+      },
+      {
+       "note": 42,
+       "steps": "x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxx"
+      },
+      {
+       "note": 39,
+       "steps": "................x...............................x..............."
+      }
+     ]
+    },
+    {
+     "name": "Boom Bap",
+     "kit": "Room",
+     "tempo": 85,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0.1,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x......x..x....."
+      },
+      {
+       "note": 38,
+       "steps": "....X.......X..g"
+      },
+      {
+       "note": 42,
+       "steps": "X.x.x.x.X.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Hip Hop Soul",
+     "kit": "Standard",
+     "tempo": 90,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0.08,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x....x..x.......x....x..x..x...."
+      },
+      {
+       "note": 38,
+       "steps": "....x.......x.......x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "XoxoxoxoXoxoxoxoXoxoxoxoXoxoxox."
+      },
+      {
+       "note": 46,
+       "steps": "..............................x."
+      }
+     ]
+    },
+    {
+     "name": "Lo-Fi Chill",
+     "kit": "Brush",
+     "tempo": 75,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0.12,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x..o...."
+      },
+      {
+       "note": 37,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "o.o.o.o.o.o.o.o."
+      },
+      {
+       "note": 82,
+       "steps": "..o...o...o...o."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Dance",
+   "styles": [
+    {
+     "name": "House",
+     "kit": "TR-808",
+     "tempo": 122,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "X...x...x...x..."
+      },
+      {
+       "note": 39,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 46,
+       "steps": "..x...x...x...x."
+      },
+      {
+       "note": 42,
+       "steps": "x...x...x...x..."
+      }
+     ]
+    },
+    {
+     "name": "House (No Clap)",
+     "kit": "TR-808",
+     "tempo": 122,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "X...x...x...x..."
+      },
+      {
+       "note": 46,
+       "steps": "..x...x...x...x."
+      },
+      {
+       "note": 42,
+       "steps": "x...x...x...x..."
+      }
+     ]
+    },
+    {
+     "name": "Disco",
+     "kit": "TR-808",
+     "tempo": 116,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x...x...x...x..."
+      },
+      {
+       "note": 38,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 46,
+       "steps": "..x...x...x...x."
+      },
+      {
+       "note": 54,
+       "steps": "xoxoxoxoxoxoxoxo"
+      }
+     ]
+    },
+    {
+     "name": "Techno",
+     "kit": "TR-808",
+     "tempo": 126,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "X...X...X...X..."
+      },
+      {
+       "note": 39,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "..x...x...x...x."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Pop",
+   "styles": [
+    {
+     "name": "Straight 8s",
+     "kit": "Standard",
+     "tempo": 96,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x.x....."
+      },
+      {
+       "note": 38,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "X.x.x.x.X.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Pop Rock",
+     "kit": "Room",
+     "tempo": 110,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x.x.....x.......x.x....."
+      },
+      {
+       "note": 38,
+       "steps": "....X.......X.......X.......X..."
+      },
+      {
+       "note": 42,
+       "steps": "X.x.x.x.X.x.x.x.X.x.x.x.X.x.x.x."
+      },
+      {
+       "note": 49,
+       "steps": "x..............................."
+      }
+     ]
+    },
+    {
+     "name": "16th Groove",
+     "kit": "Standard",
+     "tempo": 92,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.....x.x......."
+      },
+      {
+       "note": 38,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "XoxoXoxoXoxoXox."
+      },
+      {
+       "note": 46,
+       "steps": "..............x."
+      }
+     ]
+    },
+    {
+     "name": "Funk 16ths",
+     "kit": "Standard",
+     "tempo": 98,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x......x..x....."
+      },
+      {
+       "note": 38,
+       "steps": "..g.X..g.g..X.g."
+      },
+      {
+       "note": 42,
+       "steps": "XoxoXoxoXoxoXoxo"
+      }
+     ]
+    },
+    {
+     "name": "Motown",
+     "kit": "Standard",
+     "tempo": 118,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 38,
+       "steps": "X...X...X...X..."
+      },
+      {
+       "note": 36,
+       "steps": "x.......x......."
+      },
+      {
+       "note": 54,
+       "steps": "x.x.x.x.x.x.x.x."
+      },
+      {
+       "note": 42,
+       "steps": "o.o.o.o.o.o.o.o."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Ballad",
+   "styles": [
+    {
+     "name": "Slow Ballad",
+     "kit": "Standard",
+     "tempo": 72,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x..o...."
+      },
+      {
+       "note": 37,
+       "steps": "....x.......x..."
+      },
+      {
+       "note": 42,
+       "steps": "o.o.o.o.o.o.o.o."
+      },
+      {
+       "note": 46,
+       "steps": "..............o."
+      }
+     ]
+    },
+    {
+     "name": "6/8 Ballad",
+     "kit": "Standard",
+     "tempo": 76,
+     "beatsPerBar": 3,
+     "stepsPerBeat": 2,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.....x....o"
+      },
+      {
+       "note": 38,
+       "steps": "...x.....x.."
+      },
+      {
+       "note": 42,
+       "steps": "XoooooXooooo"
+      }
+     ]
+    },
+    {
+     "name": "Power Ballad",
+     "kit": "Power",
+     "tempo": 68,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 2,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x.x.....x.......x.x....."
+      },
+      {
+       "note": 38,
+       "steps": "....X.......X.......X.......X..."
+      },
+      {
+       "note": 42,
+       "steps": "x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x."
+      },
+      {
+       "note": 49,
+       "steps": "x..............................."
+      }
+     ]
+    },
+    {
+     "name": "Brush Ballad",
+     "kit": "Brush",
+     "tempo": 66,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "o.......o......."
+      },
+      {
+       "note": 38,
+       "steps": "o.o.x.o.o.o.x.o."
+      },
+      {
+       "note": 42,
+       "steps": "....x.......x..."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Groove",
+   "styles": [
+    {
+     "name": "Reggae One Drop",
+     "kit": "Standard",
+     "tempo": 76,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "........x......."
+      },
+      {
+       "note": 37,
+       "steps": "........x......."
+      },
+      {
+       "note": 42,
+       "steps": "o.X.o.x.o.X.o.x."
+      }
+     ]
+    },
+    {
+     "name": "Reggaeton",
+     "kit": "Electronic",
+     "tempo": 95,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x.......x......."
+      },
+      {
+       "note": 38,
+       "steps": "...x..x....x..x."
+      },
+      {
+       "note": 42,
+       "steps": "x.x.x.x.x.x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Country Train",
+     "kit": "Brush",
+     "tempo": 112,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 4,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 38,
+       "steps": "oxoXoxoxoxoXoxox"
+      },
+      {
+       "note": 36,
+       "steps": "x.......x......."
+      }
+     ]
+    },
+    {
+     "name": "Waltz",
+     "kit": "Standard",
+     "tempo": 140,
+     "beatsPerBar": 3,
+     "stepsPerBeat": 2,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 36,
+       "steps": "x....."
+      },
+      {
+       "note": 38,
+       "steps": "..o.o."
+      },
+      {
+       "note": 42,
+       "steps": "x.x.x."
+      }
+     ]
+    },
+    {
+     "name": "Afro 12/8",
+     "kit": "Standard",
+     "tempo": 110,
+     "beatsPerBar": 4,
+     "stepsPerBeat": 3,
+     "bars": 1,
+     "swing": 0,
+     "tracks": [
+      {
+       "note": 56,
+       "steps": "x.x.xx.x.x.x"
+      },
+      {
+       "note": 63,
+       "steps": "..x.....x..."
+      },
+      {
+       "note": 82,
+       "steps": "oooooooooooo"
+      },
+      {
+       "note": 36,
+       "steps": "o.....o....."
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "_research_note": "Verbatim copy of Chordio Resources/DrumPatterns.json (app data, reference only; not covered by the FluidR3 MIT licence which applies to the kit samples)."
+}

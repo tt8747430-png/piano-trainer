@@ -37,5 +37,5 @@ Full per-file copyright lines are in `fonts/FONTS-ATTRIBUTION.md`; the licence t
 - **MuseScore code and data** (templates, instrument lists, styles) are **GPL-3.0**. Usable only if Piano Trainer's code were GPL, so they're not included. MuseScore's fonts and its MIT SoundFont are included above.
 
 ## Related
-- `~/Downloads/research/_shared/app-ready-data/`: data (tempo words, EN/RU glossary, instruments EN/RU, page sizes, clefs…).
-- `~/Downloads/research/dorico/RESOURCES_CATALOGUE.md`: open learning material (Open Music Theory, OpenScore CC0 scores, Mutopia, IMSLP).
+- `piano-data/research/_shared/app-ready-data/`: data (tempo words, EN/RU glossary, instruments EN/RU, page sizes, clefs…).
+- `piano-data/research/dorico/RESOURCES_CATALOGUE.md`: open learning material (Open Music Theory, OpenScore CC0 scores, Mutopia, IMSLP).

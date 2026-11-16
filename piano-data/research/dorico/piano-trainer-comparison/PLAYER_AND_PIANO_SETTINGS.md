@@ -9,7 +9,7 @@
   - `src/entities/settings/model/types.ts` and `registry.ts`
   - `shared/lib/keyboard-choices.ts`
   - ADR 0034
-- Flat's player and piano settings will be added in `~/Downloads/research/flat/FLAT_PLAYER_AND_PIANO.md` (in progress).
+- Flat's player and piano settings will be added in `piano-data/research/flat/FLAT_PLAYER_AND_PIANO.md` (in progress).
 
 ---
 

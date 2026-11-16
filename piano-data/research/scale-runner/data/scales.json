@@ -1,0 +1,123 @@
+{
+  "_source": "App.framework/App (Dart AOT snapshot string table, arm64 slice)",
+  "_note": "Names and formula strings are EXACT (both present as strings). Pairing name->formula is INFERRED from standard theory (strings are hash-ordered, not adjacent). Grouping into the four quiz groups follows the group labels 'Major Scale', 'Harmonic Minor Scale', 'Melodic Minor Scale', 'Other Scales' (exact labels; membership inferred). Pentatonic/Blues/Chromatic formulas are not stored as strings (built in code).",
+  "groups": {
+    "Major Scale": [
+      [
+        "Major (Ionian)",
+        "1-2-3-4-5-6-7"
+      ],
+      [
+        "Dorian",
+        "1-2-b3-4-5-6-b7"
+      ],
+      [
+        "Phrygian",
+        "1-b2-b3-4-5-b6-b7"
+      ],
+      [
+        "Lydian",
+        "1-2-3-#4-5-6-7"
+      ],
+      [
+        "Mixolydian",
+        "1-2-3-4-5-6-b7"
+      ],
+      [
+        "Aeolian (Natural Minor)",
+        "1-2-b3-4-5-b6-b7"
+      ],
+      [
+        "Locrian",
+        "1-b2-b3-4-b5-b6-b7"
+      ]
+    ],
+    "Harmonic Minor Scale": [
+      [
+        "Harmonic Minor",
+        "1-2-b3-4-5-b6-7"
+      ],
+      [
+        "Locrian ♮6",
+        "1-b2-b3-4-b5-6-b7"
+      ],
+      [
+        "Ionian #5 (Augmented Major)",
+        "1-2-3-4-#5-6-7"
+      ],
+      [
+        "Dorian #4 (Ukrainian Dorian)",
+        "1-2-b3-#4-5-6-b7"
+      ],
+      [
+        "Phrygian Dominant",
+        "1-b2-3-4-5-b6-b7"
+      ],
+      [
+        "Lydian #2",
+        "1-#2-3-#4-5-6-7"
+      ],
+      [
+        "Ultralocrian (Altered Diminished)",
+        "1-b2-b3-b4-b5-b6-bb7"
+      ]
+    ],
+    "Melodic Minor Scale": [
+      [
+        "Melodic Minor (asc)",
+        "1-2-b3-4-5-6-7"
+      ],
+      [
+        "Dorian b2 (Phrygian ♮6)",
+        "1-b2-b3-4-5-6-b7"
+      ],
+      [
+        "Lydian Augmented",
+        "1-2-3-#4-#5-6-7"
+      ],
+      [
+        "Lydian Dominant",
+        "1-2-3-#4-5-6-b7"
+      ],
+      [
+        "Mixolydian b6",
+        "1-2-3-4-5-b6-b7"
+      ],
+      [
+        "Locrian ♮2 (Half-Diminished)",
+        "1-2-b3-4-b5-b6-b7"
+      ],
+      [
+        "Altered (Super Locrian)",
+        "1-b2-b3-b4-b5-b6-b7"
+      ]
+    ],
+    "Other Scales": [
+      [
+        "Major Pentatonic",
+        null
+      ],
+      [
+        "Minor Pentatonic",
+        null
+      ],
+      [
+        "Blues",
+        null
+      ],
+      [
+        "Chromatic",
+        null
+      ]
+    ]
+  },
+  "alsoPresent": [
+    "Major",
+    "Minor",
+    "Ionian",
+    "Aeolian",
+    "Diminished",
+    "Augmented",
+    "C Major  1-2-3-4-5-6-7 (guide example)"
+  ]
+}

@@ -1,0 +1,716 @@
+# Scale Runner: English UI strings
+
+All strings are **exact**, extracted from the Dart AOT snapshot: Latin-1 strings with `strings(1)`, UTF-16 strings with a Node scan. They were filtered to app copy. A few Flutter or library labels may remain.
+
+- A leading or trailing space marks a fragment that is concatenated at runtime with a number or name, e.g. `"-day streak!"`.
+- **Grouping is inferred** by keyword. Snapshot order is hash order.
+- Machine-readable copy: `data/strings_en.json` (689 strings).
+
+**Locales:** English only. There is no `intl`/ARB, no `.lproj` other than `Base.lproj`, and `CFBundleDevelopmentRegion=en`. **No Russian.**
+
+## Practice modes, prompts and feedback (305)
+
+- `-day piano practice streak with Scale Runner. `
+- `. No voicing is deleted.`
+- `" is the same voicing: `
+- `"String" is not a supported type.`
+- `% accuracy `
+- `  • Your display name and a generated avata`
+- `  • Your practice settings (enabled scales, chords, keys and drill options)`
+- `  • Your saved voicings, folders and tags`
+- `12-bar blues`
+- `1st inversion`
+- `2 months of Groove Runner Pro, free.`
+- `2nd inversion`
+- `7th chords`
+- `9th chords`
+- `A 0–100 score per mode, blending accuracy with how much you've practiced. Shared with friends.`
+- `A few minutes at the keys keeps you moving forward.`
+- `A key and scale are named at the top, with its formula.`
+- `A note often lives in more than one place on the neck. How much of that to show alongside the one the drill means.`
+- `A one-bar count-in leads into each new key.`
+- `Accuracy`
+- `Advance on the metronome beat (count-in first). Off = self-paced: play each voicing to advance.`
+- `All colors are grayscale, no chroma.`
+- `All keys`
+- `Already waiting for next.`
+- `Any chord tones`
+- `Any voicing counts, and a slightly late hit still scores.`
+- `Arpeggiated Notes`
+- `Back to root`
+- `Bar 1 `
+- `Bar 2 `
+- `Bar 4 `
+- `Bars`
+- `Beat dots`
+- `Beat indicator`
+- `Blue target dots`
+- `Bonus: 2 months of Groove Runner Pro free`
+- `Build a voicing, then play it in all 12 keys`
+- `Build a voicing.`
+- `Build and drill as many shapes as you want, past the free 3.`
+- `Build chords one note at a time on the on-screen keys. Notes stay lit until the chord completes, a wrong note is played, or 2 seconds pass. MIDI instruments still hold every note.`
+- `Build the chord`
+- `Build the named chord, note by note or all at once`
+- `Build the named chord, one note at a time or all at once.`
+- `By degree`
+- `By mode`
+- `C Major, root`
+- `Calibrate Timing`
+- `Can not change entry mode from `
+- `Capture a chord shape you like by playing it.`
+- `Chord`
+- `Chord families`
+- `Chord formulas`
+- `Chord held`
+- `Chord missed`
+- `Chord practice`
+- `Chord ready`
+- `Chord struck`
+- `Chords`
+- `Clear the accuracy you've accumulated by chord quality and degree.`
+- `Clear the accuracy you've accumulated by key and mode.`
+- `Comp diatonic chords in time, one per bar, in a single key`
+- `Correct notes light green, wrong ones flash red. Just try again.`
+- `Correct! Press any key to continue`
+- `Couldn't open the store. Search for Groove Runner and use code `
+- `Count in between keys`
+- `Count-in display`
+- `Create your first voicing`
+- ` days in a row with Scale Runner! Join me: `
+- `Defaults to the lowest note. Pick any of the twelve, since a rootless voicing has no root in it at all.`
+- `Degree formula`
+- `Delete account`
+- `Delete your account?`
+- `Display name`
+- `Drill it in all 12 keys.`
+- `Drill it on piano`
+- `Drill settings`
+- `Drills`
+- `Each chord shows during its count-in; strike it on the downbeat.`
+- `Each click is an eighth note`
+- `Each inversion is built from scratch, so lift off between them.`
+- `Each round picks a random chord and key, then walks its inversions up an octave and back down.`
+- `Edit voicing`
+- `Every progression & key`
+- `Finish the scale to get the next key.`
+- `Flash the metronome BPM green/amber/red with your key timing`
+- `Follow a chord progression`
+- `Formula`
+- `Formula, bass up`
+- `Four-note diatonic 7ths instead of triads`
+- `Free Play`
+- `Free Play guide`
+- `Free Play names whatever you play. Scales and Chords quiz you with random prompts. Scale Running is a continuous drill in time with the metronome.`
+- `Freestyle`
+- `Fret numbers`
+- `Full progression presets, sevenths, and key cycles.`
+- `Get 2 months of Groove Runner Pro free with Scale Runner Pro.`
+- `Get Groove Runner`
+- `Get ready…`
+- `Got a MIDI keyboard?`
+- `Green is on the beat, amber is close, red is off.`
+- `Groove Runner Pro, on us`
+- `Groove Runner: 2 months free`
+- `Groove Runner: drum practice for MIDI e-kits`
+- `handling status bar action`
+- `Harmonic Minor Scale`
+- `Hide Groove Runner offer`
+- `Highlight the chord tones on the keyboard. Turn off for a harder challenge.`
+- `Highlight the keys to press on the keyboard. Turn off for a harder challenge.`
+- `Hints`
+- `Hold C, run C Ionian`
+- `Hold chords and run their modes in time, key by key`
+- `Hold each chord while running its mode. Off = plain scale runs.`
+- `Hold it until every note lights up.`
+- `Hold the chord`
+- `Hold the chord, run the mode: one note per beat`
+- `How many chords per session. The drill ends and tallies automatically after the last one.`
+- `How the count toward each chord's strike is shown.`
+- `How the key advances after each full pass of the progression`
+- `How the key moves`
+- `I'm practicing piano with Scale Runner. `
+- `If you connect a MIDI keyboard via USB or Bluetooth, the app communicates directly with that device to receive note input. No information about your device, your playing, or your MIDI hardware is transmitted anywhere.`
+- `In tempo mode, one inversion per beat after the count-in.`
+- `Included with Scale Runner Pro`
+- `Interval`
+- `Inversion`
+- `INVERSION`
+- `Inversion Running guide`
+- `Inversion Running settings`
+- `It ends at midnight. One quick session saves it.`
+- `Its notes are spread wider than six strings can hold in every key of the cycle.`
+- `Its voicing moves`
+- `Jam Mode`
+- `Jam Mode guide`
+- `Jam Mode settings`
+- `Jam Mode stats reset`
+- `Keep tapping...`
+- `Key change`
+- `Key not in map.`
+- `Keyboard working!`
+- `Keys`
+- ` keys.`
+- `Label each string above the board — E A D G B E`
+- ` left in this mode.`
+- `Let's play`
+- `Life happens. Pro members get a weekly streak freeze that would have saved it, and every practice mode, forever.`
+- `Major Scale`
+- `Mark the exact keys to play. Turn off once you can find the shape yourself, since that's the point of the mode.`
+- `Melodic Minor Scale`
+- `Meter (locked while running)`
+- `Meter.`
+- `Metronome`
+- `Mirror the fretboard for a left-handed grip`
+- `Missed`
+- `Mode`
+- `Mode scores`
+- `Nailed it!`
+- `New voicing`
+- `Next chord…`
+- `Next key…`
+- `No degree data yet.`
+- `No MIDI devices found. Connect a USB keyboard or pair over Bluetooth, then rescan.`
+- `No mode data yet.`
+- `No notes yet.`
+- `No piano needed`
+- `No voicings match`
+- `None of the provided map keys matched this set, and the type "`
+- `Note names on dots only`
+- `Note sound`
+- `Notes, intervals and chords are named as you play`
+- `Notifications are blocked. Allow them for Scale Runner in your device settings first.`
+- `Number the first fret shown and the position markers beside it`
+- `Off names all 30 cells, which can crowd the shape you are meant to see`
+- `One bar of clicks before each new key so you can reset your hands. Off rolls straight into the next key.`
+- `One diatonic chord per bar, all in a single key.`
+- `One missed day a week is repaired automatically.`
+- `One note per click, eight notes per bar.`
+- `One shape, every key. Changing either of these restarts the drill.`
+- `One-time purchase: Scale Running, Inversion Running, Jam Mode and unlimited saved voicings`
+- `Only your display name, avatar, and streak are shared, and only with friends you invite.`
+- `Operation already completed`
+- `Optional Account & Social Features`
+- `Other Scales`
+- `Piano`
+- `Pick a practice mode`
+- `Pick another voicing`
+- `Pick up where you left off. Five minutes counts.`
+- `Play`
+- `Play a chord shape, say which note is its root, and give it a name. Voicings then walks that exact shape through every key, at your own pace.`
+- `Play a Jam Mode session to see per-quality stats here.`
+- `Play a piano tone when you press a key (turn off if your keyboard has its own sound)`
+- `Play all the chord notes together`
+- `Play an Inversion Running session to see per-chord stats here.`
+- `Play any chord`
+- `Play any key on your keyboard in time with the metronome.`
+- `Play any voicing of 3 or more notes built on the prompted root: 3rds, 7ths, 9ths, sus tones, doubled freely. The lowest note must be the root. The family picks below are ignored while this is on.`
+- `Play anything`
+- `Play anything. Chords and intervals are named as you play them`
+- `Play anything. Whatever is sounding gets named live.`
+- `Play at least two notes first.`
+- `Play it from the root, one note at a time.`
+- `Play scales from a random key, note by note`
+- `Play the chord on beat one, then run its mode.`
+- `Play the chord on your keyboard, or tap the keys below. Notes stay put once played. Play one again to remove it.`
+- `Play the chord, then walk it up through its inversions and back.`
+- `Play the scale, low to high`
+- `Play the voicing`
+- `Progression`
+- `Prompted`
+- `Prompted shows a specific chord each bar. Freestyle lets you play any diatonic chord, just don't play the same scale degree twice in a row.`
+- `Read the prompt`
+- `Rename voicing`
+- `Reps per key`
+- ` rescued beat=`
+- `Reset weak-point stats`
+- `Root (8va)`
+- `Run it again`
+- `Run the scale: one note per beat`
+- `Save it, then drill it through all 12 keys.`
+- `Scale practice`
+- `Scale Run`
+- `SCALE RUN`
+- `Scale Runner`
+- `Scale Runner does not knowingly collect any information from anyone, including children under 13, because it does not collect information at all.`
+- `Scale Runner Pror`
+- `Scale Runner works fully offline and collects no personal data unless you choose to sign in for the optional social features. The app uses no analytics, advertising, or tracking services of any kind.`
+- `Scale Running`
+- `Scale Running guide`
+- `Scale Running settings`
+- `Scale Running stats reset`
+- `Scale Running, Inversion Running and Jam Mode, in time, key by key, as often as you like.`
+- `Scales`
+- `Search voicings, tags, folders`
+- `Session complete`
+- `Session ended`
+- `Session expired.`
+- `Session length`
+- ` session, enjoy!`
+- `Show formula`
+- `Show key dots`
+- `Show stats bar`
+- `Show the chord's degree formula (e.g. 1-3-5) under the prompt.`
+- `Show the shape's spelling (e.g. 7-3-5-1) under the key name.`
+- `Sign in to keep your voicings, settings, stats and streak in sync across your devices, invite friends, applaud their practice, and climb the streak leaderboard. Everything else works without an account.`
+- `streak_days, created_at, seen_at, from:profiles!applause_from_id_fkey(id, display_name, avatar_seed)`
+- `Strike the chord`
+- `Strike the chord, run the mode: one note per beat`
+- `String names`
+- `Tap a saved voicing to run it.`
+- `Tap the banner on the home screen to connect over USB or Bluetooth and play on the real thing.`
+- `Tap the keys below to build the shape. Notes stay put once tapped. Tap again to remove.`
+- `Tap the on-screen keys to answer. Correct notes turn green; wrong ones flash red and you just try again.`
+- `tap to change`
+- `Tap to connect or just use the on-screen keys`
+- `Target dots`
+- `Tempo mode`
+- `Test your keyboard`
+- ` That spread is wide enough that one fixed correction can only get you close — retry somewhere quieter, or with wired audio.`
+- `The App Store opens with the code ready to redeem.`
+- `The authentication challenge sent by the server is not correctly formatted.`
+- `The blue dots marking which keys to play`
+- `The degree formula under the scale/chord name`
+- `The key the drill begins in when you press Start`
+- `The key the drill begins in when you press Start.`
+- `The metronome is a plain click here: no scoring, no session.`
+- `The next chord follows straight away.`
+- `This clears the per-key and per-mode accuracy recorded on this device. Practice synced from other devices stays. It can't be undone.`
+- `This clears the per-quality and per-degree accuracy recorded on this device. Practice synced from other devices stays. It can't be undone.`
+- `This invite was already used.`
+- `This permanently removes your profile, friendships, and every synced voicing, setting and stat from our servers. Your local copy stays on this device. This can't be undone.`
+- `This voicing does not fit under a hand on guitar`
+- `This voicing will be removed for good.`
+- `Three timed drills, unlimited`
+- `Timed exercises against the metronome`
+- `Timing`
+- ` to be a string, got `
+- `Truncated URI`
+- `Try a sample voicing first`
+- `Two notes show the interval, three or more the chord.`
+- `Unlimited voicings`
+- `Up a semitone at a time for an octave, then back down. 25 keys.`
+- `Use 7th chords`
+- `Voicing options`
+- `Voicings`
+- `Voicings guide`
+- ` voicings move`
+- `Walk a chord up its inversions an octave and back down`
+- `wants to be practice friends on Scale Runner. You'll see each other's streaks and can cheer each other on.`
+- `WEAKEST`
+- `Weakest chord`
+- `Weakest degree`
+- `Weakest key`
+- `Weakest mode`
+- `Weakest quality`
+- `Welcome to Scale Runner`
+- `What do you call this shape?`
+- `Which note is the root?`
+- `You already have this shape`
+- `You missed a day, but your Pro streak freeze kept your `
+- `You'll see a name like "G Major" and its formula, e.g. 1-2-3-4-5-6-7. Each number is a scale degree, and they light up as you play the right notes.`
+- `Your 8 taps ranged `
+- `Your account has been deleted.`
+- `Your Pro bonus. Tap for the code`
+- `Your streak, this week's practice and per-mode scores are visible only to friends you connect with; everything else is private to your account. There is no public profile or global leaderboard. You can delete your account at any time from the Friends screen, which permanently removes all of it from our servers. Without an account, nothing ever leaves your device.`
+- `Your voicing in C`
+- `Your voicings, practice settings, stats and streak follow your account to every device`
+
+## Streak, reminders, sharing (47)
+
+- `-day practice streak`
+- `-day streak `
+- `-day streak`
+- `-day streak alive. You get one freeze per week, so practice today to stay safe.`
+- `-day streak ended`
+- `-day streak on the line`
+- `-day streak once. Five minutes starts the next one.`
+- `-day streak!`
+- `  • Practice statistics (score, best streak)`
+- `  • Your practice statistics, per device`
+- `  • Your practice streak (current, best, total days)`
+- `A daily nudge at your chosen time, plus a heads-up when your streak is about to break`
+- `Applauded today`
+- `best streak`
+- `Best streak`
+- `Daily practice is how it sticks. Want a reminder at a time that suits you?`
+- ` days in a row. Keep it rolling!`
+- ` days of practice in a row.`
+- `Days practiced per week`
+- `No activity yet. When friends join or applaud your streak, it shows up here.`
+- `No friends yet. Share an invite link from the Friends screen to add one.`
+- `No history yet. A week of practice shows up here.`
+- `Notifications are off. You can enable reminders anytime in Settings.`
+- `Our drum practice app for MIDI e-kits. New subscribers, monthly plan.`
+- `Practice`
+- `Practice reminders`
+- `Practice streak`
+- `Practice with friends`
+- `Protect my next streak`
+- `Remind me daily`
+- `Reminder time`
+- `Reminders`
+- ` score and best streak on this device will go back to zero. This can't be undone.`
+- `Set score and best streak back to zero`
+- `Share your streak`
+- `Sign in to back up your streak and practice with friends`
+- `Streak`
+- `Streak leaderboard`
+- `Streak protection`
+- `Streak saved`
+- `The score, streak, and best row at the top`
+- `This week`
+- ` to practice`
+- `total days`
+- `You started a streak!`
+- `You'll stop seeing each other's streaks and activity. They aren't notified.`
+- `You've practiced `
+
+## Paywall, Pro, promo (26)
+
+- `A one-time unlock, yours forever, on all your devices.`
+- `Bonus unlocked`
+- `Couldn't restore purchases.`
+- `Last free `
+- `MIDI restore unavailable: `
+- `no message provided`
+- `No previous purchase found to restore.`
+- `No proxies given`
+- `PRO`
+- `Pro restored!`
+- `production applications or plugins published to pub.dev.`
+- `Protocol error`
+- `Provided URL: `
+- `Proxy failed to establish tunnel (`
+- `Purchases aren't available right now. Try again later.`
+- `Recover a previous Pro unlock on this device`
+- `Restore purchase`
+- `Restore purchases`
+- `Something went wrong with the purchase.`
+- `text provided, but cannot be empty`
+- `The ticker was canceled before the "orCancel" property was first used.`
+- `Then $5.99/month unless canceled. New subscribers only. Ends `
+- `Unlock Pro`
+- `Unlock Pro for `
+- `Unlocked. Thanks for the support!`
+- `Your Pro bonus`
+
+## Account, friends, sync (45)
+
+- `Add as friend`
+- `Add me as a friend so we can keep each other going!`
+- `An async operation is currently pending`
+- `Applaud`
+- `Applauded`
+- ` applauded your r`
+- `Apple sign-in failed.`
+- ` are now friends`
+- ` are now friends! Find them on your leaderboard.`
+- `Couldn't accept the invite. Try again.`
+- `Everything stays on this device; it just stops syncing`
+- `Everything stays on this device; it just stops syncing. Friends and applause come back when you sign in again.`
+- `Friend invite`
+- `Friends`
+- ` friends since `
+- `Friends since `
+- `Google sign-in failed.`
+- `Invite`
+- `Invite a friend`
+- `Last synced `
+- `Manage friends`
+- `No friends yet. The leaderboard starts with your first invite.`
+- `not signed in`
+- `Not signed in.`
+- `Not synced yet`
+- `Remove friend`
+- `Shown to friends`
+- `Sign in`
+- `Sign in first.`
+- `Sign in to accept:`
+- `Sign in to back up and sync`
+- `Sign in with Apple`
+- `Sign in with email`
+- `Sign in with Google`
+- `Sign out`
+- `Sign out?`
+- `Signed in`
+- `Sync now`
+- `Synced just now`
+- `That's your own invite link!`
+- `This invite has expired. Ask for a new one.`
+- `This invite link isn't valid anymore. Ask your friend for a new one.`
+- `This invite link isn't valid.`
+- `You applauded `
+- `Your library is backed up.`
+
+## Privacy policy (8)
+
+- `  • App settings (sound preference, onboarding status)`
+- `Changes to This Policy`
+- `Children's Privacy`
+- `Data Stored on Your Device`
+- `If this policy changes, the updated version will be posted here with a revised "Last updated" date.`
+- `Privacy Policy`
+- `Questions about this privacy policy? Contact us at:`
+- `Start • `
+
+## Other labels (258)
+
+- `. Save this one as well?`
+- `" doesn't exist`
+- `" from "`
+- `" not handled.`
+- `0h !`
+- `2-5-1 (Minor - Jazz)`
+- `2-5-1 (Tritone Substitution)`
+- `2-5-1-6 (Tritone Substitution - Alternative)`
+- `4n `
+- `4w> `
+- `6p d`
+- `A few seconds of how it works:`
+- `A message on the `
+- `About`
+- `Action.`
+- `Aeolian (Natural Minor)`
+- `All positions`
+- `Altered (Super Locrian)`
+- ` ancestor was`
+- `Assertiveness.`
+- ` at index `
+- `Augmented 11th`
+- `Augmented 7th`
+- `Augmented Major 7th`
+- `Axis.`
+- `Badge`
+- ` before version r`
+- `Best`
+- `Blue`
+- `Blues`
+- `Bluetooth pairing failed: `
+- `Brightness.`
+- `By fifths`
+- `By quality`
+- `C Major  1-2-3-4-5-6-7`
+- `Ca; `
+- `Challenge`
+- `Chromatic`
+- `Clear search and filters`
+- `Client.`
+- `Clip.`
+- `Close, a bit off`
+- `Code verifier could not be found in local storage.`
+- `Color.`
+- `Container.`
+- `Context.`
+- `Could not allocate `
+- ` d ago`
+- `Delete folder`
+- `Delete forever`
+- `Delete tag`
+- `Diminished 7th`
+- ` doesn't have `
+- `Dominant 11th`
+- `Dominant 13th`
+- `Dominant 7th`
+- `Dominant 7th flat 5`
+- `Dominant 7th flat 9`
+- `Dominant 7th sharp 9`
+- `Dominant 9th`
+- `Don't have the app? `
+- `Done`
+- `Dorian #4 (Ukrainian Dorian)`
+- `Dorian b2 (Phrygian ♮6)`
+- `e.g. Maj7 drop 2`
+- `Easy`
+- `Edit name`
+- `Em!`
+- `Email`
+- `Empty IP address`
+- `Expand for more details`
+- `Expando.`
+- ` family off`
+- `Fetch.`
+- `Folder name`
+- `Folder options`
+- `Got it`
+- `Green`
+- `Guide`
+- ` h ago`
+- `Harmonic Minor`
+- `Highlighter.`
+- `Home`
+- `How it works`
+- `How it works:`
+- `I'm on a `
+- `Iaa> `
+- `Ii.`
+- `indicatorPadding insets should be less than Tab Size`
+- `Instrument.`
+- `International Recording Star`
+- `INTRO`
+- `Ionian #5 (Augmented Major)`
+- `Jr( `
+- `just now`
+- `Keep at least one selected`
+- `Keep practicing`
+- `Last updated: July 14, 2026`
+- `Layer.`
+- `Level`
+- `Lifetime stats`
+- `Link.`
+- `Lm( `
+- `Lo9 `
+- `Local Legend`
+- `Location with the name "`
+- `Location.`
+- `Locrian ♮2 (Half-Diminished)`
+- `Locrian ♮6`
+- `Logger.`
+- `Long-press or right-click a tag to rename or delete it everywhere.`
+- `Lydian #2`
+- `Lydian Augmented`
+- `Lydian Dominant`
+- `Maj7 drop 2`
+- `Major (Ionian)`
+- `Major 10th`
+- `Major 13th`
+- `Major 14th`
+- `Major 2nd`
+- `Major 3rd`
+- `Major 6th`
+- `Major 7th`
+- `Major 9th`
+- `Major Pentatonic`
+- `Map.`
+- `Maybe later`
+- `Melodic Minor (asc)`
+- `Method not defined`
+- `MIDI and Bluetooth`
+- `MIDI connected`
+- `MIDI Devices`
+- ` min ago`
+- `Minor 10th`
+- `Minor 11th`
+- `Minor 13th`
+- `Minor 14th`
+- `Minor 2nd`
+- `Minor 3rd`
+- `Minor 6/9`
+- `Minor 6th`
+- `Minor 7th`
+- `Minor 7th flat 5`
+- `Minor 9th`
+- `Minor Add11`
+- `Minor Add9`
+- `Minor Major 7th`
+- `Minor Pentatonic`
+- `Mixolydian b6`
+- `Move to folder`
+- `Move to folder…`
+- `ms, close within `
+- `Name it`
+- `New folder`
+- `New folder…`
+- `New tag`
+- `NEXT UP`
+- `Nice`
+- `No accent`
+- `No events after a done.`
+- `No MIDI device`
+- `no more input`
+- `No user found.`
+- `Normal`
+- `Not a valid method`
+- `Not available`
+- `Not now`
+- `Numbers (4 3 2 1)`
+- `Octave`
+- ` of 12 selected`
+- `On time`
+- `Opening Act`
+- `Orange`
+- `Orientation.`
+- `Other positions`
+- `Paint.`
+- `Pair Bluetooth MIDI`
+- `Pairing`
+- `Perfect 11th`
+- `Perfect 12th`
+- `Perfect 4th`
+- `Perfect 5th`
+- `Phrygian Dominant`
+- `Pink`
+- `Please call layout() before paint() to position the text before painting it.`
+- `Practised`
+- `Press Start`
+- `Primary + ghost`
+- `Primary only`
+- `Qt3+ `
+- `Quiz`
+- `Random`
+- `Random.`
+- `Readout`
+- `Received an empty response with status code `
+- `Received masked frame from server`
+- `Rect Size : `
+- `Rename folder`
+- `Rename tag`
+- `Rescan devices`
+- `Reserved status code `
+- `Reset`
+- `Reset stats`
+- `Reset stats?`
+- `Retry`
+- `Rose`
+- `Round the circle of fifths once. `
+- `Route.`
+- `S]c `
+- `Save`
+- `Save anyway`
+- `Score`
+- `Semantics.`
+- ` sent to `
+- `Settings`
+- `Social features aren't available.`
+- `Sound`
+- `Start`
+- `Start again`
+- `Stats`
+- `Stats reset`
+- `Stop`
+- `Store.`
+- `Strict`
+- `Subjects do not support resume callbacks`
+- `Sus2 / Sus4`
+- `Tags`
+- `Tb+ `
+- `Teal`
+- `That's serious dedication: `
+- `The app stores the following information locally on your device only, using standard app preferences storage:`
+- `The capacity of the `
+- `The folder will be removed.`
+- `The shader has fewer than two float uniforms.`
+- `The tag will be removed.`
+- `This information is deleted automatically when you uninstall the app.`
+- `Threshold`
+- `Timer.`
+- ` to Ungrouped. Nothing is deleted.`
+- `Tolerance`
+- `Toward the nut`
+- `Triads`
+- `Tristate.`
+- `Tuning`
+- `Two Octaves`
+- `Ultralocrian (Altered Diminished)`
+- `Unfinished UTF-8 octet sequence`
+- `Ungrouped`
+- `Unison`
+- `Up the neck`
+- `Upgrade`
+- `Variant.`
+- `Version.`
+- `Violet`
+- `WORK ON`
+- `You and `
+- `You built a `
+- `Zg(2 `
