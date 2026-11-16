@@ -6,6 +6,14 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 
 1. **Read:** the area's section of `feedback-log.md`, its ADR (a refactor skips the ADR: `SKILL.md`, Loops and
    refactors), and the reference app's screens in `piano-data/reference-apps`.
+   **Look at the examples before refactoring any control, component or page** (owner, 2026-11-16: "when you need to
+   refactor a control and component a page … look at the piano-data examples and search by file name … and also
+   search for example images in internet"): find the thing by its file name in `piano-data/reference-apps`
+   (`ls piano-data/reference-apps/*/ | grep -i <word>`: members, settings, folder, sheet, menu, toolbar, picker), open
+   every match, then search the web for screenshots of the same control in shipped apps, and cite what was looked at
+   in the spec. Dorico and Flat (`dorico/`, `flat-score-editor/`) come first and are looked at most;
+   `piano-chords-and-scales-app/` is a welcome source for any screen. `music-theory-book-app/` is for its learning
+   content only, never as a UI example. The app's own old screens are never an example.
 2. **Look at it today:** shoot the current screen before changing it, so you know what it does.
 3. **Load `impeccable`:** `.claude/skills/impeccable/scripts/impeccable context --target <path>` once a session, then the command's
    reference, and `.claude/skills/impeccable/reference/craft-floor.md` right before the first edit. Our screens are Operate; lessons and How to use are Read.
@@ -27,7 +35,7 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - A screen's own actions go in its bar. What floats is the + that creates, or a page's one primary action at its foot
   (Play on a detail page, `DESIGN.md`; owner 2026-11-13). One gear per screen, Edit beside the title.
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
-- In a list of people or things, Add is the list's last row; a row's own acts sit behind its ···; the loss of the
+- In a list of people or things, Add is the list's last row, and a folded list's "Show all n ›" is a quiet link under the card, below Add (owner 2026-11-16); a row's own acts sit behind its ···; the loss of the
   whole thing is its own card at the page's foot (Noji's Participants and deck settings; owner 2026-11-16). Never a
   New field inline above a list, nor loose Add or Delete links.
 - Reorder by dragging a handle, by mouse and held finger, never Move up or Move down.

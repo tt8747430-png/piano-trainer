@@ -33,7 +33,7 @@ reference shows what to add as well as what to copy. The brief and the owner's c
 
 | Area                                         | Reference                                                                      |
 | -------------------------------------------- | ------------------------------------------------------------------------------ |
-| Score editor                                 | Flat, Dorico, Sibelius for iPhone, forScore, MuseScore, Soundslice             |
+| Score editor                                 | Dorico and Flat first, looked at most; Sibelius for iPhone, forScore, MuseScore, Soundslice |
 | Engraving                                    | LilyPond and abcjs rules; Verovio, the engine                                  |
 | Player views, chords, song lessons           | Chordify, without guitar features; Songscription's score page (`.scratch/r39/plan/player-reference-songscription.md`) |
 | Library, folders, swipe actions              | Mindscape and the owner's `memory-palaces` repo, whose code may be copied      |
@@ -42,6 +42,7 @@ reference shows what to add as well as what to copy. The brief and the owner's c
 | Public library, publish, export, Profile     | Noji (`reference-apps/noji`)                                                             |
 | Profile, Settings, tab bar, selection bar    | `memory-palaces` (`AppNav`, `BottomDock`, `ProfilePage`, `SettingsPage`), and other best-practice apps |
 | Lesson and course editors                    | Obsidian's live preview, Notion and Craft's floating toolbar                   |
+| Any control, component or page               | `piano-data/reference-apps` by file name, then screenshots on the web ([ui-and-mockups](references/ui-and-mockups.md), Building a screen); `piano-chords-and-scales-app` welcome; `music-theory-book-app` for its content only, never its UI |
 
 ## Rules every change is held to
 
