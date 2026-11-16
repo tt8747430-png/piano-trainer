@@ -245,7 +245,6 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       intoSeg: SEGT(['None', 'Fill in', 'Break'], tg.into || 'None', (l) => setTag({ into: l })),
       endingSeg: SEGT(['None', 'Ending I', 'Ending II', 'Ending III'], tg.ending || 'None', (l) => setTag({ ending: l })),
       chordOn58: st.sheet === 'chord', selSym, selTitle: 'Bar ' + ((st.sel ? st.sel[1] : 0) + 1) + ' · ' + selSym, selLen: selLen + (selLen === 1 ? ' beat' : ' beats'), lenDn: () => setLen(-1), lenUp: () => setLen(1),
-      suggest: ['Am', 'F', 'G', 'Em', 'Dm', 'G7'].map((c) => ({ c, pick: () => editSecs((s) => { s[st.sel ? st.sel[0] : 0][3][st.sel ? st.sel[1] : 0][selCi] = c; }) })),
       chordRoots: rootGrid(Math.max(0, ROOTS.indexOf((selSym.match(/^[A-G][♭♯]?/) || ['C'])[0].replace('D♭', 'C♯').replace('G♭', 'F♯'))), () => {}),
       qualChips: chipsOf(['maj', 'm', '7', 'maj7', 'm7', 'sus4', 'sus2', 'dim', 'add9', '6'], (() => { const q = selSym.split('/')[0].replace(/^[A-G][♭♯]?/, ''); return q === '' ? 'maj' : q === '°' ? 'dim' : q; })(), () => {}),
       duplicate: () => editSecs((s, l) => { const [si, bi] = st.sel || [0, 0]; s[si][3].splice(bi + 1, 0, s[si][3][bi].slice()); }),
