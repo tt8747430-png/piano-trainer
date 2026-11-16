@@ -77,6 +77,11 @@ for b in boards:
                             ' if (!(t instanceof Element)) return; const h = t.previousElementSibling; if (!h || !h.matches("header[data-float]")) return;'
                             ' const y = t.scrollTop, p = last.has(t) ? last.get(t) : 0; if (Math.abs(y - p) < 6) return; last.set(t, y);'
                             ' if (y > p && y > 56) h.setAttribute("data-away", ""); else h.removeAttribute("data-away"); }, true); })();</script></head>', 1)
+        # a sheet or popover keeps its own scroll: reaching its end never scrolls the page under it (Apple HIG, Sheets;
+        # Web Interface Guidelines, overscroll-behavior: contain); a tap never waits on double-tap zoom (touch-action)
+        if 'data-sheetcss' not in h1:
+            h1 = h1.replace('</head>', '<style data-sheetcss>[role=dialog], [role=dialog] .nos { overscroll-behavior: contain }'
+                            ' button, a, [role=switch], [role=radio], [role=slider] { touch-action: manipulation }</style></head>', 1)
         if '<!--piano2d-->' in h1 and 'PIANO2D' not in h1:
             import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as _PS
             k = h1.rindex('</script>'); h1 = h1[:k] + '/*PIANO2D*/' + _PS.PIANO2D_JS + h1[k:]
