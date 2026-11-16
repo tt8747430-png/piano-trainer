@@ -53,18 +53,18 @@ def RS_CAP(i, perfect):
         return f'<span style="color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓</span>'
     if m[0] == 'wrong':
         return f'<span style="color: {RS_RED}; font-weight: 600">Wrong notes</span>'
-    return f'<span style="color: {RS_OCHRE}; font-weight: 600; font-variant-numeric: tabular-nums">{m[0].capitalize()} · {m[1]} ms</span>'
+    return f'<span style="color: {RS_OCHRE}; font-weight: 600; font-variant-numeric: tabular-nums">{m[0].capitalize()}<br>{m[1]} ms</span>'
 
 
 def RS_RUNSTAFF(per_row, cw, perfect):
     rows = []
     for r in range(0, 12, per_row):
-        cells = [f'<div style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL([], 34, clef=True)}<span style="height: 18px"></span></div>']
+        cells = [f'<div style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL([], 34, clef=True)}<span style="height: 32px"></span></div>']
         for i in range(r, r + per_row):
             m = None if perfect else RS_MARKS.get(i)
             notes, red = (m[1], m[2]) if m and m[0] == 'wrong' else (RS_RUN[i], None)
             cells.append(f'<div role="listitem" aria-label="{RS_NAMES[i % 4]}" style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL(notes, cw, red, last=(i == r + per_row - 1))}'
-                         f'<span style="height: 18px; font-size: 12px; line-height: 18px; white-space: nowrap">{RS_CAP(i, perfect)}</span></div>')
+                         f'<span style="height: 32px; font-size: 12px; line-height: 16px; white-space: nowrap; text-align: center">{RS_CAP(i, perfect)}</span></div>')
         rows.append(f'<div role="list" style="display: flex; justify-content: center">{"".join(cells)}</div>')
     return '<div style="display: flex; flex-direction: column; gap: 4px">' + ''.join(rows) + '</div>'
 

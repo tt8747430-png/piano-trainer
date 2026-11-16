@@ -454,6 +454,7 @@ owner's, typos fixed.
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
 ## Practice
+- **A run's timing verdicts stay under their own chord** (loop round 50, PracticeResult): on a phone "Early · 25 ms" and "Late · 60 ms" under neighbouring chords ran into each other; each verdict now sets on two lines, the word over its milliseconds (Early / 25 ms), every row of the run 32px under its staff so the rows stay level, on both sizes.
 - **Loop round 48, the tools' laptop pages start at one line (Tuner):** the Tuner's Reference pitch card stood 24 lower than the Metronome's settings card; both pages start their columns 24 under the bar (2026-11-16).
 - **Loop round 48, Intervals' laptop shows what its ⓘ hid (IntervalsLaptop):** the right column ended at the grid over an empty half screen; under it now stand Down (the song that falls by the interval) and Inverts to, and the laptop's ⓘ keeps the meaning alone. Sounds like stays the way up, so nothing is said twice; the phone keeps all three in its ⓘ (2026-11-16).
 - **Loop round 48, the Progressions tile reads I IV V (Practice):** its numerals ran together as "IIV V" at the tile's size; they stand apart, 10.5 bold with wider word spacing, wherever the tile is drawn (2026-11-16).
