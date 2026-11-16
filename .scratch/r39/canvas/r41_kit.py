@@ -199,7 +199,7 @@ def pic(kind, s=44):
       'keys': ''.join(f'<rect x="{6+i*5}" y="12" width="4.6" height="20" rx="1" fill="{"#E19E8C" if i in (1,3,5) else "#FEFDFB"}"></rect>' for i in range(7)) + ''.join(f'<rect x="{9.5+i*5}" y="12" width="3" height="12" fill="{INK}"></rect>' for i in (0,1,3,4,5)),
       'staff': ''.join(f'<path d="M6 {14+i*4}H38" stroke="{INK}" stroke-width=".7"></path>' for i in range(5)) + ''.join(f'<ellipse cx="{11+i*5}" cy="{32-i*2.2}" rx="2.2" ry="1.7" fill="{INK}"></ellipse>' for i in range(6)),
       'arc': f'<ellipse cx="13" cy="30" rx="3" ry="2.3" fill="{INK}"></ellipse><ellipse cx="31" cy="18" rx="3" ry="2.3" fill="{INK}"></ellipse><path d="M14 26Q22 6 30 14" fill="none" stroke="{INK}" stroke-width="1.4"></path>',
-      'roman': f'<text x="22" y="27" text-anchor="middle" font-size="11" font-weight="700" fill="{INK}">I IV V</text>',
+      'roman': f'<text x="22" y="27" text-anchor="middle" font-size="10.5" font-weight="700" word-spacing="2.5" fill="{INK}">I IV V</text>',
       'roll': ''.join(f'<rect x="{6+i*8}" y="{28 - (i%2)*8}" width="6" height="3.5" rx="1.5" fill="{INK}"></rect>' for i in range(4)) + f'<rect x="6" y="34" width="30" height="3.5" rx="1.5" fill="#8C7AB8"></rect>',
       'chips': ''.join(f'<rect x="{5+i*12}" y="15" width="10" height="14" rx="3" fill="#FEFDFB"></rect><text x="{10+i*12}" y="25.5" text-anchor="middle" font-size="7" font-weight="700" fill="{INK}">{c}</text>' for i, c in enumerate('CGF')),
       'drill': ''.join(f'<ellipse cx="{8+i*4.4}" cy="{30-[0,2,3,4,5,4,3,2][i]*2.4}" rx="1.8" ry="1.4" fill="{INK}"></ellipse>' for i in range(8)) + f'<path d="M9.6 30V17M40 30V17" stroke="{INK}" stroke-width=".6"></path>',
