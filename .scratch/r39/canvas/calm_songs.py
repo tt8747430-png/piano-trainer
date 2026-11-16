@@ -18,7 +18,17 @@ def score_svg(w, sel=None, played=None, size=1.0):
             out.append(f'<text x="{x0:.1f}" y="{top + 2 * sp - 1:.1f}" font-size="{19 * size:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">3</text><text x="{x0:.1f}" y="{base - 1:.1f}" font-size="{19 * size:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">4</text>')
             x0 += 22 * size
         wt = lambda b: 1 + b * 0.7; beats = sum(wt(b) for _, b, _, _ in sysn); dx = (w - x0 - 20) / (beats + 0.3); x = x0 + 12; last = idx + len(sysn) - 1
-        for p, b, syl, ch in sysn:
+        # an engraver widens the spacing so no two words touch: each note's advance is at least half of its word and the
+        # next one's, plus a gap; the rest of the line is shared out by duration, as before
+        avail = beats * dx; need = [((len(sysn[i][2]) + (len(sysn[i + 1][2]) if i + 1 < len(sysn) else 0)) / 2 * 7.4 + 10) * size for i in range(len(sysn))]
+        fixed = set()
+        while True:
+            free = avail - sum(need[i] for i in fixed); fw = sum(wt(sysn[i][1]) for i in range(len(sysn)) if i not in fixed)
+            more = [i for i in range(len(sysn)) if i not in fixed and wt(sysn[i][1]) * free / fw < need[i]]
+            if not more: break
+            fixed.update(more)
+        adv = [need[i] if i in fixed else wt(sysn[i][1]) * free / fw for i in range(len(sysn))]
+        for k, (p, b, syl, ch) in enumerate(sysn):
             y = base - STEP[p] * sp / 2; on = idx == sel; past = played is not None and idx < played
             col = '#8C6418' if on else (SOFT if past else INK)
             # the selection is tight to the note, its head and stem, never a column over the chord and the words (feedback-log, Selection; Dorico and Flat colour the note itself)
@@ -34,9 +44,9 @@ def score_svg(w, sel=None, played=None, size=1.0):
             if b == 3: out.append(f'<circle cx="{x + 10 * size:.1f}" cy="{y - (sp / 2 if STEP[p] % 2 == 0 else 0):.1f}" r="{1.6 * size:.1f}" fill="{col}"></circle>')
             if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - 10 * size:.1f}" font-size="{15 * size:.0f}" font-weight="700" fill="{INK}">{ch}</text>')
             out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" fill="{col}">{syl}</text>')
-            x += wt(b) * dx; acc += b
+            x += adv[k]; acc += b
             if acc % 3 == 0 and idx < last:
-                out.append(f'<path d="M{x - dx * 0.5:.1f} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
+                out.append(f'<path d="M{x - adv[k] * 0.5:.1f} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
             idx += 1
         gy = base + 40 * size; H = gy
     return f'<svg viewBox="0 0 {w} {H:.0f}" width="100%" role="img" aria-label="Amazing Grace, bars 1 to 7" style="display: block">' + ''.join(out) + '</svg>'

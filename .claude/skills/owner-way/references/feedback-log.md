@@ -105,6 +105,7 @@ owner's, typos fixed.
   is exactly the bars chosen; it works from the keyboard. A note clicked in the Player jumps to that note.
 - **Two marks:** what is chosen and what is playing are separate; playing is one line across the staves in sight.
 - **The editor's selection tight to the note (loop round 58, held against Dorico `001`–`005` and Flat):** the chosen note wore a sky column from over its chord symbol to under the staff, picking the chord and empty staff with it; it now wraps the note's head and stem alone, as Dorico and Flat mark the note itself, on the editor's four boards (2026-11-16).
+- **A score's words never touch (loop round 58, engraving):** on a phone the song's page set "zing grace," and "that saved" against each other, the notes spaced by duration alone; each note now advances at least half of its word and the next one's plus a gap, the rest of the line shared by duration, as an engraver widens a bar for its lyrics; wherever the melody is drawn (2026-11-16).
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
