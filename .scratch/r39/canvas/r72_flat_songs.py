@@ -85,9 +85,7 @@ def FOLDERCARDS(href):
                    f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>' for t, s, c, k in FOLDERS_ALL)
 KEEPROWS = lambda href: GROUP(('link', 'Archive', '3', href), ('link', 'Trash', '2', href), bg=SHEET)
 _NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
-FOLDERSHEET = BSHEET('folderOn', 'New folder', f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
-                     f'<input value="{{{{fname}}}}" onInput="{{{{named}}}}" placeholder="Folder name" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
-                     f'<button type="button" onClick="{{{{closeSheet}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{createBg}}}}; color: {{{{createFg}}}}; font: inherit; font-size: 16px; font-weight: 700">Create</button>', 'Cancel')
+FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 64px 24px; text-align: center">'
          f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
          f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Write a song, import MusicXML or MIDI, or add one from Explore.</span>'
@@ -130,7 +128,7 @@ RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
-ovpops = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + FOLDERSHEET.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
+ovpops = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + LFOLDERSHEET_L
 detail('Songs', 'My songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET + SONGSHEET + IMPSHEET + RECSHEET, ovpops + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
 # ── All songs ──
