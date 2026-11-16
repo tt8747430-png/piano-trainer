@@ -35,9 +35,9 @@ CF_SET66 = GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), (
 ph66 = (TOP66 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + SHOWSTATES() + TITLE66 + TRY66 + NOTES66 + ROWS66 + '</main>' + BAR66('left: 12px; right: 12px; bottom: 30px'))
 lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP66).replace('Main.dc.html', 'Laptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'{SHOWSTATES()}<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
-        + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
+        + f'{SHOWSTATES()}<div style="flex: none; margin: -8px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE66.replace("font-size: 44px", "font-size: 64px")}{TRY66}{NOTES66}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS66}</div></div></div>'
         + BAR66('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')

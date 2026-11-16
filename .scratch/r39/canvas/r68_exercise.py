@@ -34,9 +34,9 @@ POPS68 = POPOVER('rootOn', 'Key', ROOTGRID(), 'left: calc(50% - 400px); bottom: 
 ph68 = (TOP68 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
         + TITLE68 + MUSIC68(338) + ROWS68 + HOW68 + '</main>' + BAR68('left: 12px; right: 12px; bottom: 30px'))
 lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP68).replace('FingerTechnique.dc.html', 'FingerTechniqueLaptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 56px">'
-        + f'<div style="flex: none; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div>'
-        + f'<div style="display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start">'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
+        + f'<div style="flex: none; margin: -8px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}{HOW68}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68}</div></div></div>'
         + BAR68('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + '</div>')

@@ -64,9 +64,9 @@ ph61 = (TOP61 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: a
         + TITLE61 + MUSIC61 + SEG61 + GRID61 + '</main>'
         + BAR61('left: 12px; right: 12px; bottom: 30px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 104px'))
 lm61 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP61)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 24px 40px; align-content: start; padding: 8px 40px 120px 56px">'
-        + f'<div style="grid-column: 1 / -1; margin: -8px -40px 0 -56px">{KB60("kbLE", 180)}</div><div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE61}{MUSIC61}</div>'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{SEG61}{GRID61}</div></div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 0 120px">'
+        + f'<div style="margin: 0 0 28px">{KB60("kbLE", 180)}</div><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE61}{MUSIC61}'
+        + f'<div style="display: flex; flex-direction: column; gap: 16px">{SEG61}{GRID61}</div></div></div>'
         + BAR61('left: 50%; translate: -50% 0; bottom: 24px; width: 520px') + WAYMENU('left: 50%; translate: -50% 0; bottom: 100px') + '</div>')
 # on a laptop the way down and the inversion stand under the grid (Sounds like is the way up); its ⓘ keeps the meaning alone
 SONGS61 = '<div style="flex: none; margin-top: 8px">' + GROUP(('val', 'Down', '{{downS}}'), ('val', 'Inverts to', '{{inv}}'), bg=SHEET) + '</div>'
