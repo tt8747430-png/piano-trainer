@@ -134,7 +134,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const SECS = st.secs || SECS0, LEN = st.len || LEN0;
     const lens = (si, bi, cs) => LEN[si + ':' + bi] || (cs.length === 1 ? [4] : cs.map(() => 4 / cs.length));
     const TAGS0 = [{ intro: 'Intro I', mains: ['Main A', 'Main B'], into: 'Fill in' }, { mains: ['Main C'], into: 'Break' }, { mains: ['Main D'], ending: 'Ending I' }];
-    const TAGS = st.tags || TAGS0, follow = st.follow ?? true;
+    const TAGS = st.tags || TAGS0, follow = st.follow ?? false;
     const tagLine = (t) => [t.intro, t.mains.join(', '), t.into, t.ending].filter((x) => x && x !== 'None').join(' · ');
 
     const kbOnS = st.kbOn ?? true, kbView = st.kbView || '2d', kbAngle = st.kbAngle || 'seat', kbHands = st.kbHands ?? true, kbRange = st.kbRange || 'fit', kbLabel = st.kbLabel || 'names';
@@ -241,6 +241,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       playFrom: () => set({ sheet: null, playing: true, pos: 0 }),
       shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), shareSeg: SEGT(['View only', 'Can edit'], st.shareMode ?? 'View only', (l) => set({ shareMode: l })),
       followSw: follow, followBg: follow ? '#44684A' : '#DAD1C8', followX: follow ? 22 : 2, toggleFollow: () => set({ follow: !follow }),
+      states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],
       arOn: follow, arStart: lamp(!!st.playing), arAcmp: lamp(ar.acmp), arSync: lamp(ar.sync), arSyncStop: lamp(ar.syncStop), arAuto: lamp(ar.autoFill), arOts: lamp(ar.ots), arFade: lamp(ar.fade), arBreak: lamp(false, ar.next === 'Break'),
       arIntros: ['I', 'II', 'III'].map((n) => ({ n, ...lamp(ar.intro === n), pick: () => arSet({ intro: ar.intro === n ? null : n }) })),
       arMains: ['A', 'B', 'C', 'D'].map((n) => ({ n, ...lamp(ar.main === n, ar.next === n), pick: () => arSet(ar.main === n ? { next: 'fill' } : { next: n, main: st.playing ? ar.main : n }) })),
@@ -259,7 +260,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
 { const R = Component.prototype.renderVals; Component.prototype.renderVals = function () {
   const v = R.call(this), st = this.state || {}, set = (o) => this.setState(o);
   const close = (f) => () => { f && f(); set({ statesOpen: false }); };
-  const rows = [].concat([{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]);
+  const rows = [].concat((v.states || []).map((p) => ({ l: p.l, on: p.bg === "#332921", pick: p.pick })), [{ l: "Playing", on: !!v.playing, pick: v.togglePlay }]);
   const once = rows.filter((r, i) => rows.findIndex((q) => q.l === r.l || (r.l === "Playing" && q.l.startsWith("Playing"))) === i);
   const none = !once.some((r) => r.on);
   const list = [{ l: "As designed", on: none, pick: () => once.filter((r) => r.on).forEach((r) => r.pick()) }].concat(once);

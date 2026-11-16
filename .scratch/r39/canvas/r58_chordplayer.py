@@ -13,7 +13,7 @@ r'''    // each bar's chords and their lengths in beats; the chorus's 4th bar ho
     const SECS = st.secs || SECS0, LEN = st.len || LEN0;
     const lens = (si, bi, cs) => LEN[si + ':' + bi] || (cs.length === 1 ? [4] : cs.map(() => 4 / cs.length));
     const TAGS0 = [{ intro: 'Intro I', mains: ['Main A', 'Main B'], into: 'Fill in' }, { mains: ['Main C'], into: 'Break' }, { mains: ['Main D'], ending: 'Ending I' }];
-    const TAGS = st.tags || TAGS0, follow = st.follow ?? true;
+    const TAGS = st.tags || TAGS0, follow = st.follow ?? false;
     const tagLine = (t) => [t.intro, t.mains.join(', '), t.into, t.ending].filter((x) => x && x !== 'None').join(' · ');''', 1)
 CP58 = CP58.replace("    const secs = SECS.map(([m, name, rep, bars], si) => ({ m, name, rep: '× ' + rep, bars: bars.map((cs, bi) => ({ cs: cs.map((c) => ({ c })), bg: play[0] === si && play[1] === bi ? '#EDC684' : !st.playing && slot.si === si && slot.bi === bi ? '#F6E7C8' : 'transparent', edge: bi % 4 === 3 ? '0' : '1px', pick: () => set({ sheet: 'chord', sel: [si, bi] }) })) }));",
 r'''    const beatNow = st.playing ? ((st.pos ?? 4) % 2) * 2 : -1;
@@ -48,6 +48,7 @@ CP58 = CP58.replace("    return { ...common(st, set),", r'''    return { ...comm
       playFrom: () => set({ sheet: null, playing: true, pos: 0 }),
       shareOn: st.sheet === 'share', openShare: () => set({ sheet: 'share' }), shareSeg: SEGT(['View only', 'Can edit'], st.shareMode ?? 'View only', (l) => set({ shareMode: l })),
       followSw: follow, followBg: follow ? '#44684A' : '#DAD1C8', followX: follow ? 22 : 2, toggleFollow: () => set({ follow: !follow }),
+      states: [{ l: 'Following the Genos', bg: follow ? '#332921' : '#EEE9E2', pick: () => set({ follow: !follow }) }],
       arOn: follow, arStart: lamp(!!st.playing), arAcmp: lamp(ar.acmp), arSync: lamp(ar.sync), arSyncStop: lamp(ar.syncStop), arAuto: lamp(ar.autoFill), arOts: lamp(ar.ots), arFade: lamp(ar.fade), arBreak: lamp(false, ar.next === 'Break'),
       arIntros: ['I', 'II', 'III'].map((n) => ({ n, ...lamp(ar.intro === n), pick: () => arSet({ intro: ar.intro === n ? null : n }) })),
       arMains: ['A', 'B', 'C', 'D'].map((n) => ({ n, ...lamp(ar.main === n, ar.next === n), pick: () => arSet(ar.main === n ? { next: 'fill' } : { next: n, main: st.playing ? ar.main : n }) })),
@@ -186,7 +187,9 @@ STRIP59 = lambda pos, wide: (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val=
     + HEAD59 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + '</div></sc-if>')
 CP58 = CP58.replace("arTitle: st.playing ?", "arDot: st.playing ? '#44684A' : '#9C9086', arTitle: st.playing ?", 1)
 CP58 = CP58.replace("const lamp = (on, next) => ({", "const lamp = (on, next) => ({ on: !!on,", 1)
-ph58 = (body(TOP('Main.dc.html', '', UNDOB + GEAR() + DOTSB), CHART59(8, 4, 60, 21, 2), '', 300)
+# the arranger's panel is a state (Follow a MIDI arranger, off by default): at rest the chart is the page (loop round 58,
+# owner 2026-11-16: "the page has one focus")
+ph58 = (body(TOP('Main.dc.html', '', UNDOB + GEAR() + DOTSB), SHOWSTATES() + CHART59(8, 4, 60, 21, 2), '', 300)
         .replace('</main>', '</main><sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; margin-bottom: 34px; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(112) + '</div></sc-if>'
                  + STRIP59('position: absolute; left: 16px; right: 16px; bottom: 234px;', False) + DOCK(CP_DOCK, 158), 1))
 lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
