@@ -274,3 +274,7 @@ EMPTYICON = {
     '…': _EI('<path d="M21 12a9 9 0 1 1-6.219-8.56"/>'),
 }
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
+
+# Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
+PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
+                        f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')
