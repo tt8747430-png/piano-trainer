@@ -21,7 +21,10 @@ def score_svg(w, sel=None, played=None, size=1.0):
         for p, b, syl, ch in sysn:
             y = base - STEP[p] * sp / 2; on = idx == sel; past = played is not None and idx < played
             col = '#8C6418' if on else (SOFT if past else INK)
-            if on: out.append(f'<rect x="{x - 12 * size:.1f}" y="{top - 22 * size:.1f}" width="{24 * size:.1f}" height="{4 * sp + 44 * size:.1f}" rx="{8 * size:.1f}" fill="{ACCENT}" opacity=".55"></rect>')
+            # the selection is tight to the note, its head and stem, never a column over the chord and the words (feedback-log, Selection; Dorico and Flat colour the note itself)
+            if on:
+                su = STEP[p] < 4; y1 = (y - 3.5 * sp - 5 * size) if su else (y - 7 * size); y2 = (y + 7 * size) if su else (y + 3.5 * sp + 5 * size)
+                out.append(f'<rect x="{x - 10 * size:.1f}" y="{y1:.1f}" width="{(21 if su else 20) * size:.1f}" height="{y2 - y1:.1f}" rx="{6 * size:.1f}" fill="{ACCENT}" opacity=".55"></rect>')
             if STEP[p] < 0: out.append(f'<path d="M{x - 9 * size:.1f} {base + sp:.1f}H{x + 9 * size:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
             hollow = b >= 2
             out.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{5.6 * size:.1f}" ry="{4 * size:.1f}" transform="rotate(-20 {x:.1f} {y:.1f})" fill="{"none" if hollow else col}" stroke="{col}" stroke-width="{1.8 if hollow else 0}"></ellipse>')
