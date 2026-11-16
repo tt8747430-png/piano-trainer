@@ -71,6 +71,13 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - Phone and desktop have the same features, text and layout logic.
 - Nothing hangs under a bar: a status or language goes in the bar or its menu.
 - Floating things float, reserve no space, and auto-hide reliably.
+- **The page has one focus, and what floats is centred on it** (owner, 2026-11-16: "the floating controls like in the
+  scales page should be centerd by the main focus content … the practices on the right robs the focus from the main
+  content and the floatign actions feel wrongly placed … all of the main content should be correctly focudsed"): the
+  main content (the scale, the interval, the chord, the progression) is one centred column that leads the page; what
+  follows from it (practise rows, related links) reads after it in the same column, never as a rival column beside it.
+  A floating bar of the page's controls is centred on that column, not on the window or between two columns. A
+  sidebar of the app's places is not content and does not count.
 - Nothing traps a click. Controls never jump between modes or on entering Select.
 - Rows and grids stay even on wide screens. A card's hover never hides a button's inside it.
 - Nothing is cut: titles wrap to two lines; rows in a rounded card keep its corners.
