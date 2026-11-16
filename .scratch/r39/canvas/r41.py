@@ -33,4 +33,5 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r66_chord_finder.py').re
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r67_circle.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r68_exercise.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r70_scrim.py').read())
+exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r71_tips.py").read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r69_night.py').read())
