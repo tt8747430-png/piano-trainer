@@ -16,7 +16,7 @@ TKS_SRC = r'''
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
       moreOn: st.sheet === 'more', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved.', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),
@@ -27,7 +27,7 @@ TKS_SRC = r'''
       intoList: ['Both staves', 'Right hand', 'Left hand', 'Melody'].map((l) => ({ l, mark: l === into ? '✓' : '', pick: () => S({ into: l, sheet: null }) })),
       discard: () => drop(at.id), save: () => S({ page: null, toast: 'Written into bars 3–10.', toastUndo: false }) };'''
 
-PLAYMINI = (f'<button type="button" aria-label="Play" onClick="{{{{r.play}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">'
+PLAYMINI = (f'<button type="button" aria-label="Play" onClick="{{{{r.play}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{r.pbg}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">'
             f'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg></button>')
 TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{PLAYMINI}'
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; display: flex; flex-direction: column; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
