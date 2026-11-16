@@ -1025,6 +1025,7 @@ are reference only, but progressions are facts.
   "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
 
 ## Profile and Settings
+- **Loop round 46, a badge's notification wears its medal; Practice time opens its page (Profile):** Silver Streak Keeper and Gold Library Builder showed a black dot on lilac in Notifications; each now wears the star medal in its tier's colour, as the Badges page. The Practice time figure was the one figure that opened nothing; it opens Practice history, as the ruling has each figure link to its page (2026-11-16).
 - **Loop round 46, signed out wears the person, as Profile's guest (Settings):** Settings' Sign in card showed a camera, the add-a-photo glyph, where Profile's guest shows a person; one glyph for someone not signed in (2026-11-16).
 
 - **Loop round 44, Settings has its Back on a laptop too (SettingsLaptop):** the list pane's title stood alone, so the laptop had no way back to Profile, where its gear opens it; Back to Profile now stands beside the title, as the phone's bar and the Administration pane hold theirs (2026-11-16).
