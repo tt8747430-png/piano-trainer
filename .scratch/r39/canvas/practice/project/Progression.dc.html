@@ -78,7 +78,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const P = ['I', 'V', 'vi', 'IV'], DEG = { I: 0, ii: 2, iii: 4, IV: 5, V: 7, vi: 9 };
     const FN = { I: ['Tonic', '#F3D2C8'], vi: ['Tonic', '#F3D2C8'], iii: ['Tonic', '#F3D2C8'], IV: ['Predominant', '#D3E5F2'], ii: ['Predominant', '#D3E5F2'], V: ['Dominant', '#DCE9D6'] };
     const MOVE = ['5th up', '2nd up', '3rd down', '4th down'];
-    const key = st.key ?? 0, at = st.at ?? 1, loop = st.loop ?? true;
+    const key = st.key ?? 0, at = st.at ?? 1, loop = !!st.loop;
     const ch = (n) => NN[(key + DEG[n]) % 12] + (n === n.toLowerCase() ? 'm' : '');
     const lo62 = 48, cur = P[at], r = (key + DEG[cur]) % 12, minor = cur === cur.toLowerCase(), marks = {};
     const KC = { Tonic: '#E3A08E', Predominant: '#85B8DC', Dominant: '#8DBB86' }[FN[cur][0]];
