@@ -63,6 +63,12 @@ def NEWNAME(cond, title, ph, val, inp, go, bg, fg, label='Create'):
     return BSHEET(cond, title, f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
                   f'<input value="{{{{{val}}}}}" onInput="{{{{{inp}}}}}" placeholder="{ph}" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
                   f'<button type="button" onClick="{{{{{go}}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{{bg}}}}}; color: {{{{{fg}}}}}; font: inherit; font-size: 16px; font-weight: 700">{label}</button>', 'Cancel')
+# The one Add row (owner 2026-11-16, Noji's Participants): the last row of the list it adds to, a plus in a soft
+# circle in the rows' picture column, the words in the link colour. ADDCARD stands alone where it adds a whole group.
+def ADDROW(label, act, node=36, pad='0 16px', gap=14):
+    return (f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 56px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: {gap}px; padding: {pad}">'
+            f'<span style="flex: none; width: {node}px; height: {node}px; border-radius: {node // 2}px; background: {FILL}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>{label}</button>')
+ADDCARD = lambda label, act: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{ADDROW(label, act)}</div>'
 NEWNAME_L = lambda html: html.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 440px; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px')
 LFOLDERSHEET = NEWNAME('folderOn', 'New folder', 'Folder name', 'fname', 'named', 'closeSheet', 'createBg', 'createFg')
 LFOLDERSHEET_L = NEWNAME_L(LFOLDERSHEET)
