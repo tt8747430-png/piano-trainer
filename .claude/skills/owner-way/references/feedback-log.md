@@ -274,6 +274,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **Loop round 46, Continue and the table say one progress (My songs):** Continue showed Für Elise at "Bar 3 of 24" while its row said "Learning", and offered Twinkle, Twinkle, which the table calls Learned; Für Elise's row now reads Bar 3 of 24, and the third song in progress is Ode to Joy at Bar 5 of 12, on both sizes (2026-11-16).
 
 - **Loop round 46, A broken link opens the shared song's page (Explore):** the state flipped the link's flag but stayed on Explore, so it showed nothing; it opens A shared song with "This link holds no song" (2026-11-16).
 - **Loop round 46, an empty folder says No songs (Folder):** its Empty folder state kept "6 songs · 2 learned" under the name over "This folder is empty"; the count follows what the folder holds (2026-11-16).

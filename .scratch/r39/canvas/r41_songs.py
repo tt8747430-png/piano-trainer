@@ -8,7 +8,7 @@ def cover(title, by, w=150, notes=(2, 4, 4, 3, 2, 0, -1)):
     return (f'<svg viewBox="0 0 {w} 96" width="100%" aria-hidden="true" style="display: block; border-radius: 10px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 6px 14px -8px rgba(51,41,33,.25)">'
             f'<text x="{w / 2}" y="20" text-anchor="middle" font-family="{SERIF}" font-size="12" fill="{INK}">{title}</text><text x="{w / 2}" y="32" text-anchor="middle" font-size="7" fill="{SOFT}">{by}</text>'
             f'{st}<text x="9" y="70" font-family="Noto Music, serif" font-size="24" fill="{INK}">𝄞</text>{n}</svg>')
-SHELF = [('Amazing Grace', 'John Newton', 'Bar 9 of 16', '56%'), ('Twinkle, Twinkle', 'Traditional', 'Bar 5 of 12', '40%'), ('Für Elise', 'Beethoven', 'Bar 3 of 24', '12%')]
+SHELF = [('Amazing Grace', 'John Newton', 'Bar 9 of 16', '56%'), ('Ode to Joy', 'Beethoven', 'Bar 5 of 12', '40%'), ('Für Elise', 'Beethoven', 'Bar 3 of 24', '12%')]
 def shelf(w, n=3):
     cards = ''.join(f'<a href="{{SONG}}" style="flex: none; width: {w}px; display: flex; flex-direction: column; gap: 6px; color: {INK}; text-decoration: none">{cover(t, b)}<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="height: 3px; border-radius: 2px; background: {FILL}"><span style="display: block; width: {p}; height: 3px; border-radius: 2px; background: #C26A2E"></span></span><span style="font-size: 13px; color: {SOFT}">{s}</span></a>' for t, b, s, p in SHELF[:n])
     return f'<section style="display: flex; flex-direction: column; gap: 8px">{H2("Continue")}<div class="nos" style="display: flex; gap: 12px; overflow-x: auto">{cards}</div></section>'
@@ -33,11 +33,11 @@ SONGS_D = {'emptyLib': {'t': 'Your library is empty', 'b': 'Create a song, or re
     {'g': 'Folders', 'rows': [S('Songs to learn', '23 songs · 4 learned', '', '♪', HONEY, href='Folder.dc.html'), S('Hymns', '6 songs · 2 learned', '', '♪', SKY, href='Folder.dc.html'), S('Called to Play', '15 songs · Book 1', '', '♪', LILAC, href='Folder.dc.html'), S('Shared with me', "4 songs · From Maria's group", '', '♪', SAGE, href='Groups.dc.html')]},
     {'g': 'Songs', 'rows': [
       S('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'G', HONEY, ('Recently played', 'Learning'), ('G major', 'Beginner')),
-      S('Für Elise', 'Beethoven · A minor', 'Learning', 'Am', PEACH, ('Recently played', 'Learning'), ('A minor', 'Intermediate')),
+      S('Für Elise', 'Beethoven · A minor', 'Bar 3 of 24', 'Am', PEACH, ('Recently played', 'Learning'), ('A minor', 'Intermediate')),
       S('Let It Be', 'The Beatles · C major', 'Learned', 'C', SAGE, ('Learned',), ('C major', 'Beginner')),
       S('Clair de lune', 'Debussy · D♭ major', '', 'D♭', SKY, (), ('D♭ major', 'Advanced')),
       S('Twinkle, Twinkle, Little Star', 'Traditional · C major', 'Learned', 'C', SAGE, ('Recently played', 'Learned'), ('C major', 'Beginner')),
-      S('Ode to Joy', 'Beethoven · D major', '', 'D', LILAC, (), ('D major', 'Beginner')),
+      S('Ode to Joy', 'Beethoven · D major', 'Bar 5 of 12', 'D', LILAC, ('Recently played', 'Learning'), ('D major', 'Beginner')),
       S('Jingle Bells', 'James Lord Pierpont · G major', '', 'G', HONEY, (), ('G major', 'Beginner')),
       S('My first song', 'Written by you · C major', '', 'C', FILL, (), ('C major', 'Beginner'))]}]}
 library('Songs', 'My songs', SONGS_D, soft='Explore', soft_href='Explore', right_extra=IB('Archive', ARCHIVE, href='Archive.dc.html'), root='Songs', section='Songs',
