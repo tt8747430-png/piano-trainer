@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 46, the editor draws its Record (Editor, EditorDraft, Takes):** the record-take feature had no button on any editor board, while Takes' empty state sent the learner to "Record under the score"; Record, a crimson dot in a ring, stands beside Play in the note's band (on a phone over the keys, on a laptop at the palette's head), and Takes says "Press Record beside Play in the editor, play, then Stop" (2026-11-16).
 - **Loop round 43, Profile's sections stand on the page again (Profile, ProfileLaptop):** the "Almost there" card had swallowed Badges, Achievements and Practice history, a card round cards, and on the laptop the right column with them (the card's opening no longer matched after cards went to 14, so its close was cut); now each section is its own, and the laptop holds Badges and Achievements in its right column, as drawn (2026-11-16).
 - **Loop round 43, the laptop editor's bar holds no title (EditorLaptop):** "Amazing Grace" beside Close is gone, as round 30 ruled (the score prints it where it is edited); the save status, "Saved on this device", stays beside Close alone (2026-11-16).
 - **Loop round 44, every take's Play on its circle (Takes):** on a phone the first take's Play stood bare, its circle turned paper for the laptop's chosen row, which a phone does not draw; the phone's rows keep the grey circle, and only the laptop's chosen row turns it paper on its sand (2026-11-16).

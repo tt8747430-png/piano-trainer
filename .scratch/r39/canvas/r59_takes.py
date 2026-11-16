@@ -33,7 +33,7 @@ TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; justify-content: center; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
          f'<button type="button" aria-label="Take actions" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 TKLIST = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROW}</sc-for></div>', 'true')
-          + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'))
+          + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'))
 
 def _HEADS(w):
     # bar 1 (and bar 2 when the staff is wide), each note spread across its bar as an engraver spaces them
@@ -69,7 +69,7 @@ tkslm = (LTOP('EditorLaptop.dc.html') + SHOWSTATES()
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{H1("Takes")}{TKLISTL}</div>'
               f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px">'
               f'<h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Review your recording</h2>{REVIEW(900)}</section></main>', 'true')
-         + IF('none', WIDE(H1('Takes') + EMPTY('none', MUSICN, 'No takes yet', 'Press Record under the score, play, then Stop: each take is kept here.'), 720))
+         + IF('none', WIDE(H1('Takes') + EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TOASTL)
 TKS_MOREL = GROUP(('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
 detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
