@@ -65,9 +65,9 @@ CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro
 CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
         f'{CAPS("What changed")}<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Changes made since the last publication are saved and ready to publish.</p>'
         f'{GROUP(("link", "Learner preview", "8 lessons", "Course.dc.html"), ("action", "Copy link", "copyLink"), ("link", "View", "", "Course.dc.html"), ("val", "Versions", "3"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
-CNEW = (f'{CAPS("Name")}<input placeholder="New lesson" aria-label="Name" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
-        f'<div style="display: flex">{BTN("Create lesson", "create", "", "primary", 50)}</div>')
-CPROPS = f'{CAPS("Shelf")}{KCHIPS("shelves")}{CAPS("Level")}{KCHIPS("levels")}'
+CNEW = (f'{NAMEFIELD('Lesson name')}'
+        f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
+CPROPS = f'{CAPS("Shelf")}{WCHIPS("shelves")}{CAPS("Level")}{WCHIPS("levels")}'
 CPM = GROUP(('val', 'Versions', '3'), bg=SHEET) + GROUP(('action', 'Discard changes', 'closeSheet', '#B3261E'), bg=SHEET)
 def CPAGE(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
@@ -77,7 +77,7 @@ def CPAGE(lap):
 CASKS = (ASK('delOn', 'Delete Intro to Music Reading?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete course', 'closeSheet'))
 cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Intro to Music Reading", CBAR_R, "LearnCourses.dc.html", "Back to Courses", wrap=True)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
-csh = BSHEET('newOn', 'New lesson', CNEW) + BSHEET('pmOn', 'Publishing', CPM) + BSHEET('propOn', 'Properties', CPROPS)
+csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('pmOn', 'Publishing', CPM) + BSHEET('propOn', 'Properties', CPROPS)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Intro to Music Reading", CBAR_R, "LearnCoursesLaptop.dc.html")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT.replace("padding: 0 16px 6px", "padding: 6px 40px 6px")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 60px; display: flex; align-items: flex-start"><div style="flex: 1; max-width: 1180px; display: flex; gap: 48px; align-items: flex-start">{CBODY(True)}</div></main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')

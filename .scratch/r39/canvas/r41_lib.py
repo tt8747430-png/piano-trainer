@@ -59,9 +59,11 @@ SORTSHEET_BODY = (f'{CAPS("Sort by")}{SEGC("sorts", 34, 13)}<sc-for list="{{{{fi
 
 # The one New folder sheet: a name and Create (Songs, every Practice library)
 # The one sheet that names something new (New folder, New group, New flag): a name and Create at its foot
+# The name field every New sheet opens with: its small label, then the field
+NAMEFIELD = lambda ph, val='', inp='': (f'<label style="display: flex; flex-direction: column; gap: 6px">{CAPS("Name")}'
+                  f'<input' + (f' value="{{{{{val}}}}}" onInput="{{{{{inp}}}}}"' if val else '') + f' placeholder="{ph}" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>')
 def NEWNAME(cond, title, ph, val, inp, go, bg, fg, label='Create'):
-    return BSHEET(cond, title, f'<label style="display: flex; flex-direction: column; gap: 6px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Name</span>'
-                  f'<input value="{{{{{val}}}}}" onInput="{{{{{inp}}}}}" placeholder="{ph}" style="height: 52px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 17px; color: {INK}; outline: none"></label>'
+    return BSHEET(cond, title, NAMEFIELD(ph, val, inp) +
                   f'<button type="button" onClick="{{{{{go}}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{{bg}}}}}; color: {{{{{fg}}}}}; font: inherit; font-size: 16px; font-weight: 700">{label}</button>', 'Cancel')
 # The one Add row (owner 2026-11-16, Noji's Participants): the last row of the list it adds to, a plus in a soft
 # circle in the rows' picture column, the words in the link colour. ADDCARD stands alone where it adds a whole group.
