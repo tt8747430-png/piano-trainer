@@ -273,6 +273,7 @@ owner's, typos fixed.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
 
+- **Loop round 46, an empty folder says No songs (Folder):** its Empty folder state kept "6 songs · 2 learned" under the name over "This folder is empty"; the count follows what the folder holds (2026-11-16).
 - **Loop round 45, a folder holds what it counts, and makes what Songs makes (Folder):** Hymns said 6 songs and listed 4; it lists all six (Holy, Holy, Holy and Abide with Me added, with their melodies), the archived ones apart under Archived (2), and deleting it names its 6 songs. A folder has the library's New, less New group: the 56 honey + at the bottom right on a phone (New song, Record, New folder, Import), New ▾ beside its gear on a laptop (2026-11-16).
 - **Loop round 44, one folder, one name (Folder, Groups, AppLayers):** the library's Hymns row opened a folder called Church (12 songs, honey), a folder the library never lists; the board is now Hymns, 6 songs · 2 learned, in the library's sky, in its settings, toasts, Archive and Search too. Maria's shared folder is Choir hymns so the two are never confused, and Share with a group offers the library's own folders (Songs to learn, Hymns, Called to Play) (2026-11-16).
 - **A folder, Archive and Trash draw their empty states in the States box (2026-11-15):** Empty folder ("This folder is empty", its line from the app, New song), Nothing archived and Trash is empty, each the one empty state, phone and laptop.
