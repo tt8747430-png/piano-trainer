@@ -17,7 +17,7 @@ YOURS = {
 YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r'''
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
     const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
-    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d + (k === 'learned' ? ' · learned' : ''), learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
+    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
       more: () => set({ sheet: 'row', row: t, rowC: false }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
     const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
       const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
@@ -30,19 +30,11 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
     const states = [['Nothing made yet', bare, { bare: true, q: '' }, { bare: false }], ['Search finds nothing', !bare && ql === 'chopin', { q: 'Chopin', bare: false }, { q: '' }],
       ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: 'Notes from my teacher deleted' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
-    const sel = st.sel ?? 'Sunday service set', selBg = (t) => t === sel ? '#EEE9E2' : 'transparent';
-    courses.forEach((c) => { c.pick = () => set({ sel: c.t }); c.selBg = selBg(c.t); c.cur = c.t === sel ? 'true' : 'false'; c.lessons.forEach((l) => { l.pick = () => set({ sel: l.t }); l.selBg = selBg(l.t); l.cur = l.t === sel ? 'true' : 'false'; }); });
-    loose.forEach((l) => { l.pick = () => set({ sel: l.t }); l.selBg = selBg(l.t); l.cur = l.t === sel ? 'true' : 'false'; });
-    const pc = Y.courses.find((c) => c.t === sel), inC = Y.courses.find((c) => c.lessons.some(([t]) => t === sel)), pl = pc ? null : (inC ? inC.lessons : Y.loose).find(([t]) => t === sel) || Y.loose[0];
-    const pLs = pc ? pc.lessons.map(([t, d, k]) => ({ t, d, learned: k === 'learned', todo: k !== 'learned', fw: k === 'learned' ? 450 : 600 })) : [];
-    const pDone = pLs.filter((l) => l.learned).length, pNext = pLs.find((l) => l.todo);
-    const pane = pc ? { pT: pc.t, pKind: 'Course · ' + pc.lessons.length + ' lessons', pLine: pc.line, pPaint: pc.paint, pCourse: true, pLesson: false, pLs, pProg: pDone + ' of ' + pLs.length + ' learned', pPct: Math.round(100 * pDone / pLs.length) + '%', pGo: pNext ? 'Continue: ' + pNext.t : 'Open', pHref: 'CourseLaptop.dc.html', pSet: 'YourCourseSettingsLaptop.dc.html' }
-      : { pT: pl[0], pKind: 'Lesson · ' + pl[1] + (pl[2] === 'learned' ? ' · learned' : ''), pLine: inC ? 'In ' + inC.t : 'In no course', pPaint: '#EEE9E2', pCourse: false, pLesson: true, pLs: [], pProg: '', pPct: '0%', pGo: pl[2] === 'learned' ? 'Read again' : 'Open', pHref: 'LessonLaptop.dc.html', pSet: 'YourLessonSettingsLaptop.dc.html' };
     const sheetOpen = (n) => () => set({ sheet: n });
     return { ...common(st, set), closeSheet: () => set({ sheet: null }),
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
-      ...pane, paneOn: any, courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
+      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
       noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
       rowOn: sheet === 'row', rowT: st.row || '', rowCourse: !!st.rowC, rowLesson: !st.rowC, rowIsLesson: !Y.courses.some((c) => c.t === st.row),
       removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: st.row + ' deleted' }),
@@ -61,22 +53,15 @@ def LROW(href, indent):
             f'<a href="{href}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">{LTILE}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{l.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{l.d}}}}</span></span></a>'
             f'{ROWMORE("l.more", "{{l.t}}")}</div>')
-def _SEL(h, v):
-    # on a laptop a row's name selects it for the pane beside the list; its link becomes a button
-    h = re.sub(r'<a href="[^"]*" style="flex: 1;', '<button type="button" aria-current="{{%s.cur}}" onClick="{{%s.pick}}" style="flex: 1; border: 0; background: transparent; padding: 0; font: inherit; text-align: left;' % (v, v), h, count=1)
-    h = h.replace('</span></span></a>', '</span></span></button>', 1)
-    return h.replace('box-shadow: inset 0 -1px 0 ' + FILL + '">', 'box-shadow: inset 0 -1px 0 ' + FILL + '; background: {{%s.selBg}}">' % v, 1)
 def LIST(lap):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
     course = (f'<div style="display: flex; align-items: center; gap: 4px; min-height: 64px; padding: 6px 4px 6px 4px; box-shadow: inset 0 -1px 0 {FILL}">'
               f'<button type="button" aria-label="Show its lessons" aria-expanded="{{{{c.isOpen}}}}" onClick="{{{{c.toggle}}}}" style="flex: none; width: 44px; height: 44px; margin-right: -8px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center"><span style="display: flex; transform: {{{{c.chev}}}}; transition: transform .2s cubic-bezier(.22,1,.36,1)">{CHEV_R}</span></button>'
               f'<a href="{ch}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{c.paint}}}}; display: flex; align-items: center; justify-content: center">{FOLDI}</span>'
               f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></span></a>{ROWMORE("c.more", "{{c.t}}")}</div>'
-              f'<sc-if value="{{{{c.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><sc-for list="{{{{c.lessons}}}}" as="l" hint-placeholder-count="3">{_SEL(LROW(lh, 52), "l") if lap else LROW(lh, 52)}</sc-for></sc-if>')
-    if lap:
-        course = _SEL(course, 'c')
+              f'<sc-if value="{{{{c.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><sc-for list="{{{{c.lessons}}}}" as="l" hint-placeholder-count="3">{LROW(lh, 52)}</sc-for></sc-if>')
     return (f'<sc-if value="{{{{listOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden; padding: 0 0 0 8px"><sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
-            f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{_SEL(LROW(lh, 4), "l") if lap else LROW(lh, 4)}</sc-for></div></sc-if>'
+            f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 4)}</sc-for></div></sc-if>'
             + LEMPTY('noneOn', SEARCH.replace('width="18" height="18"', 'width="26" height="26"'), '{{noneT}}', 'Check the spelling, or search for a word from a lesson’s name.', BTN('Clear search', 'clearQ', kind='quiet', h=48, grow=False))
             + LEMPTY('bareOn', BOOKI.replace('22', '26'), 'No lessons or courses yet', 'Write a lesson in your own words with +, then gather lessons into a course.', f'<a href="LearnCourses.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Browse the courses</a>'))
 SORTB = (f'<button type="button" onClick="{{{{openSort}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">'
@@ -95,23 +80,10 @@ YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}">
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
 yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
-PANE = (f'<sc-if value="{{{{paneOn}}}}" hint-placeholder-val="{{{{true}}}}"><aside aria-label="{{{{pT}}}}" style="position: sticky; top: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 24px; display: flex; flex-direction: column; gap: 16px">'
-        f'<span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 16px; background: {{{{pPaint}}}}; display: flex; align-items: center; justify-content: center; color: {INK}"><sc-if value="{{{{pCourse}}}}" hint-placeholder-val="{{{{true}}}}">{FOLDI.replace('width="20" height="20"', 'width="28" height="28"')}</sc-if><sc-if value="{{{{pLesson}}}}" hint-placeholder-val="{{{{false}}}}">{BOOKI.replace('width="22" height="22"', 'width="28" height="28"')}</sc-if></span>'
-        f'<div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance">{{{{pT}}}}</h2><span style="font-size: 14px; color: {SOFT}">{{{{pKind}}}}</span></div>'
-        f'<p style="margin: 0; font-size: 15px; line-height: 1.45; text-wrap: pretty">{{{{pLine}}}}</p>'
-        f'<sc-if value="{{{{pCourse}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">Progress</span><span style="color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pProg}}}}</span></div>'
-        f'<div style="height: 6px; border-radius: 3px; background: {FILL}; overflow: hidden"><div style="width: {{{{pPct}}}}; height: 100%; border-radius: 3px; background: #44684A"></div></div></div>'
-        f'<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column"><sc-for list="{{{{pLs}}}}" as="l" hint-placeholder-count="4"><li style="min-height: 40px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: {{{{l.fw}}}}; box-shadow: inset 0 -1px 0 {FILL}">'
-        f'<span style="flex: none; width: 24px; height: 24px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2F5A35"><sc-if value="{{{{l.learned}}}}" hint-placeholder-val="{{{{false}}}}">{CHECKI.replace('width="20" height="20"', 'width="16" height="16"')}</sc-if><sc-if value="{{{{l.todo}}}}" hint-placeholder-val="{{{{true}}}}"><span style="width: 8px; height: 8px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px {SOFT}"></span></sc-if></span>'
-        f'<span style="flex: 1; min-width: 0">{{{{l.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{l.d}}}}</span></li></sc-for></ol></sc-if>'
-        f'<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px"><a href="{{{{pHref}}}}" style="height: 48px; border-radius: 24px; background: {INK}; color: {SHEET}; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{pGo}}}}</a>'
-        f'<a href="{{{{pSet}}}}" style="height: 44px; border-radius: 22px; background: {FILL}; color: {INK}; text-decoration: none; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center">Settings</a></div></aside></sc-if>')
-ylm = (f'{LTITLEBAR("Your lessons and courses", "", "LearnLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 60px 56px"><div style="display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 14px">'
-       f'{SHOWSTATES()}<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1"><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}</sc-if></div>{NEWBTN("openNew")}</div><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}</sc-if>{LIST(True)}</div>{PANE}</div></main>'
-       f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+ylm = (f'{LTITLEBAR("Your lessons and courses", "", "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<div style="display: flex; gap: 12px; align-items: center"><div style="flex: 1"><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}</sc-if></div>{NEWBTN("openNew")}</div><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -5px -16px; padding: 0 16px", "margin: -5px 0; padding: 0")}</sc-if>{LIST(True)}', 880) + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
-       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 506px; top: 140px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 300px; top: 210px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 300px; top: 280px', 320), 'Learn')
+       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 526px; top: 140px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 56px; top: 150px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 663px; top: 140px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 552px; top: 280px', 320), 'Learn')
 
 # ── Settings of the learner's own lesson and course: rows that say their value and open in place ──
 OSET_JS = js(r'''
