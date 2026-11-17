@@ -204,8 +204,8 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
   const current = options[at]
 
   const content = (
-    <div className="flex flex-col gap-3">
-      <label className="flex h-12 items-center gap-2 rounded-control bg-card pr-1 pl-3 text-muted-foreground ring-1 ring-border focus-within:ring-foreground/35">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <label className="flex h-12 shrink-0 items-center gap-2 rounded-control bg-card pr-1 pl-3 text-muted-foreground ring-1 ring-border focus-within:ring-foreground/35">
         <Search aria-hidden className="size-4.5 shrink-0" />
         <input
           ref={fieldRef}
@@ -237,35 +237,57 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
           </button>
         )}
       </label>
-      {!typing && recent.length > 0 ? (
-        <section className="flex flex-col gap-2">
-          <Caps>{t('recent')}</Caps>
-          <div className="flex flex-wrap gap-2">
-            {recent.map((each) => (
-              <Chip key={each} onClick={() => ask(each)}>
-                {each}
-              </Chip>
-            ))}
+      <div className="-mx-4 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 scrollbar-none">
+        {!typing && recent.length > 0 ? (
+          <section className="flex flex-col gap-2">
+            <Caps>{t('recent')}</Caps>
+            <div className="flex flex-wrap gap-2">
+              {recent.map((each) => (
+                <Chip key={each} onClick={() => ask(each)}>
+                  {each}
+                </Chip>
+              ))}
+            </div>
+          </section>
+        ) : null}
+        <div id={listId} role="listbox" aria-label={t('title')} className="flex flex-col gap-3">
+          {sections.map((section) => (
+            <PaletteSection
+              key={section.heading}
+              section={section}
+              active={wide ? current : undefined}
+              optionId={optionId}
+              onHover={(option) => setActive(options.indexOf(option))}
+              onChoose={choose}
+            />
+          ))}
+        </div>
+        {typing && options.length === 0 ? (
+          <div role="status" className="flex flex-col items-center gap-2 px-4 py-10 text-center">
+            <p className="text-lg font-bold text-balance">{t('none', { query: wanted.trim() })}</p>
+            <p className="text-[0.9375rem] text-pretty text-muted-foreground">{t('noneHint')}</p>
+            <Chip onClick={() => ask('')}>{t('clear')}</Chip>
           </div>
-        </section>
-      ) : null}
-      <div id={listId} role="listbox" aria-label={t('title')} className="flex flex-col gap-3">
-        {sections.map((section) => (
-          <PaletteSection
-            key={section.heading}
-            section={section}
-            active={wide ? current : undefined}
-            optionId={optionId}
-            onHover={(option) => setActive(options.indexOf(option))}
-            onChoose={choose}
-          />
-        ))}
+        ) : null}
       </div>
-      {typing && options.length === 0 ? (
-        <div role="status" className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-          <p className="text-lg font-bold text-balance">{t('none', { query: wanted.trim() })}</p>
-          <p className="text-[0.9375rem] text-pretty text-muted-foreground">{t('noneHint')}</p>
-          <Chip onClick={() => ask('')}>{t('clear')}</Chip>
+      {wide ? (
+        <div
+          aria-label={t('keys.label')}
+          className="-mx-4 flex shrink-0 gap-4 px-5 pt-3 text-[0.8125rem] text-muted-foreground shadow-[inset_0_1px_0_var(--color-muted)]"
+        >
+          <span className="flex items-center gap-1">
+            <Kbd>↑</Kbd>
+            <Kbd>↓</Kbd>
+            <span className="ms-0.5">{t('keys.move')}</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <Kbd>↵</Kbd>
+            <span className="ms-0.5">{t('keys.open')}</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <Kbd>Esc</Kbd>
+            <span className="ms-0.5">{t('keys.close')}</span>
+          </span>
         </div>
       ) : null}
     </div>
@@ -274,7 +296,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
   if (!wide)
     return (
       <Sheet open onOpenChange={(open) => (open ? undefined : onClose())}>
-        <SheetContent title={t('title')} initialFocus={() => fieldRef.current ?? true}>
+        <SheetContent title={t('title')} tall initialFocus={() => fieldRef.current ?? true}>
           {content}
         </SheetContent>
       </Sheet>
@@ -285,13 +307,22 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
         showCloseButton={false}
         // The field has the focus as it opens: the palette is typed into.
         initialFocus={fieldRef}
-        className="top-24 flex max-h-[min(42.5rem,calc(100dvh-8rem))] -translate-y-0 flex-col overflow-y-auto rounded-sheet bg-background p-4 shadow-[0_0_0_1px_var(--color-border),var(--elevation-2)] ring-0 sm:max-w-160"
+        className="top-24 flex h-[min(30.5rem,calc(100dvh-8rem))] -translate-y-0 flex-col overflow-hidden rounded-sheet bg-background p-4 shadow-[0_0_0_1px_var(--color-border),var(--elevation-2)] ring-0 sm:max-w-160"
       >
         <DialogTitle className="sr-only">{t('title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('hint')}</DialogDescription>
         {content}
       </DialogContent>
     </Dialog>
+  )
+}
+
+/** A key the palette answers to, as the board's footer draws it. */
+function Kbd({ children }: { children: ReactNode }) {
+  return (
+    <kbd className="grid h-6 min-w-6 place-items-center rounded-md bg-muted px-1.5 font-sans text-xs font-semibold text-foreground shadow-[inset_0_-1px_0_var(--color-border)]">
+      {children}
+    </kbd>
   )
 }
 
