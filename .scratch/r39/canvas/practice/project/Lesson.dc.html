@@ -95,7 +95,7 @@ const LS = {"place": "Lesson 7 of 13", "title": "How major scales work", "titleR
     return { ...common(st, set), added, states, editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
       edit: () => set({ editing: true, sel: 0 }), done: () => set({ editing: false, sheet: null }), langs: seg(['EN', 'RU'], ru ? 'RU' : 'EN', (l) => set({ lang: l })),
       place: LS.place, title: T(LS, 'title'), summary: T(LS, 'summary'), secs, status: st.saving ? 'Saving…' : 'Saved · not published',
-      kb: calmKeys(root, root + 16, marks, 370, 96), kbL: calmKeys(root, root + 16, marks, 566, 112), verName: ver, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(60, 76, qm, 566, 112),
+      kb: calmKeys(root, root + 16, marks, 370, 96), kbL: calmKeys(root, root + 16, marks, 720, 128), verName: ver, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(60, 76, qm, 720, 128),
       notRight: !right, qLine: right ? 'Correct' : (chosen.length + ' of 8 notes'), qInk: right ? '#2F5A35' : '#685E56', showAns: () => set({ chosen: D }), resetQ: () => set({ chosen: [] }),
       insOn: sheet === 'insert', openIns: () => set({ sheet: 'insert' }), ins: ins2, insOld: INS.map(([g, ks]) => ({ g, ks: ks.map((k) => ({ k, add: () => set({ sheet: null, toast: k + ' added' }) })) })),
       legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),

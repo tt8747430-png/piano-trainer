@@ -242,6 +242,31 @@ async function analyse(page, scr, phone) {
       if (hd && first !== undefined && !filled && first - hb > 24 && main.scrollTop === 0 && getComputedStyle(main).justifyContent !== 'center') problems.push(`${Math.round(first - hd.getBoundingClientRect().bottom)}px bare between the bar and the first content: a band nothing fills (the page starts 8–16 under its bar)`)
     }
   }
+  // A bare band under a column (owner, 2026-11-17: "these empty spaces on the left under the sections should not be
+  // … the same for the courses and lessons. you should flag this with the line tool"): on a wide screen, columns side
+  // by side whose content ends far apart leave paper bare under the shorter one, a column of the page's width unused.
+  // Each pair is judged as far as the screen shows it; a side pane of the app's places (the sidebar) is not content.
+  if (scr.w >= 700) {
+    const bottomOf = (el) => { let b = -1; for (const e of [el, ...el.querySelectorAll('*')]) { if (!vis(e) || e.closest('[data-float], [role=dialog], [role=toolbar], [role=status]')) continue; const r = e.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue; if (getComputedStyle(e).position === 'absolute' && e !== el) continue; b = Math.max(b, Math.min(r.bottom, scr.y + scr.h)) } return b }
+    const seen = new Set()
+    for (const box of document.querySelectorAll('main, main *')) {
+      if (!vis(box) || box.closest('nav, [role=dialog], [data-float]')) continue
+      const kids = [...box.children].filter((k) => vis(k) && k.getBoundingClientRect().width > 150 && k.getBoundingClientRect().height > 0)
+      if (kids.length < 2) continue
+      for (let i = 0; i < kids.length; i++) for (let j = 0; j < kids.length; j++) {
+        if (i === j) continue
+        const a = kids[i].getBoundingClientRect(), c = kids[j].getBoundingClientRect()
+        if (a.right > c.left + 4 && c.right > a.left + 4) continue // not side by side
+        if (Math.abs(a.top - c.top) > 48 || a.top > scr.y + scr.h - 100) continue
+        const ab = bottomOf(kids[i]), cb = bottomOf(kids[j]), gap = Math.round(cb - ab)
+        if (gap >= 160 && cb >= scr.y + scr.h - 120) {
+          const key = Math.round(a.left) + ':' + Math.round(a.top)
+          if (seen.has(key)) continue; seen.add(key)
+          problems.push(`a bare band ${Math.round(a.width)}×${gap}px under the column at x ${Math.round(a.left - scr.x)}, beside one that goes on: the page's width is left unused (balance; put what the column holds in the bar, the foot or a band across the top, and let the content take the width)`)
+        }
+      }
+    }
+  }
   // Two acts of different weight in one box: a box holding a filled (honey) button and another button of another fill.
   for (const b of blocks.filter((b) => b.card)) {
     const btns = [...b.el.querySelectorAll('button, a')].filter(vis).map((x) => getComputedStyle(x).backgroundColor).filter(opaque)

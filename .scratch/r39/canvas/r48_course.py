@@ -52,11 +52,16 @@ def CBODY(lap):
     go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
           f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
     # loop round 59: no About: what the course teaches is said once, in the summary under its name, as a level's goal
-    if lap:  # owner, 2026-11-17: "don't you see all of this empty space?": the course's head stands at the left in
-        # view (cover, name, goal, progress, Continue), its lessons and songs fill the rest, as the lesson's contents
-        # and sections do; nothing centred in an empty band
-        return (f'<div style="position: sticky; top: 0; display: flex; flex-direction: column; gap: 16px">{COVER}{head}{go}</div>'
-                f'<div style="display: flex; flex-direction: column; gap: 16px">{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}</div>')
+    if lap:  # owner, 2026-11-17: "these empty spaces on the left under the sections should not be … the same for the
+        # courses and lessons": the course's head is a band across the top (cover, then its name, goal, progress and
+        # Continue), its lessons flow in two balanced columns under it and its songs in a row of three; no side
+        # column that runs out (lines.mjs: a bare band under a column)
+        lrows = (LROWS.replace('<span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span>', '', 1)
+                 .replace('<div style="position: relative">', '<div style="columns: 2; column-gap: 48px">', 1)
+                 .replace('<a href="Lesson.dc.html" style="position: relative;', '<a href="Lesson.dc.html" style="break-inside: avoid; position: relative;', 1))
+        songs = SONGROWS.replace('overflow: hidden">', 'overflow: hidden; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">', 1)
+        return (f'<div style="display: grid; grid-template-columns: 360px minmax(0, 640px); gap: 40px; align-items: start">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
+                f'{H2("Lessons")}{lrows}{H2("Guided songs")}{songs}')
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT_R = IB('Settings', GEARI, 'openSettings') + EDITR()  # Edit becomes Done in its place
@@ -76,7 +81,7 @@ cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 56px; align-items: start">{CBODY(True)}</main>'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
 cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
