@@ -17,12 +17,12 @@ YOURS = {
 YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r'''
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
     const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
-    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
+    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, kind: 'Lesson', len: d, prog: k === 'learned' ? 'Learned' : '—', learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
       more: (e) => set({ sheet: 'row', row: t, rowC: false, menuPos: ANCHOR(e, 230) }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
     const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
       const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
       const isOpen = !!open[c.t] && kind !== 'Courses';
-      return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), lessons: ls, isOpen, shut: !isOpen,
+      return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), kind: 'Course', len: ls.length + ' lessons', prog: ls.filter((l) => l.learned).length + ' of ' + ls.length + ' learned', lessons: ls, isOpen, shut: !isOpen,
         toggle: () => set({ open: { ...open, [c.t]: !open[c.t] } }), more: (e) => set({ sheet: 'row', row: c.t, rowC: true, menuPos: ANCHOR(e, 230) }), chev: isOpen ? 'rotate(90deg)' : 'none' };
     });
     const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
@@ -47,7 +47,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
       selOn, selOff: !selOn, canSel: !selOn && any, toggleSel: () => set({ sel: !selOn, picked: [], sheet: null }),
-      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses',
+      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses', headPad: selOn ? '164px' : '108px',
       selDup: () => set({ sel: false, picked: [], toast: (n || all.length) === 1 ? 'Copy made' : named(n ? picked : all) + ' copied' }), selDel: () => dropMany(n ? picked : all),
       selDupL: n ? 'Duplicate' : 'Duplicate all', selDelL: n ? 'Delete' : 'Delete all',
       courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare || (!any && !ql), notBare: !(bare || (!any && !ql)), noneOn: !bare && !any && !!ql,
@@ -87,6 +87,30 @@ def LIST(lap):
             f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 4)}</sc-for></div></sc-if>'
             + LEMPTY('noneOn', SEARCH.replace('width="18" height="18"', 'width="26" height="26"'), '{{noneT}}', 'Check the spelling, or search for a word from a lesson’s name.', BTN('Clear search', 'clearQ', kind='quiet', h=48, grow=False))
             + LEMPTY('bareOn', BOOKI.replace('22', '26'), 'No lessons or courses yet', 'Write a lesson in your own words with +, then gather lessons into a course.', f'<a href="LearnCourses.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Browse the courses</a>'))
+# The laptop draws the list as the libraries' table (Songs, Accompaniment; owner, 2026-11-15: "the empty space should be
+# properly used"): a heading row, then rows on the page, the description line split into Length and Progress (the kind is the tile and the chips)
+_COLS = lambda v: (f'<span style="flex: 1; min-width: 0; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{{v}.len}}}}</span>'
+                   f'<span style="flex: 1.2; min-width: 0; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{{v}.prog}}}}</span>')
+def TROW_L(href, indent):
+    sp = f'<span aria-hidden="true" style="flex: none; width: {indent}px"></span>' if indent else ''
+    return (f'<div style="position: relative; min-height: 60px; display: flex; align-items: center; gap: 16px; padding: 6px 0; box-shadow: inset 0 -1px 0 {FILL}">'
+            f'<div style="flex: 2.4; min-width: 0; display: flex; align-items: center; gap: 12px">{YHIT("l")}{YCHECK("l")}{sp}'
+            f'<a href="{href}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">{LTILE}<span style="font-size: 16px; font-weight: 600">{{{{l.t}}}}</span></a></div>'
+            f'{_COLS("l")}<span style="flex: none; width: 44px">{OFFSEL(ROWMORE("l.more", "{{l.t}}"))}</span></div>')
+def TABLE_L():
+    lh, ch = 'LessonLaptop.dc.html', 'CourseLaptop.dc.html'
+    head = (f'<div style="display: flex; gap: 16px; padding: 0 0 8px; box-shadow: inset 0 -1px 0 {LINE}">'
+            + ''.join(f'<span style="flex: {f}; min-width: 0; font-size: 13px; font-weight: 600; color: {SOFT}"><span style="padding-left: {pl}">{t}</span></span>' for t, f, pl in (('Name', 2.4, '{{headPad}}'), ('Length', 1, '0'), ('Progress', 1.2, '0')))
+            + '<span style="flex: none; width: 44px"></span></div>')
+    course = (f'<div style="position: relative; min-height: 64px; display: flex; align-items: center; gap: 16px; padding: 6px 0; box-shadow: inset 0 -1px 0 {FILL}">'
+              f'<div style="flex: 2.4; min-width: 0; display: flex; align-items: center; gap: 4px">{YHIT("c")}{YCHECK("c").replace("margin: 0 10px", "margin: 0 18px 0 10px")}'
+              f'<button type="button" aria-label="Show its lessons" aria-expanded="{{{{c.isOpen}}}}" onClick="{{{{c.toggle}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center"><span style="display: flex; transform: {{{{c.chev}}}}; transition: transform .2s cubic-bezier(.22,1,.36,1)">{CHEV_R}</span></button>'
+              f'<a href="{ch}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; margin-left: 4px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{c.paint}}}}; display: flex; align-items: center; justify-content: center">{FOLDI}</span>'
+              f'<span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span></a></div>{_COLS("c")}<span style="flex: none; width: 44px">{OFFSEL(ROWMORE("c.more", "{{c.t}}"))}</span></div>'
+              f'<sc-if value="{{{{c.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><sc-for list="{{{{c.lessons}}}}" as="l" hint-placeholder-count="3">{TROW_L(lh, 56)}</sc-for></sc-if>')
+    rest = LIST(True)[LIST(True).index('</div></sc-if>') + len('</div></sc-if>'):]
+    return (f'<sc-if value="{{{{listOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column">{head}<sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
+            f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{TROW_L(lh, 40)}</sc-for></div></sc-if>' + rest)
 SORTB = (f'<button type="button" onClick="{{{{openSort}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">'
          f'{{{{sortL}}}}{CHEV_D}</button>')
 SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 12px; border-radius: 12px; background: {FILL}; color: {SOFT}">{SEARCH}'
@@ -98,7 +122,7 @@ FAB = lambda bottom: OFFSEL(NEWDIAL([('New course', 'newCourse'), ('New lesson',
 YSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 _YSELIN = SELACT('{{selDupL}}', 'selDup', DUPSEL) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
 YSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_YSELIN, 34)}</sc-if>'
-YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 276px; width: 440px; bottom: 28px') + '</sc-if>'  # centred on the list's 880 column (56 + 440), not the pane
+YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: calc(50% - 220px); width: 440px; bottom: 28px') + '</sc-if>'  # centred on the table, which keeps 56 at each side of the pane
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 # a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
 ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))
@@ -107,7 +131,7 @@ YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}">
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
 yph = (f'{TITLEBAR("{{pageT}}", YSEL, "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YSELBAR}{YTOAST}')
-ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(True)}', 880) + YSELBAR_L + FAB(32).replace('right: 16px', 'right: 40px') + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{TABLE_L()}', 2000) + YSELBAR_L + FAB(32).replace('right: 16px', 'right: 40px') + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
        POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 28px; top: 76px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')

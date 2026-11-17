@@ -78,12 +78,12 @@ const Y = {"courses": [{"t": "Sunday service set", "paint": "#DCE9D6", "pic": "c
 
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
     const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
-    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
+    const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, kind: 'Lesson', len: d, prog: k === 'learned' ? 'Learned' : '—', learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
       more: (e) => set({ sheet: 'row', row: t, rowC: false, menuPos: ANCHOR(e, 230) }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
     const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
       const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
       const isOpen = !!open[c.t] && kind !== 'Courses';
-      return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), lessons: ls, isOpen, shut: !isOpen,
+      return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), kind: 'Course', len: ls.length + ' lessons', prog: ls.filter((l) => l.learned).length + ' of ' + ls.length + ' learned', lessons: ls, isOpen, shut: !isOpen,
         toggle: () => set({ open: { ...open, [c.t]: !open[c.t] } }), more: (e) => set({ sheet: 'row', row: c.t, rowC: true, menuPos: ANCHOR(e, 230) }), chev: isOpen ? 'rotate(90deg)' : 'none' };
     });
     const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
@@ -108,7 +108,7 @@ const Y = {"courses": [{"t": "Sunday service set", "paint": "#DCE9D6", "pic": "c
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
       selOn, selOff: !selOn, canSel: !selOn && any, toggleSel: () => set({ sel: !selOn, picked: [], sheet: null }),
-      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses',
+      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses', headPad: selOn ? '164px' : '108px',
       selDup: () => set({ sel: false, picked: [], toast: (n || all.length) === 1 ? 'Copy made' : named(n ? picked : all) + ' copied' }), selDel: () => dropMany(n ? picked : all),
       selDupL: n ? 'Duplicate' : 'Duplicate all', selDelL: n ? 'Delete' : 'Delete all',
       courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare || (!any && !ql), notBare: !(bare || (!any && !ql)), noneOn: !bare && !any && !!ql,
