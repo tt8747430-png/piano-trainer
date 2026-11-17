@@ -139,6 +139,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Played through floats on a laptop, as PlayerDesk draws it (loop round 60):** a 440 card 112 above the window's foot, clear of the transport, 16 round with its soft shade, where the app pinned a 670 sheet to the foot; the phone keeps its sheet. One sheet, a `floating` choice (2026-11-17).
 - **A Wait pass counts its pauses (loop round 62, research item 14, Chordio's time per step):** a step that takes over two beats at the chosen tempo is a pause for its bar; Played through says it under the four bars' slips ("No slips · 2 pauses", soft ink, only when there are some), the score never counts it, and of two equally weak pairs of bars the one with more pauses is the one to practise (canvas v376) (2026-11-17).
 - **Loop round 61, Played through ported from its board (PlayerDone):** a Wait pass at the song's end opens the sheet: the score and the best, the tempo and its word, the bars four at a time painted by their slips (each a button that loops its four, the weakest ringed), Practise bars n–m at 70 %, Play again, Try it in Play, the days in a row; Wait mode's line keeps only the score, its Again and Loop gone to the sheet (2026-11-17).
 - **The Player's group labels in the caps (loop round 60, 2026-11-16):** the Practice sheet's "Tempo" and "Loop bars 5–8" had lost the caps that rounds 15 and 25 give every group label; they wear the kit's CAPS again (13 semibold, 4% tracking), on phone and laptop.

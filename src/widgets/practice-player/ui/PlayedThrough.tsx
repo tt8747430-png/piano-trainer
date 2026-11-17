@@ -89,7 +89,7 @@ export function PlayedThrough({
       : t('done.practiseBars', { first: bars.first + 1, last: bars.last + 1 })
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent title={t('done.title')} description={t('done.of', { hands })}>
+      <SheetContent title={t('done.title')} description={t('done.of', { hands })} floating>
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-1 card px-4 py-3">

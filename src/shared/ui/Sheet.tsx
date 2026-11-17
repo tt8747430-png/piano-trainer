@@ -18,6 +18,17 @@ import {
  * A sheet from the right as the boards' laptop popover. Each class names the right edge as well as
  * the axis, so it outranks the drawer's own placing of a panel from the right.
  */
+/** `floating` on a laptop: PlayerDesk's card, 440 wide, 112 above the foot, 16 round, no bleed under it. */
+const FLOATING_CARD = [
+  'lg:max-w-110',
+  'lg:data-[swipe-direction=down]:bottom-28',
+  'lg:data-[swipe-direction=down]:rounded-2xl',
+  'lg:data-[swipe-direction=down]:border-0',
+  'lg:data-[swipe-direction=down]:after:hidden',
+  'lg:max-h-[calc(var(--app-height,100dvh)-9rem)]',
+  'lg:shadow-[0_0_0_1px_rgb(51_41_33/0.06),0_-8px_30px_-12px_rgb(51_41_33/0.28)]',
+].join(' ')
+
 const LAPTOP_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:mx-0',
   'data-[swipe-axis=x]:data-[swipe-direction=right]:inset-y-auto',
@@ -77,6 +88,7 @@ export function SheetContent({
   footer,
   full = false,
   tall = false,
+  floating = false,
   initialFocus,
   dismiss = 'done',
 }: {
@@ -94,6 +106,11 @@ export function SheetContent({
   full?: boolean
   /** As tall as a sheet stands, whatever it holds: a sheet that is a screen (the library's filters). */
   tall?: boolean
+  /**
+   * On a laptop, a card floating over the screen's foot rather than a sheet across it: the Player's
+   * Played through (PlayerDesk's, 440 wide, 112 above the window's foot, clear of the transport).
+   */
+  floating?: boolean
   /** What takes the focus as it opens, in place of the panel: a picker's value. */
   initialFocus?: () => HTMLElement | true
   /** Its header's way out: Done; Cancel on a sheet that makes something (the canvas's NEWNAME); Close once it reports what was made (Import). */
@@ -114,6 +131,7 @@ export function SheetContent({
           'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
         full &&
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
+        floating && FLOATING_CARD,
       )}
     >
       <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
