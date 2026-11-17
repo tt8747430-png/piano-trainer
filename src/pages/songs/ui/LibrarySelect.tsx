@@ -6,33 +6,18 @@ import {
   useLibrary,
   type ShelvedFolder,
 } from '@/entities/library'
-import type { Entry, PieceId } from '@/entities/piece'
-import { useEntryFace } from '@/widgets/piece-list'
-import { FavouriteMark, RowFace } from '@/shared/ui'
-import { PieceMark } from '@/widgets/piece-cover'
+import type { PieceId } from '@/entities/piece'
 import {
   CardLookProvider,
   FolderFace,
   LibraryDnd,
   RowInHand,
   SelectRow,
+  SONG_FACE,
+  SongCardFace,
   SortableRows,
-  useCardLook,
 } from '@/widgets/song-library'
 import { folderKey, songKey, type Chosen, type LibraryPage } from '../model/use-library-page'
-
-/** A song's face in Select, as its row shows it: its small cover, its title over its composer and key, its ♡ where it is a favourite. */
-function SongFace({ entry, favourite }: { entry: Entry; favourite: boolean }) {
-  const { show } = useCardLook()
-  const { face } = useEntryFace(entry, show)
-  return (
-    <>
-      <PieceMark entry={entry} />
-      <RowFace {...face} />
-      {favourite ? <FavouriteMark /> : null}
-    </>
-  )
-}
 
 /**
  * The library while Select is on (Mindscape's `LibrarySelectList`): the rows on screen, each chosen
@@ -73,7 +58,7 @@ export function LibrarySelect({
       return each ? <FolderFace folder={each.folder} holds={each} /> : null
     }
     const entry = entries.get(key.slice('song:'.length))
-    return entry ? <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} /> : null
+    return entry ? <SongCardFace entry={entry} /> : null
   }
   // Any folder by name, one out of sight too: the place a folder open stands in.
   const anyFolderName = (id: string) => {
@@ -160,10 +145,13 @@ export function LibrarySelect({
                         name={songName(id)}
                         checked={select.chosen.has(songKey(id))}
                         onToggle={() => select.toggle(songKey(id))}
-                        sortable={sortable}
+                        // The songs follow the sort (R72); only the folders keep the learner's order.
+                        sortable={false}
                         carry={songKey(id)}
+                        face={SONG_FACE}
+                        tall
                       >
-                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                        <SongCardFace entry={entry} />
                       </SelectRow>
                     ) : null
                   }}
@@ -171,7 +159,7 @@ export function LibrarySelect({
                     const entry = entries.get(id)
                     return entry ? (
                       <RowInHand checked={select.chosen.has(songKey(id))}>
-                        <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
+                        <SongCardFace entry={entry} />
                       </RowInHand>
                     ) : null
                   }}

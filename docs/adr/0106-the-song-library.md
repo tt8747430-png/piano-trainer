@@ -27,7 +27,7 @@ details.
     starting Select;
   - a folder's row counts its folders and songs and names its first songs; its More edits, moves, archives or deletes
     it;
-  - **Select**: a check fading in where More stood so nothing moves, the count as the title, Select all (round, so
+  - **Select** (R72): the same card, a 24 check fading in before its picture, ··· leaving, the count as the title, Select all (round, so
     the bar keeps its one row at 320px), a glass dock centred at the foot (R72's SELBAR, 68 tall, 560 at most) of
     Add to folder · Favourite · Archive by default (Settings › Select toolbar, the rest under its ···), each in its slot, greyed where
     what is chosen does not allow it (Delete: anything but the learner's own songs and folders); it counts and acts on
