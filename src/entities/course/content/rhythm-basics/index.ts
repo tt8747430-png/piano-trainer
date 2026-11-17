@@ -9,6 +9,7 @@ const course: Course = {
   shelf: 'beginner',
   stage: 'beginner',
   title: { en: 'Rhythm Basics', ru: 'Основы ритма' },
+  line: { en: 'Count, clap and play in time', ru: 'Считать, хлопать и играть в темп' },
   summary: {
     en: 'Learn to count the beat and hold every note for its full length. You start with quarter, half and whole notes, then add eighths, dotted halves, 3/4, the pickup, rests and ties.',
     ru: 'Учимся считать доли и выдерживать каждую ноту полностью. Сначала четверти, половинные и целые, затем восьмые, половинные с точкой, размер 3/4, затакт, паузы и лиги.',

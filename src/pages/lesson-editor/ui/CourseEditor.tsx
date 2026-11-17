@@ -10,7 +10,7 @@ import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { Dropdown, type EditAction } from '@/shared/ui'
 import { AboutDocument } from '@/widgets/lesson-document'
-import { DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
+import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
 import { CourseParts } from './CourseParts'
 import { OwnCourseEditor } from './OwnCourseEditor'
 
@@ -84,6 +84,15 @@ function CourseDocument({
       onOrder={(order) => change({ ...record, lessons: order })}
     >
       <Properties label={t('learn:edit.doc.properties')}>
+        <PropertyRow name={t('learn:edit.course.line')}>
+          <DocText
+            label={t('learn:edit.course.line')}
+            value={record.line ?? course.line}
+            locale={locale}
+            placeholder={words('edit.course.linePlaceholder')}
+            onChange={(line) => change({ ...record, line })}
+          />
+        </PropertyRow>
         <PropertyRow name={t('learn:edit.course.shelf')}>
           <Dropdown
             bare

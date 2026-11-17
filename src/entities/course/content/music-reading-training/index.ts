@@ -13,6 +13,7 @@ const course: Course = {
   shelf: 'technique',
   stage: 'beginner',
   title: { en: 'Music Reading Training', ru: 'Тренировка чтения нот' },
+  line: { en: 'Reading drills, position by position', ru: 'Чтение нот, позиция за позицией' },
   summary: {
     en: 'Reading drills, one hand position at a time. The right hand starts on middle C, the left hand moves across the bass staff, and mixed lines in both clefs train sight-reading.',
     ru: 'Упражнения в чтении нот, по одной позиции руки за раз. Правая рука начинает с до первой октавы, левая проходит весь басовый стан, а смешанные строки в обоих ключах тренируют чтение с листа.',

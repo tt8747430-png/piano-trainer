@@ -388,6 +388,8 @@ export const learn = {
       createFailed: 'The course could not be made: a course of that name may be there already.',
       fewerWeeks: 'Fewer weeks',
       moreWeeks: 'More weeks',
+      line: 'Line',
+      linePlaceholder: 'What it is, in a few words',
       shelf: 'Shelf',
       stage: 'Level',
       weeks: 'Length',

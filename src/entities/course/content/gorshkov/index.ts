@@ -10,6 +10,7 @@ const course: Course = {
   shelf: 'method-books',
   stage: 'advanced',
   title: { en: 'Gorshkov: a course in accompaniment', ru: 'Горшков: курс по аккомпанементу' },
+  line: { en: '7ths, 9ths and a line in the chords', ru: 'Септаккорды, ноны и голос в аккордах' },
   summary: {
     en: 'Vasily Gorshkov’s accompaniment course, taught on the songs of his lessons: 7th and 9th chords where they fit, thinking in degrees, chord pulse, and a line woven into the chords.',
     ru: 'Курс аккомпанемента Василия Горшкова на песнях из его уроков: септ- и нонаккорды там, где они уместны, мышление ступенями, аккордовая пульсация и линия, вплетённая в аккорды.',

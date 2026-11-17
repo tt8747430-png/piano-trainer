@@ -44,7 +44,7 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
         </span>
       </span>
       <span className="line-clamp-2 text-[0.8125rem]/[1.35] text-pretty text-muted-foreground">
-        {localText(course.summary, locale)}
+        {localText(course.line, locale)}
       </span>
     </Link>
   )

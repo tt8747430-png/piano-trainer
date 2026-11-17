@@ -373,6 +373,8 @@ export const learn: LocaleResources['learn'] = {
       createFailed: 'Курс не создан: возможно, курс с таким названием уже есть.',
       fewerWeeks: 'Меньше недель',
       moreWeeks: 'Больше недель',
+      line: 'Строка',
+      linePlaceholder: 'О чём курс, в двух словах',
       shelf: 'Полка',
       stage: 'Уровень',
       weeks: 'Длительность',
