@@ -155,8 +155,16 @@ p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + HIST9H + BADGES9H + ACH9, "true")}</main>{TABBAR("Profile")}</sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{barT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
-p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">'
-        f'<div style="display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + HIST9H, "true")}</div><div style="display: flex; flex-direction: column; gap: 12px">{IF9("notLoading", BADGES9H + ACH9, "true")}</div></main></sc-if>'
+# On a laptop the Profile is rows, each holding a pair whose tops meet (owner, 2026-11-17, edge-lines: two free columns
+# crossed each other's edges): the week beside the badges, the practice history beside the achievements, every box
+# under its own heading.
+_WK = WEEK[WEEK.index('<div role="img"'):]
+_WKHEAD = WEEK[:WEEK.index('<div role="img"')]
+WEEKL = H2('Last 7 days', f'<span style="min-height: 44px; display: flex; align-items: center; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span>') + WEEK.replace(_WKHEAD[_WKHEAD.index('<div style="display: flex; justify-content: space-between'):], '').replace('margin-top: 12px">', '">', 1)
+_CELL = lambda x: f'<div style="display: flex; flex-direction: column; gap: 12px">{x}</div>'
+p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 32px; align-items: start">'
+        f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9, "true")}</div>'
+        f'{IF9("notLoading", _CELL(WEEKL) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9), "true")}</main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
 detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
 print('r50 profile ok')
