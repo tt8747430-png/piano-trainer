@@ -21,12 +21,9 @@ const buttonVariants = cva(
         soft: 'border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
         surface:
           'rounded-full border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
-        // A bar's button over a picture (Chords' stage), the canvas's GLASSBTN: a 44 circle of glass,
-        // a hairline round it, blurred 12 behind, its 22px icon in ink.
-        glass:
-          'rounded-full border-border bg-glass text-foreground backdrop-blur-md hover:brightness-97 aria-expanded:brightness-97 [&_svg:not([class*=size-])]:size-5.5',
-        // A screen's bar's button, the canvas's IB: bare, its 22px icon in ink, the muted fill under the pointer.
-        bar: 'rounded-full bg-transparent text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen [&_svg:not([class*=size-])]:size-5.5',
+        // Every bar's button, the canvas's IB and GLASSST: a 44 circle of glass (the line ring, the
+        // float's shade, blurred 24 behind), its 22px icon in ink; Done and Edit the same glass as a capsule.
+        bar: 'glass rounded-full text-foreground hover:brightness-97 aria-expanded:brightness-97 aria-pressed:bg-chosen [&_svg:not([class*=size-])]:size-5.5',
         link: 'text-base font-semibold text-link underline-offset-4 hover:underline',
         // A toolbar's round button, the score's bar's every one (ADR 0115, R31-E): no frame of its own on the
         // bar's band, the muted fill while it is hovered, open or pressed.

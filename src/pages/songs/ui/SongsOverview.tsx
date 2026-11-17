@@ -45,12 +45,7 @@ export function SongsOverview() {
         views={<TitleTabs {...views} />}
         tools={
           <>
-            <RoundLink
-              label={t('all.search')}
-              icon={Search}
-              variant="glass"
-              render={<Link to="/songs/all" />}
-            />
+            <RoundLink label={t('all.search')} icon={Search} render={<Link to="/songs/all" />} />
             {laptop ? <NewMenu page={page} folder={null} onImport={songImport.choose} /> : null}
           </>
         }

@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { coursesOn, SHELVES, type Course } from '@/entities/course'
+import { coursesOn, SHELVES, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { STAGE_PAINT } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { PAINT, SeeAll, SectionHead } from '@/shared/ui'
@@ -12,11 +11,11 @@ import { continueStep } from '../model/continue-step'
 /** How many covers Learn shows before See all. */
 const SHOWN = 5
 
-/** A course as a cover (canvas 163): its level's paint, its shelf (or Next) over its name, what it teaches under it. */
+/** A course as a cover (the canvas's COURSECARD): its shelf's paint, Next and its shelf over its name, what it teaches under it. */
 function CourseCover({ course, current }: { course: Course; current: boolean }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const paint = PAINT[STAGE_PAINT[course.stage]]
+  const paint = PAINT[SHELF_PAINT[course.shelf]]
   return (
     <Link
       to="/courses/$courseId"
@@ -26,19 +25,20 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
     >
       <span
         className={cn(
-          'flex h-32 flex-col justify-between rounded-[14px] px-3.5 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
+          'flex h-32 flex-col justify-between rounded-[14px] px-4 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
           paint.fill,
         )}
       >
-        {current ? (
-          <span className="flex h-6 items-center self-start rounded-pill bg-primary px-2.5 text-xs font-bold text-primary-foreground">
-            {t('upNext')}
+        <span className="flex min-h-6 items-center gap-2">
+          {current ? (
+            <span className="flex h-6 shrink-0 items-center rounded-pill bg-primary px-3 text-xs font-bold text-primary-foreground">
+              {t('upNext')}
+            </span>
+          ) : null}
+          <span className="truncate text-[0.6875rem] font-bold tracking-[0.06em] text-muted-foreground uppercase">
+            {t(`shelfShort.${course.shelf}`)}
           </span>
-        ) : (
-          <span className="flex min-h-6 items-center text-[0.6875rem] font-bold tracking-[0.06em] text-muted-foreground uppercase">
-            {t(`shelves.${course.shelf}`)}
-          </span>
-        )}
+        </span>
         <span className="font-display text-[1.1875rem]/[1.15] text-balance text-foreground">
           {localText(course.title, locale)}
         </span>

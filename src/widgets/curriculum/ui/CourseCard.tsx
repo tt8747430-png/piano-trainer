@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { CourseIcon, type Course } from '@/entities/course'
+import { CourseIcon, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { STAGE_PAINT } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { OpensMark, PAINT } from '@/shared/ui'
@@ -22,7 +21,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
   const learned = useProgress(selectLearned)
   const progress = courseProgress(course, learned)
   const complete = isComplete(progress)
-  const paint = PAINT[STAGE_PAINT[course.stage]]
+  const paint = PAINT[SHELF_PAINT[course.shelf]]
   const facts = [
     t('course.lessonCount', { count: course.lessons.length }),
     ...(course.songs.length > 0 ? [t('course.songCount', { count: course.songs.length })] : []),

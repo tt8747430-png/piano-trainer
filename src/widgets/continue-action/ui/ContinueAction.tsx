@@ -5,15 +5,16 @@ import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ProgressBar, LessonIcon } from '@/shared/ui'
+import { LessonIcon } from '@/shared/ui'
 import { continueStep, courseProgress, journeyProgress, useStepTitle } from '@/widgets/curriculum'
 
 /**
  * What to do next (ADR 0053), Learn's first row: one card that is the link, Continue and the
- * journey or course it is on, the step it opens, how far that track is learned, and a round honey
+ * journey or course it is on, the step it opens, which lesson of how many it is, and a round honey
  * mark at its end: the next lesson of the journey or of the course last worked in, read; its next
  * guided song, on its page. Nothing once everything is learned. Beside the level it is on (`shown`,
- * Learn's Lessons with that level open), the card leaves the meter to the level's own line.
+ * Learn's Lessons with that level open), the card leaves the line to the level's own; how much is learned
+ * is the level's ring, never a second meter here (the Learn board's).
  */
 export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const { t } = useTranslation('learn')
@@ -30,17 +31,18 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const track = 'course' in next ? next.course : next.journey
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
-  // Which lesson of its track it is, as the level's and the course's lines number them.
+  // Which lesson of its track it is, of how many, as the level's and the course's lines number them.
+  const lessonIds =
+    'course' in next
+      ? next.course.lessons.map((lesson) => lesson.id)
+      : next.journey.chapters
+          .flatMap((chapter) => chapter.steps)
+          .flatMap((each) => (each.kind === 'lesson' ? [each.lessonId] : []))
   const n =
-    step.kind === 'course-lesson' && 'course' in next
-      ? next.course.lessons.findIndex((lesson) => lesson.id === step.lessonId) + 1
-      : step.kind === 'lesson' && 'journey' in next
-        ? next.journey.chapters
-            .flatMap((chapter) => chapter.steps)
-            .filter((each) => each.kind === 'lesson')
-            .findIndex((each) => each.lessonId === step.lessonId) + 1
-        : 0
-  const meter = track.id !== shown
+    step.kind === 'course-lesson' || step.kind === 'lesson'
+      ? lessonIds.indexOf(step.lessonId) + 1
+      : 0
+  const counted = track.id !== shown
   const face = (
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
@@ -50,10 +52,10 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
         <h2 id={id} className="font-display text-[1.375rem]/[1.15] font-normal text-balance">
           {title}
         </h2>
-        {meter ? (
+        {counted ? (
           <span className="text-[0.8125rem]/4 text-muted-foreground">
             {n > 0
-              ? `${t('lessonNumber', { n })} · ${t('progress', { learned: progress.done, total: progress.total })}`
+              ? t('lessonOf', { n, count: lessonIds.length })
               : t('progress', { learned: progress.done, total: progress.total })}
           </span>
         ) : null}
@@ -64,11 +66,6 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
       >
         <Icon className={read ? undefined : 'fill-current'} />
       </span>
-      {meter ? (
-        <span className="col-span-2 flex">
-          <ProgressBar done={progress.done} total={progress.total} />
-        </span>
-      ) : null}
     </>
   )
   const className =

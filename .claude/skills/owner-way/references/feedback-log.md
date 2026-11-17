@@ -520,6 +520,7 @@ owner's, typos fixed.
 - **Loop round 18, a lesson's head 28 above its first section,** as the board's document spaces head and sections (was 16) (2026-11-15).
 - **Loop round 15, a lesson's words as the board's:** each section's heading in the sans, 22 bold, tracked 1% tighter; its text 17 on 1.55; 12 between a section's parts; the title 30 on 1.15; the editor's document the same, so Edit looks as it reads. The docked keys stay: one fold shared by every reading page, no ruling removed it (2026-11-14).
 
+- **Loop round 62, Learn to its boards:** level rows show the book alone (no lesson count); Continue reads "Lesson n of N" with no meter; on a laptop Continue spans the page and Levels and Your lessons stand side by side above the covers; a cover prints Next beside its shelf's short name ("Beginner"), 16 across, on its shelf's paint (beginner grass, intermediate sky, technique sand, chords yellow, method books lilac), one paint a shelf on every course row, tile and page (`SHELF_PAINT`) (2026-11-17).
 ## Practice
 - **Interval settings lose All piano settings (loop round 60, 2026-11-16):** its gear sheet ended with a link to the piano's settings that the bar's piano button already opens, two ways to one sheet; Scale and Progression settings never had it. The sheet holds Play all and Speed alone, phone and laptop.
 - **A progression's Loop starts off, as a pattern's (loop round 60, 2026-11-16):** the Progression's floating Loop opened switched on, an ink disc beside the honey Play, while the Pattern page's opens off; both open off now, glass at rest and ink once pressed, so Play is the one filled piece of the bar at rest (phone and laptop).
@@ -1244,6 +1245,7 @@ are reference only, but progressions are facts.
   content goes, the heading stays, so the page becomes a short list of what can be opened again; See all stays beside
   it. `.scratch/r39/canvas/folds.py`, run by `index.py`.
 
+- **Loop round 62, one glass bar button:** every bar button is the kit's IB, a 44 glass circle with the line ring and the float's shade, 8 apart, Done and Tools the same glass as capsules; the bare `bar` and the separate `glass` variants became one, and a row's or page's own button (Restore, Restore all, Empty Trash) is `secondary`, never glass. A sub-page's bar is the kit's TOP: 56 tall, its title 8 after Back (never centred), 30 bold and 12 after it on a laptop (LPAD), on the page's paper with no line (2026-11-17).
 ## Actions and menus
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18

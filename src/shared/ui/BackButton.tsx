@@ -11,13 +11,10 @@ import { RoundButton } from './RoundButton'
 export function BackButton({
   label,
   onClick,
-  variant,
   close = false,
 }: {
   label?: string
   onClick?: () => void
-  /** Glass where the bar stands over a picture (Chords' stage); bare by default. */
-  variant?: 'glass'
   /** An X named Close, for a page that is a step aside rather than a level down (Sign in). */
   close?: boolean
 }) {
@@ -28,7 +25,6 @@ export function BackButton({
       label={label ?? t(close ? 'close' : 'back')}
       icon={close ? X : ChevronLeft}
       onClick={onClick ?? up}
-      {...(variant ? { variant } : {})}
     />
   )
 }

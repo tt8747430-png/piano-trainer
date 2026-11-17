@@ -1,11 +1,11 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { courseById, courseStepIds, type Course } from '@/entities/course'
+import { courseById, courseStepIds, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectOwnCourse, useOwnLessons } from '@/entities/own-lessons'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { STAGE_PAINT, stepOf, type StepId } from '@/entities/step'
+import { stepOf, type StepId } from '@/entities/step'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
@@ -90,7 +90,7 @@ function AppCourse({ courseId }: { courseId: string }) {
   // The route finds no course that is not there.
   if (!course) return null
   const progress = courseProgress(course, learned)
-  const paint = PAINT[STAGE_PAINT[course.stage]]
+  const paint = PAINT[SHELF_PAINT[course.shelf]]
   const next = openCourseStep(course, learned)
   return (
     <div className="flex flex-col gap-8">

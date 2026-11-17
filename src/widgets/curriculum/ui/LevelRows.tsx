@@ -10,8 +10,8 @@ import { journeyProgress } from '../model/progress'
 
 /**
  * Learn's Levels (canvas 163): the four levels as one card of rows, each its number in a ring of how
- * much of it is learned, its stage ("Beginner"), its book and how many lessons, how many are learned, and
- * a chevron. A row opens the level's page.
+ * much of it is learned, its stage ("Beginner"), its book, how many of its steps are learned (one count,
+ * never a second of its lessons beside it), and a chevron. A row opens the level's page.
  */
 export function LevelRows() {
   const { t } = useTranslation(['learn', 'common'])
@@ -27,10 +27,6 @@ export function LevelRows() {
         {allJourneys().map((journey, i) => {
           const progress = journeyProgress(journey, learned)
           const share = progress.total === 0 ? 0 : progress.done / progress.total
-          // Its lessons, as a lesson numbers itself ("Lesson 7 of 11"); its chord and scale steps aside.
-          const lessons = journey.chapters
-            .flatMap((chapter) => chapter.steps)
-            .filter((step) => step.kind === 'lesson').length
           return (
             <li key={journey.id}>
               <Link
@@ -49,8 +45,7 @@ export function LevelRows() {
                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="font-semibold">{t(`common:stage.${journey.stage}`)}</span>
                   <span className="text-sm text-pretty text-muted-foreground">
-                    {localText(journey.title, locale)} ·{' '}
-                    {t('learn:course.lessonCount', { count: lessons })}
+                    {localText(journey.title, locale)}
                   </span>
                 </span>
                 <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">

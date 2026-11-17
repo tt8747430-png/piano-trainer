@@ -193,7 +193,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('patterns.title')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />

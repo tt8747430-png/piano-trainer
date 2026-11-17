@@ -80,14 +80,13 @@ export function ToolPage({
     <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
         title={title}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={
           gear || settings || actions ? (
             <>
               {gear ??
                 (settings ? (
                   <RoundLink
-                    variant="glass"
                     label={t('practice:settings.open', { page: title })}
                     icon={Settings}
                     render={settings}

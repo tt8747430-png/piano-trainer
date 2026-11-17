@@ -62,12 +62,12 @@ export function ArchivedRow({
         <SongFace entry={song} />
       ) : null}
       <Button
-        variant="bar"
+        variant="secondary"
         aria-label={
           restore ? t('folder.unarchiveNamed', { name }) : t('archive.restoreNamed', { name })
         }
         onClick={onRestore}
-        className="h-11 shrink-0 rounded-full bg-muted px-3 text-sm font-semibold hover:bg-muted/80"
+        className="h-11 shrink-0 rounded-full px-3 text-sm font-semibold"
       >
         {restore ?? t('library.restore')}
       </Button>

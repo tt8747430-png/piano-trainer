@@ -18,7 +18,16 @@ export const learn = {
     chords: 'Chords and improvisation',
     'method-books': 'Method books',
   },
+  /** A shelf's name on a course's cover, the shelf said once: Beginner, not Beginner courses. */
+  shelfShort: {
+    beginner: 'Beginner',
+    intermediate: 'Intermediate',
+    technique: 'Technique and exercises',
+    chords: 'Chords and improvisation',
+    'method-books': 'Method books',
+  },
   progress: '{{learned}} of {{total}} learned',
+  lessonOf: 'Lesson {{n}} of {{count}}',
   lessonNumber: 'Lesson {{n}}',
   // A lesson's prerequisites in its contents, by number; how much of it is read, for a screen reader.
   after: 'After {{lessons}}',

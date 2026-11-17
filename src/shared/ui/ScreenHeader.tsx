@@ -1,5 +1,5 @@
 import { PencilLine } from 'lucide-react'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
@@ -80,7 +80,6 @@ export function ScreenHeader({
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
   const pageHeading = usePageHeading<HTMLHeadingElement>(title)
-  const scrolled = useScrolled()
   useEffect(() => {
     const element = bar.current
     if (!element) return
@@ -112,8 +111,8 @@ export function ScreenHeader({
         )
       }
       className={cn(
-        'sticky top-0 z-30 -mx-gutter -mt-safe border-b bg-background px-gutter pt-safe print:static print:mx-0 print:translate-y-0 print:border-0 print:px-0 duration-200 ease-out motion-safe:transition-[translate,border-color] data-hidden:-translate-y-full',
-        scrolled ? 'border-hairline' : 'border-transparent',
+        // The boards' bar: the page's own paper under it, no band and no line, its buttons the glass.
+        'sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:translate-y-0 print:px-0 duration-200 ease-out motion-safe:transition-[translate] data-hidden:-translate-y-full',
       )}
     >
       {large ? (
@@ -146,7 +145,7 @@ export function ScreenHeader({
             ) : null}
           </div>
           {tools || settings || more ? (
-            <div className="-me-1.5 ms-auto flex shrink-0 items-center print:hidden">
+            <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">
               {tools}
               {settings}
               {more}
@@ -154,14 +153,21 @@ export function ScreenHeader({
           ) : null}
         </div>
       ) : (
-        // The canvas's TOP: Back at the start, the title centred on the screen, the acts at the end.
-        <div className="grid min-h-11 grid-cols-[minmax(max-content,1fr)_minmax(0,auto)_minmax(max-content,1fr)] items-center">
-          <div className="-ms-1 flex justify-self-start print:hidden">{back}</div>
-          <div className="flex min-w-0 items-center justify-center gap-0.5 px-2">
+        // The canvas's TOP: Back at the start, the title 8 after it (never centred: bars.md, Apple's
+        // Toolbars), the acts at the end, 56 tall.
+        <div className="flex min-h-14 items-center">
+          {back ? <div className="-ms-1 flex shrink-0 print:hidden">{back}</div> : null}
+          <div
+            className={cn(
+              'flex min-w-0 flex-1 items-center gap-0.5',
+              back ? 'ms-2 lg:ms-3' : 'ms-1 lg:ms-0',
+            )}
+          >
             <h1
               {...pageHeading}
               className={cn(
-                'min-w-0 font-sans outline-none',
+                // A laptop page's title is its 30 bold, as the boards' LPAD.
+                'min-w-0 font-sans outline-none lg:text-[1.875rem] lg:font-bold lg:tracking-[-0.01em]',
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
@@ -183,8 +189,8 @@ export function ScreenHeader({
               )
             ) : null}
           </div>
-          {/* Round glass buttons (a tool's) stand 8 apart, as the boards draw them; bare icons touch. */}
-          <div className="-me-1.5 flex items-center justify-self-end has-[[data-variant=glass]]:gap-2 print:hidden">
+          {/* The bar's glass circles stand 8 apart, as the boards' IB. */}
+          <div className="ms-2 flex shrink-0 items-center gap-2 print:hidden">
             {tools}
             {settings}
             {more}
@@ -227,16 +233,4 @@ function EditDone({ action }: { action: EditAction }) {
       {t('editMode.done')}
     </Button>
   )
-}
-
-/** Whether the page has scrolled at all: the bar's hairline. */
-function useScrolled(): boolean {
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const read = () => setScrolled(window.scrollY > 0)
-    read()
-    window.addEventListener('scroll', read, { passive: true })
-    return () => window.removeEventListener('scroll', read)
-  }, [])
-  return scrolled
 }

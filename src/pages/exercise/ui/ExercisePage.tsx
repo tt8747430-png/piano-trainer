@@ -105,7 +105,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('practice:exercisePage.title')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={<PianoButton />}
       />
       <PinnedKeyboard shown={shown} place="top" />

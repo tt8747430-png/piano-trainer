@@ -12,7 +12,7 @@ export function PlayerClose({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation('common')
   return (
     <Button
-      variant="glass"
+      variant="bar"
       size="icon"
       aria-label={t('close')}
       title={keyHint(t('close'), PLAYER_KEYS.close)}

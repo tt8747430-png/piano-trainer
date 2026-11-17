@@ -17,7 +17,8 @@ import {
   Workflow,
   type LucideIcon,
 } from 'lucide-react'
-import { KeysIcon } from '@/shared/ui'
+import { KeysIcon, type Paint } from '@/shared/ui'
+import type { Shelf } from '../model/types'
 
 /** Each course's icon, its card's and its page's; a method book's an open book. */
 export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
@@ -45,3 +46,15 @@ export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
 
 /** A course's icon; the courses' test holds every course to one. */
 export const courseIcon = (id: string): LucideIcon => COURSE_ICON[id] ?? BookOpen
+
+/**
+ * Each shelf's paint, a course's cover and tile on it (the canvas's COURSECARD: its name printed on
+ * its shelf's paint, as a book's cover): one paint a shelf, so a shelf reads as one row of books.
+ */
+export const SHELF_PAINT: Readonly<Record<Shelf, Paint>> = {
+  beginner: 'grass',
+  intermediate: 'sky',
+  technique: 'sand',
+  chords: 'yellow',
+  'method-books': 'lilac',
+}

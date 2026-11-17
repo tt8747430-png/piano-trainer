@@ -15,7 +15,7 @@ export function EditorLead() {
   return (
     // Close as a glass circle, over the music (the editor board's bar).
     <Button
-      variant="glass"
+      variant="bar"
       size="icon"
       aria-label={t('close')}
       title={t('close')}

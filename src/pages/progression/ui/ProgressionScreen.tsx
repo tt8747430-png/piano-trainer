@@ -109,7 +109,7 @@ export function ProgressionScreen({
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('progressions.title')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         tools={tools}
         {...(own
           ? {
@@ -123,7 +123,7 @@ export function ProgressionScreen({
           : {})}
         settings={
           <>
-            <SettingsGear page="progressions" variant="glass" />
+            <SettingsGear page="progressions" />
             <PianoButton />
           </>
         }

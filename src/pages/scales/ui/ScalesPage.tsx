@@ -26,11 +26,10 @@ export function ScalesPage() {
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('pages.scales')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         settings={
           <>
             <RoundButton
-              variant="glass"
               label={t('settings.open', { page: t('pages.scales') })}
               icon={Settings}
               aria-haspopup="dialog"

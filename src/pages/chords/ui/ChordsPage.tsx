@@ -32,7 +32,7 @@ export function ChordsPage() {
     <div className="flex flex-col gap-4">
       <ScreenHeader
         title={t('pages.chords')}
-        back={<BackButton variant="glass" />}
+        back={<BackButton />}
         tools={
           <PianoSheet
             midi={midi}
@@ -72,7 +72,6 @@ export function ChordsPage() {
             }}
             trigger={(open) => (
               <RoundButton
-                variant="glass"
                 label={t('player:pianoSheet.title')}
                 icon={KeysIcon}
                 aria-haspopup="dialog"

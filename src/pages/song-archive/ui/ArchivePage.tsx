@@ -43,8 +43,8 @@ export function ArchivePage() {
         ) : (
           <div className="flex flex-col gap-3">
             <Button
-              variant="bar"
-              className="self-start h-11 rounded-full border-0 bg-muted px-5 text-base font-bold hover:bg-muted/80"
+              variant="secondary"
+              className="self-start h-11 rounded-full border-0 px-5 text-base font-bold"
               onClick={() => {
                 restoreAll(store, libraryCatalog(repertoire))
                 say(t('archive.restoredAll'))

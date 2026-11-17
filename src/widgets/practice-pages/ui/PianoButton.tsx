@@ -19,7 +19,6 @@ export function PianoButton({ screen = 'reading' }: { screen?: KeysScreen }) {
       onKeys={(shown) => fold(!shown)}
       trigger={(open) => (
         <RoundButton
-          variant="glass"
           label={t('pianoSheet.title')}
           icon={KeysIcon}
           aria-haspopup="dialog"
