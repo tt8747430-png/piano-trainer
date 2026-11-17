@@ -4,7 +4,8 @@
 # Publish with its menu; a formatting bar; Insert (and /) by group; an example's Edit sheet; the Publish page.
 # Learn's level gets the same Edit mode: rows dragged, chapters renamed and added, Remove with Undo. Preview as learner
 # hides all of it. Exact labels from src/shared/i18n/locales/en/learn.ts and editor.ts. Exec'd by r41.py.
-from r47_blocks import PKEYS, ADDED, INSLIST, INS_JS
+_B = dict(globals()); exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r47_blocks.py').read(), _B)  # its own namespace: its names never shadow the kit's
+PKEYS, ADDED, INSLIST, INS_JS = _B['PKEYS'], _B['ADDED'], _B['INSLIST'], _B['INS_JS']
 LESSON = {
   'place': 'Lesson 7 of 13', 'title': 'How major scales work', 'titleRu': 'Как устроены мажорные гаммы',
   'summary': 'Build a major scale on any key from one pattern of whole and half steps.',

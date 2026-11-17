@@ -3,7 +3,6 @@
 # the lesson's column starts on the 16 gutter in both modes; a block's Move and ··· are the floating toolbar's, for
 # the selected block (Craft and Notion on iOS), so nothing waits in a margin; the keys are the Player's (the dark
 # frame, the felt line, keys rounded at their foot); every kind in Insert is drawn as the block it adds.
-from r41_kit import *
 
 FRAME = 'background: #2A1F18; border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14)'
 FELT = '<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 5px; background: #8E2A22"></div>'
@@ -36,7 +35,7 @@ def ICON(d, extra=''):
 PLUS_S = ICON('M12 5v14M5 12h14').replace('width="20" height="20"', 'width="16" height="16"')
 G, Y, B = '#9BC093', '#E8C67D', '#85B8DC'
 PLAYB = f'<button type="button" aria-label="Play" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace("width=\"22\" height=\"22\"", "width=\"20\" height=\"20\"")}</button>'
-def HEAD(t, play=True):
+def BHEAD(t, play=True):
     return f'<div style="display: flex; align-items: center; gap: 8px; min-height: 44px"><span style="flex: 1; font-size: 17px; font-weight: 700">{t}</span>{PLAYB if play else ""}</div>'
 TILE = lambda top, name, sub='': (f'<span style="flex: 1; min-width: 0; min-height: 64px; border-radius: 12px; background: {FILL}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">'
                                   + (f'<span style="font-size: 13px; color: {SOFT}">{top}</span>' if top else '') + f'<span style="font-size: 17px; font-weight: 700">{name}</span>'
@@ -70,16 +69,16 @@ BLOCKS = {
     'Steps': f'<ol style="margin: 0; padding-left: 24px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 4px"><li contenteditable="true" style="outline: none">Start on any key.</li><li contenteditable="true" style="outline: none; color: {SOFT}">The next step</li></ol>',
     'Note': f'<aside style="padding: 12px 16px; border-radius: 12px; background: {FILL}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Note</span><span contenteditable="true" style="font-size: 16px; line-height: 1.45; outline: none">A sharp raises a note by a half step; a flat lowers it.</span></aside>',
     'Rule': f'<hr style="margin: 8px 0; border: 0; height: 1px; background: {LINE}">',
-    'Chords': HEAD('C · F · G') + '<div style="display: flex; gap: 8px">' + TILE('', 'C', 'C E G') + TILE('', 'F', 'F A C') + TILE('', 'G', 'G B D') + '</div>',
-    'One chord on every root': HEAD('Major on every root') + '<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">' + ''.join(f'<span style="height: 44px; border-radius: 12px; background: {INK if r == "C" else FILL}; color: {SHEET if r == "C" else INK}; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center">{r}</span>' for r in ROOTS) + '</div>' + SKEYS({60: (G, 'C'), 64: (G, 'E'), 67: (G, 'G')}),
-    'Scale': HEAD('D major') + SKEYS({62: (G, 'D'), 64: (G, 'E'), 66: (Y, 'F♯'), 67: (G, 'G'), 69: (G, 'A'), 71: (G, 'B'), 73: (Y, 'C♯'), 74: (G, 'D')}),
-    'Interval': HEAD('Perfect fifth · C–G') + SKEYS({60: (B, 'C'), 67: (B, 'G')}),
-    'Notes': HEAD('C D E F') + STAFF(),
-    'Voicings': HEAD('Cmaj7 · rootless') + '<div style="display: flex; gap: 8px">' + CHIP('Close', True) + CHIP('Rootless') + CHIP('Drop 2') + '</div>' + SKEYS({64: (G, 'E'), 67: (G, 'G'), 71: (G, 'B'), 74: (G, 'D')}, 60, 76),
-    'Pattern': HEAD('Alberti bass') + ROLL(),
-    'Progression': HEAD('I – IV – V – I in C') + '<div style="display: flex; gap: 8px">' + TILE('I', 'C') + TILE('IV', 'F') + TILE('V', 'G') + TILE('I', 'C') + '</div>',
+    'Chords': BHEAD('C · F · G') + '<div style="display: flex; gap: 8px">' + TILE('', 'C', 'C E G') + TILE('', 'F', 'F A C') + TILE('', 'G', 'G B D') + '</div>',
+    'One chord on every root': BHEAD('Major on every root') + '<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">' + ''.join(f'<span style="height: 44px; border-radius: 12px; background: {INK if r == "C" else FILL}; color: {SHEET if r == "C" else INK}; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center">{r}</span>' for r in ROOTS) + '</div>' + SKEYS({60: (G, 'C'), 64: (G, 'E'), 67: (G, 'G')}),
+    'Scale': BHEAD('D major') + SKEYS({62: (G, 'D'), 64: (G, 'E'), 66: (Y, 'F♯'), 67: (G, 'G'), 69: (G, 'A'), 71: (G, 'B'), 73: (Y, 'C♯'), 74: (G, 'D')}),
+    'Interval': BHEAD('Perfect fifth · C–G') + SKEYS({60: (B, 'C'), 67: (B, 'G')}),
+    'Notes': BHEAD('C D E F') + STAFF(),
+    'Voicings': BHEAD('Cmaj7 · rootless') + '<div style="display: flex; gap: 8px">' + CHIP('Close', True) + CHIP('Rootless') + CHIP('Drop 2') + '</div>' + SKEYS({64: (G, 'E'), 67: (G, 'G'), 71: (G, 'B'), 74: (G, 'D')}, 60, 76),
+    'Pattern': BHEAD('Alberti bass') + ROLL(),
+    'Progression': BHEAD('I – IV – V – I in C') + '<div style="display: flex; gap: 8px">' + TILE('I', 'C') + TILE('IV', 'F') + TILE('V', 'G') + TILE('I', 'C') + '</div>',
     'Versions': f'<span style="font-size: 15px; font-weight: 700">Versions</span><div role="group" aria-label="Versions" style="display: flex; gap: 8px; flex-wrap: wrap">' + CHIP('C major', True) + CHIP('G major') + CHIP(PLUS_S + 'Add') + '</div>',
-    'Question': HEAD('Which key is F♯?', False) + f'<span style="font-size: 14px; color: {SOFT}">Choose on the keys</span>' + SKEYS({}),
+    'Question': BHEAD('Which key is F♯?', False) + f'<span style="font-size: 14px; color: {SOFT}">Choose on the keys</span>' + SKEYS({}),
     'Link': LINKROW,
     'Picture': f'<div style="height: 160px; border-radius: 14px; box-shadow: inset 0 0 0 1.5px {LINE}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: {SOFT}">{{PIC}}<button type="button" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Add a picture</button></div>',
 }

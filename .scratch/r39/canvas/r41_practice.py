@@ -377,7 +377,6 @@ detail('ChordPlayer', 'Chord player', CP, ph, lm, '', BSHEET('chordOn', 'Bar 3',
        POPOVER('chordOn', 'Bar 3', CP_CHORD, 'left: 140px; top: 220px', 440) + POPOVER('styleOn', 'Style', WHEEL([('wStyle', 1)]), 'left: 200px; bottom: 110px') + POPOVER('setOn', 'Chord player settings', CP_SET) + CP_PPOP + POPOVER('moreOn', 'Chord sheet', CP_MORE.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html')))
 
 # ═════ An exercise (Hanon Pro: the page, Listen, a metronome and a target tempo) ═════
-_h = open('/home/user/piano-trainer/.scratch/r39/canvas/calm.py').read(); exec('def hanon' + _h.split('def hanon')[1].split('EX_STAGE =')[0])
 EX = js(r'''
     const no = st.no ?? 1, key = st.key ?? 0, bpm = st.bpm ?? 60, target = 108;
     return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), rootOn: st.sheet === 'root', openRoot: () => set({ sheet: 'root' }),
@@ -452,8 +451,6 @@ lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Chord finder'), SUBJECT('{{name}}',
 detail('ChordFinder', 'Chord finder', CF, ph, lm, '', BSHEET('setOn', 'Chord finder settings', CF_SET), POPOVER('setOn', 'Chord finder settings', CF_SET))
 
 # ═════ Circle of fifths (muted.io: the circle, then the key's signature and chords) ═════
-_c = open('/home/user/piano-trainer/.scratch/r39/canvas/calm.py').read()
-CO_LOGIC = _c.split("CO_JS = RB_JS(r'''")[1].split("''')")[0]
 CO = js(CO_LOGIC.replace("return { ...common(st, set),", "const DIA = [[0, ''], [2, 'm'], [4, 'm'], [5, ''], [7, ''], [9, 'm'], [11, '°']], FIFTH = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5], root = FIFTH[sel];\n    return { ...common(st, set), setOn: st.sheet === 'set', openSet: () => set({ sheet: 'set' }), dia: DIA.map(([iv, q], i) => ({ c: NN[(root + iv) % 12] + q, d: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'][i] })), modeSeg: seg(['Major', 'Minor'], st.mode ?? 'Major', (l) => set({ mode: l })),"))
 CIRCLE = lambda w: (f'<div style="position: relative; width: {w}px; max-width: 100%; aspect-ratio: 1; margin: 0 auto"><svg viewBox="0 0 400 400" role="radiogroup" aria-label="Keys" style="display: block; width: 100%; height: 100%"><sc-for list="{{{{segs}}}}" as="g" hint-placeholder-count="12"><g onClick="{{{{g.pick}}}}" style="cursor: pointer"><path d="{{{{g.o}}}}" fill="{{{{g.fo}}}}" stroke="{LINE}" stroke-width="1.2"></path><path d="{{{{g.n}}}}" fill="{{{{g.fi}}}}" stroke="{LINE}" stroke-width="1.2"></path></g></sc-for><circle cx="200" cy="200" r="74" fill="{PAGE}" stroke="{LINE}" stroke-width="1.2"></circle></svg>'
     # the key names as HTML over the wheel: a hole inside SVG <text> does not draw in the canvas
@@ -464,7 +461,4 @@ ph = body(TOP('Main.dc.html', 'Circle of fifths', GEAR()), CIRCLE(350) + SUBJECT
 lm = lapbody(LTOP('Laptop.dc.html', GEAR(), 'Circle of fifths'), f'<div style="flex: 1; min-height: 0; display: flex; align-items: center">{CIRCLE(600)}</div>', SUBJECT('{{name}}', '{{sub}}', 40) + CARD(scale_staff(360, '        ').replace('aria-label="G major, up one octave, right-hand fingering over the notes"', 'aria-label="The key signature"')) + CAPS('Chords in the key') + DIA + GROUP(('link', 'Relative minor', 'E minor', ''), ('link', 'Open in Scales and keys', '', 'ScalesLaptop.dc.html')), SEGC('modeSeg', 36, 14).replace('flex: none;', 'flex: 1;') + PLAYBTN())
 detail('CircleOfFifths', 'Circle of fifths', CO, ph, lm, '', BSHEET('setOn', 'Circle settings', CO_SET), POPOVER('setOn', 'Circle settings', CO_SET))
 
-# ═════ Chords: the calm Chords page itself (the example), unchanged ═════
-_cs = _c.split('# The calm Chords page itself')[1].split("print('practice ok')")[0]
-exec(_cs.split('\n', 1)[1])
 print('practice ok')

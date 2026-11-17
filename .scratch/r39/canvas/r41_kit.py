@@ -219,8 +219,7 @@ def LTOP(back='', right='', title=''):
     return LPAD(TOP(back, title, right))  # a laptop page's bar is the phone's, its title centred
 
 # the engraved melody (Amazing Grace), shared with R40
-_s = open('/home/user/piano-trainer/.scratch/r39/canvas/calm_songs.py').read()
-exec(_s[:_s.index('LINKPILL')])
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/calm_parts.py').read())
 PEACH, SKY, SAGE, HONEY, LILAC = '#F3D2C8', '#D3E5F2', '#DCE9D6', '#F6E7C8', '#E4DCF1'
 # The app's tab bar, as Apple's HIG "Tab bars": "Include tab labels … single words"; icons "above tab labels in
 # compact views"; "Prefer filled symbols or icons"; on iOS it "floats above content … on a Liquid Glass background that

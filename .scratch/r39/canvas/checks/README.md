@@ -12,6 +12,13 @@ generator. Each is one expression that returns JSON; `layout_check.js` here is t
 | `system_measure.js`  | the distinct text colours, backgrounds, radii (with the element's height), shadows,       |
 |                      | weights                                                                                   |
 
+## After every rebuild
+
+`python3 checks/regress.py` compares each built board with the last commit and prints `REVERTED?` for a board that
+shrank by more than 15%, grew by more than half, or changed its title. One is never published until the generator that
+rewrote it is found: each board has one generator (`r41.py` runs them in order; a helper file is exec'd in its own
+namespace, never imported, so it cannot re-run an old writer or shadow the kit's names).
+
 ## Running one
 
 `run.mjs` serves the built boards to Chromium, plays steps and prints each `eval`'s result:

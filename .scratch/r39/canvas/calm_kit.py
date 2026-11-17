@@ -1,13 +1,46 @@
-# The calm kit: tokens, pieces and the phone and laptop frames, shared by calm.py (R40) and r41.py.
+# The calm kit: tokens, pieces and the phone and laptop frames, for r41.py.
 # R40: every Songs and Practice page in the calm language of the Chords page (the other session's "Calm Chords page"):
 # a bare bar, the subject large, one big picture, a quiet switcher, two or three rows, one floating bar with the main
-# action and Play; changes in a wheel; nothing to scroll. Run: python3 -I calm.py
+# action and Play; changes in a wheel; nothing to scroll. Built only through r41.py.
 import json, re, shutil
-G = {}
-exec(open('/home/user/piano-trainer/.scratch/r39/canvas/chords.py').read(), G)
-OUT, HEAD, STATUS, SIDE, LAPFRAME_TOP = G['OUT'], G['HEAD'], G['STATUS'], G['SIDE'], G['LAPFRAME_TOP']
-PHONE_FRAME, LAPTOP_FRAME = G['PHONE_FRAME'], G['LAPTOP_FRAME']
-CALM = '/home/user/piano-trainer/.scratch/chords-calm/calm/project/'
+# the frames and the page head, read from the Main and Laptop boards
+OUT = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
+src = open(OUT + 'Main.dc.html').read()
+lap = open(OUT + 'Laptop.dc.html').read()
+STATUS = re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px;.*?</span></div>)', src, re.S).group(1)
+SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
+# the sidebar as drawn, before index.py's lapwin.py gives it the rail and Focus buttons
+SIDE = re.sub(r'<div data-sidehead.*?</button></div></div>', '<div style="height: 44px; display: flex; align-items: center; padding: 0 12px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>', SIDE, count=1, flags=re.S)
+LAPFRAME_TOP = lap.split('<div style="position: absolute; left: 217.7px; top: 124.6px;')[0].split('</helmet>', 1)[1].lstrip('\n')
+# the frame alone: the Practice overview's States box (states_tool.py puts it after the root) is that board's, never every laptop board's
+if '<div data-canvas-tool' in LAPFRAME_TOP:
+    _i = LAPFRAME_TOP.index('<div data-canvas-tool'); _j = LAPFRAME_TOP.index('</sc-if></div>', _i) + len('</sc-if></div>')
+    LAPFRAME_TOP = LAPFRAME_TOP[:_i] + LAPFRAME_TOP[_j:]
+PHONE_FRAME, LAPTOP_FRAME = '/_blob/2fd798458923e267dd22b7a996a98294', '/_blob/0526d4830b1e952a0ab4ba3ffc2765fc'
+SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)'
+POP = '0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28)'
+
+HEAD = '''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>%s</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&amp;family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap">
+<style>
+body{margin:0}
+button{font:inherit;cursor:pointer}
+.nos{scrollbar-width:none}.nos::-webkit-scrollbar{display:none}
+main>*{flex:none}
+</style>
+</helmet>
+'''
+
+
 
 # ── tokens (the calm Chords page's, light) ──
 PAGE, SHEET, INK, SOFT, FILL, LINE, LINK, ACCENT = '#F7F3EE', '#FEFDFB', '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#356890', '#EDC684'

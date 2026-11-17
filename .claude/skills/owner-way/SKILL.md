@@ -107,6 +107,12 @@ wins there.
   turn, and the same is asked between pages and across the whole app (owner, 2026-11-16: "check between the pages
   for these thigns and across the app"): one home per thing, a link from the others
   ([ui-and-mockups](references/ui-and-mockups.md), Building a screen, step 2).
+- **A rebuild never reverts a board** (owner, 2026-11-17: "what happened to the chords page: why it has the old
+  design? where did you take it? … remove all the old canvas that can mislead you"): a helper file imported the kit
+  as a module, which re-ran the old R40 Chords writer, and the old design went out. Each board has one generator;
+  old canvases and their generators are deleted, not kept beside the new ones; after every rebuild
+  `python3 checks/regress.py` runs before the publish, and a board it prints is published only once its writer is
+  found and fixed (`.scratch/r39/canvas/checks/README.md`).
 - **A refactor** is a screen's design and its code. It does not read the ADRs: it uses best practice and the UI skills
   freely. The area's rulings (feedback log, the spec's "The rulings as they stand") are read where they bear on the
   change; a ruling changes only when the owner changes it.
