@@ -1407,6 +1407,9 @@ are reference only, but progressions are facts.
   the iOS delete control, a 22px red circle with a white minus in a 44px target beside the drag handle, named
   "Remove <title>" with its tooltip (Apple HIG, Lists and tables: editing). Undo still follows in the toast.
 
+- **One menu shell on every board (2026-11-17, every `role="menu"` on the canvas grouped by its look):** seven shapes stood for one kind of thing (corners 14, 16 and 18; insets 6 and 8; four shadows; solid, glass and the page's own colour). Every menu now wears the kit's `MENUSHELL`: 6 in, 16 corners, its 10-round rows concentric, the glass with its ring: the rows' ···, Sort, New, Play as, Play over, What it plays, Hands, the Player's View and Song, and the laptop's account menu. Chords' own spacing snap had turned the 6 into 8 (a drifted copy in one area's post-process); menus are now exempt from it.
+- **The account menu says only what is true (2026-11-17):** its Help opened Legal, a link that did not go where it said; the User guide's home is Settings › Support, so Help leaves the menu (Profile, Settings, Language, Sign out stay).
+
 ## Profile and Settings
 - **Profile on a laptop without rows cut in two (the lines' sweep, 2026-11-17):** Practice history's score stood at the row's far end, 440 from the run's name; the score now leads the row in a 52 tile (the row's picture, as every list row leads with one), phone and laptop, and the laptop's rows in Badges, Practice history and Achievements carry no chevron, each the link.
 - **Profile's week under its own heading on the phone (loop 63, 2026-11-17, canvas v461):** the phone set "Last 7 days" and its summary inside the chart's card while Practice history, Badges and Achievements, and the laptop's week, head their cards from outside; the phone now does the same, one shape of section on the page and on both sizes (consistency, similarity). `Profile`.

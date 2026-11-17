@@ -786,13 +786,13 @@ TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; backgroun
 CHEV_D = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>'
 def PLAYASMENU(pos):
     return (f'<sc-if value="{{{{isPlayAs}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-      f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
+      f'<div role="menu" aria-label="Play as" style="position: absolute; {pos}; z-index: 61; width: 248px; white-space: nowrap; box-sizing: border-box; display: flex; flex-direction: column; padding: 6px; border-radius: 16px; {GLASSFX}">'
       f'<sc-for list="{{{{playAsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for>'
       f'<sc-if value="{{{{hasSeq}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="height: 1px; margin: 4px 8px; background: {LINE}"></span><sc-for list="{{{{scopeList}}}}" as="o" hint-placeholder-count="2"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span><span style="flex: 1; font-size: 16px; font-weight: 600">{{{{o.l}}}}</span></button></sc-for></sc-if></div></sc-if>')
 def HANDSMENU(pos):
     ic = '<sc-if value="{{o.isB}}" hint-placeholder-val="{{false}}">' + HANDS2 + '</sc-if><sc-if value="{{o.isR}}" hint-placeholder-val="{{false}}">' + HANDI + '</sc-if><sc-if value="{{o.isL}}" hint-placeholder-val="{{false}}">' + HANDL + '</sc-if>'
     return (f'<sc-if value="{{{{isHands}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-      f'<div role="menu" aria-label="Hands" style="position: absolute; {pos}; z-index: 61; width: 216px; box-sizing: border-box; padding: 6px; border-radius: 16px; background: {PAGE}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column">'
+      f'<div role="menu" aria-label="Hands" style="position: absolute; {pos}; z-index: 61; width: 216px; box-sizing: border-box; display: flex; flex-direction: column; padding: 6px; border-radius: 16px; {GLASSFX}">'
       f'<sc-for list="{{{{handsList}}}}" as="o" hint-placeholder-count="3"><button type="button" role="menuitemradio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="min-height: 48px; border: 0; border-radius: 12px; background: transparent; padding: 6px 12px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: none; width: 36px; display: flex; justify-content: center">' + ic + f'</span><span style="flex: 1; font-size: 16px; font-weight: 600; white-space: nowrap">{{{{o.l}}}}</span><span style="flex: none; width: 18px; font-size: 16px; font-weight: 700; color: #7A5418">{{{{o.mark}}}}</span></button></sc-for></div></sc-if>')
 
 # ── the sheets' bodies, the same on both sizes ──
@@ -941,7 +941,11 @@ for f in ('Chords', 'ChordsLaptop'):
     STEP = {5: 4, 6: 8, 7: 8, 9: 8, 10: 12, 14: 16, 18: 16, 22: 24}
     def _snap(m):
         return m.group(1) + re.sub(r'(?<![\d.])(-?)(\d+)px', lambda n: n.group(1) + str(STEP.get(int(n.group(2)), int(n.group(2)))) + 'px', m.group(2))
+    # a menu keeps the kit's shell (MENUSHELL: 6 in, its 10-round rows concentric in the 16), as on every board
+    _menus = re.findall(r'<div role="menu"[^>]*>', h)
+    for _k, _m in enumerate(_menus): h = h.replace(_m, f'\x00MENU{_k}\x00', 1)
     h = re.sub(r'((?:padding|gap|margin)(?:-[a-z]+)?: )([^;"\'{}]+)', _snap, h)
+    for _k, _m in enumerate(_menus): h = h.replace(f'\x00MENU{_k}\x00', _m, 1)
     h = h.replace('border-radius: 12px; background: #FEFDFB; overflow: hidden', 'border-radius: 14px; background: #FEFDFB; overflow: hidden')
     h = h.replace('background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', 'background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)').replace('font-weight: 800', 'font-weight: 700')
     # motion (seven questions, canvas 95): each layer comes from where it was asked for, short and eased out; it
