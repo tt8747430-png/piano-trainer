@@ -208,7 +208,9 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       const direction = press.key === 'ArrowUp' ? 1 : -1
       if (press.altKey) return { type: 'chordNote', direction }
       if (layer === 'chords') return null
-      // A step in the key, as Flat and Dorico move a note; Shift a semitone, Cmd an octave.
+      // Cmd and Shift draw the notes on the piano's other staff (Dorico's cross-staff); a step in the
+      // key, as Flat and Dorico move a note; Shift a semitone, Cmd an octave.
+      if (mod && press.shiftKey) return { type: 'cross', to: direction > 0 ? 'upper' : 'lower' }
       if (mod) return { type: 'shift', semitones: direction * 12 }
       if (press.shiftKey) return { type: 'shift', semitones: direction }
       return { type: 'step', steps: direction }

@@ -510,6 +510,23 @@ export const GRACE_EDITS = {
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
+/** The piano's staff a cross-staff key draws the notes on (Dorico's ⌘⇧↑ ⌘⇧↓). */
+export type CrossTo = 'upper' | 'lower'
+
+/**
+ * A hand's notes `where` drawn on the piano's `to` staff (ADR 0114): crossed where it is not their
+ * hand's, back on their own where it is. Heard, fingered and scored as their hand's still.
+ */
+export const crossNotes = (draft: Draft, hand: HandId, where: Where, to: CrossTo): Draft =>
+  changeAt(draft, hand, where, (n) => {
+    if ((to === 'lower') === (hand === 'lh')) {
+      if (!n.cross) return n
+      const { cross: _crossed, ...home } = n
+      return home
+    }
+    return n.cross ? n : { ...n, cross: true }
+  })
+
 /**
  * The start of the first of `notes` (in order) after `tick` (1), or of the last before it (−1),
  * where the Lyrics and fingering fields go on (ADR 0096); none past the ends.

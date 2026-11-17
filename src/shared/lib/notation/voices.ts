@@ -15,6 +15,8 @@ export interface BarNote {
   readonly spelled: SpelledNote
   readonly finger?: Finger
   readonly crossing?: true
+  /** Drawn on the piano's other staff (ADR 0114). */
+  readonly cross?: true
   readonly role?: ChordRole
   readonly marks?: NoteMarks
   /** What it sings, by verse: a tune's note on the staff the words go under. */

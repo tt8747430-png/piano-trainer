@@ -144,6 +144,7 @@ function sounding(
       ...(n.marks ? { marks: n.marks } : {}),
       ...(lyrics && n.lyrics ? { lyrics: n.lyrics } : {}),
       ...(n.voice ? { voice: n.voice } : {}),
+      ...(n.cross ? { cross: n.cross } : {}),
     }))
 }
 

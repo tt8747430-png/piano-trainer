@@ -537,6 +537,8 @@ class Writer {
             : '',
         single ? `${dur}${stem}${tremolo(marks?.ornament)}` : '',
         tie ? `tie="${tie}"` : '',
+        // Drawn on the piano's other staff (ADR 0114): Verovio's cross-staff note.
+        written.cross ? `staff="${this.number(staff === 'treble' ? 'bass' : 'treble')}"` : '',
         // A chord tone is typed by its role, so the engraving's class paints its notehead, which is
         // solid whatever its value, as the canvas draws a chord's tones.
         written.role ? `type="role-${written.role}" head.fill="solid"` : '',

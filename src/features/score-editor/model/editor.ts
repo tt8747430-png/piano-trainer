@@ -28,6 +28,7 @@ import {
   makeRoom,
   notesAt,
   respellNotes,
+  crossNotes,
   setDuration,
   setFingers,
   shiftNotes,
@@ -405,6 +406,13 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
             struck: null,
             selection: state.selection,
           })
+    case 'cross':
+      return isHandLayer(layer)
+        ? commit(state, crossNotes(draft, layer, spellSpan(state), action.to), {
+            struck: null,
+            selection: state.selection,
+          })
+        : state
     case 'fingers':
       return isHandLayer(layer)
         ? commit(state, setFingers(draft, layer, fingerPlace(state), action.fingers), {

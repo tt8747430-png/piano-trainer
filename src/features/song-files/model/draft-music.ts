@@ -26,6 +26,7 @@ const timed = (notes: readonly DraftNote[], layer: NoteLayer, sings: boolean): T
     ...(n.marks ? { marks: n.marks } : {}),
     ...(sings && n.lyrics ? { lyrics: n.lyrics } : {}),
     ...(n.voice ? { voice: n.voice } : {}),
+    ...(n.cross ? { cross: n.cross } : {}),
   }))
 
 /**

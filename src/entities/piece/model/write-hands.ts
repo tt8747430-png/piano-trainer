@@ -1,11 +1,13 @@
 import type { HandNote } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT, type Clef, type Tick } from '@/shared/lib/music'
-import { CLEF_TOKEN, VOICE_TWO } from './parse-hands'
+import { CLEF_TOKEN, CROSS_MARK, VOICE_TWO } from './parse-hands'
 import { pitchText } from './music'
 import { writeMarks } from './note-marks'
 import { beatsText } from './write-chart'
 
-const noteText = (n: HandNote) => `${pitchText(n)}${n.finger === undefined ? '' : `^${n.finger}`}`
+/** A note as its token writes it: its pitch, `*` where it is drawn on the other staff (ADR 0114), its finger. */
+const noteText = (n: HandNote) =>
+  `${pitchText(n)}${n.cross ? CROSS_MARK : ''}${n.finger === undefined ? '' : `^${n.finger}`}`
 
 /** A note's marks as its token writes them: `[acc,stacc]`, or nothing. */
 const marksText = (n: HandNote): string => {

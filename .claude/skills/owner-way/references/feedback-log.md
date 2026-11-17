@@ -96,6 +96,7 @@ owner's, typos fixed.
 - **Loop round 61, the palette folds without a jump (research F19):** folding and unfolding cross-fade the tool row and the sections in 150 ms on the app's curve, the sections rising 8; instant under reduced motion (2026-11-17).
 - **Loop round 61, Repeat (research F13):** a key after Rest and ⇧R write the notes chosen, else the note or chord just written, again right after them, the copy chosen, as Flat's and Dorico's R; the clipboard is untouched. The canvas's palette now carries the app's keys and shortcuts (2026-11-17).
 - **Loop round 61, Voice 2 (research F8):** a key after Chord in Input mode and ⇧V write the piano staff's second voice, stems down under the first, as Flat's and Dorico's V: a held note under a moving tune; each voice's edits leave the other's notes; greyed on a single staff (2026-11-17).
+- **Loop round 61, cross-staff (research F9):** Cross to upper staff and Cross to lower staff after the octave pair in Pitch, ⌘⇧↑ ⌘⇧↓, as Dorico's: the notes drawn on the piano's other staff, still their hand's; the key toward their own staff brings them back (2026-11-17).
 - **The tempo's pickers say their name once (loop 22, 2026-11-15):** Beat and Tempo text stand at the row's start, so
   their pickers show the value alone (♩, None), in the editor's Tempo sheet and the New song sheet alike.
 

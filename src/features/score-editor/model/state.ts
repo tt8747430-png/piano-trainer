@@ -1,5 +1,6 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { Voice } from './voices'
+import type { CrossTo } from './notes'
 import type { HeaderField, PieceLayout, SectionKind, StaffName } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
@@ -105,6 +106,8 @@ export type EditorAction =
   | { readonly type: 'mode'; readonly mode?: EditMode }
   /** Voice 2 on or off (Flat's and Dorico's ⇧V), on the piano's staves. */
   | { readonly type: 'voice' }
+  /** The notes chosen drawn on the piano's other staff, or back (Dorico's ⌘⇧↑ ⌘⇧↓). */
+  | { readonly type: 'cross'; readonly to: CrossTo }
   | {
       readonly type: 'move'
       readonly by: CaretMove

@@ -124,6 +124,11 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     engraving, where written voices hold over the guess by pitch (`separateVoices`); the saved hands write a
     second-voice chord `v2:C3/2@1`, always placed by its beat; MusicXML reads a staff's lowest-numbered voice as
     the first and any other as the second.
+  - **Cross to upper staff** and **Cross to lower staff** (Dorico's cross-staff; ⌘⇧↑ ⌘⇧↓, which no longer move an
+    octave) follow the octave pair in Pitch: the notes chosen, else the note just written, are drawn on the piano's
+    other staff and stay their hand's, heard, fingered and scored as written; the key toward their own staff
+    brings them back. Greyed on a single staff. The note carries `cross` to the engraving, which gives it the
+    other staff's `@staff` (Verovio's cross-staff note); the saved hands mark it `C4*`, before its finger.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, Shift with R Repeat (the notes chosen, else the note or chord just written, written again after them and
   chosen), 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, with Alt two, the comma a tie,

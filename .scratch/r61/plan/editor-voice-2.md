@@ -40,13 +40,17 @@
 
 ### F9, Cross-staff
 
-1. **Model.** `DraftNote.cross?: 'up' | 'down'`: drawn on the other piano staff, still its hand's (heard, fingered
-   and scored as written). `BarNote.crossing` exists already (`voices.ts:18`) and is the engraving's hook.
+1. **Model.** `DraftNote.cross?: true`: drawn on the other piano staff, still its hand's (heard, fingered and
+   scored as written). `BarNote.crossing` is the finger crossing (a thumb passing under), not this: a new `cross`
+   goes through `HandNote`, `PerformanceNote`, `TimedNote`, `BarNote` and `WrittenNote` to MEI's `@staff`.
 2. **Keys.** ⌘⇧↑ "Cross to upper staff", ⌘⇧↓ "Cross to lower staff" on the notes chosen of the piano's two
    staves; ⌘⇧ with the arrows no longer repeats the octave move.
 3. **Palette.** Two keys in Pitch after the octave pair, greyed off the piano's staves with "Available on the
    piano staves only. Select a note on the upper or lower staff." (the Fingering field's `reason.hand`).
-4. **Canvas first,** as F8.
+4. **Canvas first,** as F8: two keys after Pitch's octave lines on the four editor boards and a "Crossed to the
+   lower staff" state (canvas v374).
+5. **Built (2026-11-17).** Saved as `C4*`. Checked in the browser: bar 2's left-hand note, ⌘⇧↑, engraved on the
+   upper staff with its stem from the lower; ⌘⇧↓ brings it back.
 
 ## Order
 

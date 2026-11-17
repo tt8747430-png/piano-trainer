@@ -590,6 +590,45 @@ function GraceKeys() {
 }
 
 /**
+ * Cross to upper or lower staff (ADR 0114, Dorico's ⌘⇧↑ ⌘⇧↓): the notes chosen drawn on the
+ * piano's other staff, still their hand's. On the piano's staves only.
+ */
+function CrossKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const piano = useEditorState((state) => isHandLayer(state.layer))
+  return (['upper', 'lower'] as const).map((to) => (
+    <PaletteKey
+      key={to}
+      label={t(to === 'upper' ? 'crossUp' : 'crossDown')}
+      disabled={!piano}
+      onClick={() => actions.dispatch({ type: 'cross', to })}
+    >
+      <CrossIcon up={to === 'upper'} />
+    </PaletteKey>
+  ))
+}
+
+/** A note crossing to the staff a line marks, above or below it, with its arrow. */
+function CrossIcon({ up }: { up: boolean }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <rect x="2" y={up ? 2.8 : 19.8} width="20" height="1.4" rx="0.7" />
+      <Head cx={8} cy={up ? 17.5 : 9.5} />
+      <rect x="11.4" y={up ? 9 : 2.5} width="1.4" height={up ? 8 : 6.5} />
+      <path
+        d={up ? 'M18 15V6m-2.5 2.5L18 6l2.5 2.5' : 'M18 9v9m-2.5-2.5L18 18l2.5-2.5'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/**
  * The Pitch section (Flat's Pitch and representation): each pair up then down, a step of the key, a
  * half step (sharps up, flats down), an octave; then the grace note (Flat's 9) and the octave lines.
  * Each key its picture alone, named in its tooltip.
@@ -615,6 +654,7 @@ export function PitchKeys() {
           <Move up={false} by={by} />
         </PaletteKey>,
       ])}
+      <CrossKeys />
       <GraceKeys />
       <LineKeys lines={['8va', '8vb', '15ma', '15mb']} />
     </KeyGrid>

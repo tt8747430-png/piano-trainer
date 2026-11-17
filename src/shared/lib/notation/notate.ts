@@ -90,6 +90,7 @@ function barChords(
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
       ...(n.finger && n.crossing ? { crossing: true } : {}),
+      ...(n.cross ? { cross: true } : {}),
       ...(n.role ? { role: n.role } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
       ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
@@ -192,6 +193,7 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
           ...(n.finger && i === 0 && !n.tiedFrom
             ? { finger: n.finger, ...(n.crossing ? { crossing: true as const } : {}) }
             : {}),
+          ...(n.cross ? { cross: true } : {}),
           ...(n.role ? { role: n.role } : {}),
         })),
       })
@@ -235,6 +237,7 @@ function withAccidentals(voices: readonly DraftVoice[], key: Key): ScoreVoice[] 
               tie: draft.tie,
               ...(draft.finger ? { finger: draft.finger } : {}),
               ...(draft.crossing ? { crossing: true } : {}),
+              ...(draft.cross ? { cross: true } : {}),
               ...(draft.role ? { role: draft.role } : {}),
             })),
           },

@@ -479,7 +479,6 @@ function playTune(
       ...at,
       ...(n.marks ? { marks: n.marks } : {}),
       ...(n.lyrics ? { lyrics: n.lyrics } : {}),
-      ...(n.voice ? { voice: n.voice } : {}),
     }
     if (figure.use !== 'harmony' || n.durationTicks < TICKS_PER_BEAT) return [played]
     return [
@@ -533,6 +532,7 @@ function playWritten(
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       ...(n.lyrics ? { lyrics: n.lyrics } : {}),
       ...(n.voice ? { voice: n.voice } : {}),
+      ...(n.cross ? { cross: n.cross } : {}),
       startTick,
       durationTicks: n.durationTicks,
       velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,
@@ -730,7 +730,6 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         ...(chord === undefined ? {} : { chord }),
         ...(n.marks ? { marks: n.marks } : {}),
         ...(n.lyrics ? { lyrics: n.lyrics } : {}),
-        ...(n.voice ? { voice: n.voice } : {}),
       })
     }
   })

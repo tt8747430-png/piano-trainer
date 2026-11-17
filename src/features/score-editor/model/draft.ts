@@ -79,6 +79,8 @@ export interface DraftNote {
   readonly lyrics?: NoteLyrics
   /** Written in its staff's second voice (ADR 0114): none is the first. */
   readonly voice?: 2
+  /** Drawn on the piano's other staff, still its hand's (ADR 0114, Dorico's cross-staff). */
+  readonly cross?: true
 }
 
 /** A chord from where it starts in its bar; it lasts until the next one or the barline. */
@@ -162,6 +164,7 @@ const playedNote = (n: Performance['notes'][number], end: Tick): DraftNote => ({
   ...(n.marks ? { marks: n.marks } : {}),
   ...(n.lyrics ? { lyrics: n.lyrics } : {}),
   ...(n.voice ? { voice: n.voice } : {}),
+  ...(n.cross ? { cross: n.cross } : {}),
 })
 
 /** The Player's performance of the music as written: its own key and pattern, the built-in book's. */

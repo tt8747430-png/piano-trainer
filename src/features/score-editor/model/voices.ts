@@ -19,6 +19,7 @@ const IN_A_VOICE: ReadonlySet<EditorAction['type']> = new Set([
   'step',
   'shift',
   'respell',
+  'cross',
   'accidental',
   'grace',
   'fingers',

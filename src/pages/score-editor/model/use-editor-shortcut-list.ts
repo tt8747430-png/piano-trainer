@@ -59,6 +59,8 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.keyStep'), shown: ['↑', '↓'] },
     { label: t('shortcuts.semitone'), shown: [shift, '↑', '↓'] },
     { label: t('shortcuts.octave'), shown: [mod, '↑', '↓'] },
+    { label: t('crossUp'), shown: [mod, shift, '↑'] },
+    { label: t('crossDown'), shown: [mod, shift, '↓'] },
     { label: t('shortcuts.intervalUp'), shown: [alt, '2–8'] },
     { label: t('shortcuts.intervalDown'), shown: [shift, alt, '2–8'] },
     { label: t('shortcuts.delete'), shown: ['Backspace'] },

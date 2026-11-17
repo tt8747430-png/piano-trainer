@@ -461,6 +461,8 @@ export const editor: LocaleResources['editor'] = {
   down: 'На полутон вниз',
   octaveUp: 'На октаву вверх',
   octaveDown: 'На октаву вниз',
+  crossUp: 'На верхний нотоносец',
+  crossDown: 'На нижний нотоносец',
   stepUp: 'На ступень вверх',
   stepDown: 'На ступень вниз',
   back: 'Предыдущая нота',

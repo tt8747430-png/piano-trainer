@@ -502,6 +502,8 @@ export const editor = {
   down: 'Semitone down',
   octaveUp: 'Octave up',
   octaveDown: 'Octave down',
+  crossUp: 'Cross to upper staff',
+  crossDown: 'Cross to lower staff',
   stepUp: 'Diatonic step up',
   stepDown: 'Diatonic step down',
   back: 'Previous note',
