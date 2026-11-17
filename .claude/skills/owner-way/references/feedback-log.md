@@ -1314,6 +1314,8 @@ are reference only, but progressions are facts.
   it. `.scratch/r39/canvas/folds.py`, run by `index.py`.
 
 - **Loop round 62, one glass bar button:** every bar button is the kit's IB, a 44 glass circle with the line ring and the float's shade, 8 apart, Done and Tools the same glass as capsules; the bare `bar` and the separate `glass` variants became one, and a row's or page's own button (Restore, Restore all, Empty Trash) is `secondary`, never glass. A sub-page's bar is the kit's TOP: 56 tall, its title 8 after Back (never centred), 30 bold and 12 after it on a laptop (LPAD), on the page's paper with no line (2026-11-17).
+- **The app's layers lie over the real Learn (loop 63, 2026-11-17):** the board of search, MIDI, the notices and the route states drew its own stand-in Learn under them (a Continue card with no button, a list of a level's lessons Learn does not have); it now lays them over Learn itself, built from Learn's own parts with its data (Continue, Levels, your lessons, Courses), phone and laptop. The search sheet's Recent searches and Suggestions each sit 8 over what they head, the groups 24 apart (one implementation; proximity; canvas v437).
+
 ## Actions and menus
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18

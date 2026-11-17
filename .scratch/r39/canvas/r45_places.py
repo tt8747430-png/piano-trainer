@@ -113,12 +113,12 @@ LPOPS = POPOVER('pickOn', 'New', NEWPICK, 'right: 60px; top: 300px', 300) + POPO
 # structure and organization"): one overview in Practice's shape (Continue, Levels, Courses, your own), a page per
 # level, a page for all courses; the title in the bar (TITLEBAR), never a bar of two buttons over an empty row. ═════
 SEARCHB = IB('Search', SEARCH.replace('18', '22'), href='#')
-RING = (f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {{{{p.ring}}}}; display: flex; align-items: center; justify-content: center">'
+LVRING = (f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {{{{p.ring}}}}; display: flex; align-items: center; justify-content: center">'
         f'<span style="width: 36px; height: 36px; border-radius: 18px; background: {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{p.i}}}}</span></span>')
 def LEVELLIST(lap=False):
     href = 'LearnLevelLaptop.dc.html' if lap else 'LearnLevel.dc.html'
     return (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{levelsHome}}}}" as="p" hint-placeholder-count="4">'
-            f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">{RING}'
+            f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">{LVRING}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.l}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{p.sub}}}}</span></span>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap">{{{{p.got}}}}</span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a></sc-for></div>')
 NEXTPILL = f'<span style="flex: none; height: 24px; padding: 0 12px; border-radius: 12px; background: {ACCENT}; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center">Next</span>'
@@ -132,7 +132,7 @@ def COURSECARD(w, href):
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')
 COURSESTRIP = (f'<div class="nos" style="flex: none; display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="4">{COURSECARD("168px", "Course.dc.html")}</sc-for></div>')
 COURSEGRID = (f'<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="5">{COURSECARD("auto", "CourseLaptop.dc.html")}</sc-for></div>')
-SEEALL = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">See all</a>'
+SEEALLH = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">See all</a>'
 PLUSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
 def OWNROW(t, sub, href, kind='lesson'):
     bg, fg, ic = {'lesson': (SHEET, INK, BOOKI.replace("22", "20")), 'learned': (SAGE, '#2F5A35', CHECKI), 'course': (SAGE, INK, FOLDI)}[kind]
@@ -142,7 +142,7 @@ def OWNROW(t, sub, href, kind='lesson'):
 NEWROW = lambda t, act: ADDROW(t, act, node=44, pad='0 12px', gap=12)
 def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
-    head = H2("Your lessons and courses", SEEALL("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
+    head = H2("Your lessons and courses", SEEALLH("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
     return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course")}'
             f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}{NEWROW("New lesson or course", "openNew").replace("min-height: 56px", "min-height: 80px") if lap else NEWROW("New lesson or course", "openNew")}</div>')
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
@@ -155,10 +155,10 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 
 # Learn: the overview
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
+       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{H2("Levels").replace("align-items: baseline", "align-items: center; min-height: 44px")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 16px">{OWNGROUP(True).replace("align-items: baseline", "align-items: center; min-height: 44px", 1)}</div></div>'
-       f'{H2("Courses", SEEALL("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+       f'{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons
