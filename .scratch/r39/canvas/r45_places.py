@@ -217,6 +217,9 @@ _ROW = f'style="min-height: 64px; display: flex; align-items: center; gap: 12px;
 assert _ROW in cl2
 cl2 = cl2.replace(_ROW, f'style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE};')
 cl2 = cl2.replace('<h3 style="margin: 0 0 0 16px;', '<h3 style="margin: 0;')
+# a card is tapped whole and ends where its words end, as the Learn page's level and own-lesson cards: no chevron
+assert CHEV_R in cl2
+cl2 = cl2.replace(CHEV_R, '')
 cl2 = cl2.replace('<section style="display: flex; flex-direction: column; gap: 8px">', '<section style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px">')
 clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + TB("Edit", "editOn"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", EDITR())}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
