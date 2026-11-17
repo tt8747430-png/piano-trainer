@@ -36,7 +36,8 @@ const MEASURE = ([want, lap, before]) => {
       }
       return { role: L.getAttribute('role'), label: L.getAttribute('aria-label') || '', p }
 }
-for (const name of names) {
+async function doBoard(name) {
+  const out = []
   const lap = /Laptop$/.test(name) || name === 'Laptop'
   const want = lap ? [1710, 904] : [402, 874]
   const page = await browser.newPage({ viewport: lap ? { width: 2000, height: 1160 } : { width: 450, height: 952 } })
@@ -48,7 +49,7 @@ for (const name of names) {
     if (path.endsWith('.dc.html')) return route.fulfill({ contentType: 'text/html; charset=utf-8', body: readFileSync(P + path.split('/').pop(), 'utf8') })
     return route.fulfill({ status: 404, body: '' })
   })
-  const load = async () => { await page.goto('http://canvas.local/project/' + name + '.dc.html'); await page.waitForTimeout(1600) }
+  const load = async () => { await page.goto('http://canvas.local/project/' + name + '.dc.html'); await page.waitForTimeout(1100) }
   await load()
   // the openers: controls inside the screen, outside any layer and the States box, that do not leave the board
   const openers = await page.evaluate((want) => {
@@ -65,8 +66,10 @@ for (const name of names) {
     }
     return out
   }, want)
-  const seenLayers = new Set()
+  const seenLayers = new Set(), kinds = new Set()
   for (const o of openers) {
+    const kind = o.label.replace(/ for .*/, ' for').replace(/\d+/g, '#')
+    if (/ for$/.test(kind)) { if (kinds.has(kind)) continue; kinds.add(kind) }
     const before = await page.evaluate(() => [...document.querySelectorAll('[role=dialog], [role=menu], [role=alertdialog]')].filter((d) => d.getBoundingClientRect().width > 0).length)
     const el = page.locator(`[data-opener="${o.id}"]`).first()
     if (!(await el.count())) continue
@@ -78,10 +81,10 @@ for (const name of names) {
       if (!seenLayers.has(key)) {
         seenLayers.add(key); total++
         if (res.p.length) bad++
-        console.log(`${name} · ${o.label} → ${res.role} “${res.label}”${res.p.length ? '\n  PROBLEM ' + res.p.join('\n  PROBLEM ') : ''}`)
+        out.push(`${name} · ${o.label} → ${res.role} “${res.label}”${res.p.length ? '\n  PROBLEM ' + res.p.join('\n  PROBLEM ') : ''}`)
       }
       // a layer's own controls that open a further layer (New → New lesson), each from a fresh board
-      const inner = await page.evaluate(() => { const ls = [...document.querySelectorAll('[role=dialog], [role=menu], [role=alertdialog]')].filter((d) => d.getBoundingClientRect().width > 0 && d.getAttribute('aria-label') !== 'States'); const L = ls[ls.length - 1]; let k = 0; const out = []; for (const e of L.querySelectorAll('button, [role=button], [role=menuitem], a:not([href]), a[href="#"]')) { k++; e.setAttribute('data-inner', String(k)); out.push({ id: String(k), label: (e.getAttribute('aria-label') || e.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) }) } return out.slice(0, 12) })
+      const inner = await page.evaluate(() => { const ls = [...document.querySelectorAll('[role=dialog], [role=menu], [role=alertdialog]')].filter((d) => d.getBoundingClientRect().width > 0 && d.getAttribute('aria-label') !== 'States'); const L = ls[ls.length - 1]; let k = 0; const out = []; for (const e of L.querySelectorAll('button, [role=button], [role=menuitem], a:not([href]), a[href="#"]')) { k++; e.setAttribute('data-inner', String(k)); out.push({ id: String(k), label: (e.getAttribute('aria-label') || e.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) }) } return out.slice(0, 8) })
       for (const q of inner) {
         await load()
         await page.evaluate((ids) => { const want = ids.want; const scr = [...document.querySelectorAll('div')].find((e) => { const r = e.getBoundingClientRect(); return Math.round(r.width) === want[0] && Math.round(r.height) === want[1] }); let n = 0; if (scr) for (const el of scr.querySelectorAll('button, [role=button], a:not([href]), a[href="#"], [onclick]')) { n++; el.setAttribute('data-opener', String(n)) } }, { want })
@@ -98,7 +101,7 @@ for (const name of names) {
         if (r2 && r2.role && (r2.role + ':' + r2.label) !== key && !seenLayers.has(r2.role + ':' + r2.label)) {
           seenLayers.add(r2.role + ':' + r2.label); total++
           if (r2.p.length) bad++
-          console.log(`${name} · ${o.label} › ${q.label} → ${r2.role} “${r2.label}”${r2.p.length ? '\n  PROBLEM ' + r2.p.join('\n  PROBLEM ') : ''}`)
+          out.push(`${name} · ${o.label} › ${q.label} → ${r2.role} “${r2.label}”${r2.p.length ? '\n  PROBLEM ' + r2.p.join('\n  PROBLEM ') : ''}`)
         }
       }
       await load()
@@ -107,8 +110,13 @@ for (const name of names) {
       await load()
     }
   }
-  for (const e of new Set(errs)) console.log(`${name}\n  PROBLEM THROWS ${e.slice(0, 140)}`)
+  for (const e of new Set(errs)) out.push(`${name}\n  PROBLEM THROWS ${e.slice(0, 140)}`)
   await page.close()
+  return out
 }
+// boards in parallel, printed in order as each finishes
+const queue = [...names]
+const W = Number(process.env.WORKERS || 6)
+await Promise.all(Array.from({ length: W }, async () => { while (queue.length) { const n = queue.shift(); try { const o = await doBoard(n); if (o.length) console.log(o.join('\n')) } catch (e) { console.log(`${n}\n  PROBLEM THROWS ${String(e).slice(0, 140)}`) } } }))
 console.log(`LAYERS ${total} opened, ${bad} with problems`)
 await browser.close()
