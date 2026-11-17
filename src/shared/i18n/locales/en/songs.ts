@@ -32,7 +32,7 @@ export const songs = {
   groups: {
     title: 'Groups',
     new: 'New group',
-    create: 'Create group',
+    create: 'Create',
     name: 'Name',
     namePlaceholder: 'Sunday choir, Piano class 3B…',
     offline: 'You’re offline. Groups will be available once you reconnect.',
@@ -187,7 +187,7 @@ export const songs = {
       yellow: 'Yellow',
       lilac: 'Lilac',
     },
-    create: 'Create folder',
+    create: 'Create',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
     learnedCount: '{{count}} learned',

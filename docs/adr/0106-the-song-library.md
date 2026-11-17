@@ -37,6 +37,8 @@ details.
     hold), with every row chosen where it is chosen, into a folder lit as the target, or onto the bar, which while
     carrying is Archive and, in a folder, Move to the place it stands in; each drop a toast with Undo, ending Select
     (`LibraryDnd`: one drag the sorted lists join);
+  - **New folder** (R72's NEWNAME): a sheet of its name alone, Cancel in its header and Create at its foot; its colour
+    is the next paint, changed later from its ··· (Colour). New group's sheet is the same shape;
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
     New folder at its foot;
   - the song's Settings (ADR 0111): the ♡, Move to…, Archive or Restore; a song's row and page also

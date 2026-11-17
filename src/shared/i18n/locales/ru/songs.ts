@@ -25,7 +25,7 @@ export const songs: LocaleResources['songs'] = {
   groups: {
     title: 'Группы',
     new: 'Новая группа',
-    create: 'Создать группу',
+    create: 'Создать',
     name: 'Название',
     namePlaceholder: 'Воскресный хор, класс фортепиано 3Б…',
     offline: 'Нет подключения к сети. Группы станут доступны, когда связь восстановится.',
@@ -183,7 +183,7 @@ export const songs: LocaleResources['songs'] = {
       yellow: 'Жёлтый',
       lilac: 'Сиреневый',
     },
-    create: 'Создать папку',
+    create: 'Создать',
     songCount_one: '{{count}} песня',
     songCount_few: '{{count}} песни',
     songCount_many: '{{count}} песен',

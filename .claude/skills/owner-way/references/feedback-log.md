@@ -295,6 +295,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **Loop round 61, New folder as R72's NEWNAME:** a sheet of a name and Create, Cancel in its header (it said Done, and drew the colour picker under the name); the colour is the next paint, changed from the folder's ··· › Colour. New group's sheet takes the same Cancel and Create (2026-11-17).
 - **Loop round 61, Recently played says one progress and one clock (research Songs 1, 2):** it skips a learned song, as the table calls it Learned, and orders by when each was last played, kept with its place, not by the order the record was written (Flat's Recent scores) (2026-11-16).
 - **Loop round 61, Level reads the learner's own level (research Songs 3):** a song's level set in its Details is the one Sort and filter's Level finds and offers, else its course's; an own song with a level was never found by it (2026-11-16).
 - **Loop round 61, search reads what the learner wrote about a song (research Songs 4):** the library's search also finds a song by its tags, its genre's name and its score's subtitle, word by word as before (Flat indexes tags and subtitle) (2026-11-16).

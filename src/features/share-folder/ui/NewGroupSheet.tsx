@@ -44,6 +44,7 @@ function NewGroupForm({ onMade }: { onMade: (group: LearnerGroup) => void }) {
   return (
     <SheetContent
       title={t('groups.new')}
+      dismiss="cancel"
       footer={
         <Button
           size="lg"

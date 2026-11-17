@@ -16,7 +16,6 @@ import { nextName } from '@/shared/lib'
 import { NameField, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { makeFolder } from '../make-folder'
-import { LookFields } from './LookFields'
 
 /** What the folder sheet is open on: a new folder, in a folder or at Home. */
 export interface FolderSheetTarget {
@@ -25,8 +24,9 @@ export interface FolderSheetTarget {
 }
 
 /**
- * New folder (Mindscape's `FolderSheet`): its name (suggested, "New folder", "New folder 2"), its
- * picture and its paint, made where the learner is, last there (`onMade` hears its id). A folder is
+ * New folder (R72's, the canvas's NEWNAME): its name alone (suggested, "New folder", "New folder 2")
+ * and Create, Cancel in its header; made where the learner is, last there (`onMade` hears its id),
+ * its paint the next of the five. A folder is
  * edited in place on its page (`FolderEditPanel`).
  */
 export function FolderSheet({
@@ -74,10 +74,11 @@ function FolderForm({
     layout.folders.map((folder) => nameOf(folder)),
   )
   const [name, setName] = useState('')
-  const [look, setLook] = useState<FolderLook>({
+  // Its paint the next of the five, so folders made one after another differ; ··· › Colour changes it.
+  const look: FolderLook = {
     picture: 'music',
     paint: FOLDER_PAINTS[layout.folders.length % FOLDER_PAINTS.length] ?? 'sand',
-  })
+  }
   const typed = name.trim()
   const submit = (event?: FormEvent) => {
     event?.preventDefault()
@@ -89,6 +90,7 @@ function FolderForm({
   return (
     <SheetContent
       title={t('folder.new')}
+      dismiss="cancel"
       footer={
         <Button size="lg" className="w-full" onClick={() => submit()}>
           {t('folder.create')}
@@ -105,7 +107,6 @@ function FolderForm({
           maxLength={FOLDER_NAME_MAX}
           onChange={(event) => setName(event.target.value)}
         />
-        <LookFields pictures={false} look={look} onChange={setLook} />
       </form>
     </SheetContent>
   )

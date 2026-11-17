@@ -53,6 +53,7 @@ export function SheetContent({
   full = false,
   tall = false,
   initialFocus,
+  dismiss = 'done',
 }: {
   title: string
   description?: string
@@ -70,6 +71,8 @@ export function SheetContent({
   tall?: boolean
   /** What takes the focus as it opens, in place of the panel: a picker's value. */
   initialFocus?: () => HTMLElement | true
+  /** Its header's way out: Done, or Cancel on a sheet that makes something (the canvas's NEWNAME). */
+  dismiss?: 'done' | 'cancel'
 }) {
   const { t } = useTranslation('common')
   return (
@@ -110,7 +113,7 @@ export function SheetContent({
             />
           }
         >
-          {t('done')}
+          {dismiss === 'cancel' ? t('confirm.cancel') : t('done')}
         </DrawerClose>
       </DrawerHeader>
       <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-4 pt-1 pb-6 *:shrink-0">
