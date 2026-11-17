@@ -1023,6 +1023,7 @@ owner's, typos fixed.
 
 - **The Metronome's settings in one home** (round 63, canvas v407): Flash on the beat and Volume join the rows under the beats (Time signature, Subdivision, Sound, Volume, Flash on the beat, Speed trainer, Silent bars, by how often they are wanted), and the bar's gear, which held those two apart from the rest, goes, as on the Tuner (CLAUDE.md: each tool's settings in place; one home per setting).
 
+- **A drill's Root is the one root picker (loop 63, 2026-11-17):** Walk the chords and the Chromatic walk chose their root from a wrapped row of eight chips, E♭ alone on a second line; they now use the kit's root grid, all twelve roots in two even rows of six, as Intervals, a progression and an exercise do (one implementation; `CLAUDE.md`: a key or root is one of the pickers; canvas v427).
 - **Check's Hint reaches 44 (loop 63, 2026-11-17):** the quiz's Hint link was 40 tall; it is 44, as every target on a phone (Fitts; canvas v425).
 
 ## Sounds

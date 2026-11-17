@@ -238,14 +238,14 @@ PV_SRC = r'''
     const root = st.root ?? 'C', size = st.size ?? 'Triads', walk = st.walk ?? 'One key';
     const T = { walk: 'Walk the chords in ' + root + ' major', chromatic: 'Chromatic walk: major and minor 7ths', progression: 'I – V – vi – IV in ' + root + (walk === 'One key' ? '' : ', up by semitones'), exercise: 'Hanon No. 1: in ' + root };
     return { ...common(st, set), title: T[V], isWalk: V === 'walk', isChrom: V === 'chromatic', isProg: V === 'progression', isEx: V === 'exercise', playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => S({ playing: !st.playing, open: false }), setupOn: open, openSetup: () => S({ open: true }), startIt: () => S({ open: false }),
-      roots: chipsOf(['C', 'G', 'D', 'A', 'E', 'F', 'B♭', 'E♭'], root, (x) => S({ root: x })), sizes: A('size', ['Triads', 'Sevenths'], 'Triads'), dirs: A('dir', ['Up', 'Down', 'Up and down'], 'Up'),
+      rootsG: rootGrid(ROOTS.indexOf(root), (i) => S({ root: ROOTS[i] })), sizes: A('size', ['Triads', 'Sevenths'], 'Triads'), dirs: A('dir', ['Up', 'Down', 'Up and down'], 'Up'),
       fams: chipsOf(['Major 7th', 'Dominant 7th', 'Minor 7th', 'Half-diminished'], st.fam ?? 'Minor 7th', (x) => S({ fam: x })), walks: chipsOf(['One key', 'Chromatically rising', 'By fifths', 'By fourths'], walk, (x) => S({ walk: x })),
       rhythms: A('rh', ['Even', 'Dotted', 'Reverse dotted'], 'Even'), hands: A('hands', ['Right hand', 'Left hand', 'Both'], 'Both'), nextKey: A('nk', ['Circle of fifths', 'Chromatic'], 'Circle of fifths'), voicings: A('vc', ['Close', 'Drop 2'], 'Close'),
       tempoV: (st.bpm ?? 72) + ' BPM', bDn: () => S({ bpm: (st.bpm ?? 72) - 4 }), bUp: () => S({ bpm: (st.bpm ?? 72) + 4 }), octV: String(st.oct ?? 2), oDn: () => S({ oct: Math.max(1, (st.oct ?? 2) - 1) }), oUp: () => S({ oct: Math.min(4, (st.oct ?? 2) + 1) }),
       ladOn: !!st.lad, ladOnBg: st.lad ? '#44684A' : '#DAD1C8', ladOnX: st.lad ? 22 : 2, ladT: () => S({ lad: !st.lad }), tipOn_lad: st.tip === 'lad', tip_lad: () => S({ tip: st.tip === 'lad' ? null : 'lad' }),
       closeSheet: () => S({ open: false }) };'''
-PVSET = (IF('isWalk', SEC(CAPS('Root'), WRAPCHIPS('roots')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
-         + IF('isChrom', SEC(CAPS('Chord types'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), WRAPCHIPS('roots')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
+PVSET = (IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
+         + IF('isChrom', SEC(CAPS('Chord types'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
          + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WRAPCHIPS('walks')))
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
