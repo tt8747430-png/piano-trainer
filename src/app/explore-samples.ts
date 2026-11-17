@@ -1,7 +1,14 @@
 import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 
-/** A sample's chart: the first line its card draws, as the server reads it. */
-const chart = (line: string) => ({ sections: [{ lines: [line] }] })
+/** A sample's song, as Publish writes it: one verse of its chords, so its page opens and plays. */
+const chart = (title: string, key: string, line: string) => ({
+  title,
+  key,
+  meter: '4/4',
+  tempo: 90,
+  pattern: 'M1',
+  sections: [{ kind: 'verse', lines: [line] }],
+})
 
 /**
  * Explore's sample songs for a development build (`VITE_EXPLORE_SAMPLES`): published by four named
@@ -110,6 +117,6 @@ export const createSamplePublicLibrary = (): PublicLibrary =>
         tags: [String(tag)],
       },
       stars: Array.isArray(stars) ? stars : [],
-      body: chart(String(line)),
+      body: chart(String(title), String(key), String(line)),
     })),
   })
