@@ -9,6 +9,7 @@ import {
   Music2,
   Printer,
   Heading,
+  Keyboard,
   Ruler,
   TextCursorInput,
 } from 'lucide-react'
@@ -19,9 +20,10 @@ import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
 import type { Piece } from '@/entities/piece'
 import { MidiControl } from '@/features/connect-midi'
+import { useOpenShortcuts } from '@/features/shortcuts-help'
 import { SongExportSheet } from '@/features/song-files'
 import { useKeyName } from '@/shared/i18n'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { hasFinePointer, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import {
   BackButton,
@@ -130,7 +132,8 @@ function MainPage({
   onExport: () => void
   onPrint: () => void
 }) {
-  const { t } = useTranslation(['editor', 'music', 'songs', 'player'])
+  const { t } = useTranslation(['editor', 'music', 'songs', 'player', 'common'])
+  const openShortcuts = useOpenShortcuts()
   const { meta, takes, view } = useScoreEditorContext()
   const keyName = useKeyName()
   const layout = useSettings((state) => selectScoreView(state).layout)
@@ -232,6 +235,19 @@ function MainPage({
             paint="grass"
             render={<Link to="/settings/connect-piano" />}
           />
+          {/* Its shortcuts, where keys type them (F23, Flat's rail ending with Shortcuts). */}
+          {hasFinePointer() ? (
+            <RowButton
+              title={t('common:shortcuts.title')}
+              icon={Keyboard}
+              paint="lilac"
+              value="?"
+              onClick={() => {
+                view.setGear(null)
+                openShortcuts()
+              }}
+            />
+          ) : null}
         </SettingsGroup>
       )}
       {example ? null : (

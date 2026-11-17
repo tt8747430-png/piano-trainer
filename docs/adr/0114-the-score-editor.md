@@ -81,7 +81,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   EditorLaptop board's popover; titled with the song's name, "Saved on this device" or "Saved to your account" under it for the
   learner's own song or version; a page at a time with Back): Title and credits (its
   value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Record a take, Takes; Settings, each one tap away by its name
-  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; Export… (the learner's own song or version, saved as it
+  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano, MIDI keyboard and, where keys type them
+  (a fine pointer), Shortcuts with ? as its value; Export… (the learner's own song or version, saved as it
   is edited, through the song page's export sheet, as the board's Export row) and Print (`EditorPrint`: the draft as
   the Player plays it as written, through the Player's `SongPrint`, as the editor shows it, its sections headed as
   the sheet heads them); an original's Publish…, Versions and Discard
