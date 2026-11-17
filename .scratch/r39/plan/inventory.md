@@ -20,9 +20,9 @@ boards themselves; run it after a rebuild. A layer is named by its `aria-label` 
 | SharedFolder | — |
 | SharedFolderLaptop | menu: Ana Popescu |
 | Archive | menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
-| ArchiveLaptop | menu: Ana Popescu; sheet or dialog: New; menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
+| ArchiveLaptop | menu: Ana Popescu; menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
 | Trash | menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
-| TrashLaptop | menu: Ana Popescu; sheet or dialog: New; menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
+| TrashLaptop | menu: Ana Popescu; menu: New; sheet or dialog: Apply style to; question: {{permT}}; question: Apply to all folders?; question: Delete “Hymns”?; menu: {{whoT}} |
 | Groups | sheet or dialog: New group; sheet or dialog: Join with a link; sheet or dialog: Choose a folder; sheet or dialog: Share with a group; question: {{rmT}}; question: Delete Choir accompanists?; question: Stop sharing Choir hymns? |
 | GroupsLaptop | menu: Ana Popescu; sheet or dialog: New group; sheet or dialog: Join with a link; sheet or dialog: Choose a folder; sheet or dialog: Share with a group; question: {{rmT}}; question: Delete Choir accompanists?; question: Stop sharing Choir hymns? |
 | Song | menu: Amazing Grace; sheet or dialog: Title and credits |
@@ -87,13 +87,13 @@ boards themselves; run it after a rebuild. A layer is named by its `aria-label` 
 | Intervals | sheet or dialog: {{name}}; menu: Play as; sheet or dialog: From; sheet or dialog: Interval settings; sheet or dialog: Piano |
 | IntervalsLaptop | menu: Ana Popescu; sheet or dialog: {{name}}; menu: Play as; sheet or dialog: From; sheet or dialog: Interval settings; sheet or dialog: Piano |
 | Progressions | menu: New; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New folder |
-| ProgressionsLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New; menu: New; sheet or dialog: New folder |
+| ProgressionsLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; menu: New; sheet or dialog: New folder |
 | Progression | menu: What it plays; sheet or dialog: Key; sheet or dialog: Progression settings; sheet or dialog: Piano |
 | ProgressionLaptop | menu: Ana Popescu; menu: What it plays; sheet or dialog: Key; sheet or dialog: Progression settings; sheet or dialog: Piano |
 | ProgressionEdit | sheet or dialog: About this; sheet or dialog: Publishing; question: Discard your changes? |
 | ProgressionEditLaptop | menu: Ana Popescu; sheet or dialog: About this; sheet or dialog: Publishing; question: Discard your changes? |
 | Accompaniment | menu: New; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New folder |
-| AccompanimentLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New; menu: New; sheet or dialog: New folder |
+| AccompanimentLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; menu: New; sheet or dialog: New folder |
 | Pattern | menu: Play over; sheet or dialog: {{name}}; sheet or dialog: Piano |
 | PatternLaptop | menu: Ana Popescu; menu: Play over; sheet or dialog: {{name}}; sheet or dialog: Piano |
 | PatternNew | sheet or dialog: {{name}} |
@@ -101,9 +101,9 @@ boards themselves; run it after a rebuild. A layer is named by its `aria-label` 
 | ChordPlayer | sheet or dialog: {{selSym}}; sheet or dialog: {{tagTitle}}; sheet or dialog: Share; sheet or dialog: Style; sheet or dialog: Key; sheet or dialog: Tempo; sheet or dialog: Repeats; sheet or dialog: Chord player settings; sheet or dialog: Piano; sheet or dialog: Chord sheet |
 | ChordPlayerLaptop | menu: Ana Popescu; sheet or dialog: {{selSym}}; sheet or dialog: {{tagTitle}}; sheet or dialog: Share; sheet or dialog: Style; sheet or dialog: Key; sheet or dialog: Tempo; sheet or dialog: Repeats; sheet or dialog: Chord player settings; sheet or dialog: Piano; sheet or dialog: Chord sheet |
 | FingerTechnique | menu: New; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New folder |
-| FingerTechniqueLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New; menu: New; sheet or dialog: New folder |
+| FingerTechniqueLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; menu: New; sheet or dialog: New folder |
 | JazzVocabulary | menu: New; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New folder |
-| JazzVocabularyLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; sheet or dialog: New; menu: New; sheet or dialog: New folder |
+| JazzVocabularyLaptop | menu: Ana Popescu; menu: {{rowT}}; sheet or dialog: Rename; sheet or dialog: Sort and filter; menu: New; sheet or dialog: New folder |
 | Exercise | sheet or dialog: Key; sheet or dialog: Piano |
 | ExerciseLaptop | menu: Ana Popescu; sheet or dialog: Key; sheet or dialog: Piano |
 | Check | sheet or dialog: Level; sheet or dialog: Chord qualities |
@@ -158,7 +158,7 @@ boards themselves; run it after a rebuild. A layer is named by its `aria-label` 
 
 PlayerApp, PlayerDesk: boards only the published canvas holds, kept by index.py as they are (the owner's own)
 
-129 boards, 467 layers.
+129 boards, 461 layers.
 
 ## Components
 
@@ -194,19 +194,18 @@ PlayerApp, PlayerDesk: boards only the published canvas holds, kept by index.py 
 | `LPLACEBAR` | r41_kit.py | r53_songs_more.py, r72_flat_songs.py |
 | `LTITLEBAR` | r41_kit.py | r45_places.py, r46_admin.py, r50_profile.py, r51_account.py, r52_global.py, r53_songs_more.py, r54_practice_more.py, r57_yours.py, r59_takes.py, r63_pattern.py |
 | `LTOP` | r41_kit.py | r41_practice.py, r45_places.py, r47_edit.py, r48_course.py, r52_global.py, r53_songs_more.py, r54_practice_more.py, r56_results.py, r58_chordplayer.py |
-| `MENUSHELL` | r41_kit.py | r72_flat_songs.py |
+| `MENUSHELL` | r41_kit.py | the kit alone |
 | `MODESW` | r41_kit.py | r44_editor.py |
 | `NAMEFIELD` | r41_lib.py | r45_places.py, r48_course.py |
-| `NEWBTN` | r41_kit.py | r53_songs_more.py, r72_flat_songs.py |
 | `NEWDIAL` | r41_kit.py | r45_places.py, r53_songs_more.py, r57_yours.py, r72_flat_songs.py |
 | `NEWFAB` | r41_kit.py | r46_admin.py, r53_songs_more.py |
-| `NEWMENU` | r41_kit.py | r45_places.py, r53_songs_more.py, r57_yours.py, r72_flat_songs.py |
+| `NEWMENU` | r41_kit.py | r45_places.py, r57_yours.py |
 | `NEWNAME` | r41_lib.py | r46_admin.py, r53_songs_more.py |
 | `NEWNAME_L` | r41_lib.py | r46_admin.py |
 | `NONE` | r41_lib.py | the kit alone |
 | `PILL` | calm_kit.py | r47_edit.py |
 | `PLAYBTN` | r41_kit.py | r41_practice.py, r41_songs.py, r54_practice_more.py, r56_results.py |
-| `POPOVER` | r41_kit.py | r41_practice.py, r41_songs.py, r42_chords.py, r44_editor.py, r45_places.py, r47_edit.py, r48_course.py, r49_settings.py, r50_profile.py, r53_songs_more.py, r54_practice_more.py, r55_editor_draft.py, r56_results.py, r57_yours.py, r58_chordplayer.py, r59_takes.py, r60_scales.py, r61_intervals.py, r62_progression.py, r63_pattern.py, r64_metronome.py, r66_chord_finder.py, r68_exercise.py |
+| `POPOVER` | r41_kit.py | r41_practice.py, r41_songs.py, r42_chords.py, r44_editor.py, r45_places.py, r47_edit.py, r48_course.py, r49_settings.py, r50_profile.py, r54_practice_more.py, r55_editor_draft.py, r56_results.py, r57_yours.py, r58_chordplayer.py, r59_takes.py, r60_scales.py, r61_intervals.py, r62_progression.py, r63_pattern.py, r64_metronome.py, r66_chord_finder.py, r68_exercise.py |
 | `PREVPILL` | r41_kit.py | r47_edit.py, r49_settings.py |
 | `PSEARCH` | r41_kit.py | r53_songs_more.py, r72_flat_songs.py |
 | `ROOTGRID` | r41_kit.py | r41_practice.py, r47_edit.py, r54_practice_more.py, r58_chordplayer.py, r61_intervals.py, r62_progression.py, r68_exercise.py |

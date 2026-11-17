@@ -317,10 +317,8 @@ def NEWFAB(label, act, bottom):
     """A floating New with one thing to make: the same 56 honey + as NEWDIAL, at the bottom right, its name in its tip."""
     return (f'<button type="button" aria-label="{label}" data-tip="{label}" onClick="{{{{{act}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">{_NEWPLUS}</button>')
 def NEWMENU(items):
-    """The same New as a menu: from a laptop's New ▾, or a row."""
+    """The same New as a menu, the floating +'s list (NEWDIAL)."""
     return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'
-NEWBTN = lambda act='openAdd': (f'<button type="button" aria-haspopup="menu" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">'
-                                f'{_NEWPLUS.replace("26", "20")}New{CHEV_D}</button>')
 # A board's states for the canvas's States box: a hidden list states_tool.py lifts out of the screen (each row's
 # {l, bg, pick}; bg ink marks the one shown). The board draws each state itself.
 def SHOWSTATES(lst='states'):

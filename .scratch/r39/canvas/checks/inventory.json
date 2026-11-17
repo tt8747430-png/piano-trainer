@@ -40,10 +40,6 @@
     "label": "Sort and filter"
    },
    {
-    "role": "dialog",
-    "label": "New"
-   },
-   {
     "role": "menu",
     "label": "New"
    },
@@ -210,10 +206,6 @@
    {
     "role": "menu",
     "label": "Ana Popescu"
-   },
-   {
-    "role": "dialog",
-    "label": "New"
    },
    {
     "role": "menu",
@@ -699,10 +691,6 @@
     "label": "Sort and filter"
    },
    {
-    "role": "dialog",
-    "label": "New"
-   },
-   {
     "role": "menu",
     "label": "New"
    },
@@ -933,10 +921,6 @@
    {
     "role": "dialog",
     "label": "Sort and filter"
-   },
-   {
-    "role": "dialog",
-    "label": "New"
    },
    {
     "role": "menu",
@@ -1614,10 +1598,6 @@
     "label": "Sort and filter"
    },
    {
-    "role": "dialog",
-    "label": "New"
-   },
-   {
     "role": "menu",
     "label": "New"
    },
@@ -2022,10 +2002,6 @@
    {
     "role": "menu",
     "label": "Ana Popescu"
-   },
-   {
-    "role": "dialog",
-    "label": "New"
    },
    {
     "role": "menu",
@@ -2552,9 +2528,7 @@
   },
   "MENUSHELL": {
    "kit": "r41_kit.py",
-   "users": [
-    "r72_flat_songs.py"
-   ]
+   "users": []
   },
   "POPOVER": {
    "kit": "r41_kit.py",
@@ -2568,7 +2542,6 @@
     "r48_course.py",
     "r49_settings.py",
     "r50_profile.py",
-    "r53_songs_more.py",
     "r54_practice_more.py",
     "r55_editor_draft.py",
     "r56_results.py",
@@ -2636,16 +2609,7 @@
    "kit": "r41_kit.py",
    "users": [
     "r45_places.py",
-    "r53_songs_more.py",
-    "r57_yours.py",
-    "r72_flat_songs.py"
-   ]
-  },
-  "NEWBTN": {
-   "kit": "r41_kit.py",
-   "users": [
-    "r53_songs_more.py",
-    "r72_flat_songs.py"
+    "r57_yours.py"
    ]
   },
   "SHOWSTATES": {
