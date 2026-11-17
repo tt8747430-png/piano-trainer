@@ -463,8 +463,8 @@ const LIBRARY = [
     'Госпел-подход',
     {
       note: note(
-        'The bass climbs by whole tones into I. In major, ♭VI and ♭VII are borrowed from the parallel minor.',
-        'Бас поднимается к I целыми тонами. В мажоре ♭VI и ♭VII взяты из одноимённого минора.',
+        'The bass climbs by whole tones into I. In major, ♭VI and ♭VII are borrowed from the parallel minor. Also called the Mario cadence, after the fanfare that ends a Super Mario Bros. level.',
+        'Бас поднимается к I целыми тонами. В мажоре ♭VI и ♭VII взяты из одноимённого минора. Её также называют каденцией Марио — по фанфаре в конце уровня Super Mario Bros.',
       ),
     },
   ),
@@ -488,6 +488,20 @@ const LIBRARY = [
       'Минорный аккорд и мажорный аккорд квартой выше: мажорная IV содержит повышенную VI ступень дорийского лада (F♯ в ля дорийском).',
     ),
   }),
+  entry(
+    'modal',
+    'dorian-progression',
+    { minor: 'i IV v i' },
+    'Dorian progression',
+    'Дорийская последовательность',
+    {
+      mode: 'dorian',
+      note: note(
+        'The major IV and the minor v are both the Dorian mode’s: no leading tone, so it comes home without a dominant. In A Dorian: Am, D, Em, Am.',
+        'Мажорная IV и минорная v принадлежат дорийскому ладу: вводного тона нет, и тоника приходит без доминанты. В ля дорийском: Am, D, Em, Am.',
+      ),
+    },
+  ),
   entry('modal', 'mixolydian-vamp', { major: 'I ♭VII' }, 'Mixolydian vamp', 'Миксолидийский вамп', {
     mode: 'mixolydian',
     note: note(
@@ -502,6 +516,20 @@ const LIBRARY = [
       'Мажорный аккорд и мажорный аккорд на тон выше: II содержит повышенную IV ступень лидийского лада (F♯ в до лидийском).',
     ),
   }),
+  entry(
+    'modal',
+    'lydian-progression',
+    { major: 'I II vii I' },
+    'Lydian progression',
+    'Лидийская последовательность',
+    {
+      mode: 'lydian',
+      note: note(
+        'II and the minor vii both hold the Lydian mode’s raised 4th, so the mode is heard all the way home. In C Lydian: C, D, Bm, C.',
+        'II и минорная vii обе содержат повышенную IV ступень лидийского лада, и лад слышен до самой тоники. В до лидийском: C, D, Bm, C.',
+      ),
+    },
+  ),
   entry('modal', 'phrygian-vamp', { minor: 'i ♭II' }, 'Phrygian vamp', 'Фригийский вамп', {
     mode: 'phrygian',
     note: note(
@@ -509,6 +537,20 @@ const LIBRARY = [
       'Минорный аккорд и мажорный аккорд на полутон выше: ♭II содержит пониженную II ступень фригийского лада (B♭ в ля фригийском).',
     ),
   }),
+  entry(
+    'modal',
+    'phrygian-progression',
+    { minor: 'i ♭II III i' },
+    'Phrygian progression',
+    'Фригийская последовательность',
+    {
+      mode: 'phrygian',
+      note: note(
+        'Up a semitone to ♭II and on to III, then down to i: the lowered 2nd leads home from above. In A Phrygian: Am, B♭, C, Am.',
+        'Вверх на полутон к ♭II, дальше к III и вниз к i: пониженная II ступень приводит к тонике сверху. Во фригийском от ля: Am, B♭, C, Am.',
+      ),
+    },
+  ),
   entry(
     'theory',
     'key-chords',

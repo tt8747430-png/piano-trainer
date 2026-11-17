@@ -977,6 +977,7 @@ owner's, typos fixed.
   black key's top first, then the white key's), sounds it and holds it down in the pressed colour until the finger
   lifts, as the 2D keys do. The Player's 3D keys already sound on a press. One implementation in the shared stage
   (`piano_sheet.py`'s `HANDS3D`); the stage reports each key's corners (`pthands.bundle.js`, `__ptProj`).
+- **Loop round 61, modal progressions (research 3.4):** the Modal style gains Dorian i–IV–v–i, Lydian I–II–vii–I and Phrygian i–♭II–III–i, each "… progression" (a Phrygian cadence is iv⁶–V); Mixolydian and Aeolian already had theirs; the walk-up is also named the Mario cadence (2026-11-17).
 
 ## Sounds
 
