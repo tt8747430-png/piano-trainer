@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import { useId, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { badgesOf, nextMilestone, type Badge } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
 import { ProgressMeter, RowLink, SettingsGroup } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
-import { SectionHead } from './SectionHead'
+import { ProfileSection } from './ProfileSection'
 
 /** The badge as a row: its picture, its name, where the learner stands; a link to its page. */
 export function BadgeRow({ badge }: { badge: Badge }) {
@@ -90,7 +90,6 @@ export function NextMilestone() {
 /** The Profile's badges: the first three, furthest along first, then See all. */
 export function BadgesPreview() {
   const { t } = useTranslation('account')
-  const headingId = useId()
   const figures = useProfileFigures()
   const badges = useMemo(
     () =>
@@ -100,13 +99,12 @@ export function BadgesPreview() {
     [figures],
   )
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-2">
-      <SectionHead id={headingId} title={t('profile.badges.title')} to="/profile/badges" />
+    <ProfileSection title={t('profile.badges.title')} to="/profile/badges">
       <SettingsGroup flush>
         {badges.slice(0, 3).map((badge) => (
           <BadgeRow key={badge.id} badge={badge} />
         ))}
       </SettingsGroup>
-    </section>
+    </ProfileSection>
   )
 }
