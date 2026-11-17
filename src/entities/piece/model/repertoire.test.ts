@@ -26,6 +26,7 @@ const VERSION: PieceMusic = {
 const SONG: OwnSong = {
   id: 'my-1',
   title: 'Morning',
+  added: '2026-11-01T10:00:00.000Z',
   key: 'G',
   meter: '4/4',
   tempo: 90,

@@ -4,20 +4,23 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './primitives/dropdown-menu'
 
 /**
  * A list's count and its sort (the R72 board's COUNTROW, Flat's library): how many it shows, quiet at
  * the start, and at the end the sort it is in, in the link's colour with ⇅, opening a menu of the
- * sorts, the one in use ticked. A sort picked closes the menu.
+ * sorts, the one in use ticked, and under a line which way it runs where the list offers both. A
+ * choice made closes the menu.
  */
-export function CountSort<Sort extends string>({
+export function CountSort<Sort extends string, Way extends string = never>({
   count,
   label,
   sort,
   sorts,
   onSort,
+  ways,
 }: {
   /** "8 songs". */
   count: string
@@ -26,6 +29,12 @@ export function CountSort<Sort extends string>({
   sort: Sort
   sorts: readonly { readonly value: Sort; readonly label: string }[]
   onSort: (sort: Sort) => void
+  /** Which way it runs (Ascending · Descending), under the sorts. */
+  ways?: {
+    readonly way: Way
+    readonly options: readonly { readonly value: Way; readonly label: string }[]
+    readonly onWay: (way: Way) => void
+  }
 }) {
   const current = sorts.find((each) => each.value === sort)
   return (
@@ -54,6 +63,26 @@ export function CountSort<Sort extends string>({
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>
+          {ways ? (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup
+                value={ways.way}
+                onValueChange={(next: Way) => ways.onWay(next)}
+              >
+                {ways.options.map((each) => (
+                  <DropdownMenuRadioItem
+                    key={each.value}
+                    value={each.value}
+                    closeOnClick
+                    className="min-h-11 text-base"
+                  >
+                    {each.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

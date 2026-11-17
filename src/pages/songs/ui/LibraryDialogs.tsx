@@ -12,7 +12,6 @@ import { useLocale } from '@/shared/i18n'
 import { say } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 import { DeleteAsk } from './DeleteAsk'
-import { MoveInSheet } from './MoveInSheet'
 import { NewSongSheet } from './NewSongSheet'
 
 /** What sharing said, as the song's page words it. */
@@ -125,14 +124,6 @@ export function LibraryDialogs({
         onOpenChange={shut}
       />
       <SongExportSheet piece={exported} onOpenChange={shut} />
-      {folder ? (
-        <MoveInSheet
-          page={page}
-          folder={folder}
-          open={pending?.kind === 'move-in'}
-          onOpenChange={shut}
-        />
-      ) : null}
     </>
   )
 }

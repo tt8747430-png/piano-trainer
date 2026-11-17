@@ -17,10 +17,12 @@ export type MusicTarget =
   | { readonly kind: 'song'; readonly id: OwnSongId }
 
 /** What an own song is apart from its music: who and what it is, kept as its music is written. */
-const songFactsOf = ({ id, title, author, note }: OwnSong) => ({
+const songFactsOf = ({ id, title, author, publicId, note, added }: OwnSong) => ({
   id,
   title,
+  added,
   ...(author ? { author } : {}),
+  ...(publicId ? { publicId } : {}),
   ...(note ? { note } : {}),
 })
 

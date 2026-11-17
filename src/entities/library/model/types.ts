@@ -84,9 +84,17 @@ export interface TrashedSong {
   readonly from: SongPlace
 }
 
-/** How the library's songs are listed: as the learner dragged them, by name, played last first, or by key. */
-export const LIBRARY_SORTS = ['manual', 'name', 'recent', 'key'] as const
+/** How the library's songs are listed (R72, Flat's library): by when played, title, composer or when added. */
+export const LIBRARY_SORTS = ['played', 'title', 'composer', 'added'] as const
 export type LibrarySort = (typeof LIBRARY_SORTS)[number]
+
+/** Which way a sort runs. */
+export const SORT_DIRECTIONS = ['ascending', 'descending'] as const
+export type SortDirection = (typeof SORT_DIRECTIONS)[number]
+
+/** The way a sort starts when chosen: names from A, dates the newest first (the board's). */
+export const sortStarts = (sort: LibrarySort): SortDirection =>
+  sort === 'title' || sort === 'composer' ? 'ascending' : 'descending'
 
 /** The longest name a folder takes. */
 export const FOLDER_NAME_MAX = 40

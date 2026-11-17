@@ -21,8 +21,6 @@ details.
   pictures and one of 5 paints. A new song is made where the learner is, and so is an imported one: New offers New
   song, New folder and Import, and only these (it adds; the Public library is a place, Home's first row), and a
   file dropped on the library imports it (ADR 0107).
-- **The laptop's table** (`SongTable`, from 64rem) fits its pane at every width: the title takes the room the other
-  columns leave and is cut short, and a pane narrower than 48rem leaves the Chords out.
 - **The actions**, at every size:
   - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, to the Trash with Undo), a swipe
     (right Favourite; left Move, then Archive), a long press starting Select;
@@ -31,9 +29,9 @@ details.
   - **Select**: a check fading in where More stood so nothing moves, the count as the title, Select all (round, so
     the bar keeps its one row at 320px), a bar of Favourite · Move · Archive · Delete, each in its slot, greyed where
     what is chosen does not allow it (Delete: anything but the learner's own songs and folders); it counts and acts on
-    the rows chosen that are in sight, a search or filter hiding the rest; its Archive is one toast whose Undo puts
-    every song and folder back; in the Manual sort a handle moves each row, by finger, mouse or keyboard, a screen
-    reader told where; in any sort a row's face carries it (a mouse after 8px, a finger after a quarter-second
+    the rows chosen that are in sight, a search hiding the rest; its Archive is one toast whose Undo puts
+    every song and folder back; a folder's handle moves it among the folders, by finger, mouse or keyboard, a screen
+    reader told where, while nothing is searched (the songs follow the sort); a row's face carries it (a mouse after 8px, a finger after a quarter-second
     hold), with every row chosen where it is chosen, into a folder lit as the target, or onto the bar, which while
     carrying is Archive and, in a folder, Move to the place it stands in; each drop a toast with Undo, ending Select
     (`LibraryDnd`: one drag the sorted lists join);
@@ -47,20 +45,21 @@ details.
   folder whole, an app song on its own). The ask names the folder, counts its songs and says which happens.
 - **The Trash** (`/songs/trash`, R34, StemDeck's): Delete on the learner's own song moves it there with no ask and a
   toast with Undo, as nothing is lost yet; it is gone, with its recordings, only once deleted permanently from the
-  Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`, `pt-library` version 6;
-  `trashSongs`, `restoreTrashed`, `emptyTrash`). On a phone Home's bar holds one button for both, a menu of Archive · Trash,
-  its count both; on a laptop the tree lists Archive and Trash and the bar has no such button (one way to each).
-- **The archive is a place** (`/songs/archive`, from the phone bar's Archive · Trash menu or the laptop tree): archived songs and folders,
+  Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`; `trashSongs`, `restoreTrashed`,
+  `emptyTrash`). My songs lists the Archive and the Trash as rows with their counts.
+- **The archive is a place** (`/songs/archive`, from its row on My songs): archived songs and folders,
   newest first, each with Restore; Restore all; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
   it stood while that folder is in the library, else at Home, last; a folder back with everything under it. An
   archived song still opens by its link, from Learn and from Search, which says it is archived.
-- **One search with its sort and filters** (in the URL, never remembered): the sort joined to the search's end
-  (Manual · Name · Recently played · Key, kept in the library); Filter with its count (a sheet on a phone, a popover
-  on a laptop): Key with its counts, Level, Favourites; the filters on as removable chips. At Home they look through
-  the whole library, the songs found under their folders' paths; in a folder they narrow it. While they hide songs a
-  line says how many are shown, with Clear filters.
-- **Empty states:** an empty folder offers New song and Move songs here; an empty Home New song; filters that keep
-  nothing say which.
+- **One search, one sort** (R72, Flat's library; no filter page, no place chips, no tree): the search in the URL,
+  never remembered, finds a song by its title, composer, subtitle, tags and genre, word by word, and in a folder
+  narrows it. The sort is kept in the library (`pt-library` version 7): Last played, Title, Composer or Added, and
+  Ascending or Descending, each sort starting the usual way (Title and Composer A to Z, Last played and Added the
+  newest first); what has no date or composer stands last either way. Added is when the learner's own song came in
+  (`OwnSong.added`, `pt-pieces` version 13); the app's songs have none.
+- **Empty states:** a folder with nothing in it says "Nothing in this folder yet" and Favourites "No favourites yet",
+  each with Add songs from your library (to All songs); an empty library offers New song; a search that keeps
+  nothing names what was searched, with Clear search.
 - **Saved: `pt-library` holds only what the learner changed**, read over the catalog and writing nothing as it reads.
   A built-in folder the store does not hold stands after the others; a built-in song placed nowhere stands last in
   its collection's folder; an own song placed nowhere, or whose folder is gone, stands at Home.
@@ -72,22 +71,22 @@ details.
   take's share right as meters in ink, the last take bar by bar, and one next step as a quiet button into the Player
   (`nextStep`: the weakest bar or pair under 80 % looped at 70 % speed, else the tempo climbed 50 → 75 → 100 %). Play
   stays the page's one honey control.
-- **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), tags.
+- **Not taken:** setlists, a sort per folder, a 30-day expiry (the app's songs never vanish), filters by key or level.
 
 - **My songs is an overview** (R72, Flat's library; loop round 61): Recently played (the shelf of songs left part
   way, See all n opening All songs), then the Folders as cards of their own (Favourites first, opening All songs on
   the favourites; the learner's folders; Shared with me), then the Archive and the Trash, each a row with its count.
-  Search is the bar's round button and opens **All songs** (`/songs/all`): every song in one list, searched, sorted
-  and filtered by the Sort and filter sheet, Select in its bar. A search or filter carried in Home's URL still shows
-  what it finds there. The laptop's overview has no tree beside it: the folder cards three across.
+  Search is the bar's round button and opens **All songs** (`/songs/all`, `favourites` in its URL for the card): every
+  song in one list, searched and sorted, Select and New in its bar. A phone stacks the search over the count; a laptop
+  sets the search, 520 wide, beside it. The laptop's overview has no tree beside it: the folder cards three across.
 - **A song's row is a card of its own** (R72's SONGROW, the default Card style): 88 tall, its first notes in a 56
   tile, its title over its composer and key and a third line saying where it stands and when it was last played
-  ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started"); ··· at its end on every pointer holds its acts,
+  ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started", a learner's own song never played "Not started · Added
+  today"); ··· at its end on every pointer holds its acts,
   Favourite among them, so the row carries no heart. The cards stand 12 apart, two across on a laptop, in All songs
   and a folder alike; a folder shows no place chips. The List style keeps one card with hairlines.
 - **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
-  in the link's colour with ⇅ at the end, a menu of Manual · Name · Recently played · Key; the Filter sheet holds only
-  the filters. A folder's name is its bar's title beside Back (no head under the bar), Select and its gear beside it.
+  in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), Select and its gear beside it.
 - **Explore is a feed** (R72, Flat's community): the search, the categories as chips, the count and its order (New,
   Most saved, Top rated, `CountSort`), then a card per item (`ExploreFeedCard`): who shared it at its head, its tile
   on its paint with its title and key and meter, a link to its page; at its foot its saves, its stars where enough

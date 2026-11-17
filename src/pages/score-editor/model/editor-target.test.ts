@@ -20,6 +20,7 @@ const NONE: PiecesState = {
 const SONG = {
   id: 'my-1' as const,
   title: 'Morning',
+  added: '2026-11-01T10:00:00.000Z',
   key: 'G' as const,
   meter: '4/4' as const,
   tempo: 90,

@@ -39,7 +39,7 @@ describe('the learner’s pieces', () => {
   } as const
   const state = {
     versions: { bz1: music, bz4: music, romashki: music, gone: music },
-    songs: [{ ...music, id: 'my-1', title: 'Morning' }] as const,
+    songs: [{ ...music, id: 'my-1', title: 'Morning', added: '2026-11-01T10:00:00.000Z' }] as const,
   }
 
   it('find a version of a song, study or listing, one written in degrees too, never of an unknown id', () => {

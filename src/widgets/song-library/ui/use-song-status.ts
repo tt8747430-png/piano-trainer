@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { Entry } from '@/entities/piece'
+import { usePieces, type Entry } from '@/entities/piece'
 import { selectIsLearned, selectPractised, selectSongPlay, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
@@ -9,9 +9,10 @@ const DAY = 86_400_000
 
 /**
  * When a song was last played, as the R72 board says it: within a week the day said in words
- * ("Today", "3 days ago"), then the date ("9 Nov"). Its first letter a capital, as it may open a line.
+ * ("Today", "3 days ago"), then the date ("9 Nov"). Its first letter a capital where it opens a
+ * line, as it may.
  */
-function playedWhen(at: string, locale: string, now: number): string {
+function playedWhen(at: string, locale: string, now: number, opens = true): string {
   const then = new Date(at)
   const days = Math.round(
     (new Date(now).setHours(0, 0, 0, 0) - new Date(then).setHours(0, 0, 0, 0)) / DAY,
@@ -20,12 +21,13 @@ function playedWhen(at: string, locale: string, now: number): string {
     days < 7
       ? new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-days, 'day')
       : new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }).format(then)
-  return said.charAt(0).toLocaleUpperCase(locale) + said.slice(1)
+  return opens ? said.charAt(0).toLocaleUpperCase(locale) + said.slice(1) : said
 }
 
 /**
  * A song's row's third line (the R72 board's "Bar 9 of 16 · Today"): where it stands (Learned, the bar
- * it stopped at, Learning, or Not started), then when it was last played, where it has been.
+ * it stopped at, Learning, or Not started), then when it was last played, where it has been; a song of
+ * the learner's never played, when it was added ("Not started · Added 4 Nov").
  */
 export function useSongStatus(entry: Entry): string {
   const { t } = useTranslation(['songs', 'common'])
@@ -33,13 +35,17 @@ export function useSongStatus(entry: Entry): string {
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const at = useProgress((state) => selectPractised(state)[entry.id])
   const play = useProgress(selectSongPlay(entry.id))
+  const added = usePieces((state) => state.songs.find((song) => song.id === entry.id)?.added)
   const stopped = play && play.at > 0 && play.at < play.bars ? play : undefined
   const status = learned
     ? t('common:learned.done')
     : stopped
       ? t('continue.bar', { bar: stopped.at + 1, total: stopped.bars })
       : at
-        ? t('table.learning')
+        ? t('row.learning')
         : t('row.notStarted')
-  return at ? `${status} · ${playedWhen(at, locale, Date.now())}` : status
+  if (at) return `${status} · ${playedWhen(at, locale, Date.now())}`
+  if (added)
+    return `${status} · ${t('row.added', { when: playedWhen(added, locale, Date.now(), false) })}`
+  return status
 }

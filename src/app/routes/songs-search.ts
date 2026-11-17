@@ -1,34 +1,19 @@
-import { isStage } from '@/entities/step'
-import type { ExploreCategory, FolderSearch, SongsFilter, SongsHome } from '@/pages/songs'
+import type {
+  AllSongsSearch,
+  ExploreCategory,
+  FolderSearch,
+  SongsFilter,
+  SongsHome,
+} from '@/pages/songs'
 import { readText } from '@/shared/lib'
-import { keyParam, parseKey } from '@/shared/lib/music'
 import { routeSearch, type Raw } from './read-search'
 
-// The library's filters, at Home and in a folder alike (ADR 0106): in the URL, never remembered.
-export const SONGS_DEFAULTS: SongsFilter = {
-  q: '',
-  stage: 'any',
-  key: '',
-  favourites: false,
-  folder: 'any',
-  learned: 'any',
-}
-/** A key as a song is written in, spelled as written (a song in G♭ is not one in F♯); none if none reads. */
-function readSongKey(raw: unknown): SongsFilter['key'] {
-  const key = typeof raw === 'string' ? parseKey(raw) : null
-  return key ? keyParam(key) : ''
-}
+// The library's search, at Home and in a folder alike (ADR 0106, R72): in the URL, never remembered.
+export const SONGS_DEFAULTS: SongsFilter = { q: '' }
 function readSongsSearch(raw: Raw): SongsFilter {
-  return {
-    q: readText(raw.q, SONGS_DEFAULTS.q),
-    stage: isStage(raw.stage) ? raw.stage : SONGS_DEFAULTS.stage,
-    key: readSongKey(raw.key),
-    favourites: raw.favourites === true,
-    folder: raw.folder === 'none' ? 'none' : 'any',
-    learned: raw.learned === 'yes' || raw.learned === 'no' ? raw.learned : 'any',
-  }
+  return { q: readText(raw.q, SONGS_DEFAULTS.q) }
 }
-// A folder's: the filters, and its Edit (the folder's name and look in place), entered from its ✎ or
+// A folder's: the search, and its Edit (the folder's name and look in place), entered from its ✎ or
 // a folder row's Edit.
 export const FOLDER_DEFAULTS: FolderSearch = { ...SONGS_DEFAULTS, edit: false }
 const readFolderSearch = (raw: Raw): FolderSearch => ({
@@ -36,8 +21,14 @@ const readFolderSearch = (raw: Raw): FolderSearch => ({
   edit: raw.edit === true,
 })
 export const folderSearch = routeSearch(readFolderSearch, FOLDER_DEFAULTS)
-// All songs (R72, Flat's library): every song in one list, searched, sorted and filtered as Home was.
-export const allSongsSearch = routeSearch(readSongsSearch, SONGS_DEFAULTS)
+// All songs (R72, Flat's library): every song in one list, searched and sorted; My songs' Favourites
+// card opens it on the favourites alone.
+const ALL_SONGS_DEFAULTS: AllSongsSearch = { ...SONGS_DEFAULTS, favourites: false }
+const readAllSongsSearch = (raw: Raw): AllSongsSearch => ({
+  ...readSongsSearch(raw),
+  favourites: raw.favourites === true,
+})
+export const allSongsSearch = routeSearch(readAllSongsSearch, ALL_SONGS_DEFAULTS)
 
 // A song's page (R30 S4): in Edit or not, entered from its ✎.
 

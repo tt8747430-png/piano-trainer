@@ -128,8 +128,8 @@ describe('the order', () => {
 
   it('keeps the sort chosen', () => {
     const store = fresh()
-    setSort(store, 'recent')
-    expect(store.getState().sort).toBe('recent')
+    setSort(store, 'title')
+    expect(store.getState()).toMatchObject({ sort: 'title', direction: 'ascending' })
   })
 })
 

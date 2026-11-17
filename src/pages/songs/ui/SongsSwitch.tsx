@@ -6,11 +6,6 @@ import type { SongsHome, SongsView } from '../model/explore-view'
 /** What a view starts from: nothing searched, filtered, chosen or opened of the other's. */
 const FRESH: Omit<SongsHome, 'view'> = {
   q: '',
-  stage: 'any',
-  key: '',
-  favourites: false,
-  folder: 'any',
-  learned: 'any',
   cat: 'all',
   shelf: '',
 }

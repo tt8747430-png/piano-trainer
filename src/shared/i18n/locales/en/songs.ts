@@ -1,63 +1,23 @@
 export const songs = {
   title: 'Songs',
-  search: 'Search songs',
-  // The search box's hint: short, for a phone's width beside the sort.
-  searchHint: 'Search',
   noChart: 'Chart not available',
-  empty: 'No matching songs.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
   emptyQueryLine: 'Check the spelling, or try a song’s title or its composer.',
-  // A song's stage, as its course places it (ADR 0053).
-  stage: 'Level',
-  anyStage: 'Any',
-  emptyStage: 'No songs here at the “{{stage}}” level.',
-  emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” level.',
-  emptyFavourites: 'No favourites here yet.',
-  emptyLearned: 'No learned songs here yet.',
-  emptyLearning: 'No songs you are learning here yet.',
-  emptyKey: 'No songs here in {{key}}.',
-  emptyFilters: 'No songs here match these filters.',
-  emptyQueryFilters: 'No songs match “{{query}}” with these filters.',
-  // Sort and filter's sheet (ADR 0106): Folder, Key and Level, each folding.
-  filters: {
-    folder: 'Folder',
-    any: 'Any',
-    noFolder: 'Not in a folder',
-    key: 'Key',
-    anyKey: 'Any key',
-    // A key chosen, with how many songs here are in it.
-    keyCount: '{{key}} · {{count}}',
-    show_one: 'Show {{count}} song',
-    show_other: 'Show {{count}} songs',
-    showNone: 'No songs to show',
-    chipKey: 'Key: {{key}}',
-    chipStage: 'Level: {{stage}}',
-  },
-  // The library's sort, kept (ADR 0106).
-  // The place chips over the library (canvas 133).
   places: {
-    all: 'All',
+    emptyFavourites: 'No favourites yet',
+    emptyFavouritesLine: 'The songs you mark as favourite show here.',
     favourites: 'Favourites',
-    learning: 'Learning',
-    learned: 'Learned',
-    label: 'Show',
   },
   sort: {
     label: 'Sort by',
-    manual: 'Manual',
-    name: 'Name',
-    recent: 'Recently played',
-    key: 'Key',
-    // As the sort's button by the search shows it: a word or two.
-    short: {
-      manual: 'Manual',
-      name: 'Name',
-      recent: 'Recent',
-      key: 'Key',
-    },
+    played: 'Last played',
+    title: 'Title',
+    composer: 'Composer',
+    added: 'Added',
+    ascending: 'Ascending',
+    descending: 'Descending',
   },
-  // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   // Songs' Continue (R30 S3): the last songs played.
   continue: {
     title: 'Recently played',
@@ -65,7 +25,7 @@ export const songs = {
     seeAll: 'See all {{count}}',
   },
   // A song's row (R72): where it stands, when nothing has been played.
-  row: { notStarted: 'Not started' },
+  row: { notStarted: 'Not started', learning: 'Learning', added: 'Added {{when}}' },
   // All songs (R72, Flat's library): every song in one list.
   all: { title: 'All songs', search: 'Search your songs' },
   // Groups and the folders shared with them (R30 S6).
@@ -245,9 +205,9 @@ export const songs = {
     moveTo: 'Move to folder…',
     deleteSays:
       'Deleting a folder permanently removes it and your own songs inside. Built-in songs are moved to the archive.',
-    emptyTitle: 'This folder is empty',
-    emptyDescription: 'Create a song or folder here, or move existing songs into it.',
-    moveIn: 'Move songs here',
+    emptyTitle: 'Nothing in this folder yet',
+    emptyDescription: 'The songs you put in this folder show here.',
+    addSongs: 'Add songs from your library',
     deleting: {
       title: 'Delete “{{name}}”?',
       builtIn: 'The folder and its built-in songs ({{count}}) will be moved to the archive.',
@@ -308,26 +268,8 @@ export const songs = {
     title: 'Your library is empty',
     description: 'Create a song, or restore items from the archive.',
   },
-  // The archive (ADR 0106, Mindscape's): what was archived, to restore.
-  // The laptop's library tree (R30 S2), Apple Music's sidebar.
-  // The laptop's table of songs (R30 S2): its headings.
   table: {
     songs: 'Songs',
-    title: 'Title',
-    chords: 'Chords',
-    composerKey: 'Composer and key',
-    progress: 'Progress',
-    learning: 'Learning',
-    played: 'Last played',
-    actions: 'Actions',
-  },
-  tree: {
-    places: 'Places',
-    label: 'Library',
-    all: 'All songs',
-    folders: 'Folders',
-    unfold: 'Show the folders in {{name}}',
-    fold: 'Hide the folders in {{name}}',
   },
   archive: {
     title: 'Archive',

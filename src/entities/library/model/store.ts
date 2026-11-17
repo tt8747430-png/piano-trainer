@@ -9,6 +9,7 @@ import {
   isOwnFolderId,
   isPieceIdText,
   LIBRARY_SORTS,
+  SORT_DIRECTIONS,
   MOST_FOLDERS,
   MOST_PIECES,
   ownFolderNumber,
@@ -17,6 +18,7 @@ import {
   type FolderId,
   type FolderLook,
   type LibrarySort,
+  type SortDirection,
   type SavedFolder,
   type SongPlace,
 } from './types'
@@ -27,7 +29,7 @@ import { isEmptyDetails, sanitiseSongDetails, type SongDetails } from './song-de
 export type CardPlace = FolderId | 'home'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 6
+export const LIBRARY_VERSION = 7
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -45,6 +47,8 @@ export interface LibraryState {
   /** The learner's own songs deleted, the newest first, each saying where it stood (R34). */
   readonly trash: readonly TrashedSong[]
   readonly sort: LibrarySort
+  /** Which way the sort runs. */
+  readonly direction: SortDirection
   /** The next own folder's number: a deleted folder's id is never given again. */
   readonly nextFolder: number
   /** How each place draws its rows, where the learner (or an editor, for everyone) styled them (B9). */
@@ -63,7 +67,8 @@ export const INITIAL_LIBRARY: LibraryState = {
   favourites: [],
   archive: [],
   trash: [],
-  sort: 'manual',
+  sort: 'played',
+  direction: 'descending',
   nextFolder: 1,
   cardLooks: {},
   songLooks: {},
@@ -86,6 +91,7 @@ const isFolderId = (value: unknown): value is FolderId =>
 const isPicture = isOneOf(FOLDER_PICTURES)
 const isPaint = isOneOf(FOLDER_PAINTS)
 const isSort = isOneOf(LIBRARY_SORTS)
+const isDirection = isOneOf(SORT_DIRECTIONS)
 
 /** An own folder's look where its save has none that reads. */
 const OWN_LOOK: FolderLook = { picture: 'music', paint: 'sand' }
@@ -193,7 +199,8 @@ function sanitize(persisted: unknown): LibraryState {
     favourites: songsOf(saved.favourites, new Set()),
     archive: archive.slice(0, MOST_PIECES),
     trash: trash.slice(0, MOST_PIECES),
-    sort: isSort(saved.sort) ? saved.sort : 'manual',
+    sort: isSort(saved.sort) ? saved.sort : INITIAL_LIBRARY.sort,
+    direction: isDirection(saved.direction) ? saved.direction : INITIAL_LIBRARY.direction,
     nextFolder: Math.max(next, past, 1),
     songLooks: songLooksOf(saved.songLooks),
     songDetails: songDetailsOf(saved.songDetails),

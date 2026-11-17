@@ -18,6 +18,8 @@ import { useSongsViews } from './SongsSwitch'
 const CARD =
   'flex min-h-20 min-w-0 items-center gap-4 rounded-[14px] bg-card p-3 text-foreground ring-1 ring-border transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl'
 
+const NOTHING_SEARCHED: SongsFilter = { q: '' }
+
 /**
  * My songs (R72, Flat's library overview; the Songs board): Recently played, a shelf of the songs
  * played with See all, then the Folders as cards (Favourites first, the learner's folders, Shared
@@ -25,11 +27,11 @@ const CARD =
  * All songs, where every song is listed, searched, sorted and selected. New floats at the foot on a
  * phone and is the bar's on a laptop.
  */
-export function SongsOverview({ filter }: { filter: SongsFilter }) {
+export function SongsOverview() {
   const { t } = useTranslation('songs')
   const views = useSongsViews('mine')
   const laptop = useMediaQuery(LIBRARY_PANES)
-  const page = useLibraryPage(null, filter)
+  const page = useLibraryPage(null, NOTHING_SEARCHED)
   const layout = useLibraryLayout()
   const favourites = useLibrary((state) => state.favourites).length
   const songImport = useSongImport(null)
@@ -54,7 +56,12 @@ export function SongsOverview({ filter }: { filter: SongsFilter }) {
         }
       />
       {empty ? (
-        <LibraryEmpty page={page} inFolder={false} filter={filter} onClear={() => undefined} />
+        <LibraryEmpty
+          page={page}
+          place="home"
+          filter={NOTHING_SEARCHED}
+          onClear={() => undefined}
+        />
       ) : (
         <div className="flex flex-col gap-7 lg:gap-9">
           <ContinueShelf more={total} />

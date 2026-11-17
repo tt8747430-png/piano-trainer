@@ -154,7 +154,10 @@ export function makeSong(store: PiecesStore, draft: SongDraft): OwnSongId | null
   const { songs, nextSong } = store.getState()
   const id = ownSongId(nextSong)
   store.setState({
-    songs: [...songs, { id, title, ...chartStart(draft.key, draft.meter, draft) }],
+    songs: [
+      ...songs,
+      { id, title, added: new Date().toISOString(), ...chartStart(draft.key, draft.meter, draft) },
+    ],
     nextSong: nextSong + 1,
   })
   return id
@@ -178,6 +181,7 @@ export function addSong(
       {
         id,
         title: song.title,
+        added: new Date().toISOString(),
         ...song.music,
         ...(author ? { author } : {}),
         ...(publicId ? { publicId } : {}),
