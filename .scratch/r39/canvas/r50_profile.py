@@ -151,16 +151,17 @@ IF9 = lambda c, inner, h='false': f'<sc-if value="{{{{{c}}}}}" hint-placeholder-
 WHO9 = (f'<div aria-label="Canvas: show a state" style="flex: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}"><span style="font-size: 12px; font-weight: 700; color: {SOFT}; padding: 0 4px">CANVAS · SHOW</span>'
         f'<sc-for list="{{{{whoDemo}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="height: 32px; padding: 0 12px; border: 0; border-radius: 16px; background: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 13px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>')
 HEROX = IF9('isSigned', HERO_P, 'true') + IF9('isGuest', GUEST_P)
+# the week under its own heading on the phone too, as every section of the page and as the laptop (loop 63)
+_WK = WEEK[WEEK.index('<div role="img"'):]
+_WKHEAD = WEEK[:WEEK.index('<div role="img"')]
+WEEKL = H2('Last 7 days', f'<span style="min-height: 44px; display: flex; align-items: center; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span>') + WEEK.replace(_WKHEAD[_WKHEAD.index('<div style="display: flex; justify-content: space-between'):], '').replace('margin-top: 12px">', '">', 1)
 p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="Settings.dc.html"))}'
-        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEK + HIST9H + BADGES9H + ACH9, "true")}</main>{TABBAR("Profile")}</sc-if>'
+        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEKL + HIST9H + BADGES9H + ACH9, "true")}</main>{TABBAR("Profile")}</sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{barT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
 # On a laptop the Profile is rows, each holding a pair whose tops meet (owner, 2026-11-17, edge-lines: two free columns
 # crossed each other's edges): the week beside the badges, the practice history beside the achievements, every box
 # under its own heading.
-_WK = WEEK[WEEK.index('<div role="img"'):]
-_WKHEAD = WEEK[:WEEK.index('<div role="img"')]
-WEEKL = H2('Last 7 days', f'<span style="min-height: 44px; display: flex; align-items: center; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span>') + WEEK.replace(_WKHEAD[_WKHEAD.index('<div style="display: flex; justify-content: space-between'):], '').replace('margin-top: 12px">', '">', 1)
 _CELL = lambda x: f'<div class="pcell" style="display: flex; flex-direction: column; gap: 12px">{x}</div>'  # a row's two boxes share their bottom edge
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 32px; align-items: stretch"><style>.pcell > :last-child{{flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center}}</style>'
         f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9, "true")}</div>'
