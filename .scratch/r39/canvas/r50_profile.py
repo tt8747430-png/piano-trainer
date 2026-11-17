@@ -78,7 +78,7 @@ ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First lesson done', 'Ea
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
            f'<span style="flex: none; width: 52px; height: 44px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{r.a}}}}</span>'
            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="font-family: {SERIF}">{{{{r.c}}}}</span> · {{{{r.e}}}}</span>'
-           f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
+           f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
            f'<span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 HIST9H = H2('Practice history', SEEALL9('goHistory')) + BOX(f'<sc-for list="{{{{runLatest}}}}" as="r" hint-placeholder-count="3">{RUNROW9}</sc-for>')
 CHART30 = CARD(f'<div style="display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">'

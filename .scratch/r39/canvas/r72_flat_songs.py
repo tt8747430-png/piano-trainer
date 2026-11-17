@@ -138,7 +138,7 @@ def PLAYLISTROWS(href, shared_href, w=64, card=True):
         if listed:  # a hairline from the name's edge to the right, as an inset grouped list draws it
             box = f'border-radius: 0; background: linear-gradient({LINE}, {LINE}) no-repeat {w + 16}px 0 / calc(100% - {w + 16}px) {1 if i else 0}px; '
         out += (f'<a href="{shared_href if face else href}" style="{box}min-height: {w + 16}px; box-sizing: border-box; padding: {"8px 12px 8px 0" if listed else f"8px {12 if card else 8}px"}; display: flex; align-items: center; gap: {16 if card else 12}px; color: {INK}; text-decoration: none">{PLCOVER(c, k == "heart", songs, face, w)}'
-                f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: {17 if card else 15}px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: {14 if card else 13}px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span></span>'
+                f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: {16 if card else 15}px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: {14 if card else 13}px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span></span>'
                 + (f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span>' if card else '') + '</a>')
     return out
 # One New everywhere in Songs (owner, 2026-11-17: "the floating actions should also be consistent how they open"):
