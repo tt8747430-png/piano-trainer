@@ -18,8 +18,8 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
   const id = useId()
   const courses = coursesOn(shelf)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-1.5">
-      <h2 id={id} className="px-1 font-sans text-sm font-semibold text-muted-foreground">
+    <section aria-labelledby={id} className="flex flex-col gap-2">
+      <h2 id={id} className="px-4 font-sans text-sm font-semibold text-muted-foreground">
         {t(`shelves.${shelf}`)}
       </h2>
       <ul className="flex flex-col rows-hairline overflow-hidden card">
