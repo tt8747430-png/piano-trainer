@@ -84,7 +84,7 @@ LEGAL_JS = js('const DOCS = ' + json.dumps({'Privacy Policy': PRIV, 'Terms of Se
     return { ...common(st, set), docs: seg(['Privacy Policy', 'Terms of Service'], d, (x) => S({ doc: x })), docT: d, otherT: d === 'Privacy Policy' ? 'Terms of Service' : 'Privacy Policy', toOther: () => S({ doc: d === 'Privacy Policy' ? 'Terms of Service' : 'Privacy Policy' }), secs: DOCS[d].map(([h, t], i) => ({ h, t, id: 's' + i, href: '#s' + i, bg: i ? 'transparent' : 'var(--fill, #EEE9E2)', fw: i ? 400 : 600 })),
       states: [['Terms of Service', d === 'Terms of Service', { doc: 'Terms of Service' }, { doc: 'Privacy Policy' }]]
         .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => S(on ? off : o) })) };''')
-SECS = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><section id="{{{{s.id}}}}" style="display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 16px"><h2 style="margin: 0; font-size: 19px; font-weight: 700">{{{{s.h}}}}</h2>'
+SECS = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><section id="{{{{s.id}}}}" style="display: flex; flex-direction: column; gap: 8px; scroll-margin-top: 16px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{{{{s.h}}}}</h2>'
         f'<p style="margin: 0; font-size: 16px; line-height: 1.55; max-width: 65ch; text-wrap: pretty">{{{{s.t}}}}</p></section></sc-for>')
 LHEAD = f'<span style="font-size: 14px; color: {SOFT}">Last changed 4 November 2026</span>'
 lgph = (f'{TOP("Settings.dc.html", "{{docT}}", "", "Settings")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 20px 48px; display: flex; flex-direction: column; gap: 20px">'
