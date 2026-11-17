@@ -798,13 +798,12 @@ export const editor = {
       midi: 'MIDI keyboard',
     },
     title: 'Score settings',
-    // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
+    // The gear's first page (R31-E, Flat's one menu): the score's acts, then its settings, untitled.
     acts: {
       view: 'Score view',
       transpose: 'Transpose',
       record: 'Record a take',
       takes: 'Takes',
-      settings: 'Settings',
     },
     names: {
       title: 'Title',

@@ -734,7 +734,6 @@ export const editor: LocaleResources['editor'] = {
       transpose: 'Транспонировать',
       record: 'Записать дубль',
       takes: 'Дубли',
-      settings: 'Настройки',
     },
     names: {
       title: 'Название',

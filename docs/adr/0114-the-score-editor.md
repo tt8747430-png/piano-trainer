@@ -80,7 +80,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone; on
   a laptop a 400-wide card hung 8 under the bar's ··· at its right edge, over the music, closed by a click outside, as the
   EditorLaptop board's popover; titled with the song's name, "Saved on this device" or "Saved to your account" under it for the
-  learner's own song or version; a page at a time with Back): Title and credits (its
+  learner's own song or version; a page at a time with Back): its groups untitled, parted by space alone (no headings over a drawer's
+  groups, the owner's ruling; research F21's titled groups not built): Title and credits (its
   value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Record a take, Takes; Settings, each one tap away by its name
   alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano, MIDI keyboard and, where keys type them
   (a fine pointer), Shortcuts with ? as its value; Export… (the learner's own song or version, saved as it

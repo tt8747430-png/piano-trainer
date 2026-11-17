@@ -195,7 +195,7 @@ function MainPage({
         )}
       </SettingsGroup>
       {example ? null : (
-        <SettingsGroup flush title={t('scoreSettings.acts.settings')}>
+        <SettingsGroup flush>
           <RowTrigger
             title={t('scoreSettings.pages.instruments')}
             icon={Music2}
@@ -264,7 +264,7 @@ function MainPage({
         </SettingsGroup>
       )}
       {draft ? (
-        <SettingsGroup flush title={t('original.more')}>
+        <SettingsGroup flush>
           {draft.rows}
         </SettingsGroup>
       ) : null}

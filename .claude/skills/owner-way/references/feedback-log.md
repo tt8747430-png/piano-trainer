@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, the editor's menu groups untitled (the boards' MENUCARD; the Player's ruling "i don't like the headings or titles of the settings sections"):** its "Settings" and "Publishing" labels are gone, the groups parted by space; research F21's "This score" and "Editor" titles were not built for the same ruling (2026-11-17).
 - **Loop round 61, a slower hand's chord written as one (research F24):** keys struck within 80 ms were one chord, so a slower player's chord split into notes; the window is Dorico's default 100 ms, fixed, with no new setting (fewer settings) (2026-11-17).
 - **Loop round 61, Shortcuts from the editor's menu on a laptop (research F23, Flat's rail; canvas v369):** the shortcuts sheet opened only with ?; where keys type them, the menu's settings end with Shortcuts, ? its value, on EditorLaptop and EditorDraftLaptop and in the app (2026-11-17).
 - **Loop round 61, no Playback sound row (canvas v368):** the editor boards' menu drew "Playback sound · Grand piano", but the app has one piano sound, so the row could change nothing; it is gone from the four editor boards ("if a control's effect cannot be seen or heard, it is wrong") (2026-11-17).
