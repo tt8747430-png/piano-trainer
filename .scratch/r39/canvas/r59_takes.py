@@ -12,14 +12,20 @@ TKS_SRC = r'''
     const review = st.page === 'review', grid = st.grid || '1/8', raw = !!st.hideRaw, into = st.into || 'Both staves';
     const drop = (id) => S({ gone: gone.concat([id]), sheet: null, page: null, last: id, toast: 'Take deleted', toastUndo: true });
     const noneOn = takes.length === 0;
+    const selOn = !!st.sel && !review, picked = (st.picked ?? []).filter((id) => takes.some((t) => t.id === id)), n = picked.length;
+    const ck = (on) => ({ ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#B5A99B', ckMark: on ? 1 : 0 });
+    const dropMany = (ids) => S({ gone: gone.concat(ids), sel: false, picked: [], sheet: null, lastMany: ids, toast: ids.length === 1 ? 'Take deleted' : ids.length + ' takes deleted', toastUndo: true });
     const states = [{ l: 'No takes yet', bg: noneOn ? '#332921' : '#EEE9E2', fg: noneOn ? '#FEFDFB' : '#332921', pick: () => S({ gone: noneOn ? [] : [1, 2, 3], page: null }) }];
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
-      isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
+      isList: !review, isReview: review, pageT: review ? 'Review your recording' : selOn ? (n ? n + ' selected' : 'Select takes') : 'Takes',
+      selOn, selOff: !selOn, canSel: !selOn && takes.length > 0, toggleSel: () => S({ sel: !selOn, picked: [] }),
+      selDl: () => S({ sel: false, picked: [], toast: (n || takes.length) === 1 ? '1 take saved as MIDI' : (n || takes.length) + ' takes saved as MIDI', toastUndo: false }), selDel: () => dropMany(n ? picked : takes.map((t) => t.id)),
+      selDlL: n ? 'Download' : 'Download all', selDelL: n ? 'Delete' : 'Delete all', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: (e) => S({ sheet: 'more', at: t.id, menuPos: ANCHOR(e, 170) }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, ...ck(picked.includes(t.id)), on2: picked.includes(t.id) ? 'true' : 'false', tap: () => S({ picked: picked.includes(t.id) ? picked.filter((x) => x !== t.id) : [...picked, t.id] }), on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id && !selOn ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: (e) => S({ sheet: 'more', at: t.id, menuPos: ANCHOR(e, 170) }) })),
       moreOn: st.sheet === 'more', menuPos: st.menuPos ?? 'right: 16px; top: 120px', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved', toastUndo: false }), del: () => drop(at.id),
-      undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),
+      undo: () => S({ toast: null, gone: st.lastMany ? gone.filter((g) => !st.lastMany.includes(g)) : gone.filter((g) => g !== st.last), lastMany: null }),
       atN: at.n, atD: at.d,
       grids: seg(['1/4', '1/8', '1/16', '1/4t', '1/8t'], grid, (l) => S({ grid: l })),
       rawOn: raw, rawOnBg: raw ? '#7FB685' : '#DAD1C8', rawOnX: raw ? 22 : 2, toggleRaw: () => S({ hideRaw: !raw }),
@@ -32,6 +38,16 @@ PLAYMINI = (f'<button type="button" aria-label="Play" onClick="{{{{r.play}}}}" s
 TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{PLAYMINI}'
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; justify-content: center; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
          f'<button type="button" aria-label="Take actions" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
+TKCHECK = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; margin: 0 10px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+TKHIT = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{r.on2}}}}" aria-label="{{{{r.n}}}}" onClick="{{{{r.tap}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
+assert TKROW.count('{PLAYMINI}') == 0 and TKROW.count(PLAYMINI) == 1
+_TKMORE = TKROW[TKROW.index('<button type="button" aria-label="Take actions"'):TKROW.index('</button></div>', TKROW.index('aria-label="Take actions"')) + len('</button>')]
+TKROW = TKROW.replace(_TKMORE, f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{_TKMORE}</sc-if>', 1)
+TKROW = TKROW.replace('<div style="min-height: 64px; display: flex;', '<div style="position: relative; min-height: 64px; display: flex;', 1).replace(PLAYMINI, TKHIT + TKCHECK + f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYMINI}</sc-if>', 1)
+TKSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
+_TKSELIN = SELACT('{{selDlL}}', 'selDl', ACTIC['Export']) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
+TKSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_TKSELIN, 34)}</sc-if>'
+TKSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_TKSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 440px; bottom: 28px') + '</sc-if>'
 TKLIST = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROW}</sc-for></div>', 'true')
           + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'))
 
@@ -58,20 +74,20 @@ REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span s
 BACKB = f'<button type="button" aria-label="Back" onClick="{{{{toList}}}}" data-tip="Back" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button>'
 TKS_MORE = ROWMENU('moreOn', '{{moreT}}', [('action', 'Review', 'doReview'), ('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
 TKS_INTO = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{intoList}}}}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{o.l}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{o.mark}}}}</span></button></sc-for></div>'
-tksph = (IF('isList', TOP('Editor.dc.html', 'Takes', '', 'Amazing Grace'), 'true') + IF('isReview', TOP('', 'Review your recording', '', 'Takes', BACKB))
-         + NARROW(IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(340))) + TOASTS)
+tksph = (IF('isList', TOP('Editor.dc.html', '{{pageT}}', TKSEL, 'Amazing Grace'), 'true') + IF('isReview', TOP('', 'Review your recording', '', 'Takes', BACKB))
+         + NARROW(IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(340))) + TKSELBAR + TOASTS)
 TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type="button" aria-current="{{r.cur}}" onClick="{{r.pick}}" style="flex: 1; border: 0; background: transparent; padding: 0; font: inherit; text-align: left;', 1)
           .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1).replace('background: {{r.pbg}}', 'background: {{r.pbgL}}', 1))
 assert TKROWL != TKROW and '</a>' not in TKROWL
 TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL}</sc-for></div>', 'true'))
-tkslm = (LTITLEBAR('Takes', '', 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
+tkslm = (LTITLEBAR('{{pageT}}', TKSEL, 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
          + IF('some', f'<main style="flex: 1; min-height: 0; padding: 0 40px 32px; display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 40px; align-items: start">'
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'
               # the review stands on the paper beside the list, never a card holding cards (scan-first 6; edge-lines 3)
               f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">'
               f'{REVIEW(900)}</section></main>', 'true')
          + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
-         + TOASTL)
+         + TKSELBAR_L + TOASTL)
 TKS_MOREL = ROWMENU('moreOn', '{{moreT}}', [('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
 detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
        TKS_MORE + BSHEET('intoOn', 'Into', TKS_INTO),
