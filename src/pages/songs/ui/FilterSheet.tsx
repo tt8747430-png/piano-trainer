@@ -33,7 +33,7 @@ function FilterFields({ page, filter }: { page: LibraryPage; filter: SongsFilter
   const set = useSetSearch<SongsFilter>()
   const { scope } = page.view
   const keys = keysIn(scope)
-  const held = stagesIn(scope)
+  const held = stagesIn(scope, page.levelOf)
   // A choice in the URL stays offered while nothing here holds it, so it can be taken off.
   const stages = STAGES.filter((stage) => held.includes(stage) || stage === filter.stage)
   const keyed = keys.some((each) => each.key === filter.key) || filter.key === ''

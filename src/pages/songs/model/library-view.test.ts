@@ -54,6 +54,7 @@ const lookups: ViewLookups = {
   compare: (a, b) => a.localeCompare(b, 'en'),
   home: 'Home',
   allSongs: 'All songs',
+  levelOf: (id) => pieceStage(id) ?? null,
 }
 const view = (filter: Partial<SongsFilter> = {}, folder: string | null = null, at = layout) =>
   libraryView(at, folder as never, { ...NONE, ...filter }, 'manual', lookups)
@@ -209,7 +210,7 @@ describe('the keys', () => {
 describe('stagesIn', () => {
   it('offers the levels the songs hold, in order', () => {
     const all = SONG_COLLECTIONS.flatMap((collection) => collection.entries)
-    const stages = stagesIn(all)
+    const stages = stagesIn(all, lookups.levelOf)
     expect(stages.length).toBeGreaterThan(0)
     expect(new Set(stages).size).toBe(stages.length)
   })

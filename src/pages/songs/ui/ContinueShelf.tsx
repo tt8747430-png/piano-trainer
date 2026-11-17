@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useLibrary } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire } from '@/entities/piece'
 import { songsToContinue, useProgress } from '@/entities/progress'
+import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
 import { PieceShelfCover } from '@/widgets/piece-cover'
 
@@ -24,7 +25,7 @@ export function ContinueShelf({ more }: { more?: number } = {}) {
   const learned = useProgress((state) => state.learned)
   const archived = useLibrary((state) => state.archive)
   const gone = new Set(archived.flatMap((entry) => (entry.kind === 'song' ? [entry.id] : [])))
-  const shown = songsToContinue(songs, learned)
+  const shown = songsToContinue(songs, (id) => learned[pieceStepId(id)] !== undefined)
     .flatMap(([id, play]) => {
       const entry = gone.has(id) ? undefined : repertoire.entry(id)
       return entry && entry.kind !== 'listing' ? [{ entry, play }] : []

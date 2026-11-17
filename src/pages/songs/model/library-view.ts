@@ -1,4 +1,3 @@
-import { pieceStage } from '@/entities/course'
 import {
   childFolders,
   folderPath,
@@ -59,6 +58,8 @@ export interface ViewLookups {
   readonly home: string
   /** Every song's heading at Home, under the folders: Songs, as the laptop's table and the boards name it. */
   readonly allSongs: string
+  /** A song's level: the learner's own, else its course's. */
+  readonly levelOf: (id: PieceId) => Stage | null
 }
 
 /** The filters that narrow, besides the search: what the Filter button counts and its chips name. */
@@ -144,7 +145,7 @@ export function libraryView(
   const keeps = (entry: Entry) =>
     (filter.folder === 'any' || loose.has(entry.id)) &&
     (filter.learned === 'any' || learnedOrLearning(entry.id)) &&
-    (filter.stage === 'any' || pieceStage(entry.id) === filter.stage) &&
+    (filter.stage === 'any' || lookups.levelOf(entry.id) === filter.stage) &&
     (filter.key === '' || songKeyParam(entry) === filter.key) &&
     (!filter.favourites || lookups.favourites.has(entry.id)) &&
     matchesQuery(entryWords(entry), filter.q)
@@ -251,8 +252,11 @@ export function libraryView(
  * The levels the songs hold, in order, whatever is searched or chosen (so the choice stays put while
  * a search is typed): a level no song holds is never offered.
  */
-export function stagesIn(entries: readonly Entry[]): Stage[] {
-  const held = new Set(entries.map((entry) => pieceStage(entry.id)))
+export function stagesIn(
+  entries: readonly Entry[],
+  levelOf: (id: PieceId) => Stage | null,
+): Stage[] {
+  const held = new Set(entries.map((entry) => levelOf(entry.id)))
   return STAGES.filter((stage) => held.has(stage))
 }
 

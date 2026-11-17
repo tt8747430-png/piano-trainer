@@ -1,6 +1,6 @@
 import { useForgetScreens } from '@/shared/lib'
 import { useNavigate } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   libraryCatalog,
@@ -17,6 +17,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
+import { pieceStage } from '@/entities/course'
 import { byLastOpened, selectLearned, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,
@@ -67,6 +68,12 @@ export function useLibraryPage(
   const repertoire = useRepertoire()
   const favourites = useLibrary(selectFavourites)
   const sort = useLibrary(selectSort)
+  const details = useLibrary((state) => state.songDetails)
+  // A song's level as the learner places it, else as its course does (the research's Songs item 3).
+  const levelOf = useCallback(
+    (id: PieceId) => details[id]?.level ?? pieceStage(id) ?? null,
+    [details],
+  )
   const practised = useProgress(selectPractised)
   const learnedSteps = useProgress(selectLearned)
   const folderName = useFolderName()
@@ -100,6 +107,7 @@ export function useLibraryPage(
         compare,
         home: t('library.home'),
         allSongs: t('table.songs'),
+        levelOf,
       },
       // Every song at Home while browsing; Select drags in the library's own places.
       { tree, everySong: !tree && !selecting },
@@ -115,6 +123,7 @@ export function useLibraryPage(
     favourites,
     learnedSteps,
     practised,
+    levelOf,
     t,
     tree,
     selecting,
@@ -181,6 +190,7 @@ export function useLibraryPage(
     layout,
     view,
     sort,
+    levelOf,
     favourites,
     pending,
     open: setPending,

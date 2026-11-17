@@ -134,11 +134,11 @@ export function withWaitScore(
  */
 export function songsToContinue(
   songs: Readonly<Partial<Record<PieceId, SongPlay>>>,
-  learned: Readonly<Partial<Record<string, string>>>,
+  learned: (id: PieceId) => boolean,
 ): readonly (readonly [PieceId, SongPlay])[] {
   return Object.entries(songs)
     .flatMap(([id, play]): (readonly [PieceId, SongPlay])[] =>
-      play && play.at > 0 && play.at < play.bars && learned[id] === undefined ? [[id, play]] : [],
+      play && play.at > 0 && play.at < play.bars && !learned(id) ? [[id, play]] : [],
     )
     .toSorted(([, a], [, b]) => Date.parse(b.last) - Date.parse(a.last))
 }
