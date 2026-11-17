@@ -37,6 +37,8 @@ import { TimePicker } from './TimePicker'
 
 /** The app's one ease-out (DESIGN.md's Motion). */
 const EASE = [0.22, 1, 0.36, 1] as const
+/** The fold's cross-fade, in seconds. */
+const FADE = 0.15
 /** How long the category's mark takes to slide, in seconds. */
 const SLIDE = 0.22
 
@@ -441,18 +443,30 @@ export function PaletteSheet({
             onFold={(next) => unfold(!next)}
           />
           <SelectionStrip className="-me-2 pb-2" />
+          {/* The row and the sections cross-fade as it folds and unfolds (research F19), never a jump. */}
           {unfolded ? (
-            <div
+            <motion.div
+              key="sections"
               ref={box}
               onScroll={onScroll}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: FADE, ease: EASE }}
               className="relative flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain pt-1 pb-3"
             >
               <Laid form="grid">
                 <Sections />
               </Laid>
-            </div>
+            </motion.div>
           ) : (
-            <ToolRow category={category} />
+            <motion.div
+              key="row"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: FADE, ease: EASE }}
+            >
+              <ToolRow category={category} />
+            </motion.div>
           )}
           {/* Flat's tab bar at the foot, and the button that opens every section above it. */}
           <div className="flex shrink-0 items-center gap-2 pt-1">
