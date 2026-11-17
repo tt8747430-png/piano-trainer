@@ -5,6 +5,7 @@
 // Prints one line per layer: board · opener → layer, then PROBLEM lines:
 //   OUTSIDE  the layer runs past the screen;  CUT  a word runs past the layer's edge;  OVERLAP  two controls cross;
 //   SHEET ON A LAPTOP  a phone's bottom sheet drawn on a laptop (a laptop opens a popover, menu or centred dialog);
+//   HEADING  a caption as near the group above as its own;  UNBALANCED  a dialog's top and bottom insets differ;
 //   SMALL  a control under 32 tall or wide with no larger reach;  EMPTY  a layer with no words;  THROWS  a page error.
 import { readFileSync, readdirSync } from 'node:fs'
 import { chromium } from 'playwright'
@@ -33,6 +34,22 @@ const MEASURE = ([want, lap, before]) => {
         if (ctl[i].contains(ctl[j]) || ctl[j].contains(ctl[i])) continue
         const a = ctl[i].getBoundingClientRect(), c = ctl[j].getBoundingClientRect()
         if (Math.min(a.right, c.right) - Math.max(a.left, c.left) > 2 && Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top) > 2) { p.push('OVERLAP “' + (ctl[i].textContent || ctl[i].getAttribute('aria-label') || '').trim().slice(0, 20) + '” × “' + (ctl[j].textContent || ctl[j].getAttribute('aria-label') || '').trim().slice(0, 20) + '”'); break outer }
+      }
+      // a caption heads what follows it: nearer its own control than the group above (proximity)
+      const vis = (e) => e && e.getBoundingClientRect().height > 0 && getComputedStyle(e).position !== 'absolute'
+      for (const h of L.querySelectorAll('h3, h4')) {
+        if (!vis(h)) continue
+        let prev = h.previousElementSibling; while (prev && !vis(prev)) prev = prev.previousElementSibling
+        let next = h.nextElementSibling; while (next && !vis(next)) next = next.nextElementSibling
+        if (!next && h.parentElement !== L) { next = h.parentElement.nextElementSibling; if (!prev) { prev = h.parentElement.previousElementSibling; while (prev && !vis(prev)) prev = prev.previousElementSibling } }
+        if (!prev || !next) continue
+        const hb = h.getBoundingClientRect(), up = hb.top - prev.getBoundingClientRect().bottom, down = next.getBoundingClientRect().top - hb.bottom
+        if (up >= 0 && down >= 0 && up <= down) { p.push('HEADING “' + h.textContent.trim().slice(0, 24) + '” ' + Math.round(up) + ' above, ' + Math.round(down) + ' below'); break }
+      }
+      // a centred dialog or popover holds its content in the middle: top and bottom insets alike
+      if (!(Math.abs(R.left - S.left) < 2 && Math.abs(R.right - S.right) < 2)) {
+        const kids = [...L.children].filter(vis)
+        if (kids.length) { const t = kids[0].getBoundingClientRect().top - R.top, b = R.bottom - kids[kids.length - 1].getBoundingClientRect().bottom; if (L.scrollHeight <= L.clientHeight + 1 && Math.abs(t - b) > 4) p.push('UNBALANCED top ' + Math.round(t) + ', bottom ' + Math.round(b)) }
       }
       const by = L.getAttribute('aria-labelledby'); return { role: L.getAttribute('role'), label: L.getAttribute('aria-label') || (by && document.getElementById(by) ? document.getElementById(by).textContent.trim() : ''), p }
 }
