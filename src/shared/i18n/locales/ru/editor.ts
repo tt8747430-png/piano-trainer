@@ -8,6 +8,8 @@ export const editor: LocaleResources['editor'] = {
   unsaved: 'Не удалось сохранить изменение. Партитура возвращена к последней сохранённой версии.',
   savedHere: 'Сохранено на этом устройстве',
   savedAccount: 'Сохранено в вашем аккаунте',
+  noMidi: 'Нет',
+  exportFormats: 'MusicXML, MIDI',
   goToBar: { title: 'Перейти к такту', bar: 'Такт', of: 'из {{count}}' },
   dock: 'Воспроизведение и запись',
   tools: 'Инструменты нот',

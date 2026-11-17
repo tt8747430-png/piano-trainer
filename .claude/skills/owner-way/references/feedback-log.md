@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, the editor boards' menu carries the app's rows (canvas v371):** the four editor boards drew Credits, Instruments, Version history, Layout, MIDI keyboard and Takes, missing Score view, Transpose, Note input, Recording and On-screen piano; they draw the app's three groups now (the score's acts; its settings by name; Export and Print), and the app's MIDI keyboard says the keyboard connected or None, and Export names MusicXML, MIDI, as the boards' values (2026-11-17).
 - **Loop round 61, Record a take in the note band (the Editor boards, loop round 46):** it was a row in the ··· menu; it stands between Piano keys and Play, a crimson dot in its ring, on both sizes, and is gone from the menu; a lesson's example has none (2026-11-17).
 - **Loop round 61, the score stays under the eye (research F20, checked):** hiding or showing the keys leaves the caret's line where it was mid-score (476 → 476 at 1710, 407 → 407 at 402); only at the score's end, with no room to scroll, does the music settle down (2026-11-17).
 - **Loop round 61, no "Use for new songs" in Layout (research F22, not built):** a saved layout default would make Reset mean two things and add a hidden setting; every new song starts from the one layout, and Reset returns to it ("fewer settings") (2026-11-17).

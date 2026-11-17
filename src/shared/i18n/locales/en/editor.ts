@@ -8,6 +8,9 @@ export const editor = {
   // Under the menu's title (the boards' ED_SAVED): where the learner's own song or version is kept.
   savedHere: 'Saved on this device',
   savedAccount: 'Saved to your account',
+  // The menu's MIDI keyboard row with none connected, and what Export writes (the boards' values).
+  noMidi: 'None',
+  exportFormats: 'MusicXML, MIDI',
   // ⌘G's card over the sheet's head (research F11, Flat's and Dorico's): a bar's number, out of how many.
   goToBar: { title: 'Go to bar', bar: 'Bar', of: 'of {{count}}' },
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.

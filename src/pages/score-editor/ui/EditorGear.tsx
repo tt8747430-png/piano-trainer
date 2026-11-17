@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
 import type { Piece } from '@/entities/piece'
-import { MidiControl } from '@/features/connect-midi'
+import { MidiControl, useMidiConnection } from '@/features/connect-midi'
 import { useOpenShortcuts } from '@/features/shortcuts-help'
 import { SongExportSheet } from '@/features/song-files'
 import { useKeyName } from '@/shared/i18n'
@@ -143,6 +143,12 @@ function MainPage({
     (state) => state.draft.staves.length + (state.draft.leadSheet ? 0 : 1),
   )
   const count = useTakes((state) => selectTakesOf(state, takes.pieceId).length)
+  // The keyboard connected, by its name, as the boards' MIDI keyboard row says; None while none is.
+  const { connection } = useMidiConnection()
+  const midi =
+    connection.kind === 'ready' && connection.status.state === 'connected'
+      ? connection.status.devices.join(', ')
+      : t('noMidi')
   const example = meta.kind === 'example'
   return (
     <div className="flex flex-col gap-5">
@@ -226,6 +232,7 @@ function MainPage({
             title={t('scoreSettings.pages.midi')}
             icon={Cable}
             paint="grass"
+            value={midi}
             render={<Link to="/settings/connect-piano" />}
           />
           {/* Its shortcuts, where keys type them (F23, Flat's rail ending with Shortcuts). */}
@@ -250,6 +257,7 @@ function MainPage({
               title={t('songs:export.action')}
               icon={Download}
               paint="sky"
+              value={t('exportFormats')}
               onClick={onExport}
             />
           ) : null}
