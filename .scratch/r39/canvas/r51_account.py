@@ -32,11 +32,11 @@ SI_JS = js(r'''
       sendLink: () => okEmail ? S({ view: 'forgotSent', fe: '' }) : S({ fe: 'email' }), savePw: () => okPw ? S({ view: 'saved', fe: '' }) : S({ fe: 'pw' }),
       sentT: 'We sent a link to ' + email + '. Open it on this device to finish creating your account.', fsentT: 'If ' + email + ' has an account, a link to choose a new password is on its way.' };''')
 INP = lambda label, val, on, ring, err_cond, err, typ='text', eye=False, note='': (
-    f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span>'
-    f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: {{{{{ring}}}}}; padding: 0 4px 0 12px"><input type="{typ}" value="{{{{{val}}}}}" onInput="{{{{{on}}}}}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
+    f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
+    f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: {{{{{ring}}}}}; padding: 0 4px 0 16px"><input type="{typ}" value="{{{{{val}}}}}" onInput="{{{{{on}}}}}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
     + (f'<button type="button" aria-label="{{{{eyeL}}}}" onClick="{{{{eye}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{EYE}</button>' if eye else '') + '</span>'
-    + (f'<span style="margin: 0 4px; font-size: 13px; color: {SOFT}">{note}</span>' if note else '')
-    + f'<sc-if value="{{{{{err_cond}}}}}" hint-placeholder-val="{{{{false}}}}"><span role="alert" style="margin: 0 4px; font-size: 14px; color: {RED}">{err}</span></sc-if></label>')
+    + (f'<span style="margin: 0 16px; font-size: 13px; color: {SOFT}">{note}</span>' if note else '')
+    + f'<sc-if value="{{{{{err_cond}}}}}" hint-placeholder-val="{{{{false}}}}"><span role="alert" style="margin: 0 16px; font-size: 14px; color: {RED}">{err}</span></sc-if></label>')
 EMAIL = INP('Email', 'email', 'setEmail', 'emailRing', 'eEmail', 'Enter an email address, like name@example.com.', 'email')
 PW = INP('Password', 'pw', 'setPw', 'pwRing', 'ePw', 'Use at least 8 characters.', '{{pwType}}', True)
 ERRBOX = f'<sc-if value="{{{{hasErr}}}}" hint-placeholder-val="{{{{false}}}}"><div role="alert" style="border-radius: 12px; background: #F6DEDA; color: #8C1D17; padding: 12px 16px; font-size: 15px; line-height: 1.4">{{{{err}}}}</div></sc-if>'
