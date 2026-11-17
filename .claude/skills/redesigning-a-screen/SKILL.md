@@ -157,6 +157,7 @@ source; installing one is the owner's decision.
 | emilkowalski/skills `emil-design-eng`, `ui-cheatsheet` (MIT) | whether to animate by frequency, durations, origin-aware popovers |
 | benjitaylor/skills `stageshow` (MIT) | the five ways a canvas fails, the exacting designer's look |
 | benjitaylor/agentation (PolyForm Shield) | removed 2026-11-13; the owner's screenshots do its job |
+| Articles: Chawla (trends), Nurkhon (design engineer), Malewicz (UI direction), Babich (DESIGN.md) | glass bars low-key, never hidden; every width between phone and laptop holds; components handed over with every state; tokens by role with when-not; no trend textures |
 | Nine design skills the owner pasted, written for Figma (source and licence not stated) | rewritten for the canvas and installed: `product-designer`, `screen-design`, `state-expander`, `phone-from-laptop`, `ux-writing`, `interface-review`, `spacing-audit`, `design-consistency`, `board-cleanup` |
 | A Firecrawl video and its scrape skill (transcript) | search then scrape for research when the connector is attached; `proxy: "basic"`, never past a bot check; Interact not used |
 | Kevin: Matt Pocock's agent skills v1.3 (transcript) | grill the owner on the open decisions after two rejections of a part, recommendation with each; variants side by side for what talk cannot settle; retro into checks |
