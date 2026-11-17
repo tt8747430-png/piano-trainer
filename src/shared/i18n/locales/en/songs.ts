@@ -316,10 +316,18 @@ export const songs = {
   new: 'New',
   newSong: 'New song',
   recordSong: 'Record',
+  // Record (R72's RECFORM): a song made at once and recorded into.
+  recording: {
+    title: 'Record',
+    name: 'Recording',
+    input: 'Input',
+    click: 'Click',
+    countIn: 'Count-in',
+    start: 'Start recording',
+  },
   // The New dial's lines, what each way of adding does.
   making: {
     title: 'New song',
-    recordTitle: 'Record a song',
     name: 'Name',
     namePlaceholder: 'Song name',
     staves: 'Staves',
@@ -335,7 +343,6 @@ export const songs = {
     keyNone: '{{key}} · no sharps or flats',
     meter: 'Time',
     create: 'Create',
-    createAndRecord: 'Create and record',
     making: 'Making…',
     failed: 'The song could not be made. Try again once you’re online.',
   },

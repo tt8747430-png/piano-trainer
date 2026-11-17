@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Mic } from 'lucide-react'
 import { useState, type FormEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
@@ -63,7 +62,7 @@ function Part({ label, value, children }: { label: string; value?: string; child
  * New song as Flat's new score, one sheet (R72's SONGFORM; a centred dialog on a laptop): its name;
  * its staves (Piano, Melody, Voice and piano); its tempo and bars, stepped; its key, a major key by
  * its signature, sharps over flats, a tile tapped again going back to C major; its time, from the
- * six most common; Create, which opens it in the score editor (`record`: Record pressed there).
+ * six most common; Create, which opens it in the score editor. Record is its own sheet (`RecordSheet`).
  * What more a score needs (a pickup, a choir, a tempo's words) is set in the editor.
  *
  * It is made where the learner is (ADR 0106): in the folder open (`folder`), else at Home, last. An
@@ -75,15 +74,12 @@ export function NewSongSheet({
   onOpenChange,
   folder,
   builtIn,
-  record = false,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   folder: FolderId | null
   /** An editor's new built-in song in this collection, in place of the learner's own. */
   builtIn?: SongCollectionId | undefined
-  /** Made to be played in: the score editor opens with Record pressed. */
-  record?: boolean
 }) {
   const { t } = useTranslation('songs')
   const keyName = useKeyName()
@@ -120,7 +116,7 @@ export function NewSongSheet({
     if (!made.ok) return setFailed(true)
     await navigate({ to: '/edit/$pieceId', params: { pieceId: made.value } })
   }
-  /** Makes the song and opens it in the score editor, Record pressed where it was made to record. */
+  /** Makes the song and opens it in the score editor. */
   const make = () => {
     const id = makeSong(store, { title, key, meter, ...start })
     if (!id) return
@@ -131,7 +127,7 @@ export function NewSongSheet({
         { songs: [id], folders: [] },
         folder,
       )
-    void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })
+    void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record: false } })
   }
   const submit = (event: FormEvent) => {
     event.preventDefault()
@@ -169,7 +165,7 @@ export function NewSongSheet({
       open={open}
       onOpenChange={onOpenChange}
       wide
-      title={t(record && !builtIn ? 'making.recordTitle' : 'making.title')}
+      title={t('making.title')}
       footer={
         <div className="flex flex-col gap-2">
           <Button
@@ -179,8 +175,7 @@ export function NewSongSheet({
             className="w-full"
             disabled={!named || making}
           >
-            {record ? <Mic data-icon="inline-start" aria-hidden /> : null}
-            {making ? t('making.making') : t(record ? 'making.createAndRecord' : 'making.create')}
+            {making ? t('making.making') : t('making.create')}
           </Button>
           {failed ? (
             <p role="alert" className="text-sm text-destructive">

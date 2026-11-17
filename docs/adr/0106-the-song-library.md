@@ -41,7 +41,10 @@ details.
     three tiles; Tempo (♩ = 80, by 4) and Bars (8) stepped; Key, a major key by its signature, sharps over flats, its
     name beside the label (C major when none is tapped); Time from 2/4, 3/4, 4/4, 6/8, 3/8, 12/8; Create, opening
     the score editor. A pickup, a choir or a tempo's words are set in the editor;
-  - New song, New folder and New group are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
+  - **Record** (R72's RECFORM): Input (the piano connected, else Not connected; it opens Connect a piano), Tempo,
+    Click and Count-in (the recorder's saved choices), and Start recording, which makes "Recording" (C major, 4/4)
+    where the learner is and opens it in the score editor with Record pressed;
+  - New song, Record, New folder and New group are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
     (480 for a form, 440 for a name), Cancel in its header and Create at its foot;
   - **New folder** (R72's NEWNAME): a sheet of its name alone, Cancel in its header and Create at its foot; its colour
     is the next paint, changed later from its ··· (Colour). New group's sheet is the same shape;

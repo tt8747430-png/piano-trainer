@@ -308,9 +308,17 @@ export const songs: LocaleResources['songs'] = {
   new: 'Создать',
   newSong: 'Новая песня',
   recordSong: 'Записать',
+  // Запись (R72): песня создаётся сразу, и в неё записывают.
+  recording: {
+    title: 'Запись',
+    name: 'Запись',
+    input: 'Вход',
+    click: 'Метроном',
+    countIn: 'Отсчёт',
+    start: 'Начать запись',
+  },
   making: {
     title: 'Новая песня',
-    recordTitle: 'Записать песню',
     name: 'Название',
     namePlaceholder: 'Название песни',
     staves: 'Нотоносцы',
@@ -326,7 +334,6 @@ export const songs: LocaleResources['songs'] = {
     keyNone: '{{key}} · без знаков',
     meter: 'Размер',
     create: 'Создать',
-    createAndRecord: 'Создать и записать',
     making: 'Создаём…',
     failed: 'Песня не создана. Попробуйте снова, когда будете онлайн.',
   },

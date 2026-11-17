@@ -7,10 +7,11 @@ import { ExportSheet, useSongFiles, type ExportFiles } from '@/features/song-fil
 import type { LibraryPage } from '../model/use-library-page'
 import { DeleteAsk } from './DeleteAsk'
 import { NewSongSheet } from './NewSongSheet'
+import { RecordSheet } from './RecordSheet'
 
 /**
  * What the library's page opens over itself, one at a time (Mindscape's `LibraryDialogs`): Move to…,
- * the folder sheet, the asks before Delete, New song, New group, and Export… of the songs chosen.
+ * the folder sheet, the asks before Delete, New song, Record, New group, and Export… of the songs chosen.
  */
 export function LibraryDialogs({
   page,
@@ -76,11 +77,15 @@ export function LibraryDialogs({
         }}
       />
       <NewSongSheet
-        open={pending?.kind === 'new-song'}
+        open={pending?.kind === 'new-song' && (pending.record !== true || collection !== undefined)}
         onOpenChange={shut}
         folder={folder?.id ?? null}
         builtIn={collection}
-        record={pending?.kind === 'new-song' && pending.record === true}
+      />
+      <RecordSheet
+        open={pending?.kind === 'new-song' && pending.record === true && collection === undefined}
+        onOpenChange={shut}
+        folder={folder?.id ?? null}
       />
       <ExportSheet
         subject={pending?.kind === 'export-chosen' ? pending.what : null}
