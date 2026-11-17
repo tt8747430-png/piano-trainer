@@ -1,3 +1,4 @@
+import re
 # R48: a course (pages/course, the course editor): its page for a learner, the same page in an editor's Edit mode
 # (title and summary in place, Properties: Shelf, Level, Length; Lessons dragged, removed, "Or add one back", Add
 # lesson), its Settings page and Publish. Labels from learn.ts (course, own, edit.course, settings). Exec'd by r41.py.
@@ -57,10 +58,16 @@ def CBODY(lap):
         # Continue), its lessons flow in two balanced columns under it and its songs in a row of three; no side
         # column that runs out (lines.mjs: a bare band under a column)
         lrows = (LROWS.replace('<span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span>', '', 1)
-                 .replace('<div style="position: relative">', '<div style="columns: 2; column-gap: 48px">', 1)
-                 .replace('<a href="Lesson.dc.html" style="position: relative;', '<a href="Lesson.dc.html" style="break-inside: avoid; position: relative;', 1))
+                 .replace('<div style="position: relative">', '<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 24px">', 1)
+                 .replace('<a href="Lesson.dc.html" style="position: relative;', '<a href="Lesson.dc.html" style="break-inside: avoid; position: relative;', 1)
+                 # a row ends where its words end (owner, 2026-11-17, the rows marked: "why don't you flag such
+                 # things"): the title takes its own width, Next stands beside it, and the far chevron goes; the whole
+                 # row is the link, its hover the sign
+                 .replace('<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{l.t}}</span>', '<span style="flex: 0 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{l.t}}</span>', 1)
+                 .replace(f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><span style="color: {SOFT}; display: flex; padding-right: 4px">{CHEV_R}</span></sc-if>', '', 1))
         songs = SONGROWS.replace('overflow: hidden">', 'overflow: hidden; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">', 1)
-        return (f'<div style="display: grid; grid-template-columns: 360px minmax(0, 640px); gap: 40px; align-items: start">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
+        songs = re.sub(r'<span style="color: [^"]*; display: flex[^"]*">' + re.escape(CHEV_R) + '</span>', '', songs)
+        return (f'<div style="display: grid; grid-template-columns: 360px minmax(0, 640px); gap: 40px; align-items: stretch">{COVER.replace("height: 132px;", "min-height: 132px; height: 100%;", 1)}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
                 f'{H2("Lessons")}{lrows}{H2("Guided songs")}{songs}')
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')

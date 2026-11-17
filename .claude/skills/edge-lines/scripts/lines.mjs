@@ -259,12 +259,30 @@ async function analyse(page, scr, phone) {
         if (a.right > c.left + 4 && c.right > a.left + 4) continue // not side by side
         if (Math.abs(a.top - c.top) > 48 || a.top > scr.y + scr.h - 100) continue
         const ab = bottomOf(kids[i]), cb = bottomOf(kids[j]), gap = Math.round(cb - ab)
-        if (gap >= 160 && cb >= scr.y + scr.h - 120) {
+        // owner, 2026-11-17 (the course's cover beside its name, marked): any pair sharing a top, not only one running
+        // to the screen's foot; 48 bare under the shorter one is already a hole beside a full neighbour
+        if (gap >= 48 && cb > ab && Math.min(a.height, c.height) > 40) {
           const key = Math.round(a.left) + ':' + Math.round(a.top)
           if (seen.has(key)) continue; seen.add(key)
           problems.push(`a bare band ${Math.round(a.width)}×${gap}px under the column at x ${Math.round(a.left - scr.x)}, beside one that goes on: the page's width is left unused (balance; put what the column holds in the bar, the foot or a band across the top, and let the content take the width)`)
         }
       }
+    }
+  }
+  // A row cut in two (owner, 2026-11-17, a course's lesson rows marked: the title at the left, its chevron and Next
+  // 400px away): on a wide screen a list row whose words end far from its trailing mark reads as two things
+  // (proximity); the row is too wide for what it holds: narrow the list, set it in columns, or bring the end mark in.
+  if (scr.w >= 700) {
+    const cut = new Set()
+    for (const row of document.querySelectorAll('main a, main [role=button], main li')) {
+      if (!vis(row) || row.closest('nav, [role=dialog], [data-float]')) continue
+      const r = row.getBoundingClientRect(); if (r.width < 420 || r.height > 120) continue
+      const leaves = [...row.querySelectorAll('*')].filter((e) => vis(e) && !e.children.length && e.getBoundingClientRect().width > 4)
+      if (leaves.length < 2) continue
+      const xs = leaves.map((e) => e.getBoundingClientRect()).sort((p, q) => p.left - q.left)
+      let best = 0
+      for (let i = 1; i < xs.length; i++) { const end = Math.max(...xs.slice(0, i).map((b) => b.right)); best = Math.max(best, xs[i].left - end) }
+      if (best > 240 && !cut.has(Math.round(r.top))) { cut.add(Math.round(r.top)); problems.push(`a row cut in two at y ${Math.round(r.top - scr.y)}: ${Math.round(best)}px bare between its words and its end (proximity): narrow the list or set it in columns, or bring the end in`) }
     }
   }
   // Two acts of different weight in one box: a box holding a filled (honey) button and another button of another fill.
