@@ -20,7 +20,6 @@ export const settings = {
   pages: {
     general: 'General',
     storage: 'Storage and backup',
-    onScreenPiano: 'On-screen piano',
     connectPiano: 'MIDI devices',
     computerKeys: 'Computer keyboard',
     selectionToolbar: 'Selection toolbar',
@@ -29,13 +28,9 @@ export const settings = {
     feedback: 'Report a problem',
     about: 'About',
   },
-  // The on-screen piano's page: its groups.
+  // Storage and backup's Piano sound.
   piano: {
-    essentials: 'Keys',
-    sound: 'Sound',
-    look: 'Display',
-    place: 'Placement',
-    play: 'While you play',
+    sound: 'Piano sound',
   },
   progress: {
     reset: 'Reset progress',

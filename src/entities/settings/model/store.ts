@@ -53,13 +53,11 @@ import {
   REMEMBERED_CHORDS,
   defaultKeyboard,
   detectLocale,
-  isKeyDock,
   isDiagramsMode,
   isTextSize,
   isOtherHandLook,
   isCountdown,
   isSpeedStep,
-  isKeySize,
   isBeatLevel,
   isMetronomeSound,
   isSubdivision,
@@ -69,7 +67,6 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  isSwipe,
   isTheme,
   isTouch,
   type ChordFinderSettings,
@@ -101,7 +98,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 52
+export const SETTINGS_VERSION = 53
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -449,19 +446,11 @@ function keysWindows(value: unknown): KeysWindows {
 function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSettings {
   const saved = savedObject<KeyboardSettings>(value)
   return {
-    keySize: isKeySize(saved.keySize) ? saved.keySize : current.keySize,
-    swipe: isSwipe(saved.swipe) ? saved.swipe : current.swipe,
     namedKeys: isNamedKeys(saved.namedKeys) ? saved.namedKeys : current.namedKeys,
-    markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
-    chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
-    autoplay: typeof saved.autoplay === 'boolean' ? saved.autoplay : current.autoplay,
-    dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:
       typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
-    pedals: saved.pedals === 'all' || saved.pedals === 'sustain' ? saved.pedals : current.pedals,
-    volume: isVolume(saved.volume) ? saved.volume : current.volume,
   }
 }
 

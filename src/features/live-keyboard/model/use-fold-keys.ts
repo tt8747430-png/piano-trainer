@@ -20,14 +20,14 @@ export function useFoldKeys(screen: KeysScreen = 'reading'): {
   fold: (on: boolean) => void
 } {
   const store = useSettingsStoreApi()
-  const { folded, foldedLandscape, dock } = useSettings(selectKeyboard)
+  const { folded, foldedLandscape } = useSettings(selectKeyboard)
   const onSide = useMediaQuery(LANDSCAPE_PHONE) && screen === 'reading'
   return {
     folded: onSide ? foldedLandscape : folded,
     fold: (on) =>
       morph(
         () => setKeyboard(store, onSide ? { foldedLandscape: on } : { folded: on }),
-        `keys-${on ? 'fold' : 'unfold'}-${dock}`,
+        `keys-${on ? 'fold' : 'unfold'}`,
       ),
   }
 }

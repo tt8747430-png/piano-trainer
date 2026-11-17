@@ -276,20 +276,6 @@ const generalRoute = createRoute({
   path: '/settings/general',
   component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
-const onScreenPianoRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/on-screen-piano',
-  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
-})
-/** Computer keys is a part of On-screen piano (R29): its old link opens there. */
-const computerKeysRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/computer-keys',
-  beforeLoad: () => {
-    throw redirect({ to: '/settings/on-screen-piano', replace: true })
-  },
-  component: lazyRouteComponent(settingsScreens, 'OnScreenPianoPage'),
-})
 // The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
 const selectToolbarRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1113,8 +1099,6 @@ const routeTree = rootRoute.addChildren([
     adminSectionRoute,
     settingsRoute,
     generalRoute,
-    onScreenPianoRoute,
-    computerKeysRoute,
     selectToolbarRoute,
     swipeActionsRoute,
     storageRoute,

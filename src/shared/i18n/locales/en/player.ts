@@ -237,7 +237,6 @@ export const player = {
     songGroup: 'This song',
     shareGroup: 'Share',
     metronome: 'Metronome sound and beats',
-    onScreenPiano: 'On-screen piano',
     speed: 'Playback speed',
     speedStepInfo:
       'The tempo increase after each clean pass while speed training works up to the song’s tempo.',

@@ -39,14 +39,3 @@ export const CAMERA_ANGLES = ['seat', 'above'] as const
  * or above, looking down more steeply on the keys.
  */
 export type CameraAngle = (typeof CAMERA_ANGLES)[number]
-
-export const KEY_DOCKS = ['bottom', 'top'] as const
-/** Where a page's keys stay while it scrolls: over the tab bar, or under the screen's bar. */
-export type KeyDock = (typeof KEY_DOCKS)[number]
-
-/**
- * The pedals the bar's Sustain works (R31-P, R34): the sustain pedal alone, or with the soft and
- * sostenuto pedals in its menu.
- */
-export const PEDALS_SHOWN = ['sustain', 'all'] as const
-export type PedalsShown = (typeof PEDALS_SHOWN)[number]

@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { shownText } from '@/shared/test/shown-text'
 import { renderApp } from '@/app/testing/render-app'
-import { setKeyboard } from '@/features/set-preference'
 import type { LiveEvent } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
@@ -261,15 +260,11 @@ describe('Practice → Scales and keys', () => {
     expect(screen.getByRole('link', { name: 'C major' })).toBeInTheDocument()
   })
 
-  it('plays a scale up its octave as it is chosen, unless Settings turns that off', async () => {
+  it('plays a scale up its octave as it is chosen', async () => {
     const user = userEvent.setup()
-    const { audio, settingsStore } = await renderApp('/practice/scales')
+    const { audio } = await renderApp('/practice/scales')
     await pickIn(user, 'Tonic', 'D')
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([62, 64, 66, 67, 69, 71, 73, 74])
-    act(() => setKeyboard(settingsStore, { autoplay: false }))
-    const played = audio.played.length
-    await pickIn(user, 'Tonic', 'E')
-    expect(audio.played).toHaveLength(played)
   })
 
   it('lists the scales in a menu, keys, then modes, blues, the symmetric scales and the others', async () => {

@@ -220,7 +220,6 @@ export const player: LocaleResources['player'] = {
     songGroup: 'Эта песня',
     shareGroup: 'Поделиться',
     metronome: 'Звук и доли метронома',
-    onScreenPiano: 'Экранная клавиатура',
     speed: 'Скорость воспроизведения',
     speedStepInfo:
       'Прибавка темпа после каждого чистого прохода, пока тренировка темпа доходит до темпа песни.',

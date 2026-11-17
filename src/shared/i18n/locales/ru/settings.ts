@@ -19,7 +19,6 @@ export const settings: LocaleResources['settings'] = {
   pages: {
     general: 'Основные',
     storage: 'Хранилище и копии',
-    onScreenPiano: 'Экранная клавиатура',
     connectPiano: 'MIDI-устройства',
     computerKeys: 'Клавиатура компьютера',
     selectionToolbar: 'Панель выделения',
@@ -29,11 +28,7 @@ export const settings: LocaleResources['settings'] = {
     about: 'О приложении',
   },
   piano: {
-    essentials: 'Клавиши',
-    sound: 'Звук',
-    look: 'Отображение',
-    place: 'Размещение',
-    play: 'Во время игры',
+    sound: 'Звук фортепиано',
   },
   progress: {
     reset: 'Сбросить прогресс',

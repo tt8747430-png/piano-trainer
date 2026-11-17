@@ -499,7 +499,7 @@ export function PaletteSheet({
     <MotionConfig reducedMotion="user">
       <section
         aria-label={t('panel.label')}
-        className="mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] flex max-h-[50dvh] min-h-0 shrink-0 flex-col rounded-t-sheet border-t border-hairline bg-card px-[max(var(--gutter),env(safe-area-inset-left))] pb-[max(--spacing(3),env(safe-area-inset-bottom))] elevation-2 [[data-keys=bottom]:has(>[data-area=keys])_&]:pb-3"
+        className="mr-[calc(-1*max(var(--gutter),env(safe-area-inset-right)))] ml-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))] flex max-h-[50dvh] min-h-0 shrink-0 flex-col rounded-t-sheet border-t border-hairline bg-card px-[max(var(--gutter),env(safe-area-inset-left))] pb-[max(--spacing(3),env(safe-area-inset-bottom))] elevation-2 [:has(>[data-area=keys])_&]:pb-3"
       >
         <fieldset disabled={takes.stage !== 'idle'} className="contents">
           <Grip

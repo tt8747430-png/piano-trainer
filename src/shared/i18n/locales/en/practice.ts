@@ -1137,7 +1137,6 @@ export const practice = {
       voicingInfo:
         'Smooth voice leading moves each chord to the nearest notes of the one before; block chords play each in root position.',
       relaid: 'Laid out in {{meter}}',
-      onScreenPiano: 'On-screen piano',
       follow: 'Follow a MIDI arranger',
       followInfo:
         'The Genos leads: its Start, Stop and clock move the sheet, which plays no sound and sends the Genos the sections you set. Chrome or Edge on a Mac or PC, connected by USB.',

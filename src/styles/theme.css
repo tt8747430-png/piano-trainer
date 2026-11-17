@@ -958,8 +958,7 @@
    At every size a column: the bar (its lead and actions in columns of their own, so neither squeezes
    the other), the sheet taking what is left, Wait mode's line and the keys at the foot. On a phone on
    its side Wait mode's line joins the bar's row, between its lead and its actions, so the sheet keeps
-   the height its row would take. Where the keyboard settings dock the keys at the top
-   (`data-keys='top'`), they sit under the bar. */
+   the height its row would take.*/
 @utility player-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -998,14 +997,6 @@
     z-index: 30;
     margin-bottom: 0.5rem;
   }
-  &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      'bar'
-      'keys'
-      'sheet'
-      'status';
-  }
   /* The Player's transport in its own row at the foot (R31-P): nothing floats over the music. */
   & > [data-area='transport'] {
     grid-area: transport;
@@ -1017,15 +1008,6 @@
       'sheet'
       'status'
       'keys'
-      'transport';
-  }
-  &[data-keys='top']:has(> [data-area='transport']) {
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      'bar'
-      'keys'
-      'sheet'
-      'status'
       'transport';
   }
   /* On a phone on its side the bar is one row, Wait mode's line in it beside its end group, keeping
@@ -1048,27 +1030,12 @@
     & > [data-area='dock'] {
       margin-bottom: 0.25rem;
     }
-    &[data-keys='top'] {
-      grid-template-rows: auto auto minmax(0, 1fr);
-      grid-template-areas:
-        'bar bar bar bar'
-        'keys keys keys keys'
-        'sheet sheet sheet sheet';
-    }
     &:has(> [data-area='transport']) {
       grid-template-rows: auto minmax(0, 1fr) auto auto;
       grid-template-areas:
         'bar bar bar bar'
         'sheet sheet sheet sheet'
         'keys keys keys keys'
-        'transport transport transport transport';
-    }
-    &[data-keys='top']:has(> [data-area='transport']) {
-      grid-template-rows: auto auto minmax(0, 1fr) auto;
-      grid-template-areas:
-        'bar bar bar bar'
-        'keys keys keys keys'
-        'sheet sheet sheet sheet'
         'transport transport transport transport';
     }
   }

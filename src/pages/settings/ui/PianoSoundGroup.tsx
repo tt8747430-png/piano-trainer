@@ -1,11 +1,9 @@
 import { CircleCheck } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { setKeyboard } from '@/features/set-preference'
 import { useLocale } from '@/shared/i18n'
 import { useOnline } from '@/shared/lib'
-import { ActionRow, ConfirmDialog, DangerRow, SettingsGroup, VolumeSlider } from '@/shared/ui'
+import { ActionRow, ConfirmDialog, DangerRow, SettingsGroup } from '@/shared/ui'
 import { usePianoSound } from '../model/use-piano-sound'
 
 /** Bytes as a learner reads them: megabytes to one decimal. */
@@ -17,18 +15,16 @@ const megabytes = (bytes: number, locale: string) =>
   }).format(bytes / 1_000_000)
 
 /**
- * On-screen piano's Sound (loop round 24, canvas v203: "the sound settings go to the storage and
+ * Storage and backup's Piano sound (the board's P_STORAGE; "the sound settings go to the storage and
  * backup"): the grand, how much of it this device keeps and Download for offline use with its
- * progress until all of it is kept (offline it waits, saying it needs the internet); the piano's
- * Volume; and Remove downloaded piano samples, asked first, once some are kept. Where the browser
- * keeps no caches, the Volume alone.
+ * progress until all of it is kept (offline it waits, saying it needs the internet); and Remove
+ * downloaded piano samples, asked first, once some are kept. Where the browser keeps no caches,
+ * nothing.
  */
 export function PianoSoundGroup() {
   const { t } = useTranslation(['settings', 'common', 'player'])
   const locale = useLocale()
   const online = useOnline()
-  const store = useSettingsStoreApi()
-  const keyboard = useSettings(selectKeyboard)
   const piano = usePianoSound()
   const [removing, setRemoving] = useState(false)
   const { sound } = piano
@@ -94,14 +90,6 @@ export function PianoSoundGroup() {
           )}
         </>
       ) : null}
-      <div className="px-4 pt-1 pb-3">
-        <VolumeSlider
-          setting="keyboard.volume"
-          label={t('common:keyboardSettings.volume')}
-          value={keyboard.volume}
-          onChange={(volume) => setKeyboard(store, { volume })}
-        />
-      </div>
       {sound.state === 'known' && sound.kept > 0 ? (
         <DangerRow title={t('pianoSound.remove')} onClick={() => setRemoving(true)} />
       ) : null}

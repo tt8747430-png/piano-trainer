@@ -197,10 +197,6 @@ export function ChordPlayerSettingsPage() {
         <div className="flex flex-col gap-4 lg:pt-[22px]">
           <SettingsGroup flush>
             <RowLink
-              title={t('chordPlayer.settings.onScreenPiano')}
-              render={<Link to="/settings/on-screen-piano" />}
-            />
-            <RowLink
               title={t('chordPlayer.settings.connectPiano')}
               value={midi}
               render={<Link to="/settings/connect-piano" />}

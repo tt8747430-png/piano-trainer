@@ -4,7 +4,6 @@ export {
   EditProfilePage,
   ProfilePrivacyPage,
   GeneralPage,
-  OnScreenPianoPage,
   FeedbackPage,
   SelectToolbarPage,
   SwipeActionsPage,

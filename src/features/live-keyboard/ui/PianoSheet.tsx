@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useState, type ReactNode } from 'react'
+import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setKeyboard } from '@/features/set-preference'
 import {
   CAMERA_ANGLES,
   CHORD_LABELS,
@@ -31,8 +33,9 @@ export type PianoShown = 'hands' | 'keys'
 /**
  * The canvas's Piano sheet, one for every screen with keys (the Player's transport, Chords' bar),
  * opened by the screen's own button (`trigger`): Show the piano, then the 3D piano (the hands at the
- * keys) or the 2D keys as two cards, choosing one shows it; then the Sound and the MIDI keyboard, each
- * a row to its home with its value now.
+ * keys) or the 2D keys as two cards, choosing one shows it; then Labels (a chord's own where the
+ * screen offers them, else Note names | None, every on-screen piano's); then the Sound and the MIDI
+ * keyboard, each a row to its home with its value now.
  */
 export function PianoSheet<R extends string>({
   keys,
@@ -81,6 +84,8 @@ export function PianoSheet<R extends string>({
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
   const online = useOnline()
+  const store = useSettingsStoreApi()
+  const named = useSettings((state) => selectKeyboard(state).namedKeys !== 'none')
   const shown: PianoShown = hands ? 'hands' : 'keys'
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -169,13 +174,31 @@ export function PianoSheet<R extends string>({
                 onChange={labels.onChange}
               />
             </div>
-          ) : null}
+          ) : (
+            <div
+              data-setting="keyboard.namedKeys"
+              className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}
+            >
+              <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
+              <Segmented
+                label={t('pianoSheet.labels')}
+                value={named ? 'names' : 'none'}
+                options={(['names', 'none'] as const).map((each) => ({
+                  value: each,
+                  label: t(`pianoSheet.label.${each}`),
+                }))}
+                onChange={(each) =>
+                  setKeyboard(store, { namedKeys: each === 'names' ? 'c' : 'none' })
+                }
+              />
+            </div>
+          )}
           <SettingsGroup flush>
             <RowLink
               title={t('pianoSheet.sound')}
               value={t('pianoSheet.grand')}
               detail={online ? undefined : t('pianoSheet.offline')}
-              render={<Link to="/settings/on-screen-piano" />}
+              render={<Link to="/settings/storage" />}
             />
             <RowLink
               title={t('pianoSheet.midi')}

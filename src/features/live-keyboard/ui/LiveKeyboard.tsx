@@ -61,13 +61,8 @@ export function LiveKeyboard({
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
 }) {
-  const { typing, keySize, swipe, namedKeys, markNotes } = useSettings(selectKeyboard)
-  const settings = {
-    keySize,
-    swipe,
-    namedKeys: namesKeys ? namedKeys : ('none' as const),
-    markNotes,
-  }
+  const { typing, namedKeys } = useSettings(selectKeyboard)
+  const settings = { namedKeys: namesKeys ? namedKeys : ('none' as const) }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')

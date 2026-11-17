@@ -1,4 +1,4 @@
-import { selectChords, selectKeyboard, useSettings } from '@/entities/settings'
+import { selectChords, useSettings } from '@/entities/settings'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -118,9 +118,7 @@ export function ChordExplorer({
     practised(view)
   }
   const { quality } = built
-  // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
-  // Stop, and it cuts off what played.
-  const { autoplay } = useSettings(selectKeyboard)
+  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   // A key's chords played in it count the key practised (B1's Keys practised, as the walk Player's).
   const progress = useProgressStoreApi()
   const practised = (view: ChordView) => {
@@ -132,7 +130,6 @@ export function ChordExplorer({
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    if (!autoplay) return
     play(chordSounds(chordKeys(view), { arpeggio: false }))
     practised(view)
   }

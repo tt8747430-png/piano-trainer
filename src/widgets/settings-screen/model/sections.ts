@@ -19,14 +19,13 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { Paint } from '@/shared/ui'
-import { KeysIcon, SelectionBarIcon } from '@/shared/ui'
+import { SelectionBarIcon } from '@/shared/ui'
 
 /** One of Settings' own pages: where it is, its name, its picture, and the paths that are its own. */
 export interface SettingsPageEntry {
   readonly to:
     | '/settings/general'
     | '/settings/storage'
-    | '/settings/on-screen-piano'
     | '/settings/connect-piano'
     | '/settings/select-toolbar'
     | '/settings/swipe-actions'
@@ -36,7 +35,6 @@ export interface SettingsPageEntry {
   readonly title:
     | 'pages.general'
     | 'pages.storage'
-    | 'pages.onScreenPiano'
     | 'pages.connectPiano'
     | 'pages.selectionToolbar'
     | 'pages.swipeActions'
@@ -71,12 +69,6 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
   {
     title: 'groups.piano.label',
     pages: [
-      {
-        to: '/settings/on-screen-piano',
-        title: 'pages.onScreenPiano',
-        icon: KeysIcon,
-        paint: 'lilac',
-      },
       {
         to: '/settings/connect-piano',
         title: 'pages.connectPiano',

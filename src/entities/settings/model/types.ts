@@ -6,25 +6,18 @@ import {
   CHORD_LABELS,
   CHORD_RANGES,
   isOneOf,
-  KEY_DOCKS,
-  KEY_SIZES,
   NAMED_KEYS,
   OCTAVE_SHIFTS,
   PEDAL_WAYS,
   SONG_RANGES,
-  SWIPES,
   type CameraAngle,
   type ChordLabels,
   type ChordRange,
-  type KeyDock,
   type SheetView,
-  type KeySize,
   type NamedKeys,
   type OctaveShift,
   type PedalWay,
-  type PedalsShown,
   type SongRange,
-  type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
@@ -111,19 +104,14 @@ export interface TrainerSettings {
 /** How every lesson shows its examples. */
 /** The keyboard settings: the same on every screen, set in Settings › On-screen piano. */
 export interface KeyboardSettings {
-  readonly keySize: KeySize
-  readonly swipe: Swipe
+  /**
+   * What the keys carry (the Piano sheet's Labels, the boards' PIANO_SHEET_2D): the Cs named, or
+   * nothing. Every other choice about the keys went with the On-screen piano page (owner,
+   * 2026-11-15): the keys fit their screen, a swipe scrolls them, the sustain pedal alone.
+   */
   readonly namedKeys: NamedKeys
-  /** A key a page marks (a chord's, a scale's) names its note under its degree. */
-  readonly markNotes: boolean
-  /** The bar names the chord a hand holds. */
-  readonly chordNames: boolean
-  /** The computer keyboard plays the keys. */
+  /** The computer keyboard plays the keys (General's Computer keyboard). */
   readonly typing: boolean
-  /** A chord or a scale chosen on a Practice page plays as it is chosen. */
-  readonly autoplay: boolean
-  /** Where a page's keys stay while it scrolls. */
-  readonly dock: KeyDock
   /** A page's keys hidden from its bar's Keyboard (R34): the screen as the learner left it. */
   readonly folded: boolean
   /**
@@ -131,10 +119,6 @@ export interface KeyboardSettings {
    * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
    */
   readonly foldedLandscape: boolean
-  /** The pedals the bar's Sustain works (R34): sustain alone, or with soft and sostenuto in its menu. */
-  readonly pedals: PedalsShown
-  /** How loud the keys a hand plays sound (the live voice), a whole percent from 0 to 100 (R33). */
-  readonly volume: number
 }
 
 /** The sizes of screen the keys' height is kept for (R34): a phone upright, on its side, a wider screen. */
@@ -582,24 +566,13 @@ export const isSongRange = isOneOf(SONG_RANGES)
 
 /** A new keyboard's settings: the computer keyboard plays where the pointer is fine (a mouse, a trackpad). */
 export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
-  keySize: 'fit',
-  swipe: 'scroll',
   namedKeys: 'c',
-  markNotes: true,
-  chordNames: true,
   typing: finePointer,
-  autoplay: true,
-  dock: 'bottom',
   folded: false,
   foldedLandscape: true,
-  pedals: 'sustain',
-  volume: 100,
 })
 
 export const isTheme = isOneOf(THEMES)
-export const isKeySize = isOneOf(KEY_SIZES)
-export const isSwipe = isOneOf(SWIPES)
-export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)

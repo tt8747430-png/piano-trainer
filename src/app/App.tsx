@@ -35,7 +35,6 @@ import { ErrorListener } from './providers/ErrorListener'
 import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
 import { MidiSync } from './providers/MidiSync'
-import { PianoVolume } from './providers/PianoVolume'
 import { ThemeProvider } from './providers/ThemeProvider'
 import type { Stores } from './composition-root'
 import type { AppRouter } from './router'
@@ -98,7 +97,6 @@ export function App({
                                               <AudioUnlock />
                                               <MidiReconnect />
                                               <MidiSync />
-                                              <PianoVolume />
                                               <ThemeProvider>
                                                 <ShortcutsProvider>
                                                   <RouterProvider router={router} />

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { selectKeyboard, useSettings } from '@/entities/settings'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -69,8 +68,9 @@ export function PinnedKeyboard({
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
-  const docked = useSettings((state) => selectKeyboard(state).dock)
-  const dock = place ?? docked
+  // At the screen's foot, where the hands play (the boards' one piano); under the bar where the keys
+  // are the page's stage.
+  const dock = place ?? 'bottom'
   const { folded, fold } = useFoldKeys(screen)
   const laptop = useMediaQuery(LAPTOP)
   const { keys, marks } = shown

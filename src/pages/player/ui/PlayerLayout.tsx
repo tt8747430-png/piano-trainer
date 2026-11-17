@@ -333,7 +333,7 @@ export function PlayerLayout({
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen keys="bottom" aside={shown === 'diagrams' && practice.state.playing} docked>
+    <PlayerScreen aside={shown === 'diagrams' && practice.state.playing} docked>
       {/* The score's bar, the editor's (ADR 0115, loop round 61): Close; Play · Edit where the
           editor's stands; the views and Settings at the end, one glass group on a phone, the views'
           pill beside Settings on a laptop. The title is the score's. The loop is the transport's (ADR

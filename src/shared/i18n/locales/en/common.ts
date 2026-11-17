@@ -127,11 +127,6 @@ export const common = {
   // The pedals worked from the bar (R34): each one's name, and what it does.
   pedals: {
     sustain: { name: 'Sustain', label: 'Sustain pedal — hold, or tap to latch' },
-    sostenuto: {
-      name: 'Sost.',
-      label: 'Sostenuto pedal — sustains only the notes held as it is pressed',
-    },
-    soft: { name: 'Soft', label: 'Soft pedal (una corda) — softens the tone while held' },
   },
   // The on-screen keyboard's controls in the screen's bar (R34).
   keysWindow: {
@@ -146,54 +141,13 @@ export const common = {
     show: 'Show the keyboard',
     hide: 'Hide the keyboard',
     chord: 'Chord held',
-    morePedals: 'Soft and sostenuto pedals',
-    latched: 'Latched',
     resize: 'Resize keyboard',
   },
-  // The keyboard settings: Settings › On-screen piano.
+  // The computer keyboard's switch: Settings › General.
   keyboardSettings: {
-    pedals: {
-      label: 'Pedals',
-      detail: 'Adds the soft and sostenuto pedals to the Sustain button’s menu.',
-      sustain: 'Sustain only',
-      all: 'All three',
-    },
-    keySize: {
-      label: 'Key size',
-      detail: 'All keys fit the width; a larger size scrolls to follow the music.',
-      fit: 'Fit to music',
-      large: 'Large',
-      piano: 'All keys',
-    },
-    namedKeys: {
-      label: 'Note names',
-      detail: 'Which keys carry their note name.',
-      c: 'On every C',
-      all: 'On every key',
-      none: 'Hidden',
-    },
-    markNotes: 'Note names on highlighted keys',
-    markNotesNote: 'Shows each note’s name beneath its chord tone or scale degree.',
-    chordNames: 'Chord symbol',
-    chordNamesNote: 'Names the chord you hold in the bar.',
-    dock: {
-      label: 'Position',
-      detail: 'Where pages dock their keyboard.',
-      bottom: 'Bottom',
-      top: 'Top',
-    },
-    swipe: {
-      label: 'Swipe gesture',
-      detail: 'Scrolls the keyboard, or plays every key your finger crosses.',
-      scroll: 'Scroll',
-      glissando: 'Glissando',
-    },
-    volume: 'Volume',
     typing: 'Play with computer keyboard',
     typingNote: 'The letter keys play the on-screen piano.',
     typingHint: 'Z and X shift the octave · Space holds the sustain pedal',
-    autoplay: 'Play on selection',
-    autoplayNote: 'Chords and scales sound as soon as you select them on a Practice page.',
   },
   // The computer's shortcuts: the sheet, and the groups every screen shares.
   shortcuts: {

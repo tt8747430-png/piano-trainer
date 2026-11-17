@@ -6,8 +6,11 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
+import { TypingSwitch } from '@/features/live-keyboard'
 import { setLocale, setTheme } from '@/features/set-preference'
+import { ShortcutsButton } from '@/features/shortcuts-help'
 import { LOCALES } from '@/shared/i18n'
+import { hasFinePointer } from '@/shared/lib'
 import { SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { AppearanceChoice, LanguageChoice } from './GeneralChoices'
@@ -15,11 +18,12 @@ import { AppearanceChoice, LanguageChoice } from './GeneralChoices'
 /**
  * Settings › General (canvas 128, "these are very heavy to read"): Appearance as three small screens
  * (Match system split light and dark, Light, Dark), then Language as English | Русский, each its own
- * name, the chosen ringed in ink. How a lesson reads is the lesson's own Settings'; the library's
- * bars are Settings › Library's (R32).
+ * name, the chosen ringed in ink; on a computer, Computer keyboard last (the board's P_GENERAL): its
+ * switch and Shortcuts, what the letters do behind its ⓘ (none on a phone, which has no letters to
+ * play). How a lesson reads is the lesson's own Settings'; the library's bars are Settings › Library's.
  */
 export function GeneralPage() {
-  const { t } = useTranslation('settings')
+  const { t } = useTranslation(['settings', 'common'])
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
@@ -45,6 +49,16 @@ export function GeneralPage() {
           />
         </div>
       </SettingsGroup>
+      {hasFinePointer() ? (
+        <SettingsGroup
+          flush
+          title={t('pages.computerKeys')}
+          info={`${t('common:keyboardSettings.typingNote')} ${t('common:keyboardSettings.typingHint')}`}
+        >
+          <TypingSwitch />
+          <ShortcutsButton />
+        </SettingsGroup>
+      ) : null}
     </SettingsScreen>
   )
 }

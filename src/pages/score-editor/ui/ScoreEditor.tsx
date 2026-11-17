@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import {
   selectEditing,
-  selectKeyboard,
   selectPaletteFolded,
   useSettings,
   useSettingsStoreApi,
@@ -107,7 +106,6 @@ function EditorScreen({
   const panel = usePalettePanel()
   const right = useSettings((state) => selectEditing(state).paletteSide) === 'right'
   const idle = editor.takes.stage === 'idle'
-  const dock = useSettings((state) => selectKeyboard(state).dock)
   const settings = useSettingsStoreApi()
   const folded = useSettings(selectPaletteFolded)
   const fold = (next: boolean) => setPaletteFolded(settings, next)
@@ -181,12 +179,11 @@ function EditorScreen({
       {/* The Player's frame (ADR 0115): its bar's two groups, the work and the keys in the Player's
           places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div
-        data-keys={dock}
         className={cn(
           SCORE_SCREEN,
           // As Flat's, what stands at the foot (the keys, else the palette) runs on under the home
           // indicator to the screen's edge, its own paper filling the inset.
-          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 data-[keys=bottom]:[&>[data-area=keys]]:bg-card data-[keys=bottom]:[&>[data-area=keys]]:pb-safe',
+          '-mb-[calc(env(safe-area-inset-bottom)+0.5rem)] landscape-phone:mb-0 [&>[data-area=keys]]:bg-card [&>[data-area=keys]]:pb-safe',
         )}
       >
         <ScoreBar

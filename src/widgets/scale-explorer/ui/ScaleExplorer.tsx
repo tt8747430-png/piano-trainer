@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import {
   keySignature,
@@ -46,12 +45,10 @@ export function ScaleExplorer({
   const scaleName = useScaleName()
   const keyName = useKeyName()
   const play = usePlay()
-  const { autoplay } = useSettings(selectKeyboard)
   const root = noteFromParam(scale.root)
   const name = scaleName(root, scale.kind)
   const choose = (change: Partial<ScaleView>) => {
     onChange(change)
-    if (!autoplay) return
     const keys = placeScale(noteFromParam(change.root ?? scale.root), change.kind ?? scale.kind, 0)
     play(
       walkSounds(

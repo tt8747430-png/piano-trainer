@@ -3,7 +3,7 @@ import { Plug } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiSummary } from '@/features/connect-midi'
-import { RowLink, SettingsGroup, KeysIcon } from '@/shared/ui'
+import { RowLink, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /**
@@ -25,12 +25,6 @@ export function PracticeSettingsScreen({
     <SettingsScreen title={title} sub={from !== undefined}>
       {children}
       <SettingsGroup flush title={t('groups.piano.label')}>
-        <RowLink
-          title={t('pages.onScreenPiano')}
-          icon={KeysIcon}
-          paint="lilac"
-          render={<Link to="/settings/on-screen-piano" />}
-        />
         <RowLink
           title={t('pages.connectPiano')}
           icon={Plug}

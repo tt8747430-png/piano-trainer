@@ -1,7 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { setKeyboard } from '@/features/set-preference'
 import { midi } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { renderLiveKeyboard as setUp } from '../testing/render-live-keyboard'
@@ -131,30 +130,6 @@ describe('the bar’s Sustain (R34)', () => {
     setUp({ sustained: true })
     expect(sustain()).toHaveAttribute('aria-pressed', 'true')
   })
-
-  it('opens the soft and sostenuto pedals from its menu where all three are shown', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = setUp()
-    expect(screen.queryByRole('button', { name: 'Soft and sostenuto pedals' })).toBeNull()
-    act(() => setKeyboard(settingsStore, { pedals: 'all' }))
-    await user.click(screen.getByRole('button', { name: 'Soft and sostenuto pedals' }))
-    expect(await screen.findByRole('button', { name: /^Soft pedal/ })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /^Sostenuto pedal/ })).toBeInTheDocument()
-  })
-
-  it('keeps a pedal latched from its menu down as the menu closes, a dot saying so', async () => {
-    const user = userEvent.setup()
-    const { audio, settingsStore } = setUp()
-    act(() => setKeyboard(settingsStore, { pedals: 'all' }))
-    await user.click(screen.getByRole('button', { name: 'Soft and sostenuto pedals' }))
-    const soft = await screen.findByRole('button', { name: /^Soft pedal/ })
-    fireEvent.pointerDown(soft, { pointerId: 1, pointerType: 'touch' })
-    fireEvent.pointerUp(soft, { pointerId: 1, pointerType: 'touch' })
-    expect(audio.pedals().soft).toBe(true)
-    await user.keyboard('{Escape}')
-    expect(audio.pedals().soft).toBe(true)
-    expect(document.querySelector('[data-slot="pedals-down"]')).not.toBeNull()
-  })
 })
 
 describe('the chord held, in the bar', () => {
@@ -193,13 +168,6 @@ describe('the chord held, in the bar', () => {
     const { audio } = setUp()
     act(() => void audio.play(chordSounds([60, 64, 67].map(midi), { arpeggio: false }), 0))
     act(() => audio.setNow(0.1))
-    expect(chord()).toBeNull()
-  })
-
-  it('names nothing with Chord symbol off', () => {
-    const { settingsStore } = setUp()
-    act(() => setKeyboard(settingsStore, { chordNames: false }))
-    hold('C4', 'E4', 'G4')
     expect(chord()).toBeNull()
   })
 })
