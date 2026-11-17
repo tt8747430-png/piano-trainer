@@ -1028,6 +1028,7 @@ owner's, typos fixed.
 
 - **A drill's Root is the one root picker (loop 63, 2026-11-17):** Walk the chords and the Chromatic walk chose their root from a wrapped row of eight chips, E♭ alone on a second line; they now use the kit's root grid, all twelve roots in two even rows of six, as Intervals, a progression and an exercise do (one implementation; `CLAUDE.md`: a key or root is one of the pickers; canvas v427).
 - **Check's Hint reaches 44 (loop 63, 2026-11-17):** the quiz's Hint link was 40 tall; it is 44, as every target on a phone (Fitts; canvas v425).
+- **A pattern's style chips reach 44 (loop 63, 2026-11-17):** New pattern's and a pattern's hand chips (Block chords, Alberti, Ballad, Stride …) were 40 tall; they are the kit's 44 chips, 8 apart, as every chip row on a phone (Fitts; canvas v430).
 
 ## Sounds
 
