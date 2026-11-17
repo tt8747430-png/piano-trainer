@@ -30,7 +30,7 @@ import { selectChordPlayer, useSettings, useSettingsStoreApi } from '@/entities/
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { setChordPlayer } from '@/features/set-preference'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, useMediaQuery, WIDE } from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -181,8 +181,9 @@ export function ChordPlayer({
   const book = useMemo(() => styleBook(patterns), [patterns])
   const prefs = useSettings(selectChordPlayer)
   const settingsStore = useSettingsStoreApi()
-  const wideSide = useMediaQuery('(min-width: 64rem)')
-  // The Genos strip in the side column only where there is one (a laptop); over the dock elsewhere.
+  // Two columns from 80rem, as Settings and Songs: below it the sheet takes the width alone.
+  const wideSide = useMediaQuery(WIDE)
+  // The Genos strip in the side column only where there is one; over the dock elsewhere.
   const stripPlace = prefs.arranger === 'side' && !wideSide ? 'card' : prefs.arranger
   const { shown, entry } = hand
   const style = book.get(entry.style)
@@ -552,8 +553,8 @@ export function ChordPlayer({
         onDragEnd={onDrop}
         onDragCancel={() => setInHand(null)}
       >
-        {/* On a laptop the sheet's column and, beside it, the key's chords and the styles (canvas 171). */}
-        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start lg:gap-10">
+        {/* From 80rem the sheet's column and, beside it, the key's chords and the styles (canvas 171). */}
+        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start xl:gap-10">
           <div
             ref={column}
             className={cn(
@@ -625,7 +626,7 @@ export function ChordPlayer({
               ) : null}
             </div>
           </div>
-          <aside className="hidden flex-col gap-8 lg:flex">
+          <aside className="hidden flex-col gap-8 xl:flex">
             {prefs.follow && stripPlace === 'side' ? (
               <ArrangerStrip
                 follow={follow}

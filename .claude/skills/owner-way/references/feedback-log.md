@@ -995,6 +995,8 @@ owner's, typos fixed.
 
 - **Intervals in the app as its board, at every width (port, 2026-11-17; craft-details, every width holds):** at 1024 the app still stood the interval in a 230 column beside a sticky column of Simple · Compound tabs and tiles, "Perfect fifth" wrapping, and kept the size line and the ⓘ's Up the rulings removed. It now reads as `r61_intervals.py`: the keys a band edge to edge, 28 over one centred column 880 wide at most (name and ⓘ, the music card, every interval in one grid of seven, 24 apart); no tabs, no size line, the ⓘ holding the meaning, Down and Inverts to. Scales' keys lost their laptop card the same way (one band, the `column` mode gone from the pinned keys).
 
+- **The Chord player's two columns from 80rem (port, 2026-11-17; every width holds):** at 1024 the sheet's column was 270 wide beside the 420 one of the key's chords and styles: the first bar's name cut, the transport hanging over the sidebar's edge. As Settings and Songs, the side column joins at 80rem (`WIDE`); below it the sheet takes the width and the chords and styles are the dock's sheets, as on a phone.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
