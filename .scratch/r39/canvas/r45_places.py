@@ -185,7 +185,10 @@ cl2 = COURSELIST.replace('href="Course.dc.html"', 'href="CourseLaptop.dc.html"')
 # on a laptop the shelves stand side by side, Beginner to Chords and improvisation, every course in sight (owner,
 # 2026-11-15: "the empty space should be properly used")
 _k = cl2.index('</section></sc-for>') + len('</section></sc-for>')
-cl2 = '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start">' + cl2[:_k] + '</div>' + cl2[_k:]
+# the shelves flow as balanced columns (masonry), so a short shelf leaves no hole under it (round 63: a row-aligned
+# grid left 184px of paper under Intermediate, beside Beginner's four courses)
+cl2 = cl2.replace('<section style="display: flex; flex-direction: column; gap: 8px">', '<section style="display: flex; flex-direction: column; gap: 8px; break-inside: avoid; margin-bottom: 24px">')
+cl2 = '<div style="columns: 3; column-gap: 24px">' + cl2[:_k] + '</div>' + cl2[_k:]
 clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + TB("Edit", "editOn"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
         f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
