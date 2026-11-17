@@ -33,7 +33,7 @@ export function PracticeCalendar({ title }: { title: string }) {
   // A Monday to Sunday week for the column names: 5–11 January 2026.
   const weekdays = Array.from({ length: 7 }, (_, i) => narrow.format(new Date(2026, 0, 5 + i, 12)))
   return (
-    <section aria-labelledby={headingId} className="card px-3 pt-2 pb-3.5">
+    <section aria-labelledby={headingId} className="card px-3 pt-2 pb-1">
       <h2 id={headingId} className="sr-only">
         {title}
       </h2>

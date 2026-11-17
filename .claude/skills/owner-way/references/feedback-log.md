@@ -997,6 +997,8 @@ owner's, typos fixed.
 
 - **The Chord player's two columns from 80rem (port, 2026-11-17; every width holds):** at 1024 the sheet's column was 270 wide beside the 420 one of the key's chords and styles: the first bar's name cut, the transport hanging over the sidebar's edge. As Settings and Songs, the side column joins at 80rem (`WIDE`); below it the sheet takes the width and the chords and styles are the dock's sheets, as on a phone.
 
+- **The Streak calendar's card holds its month in its middle (v396; edge-lines, balanced insets):** its arrows stood 8 under the card's top and its last week 14 over its foot, so the month sat high; the foot is 4, the last row's cells 8 from the edge as the arrows are (Streak, StreakLaptop, and the app).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
