@@ -152,7 +152,7 @@ ED_MENU = lambda sfx, vh=('Today', ''): (MENUCARD(('link', 'Title and credits', 
                        f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding-right: 12px"><span style="font-size: 17px; font-weight: 700">Publish in Explore</span>' + INFOB('About publishing', 'tipPub', 'tipPubOn')
                        + INFOTIP('tipPubOn', 'tipPub', 'About publishing', 'Anyone can find, play and save it. You can take it down at any time.', 'right: 0; top: 32px') + '</div>'
                        f'<div style="display: flex">{BTN("Publish", href="SongSettings" + sfx, h=48)}</div></div>')
-FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin-left: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span>'
+FIELD = lambda label, val: (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
                             f'<input value="{val}" placeholder="{label}" style="height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 ED_CREDITS = (FIELD('Title', 'Amazing Grace') + FIELD('Subtitle', '') + FIELD('Words', 'John Newton') + FIELD('Music', 'New Britain') + FIELD('Arranged by', 'Ana Popescu') + FIELD('Copyright', 'Public domain')
               + f'<div style="display: flex">{BTN("Save", "closeSheet", h=48)}</div>')

@@ -20,9 +20,9 @@ def FIELD(label, val, key='', typ='text', note='', noteC=SOFT, eye=False):
     inp = f'<input type="{{{{{key}Type}}}}" ' if eye else f'<input type="{typ}" '
     inp += f'value="{val}" aria-label="{label}" style="flex: 1; min-width: 0; height: 48px; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">'
     e = f'<button type="button" aria-label="{{{{{key}EyeL}}}}" onClick="{{{{{key}Eye}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{EYE}</button>' if eye else ''
-    n = f'<span style="margin: 0 4px; font-size: 13px; color: {noteC}">{note}</span>' if note else ''
-    return (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span>'
-            f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 4px 0 12px">{inp}{e}</span>{n}</label>')
+    n = f'<span style="margin: 0 16px; font-size: 13px; color: {noteC}">{note}</span>' if note else ''
+    return (f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span>'
+            f'<span style="display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 4px 0 16px">{inp}{e}</span>{n}</label>')
 AVA = lambda s, fs: f'<span style="flex: none; width: {s}px; height: {s}px; border-radius: {s // 2}px; background: #E9D8C4; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: {fs}px; color: {INK}">{{{{avatar}}}}</span>'
 DOT = lambda c: f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {c}"></span>'
 BOXG = lambda *rows: '<div style="border-radius: 14px; background: ' + SHEET + '; box-shadow: 0 0 0 1px ' + LINE + '; overflow: hidden">' + ''.join(f'<div style="box-shadow: inset 0 {"-1px" if i < len(rows) - 1 else "0"} 0 {FILL}">{r}</div>' for i, r in enumerate(rows)) + '</div>'
