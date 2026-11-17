@@ -3,7 +3,7 @@ import { addNoteKey } from './add-note'
 import { markBars } from './bar-marks'
 import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
-import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
+import { chosenNotes, chosenSpan, fingerPlace, shownValue, spellSpan, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
 import { singleStaff, staffPlace, ticksOf } from '@/shared/lib/notation'
@@ -365,7 +365,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
           })
     case 'accidental': {
       if (layer === 'chords') return state
-      const next = toggleAccidental(draft, layer, chosenSpan(state), action.accidental)
+      const next = toggleAccidental(draft, layer, spellSpan(state), action.accidental)
       return commit(state, next, {
         struck: null,
         selection: state.selection,
@@ -384,7 +384,7 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     case 'respell':
       return layer === 'chords'
         ? state
-        : commit(state, respellNotes(draft, layer, chosenSpan(state)), {
+        : commit(state, respellNotes(draft, layer, spellSpan(state)), {
             struck: null,
             selection: state.selection,
           })

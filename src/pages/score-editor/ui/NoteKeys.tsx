@@ -6,6 +6,7 @@ import {
   canTie,
   carriesAccidental,
   chosenNotes,
+  spellNotes,
   EDIT_MODES,
   NOTE_VALUES,
   selectionSpan,
@@ -20,7 +21,6 @@ import { isCompound, type Accidental } from '@/shared/lib/music'
 import { TUPLET_COUNTS, type TupletCount } from '@/shared/lib/notation'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { useNotesChosen } from '../model/use-notes-chosen'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
 import { PaletteFormContext, usePaletteForm } from './palette-form'
@@ -107,10 +107,11 @@ const ACCIDENTAL_KEYS = [0, 1, -1] as const satisfies readonly Accidental[]
 function AccidentalKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const chosen = useNotesChosen()
+  // What they act on: the notes chosen, else the note or chord just written (research F6).
+  const spelt = useEditorState((state) => spellNotes(state).length > 0)
   const carried = useEditorState(
     useShallow((state) => {
-      const notes = chosenNotes(state)
+      const notes = spellNotes(state)
       return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
     }),
   )
@@ -127,7 +128,7 @@ function AccidentalKeys() {
         label={label}
         tool={tool}
         pressed={carried[i] ?? false}
-        disabled={!chosen}
+        disabled={!spelt}
         reason={t('reason.chooseNote')}
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
@@ -252,7 +253,7 @@ export function NoteBar() {
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
   const onStaff = useEditorState((state) => state.layer !== 'chords')
-  const chosen = useNotesChosen()
+  const spelt = useEditorState((state) => spellNotes(state).length > 0)
   // A tie acts only where a note there has the same key's note after it; else it greys (Flat's).
   const tieable = useEditorState(
     (state) =>
@@ -328,7 +329,7 @@ export function NoteBar() {
         <PaletteKey
           label={t('respell')}
           tool="respell"
-          disabled={!chosen}
+          disabled={!spelt}
           reason={t('reason.chooseNote')}
           onClick={() => dispatch({ type: 'respell' })}
         >

@@ -28,11 +28,13 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **Every tool acts on what is chosen.** With only a caret, a value sets the next note's value; with notes chosen it
   makes them that long (`setDuration`). Tie (`,`) at the caret joins a note to the same key's note after it, or, in
   note input, holds on the note or chord just written at the value chosen, the caret after it (`tieOn`, Dorico's
-  NoteInput.Tie), so a note held across a barline is typed as it is played. ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
+  NoteInput.Tie), so a note held across a barline is typed as it is played. ♮ ♯ ♭ and Respell, with nothing chosen and nothing at the
+  caret, act on the note or chord just written (`spellSpan`, Flat's sharpLastNote, Dorico's retrospective
+  respelling), so C♯ played on the keys becomes D♭ without going back to it. ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
 - **Only what applies is shown** (R32-B, MuseScore's Properties panel; the owner: "show only the actions relevant at
   that time"): a key that cannot act on what is chosen is not drawn, never greyed (the tie with no note of the same
-  key after it nor one just written before the caret, `canTie`; a dot or tuplet the value cannot take; the accidentals, Respell, the expressions, Roman
-  numeral and Tempo change with no note chosen; a line with nothing to draw over; a field that cannot open there).
+  key after it nor one just written before the caret, `canTie`; a dot or tuplet the value cannot take; the accidentals and Respell with no note chosen nor
+  one just written, the expressions, Roman numeral and Tempo change with no note chosen; a line with nothing to draw over; a field that cannot open there).
   Pitch, Articulations, Ornaments and Dynamics, whose every tool changes notes, say "Select a note to use these
   tools." in place of their grid. The strip holds only the categories that act where the caret writes: in the chord
   row Note (the values), Measures, Key signature, Time signature, Barlines and repeats.
