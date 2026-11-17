@@ -372,6 +372,11 @@ export const songs: LocaleResources['songs'] = {
     count: '{{staff}}: {{count}}',
   },
   public: {
+    reportSong: 'Пожаловаться на песню',
+    reportPattern: 'Пожаловаться на рисунок',
+    publishedOn: 'Опубликовано',
+    playAll: 'Играть с начала',
+    stopAll: 'Стоп',
     title: 'Общая библиотека',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },
     seeAll: 'Все',

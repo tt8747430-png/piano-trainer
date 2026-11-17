@@ -47,8 +47,11 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 **Actions**
 
 - One way to each action. Adding a direct way removes the old one.
-- A screen's own actions go in its bar. What floats is the + that creates, or a page's one primary action at its foot
-  (Play on a detail page, `DESIGN.md`; owner 2026-11-13). One gear per screen, Edit beside the title.
+- A screen's own actions go in its bar. **Nothing floats on a page** (owner, 2026-11-17: "what is with the floating
+  add action, what is with your instructions that tell you to not do this, fix them"; Flat's My scores): the + that
+  creates is a round button in the bar, opening the ways to add; a page's one primary action (Add to my library,
+  Play, Practise) sits in its head, under the title, never floating over the content. What still floats is a tool's own control bar (the Player's,
+  the editor's, a Practice explorer's, centred on its focus, below), never an action. One gear per screen, Edit beside the title.
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
 - In a list of people or things, Add is the list's last row, and a folded list's "Show all n ›" is a quiet link under the card, below Add (owner 2026-11-16); a row's own acts sit behind its ···; the loss of the
   whole thing is its own card at the page's foot (Noji's Participants and deck settings; owner 2026-11-16). Never a

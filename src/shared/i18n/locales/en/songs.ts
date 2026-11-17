@@ -374,6 +374,11 @@ export const songs = {
   // A song someone shared as a link.
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
+    reportSong: 'Report this song',
+    reportPattern: 'Report this pattern',
+    publishedOn: 'Published',
+    playAll: 'Play from the start',
+    stopAll: 'Stop',
     title: 'Public library',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
     seeAll: 'See all',

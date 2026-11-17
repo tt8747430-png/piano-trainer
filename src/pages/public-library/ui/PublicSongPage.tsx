@@ -11,25 +11,25 @@ import {
   usePatternsStoreApi,
   type SharedPattern,
 } from '@/entities/pattern'
-import { readSharedSong, usePieces, usePiecesStoreApi, type SharedSong } from '@/entities/piece'
+import {
+  pieceKey,
+  readSharedSong,
+  usePieces,
+  usePiecesStoreApi,
+  type SharedSong,
+} from '@/entities/piece'
 import { addSong } from '@/features/edit-piece'
 import { saveOwnPattern } from '@/features/manage-patterns'
 import type { NetFailure } from '@/shared/api/network'
 import type { PublicEntry, PublicRating } from '@/shared/api/public-library'
-import { localText, useLocale } from '@/shared/i18n'
+import { localText, useKeyName, useLocale } from '@/shared/i18n'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
-import {
-  BackButton,
-  ButtonLink,
-  Fab,
-  FloatingActions,
-  RoundButton,
-  Said,
-  ScreenHeader,
-} from '@/shared/ui'
+import { BackButton, ButtonLink, Said, ScreenHeader } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ReportDialog, SongPreview, useAuthorName } from '@/widgets/song-preview'
-import { About, Byline, FactChips, ReadingItem } from './PublicItemParts'
+import { About, Byline, Facts, ReadingItem } from './PublicItemParts'
 import { RateStars } from './RateStars'
 
 type Reading =
@@ -79,11 +79,11 @@ function useItem(itemId: string) {
 }
 
 /**
- * An item of Explore (B3, Noji's deck page): its title in the bar with Report; a card that says it
- * is from Explore and not (or now) in the learner's library, who shared it, its stars to read and
- * give, and its saves; what its author wrote of it; its facts; a song's chart to hear on the keys, a
- * pattern's figures. Add to my library, at the foot, copies it in (counted once where they are
- * signed in), and then reads Open in my library.
+ * An item of Explore as Flat's public score page (owner, 2026-11-17): on a laptop an info pane at
+ * the left (its title, who shared it, whether it is in the library and Add to my library, its
+ * stars, what its author wrote, its facts and tags, Report) beside the music under its toolbar; on
+ * a phone the same, the music after the head. Add to my library copies it in (counted once where
+ * they are signed in), then reads Open in my library. Nothing floats.
  */
 export function PublicSongPage() {
   const { t } = useTranslation('songs')
@@ -94,6 +94,11 @@ export function PublicSongPage() {
   const patterns = usePatternsStoreApi()
   const locale = useLocale()
   const navigate = useNavigate()
+  const { t: tm, i18n } = useTranslation(['music', 'piece'])
+  const keyName = useKeyName()
+  const laptop = useMediaQuery(LAPTOP)
+  const keyLabel = tm('music:key.label')
+  const timeLabel = tm('piece:time')
   const { reading, rated } = useItem(itemId)
   const [reporting, setReporting] = useState(false)
   const author = useAuthorName(
@@ -181,9 +186,22 @@ export function PublicSongPage() {
     )
   const { entry } = reading
   const owned = reading.kind === 'song' ? ownSong : ownPattern
-  const facts =
-    reading.kind === 'pattern'
+  const keyFacts =
+    reading.kind === 'song'
       ? [
+          { name: t('public.composer'), value: entry.meta.composer ?? '' },
+          {
+            name: t('public.type'),
+            value: entry.meta.type ? t(`public.types.${entry.meta.type}`) : '',
+          },
+          {
+            name: keyLabel,
+            value: keyName(pieceKey({ id: itemId, kind: 'song', title, ...reading.song.music })),
+            phoneOnly: true,
+          },
+          { name: timeLabel, value: reading.song.music.meter, phoneOnly: true },
+        ]
+      : [
           {
             name: t('public.rightHand'),
             value: localText(RIGHT_FIGURES[reading.pattern.rh].name, locale),
@@ -193,41 +211,87 @@ export function PublicSongPage() {
             value: localText(LEFT_FIGURES[reading.pattern.lh].name, locale),
           },
         ]
-      : []
-  return (
-    <div className="flex flex-col gap-5 pb-24">
-      <ScreenHeader
-        title={title}
-        back={<BackButton />}
-        tools={
-          <>
-            {reading.kind === 'song' ? <PageKeyboardTools /> : null}
-            <RoundButton
-              label={t('public.report')}
-              icon={Flag}
-              onClick={() => setReporting(true)}
-            />
-          </>
-        }
-      />
-      {/* Its overview card, as a song's page has (Noji's deck header): whose it is, its stars and saves. */}
-      <section aria-label={title} className="card flex flex-col gap-4 p-4">
-        <p className="text-sm font-semibold text-muted-foreground">
+  const facts = [
+    ...keyFacts,
+    {
+      name: t('public.publishedOn'),
+      value: new Date(entry.publishedAt).toLocaleDateString(i18n.language, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+    },
+  ].filter((fact) => fact.value !== '')
+  const head = (
+    <>
+      <h1 className="text-[1.625rem] leading-tight font-bold text-balance">{title}</h1>
+      <Byline entry={entry} />
+      {/* Whether it is in the library, then the page's one act, in its head (owner, 2026-11-17: nothing floats). */}
+      <div className="flex flex-col gap-2">
+        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span aria-hidden className="size-2 rounded-full bg-learned" />
           {owned ? t('explore.yours') : t('explore.notYours')}
         </p>
-        <Byline entry={entry} />
-        <RateStars itemId={itemId} rating={entry.rating} onRated={rated} />
-      </section>
-      <About entry={entry} />
-      {/* A song's key, time and tempo, then its chart to hear; a pattern's two figures. */}
-      {reading.kind === 'song' ? <SongPreview song={reading.song} /> : <FactChips facts={facts} />}
-      <FloatingActions>
         {owned ? (
-          <Fab label={t('explore.open')} icon={FolderOpen} extended onClick={open} />
+          <Button size="lg" variant="soft" className="rounded-pill font-bold" onClick={open}>
+            <FolderOpen data-icon="inline-start" />
+            {t('explore.open')}
+          </Button>
         ) : (
-          <Fab label={t('explore.add')} icon={Plus} extended onClick={add} />
+          <Button size="lg" className="rounded-pill font-bold" onClick={add}>
+            <Plus data-icon="inline-start" />
+            {t('explore.add')}
+          </Button>
         )}
-      </FloatingActions>
+      </div>
+    </>
+  )
+  const about = (
+    <>
+      <RateStars itemId={itemId} rating={entry.rating} onRated={rated} />
+      <About entry={entry} />
+      <Facts facts={facts} tags={entry.meta.tags ?? []} />
+    </>
+  )
+  const report = (
+    <button
+      type="button"
+      onClick={() => setReporting(true)}
+      className="flex h-11 items-center gap-2.5 self-start rounded-control px-1 text-[0.9375rem] font-semibold text-muted-foreground hover:text-foreground"
+    >
+      <Flag aria-hidden className="size-5" />
+      {t(reading.kind === 'song' ? 'public.reportSong' : 'public.reportPattern')}
+    </button>
+  )
+  const music = reading.kind === 'song' ? <SongPreview song={reading.song} /> : null
+  return (
+    <div className="flex flex-col gap-5 pb-8">
+      <ScreenHeader
+        title={title}
+        titleOnPage
+        back={<BackButton />}
+        tools={reading.kind === 'song' ? <PageKeyboardTools /> : undefined}
+      />
+      {laptop ? (
+        // Flat's public score: the info pane at the left, the music beside it under its toolbar.
+        <div className="grid grid-cols-[21.25rem_minmax(0,1fr)] items-start gap-8">
+          <aside className="card sticky top-4 flex flex-col gap-4 p-5">
+            {head}
+            <hr className="border-border" />
+            {about}
+            <hr className="border-border" />
+            {report}
+          </aside>
+          <div className="flex min-w-0 flex-col gap-5">{music}</div>
+        </div>
+      ) : (
+        <>
+          {head}
+          {music}
+          <section className="card flex flex-col gap-4 p-4">{about}</section>
+          {report}
+        </>
+      )}
       <ReportDialog itemId={itemId} open={reporting} onOpenChange={setReporting} />
     </div>
   )
