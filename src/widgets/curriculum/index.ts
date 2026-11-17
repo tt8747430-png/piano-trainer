@@ -1,4 +1,5 @@
 export {
+  continuePlace,
   continueStep,
   currentJourney,
   openCourseStep,

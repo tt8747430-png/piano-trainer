@@ -6,7 +6,7 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { LessonIcon } from '@/shared/ui'
-import { continueStep, courseProgress, journeyProgress, useStepTitle } from '@/widgets/curriculum'
+import { continuePlace, continueStep, useStepTitle } from '@/widgets/curriculum'
 
 /**
  * What to do next (ADR 0053), Learn's first row: one card that is the link, Continue and the
@@ -29,19 +29,7 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const Icon = read ? LessonIcon : Play
   const title = stepTitle(step).primary
   const track = 'course' in next ? next.course : next.journey
-  const progress =
-    'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
-  // Which lesson of its track it is, of how many, as the level's and the course's lines number them.
-  const lessonIds =
-    'course' in next
-      ? next.course.lessons.map((lesson) => lesson.id)
-      : next.journey.chapters
-          .flatMap((chapter) => chapter.steps)
-          .flatMap((each) => (each.kind === 'lesson' ? [each.lessonId] : []))
-  const n =
-    step.kind === 'course-lesson' || step.kind === 'lesson'
-      ? lessonIds.indexOf(step.lessonId) + 1
-      : 0
+  const place = continuePlace(next, learned)
   const counted = track.id !== shown
   const face = (
     <>
@@ -54,9 +42,9 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
         </h2>
         {counted ? (
           <span className="text-[0.8125rem]/4 text-muted-foreground">
-            {n > 0
-              ? t('lessonOf', { n, count: lessonIds.length })
-              : t('progress', { learned: progress.done, total: progress.total })}
+            {'n' in place
+              ? t('lessonOf', { n: place.n, count: place.count })
+              : t('progress', { learned: place.done, total: place.total })}
           </span>
         ) : null}
       </span>
