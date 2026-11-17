@@ -38,7 +38,7 @@ export function GroupsPage() {
   const ready = data.kind === 'ready' && data.groups.length > 0
   const sharedWithMe = data.kind === 'ready' ? data.shared.filter((each) => !each.mine) : []
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
+    <div className="flex w-full flex-col gap-6 pb-8 [&>*:not([data-slot=screen-bar])]:max-w-3xl">
       <ScreenHeader
         title={t('groups.title')}
         back={<BackButton />}

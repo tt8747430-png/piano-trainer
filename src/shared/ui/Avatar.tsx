@@ -10,8 +10,8 @@ const SIZE = {
   tree: 'size-6 text-xs',
   /** A byline's: beside a name. */
   byline: 'size-11 text-lg',
-  /** A feed card's head (R72's FEEDCARD): beside who shared it. */
-  feed: 'size-8 text-sm font-bold',
+  /** A feed card's foot (the Explore board's FEEDCARD): beside who shared it. */
+  feed: 'size-6 text-[0.6875rem] font-bold',
   /** Explore's People (R72's PERSON): a person's row. */
   person: 'size-12 text-[1.1875rem] font-bold',
   /** A row's: its tile's size. */

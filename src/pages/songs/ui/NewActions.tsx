@@ -16,7 +16,7 @@ interface Where {
  * it may be done here (R29 B4): a learner's built-in folder has none. It adds, and only adds (Noji's
  * +): the Public library is a place, reached by its own row.
  */
-function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[] {
+export function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[] {
   const { t } = useTranslation('songs')
   const songs = page.may('addSong')
   return [

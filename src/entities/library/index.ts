@@ -61,12 +61,7 @@ export {
 } from './model/permissions'
 export { useCan, usePermissions } from './model/use-can'
 export { LibraryStoreProvider, useLibrary, useLibraryStoreApi } from './model/context'
-export {
-  selectDirection,
-  selectFavourites,
-  selectIsFavourite,
-  selectSort,
-} from './model/selectors'
+export { selectDirection, selectFavourites, selectIsFavourite, selectSort } from './model/selectors'
 export { useLibraryLayout } from './model/use-library-layout'
 export { FolderTile } from './ui/FolderTile'
 export { FOLDER_PICTURE_ICONS } from './ui/folder-pictures'

@@ -1,10 +1,12 @@
 import { Link } from '@tanstack/react-router'
+import { ListMusic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLibrary } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire } from '@/entities/piece'
 import { songsToContinue, useProgress } from '@/entities/progress'
 import { pieceStepId } from '@/entities/step'
 import { useLocale } from '@/shared/i18n'
+import { RowLink } from '@/shared/ui'
 import { PieceShelfCover } from '@/widgets/piece-cover'
 
 /** How many songs Continue holds: the latest few, the rest scroll in from the edge. */
@@ -31,14 +33,27 @@ export function ContinueShelf({ more }: { more?: number } = {}) {
       return entry && entry.kind !== 'listing' ? [{ entry, play }] : []
     })
     .slice(0, SHOWN)
-  if (shown.length === 0) return null
+  if (shown.length === 0 && !more) return null
+  // Nothing played yet: one row to every song, named for where it goes (never a bare heading).
+  if (shown.length === 0)
+    return (
+      <div className="card">
+        <RowLink
+          render={<Link to="/songs/all" />}
+          icon={ListMusic}
+          paint="sand"
+          title={t('all.title')}
+          value={String(more)}
+        />
+      </div>
+    )
   return (
     <section aria-labelledby="songs-continue" className="flex flex-col gap-2">
       <div className="mx-1 flex items-center justify-between gap-3">
         <h2 id="songs-continue" className="font-sans text-xl font-bold">
           {t('continue.title')}
         </h2>
-        {/* See all n (the R72 board): every song, on All songs. */}
+        {/* All n songs (the Songs board): named for where it goes, All songs. */}
         {more ? (
           <Link
             to="/songs/all"

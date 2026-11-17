@@ -32,8 +32,8 @@ export const allSongsSearch = routeSearch(readAllSongsSearch, ALL_SONGS_DEFAULTS
 
 // A song's page (R30 S4): in Edit or not, entered from its ✎.
 
-// Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's Songs or People, its kind chip
-// and a shelf's See all in the URL beside the library's filters.
+// Songs' Home (D1): Songs, or Explore opened from it as a page with Back (never remembered: Songs opens
+// on Songs); Explore's Songs or People, its kind chip and its order in the URL beside the library's search.
 export const SONGS_HOME_DEFAULTS: SongsHome = {
   ...SONGS_DEFAULTS,
   view: 'mine',
@@ -66,8 +66,6 @@ export function readSongsHomeSearch(raw: Raw): SongsHome {
   }
 }
 export const songsHomeSearch = routeSearch(readSongsHomeSearch, SONGS_HOME_DEFAULTS)
-/** What Songs' Home remembers: its view alone; the filters and Explore's are one visit's. */
-export const SONGS_KEPT = ['view'] as const satisfies readonly (keyof SongsHome)[]
 
 // A shared song: its link's text, only read as text here, so the router carries no decoder.
 export const validateSharedSongSearch = (raw: Raw): { song: string } => ({

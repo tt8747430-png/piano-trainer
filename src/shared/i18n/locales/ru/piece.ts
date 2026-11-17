@@ -211,7 +211,7 @@ export const piece: LocaleResources['piece'] = {
     title: 'Настройки',
     open: 'Настройки',
     library: 'Библиотека',
-    folder: 'Папка',
+    folder: 'Плейлист',
     favourite: 'В избранном',
     home: 'Библиотека',
     archived: 'В архиве',

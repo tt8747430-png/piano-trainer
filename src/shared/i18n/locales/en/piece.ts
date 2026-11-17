@@ -211,7 +211,7 @@ export const piece = {
     title: 'Settings',
     open: 'Settings',
     library: 'Library',
-    folder: 'Folder',
+    folder: 'Playlist',
     favourite: 'Favourite',
     home: 'Library',
     archived: 'Archived',

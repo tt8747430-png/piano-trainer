@@ -8,6 +8,7 @@ on comes first, before any filing; (3) one quiet row shape, with search, sort an
 
 ## The rulings as they stand (carried over; feedback-log "Library, adding, publishing" and "Song page")
 
+- **Playlists, honest links (owner, 2026-11-17; canvas v383, the Songs and SharedFolder boards; Flat's My scores 091–097 and flat.io/library):** folders are playlists with mosaic covers; phone: search, New song · Record · Import, Recently played with All n songs, Playlists as rows, Explore; ··· is Archive and Trash only. Laptop: the Playlists pane (Archive, Trash at its foot) beside every song. A shared playlist opens itself, never Groups. This replaces the drawn folders, the Shared with me section, All songs in ···, and the four-card create strip.
 - **My songs is Flat's library, new, with no backwards compatibility** (owner, 2026-11-16: "look at the example apps
   and improve the design with no backwards compatibility … I want new completely new design"; `flat-score-editor`
   091–097). The overview: the title (My songs · Explore) and a glass Search; Recently played as a shelf of engraved

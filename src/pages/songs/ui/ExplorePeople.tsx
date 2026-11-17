@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, SearchX } from 'lucide-react'
+import { ChevronRight, SearchX, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
 import { Avatar, Said } from '@/shared/ui'
@@ -28,7 +28,8 @@ export function peopleOf(entries: readonly PublicEntry[]): readonly Person[] {
 
 /**
  * Explore's People (R72's PERSON, Flat's): who publishes, each a card of their picture, name and how
- * many songs, opening their songs; searched by name. None matching says so, with Clear.
+ * many songs, opening their songs; searched by name. None matching says so, with Clear; nobody yet
+ * publishing under a name (all as "Piano Trainer learner") says that, never "No one matches “”".
  */
 export function ExplorePeople({
   entries,
@@ -47,8 +48,9 @@ export function ExplorePeople({
   if (people.length === 0)
     return (
       <Said
-        icon={SearchX}
-        title={t('explore.noPeople', { query })}
+        icon={wanted ? SearchX : Users}
+        title={wanted ? t('explore.noPeople', { query: query.trim() }) : t('explore.noPeopleYet')}
+        description={wanted ? undefined : t('explore.noPeopleYetLine')}
         action={
           wanted ? (
             <button type="button" onClick={onClear} className="font-semibold text-link">

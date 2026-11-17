@@ -54,6 +54,8 @@ import { createSupabaseGroups, type GroupsPort } from '@/shared/api/groups'
 import { createSupabaseChordShare, type ChordSharePort } from '@/shared/api/chord-share'
 import { createSupabaseProfile, type ProfilePort } from '@/shared/api/profile'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
+import { EXPLORE_SAMPLES } from '@/shared/config'
+import { createSamplePublicLibrary } from './explore-samples'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
 import { safeLocalStorage, type SavingOptions } from '@/shared/lib'
 import { createSyncRunner, type SyncedSave, type SyncRunner } from '@/shared/lib/sync'
@@ -169,9 +171,9 @@ export function createSync(
 /** The cloud the sync talks to: the backend's tables. */
 export const createCloud = (backend: Backend): CloudSync => createSupabaseCloud(backend)
 
-/** The Public library: the project's tables (ADR 0116). */
+/** The Public library: the project's tables (ADR 0116); in development, sample songs where asked. */
 export const createPublicLibrary = (backend: Backend): PublicLibrary =>
-  createSupabasePublicLibrary(backend)
+  EXPLORE_SAMPLES ? createSamplePublicLibrary() : createSupabasePublicLibrary(backend)
 
 /** The learner's profile: the project's `learner_profiles` and `avatars` (B1). */
 export const createProfile = (backend: Backend): ProfilePort => createSupabaseProfile(backend)

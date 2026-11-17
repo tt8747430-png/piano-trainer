@@ -2,10 +2,13 @@ import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Lock, PencilLine } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { FOLDER_PAINTS } from '@/entities/library'
 import { entryTitles, pieceKey, useRepertoire } from '@/entities/piece'
-import { GroupMark, readSharedEntries, useGroupsData } from '@/features/share-folder'
+import { readSharedEntries, useGroupsData } from '@/features/share-folder'
+import { PlaylistCover } from '@/widgets/piece-cover'
 import { songLinkData } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
+import { isOneOf } from '@/shared/lib'
 import { useGroups } from '@/shared/lib/groups'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
 import {
@@ -19,6 +22,8 @@ import {
   SettingsGroup,
 } from '@/shared/ui'
 import { GroupsState, RowsLoading } from './GroupsState'
+
+const isFolderPaint = isOneOf(FOLDER_PAINTS)
 
 /**
  * A folder shared with one of the learner's groups (R30 S6, R32-C): its picture on its paint, who
@@ -69,7 +74,15 @@ export function SharedFolderPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
       <ScreenHeader title={folder.name} large back={<BackButton />} />
       <div className="flex items-center gap-4">
-        <GroupMark look={folder} />
+        <PlaylistCover
+          paint={isFolderPaint(folder.paint) ? folder.paint : 'grass'}
+          songs={entries.flatMap((entry) => {
+            const found = entry.kind === 'built-in' ? repertoire.entry(entry.id) : undefined
+            return found && found.kind !== 'listing' ? [found] : []
+          })}
+          face={folder.mine ? undefined : folder.ownerName}
+          className="size-24 lg:size-28"
+        />
         <div className="flex min-w-0 flex-col gap-1">
           <p className="text-pretty">
             {folder.mine

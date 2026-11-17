@@ -1,127 +1,159 @@
-import { Link } from '@tanstack/react-router'
-import { ChevronRight, Heart, Search, Users } from 'lucide-react'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { useLibrary, useLibraryLayout } from '@/entities/library'
+import { LIBRARY_SORTS, SORT_DIRECTIONS, useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
-import { cn, useMediaQuery } from '@/shared/lib'
-import { LIBRARY_PANES, RoundLink, RowFace, ScreenHeader, TileMark, TitleTabs } from '@/shared/ui'
-import { FolderFace, useHoldsLine } from '@/widgets/song-library'
+import { useMediaQuery, useSetSearch } from '@/shared/lib'
+import {
+  CountSort,
+  LIBRARY_PANES,
+  MoreMenu,
+  ScreenHeader,
+  SearchField,
+  SectionHead,
+} from '@/shared/ui'
+import type { SongsHome } from '../model/explore-view'
 import { useLibraryPage } from '../model/use-library-page'
-import type { SongsFilter } from '../model/songs-filter'
 import { ContinueShelf } from './ContinueShelf'
+import { CreateButtons } from './CreateButtons'
+import { ExploreShelf } from './ExploreShelf'
+import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
-import { NewActions, NewMenu } from './NewActions'
-import { useSongsViews } from './SongsSwitch'
+import { Playlists } from './Playlists'
+import { SongsFound } from './SongsFound'
 
-/** A folder's card (the R72 board's FOLDERCARDS): a white card of its own, its 56px tile, name, line and chevron. */
-const CARD =
-  'flex min-h-20 min-w-0 items-center gap-4 rounded-[14px] bg-card p-3 text-foreground ring-1 ring-border transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl'
-
-const NOTHING_SEARCHED: SongsFilter = { q: '' }
+/** A row of the laptop's pane under its playlists: Archive or Trash, with how many it holds. */
+const PANE_ROW =
+  'flex min-h-11 items-center justify-between rounded-[10px] px-2 text-[0.9375rem] font-semibold text-foreground transition-colors duration-150 ease-out hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none'
 
 /**
- * My songs (R72, Flat's library overview; the Songs board): Recently played, a shelf of the songs
- * played with See all, then the Folders as cards (Favourites first, the learner's folders, Shared
- * with me), then the Archive and the Trash, each a row with its count. Search is the bar's, opening
- * All songs, where every song is listed, searched, sorted and selected. New floats at the foot on a
- * phone and is the bar's on a laptop.
+ * Songs (the Songs board, owner 2026-11-17: "copiing the flat layout and its playlists … i dont want
+ * misleading links"): the title, the search in place and the ways to make a song. On a phone, Flat's
+ * My scores: Recently played with All n songs, the Playlists as rows, Explore's newest; its ··· holds
+ * Archive and Trash. On a laptop, Flat's library: a pane of the Playlists with Archive and Trash at its
+ * foot, every song beside it under its count and sort, Explore's newest under them. While the search
+ * holds words the page shows what it found. Every link is named for where it goes.
  */
 export function SongsOverview() {
   const { t } = useTranslation('songs')
-  const views = useSongsViews('mine')
+  const navigate = useNavigate()
+  const { q } = useSearch({ from: '/shell/songs' })
+  const show = useSetSearch<SongsHome>()
   const laptop = useMediaQuery(LIBRARY_PANES)
-  const page = useLibraryPage(null, NOTHING_SEARCHED)
+  const query = q.trim()
+  const page = useLibraryPage(null, { q })
+  // Every song, one list (a laptop's right side): All songs' own view.
+  const every = useLibraryPage(null, { q: '' }, { tree: true })
   const layout = useLibraryLayout()
-  const favourites = useLibrary((state) => state.favourites).length
-  const favouritesLine = useHoldsLine({ folders: 0, songs: favourites })
   const songImport = useSongImport(null)
-  const total = page.view.scope.length
-  const empty = page.view.folders.length === 0 && total === 0
+  const empty = !query && page.view.folders.length === 0 && page.view.scope.length === 0
+  const search = empty ? null : (
+    <SearchField
+      value={q}
+      onChange={(next) => show({ q: next })}
+      label={t('all.search')}
+      screen={t('title')}
+    />
+  )
+  const more = laptop ? null : (
+    <MoreMenu
+      label={t('more')}
+      actions={[
+        {
+          key: 'archive',
+          label: t('menu.archive', { count: layout.archive.length }),
+          onSelect: () => void navigate({ to: '/songs/archive' }),
+        },
+        {
+          key: 'trash',
+          label: t('menu.trash', { count: layout.trash.length }),
+          onSelect: () => void navigate({ to: '/songs/trash' }),
+        },
+      ]}
+    />
+  )
   return (
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader
         title={t('title')}
         large
-        views={<TitleTabs {...views} />}
         tools={
-          <>
-            <RoundLink label={t('all.search')} icon={Search} render={<Link to="/songs/all" />} />
-            {laptop ? <NewMenu page={page} folder={null} onImport={songImport.choose} /> : null}
-          </>
+          laptop ? (
+            <>
+              {search ? <div className="w-80">{search}</div> : null}
+              <CreateButtons page={page} onImport={songImport.choose} bar />
+            </>
+          ) : null
         }
+        more={more}
       />
-      {empty ? (
-        <LibraryEmpty
-          page={page}
-          place="home"
-          filter={NOTHING_SEARCHED}
-          onClear={() => undefined}
-        />
-      ) : (
-        <div className="flex flex-col gap-7 lg:gap-9">
-          <ContinueShelf more={total} />
-          <section aria-labelledby="songs-folders" className="flex flex-col gap-3 lg:gap-4">
-            <h2 id="songs-folders" className="mx-1 font-sans text-xl font-bold">
+      {laptop ? null : (
+        <>
+          {search}
+          {query ? null : <CreateButtons page={page} onImport={songImport.choose} />}
+        </>
+      )}
+      {query ? (
+        <SongsFound page={page} query={query} onClear={() => show({ q: '' })} />
+      ) : empty ? (
+        <div className="flex flex-col gap-7">
+          <LibraryEmpty page={page} place="home" filter={{ q: '' }} onClear={() => undefined} />
+          <ExploreShelf />
+        </div>
+      ) : laptop ? (
+        <div className="grid grid-cols-[20rem_minmax(0,1fr)] items-start gap-8">
+          <aside
+            aria-labelledby="songs-playlists"
+            className="card sticky top-4 flex flex-col gap-2 px-3 py-4"
+          >
+            <h2 id="songs-playlists" className="mx-2 mb-1 font-sans text-lg font-bold">
               {t('folder.list')}
             </h2>
-            <ul className="grid gap-3 lg:grid-cols-3">
-              <li className="flex min-w-0">
-                <Link to="/songs/all" search={{ favourites: true }} className={cn(CARD, 'flex-1')}>
-                  <span
-                    data-slot="row-tile"
-                    aria-hidden
-                    className="grid size-14 shrink-0 place-items-center rounded-xl bg-destructive/12"
-                  >
-                    <Heart className="size-6 fill-destructive text-destructive" />
-                  </span>
-                  <RowFace title={t('places.favourites')} detail={favouritesLine} />
-                  <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-                </Link>
-              </li>
-              {page.view.folders.map(({ folder, ...holds }) => (
-                <li key={folder.id} className="flex min-w-0">
-                  <Link
-                    to="/songs/folders/$folderId"
-                    params={{ folderId: folder.id }}
-                    className={cn(CARD, 'flex-1')}
-                  >
-                    <FolderFace folder={folder} holds={holds} />
-                    <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-                  </Link>
-                </li>
-              ))}
-              <li className="flex min-w-0">
-                <Link to="/songs/groups" className={cn(CARD, 'flex-1')}>
-                  <TileMark large icon={Users} paint="grass" />
-                  <RowFace title={t('groups.sharedWithMe')} detail={t('groups.title')} />
-                  <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-                </Link>
-              </li>
-            </ul>
+            <Playlists page={page} pane />
+            <div aria-hidden className="mx-2 my-1 h-px bg-border" />
+            <Link to="/songs/archive" className={PANE_ROW}>
+              {t('archive.title')}
+              <span className="font-normal text-muted-foreground tabular-nums">
+                {layout.archive.length}
+              </span>
+            </Link>
+            <Link to="/songs/trash" className={PANE_ROW}>
+              {t('trash.title')}
+              <span className="font-normal text-muted-foreground tabular-nums">
+                {layout.trash.length}
+              </span>
+            </Link>
+          </aside>
+          <div className="flex min-w-0 flex-col gap-9">
+            <section aria-label={t('all.title')} className="flex flex-col gap-3">
+              <CountSort
+                count={t('folder.songCount', { count: every.view.shown })}
+                label={t('sort.label')}
+                sort={every.sort}
+                sorts={LIBRARY_SORTS.map((value) => ({ value, label: t(`sort.${value}`) }))}
+                onSort={every.setSort}
+                ways={{
+                  way: every.direction,
+                  options: SORT_DIRECTIONS.map((value) => ({ value, label: t(`sort.${value}`) })),
+                  onWay: every.setDirection,
+                }}
+              />
+              <LibraryBrowse page={every} place="home" noFolders onClear={() => undefined} />
+            </section>
+            <ExploreShelf />
+          </div>
+          <LibraryDialogs page={every} folder={null} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-7">
+          <ContinueShelf more={page.view.scope.length} />
+          <section aria-labelledby="songs-playlists" className="flex flex-col gap-3">
+            <SectionHead id="songs-playlists" title={t('folder.list')} />
+            <Playlists page={page} />
           </section>
-          <ul className="card flex flex-col overflow-hidden lg:w-[calc((100%-1.5rem)/3)]">
-            {(
-              [
-                ['/songs/archive', t('archive.title'), layout.archive.length],
-                ['/songs/trash', t('trash.title'), layout.trash.length],
-              ] as const
-            ).map(([to, label, count]) => (
-              <li key={to} className="border-hairline not-first:border-t">
-                <Link
-                  to={to}
-                  className="flex min-h-12 items-center gap-3 px-4 text-base transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-                >
-                  <span className="flex-1">{label}</span>
-                  <span className="text-muted-foreground tabular-nums">{count}</span>
-                  <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <ExploreShelf />
         </div>
       )}
-      {laptop ? null : <NewActions page={page} folder={null} onImport={songImport.choose} />}
       <LibraryDialogs page={page} folder={null} />
       {songImport.view}
     </div>

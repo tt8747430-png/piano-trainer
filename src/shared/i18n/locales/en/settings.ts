@@ -72,7 +72,7 @@ export const settings = {
   },
   backup: {
     label: 'Backup',
-    says: 'Your songs, folders, takes, patterns, progress and settings live on this device only. Save them to a file to keep them safe or to move them to another device.',
+    says: 'Your songs, playlists, takes, patterns, progress and settings live on this device only. Save them to a file to keep them safe or to move them to another device.',
     save: 'Save a backup',
     restore: 'Restore from a file',
     notBackup: 'This file is not a Piano Trainer backup.',
@@ -93,12 +93,12 @@ export const settings = {
   bars: {
     selectToolbar: 'Selection toolbar',
     swipeActions: 'Swipe actions',
-    songs: 'Songs and folders',
-    selectFootnote: 'Up to four actions appear in the toolbar when you select songs or folders.',
+    songs: 'Songs and playlists',
+    selectFootnote: 'Up to four actions appear in the toolbar when you select songs or playlists.',
     swipeFootnote:
       'Up to two actions on each side. An archived or deleted song comes back with Undo in the message.',
     songRows: 'Songs',
-    folderRows: 'Folders',
+    folderRows: 'Playlists',
     swipeRight: 'Leading swipe (right)',
     swipeLeft: 'Trailing swipe (left)',
     first: 'First',
@@ -146,7 +146,7 @@ export const settings = {
     waiting_one: '{{count}} change pending',
     waiting_other: '{{count}} changes pending',
     last: 'Last synced {{when}}',
-    what: 'Your songs, folders, takes, progress and settings sync while you are signed in.',
+    what: 'Your songs, playlists, takes, progress and settings sync while you are signed in.',
     // The account card's one line (A15).
     line: {
       synced: 'Synced {{when}}',
@@ -251,10 +251,10 @@ export const settings = {
     songs: {
       title: 'Organise your library',
       library:
-        'Songs holds your library: folders first, then songs. Search finds a song by title; Filters narrow the list by key, level or favourites.',
-      folder: 'New folder groups songs. Folders can contain folders of their own.',
+        'Songs holds your library: playlists first, then songs. Search finds a song by title; Filters narrow the list by key, level or favourites.',
+      folder: 'New playlist gathers songs. A playlist can hold playlists of its own.',
       select: 'Select, or a long press on a row, chooses several songs at once.',
-      move: 'Move to… places the selected songs in a folder. Undo in the message reverses it.',
+      move: 'Move to… places the selected songs in a playlist. Undo in the message reverses it.',
       archive:
         'Archive puts songs away without deleting them. They wait in the Archive, in Songs, to be restored.',
       favourite: 'The heart marks a song as a favourite.',

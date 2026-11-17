@@ -77,8 +77,6 @@ import {
 } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import {
-  readSongsHomeSearch,
-  SONGS_KEPT,
   songsHomeSearch,
   allSongsSearch,
   folderSearch,
@@ -424,7 +422,6 @@ const songsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs',
   ...songsHomeSearch,
-  ...remembered(readSongsHomeSearch, SONGS_KEPT, SONGS_KEPT),
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
 })
 // A published song or pattern (ADR 0116), Explore's item: its path kept, so published links work.

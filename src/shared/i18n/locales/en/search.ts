@@ -22,7 +22,7 @@ export const search = {
   groups: {
     practice: 'Practice',
     songs: 'Songs',
-    folders: 'Folders',
+    folders: 'Playlists',
     lessons: 'Lessons',
   },
 } as const

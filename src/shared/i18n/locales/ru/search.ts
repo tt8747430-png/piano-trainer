@@ -17,7 +17,7 @@ export const search: LocaleResources['search'] = {
   groups: {
     practice: 'Практика',
     songs: 'Песни',
-    folders: 'Папки',
+    folders: 'Плейлисты',
     lessons: 'Уроки',
   },
 }
