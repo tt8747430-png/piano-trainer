@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { LIBRARY_SORTS, SORT_DIRECTIONS, useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
-import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch, WIDE } from '@/shared/lib'
 import { RowLink, ScreenHeader, SearchField, SectionHead, SortMenu } from '@/shared/ui'
 import { SongTable } from '@/widgets/song-library'
 import type { SongsHome } from '../model/explore-view'
@@ -17,12 +17,6 @@ import { Playlists } from './Playlists'
 import { songActions } from './row-actions'
 import { SongsFound } from './SongsFound'
 import { FRESH } from './songs-fresh'
-
-/**
- * The pane beside the table from 80rem: under it the pane, the sidebar and a table leave the titles a
- * word wide (1024 measured), so the page takes the phone's one column (craft-details, every width holds).
- */
-const SONGS_PANES = '(min-width: 80rem)'
 
 /** The newest played first: My songs' shelf of every song (the Songs board's RECENT). */
 const LATEST = { sort: 'played', direction: 'descending' } as const
@@ -46,7 +40,7 @@ export function SongsOverview() {
   const { t } = useTranslation(['songs', 'common'])
   const { q } = useSearch({ from: '/shell/songs' })
   const show = useSetSearch<SongsHome>()
-  const laptop = useMediaQuery(SONGS_PANES)
+  const laptop = useMediaQuery(WIDE)
   const query = q.trim()
   const page = useLibraryPage(null, { q })
   // Every song, one list: the laptop's table in the learner's sort, the phone's shelf the latest first.

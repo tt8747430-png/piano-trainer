@@ -1,7 +1,7 @@
 import { useRouterState } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { useMediaQuery, WIDE } from '@/shared/lib'
 import { BackButton, ScreenHeader } from '@/shared/ui'
 import { settingsPlaceOf } from '../model/sections'
 import { SettingsList } from './SettingsList'
@@ -34,7 +34,7 @@ export function SettingsScreen({
   children: ReactNode
 }) {
   const { t } = useTranslation('settings')
-  const wide = useMediaQuery(LAPTOP)
+  const wide = useMediaQuery(WIDE)
   const path = useRouterState({ select: (state) => state.location.pathname })
   const place = settingsPlaceOf(path)
   const panes = wide && place !== null
