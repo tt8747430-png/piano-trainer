@@ -1387,6 +1387,10 @@
     "label": "Settings"
    },
    {
+    "role": "menu",
+    "label": "Song"
+   },
+   {
     "role": "dialog",
     "label": "{{sheet.name}} chord"
    }
@@ -1431,6 +1435,10 @@
    {
     "role": "dialog",
     "label": "Settings"
+   },
+   {
+    "role": "menu",
+    "label": "Song"
    },
    {
     "role": "dialog",

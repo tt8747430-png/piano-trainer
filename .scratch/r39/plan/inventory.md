@@ -158,7 +158,7 @@ boards themselves; run it after a rebuild. A layer is named by its `aria-label` 
 
 PlayerApp, PlayerDesk: boards only the published canvas holds, kept by index.py as they are (the owner's own)
 
-129 boards, 461 layers.
+129 boards, 463 layers.
 
 ## Components
 
