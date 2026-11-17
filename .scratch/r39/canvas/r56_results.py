@@ -7,7 +7,7 @@
 # early or late and by how much; your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
 # r53_songs_more's IF and r50_profile's pieces. Helpers carry the RS_ prefix.
 
-RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#2F5A35', '#A1352B', '#9A6A1E'
+RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#2F5A35', '#A1352B', '#8A5D16'
 RS_LET = 'CDEFGAB'
 # the run: Cmaj7 through its inversions, three times (root position, 1st, 2nd, 3rd)
 RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4), ('C', 5)],
@@ -93,7 +93,7 @@ RS_MOTION = ('<style data-motion>@keyframes rs-rise { from { opacity: 0; transfo
 
 
 def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
-    icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#9A6A1E" if perfect else RS_SAGE_INK}; '
+    icon = (f'<span class="rs-pop" style="width: 96px; height: 96px; border-radius: 48px; background: {"#F6E3BC" if perfect else RS_SAGE}; color: {"#8A5D16" if perfect else RS_SAGE_INK}; '
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
     head = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">{icon}'
             f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
@@ -183,8 +183,8 @@ rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_
 rs_lm = RS_MOTION + IF('isRun', RS_RUNVIEW(True), 'true') + IF('isResults', RS_RESULTS(6, 116, False, True))
 detail('PlayChord', 'The Player: a chord practice run and its results', RS_JS("'run'"), rs_ph, rs_lm, '', '', '', 'Practice')
 # opened from Profile › Practice history: the bar's Back, no Done and no link back to Profile
-rs_pph = RS_MOTION + TOP('Profile.dc.html', '', '', 'Back') + RS_RESULTS(4, 76, True)
-rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html') + RS_RESULTS(6, 116, True, True)
+rs_pph = RS_MOTION + TOP('Profile.dc.html', 'Today, 14:20', '', 'Profile') + RS_RESULTS(4, 76, True)
+rs_plm = RS_MOTION + LTOP('ProfileLaptop.dc.html', '', 'Today, 14:20') + RS_RESULTS(6, 116, True, True)
 detail('PracticeResult', 'A practice run’s results, from Profile', RS_JS("'result'"), rs_pph, rs_plm, '', '', '', 'Profile')
 print('r56 results ok')
 
