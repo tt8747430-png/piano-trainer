@@ -75,7 +75,7 @@ def NEWNAME(cond, title, ph, val, inp, go, bg, fg, label='Create'):
                   f'<button type="button" aria-disabled="{{{{{fg[:-2]}Dis}}}}" onClick="{{{{{go}}}}}" style="height: 50px; border: 0; border-radius: 25px; background: {{{{{bg}}}}}; color: {{{{{fg}}}}}; font: inherit; font-size: 16px; font-weight: 700">{label}</button>', 'Cancel')
 # The one Add row (owner 2026-11-16, Noji's Participants): the last row of the list it adds to, a plus in a soft
 # circle in the rows' picture column, the words in the link colour. ADDCARD stands alone where it adds a whole group.
-def ADDROW(label, act, node=36, pad='0 16px', gap=14):
+def ADDROW(label, act, node=36, pad='0 16px', gap=12):
     return (f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 56px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: {gap}px; padding: {pad}">'
             f'<span style="flex: none; width: {node}px; height: {node}px; border-radius: {node // 2}px; background: {FILL}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span>{label}</button>')
 ADDCARD = lambda label, act: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{ADDROW(label, act)}</div>'

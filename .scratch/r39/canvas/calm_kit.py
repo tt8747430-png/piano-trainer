@@ -184,7 +184,7 @@ def laptop(fname, title, main, aside, js, pops='', section='Practice'):
         if m:
             songs = m.group(1).replace('background: #EAE2D7', 'background: transparent') if here else m.group(1)
             side = side.replace(m.group(1), songs + sub, 1)
-    asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 18px">{aside}</aside>' if aside else ''
+    asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 16px">{aside}</aside>' if aside else ''
     cols = 'minmax(0, 1fr) 440px' if aside else 'minmax(0, 1fr)'
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
 {side}

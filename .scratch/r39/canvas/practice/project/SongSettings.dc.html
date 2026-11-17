@@ -95,8 +95,8 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       askUnpub: () => S({ sheet: 'unpub' }), unpubOn: st.sheet === 'unpub', doUnpub: () => { S({ sheet: null, pub: false }); toast('Removed from the Public library'); },
       tipOn_chords: st.tip === 'chords', tip_chords: () => S({ tip: st.tip === 'chords' ? null : 'chords' }), tipOn_time: st.tip === 'time', tip_time: () => S({ tip: st.tip === 'time' ? null : 'time' }),
       tipOn_chg: st.tip === 'chg', tip_chg: () => S({ tip: st.tip === 'chg' ? null : 'chg' }), tipOn_pat: st.tip === 'pat', tip_pat: () => S({ tip: st.tip === 'pat' ? null : 'pat' }),
-      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px',
-      esorts: ['New', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'New'), mark: l === (st.esort ?? 'New') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
+      esortL: st.esort ?? 'Newest', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px',
+      esorts: ['Newest', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'Newest'), mark: l === (st.esort ?? 'Newest') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null }) };
   }
 }

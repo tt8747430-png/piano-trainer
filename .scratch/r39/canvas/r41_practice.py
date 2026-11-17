@@ -14,7 +14,7 @@ def L(href, lap):  # a phone board's laptop twin
 def body(top, inner, dock='', pad_bottom=118):
     return f'{top}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {pad_bottom}px; display: flex; flex-direction: column; gap: 16px">{inner}</main>{DOCK(dock) if dock else ""}'
 def lapbody(top, left, right, dock=''):
-    return f'{top}<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; padding: 0 40px 28px 56px"><div style="min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 18px">{left}{DOCK_L(dock) if dock else ""}</div><div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{right}</div></div>'
+    return f'{top}<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; padding: 0 40px 28px 56px"><div style="min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 16px">{left}{DOCK_L(dock) if dock else ""}</div><div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{right}</div></div>'
 SPACER = '<span style="flex: 1"></span>'
 
 # ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════

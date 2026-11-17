@@ -149,7 +149,7 @@ def COURSECARD(w, href):
             f'</span>'
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')
 COURSESTRIP = (f'<div class="nos" style="flex: none; display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="4">{COURSECARD("168px", "Course.dc.html")}</sc-for></div>')
-COURSEGRID = (f'<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="5">{COURSECARD("auto", "CourseLaptop.dc.html")}</sc-for></div>')
+COURSEGRID = (f'<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="5">{COURSECARD("auto", "CourseLaptop.dc.html")}</sc-for></div>')
 SEEALLH = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">See all</a>'
 PLUSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
 def OWNROW(t, sub, href, kind='lesson'):

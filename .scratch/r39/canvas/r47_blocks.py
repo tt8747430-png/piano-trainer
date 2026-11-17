@@ -61,7 +61,7 @@ def ROLL():
 LINKROW = (f'<a href="Lesson.dc.html" style="min-height: 56px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">'
            f'<span style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {FILL}; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center">6</span>'
            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">Half steps, whole steps, sharps and flats</span><span style="font-size: 13px; color: {SOFT}">Lesson 6 · Foundations</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
-CHIP = lambda t, on=False: f'<span style="flex: none; height: 44px; padding: 0 16px; border-radius: 22px; background: {INK if on else FILL}; color: {SHEET if on else INK}; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px">{t}</span>'
+CHIP = lambda t, on=False: f'<span style="flex: none; height: 44px; padding: 0 16px; border-radius: 22px; background: {INK if on else FILL}; color: {SHEET if on else INK}; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px">{t}</span>'
 P17 = 'margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; outline: none'
 
 BLOCKS = {
