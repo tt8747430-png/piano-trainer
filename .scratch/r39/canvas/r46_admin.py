@@ -6,7 +6,7 @@
 # opened in the popup"): one shell for Settings and Administration, over the page it was opened from, the page dimmed.
 _XI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>'
 # the Settings dialog's panes, one shape for Settings and Administration: sentence-case headings, groups as rows on the pane
-CSET = (f'<style>.cset h3{{margin: 0 !important; font-size: 16px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; color: {INK} !important}}'
+SETCSS = (f'<style>.cset h3{{margin: 0 !important; font-size: 16px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; color: {INK} !important}}'
         f'.cset * + h3[data-sec]{{margin-top: 8px !important}}.cset section{{gap: 4px !important}}.cset [data-group]{{border-radius: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important}}'
         f'.cset [data-group] > sc-for > *, .cset [data-group] > :is(a, button, div){{padding-left: 0 !important; padding-right: 0 !important; min-height: 56px !important; box-shadow: inset 0 -1px 0 {FILL} !important}}'
         f'.cset [data-group] > sc-for:last-child > :last-child, .cset [data-group] > :last-child{{box-shadow: none !important}}.cset [data-group] > div > div:first-child, .cset [data-group] > div > button:only-child{{padding-left: 0 !important; padding-right: 0 !important}}</style>')
@@ -145,7 +145,7 @@ ANAV = (f'<a href="SettingsLaptop.dc.html" style="height: 40px; border-radius: 1
 ADM_L = (ADM_SECTIONS("L").replace("repeat(2, minmax(0, 1fr)); gap: 8px", "repeat(3, minmax(0, 1fr)); gap: 16px")
          .replace(ROWS("").removesuffix("</div>"), ROWS("").removesuffix("</div>").replace("<div style", "<div data-group style"))
          .replace('<h3 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: ' + SOFT + '">', '<h3 data-sec>'))
-alm = CSET + SETDLG(ANAV, f'<div style="display: flex; flex-direction: column; gap: 12px">'
+alm = SETCSS + SETDLG(ANAV, f'<div style="display: flex; flex-direction: column; gap: 12px">'
        f'<div style="width: 100%; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: center; gap: 12px; min-height: 40px; margin-bottom: 8px"><sc-if value="{{{{gOne}}}}" hint-placeholder-val="{{{{false}}}}">{IB("Groups", CHEV_L, "gBack")}</sc-if><h2 style="flex: 1; margin: 0; font-size: 20px; font-weight: 600">{{{{lsecT}}}}</h2>{'<sc-if value="{{groupsRight}}" hint-placeholder-val="{{false}}">' + BTN('New group', 'openNewG', '', 'primary', 44, False) + '</sc-if><sc-if value="{{flagsRight}}" hint-placeholder-val="{{false}}">' + BTN('New flag', 'openNewF', '', 'primary', 44, False) + '</sc-if>'}</div>{ADM_L}</div>'
        f'</div>', DLG)
 ADMSH = NEWNAME('newGOn', 'New group', 'Group name', 'gName', 'typeG', 'createG', 'gCreateBg', 'gCreateFg') + NEWNAME('addMOn', 'Add member', 'Name or email', 'mName', 'typeM', 'addMember', 'mAddBg', 'mAddFg', 'Add') + BSHEET('mMenuOn', '{{mMenuT}}', GROUP(('action', 'Remove from group', 'askRemoveM', '#B3261E'), bg=SHEET), 'Cancel') + NEWNAME('newFOn', 'New flag', 'What it turns on', 'fName', 'typeF', 'addFlag', 'fCreateBg', 'fCreateFg')

@@ -312,7 +312,7 @@ LSEARCH = (f'<label style="height: 40px; border-radius: 10px; background: {FILL}
            f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>'
            f'<input aria-label="Search settings" placeholder="Search" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 15px; color: {INK}; outline: none"></label>')
 s9lm = (SETDLG(f'{LSEARCH}{LACCT}{LNAV}{LADMIN}',
-        f'{CSET}<div style="display: flex; flex-direction: column; gap: 32px">'
+        f'{SETCSS}<div style="display: flex; flex-direction: column; gap: 32px">'
         f'<div style="min-height: 40px; display: flex; align-items: center; gap: 8px; margin: 0 0 -12px"><sc-if value="{{{{lapBack}}}}" hint-placeholder-val="{{{{false}}}}">{IB("Back to {{lapBackT}}", CHEV_L, "back")}</sc-if>'
         f'<h2 style="margin: 0; font-size: 20px; font-weight: 600">{{{{lapT}}}}</h2></div>{PAGEBODIES("l_", True)}</div>')
         + PREVPILL('left: 50%; transform: translateX(-50%); bottom: 28px; white-space: nowrap; z-index: 70') + S9TOAST.replace('left: 16px; right: 16px; bottom: 40px', 'left: 50%; transform: translateX(-50%); width: 420px; bottom: 28px') + S9ASKS)

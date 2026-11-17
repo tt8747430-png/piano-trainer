@@ -1541,6 +1541,7 @@ are reference only, but progressions are facts.
   said Signing in needs one.
 - **A week not yet played says what fills it (loop 23, 2026-11-15):** Last 7 days with nothing played shows
   "Play anything today and it shows here." centred over the flat days, instead of seven empty tracks alone.
+- **Settings on a laptop carries only its own panes (loop 63, 2026-11-17):** a course's settings (its name, The course, Share, Progress) were built hidden into the Settings dialog, because the course's settings and the Settings stylesheet shared one name in the generators; the stylesheet has its own name now, and the dialog holds only Settings (one home per thing; canvas v436).
 
 ## Words
 
