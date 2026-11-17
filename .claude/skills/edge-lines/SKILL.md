@@ -13,12 +13,19 @@ The laws, their sources and what they ask here: [references/laws.md](references/
 
 ## 1. Draw the lines
 
+Shoot at the owner's own devices, never an invented size (owner, 2026-11-17: "why dont you take the real sizes of the
+devices that i gave you"): `phone` 402×874 (iPhone 17 Pro, the installed app), `phone-small` 393×852, `phone-side`
+852×393, `ipad` 744×1133, `tablet` 1024×768, `mac` 1710×904 (MacBook Air in Safari), `mac-app` 1710×984. A board is
+always shot at its own device and cropped to its screen; the shot is that screen, nothing round it.
+
 ```bash
 # a canvas board (RT is the canvas runtime, as checks/run.mjs)
-RT=$SP/dcrt/artifact-type/dc-runtime.js node .claude/skills/edge-lines/scripts/lines.mjs PublicSong 450 952 $SP/lines/pub.png
-RT=… node .claude/skills/edge-lines/scripts/lines.mjs PublicSongLaptop 2000 1100 $SP/lines/pub-l.png
+RT=$SP/dcrt/artifact-type/dc-runtime.js node .claude/skills/edge-lines/scripts/lines.mjs PublicSong phone $SP/lines/pub.png
+RT=… node .claude/skills/edge-lines/scripts/lines.mjs PublicSongLaptop mac $SP/lines/pub-l.png
 # an app screen on the dev server
-node .claude/skills/edge-lines/scripts/lines.mjs http://localhost:5191/songs 402 874 $SP/lines/songs.png '[{"scroll":600}]'
+node .claude/skills/edge-lines/scripts/lines.mjs http://localhost:5191/songs phone $SP/lines/songs.png '[{"scroll":600}]'
+# a flow: how a page changes into its sibling (All songs to Explore), at one device
+RT=… node .claude/skills/edge-lines/scripts/lines.mjs flow SongsLaptop '[]' ExploreLaptop '[]' mac $SP/lines/flow.png
 ```
 
 Steps are a JSON list: `{"click": selector}`, `{"wait": ms}`, `{"scroll": px}`. It prints `PROBLEM` and `NOTE` lines
@@ -42,6 +49,24 @@ It judges those relations too (PROBLEM or NOTE):
 - a filled thing within 8 of a box's corner not concentric with it;
 - a heading as far from what it heads as from what is above it, or further: it reads as the end of the last group.
 - A block centred in a row (a title beside a search) is read by its row's top.
+- boxes side by side whose edges cross: one starts inside its neighbour's height and ends below it (owner, 2026-11-17:
+  "the method books box crosses this lines that define where a box finishes"); every card's bottom is drawn across the
+  screen in dashed orange, so the crossing shows;
+- Fitts: a target under 44 on a phone or 40 on a laptop (its `::before` reach counted);
+- Hick: more than seven choices at once in one bar, menu, tab row or radio group;
+- Von Restorff: more than one honey act on a screen;
+- contrast: text under 4.5:1 (3:1 when large);
+- similarity: pills, round buttons or rounded controls of one screen at near-miss heights (1–6px apart).
+
+A flow (owner, 2026-11-17: "learn also to draw lines and to determine how the page changes when switching from one
+page to another … what controls changes how they move") matches every control, title, field and pane of page A to
+page B by its name and prints `FLOW` lines: what moved (by how much), what changed size, what is new, what went. A
+part of the page's frame (the bar, its title and acts, the side pane, the search, the column the content starts on)
+that moves or resizes between sibling pages is a PROBLEM, and so is a frame that keeps under 80% of its parts in
+place: the learner must see where they went, not a new page (Jakob's law; consistency). The shot is A beside B: kept
+parts dashed green, moved or resized red with an arrow from where they were, new blue, gone struck through in purple.
+Run it for every pair of sibling pages a change touches (the places of one area, the tabs of one page, a list and its
+item), and for a sheet opening over its page.
 
 Then **look at the shot** (Read the png). The script finds near-misses and off-scale gaps; only the eye finds the rest.
 

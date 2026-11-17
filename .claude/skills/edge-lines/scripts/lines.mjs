@@ -1,48 +1,88 @@
 // Draws a screen's edges and gaps over a screenshot, as the owner marks them by hand, and lists what is off.
 //
-//   node lines.mjs <url | Board> <width> <height> <out.png> [steps-json]
+//   node lines.mjs <url | Board> <device | width height> <out.png> [steps-json]
+//   node lines.mjs flow <url | Board> <steps-json> <url | Board> <steps-json> <device> <out.png>
+//
+// Devices are the owner's (owner-way testing.md): phone 402×874 (iPhone 17 Pro, the installed app), phone-small 393×852,
+// phone-side 852×393, ipad 744×1133, tablet 1024×768, mac 1710×904 (MacBook Air, Safari), mac-app 1710×984. A canvas
+// board is always shot at its own device, cropped to its screen (the phone's 402×874, the laptop's 1710×904), never
+// the frame or the page around it.
 //
 // A URL opens the app (the dev server); a bare name opens that canvas board from
 // .scratch/r39/canvas/practice/project/<Board>.dc.html, with RT naming the canvas runtime (as checks/run.mjs).
 //
-// It finds the screen's blocks (bars, titles, columns, cards, panes, toolbars, tables, floating actions), then:
-//   - draws each block's left edge and top edge as a line: blue where blocks share it, red where two blocks miss
-//     each other by 1 to 12px (a near-miss is worse than a clear difference: it looks like a mistake);
-//   - writes the gap between neighbouring blocks in a column and a row, red when it is off the 4/8 scale;
-//   - outlines a card (a lighter surface with a ring or shadow) in orange, and says when a card stands alone in its
-//     column (a card with no sibling cards on a plain page reads as a box dropped on the paper);
-//   - outlines a bar that holds no title and no control in red (an empty header).
-// The report is printed as lines starting with PROBLEM or NOTE, then the shot is written with the overlay.
-// steps-json, if given, is a list of {click: selector} | {wait: ms} | {scroll: px} run before measuring.
+// One screen: it finds the blocks (bars, titles, columns, cards, panes, toolbars, tables, floating actions), then
+//   - draws each block's left edge and top edge as a line, and every card's bottom edge across the screen: blue where
+//     blocks share it, red where two miss each other by 1 to 12px; boxes side by side whose edges cross (one starts
+//     inside the height of its neighbour and ends below it) are named, as the owner draws them;
+//   - writes the gap between neighbouring blocks, red when it is off the 4/8 scale;
+//   - outlines cards in orange and judges how each box holds its rows (insets purple, row gaps teal);
+//   - checks the laws: Fitts (targets 44 on a phone, 40 on a laptop), Hick (no more than seven choices in one bar,
+//     menu or list of places), Von Restorff (one honey act), contrast (4.5:1 for text), similarity (alike controls
+//     share one height and one corner).
+// A flow: both screens are shot at one device and each control, title and field is matched by its name. It names
+// what moved, what changed size, what appeared and what went, and calls it a PROBLEM when the page's frame (its bar,
+// title, search, side pane, the column the content starts on) moves between sibling pages (Jakob, consistency): the
+// learner should see where they went, not a new page. The shot is A beside B, kept parts in green, moved or resized
+// in red with an arrow, new in blue, gone struck through.
+// The report is printed as lines starting with PROBLEM, NOTE or FLOW, then the shot is written with the overlay.
+// steps-json is a list of {click: selector} | {wait: ms} | {scroll: px} run before measuring.
 import { readFileSync } from 'node:fs'
 import { chromium } from 'playwright'
 
-const [url, w, h, out, stepsArg] = process.argv.slice(2)
+const DEVICES = { phone: [402, 874], 'phone-small': [393, 852], 'phone-side': [852, 393], ipad: [744, 1133], tablet: [1024, 768], mac: [1710, 904], 'mac-app': [1710, 984] }
+const argv = process.argv.slice(2)
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] })
-const page = await browser.newPage({ viewport: { width: +w, height: +h }, deviceScaleFactor: 1 })
-if (url.startsWith('http')) await page.goto(url, { waitUntil: 'networkidle' }).catch(() => {})
-else {
-  const boards = new URL('../../../../.scratch/r39/canvas/practice/project/', import.meta.url).pathname
-  const runtime = readFileSync(process.env.RT, 'utf8')
-  await page.route('http://canvas.local/**', (route) => {
-    const path = new URL(route.request().url()).pathname
-    if (path.endsWith('support.js')) return route.fulfill({ contentType: 'text/javascript', body: runtime })
-    if (path.endsWith('.dc.html')) return route.fulfill({ contentType: 'text/html; charset=utf-8', body: readFileSync(boards + path.split('/').pop(), 'utf8') })
-    return route.fulfill({ status: 404, body: '' })
-  })
-  await page.goto('http://canvas.local/project/' + url + '.dc.html')
-  await page.waitForTimeout(2000)
-}
-await page.waitForTimeout(800)
-for (const s of JSON.parse(stepsArg || '[]')) {
-  // A board's empty full-page layer can sit over the frame; a click that it intercepts is forced.
-  if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch(() => page.locator(s.click).first().click({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))
-  if (s.wait) await page.waitForTimeout(s.wait)
-  if (s.scroll) await page.mouse.wheel(0, s.scroll)
-}
-await page.waitForTimeout(300)
 
-const report = await page.evaluate(() => {
+// Opens a target at a device and returns the page and the screen's rectangle in it.
+async function open(target, device, steps) {
+  const board = !target.startsWith('http')
+  const lap = /Laptop$/.test(target) || target === 'Laptop'
+  const [dw, dh] = device
+  const page = await browser.newPage({ viewport: board ? (lap ? { width: 2000, height: 1160 } : { width: 450, height: 952 }) : { width: dw, height: dh }, deviceScaleFactor: 1 })
+  if (!board) await page.goto(target, { waitUntil: 'networkidle' }).catch(() => {})
+  else {
+    const boards = new URL('../../../../.scratch/r39/canvas/practice/project/', import.meta.url).pathname
+    const runtime = readFileSync(process.env.RT, 'utf8')
+    await page.route('http://canvas.local/**', (route) => {
+      const path = new URL(route.request().url()).pathname
+      if (path.endsWith('support.js')) return route.fulfill({ contentType: 'text/javascript', body: runtime })
+      if (path.endsWith('.dc.html')) return route.fulfill({ contentType: 'text/html; charset=utf-8', body: readFileSync(boards + path.split('/').pop(), 'utf8') })
+      return route.fulfill({ status: 404, body: '' })
+    })
+    await page.goto('http://canvas.local/project/' + target + '.dc.html')
+    await page.waitForTimeout(2000)
+  }
+  await page.waitForTimeout(800)
+  for (const s of steps) {
+    // A board's empty full-page layer can sit over the frame; a click that it intercepts is forced.
+    if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch(() => page.locator(s.click).first().click({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))
+    if (s.wait) await page.waitForTimeout(s.wait)
+    if (s.scroll) await page.mouse.wheel(0, s.scroll)
+  }
+  await page.waitForTimeout(300)
+  // The board's screen: the element of the device's size (402×874 or 1710×904).
+  const scr = board
+    ? await page.evaluate((lap) => {
+        const want = lap ? [1710, 904] : [402, 874]
+        const el = [...document.querySelectorAll('div')].find((e) => { const r = e.getBoundingClientRect(); return Math.round(r.width) === want[0] && Math.round(r.height) === want[1] })
+        const r = el ? el.getBoundingClientRect() : { left: 0, top: 0, width: innerWidth, height: innerHeight }
+        return { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }
+      }, lap)
+    : { x: 0, y: 0, w: dw, h: dh }
+  return { page, scr, phone: scr.w < 600 }
+}
+
+const flow = argv[0] === 'flow'
+const deviceOf = (a, b) => (DEVICES[a] ? DEVICES[a] : [+a, +b])
+let url, w, h, out, stepsArg
+if (!flow) {
+  url = argv[0]
+  if (DEVICES[argv[1]]) [w, h, out, stepsArg] = [...DEVICES[argv[1]], argv[2], argv[3]]
+  else [w, h, out, stepsArg] = [+argv[1], +argv[2], argv[3], argv[4]]
+}
+async function analyse(page, scr, phone) {
+  return page.evaluate(({ scr, phone }) => {
   const SCALE = [0, 2, 4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 72, 80, 96]
   const vis = (el) => {
     const r = el.getBoundingClientRect()
@@ -79,12 +119,12 @@ const report = await page.evaluate(() => {
       card: isCard(el),
       floating: cs.position === 'fixed' || cs.position === 'absolute',
     }
-  }).filter((b) => b.x >= 0 && b.y >= 0 && b.x < innerWidth && b.y < innerHeight)
+  }).filter((b) => b.x >= scr.x && b.y >= scr.y && b.x < scr.x + scr.w && b.y < scr.y + scr.h)
   // Cards outside the selector: any lighter ringed surface the eye reads as a box.
   for (const el of document.querySelectorAll('div, a, article, li')) {
     if (!vis(el) || !isCard(el) || blocks.some((b) => b.el === el)) continue
     const r = el.getBoundingClientRect()
-    if (r.top > innerHeight) continue
+    if (r.top > scr.y + scr.h || r.left > scr.x + scr.w || r.right < scr.x) continue
     blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: false })
   }
   const lines = []
@@ -249,13 +289,79 @@ const report = await page.evaluate(() => {
     if (prev && vis(prev) && parseFloat(getComputedStyle(prev).fontSize) < parseFloat(getComputedStyle(hd).fontSize) * 0.8 && R(prev).height < 24) continue
     if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${hd.textContent.trim().slice(0, 24)}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
   }
+  // ── Edges that cross: boxes side by side whose tops and bottoms both differ, one starting inside its neighbour's
+  // height (owner, 2026-11-17: "the method books box crosses this lines that define where a box finishes").
+  const cards = blocks.filter((b) => b.card && !b.floating && !blocks.some((o) => o !== b && o.card && o.el.contains(b.el)))
+  for (const a of cards) for (const c of cards) {
+    if (a === c || !(a.r <= c.x || c.r <= a.x) || Math.abs((a.r - a.x) - (c.r - c.x)) > 0.3 * (a.r - a.x)) continue
+    if (c.y > a.y + 12 && c.y < a.b - 12 && c.b > a.b + 12) problems.push(`boxes side by side cross: ${named(c)} starts ${a.b - c.y}px above where ${named(a)} ends and runs ${c.b - a.b}px below it (edges that cross read as overlap, not columns: align their tops and bottoms, or stack them)`)
+  }
+  // ── Fitts: every target within reach of a finger (44) or a pointer in a dense laptop row (40).
+  const MIN = phone ? 44 : 40
+  const small = []
+  for (const el of document.querySelectorAll('button, a[href], input:not([type=hidden]), select, [role=button], [role=radio], [role=tab], [role=switch], [role=checkbox]')) {
+    if (!vis(el) || el.closest('p, [aria-hidden=true]') || el.parentElement?.closest('button, a[href]')) continue
+    const r = R(el)
+    if (r.left < scr.x || r.top < scr.y || r.right > scr.x + scr.w || r.bottom > scr.y + scr.h) continue
+    const before = getComputedStyle(el, '::before')
+    const reach = Math.max(r.height, parseFloat(before.height) || 0), across = Math.max(r.width, parseFloat(before.width) || 0)
+    if (reach < MIN - 0.5 && across < MIN + 40) small.push(`“${(el.innerText || el.getAttribute('aria-label') || el.tagName).trim().split('\n')[0].slice(0, 20)}” ${Math.round(r.width)}×${Math.round(r.height)}`)
+  }
+  if (small.length) problems.push(`Fitts: ${small.length} target${small.length > 1 ? 's' : ''} under ${MIN}px: ${small.slice(0, 6).join(', ')}${small.length > 6 ? ' …' : ''}`)
+  // ── Hick: one bar, menu, tab row or list of places offers at most seven choices at once.
+  for (const g of document.querySelectorAll('[role=toolbar], [role=menu], [role=tablist], [role=radiogroup], nav, header')) {
+    if (!vis(g)) continue
+    const n = [...g.querySelectorAll('button, a[href], [role=menuitem], [role=tab], [role=radio]')].filter(vis).length
+    if (n > 7 && !g.matches('nav')) notes.push(`Hick: “${(g.getAttribute('aria-label') || g.tagName).slice(0, 24)}” offers ${n} choices at once: group them, or fold the rare ones`)
+  }
+  // ── Von Restorff: one honey act per screen (the accent on more than one control is two focal points).
+  const honey = (c) => { const m = c.match(/\d+(\.\d+)?/g); if (!m) return false; const [r, g, b, a = 1] = m.map(Number); return a > 0.6 && r > 200 && g > 160 && g < 225 && b < 160 && r - b > 70 }
+  const accents = [...document.querySelectorAll('button, a[href]')].filter((el) => vis(el) && honey(getComputedStyle(el).backgroundColor) && R(el).width * R(el).height > 1200 && R(el).top >= scr.y && R(el).bottom <= scr.y + scr.h)
+  if (accents.length > 1) problems.push(`Von Restorff: ${accents.length} honey acts on one screen (${accents.slice(0, 3).map((e) => '“' + (e.innerText || e.getAttribute('aria-label') || '').trim().slice(0, 16) + '”').join(', ')}): one is the focus, the rest go quiet`)
+  // ── Contrast: text against what it sits on, 4.5:1 (3:1 at 18px bold or 24px).
+  const lum = (c) => { const m = c.match(/\d+(\.\d+)?/g).map(Number); const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4 }; return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]) }
+  const under = (el) => { for (let e = el; e; e = e.parentElement) { const c = getComputedStyle(e).backgroundColor; if (opaque(c) && !/rgba\(.*,\s*0?\.\d+\)$/.test(c)) return c } return 'rgb(255, 255, 255)' }
+  const faint = []
+  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim().length > 1 ? 1 : 3) })
+  for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+    const el = n.parentElement
+    if (!vis(el) || el.closest('[aria-hidden=true], svg, [disabled]')) continue
+    const r = R(el)
+    if (r.top < scr.y || r.bottom > scr.y + scr.h || r.left < scr.x || r.right > scr.x + scr.w) continue
+    const cs = getComputedStyle(el)
+    const fg = cs.color, bgc = under(el)
+    const a = (fg.match(/[\d.]+/g) || [])[3]
+    if (a !== undefined && +a < 0.99) continue
+    const [l1, l2] = [lum(fg), lum(bgc)].sort((x, y) => y - x)
+    const ratio = (l1 + 0.05) / (l2 + 0.05)
+    const large = parseFloat(cs.fontSize) >= 24 || parseFloat(cs.fontSize) >= 18.5 && +cs.fontWeight >= 700
+    if (ratio < (large ? 3 : 4.5)) faint.push(`“${n.textContent.trim().slice(0, 18)}” ${ratio.toFixed(1)}:1`)
+  }
+  if (faint.length) problems.push(`contrast: ${faint.length} text${faint.length > 1 ? 's' : ''} under 4.5:1: ${[...new Set(faint)].slice(0, 5).join(', ')}`)
+  // ── Similarity: controls of one shape (pills, round buttons, rounded fields) share one height; a near-miss (1–6px)
+  // is two components where one was meant.
+  const shapes = {}
+  for (const el of document.querySelectorAll('button, a[href], input, [role=button]')) {
+    if (!vis(el)) continue
+    const cs = getComputedStyle(el), r = R(el)
+    if (r.top < scr.y || r.bottom > scr.y + scr.h || !(opaque(cs.backgroundColor) || cs.boxShadow !== 'none') || r.height < 24 || r.height > 72) continue
+    const rad = parseFloat(cs.borderTopLeftRadius)
+    const kind = rad >= r.height / 2 - 1 ? (Math.abs(r.width - r.height) < 2 ? 'round button' : 'pill') : rad >= 6 ? 'rounded control' : null
+    if (kind) (shapes[kind] ??= []).push(Math.round(r.height))
+  }
+  for (const [k, hs] of Object.entries(shapes)) {
+    const set = [...new Set(hs)].sort((a, b) => a - b)
+    const pairs = set.filter((x, i) => i && x - set[i - 1] >= 1 && x - set[i - 1] <= 6)
+    if (pairs.length) notes.push(`similarity: ${k}s ${set.join(', ')}px tall on one screen: alike parts share one size`)
+  }
+  for (const b of cards) lines.push({ kind: 'h', at: b.b, bottom: true })
   // Draw.
   const layer = document.createElement('div')
   layer.style.cssText = 'position: fixed; inset: 0; z-index: 2147483647; pointer-events: none; font: 600 11px/1 system-ui'
   const add = (css, txt = '') => { const d = document.createElement('div'); d.style.cssText = 'position: absolute; ' + css; d.textContent = txt; layer.append(d) }
   for (const l of lines) l.kind === 'v'
     ? add(`left: ${l.at}px; top: 0; bottom: 0; width: 0; border-left: 1px ${l.bad ? 'solid #E0201B' : 'dashed rgba(30,90,200,.45)'}`)
-    : add(`top: ${l.at}px; left: 0; right: 0; height: 0; border-top: 1px ${l.bad ? 'solid #E0201B' : 'dashed rgba(30,90,200,.3)'}`)
+    : add(`top: ${l.at}px; left: 0; right: 0; height: 0; border-top: 1px ${l.bad ? 'solid #E0201B' : l.bottom ? 'dashed rgba(230,120,0,.55)' : 'dashed rgba(30,90,200,.3)'}`)
   for (const g of gaps) {
     const c = g.bad ? '#E0201B' : '#1E8A3E'
     if (g.y1 !== undefined) add(`left: ${g.x}px; top: ${g.y1}px; height: ${g.y2 - g.y1}px; width: 0; border-left: 2px solid ${c}`, ''), add(`left: ${g.x + 4}px; top: ${(g.y1 + g.y2) / 2 - 6}px; color: ${c}; background: #fff`, String(g.g))
@@ -269,9 +375,70 @@ const report = await page.evaluate(() => {
   for (const b of blocks.filter((b) => b.card)) add(`left: ${b.x}px; top: ${b.y}px; width: ${b.r - b.x}px; height: ${b.b - b.y}px; outline: 2px solid rgba(230,120,0,.7)`)
   document.body.append(layer)
   return { problems: [...new Set(problems)], notes: [...new Set(notes)] }
-})
-for (const p of report.problems) console.log('PROBLEM', p)
-for (const n of report.notes) console.log('NOTE', n)
-await page.screenshot({ path: out })
-console.log(`${report.problems.length} problems, ${report.notes.length} notes; overlay in ${out}`)
+}, { scr, phone })
+}
+
+// The named parts of a screen, for a flow: controls, titles and fields by their accessible name, and the page's frame.
+async function parts(page, scr) {
+  return page.evaluate((scr) => {
+    const vis = (el) => { const r = el.getBoundingClientRect(), cs = getComputedStyle(el); return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none' && +cs.opacity > 0.05 }
+    const out = []
+    for (const el of document.querySelectorAll('h1, h2, button, a[href], input, [role=tab], [role=radio], [role=searchbox], nav, aside, [role=toolbar], main')) {
+      if (!vis(el) || el.closest('[aria-hidden=true]')) continue
+      const r = el.getBoundingClientRect()
+      if (r.right < scr.x || r.left > scr.x + scr.w || r.bottom < scr.y || r.top > scr.y + scr.h) continue
+      const name = (el.getAttribute('aria-label') || el.getAttribute('placeholder') || el.innerText || '').trim().split('\n')[0].slice(0, 40)
+      const kind = el.tagName.toLowerCase()
+      if (!name && !/^(nav|aside|main)$/.test(kind)) continue
+      // The frame: the bar, the side pane, the title, the search: what should stay put between sibling pages.
+      const frame = /^(nav|aside|main|h1)$/.test(kind) || !!el.closest('header, nav, aside, [role=toolbar]') || kind === 'input'
+      out.push({ key: kind + '|' + name, name: name || kind, kind, frame, x: Math.round(r.left - scr.x), y: Math.round(r.top - scr.y), w: Math.round(r.width), h: Math.round(r.height) })
+    }
+    const seen = {}
+    return out.filter((p) => (seen[p.key] = (seen[p.key] || 0) + 1) === 1)
+  }, scr)
+}
+
+if (!flow) {
+  const { page, scr, phone } = await open(url, [w, h], JSON.parse(stepsArg || '[]'))
+  const report = await analyse(page, scr, phone)
+  for (const p of report.problems) console.log('PROBLEM', p)
+  for (const n of report.notes) console.log('NOTE', n)
+  await page.screenshot({ path: out, clip: { x: scr.x, y: scr.y, width: scr.w, height: scr.h } })
+  console.log(`${report.problems.length} problems, ${report.notes.length} notes; overlay in ${out} (${scr.w}×${scr.h})`)
+} else {
+  const [, ta, sa, tb, sb, dev, fout] = argv
+  const device = deviceOf(dev)
+  const A = await open(ta, device, JSON.parse(sa || '[]')), B = await open(tb, device, JSON.parse(sb || '[]'))
+  const pa = await parts(A.page, A.scr), pb = await parts(B.page, B.scr)
+  const shotA = (await A.page.screenshot({ clip: { x: A.scr.x, y: A.scr.y, width: A.scr.w, height: A.scr.h } })).toString('base64')
+  const shotB = (await B.page.screenshot({ clip: { x: B.scr.x, y: B.scr.y, width: B.scr.w, height: B.scr.h } })).toString('base64')
+  const byKey = Object.fromEntries(pb.map((p) => [p.key, p]))
+  const marks = []
+  let kept = 0, frames = 0
+  for (const a of pa) {
+    const b = byKey[a.key]
+    if (!b) { console.log(`FLOW gone: ${a.kind} “${a.name}”`); marks.push({ side: 0, ...a, c: 'gone' }); continue }
+    const dx = b.x - a.x, dy = b.y - a.y, dw = b.w - a.w, dh = b.h - a.h
+    const moved = Math.abs(dx) > 2 || Math.abs(dy) > 2, sized = Math.abs(dw) > 2 || Math.abs(dh) > 2
+    if (a.frame) frames++
+    if (!moved && !sized) { kept++; marks.push({ side: 0, ...a, c: 'kept' }, { side: 1, ...b, c: 'kept' }); continue }
+    const what = [moved ? `moved ${dx >= 0 ? '+' : ''}${dx},${dy >= 0 ? '+' : ''}${dy}` : '', sized ? `resized ${a.w}×${a.h} → ${b.w}×${b.h}` : ''].filter(Boolean).join(', ')
+    console.log(`${a.frame ? 'PROBLEM' : 'FLOW'} ${a.frame ? "the page's frame changes: " : ''}${a.kind} “${a.name}” ${what}`)
+    marks.push({ side: 0, ...a, c: 'moved' }, { side: 1, ...b, c: 'moved', from: a })
+  }
+  for (const b of pb) if (!pa.some((a) => a.key === b.key)) { console.log(`FLOW new: ${b.kind} “${b.name}”`); marks.push({ side: 1, ...b, c: 'new' }) }
+  const fixed = marks.filter((m) => m.side === 0 && m.frame && m.c === 'kept').length
+  console.log(`FLOW ${kept} of ${pa.length} parts stay put; the frame keeps ${fixed} of ${frames} in place${frames && fixed / frames < 0.8 ? ': PROBLEM, the page changes too much to follow (Jakob; consistency between sibling pages)' : ''}`)
+  // A beside B, marked.
+  const [W, H] = [A.scr.w, A.scr.h]
+  const cmp = await browser.newPage({ viewport: { width: W * 2 + 24, height: H }, deviceScaleFactor: 1 })
+  const C = { kept: 'rgba(30,138,62,.55)', moved: '#E0201B', new: '#1E5AC8', gone: '#7A3FC2' }
+  const boxes = marks.map((m) => `<div style="position:absolute;left:${m.side * (W + 24) + m.x}px;top:${m.y}px;width:${m.w}px;height:${m.h}px;outline:2px ${m.c === 'kept' ? 'dashed' : 'solid'} ${C[m.c]};${m.c === 'gone' ? 'background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(122,63,194,.25) 6px 8px)' : ''}"></div>`).join('')
+  const arrows = marks.filter((m) => m.from).map((m) => `<line x1="${m.from.x + m.from.w / 2}" y1="${m.from.y + m.from.h / 2}" x2="${W + 24 + m.x + m.w / 2}" y2="${m.y + m.h / 2}" stroke="#E0201B" stroke-width="1.5" marker-end="url(#h)" opacity=".7"/>`).join('')
+  await cmp.setContent(`<body style="margin:0;position:relative;background:#222"><img src="data:image/png;base64,${shotA}" style="position:absolute;left:0;top:0"><img src="data:image/png;base64,${shotB}" style="position:absolute;left:${W + 24}px;top:0">${boxes}<svg width="${W * 2 + 24}" height="${H}" style="position:absolute;inset:0"><defs><marker id="h" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#E0201B"/></marker></defs>${arrows}</svg></body>`)
+  await cmp.waitForTimeout(300)
+  await cmp.screenshot({ path: fout })
+  console.log(`flow shot in ${fout}`)
+}
 await browser.close()

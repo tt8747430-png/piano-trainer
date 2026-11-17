@@ -70,6 +70,22 @@ The primary act is large and in reach of the thumb.
 **Aesthetic-usability** ([Laws of UX](https://lawsofux.com/aesthetic-usability-effect/)): what looks finished is trusted
 and forgiven more.
 
+## Laws the tool measures (2026-11-17)
+
+- **Fitts's law** (lawsofux.com/fittss-law): the time to reach a target grows with its distance and shrinks with its
+  size, so targets are 44pt on touch (Apple HIG) and at least 40 in a dense laptop row; primary acts sit where the
+  thumb or pointer already is.
+- **Hick's law** (lawsofux.com/hicks-law): the time to choose grows with the number of choices; a bar, menu or tab row
+  offers a few, the rare ones folded behind a More.
+- **Von Restorff effect** (lawsofux.com/von-restorff-effect): the one item that differs is remembered; one honey act
+  per screen, or none stands out.
+- **Jakob's law** (lawsofux.com/jakobs-law) and **consistency** (NN/g heuristic 4): people expect a place to work as
+  the others do; sibling pages keep one frame (bar, title, search, pane, the column content starts on) so moving
+  between them changes the content, not the page.
+- **Alignment of boxes side by side** (Müller-Brockmann, grid systems; HIG layout): columns share their tops, and a
+  box that starts inside its neighbour's height and ends below it reads as overlap, not as a column.
+- **Contrast** (WCAG 2.2, 1.4.3): text 4.5:1, large text 3:1.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
