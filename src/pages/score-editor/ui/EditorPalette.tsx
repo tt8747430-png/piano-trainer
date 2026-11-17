@@ -1,15 +1,16 @@
-import { ChevronUp, Clock } from 'lucide-react'
+import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPaletteCategory,
   selectPaletteRecent,
+  selectSectionFolded,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { chosenNotes } from '@/features/score-editor'
-import { setPaletteCategory } from '@/features/set-preference'
+import { setPaletteCategory, setSectionFolded } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
 import { PickerLayoutContext } from '@/shared/ui/pickers/picker-layout'
 import { KeysWait } from '@/shared/ui'
@@ -35,7 +36,7 @@ import {
   TwoNoteTremoloKeys,
 } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
-import { PaletteFormContext, RecentTools, type PaletteForm } from './palette-form'
+import { PaletteFormContext, RecentTools, usePaletteForm, type PaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
 import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
 import { SelectionStrip } from './SelectionStrip'
@@ -70,15 +71,39 @@ function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) =
  */
 function Category({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
+  const settings = useSettingsStoreApi()
   const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
+  const grid = usePaletteForm() === 'grid'
+  const fold = `palette.${category}`
+  const shut = useSettings(selectSectionFolded(fold)) && grid
   const title = t(`palette.category.${category}`)
   return (
     <PaletteSection category={category} title={title}>
-      {/* Notes titles its own sections: its input modes, then Notation. */}
-      {category === 'notes' ? null : <GroupName name={title} />}
-      <KeysWait value={waits ? t('reason.chooseNote') : null}>
-        <Tools category={category} />
-      </KeysWait>
+      {/* Each group folds by its heading (loop round 57, Dorico's panels); the row has none. */}
+      {grid ? (
+        <h3 className="-my-1.5">
+          <button
+            type="button"
+            aria-expanded={!shut}
+            onClick={() => setSectionFolded(settings, fold, !shut)}
+            className="flex min-h-11 w-full items-center justify-between font-sans text-[0.9375rem] leading-tight font-semibold text-foreground"
+          >
+            {title}
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                'size-5 text-muted-foreground transition-transform duration-150 ease-out motion-reduce:transition-none',
+                shut && '-rotate-90',
+              )}
+            />
+          </button>
+        </h3>
+      ) : null}
+      {shut ? null : (
+        <KeysWait value={waits ? t('reason.chooseNote') : null}>
+          <Tools category={category} />
+        </KeysWait>
+      )}
     </PaletteSection>
   )
 }
