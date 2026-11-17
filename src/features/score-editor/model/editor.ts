@@ -33,6 +33,7 @@ import {
   stepNotes,
   steppedKey,
   tieNotes,
+  tieOn,
   toggleAccidental,
   writeRest,
 } from './notes'
@@ -419,14 +420,19 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
         struck: null,
         selection: state.selection,
       })
-    case 'tie':
-      return layer === 'chords'
-        ? state
-        : commit(
-            state,
-            tieNotes(draft, layer, state.selection ? selectionSpan(state.selection) : caret),
-            { struck: null },
-          )
+    case 'tie': {
+      if (layer === 'chords') return state
+      if (state.selection)
+        return commit(state, tieNotes(draft, layer, selectionSpan(state.selection)), {
+          struck: null,
+        })
+      // A note after the caret's of the same key: joined, as before. Else, in note input, the note
+      // just written held on at the value chosen, the caret after it (research F5).
+      const joined = tieNotes(draft, layer, caret)
+      if (joined !== draft) return commit(state, joined, { struck: null })
+      const held = tieOn(draft, layer, caret, stepOf(state))
+      return commit(state, held.draft, { caret: held.end, struck: null })
+    }
     // The words go under the staff they are written on alone (ADR 0097).
     case 'syllable':
       return singsHere(draft, layer)

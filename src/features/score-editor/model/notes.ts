@@ -561,9 +561,29 @@ export function tieNotes(draft: Draft, layer: NoteLayer, span: Tick | TickSpan):
   return changed ? withNotes(draft, layer, notes) : draft
 }
 
+/** The notes (a note or a chord) that end where the caret stands, written just before it. */
+const endingAt = (draft: Draft, layer: NoteLayer, at: Tick): DraftNote[] =>
+  notesOf(draft, layer).filter((n) => n.startTick + n.durationTicks === at)
+
 /**
- * Whether Tie has a note to join in `span` (R32-B): a note there with the same key's note starting
- * where it ends. Where none has, the palette draws no Tie.
+ * Tie in note input (research F5, Dorico's NoteInput.Tie): the note or chord ending at the caret
+ * held on for `ticks` more, what stood there written over, as one note the engraving splits at a
+ * barline; stopping at the song's end. Nothing ends at the caret, or the song ends there: unchanged.
+ */
+export function tieOn(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Written {
+  const held = endingAt(draft, layer, at)
+  if (held.length === 0 || at >= totalTicks(draft)) return { draft, end: at }
+  const end = Math.min(at + ticks, totalTicks(draft))
+  const notes = clearUnder(draft, layer, at, end).map((n) =>
+    held.includes(n) ? { ...n, durationTicks: end - n.startTick } : n,
+  )
+  return { draft: withNotes(draft, layer, notes), end }
+}
+
+/**
+ * Whether Tie acts (R32-B, research F5): a note in `span` with the same key's note starting where it
+ * ends, or, at the caret, a note or chord written just before it to hold on. Where neither, it greys.
  */
 export const canTie = (draft: Draft, layer: NoteLayer, span: Tick | TickSpan): boolean =>
-  tieNotes(draft, layer, span) !== draft
+  tieNotes(draft, layer, span) !== draft ||
+  (typeof span === 'number' && endingAt(draft, layer, span).length > 0 && span < totalTicks(draft))
