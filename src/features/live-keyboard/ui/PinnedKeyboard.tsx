@@ -9,7 +9,6 @@ import {
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { Docked, Pinned, type ShownKeys } from '@/shared/ui'
 import { useFoldKeys, type KeysScreen } from '../model/use-fold-keys'
-import { KeyboardStrip } from './KeyboardStrip'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /** A page's pinned keys stand as every Practice board draws them: 150px on a phone, 180 on a laptop. */
@@ -22,10 +21,11 @@ const LAPTOP_KEYS_PX = 180
  * other keys), and it scrolls the keys the app shows into view, no further than that. A key a hand chooses (`selected`) never moves it: the keys hold still
  * under the finger (ADR 0062). It stays edge to edge where the keyboard settings dock it, at the
  * screen's foot over the tab bar or at its top under the screen's bar (R34, Songscription's), with no
- * divider: the boards draw a page's keys at their piano's proportion (canvas 197). Hidden from the page's bar (`PageKeyboardTools`), it folds into a thin
- * labelled strip where it stood that brings it back at a tap, nothing floating; on a phone on its
- * side a reading page opens with it hidden until shown there (ADR 0062); a screen played on
- * (`screen="playing"`) keeps it in sight.
+ * divider: the boards draw a page's keys at their piano's proportion (canvas 197). Hidden from the
+ * page's Piano sheet (its bar's Piano), it leaves nothing where it stood, as every board draws it
+ * (owner, 2026-11-17: "the same floating keyboard everywhere"); on a phone on its side a reading page
+ * opens with it hidden until shown there (ADR 0062); a screen played on (`screen="playing"`) keeps it
+ * in sight.
  */
 export function PinnedKeyboard({
   shown,
@@ -71,7 +71,7 @@ export function PinnedKeyboard({
   // At the screen's foot, where the hands play (the boards' one piano); under the bar where the keys
   // are the page's stage.
   const dock = place ?? 'bottom'
-  const { folded, fold } = useFoldKeys(screen)
+  const { folded } = useFoldKeys(screen)
   const laptop = useMediaQuery(LAPTOP)
   const { keys, marks } = shown
   const [opened] = useState(keys)
@@ -85,11 +85,9 @@ export function PinnedKeyboard({
       to: wanted.to > widest.to ? wanted.to : widest.to,
     })
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
-  const edge = dock === 'bottom' ? 'above' : 'below'
-  // Hidden, the keys fold into a thin strip where they stood that brings them back (R34).
-  const body = folded ? (
-    <KeyboardStrip edge={edge} onShow={() => fold(false)} />
-  ) : (
+  // Hidden from the Piano sheet, nothing stands where the keys stood.
+  if (folded) return null
+  const body = (
     <LiveKeyboard
       range={range ?? widest}
       inView={rangeOf(showing) ?? rangeOf(opened)}

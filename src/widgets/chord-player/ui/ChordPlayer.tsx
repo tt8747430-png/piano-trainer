@@ -157,6 +157,7 @@ export function ChordPlayer({
   routes,
   more,
   settings,
+  piano,
 }: {
   hand: ChordSheetInHand
   /** One of My chord sheets (`?sheet=`), or none: the sheet in hand. */
@@ -168,6 +169,8 @@ export function ChordPlayer({
   more: readonly MenuAction[]
   /** The gear: the Chord player's Settings. */
   settings: ReactNode
+  /** The bar's Piano: its sheet shows or hides the keys, as on every Practice page. */
+  piano: ReactNode
 }) {
   const navigate = useNavigate()
   const sheets = useChordSheetsStoreApi()
@@ -439,12 +442,15 @@ export function ChordPlayer({
         title={t('pages.chordPlayer')}
         back={<BackButton />}
         tools={
-          <RoundButton
-            label={t('chordPlayer.undo')}
-            icon={Undo2}
-            disabled={!hand.canUndo}
-            onClick={hand.undo}
-          />
+          <>
+            <RoundButton
+              label={t('chordPlayer.undo')}
+              icon={Undo2}
+              disabled={!hand.canUndo}
+              onClick={hand.undo}
+            />
+            {piano}
+          </>
         }
         settings={settings}
         more={

@@ -119,11 +119,6 @@ export const common: LocaleResources['common'] = {
   keyboardTools: {
     short: { keys: '2D', hands: '3D', off: 'Выкл.' },
     keyboard: 'Клавиатура',
-    hands: 'Руки на клавишах',
-    show: 'Показать клавиатуру',
-    hide: 'Скрыть клавиатуру',
-    chord: 'Взятый аккорд',
-    resize: 'Изменить высоту клавиатуры',
   },
   keyboardSettings: {
     typing: 'Играть на клавиатуре компьютера',

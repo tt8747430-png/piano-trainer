@@ -137,11 +137,6 @@ export const common = {
     // The transport's Keyboard caption: what stands in the keys' place.
     short: { keys: '2D', hands: '3D', off: 'Off' },
     keyboard: 'Keyboard',
-    hands: 'Hands at the keys',
-    show: 'Show the keyboard',
-    hide: 'Hide the keyboard',
-    chord: 'Chord held',
-    resize: 'Resize keyboard',
   },
   // The computer keyboard's switch: Settings › General.
   keyboardSettings: {

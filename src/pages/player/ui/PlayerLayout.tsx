@@ -17,7 +17,7 @@ import {
   useHeldKeys,
   useMidiConnection,
 } from '@/features/connect-midi'
-import { KeyboardStrip, KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
+import { KeysPlace, LiveKeyboard } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TICKS_PER_BEAT } from '@/shared/lib/music'
@@ -283,12 +283,8 @@ export function PlayerLayout({
   )
   // Where the music stands: the notes awaited, or where Listen stopped.
   const cursorTick = performance.beatGroups[practice.state.beatGroup]?.tick ?? 0
-  const keys = !player.keys ? (
-    // Hidden, a thin strip where they stood brings them back at a tap (R34, Songscription's).
-    <PlayerArea area="keys" className="-mx-gutter">
-      <KeyboardStrip edge="above" onShow={() => player.setKeys(true)} />
-    </PlayerArea>
-  ) : scoreView.hands ? (
+  // Hidden from the Piano sheet, nothing stands where the keys stood, as on every page.
+  const keys = !player.keys ? null : scoreView.hands ? (
     // The hands at the keys in the keys' place (R36, flowkey's), edge to edge: watched, never tapped.
     <PlayerArea area="keys" className="-mx-gutter">
       <KeysPlace foot={PLAYER_FOOT}>

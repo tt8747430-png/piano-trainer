@@ -5,6 +5,7 @@ import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
 import { ShareChordSheet } from '@/features/share-chord-sheet'
 import { NewSheet, RoundLink } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
+import { PianoButton } from '@/widgets/practice-pages'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
 
 /**
@@ -46,6 +47,7 @@ export function ChordPlayerPage() {
               onSelect: page.share,
             },
           ]}
+          piano={<PianoButton />}
           settings={
             <RoundLink
               label={t('settings.open', { page: t('pages.chordPlayer') })}
