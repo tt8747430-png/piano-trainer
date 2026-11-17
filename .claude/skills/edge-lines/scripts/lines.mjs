@@ -334,6 +334,10 @@ async function analyse(page, scr, phone) {
   for (const a of cards) for (const c of cards) {
     if (a === c || !(a.r <= c.x || c.r <= a.x) || Math.abs((a.r - a.x) - (c.r - c.x)) > 0.3 * (a.r - a.x)) continue
     if (c.y > a.y + 12 && c.y < a.b - 12 && c.b > a.b + 12) problems.push(`boxes side by side cross: ${named(c)} starts ${a.b - c.y}px above where ${named(a)} ends and runs ${c.b - a.b}px below it (edges that cross read as overlap, not columns: align their tops and bottoms, or stack them)`)
+    // columns side by side start on one line (Müller-Brockmann; HIG layout): a box whose top misses its neighbour's by up
+    // to 40, while they share most of their height, reads as a slip, not two columns (Learn's laptop, 2026-11-17)
+    else if (a.x < c.x && c.y > a.y && c.y - a.y <= 40 && Math.min(a.b, c.b) - c.y > 0.6 * Math.min(a.b - a.y, c.b - c.y)) problems.push(`columns side by side start ${Math.round(c.y - a.y)}px apart: ${named(a)} and ${named(c)} (columns share their tops)`)
+    else if (c.x < a.x && c.y > a.y && c.y - a.y <= 40 && Math.min(a.b, c.b) - c.y > 0.6 * Math.min(a.b - a.y, c.b - c.y)) problems.push(`columns side by side start ${Math.round(c.y - a.y)}px apart: ${named(c)} and ${named(a)} (columns share their tops)`)
   }
   // ── Fitts: every target within reach of a finger (44) or a pointer in a dense laptop row (40).
   const MIN = phone ? 44 : 40

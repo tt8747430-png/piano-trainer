@@ -54,6 +54,7 @@ It judges those relations too (PROBLEM or NOTE):
 - boxes side by side whose edges cross: one starts inside its neighbour's height and ends below it (owner, 2026-11-17:
   "the method books box crosses this lines that define where a box finishes"); every card's bottom is drawn across the
   screen in dashed orange, so the crossing shows;
+- columns side by side whose tops miss by up to 40 while they share most of their height: a slip, not two columns;
 - Fitts: a target under 44 on a phone or 40 on a laptop (its `::before` reach counted);
 - Hick: more than seven choices at once in one bar, menu, tab row or radio group;
 - Von Restorff: more than one honey act on a screen;
