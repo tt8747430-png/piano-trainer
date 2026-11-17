@@ -87,7 +87,7 @@ def PATHF(lap):
             f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{ADDCARD('Add chapter', 'addChapter')}</sc-if>')
 METER = f'<span style="display: block; height: 6px; border-radius: 3px; background: {FILL}"><span style="display: block; width: {{{{meter}}}}; height: 6px; border-radius: 3px; background: #44684A"></span></span>'
 CONT = CARD(f'<div style="display: flex; align-items: center; gap: 16px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">{{{{contT}}}}</span><span style="font-family: {SERIF}; font-size: 22px">{{{{nextT}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{contSub}}}}</span></div>'
-            f'<a href="#" aria-label="Open the lesson" style="flex: none; width: 56px; height: 56px; border-radius: 28px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</a></div>')
+            f'<a href="#" aria-label="Open the lesson" style="flex: none; width: 56px; height: 56px; border-radius: 28px; background: {INK}; color: {SHEET}; display: flex; align-items: center; justify-content: center">{BOOKI}</a></div>')
 COURSEROWS = (f'<div style="display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border-radius: 14px; background: {HONEY}"><span style="font-size: 13px; font-weight: 700; color: #8A5A1C">About the courses</span><p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 15px; line-height: 1.45; outline: none">Each course is a few weeks of lessons with songs to read at the end. Start with one on your shelf; the Lessons keep going beside it.</p></div>'
               f'<sc-for list="{{{{courses}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 16px; font-size: 14px; font-weight: 600; color: {SOFT}">{{{{g.h}}}}</h3><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
               f'<sc-for list="{{{{g.cs}}}}" as="k" hint-placeholder-count="3"><a href="Course.dc.html" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none"><span style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{k.tileBg}}}}; box-shadow: {{{{k.ring}}}}; display: flex; align-items: center; justify-content: center; color: {INK}"><sc-if value="{{{{k.done}}}}" hint-placeholder-val="{{{{false}}}}"><span style="display: flex; color: #2F5A35">{CHECKI}</span></sc-if><sc-if value="{{{{k.notDone}}}}" hint-placeholder-val="{{{{true}}}}">{FOLDI}</sc-if></span>'
@@ -144,7 +144,7 @@ def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
     head = H2("Your lessons and courses", SEEALLH("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
     return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course")}'
-            f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}{NEWROW("New lesson or course", "openNew").replace("min-height: 56px", "min-height: 80px") if lap else NEWROW("New lesson or course", "openNew")}</div>')
+            f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}</div>')
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 # canvas 167 (owner: "popups with meaningful information … show more things with less ui"): About the courses says
 # what a course is in one line, then the shelves themselves with their counts, each a tap to its shelf
@@ -155,10 +155,10 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 
 # Learn: the overview
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
+       f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 112)}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{H2("Levels").replace("align-items: baseline", "align-items: center; min-height: 44px")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 16px">{OWNGROUP(True).replace("align-items: baseline", "align-items: center; min-height: 44px", 1)}</div></div>'
-       f'{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+       f'{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32)}{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons

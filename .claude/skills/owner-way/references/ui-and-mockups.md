@@ -95,6 +95,13 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 - Phone and desktop have the same features, text and layout logic.
 - Nothing hangs under a bar: a status or language goes in the bar or its menu.
 - Floating things float, reserve no space, and auto-hide reliably.
+- **No control reserves space it does not use** (owner, 2026-11-17, the lesson: "the drag handle reserves space … other
+  controls else can have this issues? fix all the instructions that made you do this"): a page's column starts on the
+  16 gutter on a phone (the bar's 12 inset plus the glass's own 4, as every list), and the first content stands 8–16
+  under the bar. An edit handle, a ···, a number or a check that shows only in one mode is drawn over its block when
+  it is wanted (the selected block's grip and ··· float at its top right, glass, Notion and Craft on iOS), never
+  as a margin kept empty in every mode. Edit looks as it reads: entering it moves nothing. `lines.mjs` fails a
+  column that starts further in with nothing in the band at its left, and a bare band under the bar.
 - **The page has one focus, and what floats is centred on it** (owner, 2026-11-16: "the floating controls like in the
   scales page should be centerd by the main focus content … the practices on the right robs the focus from the main
   content and the floatign actions feel wrongly placed … all of the main content should be correctly focudsed"): the

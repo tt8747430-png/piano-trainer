@@ -220,6 +220,28 @@ async function analyse(page, scr, phone) {
     const ctrls = hd.querySelectorAll('button, a').length
     if (!words && ctrls <= 1) problems.push(`an empty bar at y ${Math.round(hd.getBoundingClientRect().top)}: no title, ${ctrls} control`)
   }
+  // The page's gutter (owner, 2026-11-17, the lesson: "the drag handle reserves space"): a reading column starts on
+  // the page's 16 gutter on a phone; a column that starts further in, with nothing drawn in the band at its left,
+  // keeps room for a control that is not there (an edit handle, a number). And the first content sits close under
+  // the bar: more than 24 bare under it is a band nothing fills.
+  if (scr.w < 600) {
+    const main = [...document.querySelectorAll('main')].find((m) => vis(m) && m.getBoundingClientRect().width > scr.w * 0.8)
+    if (main) {
+      const kids = [...main.querySelectorAll('h1, h2, p, li, figure, aside, section > *')].filter((e) => vis(e) && !e.closest('[data-float], [role=dialog]'))
+      const lefts = kids.map((e) => Math.round(e.getBoundingClientRect().left - scr.x)).filter((x) => x >= 0)
+      const minL = lefts.length ? Math.min(...lefts) : 16
+      const band = [...main.querySelectorAll('*')].some((e) => { const r = e.getBoundingClientRect(); return vis(e) && r.width > 0 && r.left - scr.x < minL - 4 && r.right - scr.x <= minL && r.height > 0 && r.top < scr.y + scr.h })
+      const maxR = kids.length ? Math.max(...kids.map((e) => Math.round(e.getBoundingClientRect().right - scr.x))) : scr.w - 16
+      // a centred thing (the Tuner's gauge, a sign-in form) is held by its two sides, not a gutter
+      if (minL > 20 && !band && Math.abs(minL - (scr.w - maxR)) > 8) problems.push(`the content starts ${minL}px in with nothing in the band at its left: it keeps room for a control not shown; a page's column starts on the 16 gutter, and edit controls float over their block, reserving no space`)
+      const hd = [...document.querySelectorAll('header')].find((h) => vis(h) && h.getBoundingClientRect().top - scr.y < 120)
+      const first = [...main.querySelectorAll('*')].filter((e) => vis(e) && e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect().top).filter((t) => t > (hd ? hd.getBoundingClientRect().bottom : 0)).sort((a, b) => a - b)[0]
+      const hb = hd ? hd.getBoundingClientRect().bottom : 0
+      const filled = first !== undefined && [...document.body.querySelectorAll('*')].some((e) => { if (!vis(e) || main.contains(e) || e.contains(main) || (hd && (hd.contains(e) || e.contains(hd)))) return false; const r = e.getBoundingClientRect(); return r.height > 8 && r.width > 40 && r.top >= hb - 4 && r.top < first - 4 && r.left - scr.x < scr.w && r.right > scr.x })
+      // a lone instrument centred in the screen (the Circle of fifths) is placed, not left: no band
+      if (hd && first !== undefined && !filled && first - hb > 24 && main.scrollTop === 0 && getComputedStyle(main).justifyContent !== 'center') problems.push(`${Math.round(first - hd.getBoundingClientRect().bottom)}px bare between the bar and the first content: a band nothing fills (the page starts 8–16 under its bar)`)
+    }
+  }
   // Two acts of different weight in one box: a box holding a filled (honey) button and another button of another fill.
   for (const b of blocks.filter((b) => b.card)) {
     const btns = [...b.el.querySelectorAll('button, a')].filter(vis).map((x) => getComputedStyle(x).backgroundColor).filter(opaque)

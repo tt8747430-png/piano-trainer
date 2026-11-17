@@ -56,6 +56,7 @@ It judges those relations too (PROBLEM or NOTE):
   "the method books box crosses this lines that define where a box finishes"); every card's bottom is drawn across the
   screen in dashed orange, so the crossing shows;
 - columns side by side whose tops miss by up to 40 while they share most of their height: a slip, not two columns;
+- the page's gutter: on a phone a column starting further in than 20 with nothing drawn at its left (a margin kept for a control not shown, an edit handle), and more than 24 bare between the bar and the first content (a band nothing fills);
 - Fitts: a target under 44 on a phone or 40 on a laptop (its `::before` reach counted);
 - Hick: more than seven choices at once in one bar, menu, tab row or radio group;
 - Von Restorff: more than one honey act on a screen;
