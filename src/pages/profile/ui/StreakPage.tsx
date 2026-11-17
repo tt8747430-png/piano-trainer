@@ -33,7 +33,13 @@ export function StreakPage() {
               {t('profile.streakPage.days', { count: run })}
             </span>
             <span className="text-[0.9375rem]/snug text-pretty text-muted-foreground">
-              {run > 0 ? t('profile.streakPage.keep') : t('profile.streakPage.start')}
+              {t(
+                run === 0
+                  ? 'profile.streakPage.start'
+                  : days.includes(today)
+                    ? 'profile.streakPage.counted'
+                    : 'profile.streakPage.keep',
+              )}
             </span>
           </span>
         </section>

@@ -141,6 +141,7 @@ export const account = {
     streakPage: {
       title: 'Streak',
       keep: 'Keep the flame alive: practise today to extend your streak.',
+      counted: 'Today counts. Practise tomorrow to keep it going.',
       start: 'Practise today to start a streak.',
       days_one: '{{count}} day streak',
       days_other: '{{count}} day streak',
