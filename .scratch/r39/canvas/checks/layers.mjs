@@ -34,7 +34,7 @@ const MEASURE = ([want, lap, before]) => {
         const a = ctl[i].getBoundingClientRect(), c = ctl[j].getBoundingClientRect()
         if (Math.min(a.right, c.right) - Math.max(a.left, c.left) > 2 && Math.min(a.bottom, c.bottom) - Math.max(a.top, c.top) > 2) { p.push('OVERLAP “' + (ctl[i].textContent || ctl[i].getAttribute('aria-label') || '').trim().slice(0, 20) + '” × “' + (ctl[j].textContent || ctl[j].getAttribute('aria-label') || '').trim().slice(0, 20) + '”'); break outer }
       }
-      return { role: L.getAttribute('role'), label: L.getAttribute('aria-label') || '', p }
+      const by = L.getAttribute('aria-labelledby'); return { role: L.getAttribute('role'), label: L.getAttribute('aria-label') || (by && document.getElementById(by) ? document.getElementById(by).textContent.trim() : ''), p }
 }
 async function doBoard(name) {
   const out = []
