@@ -86,6 +86,9 @@ use one.
   chord. **My chord sheets** are `pt-chord-sheets` (version 1, synced as `chord_sheets`): the sheet in hand and
   the learner's own, each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
   transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`.
+  Randomize (`randomProgression`) starts on the tonic, moves by function and closes V–I, each step as likely as
+  Piston's table of usual root progressions makes it (usual, sometimes, less often), so I → IV and V → I come
+  often and iii seldom.
 
 ## Consequences
 
