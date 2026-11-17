@@ -168,9 +168,13 @@ async function analyse(page, scr, phone) {
   const near = (a, b) => Math.abs(a - b) >= 1 && Math.abs(a - b) <= 12
   // Left edges and tops: blocks that nearly share an edge.
   const big = blocks.filter((b) => !b.floating && b.r - b.x > 60)
+  // The nearest surface (a lighter rounded box) holding a block: its content aligns to its inset.
+  const region = (b) => { for (let p = b.el.parentElement; p && p !== document.body; p = p.parentElement) { const cs = getComputedStyle(p); if (parseFloat(cs.borderTopLeftRadius) >= 8 && opaque(bg(p)) && p.parentElement && bg(p) !== bg(p.parentElement) && p.getBoundingClientRect().width >= 160) return p } return null }
   for (let i = 0; i < big.length; i++) for (let j = i + 1; j < big.length; j++) {
     const a = big[i], c = big[j]
     if (a.el.contains(c.el) || c.el.contains(a.el)) continue
+    // Content inside a card sits on the card's inset; the card's own edge is what meets the page's.
+    if (region(a) !== region(c)) continue
     const stacked = Math.min(a.r, c.r) > Math.max(a.x, c.x) || Math.abs(a.y - c.y) > 40
     if (near(a.x, c.x) && stacked) problems.push(`left edges miss by ${Math.abs(a.x - c.x)}px: ${a.tag} “${a.text}” at ${a.x}, ${c.tag} “${c.text}” at ${c.x}`)
     const side = a.b > c.y && c.b > a.y || Math.abs(a.y - c.y) <= 12
