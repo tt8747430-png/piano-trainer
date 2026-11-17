@@ -112,6 +112,7 @@ owner's, typos fixed.
 - **One control each,** one key picker, one stepper and menu style.
 
 ## Player and editor together
+- **The next lyric line readable (loop 63, 2026-11-17, canvas v460):** under the Diagrams view's current line the next one was #A39A90 on the paper, 2.5:1; it is soft ink now (#685E56, 4.5:1 and over), its lighter weight keeping it second (contrast, WCAG 1.4.3). `PlayerApp`, `PlayerDesk`.
 
 - **Loop round 61, a laptop's settings are a card under their button (EditorLaptop's and PlayerDesk's popover):** the editor's gear and the Player's Settings opened as a full-height panel at the right, which covered the editor's Undo, Redo and ···, cut its layout pill, and squeezed the Player's music; both are now the board's card, 400 wide, 16 round with the hairline and the second shade, hung 8 under the bar's buttons at their right edge, fading in place, the music keeping its width, a click outside closing it (2026-11-17).
 - **Loop round 32, a key down and the chosen note's keys in sky:** the boards' piano paints a key down `#85B8DC` (`--key-down`), the score's selection colour; the app had painted it and the editor's chosen keys honey, the one action's colour. Every keyboard now (2026-11-15). The editor's credits line reaches 44 under the title (it was 38).

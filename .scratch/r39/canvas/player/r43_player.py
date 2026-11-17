@@ -225,6 +225,8 @@ def kit(t, phone):
     t = t.replace('border-radius: 9px; background: #E7E0D6', 'border-radius: 9px; background: #EEE9E2')
     t = t.replace('<p style="margin: 6px 14px -4px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #685E56">',
                   '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">')  # the kit's CAPS, as every group label (rounds 15, 25)
+    # the next lyric line reads at 4.5:1 in soft ink (was #A39A90, 2.5:1); its lighter weight keeps it second (loop 63)
+    t = t.replace('line-height: 1.2; color: #A39A90">{{lineNext}}', 'line-height: 1.2; color: #685E56">{{lineNext}}')
     t = t.replace('<span aria-hidden="true" style="color: #A39A90; font-size: 18px">›</span>', '<span aria-hidden="true" style="display: flex; color: #685E56">' + CHEV_R + '</span>')
     # the switch
     t = re.sub(r'width: 44px; height: 26px; (padding: 0; border: 0; )?border-radius: 9999px; background: \{\{([\w.]+)\}\}',
