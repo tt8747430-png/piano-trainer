@@ -6,9 +6,13 @@ import { PieceMark } from '@/widgets/piece-cover'
 import { useEntryFace } from '@/widgets/piece-list'
 import { useSongStanding } from './use-song-status'
 
-/** The table's columns (the SongsLaptop board's _LCOLS): Title, Composer and key, Progress, When, ···. */
+/**
+ * The table's columns (the SongsLaptop board's _LCOLS): Title, Composer and key, Progress, When, ···.
+ * Under 1536 wide the composer column goes (`COMPOSER`), so a title is never cut to a word.
+ */
 const COLUMNS =
-  'grid grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_8.75rem_7.5rem_2.75rem] items-center gap-4 pr-2 pl-3'
+  'grid grid-cols-[minmax(0,1fr)_8.75rem_7.5rem_2.75rem] items-center gap-4 pr-2 pl-3 2xl:grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_8.75rem_7.5rem_2.75rem]'
+const COMPOSER = 'hidden 2xl:block'
 
 function SongTableRow({ entry, actions }: { entry: Entry; actions: readonly RowAction[] }) {
   const { t } = useTranslation('common')
@@ -28,7 +32,7 @@ function SongTableRow({ entry, actions }: { entry: Entry; actions: readonly RowA
           <span className="truncate text-[0.9375rem] font-semibold">{face.title}</span>
         </PieceLink>
       </span>
-      <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground">
+      <span role="cell" className={`${COMPOSER} truncate text-[0.9375rem] text-muted-foreground`}>
         {face.detail}
       </span>
       <span role="cell" className="truncate text-[0.9375rem] text-muted-foreground tabular-nums">
@@ -71,7 +75,7 @@ export function SongTable({
         <span role="columnheader" className={head}>
           {t('table.title')}
         </span>
-        <span role="columnheader" className={head}>
+        <span role="columnheader" className={`${COMPOSER} ${head}`}>
           {t('table.composerKey')}
         </span>
         <span role="columnheader" className={head}>

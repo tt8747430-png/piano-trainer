@@ -4,14 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LIBRARY_SORTS, SORT_DIRECTIONS, useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
 import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
-import {
-  LIBRARY_PANES,
-  RowLink,
-  ScreenHeader,
-  SearchField,
-  SectionHead,
-  SortMenu,
-} from '@/shared/ui'
+import { RowLink, ScreenHeader, SearchField, SectionHead, SortMenu } from '@/shared/ui'
 import { SongTable } from '@/widgets/song-library'
 import type { SongsHome } from '../model/explore-view'
 import { useLibraryPage } from '../model/use-library-page'
@@ -24,6 +17,12 @@ import { Playlists } from './Playlists'
 import { songActions } from './row-actions'
 import { SongsFound } from './SongsFound'
 import { FRESH } from './songs-fresh'
+
+/**
+ * The pane beside the table from 80rem: under it the pane, the sidebar and a table leave the titles a
+ * word wide (1024 measured), so the page takes the phone's one column (craft-details, every width holds).
+ */
+const SONGS_PANES = '(min-width: 80rem)'
 
 /** The newest played first: My songs' shelf of every song (the Songs board's RECENT). */
 const LATEST = { sort: 'played', direction: 'descending' } as const
@@ -47,7 +46,7 @@ export function SongsOverview() {
   const { t } = useTranslation(['songs', 'common'])
   const { q } = useSearch({ from: '/shell/songs' })
   const show = useSetSearch<SongsHome>()
-  const laptop = useMediaQuery(LIBRARY_PANES)
+  const laptop = useMediaQuery(SONGS_PANES)
   const query = q.trim()
   const page = useLibraryPage(null, { q })
   // Every song, one list: the laptop's table in the learner's sort, the phone's shelf the latest first.
@@ -113,14 +112,14 @@ export function SongsOverview() {
         </aside>
         <div className="flex min-w-0 flex-col gap-5">
           <div className="flex min-h-12 items-center gap-4">
-            <h1 className="font-sans text-[1.75rem] leading-tight font-bold tracking-[-0.01em]">
+            <h1 className="font-sans text-[1.75rem] leading-tight font-bold tracking-[-0.01em] whitespace-nowrap">
               {t('all.title')}
             </h1>
-            <span className="text-[1.0625rem] text-muted-foreground tabular-nums">
+            <span className="text-[1.0625rem] whitespace-nowrap text-muted-foreground tabular-nums">
               {t('folder.songCount', { count: songs.length })}
             </span>
             <span className="flex-1" />
-            {search ? <div className="w-80">{search}</div> : null}
+            {search ? <div className="w-80 min-w-0 shrink">{search}</div> : null}
             <NewMenu page={page} folder={null} onImport={songImport.choose} />
           </div>
           {query ? (
