@@ -441,11 +441,6 @@ const ACCOMPANIMENT: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'E harmonised', ru: 'Ми, гармонизованная' },
-          target: { opens: 'harmonise', key: C_MAJOR, note: note('E') },
-        },
-        {
-          kind: 'link',
           title: { en: 'The hymn in the Player', ru: 'Гимн в плеере' },
           target: { opens: 'piece', piece: 'otche', pattern: 'r4' },
         },
@@ -633,11 +628,6 @@ describe('LessonView’s accompaniment', () => {
     expect(screen.getByRole('link', { name: 'C to F, between' })).toHaveAttribute(
       'href',
       '/practice/progressions/line?key=C&p=I-IV',
-    )
-    // A melody note harmonised, on the Key view of its key.
-    expect(screen.getByRole('link', { name: 'E harmonised' })).toHaveAttribute(
-      'href',
-      '/practice/scales?root=C&kind=major&show=key&melody=E',
     )
     expect(screen.getByRole('link', { name: 'The hymn in the Player' }).getAttribute('href')).toBe(
       '/play/otche?pattern=r4',

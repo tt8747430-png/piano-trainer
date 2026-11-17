@@ -18,8 +18,6 @@ export function linkTile(target: LessonLink): { icon: LucideIcon; paint: Paint }
     case 'between':
     case 'song-chords':
       return PAGE_TILES.progressions
-    case 'harmonise':
-      return PAGE_TILES.key
     case 'player':
       return { icon: CirclePlay, paint: PAGE_TILES.progressions.paint }
     case 'exercise':

@@ -171,7 +171,6 @@ export {
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './voicing-kind'
-export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead, type RowPosition } from './voice-lead'
 export {
@@ -220,7 +219,6 @@ export {
   COMPARED_SCALES,
   scaleDifferences,
   type ComparedScale,
-  modeVamp,
   scaleDegreeNames,
   scaleGaps,
   scaleHasChords,

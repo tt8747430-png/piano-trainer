@@ -94,7 +94,6 @@ export function CircleOfFifthsPage() {
               search={{
                 root: noteParam(key.tonic),
                 kind: key.minor ? 'natural' : 'major',
-                show: 'key',
               }}
             />
           }

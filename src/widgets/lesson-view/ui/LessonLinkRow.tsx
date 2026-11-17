@@ -64,7 +64,6 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
               search={{
                 root: noteParam(target.key.tonic),
                 kind: keyScale(target.key),
-                show: 'key',
               }}
             />
           }
@@ -135,24 +134,6 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         />
       )
     }
-    case 'harmonise':
-      return (
-        <RowLink
-          title={title}
-          {...linkTile(target)}
-          render={
-            <Link
-              to="/practice/scales"
-              search={{
-                root: noteParam(target.key.tonic),
-                kind: keyScale(target.key),
-                show: 'key',
-                melody: noteParam(target.note),
-              }}
-            />
-          }
-        />
-      )
     case 'song-chords': {
       const search = typedSearch(target.chords, { tonic: note('C'), minor: false })
       if (!search) throw new RangeError(`A lesson's chords "${target.chords}" do not read`)

@@ -104,8 +104,8 @@ const gospelReharmonisation: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Find chords under the note C', ru: 'Аккорды под нотой до' },
-          target: { opens: 'harmonise', key: C_MAJOR, note: note('C') },
+          title: { en: 'Chords in C major', ru: 'Аккорды до мажора' },
+          target: { opens: 'key', key: C_MAJOR },
         },
       ],
     },

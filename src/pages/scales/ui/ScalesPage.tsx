@@ -3,24 +3,19 @@ import { Settings } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { BackButton, RoundButton, ScreenHeader, Segmented } from '@/shared/ui'
-import { keyOfScale, ScaleExplorer, showsOf, type ScaleView } from '@/widgets/scale-explorer'
+import { BackButton, RoundButton, ScreenHeader } from '@/shared/ui'
+import { ScaleExplorer, type ScaleView } from '@/widgets/scale-explorer'
 import { PianoButton } from '@/widgets/practice-pages'
 import { StepPanel } from '@/widgets/step-panel'
-import { PiecesInKey } from './PiecesInKey'
 
 /**
- * Scales and keys (canvas 174, in the Chords page's shape): any scale on any root, with its path
- * step's panel when opened from one; Scale · Chords · Key under its name; in its Key view, the songs
- * and studies written in the key.
+ * Scales and keys (the Scales board, R60, in the Chords page's shape): any scale on any root on one
+ * page, with its path step's panel when opened from one.
  */
 export function ScalesPage() {
   const { t } = useTranslation('practice')
   const { step, ...scale } = useSearch({ from: '/shell/practice/scales' })
   const onChange = useSetSearch<ScaleView>()
-  // A scale with one view (a blues scale's Scale alone) draws no views control (R30).
-  const views = showsOf(scale.kind)
-  const key = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   const [settingsOpen, setSettingsOpen] = useState(false)
   return (
     <div className="flex flex-col gap-4">
@@ -44,21 +39,7 @@ export function ScalesPage() {
         scale={scale}
         onChange={onChange}
         settings={{ open: settingsOpen, onOpenChange: setSettingsOpen }}
-        views={
-          views.length > 1 ? (
-            <Segmented
-              label={t('pages.scales')}
-              value={scale.show}
-              options={views.map((show) => ({
-                value: show,
-                label: t(`scales.show.${show}`),
-              }))}
-              onChange={(show) => onChange({ show })}
-            />
-          ) : null
-        }
       />
-      {key ? <PiecesInKey musicKey={key} /> : null}
     </div>
   )
 }
