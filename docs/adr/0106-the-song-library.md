@@ -86,7 +86,7 @@ details.
   Favourite among them, so the row carries no heart. The cards stand 12 apart, two across on a laptop, in All songs
   and a folder alike; a folder shows no place chips. The List style keeps one card with hairlines.
 - **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
-  in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), Select and its gear beside it.
+  in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), then Select, where there is something to choose, and the board's ···: Rename and Colour (its name and paint edited in place under the bar, as wide as the search), Share with a group, Archive folder (at once, with Undo, back to where it stood), and Folder settings (Card style, Move, Delete).
 - **Explore is a feed** (R72, Flat's community): the search, the categories as chips, the count and its order (New,
   Most saved, Top rated, `CountSort`), then a card per item (`ExploreFeedCard`): who shared it at its head, its tile
   on its paint with its title and key and meter, a link to its page; at its foot its saves, its stars where enough

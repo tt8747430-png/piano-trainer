@@ -139,12 +139,15 @@ export function LibraryScreen({
         }
       />
       {folder && editing ? (
-        <FolderEditPanel
-          value={editing}
-          placeholder={nameOf(folder)}
-          onChange={setDraft}
-          onDone={done}
-        />
+        // As wide as the search on a laptop (520), never the page's width.
+        <div className="w-full max-w-130">
+          <FolderEditPanel
+            value={editing}
+            placeholder={nameOf(folder)}
+            onChange={setDraft}
+            onDone={done}
+          />
+        </div>
       ) : null}
       {/* A laptop sets the search (520) beside the count; a phone stacks them (the LISTPAGE board). */}
       {laptop && search ? (

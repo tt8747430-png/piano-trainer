@@ -1,29 +1,35 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { CheckCheck, ListChecks, ListX, Settings, Trash2 } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import {
+  Archive,
+  CheckCheck,
+  ListChecks,
+  ListX,
+  Palette,
+  PencilLine,
+  Settings,
+  Users,
+} from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
-import { useUp } from '@/shared/lib'
+import { ShareFolderSheet, useFolderShare } from '@/features/share-folder'
+import { useForgetScreens, useUp } from '@/shared/lib'
 import {
   BackButton,
   MoreMenu,
   RoundButton,
-  RoundLink,
   ScreenHeader,
-  TitleTabs,
   type EditAction,
+  type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
-import { ArchiveButton } from './ArchiveButton'
-import { useSongsViews } from './SongsSwitch'
 
 /**
- * The library's bar (Mindscape's): its title says where the learner is, Songs at Home with its views
- * (My songs · Explore), the folder's name in one with its Edit beside it (its name and look, in place)
- * and Back, which goes up a level, named so; at Home the Archive (its count) and More (Select, Card
- * style), in a folder Select and in a folder the gear to its Settings page (Share, Card style, Move to folder…, Archive
- * folder, Delete folder). While Select is on, the count chosen is its title, with Select all and Done.
+ * A list's bar (R72's LISTPAGE): Back, which goes up a level, named so; its title, All songs,
+ * Favourites or the folder's name; Select, and New on a laptop; in a folder the board's ··· (Rename,
+ * Colour, Share, Archive folder, then its Settings). While Select is on, the count chosen is its
+ * title, with Select all and Done.
  */
 export function LibraryHeader({
   page,
@@ -42,12 +48,16 @@ export function LibraryHeader({
   add?: ReactNode
 }) {
   const { t } = useTranslation('songs')
-  const views = useSongsViews('mine')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
   const { select } = page
   const up = useUp()
   const navigate = useNavigate()
+  const forget = useForgetScreens()
+  const shareOf = useFolderShare()
+  const [sharing, setSharing] = useState(false)
+  // Select only where there is something to choose.
+  const chooses = page.view.shown > 0 || page.view.folders.length > 0
   if (select.on)
     return (
       <ScreenHeader
@@ -75,86 +85,98 @@ export function LibraryHeader({
         back={<BackButton label={t('folder.up', { name: t('title') })} onClick={up} />}
         tools={
           <>
-            <RoundButton
-              label={t('select.start')}
-              icon={ListChecks}
-              onClick={() => page.select.start()}
-            />
-            {add}
-          </>
-        }
-      />
-    )
-  const name = folder ? nameOf(folder) : t('title')
-  const above = folder?.parent ? folders.find((each) => each.id === folder.parent) : undefined
-  // Home's bar has Songs' switch, My songs · Explore, in its title's place (D1).
-  const place = folder
-    ? ({ large: false } as const)
-    : ({ large: true, views: <TitleTabs {...views} /> } as const)
-  return (
-    <ScreenHeader
-      title={name}
-      {...place}
-      back={
-        folder ? (
-          <BackButton
-            label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
-            onClick={up}
-          />
-        ) : undefined
-      }
-      // While the folder is in Edit only Done stands beside its name: Select and its Settings wait.
-      tools={
-        edit?.editing ? null : (
-          <>
-            {/* At Home Select is in More (canvas 133); a folder's bar has no More. */}
-            {folder ? (
+            {chooses ? (
               <RoundButton
                 label={t('select.start')}
                 icon={ListChecks}
                 onClick={() => page.select.start()}
               />
             ) : null}
-            {/* The Archive is the bar's at Home, on a phone and a laptop alike (the boards'). */}
-            {folder ? null : <ArchiveButton />}
             {add}
           </>
-        )
-      }
-      more={
-        folder ? null : (
-          <MoreMenu
-            actions={[
-              {
-                key: 'select',
-                label: t('select.start'),
-                icon: ListChecks,
-                onSelect: () => page.select.start(),
-              },
-              // The board's ···: Select, then the Trash (deleted songs wait there, out of Archive).
-              {
-                key: 'trash',
-                label: t('trash.title'),
-                icon: Trash2,
-                onSelect: () => void navigate({ to: '/songs/trash' }),
-              },
-            ]}
+        }
+      />
+    )
+  if (!folder) return null
+  const name = nameOf(folder)
+  const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
+  // Out of the library (archived): to where it stood, its folder or Home; its screens gone for Back.
+  const leave = () => {
+    forget(`/songs/folders/${folder.id}`)
+    return above
+      ? navigate({ to: '/songs/folders/$folderId', params: { folderId: above.id }, replace: true })
+      : navigate({ to: '/songs', replace: true })
+  }
+  const actions: (MenuAction | false)[] = [
+    // Its name and its colour, both edited in place under the bar (`FolderEditPanel`).
+    edit !== undefined && {
+      key: 'rename',
+      label: t('folder.rename'),
+      icon: PencilLine,
+      onSelect: edit.onEdit,
+    },
+    edit !== undefined && {
+      key: 'colour',
+      label: t('folder.colour'),
+      icon: Palette,
+      onSelect: edit.onEdit,
+    },
+    { key: 'share', label: t('groups.share'), icon: Users, onSelect: () => setSharing(true) },
+    page.mayOnFolder('archiveFolder', folder) && {
+      key: 'archive',
+      label: t('folder.archive'),
+      icon: Archive,
+      destructive: true,
+      onSelect: () => {
+        page.acts.archiveFolder(folder)
+        void leave()
+      },
+    },
+    {
+      key: 'settings',
+      label: t('folder.settings'),
+      icon: Settings,
+      onSelect: () =>
+        void navigate({ to: '/songs/folders/$folderId/settings', params: { folderId: folder.id } }),
+    },
+  ]
+  return (
+    <>
+      <ScreenHeader
+        title={name}
+        back={
+          <BackButton
+            label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
+            onClick={up}
           />
-        )
-      }
-      edit={edit}
-      // A folder's own settings (name, look, place, Archive, Delete) are its Settings page.
-      settings={
-        folder && !edit?.editing ? (
-          <RoundLink
-            label={t('folder.openSettings', { name })}
-            icon={Settings}
-            render={
-              <Link to="/songs/folders/$folderId/settings" params={{ folderId: folder.id }} />
-            }
-          />
-        ) : null
-      }
-    />
+        }
+        // While its name and colour are edited only Done stands beside its name.
+        tools={
+          edit?.editing ? null : (
+            <>
+              {chooses ? (
+                <RoundButton
+                  label={t('select.start')}
+                  icon={ListChecks}
+                  onClick={() => page.select.start()}
+                />
+              ) : null}
+              {add}
+            </>
+          )
+        }
+        // The board's ···: Rename, Colour, Share, Archive folder, then its Settings (Card style, Move, Delete).
+        more={
+          edit?.editing ? null : (
+            <MoreMenu
+              label={t('folder.more', { name })}
+              actions={actions.filter((action): action is MenuAction => action !== false)}
+            />
+          )
+        }
+        edit={edit?.editing ? edit : undefined}
+      />
+      <ShareFolderSheet open={sharing} onOpenChange={setSharing} folder={shareOf(folder)} />
+    </>
   )
 }

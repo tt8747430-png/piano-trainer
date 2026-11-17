@@ -197,9 +197,10 @@ export const songs = {
     more: 'More for {{name}}',
     archive: 'Archive folder',
     delete: 'Delete folder',
-    // A folder's Settings page (R29), from the gear in its bar.
+    // A folder's Settings page (R29), the last of its ··· (R72).
     settings: 'Folder settings',
-    openSettings: 'Settings for {{name}}',
+    rename: 'Rename',
+    colour: 'Colour',
     appearance: 'Appearance',
     inLibrary: 'In the library',
     moveTo: 'Move to folder…',
