@@ -32,7 +32,19 @@ export async function settle(page, { timeout = 30000 } = {}) {
       (selector) =>
         [...document.querySelectorAll(selector)].every((element) => {
           const box = element.getBoundingClientRect()
-          return box.width === 0 || box.height === 0 || getComputedStyle(element).visibility === 'hidden'
+          // Out of sight is not at work: a score's lazy pages stay skeletons until scrolled to (A34),
+          // and a scrolled shot settles again when it brings them in.
+          // Out of sight: past the window or scrolled away inside its nearest scroller (a lazy page waits there).
+          let clip = { top: 0, bottom: innerHeight, left: 0, right: innerWidth }
+          for (let up = element.parentElement; up; up = up.parentElement) {
+            const style = getComputedStyle(up)
+            if (/(auto|scroll|hidden)/.test(style.overflowY + style.overflowX)) {
+              const edge = up.getBoundingClientRect()
+              clip = { top: Math.max(clip.top, edge.top), bottom: Math.min(clip.bottom, edge.bottom), left: Math.max(clip.left, edge.left), right: Math.min(clip.right, edge.right) }
+            }
+          }
+          const away = box.bottom <= clip.top || box.top >= clip.bottom || box.right <= clip.left || box.left >= clip.right
+          return away || box.width === 0 || box.height === 0 || getComputedStyle(element).visibility === 'hidden'
         }),
       BUSY,
       { timeout },
