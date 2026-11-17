@@ -69,7 +69,8 @@ details.
   archived song still opens by its link, from Learn and from Search, which says it is archived.
 - **One search, one sort** (R72, Flat's library; no filter page, no place chips, no tree): the search in the URL,
   never remembered, finds a song by its title, composer, subtitle, tags and genre, word by word, and in a folder
-  narrows it. The sort is kept in the library (`pt-library` version 7): Last played, Title, Composer or Added, and
+  narrows it. A song is played once its Player's music starts (its first Play, or Wait mode begun), never on
+  opening the Player alone; Last played and Learning read that. The sort is kept in the library (`pt-library` version 7): Last played, Title, Composer or Added, and
   Ascending or Descending, each sort starting the usual way (Title and Composer A to Z, Last played and Added the
   newest first); what has no date or composer stands last either way. Added is when the learner's own song came in
   (`OwnSong.added`, `pt-pieces` version 13); the app's songs have none.

@@ -123,7 +123,6 @@ export function usePlayer(
     [piece, choice, book],
   )
   const headings = usePieceHeadings(piece)
-  useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
   // The recording plays along in any key, shifted as far as the music is (R34): stretched, the singer
   // moves with the chords. Its track's Play turns it on or off (A35).
   // Moved by the learner's Sync where a device hears it off the notes: later, its bar 1 comes later.
@@ -155,6 +154,11 @@ export function usePlayer(
     `${state.beatGroup}:${state.received.length}:${state.ahead.length}:${state.wrongHere.length}`,
   )
   usePracticeClock(atTheKeys)
+  // Practised once the music really starts (research item 12): the first Play, or the first right
+  // key in Wait mode, never the opening alone; so Recently played and Learning hold what was played.
+  useEffect(() => {
+    if (atTheKeys) recordPractised(progress, piece.id, new Date())
+  }, [atTheKeys, progress, piece.id])
   // The song's place (canvas 125): the bars played through and where Continue opens next.
   const lastBar = writtenBarOf(performance, performance.bars.length - 1)
   useSongPlayRecord(
