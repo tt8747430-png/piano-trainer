@@ -4,14 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { selectIntervals, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { intervalExample, writesInterval } from '@/features/play-example'
-import {
-  INTERVAL_GROUP_IDS,
-  noteFromParam,
-  noteParam,
-  pitchClassOf,
-  printedNote,
-  type IntervalGroup,
-} from '@/shared/lib/music'
+import { noteFromParam, noteParam, pitchClassOf, printedNote } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -21,18 +14,10 @@ import {
   FloatingPieces,
   FloatingPlaySplit,
   PitchPicker,
-  Segmented,
   usePlayKey,
   usualName,
 } from '@/shared/ui'
-import {
-  INTERVAL_ROWS,
-  ROW_INTERVALS,
-  everyInterval,
-  groupOf,
-  oneInterval,
-  type RowInterval,
-} from '../model/interval-rows'
+import { ROW_INTERVALS, everyInterval, oneInterval, type RowInterval } from '../model/interval-rows'
 import { intervalMusic } from '../model/interval-music'
 import { INTERVAL_PLAY_WAYS, type IntervalView } from '../model/interval-view'
 import { IntervalHero } from './IntervalHero'
@@ -56,9 +41,10 @@ function shuffled(names: readonly RowInterval[]): RowInterval[] {
 /**
  * Intervals in the Chords page's shape (canvas 176): the keys at the top lighting the interval's two
  * notes; its name with its facts behind the ⓘ; its notes on the staff with the song it sounds like and
- * Hear it; Simple · Compound over the tiles. One floating bar as Scales': From (the root), Play with
- * how it plays (Ascending, Descending, Harmonic), and Play all. On a laptop the keys run across the
- * top, as Scales', and the tiles stand in a column beside the interval. The interval, the root and the way are the URL's.
+ * Hear it; every interval in one grid of tiles, the simple then the compound. One floating bar as
+ * Scales': From (the root), Play with how it plays (Ascending, Descending, Harmonic), and Play all.
+ * On a laptop the keys run across the top and the rest reads down one centred column, as Scales'.
+ * The interval, the root and the way are the URL's.
  */
 export function IntervalExplorer({
   view,
@@ -79,7 +65,6 @@ export function IntervalExplorer({
     () => notate(intervalMusic(example.music, view.way)),
     [example.music, view.way],
   )
-  const group = groupOf(chosen)
   const play = (name: RowInterval) =>
     playback.toggle(name, () => oneInterval(root, name, view.way, speed))
   usePlayKey(() => play(chosen))
@@ -94,42 +79,25 @@ export function IntervalExplorer({
     )
   const fromName = printedNote(usualName(pitchClassOf(root)))
   return (
-    <div className="flex flex-col gap-4">
-      {/* The board's laptop (canvas 197): the keys in a card heading the first column, 20 over the
-          name; the size and the tiles beside them, 40 apart. On a phone the keys stay pinned on top. */}
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_26.25rem] lg:items-start lg:gap-x-10 lg:gap-y-5 lg:pt-2">
-        <PinnedKeyboard shown={example.shown} place="top" fitInView column />
-        <div className="flex min-w-0 flex-col gap-4 lg:col-start-1 lg:row-start-2 lg:gap-5">
-          <IntervalHero
-            name={chosen}
-            root={root}
-            score={score}
-            playing={playback.playing === chosen}
-            onPlay={() => play(chosen)}
-          />
-        </div>
-        <div className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:pt-1">
-          <Segmented<IntervalGroup>
-            label={t('intervals.size.label')}
-            value={group}
-            options={INTERVAL_GROUP_IDS.map((each) => ({
-              value: each,
-              label: t(`intervals.size.${each}`),
-            }))}
-            onChange={(each) => {
-              const first = INTERVAL_ROWS[each].find((name) => writesInterval(root, name))
-              if (first) onChange({ iv: first })
-            }}
-          />
-          <IntervalTiles
-            names={INTERVAL_ROWS[group].filter((name) => writesInterval(root, name))}
-            chosen={chosen}
-            onPick={(name) => {
-              onChange({ iv: name })
-              play(name)
-            }}
-          />
-        </div>
+    // The board's one column (`r61_intervals.py`): the keys edge to edge, 28 over a centred column
+    // 880 wide at most, its name, its music and every interval in one grid, 24 apart on a laptop.
+    <div className="flex flex-col gap-4 lg:gap-7">
+      <PinnedKeyboard shown={example.shown} place="top" fitInView />
+      <div className="flex min-w-0 flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
+        <IntervalHero
+          name={chosen}
+          score={score}
+          playing={playback.playing === chosen}
+          onPlay={() => play(chosen)}
+        />
+        <IntervalTiles
+          names={ROW_INTERVALS.filter((name) => writesInterval(root, name))}
+          chosen={chosen}
+          onPick={(name) => {
+            onChange({ iv: name })
+            play(name)
+          }}
+        />
       </div>
       <FloatingActions>
         {/* Scales' three pieces of glass: where the interval is played from, Play with how, all. */}

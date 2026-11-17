@@ -133,7 +133,7 @@ export function RunView({
   const standard = hasStandardFingering(kind)
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" column />}
+      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" />}
       heading={choice}
       music={
         <section className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-card px-3 py-4 ring-1 ring-border">

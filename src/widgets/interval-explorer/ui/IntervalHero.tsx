@@ -1,7 +1,6 @@
 import { Play, Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { INTERVALS, printedNote, spellAbove, type SpelledNote } from '@/shared/lib/music'
 import type { notate } from '@/shared/lib/notation'
 import { InfoTip, LazyScoreView } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -11,18 +10,16 @@ import { useIntervalName } from './use-interval-name'
 
 /**
  * The interval chosen, the page's subject (canvas 170): its name and, behind its ⓘ, what it sounds
- * like, a song it rises in and one it falls in, and what it inverts to; under the name its size and
- * its two notes; then the card of its staff and the song it sounds like, with Hear it.
+ * like, a song it falls in and what it inverts to (its size and notes are the keys' and the tiles');
+ * then the card of its staff and the song it sounds like, with Hear it.
  */
 export function IntervalHero({
   name,
-  root,
   score,
   playing,
   onPlay,
 }: {
   name: RowInterval
-  root: SpelledNote
   score: ReturnType<typeof notate>
   playing: boolean
   onPlay: () => void
@@ -33,44 +30,34 @@ export function IntervalHero({
   const { title } = said(name)
   const songs = intervalSongs(name)
   const inverse = INVERSIONS[name]
-  const upper = spellAbove(root, INTERVALS[name])
+  // The ⓘ says what Sounds like and the keys do not: the song it falls in, and what it inverts to.
   const facts: { label: string; value: string }[] = []
-  if (songs) {
-    const up = songs.down ? t('intervals.songsUp') : t('intervals.songs')
-    facts.push({ label: up, value: songs.up[locale].join(' · ') })
-    if (songs.down)
-      facts.push({ label: t('intervals.songsDown'), value: songs.down[locale].join(' · ') })
-  }
+  if (songs?.down)
+    facts.push({ label: t('intervals.songsDown'), value: songs.down[locale].join(' · ') })
   if (inverse) facts.push({ label: t('intervals.inverts'), value: said(inverse).title })
   const heard = songs?.up[locale][0]
   return (
     <section aria-labelledby="interval-chosen" className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-0.5">
-          <h2
-            id="interval-chosen"
-            className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
-          >
-            {title}
-          </h2>
-          <InfoTip name={title} className="mx-3 [&_svg]:size-5">
-            <div className="flex flex-col gap-3">
-              <p className="text-pretty">{t(`intervals.meaning.${name}`)}</p>
-              <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5">
-                {facts.map(({ label, value }) => (
-                  <div key={label} className="contents">
-                    <dt className="text-muted-foreground">{label}</dt>
-                    <dd className="font-semibold">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </InfoTip>
-        </div>
-        <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
-          {t('intervals.semitones', { count: INTERVALS[name].semitones })} ·{' '}
-          {t('intervals.upTo', { low: printedNote(root), high: printedNote(upper) })}
-        </p>
+      <div className="flex items-center gap-0.5">
+        <h2
+          id="interval-chosen"
+          className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
+        >
+          {title}
+        </h2>
+        <InfoTip name={title} className="ms-2 [&_svg]:size-5">
+          <div className="flex flex-col gap-3">
+            <p className="text-pretty">{t(`intervals.meaning.${name}`)}</p>
+            <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5">
+              {facts.map(({ label, value }) => (
+                <div key={label} className="contents">
+                  <dt className="text-muted-foreground">{label}</dt>
+                  <dd className="font-semibold">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </InfoTip>
       </div>
       {/* Its notes on the staff, what it sounds like and Hear it: the Scales page's music card. */}
       <div className="flex flex-col gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">

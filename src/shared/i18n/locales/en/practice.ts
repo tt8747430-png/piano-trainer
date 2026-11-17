@@ -208,15 +208,11 @@ export const practice = {
   },
   intervals: {
     from: 'From',
-    // The chosen interval: its notes, what it sounds like, and its facts behind its ⓘ (canvas 170).
-    upTo: '{{low}} up to {{high}}',
+    // The chosen interval: what it sounds like, and its facts behind its ⓘ (canvas 170).
     soundsLike: 'Sounds like',
     inverts: 'Inverts to',
     chosen: 'Interval',
-    size: { label: 'Intervals', simple: 'Simple', compound: 'Compound' },
     written: 'The interval written',
-    simple: 'Simple intervals',
-    compound: 'Compound intervals',
     // How every row plays its interval, as ear-training apps and exam syllabi name it (R29-P12).
     playAs: 'Play as',
     way: { together: 'Harmonic', up: 'Ascending', down: 'Descending' },
@@ -252,18 +248,13 @@ export const practice = {
     // Interval settings (canvas 176): how Play all goes through them, and how fast every interval plays.
     order: { label: 'Play all', 'in-order': 'In order', shuffled: 'Shuffled' },
     speed: { label: 'Speed', slow: 'Slow', medium: 'Medium', fast: 'Fast' },
-    semitones_one: '{{count}} semitone',
-    semitones_other: '{{count}} semitones',
-    // The songs an interval opens, rising and falling.
-    songsUp: 'Up',
+    // The song an interval opens falling, behind its ⓘ.
     songsDown: 'Down',
     // The tritone by each of its spellings, a row each.
     tritone: {
       A4: { name: 'Augmented fourth', short: 'A4' },
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
-    // The songs an interval opens, behind its row's ⓘ (the unison's one list).
-    songs: 'Songs',
   },
   progressions: {
     practise: 'Practise',

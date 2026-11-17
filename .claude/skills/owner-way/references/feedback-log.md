@@ -993,6 +993,8 @@ owner's, typos fixed.
   (`piano_sheet.py`'s `HANDS3D`); the stage reports each key's corners (`pthands.bundle.js`, `__ptProj`).
 - **Loop round 61, modal progressions (research 3.4):** the Modal style gains Dorian i–IV–v–i, Lydian I–II–vii–I and Phrygian i–♭II–III–i, each "… progression" (a Phrygian cadence is iv⁶–V); Mixolydian and Aeolian already had theirs; the walk-up is also named the Mario cadence (2026-11-17).
 
+- **Intervals in the app as its board, at every width (port, 2026-11-17; craft-details, every width holds):** at 1024 the app still stood the interval in a 230 column beside a sticky column of Simple · Compound tabs and tiles, "Perfect fifth" wrapping, and kept the size line and the ⓘ's Up the rulings removed. It now reads as `r61_intervals.py`: the keys a band edge to edge, 28 over one centred column 880 wide at most (name and ⓘ, the music card, every interval in one grid of seven, 24 apart); no tabs, no size line, the ⓘ holding the meaning, Down and Inverts to. Scales' keys lost their laptop card the same way (one band, the `column` mode gone from the pinned keys).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
