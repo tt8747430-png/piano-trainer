@@ -237,7 +237,7 @@ PV_SRC = r'''
     const A = (k, opts, d) => seg(opts, st[k] ?? d, (x) => S({ [k]: x }));
     const root = st.root ?? 'C', size = st.size ?? 'Triads', walk = st.walk ?? 'One key';
     const T = { walk: 'Walk the chords in ' + root + ' major', chromatic: 'Chromatic walk: major and minor 7ths', progression: 'I – V – vi – IV in ' + root + (walk === 'One key' ? '' : ', up by semitones'), exercise: 'Hanon No. 1: in ' + root };
-    return { ...common(st, set), title: T[V], isWalk: V === 'walk', isChrom: V === 'chromatic', isProg: V === 'progression', isEx: V === 'exercise', playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => S({ playing: !st.playing, open: false }), setupOn: open, openSetup: () => S({ open: true }), startIt: () => S({ open: false }),
+    return { ...common(st, set), title: T[V], isWalk: V === 'walk', isChrom: V === 'chromatic', isProg: V === 'progression', isEx: V === 'exercise', playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => S({ playing: !st.playing, open: false }), setupOn: open, openSetup: () => S({ open: true }), startIt: () => S({ open: false, playing: true }),
       rootsG: rootGrid(ROOTS.indexOf(root), (i) => S({ root: ROOTS[i] })), sizes: A('size', ['Triads', 'Sevenths'], 'Triads'), dirs: A('dir', ['Up', 'Down', 'Up and down'], 'Up'),
       fams: chipsOf(['Major 7th', 'Dominant 7th', 'Minor 7th', 'Half-diminished'], st.fam ?? 'Minor 7th', (x) => S({ fam: x })), walks: chipsOf(['One key', 'Chromatically rising', 'By fifths', 'By fourths'], walk, (x) => S({ walk: x })),
       rhythms: A('rh', ['Even', 'Dotted', 'Reverse dotted'], 'Even'), hands: A('hands', ['Right hand', 'Left hand', 'Both'], 'Both'), nextKey: A('nk', ['Circle of fifths', 'Chromatic'], 'Circle of fifths'), voicings: A('vc', ['Close', 'Drop 2'], 'Close'),
@@ -250,7 +250,9 @@ PVSET = (IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord si
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
                       + SEC(S9CAPS('Tempo ladder', 'lad'), TIPCARD('lad', 'Each clean pass raises the tempo a little, up to the target.'), GROUP(('toggle', 'Tempo ladder', 'ladOn', 'ladT'), bg=SHEET)))
-         + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>')
+)
+# the phone's sheet covers Play, so its foot starts the run; on a laptop Play stands beside the Setup popover and starts it
+PVSTART = PVSET + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>'
 PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
 # the four runs' Player is drawn in r56_results.py, from the run view's parts (round 41)
 print('r54 take, player variants ok')

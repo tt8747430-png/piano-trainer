@@ -219,5 +219,5 @@ PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G']
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSET, 'Close'), POPOVER('setupOn', 'Setup', PVSET, 'right: 40px; top: 64px', 420), 'Practice')
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSET, 'left: 623px; bottom: 244px', 420).replace('max-height: 760px', 'max-height: 452px', 1), 'Practice')
 print('r56 runs ok')
