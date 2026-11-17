@@ -28,6 +28,7 @@ export {
 } from './model/draft'
 export { placesIn, selectionSpan, tapsIn } from './model/caret-moves'
 export { chosenBars, MOST_BARS } from './model/form-edits'
+export { startsLine } from './model/bars'
 export {
   EDIT_MODES,
   type BarEdit,

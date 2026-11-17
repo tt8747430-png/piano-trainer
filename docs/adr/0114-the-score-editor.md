@@ -105,10 +105,11 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     (Input mode's three) shares the row among them; pressed, a sky glyph on a sky wash. A
     tooltip is the key's name then its shortcut, as Flat's. A key that cannot act is not drawn (R32-B).
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
-  and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
+  and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, with Alt two, the comma a tie,
   a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
-  the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Cmd or Ctrl with Shift
-  and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats; 7 the 64th, Shift
+  the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Alt with Enter a bar
+  after, Cmd or Ctrl with Shift and Enter a bar at the end, with Backspace the bars deleted, with Enter the system
+  break (one key: pressed where a line starts at the bar, a second press joins the line to the one before); [ ] the repeats; 7 the 64th, Shift
   with 2 to 8 a tuplet (9 by its key: Shift with 9 is the acciaccatura's); Cmd or Ctrl with E free text, with Shift
   and K the Roman numeral. Bar repeats, multi-bar rests, the page break, swing and the new marks have no key of
   their own, as in Flat.

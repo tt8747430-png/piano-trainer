@@ -287,6 +287,7 @@ export function NoteBar() {
       </PaletteKey>
       <PaletteKey
         label={t('doubleDot')}
+        tool="doubleDot"
         pressed={shown?.dots === 2}
         disabled={!doubleDottable}
         reason={t('reason.noDot')}

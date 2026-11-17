@@ -1,5 +1,5 @@
 import type { Chord } from '@/shared/lib/music'
-import { deleteBars, insertBar, insertBarBefore, joinLine, newLine, type BarRange } from './bars'
+import { deleteBars, insertBar, insertBarBefore, toggleLine, type BarRange } from './bars'
 import { snapToChord } from './caret'
 import { selectionSpan, startOf } from './caret-moves'
 import type { Draft } from './draft'
@@ -57,10 +57,13 @@ export function barsEdited(state: EditorState, edit: BarEdit): EditorState {
       const next = deleteBars(draft, range)
       return commit(state, next, { caret: startOf(next, range.from), selection: null })
     }
+    case 'insertEnd': {
+      const last = barsOf(draft).length - 1
+      const next = insertBar(draft, last)
+      return commit(state, next, { caret: startOf(next, last + 1), selection: null })
+    }
     case 'newLine':
-      return commit(state, newLine(draft, range.from), { selection: null })
-    case 'joinLine':
-      return commit(state, joinLine(draft, range.from), { selection: null })
+      return commit(state, toggleLine(draft, range.from), { selection: null })
     case 'newSection':
       return commit(state, newSection(draft, range.from), { selection: null })
   }

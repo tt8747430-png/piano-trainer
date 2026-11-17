@@ -77,7 +77,8 @@ export interface EditorState extends Snapshot {
 /** Flat's two grace notes: the acciaccatura, slashed, and the appoggiatura. */
 export type GraceKind = 'acciaccatura' | 'appoggiatura'
 
-export type BarEdit = 'insert' | 'insertBefore' | 'delete' | 'newLine' | 'joinLine' | 'newSection'
+/** What a bar key does: `newLine` is the system break, set or taken off (Flat's ⌘Enter). */
+export type BarEdit = 'insert' | 'insertBefore' | 'insertEnd' | 'delete' | 'newLine' | 'newSection'
 
 /** The clipboard's edits, on what is chosen (ADR 0114): the bars in the chord row, the notes on a staff. */
 export type ClipEdit = 'copy' | 'cut' | 'paste'

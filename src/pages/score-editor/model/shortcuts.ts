@@ -12,6 +12,7 @@ interface ToolCombo {
   readonly cap: string
   readonly shift?: true
   readonly mod?: true
+  readonly alt?: true
 }
 
 /** A tool's shortcut, with what it does. */
@@ -59,6 +60,7 @@ export const TOOL_SHORTCUTS = {
   flat: { code: 'Minus', cap: '−', does: { type: 'accidental', accidental: -1 } },
   respell: { code: 'KeyJ', cap: 'J', shift: true, does: { type: 'respell' } },
   dot: { code: 'Period', cap: '.', does: { type: 'dot' } },
+  doubleDot: { code: 'Period', cap: '.', alt: true, does: { type: 'dot', dots: 2 } },
   tie: { code: 'Comma', cap: ',', does: { type: 'tie' } },
   // Flat's ⇧2–⇧8: a tuplet of two to eight on the value; ⇧9 is the acciaccatura's, so nine takes
   // its key alone (ADR 0097).
@@ -86,12 +88,14 @@ export const TOOL_SHORTCUTS = {
     shift: true,
     does: { type: 'mark', mark: { kind: 'pedal', pedal: 'down' } },
   },
-  barAfter: {
+  // Flat's: ⌥Enter a bar after, ⌘⇧Enter one at the end, ⌘Enter the system break (research F14).
+  barAfter: { code: 'Enter', cap: 'Enter', alt: true, does: { type: 'bars', edit: 'insert' } },
+  barEnd: {
     code: 'Enter',
     cap: 'Enter',
     shift: true,
     mod: true,
-    does: { type: 'bars', edit: 'insert' },
+    does: { type: 'bars', edit: 'insertEnd' },
   },
   barDelete: {
     code: 'Backspace',
@@ -120,24 +124,28 @@ export const isTool = (name: string): name is Tool => Object.hasOwn(TOOL_SHORTCU
 
 const TOOLS: readonly ToolShortcut[] = Object.values(TOOL_SHORTCUTS)
 
-/** The tool a press is the key of: its key with exactly its modifiers, Alt never. */
+/** The tool a press is the key of: its key with exactly its modifiers. */
 const toolOf = (press: KeyPress): ToolShortcut | undefined =>
-  press.altKey
-    ? undefined
-    : TOOLS.find(
-        (tool) =>
-          tool.code === press.code &&
-          (tool.shift === true) === press.shiftKey &&
-          (tool.mod === true) === (press.metaKey || press.ctrlKey),
-      )
+  TOOLS.find(
+    (tool) =>
+      tool.code === press.code &&
+      (tool.shift === true) === press.shiftKey &&
+      (tool.alt === true) === press.altKey &&
+      (tool.mod === true) === (press.metaKey || press.ctrlKey),
+  )
 
 /** A tool's keycaps in the order they are pressed, with the modifiers' caps this keyboard prints. */
 export function toolCaps(
   tool: Tool,
-  caps: { readonly mod: string; readonly shift: string },
+  caps: { readonly mod: string; readonly alt: string; readonly shift: string },
 ): readonly string[] {
   const combo: ToolCombo = TOOL_SHORTCUTS[tool]
-  return [...(combo.mod ? [caps.mod] : []), ...(combo.shift ? [caps.shift] : []), combo.cap]
+  return [
+    ...(combo.mod ? [caps.mod] : []),
+    ...(combo.alt ? [caps.alt] : []),
+    ...(combo.shift ? [caps.shift] : []),
+    combo.cap,
+  ]
 }
 
 /** The clipboard's edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
@@ -205,7 +213,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       return mod ? null : { type: 'deselect' }
     // Enter goes on a line; Shift, back a line.
     case 'Enter':
-      if (mod) return null
+      if (mod || press.altKey) return null
       return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
   return null

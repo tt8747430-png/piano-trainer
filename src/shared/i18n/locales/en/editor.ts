@@ -521,7 +521,6 @@ export const editor = {
     insertBefore: 'Add bar before',
     delete: 'Delete bars',
     newLine: 'System break',
-    joinLine: 'Join lines',
     newSection: 'New section',
     repeats: 'Rests and repeats',
     repeatsInfo:
@@ -610,6 +609,7 @@ export const editor = {
     play: 'Play from here, or stop',
     value: 'Note value (whole to 64th)',
     dot: 'Dotted',
+    doubleDot: 'Double dotted',
     tuplet: 'Tuplet (2 to 8)',
     annotation: 'Text above the note',
     numeral: 'Roman numeral analysis',
@@ -625,6 +625,7 @@ export const editor = {
     trill: 'Trill',
     pedal: 'Pedal',
     barAfter: 'Add bar after',
+    barEnd: 'Add bar at end',
     barDelete: 'Delete bars',
     newLine: 'System break',
     repeats: 'Start repeat, end repeat',
