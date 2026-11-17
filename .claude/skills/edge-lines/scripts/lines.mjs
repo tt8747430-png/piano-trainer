@@ -228,8 +228,10 @@ async function analyse(page, scr, phone) {
   // ── Relations: how a card and the things in it belong to each other, not only where their edges fall.
   const rel = [] // drawn: insets (purple), row rhythm (teal)
   const R = (el) => el.getBoundingClientRect()
+  // A glyph centred in a small tile (a chord's 6°, a number in a circle) or a segment's label is a picture, not where words start.
+  const centredGlyph = (p) => { for (let e = p, i = 0; e && i < 3; e = e.parentElement, i++) { const c = getComputedStyle(e); if (R(e).width <= 64 && (c.justifyContent === 'center' || c.textAlign === 'center')) return true } return false }
   const textLeft = (el) => {
-    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim() && !n.parentElement.closest('[aria-hidden=true], svg') ? 1 : 3) })
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim() && !n.parentElement.closest('[aria-hidden=true], svg, [role=radio]') && !centredGlyph(n.parentElement) ? 1 : 3) })
     const n = walk.nextNode()
     if (!n) return null
     const range = document.createRange()
@@ -293,7 +295,8 @@ async function analyse(page, scr, phone) {
     }
     // The card from its neighbours: never closer to them than its contents are to its edge.
     const sib = b.el.nextElementSibling
-    if (sib && vis(sib) && getComputedStyle(sib).position !== 'absolute') {
+    // Inside a toolbar the acts sit close by design (a dock's groups); the rule is for cards on the page.
+    if (sib && vis(sib) && getComputedStyle(sib).position !== 'absolute' && !b.el.closest('[role=toolbar]')) {
       const s = R(sib)
       const out = s.top >= box.bottom - 1 ? Math.round(s.top - box.bottom) : s.left >= box.right - 1 ? Math.round(s.left - box.right) : null
       if (out !== null && out < Math.min(inL, inT) && out < 16) problems.push(`${named(b)}: ${out}px from its neighbour but ${Math.min(inL, inT)}px inset: it reads as part of the next thing`)
@@ -324,6 +327,9 @@ async function analyse(page, scr, phone) {
     const u = R(unit)
     const below = Math.round(R(next).top - u.bottom)
     const above = prev && vis(prev) ? Math.round(u.top - R(prev).bottom) : null
+    // A sheet's or dialog's own title under its grabber is the sheet's name, not a group's heading.
+    if (prev && vis(prev) && R(prev).height <= 8) continue
+    if (hd.closest('[role=dialog]') && !prev) continue
     // An eyebrow (a small line just above, smaller than the heading) is part of the heading, not a group before it.
     if (prev && vis(prev) && parseFloat(getComputedStyle(prev).fontSize) < parseFloat(getComputedStyle(hd).fontSize) * 0.8 && R(prev).height < 24) continue
     if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${hd.textContent.trim().slice(0, 24)}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)

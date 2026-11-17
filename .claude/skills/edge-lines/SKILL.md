@@ -51,6 +51,7 @@ It judges those relations too (PROBLEM or NOTE):
 - a filled thing within 8 of a box's corner not concentric with it;
 - a heading as far from what it heads as from what is above it, or further: it reads as the end of the last group.
 - A block centred in a row (a title beside a search) is read by its row's top.
+- Not counted, being no group's heading or row of words: a sheet's or dialog's title under its grabber, a glyph centred in a small tile (6°, a numbered circle), a segment's label, and the acts inside one toolbar (a dock's groups sit close by design).
 - boxes side by side whose edges cross: one starts inside its neighbour's height and ends below it (owner, 2026-11-17:
   "the method books box crosses this lines that define where a box finishes"); every card's bottom is drawn across the
   screen in dashed orange, so the crossing shows;
