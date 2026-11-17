@@ -241,7 +241,7 @@ SELBAR = lambda bottom: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{
 SELTB = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 # Songs' places on a laptop share one frame (LPLACEBAR) and the sidebar holds the places (SONGS_SUB): no pane card
 # Select stands next to the search on every place, so it never moves between them; what a place adds goes before it
-_PACTS = lambda more='': more + f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{NEWBTN("openAdd")}</sc-if>' + SELTB
+_PACTS = lambda more='': more + SELTB  # New floats at the bottom right (NEWPOP), as on a phone
 _PTITLE = lambda t: f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{t}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
 _SELBAR_L = SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')
 ovlm = LPLACEBAR(_PTITLE('All songs'), '{{count}}', _PACTS(), PSEARCH('Search your songs', 'q', 'typed')) + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
@@ -271,7 +271,7 @@ RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
-NEWPOP = MENUSHELL('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), w=260)
+NEWPOP = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">' + NEWDIAL([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW][::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + '</sc-if>'
 PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
 detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('{{menuPos}}') + NEWPOP + ROWMENU('rowOn', '{{rowT}}', ROWITEMS('Laptop.dc.html')) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 

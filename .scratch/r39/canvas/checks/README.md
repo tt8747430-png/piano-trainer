@@ -34,3 +34,13 @@ RT=<path to the Design type's dc-runtime.js> CSP=1 node run.mjs <Board> <width> 
 - A laptop popover has no Done button; close it by clicking the element before `[role=dialog]`.
 - `dc-runtime.js` is the Design artifact type's own script; read it from the type with the Artifact tool once per
   session and keep it in the scratchpad.
+
+## The inventory and the layers
+
+- `python3 checks/inventory.py` writes `../plan/inventory.md`: every board by canvas page, every sheet, popover, menu
+  and dialog it holds (by its `aria-label`), and every kit component with the generators that call it. Run it after a
+  rebuild; a component used by nothing is deleted, and a board on no canvas page is placed or deleted.
+- `RT=… node .scratch/r39/canvas/checks/layers.mjs [Board …]` (from the repo root) opens every board, taps every
+  control in its screen that does not leave the board, and measures each layer that opens, two levels deep (New ›
+  New lesson): OUTSIDE the screen, a word CUT at its edge, two controls in OVERLAP, a phone's SHEET ON A LAPTOP,
+  a SMALL control, an EMPTY layer, a page that THROWS. Its last line counts the layers opened and those with problems.

@@ -17,8 +17,6 @@ if '<div data-canvas-tool' in LAPFRAME_TOP:
     _i = LAPFRAME_TOP.index('<div data-canvas-tool'); _j = LAPFRAME_TOP.index('</sc-if></div>', _i) + len('</sc-if></div>')
     LAPFRAME_TOP = LAPFRAME_TOP[:_i] + LAPFRAME_TOP[_j:]
 PHONE_FRAME, LAPTOP_FRAME = '/_blob/2fd798458923e267dd22b7a996a98294', '/_blob/0526d4830b1e952a0ab4ba3ffc2765fc'
-SH = '0 0 0 1px rgba(26,22,18,0.05), 0 1px 2px rgba(26,22,18,0.06), 0 3px 10px -4px rgba(26,22,18,0.10)'
-POP = '0 0 0 1px rgba(26,22,18,0.05), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28)'
 
 HEAD = '''<!doctype html>
 <html lang="en">
@@ -50,11 +48,9 @@ FONT = "'Instrument Sans', -apple-system, 'Helvetica Neue', sans-serif"
 I = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
 CHEV_L = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="m15 18-6-6 6-6"></path></svg>'
 CHEV_R = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="m9 18 6-6-6-6"></path></svg>'
-CHEV_U = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="m18 15-6-6-6 6"></path></svg>'
 MORE = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>'
 PLAY = '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M7 4.8a1.6 1.6 0 0 1 2.4-1.4l11 6.8a2.1 2.1 0 0 1 0 3.6l-11 6.8A1.6 1.6 0 0 1 7 19.2z"></path></svg>'
 STOP = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2.5"></rect></svg>'
-HEART = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
 SEARCH = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4-4"></path></svg>'
 PLUS = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="M12 5v14M5 12h14"></path></svg>'
 UNDO = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg>'
@@ -102,13 +98,8 @@ const common = (st, set) => ({ sheetOn: !!st.sheet, closeSheet: () => set({ shee
 def BAR(back, right='', backlabel='Back'):
     b = f'<a href="{back}" aria-label="{backlabel}" style="width: 44px; height: 44px; margin-left: -6px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a>' if back else '<span style="width: 44px"></span>'
     return f'<header style="flex: none; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px">{b}<div style="display: flex; align-items: center; gap: 4px">{right}<button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="width: 44px; height: 44px; margin-right: -6px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></header>'
-ICONBTN = lambda label, svg, act='': f'<button type="button" aria-label="{label}" {("onClick=\"{{" + act + "}}\"") if act else ""} style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{svg}</button>'
-def HERO(size=60, gap=6):
-    return f'<div style="flex: none; display: flex; flex-direction: column; align-items: center; gap: {gap}px; padding: 4px 16px 0; text-align: center"><h1 style="margin: 0; font-size: {size}px; line-height: 1; font-weight: 700; letter-spacing: -0.02em; color: {INK}; white-space: nowrap">{{{{name}}}}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{sub}}}}</p></div>'
 def KEYS(h):
     return f'<div style="position: relative; flex: none; width: 100%; height: {h}px; border-radius: 14px; overflow: hidden; background: {LINE}; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{kb.whites}}}}" as="k" hint-placeholder-count="14"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 10px; border-right: 1px solid rgba(51,41,33,.16); background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-size: 12px; font-weight: {{{{k.fw}}}}; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><sc-for list="{{{{kb.blacks}}}}" as="k" hint-placeholder-count="10"><span style="position: absolute; left: {{{{k.left}}}}px; top: 0; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; box-sizing: border-box; padding-bottom: 6px; border-radius: 0 0 5px 5px; background: {{{{k.bg}}}}; color: {INK}; font-size: 10px; font-weight: 700; display: flex; align-items: flex-end; justify-content: center">{{{{k.label}}}}</span></sc-for><div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #7C302C"></div></div>'
-def TABS(lst='tabs'):
-    return f'<div role="tablist" style="flex: none; display: flex; justify-content: center; gap: 22px"><sc-for list="{{{{{lst}}}}}" as="t" hint-placeholder-count="4"><button type="button" role="tab" onClick="{{{{t.pick}}}}" style="height: 36px; border: 0; background: transparent; padding: 0 2px; color: {{{{t.ink}}}}; font: inherit; font-size: 15px; font-weight: {{{{t.fw}}}}; box-shadow: inset 0 -2px 0 {{{{t.line}}}}">{{{{t.l}}}}</button></sc-for></div>'
 def ROWS(*rows):
     out = []
     for i, r in enumerate(rows):
@@ -126,19 +117,10 @@ def ROWS(*rows):
         elif kind == 'raw':
             out.append(label)
     return f'<div style="flex: none; border-radius: 12px; background: {FILL}; overflow: hidden">{"".join(out)}</div>'
-def FLOAT(change, mids='', play=True, bottom=34, sticky=True):
-    ch = f'<button type="button" onClick="{{{{openChange}}}}" style="flex: 1; min-width: 0; height: 52px; border: 0; background: transparent; padding: 0 12px; display: flex; align-items: center; gap: 8px; color: {INK}; font: inherit; font-size: 16px; font-weight: 600; white-space: nowrap">{change}<span style="display: flex">{CHEV_U}</span></button>' if change else '<span style="flex: 1"></span>'
-    pl = f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: 52px; height: 52px; border: 0; border-radius: 26px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>' if play else ''
-    pos = f'position: absolute; left: 16px; right: 16px; bottom: {bottom}px; z-index: 40;' if sticky else 'position: relative;'
-    return f'<div role="toolbar" style="{pos} height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{ch}{mids}{pl}</div>'
 PILL = lambda label, act, on='': f'<button type="button" onClick="{{{{{act}}}}}" {("aria-pressed=\"{{" + on + "}}\"") if on else ""} style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {{{{{(on + "Bg") if on else "pillBg"}}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; white-space: nowrap">{label}</button>'
 def WHEEL(cols):
     colsh = ''.join(f'<div style="flex: {flex}; min-width: 0; display: flex; flex-direction: column"><sc-for list="{{{{{lst}}}}}" as="w" hint-placeholder-count="7"><button type="button" onClick="{{{{w.pick}}}}" style="height: 44px; border: 0; background: transparent; color: {INK}; opacity: {{{{w.op}}}}; font: inherit; font-size: 18px; font-weight: {{{{w.fw}}}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{w.l}}}}</button></sc-for></div>' for lst, flex in cols)
     return f'<div style="position: relative; display: flex; gap: 4px"><div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 132px; height: 44px; border-radius: 10px; background: {FILL}"></div><div style="position: relative; flex: 1; display: flex; gap: 4px">{colsh}</div></div>'
-def SHEET_PHONE(cond, head_left, body, foot=''):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; border-radius: 22px 22px 0 0; background: {SHEET}; padding: 8px 16px 40px; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px"><span style="font-size: 16px; font-weight: 600; color: {INK}">{head_left}</span><button type="button" onClick="{{{{closeSheet}}}}" style="height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div>{body}{foot}</section></sc-if>'
-def MORESHEET(title, rows, foot=''):
-    return SHEET_PHONE('moreOn', title, rows, f'<p style="margin: 0; font-size: 13px; color: {SOFT}">{foot}</p>' if foot else '')
 
 def phone(fname, title, body, js, sheets='', bg=PAGE):
     html = HEAD % title + f"""<div style="width: 450px; height: 920px; position: relative; font-family: {FONT}">
@@ -224,34 +206,7 @@ def laptop(fname, title, main, aside, js, pops='', section='Practice'):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-def POP_L(cond, body, pos='right: 470px; bottom: 120px', w=420):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" style="position: absolute; {pos}; z-index: 61; width: {w}px; box-sizing: border-box; border-radius: 16px; background: {SHEET}; padding: 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>'
 
 # A page in the calm shape: phone and laptop from one description
-def calm_page(stem, title, js, stage_phone, stage_laptop, tabs=True, rows='', change='', mids='', more='', more_title='', more_foot='', wheel_cols=None, wheel_head='', back='Main.dc.html', back_l='Laptop.dc.html', hero=60, aside_extra='', play=True, section='Practice', heart=False):
-    right = ICONBTN('Favourite', HEART) if heart else ''
-    wheel_body = WHEEL(wheel_cols) if wheel_cols else ''
-    body = f"""{BAR(back, right)}
-{HERO(hero)}
-<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px 16px 118px">
-<div style="flex: 1; min-height: 0; position: relative">{stage_phone}</div>
-{TABS() if tabs else ''}
-{rows}
-</div>
-{FLOAT(change, mids, play)}"""
-    sheets = (SHEET_PHONE('changeOn', wheel_head, wheel_body) if wheel_cols else '') + (MORESHEET(more_title, more, more_foot) if more else '')
-    phone(stem, title + ', phone', body, js, sheets)
-    main = f"""<header style="flex: none; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px"><a href="{back_l}" aria-label="Back" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: {INK}; text-decoration: none">{CHEV_L}</a><div style="display: flex; gap: 4px">{right}<button type="button" aria-label="More" onClick="{{{{openMore}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></header>
-{HERO(hero + 28, 8)}
-<div style="flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px; padding: 22px 64px 28px">
-<div style="flex: 1; min-height: 0; position: relative">{stage_laptop}</div>
-{TABS() if tabs else ''}
-<div style="flex: none; display: flex; justify-content: center"><div style="width: 560px">{FLOAT('', mids, play, sticky=False)}</div></div>
-</div>"""
-    aside = (f'<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{change}</h2></div>' + (WHEEL(wheel_cols) if wheel_cols else '') if change else '') + rows + aside_extra
-    pops = POP_L('moreOn', f'<span style="font-size: 16px; font-weight: 600">{more_title}</span>' + more, 'right: 40px; top: 64px', 380) if more else ''
-    laptop(stem + 'Laptop' if stem != 'Main' else 'Laptop', title + ', laptop', main, aside, js, pops, section)
 
-def RB_JS(extra):
-    return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + extra + '\n  }\n}\n'
 
