@@ -266,10 +266,11 @@ export const songs = {
     moveOut: 'Move to {{place}}',
     zones: 'Drop here',
   },
-  // Home with nothing in it: every song and folder archived.
+  // A library with nothing in it (R72's BAREP).
   homeEmpty: {
-    title: 'Your library is empty',
-    description: 'Create a song, or restore items from the archive.',
+    title: 'Your songs live here',
+    description: 'Write one with +, import MusicXML or MIDI, or find one in Explore.',
+    explore: 'Find a song in Explore',
   },
   table: {
     songs: 'Songs',

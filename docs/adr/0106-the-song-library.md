@@ -43,6 +43,9 @@ details.
     New folder at its foot;
   - the song's Settings (ADR 0111): the ♡, Move to…, Archive or Restore; a song's row and page also
     Export…, one sheet of MusicXML, MIDI and Share link (ADR 0107).
+- **An empty place invites** (R72's BAREP and FEMPTY, `Said invite`): an empty folder or Favourites is one card saying
+  what shows there, with Add songs from your library (All songs); an empty library says where songs live and points
+  to Explore, since New already sits in the bar or the dial.
 - **Every move, archive and favourite toasts with Undo**, which puts it back exactly where it stood.
 - **Deleting a folder deletes its songs and folders**, but the app's content is never destroyed: what the learner
   made goes (an own folder for good, their songs to the Trash); what the app brought goes to the archive (a built-in

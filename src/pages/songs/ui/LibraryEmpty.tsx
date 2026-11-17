@@ -1,14 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { FolderOpen, Heart, Music, Plus, SearchX } from 'lucide-react'
+import { Heart, Music, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { ButtonLink, Said } from '@/shared/ui'
+import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
  * A place of the library with nothing to list: a folder or Favourites says what shows there and
- * links to All songs (R72); an empty library offers New song; a search that keeps nothing says so,
+ * links to All songs (R72); an empty library says where songs live and points to Explore; a search that keeps nothing says so,
  * with Clear search.
  */
 export function LibraryEmpty({
@@ -39,34 +39,32 @@ export function LibraryEmpty({
         }
       />
     )
-  // A folder or Favourites with nothing in it (R72's FEMPTY): what shows here, and the way to All songs.
+  // A folder or Favourites with nothing in it (R72's FEMPTY): a card saying what shows here, with the
+  // way to All songs.
   if (place !== 'home')
     return (
       <Said
-        icon={place === 'folder' ? FolderOpen : Heart}
+        invite={place === 'folder' ? 'sky' : 'sand'}
+        card
+        icon={place === 'folder' ? Music : Heart}
         title={t(place === 'folder' ? 'folder.emptyTitle' : 'places.emptyFavourites')}
         description={t(
           place === 'folder' ? 'folder.emptyDescription' : 'places.emptyFavouritesLine',
         )}
-        action={
-          <ButtonLink variant="link" render={<Link to="/songs/all" />}>
-            {t('folder.addSongs')}
-          </ButtonLink>
-        }
+        action={<Link to="/songs/all">{t('folder.addSongs')}</Link>}
       />
     )
+  // A library with nothing in it (R72's BAREP): where songs live, the three ways in, and Explore.
   return (
     <Said
+      invite="yellow"
       icon={Music}
       title={t('homeEmpty.title')}
       description={t('homeEmpty.description')}
       action={
-        page.may('addSong') ? (
-          <Button variant="ghost" onClick={() => page.open({ kind: 'new-song' })}>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('newSong')}
-          </Button>
-        ) : null
+        <Link to="/songs" search={(was) => ({ ...was, view: 'explore' })}>
+          {t('homeEmpty.explore')}
+        </Link>
       }
     />
   )

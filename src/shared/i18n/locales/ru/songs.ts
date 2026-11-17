@@ -259,8 +259,9 @@ export const songs: LocaleResources['songs'] = {
     zones: 'Отпустите здесь',
   },
   homeEmpty: {
-    title: 'Библиотека пуста',
-    description: 'Создайте песню или восстановите элементы из архива.',
+    title: 'Здесь живут ваши песни',
+    description: 'Напишите песню через +, импортируйте MusicXML или MIDI или найдите её в Обзоре.',
+    explore: 'Найти песню в Обзоре',
   },
   table: {
     songs: 'Песни',
