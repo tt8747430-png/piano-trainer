@@ -340,17 +340,23 @@ on a phone, 24px from 640px, 40px beside the sidebar.
 
 - **Grids, not columns:** row cards in as many 18rem columns as fit (`grid-cards`), fields in 20rem (`grid-fields`),
   chord buttons in `grid-chords`, tiles in `grid-tiles`. Rows and grids stay even on wide screens.
-- **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`.
+- **Rhythm:** 24px between a screen's parts, 32px between sections, 16–20px inside a group, with `gap`. A section's
+  heading sits on the content's edge, 32 below what comes before and 12 above what it heads, so it reads with its own
+  group (proximity). A group's small-capital label starts on its rows' 16 inset, 8 above the group. Sibling tiles stand
+  at least as far apart as their own inset (Profile's figures, 12).
 - **The shell:** four places in a bar docked at the foot of a phone, a rail down the left of a phone on its side, a
   256px sidebar from 1024px (72px collapsed), as Claude's: the name and its toggle, Search as a field, Learn, Songs
-  and Practice, Recents (the songs opened last), and under a line the learner (picture and name, opening the
-  Profile) with Settings' gear beside it. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
+  and Practice, Recents (the songs opened last), and at its foot one account row (picture, name and ⌃⌄) opening a
+  menu above it: the email, Profile, Settings, Language, Help, then Sign out apart. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
   alone; what a place opens has the whole height.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned, what it is with its one Play, its
   choices, then its titled sections. No page splits into two columns of unrelated things.
-- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 64rem the libraries' two
+- **Two panes from 80rem (`WIDE`):** Settings and Songs stand in two panes only from 1280; under it the sidebar
+  leaves a second pane too narrow to read, so they keep one column. A bar over a 672 column (`max-w-2xl`) sets its
+  row on that column (`ScreenHeader column`), so title and content share an edge at every width.
+- **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 80rem the libraries' two
   panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
   the page (44rem), which scrolls with the window. Never two columns of unequal groups.
 - **The editor's palette docks:** from 48rem a panel at the sheet's side (left or right, as Note input's Palette
