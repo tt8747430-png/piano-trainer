@@ -158,8 +158,8 @@ def GROUP(*rows, bg=FILL):
     # round 41: one card of rows. On the card paper a group is BOXG's card, 14 corners and the hairline ring, so a page
     # never draws its groups two ways; a filled group (on a sheet) keeps its fill alone.
     if bg == SHEET:
-        return f'<div style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
-    return f'<div style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
+        return f'<div data-group style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
+    return f'<div data-group style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
 def BTN(label, act='', href='', kind='primary', h=50, grow=True):
     bg = {'primary': ACCENT, 'quiet': FILL, 'ink': INK}[kind]; fg = SHEET if kind == 'ink' else INK
     st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'

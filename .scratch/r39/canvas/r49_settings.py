@@ -154,10 +154,21 @@ PAGES = [('Account', P_ACCOUNT), ('Edit profile', P_EDITPROFILE), ('Change passw
          ('MIDI devices', P_MIDI), ('MIDI log', P_LOG), ('Calibrate timing', P_TIMING), ('Selection toolbar', P_TOOLBAR), ('Swipe actions', P_SWIPE), ('User guide', P_GUIDE), ('Report a problem', P_REPORT), ('About', P_ABOUT)]
 SLUG = lambda p: p.replace(' ', '_').replace('-', '_')
 PARENT = {'Edit profile': 'Account', 'Change password': 'Account', 'Privacy': 'Account', 'MIDI log': 'MIDI devices', 'Calibrate timing': 'MIDI devices'}
+# On a laptop Appearance is claude.ai's: a section of rows, Theme with its three small screens and Language with two
+# choices, each at the row's end (owner, 2026-11-17, claude.ai's Settings › General › Appearance).
+_THUMB = (f'<sc-for list="{{{{themes}}}}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{t.on}}}}" onClick="{{{{t.pick}}}}" style="border: 0; background: transparent; padding: 0; font: inherit; color: {INK}; display: flex; flex-direction: column; align-items: center; gap: 6px">'
+          f'<span style="width: 80px; height: 56px; border-radius: 10px; box-shadow: {{{{t.ring}}}}; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(135deg, {{{{t.top}}}} 50%, {{{{t.bot}}}} 50%)"><span style="margin: 7px 7px 0; height: 5px; width: 50%; border-radius: 3px; background: #B4AAA0"></span><span style="margin: 5px 7px 0; flex: 1; border-radius: 5px; background: {{{{t.card}}}}; opacity: .9"></span><span style="margin: 5px 7px 7px; height: 7px; border-radius: 4px; background: {ACCENT}"></span></span>'
+          f'<span style="font-size: 13px; font-weight: 600">{{{{t.t}}}}</span></button></sc-for>')
+_LANGSEG = (f'<sc-for list="{{{{langs}}}}" as="l" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{{{l.on}}}}" onClick="{{{{l.pick}}}}" style="height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: {{{{l.ring}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{l.fw}}}}">{{{{l.l}}}}</button></sc-for>')
+LTHEMES = (f'<section style="display: flex; flex-direction: column; gap: 8px">{CAPS("Appearance")}<div data-group>'
+           f'<div style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 12px 0"><span style="flex: 1; font-size: 16px">Theme</span><div role="radiogroup" aria-label="Theme" style="display: flex; gap: 12px">{_THUMB}</div></div>'
+           f'<div style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 8px 0"><span style="flex: 1; font-size: 16px">Language</span><div role="radiogroup" aria-label="Language" style="display: flex; gap: 8px">{_LANGSEG}</div></div></div></section>')
 def PAGEBODIES(pre, lap=False):
     out = []
     for p, body in PAGES:
         b = body.replace('aspect-ratio: 0.72', 'aspect-ratio: 1.4').replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('Legal.dc.html', 'LegalLaptop.dc.html') if lap else body
+        if lap: b = b.replace('<div style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8').replace('<div role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8')
+        if p == 'General' and lap: b = LTHEMES + body[len(THEMES):]  # claude.ai's Appearance: rows, each its control at the end
         if p == 'General' and not lap: b = THEMES  # a phone has no letter keys: the computer keyboard is the laptop's alone (show only what works here)
         out.append(f'<sc-if value="{{{{{pre}{SLUG(p)}}}}}" hint-placeholder-val="{{{{{"true" if (lap and p == "General") else "false"}}}}}">{b}</sc-if>')
     return ''.join(out)
@@ -288,12 +299,29 @@ assert LACCT.count('box-shadow: 0 0 0 1px') == 0, LACCT.count('box-shadow: 0 0 0
 LADMIN = (f'<sc-if value="{{{{admin}}}}" hint-placeholder-val="{{{{true}}}}"><a href="AdminLaptop.dc.html" style="height: 40px; border-radius: 10px; color: {INK}; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 0 12px">'
           f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{SOFT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>'
           f'<span style="flex: 1; font-size: 15px">Administration</span><span style="font-size: 13px; color: {SOFT}">2 reports</span></a></sc-if>')
-s9lm = (f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr)"><nav aria-label="Settings" class="nos" style="min-height: 0; overflow-y: auto; padding: 24px 16px; box-shadow: 1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 20px">'
-        f'<div style="display: flex; align-items: center; gap: 12px; margin: 0 0 -4px -4px"><a href="ProfileLaptop.dc.html" aria-label="Back to Profile" data-tip="Back to Profile" style="{GLASSST}">{CHEV_L}</a><h1 style="margin: 0; font-size: 28px; font-weight: 700">Settings</h1></div>{LACCT}{LNAV}{LADMIN}</nav>'
-        f'<main class="nos" style="min-width: 0; min-height: 0; overflow-y: auto; padding: 24px 56px 48px"><div style="max-width: 720px; display: flex; flex-direction: column; gap: 16px">'
-        f'<div style="min-height: 44px; display: flex; align-items: center; gap: 8px"><sc-if value="{{{{lapBack}}}}" hint-placeholder-val="{{{{false}}}}">{IB('Back to {{lapBackT}}', CHEV_L, 'back')}</sc-if>'
-        f'<h2 style="margin: 0; font-size: 28px; font-weight: 700">{{{{lapT}}}}</h2></div>{PAGEBODIES("l_", True)}</div></main></div>'
-        + PREVPILL('left: 50%; transform: translateX(-50%); bottom: 28px; white-space: nowrap') + S9TOAST.replace('left: 16px; right: 16px; bottom: 40px', 'left: 50%; transform: translateX(-50%); width: 420px; bottom: 28px') + S9ASKS)
+# The laptop's Settings as claude.ai's (owner, 2026-11-17: "make all the settings like the claude.ai does with all the
+# settings in the popup like this"): a dialog over the page it was opened from, the page dimmed behind; its bar the word
+# Settings and a close ×; on the left a search field and the places in groups, the open one on the sand wash; on the
+# right the place's sections, each a heading and plain rows (the name, its value or control at the row's end) parted by
+# hairlines, no cards and no capitals.
+CSET = (f'<style>.cset h3{{margin: 0 !important; font-size: 16px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; color: {INK} !important}}'
+        f'.cset section{{gap: 4px !important}}.cset [data-group]{{border-radius: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important}}'
+        f'.cset [data-group] > sc-for > *, .cset [data-group] > :is(a, button, div){{padding-left: 0 !important; padding-right: 0 !important; min-height: 56px !important; box-shadow: inset 0 -1px 0 {FILL} !important}}'
+        f'.cset [data-group] > sc-for:last-child > :last-child, .cset [data-group] > :last-child{{box-shadow: none !important}}.cset [data-group] > div > div:first-child{{padding-left: 0 !important; padding-right: 0 !important}}</style>')
+LSEARCH = (f'<label style="height: 40px; border-radius: 10px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">'
+           f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>'
+           f'<input aria-label="Search settings" placeholder="Search" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 15px; color: {INK}; outline: none"></label>')
+s9lm = (LTITLEBAR("Profile", IB("Settings", GEARI, href="ProfileLaptop.dc.html"))
+        + f'<div style="position: absolute; top: 0; bottom: 0; left: -248px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32); display: flex; align-items: center; justify-content: center">'
+        f'<div role="dialog" aria-modal="true" aria-labelledby="setT" style="width: min(1200px, calc(100% - 160px)); height: calc(100% - 96px); border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
+        f'<header style="flex: none; height: 56px; display: flex; align-items: center; padding: 0 8px 0 24px; box-shadow: inset 0 -1px 0 {LINE}"><h1 id="setT" style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">Settings</h1>'
+        f'<a href="ProfileLaptop.dc.html" aria-label="Close" data-tip="Close" style="width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: {INK}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></a></header>'
+        f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 264px minmax(0, 1fr)"><nav aria-label="Settings" class="nos" style="min-height: 0; overflow-y: auto; padding: 16px 12px 20px; box-shadow: 1px 0 0 {LINE}; display: flex; flex-direction: column; gap: 20px">'
+        f'{LSEARCH}{LACCT}{LNAV}{LADMIN}</nav>'
+        f'<main class="nos cset" style="min-width: 0; min-height: 0; overflow-y: auto; padding: 16px 32px 40px">{CSET}<div style="display: flex; flex-direction: column; gap: 32px">'
+        f'<div style="min-height: 40px; display: flex; align-items: center; gap: 8px; margin: 0 0 -12px"><sc-if value="{{{{lapBack}}}}" hint-placeholder-val="{{{{false}}}}">{IB('Back to {{lapBackT}}', CHEV_L, 'back')}</sc-if>'
+        f'<h2 style="margin: 0; font-size: 20px; font-weight: 600">{{{{lapT}}}}</h2></div>{PAGEBODIES("l_", True)}</div></main></div></div></div>'
+        + PREVPILL('left: 50%; transform: translateX(-50%); bottom: 28px; white-space: nowrap; z-index: 70') + S9TOAST.replace('left: 16px; right: 16px; bottom: 40px', 'left: 50%; transform: translateX(-50%); width: 420px; bottom: 28px') + S9ASKS)
 SETTINGS_JS = SETTINGS_JS.replace("return { ...common(st, set), ...v,", "v.acctBg = page === 'Account' || PARENT[cur] === 'Account' ? '#F2ECE4' : '#FEFDFB'; v.acctBgL = page === 'Account' || PARENT[cur] === 'Account' ? '#E8E1D8' : 'transparent'; v.syncLine = st.syncing ? 'Syncing…' : 'Synced ' + (st.synced ?? '2 min ago');\n"
     "    v.states = [['Signed out', !!st.out, { out: true }, { out: false }], ['Syncing', !!st.syncing, { syncing: true, out: false }, { syncing: false }], ['An update available', st.upd === 'avail', { upd: 'avail' }, { upd: null }], ['Viewing as a learner', !!st.prev, { prev: true }, { prev: false }]]"
     ".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));\n    return { ...common(st, set), ...v,")

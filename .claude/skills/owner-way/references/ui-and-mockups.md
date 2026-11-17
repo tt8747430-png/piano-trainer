@@ -71,7 +71,7 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
   `ROWMENU`, placed by `ANCHOR` from the button, below it or above when the screen ends first. No title, no Done, no
   Cancel; the loss last, in crimson, after a hairline; a tap outside closes it. Never a bottom sheet, never a dialog
   centred on the screen, and never a menu of one item. What a laptop shows centred is only a form (New song, New
-  playlist) or a question about a loss that cannot be undone (`ConfirmDialog`); a phone sheet never becomes a centred
+  playlist), a question about a loss that cannot be undone (`ConfirmDialog`), or Settings, which on a laptop is a dialog over the page as claude.ai's (owner, 2026-11-17); a phone sheet never becomes a centred
   dialog on a laptop by itself.
 - **Every list of the learner's things has Select** (owner, 2026-11-17: "why dont we have a select mode in such pages as
   trash and archive"): the library, a playlist, Archive, Trash, Your lessons. Select in the bar (Cancel while on, the
