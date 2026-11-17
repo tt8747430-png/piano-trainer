@@ -1,5 +1,4 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { CloudOff, Flag, FolderOpen, Plus, SearchX, TriangleAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,8 +25,7 @@ import { localText, useKeyName, useLocale } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
-import { BackButton, ButtonLink, Said, ScreenHeader } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { BackButton, ButtonLink, Fab, FloatingActions, Said, ScreenHeader } from '@/shared/ui'
 import { ReportDialog, SongPreview, useAuthorName } from '@/widgets/song-preview'
 import { About, Byline, Facts, ReadingItem } from './PublicItemParts'
 import { RateStars } from './RateStars'
@@ -79,11 +77,12 @@ function useItem(itemId: string) {
 }
 
 /**
- * An item of Explore as Flat's public score page (owner, 2026-11-17): on a laptop an info pane at
- * the left (its title, who shared it, whether it is in the library and Add to my library, its
- * stars, what its author wrote, its facts and tags, Report) beside the music under its toolbar; on
- * a phone the same, the music after the head. Add to my library copies it in (counted once where
- * they are signed in), then reads Open in my library. Nothing floats.
+ * An item of Explore as Flat's public score page, with one focus (owner, 2026-11-17, lines drawn
+ * over it; `edge-lines`): its title in the bar; on a laptop its facts a plain column at the left
+ * (who shared it, whether it is in the library, its stars, what its author wrote, its facts and
+ * tags, Report), no card, its top on the music's; on a phone the music after who shared it, then
+ * the rest. Add to my library is the page's one floating action (copied in, counted once where
+ * they are signed in), then Open in my library; Play heads the music it plays.
  */
 export function PublicSongPage() {
   const { t } = useTranslation('songs')
@@ -224,33 +223,21 @@ export function PublicSongPage() {
   ].filter((fact) => fact.value !== '')
   const head = (
     <>
-      <h1 className="text-[1.625rem] leading-tight font-bold text-balance">{title}</h1>
       <Byline entry={entry} />
-      {/* Whether it is in the library, then the page's one act, in its head (owner, 2026-11-17: nothing floats). */}
-      <div className="flex flex-col gap-2">
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span aria-hidden className="size-2 rounded-full bg-learned" />
-          {owned ? t('explore.yours') : t('explore.notYours')}
-        </p>
-        {owned ? (
-          <Button size="lg" variant="soft" className="rounded-pill font-bold" onClick={open}>
-            <FolderOpen data-icon="inline-start" />
-            {t('explore.open')}
-          </Button>
-        ) : (
-          <Button size="lg" className="rounded-pill font-bold" onClick={add}>
-            <Plus data-icon="inline-start" />
-            {t('explore.add')}
-          </Button>
-        )}
-      </div>
+      <p className="flex items-center gap-2 text-sm text-muted-foreground">
+        <span aria-hidden className="size-2 rounded-full bg-learned" />
+        {owned ? t('explore.yours') : t('explore.notYours')}
+      </p>
     </>
   )
+  const rule = <hr className="border-border" />
   const about = (
     <>
       <RateStars itemId={itemId} rating={entry.rating} onRated={rated} />
       <About entry={entry} />
-      <Facts facts={facts} tags={entry.meta.tags ?? []} />
+      <div className="flex flex-col gap-4">
+        <Facts facts={facts} tags={entry.meta.tags ?? []} />
+      </div>
     </>
   )
   const report = (
@@ -265,33 +252,37 @@ export function PublicSongPage() {
   )
   const music = reading.kind === 'song' ? <SongPreview song={reading.song} /> : null
   return (
-    <div className="flex flex-col gap-5 pb-8">
-      <ScreenHeader
-        title={title}
-        titleOnPage
-        back={<BackButton />}
-        tools={reading.kind === 'song' ? <PageKeyboardTools /> : undefined}
-      />
+    <div className="flex flex-col gap-5 pb-24">
+      <ScreenHeader title={title} back={<BackButton />} />
       {laptop ? (
-        // Flat's public score: the info pane at the left, the music beside it under its toolbar.
-        <div className="grid grid-cols-[21.25rem_minmax(0,1fr)] items-start gap-8">
-          <aside className="card sticky top-4 flex flex-col gap-4 p-5">
+        // Flat's public score: the facts a plain column at the left, the music beside it.
+        <div className="grid grid-cols-[18.75rem_minmax(0,1fr)] items-start gap-12">
+          <aside className="flex flex-col gap-5">
             {head}
-            <hr className="border-border" />
+            {rule}
             {about}
-            <hr className="border-border" />
+            {rule}
             {report}
           </aside>
-          <div className="flex min-w-0 flex-col gap-5">{music}</div>
+          <div className="min-w-0">{music}</div>
         </div>
       ) : (
-        <>
+        <div className="flex flex-col gap-4">
           {head}
           {music}
-          <section className="card flex flex-col gap-4 p-4">{about}</section>
+          {rule}
+          {about}
+          {rule}
           {report}
-        </>
+        </div>
       )}
+      <FloatingActions>
+        {owned ? (
+          <Fab label={t('explore.open')} icon={FolderOpen} extended onClick={open} />
+        ) : (
+          <Fab label={t('explore.add')} icon={Plus} extended onClick={add} />
+        )}
+      </FloatingActions>
       <ReportDialog itemId={itemId} open={reporting} onOpenChange={setReporting} />
     </div>
   )
