@@ -34,7 +34,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   value), and for an administrator **Administration**. Only what concerns the whole app (R29: the Player's, the
   editor's and each Practice page's settings are behind their own gear; how lessons read is a lesson's Settings').
   **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
-  or to the page it is under). **On a laptop** (from 64rem) the two panes of the libraries (Songs' tree and list): the
+  or to the page it is under). **From 80rem** (`WIDE`; under it the sidebar leaves the page too narrow) the two panes of the libraries (Songs' tree and list): the
   sidebar (17rem, `TreeItem` rows with a painted swatch, the account first, the groups headed) stands sticky under the
   bar with its own height and scroll, so the page beside it (44rem) scrolls with the window and never drags it; the
   page shown is marked, a page under a page marking its parent (Edit profile the account, the legal pages About, the
