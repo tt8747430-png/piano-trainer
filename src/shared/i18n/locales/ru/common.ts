@@ -18,6 +18,8 @@ export const common: LocaleResources['common'] = {
     open: 'Развернуть боковую панель',
     recents: 'Недавние',
     guest: 'Гость',
+    help: 'Справка',
+    signIn: 'Войти',
   },
   errors: {
     title: 'Что-то пошло не так',

@@ -17,6 +17,8 @@ export const common = {
     open: 'Open the sidebar',
     recents: 'Recents',
     guest: 'Guest',
+    help: 'Help',
+    signIn: 'Sign in',
   },
   errors: {
     title: 'Something went wrong',

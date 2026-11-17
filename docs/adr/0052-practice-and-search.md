@@ -13,7 +13,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 
 - **Three places and the Profile**: Learn (ADR 0053), Songs (ADR 0106) and Practice, then the Profile as the fourth
   tab (memory-palaces', Noji's), its icon the learner's initial. A bar docked at the foot on a phone, a rail down the
-  left on a phone on its side, a sidebar from 1024px as Claude's (R32): the name and its collapse toggle, Search as a field (the modifier and K), the places, Recents (the five songs opened last), the learner at its foot (their picture and name, or Guest, opening the Profile) with Settings' gear beside it; collapsed, a rail of icons with tooltips (a phone keeps the Profile as its last tab and opens Settings from it); the phone's bar on the places alone. Alt with 1–4
+  left on a phone on its side, a sidebar from 1024px as Claude's (R32): the name and its collapse toggle, Search as a field (the modifier and K), the places, Recents (the five songs opened last), the learner at its foot as one row (their picture and name, or Guest, and ⌃⌄) opening a menu above it: their email, Profile, Settings, Language with the one in use, Help, then Sign out apart, asking first (Sign in for a guest); collapsed, a rail of icons with tooltips (a phone keeps the Profile as its last tab and opens Settings from it); the phone's bar on the places alone. Alt with 1–4
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
