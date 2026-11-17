@@ -486,7 +486,7 @@ const invCards = Array.from({ length: invN }, (_, i) => {
   return { t: INV[i], s: v.map((x) => x.name).join(' · '), kb: calmKeys(a, Math.max(b, Math.max(...v.map((x) => x.m))), mk, ''' + str(mini_w) + r''', 64), ring: i === inv ? '0 0 0 2px ' + C.ink : '0 0 0 1px ' + C.line, pick: () => { change({ inv: i }); } };
 });
 const tones = ns.filter((x) => x.hand !== 'L' || hands === 'Left').filter((x, i, a) => a.findIndex((y) => y.deg === x.deg) === i).map((x) => ({ n: x.name, d: DEGL[x.deg], c: ROLE[x.deg] || C.accent }));
-const qf = st.qf || 'All', qChips = ['All', 'Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((v) => ({ l: v, on: v === qf, bg: v === qf ? C.ink : '#FEFDFB', fg: v === qf ? '#FEFDFB' : C.ink, ring: v === qf ? 'none' : '0 0 0 1px ' + C.line, pick: () => set({ qf: v }) }));
+const qf = st.qf || 'All', qChips = ['All', 'Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].map((v) => ({ l: v, on: v === qf, bg: v === qf ? C.ink : '#FEFDFB', fg: v === qf ? '#FEFDFB' : C.ink, ring: v === qf ? 'none' : 'inset 0 0 0 1px ' + C.line, pick: () => set({ qf: v }) }));
 const groups = ['Triads', 'Added notes', 'Sevenths', 'Extended', 'Altered'].filter((g) => qf === 'All' || g === qf).map((g) => ({ g, rows: QS.map((x, i) => [x, i]).filter(([x]) => x.g === g).map(([x, i]) => ({ s: RN + x.k, n: RN + ' ' + x.n, on: i === qi, bg: i === qi ? '#DAD1C8' : 'transparent', fw: i === qi ? 700 : 500, pick: () => change({ q: i }),
     inSeq: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc), chk: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? '✓' : '',
     chkBg: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? '#4B4038' : 'transparent', chkRing: seq.some((c) => c.q === i && c.rl === rLet && c.ra === rAcc) ? 'none' : '0 0 0 2px ' + C.line,
@@ -868,8 +868,8 @@ FACTS = (f'<dl style="flex: none; margin: 0; border-radius: 14px; background: #F
 # The chord's three edit options open real drawers (R42, canvas 86): a bottom sheet on a phone with its grabber, title
 # and Done, a titled popover on a laptop; a pick applies at once and the drawer stays until Done.
 D_ROOT = KEYPICK_HTML('rootPick', 'Root')
-D_TYPE = (f'<div class="nos" role="group" aria-label="Show" style="flex: none; position: sticky; top: -6px; z-index: 2; background: {PAGE}; display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 8px 16px"><sc-for list="{{{{qChips}}}}" as="c" hint-placeholder-count="6">'
-  f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 36px; padding: 0 16px; border: 0; border-radius: 18px; background: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{c.l}}}}</button></sc-for></div>') + B_LIST[len(BACKHEAD('Chord', 'backChord')):]
+D_TYPE = (f'<div class="nos" role="group" aria-label="Show" style="flex: none; position: sticky; top: -6px; z-index: 2; background: {PAGE}; display: flex; flex-wrap: wrap; gap: 0 8px; margin: 0 -16px; padding: 4px 16px"><sc-for list="{{{{qChips}}}}" as="c" hint-placeholder-count="6">'
+  f'<button type="button" aria-pressed="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="flex: none; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{c.bg}}}}; color: {{{{c.fg}}}}; box-shadow: {{{{c.ring}}}}; font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{c.l}}}}</button></sc-for></div>') + B_LIST[len(BACKHEAD('Chord', 'backChord')):]
 D_BASS = (f'<div role="radiogroup" aria-label="In the bass" style="border-radius: 12px; background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px {LINE}"><sc-for list="{{{{bassItems}}}}" as="r" hint-placeholder-count="3">'
           f'<button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px 6px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</span><span style="flex: none; width: 18px; font-size: 17px; font-weight: 700; color: #7A5418">{{{{r.mark}}}}</span></button></sc-for></div>')
 def DRAWERS(phone_like):
@@ -897,7 +897,7 @@ def LAYERS(phone_like, concept):
         out += DRAWERS(True)
     else:
         out += HANDSMENU('left: calc(50% + 80px); bottom: 92px')
-        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: calc(50% + 420px); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
+        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: min(calc(50% + 420px), calc(100% - 416px)); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
             out += POPOVER(cond, title, body, pos, 400)
         out += DRAWERS(False)
     return out

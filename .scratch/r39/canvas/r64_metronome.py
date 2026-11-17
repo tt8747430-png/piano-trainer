@@ -28,5 +28,5 @@ lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}{TEMPO(120)}{BEATS(160)}{ME_ROWS}</div></div>'
         + BAR64('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST))
-laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; top: 604px'), 'Practice')
+laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; bottom: 357px'), 'Practice')
 print('r64 metronome ok')

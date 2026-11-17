@@ -208,7 +208,10 @@ def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
+    # never past the screen: its height is capped by the room left from its top or bottom on the 904-tall laptop screen
+    m = re.search(r'(?:top|bottom): (\d+)px', pos)
+    mh = min(760, 904 - int(m.group(1)) - 16) if m else 760
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: {mh}px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
 
 def js(body):
     return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
