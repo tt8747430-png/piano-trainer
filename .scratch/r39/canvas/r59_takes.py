@@ -22,7 +22,7 @@ TKS_SRC = r'''
       selDl: () => S({ sel: false, picked: [], toast: (n || takes.length) === 1 ? '1 take saved as MIDI' : (n || takes.length) + ' takes saved as MIDI', toastUndo: false }), selDel: () => dropMany(n ? picked : takes.map((t) => t.id)),
       selDlL: n ? 'Download' : 'Download all', selDelL: n ? 'Delete' : 'Delete all', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, ...ck(picked.includes(t.id)), on2: picked.includes(t.id) ? 'true' : 'false', tap: () => S({ picked: picked.includes(t.id) ? picked.filter((x) => x !== t.id) : [...picked, t.id] }), on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id && !selOn ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: (e) => S({ sheet: 'more', at: t.id, menuPos: ANCHOR(e, 170) }) })),
+      rows: takes.map((t) => ({ n: t.n, d: t.d, ...ck(picked.includes(t.id)), on2: picked.includes(t.id) ? 'true' : 'false', tap: () => S({ picked: picked.includes(t.id) ? picked.filter((x) => x !== t.id) : [...picked, t.id] }), on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id && !selOn ? '#EEE9E2' : '#FEFDFB', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: (e) => S({ sheet: 'more', at: t.id, menuPos: ANCHOR(e, 170) }) })),
       moreOn: st.sheet === 'more', menuPos: st.menuPos ?? 'right: 16px; top: 120px', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: st.lastMany ? gone.filter((g) => !st.lastMany.includes(g)) : gone.filter((g) => g !== st.last), lastMany: null }),
@@ -79,12 +79,14 @@ tksph = (IF('isList', TOP('Editor.dc.html', '{{pageT}}', TKSEL, 'Amazing Grace')
 TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type="button" aria-current="{{r.cur}}" onClick="{{r.pick}}" style="flex: 1; border: 0; background: transparent; padding: 0; font: inherit; text-align: left;', 1)
           .replace('</span></a>', '</span></button>', 1).replace('padding: 8px 4px 8px 12px;', 'padding: 8px 4px 8px 12px; background: {{r.bg}};', 1).replace('background: {{r.pbg}}', 'background: {{r.pbgL}}', 1))
 assert TKROWL != TKROW and '</a>' not in TKROWL
-TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL}</sc-for></div>', 'true'))
+# on a laptop the takes are a row of cards across the top, the chosen one filled, the review the page's width under
+# them (the lines: a list column ending 355 above its neighbour left a bare band)
+TKLISTL = (IF('some', f'<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL.replace(f"box-shadow: inset 0 -1px 0 {FILL}", f"border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}", 1)}</sc-for></div>', 'true'))
 tkslm = (LTITLEBAR('{{pageT}}', TKSEL, 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
-         + IF('some', f'<main style="flex: 1; min-height: 0; padding: 0 40px 32px; display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 40px; align-items: start">'
+         + IF('some', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 32px 96px; display: flex; flex-direction: column; gap: 24px">'
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'
               # the review stands on the paper beside the list, never a card holding cards (scan-first 6; edge-lines 3)
-              f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">'
+              f'<section aria-label="Review your recording" style="display: flex; flex-direction: column; gap: 16px">'
               f'{REVIEW(900)}</section></main>', 'true')
          + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TKSELBAR_L + TOASTL)

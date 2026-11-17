@@ -419,7 +419,7 @@ _SSHARE = SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{pubV}}', 'goPublish
 _SDEL = SEC(GROUP(('action', 'Delete song', 'del', RED), bg=SHEET))
 SSET = HEADCARD + _SLIB + _SSHARE + _SDEL
 # on a laptop the song's groups stand in two columns, as every object's Settings: the library left, sharing and Delete right
-SSET_L = HEADCARD + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_SLIB}</div><div style="display: flex; flex-direction: column; gap: 16px">{_SSHARE}{_SDEL}</div></div>'
+SSET_L = HEADCARD + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{_SLIB}</div><div style="display: flex; flex-direction: column; gap: 16px">{_SSHARE}</div></div><div style="margin-top: 8px">{_SDEL}</div>'  # the loss of the whole song its own card at the page's foot, across both columns
 _DISC = CARD(f'<div style="display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 16px; font-weight: 600">How easily it is found</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{discN}}}}</span></div><span style="display: block; height: 6px; border-radius: 3px; background: {FILL}; overflow: hidden"><span style="display: block; height: 100%; width: {{{{discW}}}}; border-radius: 3px; background: {ACCENT}"></span></span></div>')
 _TAGCHIP = lambda lst, x: f'<sc-for list="{{{{{lst}}}}}" as="t" hint-placeholder-count="2"><button type="button" onClick="{{{{t.x}}}}" style="flex: none; height: 44px; padding: 0 12px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {"#332921" if x else FILL}; color: {SHEET if x else INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px">{{{{t.l}}}}{"<span aria-hidden=\"true\" style=\"opacity: .7\">×</span>" if x else ""}</button></sc-for>'
 _TAGS = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 4px; font-size: 13px; font-weight: 600; color: {SOFT}">Tags</span>'
@@ -449,7 +449,13 @@ _SPAT = SEC(S9CAPS('Patterns', 'pat'), TIPCARD('pat', 'The accompaniment the son
 SECT = _SHEAD + _SCH + _STIME + _SCHG + _SPAT
 # on a laptop the section's four ways in are one ladder, read in order as on a phone (Chords, In time, One change at a time,
 # Patterns), one column at reading width: two columns side by side read in zigzag and crossed their edges (loop 63)
-SECT_L = f'<div style="width: min(100%, 760px); display: flex; flex-direction: column; gap: 20px">{SECT}</div>'
+# on a laptop the section's head runs across, its steps in two columns (owner, 2026-11-17: the page's width used;
+# the lines' rows cut in two): the chords and playing in time at the left, the changes and patterns at the right
+_SCOL = lambda x: f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{x}</div>'
+SECT_L = (f'<div style="display: flex; flex-direction: column; gap: 20px">{_SHEAD}<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start">'
+          + _SCOL(_SCH + _STIME) + _SCOL(_SCHG + _SPAT) + '</div></div>')
+# each row the link, its state beside its words, no chevron 500 away
+SECT_L = SECT_L.replace(CHEV_R, '').replace('<span style="flex: 1; font-size: 16px">', '<span style="flex: 0 1 auto; font-size: 16px">')
 SMBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB) + IF('isSection', SECT)
 SMBODY_L = SHOWSTATES() + IF('isSettings', SSET_L, 'true') + IF('isPublish', SPUB_L) + IF('isSection', SECT_L)
 SMSHEETS = (ASK('unpubOn', 'Unpublish it?', 'It leaves the Public library at once. Learners who saved a copy keep theirs. You can publish it again later.', 'Unpublish', 'doUnpub')

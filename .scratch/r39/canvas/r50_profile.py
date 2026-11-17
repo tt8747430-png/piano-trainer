@@ -75,10 +75,11 @@ def AROW9(name, sub, got, act):
 ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
-RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
+RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
+           f'<span style="flex: none; width: 52px; height: 44px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{r.a}}}}</span>'
            f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><span style="font-family: {SERIF}">{{{{r.c}}}}</span> · {{{{r.e}}}}</span>'
            f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
-           f'<span style="flex: none; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{r.a}}}}</span><span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
+           f'<span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 HIST9H = H2('Practice history', SEEALL9('goHistory')) + BOX(f'<sc-for list="{{{{runLatest}}}}" as="r" hint-placeholder-count="3">{RUNROW9}</sc-for>')
 CHART30 = CARD(f'<div style="display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">'
                f'<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">9 h 34 min</span><span style="font-size: 13px; color: {SOFT}">The last 30 days</span></span>'
@@ -161,11 +162,11 @@ p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
 # On a laptop the Profile is rows, each holding a pair whose tops meet (owner, 2026-11-17, edge-lines: two free columns
 # crossed each other's edges): the week beside the badges, the practice history beside the achievements, every box
-# under its own heading.
+# under its own heading. Its rows carry no chevron, each the link, so none ends 400 from its words (the lines' row cut in two).
 _CELL = lambda x: f'<div class="pcell" style="display: flex; flex-direction: column; gap: 12px">{x}</div>'  # a row's two boxes share their bottom edge
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 32px; align-items: stretch"><style>.pcell > :last-child{{flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center}}</style>'
         f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9, "true")}</div>'
-        f'{IF9("notLoading", _CELL(WEEKL) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9), "true")}</main></sc-if>'
+        f'{IF9("notLoading", (_CELL(WEEKL) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9)).replace(CHEV_R, ""), "true")}</main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
 detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
 print('r50 profile ok')

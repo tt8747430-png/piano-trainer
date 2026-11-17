@@ -179,8 +179,9 @@ PATED = (INPUT('Name', '{{name}}', 'setName') + CARD(ROLL(340)) + SEC(CAPS('Righ
 # on a laptop (owner, 2026-11-17: "these empty spaces on the left under the sections should not be"): the name and
 # how the pattern plays are a band across the top, with Cancel and Save under the name; the two hands are chosen side by
 # side under it, so neither column runs out beside the other
-PATED_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">'
-           + INPUT('Name', '{{name}}', 'setName') + f'<div style="display: flex; gap: 8px">{BTN("Cancel", "cancel", "", "quiet", 50)}{BTN("Save", "save", "", "primary", 50)}</div></div>'
+# the form's acts at its foot, level with the preview's (the lines: a bare band under Cancel and Save)
+PATED_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: stretch"><div style="display: flex; flex-direction: column; gap: 16px">'
+           + INPUT('Name', '{{name}}', 'setName') + f'<div style="margin-top: auto; display: flex; gap: 8px">{BTN("Cancel", "cancel", "", "quiet", 50)}{BTN("Save", "save", "", "primary", 50)}</div></div>'
            + f'{CARD(f"<div style=\"display: flex; flex-direction: column; gap: 12px\"><span style=\"font-size: 13px; font-weight: 600; color: {SOFT}\">How it plays</span>{ROLL(280)}</div>")}</div>'
            + f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start">{SEC(CAPS("Right hand"), HANDGRP("rhG"))}{SEC(CAPS("Left hand"), HANDGRP("lhG"))}</div>')
 PATPUB = (IF('notPublished', SEC(CAPS('As others will see it'), CARD(f'<div style="display: flex; gap: 12px; align-items: center">{COV("", SAGE, 56)}<span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 700">{{{{name}}}}</span><span style="font-size: 13px; color: {SOFT}">A pattern by Ana Popescu · Save to my patterns</span></span></div>'))
@@ -226,7 +227,9 @@ _TKR = (SEC(CAPS('Keep bars'), GROUP(('step', 'First bar', 'firstV', 'fDn', 'fUp
 TKBODY = (IF('notDeleted', _TKL + _TKR, 'true')
           + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
 # on a laptop the recording stands left, its roll large; what to do with it stands right
-TKBODY_L = (IF('notDeleted', f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 40px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">' + _TKL.replace('PROLL(340, 120)', 'PROLL(720, 220)') + f'</div><div style="display: flex; flex-direction: column; gap: 16px">' + _TKR + '</div></div>', 'true')
+# on a laptop one column: the name, the take and its roll the page's width, then Keep bars as a form under the music it
+# trims and Delete apart under it; no side column ending above the roll (the lines: a bare band beside the roll)
+TKBODY_L = (IF('notDeleted', f'<div style="display: flex; flex-direction: column; gap: 16px">' + _TKL.replace('PROLL(340, 120)', 'PROLL(1300, 220)') + f'<div style="width: min(560px, 100%); display: flex; flex-direction: column; gap: 16px">' + _TKR + '</div></div>', 'true')
           + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
 DLI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>'
 TKASK = ASK('keepOn', '{{keepT}}', 'All other bars will be permanently deleted.', 'Keep', 'doKeep')
