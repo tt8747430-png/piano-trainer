@@ -72,13 +72,14 @@ export function SettingsScreen({
         <SettingsList place={place} />
       </aside>
       <div className="mx-auto flex w-full max-w-176 min-w-0 flex-col gap-4 pt-6">
-        <div className="flex min-h-11 items-center gap-1">
+        {lead}
+        <div className="flex min-h-11 items-center gap-2">
           {sub ? <BackButton /> : null}
-          <span className="flex-1" />
+          <h2 className="min-w-0 flex-1 font-sans text-[1.625rem]/tight font-bold text-balance">
+            {title}
+          </h2>
           {actions}
         </div>
-        {lead}
-        <h2 className="-mt-2 font-sans text-[1.625rem]/tight font-bold text-balance">{title}</h2>
         {page}
       </div>
     </div>
