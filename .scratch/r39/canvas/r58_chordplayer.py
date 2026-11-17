@@ -196,7 +196,8 @@ lm58 = lapbody(LTOP('Laptop.dc.html', UNDOB + GEAR() + DOTSB),
                '<div style="position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column"><div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + CHART59(16, 6, 76, 28, 1) + '</div>'
                + '<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">' + DOCK_L(CP_DOCK) + '</div></div>',
                # round 41: on a laptop the Genos's strip stands in the right column under the chords, where it covers no bar
-               DRAG + '<div style="height: 24px"></div>' + STRIP59('position: relative;', False).replace(', ' + SHADOW + '">', '">', 1))
+               DRAG.replace('margin: 16px 0 -4px', 'margin: 0 0 -4px', 1) + '<div style="height: 24px"></div>' + STRIP59(  # the column starts level with the chart's title (loop round 63)
+               'position: relative;', False).replace(', ' + SHADOW + '">', '">', 1))
 # the playing piano runs the window's width at its foot, under the chart and the Style column, as on every board
 lm58 += '<sc-if value="{{cpKb}}" hint-placeholder-val="{{true}}"><div style="flex: none; box-shadow: 0 -1px 0 ' + LINE + '">' + CP_KEYS(170).replace('{{kbw}}', '{{kbwL}}').replace('{{kbb}}', '{{kbbL}}') + '</div></sc-if>'
 SH58 = lambda B, P, D=None: (B('chordOn58', '{{selSym}}', CP_CHORD59) + B('tagOnSheet', '{{tagTitle}}', CP_TAG) + B('shareOn', 'Share', CP_SHARE) + (D or B)('styleOn', 'Style', WHEEL([('wStyle', 1)])) + (D or B)('keyOn', 'Key', WHEEL([('wKey', 1)])) + (D or B)('tempoOn', 'Tempo', WHEEL([('wTempo', 1)])) + (D or B)('repOn', 'Repeats', WHEEL([('wRep', 1)])) + B('setOn', 'Chord player settings', CP_SET58) + P + B('moreOn', 'Chord sheet', CP_MORE58))
