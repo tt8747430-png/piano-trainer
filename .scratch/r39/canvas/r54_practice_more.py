@@ -236,7 +236,7 @@ PV_SRC = r'''
     const S = (o) => set(o), V = __V__, open = st.open ?? true;
     const A = (k, opts, d) => seg(opts, st[k] ?? d, (x) => S({ [k]: x }));
     const root = st.root ?? 'C', size = st.size ?? 'Triads', walk = st.walk ?? 'One key';
-    const T = { walk: 'Walk the chords in ' + root + ' major', chromatic: 'Chromatic walk: major and minor 7ths', progression: 'I – V – vi – IV in ' + root + (walk === 'One key' ? '' : ', up by semitones'), exercise: 'Hanon No. 1: in ' + root };
+    const T = { walk: 'Walk the chords in ' + root + ' major', chromatic: 'Chromatic walk: ' + (st.fam ?? 'Minor 7th').replace(/^\w/, (c) => c.toLowerCase()) + ' chords', progression: 'I – V – vi – IV in ' + root + (walk === 'One key' ? '' : ', up by semitones'), exercise: 'Hanon No. 1: in ' + root };
     return { ...common(st, set), title: T[V], isWalk: V === 'walk', isChrom: V === 'chromatic', isProg: V === 'progression', isEx: V === 'exercise', playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => S({ playing: !st.playing, open: false }), setupOn: open, openSetup: () => S({ open: true }), startIt: () => S({ open: false, playing: true }),
       rootsG: rootGrid(ROOTS.indexOf(root), (i) => S({ root: ROOTS[i] })), sizes: A('size', ['Triads', 'Sevenths'], 'Triads'), dirs: A('dir', ['Up', 'Down', 'Up and down'], 'Up'),
       fams: chipsOf(['Major 7th', 'Dominant 7th', 'Minor 7th', 'Half-diminished'], st.fam ?? 'Minor 7th', (x) => S({ fam: x })), walks: chipsOf(['One key', 'Chromatically rising', 'By fifths', 'By fourths'], walk, (x) => S({ walk: x })),
@@ -245,13 +245,19 @@ PV_SRC = r'''
       ladOn: !!st.lad, ladOnBg: st.lad ? '#44684A' : '#DAD1C8', ladOnX: st.lad ? 22 : 2, ladT: () => S({ lad: !st.lad }), tipOn_lad: st.tip === 'lad', tip_lad: () => S({ tip: st.tip === 'lad' ? null : 'lad' }),
       closeSheet: () => S({ open: false }) };'''
 PVSET = (IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
-         + IF('isChrom', SEC(CAPS('Chord types'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
+         + IF('isChrom', SEC(CAPS('Chord type'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
          + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WRAPCHIPS('walks')))
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
                       + SEC(S9CAPS('Tempo ladder', 'lad'), TIPCARD('lad', 'Each clean pass raises the tempo a little, up to the target.'), GROUP(('toggle', 'Tempo ladder', 'ladOn', 'ladT'), bg=SHEET)))
 )
 # the phone's sheet covers Play, so its foot starts the run; on a laptop Play stands beside the Setup popover and starts it
+# a laptop's Setup popover: the exercise's choices in one group, each at its row's end (the kit's segr), so the popover
+# holds every row without scrolling (loop round 63)
+_PVEX = (GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
+         + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET))
+assert _PVEX in PVSET, 'exercise setup not found'
+PVSETL = PVSET.replace(_PVEX, GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), ('segr', 'Rhythm', 'rhythms', 340), ('segr', 'Hands', 'hands', 300), ('segr', 'Next key', 'nextKey', 260), ('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET))
 PVSTART = PVSET + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>'
 PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
 # the four runs' Player is drawn in r56_results.py, from the run view's parts (round 41)
