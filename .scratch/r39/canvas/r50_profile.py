@@ -161,8 +161,8 @@ p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
 _WK = WEEK[WEEK.index('<div role="img"'):]
 _WKHEAD = WEEK[:WEEK.index('<div role="img"')]
 WEEKL = H2('Last 7 days', f'<span style="min-height: 44px; display: flex; align-items: center; font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span>') + WEEK.replace(_WKHEAD[_WKHEAD.index('<div style="display: flex; justify-content: space-between'):], '').replace('margin-top: 12px">', '">', 1)
-_CELL = lambda x: f'<div style="display: flex; flex-direction: column; gap: 12px">{x}</div>'
-p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 32px; align-items: start">'
+_CELL = lambda x: f'<div class="pcell" style="display: flex; flex-direction: column; gap: 12px">{x}</div>'  # a row's two boxes share their bottom edge
+p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 32px; align-items: stretch"><style>.pcell > :last-child{{flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center}}</style>'
         f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9, "true")}</div>'
         f'{IF9("notLoading", _CELL(WEEKL) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9), "true")}</main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
