@@ -638,6 +638,7 @@ export const editor = {
     extend: 'Extend or reduce the selection by one note',
     extendBar: 'Extend the selection to the end or start of the bar',
     extendEnds: 'Extend the selection to the start or end of the score',
+    selectAll: 'Select the whole staff',
     deselect: 'Clear the selection',
     keyStep: 'Diatonic step up or down',
     semitone: 'Semitone up or down',

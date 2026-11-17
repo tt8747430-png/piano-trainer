@@ -48,6 +48,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.extend'), shown: [shift, '←', '→'] },
     { label: t('shortcuts.extendBar'), shown: [shift, mod, '←', '→'] },
     { label: t('shortcuts.extendEnds'), shown: [shift, 'Home', 'End'] },
+    { label: t('shortcuts.selectAll'), shown: [mod, 'A'] },
     { label: t('shortcuts.deselect'), shown: ['Esc'] },
     { label: t('shortcuts.staff'), shown: [alt, '↑', '↓'] },
     { label: t('shortcuts.keyStep'), shown: ['↑', '↓'] },

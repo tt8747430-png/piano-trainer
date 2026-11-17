@@ -53,7 +53,7 @@ import {
 import { setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt, barsOf, keyAt } from './timeline'
+import { barAt, barsOf, keyAt, totalTicks } from './timeline'
 import { toggledDot, toggledTuplet, withValue, type ChosenValue } from './values'
 
 /**
@@ -208,6 +208,13 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
           (n) => (n.marks?.grace?.length ?? 0) > 0,
         )
       return graced ? { ...placed, grace: true } : placed
+    }
+    case 'selectAll': {
+      // The whole staff, as Flat's and Dorico's ⌘A; the caret at its start.
+      const whole = { from: 0, to: totalTicks(draft) }
+      return whole.to === 0
+        ? state
+        : { ...state, selection: { anchor: whole, head: whole }, caret: 0, chordNote: null }
     }
     case 'deselect':
       return state.selection === null && state.chordNote === null

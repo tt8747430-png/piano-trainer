@@ -160,6 +160,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     if (press.code === 'KeyZ') return { type: press.shiftKey ? 'redo' : 'undo' }
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
     if (isClipKey(press.code)) return { type: 'clip', edit: CLIP_EDITS[press.code] }
+    if (press.code === 'KeyA' && !press.shiftKey && !press.altKey) return { type: 'selectAll' }
   }
   const tool = toolOf(press)
   if (tool) return tool.does.type === 'mode' && layer === 'chords' ? null : tool.does
