@@ -401,7 +401,7 @@ square at the top.
 
 ### Placement
 
-- **A detail page** reads title, facts, sections; its one primary action sits in its head under the title, never floating (owner, 2026-11-17).
+- **A detail page** reads title, facts, sections; its one primary action floats at the foot, honey, alone (one floating action per screen, Material 3); Play sits at the head of the music it plays; the page's info is a plain column on the paper, never a card (owner, 2026-11-17: "use proper floating actions", "learn how to correctly use cards"; `edge-lines`).
 - **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
   Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
   Settings (the gear), More. Its title is Onest, as every board draws it (canvas 133): a plain title semibold at 1.0625rem on a phone (1.125rem
@@ -432,7 +432,7 @@ square at the top.
   menu for one-tap commands. A sheet never holds a second sheet; a menu never holds a setting.
 - **An act on an item is a button, never a switch:** Favourite and Learned on the item's card and in its menus. An item's
   Settings holds what it is, not what the learner does with it.
-- **Creating** is the bar's round + (Flat's My scores), opening a menu of the ways to add; nothing floats on a page (owner, 2026-11-17). **Every New …** is one `NewSheet`: the name, a few
+- **Creating** is the floating + (Flat's My scores), opening a dial of the ways to add. **Every New …** is one `NewSheet`: the name, a few
   properties, one Create pinned at the foot.
 - **Score screens have three layers:** the flat bar; the music, with the sheet's pill; the Player's docked transport and
   foot. In the editor, what acts on the notes chosen is a capsule over the music only while something is chosen.
@@ -446,9 +446,9 @@ square at the top.
 - **Quiet:** `ghost`, no fill until hovered; `bar`, a screen bar's round button; `tool`, a toolbar's, no frame until
   hovered, open or pressed; `link`, deep sky.
 - **Destructive:** card paper with a crimson line and label.
-- **Floating** is a tool's control bar alone (the Player's and the editor's over the music, a Practice explorer's centred
-  on its focus), each keeping a gap above the home indicator. No page floats an action: no +, Add or Play (owner,
-  2026-11-17).
+- **Floating** (`FloatingActions`): the main action a honey 56px circle (or extended with its word), one per screen;
+  a raised 48px circle only inside a floating bar of the page's own controls (a practice page's Play · Tempo), never
+  a second act floating beside a detail page's one. A dial opens as a card of rows; every floating button keeps a gap above the home indicator.
 - **Focus:** one 3px deep-sky outline, 2px off, appearing at once (`src/styles/focus.test.ts`); inset where a scroller
   or a card's edge would cut it.
 - **Every Play becomes Stop** while it sounds; an item in a grid is pressed instead.

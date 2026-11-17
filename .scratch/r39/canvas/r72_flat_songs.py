@@ -64,7 +64,7 @@ def FTILE(c, kind, w=56):
     if kind == 'shared': return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {c}; display: flex; align-items: center; justify-content: center">{SHARED_T}</span>'
     return TILE56(STACK(c).replace('url("', "url('").replace('")', "')"), w)
 SEEALL = lambda href, n='': f'<a href="{href}" style="min-height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">See all{n}</a>'
-SECH = lambda t, right='': f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
+SECH = lambda t, right='': f'<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
 CARDROW = f'border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
 
 # ── My songs: the overview ──
@@ -131,15 +131,15 @@ def PLCOVER(c, heart, songs, face, w=64):
     badge = (f'<span style="position: absolute; right: -4px; bottom: -4px; width: {fs}px; height: {fs}px; border-radius: 50%; background: #E9D8C4; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: {max(11, fs // 2)}px; font-weight: 700; color: {INK}">{face}</span>' if face else '')
     return f'<span aria-hidden="true" style="position: relative; flex: none; display: block; width: {w}px; height: {w}px; border-radius: {max(8, w // 6)}px; background: {c}">{body}{badge}</span>'
 def PLAYLISTROWS(href, shared_href, w=64, card=True):
-    box = f'{CARDROW}; ' if card else 'border-radius: 12px; '
+    listed = card == 'list'
+    box = 'border-radius: 0; ' if listed else f'{CARDROW}; ' if card else 'border-radius: 12px; '
     out = ''
-    for t, sub, c, k, songs, face in PLAYLISTS:
-        out += (f'<a href="{shared_href if face else href}" style="{box}min-height: {w + 16}px; box-sizing: border-box; padding: 8px {12 if card else 8}px; display: flex; align-items: center; gap: {16 if card else 12}px; color: {INK}; text-decoration: none">{PLCOVER(c, k == "heart", songs, face, w)}'
+    for i, (t, sub, c, k, songs, face) in enumerate(PLAYLISTS):
+        if listed:  # a hairline from the name's edge to the right, as an inset grouped list draws it
+            box = f'border-radius: 0; background: linear-gradient({LINE}, {LINE}) no-repeat {w + 16}px 0 / calc(100% - {w + 16}px) {1 if i else 0}px; '
+        out += (f'<a href="{shared_href if face else href}" style="{box}min-height: {w + 16}px; box-sizing: border-box; padding: {"8px 12px 8px 0" if listed else f"8px {12 if card else 8}px"}; display: flex; align-items: center; gap: {16 if card else 12}px; color: {INK}; text-decoration: none">{PLCOVER(c, k == "heart", songs, face, w)}'
                 f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: {17 if card else 15}px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: {14 if card else 13}px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span></span>'
                 + (f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span>' if card else '') + '</a>')
-    out += (f'<button type="button" onClick="{{{{openFolder}}}}" style="border: 0; background: transparent; min-height: {w + 16}px; padding: 8px {12 if card else 8}px; font: inherit; color: {INK}; text-align: left; display: flex; align-items: center; gap: {16 if card else 12}px">'
-            f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; box-sizing: border-box; border-radius: {max(8, w // 6)}px; border: 2px dashed {LINE}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{PLUS}</span>'
-            f'<span style="font-size: {17 if card else 15}px; font-weight: 600">New playlist</span></button>')
     return out
 _NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
@@ -207,29 +207,57 @@ COUNTROW = (f'<div style="flex: none; display: flex; align-items: center; justif
 SORTMENU = lambda pos: (f'<sc-if value="{{{{sortOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" aria-label="Sort" style="position: absolute; {pos}; z-index: 61; width: 230px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; transform-origin: top right">'
                         f'{MENUITEM("sorts")}<div style="height: 1px; margin: 6px 12px; background: {LINE}"></div>{MENUITEM("dirs")}</div></sc-if>')
 ROWSHEET = lambda sfx: GROUP(('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit score', '', 'Editor' + sfx), ('action', 'Add to a playlist', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK), ('link', 'Settings', '', 'SongSettings' + sfx), ('action', 'Archive', 'closeSheet', RED), bg=SHEET)
-ovph = f'''{TITLEBAR('Songs', IB('More', MORE, 'openMore'))}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
-<div style="display: flex; flex-direction: column; gap: 12px"><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if><sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{CREATE(0)}</sc-if></div>{RESULTS('Song.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
+# ── Songs as Flat's My scores (owner, 2026-11-17: "the mobile layout of the playlists is not the same as the flats
+# editor … the archive and trash doenst make sense to be there … the recently played is not the same as teh flat editor:
+# it has all scores"; Flat 091): the title and a round + in the bar opening the ways to add (no strip of pills, no ···);
+# the search; All songs, every song by when it was last played, with See all; Playlists; Archive and Trash as one card
+# under them, as Flat's Trash; Explore's newest last. Nothing floats.
+_NEWPH = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
+ADDBTN = IB('New', PLUS, 'openAdd')
+_ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '1', 'Archive' + sfx), bg=SHEET)
+ovph = f'''{TITLEBAR('Songs')}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 28px">{SHOWSTATES()}
+<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if>{RESULTS('Song.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
 <sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}
-<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('Recently played', SEEALL('AllSongs.dc.html').replace('See all', 'All 8 songs'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 5).replace('{SONG}', 'Song.dc.html')}</div></section>
-<section style="display: flex; flex-direction: column; gap: 12px">{SECH('Playlists')}<div style="display: flex; flex-direction: column; gap: 8px">{PLAYLISTROWS('Folder.dc.html', 'SharedFolder.dc.html')}</div></section>
+<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All songs', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Song.dc.html')}</div></section>
+<section style="display: flex; flex-direction: column; gap: 12px">{SECH('Playlists')}<div style="{CARDROW}; padding: 0 0 0 12px; display: flex; flex-direction: column">{PLAYLISTROWS('Folder.dc.html', 'SharedFolder.dc.html', 56, 'list')}</div></section>
+{_ARCHCARD('.dc.html')}
 </sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Explore', SEEALL('Explore.dc.html'))}<div class="nos" style="{_SHELFPH}">{EXSHELF(132, 6, 'Explore.dc.html')}</div></section></sc-if>
-</main>{TABBAR('Songs')}'''
+</main>{NEWDIAL(list(_NEWPH)[::-1], 112, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}{TABBAR('Songs')}'''
 _LSEARCH = OVSEARCH.replace('flex: none; height: 48px', 'flex: none; width: 360px; height: 44px; border-radius: 22px')
 _PANEROW = lambda label, n, href: f'<a href="{href}" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; border-radius: 10px; color: {INK}; text-decoration: none; font-size: 15px; font-weight: 600">{label}<span style="font-weight: 400; color: {SOFT}; font-variant-numeric: tabular-nums">{n}</span></a>'
 # The laptop is Flat's library (owner's screenshots of flat.io/library, 2026-11-17): a pane at the left, Playlists
 # (each its mosaic, name and count; New playlist last) and, apart at its foot, Archive and Trash with counts; the
 # songs at the right under their count and sort, two across; Explore's newest under them.
-LPANE = (f'<aside style="position: sticky; top: 0; align-self: start; {CARDROW}; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px">'
-         f'<h2 style="margin: 0 8px 4px; font-size: 18px; font-weight: 700">Playlists</h2><div style="display: flex; flex-direction: column">{PLAYLISTROWS("FolderLaptop.dc.html", "SharedFolderLaptop.dc.html", 48, False)}</div>'
-         f'<div style="height: 1px; margin: 4px 8px; background: {LINE}"></div>{_PANEROW("Archive", "3", "ArchiveLaptop.dc.html")}{_PANEROW("Trash", "1", "ArchiveLaptop.dc.html")}</aside>')
-ovlm = f'''{LTITLEBAR('Songs', f'<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{_LSEARCH}</sc-if>' + CREATE('bar'))}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 36px">{SHOWSTATES()}{RESULTS('SongLaptop.dc.html', 'FolderLaptop.dc.html', 'ExploreLaptop.dc.html', 'display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
-<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}
-<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 32px; align-items: start">{LPANE}
-<div style="min-width: 0; display: flex; flex-direction: column; gap: 36px"><section style="display: flex; flex-direction: column; gap: 12px">{COUNTROW}{LIST('SongLaptop.dc.html', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px')}</section>
-<section style="display: flex; flex-direction: column; gap: 16px">{SECH('Explore', SEEALL('ExploreLaptop.dc.html'))}<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px">{EXSHELF(0, 5, 'ExploreLaptop.dc.html').replace('flex: none; width: 0px;', 'min-width: 0;').replace('<span style="width: 0px">', '<span style="width: 100%">')}</div></section></div></div></sc-if></sc-if>
+# The laptop is Flat's library (owner, 2026-11-17: "look how the layout bad is with the playlists and songs so bad
+# aligned … the layout of the songs in this grid layout i dont like"; flat.io/library): one grid from the top, a pane
+# at the left (All songs, Favourites, Explore; Playlists with + beside the heading; Archive and Trash at its foot) and
+# the list at the right under one header row (the title and its count, the search, Import · Record · New song), one
+# song a row of a table whose columns head it; every edge shared.
+_PNAV = lambda label, n, href, on=False: (f'<a href="{href}" aria-current="{"page" if on else "false"}" style="min-height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; background: {"#EEE9E2" if on else "transparent"}; color: {INK}; text-decoration: none; font-size: 15px; font-weight: {700 if on else 500}">'
+                                          f'<span style="flex: 1">{label}</span><span style="font-weight: 400; color: {SOFT}; font-variant-numeric: tabular-nums">{n}</span></a>')
+LPANE = (f'<aside aria-label="Library" style="position: sticky; top: 0; align-self: start; box-sizing: border-box; {CARDROW}; padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 2px">'
+         + _PNAV('All songs', '93', 'AllSongsLaptop.dc.html', True) + _PNAV('Explore', '', 'ExploreLaptop.dc.html')
+         + f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 12px 0 4px 10px"><h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Playlists</h2>'
+         f'<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{{{openFolder}}}}" style="width: 36px; height: 36px; border: 0; border-radius: 18px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{PLUS.replace("24", "18")}</button></div>'
+         f'<div style="display: flex; flex-direction: column">{PLAYLISTROWS("FolderLaptop.dc.html", "SharedFolderLaptop.dc.html", 40, False)}</div>'
+         f'<div style="height: 1px; margin: 12px 10px 8px; background: {LINE}"></div>' + _PNAV('Archive', '3', 'ArchiveLaptop.dc.html') + _PNAV('Trash', '1', 'ArchiveLaptop.dc.html') + '</aside>')
+_LHEAD = (f'<div style="display: flex; align-items: center; gap: 16px; min-height: 48px"><h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">All songs</h1><span style="font-size: 17px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{count}}}}</span><span style="flex: 1"></span>'
+          f'<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{_LSEARCH.replace("width: 360px", "width: 320px")}</sc-if>{CREATE("bar")}</div>')
+_TH = lambda l, w='', right=False: f'<span style="{w}font-size: 13px; font-weight: 600; color: {SOFT}{"; text-align: right" if right else ""}">{l}</span>'
+_LCOLS = 'display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 140px 120px 44px; align-items: center; gap: 16px'
+_LTHEAD = (f'<div style="{_LCOLS}; padding: 0 8px 0 12px; height: 40px; border-bottom: 1px solid {LINE}">' + _TH('Title') + _TH('Composer and key') + _TH('Progress') +
+           f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sortOn}}}}" onClick="{{{{openSort}}}}" style="height: 40px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 6px; color: {LINK}; font: inherit; font-size: 13px; font-weight: 600">{{{{sortL}}}}{SORTI}</button><span></span></div>')
+LROW = (f'<div style="{_LCOLS}; padding: 0 8px 0 12px; min-height: 60px; border-bottom: 1px solid {LINE}">'
+        f'<a href="SongLaptop.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 14px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 9px; background-image: {{{{r.pic}}}}; background-size: cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.t}}}}</span></a>'
+        f'<span style="font-size: 15px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.s}}}}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.v}}}}</span><span style="font-size: 15px; color: {SOFT}">{{{{r.when}}}}</span>'
+        f'<button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
+LTABLE = f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div role="table" aria-label="All songs" style="border-top: 1px solid {LINE}">{_LTHEAD}<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="10">{LROW}</sc-for></div></sc-if>'
+ovlm = f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
+<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 32px; align-items: start">{LPANE}
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{_LHEAD}{RESULTS('SongLaptop.dc.html', 'FolderLaptop.dc.html', 'ExploreLaptop.dc.html', 'display: flex; flex-direction: column; gap: 8px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
+<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></sc-if></div></div>
 </main>'''
 _SLAB = lambda t, v='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><span style="font-size: 13px; font-weight: 600; color: {SOFT}">{t}</span>{v}</div>'
 _TILE = 'border: 0; border-radius: 12px; background: {{o.bg}}; color: {{o.fg}}; box-shadow: 0 0 0 1px ' + LINE + '; font: inherit; padding: 0; min-width: 0'
@@ -255,7 +283,7 @@ IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
 ovpops = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + LFOLDERSHEET_L
-detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET + BSHEET('moreOn', 'Songs', MOREMENU('.dc.html')), SORTMENU('right: 56px; top: 132px') + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 56px; top: 200px', 300) + LFOLDERSHEET_L.replace('New folder', 'New playlist') + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
+detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET + BSHEET('addOn', 'New', NEWMENU([(l, a) for l, a in _NEWPH])), SORTMENU('right: 120px; top: 170px') + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 56px; top: 200px', 300) + LFOLDERSHEET_L.replace('New folder', 'New playlist') + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
 # ── All songs ──
 NOMATCH = (f'<sc-if value="{{{{none}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 24px; text-align: center"><span style="width: 56px; height: 56px; border-radius: 28px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{SEARCH.replace("width=\"18\" height=\"18\"", "width=\"24\" height=\"24\"")}</span>'

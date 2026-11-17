@@ -47,11 +47,13 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
 **Actions**
 
 - One way to each action. Adding a direct way removes the old one.
-- A screen's own actions go in its bar. **Nothing floats on a page** (owner, 2026-11-17: "what is with the floating
-  add action, what is with your instructions that tell you to not do this, fix them"; Flat's My scores): the + that
-  creates is a round button in the bar, opening the ways to add; a page's one primary action (Add to my library,
-  Play, Practise) sits in its head, under the title, never floating over the content. What still floats is a tool's own control bar (the Player's,
-  the editor's, a Practice explorer's, centred on its focus, below), never an action. One gear per screen, Edit beside the title.
+- A screen's own actions go in its bar. **What creates or adds floats** (owner, 2026-11-17: "use proper floating
+  actions and like add to library in this add buttons floating"; Flat's floating +): the + that creates on a library,
+  and a detail page's one act (Add to my library, Open in my library) as the honey floating action at the bottom
+  right, so the page has one focus and the act is always in reach. One floating action per screen (Material 3: "Don't
+  display multiple FABs on a single screen"); any other act sits on what it acts on (Play at the head of the music it
+  plays; NN/g, closeness of actions and objects). Never two acts of different weight in one box in the content.
+  Cards, focus, edges and gaps are judged by `edge-lines`. One gear per screen, Edit beside the title.
 - Creating anything is a New sheet: a name, a few properties, one Create at the foot.
 - In a list of people or things, Add is the list's last row, and a folded list's "Show all n ›" is a quiet link under the card, below Add (owner 2026-11-16); a row's own acts sit behind its ···; the loss of the
   whole thing is its own card at the page's foot (Noji's Participants and deck settings; owner 2026-11-16). Never a
