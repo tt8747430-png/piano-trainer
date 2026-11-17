@@ -161,13 +161,17 @@ def RS_RUNVIEW(lap):
     wait = f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center; white-space: nowrap">Wait mode</span>'
     bar = TOP('', f'<span style="font-family: {SERIF}">Cmaj7</span> · Inversions', wait, 'Close', CLOSEB(close), n=2)  # the pill is two buttons wide
     bar = LPAD(bar) if lap else bar
-    staff = CARD(RS_RUNSTAFF(6 if lap else 4, 92 if lap else 76, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·'), '12px 8px')
+    # round 63: the run's music is the page's subject, so it stands on the paper, never in a lone card (edge-lines law
+    # 3); on a laptop it is set larger (zoom 1.35) and centred in the band over the transport, never a 760px card
+    # with 300px of bare paper under it
+    staff = RS_RUNSTAFF(6 if lap else 4, 120 if lap else 84, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·')
+    staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 6px; border-radius: 3px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 6px; border-radius: 3px; background: {INK}"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
     transport = f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
     inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170, "kbL") if lap else '<div style="flex: none; margin: 0 -16px">' + RS_KEYS(112) + '</div>'}{transport}'
     if lap:
-        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 760px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div>'
+        return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1018px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
                 f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
     return bar + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>'
 

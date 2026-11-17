@@ -1007,6 +1007,8 @@ owner's, typos fixed.
 
 - **A route state's title belongs to its line (v400, loop round 63; edge-lines, a heading nearest what it heads):** Page not found, This screen could not open and offline stood mark, title, line and ways on all 12 apart on the board and 10 in the app, so the title read as the mark's caption. The title is now 16 under the mark and 4 over its line, the ways on 20 below; the app also takes the board's 72 yellow tile, 18 title and 15 line where it had drifted to a grey circle, 22 and 16.
 
+- **A chord run's music on the paper** (round 63, canvas v402): in the Player's chord run (`PlayChord`, `PlayChordLaptop`) the staff is the page's subject, so it leaves its lone card (edge-lines law 3); on a laptop it is set larger (zoom 1.35, 1018 wide with its progress bar) and centred in the band over the transport, where a 760px card had left 300px of bare paper; on a phone its cells widen to 84 so staff and progress bar share both edges.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
