@@ -1,5 +1,5 @@
+import { PianoButton } from '@/widgets/practice-pages'
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { PageKeyboardTools } from '@/features/live-keyboard'
 import { ArrowLeft, ArrowRight, Settings } from 'lucide-react'
 import { type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -78,7 +78,7 @@ export function LessonLayout({
         tools={
           <>
             <LearnedButton step={step} bar worded />
-            <PageKeyboardTools pedalsFromSm />
+            <PianoButton />
             <ToolsButton />
           </>
         }

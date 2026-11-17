@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isTakeId, selectTake, useTakes, useTakesStoreApi, type Take } from '@/entities/take'
 import { deleteTake } from '@/features/manage-takes'
-import { PageKeyboardTools, PinnedKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PianoButton } from '@/widgets/practice-pages'
 import {
   ActionRow,
   BackButton,
@@ -55,7 +56,7 @@ function TakeView({ take }: { take: Take }) {
     })
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton />} tools={<PageKeyboardTools />} />
+      <ScreenHeader title={title} back={<BackButton />} tools={<PianoButton />} />
       <PinnedKeyboard shown={unmarked(take.notes.map((note) => note.midi))} />
       <TakeNameField take={take} />
       <div className="flex items-center gap-3">

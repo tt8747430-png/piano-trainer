@@ -7,7 +7,8 @@ import {
   RIGHT_FIGURES,
   type OwnPatternId,
 } from '@/entities/pattern'
-import { PageKeyboardTools, PinnedKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
+import { PianoButton } from '@/widgets/practice-pages'
 import type { OwnPatternDraft } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, Dropdown, NameField, ScreenHeader } from '@/shared/ui'
@@ -35,7 +36,7 @@ export function PatternEditor({
   const { draft, change, sample, shown, show, save, cancel, savable } = usePatternEditor(start, id)
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={title} back={<BackButton />} tools={<PageKeyboardTools />} />
+      <ScreenHeader title={title} back={<BackButton />} tools={<PianoButton />} />
       <PinnedKeyboard shown={shown} />
       <form
         className="flex max-w-prose flex-col gap-5"
