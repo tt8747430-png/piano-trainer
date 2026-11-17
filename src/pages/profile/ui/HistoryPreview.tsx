@@ -22,7 +22,11 @@ export function HistoryPreview() {
   const { t } = useTranslation('account')
   const lines = useRunLines()(useProgress(selectHistory).slice(0, 3))
   return (
-    <ProfileSection title={t('profile.history.title')} to="/profile/history">
+    <ProfileSection
+      title={t('profile.history.title')}
+      to="/profile/history"
+      seeAll={lines.length > 0}
+    >
       <SettingsGroup flush>
         {lines.length === 0 ? (
           <p className="px-4 py-3 text-pretty text-muted-foreground">{t('profile.history.none')}</p>
