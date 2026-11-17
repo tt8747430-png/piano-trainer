@@ -143,7 +143,7 @@ elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True)
 EYEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
 SOLOI = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><text x="12" y="16.4" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">S</text></svg>'
 MENUCARD = lambda *rows: GROUP(*rows, bg=SHEET)
-ED_MENU = lambda sfx, vh=('Today', ''): (MENUCARD(('link', 'Credits', 'Amazing Grace', 'openCredits'), ('link', 'Instruments', 'Piano', 'openInst'), ('link', 'Version history', vh[0], vh[1]), ('link', 'Layout', 'Pages', ''), ('link', 'Playback sound', 'Grand piano', ''), ('link', 'MIDI keyboard', 'None', ''), ('link', 'Takes', '3', 'Takes' + sfx))
+ED_MENU = lambda sfx, vh=('Today', ''): (MENUCARD(('link', 'Credits', 'Amazing Grace', 'openCredits'), ('link', 'Instruments', 'Piano', 'openInst'), ('link', 'Version history', vh[0], vh[1]), ('link', 'Layout', 'Pages', ''), ('link', 'MIDI keyboard', 'None', ''), ('link', 'Takes', '3', 'Takes' + sfx))
                        + MENUCARD(('link', 'Export', 'MusicXML, MIDI, PDF', ''), ('link', 'Print', '', ''))
                        + f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 12px">'
                        # what publishing means sits behind its ⓘ, never under the control (loop round 60)

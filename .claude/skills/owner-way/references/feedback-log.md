@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, no Playback sound row (canvas v368):** the editor boards' menu drew "Playback sound · Grand piano", but the app has one piano sound, so the row could change nothing; it is gone from the four editor boards ("if a control's effect cannot be seen or heard, it is wrong") (2026-11-17).
 - **Loop round 61, where the song is kept, under the menu's title (the boards' ED_SAVED):** the learner's own song or version said nowhere that it was saved; the menu says "Saved on this device", or "Saved to your account" when signed in, under the song's name (2026-11-17).
 - **Loop round 61, Print from the editor's menu (the boards' Print row):** the editor could not print what it shows; Print, after Export…, prints the draft on A4 pages through the Player's one print, with the editor's chord names, words, fingering, staves in sight and section headings, then asks the browser's print (2026-11-17).
 - **Loop round 61, Export from the editor's menu (the boards' Export row):** writing the song out meant leaving for its page; the menu ends with Export… for the learner's own song or version, opening the song page's one export sheet (MusicXML, compressed MusicXML, MIDI) (2026-11-17).
