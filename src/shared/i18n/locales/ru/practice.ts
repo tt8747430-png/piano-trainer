@@ -33,7 +33,7 @@ export const practice: LocaleResources['practice'] = {
     chordFinder: 'Определение аккордов',
     exercises: 'Техника по методическим пособиям',
     metronome: 'Темп, размер и деление доли',
-    circleOfFifths: 'Тональности и ключевые знаки',
+    circleOfFifths: 'Все тональности и их знаки',
     tuner: 'Высота звука относительно ля первой октавы',
   },
   toolValue: {

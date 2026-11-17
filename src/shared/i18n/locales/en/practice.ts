@@ -27,7 +27,7 @@ export const practice = {
     chordFinder: 'Chord identification',
     exercises: 'Technique, book by book',
     metronome: 'Tempo, meter and subdivision',
-    circleOfFifths: 'Keys, signatures and related keys',
+    circleOfFifths: 'Every key and its signature',
     tuner: 'Pitch measured against A4',
   },
   // A tool's tile on Practice (R32): what it is set to now.
