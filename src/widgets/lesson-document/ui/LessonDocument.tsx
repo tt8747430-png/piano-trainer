@@ -237,7 +237,7 @@ function ToolbarDock({
     <div
       className={cn(
         'pointer-events-none fixed inset-x-0 bottom-[calc(var(--nav-bar)+0.5rem)] z-30 flex justify-center px-2',
-        'landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+        'landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
       )}
     >
       <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-2">

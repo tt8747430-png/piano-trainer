@@ -356,6 +356,7 @@ on a phone, 24px from 640px, 40px beside the sidebar.
 - **Two panes from 80rem (`WIDE`):** Settings and Songs stand in two panes only from 1280; under it the sidebar
   leaves a second pane too narrow to read, so they keep one column. A bar over a 672 column (`max-w-2xl`) sets its
   row on that column (`ScreenHeader column`), so title and content share an edge at every width.
+- **Focus (laptop):** the sidebar's head holds its toggle and Focus (Lucide Maximize), 40 each in the dense row, the name 18 on one line. Focus hides the sidebar and the side panels of content (the Chord player's chords and styles, Songs' library pane), never a page's own list of sections; the screen and what is docked take the window. Exit focus (Minimize, a bar circle) is then the bar's first button, before Back or the title; Esc leaves too. It lasts the session (`useFocusMode`), the `focus-mode:` variant styling what changes.
 - **Settings:** one column of grouped cards on a phone, each page pushed with Back; from 80rem the libraries' two
   panes: a sidebar of tree rows (17rem, a painted swatch each, sticky under the bar and scrolling on its own) beside
   the page (44rem), which scrolls with the window. Never two columns of unequal groups.

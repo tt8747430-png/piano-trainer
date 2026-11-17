@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LIBRARY_SORTS, SORT_DIRECTIONS, useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
 import { cn, useMediaQuery, useSetSearch, WIDE } from '@/shared/lib'
-import { RowLink, ScreenHeader, SearchField, SectionHead, SortMenu } from '@/shared/ui'
+import { ExitFocus, RowLink, ScreenHeader, SearchField, SectionHead, SortMenu } from '@/shared/ui'
 import { SongTable } from '@/widgets/song-library'
 import type { SongsHome } from '../model/explore-view'
 import { useLibraryPage } from '../model/use-library-page'
@@ -62,10 +62,10 @@ export function SongsOverview() {
   if (laptop) {
     const songs = every.view.groups.flatMap((group) => group.entries)
     return (
-      <div className="grid grid-cols-[17.5rem_minmax(0,1fr)] items-start gap-8 pt-6 pb-12">
+      <div className="grid grid-cols-[17.5rem_minmax(0,1fr)] items-start gap-8 pt-6 pb-12 focus-mode:grid-cols-1">
         <aside
           aria-label={t('library.label')}
-          className="card sticky top-6 flex flex-col gap-0.5 px-3 pt-1 pb-3"
+          className="card sticky top-6 flex flex-col gap-0.5 px-3 pt-1 pb-3 focus-mode:hidden"
         >
           <Link to="/songs/all" className={cn(PANE_ROW, 'mt-2 bg-muted font-bold')}>
             <span className="flex-1">{t('all.title')}</span>
@@ -106,6 +106,7 @@ export function SongsOverview() {
         </aside>
         <div className="flex min-w-0 flex-col gap-5">
           <div className="flex min-h-12 items-center gap-4">
+            <ExitFocus className="me-0 ms-0" />
             <h1 className="font-sans text-[1.75rem] leading-tight font-bold tracking-[-0.01em] whitespace-nowrap">
               {t('all.title')}
             </h1>

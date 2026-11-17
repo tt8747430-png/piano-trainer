@@ -17,6 +17,10 @@ export const common = {
     open: 'Open the sidebar',
     recents: 'Recents',
     guest: 'Guest',
+    // Focus (the canvas's laptop window): the sidebar and side panels hidden, Esc or Exit focus to leave.
+    focus: 'Focus',
+    focusTip: 'Hide the sidebar and panels',
+    exitFocus: 'Exit focus',
     help: 'Help',
     signIn: 'Sign in',
   },

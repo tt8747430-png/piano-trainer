@@ -554,7 +554,7 @@ export function ChordPlayer({
         onDragCancel={() => setInHand(null)}
       >
         {/* From 80rem the sheet's column and, beside it, the key's chords and the styles (canvas 171). */}
-        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start xl:gap-10">
+        <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start xl:gap-10 focus-mode:grid-cols-1">
           <div
             ref={column}
             className={cn(
@@ -626,7 +626,8 @@ export function ChordPlayer({
               ) : null}
             </div>
           </div>
-          <aside className="hidden flex-col gap-8 xl:flex">
+          {/* Focus hides the side column: the chart and its keys fill the window (canvas v398). */}
+          <aside className="hidden flex-col gap-8 xl:flex focus-mode:hidden">
             {prefs.follow && stripPlace === 'side' ? (
               <ArrangerStrip
                 follow={follow}

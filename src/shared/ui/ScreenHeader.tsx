@@ -1,8 +1,9 @@
-import { PencilLine } from 'lucide-react'
+import { Minimize, PencilLine } from 'lucide-react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, setFocusMode, useFocusMode } from '@/shared/lib'
 import { Button } from './primitives/button'
+import { RoundButton } from './RoundButton'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
 
@@ -130,6 +131,7 @@ export function ScreenHeader({
             column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
           )}
         >
+          <ExitFocus />
           {back ? <div className="-ms-1 shrink-0 print:hidden">{back}</div> : null}
           <div className="flex min-w-0 flex-1 items-center gap-0.5">
             <h1
@@ -175,6 +177,7 @@ export function ScreenHeader({
             column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
           )}
         >
+          <ExitFocus />
           {back ? <div className="-ms-1 flex shrink-0 print:hidden">{back}</div> : null}
           <div
             className={cn(
@@ -219,6 +222,22 @@ export function ScreenHeader({
     </header>
   )
   return header
+}
+
+/**
+ * While Focus is on, the bar's first button (canvas v398): it leaves Focus, before Back or the title,
+ * where the sidebar's own Focus button stood; Esc leaves it too. A page that draws its own title row
+ * (Songs and Settings on a wide screen) puts it first there.
+ */
+export function ExitFocus({ className }: { className?: string }) {
+  const { t } = useTranslation('common')
+  const on = useFocusMode()
+  if (!on) return null
+  return (
+    <div className={cn('-ms-1 me-3 hidden shrink-0 lg:flex print:hidden', className)}>
+      <RoundButton label={t('nav.exitFocus')} icon={Minimize} onClick={() => setFocusMode(false)} />
+    </div>
+  )
 }
 
 /** The pencil beside the title: quiet, the title's own act, a 44px target. */

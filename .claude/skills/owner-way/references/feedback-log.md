@@ -1001,6 +1001,8 @@ owner's, typos fixed.
 
 - **Focus leaves by the bar, never over the keys (v398; owner, 2026-11-17, on ChordPlayerLaptop: "the focus mode and the other features from the design. improve them"):** Exit focus was a capsule pinned at the window's foot, lying on the Chord player's keys and beside every floating transport. It is now the bar's first button while Focus is on, a 44 glass circle before Back (or the title, on a place with none), where the sidebar's own Focus button stood, its tip "Exit focus (Esc)"; Esc still leaves. Focus also hides the Songs library's pane, a side panel like any other, so the songs fill the window.
 
+- **Focus in the app as on the canvas (port, v399):** the sidebar's head holds its toggle and Focus; Focus hides the sidebar and the side panels of content (the Chord player's chords and styles, Songs' library pane), never a page's own list of sections (Settings', which holds its Back and title); the screen and its docked keys and transport take the window; Exit focus is the bar's first button, Esc leaves; it lasts the session. The sidebar's name steps to 18 on one line so both head buttons fit.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

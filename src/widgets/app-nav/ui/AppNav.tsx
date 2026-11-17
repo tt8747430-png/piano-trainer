@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import {
   GraduationCap,
+  Maximize,
   Metronome,
   Music,
   PanelLeftClose,
@@ -11,7 +12,7 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { cn, OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
+import { cn, OPEN_PLAINLY, setFocusMode, useFocusMode, useMediaQuery } from '@/shared/lib'
 import { useAccount, useLearnerProfile } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
@@ -210,8 +211,11 @@ function PlaceLink({
 export function AppNav() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
-  const sidebar = useSettings(selectSidebar)
-  const collapsed = sidebar === 'collapsed'
+  const chosen = useSettings(selectSidebar)
+  const focus = useFocusMode()
+  // Focus hides the sidebar; the learner's own open or collapsed comes back when it ends.
+  const sidebar = focus ? 'focus' : chosen
+  const collapsed = chosen === 'collapsed'
   const ToggleIcon = collapsed ? PanelLeftOpen : PanelLeftClose
   const navigate = useNavigate()
   const palette = useSearchPalette()
@@ -233,6 +237,10 @@ export function AppNav() {
       },
       { label: t('nav.search'), combo: SEARCH_KEY, run: () => palette.open() },
       { label: t('shortcuts.sidebar'), combo: SIDEBAR_KEY, run: toggle },
+      // Esc leaves Focus, only while it is on: otherwise Esc stays the screen's own.
+      ...(focus
+        ? [{ label: t('nav.exitFocus'), combo: { key: 'Escape' }, run: () => setFocusMode(false) }]
+        : []),
     ],
     { scope: 'app' },
   )
@@ -249,12 +257,12 @@ export function AppNav() {
       data-slot="app-nav"
       data-sidebar={sidebar}
       data-away={away ? '' : undefined}
-      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden landscape-phone:pointer-events-auto landscape-phone:border-border landscape-phone:bg-card lg:border-border landscape-phone:px-0 lg:pointer-events-auto lg:bg-card lg:px-0 landscape-phone:inset-y-0 landscape-phone:right-auto landscape-phone:flex landscape-phone:w-rail landscape-phone:flex-col landscape-phone:justify-center landscape-phone:border-t-0 landscape-phone:border-r landscape-phone:pb-0 landscape-phone:pl-safe-left lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
+      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden landscape-phone:pointer-events-auto landscape-phone:border-border landscape-phone:bg-card lg:border-border landscape-phone:px-0 lg:pointer-events-auto lg:bg-card lg:px-0 landscape-phone:inset-y-0 landscape-phone:right-auto landscape-phone:flex landscape-phone:w-rail landscape-phone:flex-col landscape-phone:justify-center landscape-phone:border-t-0 landscape-phone:border-r landscape-phone:pb-0 landscape-phone:pl-safe-left lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
     >
-      <div className="hidden h-20 shrink-0 items-center gap-2 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:justify-center">
+      <div className="hidden h-20 shrink-0 items-center gap-0.5 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
         <p
           aria-hidden
-          className="min-w-0 flex-1 pl-3 font-display text-2xl leading-tight font-semibold text-balance group-data-[sidebar=collapsed]/nav:hidden"
+          className="min-w-0 flex-1 truncate pl-2 font-display text-lg leading-tight font-semibold group-data-[sidebar=collapsed]/nav:hidden"
         >
           {t('appName')}
         </p>
@@ -264,9 +272,18 @@ export function AppNav() {
           title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
           aria-expanded={!collapsed}
           onClick={toggle}
-          className="grid size-11 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
+          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
         >
           <ToggleIcon aria-hidden className="size-5" />
+        </button>
+        <button
+          type="button"
+          aria-label={t('nav.focus')}
+          title={t('nav.focusTip')}
+          onClick={() => setFocusMode(true)}
+          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
+        >
+          <Maximize aria-hidden className="size-5" />
         </button>
       </div>
       {sidebarShown ? (

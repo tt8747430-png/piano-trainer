@@ -6,6 +6,8 @@
 # and Notes' focus, Ulysses' distraction-free mode), left by Esc or by Exit focus, the bar's first button while Focus
 # is on, before Back or the title, where the sidebar's own toggle stood (owner, 2026-11-17: "the focus mode … improve
 # them"; a capsule at the foot lay over the keys and the floating transports).
+# Focus hides the side panels of content (a song list's library pane, the Chord player's chords and styles), never
+# a page's own list of sections (Settings', Admin's, Takes'), which carries its Back and title.
 # No letter shortcut: a letter alone is the piano's (CLAUDE.md, Keys).
 import re
 
@@ -21,7 +23,7 @@ _LAPHEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items:
          '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div></div>')
 # the runtime writes each style back as the browser serialises it (minmax(0px, …))
 _LAPCOLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr) 380px', 'minmax(0px, 1fr) 440px', 'minmax(0px, 3fr) minmax(0px, 2fr)']
-_LAPFIRST = ['240px minmax(0px, 1fr)', '280px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
+_LAPFIRST = ['240px minmax(0px, 1fr)', '280px minmax(0px, 1fr)']
 _LAPCSS = ('<style data-lapcss>'
         '[data-lapwin][data-side="off"] { grid-template-columns: 76px minmax(0, 1fr) !important }'
         ' [data-side="off"] > nav { padding-left: 14px !important; padding-right: 14px !important; align-items: center }'

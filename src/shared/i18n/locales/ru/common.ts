@@ -18,6 +18,10 @@ export const common: LocaleResources['common'] = {
     open: 'Развернуть боковую панель',
     recents: 'Недавние',
     guest: 'Гость',
+    // Focus (the canvas's laptop window): the sidebar and side panels hidden, Esc or Exit focus to leave.
+    focus: 'Фокус',
+    focusTip: 'Скрыть боковую панель и панели',
+    exitFocus: 'Выйти из фокуса',
     help: 'Справка',
     signIn: 'Войти',
   },

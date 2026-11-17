@@ -92,6 +92,7 @@ export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { hasFinePointer } from './fine-pointer'
 export { LANDSCAPE_PHONE, LAPTOP, WIDE, useMediaQuery } from './use-media-query'
+export { setFocusMode, useFocusMode } from './use-focus-mode'
 export { useWakeLock } from './use-wake-lock'
 export { startKeyboardViewport, visibleBottom } from './keyboard-viewport'
 export { startKeyboardReveal } from './keyboard-reveal'

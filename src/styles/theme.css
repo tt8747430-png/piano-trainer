@@ -6,6 +6,8 @@
 @custom-variant small-phone (@media (max-width: 389.98px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
 @custom-variant narrow-phone (@media (max-width: 359.98px));
+/* Inside a screen while Focus hides the sidebar and the side panels (`use-focus-mode.ts`). */
+@custom-variant focus-mode (&:is([data-sidebar=focus] *));
 /* A wash under the pointer only where a mouse or a trackpad hovers, at every size: a phone keeps a
    tapped element hovered, and some say they hover, so a tap would leave its wash behind (the
    printed title's, a palette key's). */
@@ -633,6 +635,10 @@
 }
 @utility pl-sidebar-collapsed {
   padding-left: calc(--spacing(18) + var(--gutter) + var(--floating-left));
+}
+/* A screen in Focus: no sidebar, clear of the window's edge by a gutter alone. */
+@utility pl-focus {
+  padding-left: calc(var(--gutter) + var(--floating-left));
 }
 /* A phone on its side: its places a rail down the left (5rem, clear of a notch there), the screen
    clear of it by a gutter, and of the floating actions where they stand at its left. */

@@ -165,6 +165,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   end: it names what was missed, says how to search instead, and lists the Suggestions to go on from.
 - **Words:** a Place is the nav's; Practice has pages in groups; a thing's page is an Explorer; a Tool works something
   out from what it is given.
+  **Focus** (the sidebar's head, beside its toggle): the sidebar and the side panels of content hide for the session and the screen takes the window; Exit focus stands first in the bar, before Back or the title, and Esc leaves (`use-focus-mode.ts`, the `focus-mode:` variant). A capsule at the foot was tried on the canvas and lay over the keys.
 
 ## Consequences
 
