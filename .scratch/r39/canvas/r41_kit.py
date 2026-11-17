@@ -128,6 +128,8 @@ def CHIPS(lst):
     return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -4px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 KCHIPS = CHIPS
 # In a sheet the choices wrap, never cut at its edge ("nothing is cut")
+# A caption and the control it names, 8 apart, so the sheet's 16 falls between fields, not inside one (proximity)
+LABELLED = lambda t, ctrl: f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS(t)}{ctrl}</div>'
 WCHIPS = lambda lst: CHIPS(lst).replace('overflow-x: auto; margin: -4px -16px; padding: 0 16px', 'flex-wrap: wrap; row-gap: 0; margin: -4px 0', 1)
 def STEPPER(val, dn, up, w=64):
     b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'

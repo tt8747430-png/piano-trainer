@@ -187,6 +187,8 @@ PlayerApp, PlayerDesk: boards only the published canvas holds, kept by index.py 
 | `INFOB` | r41_kit.py | r44_editor.py, r47_edit.py, r49_settings.py, r54_practice_more.py, r61_intervals.py, r63_pattern.py |
 | `INFOTIP` | r41_kit.py | r44_editor.py, r47_edit.py, r49_settings.py, r54_practice_more.py, r61_intervals.py, r63_pattern.py |
 | `KEYS` | calm_kit.py | r41_practice.py, r41_songs.py, r44_editor.py, r56_results.py, r60_scales.py |
+| `LABELLED` | r41_kit.py | r45_places.py |
+| `LAPSHEET` | r41_lib.py | r45_places.py, r48_course.py, r53_songs_more.py, r54_practice_more.py, r55_editor_draft.py, r57_yours.py |
 | `LCOL` | r41_kit.py | r50_profile.py, r53_songs_more.py, r54_practice_more.py, r57_yours.py, r63_pattern.py |
 | `LEMPTY` | r41_lib.py | r46_admin.py, r57_yours.py |
 | `LIB_ROW` | r41_lib.py | the kit alone |
@@ -205,7 +207,7 @@ PlayerApp, PlayerDesk: boards only the published canvas holds, kept by index.py 
 | `NONE` | r41_lib.py | the kit alone |
 | `PILL` | calm_kit.py | r47_edit.py |
 | `PLAYBTN` | r41_kit.py | r41_practice.py, r41_songs.py, r54_practice_more.py, r56_results.py |
-| `POPOVER` | r41_kit.py | r41_practice.py, r41_songs.py, r42_chords.py, r44_editor.py, r45_places.py, r47_edit.py, r48_course.py, r49_settings.py, r50_profile.py, r54_practice_more.py, r55_editor_draft.py, r56_results.py, r57_yours.py, r58_chordplayer.py, r59_takes.py, r60_scales.py, r61_intervals.py, r62_progression.py, r63_pattern.py, r64_metronome.py, r66_chord_finder.py, r68_exercise.py |
+| `POPOVER` | r41_kit.py | r41_practice.py, r41_songs.py, r42_chords.py, r44_editor.py, r45_places.py, r47_edit.py, r49_settings.py, r50_profile.py, r54_practice_more.py, r55_editor_draft.py, r56_results.py, r57_yours.py, r58_chordplayer.py, r59_takes.py, r60_scales.py, r61_intervals.py, r62_progression.py, r63_pattern.py, r64_metronome.py, r66_chord_finder.py, r68_exercise.py |
 | `PREVPILL` | r41_kit.py | r47_edit.py, r49_settings.py |
 | `PSEARCH` | r41_kit.py | r53_songs_more.py, r72_flat_songs.py |
 | `ROOTGRID` | r41_kit.py | r41_practice.py, r47_edit.py, r54_practice_more.py, r58_chordplayer.py, r61_intervals.py, r62_progression.py, r68_exercise.py |

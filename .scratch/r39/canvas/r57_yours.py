@@ -134,7 +134,7 @@ yph = (f'{TITLEBAR("{{pageT}}", YSEL, "Learn.dc.html", "Back to Learn", wrap=Tru
 ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{TABLE_L()}', 2000) + YSELBAR_L + FAB(32).replace('right: 16px', 'right: 40px') + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
-       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 28px; top: 76px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
+       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + LAPSHEET(BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel'), 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
 
 # ── Settings of the learner's own lesson and course: rows that say their value and open in place ──
 OSET_JS = js(r'''

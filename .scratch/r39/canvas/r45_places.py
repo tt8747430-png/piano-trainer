@@ -112,16 +112,16 @@ COURSEROWS = (f'<div style="display: flex; flex-direction: column; gap: 4px; pad
 LTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 112px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px"><span style="flex: 1">{{{{toastT}}}}</span><sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></sc-if></div></sc-if>')
 # One New sheet for both: what it is, its name, then the one thing it needs (Flat's New score; ruling "Creating anything is a New sheet")
 NEWBODY = (f'{NAMEFIELD("{{namePh}}")}'
-           f'<sc-if value="{{{{isNL}}}}" hint-placeholder-val="{{{{true}}}}">{CAPS("In a course")}{WCHIPS("intos")}</sc-if>'
+           f'<sc-if value="{{{{isNL}}}}" hint-placeholder-val="{{{{true}}}}">{LABELLED("In a course", WCHIPS("intos"))}</sc-if>'
            f'<sc-if value="{{{{isNC}}}}" hint-placeholder-val="{{{{false}}}}">{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
            f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div></sc-if>'
            f'<div style="display: flex; margin-top: 6px">{BTN("Create", "create", "", "primary", 50)}</div>')
-NCBODY = (f'{NAMEFIELD('Course name')}{CAPS("Shelf")}{WCHIPS("ncShelves")}{CAPS("Level")}{WCHIPS("ncLevels")}{CAPS("Length")}'
-          f'<div style="display: flex; align-items: center; gap: 8px"><button type="button" aria-label="Fewer weeks" onClick="{{{{fewerW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">−</button><span style="min-width: 80px; text-align: center; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{wkL}}}}</span><button type="button" aria-label="More weeks" onClick="{{{{moreW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">+</button></div>'
+WEEKSTEP = f'<div style="display: flex; align-items: center; gap: 8px"><button type="button" aria-label="Fewer weeks" onClick="{{{{fewerW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">−</button><span style="min-width: 80px; text-align: center; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{wkL}}}}</span><button type="button" aria-label="More weeks" onClick="{{{{moreW}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px; color: {INK}">+</button></div>'
+NCBODY = (f'{NAMEFIELD('Course name')}{LABELLED("Shelf", WCHIPS("ncShelves"))}{LABELLED("Level", WCHIPS("ncLevels"))}{LABELLED("Length", WEEKSTEP)}'
           f'<div style="display: flex">{BTN("Create", "mkCourse", "", "primary", 50)}</div>')
 NEWPICK = NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')])
 LSHEETS = BSHEET('pickOn', 'New', NEWPICK) + BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('ncOn', 'New course', NCBODY, 'Cancel')
-LPOPS = POPOVER('pickOn', 'New', NEWPICK, 'right: 60px; top: 300px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 60px; top: 300px', 440) + POPOVER('ncOn', 'New course', NCBODY, 'left: 600px; top: 200px', 480)
+LPOPS = POPOVER('pickOn', 'New', NEWPICK, 'right: 60px; top: 300px', 300) + LAPSHEET(BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel'), 440) + LAPSHEET(BSHEET('ncOn', 'New course', NCBODY, 'Cancel'), 480)
 
 # ═════ Learn, refactored (canvas 163; owner: "make proper refactor of the lessons and cources and the header and the
 # structure and organization"): one overview in Practice's shape (Continue, Levels, Courses, your own), a page per
@@ -225,7 +225,7 @@ clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placehold
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
         f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY, 'Cancel'),
-       POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + POPOVER('ncOn', 'New course', NCBODY, 'right: 40px; top: 72px', 480), 'Learn')
+       POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + LAPSHEET(BSHEET('ncOn', 'New course', NCBODY, 'Cancel'), 480), 'Learn')
 
 
 # ── Profile ──

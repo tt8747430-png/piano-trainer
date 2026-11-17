@@ -2364,6 +2364,12 @@
     "r57_yours.py"
    ]
   },
+  "LABELLED": {
+   "kit": "r41_kit.py",
+   "users": [
+    "r45_places.py"
+   ]
+  },
   "WCHIPS": {
    "kit": "r41_kit.py",
    "users": [
@@ -2547,7 +2553,6 @@
     "r44_editor.py",
     "r45_places.py",
     "r47_edit.py",
-    "r48_course.py",
     "r49_settings.py",
     "r50_profile.py",
     "r54_practice_more.py",
@@ -2724,6 +2729,17 @@
    "kit": "r41_lib.py",
    "users": [
     "r53_songs_more.py"
+   ]
+  },
+  "LAPSHEET": {
+   "kit": "r41_lib.py",
+   "users": [
+    "r45_places.py",
+    "r48_course.py",
+    "r53_songs_more.py",
+    "r54_practice_more.py",
+    "r55_editor_draft.py",
+    "r57_yours.py"
    ]
   },
   "NEWNAME_L": {

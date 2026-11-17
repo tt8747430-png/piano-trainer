@@ -8,9 +8,6 @@
 #   Section     — a section's page (Chords, In time, One change at a time, Patterns, Practise)
 # Exec'd by r41.py after r52_global.
 
-# A phone sheet as the laptop's centred dialog: the sheet's 22 all round, the kit's ring and shadow, no home-indicator foot.
-LAPSHEET = lambda s, w=440: s.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', f'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: {w}px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px')
-
 def COV(t, c, w=56, folder=False):
     """A song's cover is its first notes on a staff, a folder's a stack of pages in its paint: as the library draws them."""
     pic = (STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))).replace('url("', "url('").replace('")', "')")

@@ -90,6 +90,6 @@ csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + ROWMENU('pmOn', 'Publishin
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
-cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
+cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')
