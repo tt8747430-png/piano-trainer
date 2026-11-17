@@ -362,8 +362,7 @@ TRASHP = (IF('trashAny', ARCHROW('trash'), 'true')
 # the bar holds Select (Cancel while selecting), a glass text capsule, on a phone as on a laptop
 SPACT_P = (f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>')
 # The selection bar, the library's floating glass bar (SELBAR): Restore, and the loss in crimson, on what is picked
-_ASELIN = (f'<button type="button" onClick="{{{{restoreSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">{{{{restoreSelL}}}}</button>'
-           f'<button type="button" onClick="{{{{binSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {RED}; font: inherit; font-size: 15px; font-weight: 600">{{{{binSelL}}}}</button>')
+_ASELIN = (SELACT('{{restoreSelL}}', 'restoreSel', RESTOREI) + SELACT('{{binSelL}}', 'binSel', ACTIC['Delete'], RED))
 ASELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_ASELIN, 34)}</sc-if>'
 ASELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_ASELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 440px; bottom: 28px') + '</sc-if>'
 SPACT = SPACT_P  # the laptop's bar the same glass capsule

@@ -237,9 +237,7 @@ LROW = (f'<div style="{_LCOLS}; position: relative; padding: 0 8px 0 12px; min-h
         f'<button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 LTABLE = f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div role="table" aria-label="All songs" style="border-top: 1px solid {LINE}">{_LTHEAD}<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="10">{LROW}</sc-for></div></sc-if>'
 SELBAR = lambda bottom: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(
-    f'<button type="button" onClick="{{{{closeSheet}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Add to folder</button>'
-    f'<button type="button" onClick="{{{{closeSheet}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">Favourite</button>'
-    f'<button type="button" onClick="{{{{toggleSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {RED}; font: inherit; font-size: 15px; font-weight: 600">Archive</button>', bottom) + '</sc-if>')
+    SELACT('Add to folder', 'closeSheet', ACTIC['Move']) + SELACT('Favourite', 'closeSheet', ACTIC['Favourite']) + SELACT('Archive', 'toggleSel', ACTIC['Archive'], RED), bottom) + '</sc-if>')
 SELTB = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 # Songs' places on a laptop share one frame (LPLACEBAR) and the sidebar holds the places (SONGS_SUB): no pane card
 # Select stands next to the search on every place, so it never moves between them; what a place adds goes before it
