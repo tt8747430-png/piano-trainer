@@ -44,7 +44,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   row Note (the values), Measures, Key signature, Time signature, Barlines and repeats.
 - **Three editing modes**, Flat's: **Replace** writes over what is at the caret; **Insert** writes there and pushes the
   staff's later notes right, adding bars at the end to hold them, and Delete or Cut close the gap; **Chord** adds the
-  key to the chord at the caret. I cycles them.
+  key to the chord at the caret. I cycles them. Keys struck within 100 ms of the first are one chord in every mode,
+  Dorico's default window, fixed: no setting for it.
 - **The clipboard acts on what is chosen**: bars in the chord row, notes on a staff (`Clip`). Paste writes from the
   caret on its staff and leaves what it pasted chosen; it is greyed where the clip cannot go, saying why.
 - **Edited where it is printed**, as Flat and Dorico do; there is no Song sheet, and nothing printed has a second
