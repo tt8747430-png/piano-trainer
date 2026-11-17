@@ -5,6 +5,9 @@ export const editor = {
   redo: 'Redo',
   // A change the song's music cannot be written with: nothing saved over what was.
   unsaved: 'This change couldn’t be saved. The score has been restored to its last saved version.',
+  // Under the menu's title (the boards' ED_SAVED): where the learner's own song or version is kept.
+  savedHere: 'Saved on this device',
+  savedAccount: 'Saved to your account',
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Playback and recording',
   // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.

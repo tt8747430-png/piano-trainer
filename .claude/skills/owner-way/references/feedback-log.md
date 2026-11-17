@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, where the song is kept, under the menu's title (the boards' ED_SAVED):** the learner's own song or version said nowhere that it was saved; the menu says "Saved on this device", or "Saved to your account" when signed in, under the song's name (2026-11-17).
 - **Loop round 61, Print from the editor's menu (the boards' Print row):** the editor could not print what it shows; Print, after Export…, prints the draft on A4 pages through the Player's one print, with the editor's chord names, words, fingering, staves in sight and section headings, then asks the browser's print (2026-11-17).
 - **Loop round 61, Export from the editor's menu (the boards' Export row):** writing the song out meant leaving for its page; the menu ends with Export… for the learner's own song or version, opening the song page's one export sheet (MusicXML, compressed MusicXML, MIDI) (2026-11-17).
 - **Loop round 61, Title and credits heads the editor's menu (the boards' Credits row):** it was reached only from the printed title; it is the menu's first row, the title its value, and its page goes Back to the menu however it was opened (2026-11-17).

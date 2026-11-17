@@ -22,6 +22,7 @@ import { MidiControl } from '@/features/connect-midi'
 import { SongExportSheet } from '@/features/song-files'
 import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   RowButton,
@@ -289,6 +290,8 @@ export function EditorGear({
   /** The learner's own song or version, which Export writes. */
   own?: Piece | undefined
 }) {
+  const { t } = useTranslation('editor')
+  const { account } = useAccount()
   const [exporting, setExporting] = useState(false)
   const [printing, setPrinting] = useState(false)
   const { view } = useScoreEditorContext()
@@ -306,6 +309,9 @@ export function EditorGear({
         <SheetContent
           title={title}
           status={page === 'main' ? draft?.status : undefined}
+          description={
+            page === 'main' && own ? t(account ? 'savedAccount' : 'savedHere') : undefined
+          }
           back={
             page === 'main' || gearBack(page) === null ? undefined : (
               <BackButton onClick={() => view.setGear(gearBack(page))} />
