@@ -190,7 +190,7 @@ function EditorScreen({
         )}
       >
         <ScoreBar
-          lead={<EditorLead />}
+          lead={<EditorLead own={own !== undefined} />}
           middle={<EditorMode done={done} />}
           actions={<EditorActions />}
         />

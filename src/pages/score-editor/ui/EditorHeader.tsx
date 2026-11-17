@@ -1,5 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Ellipsis, Redo2, Undo2, X } from 'lucide-react'
+import { useAccount } from '@/shared/lib/account'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt } from '@/features/score-editor'
@@ -8,21 +10,34 @@ import { Button } from '@/shared/ui/primitives/button'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
-/** The editor's bar's lead (its canvas): Close, the one way out. */
-export function EditorLead() {
+/**
+ * The editor's bar's lead (its canvas): Close, the one way out; on a laptop, where the learner's own
+ * song is saved beside it (the EditorLaptop board); a phone's bar has no room, so its ··· says it.
+ */
+export function EditorLead({ own }: { own: boolean }) {
   const { t } = useTranslation('common')
+  const { t: te } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
+  const { account } = useAccount()
+  const laptop = useMediaQuery(LAPTOP)
   return (
-    // Close as a glass circle, over the music (the editor board's bar).
-    <Button
-      variant="bar"
-      size="icon"
-      aria-label={t('close')}
-      title={t('close')}
-      onClick={actions.close}
-    >
-      <X aria-hidden />
-    </Button>
+    <>
+      {/* Close as a glass circle, over the music (the editor board's bar). */}
+      <Button
+        variant="bar"
+        size="icon"
+        aria-label={t('close')}
+        title={t('close')}
+        onClick={actions.close}
+      >
+        <X aria-hidden />
+      </Button>
+      {own && laptop ? (
+        <p role="status" className="ms-1 truncate text-[0.8125rem] text-muted-foreground">
+          {te(account ? 'savedAccount' : 'savedHere')}
+        </p>
+      ) : null}
+    </>
   )
 }
 

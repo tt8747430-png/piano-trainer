@@ -323,7 +323,10 @@ export function EditorGear({
           title={title}
           status={page === 'main' ? draft?.status : undefined}
           description={
-            page === 'main' && own ? t(account ? 'savedAccount' : 'savedHere') : undefined
+            // On a laptop the bar says it beside Close (the EditorLaptop board), so the menu does not.
+            page === 'main' && own && !laptop
+              ? t(account ? 'savedAccount' : 'savedHere')
+              : undefined
           }
           back={
             page === 'main' || gearBack(page) === null ? undefined : (
