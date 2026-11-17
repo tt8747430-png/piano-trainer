@@ -34,9 +34,12 @@ export {
   lastWeek,
   localDay,
   monthOf,
+  RESTS_KEPT,
   streak,
+  streakOf,
   withDay,
   type CalendarDay,
+  type Streak,
 } from './model/days'
 export {
   createProgressStore,

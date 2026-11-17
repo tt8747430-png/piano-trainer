@@ -53,6 +53,9 @@
   /* A song's bars played through (canvas 125's bar map). */
   --p-copper: #c26a2e;
   --p-copper-night: #d98a52;
+  /* A day practised on the streak's calendar (the board's CAL). */
+  --p-ember: #e8b48f;
+  --p-ember-night: #7a4e33;
   --p-crimson: #a34243;
   /* The shade cast by night: near black, warm. */
   --p-night-shade: #0a0705;
@@ -109,6 +112,7 @@
   --toast-action: var(--p-honey);
   --eyebrow: var(--p-rust);
   --played: var(--p-copper);
+  --practised-day: var(--p-ember);
   /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
   --scrim: rgb(51 41 33 / 0.28);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
@@ -297,6 +301,7 @@
     --toast-action: var(--p-honey-ink);
     --eyebrow: var(--p-rust-night);
     --played: var(--p-copper-night);
+    --practised-day: var(--p-ember-night);
     --scrim: rgb(10 7 5 / 0.84);
     --hand-rh-ink: var(--p-brick);
     --hand-lh-ink: var(--p-lilac-light);

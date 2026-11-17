@@ -46,6 +46,7 @@ export const learn = {
     done: 'Practised today.',
     practised: '{{day}}: practised',
     missed: '{{day}}: not practised',
+    rested: '{{day}}: rest day',
     previous: 'Previous month',
     next: 'Next month',
   },

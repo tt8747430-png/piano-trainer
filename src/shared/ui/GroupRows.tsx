@@ -30,8 +30,10 @@ export function GroupRows({
       role="group"
       aria-label={label}
       className={cn(
-        'flex flex-col rows-line overflow-hidden rounded-xl',
-        surface === 'sheet' ? 'bg-card' : 'bg-muted',
+        'flex flex-col rows-line overflow-hidden',
+        // On the page's paper a group is the card (14 corners, the hairline ring), as the kit's GROUP
+        // draws `bg=SHEET`; a filled group keeps its fill alone, 12 round.
+        surface === 'sheet' ? 'card' : 'rounded-xl bg-muted',
         className,
       )}
     >

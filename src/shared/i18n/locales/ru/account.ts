@@ -162,6 +162,10 @@ export const account: LocaleResources['account'] = {
       days_other: 'Серия: {{count}} дня',
       longest: 'Самая длинная серия',
       month: 'Дней в этом месяце',
+      rests: 'Дни отдыха',
+      restsOf: '{{count}} из {{max}}',
+      restsInfo:
+        'Каждые семь дней подряд дают день отдыха, не больше двух. Пропущенный день тратит один, и серия не прерывается.',
       calendar: 'Дни занятий',
     },
     week: {

@@ -146,6 +146,10 @@ export const account = {
       days_other: '{{count}} day streak',
       longest: 'Longest streak',
       month: 'Days this month',
+      rests: 'Rest days',
+      restsOf: '{{count}} of {{max}}',
+      restsInfo:
+        'Each seven days in a row earn a rest day, two at most. A day you miss uses one, and the streak holds.',
       // Over the calendar, whichever month it shows: the month names itself.
       calendar: 'Days practised',
     },
