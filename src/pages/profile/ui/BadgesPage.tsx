@@ -10,7 +10,7 @@ import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeRow } from './BadgesPreview'
 import { BadgeMark } from './marks'
 
-/** Every badge (B1), each a row: its picture by tier, its name, "Silver, 2 of 4", a bar to the next. */
+/** Every badge (B1), each a row: its picture by tier, its name, "Silver · 2 more days to Gold", a bar to the next. */
 export function BadgesPage() {
   const { t } = useTranslation('account')
   const figures = useProfileFigures()

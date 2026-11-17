@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { badgesOf, nextMilestone, type Badge } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
-import { ProgressMeter, RowLink, SettingsGroup } from '@/shared/ui'
+import { ProgressBar, RowLink, SettingsGroup } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
 import { ProfileSection } from './ProfileSection'
@@ -19,13 +19,11 @@ export function BadgeRow({ badge }: { badge: Badge }) {
       detail={standing(badge)}
       render={<Link to="/profile/badges/$badgeId" params={{ badgeId: badge.id }} />}
     >
+      {/* How near the next tier is as a picture; the line above says it in words. */}
       {badge.next !== null ? (
-        <ProgressMeter
-          done={badge.have}
-          total={badge.next}
-          count={t('profile.badges.locked', { have: badge.have, goal: badge.next })}
-          said={t(`profile.badges.names.${badge.id}`)}
-        />
+        <span className="mt-1 flex">
+          <ProgressBar done={badge.have} total={badge.next} />
+        </span>
       ) : null}
     </RowLink>
   )
