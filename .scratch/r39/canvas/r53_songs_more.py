@@ -259,21 +259,14 @@ grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', '<svg
         + IF('isGroup', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))
         + IF('isJoin', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(JPAGE)) + TOASTS)
-# Round 41, the laptop's width used (owner: "the empty space should be properly used"): the groups and the folders
-# shared with you are cards across the page, as Songs' folders; a group's page stands in two columns, the group and its
-# folders on the left, its members on the right.
-GCARD = lambda name, sub, act, c, folder=False, faces=None: (f'<button type="button" onClick="{{{{{act}}}}}" style="min-height: 156px; border: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; text-align: left; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px">'
-    + (FACES(faces) if faces else COV('', c, 56, folder=True) if folder else f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 14px; background: {c}; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center">{name[0]}</span>')
-    + f'<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 600; text-wrap: balance">{name}</span><span style="font-size: 13px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">{sub}</span></span></button>')
-GGRID = lambda *cards: f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">{"".join(cards)}</div>'
-GLIST_L = (IF('listAny', SEC(CAPS('Your groups'), GGRID(GCARD('Choir accompanists', '4 members · 2 folders · Owner', 'goGroup', LILAC, faces='AME'), GCARD('Piano class, Tuesday', '12 members · 3 folders', 'goGroup', SKY, faces='IRS')))
-                         + f'<div style="height: 8px"></div>' + SEC(CAPS('Shared with me'), GGRID(GCARD('Choir hymns', '12 songs · Shared by Maria Ionescu · Choir accompanists', 'goFolder', HONEY, True))), 'true')
-           + GLIST[GLIST.index("<sc-if value=\"{{empty}}\""):] if "<sc-if value=\"{{empty}}\"" in GLIST else None)
+# Loop round 63: the groups and the folders shared with you are lists on a laptop too, the phone's rows (NN/g: a
+# homogeneous collection is a list; the cards stood 156 tall round a name, with an empty band in each)
+GLIST_L = GLIST
 _GSPLIT = GPAGE.rindex('<section', 0, GPAGE.index(CAPS('Members')))
 GPAGE_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-items: start">'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[:_GSPLIT]}</div>'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[_GSPLIT:]}</div></div>')
-grlm = (IF('isList', LTITLEBAR('Groups', f'<button type="button" onClick="{{{{openJoin}}}}" style="{TBST}">Join with a link</button><span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 1180) + STRIP(), 'true')
+grlm = (IF('isList', LTITLEBAR('Groups', f'<button type="button" onClick="{{{{openJoin}}}}" style="{TBST}">Join with a link</button><span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880) + STRIP(), 'true')
         + IF('isGroup', PAGEHEAD_L('back', 'Groups', '') + WIDE(GPAGE_L, 1180))
         + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)
