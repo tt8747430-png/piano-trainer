@@ -513,10 +513,12 @@ export const songs = {
   // library; what the file holds that a song can't, listed after.
   import: {
     action: 'Import',
+    choose: 'Choose a file',
+    kinds: 'MusicXML (.musicxml, .mxl) or MIDI (.mid)',
+    whole: 'Everything in the file came in.',
     reading: 'Reading {{name}}…',
-    done: 'Imported',
     leftOut: 'Left out',
-    open: 'Open the song',
+    open: 'Open song',
     failed: 'Can’t import {{name}}',
     problem: {
       'not-a-score':

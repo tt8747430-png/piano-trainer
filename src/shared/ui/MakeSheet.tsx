@@ -17,6 +17,7 @@ export function MakeSheet({
   onOpenChange,
   title,
   wide = false,
+  dismiss = 'cancel',
   footer,
   children,
 }: {
@@ -25,6 +26,8 @@ export function MakeSheet({
   title: string
   /** A form of several parts (New song), not a name alone. */
   wide?: boolean
+  /** Its header's way out: Cancel, or Close once it reports what was made (Import). */
+  dismiss?: 'cancel' | 'close'
   /** What stands under the body, parted by a hairline: its one Create. */
   footer?: ReactNode
   children: ReactNode
@@ -34,7 +37,7 @@ export function MakeSheet({
   if (!laptop)
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent title={title} dismiss="cancel" footer={footer}>
+        <SheetContent title={title} dismiss={dismiss} footer={footer}>
           {children}
         </SheetContent>
       </Sheet>
@@ -60,7 +63,7 @@ export function MakeSheet({
               />
             }
           >
-            {t('confirm.cancel')}
+            {dismiss === 'close' ? t('close') : t('confirm.cancel')}
           </DialogClose>
         </div>
         <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-5 pt-1 pb-6 *:shrink-0">

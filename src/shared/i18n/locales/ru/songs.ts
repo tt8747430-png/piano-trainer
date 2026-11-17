@@ -514,8 +514,10 @@ export const songs: LocaleResources['songs'] = {
   },
   import: {
     action: 'Импорт',
+    choose: 'Выбрать файл',
+    kinds: 'MusicXML (.musicxml, .mxl) или MIDI (.mid)',
+    whole: 'Всё из файла перенесено.',
     reading: 'Читаем {{name}}…',
-    done: 'Импортировано',
     leftOut: 'Не вошло в песню',
     open: 'Открыть песню',
     failed: 'Не удалось импортировать {{name}}',
