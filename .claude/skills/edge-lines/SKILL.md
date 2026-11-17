@@ -28,6 +28,8 @@ node .claude/skills/edge-lines/scripts/lines.mjs http://localhost:5191/songs pho
 RT=… node .claude/skills/edge-lines/scripts/lines.mjs flow SongsLaptop '[]' ExploreLaptop '[]' mac $SP/lines/flow.png
 ```
 
+**`WIRE=1`** draws the board as its wireframe (the mebis course's phases: sketch, wireframe, mockup, prototype; `ui-and-mockups`, Building a screen, 4): no colour, no words, no pictures, each surface a grey outline, each line of text a grey bar, so the structure (focus, groups, edges, frame) is judged before the look. A screen that throws prints `PROBLEM the screen throws` before anything else.
+
 Steps are a JSON list: `{"click": selector}`, `{"wait": ms}`, `{"scroll": px}`. It prints `PROBLEM` and `NOTE` lines
 and writes the shot with:
 

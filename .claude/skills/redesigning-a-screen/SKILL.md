@@ -55,7 +55,7 @@ care shows in a hundred small things done the same way.
    unless the owner named one. An area with older specs carries their standing rulings over. Top: **The rulings as they stand**, one bullet each, the owner's words
    quoted, the decision, its references. No history below it: when a later ruling replaces a line, the old line is deleted in the
    same edit (git keeps it).
-5. **Canvas:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
+5. **Canvas, in the four phases** (sketch in the spec, wireframe, mockup, prototype; `owner-way/references/ui-and-mockups.md`, Building a screen, 4)**:** one canvas holds every place (owner, v15): the area is a page of The ideal Piano Trainer, built by
    `.scratch/r39/canvas/index.py`, its rows the phone boards, their Night boards, the laptop boards and theirs (canvas
    100–101). A place drawn elsewhere is merged in. Phone and laptop, drawn from
    the screenshots of step 2 with the real songs and the exact labels, every panel and page reachable and working

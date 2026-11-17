@@ -40,6 +40,9 @@ async function open(target, device, steps) {
   const lap = /Laptop$/.test(target) || target === 'Laptop'
   const [dw, dh] = device
   const page = await browser.newPage({ viewport: board ? (lap ? { width: 2000, height: 1160 } : { width: 450, height: 952 }) : { width: dw, height: dh }, deviceScaleFactor: 1 })
+  // A screen that throws is broken before any line is drawn (the SongSettings board drew blank on 'pick is not defined').
+  const errs = []
+  page.on('pageerror', (e) => errs.push(e.message))
   if (!board) await page.goto(target, { waitUntil: 'networkidle' }).catch(() => {})
   else {
     const boards = new URL('../../../../.scratch/r39/canvas/practice/project/', import.meta.url).pathname
@@ -61,6 +64,38 @@ async function open(target, device, steps) {
     if (s.scroll) await page.mouse.wheel(0, s.scroll)
   }
   await page.waitForTimeout(300)
+  // WIRE=1: the wireframe phase (ui-and-mockups, Building a screen, 4): no colour, no words, no pictures, only boxes,
+  // so the structure is judged alone. Text becomes grey bars, pictures crossed grey boxes, every surface white with a line.
+  if (process.env.WIRE) {
+    await page.evaluate((lap) => {
+      const want = lap ? [1710, 904] : [402, 874]
+      const scr = [...document.querySelectorAll('div')].find((e) => { const r = e.getBoundingClientRect(); return Math.round(r.width) === want[0] && Math.round(r.height) === want[1] }) || document.body
+      scr.setAttribute('data-wire', '')
+      for (const el of scr.querySelectorAll('*')) { const cs = getComputedStyle(el); if ((cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && cs.backgroundColor !== 'transparent') || cs.boxShadow !== 'none') el.setAttribute('data-box', '') }
+      const st = document.createElement('style')
+      st.textContent = `[data-wire] ::placeholder { color: transparent !important; } [data-wire], [data-wire] *:not(i[data-pic]) { color: transparent !important; text-shadow: none !important; background-image: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+        [data-wire] *:not(svg):not(svg *):not(i[data-bar]) { background-color: transparent !important; box-shadow: none !important; border-color: #B0B0B0 !important; }
+        [data-wire] { background: #FFFFFF !important; }
+        [data-wire] [data-box] { outline: 1px solid #8F8F8F !important; outline-offset: -1px; }
+        [data-wire] svg, [data-wire] img { visibility: hidden !important; }
+        [data-wire] i[data-bar], [data-wire] i[data-pic] { visibility: visible !important; }`
+      document.head.appendChild(st)
+      const sr = scr.getBoundingClientRect()
+      const add = (b, kind) => { const d = document.createElement('i'); d.setAttribute(kind, ''); Object.assign(d.style, { position: 'absolute', left: b.left - sr.left + 'px', top: b.top - sr.top + 'px', width: b.width + 'px', height: b.height + 'px', zIndex: 9999, pointerEvents: 'none', boxSizing: 'border-box' }); return d }
+      const out = []
+      // every surface that differs from its parent is drawn as a box outline
+      for (const el of scr.querySelectorAll('*')) {
+        const cs = getComputedStyle(el)
+        const r = el.getBoundingClientRect(); if (r.width < 4 || r.height < 4 || cs.visibility === 'hidden' || cs.display === 'none') continue
+        if (el.tagName === 'svg' || el.tagName === 'IMG') { const d = add(r, 'data-pic'); d.style.background = 'repeating-linear-gradient(45deg, #EEE 0 6px, #DDD 6px 12px)'; d.style.outline = '1px solid #999'; out.push(d); continue }
+        for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { const rg = document.createRange(); rg.selectNodeContents(n); for (const b of rg.getClientRects()) { const d = add({ left: b.left, top: b.top + b.height * 0.3, width: b.width, height: b.height * 0.4 }, 'data-bar'); d.style.background = '#B5B5B5'; d.style.borderRadius = '3px'; out.push(d) } }
+      }
+      if (getComputedStyle(scr).position === 'static') scr.style.position = 'relative'
+      out.forEach((d) => scr.appendChild(d))
+    }, lap)
+  }
+  const banner = board ? await page.evaluate(() => [...document.querySelectorAll('body *:not(script):not(style)')].map((e) => e.childNodes.length === 1 && e.textContent).find((t) => t && /renderVals|is not defined|is not a function|Cannot read prop/.test(t)) || '') : ''
+  for (const e of new Set([...errs, banner].filter((x) => x && x.trim()))) console.log('PROBLEM the screen throws: ' + e.replace(/\s+/g, ' ').trim().slice(0, 160))
   // The board's screen: the element of the device's size (402×874 or 1710×904).
   const scr = board
     ? await page.evaluate((lap) => {

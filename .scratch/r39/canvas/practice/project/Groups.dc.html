@@ -92,7 +92,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       askDel: () => S({ sheet: 'del' }), delOn: st.sheet === 'del', doDel: () => { S({ sheet: null, page: null }); toast('Choir accompanists deleted'); },
       askStop: () => S({ sheet: 'stop' }), stopOn: st.sheet === 'stop', doStop: () => { S({ sheet: null, page: null }); toast('Hymns is no longer shared'); },
       joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists'); }, signedOut: demo === 'Signed out', canNew: demo !== 'Signed out' && demo !== 'Offline', empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
-      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
+      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px',
       esorts: ['New', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'New'), mark: l === (st.esort ?? 'New') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };
   }

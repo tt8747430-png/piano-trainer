@@ -289,8 +289,8 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
     more = IB('More', MORE, 'openMore') if folder else ''
     fe = lambda sfx: FEMPTY.replace('{ALL}', 'AllSongs' + sfx) if folder else ''
-    ph = (TOP(back + '.dc.html', head, SELTB + more, backlabel, n=2 + folder)
-          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD}{COUNTROW}{NOMATCH}{fe('.dc.html')}{LIST('Song.dc.html', 'display: flex; flex-direction: column; gap: 12px')}</main>
+    ph = (TOP(back + '.dc.html', head, more + SELTB, backlabel, n=2 + folder)  # Select keeps the trailing place on every list, as the laptop's place bar (Jakob; edge-lines flows)
+          + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 124px; display: flex; flex-direction: column; gap: 12px">{SHOWSTATES()}{SEARCHFIELD.replace('Search your songs', 'Search this playlist') if folder else SEARCHFIELD}{COUNTROW}{NOMATCH}{fe('.dc.html')}{LIST('Song.dc.html', 'display: flex; flex-direction: column; gap: 12px')}</main>
 <sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{NEWDIAL([(l, g) for l, g in _NEW][::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}</sc-if>{SELBAR(34)}{SORTMENU('{{menuPos}}')}''')
     lm = (LPLACEBAR(_PTITLE(title), '{{count}}', _PACTS(more), PSEARCH('Search ' + ('this playlist' if folder else 'your songs'), 'q', 'typed'))
           + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 20px">{SHOWSTATES()}{NOMATCH}{fe('Laptop.dc.html')}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></main>{_SELBAR_L}''')
