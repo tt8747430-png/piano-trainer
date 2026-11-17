@@ -1,105 +1,74 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Mic } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type FormEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
 import { TITLE_MAX, usePiecesStoreApi, type SongCollectionId } from '@/entities/piece'
 import {
-  isScoreStaves,
   makeSong,
   PIANO_ONLY,
   START_BARS,
   START_TEMPO,
   useCreateBuiltInSong,
-  VOICE_IDS,
-  VOICES,
   type ScoreStaves,
-  type VoiceId,
 } from '@/features/edit-piece'
 import { moveTo } from '@/features/manage-library'
-import { localText, useLocale } from '@/shared/i18n'
+import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   beatUnit,
   C_MAJOR,
-  meterParts,
-  tempoUnitsFor,
+  keySignature,
+  printedNote,
+  signatureKey,
   type Key,
   type Meter,
-  type TempoUnit,
 } from '@/shared/lib/music'
-import {
-  BackMark,
-  NameField,
-  SearchField,
-  Sheet,
-  SheetContent,
-  SheetPart,
-  Stepper,
-} from '@/shared/ui'
+import { GroupRow, GroupRows, MakeSheet, Stepper } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
-import { TempoField } from '@/shared/ui/pickers/tempo-field'
-import { TimeSignatureField } from '@/shared/ui/pickers/time-signature-field'
-import { InstrumentList } from '@/widgets/instrument-list'
 
-/** The steps of New song, Flat's: its name, its instruments, then its time and key. */
-const STEPS = [1, 2, 3] as const
-const STEP_NAMES = {
-  1: 'setup.stepTitle',
-  2: 'setup.stepInstruments',
-  3: 'setup.stepTime',
-} as const
-type Step = (typeof STEPS)[number]
+/** The staves a song starts with, as Flat's new score offers them (R72's SONGFORM). */
+const STAVES = [
+  { id: 'piano', staves: PIANO_ONLY },
+  { id: 'melody', staves: { piano: false, voices: ['voice'] } },
+  { id: 'voicePiano', staves: { piano: true, voices: ['voice'] } },
+] as const satisfies readonly { id: string; staves: ScoreStaves }[]
+type StavesId = (typeof STAVES)[number]['id']
 
-/** An instrument New song lists (round 27): the piano, or a voice, a staff named for it. */
-type Instrument = 'piano' | VoiceId
+/** The keys by their signature: one to seven sharps over one to seven flats. */
+const SHARPS = [1, 2, 3, 4, 5, 6, 7] as const
+const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
 
-/** The instruments by family, as Flat lists them; others wait for their own sounds (ADR 0097). */
-const FAMILIES = [
-  { family: 'vocals', instruments: VOICE_IDS },
-  { family: 'keyboards', instruments: ['piano'] },
-] as const satisfies readonly { family: string; instruments: readonly Instrument[] }[]
+/** The time signatures a song most often starts in. */
+const METERS = ['2/4', '3/4', '4/4', '6/8', '3/8', '12/8'] as const satisfies readonly Meter[]
 
-/**
- * How many of an instrument the score has, and the score with one fewer or one more: a piano at
- * most, voices stacked as a choir is (`chartStart` orders them).
- */
-function counted(staves: ScoreStaves, instrument: Instrument) {
-  if (instrument === 'piano') {
-    const now = Number(staves.piano)
-    return {
-      now,
-      fewer: { ...staves, piano: false },
-      more: now === 1 ? null : { ...staves, piano: true },
-    }
-  }
-  const now = staves.voices.filter((each) => each === instrument).length
-  const at = staves.voices.lastIndexOf(instrument)
-  return {
-    now,
-    fewer: { ...staves, voices: staves.voices.filter((_, index) => index !== at) },
-    more: { ...staves, voices: [...staves.voices, instrument] },
-  }
+/** One choice of a few side by side (the board's `_TILE`): white on a hairline, ink once chosen. */
+const TILE =
+  'min-w-0 rounded-[12px] ring-1 ring-border transition-colors duration-150 aria-checked:bg-foreground aria-checked:text-background bg-card text-foreground'
+
+/** A part's name over its control, its value at its right where it has one (the board's `_SLAB`). */
+function Part({ label, value, children }: { label: string; value?: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="mx-1 flex items-baseline justify-between gap-3">
+        <span className="text-[0.8125rem] font-semibold text-muted-foreground">{label}</span>
+        {value ? <span className="text-[0.8125rem] text-foreground">{value}</span> : null}
+      </div>
+      {children}
+    </div>
+  )
 }
 
 /**
- * New song, as Flat's new score (round 27), in three steps, their dots under the title (a screen
- * reader's step count), Back on the later two:
+ * New song as Flat's new score, one sheet (R72's SONGFORM; a centred dialog on a laptop): its name;
+ * its staves (Piano, Melody, Voice and piano); its tempo and bars, stepped; its key, a major key by
+ * its signature, sharps over flats, a tile tapped again going back to C major; its time, from the
+ * six most common; Create, which opens it in the score editor (`record`: Record pressed there).
+ * What more a score needs (a pickup, a choir, a tempo's words) is set in the editor.
  *
- * 1. its name, and Next;
- * 2. its instruments by family (Vocals: Voice, Soprano, Alto, Tenor, Baritone, Bass; Keyboards:
- *    Piano), each added with + and counted with − n +, found by Search; how many are chosen beside
- *    Next. A voice is a staff named for it in its clef over the piano; without the piano, one voice
- *    alone is a lead sheet, a change no score can be greyed;
- * 3. Fine-tune your setup: the tempo (the note it counts, the number typed or stepped), how many bars
- *    (typed or stepped), the key signature from the grid the score editor's key picker is, the time
- *    signature from the common ones, common and cut time as their signs, or your own; Create song,
- *    which opens it in the score editor (`record`: Record pressed there, the + menu's Record).
- *
- * No line explains what Flat's own screens leave unsaid. It is made where the learner is (ADR 0106): in
- * the folder open (`folder`), else at Home, last. An editor's New built-in song (`builtIn`, content as
- * data) is made on the server in that collection, unpublished, and opens in the original's editor.
+ * It is made where the learner is (ADR 0106): in the folder open (`folder`), else at Home, last. An
+ * editor's New built-in song (`builtIn`, content as data) is made on the server in that collection,
+ * unpublished, and opens in the original's editor.
  */
 export function NewSongSheet({
   open,
@@ -116,42 +85,32 @@ export function NewSongSheet({
   /** Made to be played in: the score editor opens with Record pressed. */
   record?: boolean
 }) {
-  const { t } = useTranslation(['songs', 'editor'])
-  const locale = useLocale()
+  const { t } = useTranslation('songs')
+  const keyName = useKeyName()
   const store = usePiecesStoreApi()
   const library = useLibraryStoreApi()
   const navigate = useNavigate()
-  const [step, setStep] = useState<Step>(1)
   const [title, setTitle] = useState('')
-  const [staves, setStaves] = useState<ScoreStaves>(PIANO_ONLY)
-  const [search, setSearch] = useState('')
+  const [stavesId, setStavesId] = useState<StavesId>('piano')
   const [tempo, setTempo] = useState(START_TEMPO)
-  const [tempoUnit, setTempoUnit] = useState<TempoUnit>('4')
   const [bars, setBars] = useState(START_BARS)
   const [key, setKey] = useState<Key>(C_MAJOR)
   const [meter, setMeter] = useState<Meter>('4/4')
-  const [timeSymbol, setTimeSymbol] = useState(false)
-  const [tempoText, setTempoText] = useState<string | null>(null)
-  const [pickup, setPickup] = useState(0)
   const [making, setMaking] = useState(false)
   const [failed, setFailed] = useState(false)
   const createBuiltIn = useCreateBuiltInSong()
   const named = title.trim() !== ''
-  // The note the tempo counts, kept to those the time signature's beat allows.
-  const units = tempoUnitsFor(meter)
-  const unit = units.includes(tempoUnit) ? tempoUnit : beatUnit(meter)
-  const upbeats = Math.min(pickup, meterParts(meter).count - 1)
-  const start = { staves, tempo, tempoUnit: unit, tempoText, bars, timeSymbol, pickup: upbeats }
-  const chosen = Number(staves.piano) + staves.voices.length
-  const nameOf = (instrument: Instrument) =>
-    instrument === 'piano' ? t('setup.piano') : localText(VOICES[instrument].name, locale)
-  const found = search.trim().toLocaleLowerCase(locale)
-  const families = FAMILIES.map(({ family, instruments }) => ({
-    family,
-    instruments: (instruments as readonly Instrument[]).filter((each) =>
-      nameOf(each).toLocaleLowerCase(locale).includes(found),
-    ),
-  })).filter((each) => each.instruments.length > 0)
+  const signature = keySignature(key)
+  const staves = STAVES.find((each) => each.id === stavesId)?.staves ?? PIANO_ONLY
+  const start = {
+    staves,
+    tempo,
+    tempoUnit: beatUnit(meter),
+    tempoText: null,
+    bars,
+    timeSymbol: false,
+    pickup: 0,
+  }
   /** Makes the built-in song on the server, unpublished, and opens its original in the score editor. */
   const makeBuiltIn = async (collection: SongCollectionId) => {
     setMaking(true)
@@ -159,10 +118,7 @@ export function NewSongSheet({
     const made = await createBuiltIn({ title, key, meter, collection, ...start })
     setMaking(false)
     if (!made.ok) return setFailed(true)
-    await navigate({
-      to: '/edit/$pieceId',
-      params: { pieceId: made.value },
-    })
+    await navigate({ to: '/edit/$pieceId', params: { pieceId: made.value } })
   }
   /** Makes the song and opens it in the score editor, Record pressed where it was made to record. */
   const make = () => {
@@ -177,183 +133,164 @@ export function NewSongSheet({
       )
     void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })
   }
-  const create = () => (builtIn ? void makeBuiltIn(builtIn) : make())
-  const onward = () => {
-    if (!named) return
-    if (step === 1) setStep(2)
-    else if (step === 2) {
-      if (isScoreStaves(staves)) setStep(3)
-    } else if (!making) create()
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
+    if (!named || making) return
+    if (builtIn) void makeBuiltIn(builtIn)
+    else make()
   }
-  const back =
-    step > 1 ? (
-      <Button size="lg" variant="outline" onClick={() => setStep(step === 3 ? 2 : 1)}>
-        <BackMark />
-        {t('setup.back')}
-      </Button>
-    ) : null
+  const keyRow = (counts: readonly number[]) => (
+    <div className="grid grid-cols-7 gap-1">
+      {counts.map((count) => {
+        const each = signatureKey(count, false)
+        const on = signature === count
+        return (
+          <button
+            key={count}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            aria-label={keyName(each)}
+            onClick={() => setKey(on ? C_MAJOR : each)}
+            className={cn(TILE, 'flex h-14 flex-col items-center justify-center gap-0.5')}
+          >
+            <span className="text-base/[1.1] font-semibold">{printedNote(each.tonic)}</span>
+            <span className="text-xs/none opacity-70">
+              {Math.abs(count)}
+              {count > 0 ? '♯' : '♭'}
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
   return (
-    <Sheet
+    <MakeSheet
       open={open}
-      onOpenChange={(next) => {
-        onOpenChange(next)
-        if (!next) setStep(1)
-      }}
+      onOpenChange={onOpenChange}
+      wide
+      title={t(record && !builtIn ? 'making.recordTitle' : 'making.title')}
+      footer={
+        <div className="flex flex-col gap-2">
+          <Button
+            type="submit"
+            form="new-song"
+            size="lg"
+            className="w-full"
+            disabled={!named || making}
+          >
+            {record ? <Mic data-icon="inline-start" aria-hidden /> : null}
+            {making ? t('making.making') : t(record ? 'making.createAndRecord' : 'making.create')}
+          </Button>
+          {failed ? (
+            <p role="alert" className="text-sm text-destructive">
+              {t('making.failed')}
+            </p>
+          ) : null}
+        </div>
+      }
     >
-      <SheetContent
-        title={
-          step === 1 || !named
-            ? t(record && !builtIn ? 'making.recordTitle' : 'making.title')
-            : title.trim()
-        }
-        tall={step > 1}
-        footer={
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              {back}
-              {step === 2 ? (
-                <span className="min-w-0 flex-1 px-1 text-sm font-semibold">
-                  {t('setup.selected', { count: chosen })}
-                </span>
-              ) : null}
-              {step === 3 ? (
-                <Button size="lg" className="flex-1" disabled={!named || making} onClick={create}>
-                  {record ? <Mic data-icon="inline-start" aria-hidden /> : null}
-                  {making
-                    ? t('making.making')
-                    : t(record ? 'making.createAndRecord' : 'making.create')}
-                </Button>
-              ) : (
-                <Button
-                  size="lg"
-                  className={step === 1 ? 'flex-1' : 'min-w-28'}
-                  disabled={!named || (step === 2 && !isScoreStaves(staves))}
-                  onClick={onward}
-                >
-                  {t('setup.next')}
-                </Button>
-              )}
-            </div>
-            {failed ? (
-              <p role="alert" className="text-sm text-destructive">
-                {t('making.failed')}
-              </p>
-            ) : null}
-          </div>
-        }
-      >
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(event) => {
-            event.preventDefault()
-            onward()
-          }}
-        >
-          {/* The three steps by name, those reached in ink (A34, Flat's). */}
-          <ol aria-label={t('setup.steps')} className="-mt-2 grid grid-cols-3 gap-1.5">
-            {STEPS.map((at) => (
-              <li
-                key={at}
-                aria-current={at === step ? 'step' : undefined}
-                className="flex min-w-0 flex-col gap-1"
+      <form id="new-song" onSubmit={submit} className="flex flex-col gap-5">
+        <label className="flex flex-col gap-2">
+          <span className="mx-1 text-[0.8125rem] font-semibold text-muted-foreground">
+            {t('making.name')}
+          </span>
+          <input
+            autoFocus
+            value={title}
+            maxLength={TITLE_MAX}
+            placeholder={t('making.namePlaceholder')}
+            enterKeyHint="done"
+            onChange={(event) => setTitle(event.target.value)}
+            className="h-13 rounded-[14px] bg-card px-4 text-base text-foreground ring-1 ring-border outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+          />
+        </label>
+        <Part label={t('making.staves')}>
+          <div role="radiogroup" aria-label={t('making.staves')} className="grid grid-cols-3 gap-2">
+            {STAVES.map(({ id }) => (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={stavesId === id}
+                onClick={() => setStavesId(id)}
+                className={cn(
+                  TILE,
+                  'group flex min-h-16 flex-col items-start justify-center gap-0.5 px-3 py-2 text-start',
+                )}
               >
-                <span
-                  aria-hidden
+                <span className="text-[0.9375rem] font-semibold">{t(`making.stavesOf.${id}`)}</span>
+                <span className="text-[0.8125rem] text-muted-foreground group-aria-checked:text-background/75">
+                  {t(`making.stavesLine.${id}`)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </Part>
+        <GroupRows surface="sheet">
+          <GroupRow label={t('making.tempo')}>
+            <Stepper
+              label={t('making.tempo')}
+              value={tempo}
+              min={30}
+              max={240}
+              step={4}
+              format={(bpm) => `♩ = ${bpm}`}
+              onChange={setTempo}
+              decrease={t('making.slower')}
+              increase={t('making.faster')}
+            />
+          </GroupRow>
+          <GroupRow label={t('making.bars')}>
+            <Stepper
+              label={t('making.bars')}
+              value={bars}
+              min={1}
+              max={200}
+              onChange={setBars}
+              decrease={t('making.fewerBars')}
+              increase={t('making.moreBars')}
+            />
+          </GroupRow>
+        </GroupRows>
+        <Part
+          label={t('making.key')}
+          value={
+            signature === 0
+              ? t('making.keyNone', { key: keyName(C_MAJOR) })
+              : keyName(signatureKey(signature, false))
+          }
+        >
+          <div role="radiogroup" aria-label={t('making.key')} className="flex flex-col gap-1">
+            {keyRow(SHARPS)}
+            {keyRow(FLATS)}
+          </div>
+        </Part>
+        <Part label={t('making.meter')}>
+          <div role="radiogroup" aria-label={t('making.meter')} className="grid grid-cols-6 gap-1">
+            {METERS.map((each) => {
+              const [count, unit] = each.split('/')
+              return (
+                <button
+                  key={each}
+                  type="button"
+                  role="radio"
+                  aria-checked={meter === each}
+                  aria-label={each}
+                  onClick={() => setMeter(each)}
                   className={cn(
-                    'h-1.5 rounded-pill transition-colors duration-200',
-                    at <= step ? 'bg-foreground' : 'bg-border',
-                  )}
-                />
-                <span
-                  className={cn(
-                    'text-xs leading-tight text-balance',
-                    at === step ? 'font-semibold text-foreground' : 'text-muted-foreground',
+                    TILE,
+                    'flex h-15 flex-col items-center justify-center font-serif text-[1.1875rem]/[0.95] font-bold',
                   )}
                 >
-                  {t(STEP_NAMES[at])}
-                </span>
-              </li>
-            ))}
-          </ol>
-          {step === 1 ? (
-            <>
-              <NameField
-                label={t('making.name')}
-                autoFocus
-                value={title}
-                maxLength={TITLE_MAX}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-            </>
-          ) : step === 2 ? (
-            <>
-              <SearchField label={t('setup.search')} value={search} onChange={setSearch} />
-              {families.length === 0 ? (
-                <p className="px-1 text-muted-foreground">{t('setup.noMatch')}</p>
-              ) : (
-                <InstrumentList
-                  families={families.map(({ family, instruments }) => ({
-                    key: family,
-                    title: t(`setup.families.${family}`),
-                    rows: instruments.map((instrument) => {
-                      const { now, fewer, more } = counted(staves, instrument)
-                      return {
-                        key: instrument,
-                        name: nameOf(instrument),
-                        count: now,
-                        onFewer: isScoreStaves(fewer) ? () => setStaves(fewer) : undefined,
-                        onMore: more && isScoreStaves(more) ? () => setStaves(more) : undefined,
-                      }
-                    }),
-                  }))}
-                />
-              )}
-            </>
-          ) : (
-            <>
-              <SheetPart title={t('setup.timeSignature')}>
-                <TimeSignatureField
-                  value={{ meter, symbol: timeSymbol }}
-                  onChange={(next) => {
-                    setMeter(next.meter)
-                    setTimeSymbol(next.symbol)
-                  }}
-                  pickup={{ beats: upbeats, onChange: setPickup }}
-                />
-              </SheetPart>
-              <SheetPart title={t('setup.keySignature')}>
-                <KeySignaturePicker value={key} onChange={setKey} />
-              </SheetPart>
-              <SheetPart title={t('setup.tempo')}>
-                <TempoField
-                  value={{ mark: tempo, unit, text: tempoText }}
-                  units={units}
-                  low={20}
-                  high={400}
-                  onChange={(next) => {
-                    setTempo(next.mark)
-                    setTempoUnit(next.unit)
-                    setTempoText(next.text)
-                  }}
-                />
-              </SheetPart>
-              <SheetPart title={t('setup.bars')}>
-                <Stepper
-                  label={t('setup.bars')}
-                  typed
-                  value={bars}
-                  min={1}
-                  max={200}
-                  format={(count) => t('setup.barsValue', { count })}
-                  onChange={setBars}
-                  decrease={t('setup.fewerBars')}
-                  increase={t('setup.moreBars')}
-                />
-              </SheetPart>
-            </>
-          )}
-        </form>
-      </SheetContent>
-    </Sheet>
+                  <span>{count}</span>
+                  <span>{unit}</span>
+                </button>
+              )
+            })}
+          </div>
+        </Part>
+      </form>
+    </MakeSheet>
   )
 }

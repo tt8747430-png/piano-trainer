@@ -37,6 +37,12 @@ details.
     hold), with every row chosen where it is chosen, into a folder lit as the target, or onto the bar, which while
     carrying is Archive and, in a folder, Move to the place it stands in; each drop a toast with Undo, ending Select
     (`LibraryDnd`: one drag the sorted lists join);
+  - **New song** (R72's SONGFORM, Flat's new score): one sheet of Name; Staves (Piano, Melody, Voice and piano) as
+    three tiles; Tempo (♩ = 80, by 4) and Bars (8) stepped; Key, a major key by its signature, sharps over flats, its
+    name beside the label (C major when none is tapped); Time from 2/4, 3/4, 4/4, 6/8, 3/8, 12/8; Create, opening
+    the score editor. A pickup, a choir or a tempo's words are set in the editor;
+  - New song, New folder and New group are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
+    (480 for a form, 440 for a name), Cancel in its header and Create at its foot;
   - **New folder** (R72's NEWNAME): a sheet of its name alone, Cancel in its header and Create at its foot; its colour
     is the next paint, changed later from its ··· (Colour). New group's sheet is the same shape;
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
@@ -65,7 +71,7 @@ details.
   newest first); what has no date or composer stands last either way. Added is when the learner's own song came in
   (`OwnSong.added`, `pt-pieces` version 13); the app's songs have none.
 - **Empty states:** a folder with nothing in it says "Nothing in this folder yet" and Favourites "No favourites yet",
-  each with Add songs from your library (to All songs); an empty library offers New song; a search that keeps
+  each with Add songs from your library (to All songs); an empty library points to Explore; a search that keeps
   nothing names what was searched, with Clear search.
 - **Saved: `pt-library` holds only what the learner changed**, read over the catalog and writing nothing as it reads.
   A built-in folder the store does not hold stands after the others; a built-in song placed nowhere stands last in

@@ -125,9 +125,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **The score's Settings** (R32-B, Flat's document menu): pages of the gear's sheet, on the editor's draft, so each
   change is one Undo step back on the score; while the gear is open the editor's keys and MIDI write nothing. Precise
   names, most used first, each with a one-line description:
-  - **Instruments:** New song's families with − n + (`widgets/instrument-list`, one widget for both): a voice is
-    added under the last of its kind, else over the next voice down (a choir's order), named and clefed as New song
-    names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its notes (Undo brings
+  - **Instruments:** the families with − n + (`widgets/instrument-list`): a voice is
+    added under the last of its kind, else over the next voice down (a choir's order), named and clefed as its
+    family names it; a staff of no voice is Other's **Staff**; one fewer takes the last away with its notes (Undo brings
     them back); the piano hides (its music kept), never the last staff in sight; eight single staves at most. A staff
     is renamed on the score.
   - **Layout:** **Staff size**, five sizes from 75% to 130% (Flat's staff size, Dorico's space size), over the size
@@ -150,8 +150,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   chosen whole becoming one note; with only a caret, the caret's notes.
 - **A key or a meter changes at a section, never mid-bar; a clef at a bar.**
 - **Play** plays the bars as written, at the learner's speed, never changing the song's tempo.
-- **New song** chooses its instruments by family (the score's Settings' list) and starts with four bars of no
-  chord symbol.
+- **New song** starts as Piano, Melody or Voice and piano (ADR 0106), eight bars of no chord symbol; the rest of
+  a choir is added here.
 
 ## Consequences
 
