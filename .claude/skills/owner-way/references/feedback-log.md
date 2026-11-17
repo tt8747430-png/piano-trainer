@@ -287,6 +287,7 @@ owner's, typos fixed.
 - **Loop round 61, a Wait pass's score and best (research items 2, 4):** a pass ends "Played through · Score 40%" with New best or Best n% beside it, one hardest-bars rule with the takes'; the line under the transport lifts the keys' window by its height, where it had slid the transport over the keys (2026-11-16).
 - **Loop round 61, a lesson done from a good pass (research item 15):** a Wait pass counts a lesson done only at 80 % or more, a loop's lap scored on its own bars; a pass with 30 slips no longer ticks it (2026-11-16).
 
+- **Diagrams' beat cells reach 44 (loop 63, 2026-11-17):** on a phone the chord grid under the diagrams drew each beat 36 (40 without the keys), under a finger's 44; every beat is now 44 square, with or without the keys, and the heading over the diagrams keeps 8 between the title and the credits, as on the score (Fitts; one heading; canvas v428).
 - **The score's systems on the spacing scale (loop 63, 2026-11-17):** the title block sits 16 above the first system on a phone and 24 on a laptop (it read 19 and 39, nearer the score's top than its own group), and the systems stand 24 apart on a phone, 32 on a laptop (22 and 30, off the 4/8 scale); the lines show no gap off the scale (canvas v420).
 
 ## Song page
