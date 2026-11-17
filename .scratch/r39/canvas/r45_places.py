@@ -31,7 +31,7 @@ PLACES_PRE = 'const LEVELS = ' + json.dumps(LEVELS, ensure_ascii=False) + ';\nco
 
 CHECKI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17.5 19 7"></path></svg>'
 LOCKI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>'
-BOOKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>'
+BOOKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg>'
 FOLDI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 6 4 14"></path><path d="M12 6v14"></path><path d="M8 8v12"></path><path d="M4 4v16"></path></svg>'  # Lucide library: a course
 NEWJS = r'''newOn: st.sheet === 'new', pickOn: st.sheet === 'pick', openNew: () => set({ sheet: 'pick' }), dialOn: st.sheet === 'dial', noDial: st.sheet !== 'dial', openDial: () => set({ sheet: st.sheet === 'dial' ? null : 'dial' }), newLesson: () => set({ sheet: 'new', nk: 'Lesson' }), newCourse: () => set({ sheet: 'new', nk: 'Course' }), newT: st.nk === 'Course' ? 'New course' : 'New lesson', isNL: (st.nk ?? 'Lesson') === 'Lesson', isNC: st.nk === 'Course', namePh: st.nk === 'Course' ? 'Sunday service set' : 'The ii–V–I in my hymns',
       intos: chipsOf(['No course', 'Sunday service set', 'Jazz on the side'], st.into ?? 'No course', (x) => set({ into: x })),
@@ -277,7 +277,7 @@ IC = {'Appearance': ('#8C7AB8', '<path d="M12 3a9 9 0 1 0 9 9A7 7 0 0 1 12 3z"><
       'MIDI devices': ('#5B8DB8', '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"></path>'),
       'Selection toolbar': ('#5B8DB8', '<rect x="3" y="14" width="18" height="6" rx="3"></rect><path d="M7 17h.01M12 17h.01M17 17h.01M5 4h14M5 9h9"></path>'),
       'Swipe actions': ('#B08A5B', '<path d="M4 12h12M12 8l4 4-4 4M20 5v14"></path>'),
-      'User guide': ('#5B8DB8', '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5"></path>'),
+      'User guide': ('#5B8DB8', '<circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"></path>'),
       'Report a problem': ('#8C7AB8', '<path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>'),
       'About': ('#B08A5B', '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7h.01"></path>')}
 SETGROUPS = [('App', [('General', ''), ('Appearance', 'Match system'), ('Storage and backup', '')]), ('Piano', [('MIDI devices', 'Not connected')]), ('Library', [('Selection toolbar', ''), ('Swipe actions', '')]), ('Support', [('User guide', ''), ('Report a problem', ''), ('About', '')])]
