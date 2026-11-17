@@ -1003,6 +1003,8 @@ owner's, typos fixed.
 
 - **Focus in the app as on the canvas (port, v399):** the sidebar's head holds its toggle and Focus; Focus hides the sidebar and the side panels of content (the Chord player's chords and styles, Songs' library pane), never a page's own list of sections (Settings', which holds its Back and title); the screen and its docked keys and transport take the window; Exit focus is the bar's first button, Esc leaves; it lasts the session. The sidebar's name steps to 18 on one line so both head buttons fit.
 
+- **A route state's title belongs to its line (v400, loop round 63; edge-lines, a heading nearest what it heads):** Page not found, This screen could not open and offline stood mark, title, line and ways on all 12 apart on the board and 10 in the app, so the title read as the mark's caption. The title is now 16 under the mark and 4 over its line, the ways on 20 below; the app also takes the board's 72 yellow tile, 18 title and 15 line where it had drifted to a grey circle, 22 and 16.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

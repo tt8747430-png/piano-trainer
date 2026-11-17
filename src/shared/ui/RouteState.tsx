@@ -1,19 +1,20 @@
 import { WifiOff } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { cn } from '@/shared/lib'
 import { usePageHeading } from './use-page-heading'
 
 type Mark = 'missing' | 'failed' | 'offline'
 
-const MARKS: Record<Mark, { className: string; glyph: ReactNode }> = {
-  missing: { className: 'bg-muted', glyph: '?' },
-  failed: { className: 'bg-destructive/15', glyph: '!' },
-  offline: { className: 'bg-primary', glyph: <WifiOff aria-hidden className="size-7" /> },
+/** The mark's glyph; every mark stands on the same yellow tile, as the board's route states. */
+const MARKS: Record<Mark, ReactNode> = {
+  missing: '?',
+  failed: '!',
+  offline: <WifiOff aria-hidden className="size-7" />,
 }
 
 /**
- * A screen that cannot show what it was opened for (the canvas's route states): a 72 mark, what
- * happened in 22 bold, why in a 16 line, and the ways on, centred in the room under the bar.
+ * A screen that cannot show what it was opened for (the canvas's route states, `r52_global.py`): a 72
+ * tile, 16 over what happened in 18 bold, 4 over why in a 15 line, and the ways on 20 below, centred
+ * in the room under the bar: the title nearest the line it heads.
  */
 export function RouteState({
   mark,
@@ -29,27 +30,26 @@ export function RouteState({
   children: ReactNode
 }) {
   const heading = usePageHeading<HTMLHeadingElement>(title)
-  const { className, glyph } = MARKS[mark]
+  const glyph = MARKS[mark]
   return (
     <div
       role={alert ? 'alert' : undefined}
-      className="flex min-h-[calc(100dvh-10rem)] flex-1 flex-col items-center justify-center gap-2.5 p-6 text-center"
+      className="flex min-h-[calc(100dvh-10rem)] flex-1 flex-col items-center justify-center p-6 text-center"
     >
       <span
         aria-hidden
-        className={cn(
-          'flex size-18 items-center justify-center rounded-full text-[1.875rem] font-bold text-foreground',
-          className,
-        )}
+        className="flex size-18 items-center justify-center rounded-[18px] bg-paint-yellow text-[1.875rem] font-bold text-foreground"
       >
         {glyph}
       </span>
-      <h1 {...heading} className="font-sans text-[1.375rem] font-bold text-balance outline-none">
+      <h1 {...heading} className="mt-4 font-sans text-lg font-bold text-balance outline-none">
         {title}
       </h1>
-      <p className="max-w-[340px] text-base/[1.45] text-pretty text-muted-foreground">{line}</p>
+      <p className="mt-1 max-w-[340px] text-[0.9375rem]/[1.45] text-pretty text-muted-foreground">
+        {line}
+      </p>
       {/* The ways on are the board's pills, 48 tall and bold, whatever button each page passes. */}
-      <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:rounded-full *:px-5 *:text-base *:font-bold">
+      <div className="mt-5 flex flex-wrap justify-center gap-2 *:h-12 *:rounded-full *:px-5 *:text-base *:font-bold">
         {children}
       </div>
     </div>
