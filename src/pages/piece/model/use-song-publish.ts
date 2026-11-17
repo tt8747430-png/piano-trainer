@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { entryTitles, isDegreePiece, isOwnSongId, musicOf, type Piece } from '@/entities/piece'
 import { usePublish, type PublishItem } from '@/features/publish'
-import type { PublicCategory } from '@/shared/api/public-library'
 import { useLocale } from '@/shared/i18n'
 
 /**
@@ -9,7 +8,7 @@ import { useLocale } from '@/shared/i18n'
  * held as a save holds an own song, its title beside its music (read back by `readSharedSong`);
  * `item` is null for any other.
  */
-export function useSongPublish(piece: Piece, category: PublicCategory | null = null) {
+export function useSongPublish(piece: Piece) {
   const locale = useLocale()
   const title = entryTitles(piece, locale).primary
   const own = isOwnSongId(piece.id) ? piece.id : null
@@ -22,8 +21,8 @@ export function useSongPublish(piece: Piece, category: PublicCategory | null = n
       title,
       meta: { key: music.key, meter: music.meter },
       body: { title, ...music },
-      category,
+      ...(music.header?.composer ? { composer: music.header.composer } : {}),
     }
-  }, [own, piece, title, category])
+  }, [own, piece, title])
   return { item, title, publishing: usePublish(item) }
 }

@@ -2,9 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { NetFailed } from '@/shared/api/network'
 import {
   DESCRIPTION_MAX,
-  type PublicCategory,
+  TAG_MAX,
+  TAGS_MAX,
   type PublicEntry,
   type PublicKind,
+  type PublicLicence,
+  type PublicType,
   type Published,
 } from '@/shared/api/public-library'
 import { contentHash, useOnline } from '@/shared/lib'
@@ -32,12 +35,38 @@ export const descriptionOf = (text: string) => text.trim().slice(0, DESCRIPTION_
 /** Whether a description says enough to publish. */
 export const describes = (text: string) => descriptionOf(text).length >= DESCRIPTION_MIN
 
-/** What the library holds of the learner's published item: its public id, description and saves. */
+/**
+ * What others find it by and read of it (R72's Publish, Flat's discoverability form): its title, who
+ * wrote it, what it is, its tags, its description and its licence.
+ */
+export interface PublishFace {
+  readonly title: string
+  readonly composer: string
+  readonly type: PublicType
+  readonly tags: readonly string[]
+  readonly description: string
+  readonly licence: PublicLicence
+}
+
+/** A tag as it is kept: trimmed, at most `TAG_MAX` long. */
+export const tagOf = (text: string) => text.trim().slice(0, TAG_MAX)
+
+/** The parts a song is found by, each filled or not: n of 5 on the Publish page's meter. */
+export function findability(face: PublishFace, kind: PublicKind) {
+  const parts = [
+    face.title.trim() !== '',
+    ...(kind === 'song' ? [face.composer.trim() !== '', true] : []),
+    face.tags.length > 0,
+    describes(face.description),
+  ]
+  return { filled: parts.filter(Boolean).length, of: parts.length }
+}
+
+/** What the library holds of the learner's published item: its public id, face and saves. */
 interface Shown {
   readonly id: string
-  readonly description: string
+  readonly face: Partial<PublishFace>
   readonly saves: number
-  readonly category: PublicCategory | null
 }
 
 /** A learner's own song or pattern as it is published: its kind, its id among theirs, and its body. */
@@ -47,11 +76,21 @@ export interface PublishItem {
   readonly sourceId: string
   readonly title: string
   readonly meta: PublicEntry['meta']
-  /** A song's category, chosen on the Publish page (B3); none for a pattern. */
-  readonly category?: PublicCategory | null
+  /** Who wrote it, as the song names it: the face's first composer. */
+  readonly composer?: string
   /** As a save holds it, read back by the saving side (`readSharedSong`, an own pattern's reader). */
   readonly body: unknown
 }
+
+/** What an entry in the library shows of its face. */
+const faceOf = ({ title, meta }: PublicEntry): Partial<PublishFace> => ({
+  title,
+  description: meta.description ?? '',
+  ...(meta.composer ? { composer: meta.composer } : {}),
+  ...(meta.type ? { type: meta.type } : {}),
+  ...(meta.tags ? { tags: meta.tags } : {}),
+  ...(meta.licence ? { licence: meta.licence } : {}),
+})
 
 /**
  * Publishing a learner's own song or pattern to the Public library (ADR 0116): where it stands
@@ -95,9 +134,8 @@ export function usePublish(item: PublishItem | null) {
       if (current && result.ok && result.value)
         setDetails({
           id: publicId,
-          description: result.value.entry.meta.description ?? '',
+          face: faceOf(result.value.entry),
           saves: result.value.entry.saves,
-          category: result.value.entry.category,
         })
     })
     return () => {
@@ -119,19 +157,38 @@ export function usePublish(item: PublishItem | null) {
 
   const authorName = account ? account.name || account.email.split('@')[0] || account.email : ''
 
-  /** Publishes it, or its newer version, under `description` (else the one it has). */
+  // The face a new version starts from: as published, else the song's own.
+  const face: PublishFace = {
+    title: shown?.face.title ?? item?.title ?? '',
+    composer: shown?.face.composer ?? item?.composer ?? '',
+    type: shown?.face.type ?? 'original',
+    tags: shown?.face.tags ?? [],
+    description: shown?.face.description ?? '',
+    licence: shown?.face.licence ?? 'all-rights-reserved',
+  }
+
+  /** Publishes it, or its newer version, as `next` shows it. */
   const publish = useCallback(
-    async (description?: string) => {
+    async (next: PublishFace) => {
       if (!account || !id || !item || !body) return
-      const said = descriptionOf(description ?? shown?.description ?? '')
+      const said = descriptionOf(next.description)
+      const composer = next.composer.trim()
+      const tags = [...new Set(next.tags.map(tagOf).filter(Boolean))].slice(0, TAGS_MAX)
       setBusy(true)
       const result = await library.publish({
         kind: item.kind,
         sourceId: id,
-        title: item.title,
+        title: next.title.trim() || item.title,
         authorName,
-        meta: { ...item.meta, ...(said ? { description: said } : {}) },
-        category: item.category ?? null,
+        meta: {
+          ...item.meta,
+          ...(said ? { description: said } : {}),
+          ...(item.kind === 'song' && composer ? { composer } : {}),
+          ...(item.kind === 'song' ? { type: next.type } : {}),
+          ...(tags.length > 0 ? { tags } : {}),
+          licence: next.licence,
+        },
+        category: null,
         body,
         version,
       })
@@ -143,9 +200,8 @@ export function usePublish(item: PublishItem | null) {
       setPublished(result.value)
       setDetails({
         id: result.value.id,
-        description: said,
+        face: { ...next, description: said, composer, tags },
         saves: shown?.saves ?? 0,
-        category: item.category ?? null,
       })
     },
     [account, authorName, library, id, item, body, version, published, shown, progress],
@@ -169,10 +225,9 @@ export function usePublish(item: PublishItem | null) {
     authorName,
     /** Its id in the Public library, once it is in it: where View in the library goes. */
     publicId,
-    description: shown?.description ?? '',
+    /** What it is found by and read of: as published, else the song's own. */
+    face,
     saves: shown?.saves ?? 0,
-    /** Its category as published (B3); none before, or for a pattern. */
-    category: shown?.category ?? null,
     publish,
     unpublish,
   }

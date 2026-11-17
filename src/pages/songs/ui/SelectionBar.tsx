@@ -12,8 +12,7 @@ import type { LibraryPage } from '../model/use-library-page'
 
 /** One of the dock's buttons (R72's SELBAR): its name alone, 52 tall, sharing the width; greyed while
  * nothing chosen can take it. */
-const DOCK_BUTTON =
-  'h-13 min-w-0 flex-1 rounded-pill px-1 text-[0.9375rem] font-semibold'
+const DOCK_BUTTON = 'h-13 min-w-0 flex-1 rounded-pill px-1 text-[0.9375rem] font-semibold'
 
 function BarAction({
   label,
@@ -138,7 +137,9 @@ export function SelectionBar({
         {rest.length > 0 ? (
           <Popover>
             <PopoverTrigger
-              render={<Button variant="ghost" size="icon" className="size-11 shrink-0 rounded-pill" />}
+              render={
+                <Button variant="ghost" size="icon" className="size-11 shrink-0 rounded-pill" />
+              }
               aria-label={t('select.more')}
             >
               <Ellipsis aria-hidden className="size-5" />

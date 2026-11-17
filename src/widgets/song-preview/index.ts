@@ -1,4 +1,3 @@
-export { CategoryPicker } from './ui/CategoryPicker'
 export { useAuthorName } from './model/use-author-name'
 export { SavesCount } from './ui/SavesCount'
 export { ExploreFeedCard } from './ui/ExploreFeedCard'

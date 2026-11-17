@@ -174,15 +174,27 @@ export function ChoiceList<T extends string>({
   )
 }
 
-/** A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows. */
-export function GroupAction({ label, onClick }: { label: string; onClick: () => void }) {
+/**
+ * A row that does something at once, in the link's colour, as the canvas's `GROUP` action rows; a
+ * loss (Unpublish, Delete) in crimson, in a group of its own.
+ */
+export function GroupAction({
+  label,
+  onClick,
+  destructive = false,
+}: {
+  label: string
+  onClick: () => void
+  destructive?: boolean
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
         ROW,
-        'text-left text-link transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+        destructive ? 'text-destructive' : 'text-link',
       )}
     >
       {label}

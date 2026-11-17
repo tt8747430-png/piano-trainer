@@ -3,6 +3,10 @@ import type { Json, Backend, PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
   isPublicCategory,
+  isPublicLicence,
+  isPublicType,
+  TAG_MAX,
+  TAGS_MAX,
   RATED_MIN,
   type PublicEntry,
   type PublicLibrary,
@@ -47,6 +51,18 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
   const rh = text(meta.rh)
   const lh = text(meta.lh)
   const description = text(meta.description)?.trim().slice(0, DESCRIPTION_MAX)
+  const composer = text(meta.composer)
+    ?.trim()
+    .slice(0, TAG_MAX * 4)
+  const type = isPublicType(meta.type) ? meta.type : undefined
+  const licence = isPublicLicence(meta.licence) ? meta.licence : undefined
+  const tags = Array.isArray(meta.tags)
+    ? meta.tags
+        .flatMap((tag) =>
+          typeof tag === 'string' && tag.trim() ? [tag.trim().slice(0, TAG_MAX)] : [],
+        )
+        .slice(0, TAGS_MAX)
+    : []
   const author = authors.get(row.author_id)
   const opening = typeof row.opening === 'string' ? row.opening : undefined
   return {
@@ -66,6 +82,10 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
       ...(rh && { rh }),
       ...(lh && { lh }),
       ...(description && { description }),
+      ...(composer && { composer }),
+      ...(type && { type }),
+      ...(tags.length > 0 && { tags }),
+      ...(licence && { licence }),
     },
   }
 }

@@ -12,6 +12,27 @@ export type PublicCategory = (typeof PUBLIC_CATEGORIES)[number]
 export const isPublicCategory = (value: unknown): value is PublicCategory =>
   typeof value === 'string' && (PUBLIC_CATEGORIES as readonly string[]).includes(value)
 
+/** What a published song is, as Flat's discoverability form asks (R72): its author's own, or an arrangement. */
+export const PUBLIC_TYPES = ['original', 'arrangement', 'other'] as const
+export type PublicType = (typeof PUBLIC_TYPES)[number]
+export const isPublicType = (value: unknown): value is PublicType =>
+  typeof value === 'string' && (PUBLIC_TYPES as readonly string[]).includes(value)
+
+/** The licences a song is published under (R72's Licence sheet). */
+export const PUBLIC_LICENCES = [
+  'all-rights-reserved',
+  'cc-by',
+  'cc-by-sa',
+  'public-domain',
+] as const
+export type PublicLicence = (typeof PUBLIC_LICENCES)[number]
+export const isPublicLicence = (value: unknown): value is PublicLicence =>
+  typeof value === 'string' && (PUBLIC_LICENCES as readonly string[]).includes(value)
+
+/** The most tags a published item carries, and the longest tag. */
+export const TAGS_MAX = 8
+export const TAG_MAX = 24
+
 /** The fewest ratings an average is shown for, and an item counts as top rated. */
 export const RATED_MIN = 3
 
@@ -53,6 +74,12 @@ export interface PublicEntry {
     readonly rh?: string
     readonly lh?: string
     readonly description?: string
+    /** Who wrote the music, as its author gives it. */
+    readonly composer?: string
+    readonly type?: PublicType
+    /** Words it is found by: a style, an occasion, a level. */
+    readonly tags?: readonly string[]
+    readonly licence?: PublicLicence
   }
 }
 
