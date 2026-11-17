@@ -1,34 +1,27 @@
 import { Fragment, type ReactNode } from 'react'
 import { BAR_CATALOG, barOf, useSettings, type BarAct } from '@/entities/settings'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import {
-  Archive,
-  Download,
-  Ellipsis,
-  FolderInput,
-  FolderOutput,
-  Heart,
-  HeartOff,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
+import { Archive, Ellipsis, FolderOutput } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
+import { cn } from '@/shared/lib'
 import { FloatingActions } from '@/shared/ui'
 import { DropZone, useCarrying } from '@/widgets/song-library'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 
-/** One of the bar's actions: its icon over its name, greyed while nothing chosen can take it. */
+/** One of the dock's buttons (R72's SELBAR): its name alone, 52 tall, sharing the width; greyed while
+ * nothing chosen can take it. */
+const DOCK_BUTTON =
+  'h-13 min-w-0 flex-1 rounded-pill px-1 text-[0.9375rem] font-semibold'
+
 function BarAction({
   label,
-  icon: Icon,
   onClick,
   disabled,
   destructive = false,
 }: {
   label: string
-  icon: LucideIcon
   onClick: () => void
   disabled: boolean
   destructive?: boolean
@@ -38,22 +31,18 @@ function BarAction({
       variant="ghost"
       disabled={disabled}
       onClick={onClick}
-      className={
-        destructive
-          ? 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs text-destructive sm:min-w-16'
-          : 'h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16'
-      }
+      className={cn(DOCK_BUTTON, destructive && 'text-destructive')}
     >
-      <Icon aria-hidden className="size-5" />
       {label}
     </Button>
   )
 }
 
 /**
- * Select's bar at the foot (Mindscape's `SelectToolbar`), floating where the screen's actions float:
- * Favourite and Export… for the songs chosen, Move and Archive for every row chosen (folders with all they
- * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders).
+ * Select's bar at the foot (R72's SELBAR, a glass dock in New's place): by default Add to folder,
+ * Favourite and Archive (the learner's own choice in Settings › Select toolbar, the rest under More);
+ * Favourite and Export… act on the songs chosen, Add to folder and Archive on every row chosen (folders
+ * with all they hold), Delete where everything chosen can be deleted.
  * Its slots stay put as rows are chosen: one that cannot act on the choice is greyed, never taken
  * away; one the place never allows (a learner's built-in folder: Move and Delete, R29 B4) is not
  * there. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
@@ -78,39 +67,25 @@ export function SelectionBar({
     favourite: (
       <BarAction
         label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}
-        icon={select.allFavourite ? HeartOff : Heart}
         onClick={select.favourite}
         disabled={noSongs}
       />
     ),
     move: page.may('moveOut') ? (
-      <BarAction
-        label={t('select.move')}
-        icon={FolderInput}
-        onClick={select.move}
-        disabled={!select.movable}
-      />
+      <BarAction label={t('select.move')} onClick={select.move} disabled={!select.movable} />
     ) : null,
-    export: (
-      <BarAction
-        label={t('select.export')}
-        icon={Download}
-        onClick={select.export}
-        disabled={noSongs}
-      />
-    ),
+    export: <BarAction label={t('select.export')} onClick={select.export} disabled={noSongs} />,
     archive: (
       <BarAction
         label={t('select.archive')}
-        icon={Archive}
         onClick={select.archive}
         disabled={!select.archivable}
+        destructive
       />
     ),
     delete: page.may('deleteSong') ? (
       <BarAction
         label={t('select.delete')}
-        icon={Trash2}
         onClick={select.delete}
         disabled={!select.deletable}
         destructive
@@ -148,13 +123,14 @@ export function SelectionBar({
     )
   }
   return (
-    <FloatingActions>
+    // Centred under the cards, as the board's dock (DOCK_L), never in New's corner.
+    <FloatingActions className="justify-center">
       <div
         role="toolbar"
         aria-label={t('select.actions')}
         // Select's bar takes the phone's tab bar's place (memory-palaces'): one bar at the foot.
         data-takes-tab-bar=""
-        className="flex gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
+        className="glass flex h-17 w-[min(35rem,calc(100vw-2rem))] items-center gap-1 rounded-pill px-2"
       >
         {shown.map((act) => (
           <Fragment key={act}>{acts[act]}</Fragment>
@@ -162,21 +138,16 @@ export function SelectionBar({
         {rest.length > 0 ? (
           <Popover>
             <PopoverTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  className="h-14 min-w-13 flex-col gap-0.5 rounded-control px-1 text-xs sm:min-w-16"
-                />
-              }
+              render={<Button variant="ghost" size="icon" className="size-11 shrink-0 rounded-pill" />}
+              aria-label={t('select.more')}
             >
               <Ellipsis aria-hidden className="size-5" />
-              {t('select.more')}
             </PopoverTrigger>
             <PopoverContent
               side="top"
               align="end"
               aria-label={t('select.more')}
-              className="flex w-auto gap-1 p-1"
+              className="glass flex w-auto gap-2 rounded-pill px-2 py-2"
             >
               {rest.map((act) => (
                 <Fragment key={act}>{acts[act]}</Fragment>

@@ -22,12 +22,14 @@ details.
   song, New folder and Import, and only these (it adds; the Public library is a place, Home's first row), and a
   file dropped on the library imports it (ADR 0107).
 - **The actions**, at every size:
-  - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, to the Trash with Undo), a swipe
-    (right Favourite; left Move, then Archive), a long press starting Select;
+  - a song's card: its ··· (R72's ROWSHEET) Practise, Edit score, Add to a folder, Favourite, Settings, Archive (its
+    files and Delete are its page's Settings), a swipe (right Favourite; left Move, then Archive), a long press
+    starting Select;
   - a folder's row counts its folders and songs and names its first songs; its More edits, moves, archives or deletes
     it;
   - **Select**: a check fading in where More stood so nothing moves, the count as the title, Select all (round, so
-    the bar keeps its one row at 320px), a bar of Favourite · Move · Archive · Delete, each in its slot, greyed where
+    the bar keeps its one row at 320px), a glass dock centred at the foot (R72's SELBAR, 68 tall, 560 at most) of
+    Add to folder · Favourite · Archive by default (Settings › Select toolbar, the rest under its ···), each in its slot, greyed where
     what is chosen does not allow it (Delete: anything but the learner's own songs and folders); it counts and acts on
     the rows chosen that are in sight, a search hiding the rest; its Archive is one toast whose Undo puts
     every song and folder back; a folder's handle moves it among the folders, by finger, mouse or keyboard, a screen
