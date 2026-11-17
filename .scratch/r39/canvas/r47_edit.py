@@ -36,7 +36,7 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
 __INSJS__    return { ...common(st, set), added, states, editing, reading: !editing, canEdit: !preview, previewing: preview, exitPreview: () => set({ preview: false }),
       edit: () => set({ editing: true, sel: 0 }), done: () => set({ editing: false, sheet: null }), langs: seg(['EN', 'RU'], ru ? 'RU' : 'EN', (l) => set({ lang: l })),
       place: LS.place, title: T(LS, 'title'), summary: T(LS, 'summary'), secs, status: st.saving ? 'Saving…' : 'Saved · not published',
-      kb: calmKeys(root, root + 16, marks, 370, 96), kbL: calmKeys(root, root + 16, marks, 720, 128), verName: ver, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(60, 76, qm, 720, 128),
+      kb: calmKeys(root, root + 16, marks, 370, 96), kbL: calmKeys(root - 12, root + 23, marks, 1382, 150), verName: ver, qkb: calmKeys(60, 76, qm, 370, 96), qkbL: calmKeys(48, 83, qm, 1382, 150),
       notRight: !right, qLine: right ? 'Correct' : (chosen.length + ' of 8 notes'), qInk: right ? '#2F5A35' : '#685E56', showAns: () => set({ chosen: D }), resetQ: () => set({ chosen: [] }),
       insOn: sheet === 'insert', openIns: () => set({ sheet: 'insert' }), ins: ins2, insOld: INS.map(([g, ks]) => ({ g, ks: ks.map((k) => ({ k, add: () => set({ sheet: null, toast: k + ' added' }) })) })),
       legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
@@ -66,7 +66,7 @@ def KEYSOF(lst, h):
     return PKEYS(lst, h)
 _SHORT = (f'<aside style="padding: 12px 16px; border-radius: 12px; background: {HONEY}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8A5A1C">In short</span><span contenteditable="{{{{editing}}}}" style="font-size: 16px; font-weight: 600; outline: none">{{{{s.take}}}}</span></aside>')
 def DOC(lap=False):
-    kbn, qn, kh = ('kbL', 'qkbL', 128) if lap else ('kb', 'qkb', 96)
+    kbn, qn, kh = ('kbL', 'qkbL', 150) if lap else ('kb', 'qkb', 96)
     handle = ''
     ex = (f'<sc-if value="{{{{s.isScale}}}}" hint-placeholder-val="{{{{true}}}}"><figure style="position: relative; margin: 0; display: flex; flex-direction: column; gap: 12px">'
           f'<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 17px; font-weight: 700">{{{{verName}}}}</span>'
@@ -79,14 +79,15 @@ def DOC(lap=False):
           f'<div style="display: flex; align-items: center; gap: 8px"><span data-q style="flex: 1; min-height: 44px; display: flex; align-items: center; font-size: 17px; font-weight: 700">Play the D major scale</span><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'<span style="font-size: 14px; color: {SOFT}">Choose on the keys</span>{KEYSOF(qn, kh)}<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 14px; font-weight: 600; color: {{{{qInk}}}}">{{{{qLine}}}}</span>'
           f'<button type="button" onClick="{{{{resetQ}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Again</button><sc-if value="{{{{notRight}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{showAns}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Show the answer</button></sc-if></div></figure></sc-if>')
-    # on a laptop a section's words stand beside its music, so the page's width holds both (owner, 2026-11-17: "the
-    # sections just occupy half of the screen without any proper layout"); on a phone they stack
-    secst = ('display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: 48px; align-items: start' if lap else 'display: flex; flex-direction: column; gap: 12px')
+    # on a laptop a section's words and its In short stand side by side, and its keyboard runs the page's width under
+    # them, three octaves at a real key's proportion, as the Player's (owner, 2026-11-17: "these keyboards dont make
+    # any sense, make other layout for the keyboards"); on a phone they stack
+    secst = ('display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 48px; row-gap: 16px; align-items: start' if lap else 'display: flex; flex-direction: column; gap: 12px')
     sec = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="2"><section onClick="{{{{s.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{s.ring}}}}; outline-offset: 6px">' + ('<div style="display: flex; flex-direction: column; gap: 12px">' if lap else '') +
            f'<h2 data-sec contenteditable="{{{{editing}}}}" style="margin: 0; scroll-margin-top: 16px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{s.h}}}}</h2>'
            f'<sc-if value="{{{{s.hasP}}}}" hint-placeholder-val="{{{{true}}}}"><p contenteditable="{{{{editing}}}}" style="margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; text-wrap: pretty; outline: none">{{{{s.p}}}}</p></sc-if>'
            f'<sc-if value="{{{{s.hasSteps}}}}" hint-placeholder-val="{{{{false}}}}"><ol style="margin: 0; padding-left: 24px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 4px"><sc-for list="{{{{s.steps}}}}" as="x" hint-placeholder-count="4"><li contenteditable="{{{{editing}}}}" style="outline: none">{{{{x.x}}}}</li></sc-for></ol></sc-if>'
-           + (_SHORT + f'</div><div style="display: flex; flex-direction: column; gap: 12px">{ex}</div>' if lap else f'{ex}' + _SHORT) + '</section></sc-for>')
+           + ('</div>' + _SHORT.replace('<aside style="', '<aside style="align-self: end; ', 1) + f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px">{ex}</div>' if lap else f'{ex}' + _SHORT) + '</section></sc-for>')
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #A8551F">{{{{place}}}} · Foundations</span>'
             f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; line-height: 1.15; font-weight: 600; outline: none; text-wrap: balance">{{{{title}}}}</h1>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{summary}}}}</p>'
