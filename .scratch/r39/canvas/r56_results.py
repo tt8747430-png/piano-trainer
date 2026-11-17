@@ -74,11 +74,13 @@ RS_LEGEND = (f'<div style="display: flex; flex-wrap: wrap; justify-content: cent
 
 
 def RS_TILE(fig, unit, sub, label):
+    """A stat tile, the same three rows in every tile (round 63): the figure (its unit quieter), one line of context,
+    the label; 16 inset, rows closer than the inset, so the three read as one group and the tiles as siblings."""
     u = f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}"> {unit}</span>' if unit else ''
-    s = f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{sub}</span>' if sub else ''
-    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 2px">'
-            f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>{s}'
-            f'<span style="margin-top: auto; padding-top: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span></div>')
+    return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 2px">'
+            f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>'
+            f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span>'
+            f'<span style="padding-top: 6px; font-size: 13px; font-weight: 600; color: {SOFT}">{label}</span></div>')
 
 
 RS_CHECK = f'<svg viewBox="0 0 24 24" width="44" height="44" {I.replace("stroke-width=\"2\"", "stroke-width=\"2.4\"")}><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>'
@@ -95,12 +97,13 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
             f'display: flex; align-items: center; justify-content: center">{RS_STAR if perfect else RS_CHECK}</span>')
     head = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">{icon}'
             f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
-    tiles = ('<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">'
+    tiles = (f'<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: {16 if lap else 12}px">'
              + RS_TILE('100%' if perfect else '92%', '', '12 of 12' if perfect else '11 of 12', 'Accuracy')
-             + RS_TILE('12' if perfect else '9', '', 'on time' if perfect else 'on time<br>2 early · 1 late', 'Timing')
-             + RS_TILE('72', 'BPM', '', 'Tempo') + '</div>')
-    run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600">The run</h2>'
-           + CARD(f'<div style="display: flex; flex-direction: column; gap: 8px">{RS_RUNSTAFF(per_row, cw, perfect)}{"" if perfect else RS_LEGEND}</div>', '12px 8px') + '</section>')
+             + RS_TILE('12' if perfect else '9', 'on time', 'None early or late' if perfect else '2 early · 1 late', 'Timing')
+             + RS_TILE('72', 'BPM', 'In Wait mode', 'Tempo') + '</div>')
+    run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-size: 14px; font-weight: 600">The run</h2>'
+           + f'<div style="display: flex; flex-direction: column; gap: 8px">{RS_RUNSTAFF(per_row, cw, perfect)}{"" if perfect else RS_LEGEND}</div>' + '</section>')
+    # round 63: the run stands on the paper as in the run itself, never a lone card; the heading on the column's edge
     best = ('New personal best · Attempt 5' if perfect else 'Personal best 96% · Attempt 5')
     prof = '' if from_profile else (f'<a href="{"ProfileLaptop" if lap else "Profile"}.dc.html" style="height: 44px; display: inline-flex; align-items: center; gap: 4px; color: {LINK}; '
                                     f'font-size: 15px; font-weight: 600; text-decoration: none">All practice in Profile{CHEV_R}</a>')

@@ -1009,6 +1009,8 @@ owner's, typos fixed.
 
 - **A chord run's music on the paper** (round 63, canvas v402): in the Player's chord run (`PlayChord`, `PlayChordLaptop`) the staff is the page's subject, so it leaves its lone card (edge-lines law 3); on a laptop it is set larger (zoom 1.35, 1018 wide with its progress bar) and centred in the band over the transport, where a 760px card had left 300px of bare paper; on a phone its cells widen to 84 so staff and progress bar share both edges.
 
+- **A run's results, tidied** (round 63, canvas v403): the stat tiles carry the same three rows each (the figure with its unit quieter, one line of context, the label), 16 inset and 16 apart on a laptop, never a label pushed to the tile's foot by a stretch; Timing reads "9 on time · 2 early · 1 late", Tempo "72 BPM · In Wait mode"; The run stands on the paper under its heading, on the column's edge, as in the run itself. `PlayChord`, `PracticeResult` and their laptops.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
