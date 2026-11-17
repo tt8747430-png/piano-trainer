@@ -16,8 +16,8 @@ TKS_SRC = r'''
     return { ...common(st, set), states, closeSheet: () => S({ sheet: null }),
       isList: !review, isReview: review, pageT: review ? 'Review your recording' : 'Takes', toList: () => S({ page: null }),
       some: takes.length > 0, none: takes.length === 0,
-      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: () => S({ sheet: 'more', at: t.id }) })),
-      moreOn: st.sheet === 'more', moreT: at.n,
+      rows: takes.map((t) => ({ n: t.n, d: t.d, on: st.playing === t.id, pick: () => S({ at: t.id }), bg: t.id === at.id ? '#EEE9E2' : 'transparent', pbg: '#EEE9E2', pbgL: t.id === at.id ? '#FEFDFB' : '#EEE9E2', cur: t.id === at.id ? 'true' : 'false', play: () => S({ playing: st.playing === t.id ? null : t.id }), more: (e) => S({ sheet: 'more', at: t.id, menuPos: ANCHOR(e, 170) }) })),
+      moreOn: st.sheet === 'more', menuPos: st.menuPos ?? 'right: 16px; top: 120px', moreT: at.n,
       doReview: () => S({ sheet: null, page: 'review' }), download: () => S({ sheet: null, toast: at.n + '.mid saved', toastUndo: false }), del: () => drop(at.id),
       undo: () => S({ toast: null, gone: gone.filter((g) => g !== st.last) }),
       atN: at.n, atD: at.d,
@@ -56,7 +56,7 @@ REVIEW = lambda w: (f'<div style="display: flex; flex-direction: column"><span s
                     + GROUP(('toggle', 'Hide raw notes', 'rawOn', 'toggleRaw'), ('link', 'Into', '{{intoV}}', 'openInto'), bg=SHEET)
                     + f'<div style="display: flex; gap: 12px; margin-top: 4px">{BTN("Discard", "discard", "", "quiet")}{BTN("Save to score", "save")}</div>')
 BACKB = f'<button type="button" aria-label="Back" onClick="{{{{toList}}}}" data-tip="Back" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button>'
-TKS_MORE = GROUP(('action', 'Review', 'doReview'), ('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
+TKS_MORE = ROWMENU('moreOn', '{{moreT}}', [('action', 'Review', 'doReview'), ('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
 TKS_INTO = f'<div style="border-radius: 12px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{intoList}}}}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{{{o.pick}}}}" style="width: 100%; min-height: 48px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{o.l}}}}</span><span style="color: {LINK}; font-weight: 700">{{{{o.mark}}}}</span></button></sc-for></div>'
 tksph = (IF('isList', TOP('Editor.dc.html', 'Takes', '', 'Amazing Grace'), 'true') + IF('isReview', TOP('', 'Review your recording', '', 'Takes', BACKB))
          + NARROW(IF('isList', TKLIST, 'true') + IF('isReview', REVIEW(340))) + TOASTS)
@@ -67,12 +67,13 @@ TKLISTL = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; bo
 tkslm = (LTITLEBAR('Takes', '', 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
          + IF('some', f'<main style="flex: 1; min-height: 0; padding: 0 40px 32px; display: grid; grid-template-columns: 372px minmax(0, 1fr); gap: 40px; align-items: start">'
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'
-              f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px">'
-              f'<h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Review your recording</h2>{REVIEW(900)}</section></main>', 'true')
+              # the review stands on the paper beside the list, never a card holding cards (scan-first 6; edge-lines 3)
+              f'<section aria-label="Review your recording" class="nos" style="min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">'
+              f'{REVIEW(900)}</section></main>', 'true')
          + IF('none', WIDE(EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'), 720))
          + TOASTL)
-TKS_MOREL = GROUP(('action', 'Download', 'download'), ('action', 'Delete', 'del', '#B3261E'), bg=SHEET)
+TKS_MOREL = ROWMENU('moreOn', '{{moreT}}', [('action', 'Download', 'download'), ('action', 'Delete', 'del', RED)])
 detail('Takes', 'The takes and Review your recording', js(TKS_SRC), tksph, tkslm, '',
-       BSHEET('moreOn', '{{moreT}}', TKS_MORE) + BSHEET('intoOn', 'Into', TKS_INTO),
-       POPOVER('moreOn', '{{moreT}}', TKS_MOREL, 'left: 420px; top: 220px', 300) + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300), 'Songs')
+       TKS_MORE + BSHEET('intoOn', 'Into', TKS_INTO),
+       TKS_MOREL + POPOVER('intoOn', 'Into', TKS_INTO, 'right: 520px; bottom: 140px', 300), 'Songs')
 print('r59 takes ok')

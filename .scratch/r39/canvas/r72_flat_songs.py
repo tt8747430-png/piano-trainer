@@ -33,13 +33,13 @@ FL_JS = r'''
       rowOn: st.sheet === 'row', menuPos: st.menuPos ?? 'right: 16px; top: 120px', rowT: st.row ?? 'Amazing Grace', q: st.q ?? '', typed: (e) => S({ q: e.target.value }),
       none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare, canSel: !selOn && list.length > 0 && !bare,
       selOn, selOff: !selOn, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: picked.length + ' selected', selNone: picked.length === 0, selSome: picked.length > 0,
-      addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: () => S({ sheet: st.sheet === 'add' ? null : 'add' }),
-      folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76',
+      addOn: st.sheet === 'add', noAdd: st.sheet !== 'add', openAdd: (e) => S({ sheet: st.sheet === 'add' ? null : 'add', menuPos: ANCHOR(e, 240) }),
+      folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76', createDis: !(st.fname ?? '').trim(),
       recOn: st.sheet === 'rec', openRec: () => S({ sheet: 'rec' }), clickOn: st.click ?? true, clickOnBg: (st.click ?? true) ? '#44684A' : '#DAD1C8', clickOnX: (st.click ?? true) ? 22 : 2, clickT: () => S({ click: !(st.click ?? true) }),
       cins: seg(['None', '1 bar', '2 bars'], st.cin ?? '1 bar', (x) => S({ cin: x })),
       impOn: st.sheet === 'imp', openImp: () => S({ sheet: 'imp', imp: false }), impPick: () => S({ imp: true }), impNot: !st.imp, impDone: !!st.imp,
       songOn: st.sheet === 'song', openSong: () => S({ sheet: 'song' }), sname: st.sname ?? '', snamed: (e) => S({ sname: e.target.value }), sReady: !!(st.sname ?? '').trim(),
-      sBg: (st.sname ?? '').trim() ? '#EDC684' : '#EEE9E2', sFg: (st.sname ?? '').trim() ? '#332921' : '#8A7F76',
+      sBg: (st.sname ?? '').trim() ? '#EDC684' : '#EEE9E2', sFg: (st.sname ?? '').trim() ? '#332921' : '#8A7F76', sDis: !(st.sname ?? '').trim(),
       staves: [['Piano', 'Two staves'], ['Melody', 'One staff'], ['Voice and piano', 'Three staves']].map(([l, b]) => { const on = (st.stv ?? 'Piano') === l; return { l, b, on, bg: on ? '#332921' : '#FEFDFB', fg: on ? '#FEFDFB' : '#332921', sub: on ? 'rgba(254,253,251,.75)' : '#6F655D', pick: () => S({ stv: l }) }; }),
       tempoV: '♩ = ' + (st.bpm ?? 80), tDn: () => S({ bpm: Math.max(30, (st.bpm ?? 80) - 4) }), tUp: () => S({ bpm: Math.min(240, (st.bpm ?? 80) + 4) }),
       barsV: String(st.bars ?? 8), bDn: () => S({ bars: Math.max(1, (st.bars ?? 8) - 1) }), bUp: () => S({ bars: Math.min(200, (st.bars ?? 8) + 1) }),
@@ -187,7 +187,6 @@ def EXSHELF(w, n, href):
                    f'<span style="width: {w}px">{cover(t, by, notes=INC.get(t, (2, 4, 3, 5, 4, 2, 0)))}</span>'
                    f'<span style="font-size: 15px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{t}</span>'
                    f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{who}</span></a>' for t, by, who in EXPUB[:n])
-MOREMENU = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '2', 'Trash' + sfx), bg=SHEET)
 BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 48px 24px 16px; text-align: center">'
          f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 320px">Write one, record one at the piano, or import MusicXML or MIDI.</span></div></sc-if>')
 def SONGSEC(song, allh, grid):
@@ -260,7 +259,7 @@ SONGFORM = (f'<div style="display: flex; flex-direction: column; gap: 20px">'
     + GROUP(('step', 'Tempo', 'tempoV', 'tDn', 'tUp'), ('step', 'Bars', 'barsV', 'bDn', 'bUp'), bg=SHEET)
     + f'<div style="display: flex; flex-direction: column; gap: 8px">{_SLAB("Key", f"<span style=\"font-size: 13px; color: {INK}\">{{{{keyV}}}}</span>")}{_KROW("keysS")}{_KROW("keysF")}</div>'
     f'<div style="display: flex; flex-direction: column; gap: 8px">{_SLAB("Time")}<div role="radiogroup" style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px"><sc-for list="{{{{times}}}}" as="o" hint-placeholder-count="6"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="{_TILE}; height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 19px; font-weight: 700; line-height: 0.95"><span>{{{{o.n}}}}</span><span>{{{{o.d}}}}</span></button></sc-for></div></div>'
-    f'<a href="Editor.dc.html" aria-disabled="{{{{sReady}}}}" style="position: sticky; bottom: 0; height: 50px; border-radius: 25px; background: {{{{sBg}}}}; color: {{{{sFg}}}}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px {PAGE}">Create</a></div>')
+    f'<a href="Editor.dc.html" aria-disabled="{{{{sDis}}}}" style="position: sticky; bottom: 0; height: 50px; border-radius: 25px; background: {{{{sBg}}}}; color: {{{{sFg}}}}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px {PAGE}">Create</a></div>')
 IMPFORM = (IF('impNot', f'<div style="display: flex; flex-direction: column; gap: 16px"><button type="button" onClick="{{{{impPick}}}}" style="border: 0; border-radius: 16px; background: {SHEET}; box-shadow: inset 0 0 0 1.5px {LINE}; padding: 28px 16px; font: inherit; color: {INK}; display: flex; flex-direction: column; align-items: center; gap: 8px"><span style="width: 48px; height: 48px; border-radius: 24px; background: {FILL}; display: flex; align-items: center; justify-content: center">{NEWICON["Import"]}</span><span style="font-size: 16px; font-weight: 700">Choose a file</span><span style="font-size: 14px; color: {SOFT}">MusicXML (.musicxml, .mxl) or MIDI (.mid)</span></button></div>', 'true')
     + IF('impDone', f'<div style="display: flex; flex-direction: column; gap: 16px"><div style="display: flex; gap: 16px; align-items: center">{COV("Fantaisie-Impromptu", HONEY, 56)}<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">Fantaisie-Impromptu</span><span style="font-size: 14px; color: {SOFT}">Chopin · C♯ minor · 2 staves · 138 bars</span></span></div>'
       + GROUP(('val', 'Notes, tuplets and ties', 'All'), ('val', 'Tempo and metre changes', '6'), ('val', 'Pedal marks', '41'), bg=SHEET)
@@ -274,7 +273,7 @@ RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
-NEWPOP = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300)
+NEWPOP = MENUSHELL('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), w=260)
 PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
 detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('{{menuPos}}') + NEWPOP + ROWMENU('rowOn', '{{rowT}}', ROWITEMS('Laptop.dc.html')) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
@@ -314,11 +313,13 @@ LOCK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="curr
 def _shrows(song):
     return ''.join('<div style="position: relative">' + SONGROW(song).replace('{{r.t}}', t).replace('{{r.s}}', sub).replace('{{r.v}}', v).replace('{{r.when}}', w).replace('{{r.pic}}', INCIPIT(INC.get(t, (2, 4))).replace('"', "'")) + '</div>' for t, sub, v, w in CHOIR)
 _SHHEAD = lambda w: (f'<div style="display: flex; align-items: center; gap: 16px"><span style="flex: none">{PLCOVER(SAGE, False, [t for t, *_ in CHOIR], "M", w)}</span>'
-                     f'<span style="min-width: 0; display: flex; flex-direction: column; gap: 4px"><h1 style="margin: 0; font-size: 26px; font-weight: 700">Choir hymns</h1>'
+                     f'<span style="min-width: 0; display: flex; flex-direction: column; gap: 4px">'
                      f'<span style="font-size: 15px; color: {SOFT}">Shared by Maria Ionescu in Choir accompanists</span><span style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: {SOFT}">{LOCK}View only · 4 songs</span></span></div>')
-shph = (f'{TOP("Songs.dc.html", "", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
+# The playlist's name stands in the bar, as every playlist's does (edge-lines 8: an empty bar is a hole); the head
+# under it is the cover and who shared it.
+shph = (f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         f'{_SHHEAD(112)}<div style="display: flex; flex-direction: column; gap: 12px">{_shrows("Song.dc.html")}</div></main>{TABBAR("Songs")}')
-shlm = (f'{LTITLEBAR("", "", back="SongsLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 28px">'
+shlm = (f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 28px">'
         f'{_SHHEAD(160)}<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">{_shrows("SongLaptop.dc.html")}</div></main>')
 detail('SharedFolder', 'Choir hymns', FLJS(_ROWS), shph, shlm, '', '', '', 'Songs')
 print('flat songs ok')

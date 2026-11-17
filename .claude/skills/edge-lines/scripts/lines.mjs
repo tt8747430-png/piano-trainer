@@ -325,7 +325,7 @@ async function analyse(page, scr, phone) {
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim().length > 1 ? 1 : 3) })
   for (let n = tw.nextNode(); n; n = tw.nextNode()) {
     const el = n.parentElement
-    if (!vis(el) || el.closest('[aria-hidden=true], svg, [disabled]')) continue
+    if (!vis(el) || el.closest('[aria-hidden=true], svg, [disabled], [aria-disabled=true]')) continue
     const r = R(el)
     if (r.top < scr.y || r.bottom > scr.y + scr.h || r.left < scr.x || r.right > scr.x + scr.w) continue
     const cs = getComputedStyle(el)

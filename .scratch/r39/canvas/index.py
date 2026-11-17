@@ -44,9 +44,15 @@ for pid, pname, rows in PAGES:
             boards[stem + '.dc.html'] = {'x': i * (w + GAP), 'y': y + TITLE, 'w': w, 'h': h, 'title': t, 'is_interactive': True, 'page': pid}
             order.append(stem + '.dc.html')
         y += TITLE + h + ROWGAP
+# what the page itself saved is kept (the owner's note sizes, its note order, the boards only the published copy has)
+for k, n in d.get('notes', {}).items():
+    if k in notes:
+        notes[k].update({f: n[f] for f in ('w', 'maxW') if f in n})
+for k in ('PlayerApp.dc.html', 'PlayerDesk.dc.html'):
+    if k in d.get('boards', {}):
+        boards[k] = d['boards'][k]; order.append(k)
 d.update(title='The ideal Piano Trainer', boards=boards, order=order, notes=notes,
          pages=[{'id': pid, 'name': pname} for pid, pname, _ in PAGES], launch={'view': 'canvas', 'page': 'practice'})
-d.pop('noteOrder', None)
 json.dump(d, open(P + 'canvas.json', 'w'), ensure_ascii=False, indent=2)
 # canvas 167: the one piano, every board's 2D keys in the app's faces (keyface.py)
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/keyface.py').read())

@@ -61,8 +61,8 @@ CHORDS_ROW = f'<div class="nos" style="display: flex; gap: 8px; overflow-x: auto
 LEARNED = LEARNEDT
 HEARTB = IB('Favourite', f'<svg viewBox="0 0 24 24" width="22" height="22" fill="{{{{heartFill}}}}" stroke="{{{{heartStroke}}}}" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>', 'toggleFav', '', 'fav')
 FACTS = f'<div style="display: flex; padding: 4px 0">' + ''.join(f'<div style="flex: 1; display: flex; flex-direction: column; gap: 2px; {"box-shadow: inset 1px 0 0 " + LINE + "; padding-left: 14px" if i else ""}"><span style="font-size: 13px; color: {SOFT}">{a}</span><span style="font-size: 17px; font-weight: 600">{b}</span></div>' for i, (a, b) in enumerate([('Key', 'G major'), ('Time', '3/4'), ('Tempo', '80 BPM')])) + '</div>'
-COVER_BIG = lambda w, sz: f'<div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 14px 30px -18px rgba(51,41,33,.45); padding: 16px 16px 6px; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; flex-direction: column; align-items: center; gap: 2px"><span style="max-width: 90%; font-family: {SERIF}; font-size: {sz}px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{titleT}}}}</span><span style="align-self: flex-end; max-width: 100%; font-size: 11px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{coverBy}}}}</span></div>{score_svg(w, size=1.0, played=None).replace("aria-label=\"Amazing Grace, bars 1 to 7\"", "aria-label=\"Amazing Grace, the first bars\"")}</div>'
-TITLE = f'<div style="display: flex; align-items: center; gap: 8px"><h1 style="margin: 0; min-width: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{titleT}}}}</h1>{IB("Edit title and credits", PENCIL, "openCredits")}</div><p style="margin: -6px 0 0; font-size: 15px; color: {SOFT}">{{{{creditT}}}}</p>'
+COVER_BIG = lambda w, sz: f'<div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 14px 30px -18px rgba(51,41,33,.45); padding: 16px; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; flex-direction: column; align-items: center; gap: 2px"><span style="max-width: 90%; font-family: {SERIF}; font-size: {sz}px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{titleT}}}}</span><span style="align-self: flex-end; max-width: 100%; font-size: 11px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{coverBy}}}}</span></div>{score_svg(w, size=1.0, played=None).replace("aria-label=\"Amazing Grace, bars 1 to 7\"", "aria-label=\"Amazing Grace, the first bars\"")}</div>'
+TITLE = f'<div style="display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 8px"><h1 style="margin: 0; min-width: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{titleT}}}}</h1>{IB("Edit title and credits", PENCIL, "openCredits")}</div><p style="margin: 0; font-size: 15px; color: {SOFT}">{{{{creditT}}}}</p></div>'
 ACTS_OF = lambda pl: f'<div style="display: flex; gap: 8px">{BTN(PLAY.replace("22", "18") + " Continue from bar 9", href=pl)}{BTN("From the start", href=pl, kind="quiet", grow=False)}</div>' + '<div role="img" aria-label="8 of 16 bars played; bar 9 is next" style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; gap: 3px">' + ''.join(f'<span title="Bar {i + 1}" style="flex: 1; height: 14px; border-radius: 3px; background: {("#C26A2E" if i < 8 else ("#FEFDFB" if i == 8 else FILL))}; box-shadow: {("inset 0 0 0 2px #C26A2E" if i == 8 else "none")}"></span>' for i in range(16)) + f'</div><div style="display: flex; justify-content: space-between; font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums"><span>Bar 1</span><span>Played 6 times · 42 minutes</span><span>Bar 16</span></div></div>'
 FIRST_OF = lambda pl: f'<sc-if value="{{{{fresh}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex">{BTN(PLAY.replace("22", "18") + " Practise", href=pl)}</div></sc-if>'  # before a first play: one honey Practise, the column's width
 ACTS, ACTS_L = [f'<sc-if value="{{{{played}}}}" hint-placeholder-val="{{{{true}}}}">{ACTS_OF(p)}</sc-if>{FIRST_OF(p)}' for p in ('Player.dc.html', 'PlayerLaptop.dc.html')]
@@ -70,7 +70,7 @@ SGSTRIP = f'<div aria-label="Canvas: show a state" style="display: none"><sc-for
 SECTS = GROUP(('link', 'Verse', '2× · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 13–16', 'Section.dc.html'), bg=SHEET)
 PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Perfect cadence', 'I – IV – V – I', 'Progression.dc.html'), bg=SHEET)
 DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
-SONG_MORE = GROUP(('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', 'Editors', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html'), bg=SHEET)
+SONG_MORE = ROWMENU('moreOn', 'Amazing Grace', [('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', '', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html')])
 CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">
@@ -79,10 +79,12 @@ ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS}</section>
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
 </main>'''
-sh = BSHEET('moreOn', 'Amazing Grace', SONG_MORE) + BSHEET('creditsOn', 'Title and credits', CREDITS)
+sh = SONG_MORE + BSHEET('creditsOn', 'Title and credits', CREDITS)
 # one centred column (owner, 2026-11-16: "the page has one focus"): the song's cover beside its name and Continue as
 # the column's head, then its chords, sections and details under it, never a rival column beside it
-lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
+# the bar stands on the column's edges (scan-first 1): Back on its left edge, the acts ending on its right
+_SGBAR = TOP('SongsLaptop.dc.html', '', LEARNED + HEARTB + DOTS()).replace('padding: 0 12px', 'padding: 0', 1)
+lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 100%); margin: 0 auto">{_SGBAR}</div></div>
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 48px">
 <div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
 <div style="display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: end"><div>{COVER_BIG(348, 20)}</div><div style="display: flex; flex-direction: column; gap: 18px">{TITLE}{FACTS}{ACTS_L}</div></div>
@@ -91,7 +93,7 @@ lm = f'''{LTOP('SongsLaptop.dc.html', LEARNED + HEARTB + DOTS())}
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Details')}{DETAILS}</section>
 </div>
 </div>'''
-pl = POPOVER('moreOn', 'Amazing Grace', SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html')) + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
+pl = SONG_MORE.replace('EditorDraft.dc.html', 'EditorDraftLaptop.dc.html').replace('Editor.dc.html', 'EditorLaptop.dc.html').replace('SongSettings.dc.html', 'SongSettingsLaptop.dc.html') + POPOVER('creditsOn', 'Title and credits', CREDITS, 'left: 120px; top: 520px', 420)
 detail('Song', 'A song', SG, ph, lm, '', sh, pl, 'Songs')
 s = open(OUT + 'SongLaptop.dc.html').read().replace('href="Progression.dc.html"', 'href="ProgressionLaptop.dc.html"'); open(OUT + 'SongLaptop.dc.html', 'w').write(s)
 

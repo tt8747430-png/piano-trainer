@@ -214,7 +214,7 @@ GR_JS = js(r'''
     const inv = st.inv ?? true, perm = st.perm ?? 'Can view';
     return { ...common(st, set), isList: !page, isGroup: page === 'group', isFolder: page === 'folder', isJoin: page === 'join', notList: !!page,
       goGroup: () => S({ page: 'group' }), goFolder: () => S({ page: 'folder' }), goJoinPage: () => S({ page: 'join', sheet: null }), back: () => S({ page: page === 'folder' && st.fromGroup ? 'group' : null }),
-      openNew: () => S({ sheet: 'new', ngName: '' }), newOn: st.sheet === 'new', ngName: st.ngName ?? '', typeNG: (e) => S({ ngName: e.target.value }), makeGroup: () => { if (!(st.ngName || '').trim()) return; S({ sheet: null, page: 'group' }); }, ngBg: (st.ngName || '').trim() ? '#EDC684' : '#EEE9E2', ngFg: (st.ngName || '').trim() ? '#332921' : '#9C9086', openJoin: () => S({ sheet: 'join' }), joinOn: st.sheet === 'join', openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more',
+      openNew: () => S({ sheet: 'new', ngName: '' }), newOn: st.sheet === 'new', ngName: st.ngName ?? '', typeNG: (e) => S({ ngName: e.target.value }), makeGroup: () => { if (!(st.ngName || '').trim()) return; S({ sheet: null, page: 'group' }); }, ngBg: (st.ngName || '').trim() ? '#EDC684' : '#EEE9E2', ngFg: (st.ngName || '').trim() ? '#332921' : '#9C9086', ngDis: !(st.ngName || '').trim(), openJoin: () => S({ sheet: 'join' }), joinOn: st.sheet === 'join', openMore: () => S({ sheet: 'more' }), moreOn: st.sheet === 'more',
       openShare: () => S({ sheet: 'choose' }), chooseOn: st.sheet === 'choose', pickFolder: () => S({ sheet: 'share' }), shareOn: st.sheet === 'share', perms: seg(['Can view', 'Can edit'], perm, (x) => S({ perm: x })),
       shareDone: () => { S({ sheet: null, shared: true }); toast('Hymns shared with Choir accompanists'); }, sharedNew: !!st.shared,
       invOn: inv, invOnBg: inv ? '#44684A' : '#DAD1C8', invOnX: inv ? 22 : 2, invT: () => S({ inv: !inv }), copyInv: () => toast('Invite link copied'),
@@ -408,7 +408,8 @@ for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIP
     SP_SRC = SP_SRC.replace("'__PIC_%s__'" % _t.replace(' ', '_'), json.dumps(_pic + ' center / cover'))
 # Trash is its own place beside Archive (owner, 2026-11-17: "why the archive still has this trash inside it"), never
 # a row at Archive's foot
-for stem, root, ttl in (('Folder', 'null', 'A folder'), ('Archive', "'archive'", 'Archive'), ('Trash', "'trash'", 'Trash')):
+# a playlist's board (Folder) is r72's LISTPAGE, built later; this generator draws Archive and Trash
+for stem, root, ttl in (('Archive', "'archive'", 'Archive'), ('Trash', "'trash'", 'Trash')):
     detail(stem, ttl, js(SP_SRC.replace('__ROOT__', root)), spph, splm, '', SP_SHEETS + _AMENUS, SP_LAP + _AMENUS, 'Songs')
 # spph, splm, '', SP_SHEETS, SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px'), 'Songs')
 

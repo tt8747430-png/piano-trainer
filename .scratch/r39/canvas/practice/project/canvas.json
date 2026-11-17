@@ -1,1 +1,1394 @@
-{"v": 3, "attachments": {}, "boards": {"Accompaniment.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Accompaniment, phone", "w": 450, "x": 4240, "y": 300}, "AccompanimentLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Accompaniment, laptop", "w": 2143, "x": 17784, "y": 1720}, "Admin.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Administration, phone", "w": 450, "x": 3710, "y": 300}, "AdminLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Administration, laptop", "w": 2143, "x": 15561, "y": 1720}, "AllSongs.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "All songs, Select, Sort, phone", "w": 450, "x": 530, "y": 300}, "AllSongsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "All songs, Select, Sort, laptop", "w": 2143, "x": 2223, "y": 1720}, "AppLayers.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Across the app: search, MIDI, shortcuts, notices, route states, phone", "w": 450, "x": 7420, "y": 300}, "AppLayersLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop", "w": 2143, "x": 31122, "y": 1720}, "Archive.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "Archive: Select, Restore, Move to Trash, phone", "w": 450, "x": 2650, "y": 300}, "ArchiveLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "Archive: Select, Restore, Move to Trash, laptop", "w": 2143, "x": 11115, "y": 1720}, "Check.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Check a song, phone", "w": 450, "x": 7950, "y": 300}, "CheckLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Check a song, laptop", "w": 2143, "x": 33345, "y": 1720}, "ChordFinder.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Chord finder, phone", "w": 450, "x": 9540, "y": 300}, "ChordFinderLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Chord finder, laptop", "w": 2143, "x": 40014, "y": 1720}, "ChordPlayer.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Chord player, phone", "w": 450, "x": 5830, "y": 300}, "ChordPlayerLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Chord player, laptop", "w": 2143, "x": 24453, "y": 1720}, "Chords.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Chords, phone", "w": 450, "x": 530, "y": 300}, "ChordsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Chords, laptop", "w": 2143, "x": 2223, "y": 1720}, "CircleOfFifths.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Circle of fifths, phone", "w": 450, "x": 10070, "y": 300}, "CircleOfFifthsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Circle of fifths, laptop", "w": 2143, "x": 42237, "y": 1720}, "Course.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "A course, read and edited, phone", "w": 450, "x": 4770, "y": 300}, "CourseLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "A course, read and edited, laptop", "w": 2143, "x": 20007, "y": 1720}, "Editor.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "Score editor, phone", "w": 450, "x": 5830, "y": 300}, "EditorDraft.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A built-in song’s draft (editors), phone", "w": 450, "x": 6360, "y": 300}, "EditorDraftLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A built-in song’s draft (editors), laptop", "w": 2143, "x": 26676, "y": 1720}, "EditorLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "Score editor, laptop", "w": 2143, "x": 24453, "y": 1720}, "Exercise.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "An exercise, phone", "w": 450, "x": 7420, "y": 300}, "ExerciseLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "An exercise, laptop", "w": 2143, "x": 31122, "y": 1720}, "Explore.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "Explore, a public song, a shared link, phone", "w": 450, "x": 1060, "y": 300}, "ExploreLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "Explore, a public song, a shared link, laptop", "w": 2143, "x": 4446, "y": 1720}, "FingerTechnique.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Finger technique, phone", "w": 450, "x": 6360, "y": 300}, "FingerTechniqueLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Finger technique, laptop", "w": 2143, "x": 26676, "y": 1720}, "Folder.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A playlist, its settings, Card style, Archived, phone", "w": 450, "x": 1590, "y": 300}, "FolderLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A playlist, its settings, Card style, Archived, laptop", "w": 2143, "x": 6669, "y": 1720}, "Groups.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "Groups, a group, a shared folder, Join, phone", "w": 450, "x": 3710, "y": 300}, "GroupsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "Groups, a group, a shared folder, Join, laptop", "w": 2143, "x": 15561, "y": 1720}, "Intervals.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Intervals, phone", "w": 450, "x": 2120, "y": 300}, "IntervalsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Intervals, laptop", "w": 2143, "x": 8892, "y": 1720}, "JazzVocabulary.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Jazz vocabulary, phone", "w": 450, "x": 6890, "y": 300}, "JazzVocabularyLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Jazz vocabulary, laptop", "w": 2143, "x": 28899, "y": 1720}, "Laptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Practice, laptop", "w": 2143, "x": 0, "y": 1720}, "Learn.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Learn, phone", "w": 450, "x": 0, "y": 300}, "LearnCourses.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Courses, phone", "w": 450, "x": 1060, "y": 300}, "LearnCoursesLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Courses, laptop", "w": 2143, "x": 4446, "y": 1720}, "LearnLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Learn, laptop", "w": 2143, "x": 0, "y": 1720}, "LearnLevel.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "A level, phone", "w": 450, "x": 530, "y": 300}, "LearnLevelLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "A level, laptop", "w": 2143, "x": 2223, "y": 1720}, "LearnYours.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Your lessons and courses, phone", "w": 450, "x": 1590, "y": 300}, "LearnYoursLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Your lessons and courses, laptop", "w": 2143, "x": 6669, "y": 1720}, "Legal.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Privacy Policy and Terms, phone", "w": 450, "x": 6890, "y": 300}, "LegalLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Privacy Policy and Terms, laptop", "w": 2143, "x": 28899, "y": 1720}, "Lesson.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "A lesson, read and edited, phone", "w": 450, "x": 4240, "y": 300}, "LessonLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "A lesson, read and edited, laptop", "w": 2143, "x": 17784, "y": 1720}, "Main.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Practice, phone", "w": 450, "x": 0, "y": 300}, "Metronome.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Metronome, phone", "w": 450, "x": 8480, "y": 300}, "MetronomeLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Metronome, laptop", "w": 2143, "x": 35568, "y": 1720}, "Pattern.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "A pattern, phone", "w": 450, "x": 4770, "y": 300}, "PatternLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "A pattern, laptop", "w": 2143, "x": 20007, "y": 1720}, "PatternNew.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "A new pattern, phone", "w": 450, "x": 5300, "y": 300}, "PatternNewLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "A new pattern, laptop", "w": 2143, "x": 22230, "y": 1720}, "PlayChord.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "A chord practice run and its results, phone", "w": 450, "x": 1060, "y": 300}, "PlayChordLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "A chord practice run and its results, laptop", "w": 2143, "x": 4446, "y": 1720}, "PlayChromatic.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player: a chromatic walk, phone", "w": 450, "x": 3180, "y": 300}, "PlayChromaticLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player: a chromatic walk, laptop", "w": 2143, "x": 13338, "y": 1720}, "PlayExercise.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player: an exercise, phone", "w": 450, "x": 4240, "y": 300}, "PlayExerciseLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player: an exercise, laptop", "w": 2143, "x": 17784, "y": 1720}, "PlayProgression.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player: a progression in 12 keys, phone", "w": 450, "x": 3710, "y": 300}, "PlayProgressionLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player: a progression in 12 keys, laptop", "w": 2143, "x": 15561, "y": 1720}, "PlayWalk.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player: walk the chords, phone", "w": 450, "x": 2650, "y": 300}, "PlayWalkLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player: walk the chords, laptop", "w": 2143, "x": 11115, "y": 1720}, "Player.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, phone", "w": 450, "x": 0, "y": 300}, "PlayerApp.dc.html": {"h": 920, "w": 450, "x": 44460, "y": 300}, "PlayerDesk.dc.html": {"h": 1299, "w": 2143, "x": 44990, "y": 300}, "PlayerDiagrams.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Diagrams, phone", "w": 450, "x": 8480, "y": 300}, "PlayerDone.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Played through, phone", "w": 450, "x": 7950, "y": 300}, "PlayerHands.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Parts, phone", "w": 450, "x": 1590, "y": 300}, "PlayerKey.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Transpose, phone", "w": 450, "x": 7420, "y": 300}, "PlayerKeyboard.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Keyboard, phone", "w": 450, "x": 1060, "y": 300}, "PlayerLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player, laptop", "w": 2143, "x": 0, "y": 1720}, "PlayerLaptopKeyboard.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player, Keyboard, laptop", "w": 2143, "x": 4446, "y": 1720}, "PlayerLaptopLoop.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player, practising with a loop, laptop", "w": 2143, "x": 2223, "y": 1720}, "PlayerLaptopParts.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player, Parts, laptop", "w": 2143, "x": 6669, "y": 1720}, "PlayerLaptopSheet.dc.html": {"h": 1299, "is_interactive": true, "page": "player", "title": "The Player, Sheet settings, laptop", "w": 2143, "x": 8892, "y": 1720}, "PlayerLoop.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, practising with a loop, phone", "w": 450, "x": 530, "y": 300}, "PlayerPractice.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone", "w": 450, "x": 4770, "y": 300}, "PlayerSettings.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Song settings: Arrangement or Accompaniment, phone", "w": 450, "x": 6890, "y": 300}, "PlayerViewDiagrams.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Diagrams settings, phone", "w": 450, "x": 5300, "y": 300}, "PlayerViewGrid.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Grid settings, phone", "w": 450, "x": 5830, "y": 300}, "PlayerViewLyrics.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Lyrics settings, phone", "w": 450, "x": 6360, "y": 300}, "PlayerViewSheet.dc.html": {"h": 920, "is_interactive": true, "page": "player", "title": "The Player, Sheet settings, phone", "w": 450, "x": 2120, "y": 300}, "PracticeResult.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "A practice run’s results, from Profile, phone", "w": 450, "x": 2650, "y": 300}, "PracticeResultLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "A practice run’s results, from Profile, laptop", "w": 2143, "x": 11115, "y": 1720}, "Profile.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Profile, phone", "w": 450, "x": 2120, "y": 300}, "ProfileLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Profile, laptop", "w": 2143, "x": 8892, "y": 1720}, "Progression.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "A progression, phone", "w": 450, "x": 3180, "y": 300}, "ProgressionEdit.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "A progression, edited by an editor, phone", "w": 450, "x": 3710, "y": 300}, "ProgressionEditLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "A progression, edited by an editor, laptop", "w": 2143, "x": 15561, "y": 1720}, "ProgressionLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "A progression, laptop", "w": 2143, "x": 13338, "y": 1720}, "Progressions.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Progressions, phone", "w": 450, "x": 2650, "y": 300}, "ProgressionsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Progressions, laptop", "w": 2143, "x": 11115, "y": 1720}, "Scales.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Scales and keys, phone", "w": 450, "x": 1590, "y": 300}, "ScalesLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Scales and keys, laptop", "w": 2143, "x": 6669, "y": 1720}, "Section.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A section of a song, phone", "w": 450, "x": 5300, "y": 300}, "SectionLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A section of a song, laptop", "w": 2143, "x": 22230, "y": 1720}, "Settings.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Settings, phone", "w": 450, "x": 3180, "y": 300}, "SettingsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Settings, laptop", "w": 2143, "x": 13338, "y": 1720}, "SharedFolder.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A playlist shared with you, phone", "w": 450, "x": 2120, "y": 300}, "SharedFolderLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A playlist shared with you, laptop", "w": 2143, "x": 8892, "y": 1720}, "SignIn.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Sign in and the account pages, phone", "w": 450, "x": 6360, "y": 300}, "SignInLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Sign in and the account pages, laptop", "w": 2143, "x": 26676, "y": 1720}, "Song.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A song, phone", "w": 450, "x": 4240, "y": 300}, "SongLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A song, laptop", "w": 2143, "x": 17784, "y": 1720}, "SongSettings.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A song’s Settings and Publish, phone", "w": 450, "x": 4770, "y": 300}, "SongSettingsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A song’s Settings and Publish, laptop", "w": 2143, "x": 20007, "y": 1720}, "Songs.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "My songs, phone", "w": 450, "x": 0, "y": 300}, "SongsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "My songs, laptop", "w": 2143, "x": 0, "y": 1720}, "Take.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "A take, phone", "w": 450, "x": 7420, "y": 300}, "TakeLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "A take, laptop", "w": 2143, "x": 31122, "y": 1720}, "Takes.dc.html": {"h": 920, "is_interactive": true, "page": "songs", "title": "The takes, Review your recording, phone", "w": 450, "x": 6890, "y": 300}, "TakesLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "songs", "title": "The takes, Review your recording, laptop", "w": 2143, "x": 28899, "y": 1720}, "Tuner.dc.html": {"h": 920, "is_interactive": true, "page": "practice", "title": "Tuner, phone", "w": 450, "x": 9010, "y": 300}, "TunerLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "practice", "title": "Tuner, laptop", "w": 2143, "x": 37791, "y": 1720}, "YourCourseSettings.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Your own course’s Settings, phone", "w": 450, "x": 5830, "y": 300}, "YourCourseSettingsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Your own course’s Settings, laptop", "w": 2143, "x": 24453, "y": 1720}, "YourLessonSettings.dc.html": {"h": 920, "is_interactive": true, "page": "places", "title": "Your own lesson’s Settings, phone", "w": 450, "x": 5300, "y": 300}, "YourLessonSettingsLaptop.dc.html": {"h": 1299, "is_interactive": true, "page": "places", "title": "Your own lesson’s Settings, laptop", "w": 2143, "x": 22230, "y": 1720}, "Trash.dc.html": {"x": 3180, "y": 300, "w": 450, "h": 920, "title": "Trash: Select, Restore, Delete permanently, phone", "is_interactive": true, "page": "songs"}, "TrashLaptop.dc.html": {"x": 13338, "y": 1720, "w": 2143, "h": 1299, "title": "Trash: Select, Restore, Delete permanently, laptop", "is_interactive": true, "page": "songs"}}, "createdOnFiles": {"at": "2026-11-08T12:00:00Z", "v": 1}, "designSystems": [], "launch": {"page": "practice", "view": "canvas"}, "noteOrder": ["songs-phone", "songs-laptop", "player-phone", "player-laptop", "practice-phone", "practice-laptop", "places-phone", "places-laptop"], "notes": {"places-laptop": {"kind": "title1", "maxW": 8000, "page": "places", "text": "Laptop", "w": 240, "x": 0, "y": 1420}, "places-phone": {"kind": "title1", "maxW": 7870, "page": "places", "text": "Phone", "w": 240, "x": 0, "y": 0}, "player-laptop": {"kind": "title1", "maxW": 8000, "page": "player", "text": "Laptop", "w": 240, "x": 0, "y": 1420}, "player-phone": {"kind": "title1", "maxW": 8000, "page": "player", "text": "Phone", "w": 240, "x": 0, "y": 0}, "practice-laptop": {"kind": "title1", "maxW": 8000, "page": "practice", "text": "Laptop", "w": 240, "x": 0, "y": 1420}, "practice-phone": {"kind": "title1", "maxW": 8000, "page": "practice", "text": "Phone", "w": 240, "x": 0, "y": 0}, "songs-laptop": {"kind": "title1", "maxW": 8000, "page": "songs", "text": "Laptop", "w": 240, "x": 0, "y": 1420}, "songs-phone": {"kind": "title1", "maxW": 7340, "page": "songs", "text": "Phone", "w": 240, "x": 0, "y": 0}}, "order": ["Songs.dc.html", "AllSongs.dc.html", "Explore.dc.html", "Folder.dc.html", "SharedFolder.dc.html", "Archive.dc.html", "Groups.dc.html", "Song.dc.html", "SongSettings.dc.html", "Section.dc.html", "Editor.dc.html", "EditorDraft.dc.html", "Takes.dc.html", "Take.dc.html", "SongsLaptop.dc.html", "AllSongsLaptop.dc.html", "ExploreLaptop.dc.html", "FolderLaptop.dc.html", "SharedFolderLaptop.dc.html", "ArchiveLaptop.dc.html", "GroupsLaptop.dc.html", "SongLaptop.dc.html", "SongSettingsLaptop.dc.html", "SectionLaptop.dc.html", "EditorLaptop.dc.html", "EditorDraftLaptop.dc.html", "TakesLaptop.dc.html", "TakeLaptop.dc.html", "Player.dc.html", "PlayerLoop.dc.html", "PlayerKeyboard.dc.html", "PlayerHands.dc.html", "PlayerViewSheet.dc.html", "PlayWalk.dc.html", "PlayChromatic.dc.html", "PlayProgression.dc.html", "PlayExercise.dc.html", "PlayerPractice.dc.html", "PlayerViewDiagrams.dc.html", "PlayerViewGrid.dc.html", "PlayerViewLyrics.dc.html", "PlayerSettings.dc.html", "PlayerKey.dc.html", "PlayerDone.dc.html", "PlayerDiagrams.dc.html", "PlayerLaptop.dc.html", "PlayerLaptopLoop.dc.html", "PlayerLaptopKeyboard.dc.html", "PlayerLaptopParts.dc.html", "PlayerLaptopSheet.dc.html", "PlayWalkLaptop.dc.html", "PlayChromaticLaptop.dc.html", "PlayProgressionLaptop.dc.html", "PlayExerciseLaptop.dc.html", "Main.dc.html", "Chords.dc.html", "PlayChord.dc.html", "Scales.dc.html", "Intervals.dc.html", "Progressions.dc.html", "Progression.dc.html", "ProgressionEdit.dc.html", "Accompaniment.dc.html", "Pattern.dc.html", "PatternNew.dc.html", "ChordPlayer.dc.html", "FingerTechnique.dc.html", "JazzVocabulary.dc.html", "Exercise.dc.html", "Check.dc.html", "Metronome.dc.html", "Tuner.dc.html", "ChordFinder.dc.html", "CircleOfFifths.dc.html", "Laptop.dc.html", "ChordsLaptop.dc.html", "PlayChordLaptop.dc.html", "ScalesLaptop.dc.html", "IntervalsLaptop.dc.html", "ProgressionsLaptop.dc.html", "ProgressionLaptop.dc.html", "ProgressionEditLaptop.dc.html", "AccompanimentLaptop.dc.html", "PatternLaptop.dc.html", "PatternNewLaptop.dc.html", "ChordPlayerLaptop.dc.html", "FingerTechniqueLaptop.dc.html", "JazzVocabularyLaptop.dc.html", "ExerciseLaptop.dc.html", "CheckLaptop.dc.html", "MetronomeLaptop.dc.html", "TunerLaptop.dc.html", "ChordFinderLaptop.dc.html", "CircleOfFifthsLaptop.dc.html", "Learn.dc.html", "LearnLevel.dc.html", "LearnCourses.dc.html", "LearnYours.dc.html", "Profile.dc.html", "PracticeResult.dc.html", "Settings.dc.html", "Admin.dc.html", "Lesson.dc.html", "Course.dc.html", "YourLessonSettings.dc.html", "YourCourseSettings.dc.html", "SignIn.dc.html", "Legal.dc.html", "AppLayers.dc.html", "LearnLaptop.dc.html", "LearnLevelLaptop.dc.html", "LearnCoursesLaptop.dc.html", "LearnYoursLaptop.dc.html", "ProfileLaptop.dc.html", "PracticeResultLaptop.dc.html", "SettingsLaptop.dc.html", "AdminLaptop.dc.html", "LessonLaptop.dc.html", "CourseLaptop.dc.html", "YourLessonSettingsLaptop.dc.html", "YourCourseSettingsLaptop.dc.html", "SignInLaptop.dc.html", "LegalLaptop.dc.html", "AppLayersLaptop.dc.html", "PlayerApp.dc.html", "PlayerDesk.dc.html"], "pages": [{"id": "songs", "name": "Songs"}, {"id": "player", "name": "The Player"}, {"id": "practice", "name": "Practice"}, {"id": "places", "name": "Learn, Profile and Settings"}], "title": "The ideal Piano Trainer"}
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Songs.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "My songs, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "AllSongs.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "All songs, Select, Sort, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Explore.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Explore, a public song, a shared link, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Folder.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A playlist, its settings, Card style, Archived, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SharedFolder.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A playlist shared with you, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Archive.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Archive: Select, Restore, Move to Trash, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Trash.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Trash: Select, Restore, Delete permanently, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Groups.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Groups, a group, a shared folder, Join, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Song.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A song, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongSettings.dc.html": {
+      "x": 4770,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A song’s Settings and Publish, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Section.dc.html": {
+      "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A section of a song, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Editor.dc.html": {
+      "x": 5830,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Score editor, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorDraft.dc.html": {
+      "x": 6360,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A built-in song’s draft (editors), phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Takes.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The takes, Review your recording, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Take.dc.html": {
+      "x": 7420,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A take, phone",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongsLaptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "My songs, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "AllSongsLaptop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "All songs, Select, Sort, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ExploreLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Explore, a public song, a shared link, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "FolderLaptop.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A playlist, its settings, Card style, Archived, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SharedFolderLaptop.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A playlist shared with you, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "ArchiveLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Archive: Select, Restore, Move to Trash, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TrashLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Trash: Select, Restore, Delete permanently, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "GroupsLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Groups, a group, a shared folder, Join, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongLaptop.dc.html": {
+      "x": 17784,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A song, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SongSettingsLaptop.dc.html": {
+      "x": 20007,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A song’s Settings and Publish, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "SectionLaptop.dc.html": {
+      "x": 22230,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A section of a song, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorLaptop.dc.html": {
+      "x": 24453,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Score editor, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "EditorDraftLaptop.dc.html": {
+      "x": 26676,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A built-in song’s draft (editors), laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakesLaptop.dc.html": {
+      "x": 28899,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The takes, Review your recording, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "TakeLaptop.dc.html": {
+      "x": 31122,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A take, laptop",
+      "is_interactive": true,
+      "page": "songs"
+    },
+    "Player.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLoop.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, practising with a loop, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerKeyboard.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Keyboard, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerHands.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Parts, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewSheet.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Sheet settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayWalk.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: walk the chords, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayChromatic.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: a chromatic walk, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayProgression.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: a progression in 12 keys, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayExercise.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player: an exercise, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerPractice.dc.html": {
+      "x": 4770,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Practice: Wait · Play, the tempo, the metronome, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewDiagrams.dc.html": {
+      "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Diagrams settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewGrid.dc.html": {
+      "x": 5830,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Grid settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerViewLyrics.dc.html": {
+      "x": 6360,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Lyrics settings, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerSettings.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Song settings: Arrangement or Accompaniment, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerKey.dc.html": {
+      "x": 7420,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Transpose, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDone.dc.html": {
+      "x": 7950,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Played through, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerDiagrams.dc.html": {
+      "x": 8480,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "The Player, Diagrams, phone",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopLoop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, practising with a loop, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopKeyboard.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Keyboard, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopParts.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Parts, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayerLaptopSheet.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player, Sheet settings, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayWalkLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: walk the chords, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayChromaticLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: a chromatic walk, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayProgressionLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: a progression in 12 keys, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "PlayExerciseLaptop.dc.html": {
+      "x": 17784,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "The Player: an exercise, laptop",
+      "is_interactive": true,
+      "page": "player"
+    },
+    "Main.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Practice, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Chords.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Chords, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "PlayChord.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A chord practice run and its results, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Scales.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Scales and keys, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Intervals.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Intervals, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Progressions.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Progressions, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Progression.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A progression, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionEdit.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A progression, edited by an editor, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Accompaniment.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Accompaniment, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Pattern.dc.html": {
+      "x": 4770,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A pattern, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "PatternNew.dc.html": {
+      "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A new pattern, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordPlayer.dc.html": {
+      "x": 5830,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Chord player, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "FingerTechnique.dc.html": {
+      "x": 6360,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Finger technique, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabulary.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Jazz vocabulary, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Exercise.dc.html": {
+      "x": 7420,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "An exercise, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Check.dc.html": {
+      "x": 7950,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Check a song, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Metronome.dc.html": {
+      "x": 8480,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Metronome, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Tuner.dc.html": {
+      "x": 9010,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Tuner, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordFinder.dc.html": {
+      "x": 9540,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Chord finder, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "CircleOfFifths.dc.html": {
+      "x": 10070,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Circle of fifths, phone",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Laptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Practice, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordsLaptop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chords, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "PlayChordLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A chord practice run and its results, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ScalesLaptop.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Scales and keys, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "IntervalsLaptop.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Intervals, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionsLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Progressions, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A progression, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ProgressionEditLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A progression, edited by an editor, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "AccompanimentLaptop.dc.html": {
+      "x": 17784,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Accompaniment, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "PatternLaptop.dc.html": {
+      "x": 20007,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A pattern, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "PatternNewLaptop.dc.html": {
+      "x": 22230,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A new pattern, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordPlayerLaptop.dc.html": {
+      "x": 24453,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord player, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "FingerTechniqueLaptop.dc.html": {
+      "x": 26676,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Finger technique, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "JazzVocabularyLaptop.dc.html": {
+      "x": 28899,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Jazz vocabulary, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ExerciseLaptop.dc.html": {
+      "x": 31122,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "An exercise, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "CheckLaptop.dc.html": {
+      "x": 33345,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Check a song, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "MetronomeLaptop.dc.html": {
+      "x": 35568,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Metronome, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "TunerLaptop.dc.html": {
+      "x": 37791,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Tuner, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "ChordFinderLaptop.dc.html": {
+      "x": 40014,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Chord finder, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "CircleOfFifthsLaptop.dc.html": {
+      "x": 42237,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Circle of fifths, laptop",
+      "is_interactive": true,
+      "page": "practice"
+    },
+    "Learn.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Learn, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLevel.dc.html": {
+      "x": 530,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A level, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCourses.dc.html": {
+      "x": 1060,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Courses, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnYours.dc.html": {
+      "x": 1590,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Your lessons and courses, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Profile.dc.html": {
+      "x": 2120,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Profile, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "PracticeResult.dc.html": {
+      "x": 2650,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A practice run’s results, from Profile, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Settings.dc.html": {
+      "x": 3180,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Settings, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Admin.dc.html": {
+      "x": 3710,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Administration, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Lesson.dc.html": {
+      "x": 4240,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A lesson, read and edited, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Course.dc.html": {
+      "x": 4770,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "A course, read and edited, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourLessonSettings.dc.html": {
+      "x": 5300,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Your own lesson’s Settings, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourCourseSettings.dc.html": {
+      "x": 5830,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Your own course’s Settings, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SignIn.dc.html": {
+      "x": 6360,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Sign in and the account pages, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "Legal.dc.html": {
+      "x": 6890,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Privacy Policy and Terms, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AppLayers.dc.html": {
+      "x": 7420,
+      "y": 300,
+      "w": 450,
+      "h": 920,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, phone",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLaptop.dc.html": {
+      "x": 0,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Learn, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnLevelLaptop.dc.html": {
+      "x": 2223,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A level, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnCoursesLaptop.dc.html": {
+      "x": 4446,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Courses, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LearnYoursLaptop.dc.html": {
+      "x": 6669,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Your lessons and courses, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "ProfileLaptop.dc.html": {
+      "x": 8892,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Profile, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "PracticeResultLaptop.dc.html": {
+      "x": 11115,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A practice run’s results, from Profile, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SettingsLaptop.dc.html": {
+      "x": 13338,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Settings, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AdminLaptop.dc.html": {
+      "x": 15561,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Administration, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LessonLaptop.dc.html": {
+      "x": 17784,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A lesson, read and edited, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "CourseLaptop.dc.html": {
+      "x": 20007,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "A course, read and edited, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourLessonSettingsLaptop.dc.html": {
+      "x": 22230,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Your own lesson’s Settings, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "YourCourseSettingsLaptop.dc.html": {
+      "x": 24453,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Your own course’s Settings, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "SignInLaptop.dc.html": {
+      "x": 26676,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Sign in and the account pages, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "LegalLaptop.dc.html": {
+      "x": 28899,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Privacy Policy and Terms, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "AppLayersLaptop.dc.html": {
+      "x": 31122,
+      "y": 1720,
+      "w": 2143,
+      "h": 1299,
+      "title": "Across the app: search, MIDI, shortcuts, notices, route states, laptop",
+      "is_interactive": true,
+      "page": "places"
+    },
+    "PlayerApp.dc.html": {
+      "h": 920,
+      "w": 450,
+      "x": 44460,
+      "y": 300
+    },
+    "PlayerDesk.dc.html": {
+      "h": 1299,
+      "w": 2143,
+      "x": 44990,
+      "y": 300
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-08T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas",
+    "page": "practice"
+  },
+  "noteOrder": [
+    "songs-phone",
+    "songs-laptop",
+    "player-phone",
+    "player-laptop",
+    "practice-phone",
+    "practice-laptop",
+    "places-phone",
+    "places-laptop"
+  ],
+  "notes": {
+    "songs-phone": {
+      "x": 0,
+      "y": 0,
+      "text": "Phone",
+      "kind": "title1",
+      "maxW": 7340,
+      "page": "songs",
+      "w": 240
+    },
+    "songs-laptop": {
+      "x": 0,
+      "y": 1420,
+      "text": "Laptop",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "songs",
+      "w": 240
+    },
+    "player-phone": {
+      "x": 0,
+      "y": 0,
+      "text": "Phone",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
+    },
+    "player-laptop": {
+      "x": 0,
+      "y": 1420,
+      "text": "Laptop",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "player",
+      "w": 240
+    },
+    "practice-phone": {
+      "x": 0,
+      "y": 0,
+      "text": "Phone",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
+    },
+    "practice-laptop": {
+      "x": 0,
+      "y": 1420,
+      "text": "Laptop",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "practice",
+      "w": 240
+    },
+    "places-phone": {
+      "x": 0,
+      "y": 0,
+      "text": "Phone",
+      "kind": "title1",
+      "maxW": 7870,
+      "page": "places",
+      "w": 240
+    },
+    "places-laptop": {
+      "x": 0,
+      "y": 1420,
+      "text": "Laptop",
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "places",
+      "w": 240
+    }
+  },
+  "order": [
+    "Songs.dc.html",
+    "AllSongs.dc.html",
+    "Explore.dc.html",
+    "Folder.dc.html",
+    "SharedFolder.dc.html",
+    "Archive.dc.html",
+    "Trash.dc.html",
+    "Groups.dc.html",
+    "Song.dc.html",
+    "SongSettings.dc.html",
+    "Section.dc.html",
+    "Editor.dc.html",
+    "EditorDraft.dc.html",
+    "Takes.dc.html",
+    "Take.dc.html",
+    "SongsLaptop.dc.html",
+    "AllSongsLaptop.dc.html",
+    "ExploreLaptop.dc.html",
+    "FolderLaptop.dc.html",
+    "SharedFolderLaptop.dc.html",
+    "ArchiveLaptop.dc.html",
+    "TrashLaptop.dc.html",
+    "GroupsLaptop.dc.html",
+    "SongLaptop.dc.html",
+    "SongSettingsLaptop.dc.html",
+    "SectionLaptop.dc.html",
+    "EditorLaptop.dc.html",
+    "EditorDraftLaptop.dc.html",
+    "TakesLaptop.dc.html",
+    "TakeLaptop.dc.html",
+    "Player.dc.html",
+    "PlayerLoop.dc.html",
+    "PlayerKeyboard.dc.html",
+    "PlayerHands.dc.html",
+    "PlayerViewSheet.dc.html",
+    "PlayWalk.dc.html",
+    "PlayChromatic.dc.html",
+    "PlayProgression.dc.html",
+    "PlayExercise.dc.html",
+    "PlayerPractice.dc.html",
+    "PlayerViewDiagrams.dc.html",
+    "PlayerViewGrid.dc.html",
+    "PlayerViewLyrics.dc.html",
+    "PlayerSettings.dc.html",
+    "PlayerKey.dc.html",
+    "PlayerDone.dc.html",
+    "PlayerDiagrams.dc.html",
+    "PlayerLaptop.dc.html",
+    "PlayerLaptopLoop.dc.html",
+    "PlayerLaptopKeyboard.dc.html",
+    "PlayerLaptopParts.dc.html",
+    "PlayerLaptopSheet.dc.html",
+    "PlayWalkLaptop.dc.html",
+    "PlayChromaticLaptop.dc.html",
+    "PlayProgressionLaptop.dc.html",
+    "PlayExerciseLaptop.dc.html",
+    "Main.dc.html",
+    "Chords.dc.html",
+    "PlayChord.dc.html",
+    "Scales.dc.html",
+    "Intervals.dc.html",
+    "Progressions.dc.html",
+    "Progression.dc.html",
+    "ProgressionEdit.dc.html",
+    "Accompaniment.dc.html",
+    "Pattern.dc.html",
+    "PatternNew.dc.html",
+    "ChordPlayer.dc.html",
+    "FingerTechnique.dc.html",
+    "JazzVocabulary.dc.html",
+    "Exercise.dc.html",
+    "Check.dc.html",
+    "Metronome.dc.html",
+    "Tuner.dc.html",
+    "ChordFinder.dc.html",
+    "CircleOfFifths.dc.html",
+    "Laptop.dc.html",
+    "ChordsLaptop.dc.html",
+    "PlayChordLaptop.dc.html",
+    "ScalesLaptop.dc.html",
+    "IntervalsLaptop.dc.html",
+    "ProgressionsLaptop.dc.html",
+    "ProgressionLaptop.dc.html",
+    "ProgressionEditLaptop.dc.html",
+    "AccompanimentLaptop.dc.html",
+    "PatternLaptop.dc.html",
+    "PatternNewLaptop.dc.html",
+    "ChordPlayerLaptop.dc.html",
+    "FingerTechniqueLaptop.dc.html",
+    "JazzVocabularyLaptop.dc.html",
+    "ExerciseLaptop.dc.html",
+    "CheckLaptop.dc.html",
+    "MetronomeLaptop.dc.html",
+    "TunerLaptop.dc.html",
+    "ChordFinderLaptop.dc.html",
+    "CircleOfFifthsLaptop.dc.html",
+    "Learn.dc.html",
+    "LearnLevel.dc.html",
+    "LearnCourses.dc.html",
+    "LearnYours.dc.html",
+    "Profile.dc.html",
+    "PracticeResult.dc.html",
+    "Settings.dc.html",
+    "Admin.dc.html",
+    "Lesson.dc.html",
+    "Course.dc.html",
+    "YourLessonSettings.dc.html",
+    "YourCourseSettings.dc.html",
+    "SignIn.dc.html",
+    "Legal.dc.html",
+    "AppLayers.dc.html",
+    "LearnLaptop.dc.html",
+    "LearnLevelLaptop.dc.html",
+    "LearnCoursesLaptop.dc.html",
+    "LearnYoursLaptop.dc.html",
+    "ProfileLaptop.dc.html",
+    "PracticeResultLaptop.dc.html",
+    "SettingsLaptop.dc.html",
+    "AdminLaptop.dc.html",
+    "LessonLaptop.dc.html",
+    "CourseLaptop.dc.html",
+    "YourLessonSettingsLaptop.dc.html",
+    "YourCourseSettingsLaptop.dc.html",
+    "SignInLaptop.dc.html",
+    "LegalLaptop.dc.html",
+    "AppLayersLaptop.dc.html",
+    "PlayerApp.dc.html",
+    "PlayerDesk.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "songs",
+      "name": "Songs"
+    },
+    {
+      "id": "player",
+      "name": "The Player"
+    },
+    {
+      "id": "practice",
+      "name": "Practice"
+    },
+    {
+      "id": "places",
+      "name": "Learn, Profile and Settings"
+    }
+  ],
+  "title": "The ideal Piano Trainer"
+}

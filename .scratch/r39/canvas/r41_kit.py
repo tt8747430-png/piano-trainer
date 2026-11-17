@@ -24,9 +24,6 @@ const seg = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === 
 const chipsOf = (opts, cur, pick) => opts.map((l) => ({ l, bg: l === cur ? '#332921' : '#EEE9E2', fg: l === cur ? '#FEFDFB' : '#332921', pick: () => pick(l) }));
 const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const rootGrid = (cur, pick) => { const all = ROOTS.map((r, i) => ({ l: r, on: i === cur, bg: i === cur ? '#FEFDFB' : 'transparent', sh: i === cur ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: i === cur ? 700 : 500, pick: () => pick(i) })); return { a: all.slice(0, 6), b: all.slice(6) }; };
-// a row's ··· menu opens at its button (owner, 2026-11-17: "what kind of nonsense is to put this delete in this
-// cnetered popup with doen button"): its right edge on the button's, below it, or above when the screen ends first
-const ANCHOR = (e, h) => { const t = e && e.currentTarget, p = t && t.closest && t.closest('[data-menuroot]'); if (!p) return 'right: 16px; top: 120px'; const b = t.getBoundingClientRect(), r = p.getBoundingClientRect(), k = (r.width / p.offsetWidth) || 1, right = Math.max(8, Math.round((r.right - b.right) / k)), below = Math.round((b.bottom - r.top) / k) + 4; return below + (h || 160) > p.offsetHeight - 24 ? 'right: ' + right + 'px; bottom: ' + (Math.round((r.bottom - b.top) / k) + 4) + 'px' : 'right: ' + right + 'px; top: ' + below + 'px'; };
 const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ sheet: null }), open: (n) => () => set({ sheet: n }), isSheet: (n) => st.sheet === n });
 '''
 
@@ -203,8 +200,11 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
             seen_red = seen_red or col == RED
         st = f'width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left; text-decoration: none'
         out.append(f'<a role="menuitem" href="{t[3]}" style="{st}">{l}</a>' if kind == 'link' else f'<button type="button" role="menuitem" onClick="{{{{{t[2]}}}}}" style="{st}">{l}</button>')
+    return MENUSHELL(cond, label, ''.join(out), posvar, w)
+# the menu's glass shell, for a menu whose items are drawn elsewhere (New's rows with their icons)
+def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
-            f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{"".join(out)}</div></sc-if>')
+            f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
 
@@ -241,7 +241,7 @@ def TABBAR(cur):
         svg = f'<svg {_TI}>{TAB_ICONS[l]}</svg>'
         return (f'<a href="{h}" {("aria-current=\"page\"") if on else ""} style="flex: 1 1 0; min-width: 0; height: 52px; border-radius: 26px; '
                 f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; text-decoration: none; '
-                f'color: {INK if on else "#8A7F76"}; background: {FILL if on else "transparent"}">{svg}'
+                f'color: {INK if on else "#6B6259"}; background: {FILL if on else "transparent"}">{svg}'
                 f'<span style="font-size: 11px; font-weight: {700 if on else 550}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
     edge = ''  # nothing behind what floats (owner, 2026-11-15: floating buttons with a background make no sense)
