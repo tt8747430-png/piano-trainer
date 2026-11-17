@@ -8,6 +8,9 @@
 #   Section     — a section's page (Chords, In time, One change at a time, Patterns, Practise)
 # Exec'd by r41.py after r52_global.
 
+# A phone sheet as the laptop's centred dialog: the sheet's 22 all round, the kit's ring and shadow, no home-indicator foot.
+LAPSHEET = lambda s, w=440: s.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', f'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: {w}px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px')
+
 def COV(t, c, w=56, folder=False):
     """A song's cover is its first notes on a staff, a folder's a stack of pages in its paint: as the library draws them."""
     pic = (STACK(c) if folder else INCIPIT(INC.get(t, (2, 4)))).replace('url("', "url('").replace('")', "')")
@@ -206,7 +209,7 @@ exlm = (IF('isMain', IF('isList', LPLACEBAR('Explore', '{{countT}}', '', PSEARCH
         + IF('isSong', LTITLEBAR('{{sT}}', backact='back') + FULLW(PUB_L) + PUBFLOAT(40, 40))
         + IF('isShared', LTITLEBAR('A shared song', backact='back') + LCOL(SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)
 detail('Explore', 'Explore', EX_JS, exph, exlm, '', BSHEET('reportOn', 'Report this song?', REPBODY, 'Close'),
-       f'<sc-if value="{{{{reportOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-label="Report this song?" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 440px; box-sizing: border-box; border-radius: 20px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 18px; font-weight: 700">Report this song?</span>{REPBODY}</div></sc-if>', 'Songs')
+       f'<sc-if value="{{{{reportOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-label="Report this song?" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 440px; box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 18px; font-weight: 700">Report this song?</span>{REPBODY}</div></sc-if>', 'Songs')
 
 # ════ Groups ════
 GR_JS = js(r'''
@@ -271,7 +274,7 @@ grlm = (IF('isList', LTITLEBAR('Groups', f'<button type="button" onClick="{{{{op
         + IF('isGroup', PAGEHEAD_L('back', 'Groups', '') + WIDE(GPAGE_L, 1180))
         + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)
-detail('Groups', 'Groups', GR_JS, grph, grlm, '', GR_SHEETS, GR_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 460px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px'), 'Songs')
+detail('Groups', 'Groups', GR_JS, grph, grlm, '', GR_SHEETS, LAPSHEET(GR_SHEETS, 460), 'Songs')
 print('r53 explore, groups ok')
 
 # ════ Folder and Archive: a folder, its settings, card style, archived; Archive; Trash ════
@@ -396,7 +399,7 @@ spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FO
         + IF('isSubPage', TOP('', '{{pageT}}', SPACT_P, 'Back', IB('{{backT}}', CHEV_L, 'back')) + NARROW(SPBODY)) + TOASTS)
 splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS) + NEWDIAL(list(_FNEW)[::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', IF('notArch', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html'), 'true') + IF('isArchive', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('isTrash', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)) + IF('isTrash', LCOL(SPBODY_L, 9999)) + ASELBAR_L)
         + IF('isSubPage', LTITLEBAR('{{pageT}}', SPACT, backact='back') + IF('notArch', LCOL(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', LCOL(SPBODY_L, 9999))) + TOASTL)
-SP_LAP = SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
+SP_LAP = LAPSHEET(SP_SHEETS, 440)
 for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIPIT((2, 4, 5, 6, 5, 4))), ('Christmas', STACK('#F6E7C8')), ('Waltz sketch', INCIPIT((5, 4, 2, 4, 5, 4))), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
     SP_SRC = SP_SRC.replace("'__PIC_%s__'" % _t.replace(' ', '_'), json.dumps(_pic + ' center / cover'))
 # Trash is its own place beside Archive (owner, 2026-11-17: "why the archive still has this trash inside it"), never
@@ -404,7 +407,7 @@ for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIP
 # a playlist's board (Folder) is r72's LISTPAGE, built later; this generator draws Archive and Trash
 for stem, root, ttl in (('Archive', "'archive'", 'Archive'), ('Trash', "'trash'", 'Trash')):
     detail(stem, ttl, js(SP_SRC.replace('__ROOT__', root)), spph, splm, '', SP_SHEETS + _AMENUS, SP_LAP + _AMENUS, 'Songs')
-# spph, splm, '', SP_SHEETS, SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px'), 'Songs')
+# spph, splm, '', SP_SHEETS, LAPSHEET(SP_SHEETS, 440), 'Songs')
 
 # ════ SongSettings and Section: a song’s Settings, Publish, a section ════
 SM_SRC = (r'''
@@ -483,7 +486,7 @@ def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
 smlm = (IF('backHref', LTITLEBAR('{{pageT}}', back='SongLaptop.dc.html'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
-SM_LAP = SMSHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 400px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
+SM_LAP = LAPSHEET(SMSHEETS, 400)
 for stem, root, ttl in (('SongSettings', "'settings'", 'A song’s Settings and Publish'), ('Section', "'section'", 'A section of a song')):
     detail(stem, ttl, js(SM_SRC.replace('__ROOT__', root)), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
 print('r53 songs places, song pages ok')

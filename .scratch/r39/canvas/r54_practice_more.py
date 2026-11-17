@@ -8,7 +8,6 @@
 #   PlayWalk, PlayChromatic, PlayProgression, PlayExercise — the Player's variants: their setup over the Player
 # Exec'd by r41.py after r53_songs_more (uses its IF, NARROW, WIDE, PAGEHEAD_L, H1, TOASTS, TOAST_JS, STRIP, EMPTY).
 
-LAPSHEET = lambda s, w=440: s.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', f'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: {w}px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
 WRAPCHIPS = lambda lst: KCHIPS(lst).replace('flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -4px -16px; padding: 0 16px', 'display: flex; flex-wrap: wrap; gap: 0 6px; margin: -4px 0')
 # A piano whose keys are buttons: k.tap marks or unmarks a key (the trainer's Play it, the Check)
 def TAPKEYS(lst, h):
