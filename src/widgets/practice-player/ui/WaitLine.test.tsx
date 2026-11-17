@@ -4,7 +4,7 @@ import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { WaitLine } from './WaitLine'
 
 const finished = (score: number) =>
-  ({ kind: 'finished', score, hardest: null, slips: {}, bars: 8 }) as const
+  ({ kind: 'finished', score, hardest: null, slips: {}, pauses: {}, bars: 8 }) as const
 
 describe('WaitLine', () => {
   it('says a clean pass was clean', () => {

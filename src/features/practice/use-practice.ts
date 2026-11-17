@@ -94,6 +94,8 @@ export interface Practice {
 
 /** After a right answer in Wait mode, the app plays the other hand and moves on this much later. */
 const CORRECT_PAUSE_MS = 150
+/** A step that takes the learner longer than this many beats is a pause. */
+const PAUSE_BEATS = 2
 
 const sameLoop = (a: BeatGroupRange | null, b: BeatGroupRange | null) =>
   a === b || (a !== null && b !== null && a.first === b.first && a.last === b.last)
@@ -274,6 +276,20 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     const timer = setTimeout(() => dispatch({ type: 'advance' }), accompany())
     return () => clearTimeout(timer)
   }, [waiting, answered, rest, state.arrival, state.performance])
+
+  // Wait mode's time per step (research item 14): from arriving at a step the learner plays, to its
+  // last key; over two beats at the chosen tempo is a pause, said beside the slips, never scored. The
+  // first step of a pass, begun by its own first key, has no arrival to count from.
+  const armed = useRef<number | null>(null)
+  const steps = waiting && state.expected.length > 0
+  useEffect(() => {
+    armed.current = steps ? audio.now() : null
+  }, [steps, state.arrival, audio])
+  useEffect(() => {
+    if (!answered || armed.current === null) return
+    if (audio.now() - armed.current > PAUSE_BEATS * (60 / tempo)) dispatch({ type: 'pause' })
+    armed.current = null
+  }, [answered, audio, tempo])
 
   useEffect(
     () =>

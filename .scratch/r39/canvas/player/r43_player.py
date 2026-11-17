@@ -267,14 +267,15 @@ def kit(t, phone):
             '<sc-for list="{{doneGroups}}" as="g" hint-placeholder-count="4"><button type="button" aria-label="{{g.aria}}" onClick="{{g.pick}}" style="min-width: 0; min-height: 72px; box-sizing: border-box; padding: 8px; border: 0; border-radius: 12px; background: {{g.bg}}; box-shadow: {{g.ring}}; color: #332921; font: inherit; display: flex; flex-direction: column; align-items: stretch; gap: 4px; text-align: left">'
             '<span style="font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums">{{g.l}}</span>'
             '<span aria-hidden="true" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px"><sc-for list="{{g.cells}}" as="c" hint-placeholder-count="4"><span style="height: 12px; border-radius: 3px; background: {{c.bg}}"></span></sc-for></span>'
-            '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span></button></sc-for></div>'
+            '<span style="font-size: 12px; color: {{g.subC}}; font-variant-numeric: tabular-nums">{{g.sub}}</span>'
+            '<span style="display: {{g.pauseShow}}; margin-top: -4px; font-size: 12px; color: #685E56; font-variant-numeric: tabular-nums">{{g.pause}}</span></button></sc-for></div>'
             '', flags=re.S)
     t = t.replace('>Each bar</p>', '>Bars</p>')
     t = lit(t, "doneBarsLine: 'Most slips in bars 5–8 (5 of 7). Tap a bar to practise its four.',",
             ""
-            "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5;\n"
-            "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56',\n"
-            "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
+            "doneGroups: [0, 1, 2, 3].map((g) => { const n4 = [0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0].slice(g * 4, g * 4 + 4), a = g * 4 + 1, n = n4.reduce((x, y) => x + y, 0), weak = a === 5, p = [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0].slice(g * 4, g * 4 + 4).reduce((x, y) => x + y, 0);\n"
+            "  return { l: a + '–' + (a + 3), cells: n4.map((k) => ({ bg: k === 0 ? '#E4DDD3' : k === 1 ? '#F8D9C2' : k === 2 ? '#F0A877' : '#B07A2A' })), sub: n === 0 ? 'No slips' : n === 1 ? '1 slip' : n + ' slips', subC: n ? '#332921' : '#685E56', pause: p === 1 ? '1 pause' : p + ' pauses', pauseShow: p ? 'block' : 'none',\n"
+            "    aria: 'Bars ' + a + '–' + (a + 3) + ': ' + (n === 0 ? 'no slips' : n === 1 ? '1 slip' : n + ' slips') + (p ? ', ' + (p === 1 ? '1 pause' : p + ' pauses') : '') + '. Practise them', bg: weak ? '#FBF1DD' : '#FEFDFB', ring: weak ? '0 0 0 2px #B07A2A' : '0 0 0 1px rgba(51,41,33,.07)',\n"
             "    pick: () => { this.setState({ loop: true, loopA: a, loopB: a + 3, bar: a, beat: 1 }); togglePlayNow(); } }; }),")
     # Played through's text stacks on the 4 scale, and its buttons without the browser's 1 by 6 padding (canvas 122)
     t = t.replace('flex-direction: column; gap: 2px', 'flex-direction: column; gap: 4px')

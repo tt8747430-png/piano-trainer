@@ -81,12 +81,16 @@ export function nextStep(summary: Pick<PracticeSummary, 'bars' | 'speed'>): Next
 
 /**
  * The weakest bar, or pair of bars side by side, of those judged: the lowest share right. The one
- * rule for a take's next step and a Wait pass's hardest bars (CLAUDE.md, one implementation).
+ * rule for a take's next step and a Wait pass's hardest bars (CLAUDE.md, one implementation). Two
+ * equally weak, the one with more pauses wins (a Wait pass's time per step).
  */
 export function weakestBars(
   bars: readonly (number | null)[],
+  pausesIn: (bar: number) => number = () => 0,
 ): { bars: Bars; share: number } | null {
   let worst: { bars: Bars; share: number } | null = null
+  const paused = (range: Bars) =>
+    pausesIn(range.first) + (range.last > range.first ? pausesIn(range.last) : 0)
   for (const [bar, share] of bars.entries()) {
     if (share === null) continue
     const next = bars[bar + 1]
@@ -94,7 +98,9 @@ export function weakestBars(
       next === null || next === undefined
         ? { bars: { first: bar, last: bar }, share }
         : { bars: { first: bar, last: bar + 1 }, share: (share + next) / 2 }
-    if (!worst || found.share < worst.share) worst = found
+    const tied =
+      worst !== null && found.share === worst.share && paused(found.bars) > paused(worst.bars)
+    if (!worst || found.share < worst.share || tied) worst = found
   }
   return worst
 }

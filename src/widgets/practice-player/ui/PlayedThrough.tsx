@@ -20,13 +20,15 @@ export interface PassDone {
   readonly hardest: BarRange | null
   /** Each bar's slips, by its index. */
   readonly slips: Readonly<Partial<Record<number, number>>>
+  /** Each bar's pauses, steps that took over two beats, by its index. */
+  readonly pauses: Readonly<Partial<Record<number, number>>>
   /** The bars of the music. */
   readonly bars: number
 }
 
 /**
  * Played through (the board's PlayerDone; research items 2 and 4): the pass's score beside the best
- * before it, its tempo beside the score's, its bars four at a time with their slips (a tap loops the
+ * before it, its tempo beside the score's, its bars four at a time with their slips and pauses (a tap loops the
  * four), then Practise bars n–m (the weakest, at 70 %, the one rule for the hardest bars), Play
  * again and Try it in Play, and the days in a row. Only at the end of the song, never a loop's lap.
  */
@@ -66,7 +68,9 @@ export function PlayedThrough({
     const first = i * GROUP
     const last = Math.min(pass.bars, first + GROUP) - 1
     const slips = Array.from({ length: last - first + 1 }, (_, k) => pass.slips[first + k] ?? 0)
-    return { first, last, slips, total: slips.reduce((sum, n) => sum + n, 0) }
+    let pauses = 0
+    for (let bar = first; bar <= last; bar++) pauses += pass.pauses[bar] ?? 0
+    return { first, last, slips, total: slips.reduce((sum, n) => sum + n, 0), pauses }
   })
   const weak = pass.hardest
   const comparison =
@@ -119,11 +123,16 @@ export function PlayedThrough({
               const ringed = weak !== null && weak.first >= group.first && weak.first <= group.last
               const label = t('done.group', { first: group.first + 1, last: group.last + 1 })
               const slips = t('done.slips', { count: group.total })
+              const pauses = group.pauses > 0 ? t('done.pauses', { count: group.pauses }) : null
               return (
                 <button
                   key={group.first}
                   type="button"
-                  aria-label={t('done.groupAria', { bars: label, slips })}
+                  aria-label={
+                    pauses
+                      ? t('done.groupAriaPauses', { bars: label, slips, pauses })
+                      : t('done.groupAria', { bars: label, slips })
+                  }
                   onClick={close(() => onLoopBars({ first: group.first, last: group.last }))}
                   className={cn(
                     'flex min-h-18 min-w-0 flex-col items-stretch gap-1 rounded-[12px] p-2 text-left transition-colors duration-150 ease-out',
@@ -152,6 +161,11 @@ export function PlayedThrough({
                   >
                     {slips}
                   </span>
+                  {pauses ? (
+                    <span className="-mt-1 text-xs text-muted-foreground tabular-nums">
+                      {pauses}
+                    </span>
+                  ) : null}
                 </button>
               )
             })}

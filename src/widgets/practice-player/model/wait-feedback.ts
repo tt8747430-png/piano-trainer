@@ -24,6 +24,8 @@ export type WaitFeedback =
       readonly hardest: BarRange | null
       /** Each bar's slips in the pass, by its index. */
       readonly slips: PracticeState['slips']
+      /** Each bar's pauses in the pass, by its index. */
+      readonly pauses: PracticeState['pauses']
       /** The bars of the music. */
       readonly bars: number
     }
@@ -34,8 +36,9 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
   if (state.outcome === 'finished')
     return {
       kind: 'finished',
-      ...passReport(performance, state.hands, state.slips),
+      ...passReport(performance, state.hands, state.slips, null, state.pauses),
       slips: state.slips,
+      pauses: state.pauses,
       bars: performance.bars.length,
     }
   if (!state.playing) return null
@@ -72,7 +75,8 @@ const FULL_FROM = 96
 /**
  * A pass's score and its hardest bars (the research's items 2 and 4): each step is a beat group the
  * practised hands play in; a step with a slip is not clean. The score is the share of clean steps,
- * full from 96 %; the hardest bars are the takes' rule (`weakestBars`) over each bar's share. A
+ * full from 96 %; the hardest bars are the takes' rule (`weakestBars`) over each bar's share, a tie
+ * going to the bars with more pauses. A
  * loop's lap counts its own beat groups.
  */
 export function passReport(
@@ -80,6 +84,7 @@ export function passReport(
   hands: PracticeState['hands'],
   slips: PracticeState['slips'],
   groups: PracticeState['loop'] = null,
+  pauses: PracticeState['pauses'] = {},
 ): { score: number; hardest: BarRange | null } {
   const practised = practisedHands(hands)
   const steps = performance.bars.map(() => 0)
@@ -97,7 +102,7 @@ export function passReport(
   const shares = steps.map((count, bar) =>
     count === 0 ? null : 1 - Math.min(count, slips[bar] ?? 0) / count,
   )
-  const worst = weakestBars(shares)
+  const worst = weakestBars(shares, (bar) => pauses[bar] ?? 0)
   return {
     score: percent >= FULL_FROM ? 100 : percent,
     hardest: worst && worst.share < WEAK ? worst.bars : null,
