@@ -161,9 +161,10 @@ export function readDegree(
  * as the table spells it (`V7`, `Imaj7`, `I6`, `Vsus4`, `III+`, the sheets' `IIm7` and `IVm9`); lower
  * case is a chord with a minor 3rd, its suffix without the `m` (`ii`, `ii7`, `i6`, `ii9`, `imaj7`),
  * a diminished one by its mark (`vii°`, `vii°7`, `iiø7`). After a slash, the degree whose key it is
- * read in (`V/ii`, `ii°/vi`): an applied chord.
+ * read in (`V/ii`, `ii°/vi`): an applied chord. `N`, `N6` and `subV7` are read as `♭II`, `♭II/3` and `♭II7`.
  */
-export function parseNumeral(token: string): Numeral | null {
+export function parseNumeral(written: string): Numeral | null {
+  const token = unaliased(written)
   const applied = APPLIED.exec(token)
   if (applied) {
     const [, own = '', sign = '', roman = ''] = applied
@@ -174,6 +175,17 @@ export function parseNumeral(token: string): Numeral | null {
       : { ...numeral, of: { ...of, minor: roman !== roman.toUpperCase() } }
   }
   return parseOwnNumeral(token)
+}
+
+/**
+ * The names theory books give two chromatic chords, read as the numerals they are: the Neapolitan
+ * (`N` ♭II, `N6` ♭II over its 3rd) and the tritone substitute (`subV7`, `subV` ♭II7), as Suggester's
+ * numerals write them.
+ */
+function unaliased(token: string): string {
+  if (token === 'N') return '♭II'
+  if (token === 'N6') return '♭II/3'
+  return token.replace(/^subV7?(?=\/|$)/, '♭II7')
 }
 
 /** A numeral of the key itself, with no applied slash: over its bass where a slash names one (`I/5`). */

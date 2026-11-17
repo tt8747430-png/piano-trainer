@@ -90,7 +90,7 @@ something to play, and the root goes to the left hand.
   `noSeventh`, `notDorian`).
 - **A numeral is a degree, a shift and a chord's kind**, read as a chord symbol with a degree for its root: upper
   case takes any spelling (`V7`, `IMaj7`, `IIm7`, `V7(#5,♭9)`), lower case is a chord with a minor 3rd (`ii7`, `iiø7`,
-  `vii°7`, `iim7(add11)`); a line of numerals keeps a bracket's commas. It is written back one way. A flat counts from the major scale in either mode (A minor's ♭VI is F). A plain
+  `vii°7`, `iim7(add11)`); a line of numerals keeps a bracket's commas; the books' names `N`, `N6` and `subV7` read as `♭II`, `♭II/3` and `♭II7`. It is written back one way. A flat counts from the major scale in either mode (A minor's ♭VI is F). A plain
   triad grows with the chord size to the key's own chord; a triad not the key's grows to its 7th chord, then to the
   9th the key has over it; a half-diminished chord's 9th is its natural one (`m9♭5`). A numeral may be applied
   (`V/ii`, `ii°/vi`), read in the key on that degree. A chord typed is its numeral, whatever its quality.
