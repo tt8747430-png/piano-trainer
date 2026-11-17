@@ -112,6 +112,7 @@ owner's, typos fixed.
 - **One control each,** one key picker, one stepper and menu style.
 
 ## Player and editor together
+- **The Player's Pattern sheet holds the library's shape (the layers walker, 2026-11-17):** its place chips were 34 tall in a row cut at the sheet's edge, and Close all a 28-tall link in an orange at 3.9:1. The chips reach 44 as the kit's and wrap in the sheet (nothing is cut in a sheet); Close all reaches 44 in the darker orange (#A8551F, as Continue's label).
 - **The next lyric line readable (loop 63, 2026-11-17, canvas v460):** under the Diagrams view's current line the next one was #A39A90 on the paper, 2.5:1; it is soft ink now (#685E56, 4.5:1 and over), its lighter weight keeping it second (contrast, WCAG 1.4.3). `PlayerApp`, `PlayerDesk`.
 
 - **Loop round 61, a laptop's settings are a card under their button (EditorLaptop's and PlayerDesk's popover):** the editor's gear and the Player's Settings opened as a full-height panel at the right, which covered the editor's Undo, Redo and ···, cut its layout pill, and squeezed the Player's music; both are now the board's card, 400 wide, 16 round with the hairline and the second shade, hung 8 under the bar's buttons at their right edge, fading in place, the music keeping its width, a click outside closing it (2026-11-17).
