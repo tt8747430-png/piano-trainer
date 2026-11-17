@@ -6,6 +6,7 @@ import {
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
+import { useRepertoire, type Piece } from '@/entities/piece'
 import { setPaletteFolded } from '@/features/set-preference'
 import {
   cn,
@@ -77,15 +78,27 @@ export function ScoreEditor({
   done?: ReactNode
 }) {
   const editor = useScoreEditor(target, bar)
+  // The learner's own song or version, saved as it is edited: what Export writes from the gear.
+  const repertoire = useRepertoire()
+  const own =
+    target.kind === 'song' || target.kind === 'version' ? repertoire.piece(target.id) : undefined
   return (
     <ScoreEditorContext value={editor}>
-      <EditorScreen draft={draft} done={done} />
+      <EditorScreen draft={draft} done={done} own={own} />
     </ScoreEditorContext>
   )
 }
 
 /** The editor's screen over its context's draft (`ScoreEditor`). */
-function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?: ReactNode }) {
+function EditorScreen({
+  draft,
+  done,
+  own,
+}: {
+  draft?: EditorDraft | undefined
+  done?: ReactNode
+  own: Piece | undefined
+}) {
   const editor = useScoreEditorContext()
   useEditorShortcutList()
   useAnswerRecord()
@@ -265,7 +278,7 @@ function EditorScreen({ draft, done }: { draft?: EditorDraft | undefined; done?:
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
       <TakesSheet />
-      <EditorGear draft={draft} />
+      <EditorGear draft={draft} own={own} />
     </>
   )
 }

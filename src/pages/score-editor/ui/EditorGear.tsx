@@ -1,6 +1,7 @@
 import {
   ArrowUpDown,
   Cable,
+  Download,
   Circle,
   Eye,
   ListMusic,
@@ -11,11 +12,13 @@ import {
   TextCursorInput,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { selectTakesOf, useTakes } from '@/entities/take'
+import type { Piece } from '@/entities/piece'
 import { MidiControl } from '@/features/connect-midi'
+import { SongExportSheet } from '@/features/song-files'
 import { useKeyName } from '@/shared/i18n'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import {
@@ -113,8 +116,16 @@ function RecordPage() {
  * (the title, key, time, clef, tempo) is set where it prints (ADR 0114), never here. A lesson's
  * example is shown and moved alone: no takes, no Settings.
  */
-function MainPage({ draft }: { draft: EditorDraft | undefined }) {
-  const { t } = useTranslation(['editor', 'music'])
+function MainPage({
+  draft,
+  own,
+  onExport,
+}: {
+  draft: EditorDraft | undefined
+  own: Piece | undefined
+  onExport: () => void
+}) {
+  const { t } = useTranslation(['editor', 'music', 'songs'])
   const { meta, takes, view } = useScoreEditorContext()
   const keyName = useKeyName()
   const layout = useSettings((state) => selectScoreView(state).layout)
@@ -218,6 +229,16 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
           />
         </SettingsGroup>
       )}
+      {own ? (
+        <SettingsGroup flush>
+          <RowButton
+            title={t('songs:export.action')}
+            icon={Download}
+            paint="sky"
+            onClick={onExport}
+          />
+        </SettingsGroup>
+      ) : null}
       {draft ? (
         <SettingsGroup flush title={t('original.more')}>
           {draft.rows}
@@ -253,30 +274,51 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
  * stands alone. An original's draft says where it stands
  * beside the title.
  */
-export function EditorGear({ draft }: { draft: EditorDraft | undefined }) {
+export function EditorGear({
+  draft,
+  own,
+}: {
+  draft: EditorDraft | undefined
+  /** The learner's own song or version, which Export writes. */
+  own?: Piece | undefined
+}) {
+  const [exporting, setExporting] = useState(false)
   const { view } = useScoreEditorContext()
   const laptop = useMediaQuery(LAPTOP)
   const page = view.gear ?? 'main'
   const title = useTitle(page)
   return (
-    <Sheet
-      swipeDirection={laptop ? 'right' : 'down'}
-      modal={!laptop}
-      open={view.gear !== null}
-      onOpenChange={(open) => view.setGear(open ? page : null)}
-    >
-      <SheetContent
-        title={title}
-        status={page === 'main' ? draft?.status : undefined}
-        // Title and credits opens from the title on the score: its sheet's Done shuts it.
-        back={
-          page === 'main' || gearBack(page) === null ? undefined : (
-            <BackButton onClick={() => view.setGear(gearBack(page))} />
-          )
-        }
+    <>
+      <Sheet
+        swipeDirection={laptop ? 'right' : 'down'}
+        modal={!laptop}
+        open={view.gear !== null}
+        onOpenChange={(open) => view.setGear(open ? page : null)}
       >
-        {page === 'main' ? <MainPage draft={draft} /> : <PageBody page={page} />}
-      </SheetContent>
-    </Sheet>
+        <SheetContent
+          title={title}
+          status={page === 'main' ? draft?.status : undefined}
+          back={
+            page === 'main' || gearBack(page) === null ? undefined : (
+              <BackButton onClick={() => view.setGear(gearBack(page))} />
+            )
+          }
+        >
+          {page === 'main' ? (
+            <MainPage
+              draft={draft}
+              own={own}
+              onExport={() => {
+                view.setGear(null)
+                setExporting(true)
+              }}
+            />
+          ) : (
+            <PageBody page={page} />
+          )}
+        </SheetContent>
+      </Sheet>
+      <SongExportSheet piece={exporting ? (own ?? null) : null} onOpenChange={setExporting} />
+    </>
   )
 }

@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, Export from the editor's menu (the boards' Export row):** writing the song out meant leaving for its page; the menu ends with Export… for the learner's own song or version, opening the song page's one export sheet (MusicXML, compressed MusicXML, MIDI) (2026-11-17).
 - **Loop round 61, Title and credits heads the editor's menu (the boards' Credits row):** it was reached only from the printed title; it is the menu's first row, the title its value, and its page goes Back to the menu however it was opened (2026-11-17).
 - **Loop round 61, the editor's menu titled by the song (Editor, EditorLaptop's `moreOn`):** the ··· sheet read "Score" over the song it acts on; it is titled with the song's name, as the boards draw it, on both sizes (2026-11-17).
 - **Takes in one laptop bar (loop round 60, 2026-11-16):** the laptop Takes page stood its Back alone in the bar and the title under it; Back and "Takes" share the bar now, as every laptop sub-page's LTITLEBAR, and the list starts level with the review panel.

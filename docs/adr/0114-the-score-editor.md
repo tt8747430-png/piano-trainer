@@ -80,7 +80,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   a laptop a 400-wide card hung 8 under the bar's ··· at its right edge, over the music, closed by a click outside, as the
   EditorLaptop board's popover; titled with the song's name; a page at a time with Back): Title and credits (its
   value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Record a take, Takes; Settings, each one tap away by its name
-  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
+  alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; Export… (the learner's own song or version, saved as it
+  is edited, through the song page's export sheet, as the board's Export row); an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and
   the owner's captures of Flat's app and web editor): every category a titled section, all of them in one scroll;
