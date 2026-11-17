@@ -795,7 +795,6 @@ export const editor = {
       midi: 'MIDI keyboard',
     },
     title: 'Score settings',
-    score: 'Score',
     // The gear's first page (R31-E, Flat's one menu): the score's acts, then its Settings.
     acts: {
       view: 'Score view',

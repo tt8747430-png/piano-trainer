@@ -49,12 +49,13 @@ export interface EditorDraft {
 /** A recorder's red dot, as every recorder's Record wears. */
 const RECORD_DOT = 'fill-current text-destructive'
 
-/** A page's title in the sheet's head. */
+/** A page's title in the sheet's head: the song's name on the first page, as the boards' menu. */
 function useTitle(page: GearPage): string {
   const { t } = useTranslation('editor')
+  const { meta } = useScoreEditorContext()
   switch (page) {
     case 'main':
-      return t('scoreSettings.score')
+      return meta.title
     case 'view':
     case 'transpose':
     case 'record':

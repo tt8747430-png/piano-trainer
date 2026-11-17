@@ -727,7 +727,6 @@ export const editor: LocaleResources['editor'] = {
       midi: 'MIDI-клавиатура',
     },
     title: 'Настройки партитуры',
-    score: 'Партитура',
     acts: {
       view: 'Вид нот',
       transpose: 'Транспонировать',
