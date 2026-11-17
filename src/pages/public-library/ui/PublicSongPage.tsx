@@ -28,10 +28,9 @@ import {
   Said,
   ScreenHeader,
 } from '@/shared/ui'
-import { SongPreview, useAuthorName } from '@/widgets/song-preview'
+import { ReportDialog, SongPreview, useAuthorName } from '@/widgets/song-preview'
 import { About, Byline, FactChips, ReadingItem } from './PublicItemParts'
 import { RateStars } from './RateStars'
-import { ReportDialog } from './ReportDialog'
 
 type Reading =
   | { readonly kind: 'reading' }

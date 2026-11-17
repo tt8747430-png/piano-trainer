@@ -12,6 +12,8 @@ const SIZE = {
   byline: 'size-11 text-lg',
   /** A feed card's head (R72's FEEDCARD): beside who shared it. */
   feed: 'size-8 text-sm font-bold',
+  /** Explore's People (R72's PERSON): a person's row. */
+  person: 'size-12 text-[1.1875rem] font-bold',
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
   /** The Profile's and the Account's, at their top. */

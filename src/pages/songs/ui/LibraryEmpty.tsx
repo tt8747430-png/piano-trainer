@@ -62,7 +62,7 @@ export function LibraryEmpty({
       title={t('homeEmpty.title')}
       description={t('homeEmpty.description')}
       action={
-        <Link to="/songs" search={(was) => ({ ...was, view: 'explore' })}>
+        <Link to="/songs" search={{ view: 'explore' }}>
           {t('homeEmpty.explore')}
         </Link>
       }

@@ -2,7 +2,6 @@ import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
-  isPublicCategory,
   isPublicLicence,
   isPublicType,
   TAG_MAX,
@@ -17,7 +16,7 @@ import {
 // A song's first line of its chart rides along for its card (`body->sections->0->lines->0`): the
 // body itself stays on the server until the item is opened.
 const ENTRY =
-  'id, kind, title, author_id, saves, published_at, meta, category, opening:body->sections->0->lines->0'
+  'id, kind, title, author_id, saves, published_at, meta, opening:body->sections->0->lines->0'
 const LIMIT = 100
 
 interface EntryRow {
@@ -28,7 +27,6 @@ interface EntryRow {
   readonly saves: number
   readonly published_at: string
   readonly meta: Json
-  readonly category: string | null
   readonly opening: Json
 }
 
@@ -73,7 +71,6 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
     authorAvatar: builtInAvatar(author?.avatar ?? null),
     saves: row.saves,
     publishedAt: row.published_at,
-    category: isPublicCategory(row.category) ? row.category : null,
     rating: ratings.get(row.id) ?? null,
     ...(opening ? { opening } : {}),
     meta: {
@@ -151,11 +148,11 @@ export function createSupabasePublicLibrary(
     return data?.signedUrl ?? null
   }
   return {
-    browse: ({ kind, sort, query, category }) =>
+    browse: ({ kind, sort, query, tag }) =>
       ask(async (client) => {
         const filtered = () => {
           let request = client.from('public_items').select(ENTRY).eq('kind', kind)
-          if (category) request = request.eq('category', category)
+          if (tag) request = request.contains('meta', { tags: [tag] })
           if (query.trim()) request = request.ilike('title', likeOf(query))
           return request
         }
@@ -206,14 +203,13 @@ export function createSupabasePublicLibrary(
         const avatar = await avatarOf(client, known.authors.get(data.author_id)?.avatar ?? null)
         return { entry: { ...entry, authorAvatar: avatar }, body: data.body }
       }),
-    publish: ({ kind, sourceId, title, authorName, meta, category, body, version }) =>
+    publish: ({ kind, sourceId, title, authorName, meta, body, version }) =>
       ask(async (client) => {
         const author = await me()
         const fields = {
           title,
           author_name: authorName,
           meta: meta as Json,
-          category: kind === 'song' ? (category ?? null) : null,
           body: body as Json,
           version,
         }

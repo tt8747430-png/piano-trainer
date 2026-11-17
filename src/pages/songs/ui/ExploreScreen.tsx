@@ -1,14 +1,22 @@
 import { useTranslation } from 'react-i18next'
 import { useSetSearch } from '@/shared/lib'
-import { ChoiceChips, ScreenHeader, SearchField, TitleTabs } from '@/shared/ui'
-import { EXPLORE_CATEGORIES, type SongsHome } from '../model/explore-view'
+import {
+  ChoiceChips,
+  FilterChips,
+  ScreenHeader,
+  SearchField,
+  Segmented,
+  TitleTabs,
+} from '@/shared/ui'
+import { EXPLORE_CATEGORIES, EXPLORE_KINDS, type SongsHome } from '../model/explore-view'
 import { ExploreResults } from './ExploreResults'
 import { useSongsViews } from './SongsSwitch'
 
 /**
- * Explore (B3, D1, Noji's library page): Songs' second view, what learners published. Its bar the
- * library's with the switch; the search; the categories as chips (Patterns the patterns); then the
- * feed (R72, Flat's community): its count and order, a card per item.
+ * Explore (B3, D1; R72, Flat's community): Songs' second view, what learners published. Its bar the
+ * library's with the switch; the search, of songs and people; Songs | People; for Songs the kinds as
+ * chips (Patterns the patterns), or one person's songs as a chip that takes it off; then the feed
+ * (its count and order, a card per item) or the people who publish.
  */
 export function ExploreScreen({ home }: { home: SongsHome }) {
   const { t } = useTranslation('songs')
@@ -26,16 +34,36 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
             screen={t('explore.views.explore')}
           />
         </div>
-        <ChoiceChips
-          label={t('explore.categories.label')}
-          value={home.cat}
-          options={EXPLORE_CATEGORIES.map((cat) => ({
-            value: cat,
-            label: t(`explore.categories.${cat}`),
-          }))}
-          onChange={(cat) => show({ cat })}
-          scroll
-        />
+        <div className="lg:max-w-2xl">
+          <Segmented
+            label={t('explore.kinds.label')}
+            value={home.kind}
+            options={EXPLORE_KINDS.map((kind) => ({
+              value: kind,
+              label: t(`explore.kinds.${kind}`),
+            }))}
+            onChange={(kind) => show({ kind, by: '' })}
+            compact
+          />
+        </div>
+        {home.kind === 'people' ? null : home.by ? (
+          <FilterChips
+            chips={[
+              { id: 'by', name: t('explore.by', { name: home.by }), off: () => show({ by: '' }) },
+            ]}
+          />
+        ) : (
+          <ChoiceChips
+            label={t('explore.categories.label')}
+            value={home.cat}
+            options={EXPLORE_CATEGORIES.map((cat) => ({
+              value: cat,
+              label: t(`explore.categories.${cat}`),
+            }))}
+            onChange={(cat) => show({ cat })}
+            scroll
+          />
+        )}
       </div>
       <ExploreResults
         home={home}

@@ -6,12 +6,6 @@ export const DESCRIPTION_MAX = 500
 /** How Explore is sorted: the newest first, the most saved, or the top rated (then the newest). */
 export type PublicSort = 'new' | 'saved' | 'rated'
 
-/** What a published song is, chosen by its author (B3); a pattern has none. */
-export const PUBLIC_CATEGORIES = ['classical', 'folk', 'pop', 'studies'] as const
-export type PublicCategory = (typeof PUBLIC_CATEGORIES)[number]
-export const isPublicCategory = (value: unknown): value is PublicCategory =>
-  typeof value === 'string' && (PUBLIC_CATEGORIES as readonly string[]).includes(value)
-
 /** What a published song is, as Flat's discoverability form asks (R72): its author's own, or an arrangement. */
 export const PUBLIC_TYPES = ['original', 'arrangement', 'other'] as const
 export type PublicType = (typeof PUBLIC_TYPES)[number]
@@ -59,7 +53,6 @@ export interface PublicEntry {
   readonly authorAvatar: string | null
   readonly saves: number
   readonly publishedAt: string
-  readonly category: PublicCategory | null
   /** Its learners' stars; null before anyone rated it. */
   readonly rating: PublicRating | null
   /** A song's first line of its chart, as written (`C G Am F`), drawn small on its card. */
@@ -91,8 +84,6 @@ export interface Publication {
   readonly title: string
   readonly authorName: string
   readonly meta: PublicEntry['meta']
-  /** A song's category; none for a pattern, or a song its author left uncategorised. */
-  readonly category?: PublicCategory | null
   /** The song as a save holds an own song, its title beside its music: read back by `readSharedSong`. */
   readonly body: unknown
   readonly version: string
@@ -116,8 +107,8 @@ export interface PublicLibrary {
     kind: PublicKind
     sort: PublicSort
     query: string
-    /** Only the songs of one category; every one where none. */
-    category?: PublicCategory
+    /** Only the items tagged so (a style, an occasion), as their authors wrote it; every one where none. */
+    tag?: string
   }): Promise<NetResult<readonly PublicEntry[]>>
   /** One song: its entry and its body; null where it is gone or hidden. */
   item(id: string): Promise<NetResult<{ entry: PublicEntry; body: unknown } | null>>

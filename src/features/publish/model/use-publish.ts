@@ -188,7 +188,6 @@ export function usePublish(item: PublishItem | null) {
           ...(tags.length > 0 ? { tags } : {}),
           licence: next.licence,
         },
-        category: null,
         body,
         version,
       })

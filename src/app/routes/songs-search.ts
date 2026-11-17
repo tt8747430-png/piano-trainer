@@ -32,31 +32,36 @@ export const allSongsSearch = routeSearch(readAllSongsSearch, ALL_SONGS_DEFAULTS
 
 // A song's page (R30 S4): in Edit or not, entered from its ✎.
 
-// Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's category chip
+// Songs' Home (D1): My songs or Explore, remembered as Learn's view is; Explore's Songs or People, its kind chip
 // and a shelf's See all in the URL beside the library's filters.
 export const SONGS_HOME_DEFAULTS: SongsHome = {
   ...SONGS_DEFAULTS,
   view: 'mine',
+  kind: 'songs',
   cat: 'all',
+  by: '',
   shelf: '',
 }
-const CATEGORIES: readonly string[] = [
+const CATEGORIES = [
   'all',
   'classical',
   'folk',
   'pop',
-  'studies',
+  'hymn',
+  'study',
   'patterns',
-] satisfies readonly ExploreCategory[]
+] as const satisfies readonly ExploreCategory[]
 const isCategory = (value: unknown): value is ExploreCategory =>
-  typeof value === 'string' && CATEGORIES.includes(value)
+  CATEGORIES.some((each) => each === value)
 const isShelf = (value: unknown): value is SongsHome['shelf'] =>
   value === 'new' || value === 'saved' || value === 'rated'
 export function readSongsHomeSearch(raw: Raw): SongsHome {
   return {
     ...readSongsSearch(raw),
     view: raw.view === 'explore' ? 'explore' : 'mine',
+    kind: raw.kind === 'people' ? 'people' : 'songs',
     cat: isCategory(raw.cat) ? raw.cat : SONGS_HOME_DEFAULTS.cat,
+    by: readText(raw.by, ''),
     shelf: isShelf(raw.shelf) ? raw.shelf : SONGS_HOME_DEFAULTS.shelf,
   }
 }

@@ -2,8 +2,6 @@ export { createFakePublicLibrary } from './fake'
 export { createSupabasePublicLibrary } from './supabase'
 export {
   DESCRIPTION_MAX,
-  isPublicCategory,
-  PUBLIC_CATEGORIES,
   PUBLIC_LICENCES,
   PUBLIC_TYPES,
   RATED_MIN,
@@ -12,7 +10,6 @@ export {
 } from './types'
 export type {
   Publication,
-  PublicCategory,
   PublicEntry,
   PublicKind,
   PublicLicence,

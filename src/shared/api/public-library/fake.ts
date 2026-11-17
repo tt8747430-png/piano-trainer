@@ -45,10 +45,9 @@ export function createFakePublicLibrary({
   online?: () => boolean
   items?: readonly (Omit<
     PublicEntry,
-    'saves' | 'publishedAt' | 'kind' | 'category' | 'rating' | 'authorAvatar' | 'opening'
+    'saves' | 'publishedAt' | 'kind' | 'rating' | 'authorAvatar' | 'opening'
   > & {
     kind?: PublicEntry['kind']
-    category?: PublicEntry['category']
     authorAvatar?: string | null
     /** Ratings already given, each a learner's stars. */
     stars?: readonly number[]
@@ -63,7 +62,6 @@ export function createFakePublicLibrary({
       {
         ...item,
         kind: item.kind ?? 'song',
-        category: item.category ?? null,
         authorAvatar: item.authorAvatar ?? null,
         saves: 0,
         publishedAt: at(),
@@ -103,7 +101,6 @@ export function createFakePublicLibrary({
       authorAvatar: item.authorAvatar,
       saves: item.saves,
       publishedAt: item.publishedAt,
-      category: item.category,
       rating: ratingOf(item.id),
       ...(opening ? { opening } : {}),
       meta: item.meta,
@@ -114,11 +111,11 @@ export function createFakePublicLibrary({
     entry.rating && entry.rating.count >= RATED_MIN ? entry.rating.average : -1
   return {
     reports,
-    browse: ({ kind, sort, query, category }) =>
+    browse: ({ kind, sort, query, tag }) =>
       ask(async () =>
         [...held.values()]
           .filter((item) => item.kind === kind)
-          .filter((item) => !category || item.category === category)
+          .filter((item) => !tag || (item.meta.tags ?? []).includes(tag))
           .filter((item) => item.title.toLowerCase().includes(query.trim().toLowerCase()))
           .map(entryOf)
           .sort(
@@ -135,7 +132,7 @@ export function createFakePublicLibrary({
         const item = held.get(id)
         return item ? { entry: entryOf(item), body: item.body } : null
       }),
-    publish: ({ category, ...publication }) =>
+    publish: (publication) =>
       ask(async () => {
         const who = signedIn()
         const same = [...held.values()].find(
@@ -147,7 +144,6 @@ export function createFakePublicLibrary({
           id,
           author: who.id,
           authorAvatar: null,
-          category: publication.kind === 'song' ? (category ?? null) : null,
           saves: same?.saves ?? 0,
           publishedAt: same?.publishedAt ?? at(),
         })

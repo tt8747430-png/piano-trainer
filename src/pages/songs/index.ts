@@ -3,4 +3,10 @@ export { FolderCardStylePage } from './ui/CardStylePage'
 export { FolderPage } from './ui/FolderPage'
 export { FolderSettingsPage } from './ui/FolderSettingsPage'
 export { AllSongsPage, SongsPage } from './ui/SongsPage'
-export type { ExploreCategory, ExploreView, SongsHome, SongsView } from './model/explore-view'
+export type {
+  ExploreCategory,
+  ExploreKind,
+  ExploreView,
+  SongsHome,
+  SongsView,
+} from './model/explore-view'
