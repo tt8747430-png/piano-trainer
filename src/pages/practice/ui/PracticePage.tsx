@@ -111,7 +111,7 @@ export function PracticePage() {
           </>
         }
       />
-      <div className="mt-1 flex flex-col gap-3.5">
+      <div className="mt-1 flex flex-col gap-8">
         {groups.map(({ id, places }) => (
           <PracticeGroup
             key={id}

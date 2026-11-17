@@ -193,7 +193,7 @@ function Tiles() {
   const time = usePracticeTime()
   const run = useMemo(() => streak(days, today), [days, today])
   return (
-    <ul aria-label={t('profile.figures')} className="mt-1 grid w-full grid-cols-3 gap-2">
+    <ul aria-label={t('profile.figures')} className="mt-1 grid w-full grid-cols-3 gap-3">
       <li className="min-w-0">
         <Link
           to="/profile/streak"
