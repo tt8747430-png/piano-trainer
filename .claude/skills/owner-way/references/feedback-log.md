@@ -999,6 +999,8 @@ owner's, typos fixed.
 
 - **The Streak calendar's card holds its month in its middle (v396; edge-lines, balanced insets):** its arrows stood 8 under the card's top and its last week 14 over its foot, so the month sat high; the foot is 4, the last row's cells 8 from the edge as the arrows are (Streak, StreakLaptop, and the app).
 
+- **Focus leaves by the bar, never over the keys (v398; owner, 2026-11-17, on ChordPlayerLaptop: "the focus mode and the other features from the design. improve them"):** Exit focus was a capsule pinned at the window's foot, lying on the Chord player's keys and beside every floating transport. It is now the bar's first button while Focus is on, a 44 glass circle before Back (or the title, on a place with none), where the sidebar's own Focus button stood, its tip "Exit focus (Esc)"; Esc still leaves. Focus also hides the Songs library's pane, a side panel like any other, so the songs fill the window.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

@@ -3,7 +3,9 @@
 # the sidebar's toggle at its leading top (Apple HIG, Sidebars: "let people hide the sidebar"; macOS's toggle sits at
 # the window's top leading edge), folding it to a 76px rail of the same places (Material 3, Navigation rail);
 # and Focus, which hides the sidebar and every side panel so the page's one thing fills the window (macOS full-screen
-# and Notes' focus, Ulysses' distraction-free mode), left by the Exit focus capsule at the foot or Esc.
+# and Notes' focus, Ulysses' distraction-free mode), left by Esc or by Exit focus, the bar's first button while Focus
+# is on, before Back or the title, where the sidebar's own toggle stood (owner, 2026-11-17: "the focus mode … improve
+# them"; a capsule at the foot lay over the keys and the floating transports).
 # No letter shortcut: a letter alone is the piano's (CLAUDE.md, Keys).
 import re
 
@@ -19,7 +21,7 @@ _LAPHEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items:
          '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div></div>')
 # the runtime writes each style back as the browser serialises it (minmax(0px, …))
 _LAPCOLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr) 380px', 'minmax(0px, 1fr) 440px', 'minmax(0px, 3fr) minmax(0px, 2fr)']
-_LAPFIRST = ['240px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
+_LAPFIRST = ['240px minmax(0px, 1fr)', '280px minmax(0px, 1fr)', '372px minmax(0px, 1fr)']
 _LAPCSS = ('<style data-lapcss>'
         '[data-lapwin][data-side="off"] { grid-template-columns: 76px minmax(0, 1fr) !important }'
         ' [data-side="off"] > nav { padding-left: 14px !important; padding-right: 14px !important; align-items: center }'
@@ -30,7 +32,7 @@ _LAPCSS = ('<style data-lapcss>'
         ' [data-side="off"] [data-sidebtns] { flex-direction: column }'
         ' [data-lapbtn]:hover { background: rgba(128, 110, 90, 0.12) !important }'
         ' [data-lapbtn]:focus-visible, [data-focusexit]:focus-visible { outline: 2px solid currentColor; outline-offset: 2px }'
-        ' [data-lapwin] > [data-focusexit] { display: none }'
+        ' [data-focusexit] { display: none }'
         ' [data-lapwin] > nav { position: relative }'
         ' [data-acct]:hover { background: #EFE8DF !important }'
         ' [data-acctmenu] [role=menuitem]:hover { background: #F2ECE4 }'
@@ -38,7 +40,7 @@ _LAPCSS = ('<style data-lapcss>'
         ' [data-side="off"] [data-acct] { width: 48px !important; padding: 0 !important; justify-content: center }'
         ' [data-lapwin][data-focus="on"] { grid-template-columns: minmax(0, 1fr) !important }'
         ' [data-focus="on"] > nav, [data-focus="on"] aside.nos { display: none !important }'
-        ' [data-lapwin][data-focus="on"] > [data-focusexit] { display: flex }'
+        ' [data-focus="on"] [data-focusexit] { display: flex }'
         + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s"] { grid-template-columns: minmax(0, 1fr) !important }'
                   ' [data-focus="on"] [style*="grid-template-columns: %s"] > :last-child { display: none !important }' % (c, c) for c in _LAPCOLS)
         + ''.join(' [data-focus="on"] [style*="grid-template-columns: %s"] { grid-template-columns: minmax(0, 1fr) !important }'
@@ -90,10 +92,16 @@ def lapwin(h):
     if not m:
         return h
     glass = ('background: rgba(254,253,251,.86); color: #332921; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)')
-    exitb = ('<button type="button" data-focusexit onClick="{{lapFocusT}}" style="position: absolute; left: 24px; bottom: 24px; z-index: 40; height: 44px; '
-             'padding: 0 18px 0 14px; border: 0; border-radius: 22px; %s; backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8); '
-             'align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600">%sExit focus</button>' % (glass, _EXIT))
-    h = h[:m.start()] + '<div ' + m.group(1) + ' data-lapwin data-side="{{lapSide}}" data-focus="{{lapFocus}}">' + exitb + h[m.end():]
+    exitb = ('<button type="button" data-focusexit aria-label="Exit focus" data-tip="Exit focus (Esc)" onClick="{{lapFocusT}}" style="flex: none; width: 44px; height: 44px; '
+             'margin-right: 8px; padding: 0; border: 0; border-radius: 22px; %s; backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8); '
+             'align-items: center; justify-content: center; font: inherit">%s</button>' % (glass, _EXIT))
+    h = h[:m.start()] + '<div ' + m.group(1) + ' data-lapwin data-side="{{lapSide}}" data-focus="{{lapFocus}}">' + h[m.end():]
+    # Exit focus stands first in the page's bar: before Back, or before the title on a page with none.
+    nav = h.find('</nav>', m.start())
+    back, title = h.find('aria-label="Back"', nav), h.find('<h1', nav)
+    at = h.rfind('<', nav, back) if back > 0 and (title < 0 or back < title) else title
+    if at > 0:
+        h = h[:at] + exitb + h[at:]
     h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
     h = _ACCT_OLD.sub(_acct, h, count=1)
     k = h.rindex('</script>')
