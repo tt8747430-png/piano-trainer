@@ -80,7 +80,7 @@ CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}
 CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
              + ACTROW(CHECK.replace('16', '20'), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
              + GROUP(('link', 'Share', 'View only', 'openShare'), ('action', 'Save to my progressions', 'saveProg'), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), bg=SHEET))
-CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; color: {SOFT}">Everyone with the link sees each change as it is made, and the chord playing.</p>'
+CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Everyone with the link sees each change as it is made, and the chord playing.</p>'
             + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
             + BTN('{{copyL}}', 'copyLink', kind='primary', h=50))
 

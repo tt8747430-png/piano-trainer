@@ -163,7 +163,8 @@ def GROUP(*rows, bg=FILL):
     return f'<div data-group style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
 def BTN(label, act='', href='', kind='primary', h=50, grow=True):
     bg = {'primary': ACCENT, 'quiet': FILL, 'ink': INK}[kind]; fg = SHEET if kind == 'ink' else INK
-    st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
+    # min-height: in a column, flex: 1's zero basis squashed it to its text when the column was full (Copy link, 20 tall)
+    st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; min-height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
     return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
 def PLAYBTN(size=52):
     return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>'

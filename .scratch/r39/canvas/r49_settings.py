@@ -11,7 +11,7 @@ def S9CAPS(t, tip=''):
     """A group's heading; with tip, an ⓘ that opens the explanation in place (no line under a control)."""
     if not tip:
         return CAPS(t)
-    return f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 20px; padding-right: 12px">{CAPS(t)}' + INFOB(f'About {t}', f'tip_{tip}', f'tipOn_{tip}') + '</div>'
+    return f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 28px; padding-right: 12px">{CAPS(t)}' + INFOB(f'About {t}', f'tip_{tip}', f'tipOn_{tip}') + '</div>'
 def TIPCARD(key, text):
     return INFOTIP(f'tipOn_{key}', f'tip_{key}', 'About this', f'<p style="margin: 0">{text}</p>', 'right: 0; top: 30px')
 SEC = lambda *parts: f'<section style="position: relative; display: flex; flex-direction: column; gap: 8px">{"".join(parts)}</section>'
