@@ -386,7 +386,7 @@ lower case) and Suggester 2's (§2.3).
 | Research rule | Ours | Plan |
 |---|---|---|
 | Suggester 2: lower case unless a major 3rd, so a sus chord is lower case (§2.3) | `Vsus4` upper | Keep ours: a sus V is a dominant (`harmony.ts:30-53`) |
-| Suggester 2 `N` (Neapolitan), `It+6`, `Fr+6`, `Gr+6` (§2.3, §5) | `♭II`; `borrowedName` has `neapolitan` (`scale-chord.ts:186-189`); no augmented sixths | Read `N` as `♭II` (alias); add `It+6`, `Fr+6`, `Gr+6` as numerals on ♭VI (C7(no5), C7♭5, C7 over A♭ in C), function: predominant. Unlocks Suggester 2's three resolutions |
+| Suggester 2 `N` (Neapolitan), `It+6`, `Fr+6`, `Gr+6` (§2.3, §5) | `♭II`; `borrowedName` has `neapolitan` (`scale-chord.ts:186-189`); no augmented sixths | `N` read as `♭II` (built). **Augmented sixths not built (loop round 61, decided):** a numeral needs a chord quality, and three new qualities (`r M3 A6`, `r M3 A4 A6`, `r M3 P5 A6`) would join the quality table's 28 uses (pickers, the finder, Skills), where the finder would name A♭ C E♭ F♯ both A♭7 and Gr+6; the app writes chord symbols, and a lead sheet writes an augmented sixth as its dominant 7th (A♭7 in C). Suggester 2's three resolutions stay out with them |
 | Suggester 2 `subV7` (tritone substitute) | `♭II7` (`harmony.ts:38-39` reads it as a dominant) | Keep `♭II7`; read `subV7` as an alias |
 | Suggester 2 tertiary `V/V/x` | one slash only (`APPLIED`, `numerals.ts:62`) | Not now: no library line needs it |
 | Suggester 2 `I7` = the diatonic 7th (Jazz 251 `ii7 – V7 – I7`, §11) | `I7` = dominant 7th, as a chart writes it | When importing, a `DiatonicSeventh` step becomes the explicit quality (`Imaj7`, `ii7`, `V7`, `viiø7`) |

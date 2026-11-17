@@ -167,9 +167,11 @@ Ranked by impact. Behaviour and algorithms first.
 18. **Wait-mode feedback on the score: matched notes inked, the awaited ones marked.** [cosmetic, lowest]
     - **Research:** Chordio §3 step 6: expected notes blue, matched green, wrong flashes red for 0.32 s [exact]. TAKEAWAYS #10: "matched / expected" pill [inferred].
     - **Today:** the keyboard labels a received key "✓" (`features/practice/marks.ts:36-38`). Whether the score marks received notes was not checked in code. Verify in the browser before changing anything.
-    - **Change, if missing:**
-      - Received noteheads of the awaited chord take the playing mark's colour, in the existing tokens (no new colour; the rulings fix sky `#85B8DC` for a key down).
-      - No red flash on the score: the line "Not {{note}}" already says it.
+    - **Checked (loop round 61):** the awaited heads are lit on the score in their hand's colour, since the Player's
+      playhead stands at the awaited group in Wait mode and lights its heads (`SheetOverlay.tsx` passes `lights` to
+      `Playhead.tsx`, which marks `soundingHeads`); a received key carries its ✓ on the piano (`marks.ts`), where the
+      hands and eyes are. **No change:** a second received mark on the score would say the same thing twice, and the
+      line "Not {{note}}" already answers a wrong key.
 
 ---
 
