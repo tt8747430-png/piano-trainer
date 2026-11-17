@@ -1011,6 +1011,8 @@ owner's, typos fixed.
 
 - **A run's results, tidied** (round 63, canvas v403): the stat tiles carry the same three rows each (the figure with its unit quieter, one line of context, the label), 16 inset and 16 apart on a laptop, never a label pushed to the tile's foot by a stretch; Timing reads "9 on time · 2 early · 1 late", Tempo "72 BPM · In Wait mode"; The run stands on the paper under its heading, on the column's edge, as in the run itself. `PlayChord`, `PracticeResult` and their laptops.
 
+- **Spacing on the scale across Practice** (round 63, canvas v406): the Practice laptop cards drop their empty third line, so their insets balance (16 and 16, not 16 and 28); every chip row's pills are 36 in a 44 target (4px rings, -4 margins), so the boxes sit 12 from the search and the heading and 16 apart to the eye, never 11; a library's fold heading (Songs, Progressions, Accompaniment) is pulled in by 4, sitting 4 over its card, never 3; the Chord player's sections stand 16 apart, never 18; on Intervals the interval's name sits 8 over the card it names and 24 under the keys, never 16 from both (a heading as far from what it heads as from what is above, edge-lines). Scales keeps 16 under its name, which is two picker pills, not a heading.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
