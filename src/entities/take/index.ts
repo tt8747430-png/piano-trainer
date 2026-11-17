@@ -32,7 +32,8 @@ export { barMs, keepBars, takeBarCount, takeBarStart } from './model/bars'
 export { quantise, takeGrids, type QuantisedNote } from './model/quantise'
 export { midiFile, takeFileName } from './model/midi-file'
 export {
-  FEEDBACK_TOLERANCE_MS,
+  onBeatMs,
+  shareOf,
   feedbackOf,
   VERDICTS,
   type Feedback,

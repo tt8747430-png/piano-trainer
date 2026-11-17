@@ -41,8 +41,8 @@ describe('barShares', () => {
   it('gives each bar its share of judged notes played right, null where none was judged', () => {
     const feedback = {
       notes: [
-        { tick: 0, midi: midi(60), verdict: 'right' as const },
-        { tick: B, midi: midi(61), verdict: 'wrong' as const },
+        { tick: 0, midi: midi(60), verdict: 'right' as const, penalty: 0 },
+        { tick: B, midi: midi(61), verdict: 'wrong' as const, penalty: 1 },
       ],
     }
     expect(barShares(feedback, MUSIC.bars)).toEqual([0.5, null])

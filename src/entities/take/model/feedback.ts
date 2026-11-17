@@ -9,23 +9,40 @@ type Played = Pick<Performance, 'notes' | 'bars'>
 export type Verdict = 'right' | 'wrong' | 'missed' | 'early' | 'late'
 export const VERDICTS: readonly Verdict[] = ['right', 'wrong', 'missed', 'early', 'late']
 
-/** A written note judged: where it is, and how it was played (`by`: ms off its time, where played). */
+/**
+ * A written note judged: where it is, how it was played (`by`: ms off its time, where played), and
+ * what it costs the take's share (`penalty`, 0 on the beat to 1 wrong or missed).
+ */
 export interface NoteVerdict {
   readonly tick: Tick
   readonly midi: Midi
   readonly verdict: Verdict
   readonly by?: number
+  readonly penalty: number
 }
 
 export interface Feedback {
   readonly notes: readonly NoteVerdict[]
   readonly counts: Readonly<Record<Verdict, number>>
-  /** The share judged right, a whole percent; 0 where nothing was judged. */
+  /** The share earned, a whole percent: each note's penalty taken off; 0 where nothing was judged. */
   readonly percent: number
 }
 
-/** A take is judged within ±80 ms of each note's time unless said. */
-export const FEEDBACK_TOLERANCE_MS = 80
+/**
+ * A take is judged by the beat (research item 10; Metronaut's windows, Scale Runner's on-beat and
+ * close): on the beat within a tenth of a beat, never under 40 ms nor over 120; close (early or late,
+ * a third off) to a quarter of a beat; further off, two thirds off; wrong or missed, all of it.
+ */
+const ON_BEAT = 0.1
+const ON_BEAT_MS = { least: 40, most: 120 } as const
+const CLOSE = 0.25
+const PENALTY = { close: 0.33, off: 0.66, wrong: 1 } as const
+/** A take this near whole reads as whole: the slips left are the instrument's, not the learner's. */
+const WHOLE_FROM = 96
+
+/** The on-the-beat window at a tempo, in ms either side of a note's time. */
+export const onBeatMs = (tempo: number) =>
+  Math.min(ON_BEAT_MS.most, Math.max(ON_BEAT_MS.least, (ON_BEAT * 60_000) / tempo))
 
 /** A written note on the take's clock: where it is due, in ms from the take's first downbeat. */
 interface Due {
@@ -69,23 +86,35 @@ function nearest(
   return best
 }
 
-const timed = (by: number, tolerance: number): Verdict =>
-  Math.abs(by) <= tolerance ? 'right' : by < 0 ? 'early' : 'late'
+/** A played note's verdict and penalty by how far off its time it fell, a beat being `beat` ms long. */
+function timed(
+  by: number,
+  tolerance: number,
+  beat: number,
+): Pick<NoteVerdict, 'verdict' | 'penalty'> {
+  if (Math.abs(by) <= tolerance) return { verdict: 'right', penalty: 0 }
+  return {
+    verdict: by < 0 ? 'early' : 'late',
+    penalty: Math.abs(by) <= CLOSE * beat ? PENALTY.close : PENALTY.off,
+  }
+}
 
 /**
  * A take against the written music (R29 B8): each written note of the piano's under the take matched
- * to the played note of its key nearest its time (within half a beat at the take's tempo): right,
- * early or late beyond ±`tolerance` ms; a note matched by no key of its own but by another key
- * there is wrong, by none missed. In `rhythm` (the Rhythm game) the keys do not count: each onset is
+ * to the played note of its key nearest its time (within half a beat at the take's tempo): right
+ * within ±`tolerance` ms (by the beat, `onBeatMs`, unless said), else early or late, close to a
+ * quarter of a beat; a note matched by no key of its own but by another key there is wrong, by none
+ * missed. The share is what the notes' penalties leave, whole from 96 %. In `rhythm` (the Rhythm game) the keys do not count: each onset is
  * matched to the nearest key struck, on its time alone.
  */
 export function feedbackOf(
   performance: Played,
   take: Take,
-  { tolerance = FEEDBACK_TOLERANCE_MS, rhythm = false } = {},
+  { tolerance = onBeatMs(take.tempo), rhythm = false } = {},
 ): Feedback {
   const due = dueNotes(performance, take)
-  const reach = 30_000 / take.tempo
+  const beat = 60_000 / take.tempo
+  const reach = beat / 2
   const taken = new Set<number>()
   const verdicts = new Map<Due, NoteVerdict>()
   if (rhythm) {
@@ -98,7 +127,9 @@ export function feedbackOf(
         verdicts.set(note, {
           tick: note.tick,
           midi: note.midi,
-          ...(by === undefined ? { verdict: 'missed' } : { verdict: timed(by, tolerance), by }),
+          ...(by === undefined
+            ? { verdict: 'missed', penalty: PENALTY.wrong }
+            : { ...timed(by, tolerance, beat), by }),
         })
     }
   } else {
@@ -107,7 +138,7 @@ export function feedbackOf(
       if (hit === null) continue
       taken.add(hit)
       const by = (take.notes[hit]?.at ?? note.at) - note.at
-      verdicts.set(note, { tick: note.tick, midi: note.midi, verdict: timed(by, tolerance), by })
+      verdicts.set(note, { tick: note.tick, midi: note.midi, ...timed(by, tolerance, beat), by })
     }
     for (const note of due) {
       if (verdicts.has(note)) continue
@@ -117,6 +148,7 @@ export function feedbackOf(
         tick: note.tick,
         midi: note.midi,
         verdict: hit === null ? 'missed' : 'wrong',
+        penalty: PENALTY.wrong,
       })
     }
   }
@@ -124,9 +156,13 @@ export function feedbackOf(
   const counts = Object.fromEntries(
     VERDICTS.map((verdict) => [verdict, notes.filter((note) => note.verdict === verdict).length]),
   ) as Record<Verdict, number>
-  return {
-    notes,
-    counts,
-    percent: notes.length === 0 ? 0 : Math.round((counts.right / notes.length) * 100),
-  }
+  return { notes, counts, percent: shareOf(notes) }
+}
+
+/** The whole percent the notes earn, their penalties taken off; whole from 96; 0 for none. */
+export function shareOf(notes: readonly Pick<NoteVerdict, 'penalty'>[]): number {
+  if (notes.length === 0) return 0
+  const lost = notes.reduce((sum, note) => sum + note.penalty, 0) / notes.length
+  const percent = Math.round(100 * (1 - lost))
+  return percent >= WHOLE_FROM ? 100 : percent
 }

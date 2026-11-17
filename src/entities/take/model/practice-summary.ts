@@ -14,20 +14,20 @@ export interface PracticeSummary {
   readonly speed: number
 }
 
-/** Each bar's share of its judged notes played right; null where nothing in it was judged. */
+/** Each bar's share its judged notes earn, their penalties taken off; null where nothing was judged. */
 export function barShares(
   feedback: Pick<Feedback, 'notes'>,
   bars: Performance['bars'],
 ): (number | null)[] {
-  const right = bars.map(() => 0)
+  const earned = bars.map(() => 0)
   const judged = bars.map(() => 0)
   for (const note of feedback.notes) {
     const bar = bars.findLastIndex((each) => each.startTick <= note.tick)
     if (bar < 0) continue
     judged[bar] = (judged[bar] ?? 0) + 1
-    if (note.verdict === 'right') right[bar] = (right[bar] ?? 0) + 1
+    earned[bar] = (earned[bar] ?? 0) + 1 - note.penalty
   }
-  return judged.map((count, bar) => (count === 0 ? null : (right[bar] ?? 0) / count))
+  return judged.map((count, bar) => (count === 0 ? null : (earned[bar] ?? 0) / count))
 }
 
 /**

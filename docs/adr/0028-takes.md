@@ -19,8 +19,11 @@ back gets a score they did not ask for.
 - **It is played to the song's click**: a bar's count-in, then the click if the Click switch is on, and Play melody
   (the song's top single staff) under it if that is on. Both may change while it records. The take's beats are the
   piece's, so writing it needs no tempo found from the playing. Each key and pedal is placed where it was heard less
-  the piano's own lateness, as Calibrate timing measured it (ADR 0034); how did I play judges at ±80 ms, early or
-  late beyond that within half a beat (`feedbackOf`), so the windows need no setting of their own.
+  the piano's own lateness, as Calibrate timing measured it (ADR 0034); how did I play judges by the beat (`feedbackOf`,
+  Metronaut's windows): on the beat within a tenth of a beat (never under 40 ms nor over 120, `onBeatMs`), early or
+  late beyond it, close to a quarter of a beat (a third off) and further off to half a beat (two thirds off), wrong
+  or missed all of it; the take's share and each bar's are what the penalties leave, whole from 96 % (`shareOf`), so
+  the windows need no setting of their own.
 - **MIDI only.** Record needs a connected MIDI keyboard; without one its popover says so and how to connect one. The
   on-screen keys and the computer's keys are not recorded: their timing is the input's lag.
 - **In the editor's gear** (ADR 0114): Record a take, Takes (only once the song has one) and Settings › Recording;
