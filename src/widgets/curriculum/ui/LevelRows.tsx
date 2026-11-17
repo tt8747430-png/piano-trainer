@@ -23,8 +23,7 @@ export function LevelRows() {
     <FoldSection
       title={t('learn:levels')}
       fold={fold}
-      className="gap-3.5"
-      headingClassName="px-1 font-sans text-xl font-bold"
+      headingClassName="font-sans text-xl font-bold"
     >
       <ul className="flex flex-col rows-hairline overflow-hidden card">
         {allJourneys().map((journey, i) => {

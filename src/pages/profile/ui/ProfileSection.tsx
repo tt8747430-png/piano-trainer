@@ -30,7 +30,7 @@ export function ProfileSection({
         seeAll ? <SeeAll label={t('profile.badges.seeAll')} render={<Link to={to} />} /> : undefined
       }
       className="gap-2"
-      headingClassName="px-1 font-sans text-xl font-bold"
+      headingClassName="font-sans text-xl font-bold"
     >
       {children}
     </FoldSection>

@@ -76,8 +76,8 @@ export function OwnItems() {
           <SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />
         ) : null
       }
-      className="min-w-0 gap-3.5"
-      headingClassName="px-1 font-sans text-xl font-bold"
+      className="min-w-0"
+      headingClassName="font-sans text-xl font-bold"
     >
       <ul className="flex flex-col rows-hairline overflow-hidden card">
         {shownCourses.map((course) => (

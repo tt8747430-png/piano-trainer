@@ -15,7 +15,7 @@ export function LearnPage() {
   return (
     <div className="flex flex-col pb-8">
       <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-      <div className="mt-1 grid min-w-0 gap-3.5 lg:grid-cols-2 lg:items-start lg:gap-x-8 lg:gap-y-[18px]">
+      <div className="mt-1 grid min-w-0 gap-8 lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <div className="min-w-0 lg:col-span-2">
           <ContinueAction />
         </div>

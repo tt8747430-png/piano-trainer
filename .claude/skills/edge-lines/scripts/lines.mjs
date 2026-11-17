@@ -245,6 +245,8 @@ const report = await page.evaluate(() => {
     const u = R(unit)
     const below = Math.round(R(next).top - u.bottom)
     const above = prev && vis(prev) ? Math.round(u.top - R(prev).bottom) : null
+    // An eyebrow (a small line just above, smaller than the heading) is part of the heading, not a group before it.
+    if (prev && vis(prev) && parseFloat(getComputedStyle(prev).fontSize) < parseFloat(getComputedStyle(hd).fontSize) * 0.8 && R(prev).height < 24) continue
     if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${hd.textContent.trim().slice(0, 24)}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
   }
   // Draw.

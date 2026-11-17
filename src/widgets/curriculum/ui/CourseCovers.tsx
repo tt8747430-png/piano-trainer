@@ -71,10 +71,10 @@ export function CourseCovers() {
       title={t('courses')}
       fold={fold}
       action={<SeeAll label={t('seeAll')} render={<Link to="/courses" />} />}
-      className="min-w-0 gap-3.5"
-      headingClassName="px-1 font-sans text-xl font-bold"
+      className="min-w-0"
+      headingClassName="font-sans text-xl font-bold"
     >
-      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4.5 lg:overflow-visible lg:px-0">
+      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">
             <CourseCover course={course} current={course.id === current} />

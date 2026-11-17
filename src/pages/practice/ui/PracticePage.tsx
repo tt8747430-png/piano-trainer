@@ -117,7 +117,7 @@ export function PracticePage() {
             key={id}
             id={id}
             title={t(`groups.${id}`)}
-            headingClassName="px-1 font-sans text-xl font-bold"
+            headingClassName="font-sans text-xl font-bold"
           >
             <ul className={cn(GROUPED_LIST, 'lg:hidden')}>
               {places.map(({ key, title, detail, tile, link }) => (
