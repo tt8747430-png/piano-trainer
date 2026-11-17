@@ -150,7 +150,8 @@ const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasO
  * bar, with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
  * ADR 0096; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End,
  * Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or Ctrl with Z, Y,
- * and C, X, V (what is chosen, ADR 0114). A letter alone plays the piano, but for I, which typing
+ * and C, X, V (what is chosen, ADR 0114); Alt with 2 to 8 a note a 2nd to an octave above what is
+ * chosen or just written, with Shift below (research F7). A letter alone plays the piano, but for I, which typing
  * leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0114).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
@@ -162,6 +163,10 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   }
   const tool = toolOf(press)
   if (tool) return tool.does.type === 'mode' && layer === 'chords' ? null : tool.does
+  // Alt with 2 to 8 a note a 2nd to an octave above, with Shift below (Flat's addNoteInterval).
+  const interval = /^Digit([2-8])$/.exec(press.code)?.[1]
+  if (press.altKey && !mod && interval && layer !== 'chords')
+    return { type: 'interval', steps: (Number(interval) - 1) * (press.shiftKey ? -1 : 1) }
   const move = (by: CaretMove, direction: -1 | 1): Shortcut => ({
     type: 'move',
     by,

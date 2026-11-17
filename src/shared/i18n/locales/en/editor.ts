@@ -642,6 +642,8 @@ export const editor = {
     keyStep: 'Diatonic step up or down',
     semitone: 'Semitone up or down',
     octave: 'Octave up or down',
+    intervalUp: 'Add a note a 2nd to an octave above',
+    intervalDown: 'Add a note a 2nd to an octave below',
     delete: 'Delete',
     chord: 'Enter a chord symbol',
     lyrics: 'Enter lyrics',

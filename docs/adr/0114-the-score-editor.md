@@ -30,7 +30,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   note input, holds on the note or chord just written at the value chosen, the caret after it (`tieOn`, Dorico's
   NoteInput.Tie), so a note held across a barline is typed as it is played. ♮ ♯ ♭ and Respell, with nothing chosen and nothing at the
   caret, act on the note or chord just written (`spellSpan`, Flat's sharpLastNote, Dorico's retrospective
-  respelling), so C♯ played on the keys becomes D♭ without going back to it. ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
+  respelling), so C♯ played on the keys becomes D♭ without going back to it. ⌥2 to ⌥8 add a note a 2nd to an octave
+  above the chord chosen or just written, in the key, ⇧⌥ below (`addInterval`, Flat's addNoteInterval); no palette
+  key, as Flat has none; the shortcuts sheet lists them. ♯ ♭ ♮ are toggles; a rest makes a range's notes rests.
 - **Only what applies is shown** (R32-B, MuseScore's Properties panel; the owner: "show only the actions relevant at
   that time"): a key that cannot act on what is chosen is not drawn, never greyed (the tie with no note of the same
   key after it nor one just written before the caret, `canTie`; a dot or tuplet the value cannot take; the accidentals and Respell with no note chosen nor

@@ -34,6 +34,7 @@ import {
   steppedKey,
   tieNotes,
   tieOn,
+  addInterval,
   toggleAccidental,
   writeRest,
 } from './notes'
@@ -420,6 +421,13 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
         struck: null,
         selection: state.selection,
       })
+    case 'interval':
+      return layer === 'chords'
+        ? state
+        : commit(state, addInterval(draft, layer, spellSpan(state), action.steps), {
+            struck: null,
+            selection: state.selection,
+          })
     case 'tie': {
       if (layer === 'chords') return state
       if (state.selection)

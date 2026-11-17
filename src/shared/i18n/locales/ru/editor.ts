@@ -590,6 +590,8 @@ export const editor: LocaleResources['editor'] = {
     keyStep: 'На ступень вверх или вниз',
     semitone: 'На полутон вверх или вниз',
     octave: 'На октаву вверх или вниз',
+    intervalUp: 'Добавить ноту на секунду — октаву выше',
+    intervalDown: 'Добавить ноту на секунду — октаву ниже',
     delete: 'Удалить',
     chord: 'Ввести обозначение аккорда',
     lyrics: 'Ввести текст',

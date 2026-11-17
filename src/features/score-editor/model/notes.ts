@@ -375,6 +375,23 @@ export function steppedKey(key: Key, from: Midi, steps: number): Midi {
 }
 
 /**
+ * Chord input by interval (research F7, Flat's addNoteInterval): over each chord `where` takes, a
+ * note `steps` notes of the key above its highest (below its lowest where `steps` is negative), a
+ * 2nd to an octave; none past the piano's ends nor where the chord holds that key already.
+ */
+export function addInterval(draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft {
+  const taken = notesOf(draft, layer).filter(isAt(where))
+  const starts = [...new Set(taken.map((n) => n.startTick))]
+  return starts.reduce((next, at) => {
+    const chord = taken.filter((n) => n.startTick === at).map((n) => n.midi)
+    const from = steps > 0 ? Math.max(...chord) : Math.min(...chord)
+    const key = steppedKey(keyAt(draft, at), midi(from), steps)
+    if (key === from || chord.includes(key) || key < PIANO.from || key > PIANO.to) return next
+    return addToChord(next, layer, at, key, 0)
+  }, draft)
+}
+
+/**
  * The notes `where` takes moved `steps` notes of the key up or down, as a note dragged on the staff
  * moves (ADR 0096); nothing moves past the piano's ends.
  */

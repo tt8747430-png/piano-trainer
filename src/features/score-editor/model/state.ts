@@ -189,6 +189,8 @@ export type EditorAction =
   | { readonly type: 'syllable'; readonly verse: number; readonly text: string }
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
+  /** A note added to each chord chosen, else just written, `steps` notes of the key above (or below). */
+  | { readonly type: 'interval'; readonly steps: number }
   /** A chord set at the caret's place in the chords (the chord-symbol field's), the caret staying. */
   | { readonly type: 'chord'; readonly chord: Chord }
   /** A take written from the caret's bar. */
