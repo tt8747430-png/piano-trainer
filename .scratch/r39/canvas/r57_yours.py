@@ -27,14 +27,30 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
     });
     const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
     const any = courses.length + loose.length > 0;
+    // Select (owner, 2026-11-17: every list of the learner's things has Select): a checkbox leads each row, the bar's
+    // title counts what is picked, the floating bar acts on it, or on all when nothing is picked
+    const all = courses.flatMap((c) => [c.t, ...c.lessons.map((l) => l.t)]).concat(loose.map((l) => l.t));
+    const selOn = !!st.sel && any, picked = (st.picked ?? []).filter((t) => all.includes(t)), n = picked.length;
+    const ck = (t) => { const on = picked.includes(t); return { ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#B5A99B', ckMark: on ? 1 : 0, on2: on ? 'true' : 'false',
+      tap: () => set({ picked: on ? picked.filter((x) => x !== t) : [...picked, t] }) }; };
+    courses.forEach((c) => { Object.assign(c, ck(c.t)); c.lessons.forEach((l) => Object.assign(l, ck(l.t))); });
+    loose.forEach((l) => Object.assign(l, ck(l.t)));
+    const dropMany = (ts) => set({ gone: { ...gone, ...Object.fromEntries(ts.map((t) => [t, true])) }, sel: false, picked: [], sheet: null, toast: ts.length === 1 ? ts[0] + ' deleted' : named(ts) + ' deleted' });
+    const named = (ts) => { const nc = ts.filter((t) => Y.courses.some((c) => c.t === t)).length, nl = ts.length - nc, w = (k, one, many) => k + ' ' + (k === 1 ? one : many);
+      return [nl ? w(nl, 'lesson', 'lessons') : '', nc ? w(nc, 'course', 'courses') : ''].filter(Boolean).join(' and '); };
     const states = [['Nothing made yet', bare, { bare: true, q: '' }, { bare: false }], ['Search finds nothing', !bare && ql === 'chopin', { q: 'Chopin', bare: false }, { q: '' }],
+      ['Select, two picked', selOn && n === 2, { sel: true, picked: ['Warm-up before church', 'Pedalling in slow hymns'], toast: null }, { sel: false, picked: [] }],
       ['A lesson deleted, with Undo', !!st.toast, { gone: { 'Notes from my teacher': true }, toast: 'Notes from my teacher deleted' }, { gone: {}, toast: null }]]
       .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) }));
     const sheetOpen = (n) => () => set({ sheet: n });
     return { ...common(st, set), closeSheet: () => set({ sheet: null }),
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
-      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
+      selOn, selOff: !selOn, canSel: !selOn && any, toggleSel: () => set({ sel: !selOn, picked: [], sheet: null }),
+      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses',
+      selDup: () => set({ sel: false, picked: [], toast: (n || all.length) === 1 ? 'Copy made' : named(n ? picked : all) + ' copied' }), selDel: () => dropMany(n ? picked : all),
+      selDupL: n ? 'Duplicate' : 'Duplicate all', selDelL: n ? 'Delete' : 'Delete all',
+      courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare || (!any && !ql), notBare: !(bare || (!any && !ql)), noneOn: !bare && !any && !!ql,
       noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
       rowOn: sheet === 'row', menuPos: st.menuPos ?? 'right: 16px; top: 120px', rowT: st.row || '', rowCourse: !!st.rowC, rowLesson: !st.rowC, rowOpen: st.rowC ? 'Course.dc.html' : 'Lesson.dc.html', rowSet: st.rowC ? 'YourCourseSettings.dc.html' : 'YourLessonSettings.dc.html', rowOpenL: st.rowC ? 'CourseLaptop.dc.html' : 'LessonLaptop.dc.html', rowSetL: st.rowC ? 'YourCourseSettingsLaptop.dc.html' : 'YourLessonSettingsLaptop.dc.html', rowIsLesson: !Y.courses.some((c) => c.t === st.row),
       removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: st.row + ' deleted' }),
@@ -43,22 +59,29 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }) };''')
 
 BOOKT = BOOKI.replace('22', '20')
+DUPSEL = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>'
+# Select's parts, as Takes' (r59): the checkbox leading a row, a hit over the whole row, the row's ··· gone meanwhile
+YCHECK = lambda v: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; margin: 0 10px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{{v}.ckLine}}}}; background: {{{{{v}.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{{v}.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+YHIT = lambda v: f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{{v}.on2}}}}" aria-label="{{{{{v}.t}}}}" onClick="{{{{{v}.tap}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
+OFFSEL = lambda x: f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{x}</sc-if>'
 TILE = lambda bg, inner: f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {bg}; display: flex; align-items: center; justify-content: center">{inner}</span>'
 ROWMORE = lambda act, label: f'<button type="button" aria-label="More for {label}" onClick="{{{{{act}}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button>'
 LTILE = (f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center; '
          f'background: {{{{l.tileBg}}}}; box-shadow: {{{{l.tileRing}}}}; color: {{{{l.tileFg}}}}">'
          f'<sc-if value="{{{{l.learned}}}}" hint-placeholder-val="{{{{false}}}}">{CHECKI}</sc-if><sc-if value="{{{{l.todo}}}}" hint-placeholder-val="{{{{true}}}}">{BOOKT}</sc-if></span>')
 def LROW(href, indent):
-    return (f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 6px 4px 6px {indent}px; box-shadow: inset 0 -1px 0 {FILL}">'
+    # one column of checkboxes down the list (Mail, Files): a course's lesson keeps its indent after the box
+    sp = f'<span aria-hidden="true" style="flex: none; width: {indent - 16}px"></span>' if indent > 4 else ''
+    return (f'<div style="position: relative; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 6px 4px 6px 4px; box-shadow: inset 0 -1px 0 {FILL}">{YHIT("l")}{YCHECK("l")}{sp}'
             f'<a href="{href}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none">{LTILE}'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{l.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{l.d}}}}</span></span></a>'
-            f'{ROWMORE("l.more", "{{l.t}}")}</div>')
+            f'{OFFSEL(ROWMORE("l.more", "{{l.t}}"))}</div>')
 def LIST(lap):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
-    course = (f'<div style="display: flex; align-items: center; gap: 4px; min-height: 64px; padding: 6px 4px 6px 4px; box-shadow: inset 0 -1px 0 {FILL}">'
+    course = (f'<div style="position: relative; display: flex; align-items: center; gap: 4px; min-height: 64px; padding: 6px 4px 6px 4px; box-shadow: inset 0 -1px 0 {FILL}">{YHIT("c")}{YCHECK("c").replace("margin: 0 10px", "margin: 0 18px 0 10px")}'
               f'<button type="button" aria-label="Show its lessons" aria-expanded="{{{{c.isOpen}}}}" onClick="{{{{c.toggle}}}}" style="flex: none; width: 44px; height: 44px; margin-right: -8px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center"><span style="display: flex; transform: {{{{c.chev}}}}; transition: transform .2s cubic-bezier(.22,1,.36,1)">{CHEV_R}</span></button>'
               f'<a href="{ch}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{c.paint}}}}; display: flex; align-items: center; justify-content: center">{FOLDI}</span>'
-              f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></span></a>{ROWMORE("c.more", "{{c.t}}")}</div>'
+              f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></span></a>{OFFSEL(ROWMORE("c.more", "{{c.t}}"))}</div>'
               f'<sc-if value="{{{{c.isOpen}}}}" hint-placeholder-val="{{{{true}}}}"><sc-for list="{{{{c.lessons}}}}" as="l" hint-placeholder-count="3">{LROW(lh, 44)}</sc-for></sc-if>')
     return (f'<sc-if value="{{{{listOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden; padding: 0 0 0 8px"><sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
             f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 4)}</sc-for></div></sc-if>'
@@ -71,16 +94,20 @@ SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items:
 # canvas 167: the + is New's dial, as Songs' (the app's SpeedDial): it turns to a close, the page dims, and New lesson
 # and New course come up over it named in words, the nearest the thumb first; one chosen opens its own short sheet
 # canvas 169: the + is the kit's one New dial (NEWDIAL), as Songs' and the Practice libraries'
-FAB = lambda bottom: NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], bottom)
+FAB = lambda bottom: OFFSEL(NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], bottom))
+YSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
+_YSELIN = SELACT('{{selDupL}}', 'selDup', DUPSEL) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
+YSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_YSELIN, 34)}</sc-if>'
+YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 276px; width: 440px; bottom: 28px') + '</sc-if>'  # centred on the list's 880 column (56 + 440), not the pane
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 # a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
 ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))
 YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 112px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
           f'<span style="flex: 1">{{{{toastT}}}}</span><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>')
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
-yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
-       f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
-ylm = (f'{LTITLEBAR("Your lessons and courses", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + NEWBTN("openNew"), "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(True)}', 880) + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+yph = (f'{TITLEBAR("{{pageT}}", YSEL, "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
+       f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YSELBAR}{YTOAST}')
+ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL + OFFSEL(NEWBTN("openNew")), "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(True)}', 880) + YSELBAR_L + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
        POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 28px; top: 76px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
