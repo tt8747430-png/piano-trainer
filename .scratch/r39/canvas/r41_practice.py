@@ -204,14 +204,14 @@ def Rw(t, s, v, i, c, href, places=(), tags=(), ic=INK):
 library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name'], 'favs': ['Axis of Awesome'], 'open': {},
   'filters': [{'name': 'Key', 'opts': [['Major key', 18], ['Minor key', 8]]}],
   # at All the last opened lead the page, as in every Practice library (loop, 2026-11-15; round 58)
-  'sections': [{'g': 'Recently used', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', '', '', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('ii–V–I', 'ii7 – V7 – Imaj7', '', '', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',))]},
-               {'g': 'Pop', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', '', 'I V', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('50s doo-wop', 'I – vi – IV – V', '', 'I vi', HONEY, 'Progression.dc.html', (), ('Major key',)), Rw('Royal Road', 'IV – V – iii – vi', '', 'IV', HONEY, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Jazz', 'rows': [Rw('ii–V–I', 'ii7 – V7 – Imaj7', '', 'ii', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('Rhythm changes', 'I – vi – ii – V', '', 'I vi', SKY, 'Progression.dc.html', (), ('Major key',)), Rw('Cycle of dominants', 'I7 – IV7 – ♭VII7 – ♭III7', '', 'V7', SKY, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Blues', 'rows': [Rw('12-bar blues', 'I7 – IV7 – I7 – I7 – IV7 – IV7 – I7 – I7 – V7 – IV7 – I7 – V7', '', 'I7', LILAC, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Cadences', 'rows': [Rw('Perfect cadence', 'I – IV – V – I', '', 'V I', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Plagal cadence', 'I – IV – I', '', 'IV I', SAGE, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Classical', 'rows': [Rw('Pachelbel', 'I – V – vi – iii – IV – I – IV – V', '', 'I V', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Andalusian cadence', 'i – ♭VII – ♭VI – V', '', 'i', SAGE, 'Progression.dc.html', (), ('Minor key',))]},
-               {'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', '', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('', 'v', .4)),
+  'sections': [{'g': 'Recently used', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', 'Major', '', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('ii–V–I', 'ii7 – V7 – Imaj7', 'Major', '', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',))]},
+               {'g': 'Pop', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', 'Major', 'I V', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('50s doo-wop', 'I – vi – IV – V', 'Major', 'I vi', HONEY, 'Progression.dc.html', (), ('Major key',)), Rw('Royal Road', 'IV – V – iii – vi', 'Major', 'IV', HONEY, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Jazz', 'rows': [Rw('ii–V–I', 'ii7 – V7 – Imaj7', 'Major', 'ii', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('Rhythm changes', 'I – vi – ii – V', 'Major', 'I vi', SKY, 'Progression.dc.html', (), ('Major key',)), Rw('Cycle of dominants', 'I7 – IV7 – ♭VII7 – ♭III7', 'Major', 'V7', SKY, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Blues', 'rows': [Rw('12-bar blues', 'I7 – IV7 – I7 – I7 – IV7 – IV7 – I7 – I7 – V7 – IV7 – I7 – V7', 'Major', 'I7', LILAC, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Cadences', 'rows': [Rw('Perfect cadence', 'I – IV – V – I', 'Major', 'V I', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Plagal cadence', 'I – IV – I', 'Major', 'IV I', SAGE, 'Progression.dc.html', (), ('Major key',))]},
+               {'g': 'Classical', 'rows': [Rw('Pachelbel', 'I – V – vi – iii – IV – I – IV – V', 'Major', 'I V', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Andalusian cadence', 'i – ♭VII – ♭VI – V', 'Minor', 'i', SAGE, 'Progression.dc.html', (), ('Minor key',))]},
+               {'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', 'Major', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]}]},
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('Key', 'v', .6)),
   add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', 'openFolder')))
 library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, '400 Piano Chord Progressions': False, 'Classical': False, 'Rhythm styles': False},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 9], ['Intermediate', 6], ['Advanced', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
@@ -227,12 +227,12 @@ library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Intermediate', 1]]}],
   'sections': [{'g': 'The Virtuoso Pianist', 'rows': [Rw('Hanon', 'Finger independence', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',))]},
                {'g': 'Five-finger position', 'rows': [Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
 library('JazzVocabulary', 'Jazz vocabulary', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': [], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Advanced', 1], ['Professional', 2]]}],
   'sections': [{'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', LILAC, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', LILAC, 'Exercise.dc.html', (), ('Professional',))]},
                {'g': 'Piano With Jonny', 'rows': [Rw('2-5-1 scale', 'Swung 8ths over a ii–V–I', 'Beginner', '251', SKY, 'Exercise.dc.html', (), ('Beginner',)), Rw('Rapid switch', 'One line through all twelve keys', 'Professional', '12', SKY, 'Exercise.dc.html', (), ('Professional',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
 
 # ═════ A progression (Hooktheory: the chords coloured by function, the moves drawn) ═════
 PR = js(r'''

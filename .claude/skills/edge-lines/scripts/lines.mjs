@@ -274,11 +274,15 @@ async function analyse(page, scr, phone) {
   // (proximity); the row is too wide for what it holds: narrow the list, set it in columns, or bring the end mark in.
   if (scr.w >= 700) {
     const cut = new Set()
+    // a table's rows are read down their columns, under a header row whose labels stand on the rows' edges
+    const leafL = (el) => [...el.querySelectorAll('*')].filter((e) => vis(e) && !e.children.length && e.textContent.trim() && e.getBoundingClientRect().width > 4).map((e) => Math.round(e.getBoundingClientRect().left))
+    const heads = [...document.querySelectorAll('main *')].filter((h) => vis(h) && h.getBoundingClientRect().height < 40 && h.getBoundingClientRect().width > 420 && !h.closest('a, [role=button], li')).map(leafL).filter((l) => l.length >= 3)
+    const inTable = (row) => { const l = leafL(row); return heads.some((h) => h.filter((x) => l.some((y) => Math.abs(x - y) <= 3)).length >= 3) }
     for (const row of document.querySelectorAll('main a, main [role=button], main li')) {
       if (!vis(row) || row.closest('nav, [role=dialog], [data-float]')) continue
       const r = row.getBoundingClientRect(); if (r.width < 420 || r.height > 120) continue
       const leaves = [...row.querySelectorAll('*')].filter((e) => vis(e) && !e.children.length && e.getBoundingClientRect().width > 4)
-      if (leaves.length < 2) continue
+      if (leaves.length < 2 || inTable(row)) continue
       const xs = leaves.map((e) => e.getBoundingClientRect()).sort((p, q) => p.left - q.left)
       let best = 0
       for (let i = 1; i < xs.length; i++) { const end = Math.max(...xs.slice(0, i).map((b) => b.right)); best = Math.max(best, xs[i].left - end) }

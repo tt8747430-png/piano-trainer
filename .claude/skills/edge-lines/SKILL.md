@@ -58,7 +58,7 @@ It judges those relations too (PROBLEM or NOTE):
 - columns side by side whose tops miss by up to 40 while they share most of their height: a slip, not two columns;
 - the page's gutter: on a phone a column starting further in than 20 with nothing drawn at its left (a margin kept for a control not shown, an edit handle), and more than 24 bare between the bar and the first content (a band nothing fills);
 - a bare band under a column: on a wide screen, boxes side by side sharing a top whose content ends 48 or more apart (the course's cover beside its name), the shorter one's paper left unused (owner, 2026-11-17: "these empty spaces on the left under the sections should not be"); its content belongs in the bar, the foot or a band across the top;
-- a row cut in two: on a wide screen, a list row whose words end more than 240 from its trailing mark (a chevron, a Next, a value) reads as two things (proximity; owner, 2026-11-17, a course's lesson rows marked): narrow the list, set it in columns, or bring the end in;
+- a row cut in two: on a wide screen, a list row whose words end more than 240 from its trailing mark (a chevron, a Next, a value) reads as two things (proximity; owner, 2026-11-17, a course's lesson rows marked): narrow the list, set it in columns, or bring the end in. A table is read down its columns: rows lined up under a header row of three or more labels are not counted, so every column of a table carries its heading;
 - Fitts: a target under 44 on a phone or 40 on a laptop (its `::before` reach counted);
 - Hick: more than seven choices at once in one bar, menu, tab row or radio group;
 - Von Restorff: more than one honey act on a screen;

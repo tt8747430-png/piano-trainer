@@ -64,7 +64,7 @@ UNDO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="curr
 REDO = UNDO.replace('<path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path>', '<path d="m15 14 5-5-5-5"></path><path d="M20 9H9a5 5 0 0 0 0 10h3"></path>')
 def KEYSOF(lst, h):
     return PKEYS(lst, h)
-_SHORT = (f'<aside style="padding: 12px 16px; border-radius: 12px; background: {HONEY}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8A5A1C">In short</span><span contenteditable="{{{{editing}}}}" style="font-size: 16px; font-weight: 600; outline: none">{{{{s.take}}}}</span></aside>')
+_SHORT = (f'<aside style="align-self: flex-start; max-width: 65ch; box-sizing: border-box; padding: 12px 16px; border-radius: 12px; background: {HONEY}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #8A5A1C">In short</span><span contenteditable="{{{{editing}}}}" style="font-size: 16px; font-weight: 600; outline: none">{{{{s.take}}}}</span></aside>')
 def DOC(lap=False):
     kbn, qn, kh = ('kbL', 'qkbL', 150) if lap else ('kb', 'qkb', 96)
     handle = ''
@@ -82,12 +82,14 @@ def DOC(lap=False):
     # on a laptop a section's words and its In short stand side by side, and its keyboard runs the page's width under
     # them, three octaves at a real key's proportion, as the Player's (owner, 2026-11-17: "these keyboards dont make
     # any sense, make other layout for the keyboards"); on a phone they stack
-    secst = ('display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 48px; row-gap: 16px; align-items: start' if lap else 'display: flex; flex-direction: column; gap: 12px')
-    sec = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="2"><section onClick="{{{{s.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{s.ring}}}}; outline-offset: 6px">' + ('<div style="display: flex; flex-direction: column; gap: 12px">' if lap else '') +
+    # In short follows its example on the column's edge, sized to its words, in the phone's order (owner, 2026-11-17:
+    # "i dont like this alignment of these yellow explanations on the right side")
+    secst = 'display: flex; flex-direction: column; gap: 12px'
+    sec = (f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="2"><section onClick="{{{{s.pick}}}}" style="position: relative; {secst}; border-radius: 8px; outline: 2px solid {{{{s.ring}}}}; outline-offset: 6px">' +
            f'<h2 data-sec contenteditable="{{{{editing}}}}" style="margin: 0; scroll-margin-top: 16px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; outline: none">{{{{s.h}}}}</h2>'
            f'<sc-if value="{{{{s.hasP}}}}" hint-placeholder-val="{{{{true}}}}"><p contenteditable="{{{{editing}}}}" style="margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; text-wrap: pretty; outline: none">{{{{s.p}}}}</p></sc-if>'
            f'<sc-if value="{{{{s.hasSteps}}}}" hint-placeholder-val="{{{{false}}}}"><ol style="margin: 0; padding-left: 24px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 4px"><sc-for list="{{{{s.steps}}}}" as="x" hint-placeholder-count="4"><li contenteditable="{{{{editing}}}}" style="outline: none">{{{{x.x}}}}</li></sc-for></ol></sc-if>'
-           + ('</div>' + _SHORT.replace('<aside style="', '<aside style="align-self: end; ', 1) + f'<div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 12px">{ex}</div>' if lap else f'{ex}' + _SHORT) + '</section></sc-for>')
+           + f'{ex}' + _SHORT + '</section></sc-for>')
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #A8551F">{{{{place}}}} · Foundations</span>'
             f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; line-height: 1.15; font-weight: 600; outline: none; text-wrap: balance">{{{{title}}}}</h1>'
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 17px; line-height: 1.5; color: {SOFT}; outline: none">{{{{summary}}}}</p>'

@@ -69,10 +69,8 @@ def _crrow(row, c):
 _CONT = CONT.replace('{{contT}}', 'Continue · Foundations').replace('{{nextT}}', 'How major scales work').replace('{{contSub}}', 'Lesson 7 of 13')
 _LEV = lambda lap: _fill(LEVELLIST(lap), list(enumerate(_LVS)), _lvrow)
 UNDER = _CONT + H2('Levels') + _LEV(False) + H2('Courses', SEEALLH('LearnCourses.dc.html')) + _fill(COURSESTRIP, _CRS, _crrow) + OWNGROUP()
-UNDER_L = (_CONT + '<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">'
-           + H2('Levels').replace('align-items: baseline', 'align-items: center; min-height: 44px') + _LEV(True) + '</div><div style="display: flex; flex-direction: column; gap: 16px">'
-           + OWNGROUP(True).replace('align-items: baseline', 'align-items: center; min-height: 44px', 1) + '</div></div>'
-           + H2('Courses', SEEALLH('LearnCoursesLaptop.dc.html')) + _fill(COURSEGRID, _CRS, _crrow))
+# the laptop's Learn as LearnLaptop draws it: Continue, Levels as four cards, Courses, then the learner's own as three
+UNDER_L = (_CONT + H2('Levels') + _LEV(True) + H2('Courses', SEEALLH('LearnCoursesLaptop.dc.html')) + _fill(COURSEGRID, _CRS, _crrow) + OWNGROUP(True))
 
 # round 41: a suggestion wears its place's picture (a lesson the white circle it wears in Your lessons; a place its square), as Practice's rows do, over a line saying where it lives
 LESSONT = f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: #FEFDFB; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>'
