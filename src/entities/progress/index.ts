@@ -81,7 +81,6 @@ export {
   BADGES,
   badgesOf,
   isBadgeId,
-  nextMilestone,
   TIERS,
   type Badge,
   type BadgeFigures,

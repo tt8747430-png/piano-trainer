@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { BADGES, badgesOf, nextMilestone, type BadgeFigures } from './badges'
+import { BADGES, badgesOf, type BadgeFigures } from './badges'
 
 const none: BadgeFigures = {
   bestStreak: 0,
@@ -33,13 +33,6 @@ describe('the badges (B1)', () => {
     expect(library).toMatchObject({ earned: 0, tier: null, next: 1 })
   })
 
-  it('picks the nearest unearned tier as the next milestone', () => {
-    const next = nextMilestone({ ...none, songsLearned: 13, lessonsDone: 2, bestStreak: 6 })
-    // Repertoire is 8 of 10 songs from silver to gold, the streak 3 of 4 days, lessons 1 of 9:
-    // repertoire is the furthest along.
-    expect(next).toMatchObject({ id: 'repertoire', tier: 'gold', left: 2, goal: 15 })
-  })
-
   it('Scale Master counts keys practised', () => {
     const scales = (keysPractised: number) =>
       badgesOf({ ...none, keysPractised }).find((b) => b.id === 'scales')
@@ -50,17 +43,5 @@ describe('the badges (B1)', () => {
     expect(scales(2)).toMatchObject({ earned: 0, next: 3 })
     expect(scales(8)).toMatchObject({ earned: 2, tier: 'silver', next: 15 })
     expect(scales(24)).toMatchObject({ earned: 4, next: null })
-  })
-
-  it('has no next milestone once every tier is earned', () => {
-    const all = {
-      bestStreak: 999,
-      songsLearned: 999,
-      lessonsDone: 999,
-      keysPractised: 24,
-      daysPractised: 999,
-      libraryBuilt: 999,
-    }
-    expect(nextMilestone(all)).toBeNull()
   })
 })

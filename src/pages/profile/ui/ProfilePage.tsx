@@ -12,7 +12,7 @@ import { Avatar, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { AchievementsPreview } from './AchievementsPreview'
-import { BadgesPreview, NextMilestone } from './BadgesPreview'
+import { BadgesPreview } from './BadgesPreview'
 import { HistoryPreview } from './HistoryPreview'
 import { WeekCard } from './WeekCard'
 
@@ -20,7 +20,7 @@ import { WeekCard } from './WeekCard'
  * The Profile, a place of its own (B1, memory-palaces'): the learner's name in its bar with their
  * notifications' bell and, on a phone, Settings; their picture (Edit photo on it), name, handle and
  * year joined, and three tiles: the day streak (to Streak), the songs learned, the time practised;
- * the week as a bar a day; the badge nearest as a ring; the first badges and achievements, each with
+ * the week as a bar a day; the latest practice runs; the first badges and achievements, each with
  * See all, beside the rest on a laptop. A guest sees the
  * device's figures and Sign in; while the server's profile is read, its lines are grey.
  */
@@ -78,18 +78,18 @@ export function ProfilePage() {
           </span>
         }
       />
-      {/* One column on a phone; on a laptop two (canvas 128): the learner, the week and the next
-          badge, then the badges and achievements beside them. */}
+      {/* One column on a phone; on a laptop two (the Profile board): the learner, the week and the
+          practice history, then the badges and achievements beside them. Each badge's row carries
+          its own way to the next tier, so no card repeats the nearest one. */}
       <div className="mx-auto grid w-full max-w-2xl gap-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <div className="flex min-w-0 flex-col gap-4">
           <Hero />
           <WeekCard />
-          <NextMilestone />
+          <HistoryPreview />
         </div>
         <div className="flex min-w-0 flex-col gap-4 lg:pt-2">
           <BadgesPreview />
           <AchievementsPreview />
-          <HistoryPreview />
         </div>
       </div>
     </div>
@@ -225,9 +225,12 @@ function Tiles() {
   )
 }
 
-const TILE = 'card flex h-full flex-col items-start justify-start gap-1 px-3 pt-3 pb-2.5'
+const TILE = 'card flex h-full flex-col gap-1 p-3'
 
-/** A tile's figure over its name, the value first (canvas 128): "12", then "🔥 Day streak". */
+/**
+ * A tile (the Profile board, loop round 60): the figure leads with its mark on the same row at the
+ * right, its name one line under it: "12 🔥", then "Day streak".
+ */
 function TileFace({
   label,
   value,
@@ -242,24 +245,24 @@ function TileFace({
 }) {
   return (
     <>
-      <span className="text-2xl leading-tight font-bold tracking-[-0.01em] whitespace-nowrap">
-        {/* The figures outrank their units: "2 h 45 min" keeps to a third of a phone. */}
-        {String(value)
-          .split(/(\d+)/)
-          .map((part, i) =>
-            /^\d+$/.test(part) || part.trim() === '' ? (
-              part
-            ) : (
-              <span key={i} className="text-[0.8125rem] font-semibold tracking-normal">
-                {part}
-              </span>
-            ),
-          )}
+      <span className="flex items-center justify-between gap-1">
+        <span className="text-2xl leading-tight font-bold tracking-[-0.01em] tabular-nums whitespace-nowrap">
+          {/* The figures outrank their units: "2 h 45 min" keeps to a third of a phone. */}
+          {String(value)
+            .split(/(\d+)/)
+            .map((part, i) =>
+              /^\d+$/.test(part) || part.trim() === '' ? (
+                part
+              ) : (
+                <span key={i} className="text-[0.8125rem] font-semibold tracking-normal">
+                  {part}
+                </span>
+              ),
+            )}
+        </span>
+        <Icon aria-hidden className={cn('size-4.5 shrink-0', tone)} />
       </span>
-      <span className="flex min-w-0 items-start gap-[5px] text-[0.8125rem] leading-snug text-muted-foreground">
-        <Icon aria-hidden className={cn('mt-0.5 size-[15px] shrink-0', tone)} />
-        <span className="min-w-0 text-pretty">{label}</span>
-      </span>
+      <span className="truncate text-[0.8125rem] leading-snug text-muted-foreground">{label}</span>
     </>
   )
 }

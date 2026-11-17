@@ -23,7 +23,6 @@ export const account = {
       },
       tiers: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', platinum: 'Platinum' },
       tier: '{{tier}} · {{next}}',
-      locked: '{{have}} of {{goal}}',
       all: '{{tier}} · every tier earned',
       // How near the next tier is, in the badge's own unit (the board's line under each badge).
       toNext: {
@@ -40,7 +39,6 @@ export const account = {
         library_one: '{{count}} more song or folder to {{tier}}',
         library_other: '{{count}} more songs or folders to {{tier}}',
       },
-      next: 'Next badge',
       seeAll: 'See all',
       notStarted: 'Not started',
       tierOf: 'Tier {{tier}} of 4',

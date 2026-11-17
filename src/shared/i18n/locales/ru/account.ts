@@ -22,7 +22,6 @@ export const account: LocaleResources['account'] = {
       },
       tiers: { bronze: 'Бронза', silver: 'Серебро', gold: 'Золото', platinum: 'Платина' },
       tier: '{{tier}} · {{next}}',
-      locked: '{{have}} из {{goal}}',
       all: '{{tier}} · все ступени получены',
       toNext: {
         streak_one: 'До уровня «{{tier}}» ещё {{count}} день',
@@ -50,7 +49,6 @@ export const account: LocaleResources['account'] = {
         library_many: 'До уровня «{{tier}}» ещё {{count}} песен или папок',
         library_other: 'До уровня «{{tier}}» ещё {{count}} песни или папки',
       },
-      next: 'Следующий значок',
       seeAll: 'Все',
       notStarted: 'Не начат',
       tierOf: 'Ступень {{tier}} из 4',
