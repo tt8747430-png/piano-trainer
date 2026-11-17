@@ -115,8 +115,12 @@ def EDTOP(done):
             f'<span style="width: 4px"></span>{PLAYBTN(36).replace("22", "16").replace("20", "15")}{DOTS()}</header>')
 # The score lies on the page as the Player's does, no sheet of paper under it: Play and Edit keep it in place (loop round 62).
 def SCOREPAGE(w, size, pad):
-    return (f'<div style="padding: {pad}; display: flex; flex-direction: column; gap: 4px">'
-            f'<div style="text-align: center; font-family: {SERIF}; font-size: {round(22 * size)}px">Amazing Grace</div><div style="display: flex; justify-content: space-between; font-size: {round(10 * size)}px; color: {SOFT}"><span>1 · Verse 1 · <svg aria-hidden="true" width="8" height="13" viewBox="0 0 8 13" style="display: inline-block; vertical-align: -1px; margin: 0 2px"><ellipse cx="3.4" cy="10.6" rx="3.3" ry="2.3" transform="rotate(-20 3.4 10.6)" fill="currentColor"></ellipse><path d="M6.3 10V0.5" stroke="currentColor" stroke-width="1.2"></path></svg>= 80</span><span>Words: John Newton · Music: New Britain</span></div>'
+    lap = size > 1.1  # the Player's heading, value for value: one heading on the score in Play and in Edit
+    t, c, v, g = (36, 15, 14, 24) if lap else (24, 13, 12, 16)
+    return (f'<div style="padding: {pad}; display: flex; flex-direction: column">'
+            f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: {t}px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
+            f'<p style="margin: 8px 0 0; text-align: center; font-size: {c}px; color: {SOFT}">Words: John Newton · Music: New Britain</p>'
+            f'<div style="margin: {g}px 0 4px; font-size: {v}px; font-variant-numeric: tabular-nums; color: {SOFT}">1 · Verse 1 · <svg aria-hidden="true" width="8" height="13" viewBox="0 0 8 13" style="display: inline-block; vertical-align: -1px; margin: 0 2px"><ellipse cx="3.4" cy="10.6" rx="3.3" ry="2.3" transform="rotate(-20 3.4 10.6)" fill="currentColor"></ellipse><path d="M6.3 10V0.5" stroke="currentColor" stroke-width="1.2"></path></svg>= 80</div>'
             + score_svg(w, sel=5, size=size).replace(ACCENT, '#85B8DC') + '</div>')
 TILE = f'<button type="button" onClick="{{{{t.pick}}}}" style="flex: none; min-width: 46px; height: 46px; padding: 0 8px; border: 0; border-radius: 11px; background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; box-shadow: 0 0 0 1px {LINE}; font-family: \'Noto Music\', {FONT}; font-size: {{{{t.fs}}}}px; font-weight: 600">{{{{t.l}}}}</button>'
 PALETTE = (f'<div style="flex: none; border-radius: 18px 18px 0 0; background: {SHEET}; box-shadow: 0 -1px 0 {LINE}, 0 -10px 24px -18px rgba(51,41,33,.4); padding: 4px 0 6px; display: flex; flex-direction: column; gap: 8px">'

@@ -126,13 +126,13 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
 ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
 ED4 = ED4.replace("keysOn: keys,", "keysOn: keys, keysShown: keys && !open, notKeys: !keys || open,", 1)
 eph4 = (TIP_CSS + EBAR('Song.dc.html', 'Player.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "16px 12px 8px")}</div>' + SHEETP)
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "7px 12px 8px")}</div>' + SHEETP)
 
 # the laptop: full screen as the Player; the score, the keys under it; the palette docked at the right
 elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L)
         + f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px">'
         f'<div style="min-width: 0; min-height: 0; display: flex; flex-direction: column">'
-        f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 800px">{SCOREPAGE(760, 1.3, "32px 40px 16px")}</div></div>'
+        f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 800px">{SCOREPAGE(760, 1.3, "10px 40px 16px")}</div></div>'
         f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{KEYS(170).replace("kb.", "kbL.").replace("border-radius: 14px;", "border-radius: 0;")}</div></sc-if></div>'
         f'<aside aria-label="Palette" data-strip style="min-height: 0; display: flex; flex-direction: column; background: {SHEET}; box-shadow: -1px 0 0 {LINE}">'
         + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>'

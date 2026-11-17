@@ -123,6 +123,8 @@ owner's, typos fixed.
   of fifths.
 - **Floating controls** hide when the learner taps elsewhere, reliably. Nothing traps a click.
 
+- **One heading on the score in Play and in Edit (loop 63, 2026-11-17):** the editor printed the song's heading its own way (a 22 title, the credits pushed right on the verse's line); it now prints the Player's, value for value: the title centred (24 on a phone, 36 on a laptop), the credits centred under it, then the verse and tempo at the score's left 16 (24) below, the title at the same height in both modes, so switching Play and Edit changes the tools, not the page (consistency, Jakob; the flow lines). Only the laptop editor's docked palette moves the column, as ruled (canvas v421).
+
 ## Sheet, selection and playhead
 
 - **Names:** Page view, Vertical scroll, Panorama.
