@@ -83,7 +83,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   EditorLaptop board's popover; titled with the song's name, "Saved on this device" or "Saved to your account" under it for the
   learner's own song or version; a page at a time with Back): its groups untitled, parted by space alone (no headings over a drawer's
   groups, the owner's ruling; research F21's titled groups not built): Title and credits (its
-  value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Record a take, Takes; Settings, each one tap away by its name
+  value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Takes (Record a take is the note band's, between Piano keys and Play, a recorder's dot in
+  its ring, as the Editor boards draw it; with no MIDI keyboard it opens the menu's page that says so); Settings, each one tap away by its name
   alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano, MIDI keyboard and, where keys type them
   (a fine pointer), Shortcuts with ? as its value; Export… (the learner's own song or version, saved as it
   is edited, through the song page's export sheet, as the board's Export row) and Print (`EditorPrint`: the draft as

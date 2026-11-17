@@ -6,6 +6,8 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, Record a take in the note band (the Editor boards, loop round 46):** it was a row in the ··· menu; it stands between Piano keys and Play, a crimson dot in its ring, on both sizes, and is gone from the menu; a lesson's example has none (2026-11-17).
+- **Loop round 61, the score stays under the eye (research F20, checked):** hiding or showing the keys leaves the caret's line where it was mid-score (476 → 476 at 1710, 407 → 407 at 402); only at the score's end, with no room to scroll, does the music settle down (2026-11-17).
 - **Loop round 61, no "Use for new songs" in Layout (research F22, not built):** a saved layout default would make Reset mean two things and add a hidden setting; every new song starts from the one layout, and Reset returns to it ("fewer settings") (2026-11-17).
 - **Loop round 61, Go to bar (research F11, Flat's and Dorico's ⌘G; canvas v370, EditorLaptop's "Go to bar (⌘G)" state):** the editor had no way to jump to a bar but the arrows; ⌘G hangs a small card under the sheet's head, the caret's bar in its field and "of 16" beside it, Enter takes the caret to that bar's first beat; listed in the shortcuts sheet (2026-11-17).
 - **Loop round 61, the editor's menu groups untitled (the boards' MENUCARD; the Player's ruling "i don't like the headings or titles of the settings sections"):** its "Settings" and "Publishing" labels are gone, the groups parted by space; research F21's "This score" and "Editor" titles were not built for the same ruling (2026-11-17).

@@ -115,8 +115,8 @@ function RecordPage() {
 }
 
 /**
- * The gear's first page (R32-B, Flat's document menu): the score's acts, View, Transpose, Record a
- * take and Takes; then its Settings, each one tap from here with a line saying what it does:
+ * The gear's first page (R32-B, Flat's document menu): the score's acts, View, Transpose and Takes
+ * (Record a take is the note band's, beside Play, as the Editor boards draw it); then its Settings, each one tap from here with a line saying what it does:
  * Instruments, Layout, Note input, Recording; then an original's draft's acts. What the score prints
  * (the title, key, time, clef, tempo) is set where it prints (ADR 0114), never here. A lesson's
  * example is shown and moved alone: no takes, no Settings.
@@ -143,7 +143,6 @@ function MainPage({
     (state) => state.draft.staves.length + (state.draft.leadSheet ? 0 : 1),
   )
   const count = useTakes((state) => selectTakesOf(state, takes.pieceId).length)
-  const { record } = useRecordTake()
   const example = meta.kind === 'example'
   return (
     <div className="flex flex-col gap-5">
@@ -173,12 +172,6 @@ function MainPage({
         />
         {example ? null : (
           <>
-            <RowButton
-              title={t('scoreSettings.acts.record')}
-              icon={Circle}
-              paint="sand"
-              onClick={record}
-            />
             {count > 0 ? (
               <RowButton
                 title={t('scoreSettings.acts.takes')}
@@ -263,11 +256,7 @@ function MainPage({
           <RowButton title={t('player:print')} icon={Printer} paint="sand" onClick={onPrint} />
         </SettingsGroup>
       )}
-      {draft ? (
-        <SettingsGroup flush>
-          {draft.rows}
-        </SettingsGroup>
-      ) : null}
+      {draft ? <SettingsGroup flush>{draft.rows}</SettingsGroup> : null}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { useLayerName } from '@/widgets/score-sheet'
 import { caretSaid } from '../model/caret-said'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useRecordTake } from '../model/use-record-take'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { useValueWord } from './use-value-word'
 import { KeysIcon } from '@/shared/ui'
@@ -16,7 +17,8 @@ const ROUND = 'size-11 shrink-0 rounded-pill [&_svg:not([class*=size-])]:size-5'
 /**
  * The palette's head (its canvas, the selection strip): what the caret is on, large ("C5 · half
  * note"), over where it is ("Bar 4 · beat 1 · Melody"); then what acts on it: Delete (the notes
- * chosen, else the ones before the caret, as Backspace), Piano keys (filled while shown) and Play
+ * chosen, else the ones before the caret, as Backspace), Piano keys (filled while shown), Record a
+ * take (a recorder's dot in its ring, the Editor boards'; a lesson's example records none) and Play
  * from here, the screen's one honey control, Stop while it sounds. While a take records, the acts
  * wait for Stop.
  */
@@ -34,6 +36,8 @@ export function SelectionStrip({ className }: { className?: string }) {
   const layerName = useLayerName(useStaffHeads())
   const keys = useFoldKeys()
   const recording = takes.stage !== 'idle'
+  const { record } = useRecordTake()
+  const recordLabel = t('scoreSettings.acts.record')
   const what =
     said.kind === 'end'
       ? t('strip.end')
@@ -89,6 +93,22 @@ export function SelectionStrip({ className }: { className?: string }) {
       >
         <KeysIcon aria-hidden />
       </Button>
+      {meta.kind === 'example' ? null : (
+        <Button
+          variant="tool"
+          size="icon"
+          aria-label={recordLabel}
+          title={recordLabel}
+          disabled={recording || meta.playing}
+          className={ROUND}
+          onClick={record}
+        >
+          <span
+            aria-hidden
+            className="size-4 rounded-full bg-destructive ring-[1.5px] ring-destructive ring-offset-[3px] ring-offset-card"
+          />
+        </Button>
+      )}
       <Button
         size="icon"
         aria-label={play}
