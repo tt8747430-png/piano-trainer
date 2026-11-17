@@ -229,7 +229,7 @@ _PANEROW = lambda label, n, href: f'<a href="{href}" style="min-height: 44px; di
 # song a row of a table whose columns head it; every edge shared.
 _PNAV = lambda label, n, href, on=False: (f'<a href="{href}" aria-current="{"page" if on else "false"}" style="min-height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 10px; background: {"#EEE9E2" if on else "transparent"}; color: {INK}; text-decoration: none; font-size: 15px; font-weight: {700 if on else 500}">'
                                           f'<span style="flex: 1">{label}</span><span style="font-weight: 400; color: {SOFT}; font-variant-numeric: tabular-nums">{n}</span></a>')
-LPANE = (f'<aside aria-label="Library" style="position: sticky; top: 0; align-self: start; box-sizing: border-box; {CARDROW}; padding: 4px 12px 12px; display: flex; flex-direction: column; gap: 2px">'
+LPANE = (f'<aside aria-label="Library" style="position: sticky; top: 0; align-self: start; box-sizing: border-box; {CARDROW}; padding: 12px; display: flex; flex-direction: column; gap: 2px">'
          + _PNAV('All songs', '93', 'AllSongsLaptop.dc.html', True) + _PNAV('Explore', '', 'ExploreLaptop.dc.html')
          + f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 12px 0 4px 10px"><h2 style="margin: 0; font-size: 13px; font-weight: 600; color: {SOFT}">Playlists</h2>'
          f'<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{{{openFolder}}}}" style="width: 36px; height: 36px; border: 0; border-radius: 18px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{PLUS.replace("24", "18")}</button></div>'

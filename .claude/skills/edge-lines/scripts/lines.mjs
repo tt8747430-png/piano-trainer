@@ -58,6 +58,13 @@ const report = await page.evaluate(() => {
     const parentBg = el.parentElement ? bg(el.parentElement) : ''
     return ring && parseFloat(cs.borderTopLeftRadius) >= 8 && opaque(bg(el)) && bg(el) !== parentBg
   }
+  const rowTop = (el) => {
+    const p = el.parentElement
+    if (!p) return el.getBoundingClientRect().top
+    const ps = getComputedStyle(p)
+    const pr = p.getBoundingClientRect(), r = el.getBoundingClientRect()
+    return /flex/.test(ps.display) && ps.flexDirection.startsWith('row') && ps.alignItems === 'center' && r.top - pr.top <= 12 && pr.height <= r.height + 24 ? pr.top : r.top
+  }
   const sel = 'header, h1, h2, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
   const blocks = [...document.querySelectorAll(sel)].filter(vis).map((el) => {
     const r = el.getBoundingClientRect()
@@ -66,7 +73,8 @@ const report = await page.evaluate(() => {
       el,
       tag: el.tagName.toLowerCase() + (el.getAttribute('role') ? '[' + el.getAttribute('role') + ']' : ''),
       text: (el.innerText || el.getAttribute('aria-label') || '').trim().split('\n')[0].slice(0, 32),
-      x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom),
+      // A block centred in a row is read by its row's top: the row is the edge the eye lines up.
+      x: Math.round(r.left), y: Math.round(rowTop(el)), r: Math.round(r.right), b: Math.round(r.bottom),
       card: isCard(el),
       floating: cs.position === 'fixed' || cs.position === 'absolute',
     }
@@ -136,6 +144,107 @@ const report = await page.evaluate(() => {
     const btns = [...b.el.querySelectorAll('button, a')].filter(vis).map((x) => getComputedStyle(x).backgroundColor).filter(opaque)
     if (new Set(btns).size >= 2 && btns.length >= 2) notes.push(`“${b.text}” holds acts of different fills: two focus points in one box?`)
   }
+  // ── Relations: how a card and the things in it belong to each other, not only where their edges fall.
+  const rel = [] // drawn: insets (purple), row rhythm (teal)
+  const R = (el) => el.getBoundingClientRect()
+  const textLeft = (el) => {
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim() && !n.parentElement.closest('[aria-hidden=true], svg') ? 1 : 3) })
+    const n = walk.nextNode()
+    if (!n) return null
+    const range = document.createRange()
+    range.selectNodeContents(n)
+    const r = range.getBoundingClientRect()
+    return r.width ? Math.round(r.left) : null
+  }
+  // The rows of a container: down through single wrappers to the first level with two visible children or more.
+  const rowsOf = (el) => {
+    let at = el
+    for (let i = 0; i < 4; i++) {
+      const kids = [...at.children].filter(vis).filter((k) => getComputedStyle(k).position !== 'absolute')
+      if (kids.length >= 2) return kids
+      if (kids.length !== 1) return []
+      at = kids[0]
+    }
+    return []
+  }
+  const named = (b) => `${b.tag} “${b.text}”`
+  // The app's own sidebar (its nav) is chrome of unlike things, not a group to judge.
+  for (const b of blocks.filter((b) => (b.card || b.el.tagName === 'ASIDE') && !b.el.closest('nav'))) {
+    const box = R(b.el)
+    const cs = getComputedStyle(b.el)
+    const rows = rowsOf(b.el)
+    if (rows.length === 0) continue
+    const rr = rows.map(R)
+    const ink = { l: Math.min(...rr.map((r) => r.left)), t: Math.min(...rr.map((r) => r.top)), r: Math.max(...rr.map((r) => r.right)), b: Math.max(...rr.map((r) => r.bottom)) }
+    // Where the words start, inside the card: the inset the eye reads (a row's hover fill is not its edge).
+    const lefts = rows.map(textLeft).filter((x) => x !== null)
+    const inL = Math.round((lefts.length ? Math.min(...lefts) : ink.l) - box.left)
+    const inT = Math.round(ink.t - box.top)
+    const inB = Math.round(box.bottom - ink.b)
+    rel.push({ k: 'in', x: box.left, y: box.top + 10, w: inL, label: inL })
+    rel.push({ k: 'inv', x: box.left + 10, y: box.top, h: inT, label: inT })
+    rel.push({ k: 'inv', x: box.left + 10, y: ink.b, h: inB, label: inB })
+    if (Math.abs(inT - inB) > 4 && inT < 40 && inB < 40) problems.push(`${named(b)}: top inset ${inT} and bottom inset ${inB} differ (an unbalanced box: the content sits off its centre)`)
+    // Stacked rows: the gaps between them, against the card's inset (inner closer than the edge, NN/g proximity).
+    const stacked = rr.every((r, i) => i === 0 || r.top >= rr[i - 1].bottom - 1)
+    if (stacked && rows.length >= 2) {
+      const gs = rr.slice(1).map((r, i) => Math.round(r.top - rr[i].bottom))
+      gs.forEach((g, i) => rel.push({ k: 'row', x: box.right - 18, y: rr[i].bottom, h: g, label: g }))
+      // A row holding a heading, or a hairline, starts a new group inside the card: its gap is a break, not the rhythm.
+      const breaks = (el) => R(el).height <= 4 || el.matches('h1, h2, h3, h4') || !!el.querySelector('h1, h2, h3, h4')
+      const plain = gs.filter((g, i) => !breaks(rows[i]) && !breaks(rows[i + 1]))
+      const widest = Math.max(...plain, 0)
+      const edge = Math.min(inL, inT || inL)
+      if (plain.length && widest >= edge && edge > 0) problems.push(`${named(b)}: rows ${widest}px apart but only ${edge}px from the card's edge: the card no longer reads as their group (inner gaps must be smaller than the inset)`)
+      const kinds = new Set(plain)
+      if (kinds.size > 1) notes.push(`${named(b)}: its rows sit ${[...kinds].join(', ')}px apart: one rhythm reads as one list`)
+      // Rows of one kind share one height.
+      const byTag = {}
+      rows.forEach((r, i) => { const key = r.tagName + (r.getAttribute('role') ?? ''); (byTag[key] ??= []).push(Math.round(rr[i].height)) })
+      for (const [k, hs] of Object.entries(byTag)) {
+        const set = [...new Set(hs)]
+        if (hs.length >= 3 && Math.max(...set) - Math.min(...set) > 2 && Math.max(...set) < 1.5 * Math.min(...set)) notes.push(`${named(b)}: its ${k.toLowerCase()} rows are ${set.join(', ')}px tall: alike things look alike (similarity)`)
+      }
+      // The rows' words start on one edge.
+      const ls = rows.filter((r) => !breaks(r)).map(textLeft).filter((x) => x !== null)
+      const off = [...new Set(ls)].filter((x) => ls.some((o) => near(o, x)))
+      if (off.length) problems.push(`${named(b)}: its rows' words start at ${[...new Set(ls)].join(', ')}: a near-miss inside one list`)
+    }
+    // The card from its neighbours: never closer to them than its contents are to its edge.
+    const sib = b.el.nextElementSibling
+    if (sib && vis(sib) && getComputedStyle(sib).position !== 'absolute') {
+      const s = R(sib)
+      const out = s.top >= box.bottom - 1 ? Math.round(s.top - box.bottom) : s.left >= box.right - 1 ? Math.round(s.left - box.right) : null
+      if (out !== null && out < Math.min(inL, inT) && out < 16) problems.push(`${named(b)}: ${out}px from its neighbour but ${Math.min(inL, inT)}px inset: it reads as part of the next thing`)
+    }
+    // Concentric corners: a filled thing near the card's edge rounds as the card less the inset.
+    const outerR = parseFloat(cs.borderTopLeftRadius)
+    for (const k of b.el.querySelectorAll('*')) {
+      const kr = R(k), ks = getComputedStyle(k)
+      const r2 = parseFloat(ks.borderTopLeftRadius)
+      const gap = Math.round(kr.left - box.left)
+      if (!vis(k) || !opaque(ks.backgroundColor) || r2 < 4 || gap > 8 || Math.round(kr.top - box.top) > 8 || kr.width < 40) continue
+      const want = Math.max(outerR - gap, 4)
+      if (Math.abs(r2 - want) > 4) { notes.push(`${named(b)}: corner ${outerR} with a ${r2}-round fill ${gap}px in: concentric would be about ${want}`); break }
+    }
+  }
+  // Headings: closer to what they head than to what comes before them (proximity).
+  for (const hd of document.querySelectorAll('h1, h2, h3, [role=heading]')) {
+    if (!vis(hd)) continue
+    // The heading's own row (a heading beside its + or See all) is the unit.
+    let unit = hd
+    for (let i = 0; i < 3 && unit.parentElement; i++) {
+      const row = [...unit.parentElement.children].filter(vis)
+      if (!row.every((k) => Math.abs(R(k).top + R(k).height / 2 - (R(unit).top + R(unit).height / 2)) < 16)) break
+      unit = unit.parentElement
+    }
+    const prev = unit.previousElementSibling, next = unit.nextElementSibling
+    if (!next || !vis(next)) continue
+    const u = R(unit)
+    const below = Math.round(R(next).top - u.bottom)
+    const above = prev && vis(prev) ? Math.round(u.top - R(prev).bottom) : null
+    if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${hd.textContent.trim().slice(0, 24)}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
+  }
   // Draw.
   const layer = document.createElement('div')
   layer.style.cssText = 'position: fixed; inset: 0; z-index: 2147483647; pointer-events: none; font: 600 11px/1 system-ui'
@@ -147,6 +256,11 @@ const report = await page.evaluate(() => {
     const c = g.bad ? '#E0201B' : '#1E8A3E'
     if (g.y1 !== undefined) add(`left: ${g.x}px; top: ${g.y1}px; height: ${g.y2 - g.y1}px; width: 0; border-left: 2px solid ${c}`, ''), add(`left: ${g.x + 4}px; top: ${(g.y1 + g.y2) / 2 - 6}px; color: ${c}; background: #fff`, String(g.g))
     else add(`top: ${g.y}px; left: ${g.x1}px; width: ${g.x2 - g.x1}px; height: 0; border-top: 2px solid ${c}`, ''), add(`top: ${g.y + 4}px; left: ${(g.x1 + g.x2) / 2 - 6}px; color: ${c}; background: #fff`, String(g.g))
+  }
+  for (const q of rel) {
+    const c = q.k === 'row' ? '#0E8C8C' : '#7A3FC2'
+    if (q.k === 'in') add(`left: ${q.x}px; top: ${q.y}px; width: ${q.w}px; height: 0; border-top: 2px solid ${c}`), add(`left: ${q.x + 2}px; top: ${q.y + 3}px; color: ${c}; background: #fff`, String(q.label))
+    else if (q.h > 0) add(`left: ${q.x}px; top: ${q.y}px; height: ${q.h}px; width: 0; border-left: 2px solid ${c}`), add(`left: ${q.x + 3}px; top: ${q.y + q.h / 2 - 6}px; color: ${c}; background: #fff`, String(q.label))
   }
   for (const b of blocks.filter((b) => b.card)) add(`left: ${b.x}px; top: ${b.y}px; width: ${b.r - b.x}px; height: ${b.b - b.y}px; outline: 2px solid rgba(230,120,0,.7)`)
   document.body.append(layer)
