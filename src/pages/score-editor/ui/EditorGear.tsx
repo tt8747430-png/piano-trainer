@@ -7,6 +7,7 @@ import {
   ListMusic,
   Mic,
   Music2,
+  Printer,
   Heading,
   Ruler,
   TextCursorInput,
@@ -39,6 +40,7 @@ import { usePalettePanel } from '../model/use-palette-panel'
 import { useRecordTake } from '../model/use-record-take'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { CreditsPage } from './CreditsPage'
+import { EditorPrint } from './EditorPrint'
 import { EditorTranspose } from './EditorTranspose'
 import { ScorePageBody } from './ScoreSettingsPages'
 
@@ -120,12 +122,14 @@ function MainPage({
   draft,
   own,
   onExport,
+  onPrint,
 }: {
   draft: EditorDraft | undefined
   own: Piece | undefined
   onExport: () => void
+  onPrint: () => void
 }) {
-  const { t } = useTranslation(['editor', 'music', 'songs'])
+  const { t } = useTranslation(['editor', 'music', 'songs', 'player'])
   const { meta, takes, view } = useScoreEditorContext()
   const keyName = useKeyName()
   const layout = useSettings((state) => selectScoreView(state).layout)
@@ -229,16 +233,19 @@ function MainPage({
           />
         </SettingsGroup>
       )}
-      {own ? (
+      {example ? null : (
         <SettingsGroup flush>
-          <RowButton
-            title={t('songs:export.action')}
-            icon={Download}
-            paint="sky"
-            onClick={onExport}
-          />
+          {own ? (
+            <RowButton
+              title={t('songs:export.action')}
+              icon={Download}
+              paint="sky"
+              onClick={onExport}
+            />
+          ) : null}
+          <RowButton title={t('player:print')} icon={Printer} paint="sand" onClick={onPrint} />
         </SettingsGroup>
-      ) : null}
+      )}
       {draft ? (
         <SettingsGroup flush title={t('original.more')}>
           {draft.rows}
@@ -283,6 +290,7 @@ export function EditorGear({
   own?: Piece | undefined
 }) {
   const [exporting, setExporting] = useState(false)
+  const [printing, setPrinting] = useState(false)
   const { view } = useScoreEditorContext()
   const laptop = useMediaQuery(LAPTOP)
   const page = view.gear ?? 'main'
@@ -312,6 +320,10 @@ export function EditorGear({
                 view.setGear(null)
                 setExporting(true)
               }}
+              onPrint={() => {
+                view.setGear(null)
+                setPrinting(true)
+              }}
             />
           ) : (
             <PageBody page={page} />
@@ -319,6 +331,7 @@ export function EditorGear({
         </SheetContent>
       </Sheet>
       <SongExportSheet piece={exporting ? (own ?? null) : null} onOpenChange={setExporting} />
+      {printing ? <EditorPrint onDone={() => setPrinting(false)} /> : null}
     </>
   )
 }
