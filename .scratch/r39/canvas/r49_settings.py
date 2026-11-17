@@ -308,10 +308,6 @@ LADMIN = (f'<sc-if value="{{{{admin}}}}" hint-placeholder-val="{{{{true}}}}"><a 
 # Settings and a close ×; on the left a search field and the places in groups, the open one on the sand wash; on the
 # right the place's sections, each a heading and plain rows (the name, its value or control at the row's end) parted by
 # hairlines, no cards and no capitals.
-CSET = (f'<style>.cset h3{{margin: 0 !important; font-size: 16px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; color: {INK} !important}}'
-        f'.cset section{{gap: 4px !important}}.cset [data-group]{{border-radius: 0 !important; background: transparent !important; box-shadow: none !important; overflow: visible !important}}'
-        f'.cset [data-group] > sc-for > *, .cset [data-group] > :is(a, button, div){{padding-left: 0 !important; padding-right: 0 !important; min-height: 56px !important; box-shadow: inset 0 -1px 0 {FILL} !important}}'
-        f'.cset [data-group] > sc-for:last-child > :last-child, .cset [data-group] > :last-child{{box-shadow: none !important}}.cset [data-group] > div > div:first-child, .cset [data-group] > div > button:only-child{{padding-left: 0 !important; padding-right: 0 !important}}</style>')
 LSEARCH = (f'<label style="height: 40px; border-radius: 10px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">'
            f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>'
            f'<input aria-label="Search settings" placeholder="Search" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 15px; color: {INK}; outline: none"></label>')
