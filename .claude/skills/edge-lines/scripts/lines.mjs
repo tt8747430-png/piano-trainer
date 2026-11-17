@@ -391,8 +391,11 @@ async function parts(page, scr) {
       const kind = el.tagName.toLowerCase()
       if (!name && !/^(nav|aside|main)$/.test(kind)) continue
       // The frame: the bar, the side pane, the title, the search: what should stay put between sibling pages.
-      const frame = /^(nav|aside|main|h1)$/.test(kind) || !!el.closest('header, nav, aside, [role=toolbar]') || kind === 'input'
-      out.push({ key: kind + '|' + name, name: name || kind, kind, frame, x: Math.round(r.left - scr.x), y: Math.round(r.top - scr.y), w: Math.round(r.width), h: Math.round(r.height) })
+      const frame = /^(nav|aside|main|h1)$/.test(kind) || !!el.closest('header, nav, aside, [role=toolbar]') || kind === 'input' || r.top - scr.y < 96
+      // The page's title, its first field, its main column and its side pane are matched by their role: their words
+      // change from page to page, their place should not.
+      const byRole = /^(h1|main|aside)$/.test(kind) || kind === 'input' && !out.some((o) => o.kind === 'input')
+      out.push({ key: byRole ? kind : kind + '|' + name, name: name || kind, kind, frame, x: Math.round(r.left - scr.x), y: Math.round(r.top - scr.y), w: Math.round(r.width), h: Math.round(r.height) })
     }
     const seen = {}
     return out.filter((p) => (seen[p.key] = (seen[p.key] || 0) + 1) === 1)
@@ -424,7 +427,7 @@ if (!flow) {
     if (a.frame) frames++
     if (!moved && !sized) { kept++; marks.push({ side: 0, ...a, c: 'kept' }, { side: 1, ...b, c: 'kept' }); continue }
     const what = [moved ? `moved ${dx >= 0 ? '+' : ''}${dx},${dy >= 0 ? '+' : ''}${dy}` : '', sized ? `resized ${a.w}×${a.h} → ${b.w}×${b.h}` : ''].filter(Boolean).join(', ')
-    console.log(`${a.frame ? 'PROBLEM' : 'FLOW'} ${a.frame ? "the page's frame changes: " : ''}${a.kind} “${a.name}” ${what}`)
+    console.log(`${a.frame ? 'PROBLEM' : 'FLOW'} ${a.frame ? "the page's frame changes: " : ''}${a.kind} “${a.name}”${b.name !== a.name ? ' (“' + b.name + '”)' : ''} ${what}`)
     marks.push({ side: 0, ...a, c: 'moved' }, { side: 1, ...b, c: 'moved', from: a })
   }
   for (const b of pb) if (!pa.some((a) => a.key === b.key)) { console.log(`FLOW new: ${b.kind} “${b.name}”`); marks.push({ side: 1, ...b, c: 'new' }) }
