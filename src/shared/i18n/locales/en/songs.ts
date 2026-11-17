@@ -44,7 +44,7 @@ export const songs = {
   // A song's row (R72): where it stands, when nothing has been played.
   row: { notStarted: 'Not started', learning: 'Learning', added: 'Added {{when}}' },
   // All songs (R72, Flat's library): every song in one list.
-  all: { title: 'All songs', search: 'Search your songs' },
+  all: { title: 'All songs', search: 'Search your songs', seeAll: 'See all', learned: 'Learned' },
   // Groups and the folders shared with them (R30 S6).
   groups: {
     title: 'Groups',
@@ -128,6 +128,7 @@ export const songs = {
     groupGone: 'This group no longer exists, or you are no longer a member.',
   },
   library: {
+    label: 'Library',
     showAll: 'Show all {{count}}',
     home: 'Home',
     play: 'Play',
@@ -291,6 +292,9 @@ export const songs = {
   },
   table: {
     songs: 'Songs',
+    title: 'Title',
+    composerKey: 'Composer and key',
+    progress: 'Progress',
   },
   archive: {
     title: 'Archive',

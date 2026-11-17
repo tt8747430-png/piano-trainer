@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ChevronRight, Plus } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FOLDER_PAINTS, useFolderName, useLibrary, type ShelvedFolder } from '@/entities/library'
@@ -12,10 +12,14 @@ import type { LibraryPage } from '../model/use-library-page'
 
 const isFolderPaint = isOneOf(FOLDER_PAINTS)
 
-/** A row of the list: a card on a phone (the Songs board's PLAYLISTROWS), a quiet row in a laptop's pane. */
+/**
+ * A row (the Songs board's PLAYLISTROWS): on a phone a row of one inset list, a hairline from the
+ * name's edge to the right between rows as an inset grouped list draws it, one common region for the
+ * whole list and never a card a row (NN/g, common region; `edge-lines`); a quiet row in a laptop's pane.
+ */
 const ROW = {
-  card: 'card min-h-20 gap-4 px-3 py-2 hover:bg-muted/60',
-  pane: 'min-h-16 gap-3 rounded-[12px] px-2 py-2 hover:bg-muted',
+  list: "relative min-h-18 gap-4 py-2 pr-3 hover:bg-muted/60 [li+li>&]:before:absolute [li+li>&]:before:top-0 [li+li>&]:before:right-0 [li+li>&]:before:left-18 [li+li>&]:before:h-px [li+li>&]:before:bg-border [li+li>&]:before:content-['']",
+  pane: 'min-h-14 gap-3 rounded-[12px] px-2 py-2 hover:bg-muted',
 } as const
 
 function Face({
@@ -81,7 +85,7 @@ function OwnPlaylist({
             <PlaylistCover
               paint={folder.paint}
               songs={useFirstSongs(folder.songs)}
-              className={pane ? 'size-12' : 'size-16'}
+              className={pane ? 'size-10' : 'size-14'}
             />
           }
           name={nameOf(folder)}
@@ -96,8 +100,8 @@ function OwnPlaylist({
  * The learner's playlists (owner, 2026-11-17: "what about copiing the flat layout and its playlists";
  * Flat's Playlists, the Songs board's PLAYLISTROWS): Favourites first, then their own, then those a
  * group shared with them, each its mosaic cover, its name and what it holds; a shared one wears the
- * sharer's face, says who, and opens itself (never Groups). New playlist is the list's last row. A
- * phone's rows are cards; a laptop's pane holds quieter rows (`pane`).
+ * sharer's face, says who, and opens itself (never Groups). A phone's are one inset list of rows; a
+ * laptop's pane holds quieter rows (`pane`). A new playlist is made from New, or the pane's +.
  */
 export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: boolean }) {
   const { t } = useTranslation('songs')
@@ -108,15 +112,16 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
   const shared = data.kind === 'ready' ? data.shared.filter((folder) => !folder.mine) : []
   const row = cn(
     'flex min-w-0 flex-1 items-center text-foreground transition-colors duration-150 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-    pane ? ROW.pane : ROW.card,
+    pane ? ROW.pane : ROW.list,
   )
+  const cover = pane ? 'size-10' : 'size-14'
   return (
-    <ul className={cn('flex flex-col', pane ? 'gap-0' : 'gap-2')}>
+    <ul className={cn('flex flex-col', !pane && 'card overflow-hidden pl-3')}>
       <li className="flex min-w-0">
         <Link to="/songs/all" search={{ favourites: true }} className={row}>
           <Face
             pane={pane}
-            cover={<PlaylistCover paint="rose" heart className={pane ? 'size-12' : 'size-16'} />}
+            cover={<PlaylistCover paint="rose" heart className={cover} />}
             name={t('places.favourites')}
             line={favouritesLine}
           />
@@ -144,7 +149,7 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
                     paint={isFolderPaint(folder.paint) ? folder.paint : 'grass'}
                     songs={songs}
                     face={folder.ownerName}
-                    className={pane ? 'size-12' : 'size-16'}
+                    className={cover}
                   />
                 }
                 name={folder.name}
@@ -157,28 +162,6 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
           </li>
         )
       })}
-      {page.may('addFolder') ? (
-        <li className="flex min-w-0">
-          <button
-            type="button"
-            onClick={() => page.open({ kind: 'folder', target: { kind: 'new', parent: null } })}
-            className={cn(row.replace('card ', ''), 'text-left')}
-          >
-            <span
-              aria-hidden
-              className={cn(
-                'grid shrink-0 place-items-center rounded-[10px] border-2 border-dashed border-border text-muted-foreground',
-                pane ? 'size-12' : 'size-16',
-              )}
-            >
-              <Plus className="size-6" />
-            </span>
-            <span className={cn('font-semibold', pane ? 'text-[0.9375rem]' : 'text-[1.0625rem]')}>
-              {t('folder.new')}
-            </span>
-          </button>
-        </li>
-      ) : null}
     </ul>
   )
 }

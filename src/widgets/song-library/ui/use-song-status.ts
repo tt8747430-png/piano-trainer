@@ -25,11 +25,11 @@ function playedWhen(at: string, locale: string, now: number, opens = true): stri
 }
 
 /**
- * A song's row's third line (the R72 board's "Bar 9 of 16 · Today"): where it stands (Learned, the bar
- * it stopped at, Learning, or Not started), then when it was last played, where it has been; a song of
- * the learner's never played, when it was added ("Not started · Added 4 Nov").
+ * Where a song stands, in two parts (the R72 board's "Bar 9 of 16" and "Today"): Learned, the bar it
+ * stopped at, Learning, or Not started; then when it was last played, or, for a song of the learner's
+ * never played, when it was added ("Added 4 Nov"); none for the app's songs never played.
  */
-export function useSongStatus(entry: Entry): string {
+export function useSongStanding(entry: Entry): { status: string; when: string | null } {
   const { t } = useTranslation(['songs', 'common'])
   const locale = useLocale()
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
@@ -44,8 +44,16 @@ export function useSongStatus(entry: Entry): string {
       : at
         ? t('row.learning')
         : t('row.notStarted')
-  if (at) return `${status} · ${playedWhen(at, locale, Date.now())}`
-  if (added)
-    return `${status} · ${t('row.added', { when: playedWhen(added, locale, Date.now(), false) })}`
-  return status
+  const when = at
+    ? playedWhen(at, locale, Date.now())
+    : added
+      ? t('row.added', { when: playedWhen(added, locale, Date.now(), false) })
+      : null
+  return { status, when }
+}
+
+/** A song's row's third line (the R72 board's "Bar 9 of 16 · Today"): where it stands, then when. */
+export function useSongStatus(entry: Entry): string {
+  const { status, when } = useSongStanding(entry)
+  return when === null ? status : `${status} · ${when}`
 }

@@ -110,7 +110,8 @@ const report = await page.evaluate(() => {
   for (const p of parents) {
     if (!p) continue
     // A gap set by space-between or a flexible spacer is room, not a step of the scale: not measured.
-    if (/space/.test(getComputedStyle(p).justifyContent) || [...p.children].some((k) => +getComputedStyle(k).flexGrow > 0 && !k.textContent.trim())) continue
+    // A bar's or a dialog head's centred title sits in room, not on a step.
+    if (p.closest('header, [role=dialog] > :first-child, [data-slot$=header]') || /space/.test(getComputedStyle(p).justifyContent) || [...p.children].some((k) => +getComputedStyle(k).flexGrow > 0 && !k.textContent.trim())) continue
     const kids = [...p.children].filter(vis).map((el) => ({ el, r: el.getBoundingClientRect() }))
     for (let i = 1; i < kids.length; i++) {
       const a = kids[i - 1].r, c = kids[i].r
@@ -127,7 +128,7 @@ const report = await page.evaluate(() => {
   for (const g of gaps) if (g.bad) problems.push(`gap ${g.g}px is off the 4/8 scale at ${g.x ?? g.x1},${g.y ?? g.y1}`)
   // A lone card: a card whose parent holds no other card, on the page's paper.
   // A pane of the app's places (aside, nav) and an inset grouped list (three rows or more) are the boxes the laws keep.
-  const kept = (el) => /^(ASIDE|NAV)$/.test(el.tagName) || el.children.length >= 3 && [...el.children].every((k) => /^(A|BUTTON|LI)$/.test(k.tagName) || k.getAttribute('role') === 'row')
+  const kept = (el) => /^(ASIDE|NAV)$/.test(el.tagName) || !!el.closest('[role=dialog], [role=alertdialog]') || el.children.length >= 3 && [...el.children].every((k) => /^(A|BUTTON|LI)$/.test(k.tagName) || k.getAttribute('role') === 'row')
   for (const b of blocks.filter((b) => b.card && !kept(b.el))) {
     const sibs = [...(b.el.parentElement?.children ?? [])].filter((s) => s !== b.el && vis(s) && isCard(s))
     if (sibs.length === 0 && b.r - b.x > 240 && b.b - b.y > 240) notes.push(`a lone card “${b.text}” (${b.r - b.x}×${b.b - b.y}): does it group anything the space could not?`)

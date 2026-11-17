@@ -59,11 +59,14 @@ export function useLibraryPage(
   {
     tree = false,
     favouritesOnly = false,
+    order,
   }: {
     /** One list of every song (All songs): no folders among them. */
     tree?: boolean
     /** The favourites alone (My songs' Favourites card). */
     favouritesOnly?: boolean
+    /** An order of its own, never the learner's sort (My songs' shelf: the latest played first). */
+    order?: { readonly sort: LibrarySort; readonly direction: SortDirection }
   } = {},
 ) {
   const { t } = useTranslation('songs')
@@ -73,8 +76,10 @@ export function useLibraryPage(
   const layout = useLibraryLayout()
   const repertoire = useRepertoire()
   const favourites = useLibrary(selectFavourites)
-  const sort = useLibrary(selectSort)
-  const direction = useLibrary(selectDirection)
+  const savedSort = useLibrary(selectSort)
+  const savedDirection = useLibrary(selectDirection)
+  const sort = order?.sort ?? savedSort
+  const direction = order?.direction ?? savedDirection
   const details = useLibrary((state) => state.songDetails)
   const ownSongs = usePieces((state) => state.songs)
   // When each of the learner's own songs came in: what Added sorts by (R72).

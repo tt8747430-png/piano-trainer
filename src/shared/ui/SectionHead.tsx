@@ -17,7 +17,7 @@ export function SectionHead({
   children?: ReactNode
 }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 px-1">
+    <div className="flex items-baseline justify-between gap-3">
       <h2 id={id} className="font-sans text-xl font-bold">
         {title}
       </h2>

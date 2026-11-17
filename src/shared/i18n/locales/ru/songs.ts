@@ -48,7 +48,7 @@ export const songs: LocaleResources['songs'] = {
     seeAll_other: 'Все песни: {{count}}',
   },
   row: { notStarted: 'Не начата', learning: 'Учу', added: 'Добавлена {{when}}' },
-  all: { title: 'Все песни', search: 'Поиск по вашим песням' },
+  all: { title: 'Все песни', search: 'Поиск по вашим песням', seeAll: 'Все', learned: 'Выучена' },
   groups: {
     title: 'Группы',
     new: 'Новая группа',
@@ -138,6 +138,7 @@ export const songs: LocaleResources['songs'] = {
     groupGone: 'Этой группы больше нет, или вы больше в ней не состоите.',
   },
   library: {
+    label: 'Библиотека',
     showAll: 'Показать все {{count}}',
     home: 'Главная',
     play: 'Играть',
@@ -292,6 +293,9 @@ export const songs: LocaleResources['songs'] = {
   },
   table: {
     songs: 'Песни',
+    title: 'Название',
+    composerKey: 'Композитор и тональность',
+    progress: 'Прогресс',
   },
   archive: {
     title: 'Архив',
