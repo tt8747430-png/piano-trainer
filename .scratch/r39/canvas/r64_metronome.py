@@ -2,8 +2,14 @@
 # Metronome boards r41_practice writes). The bar of glass buttons (Back · Metronome · Settings) as Scales', Intervals'
 # and a progression's; the tempo, its slider and the beats as r41 draws them; the rows; and one floating bar of glass
 # pieces as theirs: Tap (tap tempo) · Start, the honey one.
+# round 63: the Metronome's settings have one home, in place under the beats (CLAUDE.md: each tool's settings in place),
+# ordered by how often they are wanted; the gear, which held Flash on the beat and Volume apart from the rest, goes, as
+# on the Tuner
 TOP64 = (TOP60.replace('Scales and keys</span>', 'Metronome</span>').replace(ROUND60("Piano", KEYSI, "openKeys"), '')
-         .replace(ROUND60("Settings", COG, "openSet"), ROUND60("Metronome settings", COG, "openSet")))
+         .replace(ROUND60("Settings", COG, "openSet"), ''))
+ME_ROWS = GROUP(('step', 'Time signature', 'meterL', 'mDn', 'mUp'), ('link', 'Subdivision', '{{subL}}', 'openSub'), ('link', 'Sound', 'Woodblock', ''),
+                ('step', 'Volume', 'meVolL', 'meVolDn', 'meVolUp', 80), ('toggle', 'Flash on the beat', 'meFlOn', 'meFlT'),
+                ('link', 'Speed trainer', 'Off', ''), ('link', 'Silent bars', 'Off', ''), bg=SHEET)
 TAPP = (f'<button type="button" aria-label="Tap tempo" style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; '
         f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{HANDI}<span style="font-size: 11px; font-weight: 600">Tap</span></button>')
 STARTP = (f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="pointer-events: auto; flex: none; width: 176px; border: 0; {TINTGRP}; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">'
@@ -21,6 +27,6 @@ lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 120px">'
         + f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}{TEMPO(120)}{BEATS(160)}{ME_ROWS}</div></div>'
         + BAR64('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
-phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST) + BSHEET('setOn', 'Metronome settings', ME_SET))
-laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; top: 604px') + POPOVER('setOn', 'Metronome settings', ME_SET, 'right: 40px; top: 64px'), 'Practice')
+phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST))
+laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; top: 604px'), 'Practice')
 print('r64 metronome ok')
