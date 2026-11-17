@@ -141,8 +141,10 @@ async function analyse(page, scr, phone) {
     const pr = p.getBoundingClientRect(), r = el.getBoundingClientRect()
     return /flex/.test(ps.display) && ps.flexDirection.startsWith('row') && ps.alignItems === 'center' && r.top - pr.top <= 12 && pr.height <= r.height + 24 ? pr.top : r.top
   }
+  // a dialog over a scrim is the screen while it is open: the page behind it is not measured against it
+  const MODAL = [...document.querySelectorAll('[role=dialog], [role=alertdialog]')].filter(vis).find((d) => { const pr = d.previousElementSibling; if (!pr) return false; const cs = getComputedStyle(pr); return cs.position === 'absolute' && /rgba\(/.test(cs.backgroundColor) && pr.getBoundingClientRect().width > d.getBoundingClientRect().width + 40 })
   const sel = 'header, h1, h2, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
-  const blocks = [...document.querySelectorAll(sel)].filter(vis).map((el) => {
+  const blocks = [...document.querySelectorAll(sel)].filter((e) => vis(e) && (!MODAL || MODAL.contains(e))).map((el) => {
     const r = el.getBoundingClientRect()
     const cs = getComputedStyle(el)
     return {
