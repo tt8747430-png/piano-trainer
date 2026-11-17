@@ -1,3 +1,4 @@
+import { WORD_BREAK } from '@/shared/lib'
 import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import {
@@ -91,8 +92,9 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
 const thrown = (error: { message: string }, status: number) =>
   Object.assign(new Error(error.message), { status })
 
-/** A search typed by the learner, safe inside `ilike`: its own `%` and `_` match themselves. */
-const likeOf = (query: string) => `%${query.trim().replace(/[\\%_]/g, (char) => `\\${char}`)}%`
+/** A word as an `ilike` pattern inside an `or` filter: its wildcards escaped, quoted for its commas. */
+const likeOf = (word: string) =>
+  `"%${word.replace(/[\\%_]/g, (char) => `\\${char}`).replaceAll('"', '\\"')}%"`
 
 /** The Public library on Supabase (ADR 0116): its tables' row-level security and two functions. */
 export function createSupabasePublicLibrary(
@@ -153,7 +155,11 @@ export function createSupabasePublicLibrary(
         const filtered = () => {
           let request = client.from('public_items').select(ENTRY).eq('kind', kind)
           if (tag) request = request.contains('meta', { tags: [tag] })
-          if (query.trim()) request = request.ilike('title', likeOf(query))
+          // Word by word, as the library's search: each word in the title or the composer's name.
+          for (const word of query.split(WORD_BREAK).filter(Boolean))
+            request = request.or(
+              `title.ilike.${likeOf(word)},meta->>composer.ilike.${likeOf(word)}`,
+            )
           return request
         }
         const { data, error, status } = await filtered()

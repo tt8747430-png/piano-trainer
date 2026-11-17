@@ -43,9 +43,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - **The Public library:** a learner's own song is private until they publish it (its Settings › Publish…, the
   Publish page `/songs/$pieceId/publish`, R72's, Flat's discoverability form: a meter of how easily it is found (n of
   5: title, composer, type, tags, a description of at least 20 characters), Title, Composer, Type (Original,
-  Arrangement, Other), Tags (chips, suggestions, at most 8), Description, Licence (All rights reserved, CC BY, CC
+  Arrangement, Other), Tags (chips, suggestions, at most 8; a first publish starts with the song's genre as its tag, Hymn, Classical, Study…, and its library tags), Description, Licence (All rights reserved, CC BY, CC
   BY-SA, Public domain), all kept in the item's `meta` JSON with no column of their own (the old `category` column is
-  left null: tags carry it); then the card as others will see it, the rights ticked each time, and Publish; on a laptop
+  left null: tags carry it, and Explore's kinds find songs by them); then the card as others will see it, the rights ticked each time, and Publish; on a laptop
   the fields left and the card, rights and Publish right. Published: In the Public library with its saves, Copy
   link, View in library, Publish new version once it changed, and Unpublish apart, r30 below). A published song is a snapshot held as a save
   holds an own song (`public_items`, one per author and song, 200 KB at most), read by anyone, written by its author

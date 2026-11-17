@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { createFakePublicLibrary, type PublicCategory } from '@/shared/api/public-library'
+import { createFakePublicLibrary } from '@/shared/api/public-library'
 
 const MUSIC = {
   key: 'G',
@@ -15,22 +15,21 @@ const MUSIC = {
 
 interface Item {
   readonly title: string
-  readonly category?: PublicCategory
+  readonly tags?: readonly string[]
   readonly stars?: readonly number[]
 }
 
-/** Explore with what others published, each item its category and ratings. */
+/** Explore with what others published, each item its tags and ratings. */
 const explore = (...items: readonly (string | Item)[]) =>
   createFakePublicLibrary({
     author: () => ({ id: 'bo', name: 'Bo' }),
     items: items.map((item, i) => {
-      const { title, category, stars } = typeof item === 'string' ? { title: item } : item
+      const { title, tags, stars } = typeof item === 'string' ? { title: item } : item
       return {
         id: `public-${i + 1}`,
         title,
         authorName: 'Bo',
-        meta: { key: 'G', meter: '3/4' },
-        ...(category ? { category } : {}),
+        meta: { key: 'G', meter: '3/4', ...(tags ? { tags } : {}) },
         ...(stars ? { stars } : {}),
         body: { title, ...MUSIC },
       }
@@ -79,12 +78,12 @@ describe('Explore', () => {
     )
   })
 
-  it('chips filter by category', async () => {
+  it('chips filter by tag', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs?view=explore', {
       publicLibrary: explore(
-        { title: 'Minuet', category: 'classical' },
-        { title: 'Ballad', category: 'pop' },
+        { title: 'Minuet', tags: ['Classical'] },
+        { title: 'Ballad', tags: ['Pop'] },
       ),
     })
     await screen.findByRole('region', { name: 'New' })

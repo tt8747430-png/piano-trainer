@@ -1,3 +1,4 @@
+import { matchesQuery } from '@/shared/lib'
 import { netResult } from '../network'
 import {
   RATED_MIN,
@@ -116,7 +117,7 @@ export function createFakePublicLibrary({
         [...held.values()]
           .filter((item) => item.kind === kind)
           .filter((item) => !tag || (item.meta.tags ?? []).includes(tag))
-          .filter((item) => item.title.toLowerCase().includes(query.trim().toLowerCase()))
+          .filter((item) => matchesQuery([item.title, item.meta.composer ?? ''], query))
           .map(entryOf)
           .sort(
             (a, b) =>

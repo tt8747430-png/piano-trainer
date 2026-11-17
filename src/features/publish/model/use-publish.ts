@@ -78,6 +78,8 @@ export interface PublishItem {
   readonly meta: PublicEntry['meta']
   /** Who wrote it, as the song names it: the face's first composer. */
   readonly composer?: string
+  /** The tags a first publish starts with: its genre's and its own, as the library files it. */
+  readonly tags?: readonly string[]
   /** As a save holds it, read back by the saving side (`readSharedSong`, an own pattern's reader). */
   readonly body: unknown
 }
@@ -162,7 +164,7 @@ export function usePublish(item: PublishItem | null) {
     title: shown?.face.title ?? item?.title ?? '',
     composer: shown?.face.composer ?? item?.composer ?? '',
     type: shown?.face.type ?? 'original',
-    tags: shown?.face.tags ?? [],
+    tags: shown?.face.tags ?? item?.tags?.slice(0, TAGS_MAX) ?? [],
     description: shown?.face.description ?? '',
     licence: shown?.face.licence ?? 'all-rights-reserved',
   }
