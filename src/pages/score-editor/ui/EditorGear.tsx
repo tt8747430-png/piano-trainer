@@ -236,7 +236,7 @@ function PageBody({ page }: { page: Exclude<GearPage, 'main'> }) {
 
 /**
  * The editor's one gear (R31-E, Flat's one menu; ADR 0115): a sheet from the foot on a phone, a
- * panel at the right on a laptop with the music in sight beside it. Its first page holds the score's
+ * card hung under the bar's ··· on a laptop (EditorLaptop's popover), closed by a click outside. Its first page holds the score's
  * acts and its Settings; each row turns to its page in the same sheet, every page with Back to the
  * first, so a sheet never opens over a sheet; Title and credits, opened from the title on the score,
  * stands alone. An original's draft says where it stands
@@ -251,8 +251,6 @@ export function EditorGear({ draft }: { draft: EditorDraft | undefined }) {
     <Sheet
       swipeDirection={laptop ? 'right' : 'down'}
       modal={!laptop}
-      // Beside the music it stays open as the music plays: Close, Escape and the gear close it.
-      disablePointerDismissal={laptop}
       open={view.gear !== null}
       onOpenChange={(open) => view.setGear(open ? page : null)}
     >

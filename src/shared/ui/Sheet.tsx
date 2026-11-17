@@ -14,6 +14,31 @@ import {
   DrawerTitle,
 } from './primitives/drawer'
 
+/**
+ * A sheet from the right as the boards' laptop popover. Each class names the right edge as well as
+ * the axis, so it outranks the drawer's own placing of a panel from the right.
+ */
+const LAPTOP_CARD = [
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:mx-0',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:inset-y-auto',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:top-19',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:right-10',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:h-auto',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:w-100',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:max-w-[calc(100vw-5rem)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:max-h-[calc(var(--app-height,100dvh)-6.25rem)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:rounded-[16px]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:border-0',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:pb-0',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:shadow-[0_0_0_1px_var(--color-hairline),var(--elevation-2)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:[--bleed:0px]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:[--closed-transform:translate3d(0,-0.5rem,0)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:duration-200',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:data-starting-style:opacity-0',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:data-ending-style:opacity-0',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:[&>[data-slot=drawer-swipe-handle]]:hidden',
+].join(' ')
+
 /** What opens a sheet: the drawer's own trigger, named for the sheet. */
 export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
 
@@ -80,8 +105,10 @@ export function SheetContent({
       {...(initialFocus ? { initialFocus } : {})}
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
-        // From the right (a laptop's panel beside what it sets): the screen's height, its own width.
-        'data-[swipe-axis=x]:mx-0 data-[swipe-axis=x]:w-[min(28rem,100vw)] data-[swipe-axis=x]:max-w-none data-[swipe-axis=x]:rounded-t-none data-[swipe-axis=x]:rounded-l-sheet data-[swipe-axis=x]:pb-safe',
+        // From the right, a laptop's settings (the boards' POPOVER, EditorLaptop's and PlayerDesk's
+        // gear): a card hung 8 under the bar's buttons at their right edge, 400 wide, as tall as
+        // it holds, 16 round with the hairline and the second shade; it fades in place.
+        LAPTOP_CARD,
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
         tall &&
           'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',

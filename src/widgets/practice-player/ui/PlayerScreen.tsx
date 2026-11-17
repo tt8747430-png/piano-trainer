@@ -29,14 +29,11 @@ const onSheet = (event: SyntheticEvent) =>
 export function PlayerScreen({
   keys,
   aside = false,
-  panel = false,
   docked = false,
   children,
 }: {
   keys: KeyboardSettings['dock']
   aside?: boolean
-  /** A panel at the right is open (a laptop's Settings): the screen ends where it starts. */
-  panel?: boolean
   /**
    * The keys are a window over the music's foot (the Player's, loop round 24): the music's scroll
    * room under its last line reaches above the window, else above the floating transport.
@@ -65,10 +62,8 @@ export function PlayerScreen({
     // a phone held upright the bar's two groups closer, so a phone from 320px has its buttons in a row.
     <div
       data-keys={keys}
-      data-panel={panel || undefined}
       className={cn(
         SCORE_SCREEN,
-        'data-panel:pe-[min(28rem,100vw)]',
         // The room under the music's last line clears the keys' window, else the transport; the music
         // runs on to the screen's foot under the floating transport, as the board draws it.
         docked &&

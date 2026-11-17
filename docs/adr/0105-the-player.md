@@ -101,7 +101,8 @@ what they changed.
   and **More**. More holds the music's acts only (Sections | Annotate | Print | Share link, Export…); every setting
   is the gear's. The
   customisable Tool bar is gone.
-- **The Settings sheet (R31-P, R32, R36)** is one list of rows ranked by what matters, each opening a subpage with
+- **The Settings sheet (R31-P, R32, R36)**, a sheet from the foot on a phone and on a laptop a 400-wide card hung 8
+  under the gear, over the music, which keeps its width (the PlayerDesk board's popover; `SheetContent` from the right), is one list of rows ranked by what matters, each opening a subpage with
   Back, its value at the row's end and no line under it: **Score view** (what the shown view shows), **Playback** (a score's
   Swing, the count-in, the Metronome's page and volume, speed training's step), **Hands** (the other
   hand Show · Dim · Hide), **Staves** (each track's Play, Show and volume together; Only

@@ -76,8 +76,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
 - **The selection strip** (`SelectionStrip`) heads the palette at every size: what the caret is on ("E4 · quarter
   note") over where ("Bar 1 · beat 1 · Melody"), then Delete (the notes chosen, else the ones before the caret),
   Piano keys (filled while shown) and Play from here, the screen's one honey control, Stop while it sounds.
-- **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone, a panel at the right on
-  a laptop, a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
+- **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone; on
+  a laptop a 400-wide card hung 8 under the bar's ··· at its right edge, over the music, closed by a click outside, as the
+  EditorLaptop board's popover; a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
   alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and

@@ -208,8 +208,6 @@ export function PlayerLayout({
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
-  // The Settings open as a panel beside the music (a laptop): the screen ends where it starts.
-  const [panel, setPanel] = useState(false)
   // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
   // Listen), remembered for good.
   const settingsStore = useSettingsStoreApi()
@@ -275,7 +273,6 @@ export function PlayerLayout({
     ],
     // Its acts are More's (R31-P): the sheet holds how the Player works, never what it does.
     acts: [],
-    onPanel: setPanel,
   }
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
@@ -336,12 +333,7 @@ export function PlayerLayout({
   )
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
-    <PlayerScreen
-      keys="bottom"
-      aside={shown === 'diagrams' && practice.state.playing}
-      panel={panel}
-      docked
-    >
+    <PlayerScreen keys="bottom" aside={shown === 'diagrams' && practice.state.playing} docked>
       {/* The score's bar, the editor's (ADR 0115, loop round 61): Close; Play · Edit where the
           editor's stands; the views and Settings at the end, one glass group on a phone, the views'
           pill beside Settings on a laptop. The title is the score's. The loop is the transport's (ADR
