@@ -173,7 +173,7 @@ LBACK = lambda back, label, title, right: (f'<header style="flex: none; height: 
 vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "{{jt}}", TB("Edit", "editOn"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LEDITH.replace("padding: 0 12px 0 16px", "padding: 16px 28px 16px 44px")}</sc-if>'
        # one centred column, as the phone (owner, 2026-11-16: "the page has one focus"): the side column's Continue repeated the
        # lesson marked Next in the path, and its Levels repeated Learn's, one Back away
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 40px">'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 40px 40px">'
        f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{LVHEAD.replace('flex: 1; min-width: 0; height: 52px', 'flex: none; min-width: 360px; height: 52px')}{PATHF(True)}</div></main>'
        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('pubOn', 'Publish Foundations', LPUBBODY) + BSHEET('chapOn', 'Chapter', CHAPBODY), POPOVER('pubOn', 'Publish Foundations', LPUBBODY, 'right: 40px; top: 72px', 360) + POPOVER('chapOn', 'Chapter', CHAPBODY, 'left: 600px; top: 240px', 380), 'Learn')

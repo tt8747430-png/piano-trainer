@@ -53,7 +53,7 @@ def CBODY(lap):
     # loop round 59: no About: what the course teaches is said once, in the summary under its name, as a level's goal
     if lap:  # one centred column (owner, 2026-11-16: "the page has one focus"): the cover beside the name and Continue as
         # its head, then the lessons and the guided songs under it, as a song's page; never a rival column
-        return (f'<div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: center; margin-bottom: 8px">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
+        return (f'<div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: start; margin-bottom: 8px">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
                 f'{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
@@ -79,7 +79,7 @@ cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('pmOn', 'Publishing', CPM) + BSHEET('propOn', 'Properties', CPROPS)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Intro to Music Reading", CBAR_R, "LearnCoursesLaptop.dc.html")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT.replace("padding: 0 16px 6px", "padding: 6px 40px 6px")}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 60px"><div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</div></main>'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 40px 60px"><div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</div></main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
 cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + POPOVER('pmOn', 'Publishing', CPM, 'right: 160px; top: 60px', 320) + POPOVER('propOn', 'Properties', CPROPS, 'left: 460px; top: 300px', 460)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
