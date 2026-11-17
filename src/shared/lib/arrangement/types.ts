@@ -33,6 +33,8 @@ export interface HandNote {
   readonly marks?: NoteMarks
   /** What it sings, by verse, where the right hand is the tune (ADR 0097). */
   readonly lyrics?: NoteLyrics
+  /** Written in its staff's second voice (ADR 0114). */
+  readonly voice?: 2
 }
 /** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
 export interface WrittenHands {
@@ -78,6 +80,8 @@ export interface StaffNote {
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097). */
   readonly lyrics?: NoteLyrics
+  /** Written in its staff's second voice (ADR 0114). */
+  readonly voice?: 2
 }
 /**
  * A single staff over the piano's grand staff (ADR 0097): its clef and its notes, one line in the
@@ -222,6 +226,8 @@ export interface PerformanceNote {
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097). */
   readonly lyrics?: NoteLyrics
+  /** Written in its staff's second voice (ADR 0114). */
+  readonly voice?: 2
 }
 /** Notes sharing an onset: what Step mode walks through. `notes` index into Performance.notes. */
 export interface BeatGroup {

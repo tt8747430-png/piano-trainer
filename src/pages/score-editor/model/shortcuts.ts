@@ -117,6 +117,8 @@ export const TOOL_SHORTCUTS = {
   },
   repeatEnd: { code: 'BracketRight', cap: ']', does: { type: 'barMarks', choice: 'repeatEnd' } },
   mode: { code: 'KeyI', cap: 'I', does: { type: 'mode' } },
+  // Flat's and Dorico's V; a letter alone plays the piano, so Shift (research F8).
+  voiceTwo: { code: 'KeyV', cap: 'V', shift: true, does: { type: 'voice' } },
   chord: { code: 'KeyK', cap: 'K', mod: true, does: { type: 'field', field: 'chord' } },
   lyrics: { code: 'KeyL', cap: 'L', mod: true, does: { type: 'field', field: 'lyrics' } },
   fingering: { code: 'KeyF', cap: 'F', shift: true, does: { type: 'field', field: 'fingering' } },

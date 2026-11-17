@@ -8,6 +8,7 @@ import {
   chosenNotes,
   spellNotes,
   EDIT_MODES,
+  isHandLayer,
   NOTE_VALUES,
   selectionSpan,
   shownValue,
@@ -206,7 +207,35 @@ function ModeKeys() {
           <ModeIcon mode={each} />
         </PaletteKey>
       ))}
+      <VoiceTwoKey />
     </KeyGrid>
+  )
+}
+
+/**
+ * Voice 2 (ADR 0114, Flat's and Dorico's ⇧V): on, the notes are written under the first voice's,
+ * stems down, and a key played or Delete reaches that voice alone. On the piano's staves only.
+ */
+function VoiceTwoKey() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const on = useEditorState((state) => state.voice === 2)
+  const piano = useEditorState((state) => isHandLayer(state.layer))
+  return (
+    <PaletteKey
+      label={t('voice.two')}
+      tool="voiceTwo"
+      pressed={on && piano}
+      disabled={!piano}
+      onClick={() => actions.dispatch({ type: 'voice' })}
+    >
+      <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+        <Head cx={10} cy={8.5} />
+        <rect x="13.4" y="1.5" width="1.4" height="7" />
+        <Head cx={14} cy={15.5} soft />
+        <rect x="10.1" y="15.5" width="1.4" height="7" opacity="0.45" />
+      </svg>
+    </PaletteKey>
   )
 }
 

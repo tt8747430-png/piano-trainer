@@ -106,15 +106,24 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     screen, the categories lighting the section in sight and scrolling to the one tapped. The keys fold away for
     it. Every tool is a 48px sand tile, the chosen in ink, wrapping 8px apart in a section. A field typed in swaps it for a slim bar over the phone's own keyboard
     (`FieldDocked`).
-  - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord; Notation: Add note, whole to 64th,
+  - **Categories in Flat's order:** Note (Input mode: Replace, Insert, Chord, Voice 2; Notation: Add note, whole to 64th,
     dot, double dot, tie, Tuplets ⌄, rest, ♮ ♯ ♭, respell) · Pitch · Articulations · Ornaments · Dynamics ·
     Measures (bars added and deleted, line and page breaks, a new section; rests and repeats; Tempo and the tempo
     words, accel., rit., a tempo…, as Flat's Measure; swing) · Clef · Key signature · Time signature · Barlines &
     repeats · Text (lyrics, chord symbols, Roman numerals, free text, the character and technique words). In the
     row, a picker's signs alone (`PickerLayoutContext`: `row`; the sections' `palette`).
   - **Keys** are Flat's: equal cells of a bordered table, 44px at the least; a table of fewer keys than a row holds
-    (Input mode's three) shares the row among them; pressed, a sky glyph on a sky wash. A
+    (Input mode's four) shares the row among them; pressed, a sky glyph on a sky wash. A
     tooltip is the key's name then its shortcut, as Flat's. A key that cannot act is not drawn (R32-B).
+  - **Voice 2** (Flat's and Dorico's V; Shift with V, a letter alone being the piano's) is a toggle on the piano's
+    two staves, greyed on a single staff. On, a note is written in the staff's second voice, stems down under the
+    first, and a key played, a rest, Delete, Repeat and the pitch and mark edits reach that voice's notes alone
+    (`editedInVoice`); off, the first voice's alone, so a held note under a moving tune is written without either
+    erasing the other. Bars, the clipboard and the caret's moves act on the whole staff. The strip says it: "Bar 1
+    · beat 1 · Lower staff · voice 2". A note's voice is kept through the Performance (`voice: 2`) to the
+    engraving, where written voices hold over the guess by pitch (`separateVoices`); the saved hands write a
+    second-voice chord `v2:C3/2@1`, always placed by its beat; MusicXML reads a staff's lowest-numbered voice as
+    the first and any other as the second.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, Shift with R Repeat (the notes chosen, else the note or chord just written, written again after them and
   chosen), 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, with Alt two, the comma a tie,

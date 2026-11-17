@@ -56,6 +56,8 @@ export interface TimedNote {
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
+  /** Written in a staff's second voice, stems down under the first (ADR 0114, Flat's and Dorico's Voice 2). */
+  readonly voice?: 2
 }
 
 /** Timed notes with their bars and chord symbols: a Performance is this. */

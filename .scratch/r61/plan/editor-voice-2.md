@@ -32,8 +32,11 @@
    is the piano's). Its tooltip "Voice 2 · ⇧V". Greyed with "Choose a note on a staff" in the chord row (F1's
    rule).
 5. **Words.** The strip's line: "Bar 4 · beat 1 · Lower staff · voice 2". en and ru (`голос 2`).
-6. **Canvas first.** The Voice 2 key in the Editor boards' Input mode group, its on state, and a bar with a held
-   half note under two quarters on the lower staff, drawn on Editor and EditorLaptop before the port.
+6. **Canvas first.** The Voice 2 key in the Editor boards' Input mode group, drawn as the app's pictures (Replace,
+   Insert, Chord, Voice 2), and a "Voice 2 on" state whose strip says "· voice 2": canvas v372–v373.
+7. **Built (2026-11-17).** On the piano's two staves only (a single staff is one line, ADR 0097): greyed there.
+   Saved as `v2:` tokens in the hands; MusicXML's other voices read as voice 2. Checked in the browser: a half
+   note written in voice 2 under bar 1's rest and chords, stem down, voice 1 kept.
 
 ### F9, Cross-staff
 

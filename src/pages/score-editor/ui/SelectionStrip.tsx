@@ -1,6 +1,7 @@
 import { Delete, Play, Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFoldKeys } from '@/features/live-keyboard'
+import { isHandLayer } from '@/features/score-editor'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { useLayerName } from '@/widgets/score-sheet'
@@ -38,6 +39,7 @@ export function SelectionStrip({ className }: { className?: string }) {
   const recording = takes.stage !== 'idle'
   const { record } = useRecordTake()
   const recordLabel = t('scoreSettings.acts.record')
+  const voiceTwo = useEditorState((state) => state.voice === 2 && isHandLayer(state.layer))
   const what =
     said.kind === 'end'
       ? t('strip.end')
@@ -51,7 +53,8 @@ export function SelectionStrip({ className }: { className?: string }) {
   const where =
     said.kind === 'end'
       ? null
-      : t('strip.where', { bar: said.bar, beat: said.beat, part: layerName(layer) })
+      : t('strip.where', { bar: said.bar, beat: said.beat, part: layerName(layer) }) +
+        (voiceTwo ? ` · ${t('voice.second')}` : '')
   const play = meta.playing ? t('stop') : t('strip.playFrom')
   const keysLabel = t('strip.keys')
   return (

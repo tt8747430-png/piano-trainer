@@ -483,6 +483,7 @@ export const editor = {
   },
   rest: 'Rest',
   addNote: 'Add note',
+  voice: { two: 'Voice 2', second: 'voice 2' },
   // The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one chosen in the Notes section,
   // the ⓘ beside its name saying what a key played does in each (ADR 0096).
   mode: {

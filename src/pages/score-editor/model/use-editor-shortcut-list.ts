@@ -33,6 +33,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.annotation'), shown: keys('annotation') },
     { label: t('shortcuts.numeral'), shown: keys('numeral') },
     { label: t('shortcuts.mode'), shown: keys('mode') },
+    { label: t('voice.two'), shown: keys('voiceTwo') },
     { label: t('shortcuts.slur'), shown: keys('slur') },
     { label: t('shortcuts.hairpins'), shown: keys('cresc', 'dim') },
     { label: t('shortcuts.octaveLines'), shown: keys('8va', '8vb') },

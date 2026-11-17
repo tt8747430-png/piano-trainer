@@ -34,6 +34,10 @@ const TOKEN = /^([^/@[\]]+)\/([^/@[\]]+)(?:@([^[\]]+))?(?:\[([^\]]*)\])?$/
 
 type Fail = (problem: string) => never
 
+/** A chord of the staff's second voice (ADR 0114): `v2:C3/2@1`, always placed by its beat. */
+export const VOICE_TWO = 'v2:'
+const SECOND_VOICE: Pick<HandNote, 'voice'> = { voice: 2 }
+
 /** A clef change written first in a hand's bar: `clef:bass C4/4 …`, or `clef:treble -` (ADR 0097). */
 export const CLEF_TOKEN = 'clef:'
 
@@ -64,9 +68,12 @@ function readBar(entry: string, bar: HandBar, hand: HandId, fail: Fail): HandNot
   if (tokens.length === 0) fail(`${HAND_NAMES[hand]} has an empty bar: write - for the pattern`)
   const notes: HandNote[] = []
   let running: Tick = 0
-  for (const token of tokens) {
-    const unreadable: () => never = () => fail(`${HAND_NAMES[hand]} cannot read "${token}"`)
+  for (const written of tokens) {
+    const unreadable: () => never = () => fail(`${HAND_NAMES[hand]} cannot read "${written}"`)
+    const second = written.startsWith(VOICE_TWO)
+    const token = second ? written.slice(VOICE_TWO.length) : written
     const [, pitches = '', beatsText = '', atText, marksText] = TOKEN.exec(token) ?? unreadable()
+    if (second && (atText === undefined || pitches === 'r')) unreadable()
     const marks = marksText === undefined ? undefined : (readMarks(marksText) ?? unreadable())
     const beats = readBeats(beatsText)
     const durationTicks = beats === null ? null : ticksIn(beats)
@@ -83,10 +90,11 @@ function readBar(entry: string, bar: HandBar, hand: HandId, fail: Fail): HandNot
           startTick,
           durationTicks,
           ...(marks ? { marks } : {}),
+          ...(second ? SECOND_VOICE : {}),
         })),
       )
     }
-    running = startTick + durationTicks
+    if (!second) running = startTick + durationTicks
   }
   return notes
 }

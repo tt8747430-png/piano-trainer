@@ -14,6 +14,7 @@ import { isHandLayer, type Draft, type Layer } from './draft'
 import { barsCounted, barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
+import { editedInVoice } from './voices'
 import { lineOver, lineSpan } from './lines'
 import { setSyllable, singsHere } from './lyrics'
 import { markNotes, setTempoChange, setText, toggleNumeral } from './marks'
@@ -151,16 +152,20 @@ function graceEdited(state: EditorState, action: EditorAction): EditorState | nu
  * act on them; Escape, or any other action, goes back to their notes.
  */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
-  if (!state.grace) return reduced(state, action)
+  if (!state.grace) return voiced(state, action)
   if (action.type === 'deselect') return { ...state, grace: false }
   const onGrace = graceEdited(state, action)
   if (onGrace) return onGrace
-  const next = reduced(state, action)
+  const next = voiced(state, action)
   // Undo and redo bring back whether the grace notes were chosen with their step.
   if (action.type === 'undo' || action.type === 'redo') return next
   const kept = ON_GRACE.has(action.type) || (action.type === 'place' && action.grace === true)
   return next.grace && !kept ? { ...next, grace: false } : next
 }
+
+/** An action made in the voice chosen, on a piano staff (ADR 0114). */
+const voiced = (state: EditorState, action: EditorAction): EditorState =>
+  editedInVoice(state, action, reduced)
 
 function reduced(state: EditorState, action: EditorAction): EditorState {
   const { draft, layer, caret } = state
@@ -190,6 +195,10 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     }
     case 'mode':
       return { ...state, mode: action.mode ?? nextMode(state.mode), struck: null }
+    case 'voice':
+      return isHandLayer(layer)
+        ? { ...state, voice: state.voice === 2 ? 1 : 2, struck: null }
+        : state
     case 'move':
       return moveCaret(state, action.by, action.direction, action.extend ?? false)
     case 'place': {

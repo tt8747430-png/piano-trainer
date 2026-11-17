@@ -94,10 +94,13 @@ function barChords(
       ...(n.marks ? { marks: n.marks } : {}),
       ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
     }
-    const id = `${staff} ${start} ${stop}`
+    const id = `${staff} ${start} ${stop} ${n.voice ?? 1}`
     const group = groups.get(id)
     if (!group) {
-      groups.set(id, { staff, chord: { start, end: stop, notes: [written] } })
+      groups.set(id, {
+        staff,
+        chord: { start, end: stop, notes: [written], ...(n.voice ? { voice: n.voice } : {}) },
+      })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
       group.chord = {
         ...group.chord,

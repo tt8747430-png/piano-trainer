@@ -443,6 +443,7 @@ export const editor: LocaleResources['editor'] = {
     nonuplet: 'Ноноль',
   },
   rest: 'Пауза',
+  voice: { two: 'Голос 2', second: 'голос 2' },
   addNote: 'Добавить ноту',
   mode: {
     label: 'Режим ввода',

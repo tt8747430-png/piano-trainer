@@ -1,4 +1,5 @@
 import type { BarMarkChoice } from './bar-marks'
+import type { Voice } from './voices'
 import type { HeaderField, PieceLayout, SectionKind, StaffName } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
@@ -68,6 +69,8 @@ export const nextMode = (mode: EditMode): EditMode =>
 export interface EditorState extends Snapshot {
   readonly value: ChosenValue
   readonly mode: EditMode
+  /** The voice a piano staff's notes are written in (ADR 0114): the second under the first, stems down. */
+  readonly voice: Voice
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]
@@ -100,6 +103,8 @@ export type EditorAction =
   | { readonly type: 'text'; readonly text: string }
   /** The editing mode chosen; none, the next round (I). */
   | { readonly type: 'mode'; readonly mode?: EditMode }
+  /** Voice 2 on or off (Flat's and Dorico's ⇧V), on the piano's staves. */
+  | { readonly type: 'voice' }
   | {
       readonly type: 'move'
       readonly by: CaretMove
@@ -264,6 +269,7 @@ export const initialEditor = (draft: Draft, mode: EditMode = 'replace'): EditorS
   layer: topStaff(draft),
   value: { value: 4, dots: 0 },
   mode,
+  voice: 1,
   selection: null,
   chordNote: null,
   grace: false,
