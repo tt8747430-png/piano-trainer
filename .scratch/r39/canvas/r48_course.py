@@ -61,10 +61,10 @@ def CBODY(lap):
                 f'{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
-CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; padding: 0 16px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>{IB("Publishing", DOTS, "openPm")}'
+CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; padding: 0 16px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>'
          f'' + TB('{{pubL}}', 'publishNow') + f'</div></header>')
 CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro to Music Reading</span>'
-        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("action", "Publish", "publishNow"), ("action", "Share link", "copyLink"), bg=SHEET)}'
+        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("action", "{{pubL}}", "publishNow"), ("link", "Versions", "3", "#"), ("action", "Share link", "copyLink"), bg=SHEET)}{GROUP(("action", "Discard changes", "closeSheet", "#B3261E"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
 CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
         + CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Summary, Lessons</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>') +
