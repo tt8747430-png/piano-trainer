@@ -62,6 +62,7 @@ export function useLibraryPage(
   { tree = false }: { tree?: boolean } = {},
 ) {
   const { t } = useTranslation('songs')
+  const { t: tPiece } = useTranslation('piece')
   const locale = useLocale()
   const store = useLibraryStoreApi()
   const layout = useLibraryLayout()
@@ -73,6 +74,14 @@ export function useLibraryPage(
   const levelOf = useCallback(
     (id: PieceId) => details[id]?.level ?? pieceStage(id) ?? null,
     [details],
+  )
+  const detailWords = useCallback(
+    (id: PieceId) => {
+      const own = details[id]
+      if (!own) return []
+      return [...own.tags, own.genre ? tPiece(`details.genres.${own.genre}`) : '']
+    },
+    [details, tPiece],
   )
   const practised = useProgress(selectPractised)
   const learnedSteps = useProgress(selectLearned)
@@ -108,6 +117,7 @@ export function useLibraryPage(
         home: t('library.home'),
         allSongs: t('table.songs'),
         levelOf,
+        detailWords,
       },
       // Every song at Home while browsing; Select drags in the library's own places.
       { tree, everySong: !tree && !selecting },
@@ -124,6 +134,7 @@ export function useLibraryPage(
     learnedSteps,
     practised,
     levelOf,
+    detailWords,
     t,
     tree,
     selecting,

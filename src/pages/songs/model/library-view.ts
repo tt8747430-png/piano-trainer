@@ -60,6 +60,8 @@ export interface ViewLookups {
   readonly allSongs: string
   /** A song's level: the learner's own, else its course's. */
   readonly levelOf: (id: PieceId) => Stage | null
+  /** What a search also finds a song by in the learner's library: its tags and its genre's name. */
+  readonly detailWords: (id: PieceId) => readonly string[]
 }
 
 /** The filters that narrow, besides the search: what the Filter button counts and its chips name. */
@@ -148,7 +150,7 @@ export function libraryView(
     (filter.stage === 'any' || lookups.levelOf(entry.id) === filter.stage) &&
     (filter.key === '' || songKeyParam(entry) === filter.key) &&
     (!filter.favourites || lookups.favourites.has(entry.id)) &&
-    matchesQuery(entryWords(entry), filter.q)
+    matchesQuery([...entryWords(entry), ...lookups.detailWords(entry.id)], filter.q)
   const entries = (ids: readonly PieceId[]) =>
     ids.flatMap((id) => {
       const entry = lookups.entryOf(id)

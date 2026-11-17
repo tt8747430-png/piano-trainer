@@ -55,6 +55,7 @@ const lookups: ViewLookups = {
   home: 'Home',
   allSongs: 'All songs',
   levelOf: (id) => pieceStage(id) ?? null,
+  detailWords: () => [],
 }
 const view = (filter: Partial<SongsFilter> = {}, folder: string | null = null, at = layout) =>
   libraryView(at, folder as never, { ...NONE, ...filter }, 'manual', lookups)
