@@ -987,7 +987,8 @@ for f in ('Chords', 'ChordsLaptop'):
     h = h.replace('aria-label="Back to Practice"', 'aria-label="Back to Practice" data-tip-start')
     for lab, tip, up in (('Back to Practice', 'Back to Practice', False), ('Settings', 'Settings', False),
                          ('Play as: block chord or arpeggio', 'Play as', True), ('Remove {{k.s}}', 'Remove {{k.s}}', True)):
-        h = h.replace('aria-label="%s"' % lab, 'aria-label="%s" data-tip="%s"%s' % (lab, tip, ' data-tip-up' if up else ''))
+        # a control that already carries its tip (the kit's Back) keeps the one
+        h = re.sub(r'aria-label="%s"(?![^>]*data-tip=)' % re.escape(lab), lambda m: 'aria-label="%s" data-tip="%s"%s' % (lab, tip, ' data-tip-up' if up else ''), h)
     h = h.replace('<div role="toolbar" aria-label="Voicing, sound and hands" style="', '<div role="toolbar" aria-label="Voicing, sound and hands" style="zoom: {{barZoom}}; ')
     h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)
     open(OUT + f + '.dc.html', 'w').write(h)
