@@ -23,8 +23,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   change its music cannot be written with is said in a notice, the music last saved kept.
 - **The caret and the selection.** The staff written is the one the caret is on (a click, or Alt ↑ ↓). Writing past
   the last bar adds one. A double click writes the note there in its bar's key. ↑ ↓ move a step in the key, with
-  Shift a semitone, with Cmd or Ctrl an octave. The selection is notes, two tick spans: Shift ← → a note, with Alt to
-  the bar's end, Home or End to an end; Alt ↑ ↓ step through a chord's notes. Escape lets go.
+  Shift a semitone, with Cmd or Ctrl an octave. ← → move a step, with Cmd or Ctrl a bar, as Flat's and Dorico's (Alt
+  with ← → does nothing). The selection is notes, two tick spans: Shift ← → a note, with Cmd to the bar's end, Home or
+  End to an end; Alt ↑ ↓ step through a chord's notes. Escape lets go.
 - **Every tool acts on what is chosen.** With only a caret, a value sets the next note's value; with notes chosen it
   makes them that long (`setDuration`). Tie (`,`) at the caret joins a note to the same key's note after it, or, in
   note input, holds on the note or chord just written at the value chosen, the caret after it (`tieOn`, Dorico's

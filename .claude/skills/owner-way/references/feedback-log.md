@@ -75,6 +75,7 @@ owner's, typos fixed.
 - **Loop round 61, Tie writes the next note tied (research F5):** with the caret after a written note or chord, `,` holds it on at the value chosen and moves on, as Dorico's Tie in note input; a note after it of the same key is still joined (2026-11-17).
 - **Loop round 61, accidentals reach the note just written (research F6):** with nothing chosen, ♮ ♯ ♭ (0 = −) and Respell change the note or chord the caret last wrote, as Flat's and Dorico's do; no new key (2026-11-17).
 - **Loop round 61, chords by interval (research F7):** ⌥2 to ⌥8 add a note a 2nd to an octave above the chord chosen or just written, in the key, ⇧⌥ below, as Flat's; listed in the shortcuts sheet (2026-11-17).
+- **Loop round 61, a bar on Cmd (research F10):** ⌘← ⌘→ the previous or next bar and ⇧⌘ extend to it, as Flat and Dorico; Home and End keep the score's ends; Alt with ← → does nothing (2026-11-17).
 - **The tempo's pickers say their name once (loop 22, 2026-11-15):** Beat and Tempo text stand at the row's start, so
   their pickers show the value alone (♩, None), in the editor's Tempo sheet and the New song sheet alike.
 

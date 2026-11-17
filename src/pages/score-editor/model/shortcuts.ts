@@ -146,8 +146,8 @@ const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasO
 
 /**
  * The editor's shortcut for a key press in a layer, or null. The tools' keys (`TOOL_SHORTCUTS`),
- * then the caret's and the edits': arrows (Shift extending what is chosen by a note, with Alt by a
- * bar, with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
+ * then the caret's and the edits': arrows (Shift extending what is chosen by a note, with Cmd by a
+ * bar, as Flat and Dorico; Home and End to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
  * ADR 0096; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End,
  * Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or Ctrl with Z, Y,
  * and C, X, V (what is chosen, ADR 0114); Alt with 2 to 8 a note a 2nd to an octave above what is
@@ -176,8 +176,10 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   switch (press.key) {
     case 'ArrowLeft':
     case 'ArrowRight': {
+      // Cmd a bar, as Flat's and Dorico's; Home and End the score's ends (research F10).
+      if (press.altKey) return null
       const direction = press.key === 'ArrowLeft' ? -1 : 1
-      return move(mod ? 'end' : press.altKey ? 'bar' : 'step', direction)
+      return move(mod ? 'bar' : 'step', direction)
     }
     case 'Home':
       return move('end', -1)
