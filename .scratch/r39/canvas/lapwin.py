@@ -31,6 +31,11 @@ _LAPCSS = ('<style data-lapcss>'
         ' [data-lapbtn]:hover { background: rgba(128, 110, 90, 0.12) !important }'
         ' [data-lapbtn]:focus-visible, [data-focusexit]:focus-visible { outline: 2px solid currentColor; outline-offset: 2px }'
         ' [data-lapwin] > [data-focusexit] { display: none }'
+        ' [data-lapwin] > nav { position: relative }'
+        ' [data-acct]:hover { background: #EFE8DF !important }'
+        ' [data-acctmenu] [role=menuitem]:hover { background: #F2ECE4 }'
+        ' [data-side="off"] [data-acctmenu] { right: auto !important; width: 248px }'
+        ' [data-side="off"] [data-acct] { width: 48px !important; padding: 0 !important; justify-content: center }'
         ' [data-lapwin][data-focus="on"] { grid-template-columns: minmax(0, 1fr) !important }'
         ' [data-focus="on"] > nav, [data-focus="on"] aside.nos { display: none !important }'
         ' [data-lapwin][data-focus="on"] > [data-focusexit] { display: flex }'
@@ -49,8 +54,33 @@ _LAPJS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.ren
        '  window.__lapExit = focus === "on" ? () => set({ lapFocus: "off" }) : null;\n'
        '  return Object.assign({}, v, { lapSide: side, lapFocus: focus, lapSideOn: side === "on" ? "true" : "false",\n'
        '    lapSideL: side === "on" ? "Hide sidebar" : "Show sidebar", lapSideT: () => set({ lapSide: side === "on" ? "off" : "on" }),\n'
-       '    lapFocusT: () => set({ lapFocus: focus === "on" ? "off" : "on" }) });\n'
+       '    lapFocusT: () => set({ lapFocus: focus === "on" ? "off" : "on" }),\n'
+       '    lapAcctOn: !!st.lapAcct, lapAcctAria: st.lapAcct ? "true" : "false", lapAcctBg: st.lapAcct ? "#EAE2D7" : "transparent", lapAcctT: () => set({ lapAcct: !st.lapAcct }) });\n'
        '}; }\n')
+
+# The account row as Claude's (owner, 2026-11-05 and 2026-11-17: "the side bar is not done like the for example claude
+# sidebar"): the sidebar's foot is one row, the learner's picture, name and ⌃⌄, that opens a menu above it: who is
+# signed in, Profile, Settings, Language, Help, then Sign out apart. Nothing else sits at the foot (no gear).
+_ACCT_OLD = re.compile(r'<a href="ProfileLaptop\.dc\.html"( aria-current="page")? style="min-height: 52px; border-radius: 10px[^"]*">(<span aria-hidden="true" style="width: 32px[^>]*>[^<]*</span>)<span style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 600">([^<]*)</span><span[^>]*>[^<]*</span></span></a>')
+_UPDOWN = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>'
+_MI = 'min-height: 40px; box-sizing: border-box; padding: 0 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #332921; text-decoration: none; font-size: 15px'
+def _acct(m):
+    cur, pic, name = m.group(1) or '', m.group(2), m.group(3)
+    row = ('<button type="button" data-acct aria-haspopup="menu" aria-expanded="{{lapAcctAria}}" onClick="{{lapAcctT}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 10px; '
+           'background: {{lapAcctBg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612; font: inherit; text-align: left">'
+           + pic + '<span data-sidetext style="flex: 1; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">' + name + '</span>'
+           '<span data-sidetext style="display: flex; color: #6B6259">' + _UPDOWN + '</span></button>')
+    menu = ('<sc-if value="{{lapAcctOn}}" hint-placeholder-val="{{false}}"><div onClick="{{lapAcctT}}" style="position: fixed; inset: 0; z-index: 70"></div>'
+            '<div role="menu" data-acctmenu aria-label="' + name + '" style="position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; padding: 6px; border-radius: 14px; background: #FEFDFB; '
+            'box-shadow: 0 0 0 1px rgba(26,22,18,0.06), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28); display: flex; flex-direction: column; gap: 2px">'
+            '<div style="padding: 8px 12px 10px; font-size: 13px; color: #6B6259; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@example.com</div>'
+            '<a role="menuitem" href="ProfileLaptop.dc.html" style="' + _MI + '">Profile</a>'
+            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Settings</a>'
+            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Language<span style="color: #6B6259">English</span></a>'
+            '<a role="menuitem" href="LegalLaptop.dc.html" style="' + _MI + '">Help</a>'
+            '<div style="height: 1px; margin: 4px 12px; background: #E4DCD2"></div>'
+            '<a role="menuitem" href="SignInLaptop.dc.html" style="' + _MI + '">Sign out</a></div></sc-if>')
+    return '<div data-acctwrap' + (' data-current' if cur else '') + ' style="position: relative">' + row + '</div>' + menu
 
 
 def lapwin(h):
@@ -65,5 +95,6 @@ def lapwin(h):
              'align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600">%sExit focus</button>' % (glass, _EXIT))
     h = h[:m.start()] + '<div ' + m.group(1) + ' data-lapwin data-side="{{lapSide}}" data-focus="{{lapFocus}}">' + exitb + h[m.end():]
     h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
+    h = _ACCT_OLD.sub(_acct, h, count=1)
     k = h.rindex('</script>')
     return h[:k] + _LAPJS + h[k:]

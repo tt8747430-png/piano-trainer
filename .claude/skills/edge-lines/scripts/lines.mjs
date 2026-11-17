@@ -35,7 +35,8 @@ else {
 }
 await page.waitForTimeout(800)
 for (const s of JSON.parse(stepsArg || '[]')) {
-  if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch((e) => console.log('ERR', e.message.slice(0, 120)))
+  // A board's empty full-page layer can sit over the frame; a click that it intercepts is forced.
+  if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch(() => page.locator(s.click).first().click({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))
   if (s.wait) await page.waitForTimeout(s.wait)
   if (s.scroll) await page.mouse.wheel(0, s.scroll)
 }
