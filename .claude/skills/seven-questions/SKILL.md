@@ -87,5 +87,7 @@ written as an engraver would). The website, when there is one, is built from the
 
 ## Reporting
 
+In a loop, one line inside the turn, never a closing report (`owner-way`). Otherwise:
+
 In the report, one line per question: kept, or fixed with what changed. A question that cannot be answered on the
 canvas (motion in a still drawing) says so.

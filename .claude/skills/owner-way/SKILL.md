@@ -184,7 +184,12 @@ does not read first: write the spec, build it, and log it.
   restart: set it and keep working, never end the turn after it. The `/loop` skill's "then end the turn" yields to this.
   A turn ends only on "stop". A full context is never a reason to stop or to write a closing report: the
   session compacts itself and the work carries on from the summary (owner, 2026-11-14: "continue in loop
-  and don't stop and fix all the instructions that make you stop"). In a loop there is no final report:
+  and don't stop and fix all the instructions that make you stop"). What ended loops before, each wrong
+  (owner, 2026-11-17: "fix all the instructions that make you stop and continue in loop"): the harness's
+  "the user hasn't heard from you in a while" nudge answered with a summary instead of one line and the next
+  tool call; a skill's step that ends in "report" (`redesigning-a-screen`, `seven-questions`, `scan-first`,
+  `spacing-audit`), which in a loop is one line inside the turn; a round, an area or a pushed commit taken for an
+  ending; a long session taken for a reason to hand over. None of these ends a turn. In a loop there is no final report:
   each finished item gets one line saying what changed, then the next item starts in the same turn; the
   dev server stays up for the next screen.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the

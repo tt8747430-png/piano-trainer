@@ -65,7 +65,8 @@ care shows in a hundred small things done the same way.
 6. **Each reaction from the owner** is one turn of this loop, in this order: re-read the rulings; change the canvas;
    run its browser test and look at the screenshots at both sizes; the polish pass (below); publish; write the ruling into the spec and a
    bullet into the feedback log; commit those files by path and
-   push (docs go at once); report.
+   push (docs go at once); one line saying what changed, then the next turn of the loop in the same message (in a
+   loop nothing ends the turn but "stop", `owner-way`).
 7. **When asked what is left to port:** a table in the spec, `# | canvas ruling | app today (files) | port`. Then list
    the stale lines found, and ask about what the canvas has no place for (acts, menus, old features), each with
    your recommendation (in a loop: decide each, ask nothing). Record each answer as a ruling: kept with its home, or removed with no home elsewhere.
