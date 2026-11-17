@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, Title and credits heads the editor's menu (the boards' Credits row):** it was reached only from the printed title; it is the menu's first row, the title its value, and its page goes Back to the menu however it was opened (2026-11-17).
 - **Loop round 61, the editor's menu titled by the song (Editor, EditorLaptop's `moreOn`):** the ··· sheet read "Score" over the song it acts on; it is titled with the song's name, as the boards draw it, on both sizes (2026-11-17).
 - **Takes in one laptop bar (loop round 60, 2026-11-16):** the laptop Takes page stood its Back alone in the bar and the title under it; Back and "Takes" share the bar now, as every laptop sub-page's LTITLEBAR, and the list starts level with the review panel.
 - **The draft's publishing in its ··· menu (loop round 60, 2026-11-16):** a built-in song's draft hung a Publishing chip and "Saved · not published" in a row under the phone's bar ("nothing hangs under a bar"). The status is the ··· sheet's line under the title, as the editor's "Saved on this device", and the laptop bar's status. The publishing acts take the place of Publish in Explore: Publish… and Discard changes. Version history (3) opens the published versions, titled the same, so there is one row for versions, not Version history and Versions both.

@@ -78,7 +78,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   Piano keys (filled while shown) and Play from here, the screen's one honey control, Stop while it sounds.
 - **One gear** (`EditorGear`, Flat's document menu, the Player's shape: a sheet on a phone; on
   a laptop a 400-wide card hung 8 under the bar's ··· at its right edge, over the music, closed by a click outside, as the
-  EditorLaptop board's popover; a page at a time with Back): View, Transpose, Record a take, Takes; Settings, each one tap away by its name
+  EditorLaptop board's popover; titled with the song's name; a page at a time with Back): Title and credits (its
+  value the title, as the board's Credits; Back from it leads to the menu however it was opened), View, Transpose, Record a take, Takes; Settings, each one tap away by its name
   alone, as the Player's: Instruments, Layout, Note input, Recording, On-screen piano; an original's Publish…, Versions and Discard
   changes, its saved state beside the title. It holds nothing the score prints (R32-B). The editor opens in the mode it was left in (`editorMode`).
 - **One palette** on the selection (`EditorPalette`, one tree for every size), as Flat's (R32-C, help.flat.io and

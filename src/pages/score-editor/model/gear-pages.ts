@@ -18,8 +18,7 @@ export const GEAR_PAGES = [
 export type GearPage = (typeof GEAR_PAGES)[number]
 
 /**
- * Where Back goes from a page: the first page, or the sheet shut from the first page and from Title
- * and credits, which the score's title opens on its own.
+ * Where Back goes from a page: the first page, whose first row is Title and credits (the boards'
+ * Credits), however it was opened; the sheet shuts from the first page.
  */
-export const gearBack = (page: GearPage): GearPage | null =>
-  page === 'main' || page === 'credits' ? null : 'main'
+export const gearBack = (page: GearPage): GearPage | null => (page === 'main' ? null : 'main')

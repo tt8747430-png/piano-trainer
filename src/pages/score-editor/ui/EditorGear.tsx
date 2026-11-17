@@ -6,6 +6,7 @@ import {
   ListMusic,
   Mic,
   Music2,
+  Heading,
   Ruler,
   TextCursorInput,
 } from 'lucide-react'
@@ -128,6 +129,15 @@ function MainPage({ draft }: { draft: EditorDraft | undefined }) {
   return (
     <div className="flex flex-col gap-5">
       <SettingsGroup flush>
+        {example ? null : (
+          <RowTrigger
+            title={t('scoreSettings.pages.credits')}
+            icon={Heading}
+            paint="sand"
+            value={meta.title}
+            onClick={() => view.setGear('credits')}
+          />
+        )}
         <RowTrigger
           title={t('scoreSettings.acts.view')}
           icon={Eye}
