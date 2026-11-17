@@ -17,7 +17,7 @@ export function BadgesPage() {
   const badges = useMemo(() => badgesOf(figures), [figures])
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.badges.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('profile.badges.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <SettingsGroup flush>
           {badges.map((badge) => (
@@ -49,7 +49,7 @@ export function BadgePage() {
   const name = t(`profile.badges.names.${id}`)
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={name} back={<BackButton />} />
+      <ScreenHeader column title={name} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
           <BadgeMark id={id} tier={badge.tier} size="hero" />

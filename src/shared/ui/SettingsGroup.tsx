@@ -34,10 +34,10 @@ export function SettingsGroup({
   return (
     <section
       aria-labelledby={title ? id : undefined}
-      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-1.5', className)}
+      className={cn('flex flex-col', heading ? 'gap-3' : 'gap-2', className)}
     >
       {title ? (
-        <div className={cn('flex items-center gap-1', !heading && 'px-1')}>
+        <div className={cn('flex items-center gap-1', !heading && 'px-4')}>
           <h2
             id={id}
             className={

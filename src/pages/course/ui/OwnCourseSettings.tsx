@@ -29,7 +29,7 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   return (
     <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="-mt-2 px-1 text-muted-foreground text-pretty">{course.title}</p>
         <OwnItemRows

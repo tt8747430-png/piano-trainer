@@ -32,7 +32,11 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const heading = headings[section] ?? ''
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <ScreenHeader title={t('learnSection.title', { section: heading })} back={<BackButton />} />
+      <ScreenHeader
+        column
+        title={t('learnSection.title', { section: heading })}
+        back={<BackButton />}
+      />
       {/* One column of rows, as the other detail pages' (Profile's, a folder's settings). */}
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <SectionCard heading={heading} lessons={lessons} />

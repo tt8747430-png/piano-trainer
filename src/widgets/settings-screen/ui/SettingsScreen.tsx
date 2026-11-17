@@ -43,6 +43,7 @@ export function SettingsScreen({
     return (
       <div className="flex flex-col gap-2">
         <ScreenHeader
+          column
           title={title}
           titleOnPage={lead !== undefined}
           back={<BackButton />}
@@ -68,7 +69,7 @@ export function SettingsScreen({
         data-slot="settings-nav"
         className="sticky top-0 flex h-dvh flex-col gap-4 overflow-y-auto overscroll-contain border-r border-border py-6 pr-4"
       >
-        <h1 className="ml-1 font-sans text-[1.75rem]/tight font-bold">{t('title')}</h1>
+        <h1 className="font-sans text-[1.75rem]/tight font-bold">{t('title')}</h1>
         <SettingsList place={place} />
       </aside>
       <div className="mx-auto flex w-full max-w-176 min-w-0 flex-col gap-4 pt-6">

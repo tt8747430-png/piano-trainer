@@ -113,7 +113,7 @@ export function HistoryPage() {
     .filter(({ lines: shown }) => shown.length > 0)
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('profile.history.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('profile.history.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <MonthChart />
         {days.length === 0 ? (

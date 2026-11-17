@@ -135,7 +135,7 @@ function SongSettings({ piece }: { piece: Piece }) {
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
     <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         {/* The song at the head: what these settings are for (R32-C). */}

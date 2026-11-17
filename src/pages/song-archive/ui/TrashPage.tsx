@@ -23,7 +23,7 @@ export function TrashPage() {
   const [deleting, setDeleting] = useState<PieceId | 'all' | null>(null)
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <ScreenHeader title={t('trash.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('trash.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         {trash.length === 0 ? (
           <TrashEmpty />

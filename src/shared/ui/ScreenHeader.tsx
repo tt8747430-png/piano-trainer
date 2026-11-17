@@ -35,6 +35,12 @@ export type ScreenHeaderProps = {
   more?: ReactNode
   /** The screen's Edit: its pencil beside the title, Done in its place while editing. */
   edit?: EditAction
+  /**
+   * The page reads in the 672 column (`max-w-2xl`): the bar's row stands on the same column, so the
+   * title and the content share their left edge at every width (craft-details, every width holds).
+   * `until-laptop` for a page whose column widens to the window from 64rem (Profile).
+   */
+  column?: boolean | 'until-laptop'
   /** The page shows its title itself, large under the bar (a document, read or in Edit): the bar
    * keeps it for a screen reader alone, never saying it twice, and leaves its room to the tools. */
   titleOnPage?: boolean
@@ -76,6 +82,7 @@ export function ScreenHeader({
   large = false,
   titleOnPage = false,
   named = false,
+  column = false,
 }: ScreenHeaderProps) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
@@ -116,7 +123,13 @@ export function ScreenHeader({
       )}
     >
       {large ? (
-        <div className="flex min-h-14 items-center gap-1.5 py-1 sm:gap-2">
+        <div
+          className={cn(
+            'flex min-h-14 items-center gap-1.5 py-1 sm:gap-2',
+            column && 'mx-auto w-full max-w-2xl',
+            column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
+          )}
+        >
           {back ? <div className="-ms-1 shrink-0 print:hidden">{back}</div> : null}
           <div className="flex min-w-0 flex-1 items-center gap-0.5">
             <h1
@@ -155,7 +168,13 @@ export function ScreenHeader({
       ) : (
         // The canvas's TOP: Back at the start, the title 8 after it (never centred: bars.md, Apple's
         // Toolbars), the acts at the end, 56 tall.
-        <div className="flex min-h-14 items-center">
+        <div
+          className={cn(
+            'flex min-h-14 items-center',
+            column && 'mx-auto w-full max-w-2xl',
+            column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
+          )}
+        >
           {back ? <div className="-ms-1 flex shrink-0 print:hidden">{back}</div> : null}
           <div
             className={cn(

@@ -36,7 +36,7 @@ export function CourseSettingsPage() {
   }
   return (
     <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader title={t('settings.title')} back={<BackButton />} />
+      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <p className="px-1 text-muted-foreground text-pretty">{title}</p>
         {editsContent(account) ? <EditorRows course={course} /> : null}
