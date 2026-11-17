@@ -59,7 +59,7 @@ BELL9 = (f'<button type="button" aria-label="{{{{bellL}}}}" onClick="{{{{goNotes
 def TILE9(icon, v, l, act):
     t = TILE(icon, v, l)
     return t.replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="border: 0; font: inherit; text-align: left; ', 1)[:-4] + '</button>' if act else t.replace('<a href="#"', '<div', 1)[:-4] + '</div>'
-TILES9 = f'<div style="display: flex; gap: 8px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE9(NOTE, "4", "Songs learned", "")}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
+TILES9 = f'<div style="display: flex; gap: 12px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE9(NOTE, "4", "Songs learned", "")}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
 SEEALL9 = lambda act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; border: 0; background: transparent; padding: 0; font: inherit; font-size: 15px; font-weight: 600; color: {LINK}">See all</button>'
 def BROW9(name, tier, sub, act):
     return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'
