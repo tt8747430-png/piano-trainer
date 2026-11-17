@@ -65,7 +65,7 @@ TR_SRC = r'''
       start: () => S({ view: 'run', n: 1, right: 0, wrong: 0, on: [], verdict: null }),
       roundT: 'Round ' + n + ' of ' + total, prog: Math.round(100 * (n - 1) / total) + '%', rightT: right + ' right', wrongT: wrong + ' wrong', prompt, notesT: notes, hint, notHint: !hint, toggleHint: () => S({ hint: !hint }),
       kb: tapKeys(48, 76, 402, 112, on, tap, paint), kbL: tapKeys(36, 96, 1462, 170, on, tap, paint), check, clear: () => S({ on: [] }), showAns: () => S({ verdict: 'shown', wrong: wrong + 1 }),
-      checkBg: on.length ? '#F2B33D' : '#EEE9E2', checkInk: on.length ? '#332921' : '#9A9089', checkNot: !on.length, clearInk: on.length ? '#332921' : '#9A9089',
+      checkBg: on.length ? '#EDC684' : '#EEE9E2', checkInk: on.length ? '#332921' : '#9A9089', checkNot: !on.length, clearInk: on.length ? '#332921' : '#9A9089',
       waiting: !verdict, answered: !!verdict, vT: verdict === 'right' ? 'Right' : verdict === 'shown' ? 'The answer: ' + notes : 'Not quite: it’s ' + notes, vBg: verdict === 'right' ? '#DCE9D6' : '#F5D6D0', vInk: verdict === 'right' ? '#2F5A35' : '#8E2A20',
       next, nextT: n >= total ? 'Results' : 'Next', endRun: () => S({ view: 'results', verdict: null, on: [] }),
       resT: MODE === 'check' ? (right + ' of ' + total) : (right + ' of ' + (right + wrong)), checkDone: right >= total - 1, checkShort: right < total - 1,
@@ -74,9 +74,9 @@ TR_SRC = r'''
 TRRUN = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
          f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{roundT}}}}</span></div>'
          f'<div style="display: flex; gap: 8px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums"><span style="padding: 4px 12px; border-radius: 12px; background: #DCE9D6; color: #2F5A35">{{{{rightT}}}}</span><span style="padding: 4px 12px; border-radius: 12px; background: {FILL}; color: {SOFT}">{{{{wrongT}}}}</span></div>'
-         f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 0 6px"><span style="font-family: {SERIF}; font-size: 44px; font-weight: 600">{{{{prompt}}}}</span>'
+         f'<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin: auto 0"><span style="font-family: {SERIF}; font-size: 44px; font-weight: 600">{{{{prompt}}}}</span>'
          f'<button type="button" onClick="{{{{toggleHint}}}}" style="min-width: 44px; height: 44px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">{IF("notHint", "Hint", "true")}{IF("hint", "Its notes: {{notesT}}")}</button></div>'
-         f'<span style="text-align: center; font-size: 14px; color: {SOFT}">Choose the keys on the on-screen piano, then Check.</span>')
+         '')
 TRBTNS = (IF('waiting', f'<div style="display: flex; gap: 8px">{BTN("Show answer", "showAns", "", "quiet", 50)}{BTN("Clear", "clear", "", "quiet", 50).replace("color: " + INK, "color: {{clearInk}}", 1).replace("<button ", "<button aria-disabled=\"{{checkNot}}\" ", 1)}<button type="button" onClick="{{{{check}}}}" aria-disabled="{{{{checkNot}}}}" style="flex: 1.4; height: 50px; border: 0; border-radius: 25px; background: {{{{checkBg}}}}; color: {{{{checkInk}}}}; font: inherit; font-size: 16px; font-weight: 700">Check</button></div>', 'true')
           + IF('answered', f'<div role="status" style="border-radius: 16px; background: {{{{vBg}}}}; padding: 16px; display: flex; align-items: center; gap: 12px"><span style="flex: 1; font-size: 18px; font-weight: 700; color: {{{{vInk}}}}">{{{{vT}}}}</span>{BTN("{{nextT}}", "next", "", "primary", 48, False)}</div>'))
 RES_T = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 0"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">RESULTS</span><span style="font-size: 56px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{resT}}}}</span></div>')
@@ -89,12 +89,12 @@ TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; backg
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
         + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
-              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: 1"></div><div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 112)}</div>{TRBTNS}</main>')
+              + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 112)}</div>{TRBTNS}</main>')
         + IF('isResults', TOP('', '', '', 'Back', '<span style="width: 44px"></span>') + NARROW(CKRES)) + TOASTS)
 LTR = lambda s: s.replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Scales.dc.html', 'ScalesLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('"Settings.dc.html"', '"SettingsLaptop.dc.html"')
 trlm = (''
         + IF('isRun', LPAD(TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html')))
-              + f'<main style="flex: 1; min-height: 0; padding: 8px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 760px; display: flex; flex-direction: column; gap: 16px">{TRRUN}</div><div style="flex: 1"></div><div style="width: 760px">{TRBTNS}</div></main>'
+              + f'<main style="flex: 1; min-height: 0; padding: 8px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1; width: 760px; display: flex; flex-direction: column; gap: 16px">{TRRUN}</div><div style="width: 760px">{TRBTNS}</div></main>'
               + f'<div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{TAPKEYS("kbL", 170)}</div>')
         + IF('isResults', LTOP('', '') + WIDE(LTR(CKRES), 560)) + TOASTL)
 for stem, mode, ttl in (('Check', "'check'", 'Check a song before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
