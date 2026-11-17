@@ -44,7 +44,7 @@ export function ExploreEmpty() {
   )
 }
 
-/** The feed's cards, grey, while Explore is asked (R72's skeleton): said once, to a screen reader. */
+/** The feed's rows, grey, while Explore is asked (R72's skeleton): said once, to a screen reader. */
 export function CardsLoading({ count }: { count: number }) {
   const { t } = useTranslation('songs')
   return (
@@ -52,16 +52,13 @@ export function CardsLoading({ count }: { count: number }) {
       <p role="status" className="sr-only">
         {t('explore.loading')}
       </p>
-      <ul
-        aria-hidden
-        className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(17rem,1fr))] lg:gap-5"
-      >
+      <ul aria-hidden className="flex flex-col gap-2">
         {Array.from({ length: count }, (_, i) => (
-          <li key={i} className="card flex flex-col overflow-hidden">
-            <span className="aspect-[16/9] bg-muted motion-safe:animate-pulse max-lg:hidden" />
-            <span className="flex flex-col gap-2 p-3">
-              <span className="h-4 w-3/4 rounded-pill bg-muted motion-safe:animate-pulse" />
-              <span className="h-3.5 w-1/2 rounded-pill bg-muted motion-safe:animate-pulse" />
+          <li key={i} className="card flex items-center gap-3 p-2 lg:gap-4 lg:pl-3">
+            <span className="aspect-square w-16 shrink-0 rounded-xl bg-muted motion-safe:animate-pulse" />
+            <span className="flex flex-1 flex-col gap-2">
+              <span className="h-4 w-2/3 rounded-pill bg-muted motion-safe:animate-pulse lg:w-1/3" />
+              <span className="h-3.5 w-1/2 rounded-pill bg-muted motion-safe:animate-pulse lg:w-1/4" />
             </span>
           </li>
         ))}

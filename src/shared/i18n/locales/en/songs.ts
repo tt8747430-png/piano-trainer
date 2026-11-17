@@ -477,7 +477,7 @@ export const songs = {
     search: 'Search songs and people',
     kinds: { label: 'Songs or people', songs: 'Songs', people: 'People' },
     categories: {
-      label: 'Kind',
+      label: 'Kinds',
       all: 'All',
       classical: 'Classical',
       folk: 'Folk',

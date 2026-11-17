@@ -481,7 +481,7 @@ export const songs: LocaleResources['songs'] = {
     search: 'Искать песни и людей',
     kinds: { label: 'Песни или люди', songs: 'Песни', people: 'Люди' },
     categories: {
-      label: 'Вид',
+      label: 'Виды',
       all: 'Все',
       classical: 'Классика',
       folk: 'Народные',

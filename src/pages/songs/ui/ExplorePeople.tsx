@@ -61,7 +61,7 @@ export function ExplorePeople({
       />
     )
   return (
-    <ul aria-label={t('explore.people')} className="grid items-start gap-3 lg:grid-cols-3 lg:gap-4">
+    <ul aria-label={t('explore.people')} className="grid items-start gap-3 lg:grid-cols-2">
       {people.map((person) => (
         <li key={person.name} className="min-w-0">
           <Link

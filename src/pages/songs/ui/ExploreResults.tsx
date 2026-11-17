@@ -124,10 +124,7 @@ export function ExploreResults({
       ) : entries.length === 0 ? (
         <ExploreEmpty />
       ) : (
-        <ul
-          aria-label={t('explore.views.explore')}
-          className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(17rem,1fr))] lg:gap-5"
-        >
+        <ul aria-label={t('explore.views.explore')} className="flex flex-col gap-2">
           {entries.map((entry) => (
             <li key={entry.id} className="min-w-0">
               <ExploreFeedCard entry={entry} />
