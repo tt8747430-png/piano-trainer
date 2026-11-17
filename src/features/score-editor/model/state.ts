@@ -120,6 +120,7 @@ export type EditorAction =
   | { readonly type: 'deselect' }
   /** Everything on the caret's staff chosen (⌘A, research F12). */
   | { readonly type: 'selectAll' }
+  | { readonly type: 'repeat' }
   /**
    * The note over (1) or under (−1) the one chosen in the chord at the caret, the chord's top or foot
    * from the whole chord; past its last, the staff over or under (Alt ↑ ↓, ADR 0096).

@@ -79,6 +79,7 @@ owner's, typos fixed.
 - **Loop round 61, ⌘A chooses the whole staff (research F12):** Cmd or Ctrl with A selects every note of the staff at the caret, as Flat's and Dorico's, so an accidental, a value or Delete reaches all of it; listed in the shortcuts sheet (2026-11-17).
 - **Loop round 61, the bar keys as Flat's (research F14, F16, F18):** ⌥Enter adds a bar after, ⌘⇧Enter one at the end, ⌘Enter the system break, one key pressed where a line starts there and pressed again to join it ("Join lines" is gone); ⌥. the double dot; the shortcuts sheet says the palette's words (2026-11-17).
 - **Loop round 61, the palette folds without a jump (research F19):** folding and unfolding cross-fade the tool row and the sections in 150 ms on the app's curve, the sections rising 8; instant under reduced motion (2026-11-17).
+- **Loop round 61, Repeat (research F13):** a key after Rest and ⇧R write the notes chosen, else the note or chord just written, again right after them, the copy chosen, as Flat's and Dorico's R; the clipboard is untouched. The canvas's palette now carries the app's keys and shortcuts (2026-11-17).
 - **The tempo's pickers say their name once (loop 22, 2026-11-15):** Beat and Tempo text stand at the row's start, so
   their pickers show the value alone (♩, None), in the editor's Tempo sheet and the New song sheet alike.
 

@@ -5,7 +5,7 @@ import { setClefIn } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
 import { chosenNotes, chosenSpan, fingerPlace, shownValue, spellSpan, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
-import { clipEdited } from './clip-edits'
+import { clipEdited, repeated } from './clip-edits'
 import { singleStaff, staffPlace, ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
@@ -465,6 +465,8 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return barsCounted(state, action.count)
     case 'clip':
       return clipEdited(state, action.edit)
+    case 'repeat':
+      return repeated(state)
     case 'barMarks':
       return commit(state, markBars(draft, chosenBars(state), action.choice))
     case 'clef':

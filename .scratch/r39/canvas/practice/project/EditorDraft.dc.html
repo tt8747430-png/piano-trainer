@@ -75,19 +75,19 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
     // the palette, Flat's categories; each tool: its sign, the font it is drawn in, its name and its shortcut
     const M = 'music', S = 'serif', T = 'text';
     const PAL = [
-      ['Notes', [['rest', '𝄽', M, 'Rest', '0'], ['w', '𝅝', M, 'Whole note', '7'], ['h', '𝅗𝅥', M, 'Half note', '6'], ['q', '𝅘𝅥', M, 'Quarter note', '5'], ['e', '𝅘𝅥𝅮', M, 'Eighth note', '4'],
-        ['s', '𝅘𝅥𝅯', M, '16th note', '3'], ['t', '𝅘𝅥𝅰', M, '32nd note', '2'], ['x', '𝅘𝅥𝅱', M, '64th note', '1'], ['dot', '𝅘𝅥 .', M, 'Dot', '.'], ['tie', '⁀', T, 'Tie', 'T'], ['tup', '3', S, 'Triplet', '⌘3'], ['grace', '𝆕', M, 'Grace note', 'G']]],
-      ['Pitch', [['bb', '𝄫', M, 'Double flat', '⇧-'], ['b', '♭', M, 'Flat', '-'], ['n', '♮', M, 'Natural', '='], ['sh', '♯', M, 'Sharp', '+'], ['x2', '𝄪', M, 'Double sharp', '⇧+'], ['8va', '8va', S, 'Octave higher', ''], ['8vb', '8vb', S, 'Octave lower', '']]],
-      ['Articulations', [['stacc', '•', T, 'Staccato', 'S'], ['acc', '>', S, 'Accent', 'A'], ['ten', '–', S, 'Tenuto', 'N'], ['marc', '^', S, 'Marcato', '⇧A'], ['ferm', '𝄐', M, 'Fermata', 'F'], ['stiss', '▾', T, 'Staccatissimo', '⇧S'], ['slur', '⌒', T, 'Slur', 'L'], ['fing', '1', S, 'Fingering', '']]],
-      ['Ornaments', [['trill', 'tr', S, 'Trill', ''], ['mord', '𝆝', M, 'Mordent', ''], ['turn', '𝆗', M, 'Turn', ''], ['gliss', '⟋', T, 'Glissando', ''], ['trem', '𝄏', M, 'Tremolo', '']]],
+      ['Notes', [['rest', '𝄽', M, 'Rest', '8'], ['w', '𝅝', M, 'Whole note', '1'], ['h', '𝅗𝅥', M, 'Half note', '2'], ['q', '𝅘𝅥', M, 'Quarter note', '3'], ['e', '𝅘𝅥𝅮', M, 'Eighth note', '4'],
+        ['s', '𝅘𝅥𝅯', M, '16th note', '5'], ['t', '𝅘𝅥𝅰', M, '32nd note', '6'], ['x', '𝅘𝅥𝅱', M, '64th note', '7'], ['dot', '𝅘𝅥 .', M, 'Dotted', '.'], ['ddot', '𝅘𝅥 ..', M, 'Double dotted', '⌥.'], ['tie', '⁀', T, 'Tie', ','], ['tup', '3', S, 'Triplet', '⇧3'], ['grace', '𝆕', M, 'Grace note', '9'], ['rpt', '𝄎', M, 'Repeat', '⇧R']]],
+      ['Pitch', [['bb', '𝄫', M, 'Double flat', '⇧-'], ['b', '♭', M, 'Flat', '−'], ['n', '♮', M, 'Natural', '0'], ['sh', '♯', M, 'Sharp', '='], ['x2', '𝄪', M, 'Double sharp', '⇧+'], ['8va', '8va', S, 'Octave higher', '⌘⇧8'], ['8vb', '8vb', S, 'Octave lower', '⌘⇧9']]],
+      ['Articulations', [['stacc', '•', T, 'Staccato', 'S'], ['acc', '>', S, 'Accent', 'A'], ['ten', '–', S, 'Tenuto', 'N'], ['marc', '^', S, 'Marcato', '⇧A'], ['ferm', '𝄐', M, 'Fermata', 'F'], ['stiss', '▾', T, 'Staccatissimo', '⇧S'], ['slur', '⌒', T, 'Slur', '⇧S'], ['fing', '1', S, 'Fingering', '']]],
+      ['Ornaments', [['trill', 'tr', S, 'Trill', '⇧T'], ['mord', '𝆝', M, 'Mordent', ''], ['turn', '𝆗', M, 'Turn', ''], ['gliss', '⟋', T, 'Glissando', ''], ['trem', '𝄏', M, 'Tremolo', '']]],
       ['Dynamics', [['ppp', 'ppp', S, 'Pianississimo', ''], ['pp', 'pp', S, 'Pianissimo', ''], ['p', 'p', S, 'Piano', ''], ['mp', 'mp', S, 'Mezzo-piano', ''], ['mf', 'mf', S, 'Mezzo-forte', ''],
-        ['f', 'f', S, 'Forte', ''], ['ff', 'ff', S, 'Fortissimo', ''], ['fff', 'fff', S, 'Fortississimo', ''], ['sfz', 'sfz', S, 'Sforzando', ''], ['cresc', '𝆒', M, 'Crescendo', '<'], ['dim', '𝆓', M, 'Diminuendo', '>'], ['ped', '𝆮', M, 'Pedal', 'P']]],
-      ['Measures', [['addbar', '+ Bar', T, 'Add a bar after', '⌘B'], ['tempo', '♩ = 80', T, 'Tempo', ''], ['dbl', '𝄁', M, 'Double barline', ''], ['fin', '𝄂', M, 'Final barline', '']]],
+        ['f', 'f', S, 'Forte', ''], ['ff', 'ff', S, 'Fortissimo', ''], ['fff', 'fff', S, 'Fortississimo', ''], ['sfz', 'sfz', S, 'Sforzando', ''], ['cresc', '𝆒', M, 'Crescendo', '⇧<'], ['dim', '𝆓', M, 'Diminuendo', '⇧>'], ['ped', '𝆮', M, 'Pedal', '⇧P']]],
+      ['Bars', [['addbar', '+ Bar', T, 'Add bar after', '⌥Enter'], ['brk', '↵', T, 'System break', '⌘Enter'], ['tempo', '♩ = 80', T, 'Tempo', ''], ['dbl', '𝄁', M, 'Double barline', ''], ['fin', '𝄂', M, 'Final barline', '']]],
       ['Clef', [['clef', '𝄞', M, 'Treble clef', ''], ['bclef', '𝄢', M, 'Bass clef', ''], ['aclef', '𝄡', M, 'Alto clef', '']]],
       ['Key', [['key', '♯', M, 'Key signature', '']]],
       ['Time', [['time', '3/4', S, 'Three four', ''], ['time44', '4/4', S, 'Four four', ''], ['time68', '6/8', S, 'Six eight', '']]],
       ['Repeats', [['rs', '𝄆', M, 'Repeat start', ''], ['re', '𝄇', M, 'Repeat end', ''], ['end1', '1.', S, 'First ending', ''], ['segno', '𝄋', M, 'Segno', ''], ['coda', '𝄌', M, 'Coda', '']]],
-      ['Text', [['chord', 'C⁷', S, 'Chord symbol', '⌘K'], ['lyr', 'la', S, 'Lyrics', '⌘L'], ['txt', 'Aa', T, 'Text', '⌘T'], ['rn', 'IV', S, 'Roman numeral', ''], ['reh', 'A', T, 'Rehearsal mark', '⌘M']]]];
+      ['Text', [['chord', 'C⁷', S, 'Chord symbol', '⌘K'], ['lyr', 'la', S, 'Lyrics', '⌘L'], ['txt', 'Aa', T, 'Text', '⌘E'], ['rn', 'IV', S, 'Roman numeral', '⌘⇧K'], ['reh', 'A', T, 'Rehearsal mark', '⌘M']]]];
 
     // the durations, rests and curves drawn as notation, not as a font's glyphs: a head, then the stem and flags
     const HEAD = 'M5.1 19.6c-.7-1.7 1-3.8 3.6-4.7s5.2-.4 5.9 1.3-1 3.8-3.6 4.7-5.2.4-5.9-1.3Z', ST = 'M14.3 17V3.5', FL = (n) => Array.from({ length: n }, (_, i) => 'M14.3 ' + (3.5 + i * 3.6) + 'c0 3.2 4.6 4 4.4 8.4').join('');
@@ -105,7 +105,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       pick: () => { if (DUR[id]) set({ dur: id, rest: false }); else if (id in ACC) set({ acc: id }); else if (id === 'rest') set({ rest: !rest });
         else if (['addbar', 'time', 'key', 'clef', 'tempo', 'chord', 'lyr', 'txt', 'rn', 'reh'].includes(id)) set({ done: name });
         else set({ marks: marks.includes(id) ? marks.filter((m) => m !== id) : [...marks, id] }); } });
-    const CATI = { Recent: ['◷', 'text'], Notes: ['♩', 'music'], Pitch: ['♭♯', 'music'], Articulations: ['>', 'serif'], Ornaments: ['tr', 'serif'], Dynamics: ['ppp', 'serif'], Measures: ['𝄁', 'music'], Clef: ['𝄞', 'music'], Key: ['♯♯', 'music'], Time: ['4/4', 'serif'], Repeats: ['𝄆', 'music'], Text: ['Aa', 'text'] };
+    const CATI = { Recent: ['◷', 'text'], Notes: ['♩', 'music'], Pitch: ['♭♯', 'music'], Articulations: ['>', 'serif'], Ornaments: ['tr', 'serif'], Dynamics: ['ppp', 'serif'], Bars: ['𝄁', 'music'], Clef: ['𝄞', 'music'], Key: ['♯♯', 'music'], Time: ['4/4', 'serif'], Repeats: ['𝄆', 'music'], Text: ['Aa', 'text'] };
     const fill = (ts) => { const n = ts.reduce((a, t) => a + t.span, 0) % 8; return n ? ts.concat(Array.from({ length: 8 - n }, () => ({ g: '', name: '', isSvg: false, isTxt: true, tip: '', on: 'false', gbg: '#FEFDFB', bg: 'transparent', fg: '#685E56', span: 1, hid: 'true', ti: '-1' }))) : ts; };
     // Recent first, as Flat's palette (flat-score-editor 017): the marks used last, each where it lives too
     const ALLT = Object.fromEntries(PAL.flatMap(([, ts]) => ts.map((t) => [t[0], t])));

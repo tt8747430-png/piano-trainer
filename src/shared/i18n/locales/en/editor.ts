@@ -379,6 +379,7 @@ export const editor = {
   },
   dot: 'Dotted',
   doubleDot: 'Double dotted',
+  repeat: 'Repeat',
   grace: 'Grace note',
   acciaccatura: 'Acciaccatura',
   // A note's marks (ADR 0097), each a key that puts it on the notes at the caret or takes it off.
@@ -614,6 +615,7 @@ export const editor = {
     annotation: 'Text above the note',
     numeral: 'Roman numeral analysis',
     rest: 'Rest',
+    repeat: 'Repeat',
     grace: 'Grace note',
     acciaccatura: 'Acciaccatura',
     accidentals: 'Natural, sharp, flat',

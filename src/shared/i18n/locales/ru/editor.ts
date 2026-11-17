@@ -345,6 +345,7 @@ export const editor: LocaleResources['editor'] = {
   },
   dot: 'С точкой',
   doubleDot: 'С двумя точками',
+  repeat: 'Повторить',
   grace: 'Форшлаг',
   acciaccatura: 'Короткий форшлаг',
   marks: {
@@ -562,6 +563,7 @@ export const editor: LocaleResources['editor'] = {
     annotation: 'Текст над нотой',
     numeral: 'Гармонический анализ римскими цифрами',
     rest: 'Пауза',
+    repeat: 'Повторить',
     grace: 'Долгий форшлаг',
     acciaccatura: 'Короткий форшлаг',
     accidentals: 'Бекар, диез, бемоль',

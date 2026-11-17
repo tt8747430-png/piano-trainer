@@ -33,6 +33,8 @@ import type { SmuflName } from '@/shared/ui/smufl'
 const GLYPH = 'font-sans text-3xl leading-none'
 /** A quarter rest, as the staff draws it. */
 const REST = '𝄽'
+/** Repeat: the one-bar repeat sign, the music written again. */
+const REPEAT = '𝄎'
 
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
 /** The value shown, kept while it reads the same: its tuplet is a fresh object each time it is read. */
@@ -237,7 +239,7 @@ function AddNoteIcon() {
 /**
  * The everyday tools, Flat's Notation in its order (R31-E): Add note, the values whole to 64th,
  * Dotted and Double dotted (out of reach where the meter takes none), Tie, Tuplets (the meter's
- * first, a triplet or a duplet in compound time, its ⌄ opening the others), Rest, then the
+ * first, a triplet or a duplet in compound time, its ⌄ opening the others), Rest, Repeat, then the
  * accidentals ♮ ♯ ♭ and Respell. The note-entry toolbar over the sheet on a laptop, the phone's
  * folded row, and the Notes' grid.
  */
@@ -324,6 +326,19 @@ export function NoteBar() {
           {REST}
         </span>
       </PaletteKey>
+      {onStaff ? (
+        <PaletteKey
+          label={t('repeat')}
+          tool="repeat"
+          disabled={!spelt}
+          reason={t('reason.chooseNote')}
+          onClick={() => dispatch({ type: 'repeat' })}
+        >
+          <span aria-hidden className={GLYPH}>
+            {REPEAT}
+          </span>
+        </PaletteKey>
+      ) : null}
       <Divider />
       <AccidentalKeys />
       {onStaff ? (

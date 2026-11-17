@@ -1,6 +1,6 @@
 import { copyBars, deleteBars, pasteBars } from './bars'
 import { selectionSpan, startOf } from './caret-moves'
-import { chosenSpan, takenAway } from './chosen'
+import { chosenSpan, spellSpan, takenAway } from './chosen'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
 import type { NoteLayer } from './draft'
 import { barsChosen, chosenBars } from './form-edits'
@@ -115,4 +115,30 @@ export function clipEdited(state: EditorState, edit: ClipEdit): EditorState {
       ? deleteNotes(draft, layer, where)
       : takenAway(state, layer, where)
   return commit(state, next, { clip, caret: from, selection: null, chordNote: null, struck: null })
+}
+
+/**
+ * Repeat (Flat's R, Dorico's R; research F13): the notes chosen, else the note or chord just
+ * written, written again right after them, over what is there (in Insert mode pushing it right),
+ * the copy chosen and the caret after it. The clipboard is untouched.
+ */
+export function repeated(state: EditorState): EditorState {
+  const { draft, layer } = state
+  if (layer === 'chords') return state
+  const where = spellSpan(state)
+  const tick = typeof where === 'number' ? where : state.caret
+  const span = state.selection && selectionSpan(state.selection)
+  const clip = span
+    ? copyNotes(draft, layer, span)
+    : copied(typeof where === 'number' ? { ...state, caret: tick, chordNote: null } : state, layer)
+  if (!clip || clip.notes.length === 0) return state
+  const at = span ? span.to : tick + clip.ticks
+  const pasted = pasteNotes(draft, layer, at, clip, state.mode === 'insert')
+  const copy = { from: at, to: pasted.end }
+  return commit(state, pasted.draft, {
+    caret: pasted.end,
+    selection: { anchor: copy, head: copy },
+    chordNote: null,
+    struck: null,
+  })
 }

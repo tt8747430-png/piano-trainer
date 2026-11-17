@@ -48,6 +48,8 @@ export const TOOL_SHORTCUTS = {
   thirtySecond: value(32, 6),
   sixtyFourth: value(64, 7),
   rest: { code: 'Digit8', cap: '8', does: { type: 'rest' } },
+  // Flat's and Dorico's R; a letter alone plays the piano, so Shift (research F13).
+  repeat: { code: 'KeyR', cap: 'R', shift: true, does: { type: 'repeat' } },
   grace: { code: 'Digit9', cap: '9', does: { type: 'grace', kind: 'appoggiatura' } },
   acciaccatura: {
     code: 'Digit9',
