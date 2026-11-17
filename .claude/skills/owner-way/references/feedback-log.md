@@ -1023,6 +1023,8 @@ owner's, typos fixed.
 
 - **The Metronome's settings in one home** (round 63, canvas v407): Flash on the beat and Volume join the rows under the beats (Time signature, Subdivision, Sound, Volume, Flash on the beat, Speed trainer, Silent bars, by how often they are wanted), and the bar's gear, which held those two apart from the rest, goes, as on the Tuner (CLAUDE.md: each tool's settings in place; one home per setting).
 
+- **Check's Hint reaches 44 (loop 63, 2026-11-17):** the quiz's Hint link was 40 tall; it is 44, as every target on a phone (Fitts; canvas v425).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
