@@ -98,7 +98,7 @@ OSET_JS = js(r'''
         .concat(isLesson ? [['In courses, open', sheet === 'ins', { sheet: 'ins' }, { sheet: null }]] : [])
         .concat([['Deleted, with Undo', /deleted$/.test(st.toast || ''), { toast: isLesson ? 'Lesson deleted' : 'Course deleted' }, { toast: null }], ['Progress reset, with Undo', st.toast === 'Progress reset', { toast: 'Progress reset' }, { toast: null }]])
         .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };''')
-READCARDS = (f'{CAPS("Read as")}<div role="radiogroup" aria-label="Read as" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px"><sc-for list="{{{{readCards}}}}" as="c" hint-placeholder-count="2">'
+READCARDS = SEC(f'{CAPS("Read as")}<div role="radiogroup" aria-label="Read as" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px"><sc-for list="{{{{readCards}}}}" as="c" hint-placeholder-count="2">'
              f'<button type="button" role="radio" aria-checked="{{{{c.on}}}}" onClick="{{{{c.pick}}}}" style="border: 0; border-radius: 14px; background: {SHEET}; box-shadow: {{{{c.ring}}}}; padding: 12px; font: inherit; color: {INK}; display: flex; flex-direction: column; gap: 8px; align-items: stretch">'
              f'<span aria-hidden="true" style="height: 56px; border-radius: 8px; background: repeating-linear-gradient(180deg, {FILL} 0 6px, transparent 6px 12px)"></span><span style="font-size: 15px; font-weight: 600">{{{{c.r}}}}</span></button></sc-for></div>')
 NAMEBODY = lambda v, label: (f'{CAPS("Name")}<input aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
@@ -108,9 +108,9 @@ def SETTINGS(lesson, lap):
     name = 'Warm-up before church' if lesson else 'Sunday service set'
     head = LTITLEBAR('Settings', '', ("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html") if lap else TOP(("Lesson" if lesson else "Course") + ".dc.html", 'Settings')
     if lesson:
-        rows = (READCARDS + CAPS('The lesson') + GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET))
+        rows = (READCARDS + SEC(CAPS('The lesson'), GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET)))
     else:
-        rows = (CAPS('The course') + GROUP(('link', 'Name', name, 'openName'), ('action', 'Duplicate', 'dup'), bg=SHEET))
+        rows = SEC(CAPS('The course'), GROUP(('link', 'Name', name, 'openName'), ('action', 'Duplicate', 'dup'), bg=SHEET))
     # the head names what these settings are for, as a song's Settings does (HEADCARD): its picture, its name, its kind;
     # a lesson wears Learn's lesson picture, a course its cover (picked below, as on the New course sheet)
     pic = (f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 32px; background: {SHEET}; box-shadow: inset 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>' if lesson else
@@ -118,13 +118,13 @@ def SETTINGS(lesson, lap):
     sub = (f'<div style="display: flex; gap: 16px; align-items: center; padding: 4px 0">{pic}<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 20px; font-weight: 700">{name}</span>'
            f'<span style="font-size: 14px; color: {SOFT}">{"Your lesson · 2 sections" if lesson else "Your course · 4 lessons"}</span></div></div>')
     if not lesson:
-        rows += (f'{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
+        rows += SEC(f'{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
                  f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div>')
-    rest = f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "reset"), bg=SHEET)}<div style="height: 8px"></div>{GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)}'
+    rest = SEC(CAPS("Progress"), GROUP(("action", "Reset progress", "reset"), bg=SHEET)) + GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)
     # on a laptop the page's groups stand in two columns: what it is on the left, its progress and Delete on the right
-    body = (sub + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{rows}</div><div style="display: flex; flex-direction: column; gap: 16px">{rest}</div></div>') if lap else sub + rows + rest
+    body = (sub + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 24px">{rows}</div><div style="display: flex; flex-direction: column; gap: 24px">{rest}</div></div>') if lap else sub + rows + rest
     pad = 'padding: 4px 56px 60px' if lap else 'padding: 4px 16px 40px'
-    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 1180px; " if lap else ""}display: flex; flex-direction: column; gap: 16px">{body}</div></main>'
+    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 1180px; " if lap else ""}display: flex; flex-direction: column; gap: 24px">{body}</div></main>'
             + (YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px") if lap else YTOAST.replace('bottom: 112px', 'bottom: 40px')))
 for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')
