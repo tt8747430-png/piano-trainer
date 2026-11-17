@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { coursesOn, SHELVES, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { PAINT, SeeAll, SectionHead } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { FoldSection, PAINT, SeeAll } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 
 /** How many covers Learn shows before See all. */
@@ -56,7 +56,7 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
  */
 export function CourseCovers() {
   const { t } = useTranslation('learn')
-  const id = useId()
+  const fold = useFold('learn.courses')
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
@@ -67,10 +67,13 @@ export function CourseCovers() {
     SHOWN,
   )
   return (
-    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3.5">
-      <SectionHead id={id} title={t('courses')}>
-        <SeeAll label={t('seeAll')} render={<Link to="/courses" />} />
-      </SectionHead>
+    <FoldSection
+      title={t('courses')}
+      fold={fold}
+      action={<SeeAll label={t('seeAll')} render={<Link to="/courses" />} />}
+      className="min-w-0 gap-3.5"
+      headingClassName="px-1 font-sans text-xl font-bold"
+    >
       <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4.5 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">
@@ -78,6 +81,6 @@ export function CourseCovers() {
           </li>
         ))}
       </ul>
-    </section>
+    </FoldSection>
   )
 }

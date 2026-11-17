@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderTile } from '@/entities/library'
 import {
@@ -13,7 +13,8 @@ import {
 import { selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ActionMenu, OpensMark, LessonIcon, SeeAll, SectionHead } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { ActionMenu, FoldSection, OpensMark, LessonIcon, SeeAll } from '@/shared/ui'
 import { lessonShare } from '../model/progress'
 import { LessonRow } from './LessonRow'
 import { NewOwnSheet, useNewOwnActions, type OwnKind } from './NewOwnSheet'
@@ -57,7 +58,7 @@ const SHOWN = 4
 export function OwnItems() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const id = useId()
+  const fold = useFold('learn.own')
   const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
   const learned = useProgress(selectLearned)
@@ -67,12 +68,17 @@ export function OwnItems() {
   const shownCourses = courses.toReversed().slice(0, SHOWN)
   const shownLessons = lessons.toReversed().slice(0, SHOWN - shownCourses.length)
   return (
-    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3.5">
-      <SectionHead id={id} title={t('own.title')}>
-        {lessons.length + courses.length > 0 ? (
+    <FoldSection
+      title={t('own.title')}
+      fold={fold}
+      action={
+        lessons.length + courses.length > 0 ? (
           <SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />
-        ) : null}
-      </SectionHead>
+        ) : null
+      }
+      className="min-w-0 gap-3.5"
+      headingClassName="px-1 font-sans text-xl font-bold"
+    >
       <ul className="flex flex-col rows-hairline overflow-hidden card">
         {shownCourses.map((course) => (
           <li key={course.id}>
@@ -117,6 +123,6 @@ export function OwnItems() {
         </li>
       </ul>
       <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
-    </section>
+    </FoldSection>
   )
 }

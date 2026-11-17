@@ -26,6 +26,7 @@ export function FoldSection({
   fold,
   detail,
   info,
+  action,
   className,
   headingClassName = 'font-sans text-xl font-bold',
   level = 2,
@@ -38,6 +39,8 @@ export function FoldSection({
   detail?: ReactNode
   /** What the section is for, opened from the ⓘ beside its name. */
   info?: ReactNode
+  /** What opens the whole section, at the heading's end: a `SeeAll`. */
+  action?: ReactNode
   /** The section's own look (a card) and the room between its parts. */
   className?: string
   headingClassName?: string
@@ -49,7 +52,10 @@ export function FoldSection({
   const open = fold?.open ?? true
   const Heading = HEADINGS[level]
   const heading = (
-    <Heading id={headingId} className={cn(info ? 'min-w-0' : undefined, headingClassName)}>
+    <Heading
+      id={headingId}
+      className={cn(info || action ? 'min-w-0' : undefined, action && 'flex-1', headingClassName)}
+    >
       {fold ? (
         <button
           type="button"
@@ -83,11 +89,12 @@ export function FoldSection({
   )
   return (
     <section aria-labelledby={headingId} className={cn('flex flex-col gap-3', className)}>
-      {info ? (
+      {info || action ? (
         // Beside the heading, not in it: the section is named by its title alone.
         <div className="flex items-center gap-2">
           {heading}
-          <InfoTip name={title}>{info}</InfoTip>
+          {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+          {action}
         </div>
       ) : (
         heading

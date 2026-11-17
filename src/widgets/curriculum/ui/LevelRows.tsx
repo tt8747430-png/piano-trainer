@@ -5,7 +5,8 @@ import { allJourneys } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { OpensMark, PAINT, ProgressRing } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { FoldSection, OpensMark, PAINT, ProgressRing } from '@/shared/ui'
 import { journeyProgress } from '../model/progress'
 
 /**
@@ -16,13 +17,15 @@ import { journeyProgress } from '../model/progress'
 export function LevelRows() {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
-  const id = useId()
+  const fold = useFold('learn.levels')
   const learned = useProgress(selectLearned)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3.5">
-      <h2 id={id} className="px-1 font-sans text-xl font-bold">
-        {t('learn:levels')}
-      </h2>
+    <FoldSection
+      title={t('learn:levels')}
+      fold={fold}
+      className="gap-3.5"
+      headingClassName="px-1 font-sans text-xl font-bold"
+    >
       <ul className="flex flex-col rows-hairline overflow-hidden card">
         {allJourneys().map((journey, i) => {
           const progress = journeyProgress(journey, learned)
@@ -57,7 +60,7 @@ export function LevelRows() {
           )
         })}
       </ul>
-    </section>
+    </FoldSection>
   )
 }
 

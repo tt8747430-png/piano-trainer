@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BOOK_IDS, EXERCISE_BOOKS, exercisesIn } from '@/entities/exercise'
 import { selectMetronome, selectTuner, useSettings } from '@/entities/settings'
+import { useFold } from '@/features/fold-section'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { FoldSection, GROUPED_LIST, PlaceRow, ScreenHeader, type Tile } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
@@ -22,6 +23,26 @@ interface Place {
   detail: string
   tile: Tile
   link: ReactElement
+}
+
+/** A group of Practice's places under its heading, folded or open as the learner left it (the board's folds). */
+function PracticeGroup({
+  id,
+  title,
+  headingClassName,
+  children,
+}: {
+  id: 'theory' | 'exercises' | 'tools'
+  title: string
+  headingClassName: string
+  children: ReactNode
+}) {
+  const fold = useFold(`practice.${id}`)
+  return (
+    <FoldSection title={title} fold={fold} headingClassName={headingClassName}>
+      {children}
+    </FoldSection>
+  )
 }
 
 /** Practice's groups, each its places in order: Theory, Exercises by book, the Tools last. */
@@ -92,8 +113,9 @@ export function PracticePage() {
       />
       <div className="mt-1 flex flex-col gap-3.5">
         {groups.map(({ id, places }) => (
-          <FoldSection
+          <PracticeGroup
             key={id}
+            id={id}
             title={t(`groups.${id}`)}
             headingClassName="px-1 font-sans text-xl font-bold"
           >
@@ -117,7 +139,7 @@ export function PracticePage() {
                 </li>
               ))}
             </ul>
-          </FoldSection>
+          </PracticeGroup>
         ))}
       </div>
     </div>
