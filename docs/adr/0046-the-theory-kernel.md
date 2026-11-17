@@ -113,8 +113,11 @@ something to play, and the root goes to the left hand.
   chord only with no tone added. Its 183 chords and the research's cases (r61 research-theory 1.4) are tests.
 - **The tools' rules:** the chords that hold a melody note are the owner's table as roles (`chordsHolding`); passing
   chords are rules from the target's root in The Ultimate Piano's six categories (`passingChords`); the keys a line of
-  chords is in are scored from the chords alone (`keysOfChords`), and each chord read there (`readInKey`), an
-  applied dominant by the chord it leads to.
+  chords is in are scored from the chords alone (`keysOfChords`: two for each chord the key holds, its tonic chord
+  opening and closing, an applied dominant, two for each V → I; a tie to the key whose tonic chord sounds, as
+  GarageBand's parallel-key rule, then the fewer accidentals), and each chord read there (`readInKey`), an applied
+  dominant by the chord it leads to. The key of notes alone is the kernel's too (`keyOfNotes`, Krumhansl–Schmuckler
+  over each pitch class's time), so a MIDI file, a take or a MusicXML file with no key read it the same way.
 - **Transposition** moves a key the short way, −5 to +6 semitones (`transposition`), into the key's simplest spelling
   (`transposedKey`). **Simplify** makes a chord its plain triad on its root (`simplifyChord`): minor where it has a
   minor 3rd and no major 3rd, major otherwise.
