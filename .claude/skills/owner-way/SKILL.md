@@ -93,7 +93,8 @@ wins there.
   all. fix all the inconsistencies in the design"): until the owner says otherwise, the loop changes the canvas alone
   and no app code. Each round finds the canvas's inconsistencies across every board (the keyboard and the floating
   keyboard, the bars, the floating actions, settings placed where they belong, controls mixed with settings) and makes
-  one shape of each everywhere, with no legacy shape kept. Floating actions sit at the bottom right. Every board's
+  one shape of each everywhere, with no legacy shape kept. Restated 2026-11-17 ("you should only work on the
+  artifact"): no port, no app commit; every round's change is a board, published. Floating actions sit at the bottom right. Every board's
   states are drawn in the States box outside the phone frame, as the Chords board's. A refactor of a pattern is
   first researched in the official guidelines (Apple HIG, Material 3) and professional designers' resources, cited
   in the spec. Every screen is made as properly on a computer as on a phone, its space used: no narrow column
