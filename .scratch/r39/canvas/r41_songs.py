@@ -111,8 +111,9 @@ def EDTOP(done):
             f'{IB("Undo", UNDO)}{IB("Redo", REDO)}<span style="width: 1px; height: 22px; background: {LINE}; margin: 0 6px"></span>'
             f'<button type="button" aria-label="Piano keys" aria-pressed="{{{{keysOn}}}}" onClick="{{{{toggleKeys}}}}" style="width: 40px; height: 36px; border: 0; border-radius: 10px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
             f'<span style="width: 4px"></span>{PLAYBTN(36).replace("22", "16").replace("20", "15")}{DOTS()}</header>')
+# The score lies on the page as the Player's does, no sheet of paper under it: Play and Edit keep it in place (loop round 62).
 def SCOREPAGE(w, size, pad):
-    return (f'<div style="border-radius: 4px; background: #FFFFFF; box-shadow: 0 0 0 1px {LINE}, 0 10px 24px -16px rgba(51,41,33,.4); padding: {pad}; display: flex; flex-direction: column; gap: 4px">'
+    return (f'<div style="padding: {pad}; display: flex; flex-direction: column; gap: 4px">'
             f'<div style="text-align: center; font-family: {SERIF}; font-size: {round(22 * size)}px">Amazing Grace</div><div style="display: flex; justify-content: space-between; font-size: {round(10 * size)}px; color: {SOFT}"><span>1 · Verse 1 · <svg aria-hidden="true" width="8" height="13" viewBox="0 0 8 13" style="display: inline-block; vertical-align: -1px; margin: 0 2px"><ellipse cx="3.4" cy="10.6" rx="3.3" ry="2.3" transform="rotate(-20 3.4 10.6)" fill="currentColor"></ellipse><path d="M6.3 10V0.5" stroke="currentColor" stroke-width="1.2"></path></svg>= 80</span><span>Words: John Newton · Music: New Britain</span></div>'
             + score_svg(w, sel=5, size=size).replace(ACCENT, '#85B8DC') + '</div>')
 TILE = f'<button type="button" onClick="{{{{t.pick}}}}" style="flex: none; min-width: 46px; height: 46px; padding: 0 8px; border: 0; border-radius: 11px; background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; box-shadow: 0 0 0 1px {LINE}; font-family: \'Noto Music\', {FONT}; font-size: {{{{t.fs}}}}px; font-weight: 600">{{{{t.l}}}}</button>'

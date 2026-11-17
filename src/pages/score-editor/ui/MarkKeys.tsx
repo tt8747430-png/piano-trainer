@@ -74,6 +74,8 @@ function MarkKey({
     <PaletteKey
       label={label}
       tool={tool}
+      // Recent's name for it: its kind and which (`articulation:staccato`, `dynamic:mf`).
+      id={Object.values(mark).join(':')}
       pressed={on}
       disabled={!chosen}
       reason={t('reason.chooseNote')}

@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp, ChevronDown } from 'lucide-react'
-import { useMemo } from 'react'
+import { use, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import {
@@ -24,7 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
-import { PaletteFormContext, usePaletteForm } from './palette-form'
+import { PaletteFormContext, RecentTools, usePaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
 import { LineKeys } from './LineKeys'
 import { PaletteGlyph, TupletGlyph } from './palette-glyph'
@@ -82,9 +82,10 @@ function ValueKeys() {
   )
 }
 
-/** A hairline between the toolbar's groups; nothing in a grid or a list. */
+/** A hairline between the toolbar's groups; nothing in a grid, a list or Recent's mixed row. */
 function Divider() {
-  if (usePaletteForm() !== 'bar') return null
+  const recent = use(RecentTools) !== null
+  if (usePaletteForm() !== 'bar' || recent) return null
   return <span aria-hidden className="mx-1 h-6 w-px shrink-0 self-center bg-hairline" />
 }
 
@@ -201,6 +202,7 @@ function ModeKeys() {
           key={each}
           label={t(`mode.${each}`)}
           tool={each === 'chord' ? undefined : 'mode'}
+          id={`mode:${each}`}
           pressed={mode === each}
           onClick={() => actions.dispatch({ type: 'mode', mode: each })}
         >
@@ -395,16 +397,11 @@ export function NoteBar() {
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
-  const row = usePaletteForm() === 'bar'
   return (
     <>
-      {row ? null : (
-        <>
-          <GroupName name={t('mode.label')} info={<ModesAbout />} />
-          <ModeKeys />
-          <GroupName name={t('palette.groups.notation')} />
-        </>
-      )}
+      <GroupName name={t('mode.label')} info={<ModesAbout />} />
+      <ModeKeys />
+      <GroupName name={t('palette.groups.notation')} />
       <KeyGrid label={t('palette.groups.notation')}>
         <NoteBar />
       </KeyGrid>

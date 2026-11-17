@@ -101,7 +101,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 51
+export const SETTINGS_VERSION = 52
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -141,6 +141,7 @@ export function createSettingsStore({
         welcomed: false,
         tipsSeen: [],
         practiceRecent: [],
+        paletteRecent: PALETTE_RECENT_START,
         lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         intervals: DEFAULT_INTERVALS,
@@ -205,6 +206,23 @@ function otherHandSettings(value: unknown): OtherHandSettings {
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
+/** How many tools the palette's Recent group keeps. */
+export const PALETTE_RECENT_MAX = 8
+/**
+ * Recent before anything is used (the Editor board, Flat's recent notation): the values, marks and
+ * lines a song is written with most, by the ids the palette's keys record.
+ */
+const PALETTE_RECENT_START: readonly string[] = [
+  'quarter',
+  'eighth',
+  'articulation:staccato',
+  'articulation:accent',
+  'slur',
+  'dynamic:mf',
+  'dynamic:p',
+  'chord',
+]
+
 /** The palette's category: a name, or none chosen. */
 const paletteCategory = (value: unknown): string | null =>
   typeof value === 'string' && value !== '' ? value : null
@@ -490,6 +508,11 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
           ...new Set(saved.practiceRecent.filter((id): id is string => typeof id === 'string')),
         ].slice(0, 8)
       : [],
+    paletteRecent: Array.isArray(saved.paletteRecent)
+      ? [
+          ...new Set(saved.paletteRecent.filter((id): id is string => typeof id === 'string')),
+        ].slice(0, PALETTE_RECENT_MAX)
+      : PALETTE_RECENT_START,
     tipsSeen: Array.isArray(saved.tipsSeen)
       ? [...new Set(saved.tipsSeen.filter((id): id is string => typeof id === 'string'))].slice(
           0,

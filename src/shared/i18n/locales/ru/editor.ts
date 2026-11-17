@@ -33,6 +33,7 @@ export const editor: LocaleResources['editor'] = {
       bars: 'Такты',
     },
     category: {
+      recent: 'Недавние',
       notes: 'Нота',
       pitch: 'Высота и запись',
       articulations: 'Штрихи',

@@ -42,6 +42,7 @@ export const editor = {
       bars: 'Bars',
     },
     category: {
+      recent: 'Recent',
       notes: 'Note',
       pitch: 'Pitch and representation',
       articulations: 'Articulations',

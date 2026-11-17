@@ -1,8 +1,13 @@
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, Clock } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectPaletteCategory, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import {
+  selectPaletteCategory,
+  selectPaletteRecent,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { chosenNotes } from '@/features/score-editor'
 import { setPaletteCategory } from '@/features/set-preference'
 import { cn, useRovingFocus, useScrollMotion } from '@/shared/lib'
@@ -14,6 +19,7 @@ import {
   isPaletteCategory,
   needsNote,
   openCategories,
+  RECENT_FROM,
   type PaletteCategory,
 } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
@@ -29,7 +35,7 @@ import {
   TwoNoteTremoloKeys,
 } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
-import { PaletteFormContext, type PaletteForm } from './palette-form'
+import { PaletteFormContext, RecentTools, type PaletteForm } from './palette-form'
 import { GroupName, KeyGrid, PaletteSection } from './palette-keys'
 import { ClefKeys, RepeatKeys, TempoKeys, TextKeys } from './ScoreKeys'
 import { SelectionStrip } from './SelectionStrip'
@@ -44,14 +50,14 @@ const SLIDE = 0.22
 
 /**
  * The palette's category (R31-E, R32-C): the tab lit in the strip and the section the palette keeps
- * in sight, as the learner left it, else Notes, Flat's first; where it does not act (the chord row's
+ * in sight, as the learner left it, else Recent, Flat's first (loop round 57); where it does not act (the chord row's
  * notes), the first that does.
  */
 function useCategory(): readonly [PaletteCategory, (category: PaletteCategory) => void] {
   const settings = useSettingsStoreApi()
   const saved = useSettings(selectPaletteCategory)
   const open = openCategories(useEditorState((state) => state.layer))
-  const wanted = isPaletteCategory(saved) ? saved : 'notes'
+  const wanted = isPaletteCategory(saved) ? saved : 'recent'
   const category = open.includes(wanted) ? wanted : (open[0] ?? 'measures')
   return [category, (next) => setPaletteCategory(settings, next)] as const
 }
@@ -81,6 +87,8 @@ function Category({ category }: { category: PaletteCategory }) {
 function Tools({ category }: { category: PaletteCategory }) {
   const { t } = useTranslation('editor')
   switch (category) {
+    case 'recent':
+      return <RecentKeys />
     case 'notes':
       return <NoteKeys />
     case 'pitch':
@@ -142,6 +150,37 @@ function Tools({ category }: { category: PaletteCategory }) {
     case 'text':
       return <TextKeys />
   }
+}
+
+/**
+ * Recent (loop round 57, the Editor board, Flat's recent notation): the tools used last, the latest
+ * first, eight at most, in one grid; each is its own category's key, still in its place there, and
+ * greys as it does there while it cannot act.
+ */
+function RecentKeys() {
+  const { t } = useTranslation('editor')
+  const recent = useSettings(selectPaletteRecent)
+  const open = openCategories(useEditorState((state) => state.layer))
+  return (
+    <KeyGrid label={t('palette.category.recent')}>
+      <RecentTools value={recent}>
+        {RECENT_FROM.filter((category) => open.includes(category)).map((category) => (
+          <RecentFrom key={category} category={category} />
+        ))}
+      </RecentTools>
+    </KeyGrid>
+  )
+}
+
+/** One category's keys among Recent's, waiting as they do in their own. */
+function RecentFrom({ category }: { category: PaletteCategory }) {
+  const { t } = useTranslation('editor')
+  const waits = useEditorState((state) => needsNote(category, chosenNotes(state).length > 0))
+  return (
+    <KeysWait value={waits ? t('reason.chooseNote') : null}>
+      <Tools category={category} />
+    </KeysWait>
+  )
 }
 
 /** The palette's keys laid out in a form: the row's pickers their signs alone, else Flat's tables. */
@@ -210,8 +249,9 @@ function useSectionInSight(
  */
 const CATEGORY_SIGN: Record<
   PaletteCategory,
-  { sign: string; face: 'music' | 'term' | 'serif' | 'sans' }
+  { sign: ReactNode; face: 'music' | 'term' | 'serif' | 'sans' }
 > = {
+  recent: { sign: <Clock className="size-5" />, face: 'sans' },
   notes: { sign: '\u2669', face: 'music' },
   pitch: { sign: '\u266D\u266F', face: 'music' },
   articulations: { sign: '>', face: 'serif' },

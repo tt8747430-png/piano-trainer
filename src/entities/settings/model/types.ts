@@ -390,6 +390,11 @@ export interface SettingsState {
   tipsSeen: readonly string[]
   /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
   practiceRecent: readonly string[]
+  /**
+   * The score editor's palette tools used last, the latest first (loop round 57, Flat's recent
+   * notation): its Recent group, eight at most, each still in its own category.
+   */
+  paletteRecent: readonly string[]
   /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
   lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */

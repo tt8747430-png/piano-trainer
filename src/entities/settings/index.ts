@@ -67,6 +67,7 @@ export {
   createSettingsStore,
   SETTINGS_STORAGE_KEY,
   SETTINGS_VERSION,
+  PALETTE_RECENT_MAX,
   type SettingsStore,
 } from './model/store'
 export {
@@ -91,6 +92,7 @@ export {
   selectSectionFolded,
   selectPaletteFolded,
   selectPaletteCategory,
+  selectPaletteRecent,
   selectEditorMode,
   selectSidebar,
   selectTipSeen,
