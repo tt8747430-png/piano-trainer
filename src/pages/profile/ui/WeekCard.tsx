@@ -46,9 +46,10 @@ export function WeekCard() {
         </p>
       </div>
       <div className="flex flex-col gap-1.5">
-        {/* A week not yet played says what fills it, over the flat days. */}
+        {/* A week with no day practised says what fills it, over the flat days. A day practised
+            with no timed minutes (an exercise run, the keys played) still counts in "n of 7 days". */}
         <div className="relative">
-          {total === 0 ? (
+          {played === 0 ? (
             <p className="absolute inset-x-0 top-5 text-center text-sm text-pretty text-muted-foreground">
               {t('profile.week.empty')}
             </p>
@@ -67,7 +68,12 @@ export function WeekCard() {
                   aria-hidden
                   className={cn(
                     'w-full rounded-[6px]',
-                    day.seconds > 0 ? 'min-h-1' : 'h-1 bg-muted',
+                    // A day practised with no timed minutes is a stub in the paint, not a bare day.
+                    day.seconds > 0
+                      ? 'min-h-1'
+                      : day.practised
+                        ? 'h-1 bg-played/50'
+                        : 'h-1 bg-muted',
                     day.seconds > 0 && (day.day === today ? 'bg-played' : 'bg-played/50'),
                   )}
                   style={day.seconds > 0 ? { height: `${(day.seconds / most) * 100}%` } : undefined}
