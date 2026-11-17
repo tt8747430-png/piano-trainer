@@ -8,7 +8,6 @@ export const songs = {
     trash_one: 'Trash · {{count}}',
     trash_other: 'Trash · {{count}}',
   },
-  create: { label: 'Make a song' },
   found: {
     songs: 'Songs',
     inExplore: 'In Explore',

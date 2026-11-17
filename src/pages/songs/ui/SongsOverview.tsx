@@ -14,11 +14,11 @@ import {
 import type { SongsHome } from '../model/explore-view'
 import { useLibraryPage } from '../model/use-library-page'
 import { ContinueShelf } from './ContinueShelf'
-import { CreateButtons } from './CreateButtons'
 import { ExploreShelf } from './ExploreShelf'
 import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
+import { NewActions, NewMenu } from './NewActions'
 import { Playlists } from './Playlists'
 import { SongsFound } from './SongsFound'
 
@@ -28,7 +28,7 @@ const PANE_ROW =
 
 /**
  * Songs (the Songs board, owner 2026-11-17: "copiing the flat layout and its playlists … i dont want
- * misleading links"): the title, the search in place and the ways to make a song. On a phone, Flat's
+ * misleading links"): the title, the search in place and the one New (the phone's floating + at the bottom right, the laptop's New ▾ in the bar, the same rows as All songs'). On a phone, Flat's
  * My scores: Recently played with All n songs, the Playlists as rows, Explore's newest; its ··· holds
  * Archive and Trash. On a laptop, Flat's library: a pane of the Playlists with Archive and Trash at its
  * foot, every song beside it under its count and sort, Explore's newest under them. While the search
@@ -81,18 +81,13 @@ export function SongsOverview() {
           laptop ? (
             <>
               {search ? <div className="w-80">{search}</div> : null}
-              <CreateButtons page={page} onImport={songImport.choose} bar />
+              <NewMenu page={page} folder={null} onImport={songImport.choose} />
             </>
           ) : null
         }
         more={more}
       />
-      {laptop ? null : (
-        <>
-          {search}
-          {query ? null : <CreateButtons page={page} onImport={songImport.choose} />}
-        </>
-      )}
+      {laptop ? null : search}
       {query ? (
         <SongsFound page={page} query={query} onClear={() => show({ q: '' })} />
       ) : empty ? (
@@ -154,6 +149,7 @@ export function SongsOverview() {
           <ExploreShelf />
         </div>
       )}
+      {laptop ? null : <NewActions page={page} folder={null} onImport={songImport.choose} />}
       <LibraryDialogs page={page} folder={null} />
       {songImport.view}
     </div>

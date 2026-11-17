@@ -14,7 +14,6 @@ export const songs: LocaleResources['songs'] = {
     trash_many: 'Корзина · {{count}}',
     trash_other: 'Корзина · {{count}}',
   },
-  create: { label: 'Создать песню' },
   found: {
     songs: 'Песни',
     inExplore: 'В Обзоре',

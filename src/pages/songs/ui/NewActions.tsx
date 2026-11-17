@@ -1,4 +1,4 @@
-import { FileUp, FolderPlus, Music, Mic, Users } from 'lucide-react'
+import { FileUp, ListPlus, Music, Mic } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { FolderId } from '@/entities/library'
 import { NewDial, NewMenu as KitNewMenu, type MenuAction } from '@/shared/ui'
@@ -11,16 +11,15 @@ interface Where {
 }
 
 /**
- * What New adds, each made where the learner is, in the folder open (`folder`) or at Home: New song,
- * Record, New folder, Import (a MusicXML or MIDI file, ADR 0107) and New group (R30 S6), each where
- * it may be done here (R29 B4): a learner's built-in folder has none. It adds, and only adds (Noji's
- * +): the Public library is a place, reached by its own row.
+ * What New adds, the same rows on every Songs page (the Songs board's one New, canvas v390): New song,
+ * Record, Import (a MusicXML or MIDI file, ADR 0107) and New playlist, each made where the learner is (in
+ * the playlist open, `folder`, or at Home) and each only where it may be done here: a built-in
+ * playlist takes no new one. It adds, and only adds: Explore is a place, and a group is made on Groups.
  */
 export function useNewActions({ page, folder, onImport }: Where): readonly MenuAction[] {
   const { t } = useTranslation('songs')
-  const songs = page.may('addSong')
   return [
-    ...(songs
+    ...(page.may('addSong')
       ? [
           {
             key: 'song',
@@ -36,33 +35,27 @@ export function useNewActions({ page, folder, onImport }: Where): readonly MenuA
           },
         ]
       : []),
+    ...(page.may('importSong')
+      ? [{ key: 'import', label: t('import.action'), icon: FileUp, onSelect: onImport }]
+      : []),
     ...(page.may('addFolder')
       ? [
           {
             key: 'folder',
             label: t('folder.new'),
-            icon: FolderPlus,
+            icon: ListPlus,
             onSelect: () => page.open({ kind: 'folder', target: { kind: 'new', parent: folder } }),
           },
         ]
       : []),
-    ...(page.may('importSong')
-      ? [{ key: 'import', label: t('import.action'), icon: FileUp, onSelect: onImport }]
-      : []),
-    {
-      key: 'group',
-      label: t('groups.new'),
-      icon: Users,
-      onSelect: () => page.open({ kind: 'new-group' }),
-    },
   ]
 }
 
-/** New on a phone: the kit's dial. With nothing to add here, no +. */
+/** New on a phone: the kit's dial at the bottom right, its card of rows above it. With nothing to add here, no +. */
 export function NewActions(where: Where) {
   const { t } = useTranslation('songs')
   const actions = useNewActions(where)
-  if (actions.length === 1) return null
+  if (actions.length === 0) return null
   return <NewDial label={t('new')} actions={actions} />
 }
 
@@ -70,6 +63,6 @@ export function NewActions(where: Where) {
 export function NewMenu(where: Where) {
   const { t } = useTranslation('songs')
   const actions = useNewActions(where)
-  if (actions.length === 1) return null
+  if (actions.length === 0) return null
   return <KitNewMenu label={t('new')} actions={actions} />
 }

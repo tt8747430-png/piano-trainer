@@ -44,10 +44,14 @@ details.
   - **Record** (R72's RECFORM): Input (the piano connected, else Not connected; it opens Connect a piano), Tempo,
     Click and Count-in (the recorder's saved choices), and Start recording, which makes "Recording" (C major, 4/4)
     where the learner is and opens it in the score editor with Record pressed;
-  - New song, Record, New folder and New group are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
+  - **New is one list, opened one way** (canvas v390; owner, 2026-11-17: "the floating actions should also be consistent
+    how they open"): New song, Record, Import, New playlist, on My songs, All songs and a playlist alike; on a phone
+    the honey + at the bottom right opens them as a card above it (`NewDial`), on a laptop the honey New ▾ at the
+    bar's end as a menu (`NewMenu`); a group is made on Groups;
+  - New song, Record and New playlist are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
     (480 for a form, 440 for a name), Cancel in its header and Create at its foot;
   - **New folder** (R72's NEWNAME): a sheet of its name alone, Cancel in its header and Create at its foot; its colour
-    is the next paint, changed later from its ··· (Colour). New group's sheet is the same shape;
+    is the next paint, changed later from its ··· (Colour);
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
     New folder at its foot;
   - the song's Settings (ADR 0111): the ♡, Move to…, Archive or Restore; a song's row and page also

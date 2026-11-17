@@ -1,8 +1,6 @@
-import { useNavigate } from '@tanstack/react-router'
 import type { ShelvedFolder } from '@/entities/library'
 import { isSongCollectionId, useRepertoire } from '@/entities/piece'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
-import { NewGroupSheet } from '@/features/share-folder'
 import { ExportSheet, useSongFiles, type ExportFiles } from '@/features/song-files'
 import type { LibraryPage } from '../model/use-library-page'
 import { DeleteAsk } from './DeleteAsk'
@@ -11,7 +9,7 @@ import { RecordSheet } from './RecordSheet'
 
 /**
  * What the library's page opens over itself, one at a time (Mindscape's `LibraryDialogs`): Move to…,
- * the folder sheet, the asks before Delete, New song, Record, New group, and Export… of the songs chosen.
+ * the folder sheet, the asks before Delete, New song, Record and Export… of the songs chosen.
  */
 export function LibraryDialogs({
   page,
@@ -22,7 +20,6 @@ export function LibraryDialogs({
 }) {
   const { pending } = page
   const repertoire = useRepertoire()
-  const navigate = useNavigate()
   // The songs Select chose, each one's file in turn.
   const filesOf = useSongFiles()
   const chosen =
@@ -68,14 +65,6 @@ export function LibraryDialogs({
         }}
       />
       <DeleteAsk page={page} />
-      <NewGroupSheet
-        open={pending?.kind === 'new-group'}
-        onOpenChange={shut}
-        onMade={(group) => {
-          page.close()
-          void navigate({ to: '/songs/groups/$groupId', params: { groupId: group.id } })
-        }}
-      />
       <NewSongSheet
         open={pending?.kind === 'new-song' && (pending.record !== true || collection !== undefined)}
         onOpenChange={shut}
