@@ -148,7 +148,7 @@ OSET_JS = js(r'''
         .concat(isLesson ? [['In courses, open', sheet === 'ins', { sheet: 'ins' }, { sheet: null }]] : [])
         .concat([['Deleted, with Undo', /deleted$/.test(st.toast || ''), { toast: isLesson ? 'Lesson deleted' : 'Course deleted' }, { toast: null }], ['Progress reset, with Undo', st.toast === 'Progress reset', { toast: 'Progress reset' }, { toast: null }]])
         .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };''')
-NAMEBODY = lambda v, label: (f'{CAPS("Name")}<input aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
+NAMEBODY = lambda v, label: (f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Name")}<input aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"></div>'
                              f'<div style="display: flex">{BTN(label, "rename", "", "primary", 50)}</div>')
 INSBODY = GROUP(('raw', f'<sc-for list="{{{{inCourses}}}}" as="k" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{{{k.on}}}}" onClick="{{{{k.pick}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 16px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: 1">{{{{k.c}}}}</span><span style="font-weight: 700; color: #2F5A35">{{{{k.mark}}}}</span></button></sc-for>'), bg=SHEET)
 def SETTINGS(lesson, lap):
@@ -165,8 +165,8 @@ def SETTINGS(lesson, lap):
     sub = (f'<div style="display: flex; gap: 16px; align-items: center; padding: 4px 0">{pic}<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 20px; font-weight: 700">{name}</span>'
            f'<span style="font-size: 14px; color: {SOFT}">{"Your lesson · 2 sections" if lesson else "Your course · 4 lessons"}</span></div></div>')
     if not lesson:
-        rows += SEC(f'{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
-                 f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div>')
+        rows += SEC(f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
+                 f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div></div>')
     rest = SEC(CAPS("Progress"), GROUP(("action", "Reset progress", "reset"), bg=SHEET)) + GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)
     # one column on both sizes, in the phone's order: what it is, then its progress, the loss last and apart (loop round 63:
     # in two columns Delete stood at the laptop's top right, the first thing seen)

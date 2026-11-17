@@ -70,8 +70,8 @@ PLAYS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" ari
 # ── a section on the Genos: Intro (first section), Main per pass, into the next, Ending (last section) ──
 SEGROW = lambda label, lst: f'<div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 12px 12px 16px"><span style="font-size: 16px">{label}</span>{SEGC(lst, 44, 14)}</div>'
 CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 12px; background: {FILL}">' + SEGROW('Intro', 'introSeg') + '</div></sc-if>'
-          + CAPS('Main, each time through')
-          + f'<div style="border-radius: 12px; background: {FILL}"><sc-for list="{{{{passes}}}}" as="p" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 12px 12px 16px; box-shadow: inset 0 -1px 0 {LINE}"><span style="font-size: 16px">{{{{p.n}}}}</span>{SEGC("p.seg", 44, 14)}</div></sc-for></div>'
+          + '<div style="display: flex; flex-direction: column; gap: 8px">' + CAPS('Main, each time through')
+          + f'<div style="border-radius: 12px; background: {FILL}"><sc-for list="{{{{passes}}}}" as="p" hint-placeholder-count="2"><div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 12px 12px 16px; box-shadow: inset 0 -1px 0 {LINE}"><span style="font-size: 16px">{{{{p.n}}}}</span>{SEGC("p.seg", 44, 14)}</div></sc-for></div></div>'
           + f'<sc-if value="{{{{tagIsLast}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {FILL}">' + SEGROW('Ending', 'endingSeg') + '</div></sc-if>'
           + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('Into the next section', 'intoSeg') + '</div>'
           + f'<p style="margin: 0 4px; font-size: 14px; color: {SOFT}">None sends nothing: the Genos plays as its panel says.</p>')
@@ -150,7 +150,7 @@ CP_CHORD59 = (GROUP(ROW59('Chord', POP59('rootPopL', 'openRootPop', 72, 'Root') 
               + f'<sc-if value="{{{{rootPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{ROOTGRID("chordRoots")}</sc-if>'
               + f'<sc-if value="{{{{qualPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("qualChips")}</sc-if>'
               + f'<sc-if value="{{{{bassPopOn}}}}" hint-placeholder-val="{{{{false}}}}">{CHIPROW("bassChips")}</sc-if>'
-              + CAPS('Suggested chords') + SUGG59
+              + LABELLED('Suggested chords', SUGG59)
               + f'<div style="display: flex; gap: 8px"><button type="button" onClick="{{{{removeChord}}}}" aria-label="Delete chord" data-tip="Delete chord" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 10px; background: #F4DCD6; color: #B3261E; display: flex; align-items: center; justify-content: center">{TRASHI}</button>'
               + QBTN(DUPI, 'Duplicate', 'duplicate') + QBTN(PLAYS, 'Play from here', 'playFrom') + '</div>')
 

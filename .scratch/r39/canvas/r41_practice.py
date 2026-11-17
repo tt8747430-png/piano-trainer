@@ -355,9 +355,9 @@ def CP_KEYS(h):
     k3 = (f'<sc-if value="{{{{cpKb3}}}}" hint-placeholder-val="{{{{false}}}}"><figure aria-label="The hands at the keys, playing {{{{nowChord}}}}" style="position: relative; margin: 0; height: {h}px; overflow: hidden; background: #EDE6DC; {PS.STAGE_VARS}">'
           f'<canvas ref="{{{{handsRef}}}}" style="display: block; width: 100%; height: 100%"></canvas><div ref="{{{{labelsRef}}}}" aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none"></div></figure></sc-if>')
     return k2 + k3
-CP_SET = (CAPS('Instruments') + GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT'))
-          + CAPS('Playing') + GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', ''))
-          + CAPS('Music') + GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200))
+CP_SET = (LABELLED('Instruments', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('toggle', 'Bass', 'cpBaOn', 'cpBaT'), ('toggle', 'Drums', 'cpDrOn', 'cpDrT')))
+          + LABELLED('Playing', GROUP(('link', 'Count-in', '1 bar', ''), ('link', 'Volume', '80%', '')))
+          + LABELLED('Music', GROUP(('link', 'Time signature', '4/4', ''), ('seg', 'Written as', 'namesSeg', 200), ('seg', 'Voicing', 'cpVSeg', 200)))
           + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)

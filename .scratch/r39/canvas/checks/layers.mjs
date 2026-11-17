@@ -46,8 +46,8 @@ const MEASURE = ([want, lap, before]) => {
         const hb = h.getBoundingClientRect(), up = hb.top - prev.getBoundingClientRect().bottom, down = next.getBoundingClientRect().top - hb.bottom
         if (up >= 0 && down >= 0 && up <= down) { p.push('HEADING “' + h.textContent.trim().slice(0, 24) + '” ' + Math.round(up) + ' above, ' + Math.round(down) + ' below'); break }
       }
-      // a centred dialog or popover holds its content in the middle: top and bottom insets alike
-      if (!(Math.abs(R.left - S.left) < 2 && Math.abs(R.right - S.right) < 2)) {
+      // a centred dialog or popover (not a menu, whose caption carries its own margin) holds its content in the middle: top and bottom insets alike
+      if (L.getAttribute('role') !== 'menu' && !(Math.abs(R.left - S.left) < 2 && Math.abs(R.right - S.right) < 2)) {
         const kids = [...L.children].filter(vis)
         if (kids.length) { const t = kids[0].getBoundingClientRect().top - R.top, b = R.bottom - kids[kids.length - 1].getBoundingClientRect().bottom; if (L.scrollHeight <= L.clientHeight + 1 && Math.abs(t - b) > 4) p.push('UNBALANCED top ' + Math.round(t) + ', bottom ' + Math.round(b)) }
       }
