@@ -117,9 +117,18 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // Opened at a bar (Edit from the Player's cursor, ADR 0115): the caret goes to its start, once,
   // and the URL forgets it.
   const setSearch = useSetSearch<EditSearch>()
+  // The caret to a bar's first beat by its printed number, on the row it is on (Go to bar, ⌘G).
+  const goToBar = useCallback(
+    (printed: number) => {
+      const placed = barsOf(store.getState().draft)[printed - 1]
+      if (placed)
+        store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })
+    },
+    [store],
+  )
+  const [goingTo, setGoingTo] = useState(false)
   const openAt = useEffectEvent((printed: number) => {
-    const placed = barsOf(store.getState().draft)[printed - 1]
-    if (placed) store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })
+    goToBar(printed)
     setSearch({ bar: undefined })
   })
   useEffect(() => {
@@ -230,6 +239,11 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     }
     const shortcut = shortcutOf(event, store.getState().layer)
     if (!shortcut) return
+    if (shortcut.type === 'goTo') {
+      event.preventDefault()
+      setGoingTo(true)
+      return
+    }
     if (shortcut.type === 'field') {
       event.preventDefault()
       openField(fieldOf(shortcut.field))
@@ -274,7 +288,14 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     store,
     takes,
     heard,
-    actions: { dispatch, play, togglePlay, close, dismissUnsaved: () => setUnsaved(false) },
+    actions: {
+      dispatch,
+      play,
+      togglePlay,
+      close,
+      dismissUnsaved: () => setUnsaved(false),
+      goToBar,
+    },
     view: {
       // The chord symbols shown or not are the View's (ADR 0114).
       chordNames: shown.chordNames,
@@ -286,6 +307,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       hidden,
       field,
       openField,
+      goingTo,
+      setGoingTo,
     },
     meta: {
       id: target.id,

@@ -8,6 +8,8 @@ export const editor = {
   // Under the menu's title (the boards' ED_SAVED): where the learner's own song or version is kept.
   savedHere: 'Saved on this device',
   savedAccount: 'Saved to your account',
+  // ⌘G's card over the sheet's head (research F11, Flat's and Dorico's): a bar's number, out of how many.
+  goToBar: { title: 'Go to bar', bar: 'Bar', of: 'of {{count}}' },
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Playback and recording',
   // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.

@@ -48,6 +48,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.line'), shown: ['Enter'] },
     { label: t('shortcuts.lineBack'), shown: [shift, 'Enter'] },
     { label: t('shortcuts.ends'), shown: ['Home', 'End'] },
+    { label: t('goToBar.title'), shown: [mod, 'G'] },
     { label: t('shortcuts.extend'), shown: [shift, '←', '→'] },
     { label: t('shortcuts.extendBar'), shown: [shift, mod, '←', '→'] },
     { label: t('shortcuts.extendEnds'), shown: [shift, 'Home', 'End'] },

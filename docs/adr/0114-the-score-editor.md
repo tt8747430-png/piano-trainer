@@ -26,7 +26,8 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   Shift a semitone, with Cmd or Ctrl an octave. ← → move a step, with Cmd or Ctrl a bar, as Flat's and Dorico's (Alt
   with ← → does nothing). The selection is notes, two tick spans: Shift ← → a note, with Cmd to the bar's end, Home or
   End to an end; Cmd or Ctrl with A the whole staff, as Flat's and Dorico's; Alt ↑ ↓ step through a chord's notes.
-  Escape lets go.
+  Escape lets go. Cmd or Ctrl with G opens Go to bar, a small card under the sheet's head (the EditorLaptop board's):
+  the caret's bar in its field, "of 16" beside it; Enter takes the caret to that bar's first beat on its row.
 - **Every tool acts on what is chosen.** With only a caret, a value sets the next note's value; with notes chosen it
   makes them that long (`setDuration`). Tie (`,`) at the caret joins a note to the same key's note after it, or, in
   note input, holds on the note or chord just written at the value chosen, the caret after it (`tieOn`, Dorico's

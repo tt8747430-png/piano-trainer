@@ -8,6 +8,7 @@ export const editor: LocaleResources['editor'] = {
   unsaved: 'Не удалось сохранить изменение. Партитура возвращена к последней сохранённой версии.',
   savedHere: 'Сохранено на этом устройстве',
   savedAccount: 'Сохранено в вашем аккаунте',
+  goToBar: { title: 'Перейти к такту', bar: 'Такт', of: 'из {{count}}' },
   dock: 'Воспроизведение и запись',
   tools: 'Инструменты нот',
   // The floating capsule of what is done to the notes chosen: Delete, Copy, Cut, Paste.

@@ -28,6 +28,7 @@ import { useScoreEditor } from '../model/use-score-editor'
 import { useAnswerRecord } from '../model/use-record-take'
 import { CaretLine } from './CaretLine'
 import { EditorGear, type EditorDraft } from './EditorGear'
+import { GoToBar } from './GoToBar'
 import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead, EditorMode } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -236,6 +237,8 @@ function EditorScreen({
               )}
               {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
               <div className="pointer-events-none absolute inset-0 z-30">
+                {/* Go to bar's card, hung under the sheet's head (⌘G). */}
+                <GoToBar />
                 {/* A change that could not be saved, said at the sheet's head. */}
                 <div className="absolute inset-x-0 top-2 flex justify-center px-2">
                   <div className="pointer-events-auto w-full max-w-md">

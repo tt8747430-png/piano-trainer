@@ -4,7 +4,11 @@ import type { TupletCount } from '@/shared/lib/notation'
 import type { SheetField } from '@/widgets/score-sheet'
 
 /** A shortcut: an editor action, or a field opened to type in where it is printed (ADR 0096). */
-type Shortcut = EditorAction | { readonly type: 'field'; readonly field: SheetField['kind'] }
+type Shortcut =
+  | EditorAction
+  | { readonly type: 'field'; readonly field: SheetField['kind'] }
+  /** Go to bar's card (Flat's and Dorico's ⌘G, research F11). */
+  | { readonly type: 'goTo' }
 
 /** A tool's key: a physical key (`code`), its cap as printed, and the modifiers held with it. */
 interface ToolCombo {
@@ -171,6 +175,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
     if (isClipKey(press.code)) return { type: 'clip', edit: CLIP_EDITS[press.code] }
     if (press.code === 'KeyA' && !press.shiftKey && !press.altKey) return { type: 'selectAll' }
+    if (press.code === 'KeyG' && !press.shiftKey && !press.altKey) return { type: 'goTo' }
   }
   const tool = toolOf(press)
   if (tool) return tool.does.type === 'mode' && layer === 'chords' ? null : tool.does
