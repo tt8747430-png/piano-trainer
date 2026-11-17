@@ -409,6 +409,7 @@ owner's, typos fixed.
 - **Loop round 61, one search and one list of words (research 8, 9):** Explore's search reads each word in a title or a composer, as the library's does; a first Publish starts with the song's genre as its tag (Hymn, Classical, Study…) and its library tags, the words Explore's chips find (2026-11-17).
 - **Loop round 61, Learning is what was played (research 12):** a song counts as practised, for Recently played and Learning, from its first Play or Wait mode's start, never from opening the Player alone (2026-11-17).
 - **Loop round 61, takes judged by the beat (research 10):** on the beat within a tenth of a beat (40 to 120 ms), close to a quarter (a third off), further off two thirds off, wrong or missed all; the share and each bar's are what the penalties leave, whole from 96 %, at every tempo alike (2026-11-17).
+- **Loop round 61, Your practice shows Wait mode (research 11):** a row "Wait mode · Best 92% · Both hands" (both hands where played so, else one hand's); the card titled as Details is, its rows 52 tall and 16 in as Details' are, no longer inset twice (2026-11-17).
 
 ## Learn and the editors
 - **Your lessons and courses: search and New in the laptop bar (loop round 60, 2026-11-16):** the laptop page put its search, Recent and + New in a row under the title, where the Practice libraries carry theirs in the bar; they stand in the bar now, and the New menu, Sort and the New sheet open under them.

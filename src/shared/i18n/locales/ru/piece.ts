@@ -180,6 +180,8 @@ export const piece: LocaleResources['piece'] = {
   practice: {
     title: 'Ваши занятия',
     last: 'Последний раз',
+    wait: 'Режим ожидания',
+    waitBest: 'Лучший {{percent}} · {{hands}}',
     takes: 'Записи',
     takeCount_one: '{{count}} запись',
     takeCount_few: '{{count}} записи',

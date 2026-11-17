@@ -182,6 +182,8 @@ export const piece = {
   practice: {
     title: 'Your practice',
     last: 'Played last',
+    wait: 'Wait mode',
+    waitBest: 'Best {{percent}} · {{hands}}',
     takes: 'Takes',
     takeCount_one: '{{count}} recording',
     takeCount_other: '{{count}} recordings',
