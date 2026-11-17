@@ -6,6 +6,7 @@ owner's, typos fixed.
 
 ## Score editor
 
+- **Loop round 61, no "Use for new songs" in Layout (research F22, not built):** a saved layout default would make Reset mean two things and add a hidden setting; every new song starts from the one layout, and Reset returns to it ("fewer settings") (2026-11-17).
 - **Loop round 61, Go to bar (research F11, Flat's and Dorico's ⌘G; canvas v370, EditorLaptop's "Go to bar (⌘G)" state):** the editor had no way to jump to a bar but the arrows; ⌘G hangs a small card under the sheet's head, the caret's bar in its field and "of 16" beside it, Enter takes the caret to that bar's first beat; listed in the shortcuts sheet (2026-11-17).
 - **Loop round 61, the editor's menu groups untitled (the boards' MENUCARD; the Player's ruling "i don't like the headings or titles of the settings sections"):** its "Settings" and "Publishing" labels are gone, the groups parted by space; research F21's "This score" and "Editor" titles were not built for the same ruling (2026-11-17).
 - **Loop round 61, a slower hand's chord written as one (research F24):** keys struck within 80 ms were one chord, so a slower player's chord split into notes; the window is Dorico's default 100 ms, fixed, with no new setting (fewer settings) (2026-11-17).
@@ -316,6 +317,7 @@ owner's, typos fixed.
 - **Calm:** too much at once is wrong. Learned at the header's right.
 - No "Learn the song step by step" card. A song with no sections must not look odd. Descriptions short or behind ⓘ.
 ## Library, adding, publishing
+- **Loop round 61, research Songs 14 and 15 not built:** Explore has no Most saved page since R72's feed, only Sort's Most saved, so a window of time would be a second control over a small catalogue; a copy saved from Explore keeps its credits, and Explore's song already says "In your library" and opens it, so a "From Explore" row on the copy would say it twice (2026-11-17).
 - **Loop round 61, Publish as R72's, Flat's discoverability form:** the song's head, "How easily it is found" n of 5, Title, Composer, Type (Original · Arrangement · Other), Tags as chips with × and suggestions with +, Description with its count, Licence a sheet of four, As others will see it, the rights, Publish; two columns on a laptop. Category and the Why publish ⓘ sheet went (tags carry the kind; an option explains nothing). Published: In the Public library, Copy link, View in library, Publish new version, Unpublish apart in crimson (2026-11-17).
 - **Loop round 61, Import as R72's IMPFORM, one sheet that reports:** New › Import opens the sheet on Choose a file (its kinds under it) where the system picker opened bare; every import reports, the song's name and what it left out on a honey note, or that everything came in, then Open song; Close in its header once the song is made (2026-11-17).
 - **Loop round 61, Record as R72's RECFORM:** its own sheet, no name asked: Input (the piano connected, else Not connected, never a promise the screen keys record), Tempo, Click, Count-in, and Start recording with its red dot, straight into the editor recording "Recording" (2026-11-17).
