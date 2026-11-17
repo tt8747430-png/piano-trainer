@@ -5,7 +5,7 @@ import { useLibrary, useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
 import { cn, useMediaQuery } from '@/shared/lib'
 import { LIBRARY_PANES, RoundLink, RowFace, ScreenHeader, TileMark, TitleTabs } from '@/shared/ui'
-import { FolderFace } from '@/widgets/song-library'
+import { FolderFace, useHoldsLine } from '@/widgets/song-library'
 import { useLibraryPage } from '../model/use-library-page'
 import type { SongsFilter } from '../model/songs-filter'
 import { ContinueShelf } from './ContinueShelf'
@@ -34,6 +34,7 @@ export function SongsOverview() {
   const page = useLibraryPage(null, NOTHING_SEARCHED)
   const layout = useLibraryLayout()
   const favourites = useLibrary((state) => state.favourites).length
+  const favouritesLine = useHoldsLine({ folders: 0, songs: favourites })
   const songImport = useSongImport(null)
   const total = page.view.scope.length
   const empty = page.view.folders.length === 0 && total === 0
@@ -74,10 +75,7 @@ export function SongsOverview() {
                   >
                     <Heart className="size-6 fill-destructive text-destructive" />
                   </span>
-                  <RowFace
-                    title={t('places.favourites')}
-                    detail={t('folder.songCount', { count: favourites })}
-                  />
+                  <RowFace title={t('places.favourites')} detail={favouritesLine} />
                   <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
                 </Link>
               </li>
