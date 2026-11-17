@@ -24,6 +24,9 @@ const seg = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === 
 const chipsOf = (opts, cur, pick) => opts.map((l) => ({ l, bg: l === cur ? '#332921' : '#EEE9E2', fg: l === cur ? '#FEFDFB' : '#332921', pick: () => pick(l) }));
 const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const rootGrid = (cur, pick) => { const all = ROOTS.map((r, i) => ({ l: r, on: i === cur, bg: i === cur ? '#FEFDFB' : 'transparent', sh: i === cur ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: i === cur ? 700 : 500, pick: () => pick(i) })); return { a: all.slice(0, 6), b: all.slice(6) }; };
+// a row's ··· menu opens at its button (owner, 2026-11-17: "what kind of nonsense is to put this delete in this
+// cnetered popup with doen button"): its right edge on the button's, below it, or above when the screen ends first
+const ANCHOR = (e, h) => { const t = e && e.currentTarget, p = t && t.closest && t.closest('[data-menuroot]'); if (!p) return 'right: 16px; top: 120px'; const b = t.getBoundingClientRect(), r = p.getBoundingClientRect(), k = (r.width / p.offsetWidth) || 1, right = Math.max(8, Math.round((r.right - b.right) / k)), below = Math.round((b.bottom - r.top) / k) + 4; return below + (h || 160) > p.offsetHeight - 24 ? 'right: ' + right + 'px; bottom: ' + (Math.round((r.bottom - b.top) / k) + 4) + 'px' : 'right: ' + right + 'px; top: ' + below + 'px'; };
 const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ sheet: null }), open: (n) => () => set({ sheet: n }), isSheet: (n) => st.sheet === n });
 '''
 
@@ -91,6 +94,19 @@ def LTITLEBAR(title, right='', back='', backact=''):
     b = (f'<a href="{back}" aria-label="Back" data-tip="Back" style="{GLASSST}">{CHEV_L}</a>' if back else
          f'<button type="button" onClick="{{{{{backact}}}}}" aria-label="Back" data-tip="Back" style="{GLASSST}; border: 0; cursor: pointer">{CHEV_L}</button>' if backact else '')
     return f'<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 {44 if (back or backact) else 56}px">{b}<h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">{title}</h1><span style="flex: 1"></span>{right}</header>'
+# One frame for every place of an area on a laptop (owner, 2026-11-17: "the pages change to much from the all songs to
+# explore … the user doesnt understand where it goes"; Jakob's law, NN/g consistency): an 88 bar, the place's name at
+# 56 in 30 bold with its count beside it, the place's acts, then the search pinned at the trailing edge (Finder, Apple
+# Music), so moving between sibling places changes the content and never the frame.
+def LPLACEBAR(title, count='', acts='', search=''):
+    c = f'<span style="flex: none; font-size: 17px; color: {SOFT}; font-variant-numeric: tabular-nums">{count}</span>' if count else ''
+    return (f'<header data-placebar style="flex: none; height: 88px; display: flex; align-items: center; gap: 12px; padding: 0 28px 0 56px">'
+            f'<h1 style="margin: 0; min-width: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h1>{c}<span style="flex: 1"></span>'
+            f'<div style="flex: none; display: flex; align-items: center; gap: 8px">{acts}</div>{search}</header>')
+# the one search field of a place, 320 wide, 44 tall, at the bar's trailing edge
+def PSEARCH(ph, val='q', act='setQ'):
+    return (f'<label style="flex: none; width: 320px; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
+            f'<input value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
 # A laptop sub-page's column: it starts on the bar title's edge (scan-first 1), never centred under a title at the left.
 LCOL = lambda inner, w: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex"><div style="width: min({w}px, 100%); display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
 # The ⓘ: one glyph for every explanation behind a tap.
@@ -172,6 +188,23 @@ def BSHEET(cond, title, body, done='Done'):
     # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head
     t = _BSHEET(cond, title, body, done or '')
     return re.sub(r'<button[^>]*>' + '</button>', '', t, count=1) if done is None else t
+# A row's ··· menu (owner, 2026-11-17: "what kind of nonsense is to put this delete in this cnetered popup with doen
+# button"; Apple HIG, Pull-down buttons and Menus; Material 3, Menus): a ··· opens a menu at its button, on a phone as
+# on a laptop, never a sheet or a dialog centred on the screen, never a title over it and never Done in it. Glass, 6
+# in, items 44 tall in the menu's 16; what loses something last, after a hairline, in crimson. Items are GROUP's
+# tuples: ('link', label, '', href) or ('action', label, act[, colour]). The JS sets {posvar} from ANCHOR(e, h).
+def ROWMENU(cond, label, items, posvar='menuPos', w=240):
+    out, seen_red = [], False
+    for t in items:
+        kind, l = t[0], t[1]
+        col = t[3] if kind == 'action' and len(t) > 3 and t[3] else INK
+        if col == RED and not seen_red and out:
+            out.append(f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div>')
+            seen_red = seen_red or col == RED
+        st = f'width: 100%; height: 44px; box-sizing: border-box; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; display: flex; align-items: center; color: {col}; font: inherit; font-size: 16px; text-align: left; text-decoration: none'
+        out.append(f'<a role="menuitem" href="{t[3]}" style="{st}">{l}</a>' if kind == 'link' else f'<button type="button" role="menuitem" onClick="{{{{{t[2]}}}}}" style="{st}">{l}</button>')
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
+            f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{"".join(out)}</div></sc-if>')
 def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: 760px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
 

@@ -423,7 +423,9 @@ if (!flow) {
     const b = byKey[a.key]
     if (!b) { console.log(`FLOW gone: ${a.kind} “${a.name}”`); marks.push({ side: 0, ...a, c: 'gone' }); continue }
     const dx = b.x - a.x, dy = b.y - a.y, dw = b.w - a.w, dh = b.h - a.h
-    const moved = Math.abs(dx) > 2 || Math.abs(dy) > 2, sized = Math.abs(dw) > 2 || Math.abs(dh) > 2
+    // a title holding another place's name is as wide as its words: only where it starts and its height are its frame
+    const words = a.kind === 'h1' && b.name !== a.name
+    const moved = Math.abs(dx) > 2 || Math.abs(dy) > 2, sized = (!words && Math.abs(dw) > 2) || Math.abs(dh) > 2
     if (a.frame) frames++
     if (!moved && !sized) { kept++; marks.push({ side: 0, ...a, c: 'kept' }, { side: 1, ...b, c: 'kept' }); continue }
     const what = [moved ? `moved ${dx >= 0 ? '+' : ''}${dx},${dy >= 0 ? '+' : ''}${dy}` : '', sized ? `resized ${a.w}×${a.h} → ${b.w}×${b.h}` : ''].filter(Boolean).join(', ')

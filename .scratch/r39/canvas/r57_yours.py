@@ -18,12 +18,12 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
     const kind = st.kind ?? 'All', sort = st.sort ?? 'Recent', open = st.open ?? { 'Sunday service set': true }, gone = st.gone ?? {}, sheet = st.sheet ?? null;
     const q = st.q ?? '', bare = !!st.bare, ql = q.trim().toLowerCase(), hit = (t) => !ql || t.toLowerCase().includes(ql);
     const rowOf = (t, d, k, inCourse) => ({ t, d: 'Lesson · ' + d, learned: k === 'learned', todo: k !== 'learned', inCourse, tileBg: k === 'learned' ? '#DCE9D6' : '#FEFDFB', tileRing: k === 'learned' ? 'none' : 'inset 0 0 0 1px #DAD1C8', tileFg: k === 'learned' ? '#2F5A35' : '#332921',
-      more: () => set({ sheet: 'row', row: t, rowC: false }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
+      more: (e) => set({ sheet: 'row', row: t, rowC: false, menuPos: ANCHOR(e, 230) }), remove: () => set({ gone: { ...gone, [t]: true }, sheet: null, toast: t + ' deleted' }) });
     const courses = (kind === 'Lessons' || bare ? [] : Y.courses).filter((c) => !gone[c.t] && (hit(c.t) || c.lessons.some(([t]) => hit(t)))).map((c) => {
       const ls = c.lessons.filter(([t]) => !gone[t] && (hit(c.t) || hit(t))).map(([t, d, k]) => rowOf(t, d, k, true));
       const isOpen = !!open[c.t] && kind !== 'Courses';
       return { t: c.t, paint: c.paint, d: 'Course · ' + ls.length + ' lessons' + (ls.some((l) => l.learned) ? ' · 1 learned' : ''), lessons: ls, isOpen, shut: !isOpen,
-        toggle: () => set({ open: { ...open, [c.t]: !open[c.t] } }), more: () => set({ sheet: 'row', row: c.t, rowC: true }), chev: isOpen ? 'rotate(90deg)' : 'none' };
+        toggle: () => set({ open: { ...open, [c.t]: !open[c.t] } }), more: (e) => set({ sheet: 'row', row: c.t, rowC: true, menuPos: ANCHOR(e, 230) }), chev: isOpen ? 'rotate(90deg)' : 'none' };
     });
     const loose = (kind === 'Courses' || bare ? [] : Y.loose).filter(([t]) => !gone[t] && hit(t)).map(([t, d, k]) => rowOf(t, d, k, false));
     const any = courses.length + loose.length > 0;
@@ -36,7 +36,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
       courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare, notBare: !bare, noneOn: !bare && !any,
       noneT: 'No results for “' + q.trim() + '”', clearQ: () => set({ q: '' }),
-      rowOn: sheet === 'row', rowT: st.row || '', rowCourse: !!st.rowC, rowLesson: !st.rowC, rowIsLesson: !Y.courses.some((c) => c.t === st.row),
+      rowOn: sheet === 'row', menuPos: st.menuPos ?? 'right: 16px; top: 120px', rowT: st.row || '', rowCourse: !!st.rowC, rowLesson: !st.rowC, rowOpen: st.rowC ? 'Course.dc.html' : 'Lesson.dc.html', rowSet: st.rowC ? 'YourCourseSettings.dc.html' : 'YourLessonSettings.dc.html', rowOpenL: st.rowC ? 'CourseLaptop.dc.html' : 'LessonLaptop.dc.html', rowSetL: st.rowC ? 'YourCourseSettingsLaptop.dc.html' : 'YourLessonSettingsLaptop.dc.html', rowIsLesson: !Y.courses.some((c) => c.t === st.row),
       removeRow: () => set({ gone: { ...gone, [st.row]: true }, sheet: null, toast: st.row + ' deleted' }),
       ''' + NEWJS + r'''
       q, typed: (e) => set({ q: e.target.value }),
@@ -73,8 +73,8 @@ SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items:
 # canvas 169: the + is the kit's one New dial (NEWDIAL), as Songs' and the Practice libraries'
 FAB = lambda bottom: NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], bottom)
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
-ROWBODY = (IF('rowLesson', GROUP(('link', 'Open', '', 'Lesson.dc.html'), ('action', 'Duplicate', 'closeSheet'), bg=SHEET) + GROUP(('link', 'Settings', '', 'YourLessonSettings.dc.html'), bg=SHEET), 'true')
-           + IF('rowCourse', GROUP(('link', 'Open', '', 'Course.dc.html'), ('action', 'Duplicate', 'closeSheet'), bg=SHEET) + GROUP(('link', 'Settings', '', 'YourCourseSettings.dc.html'), bg=SHEET)) + GROUP(('action', 'Delete', 'removeRow', '#B3261E'), bg=SHEET))
+# a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
+ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))
 YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 112px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
           f'<span style="flex: 1">{{{{toastT}}}}</span><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>')
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
@@ -82,8 +82,8 @@ yph = (f'{TITLEBAR("Your lessons and courses", "", "Learn.dc.html", "Back to Lea
        f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YTOAST.replace("bottom: 112px", "bottom: 112px")}')
 ylm = (f'{LTITLEBAR("Your lessons and courses", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + NEWBTN("openNew"), "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(True)}', 880) + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
-       BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + BSHEET('rowOn', '{{rowT}}', ROWBODY),
-       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 28px; top: 76px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + POPOVER('rowOn', '{{rowT}}', ROWBODY, 'right: 552px; top: 280px', 320), 'Learn')
+       BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
+       POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + POPOVER('newOn', '{{newT}}', NEWBODY, 'right: 28px; top: 76px', 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
 
 # ── Settings of the learner's own lesson and course: rows that say their value and open in place ──
 OSET_JS = js(r'''

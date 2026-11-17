@@ -106,7 +106,7 @@ def MORESHEET(title, rows, foot=''):
 
 def phone(fname, title, body, js, sheets='', bg=PAGE):
     html = HEAD % title + f"""<div style="width: 450px; height: 920px; position: relative; font-family: {FONT}">
-<div style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
+<div data-menuroot style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
 <div style="flex: none; height: 54px; position: relative">{STATUS}</div>
 {body}
 {sheets}
@@ -127,7 +127,8 @@ def phone(fname, title, body, js, sheets='', bg=PAGE):
 def SIDEBAR(section):
     """The app's laptop sidebar with its place current: one drawing for every laptop board."""
     side = re.sub(r'<a href="[^"]*"(?: aria-current="page")? style="min-height: 52px; border-radius: 10px', lambda m: '<a href="ProfileLaptop.dc.html"' + (' aria-current="page"' if section == 'Profile' else '') + ' style="min-height: 52px; border-radius: 10px' + ('; background: #EAE2D7' if section == 'Profile' else ''), SIDE, count=1).replace('font-weight: 700">G</span>', 'font-weight: 700">A</span>', 1).replace('font-weight: 600">Guest</span>', 'font-weight: 600">Ana Popescu</span>', 1)
-    side = side.replace('gap: 12px; padding: 0 10px', 'gap: 12px; padding: 0 12px')  # on the 4/8 scale, the avatar on the icons' edge
+    side = side.replace('gap: 12px; padding: 0 10px', 'gap: 12px; padding: 0 12px')
+    side = side.replace('color: #8A8178; padding: 2px 6px', 'color: #6B6259; padding: 2px 6px')  # Ctrl K at 4.5:1 on its chip (WCAG 1.4.3), not 3.3  # on the 4/8 scale, the avatar on the icons' edge
     for word, href in (('Learn', 'LearnLaptop.dc.html'), ('Songs', 'SongsLaptop.dc.html'), ('Practice', 'Laptop.dc.html')):
         on = word == section
         st = ('background: #EAE2D7; color: #1A1612; text-decoration: none; font-size: 16px; font-weight: 600' if on else 'background: transparent; color: #4A433C; text-decoration: none; font-size: 16px; font-weight: 500')
@@ -135,13 +136,41 @@ def SIDEBAR(section):
                       lambda m: f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="{m.group(2)}{st}">{m.group(3)}{word}</a>', side, count=1, flags=re.S)
     return side
 
+# Songs' places are sub-items of Songs in the sidebar while Songs is current (owner, 2026-11-17: "what about
+# subdivisions in the sidebar"; Apple Music's sidebar, HIG Sidebars): All songs, Explore, the playlists under their
+# heading with +, then Archive and Trash apart under a hairline. Text on the Songs label's edge (44); the place shown
+# on the current wash, Songs itself then only bold. One drawing for every Songs laptop board.
+_SUBCUR = {'SongsLaptop': 'All songs', 'AllSongsLaptop': 'All songs', 'ExploreLaptop': 'Explore', 'FolderLaptop': 'Hymns', 'SharedFolderLaptop': 'Choir hymns', 'ArchiveLaptop': 'Archive', 'TrashLaptop': 'Trash'}
+_SUBPL = (('Favourites', '#F3D2C8', 'FolderLaptop.dc.html'), ('Songs to learn', '#F6E7C8', 'FolderLaptop.dc.html'), ('Hymns', '#D3E5F2', 'FolderLaptop.dc.html'), ('Called to Play', '#E4DCF1', 'FolderLaptop.dc.html'), ('Choir hymns', '#DCE9D6', 'SharedFolderLaptop.dc.html'), ('Grade 3 pieces', '#EEE3D3', 'SharedFolderLaptop.dc.html'))
+def SONGS_SUB(fname):
+    cur = _SUBCUR.get(fname, '')
+    def item(label, href, n='', sq=''):
+        on = label == cur
+        lead = f'<span aria-hidden="true" style="flex: none; width: 20px; height: 20px; margin-left: -28px; border-radius: 5px; background: {sq}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08)"></span>' if sq else ''
+        return (f'<a href="{href}"' + (' aria-current="page"' if on else '') + f' style="height: 36px; border-radius: 10px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 44px; text-decoration: none; font-size: 15px; '
+                + ('background: #EAE2D7; color: #1A1612; font-weight: 600' if on else 'background: transparent; color: #4A433C; font-weight: 500') + f'">{lead}<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{label}</span>'
+                + (f'<span style="color: #6B6259; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums">{n}</span>' if n else '') + '</a>')
+    head = ('<div style="height: 36px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 6px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #6B6259">Playlists</span>'
+            '<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 36px; height: 36px; border: 0; border-radius: 18px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center"><span style="position: absolute; inset: -2px"></span>'
+            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>')
+    rows = (item('All songs', 'SongsLaptop.dc.html', '93') + item('Explore', 'ExploreLaptop.dc.html') + head
+            + ''.join(item(t, h, '', c) for t, c, h in _SUBPL).replace('padding: 0 12px 0 44px', 'padding: 0 12px 0 72px')
+            + '<div role="separator" style="height: 1px; margin: 6px 12px 6px 44px; background: #E9E2D8"></div>'
+            + item('Archive', 'ArchiveLaptop.dc.html', '3') + item('Trash', 'TrashLaptop.dc.html', '2'))
+    return f'<div role="group" aria-label="Songs" style="display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px">{rows}</div>', bool(cur)
 def laptop(fname, title, main, aside, js, pops='', section='Practice'):
     side = SIDEBAR(section)
+    if section == 'Songs':
+        sub, here = SONGS_SUB(fname)
+        m = re.search(r'(<a href="SongsLaptop\.dc\.html" aria-current="page" style="[^"]*">.*?Songs</a>)', side, re.S)
+        if m:
+            songs = m.group(1).replace('background: #EAE2D7', 'background: transparent') if here else m.group(1)
+            side = side.replace(m.group(1), songs + sub, 1)
     asidehtml = f'<aside class="nos" style="min-height: 0; overflow-y: auto; background: {SHEET}; box-shadow: -1px 0 0 {LINE}; padding: 28px 28px 28px; display: flex; flex-direction: column; gap: 18px">{aside}</aside>' if aside else ''
     cols = 'minmax(0, 1fr) 440px' if aside else 'minmax(0, 1fr)'
     html = HEAD % title + LAPFRAME_TOP + f"""<div style="position: absolute; left: 217.7px; top: 124.6px; width: 1710px; height: 904px; overflow: hidden; border-radius: 0 0 16px 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); background: {PAGE}; color: {INK}; font-family: {FONT}; display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr)">
 {side}
-<div style="position: relative; min-width: 0; display: grid; grid-template-columns: {cols}; grid-template-rows: minmax(0, 1fr)">
+<div data-menuroot style="position: relative; min-width: 0; display: grid; grid-template-columns: {cols}; grid-template-rows: minmax(0, 1fr)">
 <div style="position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column">{main}</div>
 {asidehtml}
 {pops}

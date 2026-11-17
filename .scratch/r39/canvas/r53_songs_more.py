@@ -2,7 +2,8 @@
 #   Explore     — Explore with its shelves, a public song (rating, Add to my library, Report), a shared song link
 #   Groups      — Groups, Join with a link, New group, a group (invite link, shared folders, members), a shared folder
 #   Folder      — a folder (Archived row), Folder settings, Card style, the folder's Archived
-#   Archive     — Archive (Restore, Restore all, Delete) and Trash (Restore, Delete permanently, Empty Trash)
+#   Archive     — Archive: Select; each row's ··· Restore, Move to Trash
+#   Trash       — Trash, its own place: Select; each row's ··· Restore, Delete permanently
 #   SongSettings — a song's Settings and Publish (Why publish, rights, published state, Unpublish)
 #   Section     — a section's page (Chords, In time, One change at a time, Patterns, Practise)
 # Exec'd by r41.py after r52_global.
@@ -55,7 +56,7 @@ EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + '; const INC =
       openReport: () => S({ sheet: 'report', reason: null }), reportOn: st.sheet === 'report', reasons: chipsOf(['Not theirs to share', 'Offensive', 'Spam', 'Doesn’t play'], st.reason, (x) => S({ reason: x })),
       sendReport: () => { if (st.reason) { S({ sheet: null }); toast('Thanks: the song is reported'); } }, repBg: st.reason ? '#B3261E' : '#EEE9E2', repInk: st.reason ? '#FFFFFF' : '#9A9089', repNot: !st.reason,
       sharedAdd: () => toast('Added to your library'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad, page: st.bad ? (st.page ?? null) : 'shared' }),
-      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: () => S({ sheet: 'esort' }), countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
+      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
       esorts: ['New', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'New'), mark: l === (st.esort ?? 'New') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, inLib: false }) };''')
 _STAFF = INCIPIT((0, 2, 4, 3, 5, 4)).replace('url("', "url('").replace('")', "')")
@@ -193,7 +194,13 @@ exph = (IF('isMain', IF('isList', TOP('Songs.dc.html', 'Explore', '', 'Songs')
            + IF('isShelf', TOP('', '', '', 'Explore', IB('Explore', CHEV_L, 'backList')) + NARROW(H1('{{shelfT}}') + GRID('all', 2))), 'true')
         + IF('isSong', TOP('', '{{sT}}', '', 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(PUB_PH) + PUBFLOAT(16, 40))
         + IF('isShared', TOP('', 'A shared song', '', 'Explore', IB('Explore', CHEV_L, 'back')) + NARROW(SHARED)) + TOASTS)
-exlm = (IF('isMain', IF('isList', LTITLEBAR('Explore', back='SongsLaptop.dc.html') + FULLW(f'<div style="display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 32px; align-items: start">{EXPANE}<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">' + EXBODY(EXTOOLS_L, 'display: flex; flex-direction: column; gap: 8px', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px', True).replace('Songs.dc.html', 'SongsLaptop.dc.html') + '</div></div>') + STRIP() + EXSORTMENU('right: 56px; top: 140px'), 'true')
+# Explore stands on the places' one frame (LPLACEBAR): its name and count, the search at the trailing edge; its pane
+# became one row under the bar, Songs | People, the kinds as chips, the order at the right (owner, 2026-11-17)
+EXROW_L = (f'<div style="flex: none; display: flex; align-items: center; gap: 16px"><div style="width: 220px; flex: none">{SEGC("kinds", 36, 15)}</div>'
+           + IF('isSongs', f'<div style="flex: 1; min-width: 0">' + KCHIPS('cats').replace('margin: -4px -16px; padding: 0 16px', 'margin: -4px 0; padding: 0') + '</div>' + EXSORTB.replace(f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{countT}}}}</span>', ''), 'true') + '</div>')
+exlm = (IF('isMain', IF('isList', LPLACEBAR('Explore', '{{countT}}', '', PSEARCH('Search songs and people', 'q', 'setQ'))
+                     + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 20px">' + EXROW_L
+                     + EXBODY('', 'display: flex; flex-direction: column; gap: 8px', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px', True).replace('Songs.dc.html', 'SongsLaptop.dc.html') + '</main>' + STRIP() + EXSORTMENU('{{menuPos}}'), 'true')
            + IF('isShelf', LTOP('', '') + WIDE(EXSHELF + GRID('all', 5), 1000)), 'true')
         + IF('isSong', LTITLEBAR('{{sT}}', backact='back') + FULLW(PUB_L) + PUBFLOAT(40, 40))
         + IF('isShared', LTITLEBAR('A shared song', backact='back') + LCOL(SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)
@@ -216,7 +223,7 @@ GR_JS = js(r'''
       askDel: () => S({ sheet: 'del' }), delOn: st.sheet === 'del', doDel: () => { S({ sheet: null, page: null }); toast('Choir accompanists deleted'); },
       askStop: () => S({ sheet: 'stop' }), stopOn: st.sheet === 'stop', doStop: () => { S({ sheet: null, page: null }); toast('Hymns is no longer shared'); },
       joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists'); }, signedOut: demo === 'Signed out', canNew: demo !== 'Signed out' && demo !== 'Offline', empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
-      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: () => S({ sheet: 'esort' }), countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
+      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
       esorts: ['New', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'New'), mark: l === (st.esort ?? 'New') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };''')
 GROW = lambda name, sub, act, c, folder=False, faces=None: (lambda h: h.replace(f'<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: {c}; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center">{name[0]}</span>', FACES(faces), 1) if faces else (h if not folder else h.replace(f'<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: {c}; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center">{name[0]}</span>', COV('', c, 44, folder=True), 1)))(f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; min-height: 64px; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left; display: flex; align-items: center; gap: 12px; padding: 8px 12px 8px 16px"><span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: {c}; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center">{name[0]}</span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>')
@@ -281,7 +288,7 @@ SP_SRC = (r'''
     const fArch = st.fArch ?? [['Holy, Holy, Holy', 'Dykes · D major'], ['Rock of Ages', 'Hastings · E♭ major']];
     const cs = st.cs ?? 'Soft', lay = st.lay ?? 'List';
     const titles = { settings: 'Folder settings', style: 'Card style', archived: 'Archived', archive: 'Archive', trash: 'Trash' };
-    const parent = { settings: null, style: 'settings', archived: null, archive: null, trash: 'archive' };
+    const parent = { settings: null, style: 'settings', archived: null, archive: null, trash: null };
     const sw = (k, d) => { const on = st[k] ?? d; return { [k + 'On']: on, [k + 'OnBg']: on ? '#44684A' : '#DAD1C8', [k + 'OnX']: on ? 22 : 2, [k + 'T']: () => S({ [k]: !on }) }; };
     const fEmpty = st.demo === 'emptyF';
     const states = [['emptyF', 'Empty folder', fEmpty, { demo: fEmpty ? null : 'emptyF', page: null }], ['arch', 'Nothing archived', page === 'archive' && arch.length === 0, { arch: arch.length ? [] : null, page: 'archive', demo: null }], ['trash', 'Trash is empty', page === 'trash' && trash.length === 0, { trash: trash.length ? [] : null, page: 'trash', demo: null }]]
@@ -290,11 +297,27 @@ SP_SRC = (r'''
       isSettings: page === 'settings', isStyle: page === 'style', isArchived: page === 'archived', isArchive: page === 'archive', isTrash: page === 'trash', notArch: page !== 'archive' && page !== 'trash',
       goSettings: () => S({ page: 'settings' }), goStyle: () => S({ page: 'style' }), goArchived: () => S({ page: 'archived' }), goArchive: () => S({ page: 'archive' }), goTrash: () => S({ page: 'trash' }),
       fArchN: 'Archived (' + fArch.length + ')', fArch: fArch.map(([t, s]) => ({ t, s, un: () => { S({ fArch: fArch.filter((x) => x[0] !== t) }); toast(t + ' is back in Hymns'); } })), fArchAny: fArch.length > 0,
-      arch: arch.map(([t, s, c, w]) => ({ t, s, c, w, k: s, restore: () => { S({ arch: arch.filter((x) => x[0] !== t), last: arch }); toast(t + ' restored', true); }, more: () => S({ sheet: 'amore', who: t }) })), archAny: arch.length > 0, archNone: arch.length === 0,
-      restoreAll: () => { S({ arch: [], last: arch }); toast('All items restored to the library', true); }, amoreOn: st.sheet === 'amore', whoT: st.who ?? '', delArch: () => { S({ arch: arch.filter((x) => x[0] !== st.who), sheet: null, last: arch }); toast((st.who ?? '') + ' moved to the Trash.', true); },
-      trash: trash.map(([t, s, c, w, k]) => ({ t, s, c, w, k, restore: () => { S({ trash: trash.filter((x) => x[0] !== t) }); toast(t + ' restored'); }, more: () => S({ sheet: 'tmore', who: t }) })), trashAny: trash.length > 0, trashNone: trash.length === 0, trashN: trash.length === 0 ? 'empty' : trash.length === 1 ? '1 song' : trash.length + ' songs',
-      tmoreOn: st.sheet === 'tmore', askPerm: () => S({ sheet: 'perm' }), permOn: st.sheet === 'perm', permT: 'Delete “' + (st.who ?? '') + '” permanently?', doPerm: () => S({ trash: trash.filter((x) => x[0] !== st.who), sheet: null }),
-      askEmpty: () => S({ sheet: 'empty' }), emptyOn: st.sheet === 'empty', emptyB: 'Songs (' + trash.length + ') and their recordings will be permanently deleted.', doEmpty: () => { S({ trash: [], sheet: null }); toast('Trash emptied'); },
+      // Select, as the library's (owner, 2026-11-17: "why dont we have a select mode in such pages as trash and archive"):
+      // Select in the bar; each row a checkbox; the selection bar at the foot acts on what is picked, or on all when
+      // none is (Apple Photos' Recently Deleted: Recover All · Delete All)
+      ...(() => { const L = page === 'trash' ? trash : arch, selOn = !!st.sel, picked = (st.picked ?? []).filter((t) => L.some((x) => x[0] === t)), n = picked.length, all = n === 0, names = all ? L.map((x) => x[0]) : picked, cnt = names.length === 1 ? '1 song' : names.length + ' songs';
+        const qq = (st.aq ?? '').trim().toLowerCase(), fl = (x) => !qq || (x[0] + ' ' + x[1]).toLowerCase().includes(qq);
+        const ck = (on) => ({ on, ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#B5A99B', ckMark: on ? 1 : 0 });
+        const row = (kind) => ([t, s, c, w, k]) => ({ t, s, c, w, k: k ?? s, ...ck(picked.includes(t)), tap: () => selOn ? S({ picked: picked.includes(t) ? picked.filter((x) => x !== t) : [...picked, t] }) : null, more: (e) => S({ sheet: kind, who: t, menuPos: ANCHOR(e, 112) }) });
+        const restoreOf = (lst, key) => () => { S({ [key]: lst.filter((x) => !names.includes(x[0])), sel: false, picked: [], last: lst }); toast((names.length === 1 ? names[0] : cnt) + ' restored', true); };
+        return { pageT: selOn ? (all ? 'Select songs' : n + ' selected') : (titles[page] || ''), selOn, selOff: !selOn, canSel: !selOn && L.length > 0, toggleSel: () => S({ sel: !selOn, picked: [] }), selT: all ? 'Select songs' : n + ' selected',
+          restoreSelL: all ? 'Restore all' : 'Restore', binSelL: page === 'trash' ? (all ? 'Delete all' : 'Delete') : (all ? 'Move all to Trash' : 'Move to Trash'),
+          arch: arch.filter(fl).map(row('amore')), aq: st.aq ?? '', setAq: (e) => S({ aq: e.target.value }), searchPh: page === 'trash' ? 'Search the Trash' : 'Search the Archive', placeN: L.length === 1 ? (page === 'trash' ? '1 song' : '1 item') : L.length + (page === 'trash' ? ' songs' : ' items'), archAny: arch.length > 0, archNone: arch.length === 0,
+          trash: trash.filter(fl).map(row('tmore')), trashAny: trash.length > 0, trashNone: trash.length === 0,
+          restoreSel: page === 'trash' ? restoreOf(trash, 'trash') : restoreOf(arch, 'arch'),
+          binSel: page === 'trash' ? () => S({ sheet: 'perm', who: names.length === 1 ? names[0] : null, permN: names }) : () => { S({ arch: arch.filter((x) => !names.includes(x[0])), trash: [...arch.filter((x) => names.includes(x[0])).map(([t, s, c, w]) => [t, 'Deleted today', c, 'Today', s]), ...trash], sel: false, picked: [], last: arch }); toast((names.length === 1 ? names[0] : cnt) + ' moved to the Trash', true); } }; })(),
+      amoreOn: st.sheet === 'amore', tmoreOn: st.sheet === 'tmore', whoT: st.who ?? '', menuPos: st.menuPos ?? 'right: 16px; top: 120px',
+      restoreOne: () => { const L = page === 'trash' ? trash : arch; S({ [page === 'trash' ? 'trash' : 'arch']: L.filter((x) => x[0] !== st.who), sheet: null, last: L }); toast((st.who ?? '') + ' restored', true); },
+      binOne: () => { S({ arch: arch.filter((x) => x[0] !== st.who), trash: [...arch.filter((x) => x[0] === st.who).map(([t, s, c, w]) => [t, 'Deleted today', c, 'Today', s]), ...trash], sheet: null, last: arch }); toast((st.who ?? '') + ' moved to the Trash', true); },
+      askPerm: () => S({ sheet: 'perm', permN: [st.who] }), permOn: st.sheet === 'perm',
+      permT: (st.permN ?? []).length > 1 ? 'Delete ' + (st.permN ?? []).length + ' songs permanently?' : 'Delete “' + ((st.permN ?? [])[0] ?? '') + '” permanently?',
+      permB: (st.permN ?? []).length > 1 ? 'They and their recordings will be deleted. This can’t be undone.' : 'The song and its recordings will be deleted. This can’t be undone.',
+      doPerm: () => { const N = st.permN ?? []; S({ trash: trash.filter((x) => !N.includes(x[0])), sheet: null, sel: false, picked: [] }); toast(N.length > 1 ? N.length + ' songs deleted' : 'Song deleted'); },
       askDelF: () => S({ sheet: 'delf' }), delfOn: st.sheet === 'delf', doDelF: () => { S({ sheet: null }); toast('Hymns deleted. 6 songs moved to the Trash.'); },
       archiveF: () => toast('Hymns archived', true), presets: seg(['Plain', 'Soft', 'Bold', 'Paper'], cs, (x) => S({ cs: x })), layouts: seg(['List', 'Grid', 'Covers'], lay, (x) => S({ lay: x })),
       prevOn: seg(['Phone', 'Laptop'], st.pv ?? 'Phone', (x) => S({ pv: x })), isList: lay === 'List', isGrid: lay !== 'List', cardBg: { Plain: '#FEFDFB', Soft: '#F6E7C8', Bold: '#332921', Paper: '#F4EEE4' }[cs], cardInk: cs === 'Bold' ? '#FEFDFB' : '#332921',
@@ -331,35 +354,44 @@ PREVCARD = (f'<div style="border-radius: 14px; background: {FILL}; padding: 16px
 CSTYLE = (PREVCARD + SEC(CAPS('Presets'), f'<div style="display: grid">{SEGC("presets", 44, 14)}</div>') + SEC(CAPS('Layout'), f'<div style="display: grid">{SEGC("layouts", 44, 14)}</div>')
           + SEC(CAPS('Card contents'), GROUP(('toggle', 'Key', 'ckOn', 'ckT'), ('toggle', 'Chords', 'ccOn', 'ccT'), ('toggle', 'Level and progress', 'clOn', 'clT'), bg=SHEET))
           + SEC(GROUP(('link', 'Apply to…', 'This folder only', 'openApply'), ('action', 'Reset to default', 'resetStyle'), bg=SHEET)))
-ARCHROW = lambda lst, act, label: (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
-                                   f'<span style="flex: none; width: 44px; height: 44px; border-radius: 8px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{x.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{x.s}}}}</span></span>'
-                                   f'<button type="button" onClick="{{{{x.{act}}}}}" aria-label="{label} {{{{x.t}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">{label}</button><button type="button" aria-label="More" onClick="{{{{x.more}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></sc-for></div>')
+# A row of Archive or Trash (owner, 2026-11-17, with boxes round each row's Restore and the bar's Restore all): one
+# act per row, its ··· (Restore; Move to Trash or Delete permanently) as a menu at the button; many at once by
+# Select. The checkbox leads the row in Select, as the library's.
+_ACK = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{x.ckLine}}}}; background: {{{{x.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{x.ckMark}}}}">{CHECK}</span></span></sc-if>')
+_AHIT = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{x.on}}}}" aria-label="{{{{x.t}}}}" onClick="{{{{x.tap}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
+_AMORE = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="More for {{{{x.t}}}}" aria-haspopup="menu" data-tip="More" onClick="{{{{x.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if>'
+ARCHROW = lambda lst, act=None, label=None: (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="position: relative; min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
+                                   f'{_AHIT}{_ACK}<span style="flex: none; width: 44px; height: 44px; border-radius: 8px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{x.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{x.s}}}}</span></span>'
+                                   f'{_AMORE}</div></sc-for></div>')
 FARCH = (f'<span style="font-size: 15px; color: {SOFT}">Archived from Hymns</span>' + IF('fArchAny', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{fArch}}}}" as="x" hint-placeholder-count="2"><div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">{COV("", HONEY, 40)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{x.t}}}}</span><span style="font-size: 13px; color: {SOFT}">{{{{x.s}}}}</span></span><button type="button" onClick="{{{{x.un}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 14px; font-weight: 600; color: {INK}">Unarchive</button></div></sc-for></div>', 'true'))
-ARCHIVEP = (IF('archAny', ARCHROW('arch', 'restore', 'Restore'), 'true')
+ARCHIVEP = (IF('archAny', ARCHROW('arch'), 'true')
             + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.'))
 _TRASHROW = (f'<button type="button" onClick="{{{{goTrash}}}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 14px; background: transparent; color: {SOFT}; font: inherit; font-size: 15px; text-align: left; display: flex; align-items: center; gap: 12px; padding: 0 16px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"></path></svg><span style="flex: 1">Trash · {{{{trashN}}}}</span>{CHEV_R}</button>')
-ARCHIVEP = ARCHIVEP + _TRASHROW
-# On a laptop Archive and Trash are the library's table: Title · Kind · when it went, Restore and More on each row,
-# the page's one act (Restore all, Empty Trash) beside the title.
-_ACOLS = lambda when: f'<div style="display: flex; gap: 16px; padding: 0 0 8px 12px; box-shadow: inset 0 -1px 0 {LINE}"><span style="width: 40px"></span>' + ''.join(f'<span style="flex: {w}; min-width: 0; font-size: 13px; font-weight: 600; color: {SOFT}">{h}</span>' for h, w in (('Title', 3), ('Composer and kind', 3), (when, 2))) + '<span style="width: 140px"></span></div>'
-ATABLE = lambda lst, when: (f'<div style="display: flex; flex-direction: column">{_ACOLS(when)}<sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="height: 64px; display: flex; align-items: center; gap: 16px; padding: 0 0 0 12px; box-shadow: inset 0 -1px 0 {FILL}">'
-                            f'<span style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
+# On a laptop Archive and Trash are the library's table: Title · Kind · when it went, and ··· on each row; Select in
+# the bar, the bulk acts in the selection bar (ui-and-mockups: every list of the learner's things has Select).
+_ACOLS = lambda when: f'<div style="display: flex; gap: 16px; padding: 0 0 8px 12px; box-shadow: inset 0 -1px 0 {LINE}"><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; width: 24px"></span></sc-if><span style="flex: none; width: 40px"></span>' + ''.join(f'<span style="flex: {w}; min-width: 0; font-size: 13px; font-weight: 600; color: {SOFT}">{h}</span>' for h, w in (('Title', 3), ('Composer and kind', 3), (when, 2))) + '<span style="width: 44px"></span></div>'
+ATABLE = lambda lst, when: (f'<div style="display: flex; flex-direction: column">{_ACOLS(when)}<sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="position: relative; height: 64px; display: flex; align-items: center; gap: 16px; padding: 0 0 0 12px; box-shadow: inset 0 -1px 0 {FILL}">'
+                            f'{_AHIT}{_ACK}<span style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
                             f'<span style="flex: 3; min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.t}}}}</span><span style="flex: 3; min-width: 0; font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.k}}}}</span><span style="flex: 2; min-width: 0; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{x.w}}}}</span>'
-                            f'<span style="width: 140px; display: flex; justify-content: flex-end; align-items: center; gap: 4px"><button type="button" onClick="{{{{x.restore}}}}" aria-label="Restore {{{{x.t}}}}" style="height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">Restore</button><button type="button" aria-label="More" onClick="{{{{x.more}}}}" style="width: 40px; height: 40px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></span></div></sc-for></div>')
-_AHEAD = lambda act: ''  # the title and its act stand in the laptop bar (SPACT)
-ARCHIVEP_L = (_AHEAD(IF('archAny', BTN("Restore all", "restoreAll", "", "quiet", 44, False))) + IF('archAny', ATABLE('arch', 'Archived'), 'true')
-              + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.') + f'<div style="margin-left: -4px">{_TRASHROW}</div>')
-TRASHP_L = (_AHEAD(IF('trashAny', BTN("Empty Trash", "askEmpty", "", "quiet", 44, False).replace("color: " + INK, "color: " + RED))) + IF('trashAny', ATABLE('trash', 'Deleted'), 'true')
+                            f'<span style="width: 44px; display: flex; justify-content: flex-end">{_AMORE}</span></div></sc-for></div>')
+ARCHIVEP_L = (IF('archAny', ATABLE('arch', 'Archived'), 'true')
+              + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.'))
+TRASHP_L = (IF('trashAny', ATABLE('trash', 'Deleted'), 'true')
             + EMPTY('trashNone', '⌫', 'The Trash is empty', 'Songs you delete wait here until you empty the Trash. Restore one to put it back where it was.'))
-TRASHP = (IF('trashAny', ARCHROW('trash', 'restore', 'Restore'), 'true')
+TRASHP = (IF('trashAny', ARCHROW('trash'), 'true')
           + EMPTY('trashNone', '🗑'.replace('🗑', '⌫'), 'The Trash is empty', 'Songs you delete wait here until you empty the Trash. Restore one to put it back where it was.'))
-# loop round 59: on a phone too the page's one act stands in the bar, a glass text capsule, never a pill hung under it
-SPACT_P = (IF('isArchive', IF('archAny', f'<button type="button" onClick="{{{{restoreAll}}}}" style="{TBST}">Restore all</button>'), 'true')
-           + IF('isTrash', IF('trashAny', f'<button type="button" onClick="{{{{askEmpty}}}}" style="{TBST}; color: {RED}">Empty Trash</button>')))
+# the bar holds Select (Cancel while selecting), a glass text capsule, on a phone as on a laptop
+SPACT_P = (f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>')
+# The selection bar, the library's floating glass bar (SELBAR): Restore, and the loss in crimson, on what is picked
+_ASELIN = (f'<button type="button" onClick="{{{{restoreSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">{{{{restoreSelL}}}}</button>'
+           f'<button type="button" onClick="{{{{binSel}}}}" style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: transparent; color: {RED}; font: inherit; font-size: 15px; font-weight: 600">{{{{binSelL}}}}</button>')
+ASELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_ASELIN, 34)}</sc-if>'
+ASELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_ASELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 440px; bottom: 28px') + '</sc-if>'
 SPACT = SPACT_P  # the laptop's bar the same glass capsule
-SP_SHEETS = (BSHEET('amoreOn', '{{whoT}}', GROUP(('action', 'Delete', 'delArch', RED), bg=SHEET)) + BSHEET('tmoreOn', '{{whoT}}', GROUP(('action', 'Delete permanently', 'askPerm', RED), bg=SHEET))
-             + BSHEET('applyOn', 'Apply style to', GROUP(('action', 'This folder only', 'applyThis'), ('action', 'Library home only', 'applyThis'), ('action', 'This folder and its 2 subfolders', 'applyThis'), ('action', 'All folders (9)', 'askAll'), bg=SHEET))
-             + ASK('permOn', '{{permT}}', 'The song and its recordings will be permanently deleted.', 'Delete', 'doPerm') + ASK('emptyOn', 'Empty the Trash?', '{{emptyB}}', 'Empty Trash', 'doEmpty')
+_AMENUS = (ROWMENU('amoreOn', '{{whoT}}', [('action', 'Restore', 'restoreOne'), ('action', 'Move to Trash', 'binOne', RED)])
+           + ROWMENU('tmoreOn', '{{whoT}}', [('action', 'Restore', 'restoreOne'), ('action', 'Delete permanently', 'askPerm', RED)], w=260))
+SP_SHEETS = (BSHEET('applyOn', 'Apply style to', GROUP(('action', 'This folder only', 'applyThis'), ('action', 'Library home only', 'applyThis'), ('action', 'This folder and its 2 subfolders', 'applyThis'), ('action', 'All folders (9)', 'askAll'), bg=SHEET))
+             + ASK('permOn', '{{permT}}', '{{permB}}', 'Delete', 'doPerm')
              + ASK('allOn', 'Apply to all folders?', 'This style will replace the current style of all 9 places, including Library home.', 'Apply', 'doAll')
              + ASK('delfOn', 'Delete “Hymns”?', 'The folder will be permanently deleted. Its 6 songs will be moved to the Trash.', 'Delete', 'doDelF'))
 SPBODY = (IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH) + IF('isArchive', ARCHIVEP) + IF('isTrash', TRASHP))
@@ -367,15 +399,17 @@ SPBODY_L = IF('notArch', IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('is
 # a folder makes what Songs makes, there: the same New, less New group (a group is not in a folder)
 _FNEW = (('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'))
 SPICONS = IB('Settings for Hymns', GEARI, 'goSettings')
-spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FOLDER).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + NEWDIAL(list(_FNEW)[::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')) + IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', SPACT_P, 'My songs') + NARROW(SPBODY))
+spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FOLDER).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + NEWDIAL(list(_FNEW)[::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')) + IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', SPACT_P, 'My songs') + NARROW(SPBODY) + ASELBAR)
         + IF('isSubPage', TOP('', '{{pageT}}', SPACT_P, 'Back', IB('{{backT}}', CHEV_L, 'back')) + NARROW(SPBODY)) + TOASTS)
-splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS + NEWBTN('openAdd')) + POPOVER('addOn', 'New', NEWMENU(list(_FNEW)), 'right: 40px; top: 72px', 300) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html') + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)))
+splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS + NEWBTN('openAdd')) + POPOVER('addOn', 'New', NEWMENU(list(_FNEW)), 'right: 40px; top: 72px', 300) + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', IF('notArch', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html'), 'true') + IF('isArchive', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('isTrash', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)) + IF('isTrash', LCOL(SPBODY_L, 9999)) + ASELBAR_L)
         + IF('isSubPage', LTITLEBAR('{{pageT}}', SPACT, backact='back') + IF('notArch', LCOL(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', LCOL(SPBODY_L, 9999))) + TOASTL)
 SP_LAP = SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px')
 for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIPIT((2, 4, 5, 6, 5, 4))), ('Christmas', STACK('#F6E7C8')), ('Waltz sketch', INCIPIT((5, 4, 2, 4, 5, 4))), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
     SP_SRC = SP_SRC.replace("'__PIC_%s__'" % _t.replace(' ', '_'), json.dumps(_pic + ' center / cover'))
-for stem, root, ttl in (('Folder', 'null', 'A folder'), ('Archive', "'archive'", 'Archive and Trash')):
-    detail(stem, ttl, js(SP_SRC.replace('__ROOT__', root)), spph, splm, '', SP_SHEETS, SP_LAP, 'Songs')
+# Trash is its own place beside Archive (owner, 2026-11-17: "why the archive still has this trash inside it"), never
+# a row at Archive's foot
+for stem, root, ttl in (('Folder', 'null', 'A folder'), ('Archive', "'archive'", 'Archive'), ('Trash', "'trash'", 'Trash')):
+    detail(stem, ttl, js(SP_SRC.replace('__ROOT__', root)), spph, splm, '', SP_SHEETS + _AMENUS, SP_LAP + _AMENUS, 'Songs')
 # spph, splm, '', SP_SHEETS, SP_SHEETS.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%', 'left: 50%; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%').replace('border-radius: 22px 22px 0 0', 'border-radius: 20px'), 'Songs')
 
 # ════ SongSettings and Section: a song’s Settings, Publish, a section ════
@@ -397,7 +431,7 @@ SM_SRC = (r'''
       askUnpub: () => S({ sheet: 'unpub' }), unpubOn: st.sheet === 'unpub', doUnpub: () => { S({ sheet: null, pub: false }); toast('Removed from the Public library'); },
       tipOn_chords: st.tip === 'chords', tip_chords: () => S({ tip: st.tip === 'chords' ? null : 'chords' }), tipOn_time: st.tip === 'time', tip_time: () => S({ tip: st.tip === 'time' ? null : 'time' }),
       tipOn_chg: st.tip === 'chg', tip_chg: () => S({ tip: st.tip === 'chg' ? null : 'chg' }), tipOn_pat: st.tip === 'pat', tip_pat: () => S({ tip: st.tip === 'pat' ? null : 'pat' }),
-      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: () => S({ sheet: 'esort' }), countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
+      esortL: st.esort ?? 'New', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
       esorts: ['New', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'New'), mark: l === (st.esort ?? 'New') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null }) };''')
 HEADCARD = f'<div style="display: flex; gap: 16px; align-items: center">{COV("Amazing Grace", HONEY, 64)}<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 20px; font-weight: 700">Amazing Grace</span><span style="font-size: 14px; color: {SOFT}">John Newton · Your song</span></div></div>'

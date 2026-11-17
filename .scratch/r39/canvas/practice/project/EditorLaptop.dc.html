@@ -70,6 +70,9 @@ const seg = (opts, cur, pick) => opts.map((l) => ({ l, on: l === cur, bg: l === 
 const chipsOf = (opts, cur, pick) => opts.map((l) => ({ l, bg: l === cur ? '#332921' : '#EEE9E2', fg: l === cur ? '#FEFDFB' : '#332921', pick: () => pick(l) }));
 const ROOTS = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const rootGrid = (cur, pick) => { const all = ROOTS.map((r, i) => ({ l: r, on: i === cur, bg: i === cur ? '#FEFDFB' : 'transparent', sh: i === cur ? '0 1px 3px rgba(51,41,33,.18), 0 0 0 0.5px rgba(51,41,33,.12)' : 'none', fw: i === cur ? 700 : 500, pick: () => pick(i) })); return { a: all.slice(0, 6), b: all.slice(6) }; };
+// a row's ··· menu opens at its button (owner, 2026-11-17: "what kind of nonsense is to put this delete in this
+// cnetered popup with doen button"): its right edge on the button's, below it, or above when the screen ends first
+const ANCHOR = (e, h) => { const t = e && e.currentTarget, p = t && t.closest && t.closest('[data-menuroot]'); if (!p) return 'right: 16px; top: 120px'; const b = t.getBoundingClientRect(), r = p.getBoundingClientRect(), k = (r.width / p.offsetWidth) || 1, right = Math.max(8, Math.round((r.right - b.right) / k)), below = Math.round((b.bottom - r.top) / k) + 4; return below + (h || 160) > p.offsetHeight - 24 ? 'right: ' + right + 'px; bottom: ' + (Math.round((r.bottom - b.top) / k) + 4) + 'px' : 'right: ' + right + 'px; top: ' + below + 'px'; };
 const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ sheet: null }), open: (n) => () => set({ sheet: n }), isSheet: (n) => st.sheet === n });
 
 

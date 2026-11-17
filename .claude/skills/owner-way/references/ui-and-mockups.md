@@ -60,6 +60,19 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
   New field inline above a list, nor loose Add or Delete links.
 - Reorder by dragging a handle, by mouse and held finger, never Move up or Move down.
 - Menu items are short ("Remove"); the menu's label names the thing.
+- **A ··· opens a menu at its button,** on a phone as on a laptop (owner, 2026-11-17: "what kind of nonsense is to put
+  this delete in this cnetered popup with doen button"; Apple HIG, Pull-down buttons; Material 3, Menus): the kit's
+  `ROWMENU`, placed by `ANCHOR` from the button, below it or above when the screen ends first. No title, no Done, no
+  Cancel; the loss last, in crimson, after a hairline; a tap outside closes it. Never a bottom sheet, never a dialog
+  centred on the screen, and never a menu of one item. What a laptop shows centred is only a form (New song, New
+  playlist) or a question about a loss that cannot be undone (`ConfirmDialog`); a phone sheet never becomes a centred
+  dialog on a laptop by itself.
+- **Every list of the learner's things has Select** (owner, 2026-11-17: "why dont we have a select mode in such pages as
+  trash and archive"): the library, a playlist, Archive, Trash, Your lessons. Select in the bar (Cancel while on, the
+  bar's title "n selected"), a checkbox leading each row, the floating glass selection bar at the foot with the acts on
+  what is picked, or on all when nothing is (Apple Photos' Recently Deleted: Recover All, Delete All). A bulk act
+  (Restore all, Empty Trash) is Select's, never a button of its own in the bar, and a row carries no act button beside
+  its ··· (no Restore pill on every row): one act per row, the rest in its menu.
 - Undo instead of asking: a loss that can be undone happens at once with Undo in its toast; only what can't be undone, or
   reaches other people, asks first. A loss is named as one, truly.
 - One icon, one meaning, app-wide: the same thing wears the same icon and word on every screen; check what it wears
