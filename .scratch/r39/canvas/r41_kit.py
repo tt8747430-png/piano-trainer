@@ -215,6 +215,10 @@ def js(body):
 def detail(stem, title, script, phone_body, laptop_main, laptop_aside, sheets_phone='', pops_laptop='', section='Practice'):
     phone(stem, title + ', phone', phone_body, script, sheets_phone)
     laptop(stem + 'Laptop' if stem != 'Main' else 'Laptop', title + ', laptop', laptop_main, laptop_aside, script, pops_laptop, section)
+# Edit morphs into Done in its own place (owner, 2026-11-17: "the edit should morf into the done and not into the
+# publish"): entering Edit keeps the bar (Back, the title, the gear); Edit's glass word becomes Done, and Publish, a
+# glass word that publishes in one tap with Undo in its toast, stands before it. Apple HIG, Edit buttons.
+EDITR = lambda: TB('{{pubL}}', 'publishNow') + TB('Done', 'done')
 def LTOP(back='', right='', title=''):
     return LPAD(TOP(back, title, right))  # a laptop page's bar is the phone's, its title centred
 

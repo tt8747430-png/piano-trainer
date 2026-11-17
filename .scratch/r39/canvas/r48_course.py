@@ -30,9 +30,6 @@ COVER = (f'<div aria-hidden="true" style="height: 132px; border-radius: 14px; ba
          + ''.join(f'<ellipse cx="{70 + i * 46}" cy="{88 - (i % 4) * 5.5}" rx="7.5" ry="5.6" fill="#3F6B45" transform="rotate(-20 {70 + i * 46} {88 - (i % 4) * 5.5})"></ellipse><line x1="{77 + i * 46}" x2="{77 + i * 46}" y1="{86 - (i % 4) * 5.5}" y2="{52 - (i % 4) * 5.5}" stroke="#3F6B45" stroke-width="1.6"></line>' for i in range(7)) + '</svg></div>')
 # the course's facts are a line, not chips: a chip is a value you change in place (scan-first 4; loop round 63)
 FACTS = f'<p style="margin: 0; font-size: 15px; font-weight: 600; color: {SOFT}">Beginner · 3 songs · 4 weeks</p>'
-PROPS = (f'<div aria-label="Properties" style="display: flex; flex-wrap: wrap; gap: 8px"><button type="button" onClick="{{{{openProps}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px"><span style="color: {SOFT}">Shelf</span> {{{{shelfV}}}}</button>'
-         f'<button type="button" onClick="{{{{openProps}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 14px"><span style="color: {SOFT}">Level</span> {{{{levelV}}}}</button>'
-         f'<span style="height: 44px; padding: 0 4px 0 12px; border-radius: 22px; background: {FILL}; font-size: 14px; display: flex; align-items: center; gap: 2px"><span style="color: {SOFT}">Length</span>&nbsp;{{{{weeksL}}}}<button type="button" aria-label="Fewer weeks" onClick="{{{{fewer}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; font: inherit; font-size: 18px; color: {INK}">−</button><button type="button" aria-label="More weeks" onClick="{{{{more}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; font: inherit; font-size: 18px; color: {INK}">+</button></span></div>')
 GRIPS = '<span role="button" aria-label="Move: {{l.t}}" style="flex: none; width: 44px; height: 44px; color: #685E56; display: flex; align-items: center; justify-content: center; cursor: grab">' + GRIP + '</span>'
 # canvas 164: a course's lessons are the line a level's are (one spine through the tiles, no card round them)
 LROWS = (f'<div style="position: relative"><span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span><sc-for list="{{{{lessons}}}}" as="l" hint-placeholder-count="8"><a href="Lesson.dc.html" style="position: relative; min-height: 64px; display: flex; align-items: center; gap: 16px; padding: 8px 8px 8px 0; border-radius: 12px; color: {INK}; text-decoration: none">'
@@ -47,44 +44,40 @@ SONGROWS = (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 
             f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 8px; background: {{{{g.pic}}}} center / cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{g.d}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for></div>')
 def CBODY(lap):
     h1 = f'<h1 contenteditable="{{{{editing}}}}" style="margin: 0; font-family: {SERIF}; font-size: {36 if lap else 30}px; font-weight: 600; line-height: 1.15; outline: none; text-wrap: balance">{{{{t}}}}</h1>'
-    # loop 63: on a phone the course's name is the page's heading, under its cover, as a lesson's (a bar title wrapping
-    # to two lines in the bar crowded Back and Edit); on a laptop the bar's 30 bold carries it, as every laptop page
-    head = (f'<div style="display: flex; flex-direction: column; gap: 8px">' + (f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{h1}</sc-if>' if lap else h1) +
+    # the course's name is the page's heading, under its cover, on a phone and a laptop alike, in both modes (a lesson's
+    # shape): Edit moves nothing
+    head = (f'<div style="display: flex; flex-direction: column; gap: 8px">' + h1 +
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 16px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
-            f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{FACTS}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{PROPS}</sc-if></div>')
+            f'{FACTS}</div>')
     go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
           f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
     # loop round 59: no About: what the course teaches is said once, in the summary under its name, as a level's goal
-    if lap:  # one centred column (owner, 2026-11-16: "the page has one focus"): the cover beside the name and Continue as
-        # its head, then the lessons and the guided songs under it, as a song's page; never a rival column
-        return (f'<div style="display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; align-items: start; margin-bottom: 8px">{COVER}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
-                f'{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}')
+    if lap:  # owner, 2026-11-17: "don't you see all of this empty space?": the course's head stands at the left in
+        # view (cover, name, goal, progress, Continue), its lessons and songs fill the rest, as the lesson's contents
+        # and sections do; nothing centred in an empty band
+        return (f'<div style="position: sticky; top: 0; display: flex; flex-direction: column; gap: 16px">{COVER}{head}{go}</div>'
+                f'<div style="display: flex; flex-direction: column; gap: 16px">{H2("Lessons")}{LROWS}{H2("Guided songs")}{SONGROWS}</div>')
     return COVER + head + go + H2('Lessons') + LROWS + H2('Guided songs') + SONGROWS
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
-CEDIT = (f'<header style="flex: none; display: flex; flex-direction: column; padding: 0 16px"><div style="min-height: 52px; display: flex; align-items: center; gap: 8px">{DONEBTN}<span style="flex: 1"></span>'
-         f'' + TB('{{pubL}}', 'publishNow') + f'</div></header>')
+CEDIT_R = IB('Settings', GEARI, 'openSettings') + EDITR()  # Edit becomes Done in its place
 CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro to Music Reading</span>'
         f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("action", "{{pubL}}", "publishNow"), ("link", "Versions", "3", "#"), ("action", "Share link", "copyLink"), bg=SHEET)}{GROUP(("action", "Discard changes", "closeSheet", "#B3261E"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
-CPUB = (f'<div style="display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-family: {SERIF}; font-size: 26px">Intro to Music Reading</span>{PILL("Has changes", "#F8E1CF")}</div>'
-        + CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .06em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Summary, Lessons</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>') +
-        f'{GROUP(("link", "Learner preview", "8 lessons", "Course.dc.html"), ("val", "Versions", "3"), bg=SHEET)}<div style="display: flex">{BTN("Publish new version", "publish", "", "primary", 50)}</div>{GROUP(("action", "Unpublish", "closePage", "#B3261E"), bg=SHEET)}')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
         f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
-CPROPS = f'{CAPS("Shelf")}{WCHIPS("shelves")}{CAPS("Level")}{WCHIPS("levels")}'
 CPM = GROUP(('val', 'Draft', '{{status}}'), ('val', 'Versions', '3'), bg=SHEET) + GROUP(('action', 'Discard changes', 'closeSheet', '#B3261E'), bg=SHEET)
 def CPAGE(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">' + ('' if lap else '<div style="height: 54px; flex: none"></div>')
             + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the course" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
-            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; {pad}"><div style="{"width: 1180px; " if lap else ""}display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SPLIT2(CSET, CAPS("The course"), CAPS("Share")) if lap else CSET}</sc-if><sc-if value="{{{{isPub}}}}" hint-placeholder-val="{{{{false}}}}">{('<div style="width: 704px; align-self: center; display: flex; flex-direction: column; gap: 16px">' + CPUB + '</div>') if lap else CPUB}</sc-if></div></main></div></sc-if>')
+            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; {pad}"><div style="{"width: 1180px; " if lap else ""}display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SPLIT2(CSET, CAPS("The course"), CAPS("Share")) if lap else CSET}</sc-if></div></main></div></sc-if>')
 CASKS = (ASK('delOn', 'Delete Intro to Music Reading?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete course', 'closeSheet'))
-cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("LearnCourses.dc.html", "", CBAR_R, "Back to Courses")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT}</sc-if>'
+cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("LearnCourses.dc.html", "", CBAR_R, "Back to Courses")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("LearnCourses.dc.html", "", CEDIT_R, "Back to Courses")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
-csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220) + BSHEET('propOn', 'Properties', CPROPS)
-clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Intro to Music Reading", CBAR_R, "LearnCoursesLaptop.dc.html")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{CEDIT.replace("padding: 0 16px\"", "padding: 6px 40px\"")}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 40px 60px"><div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</div></main>'
+csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
+clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 56px; align-items: start">{CBODY(True)}</main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
-cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220) + POPOVER('propOn', 'Properties', CPROPS, 'left: 460px; top: 300px', 460)
+cpops = POPOVER('newOn', 'New lesson', CNEW, 'right: 480px; top: 520px', 380) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')
