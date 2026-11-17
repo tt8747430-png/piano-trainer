@@ -137,14 +137,14 @@ PLUSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="cur
 def OWNROW(t, sub, href, kind='lesson'):
     bg, fg, ic = {'lesson': (SHEET, INK, BOOKI.replace("22", "20")), 'learned': (SAGE, '#2F5A35', CHECKI), 'course': (SAGE, INK, FOLDI)}[kind]
     shape = 'border-radius: 11px' if kind == 'course' else f'width: 40px; height: 40px; margin: 2px; border-radius: 20px; box-shadow: {"none" if kind == "learned" else "inset 0 0 0 1px " + LINE}'
-    return (f'<a href="{href}" style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; {shape}; background: {bg}; color: {fg}; display: flex; align-items: center; justify-content: center">{ic}</span>'
+    return (f'<a href="{href}" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; {shape}; background: {bg}; color: {fg}; display: flex; align-items: center; justify-content: center">{ic}</span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 NEWROW = lambda t, act: ADDROW(t, act, node=44, pad='0 12px', gap=12)
 def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
     head = H2("Your lessons and courses", SEEALL("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
     return (f'{head}<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course")}'
-            f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}{NEWROW("New lesson or course", "openNew")}</div>')
+            f'{OWNROW("Pedalling in slow hymns", "Lesson · 2 sections", lh)}{OWNROW("Notes from my teacher", "Lesson · 1 section", lh)}{NEWROW("New lesson or course", "openNew").replace("min-height: 56px", "min-height: 80px") if lap else NEWROW("New lesson or course", "openNew")}</div>')
 COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 # canvas 167 (owner: "popups with meaningful information … show more things with less ui"): About the courses says
 # what a course is in one line, then the shelves themselves with their counts, each a tap to its shelf
@@ -157,7 +157,7 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALL("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONT}<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{H2("Levels")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 16px">{OWNGROUP(True)}</div></div>'
+       f'{CONT}<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start"><div style="display: flex; flex-direction: column; gap: 16px">{H2("Levels").replace("align-items: baseline", "align-items: center; min-height: 44px")}{LEVELLIST(True)}</div><div style="display: flex; flex-direction: column; gap: 16px">{OWNGROUP(True).replace("align-items: baseline", "align-items: center; min-height: 44px", 1)}</div></div>'
        f'{H2("Courses", SEEALL("LearnCoursesLaptop.dc.html"))}{COURSEGRID}</main>{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
