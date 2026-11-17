@@ -245,20 +245,25 @@ PV_SRC = r'''
       tempoV: (st.bpm ?? 72) + ' BPM', bDn: () => S({ bpm: (st.bpm ?? 72) - 4 }), bUp: () => S({ bpm: (st.bpm ?? 72) + 4 }), octV: String(st.oct ?? 2), oDn: () => S({ oct: Math.max(1, (st.oct ?? 2) - 1) }), oUp: () => S({ oct: Math.min(4, (st.oct ?? 2) + 1) }),
       ladOn: !!st.lad, ladOnBg: st.lad ? '#44684A' : '#DAD1C8', ladOnX: st.lad ? 22 : 2, ladT: () => S({ lad: !st.lad }), tipOn_lad: st.tip === 'lad', tip_lad: () => S({ tip: st.tip === 'lad' ? null : 'lad' }),
       closeSheet: () => S({ open: false }) };'''
+# the tempo ladder is a row of the tempo's group, its ⓘ beside its name: no heading saying its name again (loop round 63)
+LADROW = ('raw', f'<div style="position: relative; min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 12px 6px 16px"><span style="font-size: 16px">Tempo ladder</span>'
+          + INFOB('About the tempo ladder', 'tip_lad', 'tipOn_lad') + '<span style="flex: 1"></span>'
+          + '<button type="button" role="switch" aria-checked="{{ladOn}}" aria-label="Tempo ladder" onClick="{{ladT}}" style="flex: none; height: 44px; border: 0; padding: 0; background: transparent; display: flex; align-items: center">'
+          + TOGGLE('ladOn').replace('role="switch" aria-checked="{{ladOn}}"', 'aria-hidden="true"', 1) + '</button>'
+          + INFOTIP('tipOn_lad', 'tip_lad', 'About this', '<p style="margin: 0">Each clean pass raises the tempo a little, up to the target.</p>', 'left: 0; top: 52px') + '</div>')
 PVSET = (IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
          + IF('isChrom', SEC(CAPS('Chord type'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
          + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WRAPCHIPS('walks')))
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
-                      + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
-                      + SEC(S9CAPS('Tempo ladder', 'lad'), TIPCARD('lad', 'Each clean pass raises the tempo a little, up to the target.'), GROUP(('toggle', 'Tempo ladder', 'ladOn', 'ladT'), bg=SHEET)))
+                      + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), LADROW, bg=SHEET))
 )
 # the phone's sheet covers Play, so its foot starts the run; on a laptop Play stands beside the Setup popover and starts it
 # a laptop's Setup popover: the exercise's choices in one group, each at its row's end (the kit's segr), so the popover
 # holds every row without scrolling (loop round 63)
 _PVEX = (GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
-         + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET))
+         + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), LADROW, bg=SHEET))
 assert _PVEX in PVSET, 'exercise setup not found'
-PVSETL = PVSET.replace(_PVEX, GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), ('segr', 'Rhythm', 'rhythms', 340), ('segr', 'Hands', 'hands', 300), ('segr', 'Next key', 'nextKey', 260), ('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET))
+PVSETL = PVSET.replace(_PVEX, GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), ('segr', 'Rhythm', 'rhythms', 340), ('segr', 'Hands', 'hands', 300), ('segr', 'Next key', 'nextKey', 260), ('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), LADROW, bg=SHEET))
 PVSTART = PVSET + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>'
 PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
 # the four runs' Player is drawn in r56_results.py, from the run view's parts (round 41)

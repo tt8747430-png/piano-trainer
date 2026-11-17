@@ -169,7 +169,7 @@ def RS_RUNVIEW(lap):
     # with 300px of bare paper under it
     staff = RS_RUNSTAFF(6 if lap else 4, 120 if lap else 84, True).replace(f'color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓', f'color: transparent" aria-hidden="true">·')
     staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
-    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 6px; border-radius: 3px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 6px; border-radius: 3px; background: {INK}"></div></div>'
+    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
     transport = f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
     inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170, "kbL") if lap else '<div style="flex: none; margin: 0 -16px">' + RS_KEYS(112) + '</div>'}{transport}'
