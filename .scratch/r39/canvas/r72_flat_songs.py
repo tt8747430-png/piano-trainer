@@ -141,7 +141,9 @@ def PLAYLISTROWS(href, shared_href, w=64, card=True):
                 f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: {17 if card else 15}px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{t}</span><span style="font-size: {14 if card else 13}px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span></span>'
                 + (f'<span style="flex: none; color: {SOFT}; display: flex">{CHEV_R}</span>' if card else '') + '</a>')
     return out
-_NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('New folder', 'openFolder'), ('Import', 'openImp'), ('New group', 'Groups.dc.html'))
+# One New everywhere in Songs (owner, 2026-11-17: "the floating actions should also be consistent how they open"):
+# the same four rows from the phone's dial and the laptop's New ▾, on the overview, All songs and a playlist.
+_NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 64px 24px; text-align: center">'
          f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
@@ -165,15 +167,6 @@ def SONGROW(song):
 SEARCHFIELD = (f'<label style="flex: none; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
                f'<input value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your songs" aria-label="Search your songs" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div style="{grid}"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for></div></sc-if>'
-CREATEI = {'New song': NEWICON['New song'], 'Record': NEWICON['Record'], 'Import': NEWICON['Import'], 'New folder': NEWICON['New folder']}
-_CREATE = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'))
-def CREATE(cols):
-    pill = lambda l, act, first: (f'<button type="button" onClick="{{{{{act}}}}}" style="flex: none; height: 44px; box-sizing: border-box; border: 0; border-radius: 22px; '
-                                  f'background: {ACCENT if first else SHEET}; box-shadow: {"none" if first else "0 0 0 1px " + LINE}; padding: 0 16px; display: flex; align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 600; color: {INK}; white-space: nowrap">'
-                                  f'<span style="flex: none; display: flex">{CREATEI[l]}</span>{l}</button>')
-    items = list(enumerate(_CREATE))
-    if cols == 'bar': items = items[::-1]
-    return f'<div role="group" aria-label="Make a song" style="display: flex; gap: 8px; overflow-x: auto">' + ''.join(pill(l, a, i == 0) for i, (l, a) in items) + '</div>'
 OVSEARCH = SEARCHFIELD.replace('flex: none; height: 44px', 'flex: none; height: 48px; border-radius: 24px')
 # What a search found, on the page: the songs as cards, the folders, then the same words in Explore
 FOLDHIT = (f'<sc-for list="{{{{fold}}}}" as="f" hint-placeholder-count="1"><a href="{{FOLDER}}" style="{CARDROW}; min-height: 72px; box-sizing: border-box; padding: 8px 12px; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">'
@@ -202,17 +195,16 @@ def SONGSEC(song, allh, grid):
     return (f'<section style="display: flex; flex-direction: column; gap: 12px">{SECH("Songs")}<div style="{grid}">{rows}</div>'
             f'<a href="{allh}" style="align-self: flex-start; min-height: 44px; display: flex; align-items: center; margin: 0 4px; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">All 8 songs</a></section>')
 _SHELFPH = 'display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px'
-COUNTROW = (f'<div style="flex: none; display: flex; align-items: center; justify-content: space-between; margin: 0 4px"><span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{count}}}}</span>'
+COUNTROW = (f'<div style="flex: none; display: flex; align-items: center; justify-content: space-between; margin: 0"><span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{count}}}}</span>'
             f'<button type="button" aria-haspopup="menu" aria-expanded="{{{{sortOn}}}}" onClick="{{{{openSort}}}}" style="height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; color: {LINK}; font: inherit; font-size: 16px; font-weight: 600">{{{{sortL}}}}{SORTI}</button></div>')
 SORTMENU = lambda pos: (f'<sc-if value="{{{{sortOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="menu" aria-label="Sort" style="position: absolute; {pos}; z-index: 61; width: 230px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; transform-origin: top right">'
                         f'{MENUITEM("sorts")}<div style="height: 1px; margin: 6px 12px; background: {LINE}"></div>{MENUITEM("dirs")}</div></sc-if>')
 ROWSHEET = lambda sfx: GROUP(('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit score', '', 'Editor' + sfx), ('action', 'Add to a playlist', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK), ('link', 'Settings', '', 'SongSettings' + sfx), ('action', 'Archive', 'closeSheet', RED), bg=SHEET)
 # ── Songs as Flat's My scores (owner, 2026-11-17: "the mobile layout of the playlists is not the same as the flats
 # editor … the archive and trash doenst make sense to be there … the recently played is not the same as teh flat editor:
-# it has all scores"; Flat 091): the title and a round + in the bar opening the ways to add (no strip of pills, no ···);
+# it has all scores"; Flat 091): the title; the floating + at the bottom right opening the ways to add (one New: _NEW);
 # the search; All songs, every song by when it was last played, with See all; Playlists; Archive and Trash as one card
-# under them, as Flat's Trash; Explore's newest last. Nothing floats.
-_NEWPH = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
+# under them, as Flat's Trash; Explore's newest last.
 ADDBTN = IB('New', PLUS, 'openAdd')
 _ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '1', 'Archive' + sfx), bg=SHEET)
 ovph = f'''{TITLEBAR('Songs')}
@@ -224,7 +216,7 @@ ovph = f'''{TITLEBAR('Songs')}
 {_ARCHCARD('.dc.html')}
 </sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Explore', SEEALL('Explore.dc.html'))}<div class="nos" style="{_SHELFPH}">{EXSHELF(132, 6, 'Explore.dc.html')}</div></section></sc-if>
-</main>{NEWDIAL(list(_NEWPH)[::-1], 112, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}{TABBAR('Songs')}'''
+</main>{NEWDIAL(list(_NEW)[::-1], 112, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}{TABBAR('Songs')}'''
 _LSEARCH = OVSEARCH.replace('flex: none; height: 48px', 'flex: none; width: 360px; height: 44px; border-radius: 22px')
 _PANEROW = lambda label, n, href: f'<a href="{href}" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; border-radius: 10px; color: {INK}; text-decoration: none; font-size: 15px; font-weight: 600">{label}<span style="font-weight: 400; color: {SOFT}; font-variant-numeric: tabular-nums">{n}</span></a>'
 # The laptop is Flat's library (owner's screenshots of flat.io/library, 2026-11-17): a pane at the left, Playlists
@@ -244,7 +236,7 @@ LPANE = (f'<aside aria-label="Library" style="position: sticky; top: 0; align-se
          f'<div style="display: flex; flex-direction: column">{PLAYLISTROWS("FolderLaptop.dc.html", "SharedFolderLaptop.dc.html", 40, False)}</div>'
          f'<div style="height: 1px; margin: 12px 10px 8px; background: {LINE}"></div>' + _PNAV('Archive', '3', 'ArchiveLaptop.dc.html') + _PNAV('Trash', '1', 'ArchiveLaptop.dc.html') + '</aside>')
 _LHEAD = (f'<div style="display: flex; align-items: center; gap: 16px; min-height: 48px"><h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em">All songs</h1><span style="font-size: 17px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{count}}}}</span><span style="flex: 1"></span>'
-          f'<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{_LSEARCH.replace("width: 360px", "width: 320px")}</sc-if>{CREATE("bar")}</div>')
+          f'<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{_LSEARCH.replace("width: 360px", "width: 320px")}</sc-if>{NEWBTN('openAdd')}</div>')
 _TH = lambda l, w='', right=False: f'<span style="{w}font-size: 13px; font-weight: 600; color: {SOFT}{"; text-align: right" if right else ""}">{l}</span>'
 _LCOLS = 'display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 140px 120px 44px; align-items: center; gap: 16px'
 _LTHEAD = (f'<div style="{_LCOLS}; padding: 0 8px 0 12px; height: 40px; border-bottom: 1px solid {LINE}">' + _TH('Title') + _TH('Composer and key') + _TH('Progress') +
@@ -282,8 +274,9 @@ RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px').replace('padding: 6px 16px 40px', 'padding: 6px 20px 24px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
-ovpops = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + LFOLDERSHEET_L
-detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET + BSHEET('addOn', 'New', NEWMENU([(l, a) for l, a in _NEWPH])), SORTMENU('right: 120px; top: 170px') + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 56px; top: 200px', 300) + LFOLDERSHEET_L.replace('New folder', 'New playlist') + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
+NEWPOP = POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300)
+PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
+detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('right: 120px; top: 170px') + NEWPOP + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 56px; top: 200px', 300) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
 # ── All songs ──
 NOMATCH = (f'<sc-if value="{{{{none}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 24px; text-align: center"><span style="width: 56px; height: 56px; border-radius: 28px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{SEARCH.replace("width=\"18\" height=\"18\"", "width=\"24\" height=\"24\"")}</span>'
@@ -308,11 +301,11 @@ def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     lm = (LTOP(back + 'Laptop.dc.html', SELTB + more + NEWBTN('openAdd'), head)
           + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 56px 120px; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}<div style="display: flex; align-items: center; gap: 24px"><div style="width: 520px; display: flex; flex-direction: column">{SEARCHFIELD}</div><div style="flex: 1">{COUNTROW}</div></div>{NOMATCH}{fe('Laptop.dc.html')}{LIST('SongLaptop.dc.html', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px')}</main>
 {SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')}''')
-    pops = SORTMENU('right: 56px; top: 124px') + POPOVER('addOn', 'New', NEWMENU([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW]), 'right: 40px; top: 72px', 300) + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 120px; top: 220px', 320)
-    sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET + SONGSHEET + IMPSHEET + RECSHEET
+    pops = SORTMENU('right: 56px; top: 124px') + NEWPOP + POPOVER('rowOn', '{{rowT}}', ROWSHEET('Laptop.dc.html'), 'right: 120px; top: 220px', 320)
+    sheets = BSHEET('rowOn', '{{rowT}}', ROWSHEET('.dc.html')) + FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET
     if folder:
         sheets += BSHEET('moreOn', title, FOLDERMORE('.dc.html')); pops += POPOVER('moreOn', title, FOLDERMORE('Laptop.dc.html'), 'right: 200px; top: 72px', 320)
-    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + ovpops.split('</sc-if>', 1)[1] + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
+    detail(stem, title, FLJS(rows, 'An empty folder' if folder else 'A new learner'), ph, lm, '', sheets, pops + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 LISTPAGE('AllSongs', 'All songs', _ROWS, 'Songs', 'My songs')
 HYMNS = [('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today', 6), ('Holy, Holy, Holy', 'John B. Dykes · D major', 'Learned', '9 Nov', 5), ('Abide with Me', 'William H. Monk · E♭ major', 'Bar 4 of 12', '6 Nov', 4),
          ('Be Thou My Vision', 'Irish melody · E♭ major', 'Not started', 'Added 30 Oct', 3), ('It Is Well', 'Philip P. Bliss · C major', 'Learned', '21 Oct', 2), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', 'Added 12 Oct', 1)]
