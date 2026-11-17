@@ -19,9 +19,13 @@ what they changed.
   is no slip, one wrong key slips once a step. Play in both; ‹ › step in either. A loop over bars, each lap
   played in Wait mode with nothing skipped; a Wait-mode pass finished is recorded (ADR 0111). A pass ends with its
   score, the share of steps (beat groups the practised hands play in) played without a slip, full from 96 %
-  (Metronaut): "Played through · Score 82%", or "Played through without a slip"; beside it New best, or the best to
-  beat (a whole pass's best is kept per song and hands in the progress's `songs`), Again, and Loop bars n–m where the
-  takes' one rule (`weakestBars`) finds a bar or two under 70 %. Wait mode's line stands under the floating transport,
+  (Metronaut): Wait mode's line says "Played through · Score 82%", or "Played through without a slip", and
+  **Played through** opens (`PlayedThrough`, the board's PlayerDone, never after a loop's lap): the hands and Wait under
+  its title, Done; the score "right first time" beside New best or the best to beat (a whole pass's best is kept per
+  song and hands in the progress's `songs`), and the tempo with its word beside the score's; the bars four at a time,
+  each a button of four cells painted by their slips (none, one, two, three or more: `slip-0` to `slip-3`) that
+  loops its four, the weakest ringed in honey; Practise bars n–m where the takes' one rule (`weakestBars`) finds a bar
+  or two under 80 %, looped at 70 % of the score's tempo; Play again and Try it in Play; the days in a row, to Streak. Wait mode's line stands under the floating transport,
   and the keys' window rises by its height (`--status-room`), so the transport never covers the keys.
 - **Pace** (R36, flowkey's Tempo menu), the transport's: **At your own pace**, Wait mode ("The music waits for the
   right notes.") and Interpret ("The music follows your tempo."), each saying "Connect a piano or show the

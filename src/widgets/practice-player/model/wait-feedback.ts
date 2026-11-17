@@ -22,13 +22,22 @@ export type WaitFeedback =
       readonly score: number
       /** The weakest bar or two, where they are under `WEAK` (the takes' rule). */
       readonly hardest: BarRange | null
+      /** Each bar's slips in the pass, by its index. */
+      readonly slips: PracticeState['slips']
+      /** The bars of the music. */
+      readonly bars: number
     }
 
 /** Wait mode's line now: the notes to play as written, a wrong key, right, or finished; nothing while stopped. */
 export function waitFeedback(performance: Performance, state: PracticeState): WaitFeedback | null {
   if (!waitsForNotes(state.mode)) return null
   if (state.outcome === 'finished')
-    return { kind: 'finished', ...passReport(performance, state.hands, state.slips) }
+    return {
+      kind: 'finished',
+      ...passReport(performance, state.hands, state.slips),
+      slips: state.slips,
+      bars: performance.bars.length,
+    }
   if (!state.playing) return null
   if (state.outcome === 'correct') return { kind: 'right' }
   const group = performance.beatGroups[state.beatGroup]

@@ -121,6 +121,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **Loop round 61, Played through ported from its board (PlayerDone):** a Wait pass at the song's end opens the sheet: the score and the best, the tempo and its word, the bars four at a time painted by their slips (each a button that loops its four, the weakest ringed), Practise bars n–m at 70 %, Play again, Try it in Play, the days in a row; Wait mode's line keeps only the score, its Again and Loop gone to the sheet (2026-11-17).
 - **The Player's group labels in the caps (loop round 60, 2026-11-16):** the Practice sheet's "Tempo" and "Loop bars 5–8" had lost the caps that rounds 15 and 25 give every group label; they wear the kit's CAPS again (13 semibold, 4% tracking), on phone and laptop.
 - **Loop round 50, a hand's volume reads quiet to loud (Parts):** the speaker at the slider's start followed the level, so at 80% both ends wore the same two-wave speaker; it is the one-wave speaker at every level now (still the muted mark while muted), the two-wave one stays at the loud end, on both sizes (2026-11-16).
 - **Loop round 50, Transpose chooses a key as every key picker does (PlayerKey):** the chosen letter wore the honey wash, the one action's colour; it is the sand fill with no ring, as the Chords page's and every key picker's, on both sizes and by Night (2026-11-16).

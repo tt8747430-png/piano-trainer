@@ -96,6 +96,13 @@
   --primary-foreground: var(--p-ink);
   /* A honey wash's edge: the Range strip's ring round the keys shown. */
   --honey-ring: var(--p-honey-deep);
+  /* The chosen among equals on a card (Played through's weakest bars): honey's wash under its ring. */
+  --honey-wash: #fbf1dd;
+  /* A bar's slips, none to three or more (Played through, canvas 122): sand, then warming to honey. */
+  --slip-0: #e4ddd3;
+  --slip-1: #f8d9c2;
+  --slip-2: #f0a877;
+  --slip-3: var(--p-honey-deep);
   /* Honey as ink: a mark that adds (the staff's +), the canvas's #7A5418. */
   --honey-ink: var(--p-honey-ink);
   /* A toast's action (Undo): honey on the ink toast; by night the toast is light, so the deep honey. */
@@ -281,6 +288,11 @@
     --primary: var(--p-honey-night);
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
+    --honey-wash: color-mix(in oklab, var(--p-honey-night) 18%, var(--card));
+    --slip-0: var(--p-dusk-control);
+    --slip-1: color-mix(in oklab, #f0a877 35%, var(--card));
+    --slip-2: color-mix(in oklab, #f0a877 70%, var(--card));
+    --slip-3: var(--p-honey-night);
     --honey-ink: var(--p-honey-night);
     --toast-action: var(--p-honey-ink);
     --eyebrow: var(--p-rust-night);

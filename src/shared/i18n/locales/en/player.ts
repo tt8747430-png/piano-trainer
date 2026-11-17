@@ -430,9 +430,29 @@ export const player = {
   finishedScore: 'Played through · Score {{score}}%',
   newBest: 'New best',
   bestScore: 'Best {{score}}%',
-  loopBar: 'Loop bar {{first}}',
-  loopBars: 'Loop bars {{first}}–{{last}}',
-  again: 'Again',
+  // Played through: a Wait pass at the song's end (the board's PlayerDone).
+  done: {
+    title: 'Played through',
+    of: '{{hands}} · Wait',
+    percent: '{{score}}%',
+    scoreLabel: 'right first time',
+    bpm: 'BPM, {{mark}}',
+    scoreTempo: 'the score’s tempo',
+    scoreTempoWas: 'score tempo {{tempo}}',
+    bars: 'Bars',
+    barsLabel: 'Slips, four bars at a time',
+    group: '{{first}}–{{last}}',
+    slips_zero: 'No slips',
+    slips_one: '{{count}} slip',
+    slips_other: '{{count}} slips',
+    groupAria: 'Bars {{bars}}: {{slips}}. Loop them',
+    practiseBar: 'Practise bar {{first}}',
+    practiseBars: 'Practise bars {{first}}–{{last}}',
+    again: 'Play again',
+    tryPlay: 'Try it in Play',
+    streak_one: '{{count}} day in a row',
+    streak_other: '{{count}} days in a row',
+  },
   /** An exercise's Setup: the choices its rule takes. */
   // A scale run's practice, as the reference app's Practice Scale sheet.
   scalePractice: {

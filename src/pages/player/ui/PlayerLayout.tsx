@@ -9,6 +9,8 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { retireTip, setScoreView } from '@/features/set-preference'
+import { selectDays, streak, useProgress } from '@/entities/progress'
+import { useToday } from '@/widgets/practice-days'
 import {
   isMidiConnected,
   MidiButton,
@@ -36,6 +38,8 @@ import {
   ScoreBar,
   usePlayerShortcuts,
   WaitLine,
+  PlayedThrough,
+  speedTempo,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
@@ -188,6 +192,16 @@ export function PlayerLayout({
   usePlayerShortcuts(player, view, onClose)
   // The Hands sheet (R36), from the foot bar's Hands.
   const [handsOpen, setHandsOpen] = useState(false)
+  // Played through (the board's PlayerDone): opened as a Wait pass reaches the song's end.
+  const finished = player.feedback?.kind === 'finished' ? player.feedback : null
+  const isFinished = finished !== null
+  const [doneOpen, setDoneOpen] = useState(false)
+  useEffect(() => {
+    if (isFinished) setDoneOpen(true)
+  }, [isFinished])
+  const days = useProgress(selectDays)
+  const today = useToday()
+  const daysInARow = useMemo(() => streak(days, today), [days, today])
   const { connection } = useMidiConnection()
   // The keys play at a tap; the hands at the keys are watched (R36).
   const playable = isMidiConnected(connection) || (player.keys && !scoreView.hands)
@@ -410,14 +424,7 @@ export function PlayerLayout({
             (player.feedback !== null || Boolean(status)) && 'py-1 landscape-phone:py-0',
           )}
         >
-          {view.mode !== 'listen' ? (
-            <WaitLine
-              feedback={player.feedback}
-              bestBefore={bestBefore}
-              onAgain={practice.play}
-              onLoop={player.setLoop}
-            />
-          ) : null}
+          {view.mode !== 'listen' ? <WaitLine feedback={player.feedback} /> : null}
           {status}
         </PlayerArea>
       ) : null}
@@ -471,6 +478,26 @@ export function PlayerLayout({
           />
         </div>
       </PlayerArea>
+      {finished ? (
+        <PlayedThrough
+          open={doneOpen}
+          onOpenChange={setDoneOpen}
+          pass={finished}
+          hands={t(`common:hands.${view.hands}`)}
+          bestBefore={bestBefore}
+          tempo={player.tempo}
+          ownTempo={player.ownTempo}
+          streak={daysInARow}
+          onPractise={(bars) => {
+            // The weakest bars looped at 70 % of the score's tempo, as the song page's next step.
+            player.setLoop(bars)
+            player.setTempo(speedTempo(player.ownTempo, 0.7))
+          }}
+          onLoopBars={player.setLoop}
+          onAgain={practice.play}
+          onTryPlay={() => player.listenAt(player.tempo)}
+        />
+      ) : null}
       <HandsSheet
         open={handsOpen}
         onOpenChange={setHandsOpen}
