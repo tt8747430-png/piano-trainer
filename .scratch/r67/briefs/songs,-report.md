@@ -32,6 +32,7 @@ no rulings in port.md). Songs rulings filed under other sections but living in t
 | X37 | A shared playlist is All songs' table on a laptop | `pages/groups/ui/SharedFolderPage.tsx` | built |
 | X76 | A laptop place's bar ends on its column | `PlaceBar.tsx` (`PLACE_COLUMN`) | built |
 | X119 | A section's own name stands on the paper | `SectionCard.tsx` | built |
+| X34 | Every run's music on the paper (r56 `PV_RUN`, round 68) | `pages/player/ui/WalkPlayerPage.tsx`, `ChromaticPlayerPage.tsx`, `ProgressionPlayerPage.tsx`, `ExercisePlayerPage.tsx` (all `PlayerLayout`) | done for the card: the app's runs never drew one, they are the Player's own engraved sheet on the paper (both hands, four bars a line, shot at 402 and 1710). Left: the board's run view as a screen of its own (treble staff only, eight bars on one line at 1.35 centred over the transport, Setup · tempo · Play as the transport, the keys docked edge to edge). It replaces the Player for four routes, and the walk's 15 bars (up and back) and the Player's floating keys window would both change, so it is a separate build |
 
 ## Decisions
 
