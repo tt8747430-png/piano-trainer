@@ -1748,3 +1748,7 @@ are reference only, but progressions are facts.
   at 16 above, 12 below (1.33×, under the 1.5× floor; laws, Spacing); the edit column's sections now sit 24 apart, so
   every heading is 3× nearer what it heads. Phone and laptop. Search's first-open state was checked against biases
   rule 3: it opens on recent searches and suggestions, never a blank.
+- **Canvas (2026-11-18, loop): Learn's and Songs' columns end clear of the +.** Scrolled to the end, the + covered the
+  last row's chevron on Learn ("Notes from my teacher", 38px under it) and the last Explore card's names on Songs
+  (46px). Both columns now end 176 above the screen's foot; a check over every phone board with a + found no other.
+  The rule is written beside "Floating things float" in `ui-and-mockups`.

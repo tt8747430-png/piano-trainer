@@ -210,7 +210,7 @@ ROWITEMS = lambda sfx: [('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit
 ADDBTN = IB('New', PLUS, 'openAdd')
 _ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '2', 'Trash' + sfx), bg=SHEET)
 ovph = f'''{TITLEBAR('Songs')}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 32px">{SHOWSTATES()}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 176px; display: flex; flex-direction: column; gap: 32px">{SHOWSTATES()}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if>{RESULTS('Song.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
 <sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP_PH}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All songs', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Song.dc.html')}</div></section>

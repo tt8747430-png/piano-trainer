@@ -178,7 +178,7 @@ CHAPBODY = (f'{CAPS("Name")}<input aria-label="Name" value="{{{{chapT}}}}" style
 MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCourse'), bg=SHEET)
 
 # Learn: the overview
-lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">'
+lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 176px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 112)}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONTL}{H2("Levels")}{LEVELLIST(True)}{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}{OWNGROUP(True)}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32)}{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')

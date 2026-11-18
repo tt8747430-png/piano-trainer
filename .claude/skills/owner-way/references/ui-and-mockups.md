@@ -94,7 +94,9 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
   grouping rules in `.scratch/r39/plan/bars.md`). Glass never goes on content.
 - Phone and desktop have the same features, text and layout logic.
 - Nothing hangs under a bar: a status or language goes in the bar or its menu.
-- Floating things float, reserve no space, and auto-hide reliably.
+- Floating things float, reserve no space, and auto-hide reliably. **The scroll's end clears them:** at the last scroll
+  position nothing readable or tappable lies under a floating action (Material 3, FAB: "don't let it cover content
+  that can't be scrolled clear"); a place with the tab bar and a + ends its column 176 above the screen's foot.
 - **No control reserves space it does not use** (owner, 2026-11-17, the lesson: "the drag handle reserves space … other
   controls else can have this issues? fix all the instructions that made you do this"): a page's column starts on the
   16 gutter on a phone (the bar's 12 inset plus the glass's own 4, as every list), and the first content stands 8–16
