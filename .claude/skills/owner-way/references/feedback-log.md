@@ -1415,6 +1415,7 @@ are reference only, but progressions are facts.
 - **The app's layers lie over the real Learn (loop 63, 2026-11-17):** the board of search, MIDI, the notices and the route states drew its own stand-in Learn under them (a Continue card with no button, a list of a level's lessons Learn does not have); it now lays them over Learn itself, built from Learn's own parts with its data (Continue, Levels, your lessons, Courses), phone and laptop. The search sheet's Recent searches and Suggestions each sit 8 over what they head, the groups 24 apart (one implementation; proximity; canvas v437).
 
 ## Actions and menus
+- **One laptop toast, where the ruling put it (loop round 54's one toast, measured again 2026-11-18):** the laptop's toast stood in five places: centred 460 and 28 up on 13 boards (the ruling), centred 420 and 32 up in the practice libraries, 420 at the right 40 in on Learn, Courses, Your lessons and their settings, 420 at the right of a lesson and a course, the update banner 440 at the right 28 in. Every one is now centred on its pane, 460 wide, 28 up, and over a lesson's floating foot bar 116 up, clear of it by 15 (consistency; Material 3, snackbars).
 
 - **Every confirm as the board's ASK (loop 24):** 372 wide on the page's paper, 20 corners, 20 in; the question 18
   bold sans at the start, its line 15 on 1.45; Cancel (sand) and the act as two equal 44 pills, a loss filled in
