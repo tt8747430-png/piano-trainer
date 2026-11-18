@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ButtonLink } from './ButtonLink'
 import { FloatingContext } from './floating-context'
+import { KindTile } from './KindTile'
 import { Button } from './primitives/button'
 
 /** The transport's glyphs, filled wherever they stand (the boards' Play and Stop). */
@@ -423,12 +424,7 @@ export function SpeedDialAction({
   }
   const face = (
     <>
-      <span
-        aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-menu-item bg-muted text-foreground [&_svg]:size-5"
-      >
-        <Icon />
-      </span>
+      <KindTile icon={Icon} />
       <span className="flex min-w-0 flex-col">
         <span className="truncate">{label}</span>
         {detail ? (

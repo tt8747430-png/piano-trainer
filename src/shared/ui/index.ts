@@ -138,6 +138,7 @@ export { TREE_ITEM, TreeCount, TreeHeading, TreeItem, TreeList, TreeSwatch } fro
 export { RowLink } from './RowLink'
 export { SeeAll, SectionHead } from './SectionHead'
 export { RowTrigger } from './RowTrigger'
+export { KindTile } from './KindTile'
 export { Said } from './Said'
 export { TileMark } from './TileMark'
 export { loadScoreView } from './score/load'

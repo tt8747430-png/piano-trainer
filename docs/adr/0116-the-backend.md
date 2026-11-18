@@ -78,7 +78,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
   Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
   - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
-    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the Insert menu open on it;
+    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the slash menu open on it;
     **⋮⋮** dragged moves the block, tapped opens its menu: **Turn into** (text, section heading, numbered steps,
     note, in short; its lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Duplicate,
     Delete. Order is by dragging or Alt+↑/↓, never Move up/down in a menu (the owner's rule), so the brief's Move
@@ -87,6 +87,10 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
     title, summary, heading, note and takeaway always say what they are for;
   - **selected words** get a bubble with the lead in bold, the one mark a lesson's text has; the floating toolbar
     keeps Insert, Undo and Redo. Each action has one place: a block's kind is its menu's, bold the bubble's;
+  - **Insert** (the board's INSLIST) opens a sheet titled Insert, on a laptop the card 420 wide by the bar: a search
+    (44 tall, on the fill, "Insert") keeping the kinds whose name holds what is typed, then Text, Music and Ask and
+    link, each a caps label over a card of rows 52 tall, a kind's glyph on its 36 tile (`KindTile`) and its name;
+    a tap adds the block where the caret stood and closes the sheet; a search that keeps none is the kit's `Said`;
   - an **example** (notes, chords, keys, a question, a link) is drawn as the lesson shows it, with no kind's label
     over it. Chosen, it is outlined and a small toolbar floats over its top edge: **Edit** (its line of text and
     its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;

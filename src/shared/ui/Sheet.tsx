@@ -89,6 +89,7 @@ export function SheetContent({
   full = false,
   tall = false,
   floating = false,
+  wide = false,
   initialFocus,
   dismiss = 'done',
 }: {
@@ -111,6 +112,8 @@ export function SheetContent({
    * Played through (PlayerDesk's, 440 wide, 112 above the window's foot, clear of the transport).
    */
   floating?: boolean
+  /** On a laptop, the card 420 wide, as the board's POPOVER draws a list of kinds (Insert). */
+  wide?: boolean
   /** What takes the focus as it opens, in place of the panel: a picker's value. */
   initialFocus?: () => HTMLElement | true
   /** Its header's way out: Done; Cancel on a sheet that makes something (the canvas's NEWNAME); Close once it reports what was made (Import). */
@@ -123,7 +126,7 @@ export function SheetContent({
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-sheet bg-background pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
         // From the right, a laptop's settings (the boards' POPOVER, EditorLaptop's and PlayerDesk's
-        // gear): a card hung 8 under the bar's buttons at their right edge, 400 wide, as tall as
+        // gear): a card hung 8 under the bar's buttons at their right edge, 400 wide (420 `wide`), as tall as
         // it holds, 16 round with the hairline and the second shade; it fades in place.
         LAPTOP_CARD,
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
@@ -132,6 +135,7 @@ export function SheetContent({
         full &&
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
         floating && FLOATING_CARD,
+        wide && 'data-[swipe-axis=x]:data-[swipe-direction=right]:w-105',
       )}
     >
       <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
