@@ -695,7 +695,6 @@ export const practice = {
     },
     kinds: {
       exercises: {
-        tree: 'Exercises by book',
         search: 'Search exercises',
         noMatch: 'No exercises match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
@@ -705,7 +704,6 @@ export const practice = {
         show_other: 'Show {{count}} exercises',
       },
       accompaniment: {
-        tree: 'Accompaniment by book',
         search: 'Search accompaniment',
         noMatch: 'No patterns match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
@@ -715,7 +713,6 @@ export const practice = {
         show_other: 'Show {{count}} patterns',
       },
       progressions: {
-        tree: 'Progressions by style',
         search: 'Search progressions',
         noMatch: 'No progressions match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',

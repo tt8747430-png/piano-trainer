@@ -658,7 +658,6 @@ export const practice: LocaleResources['practice'] = {
     },
     kinds: {
       exercises: {
-        tree: 'Упражнения по книгам',
         search: 'Поиск упражнений',
         noMatch: 'Нет упражнений по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у упражнения, затем «Добавить в избранное».',
@@ -670,7 +669,6 @@ export const practice: LocaleResources['practice'] = {
         show_other: 'Показать {{count}} упражнения',
       },
       accompaniment: {
-        tree: 'Аккомпанемент по книгам',
         search: 'Поиск аккомпанемента',
         noMatch: 'Нет фактур по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у фактуры, затем «Добавить в избранное».',
@@ -682,7 +680,6 @@ export const practice: LocaleResources['practice'] = {
         show_other: 'Показать {{count}} фактуры',
       },
       progressions: {
-        tree: 'Последовательности по стилям',
         search: 'Поиск последовательностей',
         noMatch: 'Нет последовательностей по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у последовательности, затем «Добавить в избранное».',
