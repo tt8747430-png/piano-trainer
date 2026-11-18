@@ -436,7 +436,7 @@ async function analyse(page, scr, phone) {
   }
   // ── Von Restorff: one honey act per screen (the accent on more than one control is two focal points).
   const honey = (c) => { const m = c.match(/\d+(\.\d+)?/g); if (!m) return false; const [r, g, b, a = 1] = m.map(Number); return a > 0.6 && r > 200 && g > 160 && g < 225 && b < 160 && r - b > 70 }
-  const accents = [...document.querySelectorAll('button, a[href]')].filter((el) => vis(el) && honey(getComputedStyle(el).backgroundColor) && R(el).width * R(el).height > 1200 && R(el).top >= scr.y && R(el).bottom <= scr.y + scr.h)
+  const accents = [...document.querySelectorAll('button, a[href]')].filter((el) => vis(el) && (!MODAL || MODAL.contains(el)) && honey(getComputedStyle(el).backgroundColor) && R(el).width * R(el).height > 1200 && R(el).top >= scr.y && R(el).bottom <= scr.y + scr.h)
   if (accents.length > 1) problems.push(`Von Restorff: ${accents.length} honey acts on one screen (${accents.slice(0, 3).map((e) => '“' + (e.innerText || e.getAttribute('aria-label') || '').trim().slice(0, 16) + '”').join(', ')}): one is the focus, the rest go quiet`)
   // ── Contrast: text against what it sits on, 4.5:1 (3:1 at 18px bold or 24px).
   const lum = (c) => { const m = c.match(/\d+(\.\d+)?/g).map(Number); const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4 }; return 0.2126 * f(m[0]) + 0.7152 * f(m[1]) + 0.0722 * f(m[2]) }
