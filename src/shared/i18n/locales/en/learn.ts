@@ -242,11 +242,6 @@ export const learn = {
     noLanguage: 'Not yet in full',
     opening: 'Opening…',
   },
-  reading: {
-    title: 'Lessons read as',
-    page: 'One page',
-    sections: 'A section at a time',
-  },
   edit: {
     doc: {
       label: 'The lesson',

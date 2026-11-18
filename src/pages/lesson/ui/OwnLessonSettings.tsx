@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -20,14 +19,7 @@ import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
  * read; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
  * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
-export function OwnLessonSettings({
-  lesson,
-  reading,
-}: {
-  lesson: OwnLesson
-  /** How lessons read: its home is every lesson's Settings. */
-  reading: ReactNode
-}) {
+export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const navigate = useNavigate()
@@ -40,7 +32,6 @@ export function OwnLessonSettings({
       <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <p className="-mt-2 px-1 text-muted-foreground text-pretty">{title}</p>
-        {reading}
         <OwnItemRows
           title={title}
           words={{ group: t('settings.lesson'), rename: t('own.renameLesson') }}

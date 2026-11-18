@@ -234,11 +234,6 @@ export const learn: LocaleResources['learn'] = {
     noLanguage: 'Пока не полностью',
     opening: 'Открываем…',
   },
-  reading: {
-    title: 'Уроки читаются',
-    page: 'Одной страницей',
-    sections: 'По разделам',
-  },
   edit: {
     doc: {
       label: 'Урок',

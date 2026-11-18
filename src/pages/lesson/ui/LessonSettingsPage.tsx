@@ -12,13 +12,6 @@ import {
   withAfter,
   type Lesson,
 } from '@/entities/lesson'
-import {
-  LESSON_READINGS,
-  selectLessonReading,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { setLessonReading } from '@/features/set-preference'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
 import { selectOwnLesson, useOwnLessons } from '@/entities/own-lessons'
 import { RemoveGroup, useLessonDraft } from '@/features/edit-original'
@@ -28,7 +21,6 @@ import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
-  ChoiceCard,
   ChoiceRow,
   MultiDropdown,
   ActionRow,
@@ -57,7 +49,7 @@ export function LessonSettingsPage() {
   const locale = useLocale()
   const { lessonId } = useParams({ from: '/shell/lessons/$lessonId/settings' })
   const own = useOwnLessons(selectOwnLesson(lessonId))
-  if (own) return <OwnLessonSettings key={lessonId} lesson={own} reading={<ReadingChoice />} />
+  if (own) return <OwnLessonSettings key={lessonId} lesson={own} />
   const lesson = lessonById(lessonId)
   const place = lessonPlace(lessonId)
   // The route finds no lesson that no level has.
@@ -155,7 +147,6 @@ function LessonSettings({
       <ScreenHeader column title={t('settings.title')} back={back} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <p className="px-1 text-muted-foreground text-pretty">{title}</p>
-        <ReadingChoice />
         {editsContent(account) ? (
           <EditorRows
             lesson={lesson}
@@ -293,21 +284,5 @@ function EditorRows({
         {shareRow}
       </SettingsGroup>
     </>
-  )
-}
-
-/** How lessons read (round 26), its one home: every lesson's Settings, the learner's own too. */
-function ReadingChoice() {
-  const { t } = useTranslation('learn')
-  const reading = useSettings(selectLessonReading)
-  const settings = useSettingsStoreApi()
-  return (
-    <ChoiceCard
-      title={t('reading.title')}
-      setting="lessonReading"
-      value={reading}
-      options={LESSON_READINGS.map((value) => ({ value, label: t(`reading.${value}`) }))}
-      onChange={(value) => setLessonReading(settings, value)}
-    />
   )
 }

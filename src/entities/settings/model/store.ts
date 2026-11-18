@@ -15,7 +15,6 @@ import { isInversion, midi, type Midi } from '@/shared/lib/music'
 import { beatsOf, BPM_RANGE, isMetronomeMeter } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
-  isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_METRONOME,
   METRONOME_VOLUMES,
@@ -98,7 +97,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 53
+export const SETTINGS_VERSION = 54
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -139,7 +138,6 @@ export function createSettingsStore({
         tipsSeen: [],
         practiceRecent: [],
         paletteRecent: PALETTE_RECENT_START,
-        lessonReading: 'page',
         progressions: DEFAULT_PROGRESSIONS,
         intervals: DEFAULT_INTERVALS,
         chordPlayer: DEFAULT_CHORD_PLAYER,
@@ -508,7 +506,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
           64,
         )
       : [],
-    lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
     progressions: progressionsSettings(saved.progressions),
     intervals: intervalSettings(saved.intervals),
     chordPlayer: chordPlayerSettings(saved.chordPlayer),
