@@ -942,8 +942,8 @@ export const practice = {
     chords: 'Chords',
     loopSection: 'Loop this section',
     keyChords: '{{key}} chords',
-    keyChordsHint: 'Drag one into a bar.',
-    keyChord: '{{chord}}: drag into a bar, or tap to add it at the end',
+    keyChord: '{{chord}}: tap or drag into a bar',
+    keyChordTip: 'Tap or drag into a bar',
     arranger: {
       title: '{{name}} on the Genos',
       tag: '{{name}} on the Genos: {{marks}}',

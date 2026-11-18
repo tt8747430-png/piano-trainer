@@ -922,8 +922,8 @@ export const practice: LocaleResources['practice'] = {
     chords: 'Аккорды',
     loopSection: 'Повторять этот раздел',
     keyChords: 'Аккорды {{key}}',
-    keyChordsHint: 'Перетащите аккорд в такт.',
-    keyChord: '{{chord}}: перетащите в такт или нажмите, чтобы добавить в конец',
+    keyChord: '{{chord}}: нажмите или перетащите в такт',
+    keyChordTip: 'Нажмите или перетащите в такт',
     arranger: {
       title: '{{name}} на Genos',
       tag: '{{name}} на Genos: {{marks}}',
