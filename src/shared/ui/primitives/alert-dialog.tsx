@@ -44,7 +44,7 @@ function AlertDialogContent({
         data-size={size}
         className={cn(
           // The canvas's ASK: 372 wide on the page's paper, 20 corners, 20 in, its parts 8 apart.
-          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-[20px] bg-background p-5 text-foreground shadow-(--elevation-3) ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-93 max-w-[calc(100%-3rem)] -translate-x-1/2 -translate-y-1/2 gap-2 rounded-sheet bg-background p-5 text-foreground layer-shadow duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
           className,
         )}
         {...props}

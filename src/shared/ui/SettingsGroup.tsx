@@ -38,14 +38,7 @@ export function SettingsGroup({
     >
       {title ? (
         <div className={cn('flex items-center gap-1', !heading && 'px-4')}>
-          <h2
-            id={id}
-            className={
-              heading
-                ? 'font-sans text-xl font-bold'
-                : 'font-sans text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase'
-            }
-          >
+          <h2 id={id} className={heading ? 'font-sans text-xl font-bold' : 'caps'}>
             {title}
           </h2>
           {/* At the heading's far edge, as the boards' group heads (S9CAPS). */}

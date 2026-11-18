@@ -23,7 +23,9 @@ export function PlayToggle({
       )}
       {...props}
     >
-      {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" /> : null}
+      {playing ? (
+        <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" />
+      ) : null}
       {children}
     </Button>
   )
