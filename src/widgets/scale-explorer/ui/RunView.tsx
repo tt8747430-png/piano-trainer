@@ -291,7 +291,7 @@ export function RunView({
     >
       {chords.length > 0 ? (
         <section className="flex flex-col gap-2">
-          <h3 className="ms-1 font-sans text-sm font-semibold">
+          <h3 className="font-sans text-sm font-semibold">
             {t('practice:scales.chordsInScale', { scale: scaleName(tonic, kind) })}
           </h3>
           <ScaleChordGrid chords={chords} />

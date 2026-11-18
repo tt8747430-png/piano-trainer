@@ -11,7 +11,7 @@ import { PAINT, ROLE_PAINT } from './paint'
  */
 export function RoleTiles({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3 px-1">
+    <ol aria-label={label} className="grid grid-cols-4 gap-x-2 gap-y-3">
       {children}
     </ol>
   )

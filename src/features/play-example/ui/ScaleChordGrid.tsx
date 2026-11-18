@@ -28,7 +28,7 @@ export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[]
   }, [])
   if (!range) return null
   return (
-    <div className="-mx-gutter flex gap-2 overflow-x-auto px-gutter py-0.5 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-7 sm:overflow-visible sm:px-0.5">
+    <div className="-mx-gutter flex gap-2 overflow-x-auto px-gutter py-0.5 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-7 sm:overflow-visible sm:p-0">
       {columns.map((column) => (
         <div key={column.map(idOf).join('|')} className="flex shrink-0 flex-col gap-2">
           {column.map((placed) => {

@@ -176,23 +176,22 @@ export function CourseEditor({ source, ...props }: EditorProps & { source: Cours
 }
 
 /**
- * An editor's course editor (ADR 0116, round 21): the course's draft as one document, one language
- * at a time (the bar's choice); each lesson is edited on its own page; the draft's status, Publish
- * and menu in the bar.
+ * An editor's course editor (ADR 0116, round 21): the course's draft as one document in the app's
+ * language; each lesson is edited on its own page; Publish, one tap, and Done in the bar.
  */
 function DraftCourseEditor({ course, back, toCourse, edit }: EditorProps & { course: Course }) {
   const { t } = useTranslation('learn')
-  const shown = useLocale()
-  const [locale, setLocale] = useState<Locale>(shown)
+  // Written in the app's language (Settings › Language, its one home).
+  const locale = useLocale()
   const draft = useCourseDraft(course)
   const addLesson = useAddLesson(course.id)
   const navigate = useNavigate()
-  // The course as last written, for the document to open on in the other language.
+  // The course as last written, for the document to open on again.
   const written = useRef<{ opened: number; record: CourseRecord } | null>(null)
   // A new course's name is its draft's: the device has none of it.
   const title = localText(
     draft.load.state === 'ready' ? draft.load.value.title : course.title,
-    shown,
+    locale,
   )
   const save = (record: CourseRecord) => {
     written.current = { opened: draft.opened, record }
@@ -222,16 +221,7 @@ function DraftCourseEditor({ course, back, toCourse, edit }: EditorProps & { cou
       backTo={{ link: toCourse, label: t('edit.course.back') }}
       editorsOnly={t('edit.course.editorsOnly')}
       unreadable={t('edit.course.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-      publishPage={{
-        link: <Link to="/courses/$courseId/publish" params={{ courseId: course.id }} />,
-        open: () =>
-          void draft
-            .flush()
-            .then(() =>
-              navigate({ to: '/courses/$courseId/publish', params: { courseId: course.id } }),
-            ),
-      }}
+      oneTap
     >
       {(initial) => (
         <CourseDocument

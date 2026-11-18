@@ -29,6 +29,8 @@ export function GroupRows({
     <div
       role="group"
       aria-label={label}
+      // In the laptop's Settings dialog a group is rows on the pane, as every settings card there.
+      data-slot="settings-card"
       className={cn(
         'flex flex-col rows-line overflow-hidden',
         // On the page's paper a group is the card (14 corners, the hairline ring), as the kit's GROUP
@@ -109,12 +111,15 @@ export function GroupSegmented<V extends OptionValue>({
 export function GroupLink({
   label,
   value,
+  mark,
   setting,
   className,
   ...button
 }: {
   label: string
   value?: string | undefined
+  /** The value's glyph before it, in Soft Ink (a swipe slot's act, the board's P_SWIPE). */
+  mark?: ReactNode
   setting?: string
 } & Omit<ComponentProps<'button'>, 'value' | 'children'>) {
   return (
@@ -130,7 +135,14 @@ export function GroupLink({
       )}
     >
       <span className="shrink-0">{label}</span>
-      <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">{value}</span>
+      {mark ? (
+        <span className="flex min-w-0 flex-1 items-center justify-end gap-3 text-muted-foreground">
+          {mark}
+          <span className="truncate">{value}</span>
+        </span>
+      ) : (
+        <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">{value}</span>
+      )}
       <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
     </button>
   )
@@ -209,7 +221,7 @@ export function GroupChips({ label, children }: { label: string; children: React
   return (
     <section aria-label={label} className="flex flex-col gap-2 px-4 py-2.5">
       <h3 className="font-sans text-sm font-normal text-muted-foreground">{label}</h3>
-      <div className="flex flex-wrap gap-1.5">{children}</div>
+      <div className="flex flex-wrap gap-2">{children}</div>
     </section>
   )
 }

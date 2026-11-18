@@ -17,36 +17,55 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
-- **The Profile** is the learner at a glance (memory-palaces', canvas 128): their name as its title with the
-  notifications' bell (and Settings on a phone); their picture with Edit photo, the year joined (or a guest's Sign
-  in); three figures (day streak, to Streak; songs learned; practice time); **Last 7 days** (today last), the time and days of seven
-  over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
-  Streak's month; the next badge as a ring with its count, under "Next badge" its name and what earns it as a goal (Repertoire · Learn 1 song; a badge's goals are targets, never a state that reads as reached); then the first badges and achievements, each with See
-  all. One column on a phone; two on a laptop, the badges and achievements beside the rest. **Achievements**' personal
-  records are a value over its label (the level its number alone, under "Level"); a record nothing has set yet, Best
-  accuracy before any take, shows "—", never "0 %".
-- **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
-  `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
-  then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer
-  keyboard inside it where a mouse or trackpad hovers; MIDI devices, its connection as its value), **Library**
-  (Selection toolbar, Swipe actions: memory-palaces' and iOS Mail's, pages of Settings' own), **Support** (User guide,
-  Report a problem: a page with its field in sight, greyed offline; About, the version or a waiting update as its
-  value), and for an administrator **Administration**. Only what concerns the whole app (R29: the Player's, the
-  editor's and each Practice page's settings are behind their own gear').
+- **The Profile** is the learner at a glance (memory-palaces', the Profile boards, r50): their name as its title
+  with the bell and the gear in one glass on both sizes; their picture (76, Edit photo a 30 round on its corner), the
+  name at 28 and "@handle · Joined 2025" (or a guest's Sign in); three tiles in one ink, only the flame painted, a
+  streak alive (day streak to Streak, songs learned to Songs, practice time to Practice history, in hours alone from
+  the first); then **Last 7 days**, **Practice history**, **Badges** and **Achievements**, each a 20 bold heading
+  12 over its box, See all at its end. The week's box holds the minutes' scale (0 and two lines) and one bar a day,
+  today in copper and the days before in ember, a day not played a flat stub; the plot is 72 on a phone and 150 on a
+  laptop. A run's row leads with its score in a 52 tile; a badge's with its medal, a white star on its tier's metal
+  (`--medal-*`), and the bar to its next tier; an achievement's with a check on the grass, or a lock before it is
+  earned, the earned first. Each box's last row draws no line. A phone reads one column, the sections 32 apart; a
+  laptop reads rows that meet, 32 apart: the learner beside the tiles, the week beside the badges, the history
+  beside the achievements, each pair stretched to one bottom edge with what it holds centred, and no chevron on
+  their rows. **Streak** names its reward: "Today counts. 2 more days to the Gold badge." while the streak badge has
+  a next tier. **Achievements**' personal records are a value over its label (the level its number alone, under
+  "Level"); a record nothing has set yet, Best accuracy before any take, shows "—", never "0 %".
+- **Settings** (R32, iOS's Settings and claude.ai's; `widgets/settings-screen`, its groups one model in
+  `model/sections.ts`), each thing placed where Apple places it: the account first (the learner's picture, name and one
+  line of the sync, or Sign in), then **App** (General: Language, one segmented English | Русский, the Computer
+  keyboard where a mouse or trackpad hovers, Software update last; Appearance, the theme alone, its value in the list;
+  Storage and backup), **Piano** (MIDI devices, its connection as its value), **Library** (Selection toolbar, every act
+  its glyph on a sand tile and the preview its glyph over its word; Swipe actions, every slot its act's glyph, No
+  action the ban sign), **Support** (User guide, Report a problem, About: only the app's facts, its licence, Legal and
+  the acknowledgements), and for an administrator **Administration**. General shows "Update available" in the list
+  only when one waits. Only what concerns the whole app (R29: the Player's, the editor's and each Practice page's
+  settings are behind their own gear).
   **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
-  or to the page it is under). **From 80rem** (`WIDE`; under it the sidebar leaves the page too narrow) the two panes of the libraries (Songs' tree and list): the
-  sidebar (17rem, `TreeItem` rows with a painted swatch, the account first, the groups headed) stands sticky under the
-  bar with its own height and scroll, so the page beside it (44rem) scrolls with the window and never drags it; the
-  page shown is marked, a page under a page marking its parent (Edit profile the account, the legal pages About, the
-  MIDI log MIDI devices) and keeping its Back; a top-level page has none. A page Settings does not list (a Practice
-  page's Settings) stands alone in one column with Back. **About** is a Settings page: the app's icon, name, version
-  and build; Software update (its status the value, a tap checks, Install and restart under it when one waits) and
-  the licence; Legal (Privacy Policy, Terms of Service, each a row; their pages go up to About); Acknowledgements.
-  **The Account** reads as an edit profile: the initial; Profile (the name, Save once changed, the email, Change
-  password); for an editor or administrator **Editorial access** (the role, and Preview as learner: the app as a
-  learner sees it for the session, its one home); Sync (where it stands, Sync now, what syncs: its one home); then
-  Sign out and Delete account…, each red in a group of its own at the foot, a footnote under it, asking through the
-  one confirm dialog (the email typed for Delete).
+  or to the page it is under). **On a laptop** (from 64rem) Settings is a dialog over the page it was opened from, as
+  claude.ai's: a Settings address (a row's link, Search's, the gear's) is turned by its route's `opensAsDialog` into
+  the page behind's with `?settings=<path>` (`app/settings-dialog`), and `SettingsDialogHost` in the shell shows that
+  place's page as the pane; × and Escape take the param off. The dialog is 22 round, at most 75rem wide and the
+  window less 6rem tall, its bar the word Settings and ×; a 16.5rem nav (a search field, the account as a plain row,
+  each group's small heading and its places as 40 rows, the open one on the chosen wash, Administration last, whose
+  own places replace the list under "‹ Settings") beside the pane (at most 45rem, its title with Back to its parent
+  for a page under a page). The pane wears one shape (`settings-pane`, by `data-slot`): sentence-case headings, the
+  groups as rows on the pane parted by hairlines, no cards; the same page components serve both sizes, reading
+  `useSettingsDialog` where a row differs (Language and Theme at their row's end).
+  **The Account** has every Settings page's shape: who it is at its head (the 64 picture, the name, the email), then
+  Profile (Edit profile, Privacy with its value), Sign-in and security (Email, its own page: the current address, New
+  email, Send confirmation link; Change password), Sync (where it stands beside its dot with when it last synced,
+  Changes pending, Sync now; what syncs behind its ⓘ: its one home), for an editor or administrator **Editorial
+  access** (the role, and Preview as learner: its one home), then Sign out and Delete account… alone 16 further, each
+  red and asked first (the word typed for Delete). Signed out: "You are not signed in.", why it matters, Sign in and
+  Create account. **Storage and backup** reads Device storage, Backup, Piano sound, then its two losses together at the
+  foot and apart (Remove downloaded piano, Reset progress).
+  **Legal** is one document a page, no tabs: its name in the bar, when it last changed, a heading and a paragraph a
+  section, the other document as one link row at its end; on a laptop the contents a band of links at the top and
+  the text in two columns. **The account pages** (Sign in, Create an account, Forgot, New password) carry their name
+  in the bar beside Close, one column 16 apart (440 and centred under the app's mark on a laptop), every field the
+  one `FormField`.
 - **Practice is three groups** (canvas 160): **Theory** (Chords, Scales and keys, Intervals, Progressions,
   Accompaniment), the pages that explain a thing and practise it where it is explained; **Exercises**, its three books
   (Finger technique, Barry Harris, Piano With Jonny, each with its count and the library's tile, `EXERCISE_BOOKS`),
@@ -115,7 +134,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     to its method book's course;
   - **Every library is the learner's to arrange** (R32, Songs' acts, the built-in books included, as an overlay in
     `pt-practice-library` version 2): each row's More has Rename…, Move to… (a book, a style, a folder of their own),
-    Hide (Show under Hidden) and Restore original name; the pencil in the bar opens Edit, every place and row with
+    Hide (Show under Hidden) and Restore original name; the bar's Edit word (the kit's, beside the title) opens Edit, every place and row with
     its handle in one drag context (memory-palaces' engine and overlay), a place's More renaming, hiding or (their
     own folder) deleting it, asking first, its rows going home. New makes what the page makes (a pattern, a
     progression) and New folder, the kit's `NewDial`, floating at the foot on both sizes (`useLibraryNew`, R67). The

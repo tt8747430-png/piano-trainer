@@ -61,7 +61,7 @@ function SectionRows({
             type="button"
             aria-expanded={!shut}
             onClick={() => setShut((was) => !was)}
-            className="flex min-h-11 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
+            className="-mx-1 flex min-h-11 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
           >
             <ChevronDown
               aria-hidden

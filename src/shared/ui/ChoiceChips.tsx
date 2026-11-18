@@ -4,14 +4,15 @@ import { cn } from '@/shared/lib'
 import { optionName, type Option, type OptionValue } from './option'
 
 /**
- * How the chips look: `ink`, the chosen filled in ink with the page's colour on it (canvas 153);
+ * How the chips look: `ink`, 36 drawn in a 44 reach and 8 apart, the chosen filled in ink with the
+ * page's colour on it (canvas 153);
  * `honey`, on a sheet of choices that each show what they are (the Player's Pattern sheet), each a
  * card's pill in a hairline, the chosen washed in honey in the honey ring, 36 drawn in a 44 reach.
  */
 const TONES = {
   ink: {
-    group: '-my-[5px] gap-1.5',
-    chip: 'min-w-14 border-y-[5px] bg-muted px-3.5 text-sm text-muted-foreground choice data-checked:bg-foreground! data-checked:text-background!',
+    group: '-my-1 gap-x-2 gap-y-0',
+    chip: 'min-w-11 border-y-4 bg-muted px-4 text-sm text-muted-foreground choice data-checked:bg-foreground! data-checked:text-background!',
   },
   honey: {
     group: '-my-1 gap-x-2 gap-y-0',

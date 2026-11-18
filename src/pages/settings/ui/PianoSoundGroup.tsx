@@ -17,16 +17,14 @@ const megabytes = (bytes: number, locale: string) =>
 /**
  * Storage and backup's Piano sound (the board's P_STORAGE; "the sound settings go to the storage and
  * backup"): the grand, how much of it this device keeps and Download for offline use with its
- * progress until all of it is kept (offline it waits, saying it needs the internet); and Remove
- * downloaded piano samples, asked first, once some are kept. Where the browser keeps no caches,
- * nothing.
+ * progress until all of it is kept (offline it waits, saying it needs the internet); removing it is
+ * the page's foot's (`RemovePianoRow`). Where the browser keeps no caches, nothing.
  */
 export function PianoSoundGroup() {
   const { t } = useTranslation(['settings', 'common', 'player'])
   const locale = useLocale()
   const online = useOnline()
   const piano = usePianoSound()
-  const [removing, setRemoving] = useState(false)
   const { sound } = piano
   return (
     <SettingsGroup flush title={t('piano.sound')} info={t('pianoSound.info')}>
@@ -90,9 +88,22 @@ export function PianoSoundGroup() {
           )}
         </>
       ) : null}
-      {sound.state === 'known' && sound.kept > 0 ? (
-        <DangerRow title={t('pianoSound.remove')} onClick={() => setRemoving(true)} />
-      ) : null}
+    </SettingsGroup>
+  )
+}
+
+/**
+ * Remove downloaded piano, the page's first loss (the board's P_STORAGE): a red row among the losses
+ * at its foot, never inside the download's group, asking first; shown once some of the grand is kept.
+ */
+export function RemovePianoRow() {
+  const { t } = useTranslation('settings')
+  const piano = usePianoSound()
+  const [removing, setRemoving] = useState(false)
+  if (piano.sound.state !== 'known' || piano.sound.kept === 0) return null
+  return (
+    <>
+      <DangerRow title={t('pianoSound.remove')} onClick={() => setRemoving(true)} />
       <ConfirmDialog
         open={removing}
         onOpenChange={setRemoving}
@@ -102,6 +113,6 @@ export function PianoSoundGroup() {
         cancel={t('pianoSound.cancel')}
         onConfirm={() => void piano.remove()}
       />
-    </SettingsGroup>
+    </>
   )
 }

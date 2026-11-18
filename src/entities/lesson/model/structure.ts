@@ -17,6 +17,7 @@ export const INSERTABLE_BLOCKS = [
   'scale',
   'interval',
   'voicings',
+  'variants',
   'question',
   'link',
   'image',
@@ -50,6 +51,23 @@ export function blankBlock(kind: InsertableBlock): LessonBlock {
       return { kind: 'interval', root: C_MAJOR.tonic, interval: 'P5' }
     case 'voicings':
       return { kind: 'voicings', voicings: [{ symbol: 'C', hands: 'C3 G3 | E4 G4' }] }
+    case 'variants':
+      // Two versions of one row of chords, each named on its chip; the editor writes them over.
+      return {
+        kind: 'variants',
+        variants: [
+          {
+            label: { en: 'Version 1', ru: 'Вариант 1' },
+            caption: blank,
+            example: { kind: 'chords', symbols: ['C', 'F', 'G'] },
+          },
+          {
+            label: { en: 'Version 2', ru: 'Вариант 2' },
+            caption: blank,
+            example: { kind: 'chords', symbols: ['C', 'Am', 'F', 'G'] },
+          },
+        ],
+      }
     case 'question':
       return { kind: 'question', ask: blank, answer: { chord: 'C' } }
     case 'link':

@@ -16,8 +16,12 @@ const SIZE = {
   person: 'size-12 text-[1.1875rem] font-bold',
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
-  /** The Profile's and the Account's, at their top. */
-  hero: 'size-20 text-4xl',
+  /** The Profile's, at its top (HERO_P). */
+  hero: 'size-19 text-[2.125rem]',
+  /** The Account's, at its top (ACC_IN's AVA 64). */
+  account: 'size-16 text-[1.75rem]',
+  /** The laptop Settings dialog's account row (LACCT's AVA 36). */
+  nav: 'size-9 text-base',
 } as const
 
 /** Whether a picture is an uploaded one's address, which an image shows. */

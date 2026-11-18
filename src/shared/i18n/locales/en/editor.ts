@@ -744,6 +744,7 @@ export const editor = {
   publishPage: {
     title: 'Publish',
     open: 'Publish…',
+    status: 'Status',
     why: 'Why publish here?',
     whyBody:
       'Publishing gives every learner this version the next time the app starts. Each version published is kept, so you can restore an earlier one.',
@@ -786,6 +787,9 @@ export const editor = {
     notSaved: 'Not saved. It will retry with your next change.',
     publish: 'Publish',
     publishMore: 'Publish…',
+    publishedWord: 'Published',
+    publishChanges: 'Publish changes',
+    unpublishedChange: 'The earlier version is published again. Your changes are kept in Versions.',
     publishTitle: 'Publish {{title}}?',
     publishBody:
       'All learners will receive this version the next time they open the app. The previous version is kept and can be restored.',

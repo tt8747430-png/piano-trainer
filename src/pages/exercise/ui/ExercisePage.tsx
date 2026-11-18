@@ -164,7 +164,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         </div>
         <div className="mt-2 flex flex-col gap-6 lg:mt-0">
           <section className="flex min-w-0 flex-col gap-2">
-            <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+            <h3 className="font-sans text-sm font-semibold text-foreground">
               {t('practice:exercisePage.options')}
             </h3>
             <GroupRows surface="sheet">
@@ -274,7 +274,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             </GroupRows>
           </section>
           <section className="flex flex-col gap-2">
-            <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+            <h3 className="font-sans text-sm font-semibold text-foreground">
               {t('practice:exercisePage.how')}
             </h3>
             <p className="card px-4 py-3.5 text-[0.9375rem] leading-[1.45] text-pretty">

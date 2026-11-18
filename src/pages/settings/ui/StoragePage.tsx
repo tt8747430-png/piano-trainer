@@ -7,12 +7,14 @@ import { resetProgress } from '@/features/reset-progress'
 import { ConfirmDialog, DangerGroup, DangerRow, SettingsGroup as Group } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { usePianoSound } from '../model/use-piano-sound'
-import { PianoSoundGroup } from './PianoSoundGroup'
+import { PianoSoundGroup, RemovePianoRow } from './PianoSoundGroup'
 
 /**
- * Settings › Storage and backup (A15, the board's P_STORAGE): what this device keeps (and keeping it
- * safe), the piano's sound kept for offline, Backup, and resetting the progress; nothing of the
- * account: its Sync is on the Account.
+ * Settings › Storage and backup (A15, the board's P_STORAGE; owner, 2026-11-18, "refactor all the
+ * settings"): what this device keeps (and keeping it safe), then the backup, the way to keep it
+ * safe, then the piano's sound kept for offline; the two losses together at the foot and apart,
+ * Remove downloaded piano and Reset progress, each asked first. Nothing of the account: its Sync is
+ * on the Account.
  */
 export function StoragePage() {
   const { t } = useTranslation('settings')
@@ -22,11 +24,12 @@ export function StoragePage() {
   return (
     <SettingsScreen title={t('pages.storage')}>
       <KeepOnDeviceFields piano={piano.sound.state === 'known' ? piano.sound.kept : 0} />
-      <PianoSoundGroup />
-      <Group flush title={t('backup.label')} info={t('backup.says')}>
+      <Group flush title={t('backup.label')}>
         <BackupFields />
       </Group>
-      <DangerGroup footnote={t('progress.body')}>
+      <PianoSoundGroup />
+      <DangerGroup className="mt-4">
+        <RemovePianoRow />
         <DangerRow title={t('progress.reset')} onClick={() => setConfirming(true)} />
         <ConfirmDialog
           open={confirming}

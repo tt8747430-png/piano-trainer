@@ -68,8 +68,9 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
     <div
       data-slot="alert-dialog-footer"
       className={cn(
-        // Cancel and the act, two equal 44 pills side by side, no band under them.
-        'mt-2 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold *:data-[variant=destructive]:border-0 *:data-[variant=destructive]:bg-destructive *:data-[variant=destructive]:text-destructive-foreground *:data-[variant=destructive]:hover:brightness-95',
+        // Cancel and the act, two equal 44 pills side by side, no band under them; the act crimson
+        // for a loss, ink for one that only reaches other people (Publish), as the canvas's ASK.
+        'mt-2 flex gap-2 *:h-11 *:min-w-0 *:flex-1 *:rounded-full *:text-base *:font-bold *:data-[variant=destructive]:border-0 *:data-[variant=destructive]:bg-destructive *:data-[variant=destructive]:text-destructive-foreground *:data-[variant=destructive]:hover:brightness-95 *:data-[variant=default]:bg-foreground *:data-[variant=default]:text-background',
         className,
       )}
       {...props}

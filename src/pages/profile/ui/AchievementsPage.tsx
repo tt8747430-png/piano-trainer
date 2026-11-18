@@ -92,7 +92,7 @@ export function AchievementPage() {
       <ScreenHeader column title={name} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
-          <MilestoneMark id={achievementId} earned={day !== null} size="hero" />
+          <MilestoneMark earned={day !== null} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
           <p className="text-[0.9375rem] text-muted-foreground">
             {day

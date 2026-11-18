@@ -7,8 +7,22 @@ export const settings = {
     exit: 'Exit',
   },
   title: 'Settings',
-  language: { label: 'Language', en: 'English', ru: 'Русский' },
-  theme: { label: 'Appearance', system: 'Match system', light: 'Light', dark: 'Dark' },
+  // The laptop's Settings dialog (claude.ai's): its close, its search over the places, a sub-page's Back.
+  dialog: {
+    close: 'Close',
+    search: 'Search',
+    searchLabel: 'Search settings',
+    none: 'No settings match',
+    back: 'Back to {{page}}',
+  },
+  language: { label: 'Language', app: 'App language', en: 'English', ru: 'Русский' },
+  theme: {
+    label: 'Appearance',
+    row: 'Theme',
+    system: 'Match system',
+    light: 'Light',
+    dark: 'Dark',
+  },
   // Settings' groups (R32), in the list's order.
   groups: {
     general: { label: 'App' },
@@ -19,6 +33,7 @@ export const settings = {
   // Settings' pages, named for what they set (R32).
   pages: {
     general: 'General',
+    appearance: 'Appearance',
     storage: 'Storage and backup',
     connectPiano: 'MIDI devices',
     computerKeys: 'Computer keyboard',
@@ -72,7 +87,6 @@ export const settings = {
   },
   backup: {
     label: 'Backup',
-    says: 'Your songs, playlists, takes, patterns, progress and settings live on this device only. Save them to a file to keep them safe or to move them to another device.',
     save: 'Save a backup',
     restore: 'Restore from a file',
     notBackup: 'This file is not a Piano Trainer backup.',
@@ -94,9 +108,7 @@ export const settings = {
     selectToolbar: 'Selection toolbar',
     swipeActions: 'Swipe actions',
     songs: 'Songs and playlists',
-    selectFootnote: 'Up to four actions appear in the toolbar when you select songs or playlists.',
-    swipeFootnote:
-      'Up to two actions on each side. An archived or deleted song comes back with Undo in the message.',
+    swipeInfo: 'Archive and Delete happen at once, with Undo in the toast.',
     songRows: 'Songs',
     folderRows: 'Playlists',
     swipeRight: 'Leading swipe (right)',
@@ -137,6 +149,7 @@ export const settings = {
   sync: {
     label: 'Sync',
     now: 'Sync now',
+    pending: 'Changes pending',
     state: {
       idle: 'Up to date',
       syncing: 'Syncing…',
@@ -186,6 +199,19 @@ export const settings = {
     signOutInfo: 'Your songs and progress stay on this device and sync again when you sign in.',
     signOutCancel: 'Cancel',
     signedOut: 'You are not signed in.',
+    signedOutWhy:
+      'Your songs and progress stay on this device. Sign in to sync them across your devices.',
+    // Account's groups (Apple's Sign-In & Security): who it is, then how they sign in.
+    profile: 'Profile',
+    editProfile: 'Edit profile',
+    privacy: 'Privacy',
+    security: 'Sign-in and security',
+    // Email, its own page under Sign-in and security.
+    emailPage: {
+      current: 'Current email',
+      send: 'Send confirmation link',
+      sent: 'Check your inbox: the new address takes effect once you confirm it.',
+    },
     signIn: 'Sign in',
     create: 'Create account',
     // The role an editor or administrator holds, and their preview (R32).
@@ -200,7 +226,6 @@ export const settings = {
       cancel: 'Keep account',
       confirm: 'Delete',
       scheduled: 'Your account will be deleted on {{date}}. Sign in before then to keep it.',
-      footnote: 'Your account and synced data are deleted after 30 days.',
     },
   },
   // Signing in to an account that is to be deleted.

@@ -3,9 +3,10 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { badgesOf, type Badge } from '@/entities/progress'
 import { useProfileFigures } from '@/features/track-achievements'
-import { ProgressBar, RowLink, SettingsGroup } from '@/shared/ui'
+import { ProgressBar, RowLink } from '@/shared/ui'
 import { useBadgeStanding } from '../model/use-badge-standing'
 import { BadgeMark } from './marks'
+import { ProfileList } from './ProfileList'
 import { ProfileSection } from './ProfileSection'
 
 /** The badge as a row: its picture, its name, where the learner stands; a link to its page. */
@@ -14,7 +15,7 @@ export function BadgeRow({ badge }: { badge: Badge }) {
   const standing = useBadgeStanding()
   return (
     <RowLink
-      mark={<BadgeMark id={badge.id} tier={badge.tier} />}
+      mark={<BadgeMark tier={badge.tier} />}
       title={t(`profile.badges.names.${badge.id}`)}
       detail={standing(badge)}
       render={<Link to="/profile/badges/$badgeId" params={{ badgeId: badge.id }} />}
@@ -42,11 +43,11 @@ export function BadgesPreview() {
   )
   return (
     <ProfileSection title={t('profile.badges.title')} to="/profile/badges">
-      <SettingsGroup flush>
+      <ProfileList>
         {badges.slice(0, 3).map((badge) => (
           <BadgeRow key={badge.id} badge={badge} />
         ))}
-      </SettingsGroup>
+      </ProfileList>
     </ProfileSection>
   )
 }

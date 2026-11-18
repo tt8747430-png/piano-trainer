@@ -50,12 +50,14 @@ export function Toaster() {
   return (
     <ToastProvider toastManager={toast}>
       <ToastPortal>
-        {/* Its own placement, not the primitive's corner: centred over the foot, beside the
-            sidebar on a laptop; above every sheet and dialog (z-50), so an Undo said from one is seen. */}
+        {/* Its own placement, not the primitive's corner: centred over the foot, clear of the tab bar
+            and what floats on a phone; on a laptop centred on its pane, 460 wide and 28 up, or over a
+            floating bar (a lesson's) 116 up (`toast-foot`); above every sheet and dialog (z-50), so an
+            Undo said from one is seen. */}
         <BaseToast.Viewport
           data-slot="toast-viewport"
           aria-label={t('notifications')}
-          className="pointer-events-none fixed inset-x-0 bottom-foot-3 z-60 mx-auto w-[min(26rem,calc(100vw-2*var(--gutter)))] print:hidden lg:left-sidebar"
+          className="pointer-events-none fixed inset-x-0 toast-foot z-60 mx-auto w-[min(26rem,calc(100vw-2*var(--gutter)))] print:hidden lg:left-sidebar lg:w-115"
         >
           <Toasts />
         </BaseToast.Viewport>

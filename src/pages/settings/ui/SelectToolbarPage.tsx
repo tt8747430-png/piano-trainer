@@ -17,7 +17,7 @@ export function SelectToolbarPage() {
   return (
     <SettingsScreen title={t('pages.selectionToolbar')}>
       <BarPreview bar={bar} />
-      <SettingsGroup bare title={t('bars.songs')} footnote={t('bars.selectFootnote')}>
+      <SettingsGroup bare title={t('bars.songs')}>
         <BarEditor
           surface="select.songs"
           bar={bar}

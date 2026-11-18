@@ -1,8 +1,17 @@
 import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2, Upload } from 'lucide-react'
-import type { ReactElement } from 'react'
+import { useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { ActionMenu, ButtonLink, RowButton, type MenuAction } from '@/shared/ui'
+import {
+  ActionMenu,
+  ActionRow,
+  ButtonLink,
+  GroupRow,
+  RowButton,
+  say,
+  SettingsGroup,
+  type MenuAction,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ContentDraft } from '../model/use-content-draft'
 import { useDraftAsk } from '../model/use-draft-ask'
@@ -145,6 +154,128 @@ export function DraftActions({
           {t('original.publish')}
         </Button>
       )}
+      <DraftDialogs
+        ask={ask}
+        draft={draft}
+        title={title}
+        unreadable={unreadable}
+        onReset={onReset}
+      />
+    </>
+  )
+}
+
+/**
+ * Publishing in one tap (owner, 2026-11-17: "i dont like this publish button and why it opens a third
+ * … drawer"): published at once, its toast saying learners receive it, with Undo where an earlier
+ * version stands to restore (the version before published again, the changes kept among the
+ * Versions). The bar's Publish and Settings' Publish changes both act through it.
+ */
+export function usePublishNow(draft: DraftActing, unreadable: string, onReset: () => void) {
+  const { t } = useTranslation('editor')
+  const [busy, setBusy] = useState(false)
+  const failed = (reason: string) =>
+    say(
+      reason === 'unreadable'
+        ? unreadable
+        : reason === 'offline'
+          ? t('original.actionOffline')
+          : t('original.actionFailed'),
+    )
+  const publish = async () => {
+    setBusy(true)
+    // The version learners have now, to publish again should the editor undo.
+    const kept = await draft.versions()
+    const before = kept.ok ? kept.value[0] : undefined
+    const result = await draft.publish()
+    setBusy(false)
+    if (!result.ok) return failed(result.reason)
+    say(
+      t('original.published'),
+      before
+        ? {
+            label: t('undo'),
+            onClick: () =>
+              void draft.restore(before.version).then((restored) => {
+                if (!restored.ok) return failed(restored.reason)
+                say(t('original.unpublishedChange'))
+                onReset()
+              }),
+          }
+        : undefined,
+    )
+  }
+  return { busy, publish }
+}
+
+/**
+ * Publish in Edit's bar (the kit's EDITR): the glass word just before Done; a tap publishes
+ * (`usePublishNow`). It reads Published, and waits, until the next change.
+ */
+export function PublishWord({
+  draft,
+  unreadable,
+  onReset,
+}: {
+  draft: DraftActing
+  /** What is said where a publish is refused for a draft that does not read as the item. */
+  unreadable: string
+  /** Opens the editor again on the item as published, after Undo. */
+  onReset: () => void
+}) {
+  const { t } = useTranslation('editor')
+  const { busy, publish } = usePublishNow(draft, unreadable, onReset)
+  return (
+    <Button
+      variant="bar"
+      className="shrink-0 px-4"
+      disabled={!draft.drafted || busy}
+      onClick={() => void publish()}
+    >
+      {t(draft.drafted ? 'original.publish' : 'original.publishedWord')}
+    </Button>
+  )
+}
+
+/**
+ * An item's Publishing in its Settings (owner, 2026-11-18, the board's THINGSET): where it stands
+ * (`status`), Versions (to restore one), and only while there are changes, Publish changes (one
+ * tap) and Discard changes (asked first).
+ */
+export function DraftPublishing({
+  draft,
+  title,
+  status,
+  unreadable,
+  onReset,
+}: {
+  draft: DraftActing
+  title: string
+  status: string | undefined
+  unreadable: string
+  onReset: () => void
+}) {
+  const { t } = useTranslation('editor')
+  const ask = useDraftAsk()
+  const { busy, publish } = usePublishNow(draft, unreadable, onReset)
+  return (
+    <>
+      <SettingsGroup flush title={t('original.draft')}>
+        <GroupRow label={t('publishPage.status')}>
+          <span className="text-muted-foreground">{status}</span>
+        </GroupRow>
+        <RowButton title={t('original.versions')} onClick={() => ask.setAsked('versions')} />
+      </SettingsGroup>
+      {draft.drafted ? (
+        <SettingsGroup flush>
+          <ActionRow
+            title={t('original.publishChanges')}
+            disabled={busy}
+            onClick={() => void publish()}
+          />
+          <ActionRow title={t('original.discard')} danger onClick={() => ask.setAsked('discard')} />
+        </SettingsGroup>
+      ) : null}
       <DraftDialogs
         ask={ask}
         draft={draft}

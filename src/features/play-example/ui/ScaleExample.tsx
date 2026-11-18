@@ -37,9 +37,9 @@ export function ScaleExample({
   const example = useMemo(() => scaleExample(tonic, kind), [tonic, kind])
   const score = useMemo(() => notate(example.music), [example])
   return (
-    <figure aria-labelledby={captionId} className="flex flex-col gap-3 card p-4">
-      <div className="flex items-center justify-between gap-3">
-        <figcaption id={captionId} className="font-display text-xl font-semibold">
+    <figure aria-labelledby={captionId} className="flex flex-col gap-2">
+      <div className="flex min-h-11 items-center justify-between gap-2">
+        <figcaption id={captionId} className="font-sans text-[1.0625rem] font-bold">
           {scaleName(tonic, kind)}
         </figcaption>
         <div className="flex items-center gap-1">

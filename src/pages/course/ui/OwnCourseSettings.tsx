@@ -15,8 +15,9 @@ import {
   restoreOwnCourse,
 } from '@/features/manage-own-lessons'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { BackButton, say, ScreenHeader } from '@/shared/ui'
+import { BackButton, say, ScreenHeader, ThingHead } from '@/shared/ui'
 import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
+import { CourseMark } from './CourseMark'
 
 /**
  * A course of the learner's own's Settings (R30-5), as a course's: The course, Rename and Duplicate
@@ -28,10 +29,14 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
   const store = useOwnLessonsStoreApi()
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{course.title}</p>
+    <div className="flex flex-col gap-2 pb-8">
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
+        <ThingHead
+          mark={<CourseMark />}
+          name={course.title}
+          line={t('settings.courseLine', { count: lessons.length })}
+        />
         <OwnItemRows
           title={course.title}
           words={{ group: t('settings.course'), rename: t('own.renameCourse') }}

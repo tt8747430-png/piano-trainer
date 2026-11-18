@@ -1,4 +1,4 @@
-import { Folder, Music } from 'lucide-react'
+import { Ban, Folder, Music, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,6 +25,9 @@ type Kind = keyof typeof KINDS
 /** A slot's value: an act, or none. */
 type Slot = BarAct | 'none'
 
+/** Each slot value's glyph: an act's the toolbar's, No action the ban sign (the board's ACTIC_ALL). */
+const SLOT_ICONS: Readonly<Record<Slot, LucideIcon>> = { ...BAR_ICONS, none: Ban }
+
 /** A side's acts with one slot changed: a slot left empty lets the one after it move up. */
 const withSlot = (bar: readonly BarAct[], index: 0 | 1, next: Slot): BarAct[] => {
   const slots: (BarAct | undefined)[] = [bar[0], bar[1]]
@@ -33,21 +36,17 @@ const withSlot = (bar: readonly BarAct[], index: 0 | 1, next: Slot): BarAct[] =>
 }
 
 /** One side of a swipe: its First and Second, each a picker of the side's acts or none. */
-function Side({
-  surface,
-  title,
-  footnote,
-}: {
-  surface: BarSurface
-  title: string
-  footnote?: string
-}) {
+function Side({ surface, title, info }: { surface: BarSurface; title: string; info?: string }) {
   const { t } = useTranslation('settings')
   const settings = useSettingsStoreApi()
   const bar = useSettings((state) => barOf(state.bars, surface))
   const name = (slot: Slot) => (slot === 'none' ? t('bars.noAction') : t(`bars.act.${slot}`))
+  const glyph = (slot: Slot, className: string) => {
+    const Icon = SLOT_ICONS[slot]
+    return <Icon aria-hidden className={className} />
+  }
   return (
-    <SettingsGroup bare title={title} footnote={footnote}>
+    <SettingsGroup bare title={title} info={info}>
       <GroupRows surface="sheet" label={title}>
         {([0, 1] as const).map((index) => {
           const value: Slot = bar[index] ?? 'none'
@@ -59,13 +58,19 @@ function Side({
               label={`${title}: ${label}`}
               value={value}
               options={[
-                { value: 'none' as const, label: name('none') },
+                { value: 'none' as const, label: name('none'), icon: glyph('none', 'size-5') },
                 ...BAR_CATALOG[surface]
                   .filter((act) => act !== other)
-                  .map((act) => ({ value: act, label: name(act) })),
+                  .map((act) => ({ value: act, label: name(act), icon: glyph(act, 'size-5') })),
               ]}
               onChange={(next) => setBar(settings, surface, withSlot(bar, index, next))}
-              trigger={<GroupLink label={label} value={name(value)} />}
+              trigger={
+                <GroupLink
+                  label={label}
+                  value={name(value)}
+                  mark={glyph(value, 'size-4.5 shrink-0')}
+                />
+              }
             />
           )
         })}
@@ -94,8 +99,8 @@ function SwipePreview({ kind }: { kind: Kind }) {
       )}
     >
       {first && Icon ? (
-        <span className="absolute inset-y-0 start-0 flex w-24 flex-col items-center justify-center gap-0.5 px-1 text-center text-sm font-bold text-white">
-          <Icon aria-hidden className="size-4.5" />
+        <span className="absolute inset-y-0 start-0 flex w-24 flex-col items-center justify-center gap-1 px-1 text-center text-[0.8125rem] font-bold text-white">
+          <Icon aria-hidden className="size-5" />
           {t(`bars.act.${first}`)}
         </span>
       ) : null}
@@ -121,8 +126,8 @@ function SwipePreview({ kind }: { kind: Kind }) {
 /**
  * Settings › Library › Swipe actions (the board's P_SWIPE; iOS Mail's Swipe Options): Songs or
  * Folders, the row as its leading swipe opens it, then each side's First and Second, each picked
- * from the side's acts or No action. An archived or deleted song comes back with Undo, as the
- * footnote says.
+ * from the side's acts, each with its glyph, or No action (the ban sign). Archive and Delete happen
+ * at once with Undo, as the trailing side's ⓘ says.
  */
 export function SwipeActionsPage() {
   const { t } = useTranslation('settings')
@@ -144,7 +149,7 @@ export function SwipeActionsPage() {
         key={`${kind}-left`}
         surface={KINDS[kind].left}
         title={t('bars.swipeLeft')}
-        footnote={t('bars.swipeFootnote')}
+        info={t('bars.swipeInfo')}
       />
     </SettingsScreen>
   )

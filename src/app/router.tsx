@@ -28,6 +28,7 @@ import { scaleHasChords } from '@/shared/lib/music'
 import { AppShell } from './AppShell'
 import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
+import { opensAsDialog } from './settings-dialog/background'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import { callbackSearch } from './routes/account-search'
@@ -189,6 +190,7 @@ const yoursRoute = createRoute({
 const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
 // Administration (ADR 0116, R32): an administrator's sections, each a page of Settings; on a phone
@@ -196,15 +198,17 @@ const settingsRoute = createRoute({
 const adminRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/admin',
+  ...opensAsDialog,
   component: lazyRouteComponent(adminScreens, 'AdminPage'),
 })
 const adminSectionRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/admin/$section',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
+  beforeLoad: async ({ params, location }) => {
     const { isAdminSection } = await adminScreens()
     if (!isAdminSection(params.section)) throw notFound()
+    opensAsDialog.beforeLoad({ location })
   },
   component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
 })
@@ -272,22 +276,33 @@ const notificationsRoute = createRoute({
 const generalRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/general',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
 // The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
+// Appearance, its own place (Apple's Display & Brightness): the theme.
+const appearanceRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/appearance',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'AppearancePage'),
+})
 const selectToolbarRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/select-toolbar',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SelectToolbarPage'),
 })
 const swipeActionsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/swipe-actions',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'SwipeActionsPage'),
 })
 const storageRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/storage',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'StoragePage'),
 })
 // The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
@@ -304,46 +319,61 @@ const termsRoute = createRoute({
 const accountSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'AccountSettingsPage'),
 })
 // The account's own pages (B1): Edit profile, Change password, and Privacy.
 const editProfileRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account/profile',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'EditProfilePage'),
+})
+// Email, its one home under Sign-in and security (Apple's Sign-In & Security › Email).
+const emailRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account/email',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'EmailPage'),
 })
 const changePasswordRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account/password',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'ChangePasswordPage'),
 })
 const profilePrivacyRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/privacy',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'ProfilePrivacyPage'),
 })
 // How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/how-to-use',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
 // Report a problem (R32): Settings › Support's page, sent with the app's error reports.
 const feedbackRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/feedback',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'FeedbackPage'),
 })
 // About (R29 B9): the version, the build, the licence and the credits, from Settings' Help.
 const aboutRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/about',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'AboutPage'),
 })
 // Connect a piano (ADR 0034): MIDI input, output, devices and playing, and its MIDI log under it.
 const midiSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
 })
 // Each Practice page's Settings (A24, R18): how it sounds and looks every time, reached from the
@@ -375,12 +405,14 @@ const chordFinderSettingsRoute = createRoute({
 const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano/log',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
 })
 // Calibrate timing (R34): the piano's lateness, tapped with a click, taken off every take.
 const timingRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/connect-piano/timing',
+  ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'TimingCalibrationPage'),
 })
 // The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
@@ -872,28 +904,6 @@ const lessonSettingsRoute = createRoute({
   beforeLoad: ({ params, context }) => findLesson(context, params.lessonId),
   component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
 })
-// An item's Publish page (R29 B6): an editor's, from its Settings' Publish….
-const lessonPublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/lessons/$lessonId/publish',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params, context }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', params.lessonId)
-  },
-  component: lazyRouteComponent(learnScreens, 'LessonPublishPage'),
-})
-const coursePublishRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/$courseId/publish',
-  notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { courseById } = await learnScreens()
-    if (!courseById(params.courseId)) throw notFound()
-  },
-  component: lazyRouteComponent(learnScreens, 'CoursePublishPage'),
-})
 const courseSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/settings',
@@ -1096,6 +1106,7 @@ const routeTree = rootRoute.addChildren([
     adminSectionRoute,
     settingsRoute,
     generalRoute,
+    appearanceRoute,
     selectToolbarRoute,
     swipeActionsRoute,
     storageRoute,
@@ -1104,6 +1115,7 @@ const routeTree = rootRoute.addChildren([
     accountSettingsRoute,
     editProfileRoute,
     changePasswordRoute,
+    emailRoute,
     profilePrivacyRoute,
     howToUseRoute,
     feedbackRoute,
@@ -1158,8 +1170,6 @@ const routeTree = rootRoute.addChildren([
     courseLessonRoute,
     lessonSettingsRoute,
     courseSettingsRoute,
-    lessonPublishRoute,
-    coursePublishRoute,
     courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,

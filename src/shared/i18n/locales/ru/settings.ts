@@ -8,8 +8,21 @@ export const settings: LocaleResources['settings'] = {
     exit: 'Выйти',
   },
   title: 'Настройки',
-  language: { label: 'Язык', en: 'English', ru: 'Русский' },
-  theme: { label: 'Оформление', system: 'Как в системе', light: 'Светлое', dark: 'Тёмное' },
+  dialog: {
+    close: 'Закрыть',
+    search: 'Поиск',
+    searchLabel: 'Поиск по настройкам',
+    none: 'Таких настроек нет',
+    back: 'Назад: {{page}}',
+  },
+  language: { label: 'Язык', app: 'Язык приложения', en: 'English', ru: 'Русский' },
+  theme: {
+    label: 'Оформление',
+    row: 'Тема',
+    system: 'Как в системе',
+    light: 'Светлое',
+    dark: 'Тёмное',
+  },
   groups: {
     general: { label: 'Приложение' },
     piano: { label: 'Фортепиано' },
@@ -18,6 +31,7 @@ export const settings: LocaleResources['settings'] = {
   },
   pages: {
     general: 'Основные',
+    appearance: 'Оформление',
     storage: 'Хранилище и копии',
     connectPiano: 'MIDI-устройства',
     computerKeys: 'Клавиатура компьютера',
@@ -68,7 +82,6 @@ export const settings: LocaleResources['settings'] = {
   },
   backup: {
     label: 'Резервная копия',
-    says: 'Ваши песни, плейлисты, дубли, фактуры, прогресс и настройки хранятся только на этом устройстве. Сохраните их в файл, чтобы не потерять или перенести на другое устройство.',
     save: 'Сохранить резервную копию',
     restore: 'Восстановить из файла',
     notBackup: 'Этот файл не является резервной копией Piano Trainer.',
@@ -89,9 +102,7 @@ export const settings: LocaleResources['settings'] = {
     selectToolbar: 'Панель выделения',
     swipeActions: 'Действия смахивания',
     songs: 'Песни и плейлисты',
-    selectFootnote: 'При выделении песен или плейлистов на панели появляется до четырёх действий.',
-    swipeFootnote:
-      'До двух действий с каждой стороны. Песню, убранную в архив или удалённую, вернёт «Отменить» в сообщении.',
+    swipeInfo: 'Архив и удаление происходят сразу, с «Отменить» в сообщении.',
     songRows: 'Песни',
     folderRows: 'Плейлисты',
     swipeRight: 'Смахивание вправо',
@@ -132,6 +143,7 @@ export const settings: LocaleResources['settings'] = {
   sync: {
     label: 'Синхронизация',
     now: 'Синхронизировать',
+    pending: 'Изменений в очереди',
     state: {
       idle: 'Синхронизировано',
       syncing: 'Синхронизация…',
@@ -182,6 +194,17 @@ export const settings: LocaleResources['settings'] = {
       'Песни и прогресс останутся на этом устройстве и снова синхронизируются после входа.',
     signOutCancel: 'Отмена',
     signedOut: 'Вы не вошли в аккаунт.',
+    signedOutWhy:
+      'Ваши песни и прогресс хранятся на этом устройстве. Войдите, чтобы синхронизировать их между устройствами.',
+    profile: 'Профиль',
+    editProfile: 'Изменить профиль',
+    privacy: 'Конфиденциальность',
+    security: 'Вход и безопасность',
+    emailPage: {
+      current: 'Текущая почта',
+      send: 'Отправить ссылку для подтверждения',
+      sent: 'Проверьте почту: новый адрес начнёт действовать, когда вы его подтвердите.',
+    },
     signIn: 'Войти',
     create: 'Создать аккаунт',
     editorial: 'Редакторский доступ',
@@ -195,7 +218,6 @@ export const settings: LocaleResources['settings'] = {
       cancel: 'Оставить аккаунт',
       confirm: 'Удалить',
       scheduled: 'Аккаунт будет удалён {{date}}. Войдите до этого срока, чтобы сохранить его.',
-      footnote: 'Аккаунт и синхронизированные данные удаляются через 30 дней.',
     },
   },
   deletionGate: {

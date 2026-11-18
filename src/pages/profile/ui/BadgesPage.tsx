@@ -52,7 +52,7 @@ export function BadgePage() {
       <ScreenHeader column title={name} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
         <section className="flex flex-col items-center gap-2 text-center">
-          <BadgeMark id={id} tier={badge.tier} size="hero" />
+          <BadgeMark tier={badge.tier} size="hero" />
           <p className="font-sans text-[1.625rem]/tight font-bold text-balance">{name}</p>
           <p className="text-[0.9375rem] text-muted-foreground">
             {badge.tier
@@ -91,7 +91,7 @@ export function BadgePage() {
                     i > badge.earned && 'opacity-45',
                   )}
                 >
-                  <BadgeMark id={id} tier={i < badge.earned ? tier : null} size="tier" />
+                  <BadgeMark tier={tier} size="tier" />
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="font-semibold">{t(`profile.badges.tiers.${tier}`)}</span>
                     <span className="text-sm text-pretty text-muted-foreground">
