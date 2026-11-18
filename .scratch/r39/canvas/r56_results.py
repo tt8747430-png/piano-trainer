@@ -197,7 +197,8 @@ print('r56 results ok')
 # Round 41: the Player's runs (walk the chords, a chromatic walk, a progression in 12 keys, an exercise) in the run
 # view's parts, where a wireframe stood (a staff with no clef and grey dots, keys with no black keys in a card): the
 # chords engraved on the treble staff, the one piano edge to edge at the foot with the first chord's tones in their
-# paints, the transport centred under the staff; Setup opens the run's choices, as before.
+# paints, the transport centred under the staff; Setup opens the run's choices, as before. Round 68: the music stands
+# on the paper as the chord run's does (round 63), never in a lone card, at its 1.35 on a laptop.
 PV_WALK = [[('C', 4), ('E', 4), ('G', 4)], [('D', 4), ('F', 4), ('A', 4)], [('E', 4), ('G', 4), ('B', 4)], [('F', 4), ('A', 4), ('C', 5)], [('G', 4), ('B', 4), ('D', 5)], [('A', 4), ('C', 5), ('E', 5)], [('B', 4), ('D', 5), ('F', 5)], [('C', 5), ('E', 5), ('G', 5)]]
 _F, _S = '♭', '♯'
 PV_MUSIC = {'walk': PV_WALK,
@@ -208,18 +209,16 @@ PV_MUSIC = {'walk': PV_WALK,
 def PV_LINE(n, cw, v='walk', start=0, last=True):
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
     return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
-def PV_STAFF(n, cw, v='walk'):
-    return CARD(PV_LINE(n, cw, v), '12px 8px')
 def PV_RUN(lap, v):
     setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
     transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
                  f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: min(1180px, 100%); display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>'
                 f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{CARD(PV_LINE(4, 76, v, 0, False) + '<div style="height: 16px"></div>' + PV_LINE(4, 76, v, 4), '12px 8px')}<div style="flex: 1"></div>'
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}<div style="flex: 1"></div>'
             f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
