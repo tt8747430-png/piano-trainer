@@ -454,6 +454,104 @@ lesson, Continue, a level placement, a practice pace. The source's words, then t
       failure count; a result after practice names the bars to work on as the next step, not as a score lost.
   11. A loss is framed truly as a loss (R38), never softened into a gain; feedback prompts ask in neutral words.
 
+## Type anatomy (Uxcel, "Characters in Typography", sent 2026-11-18)
+
+The source's terms, then what each asks of our two faces (Literata for what is named, Onest for what is read and
+pressed; `DESIGN.md`, Typography). Each rule is a yes-or-no check on a board's shot.
+
+- **X-height:** "the larger the x-height … the more legible the typeface is, even at small font sizes."
+  1. Nothing on a screen is under 12px. 12px is only the Label and Key label, in Onest, never Literata, and never
+     a sentence: a 12px line is at most a few words (a bar number, a degree, "6 of 13").
+  2. Literata sets nothing under 16px (the Lines of a progression, a chord in a row) and nothing that is read as a
+     sentence; a sentence is Onest Body.
+- **Cap height and the baseline:** "the invisible horizontal line that all letters sit on … plays an important role
+  in measuring the vertical distance between text and an element."
+  3. Gaps around text are judged from the ink, not the line box: a heading's space above and below is measured from
+     its cap height and its baseline (the lines tool's `inkBox` does this). A gap that is on the scale box to box but
+     off it ink to ink is fixed by the ink.
+  4. Text beside an icon or a control sits on a shared line: an icon centred on the x-height of a one-line label
+     (Lucide at 20 beside 16px text); a number beside a word shares its baseline (`align-items: baseline` in a value
+     row, never `center` when the two are different sizes).
+- **Ascender and descender:** "if descenders are too long they can intersect with the ascenders of letters on the
+  next line … fix this by … adjusting line spacing."
+  5. A title that wraps to two lines keeps its token's line height (Title 1 1.2, Large title 1.15, Display 1.1); a
+     board never sets a two-line title tighter than 1.1. Check every wrapped title in the shot: no g, p, y touching
+     the b, d, h, k, l below it.
+  6. Nothing cuts a descender: a clamped or truncated line keeps its full line box (no `height` equal to the font
+     size, no `overflow: hidden` on a line-height under 1.2).
+- **Serif:** serifs "create a feeling of sophistication, trust, and world-class quality."
+  7. The serif is the name of the thing (a song, a chord, a lesson, a screen's title: the Serif Names Rule); it never
+     sets a button, a tab, a chip, a field or a key label. One serif and one sans on every board: no third family
+     (Noto Music only for a music sign that stands alone).
+- **Kerning:** "certain letter combinations (… W, Y, V, or T) have large gaps"; "kerning that looks fine at small
+  sizes … becomes unbalanced … when enlarged for headlines."
+  8. Kerning is the font's: `font-kerning: normal` everywhere (the default); no board turns it off.
+  9. At 34px and above (a screen's title, the Chord at 72), look at the shot for an open pair: a T or V beside a
+     lowercase letter, and the accidental after a root (C♯, E♭). A gap wider than the stems is a fault in Text
+     Accidentals' spacing, fixed in that font's metrics, never by a space or a margin in the board.
+- **Tracking:** "commonly applied to headlines … to diminish weird gaps"; "white text on a black background is …
+  more legible when it has increased tracking."
+  10. Three values only: titles 34px and above at -0.01em (the Chord's figures -0.03em); small capitals (a CAPS
+      heading, an EXERCISE-style eyebrow) at +0.04em; everything else 0. A fourth value on a board is a drift and is
+      changed to one of the three.
+  11. Nothing set in capitals is longer than four words; capitals are never set over a chord symbol (`seven-questions`
+      5).
+  12. By Night, light text on the dark page stays at these values; legibility by Night comes from the ink's contrast
+      (4.5:1) and weight, not from wider tracking.
+- **Weight:** "a common typeface may have 3 to 6 weights"; "when using very light … or very heavy weights … use
+  larger font sizes."
+  13. Four weights, each with one job: 400 for reading, 500 for a label, 600 for a name, a control and a title, 700
+      only for a Key label. Nothing at 300 or below, nothing at 800 or above; no synthesised bold (Neither face fakes
+      a bold).
+  14. Emphasis inside a sentence is 600, never italic, colour or underline (an underline is a link's alone).
+- **Tabular and proportional figures:** tabular "where values change constantly and may look offset"; proportional
+  "for numbers inside of headlines, subheads, or any other copy where it should blend into text."
+  15. Tabular (`font-variant-numeric: tabular-nums`): every number that changes in place (tempo, a timer, a bar, a
+      count that ticks, a progress "61%") and every number in a column read down (the levels' "6 of 13", a list's
+      counts, a table).
+  16. Proportional (the default): a number inside a sentence or a title ("Lesson 7 of 13" under a title, "Bar 84 of
+      138" in a sentence that does not tick, "2 more days to the Gold badge").
+  17. Numbers in a column are right-aligned on their last digit, so places line up.
+- **Ligatures:** "standard … exist in order to increase legibility"; "discretionary … serve a decorative function."
+  18. Standard ligatures stay on (the default) in names and prose; discretionary ligatures (`dlig`) are never turned
+      on. Ligatures go off (`font-variant-ligatures: none`) only where letters are read one by one: a code a learner
+      types, a key's name, a field the learner is editing.
+
+## A phone is not a small laptop (Uxcel, "Designing for Mobile Interfaces", sent 2026-11-18)
+
+The source: mobile sessions are "shorter, more frequent", often "while in motion, multitasking"; "users should be
+able to use all essential features regardless of how they hold their device"; "choose appropriate keyboard types …
+to minimize user effort"; gestures have three limits, "discoverability … consistency … accessibility"; "always
+provide visible alternative controls".
+
+1. **Portrait first, every feature on its side.** Every phone board is drawn upright first, and every feature also
+   works at 852×393 (`testing.md`); nothing says "turn your phone". The Player and the score editor on their side
+   keep the transport and the keys; a list on its side is the same list, wider.
+2. **Short sessions start where they ended.** A place opens on what the learner last did (Continue on Learn, the last
+   song on top of Songs, the last tool first in Practice); a page left mid-task (an edit, a take, a lesson's section)
+   comes back where it was, never at its top.
+3. **One hand, thumb's reach.** The one act of a phone screen (the honey control, Play, the +) sits in the lower
+   third; the bar at the top holds Back, the title and the gear, nothing pressed often.
+4. **Targets and the space between them.** Every target 44 high; two targets side by side stand at least 8 apart
+   edge to edge, or share one 44 row split by a hairline (a segmented control); a laptop row may go to 40 high
+   (`craft-details`, Hit area), never closer than 4.
+5. **The right keyboard for each field** (each input on a board carries it, so the port does too):
+   - a number (tempo, bars, a time signature's figures): `inputmode="numeric"`, a field of digits only;
+   - a search: `type="search"` and `enterkeyhint="search"`;
+   - an email: `type="email"`, `autocomplete="email"`, `autocapitalize="off"`;
+   - a password: `type="password"`, `autocomplete="current-password"` or `"new-password"`, with the eye that shows it;
+   - a name or a title (a song, a lesson, a folder): `autocapitalize="words"` for a title, `"sentences"` for a
+     description; `enterkeyhint="done"` on the last field of a New sheet;
+   - a link: `type="url"`.
+   Every field accepts paste and dictation; nothing blocks them.
+6. **Every gesture has a visible twin.** A swipe on a row is also in the row's ···; a long press is also a menu item;
+   pinch on the score is also the zoom in its gear; a drag to reorder has its handle. A gesture is a shortcut, never
+   the only way (biases, rule 1).
+7. **Sharp on every screen.** Pictures are SVG (covers, icons, the staff, the keys) or raster at 2× and 3×; sizes in
+   rem so they follow the reader's text size; nothing drawn as a bitmap of text.
+8. **Big decisions work on the phone too.** Sign in, Publish, Delete account, Empty Trash and sharing with people
+   are complete on a phone, with the same words and the same question as on a laptop; nothing says "use a computer".
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).

@@ -1752,3 +1752,10 @@ are reference only, but progressions are facts.
   last row's chevron on Learn ("Notes from my teacher", 38px under it) and the last Explore card's names on Songs
   (46px). Both columns now end 176 above the screen's foot; a check over every phone board with a + found no other.
   The rule is written beside "Floating things float" in `ui-and-mockups`.
+- **Rules (2026-11-18): Uxcel's "Characters in Typography" and "Designing for Mobile Interfaces"** written into
+  `edge-lines/references/laws.md` as numbered checks: Type anatomy (18: the 12px floor, Literata never under 16 or in
+  a sentence, gaps measured from the ink, two-line titles no tighter than 1.1, three tracking values, four weights,
+  tabular for still numbers and columns, proportional in sentences, ligatures) and A phone is not a small laptop (8:
+  portrait first and every feature on its side, sessions resume, thumb's reach, 8 between targets, the keyboard per
+  field, a visible twin for every gesture, SVG and rem, big decisions complete on a phone). `seven-questions` 3 points
+  to them.
