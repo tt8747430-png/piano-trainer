@@ -345,7 +345,9 @@ another component's job is a finding.
   else and doesn't change the system's state. Plus, links often appear in the text and thus, can be longer."
   14. What changes something (Play, Save, Add, Delete, a toggle, opening a sheet or menu) is a button; what goes to
       another page (See all, a lesson's "After: 6 · Half steps…", Find a song in Explore) is a link: link-coloured text
-      or a row with a chevron ›, never drawn as a filled button. A button never navigates and a link never acts.
+      or a row with a chevron ›. The one exception is the screen's main act when it is the next step
+      itself (Continue, Next lesson, Start): it is the filled honey button though it opens a page. A secondary way to
+      another page is never a filled or tinted button, and a link never acts.
 - **Navigation.** "A product's navigation should be consistent across all pages."
   15. The places' bar (phone tab bar, laptop sidebar) is identical on every board that shows it: same items, order,
       icons, words and current mark.
