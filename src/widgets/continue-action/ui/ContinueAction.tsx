@@ -21,10 +21,9 @@ import {
  * is never honey, so the floating + stays the screen's one honey act. On a laptop (`CONTL`) the card is
  * one row: the words, then the track filling the room to the button with "Lesson 7 of 13" over its
  * right end (goal-gradient). Its next guided song opens on its page. Nothing once everything is
- * learned. Beside the level it is on (`shown`, a level's page), the count and the track leave it to
- * the level's own.
+ * learned.
  */
-export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
+export function ContinueAction() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const id = useId()
@@ -38,7 +37,6 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
   const title = stepTitle(step).primary
   const track = 'course' in next ? next.course : next.journey
   const place = continuePlace(next, learned)
-  const counted = track.id !== shown
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
   const share = progress.total === 0 ? 0 : progress.done / progress.total
@@ -67,21 +65,17 @@ export function ContinueAction({ shown }: { readonly shown?: string } = {}) {
         <h2 id={id} className="font-display text-[1.375rem]/[1.2] font-normal text-balance">
           {title}
         </h2>
-        {counted ? (
-          <span className="flex flex-col gap-2.5 lg:hidden">
-            <span className="text-[0.8125rem]/4 text-muted-foreground tabular-nums">{count}</span>
-            {bar}
-          </span>
-        ) : null}
-      </span>
-      {counted ? (
-        <span className="hidden min-w-40 flex-1 flex-col gap-2 pr-4 pl-8 lg:flex">
-          <span className="self-end text-[0.8125rem]/4 text-muted-foreground tabular-nums">
-            {count}
-          </span>
+        <span className="flex flex-col gap-2.5 lg:hidden">
+          <span className="text-[0.8125rem]/4 text-muted-foreground tabular-nums">{count}</span>
           {bar}
         </span>
-      ) : null}
+      </span>
+      <span className="hidden min-w-40 flex-1 flex-col gap-2 pr-4 pl-8 lg:flex">
+        <span className="self-end text-[0.8125rem]/4 text-muted-foreground tabular-nums">
+          {count}
+        </span>
+        {bar}
+      </span>
       <span
         aria-hidden
         className="grid size-14 shrink-0 place-items-center rounded-pill bg-foreground text-card transition-[filter] duration-200 ease-out group-hover:brightness-125 [&_svg]:size-5.5"
