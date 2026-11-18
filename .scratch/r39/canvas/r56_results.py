@@ -173,12 +173,16 @@ def RS_RUNVIEW(lap):
     staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
-    transport = f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
-    inner = f'{staff}{prog}<div style="flex: 1"></div>{RS_KEYS(170, "kbL") if lap else '<div style="flex: none; margin: 0 -16px">' + RS_KEYS(112) + '</div>'}{transport}'
+    transport = f'<div class="rstr" style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
+    # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
+    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}'
     if lap:
         return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1018px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
                 f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
-    return bar + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>'
+    # a phone on its side: the transport stands left of the centred music, in the band it leaves bare (round 66)
+    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important; position: relative } '
+             '.rsrun .rstr { position: absolute; left: 16px; top: 4px; z-index: 2 } }</style>')
+    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>' + short
 
 
 rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_RESULTS(4, 76, False))
