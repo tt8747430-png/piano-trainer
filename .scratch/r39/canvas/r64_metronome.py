@@ -12,8 +12,7 @@ ME_ROWS = GROUP(('step', 'Time signature', 'meterL', 'mDn', 'mUp'), ('link', 'Su
                 ('link', 'Speed trainer', 'Off', ''), ('link', 'Silent bars', 'Off', ''), bg=SHEET)
 TAPP = (f'<button type="button" aria-label="Tap tempo" style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; '
         f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{HANDI}<span style="font-size: 12px; font-weight: 600">Tap</span></button>')
-STARTP = (f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="pointer-events: auto; flex: none; width: 176px; border: 0; {TINTGRP}; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">'
-          f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><span>{{{{startL}}}}</span></button>')
+STARTP = PLAYCAP('{{startL}}')
 BAR64 = lambda pos: f'<div role="toolbar" aria-label="Tap tempo and start" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{TAPP}{STARTP}</div>'
 ME64 = ME.replace("    return { ...common(st, set), setOn:", """    const states = [['Playing', !!st.playing, { playing: true }], ['40 BPM', bpm === 40, { bpm: 40 }], ['7/4, accents and rests', meter === 7, { meter: 7, lv: ['accent', 'beat', 'silent', 'beat', 'accent', 'beat', 'silent'] }]]
       .map(([l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => set(on ? { playing: false, bpm: null, meter: null, lv: null } : o) }));

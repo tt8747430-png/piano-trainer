@@ -16,8 +16,7 @@ TOP67 = TOP60.replace('Scales and keys</span>', 'Circle of fifths</span>').repla
 WHEEL67 = lambda w, big: (f'<div style="position: relative; flex: none">{CIRCLE67(w)}<div aria-live="polite" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; text-align: center">'
     f'<span style="font-family: {SERIF}; font-size: {big}px; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; color: {INK}; max-width: {round(w * 0.27)}px">{{{{name}}}}</span>'
     f'<span style="font-size: {13 if big < 30 else 15}px; color: {SOFT}">{{{{sub}}}}</span></div></div>')
-PLAY67 = (f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="pointer-events: auto; flex: none; width: 200px; border: 0; {TINTGRP}; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">'
-          f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><span>Play the chords</span></button>')
+PLAY67 = PLAYCAP('Play the chords', 200)
 SCALESI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M3 18h4V14h4v-4h4V6h6"></path></svg>'
 SCALESP = (f'<a href="Scales.dc.html" aria-label="Open in Scales and keys" style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; {GLASSGRP}; color: {INK}; text-decoration: none; '
            f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{SCALESI}<span style="font-size: 12px; font-weight: 600">Scales</span></a>')
