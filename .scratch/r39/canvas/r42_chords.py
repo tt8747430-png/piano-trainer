@@ -974,7 +974,7 @@ for f in ('Chords', 'ChordsLaptop'):
       ':focus-visible { outline: 2px solid #356890; outline-offset: 2px }'
       # tooltips (dashboard video, canvas 99): an icon-only control names itself on a pointer, after a short wait
       '@media (hover: hover) { [data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); z-index: 90;'
-      ' translate: -50% 4px; padding: 4px 8px; border-radius: 8px; background: #332921; color: #FEFDFB; font: 500 12px/16px Onest, system-ui, sans-serif;'
+      ' translate: -50% 4px; padding: 4px 8px; border-radius: 8px; background: #332921; color: #FEFDFB; font: 500 12px/16px "Instrument Sans", -apple-system, "Helvetica Neue", sans-serif;'
       ' white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 120ms ease-out, translate 120ms ease-out }'
       ' [data-tip-up]::after { top: auto; bottom: calc(100% + 8px); translate: -50% -4px }'
       ' [data-tip-start]::after { left: 0; translate: 0 4px } [data-tip-start][data-tip]:hover::after { translate: 0 0 }'

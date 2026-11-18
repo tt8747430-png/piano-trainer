@@ -100,7 +100,7 @@ MENUITEM = lambda lst: (f'<sc-for list="{{{{{lst}}}}}" as="m" hint-placeholder-c
 _FEEDBOX = lambda wide: (f'border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}' if wide else f'background: linear-gradient({LINE}, {LINE}) no-repeat 84px 0 / calc(100% - 84px) 1px')
 FEEDROW = lambda wide: (f'<article style="position: relative; min-width: 0; {_FEEDBOX(wide)}; display: flex; align-items: center; gap: 16px; padding: 12px 4px 12px 12px">'
     + f'<button type="button" onClick="{{{{x.open}}}}" style="flex: 1; min-width: 0; border: 0; padding: 0; background: transparent; font: inherit; color: {INK}; text-align: left; display: flex; align-items: center; gap: 16px">'
-    f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 12px; background: {{{{x.col}}}}; display: flex; align-items: center; justify-content: center; font-family: Literata, Georgia, serif; font-size: {17 if wide else 20}px; font-weight: 600; white-space: nowrap">{{{{x.ch}}}}</span>'
+    f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 12px; background: {{{{x.col}}}}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: {17 if wide else 20}px; font-weight: 600; white-space: nowrap">{{{{x.ch}}}}</span>'
     f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{x.t}}}}</span>'
     + (f'<span style="font-size: 14px; color: {SOFT}">{{{{x.by}}}}</span></span></button>'
        f'<span style="flex: none; width: 128px"><span style="display: inline-flex; height: 28px; align-items: center; padding: 0 10px; border-radius: 8px; background: {{{{x.typeBg}}}}; color: {{{{x.typeFg}}}}; font-size: 13px; font-weight: 600">{{{{x.type}}}}</span></span>'
@@ -118,7 +118,7 @@ _XTH = lambda l: f'<span style="font-size: 13px; font-weight: 600; color: {SOFT}
 XHEAD = f'<div style="{_XCOLS}; padding: 0 8px 0 12px; height: 40px; white-space: nowrap; border-bottom: 1px solid {LINE}">' + ''.join(_XTH(l) for l in ('Title', 'Composer', 'Type', 'Shared by', 'Saves')) + '<span></span></div>'
 XROW = (f'<div style="{_XCOLS}; position: relative; padding: 0 8px 0 12px; min-height: 60px; border-bottom: 1px solid {LINE}">'
         f'<button type="button" onClick="{{{{x.open}}}}" style="min-width: 0; border: 0; padding: 0; background: transparent; font: inherit; color: {INK}; text-align: left; display: flex; align-items: center; gap: 16px">'
-        f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.col}}}}; display: flex; align-items: center; justify-content: center; font-family: Literata, Georgia, serif; font-size: {{{{x.chs}}}}; font-weight: 600; white-space: nowrap">{{{{x.ch}}}}</span>'
+        f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.col}}}}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: {{{{x.chs}}}}; font-weight: 600; white-space: nowrap">{{{{x.ch}}}}</span>'
         f'<span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.t}}}}</span></button>'
         f'<span style="font-size: 15px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.by}}}}</span>'
         f'<span><span style="display: inline-flex; height: 28px; align-items: center; padding: 0 10px; border-radius: 8px; background: {{{{x.typeBg}}}}; color: {{{{x.typeFg}}}}; font-size: 13px; font-weight: 600">{{{{x.type}}}}</span></span>'
@@ -158,9 +158,9 @@ PUBSONG = (f'<div style="display: flex; gap: 16px; align-items: center"><span st
 # toolbar over the music): the pane holds who shared it, the rating, what is said of it, its facts and tags, Add to
 # my library and Report; the music has Play from the start and its tempo over the chart.
 _PBARS = [('Verse', ['G', 'G7', 'C', 'G', 'G', 'Em', 'A7', 'D']), ('Chorus', ['G', 'G7', 'C', 'G', 'Em', 'D7', 'G', 'G'])]
-PUBCHART = ''.join(f'<section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-family: Literata, serif; font-size: 20px; font-weight: 700">{{{{sec{i}}}}} <span style="font-family: Onest, sans-serif; font-size: 14px; font-weight: 400; color: {SOFT}">bars {1 + i * 8}–{8 + i * 8}</span></h2>'
+PUBCHART = ''.join(f'<section style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 20px; font-weight: 700">{{{{sec{i}}}}} <span style="font-family: {FONT}; font-size: 14px; font-weight: 400; color: {SOFT}">bars {1 + i * 8}–{8 + i * 8}</span></h2>'
                    f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-                   + ''.join(f'<button type="button" style="height: 64px; border: 0; border-left: {"3px solid " + INK if j % 4 == 0 else "1px solid " + LINE}; border-top: {"1px solid " + LINE if j >= 4 else "0"}; background: transparent; padding: 6px 10px; text-align: left; display: flex; flex-direction: column; font: inherit"><span style="font-size: 12px; color: {SOFT}; font-variant-numeric: tabular-nums">{1 + i * 8 + j}</span><span style="font-family: Literata, serif; font-size: 22px; font-weight: 700; color: {INK}">{{{{ch{i}_{j}}}}}</span></button>' for j, c in enumerate(bars))
+                   + ''.join(f'<button type="button" style="height: 64px; border: 0; border-left: {"3px solid " + INK if j % 4 == 0 else "1px solid " + LINE}; border-top: {"1px solid " + LINE if j >= 4 else "0"}; background: transparent; padding: 6px 10px; text-align: left; display: flex; flex-direction: column; font: inherit"><span style="font-size: 12px; color: {SOFT}; font-variant-numeric: tabular-nums">{1 + i * 8 + j}</span><span style="font-family: {SERIF}; font-size: 22px; font-weight: 700; color: {INK}">{{{{ch{i}_{j}}}}}</span></button>' for j, c in enumerate(bars))
                    + '</div></section>' for i, (n, bars) in enumerate(_PBARS))
 _PBY = (f'<span style="display: flex; align-items: center; gap: 12px; font-size: 15px"><span style="width: 32px; height: 32px; border-radius: 16px; background: {{{{sAv}}}}; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{sAi}}}}</span>'
         f'<span style="display: flex; flex-direction: column"><span style="font-size: 13px; color: {SOFT}">Shared by</span><span style="font-weight: 600">{{{{sAu}}}}</span></span></span>')
@@ -220,7 +220,7 @@ exlm = (IF('isMain', IF('isList', LPLACEBAR('Explore', '{{countT}}', '', PSEARCH
                      + EXBODY('', 'display: flex; flex-direction: column; gap: 8px', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px', True).replace('Songs.dc.html', 'SongsLaptop.dc.html') + '</main>' + STRIP() + EXSORTMENU('{{menuPos}}'), 'true')
            + IF('isShelf', LTOP('', '') + WIDE(EXSHELF + GRID('all', 5), 1000)), 'true')
         + IF('isPerson', LTITLEBAR('{{whoN}}', backact='back') + LCOL(PERSONPAGE(True), 1000))
-        + IF('isSong', LTITLEBAR('{{sT}}', backact='back') + FULLW(PUB_L) + PUBFLOAT(40, 40))
+        + IF('isSong', LTITLEBAR('{{sT}}', backact='back') + FULLW(PUB_L) + PUBFLOAT(16, 32))
         + IF('isShared', LTITLEBAR('A shared song', backact='back') + LCOL(SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)
 detail('Explore', 'Explore', EX_JS, exph, exlm, '', BSHEET('reportOn', 'Report this song?', REPBODY, 'Close'),
        f'<sc-if value="{{{{reportOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-label="Report this song?" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 440px; box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 18px; font-weight: 700">Report this song?</span>{REPBODY}</div></sc-if>', 'Songs')
@@ -488,7 +488,7 @@ LSM = {'Song.dc.html': 'SongLaptop.dc.html', 'Legal.dc.html': 'LegalLaptop.dc.ht
 def LAPIFY(s):
     for a, b in LSM.items(): s = s.replace(a, b)
     return s
-smlm = (IF('backHref', LTITLEBAR('{{pageT}}', back='SongLaptop.dc.html'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 116px', 'bottom: 80px; right: 60px') + TOASTL)
+smlm = (IF('backHref', LTITLEBAR('{{pageT}}', back='SongLaptop.dc.html'), 'true') + IF('isPublish', LTITLEBAR('{{pageT}}', backact='back')) + FULLW(LAPIFY(SMBODY_L)) + LAPIFY(FAB).replace('bottom: 40px', 'bottom: 32px') + TOASTL)
 SM_LAP = LAPSHEET(SMSHEETS, 400)
 for stem, root, ttl in (('SongSettings', "'settings'", 'A song’s Settings and Publish'), ('Section', "'section'", 'A section of a song')):
     detail(stem, ttl, js(SM_SRC.replace('__ROOT__', root)), smph, smlm, '', SMSHEETS, SM_LAP, 'Songs')
