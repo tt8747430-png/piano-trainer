@@ -60,12 +60,21 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   caller's role itself; never by a client query on `auth.users`. Groups, their members and feature switches are
   admins' tables; a switch is on for everyone, no one, or chosen groups, and the app asks `my_features()` at start
   and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. **Administration**
-  (R32; `/admin` and `/admin/$section`, its own chunk, in Settings for administrators: a list on a phone, a group of
-  Settings' sidebar on a laptop, each section a Settings page): Overview, Accounts (a change that removes an
+  (R32; `/admin` and `/admin/$section`, its own chunk, in Settings for administrators: a list on a phone, on a
+  laptop the same Settings dialog with its own places under "‹ Settings", each section a Settings pane): Overview, Accounts (a change that removes an
   administrator asks first), Groups (members folded under Manage members), Feature flags, Content reports (Suspend
   publishing asks first), Feedback (learners' Report a problem, told from errors by its `Report: ` prefix), Error
   log, Audit log, Drafts, Component gallery; every confirmation the one `ConfirmDialog`; every change is written to
   `admin_log`.
+- **Publishing a lesson or a course** is one tap (owner, 2026-11-17: "i dont like this publish button and why it
+  opens a third … drawer"; the kit's EDITR): Edit's bar holds Publish, a glass word, just before Done; it publishes
+  at once (`usePublishNow`), its toast saying learners receive it, with Undo where an earlier version stands (that
+  version published again, the changes kept among the Versions), and reads Published until the next change. The
+  editor writes in the app's language, with no status, menu or language in its bar; there is no Publish page for a
+  lesson or a course. Their Settings hold the rest (the board's THINGSET, one shape for a lesson's, a course's and
+  the learner's own): the thing at its head (`ThingHead`), The lesson's Place (or The course's Shelf), Share link,
+  for an editor Publishing (Status, Versions; Publish changes and Discard changes only while there are changes,
+  `DraftPublishing`), the learner's progress, then Delete last and 16 apart; one column, 1180 at most on a laptop.
 - **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
   Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
   - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on

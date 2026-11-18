@@ -14,6 +14,7 @@ import {
   say,
   SettingsGroup as Group,
   SwitchRow,
+  ThingHead,
 } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { DELETE_CLOSED, deleteAccountMachine } from '../model/delete-account-machine'
@@ -86,13 +87,11 @@ function AccountHead() {
   const profile = state.kind === 'ready' ? state.profile : null
   const name = profile?.name || account?.name || account?.email || ''
   return (
-    <div className="flex items-center gap-4 py-1">
-      <Avatar name={name} picture={profile?.avatar ?? null} size="account" />
-      <div className="flex min-w-0 flex-col gap-0.5">
-        <p className="text-xl font-bold text-balance">{name}</p>
-        <p className="text-sm wrap-anywhere text-muted-foreground">{account?.email}</p>
-      </div>
-    </div>
+    <ThingHead
+      mark={<Avatar name={name} picture={profile?.avatar ?? null} size="account" />}
+      name={name}
+      line={account?.email}
+    />
   )
 }
 

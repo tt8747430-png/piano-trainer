@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { Book } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useOwnLessonsStoreApi, type OwnLesson } from '@/entities/own-lessons'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -11,12 +12,12 @@ import {
 } from '@/features/manage-own-lessons'
 import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, say, ScreenHeader } from '@/shared/ui'
+import { BackButton, say, ScreenHeader, ThingHead } from '@/shared/ui'
 import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
- * A lesson of the learner's own's Settings (R30-5), the same page as a level's lesson's: how lessons
- * read; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
+ * A lesson of the learner's own's Settings (R30-5), the same shape as a level's lesson's (the board's
+ * THINGSET): the lesson at the head; The lesson, Rename, In courses and Duplicate (the copy opened); its Progress reset; and Delete last, at
  * once with Undo, its progress going with it. No Share link: the lesson lives on the learner's devices.
  */
 export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
@@ -28,10 +29,18 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
   const title = localText(lesson.title, locale)
   const step = lessonStepId(lesson.id)
   return (
-    <div className="flex flex-col gap-6 pb-8">
-      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <p className="-mt-2 px-1 text-muted-foreground text-pretty">{title}</p>
+    <div className="flex flex-col gap-2 pb-8">
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
+        <ThingHead
+          mark={
+            <span className="grid size-16 shrink-0 place-items-center rounded-pill bg-card ring-1 ring-border ring-inset">
+              <Book aria-hidden className="size-6" />
+            </span>
+          }
+          name={title}
+          line={t('own.yourLesson')}
+        />
         <OwnItemRows
           title={title}
           words={{ group: t('settings.lesson'), rename: t('own.renameLesson') }}

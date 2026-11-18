@@ -216,7 +216,6 @@ export const learn: LocaleResources['learn'] = {
   settings: {
     title: 'Настройки',
     open: 'Настройки',
-    reading: 'Чтение',
     share: 'Поделиться',
     shareLink: 'Поделиться ссылкой',
     shared: 'Ссылка скопирована',
@@ -226,13 +225,12 @@ export const learn: LocaleResources['learn'] = {
     undo: 'Отменить',
     lesson: 'Урок',
     course: 'Курс',
-    level: 'Уровень',
-    chapter: 'Глава',
+    place: 'Место',
     inCourse: 'Курс',
-    readFirst: 'Сначала прочесть',
-    languages: 'Языки',
-    noLanguage: 'Пока не полностью',
-    opening: 'Открываем…',
+    courseLine_one: 'Курс · {{count}} урок',
+    courseLine_few: 'Курс · {{count}} урока',
+    courseLine_many: 'Курс · {{count}} уроков',
+    courseLine_other: 'Курс · {{count}} урока',
   },
   edit: {
     doc: {

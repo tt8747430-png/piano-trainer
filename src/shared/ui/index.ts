@@ -1,3 +1,4 @@
+export { ThingHead } from './ThingHead'
 export { Avatar } from './Avatar'
 export { BUILT_IN_AVATARS, isBuiltInAvatar, type BuiltInAvatar } from './avatars'
 export { BackButton } from './BackButton'

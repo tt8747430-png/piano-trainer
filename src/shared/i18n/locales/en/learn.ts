@@ -224,7 +224,6 @@ export const learn = {
   settings: {
     title: 'Settings',
     open: 'Settings',
-    reading: 'Reading',
     share: 'Share',
     shareLink: 'Share link',
     shared: 'Link copied',
@@ -234,13 +233,10 @@ export const learn = {
     undo: 'Undo',
     lesson: 'The lesson',
     course: 'The course',
-    level: 'Level',
-    chapter: 'Chapter',
+    place: 'Place',
     inCourse: 'Course',
-    readFirst: 'Read first',
-    languages: 'Written in',
-    noLanguage: 'Not yet in full',
-    opening: 'Opening…',
+    courseLine_one: 'Course · {{count}} lesson',
+    courseLine_other: 'Course · {{count}} lessons',
   },
   edit: {
     doc: {

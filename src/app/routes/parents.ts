@@ -255,8 +255,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
     return levelId ? up({ to: '/levels/$levelId', params: { levelId } }) : up({ to: '/' })
   },
   '/shell/lessons/$lessonId/settings': toLesson,
-  '/shell/lessons/$lessonId/publish': (from) =>
-    up({ to: '/lessons/$lessonId/settings', params: { lessonId: param(from, 'lessonId') } }),
   '/shell/lessons/$lessonId/edit': toLesson,
   '/full-screen/lessons/$lessonId/example': ({ params, search }) => {
     const course = text(search.course)
@@ -272,8 +270,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       : up({ to: '/courses' })
   },
   '/shell/courses/$courseId/settings': toCourse,
-  '/shell/courses/$courseId/publish': (from) =>
-    up({ to: '/courses/$courseId/settings', params: { courseId: param(from, 'courseId') } }),
   '/shell/courses/$courseId/edit': toCourse,
   '/shell/courses/$courseId/$lessonId': toCourse,
   '/shell/courses/$courseId/$lessonId/settings': toCourseLesson,

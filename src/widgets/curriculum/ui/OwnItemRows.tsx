@@ -87,7 +87,7 @@ export function OwnDeleteGroup({
   onDelete: () => void
 }) {
   return (
-    <DangerGroup>
+    <DangerGroup className="mt-4">
       <DangerRow title={words.delete} onClick={onDelete} />
     </DangerGroup>
   )

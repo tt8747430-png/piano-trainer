@@ -1,7 +1,7 @@
 import { Lock } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DraftActions, DraftStatus, type ContentDraft } from '@/features/edit-original'
+import { DraftActions, DraftStatus, PublishWord, type ContentDraft } from '@/features/edit-original'
 import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, ScreenHeader, type EditAction } from '@/shared/ui'
@@ -51,6 +51,7 @@ export function DraftScreen<T>({
   edit,
   settings,
   publishPage,
+  oneTap = false,
   children,
 }: {
   draft: ContentDraft<T>
@@ -74,6 +75,12 @@ export function DraftScreen<T>({
   settings?: ReactNode
   /** The item's Publish page (R29 B6), which the bar's Publish opens. */
   publishPage?: { readonly link: ReactElement; readonly open: () => void }
+  /**
+   * A Learn page's Edit (a lesson, a course; the kit's EDITR): its bar Publish and Done alone, Publish
+   * one tap with Undo; Versions and Discard changes are its Settings', and it is written in the app's
+   * language. Else the draft's status, its menu and Publish in the bar.
+   */
+  oneTap?: boolean
   children: (initial: T) => ReactNode
 }) {
   const { t } = useTranslation('editor')
@@ -92,7 +99,7 @@ export function DraftScreen<T>({
         // Where the draft stands, then Publish and the draft's menu, at the bar's end: nothing under
         // the bar (the language is the menu's, ticked there).
         tools={
-          open ? (
+          open && !oneTap ? (
             <>
               <DraftStatus draft={draft} className="me-1" />
               <DraftActions
@@ -108,7 +115,18 @@ export function DraftScreen<T>({
         }
         // Settings and Done only where the draft is open: to one who cannot edit, nothing is in Edit.
         settings={open ? settings : undefined}
-        edit={open ? edit : undefined}
+        edit={
+          open && edit
+            ? oneTap
+              ? {
+                  ...edit,
+                  publish: (
+                    <PublishWord draft={draft} unreadable={unreadable} onReset={draft.reopen} />
+                  ),
+                }
+              : edit
+            : undefined
+        }
       />
       {!editor ? (
         <NotOpen line={editorsOnly}>
