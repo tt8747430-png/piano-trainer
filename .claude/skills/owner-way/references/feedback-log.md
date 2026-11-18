@@ -342,6 +342,7 @@ owner's, typos fixed.
 - **A section's ladder is one column, its rows one height (loop 63, 2026-11-17):** on a laptop a section's page set its four ways in (Chords, In time, One change at a time, Patterns) in two columns that read in zigzag and crossed edges; it is now one column at reading width in the phone's order, and every row is 56, where the chords' rows were 68 and the changes' 64 (similarity; columns that cross read as overlap). The Player's Grid cells with the keys showing are 44 tall, from 42 (Fitts; canvas v429).
 
 ## Library, adding, publishing
+- **Archive and Trash are All songs' table (2026-11-18, one shape per sibling page):** on a laptop they drew their own table, a lower head over the words, 64 rows on faint rules and long dates; now the library's: a 40 head on a rule with Title over the cover, 60 rows, 15px cells and short dates (12 Nov). The folder's unused laptop table was deleted.
 - **The sidebar's count is the library's (2026-11-18, seven-questions 5):** All songs in the laptop sidebar said 93 while the page beside it said 8 songs; it says 8.
 - **Groups' + on the floating actions' line (the lines sweep, 2026-11-18):** New group floated 40 above the screen's foot, 10 over the home indicator, off the scale and off every other phone board's + (32); it stands 32 now (one place for the floating action; spacing scale).
 
