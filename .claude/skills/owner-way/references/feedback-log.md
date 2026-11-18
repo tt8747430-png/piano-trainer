@@ -1775,3 +1775,8 @@ are reference only, but progressions are facts.
   titles -0.01em, small capitals +0.04em, in the kit and 20 generators (62 boards). The song cover's miniature
   printed title stays, being the picture. Rule 13 was corrected to the boards: 700 sets names, titles and the active
   tab (the board is the spec; `DESIGN.md` moves to 700 at the port).
+- **Canvas (2026-11-18, loop): Course and the level's headings group with what they head.** On a course, "Lessons"
+  stood as far from its first lesson as from Continue (32 / 30, ink to ink), and the title as far from its cover as
+  from its line (16 / 12); the lesson list now starts 12 higher and the cover has 8 more under it. On a level, each
+  chapter heading stood 16 under the last chapter and 21 over its own first lesson; chapters are 32 apart now and
+  their rows 6 nearer their heading. Phone and laptop; the lines tool notes nothing on any of the four.
