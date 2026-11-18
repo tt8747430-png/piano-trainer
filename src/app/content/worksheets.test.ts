@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
+import { COURSES } from '@/entities/course'
 import { OWN_COURSE_TEMPLATES } from '@/entities/own-lessons'
 import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
@@ -525,12 +525,10 @@ describe('the journeys', () => {
 })
 
 describe('the courses', () => {
-  it('have unique ids, an icon each, and say what they teach in both languages', () => {
+  it('have unique ids and say what they teach in both languages', () => {
     const ids = COURSES.map((course) => course.id)
     expect(new Set(ids).size).toBe(ids.length)
-    expect(Object.keys(COURSE_ICON).sort()).toEqual([...ids].sort())
     for (const course of COURSES) {
-      expect(courseIcon(course.id), course.id).toBeDefined()
       for (const text of [course.title, course.summary]) {
         expect(text.en.trim(), course.id).not.toBe('')
         expect(text.ru.trim(), course.id).not.toBe('')

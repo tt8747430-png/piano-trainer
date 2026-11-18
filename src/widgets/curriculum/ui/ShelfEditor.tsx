@@ -1,15 +1,8 @@
 import { Link } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
+import { Library, Plus } from 'lucide-react'
 import { Fragment, lazy, Suspense, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  courseById,
-  courseIcon,
-  SHELVES,
-  type CourseOrder,
-  type Shelf,
-  SHELF_PAINT,
-} from '@/entities/course'
+import { courseById, SHELVES, type CourseOrder, type Shelf, SHELF_PAINT } from '@/entities/course'
 import { hasAbout } from '@/entities/lesson'
 import { DraftActions, DraftStatus, useCourseOrderDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
@@ -97,7 +90,7 @@ function ShelvesDocument({
               key: course.id,
               title: localText(course.title, locale),
               detail: t('course.lessonCount', { count: course.lessons.length }),
-              icon: courseIcon(course.id),
+              icon: Library,
               paint: cn(paint.fill, paint.ink),
               link: <Link to="/courses/$courseId/edit" params={{ courseId: course.id }} />,
             }

@@ -15,8 +15,8 @@ export const learn = {
   },
   // The Courses, shelf by shelf.
   shelves: {
-    beginner: 'Beginner courses',
-    intermediate: 'Intermediate courses',
+    beginner: 'Beginner',
+    intermediate: 'Intermediate',
     technique: 'Technique and exercises',
     chords: 'Chords and improvisation',
     'method-books': 'Method books',

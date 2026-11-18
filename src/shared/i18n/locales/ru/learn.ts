@@ -14,8 +14,8 @@ export const learn: LocaleResources['learn'] = {
     review: 'Повторить: {{title}}',
   },
   shelves: {
-    beginner: 'Курсы для начинающих',
-    intermediate: 'Курсы среднего уровня',
+    beginner: 'Для начинающих',
+    intermediate: 'Средний уровень',
     technique: 'Техника и упражнения',
     chords: 'Аккорды и импровизация',
     'method-books': 'Методики',
