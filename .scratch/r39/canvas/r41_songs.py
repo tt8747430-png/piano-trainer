@@ -83,7 +83,7 @@ sh = SONG_MORE + BSHEET('creditsOn', 'Title and credits', CREDITS)
 # one centred column (owner, 2026-11-16: "the page has one focus"): the song's cover beside its name and Continue as
 # the column's head, then its chords, sections and details under it, never a rival column beside it
 # the bar stands on the column's edges (scan-first 1): Back on its left edge, the acts ending on its right
-_SGBAR = TOP('SongsLaptop.dc.html', '', LEARNED + HEARTB + DOTS()).replace('padding: 0 12px', 'padding: 0', 1)
+_SGBAR = TOP('SongsLaptop.dc.html', '', LEARNED + HEARTB + DOTS(), pad='0')
 lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 100%); margin: 0 auto">{_SGBAR}</div></div>
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 48px">
 <div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 20px">

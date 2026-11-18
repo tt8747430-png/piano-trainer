@@ -254,7 +254,7 @@ PV_SRC = r'''
 LADROW = ('raw', f'<div style="position: relative; min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 12px 6px 16px"><span style="font-size: 16px">Tempo ladder</span>'
           + INFOB('About the tempo ladder', 'tip_lad', 'tipOn_lad') + '<span style="flex: 1"></span>'
           + '<button type="button" role="switch" aria-checked="{{ladOn}}" aria-label="Tempo ladder" onClick="{{ladT}}" style="flex: none; height: 44px; border: 0; padding: 0; background: transparent; display: flex; align-items: center">'
-          + TOGGLE('ladOn').replace('role="switch" aria-checked="{{ladOn}}"', 'aria-hidden="true"', 1) + '</button>'
+          + TOGGLE('ladOn', face=True) + '</button>'
           + INFOTIP('tipOn_lad', 'tip_lad', 'About this', '<p style="margin: 0">Each clean pass raises the tempo a little, up to the target.</p>', 'left: 0; top: 52px') + '</div>')
 # the setup's sections 24 apart, a heading 8 over its control: each heading reads with what it heads (laws, spacing 3)
 PVSET = ('<div style="display: flex; flex-direction: column; gap: 24px">' + IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))

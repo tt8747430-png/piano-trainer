@@ -49,12 +49,12 @@ MODEBAR_L = 'height: 72px; box-sizing: border-box; padding: 12px 24px; display: 
 # buttons … consistently implement it throughout your app"; iOS 26 draws bar items as glass): every bar's buttons
 # are 44 glass circles 8 apart (IB), Back the same glass circle at the leading edge. A page under a page: 56 tall,
 # its title 17 semibold centred; a place: TITLEBAR, its large title at the leading edge.
-def TOP(back='', title='', right='', backlabel='Back', left='', n=0):
+def TOP(back='', title='', right='', backlabel='Back', left='', n=0, pad='0 12px'):
     b = left or (f'<a href="{back}" aria-label="{backlabel}" data-tip="{backlabel}" style="{GLASSST}">{CHEV_L}</a>' if back else '')
     # bars.md: a title sits after Back or Close, 8 from its glass, never centred between the bar's sides (Apple,
     # Toolbars: "keep the title under 15 characters"; a long one ends in an ellipsis)
     t = f'<span data-bar-title style="flex: 0 1 auto; min-width: 0; margin-left: {8 if b else 4}px; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</span>' if title else ''
-    return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: 0 12px">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
+    return f'<header data-float style="position: relative; flex: none; height: 56px; display: flex; align-items: center; padding: {pad}">{b}{t}<span style="flex: 1"></span><div style="display: flex; align-items: center; gap: 8px">{right}</div></header>'
 def LPAD(h):
     """The same bar on a laptop: 40 at its leading edge, 28 at its trailing, its title the laptop's 30 bold."""
     h = h.replace('padding: 0 12px', 'padding: 0 28px 0 40px', 1)
@@ -150,8 +150,8 @@ WCHIPS = lambda lst: CHIPS(lst, wrap=True)
 def STEPPER(val, dn, up, w=64):
     b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'
     return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, "−", "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, "+", "More")}</div>'
-def TOGGLE(on):
-    return f'<span role="switch" aria-checked="{{{{{on}}}}}" style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
+def TOGGLE(on, face=False):  # face: the switch's picture inside a row that is itself the switch, hidden from readers
+    return f'<span {"aria-hidden=\"true\"" if face else f"role=\"switch\" aria-checked=\"{{{{{on}}}}}\""} style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
 def GROUP(*rows, bg=FILL):
     out = []
     for i, r in enumerate(rows):
@@ -170,7 +170,7 @@ def GROUP(*rows, bg=FILL):
         elif k == 'step': out.append(f'<div style="{base}">{lab}{STEPPER(*r[2:5])}</div>')
         elif k == 'segr': out.append(f'<div style="{base.replace("padding: 6px 12px 6px 16px", "padding: 4px 12px 4px 16px")}">{lab}<div style="flex: none; width: {r[3] if len(r) > 3 else 360}px">{SEGC(r[2], 44, 14)}</div></div>')  # a laptop row: the choice at the row's end, as a stepper; its 48 control takes 4 of padding so the row is 56, the stepper row's height (similarity)
         # a switch row is one control: the row is the switch and carries its name; the drawn switch is its picture
-        elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2]).replace(f'role="switch" aria-checked="{{{{{r[2]}}}}}"', 'aria-hidden="true"', 1)}</button>')
+        elif k == 'toggle': out.append(f'<button type="button" role="switch" aria-checked="{{{{{r[2]}}}}}" onClick="{{{{{r[3]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {INK}; font: inherit; text-align: left">{lab}{TOGGLE(r[2], face=True)}</button>')
         elif k == 'val': out.append(f'<div style="{base}">{lab}<span style="font-size: 16px; color: {SOFT}; font-variant-numeric: tabular-nums">{r[2]}</span></div>')
         elif k == 'action': out.append(f'<button type="button" onClick="{{{{{r[2]}}}}}" style="{base} width: 100%; border: 0; background: transparent; color: {r[3] if len(r) > 3 else LINK}; font: inherit; font-size: 16px; text-align: left">{r[1]}</button>')
         elif k == 'raw': out.append(f'<div style="{sep}">{r[1]}</div>')
