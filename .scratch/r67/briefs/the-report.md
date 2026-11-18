@@ -146,3 +146,15 @@ State: done = already in the app; built = built this round; theirs = in agent B'
 | 140 | Profile and Settings | Search's Recent searches belongs to its chips | widgets/search-palette/ui/SearchPalette.tsx | built |
 | 141 | Profile and Settings | Settings on a laptop carries only its own panes | widgets/settings-screen | left: not reached this round (time) |
 | 142 | Profile and Settings | The week's chart fills its box on a laptop | pages/profile | left: not reached this round (time) |
+
+## Agent A2 (continues A): Profile, Settings, Sign in, Legal, own Settings, Publish, Insert, lesson keys, bb1ffd94
+
+Plan, in order: 1 Profile · 2 Settings panes · 3 Sign in and Legal · 4 own lesson/course Settings · 5 one-tap Publish · 6 Insert kinds · 7 lesson examples without cards, keys across the width · 8 bb1ffd94 Practice heads.
+
+| # | Ruling | App file | State |
+|---|---|---|---|
+| A2-1 | Every laptop toast centred on its pane, 460 wide, 28 up; 116 over a floating bar | shared/ui/Toaster.tsx, theme.css `toast-foot` | built (measured 28/460, centre 983 on the pane) |
+| A2-2 | Every laptop floating action 16 from the right, 32 from the bottom | shared/ui/FloatingActions.tsx (FloatingHost lg:px-4 lg:mb-8) | built (measured on Learn) |
+| A2-3 | Chips that wrap stand 8 apart | shared/ui/ChoiceChips.tsx (the board's CHIPS: 44 reach, 4 border, 16 in, 8 apart, rows 0), GroupRows GroupChips | built; PublicItemParts' tags are B's |
+| A2-4 | Tooltips in the sans; no Literata or Onest anywhere | styles/index.css, theme.css (Instrument Sans Variable, Iowan Old Style), tooltip.tsx (500 12/16, 8 round, 4×8), package.json, vite.config.ts | built |
+| A2-5 | A confirm's act crimson only for a loss, ink for Publish | shared/ui/primitives/alert-dialog.tsx | built |

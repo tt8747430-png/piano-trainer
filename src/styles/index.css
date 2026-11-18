@@ -2,8 +2,7 @@
 /* What the shadcn primitives animate and select with: enter/exit keyframes, data-* variants. */
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import '@fontsource-variable/onest/wght.css';
-@import '@fontsource-variable/literata/opsz.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
 @import '@fontsource/noto-music/music-400.css';
 @import './fonts/text-accidentals.css';
 @source '../../index.html';

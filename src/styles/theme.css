@@ -126,14 +126,16 @@
   --color-key-focus: var(--key-focus);
   --color-key-focus-halo: var(--key-focus-halo);
 
-  /* Neither face has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff. */
-  --font-sans: 'Onest Variable', 'Text Accidentals', 'Noto Music', system-ui, sans-serif;
   /*
-   * The book's typeset titles: Literata, a book serif drawn for screens, variable in weight and
-   * optical size (the browser fits its design to each size), Latin and Cyrillic alike. Titles and
-   * chord symbols only; every control reads in Onest.
+   * The canvas's two faces (r41_kit FONT and SERIF): Instrument Sans for reading and acting, Iowan
+   * Old Style, the book serif Apple ships, for titles and chord symbols. Instrument Sans has no
+   * Cyrillic, so Russian reads in the system's sans after it, as the boards set it. Neither face
+   * has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff.
    */
-  --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
+  --font-sans:
+    'Instrument Sans Variable', 'Text Accidentals', 'Noto Music', -apple-system, 'Helvetica Neue',
+    system-ui, sans-serif;
+  --font-display: 'Iowan Old Style', 'Text Accidentals', 'Noto Music', 'Palatino', Georgia, serif;
   /* A music sign that stands alone: set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
@@ -273,7 +275,7 @@
   body {
     @apply bg-background font-sans text-foreground antialiased;
   }
-  /* Titles are typeset in the book's serif, semibold; reading text and controls stay Onest. */
+  /* Titles are typeset in the book's serif, semibold; reading text and controls stay in the sans. */
   h1,
   h2,
   h3 {
@@ -908,11 +910,19 @@
     --foot-pad: --spacing(12);
   }
 }
-/* What stands over all that stands at the screen's foot (a toast): `bottom-foot-3`. */
-@utility bottom-foot-* {
-  bottom: calc(
-    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
-  );
+/* Where a toast stands (the canvas's one toast): on a phone over all that stands at the screen's foot;
+   on a laptop 28 up, the floating actions at the pane's corner beside it, or 116 up over a floating
+   bar that spans the foot (a lesson's), clear of it. */
+@utility toast-foot {
+  bottom: calc(--spacing(3) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot));
+  @variant lg {
+    bottom: calc(--spacing(7) + var(--docked, 0px));
+  }
+}
+@media (width >= 64rem) {
+  :root:has([data-slot='floating-actions'] [role='toolbar']) [data-slot='toast-viewport'] {
+    bottom: calc(--spacing(29) + var(--docked, 0px));
+  }
 }
 /* The keys shown or hidden from the bar's Keyboard (R34) leave and come as one, fading, while the
    page under them takes or gives their room at once; the screen's floating actions ride with them. */

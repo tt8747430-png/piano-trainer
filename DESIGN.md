@@ -65,57 +65,57 @@ colors:
   sky-night-ink: '#C2DBF1'
 typography:
   chord-display:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '72px'
     fontWeight: 600
     lineHeight: 1
   display:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '44px'
     fontWeight: 600
     lineHeight: 1.1
   large-title:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '34px'
     fontWeight: 600
     lineHeight: 1.15
   title-1:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '28px'
     fontWeight: 600
     lineHeight: 1.2
   title-2:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '22px'
     fontWeight: 600
     lineHeight: 1.3
   title-3:
-    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
+    fontFamily: 'Iowan Old Style, Text Accidentals, Noto Music, Palatino, Georgia, serif'
     fontSize: '20px'
     fontWeight: 600
     lineHeight: 1.25
   headline:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '17px'
     fontWeight: 600
     lineHeight: 1.375
   control:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 600
     lineHeight: 1.5
   body:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 500
     lineHeight: 1.43
   key-label:
-    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Instrument Sans Variable, Text Accidentals, Noto Music, -apple-system, Helvetica Neue, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 700
     lineHeight: 1
@@ -300,12 +300,14 @@ judged note its verdict's shape beside its head (● right, ◂ early, ▸ late,
 
 ## Typography
 
-**Display Font:** Literata Variable (with Text Accidentals, Noto Music, Georgia)
-**Body Font:** Onest Variable (with Text Accidentals, Noto Music, system-ui)
+**Display Font:** Iowan Old Style, the book serif Apple ships (with Text Accidentals, Noto Music, Palatino, Georgia)
+**Body Font:** Instrument Sans Variable (with Text Accidentals, Noto Music, the system's sans)
 **Label/Mono Font:** Noto Music, for a music sign that stands alone
 
-**Character:** a book serif for what is named, a clear sans for what is read and pressed, both covering Latin and
-Cyrillic. Neither face has ♭ ♮ ♯, so Text Accidentals sits behind both, drawn to stand by the capitals.
+**Character:** a book serif for what is named, a clear sans for what is read and pressed: the canvas's two faces (its
+SERIF and FONT), no third. Instrument Sans has no Cyrillic, so Russian reads in the system's sans behind it, as the
+boards set it. Neither face has ♭ ♮ ♯, so Text Accidentals sits behind both, drawn to stand by the capitals. A tooltip
+is the sans, 500 12/16 on ink, 8 round, 4 by 8 in.
 
 ### Hierarchy
 
@@ -317,15 +319,15 @@ Sizes are in rem, so they follow the reader's text size. A screen's title steps 
 - **Title 1** (600, 28px, 1.2): a screen's title on a phone.
 - **Title 2** (600, 22px, 1.3): section and sheet titles; a screen's title on a phone on its side.
 - **Title 3** (600, 20px, 1.25): a group's title, a card's name.
-- **Headline** (Onest 600, 17px, 1.375): a row's title, the pill button.
-- **Control** (Onest 600, 16px, 1.5): buttons, values, segments.
-- **Body** (Onest 400, 16px, 1.5): everything else; prose at most 65ch.
-- **Label** (Onest 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
-- **Key label** (Onest 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
+- **Headline** (Instrument Sans 600, 17px, 1.375): a row's title, the pill button.
+- **Control** (Instrument Sans 600, 16px, 1.5): buttons, values, segments.
+- **Body** (Instrument Sans 400, 16px, 1.5): everything else; prose at most 65ch.
+- **Label** (Instrument Sans 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
+- **Key label** (Instrument Sans 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
 
 ### Named Rules
 
-**The Serif Names Rule.** Literata at 600 sets every `h1`–`h3` and every chord symbol. It never sets a control, a tab or
+**The Serif Names Rule.** Iowan Old Style at 600 sets every `h1`–`h3` and every chord symbol. It never sets a control, a tab or
 a key label.
 
 **The Printed Chord Rule.** A chord on screen is printed (`C♯m7`). What is stored, typed or put in a URL stays ASCII.
@@ -411,14 +413,14 @@ square at the top.
 - **A detail page** reads title, facts, sections; its one primary action floats at the foot, honey, alone (one floating action per screen, Material 3); Play sits at the head of the music it plays; the page's info is a plain column on the paper, never a card (owner, 2026-11-17: "use proper floating actions", "learn how to correctly use cards"; `edge-lines`).
 - **The bar** (`ScreenHeader`) is one row of one height on every screen: Back, the title with its Edit (a quiet pencil;
   Done in its place while editing) right after it, then at its end, in this order whatever the page passes: tools,
-  Settings (the gear), More. Its title is Onest, as every board draws it (canvas 133): a plain title semibold at 1.0625rem on a phone (1.125rem
-  from 40rem), a place's bold at 1.625rem; a section's head in a page is Onest bold at 1.25rem (Literata stays for
+  Settings (the gear), More. Its title is the sans, as every board draws it (canvas 133): a plain title semibold at 1.0625rem on a phone (1.125rem
+  from 40rem), a place's bold at 1.625rem; a section's head in a page is the sans bold at 1.25rem (the serif stays for
   names of music, lesson text and the score). A plain title's
   actions 4px apart there, so a tool's name fits whole on two lines beside its tools ("Определитель аккордов"); a
   word is never split. A place's or a detail page's title is larger
   in the same row and may take two lines. Nothing hangs under the bar: a status goes in it or in its menu, and a page's
   views sit in its content. A place's views (Learn's Lessons · Courses, Songs' My songs · Explore) are its title
-  (`TitleTabs`): their words where the title stands, in Onest at the large title's size, the one shown in ink with an
+  (`TitleTabs`): their words where the title stands, in the sans at the large title's size, the one shown in ink with an
   ink line under it, the other in soft ink; the place's name stays the page's heading, unseen. A pane kept in sight
   under the bar (a style's preview) is `Pinned`: solid, edge to edge, moving with the bar; never a card floating over
   the controls. What is docked at the foot (`Docked`) owns the ground down to the screen's edge. It slides away while reading down and returns as the page turns up.
@@ -446,7 +448,7 @@ square at the top.
 
 ### Buttons
 
-- **Shape:** Onest 600 at 16px in the control corner. Sizes are 44px, 48px (`lg`), a 56px pill, and a 72px round Play.
+- **Shape:** Instrument Sans 600 at 16px in the control corner. Sizes are 44px, 48px (`lg`), a 56px pill, and a 72px round Play.
   Icon-only buttons are 44px with a 20px icon.
 - **Primary:** `default`, honey with ink on it.
 - **Second actions:** `soft` and `outline`, card paper in the control line; `secondary`, sky mist.
@@ -497,7 +499,9 @@ square at the top.
   control; presets lead as a strip of drawn tiles, the chosen ringed in ink. Styles are made of the paints, so the dark
   theme redraws them; Night alone is a dark card in both themes.
 - **Popover and ⓘ:** an `InfoTip` is a 16px ⓘ in soft ink beside a name; no line of explanation stands under a control.
-- **Toast** (`say`): ink, 14 round, over the screen's foot and above every sheet, clear of all that floats there; its
+- **Toast** (`say`): ink, 14 round, over the screen's foot and above every sheet, clear of all that floats there (on a
+  laptop centred on its pane, 460 wide and 28 up, beside the floating actions at the corner; over a floating bar, a
+  lesson's, 116 up); its
   line in the sheet's colour, Undo in honey (deep honey by Night, when the toast is light), no ✕; gone in five seconds
   or by a swipe. A loss that can be undone happens at once and toasts with Undo instead of asking; only what can't be undone,
   or reaches other people, asks first in the dialog, naming what goes.
@@ -523,7 +527,7 @@ pedals, no finger numbers. Every control is the screen's bar's; nothing about th
   Down step 16px, Home and End go to the ends, a double click or Enter returns to the piano's proportion. The height
   is kept for a phone upright, a phone on its side and a wider screen apart. A splitter to a screen reader.
 - **In the bar** (`KeyboardTools`), before the gear: the chord held (from 40rem: a small soft label "Chord held" then
-  the symbol in Literata, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
+  the symbol in the serif, 20px), **Sustain** while the keys show, and **Keyboard** (the piano icon, pressed while
   they show); in the Player **Hands at the keys** (a hand) before it, the keys' place showing the one pressed and
   folding when it is pressed again. Sustain wears a pedal drawn as a line icon; down from anywhere (a finger, Space,
   a MIDI foot, the score's pedal while music plays) it fills `--key-down`, as a key held down, never a second honey
@@ -607,7 +611,7 @@ appears under a finger; the layout's one control.
 - **Do** give each screen one honey control and show the chosen in neutrals.
 - **Do** part cards by surface and a 1px line.
 - **Do** label every coloured key, and give every quiet value a firm one under `prefers-contrast: more`.
-- **Do** set titles and chord symbols in Literata 600 and everything else in Onest.
+- **Do** set titles and chord symbols in Iowan Old Style 600 and everything else in Instrument Sans.
 - **Do** keep targets at 44px and focus visible, with a shared component for every kind of thing.
 
 ### Don't:
