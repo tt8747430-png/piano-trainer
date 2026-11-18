@@ -500,9 +500,10 @@ pressed; `DESIGN.md`, Typography). Each rule is a yes-or-no check on a board's s
       (4.5:1) and weight, not from wider tracking.
 - **Weight:** "a common typeface may have 3 to 6 weights"; "when using very light … or very heavy weights … use
   larger font sizes."
-  13. Four weights, each with one job: 400 for reading, 500 for a label, 600 for a name, a control and a title, 700
-      only for a Key label. Nothing at 300 or below, nothing at 800 or above; no synthesised bold (Neither face fakes
-      a bold).
+  13. Four weights, each with its jobs, as the boards draw them: 400 for reading; 500 for a label and an inactive
+      tab; 600 for a control, a value and a small capital; 700 for a name, a title and an active tab. Nothing at
+      300 or below, nothing at 550 or 800 and above; no synthesised bold. (`DESIGN.md` names titles 600; the boards
+      set them 700, and the board is the spec: `DESIGN.md` moves to 700 at the port.)
   14. Emphasis inside a sentence is 600, never italic, colour or underline (an underline is a link's alone).
 - **Tabular and proportional figures:** tabular "where values change constantly and may look offset"; proportional
   "for numbers inside of headlines, subheads, or any other copy where it should blend into text."

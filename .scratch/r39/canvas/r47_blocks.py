@@ -7,7 +7,7 @@
 FRAME = 'background: #2A1F18; border-radius: 20px; box-shadow: 0 0 0 1px rgba(51,41,33,.10), 0 2px 6px rgba(51,41,33,.14)'
 FELT = '<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 5px; background: #8E2A22"></div>'
 WK = 'position: absolute; top: 5px; box-sizing: border-box; border: 1px solid #CFC6BA; border-top: 0; border-radius: 0 0 5px 5px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; font-size: 12px'
-BK = 'position: absolute; top: 5px; box-sizing: border-box; border-radius: 0 0 4px 4px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: 10px; font-weight: 700'
+BK = 'position: absolute; top: 5px; box-sizing: border-box; border-radius: 0 0 4px 4px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: 12px; font-weight: 700'
 
 def PKEYS(lst, h):
     """The Player's keys, driven by the board's calmKeys list."""

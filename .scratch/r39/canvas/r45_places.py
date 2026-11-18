@@ -146,7 +146,7 @@ def COURSECARD(w, href):
     # a course's cover is its name printed on its shelf's paint, the shelf above it, as a book's cover; under it its line
     return (f'<a href="{href}" style="flex: none; width: {w}; min-width: 0; display: flex; flex-direction: column; gap: 8px; color: {INK}; text-decoration: none">'
             f'<span style="position: relative; height: 128px; box-sizing: border-box; padding: 12px 16px; border-radius: 14px; background: {{{{k.paint}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.06); display: flex; flex-direction: column; justify-content: space-between">'
-            f'<span style="display: flex; min-height: 24px; align-items: center; gap: 8px"><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: {SOFT}">{{{{k.shelf}}}}</span></span>'
+            f'<span style="display: flex; min-height: 24px; align-items: center; gap: 8px"><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{k.shelf}}}}</span></span>'
             f'<span style="font-family: {SERIF}; font-size: 19px; line-height: 1.15; text-wrap: balance">{{{{k.t}}}}</span>'
             f'</span>'
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')
@@ -232,7 +232,7 @@ detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Co
 
 # ── Profile ──
 BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>'
-BELLB = f'<a href="#" aria-label="Notifications, 2 unread" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {INK}">{BELL}<span style="position: absolute; top: 6px; right: 5px; min-width: 18px; height: 18px; border-radius: 9px; background: #B3261E; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></a>'
+BELLB = f'<a href="#" aria-label="Notifications, 2 unread" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {INK}">{BELL}<span style="position: absolute; top: 6px; right: 5px; min-width: 18px; height: 18px; border-radius: 9px; background: #B3261E; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></a>'
 FLAME = '<svg viewBox="0 0 24 24" width="20" height="20" fill="#C26A2E" aria-hidden="true"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2.4 1.3-4 2.5-5 0 2 1 3 2 3 0-4 .5-6 .5-8Z"></path></svg>'
 PROFILE_JS = js(r'''
     const DAYS = [['M', 18], ['T', 25], ['W', 0], ['T', 32], ['F', 15], ['S', 40], ['S', 22]];
@@ -248,7 +248,7 @@ CLOCK = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{S
 TILES = f'<div style="display: flex; gap: 8px">{TILE(FLAME, "12", "Day streak")}{TILE(NOTE, "4", "Songs learned")}{TILE(CLOCK, "12 h", "Practice time")}</div>'
 WEEK = CARD(f'<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px; font-weight: 700">Last 7 days</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span></div>'
             f'<div role="img" aria-label="Minutes practised each day this week" style="display: flex; gap: 8px; margin-top: 12px">'
-            f'<div aria-hidden="true" style="flex: none; width: 20px; height: 72px; position: relative; font-size: 11px; line-height: 12px; color: {SOFT}; font-variant-numeric: tabular-nums; text-align: right">'
+            f'<div aria-hidden="true" style="flex: none; width: 20px; height: 72px; position: relative; font-size: 12px; line-height: 12px; color: {SOFT}; font-variant-numeric: tabular-nums; text-align: right">'
             f'<span style="position: absolute; right: 0; bottom: 58px">40</span><span style="position: absolute; right: 0; bottom: 26px">20</span><span style="position: absolute; right: 0; bottom: -6px">0</span></div>'
             f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px"><div style="position: relative; height: 72px; display: flex; gap: 8px; align-items: flex-end; box-shadow: inset 0 -1px 0 {LINE}">'
             f'<span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 32px; height: 1px; background: {FILL}"></span><span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 64px; height: 1px; background: {FILL}"></span>'

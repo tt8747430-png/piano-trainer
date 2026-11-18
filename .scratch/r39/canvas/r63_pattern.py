@@ -16,7 +16,7 @@ PA63 = PA63.replace("favOn: fav, heartFill: fav ? '#B3261E' : 'none'", "favOn: f
 TOP63 = TOP60.replace('Scales and keys</span>', 'Pattern</span>').replace('href="Main.dc.html" aria-label="Back to Practice"', 'href="Accompaniment.dc.html" aria-label="Back to Accompaniment"').replace(ROUND60("Settings", COG, "openSet"), '') + ''
 TOP63 = TOP63.replace('</div></header>', ROUND60('More', MORE, 'openMore') + '</div></header>')
 TITLE63 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px">'
-           f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance">{{{{name}}}}</h2>'
+           f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance">{{{{name}}}}</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play · Level 1", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
 def _staff63():

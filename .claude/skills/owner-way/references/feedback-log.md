@@ -1768,3 +1768,10 @@ are reference only, but progressions are facts.
   sibling pages) and The design system, as layers (our four layers mapped, canvas and app; values from the layer
   below; a component once, in the kit; one name both sides; a docstring per helper; governance as the log; a core
   change checked on every board).
+- **Canvas v543 (2026-11-18, loop): the type rules applied on every board.** A sweep of every phone board against
+  laws, Type anatomy found text under 12px (the tab bar's labels at 11, the docks' captions Style · Key · Tempo · Tap ·
+  Listen · From, key letters at 10, avatar initials and unread counts at 10), an inactive tab at weight 550, and two
+  extra tracking values (-0.02em on tool titles, +0.06em on small capitals). All are 12px now, the inactive tab 500,
+  titles -0.01em, small capitals +0.04em, in the kit and 20 generators (62 boards). The song cover's miniature
+  printed title stays, being the picture. Rule 13 was corrected to the boards: 700 sets names, titles and the active
+  tab (the board is the spec; `DESIGN.md` moves to 700 at the port).
