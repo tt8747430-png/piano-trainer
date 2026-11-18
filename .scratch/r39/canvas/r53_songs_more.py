@@ -273,7 +273,7 @@ GR_SHEETS = (NEWNAME('newOn', 'New group', 'Group name', 'ngName', 'typeNG', 'ma
              + ASK('delOn', 'Delete Choir accompanists?', 'Members will lose access to every folder shared with this group. Your own folders are not affected.', 'Delete', 'doDel')
              + ASK('stopOn', 'Stop sharing Choir hymns?', 'Members of Choir accompanists will no longer see this folder. The folder stays in your library.', 'Stop sharing', 'doStop'))
 grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', LINKI, 'openJoin'), 'Songs')
-                   + NARROW(GLIST) + STRIP() + IF('canNew', NEWFAB('New group', 'openNew', 40)) + f'<div style="height: 30px; flex: none"></div>', 'true')
+                   + NARROW(GLIST) + STRIP() + IF('canNew', NEWFAB('New group', 'openNew', 32)) + f'<div style="height: 30px; flex: none"></div>', 'true')
         + IF('isGroup', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))
         + IF('isJoin', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(JPAGE)) + TOASTS)

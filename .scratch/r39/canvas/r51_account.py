@@ -66,12 +66,12 @@ V_FAIL = DONEPAGE('isFailed', '<span style="font-size: 34px; font-weight: 700">!
 V_DONE = DONEPAGE('isDone', CHECKI.replace('20', '36'), SAGE, 'You’re signed in', 'Your library syncs across your devices from now on.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
 SIBODY = V_IN + V_CREATE + V_SENT + V_FORGOT + V_FSENT + V_NEW + V_SAVED + V_WORK + V_FAIL + V_DONE
 # the demo's own switches, outside the drawn screen's flow: offline, and a failed sign-in link
-# the phone's bar holds the page's name beside Close, as every page's (one bar shape; lines.mjs, an empty bar)
+# the bar holds the page's name beside Close, phone and laptop, as every page's (one bar shape; lines.mjs, an empty bar)
 siph = (f'{TOP("", "{{title}}", "", "Close", CLOSEB("Settings.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">'
         f'{OFFBANNER}{SIBODY}</main>')
-silm = (f'{LPAD(TOP("", "", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
+silm = (f'{LPAD(TOP("", "{{title}}", "", "Close", CLOSEB("SettingsLaptop.dc.html")))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; justify-content: center; padding: 8px 0 48px"><div style="width: 440px; display: flex; flex-direction: column; gap: 16px">'
         f'<span style="align-self: center; width: 64px; height: 64px; border-radius: 16px; background: {INK}; color: {ACCENT}; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 36px">𝄞</span>'
-        f'<sc-if value="{{{{isForm}}}}" hint-placeholder-val="{{{{true}}}}"><h1 style="margin: 0 0 -4px; text-align: center; font-size: 32px; font-weight: 700; letter-spacing: -0.01em">{{{{title}}}}</h1></sc-if>{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}</div></main>')
+        f'{OFFBANNER}{SIBODY.replace("Settings.dc.html", "SettingsLaptop.dc.html").replace("Legal.dc.html", "LegalLaptop.dc.html")}</div></main>')
 detail('SignIn', 'Sign in', SI_JS, SHOWSTATES() + siph, SHOWSTATES() + silm, '', '', '', 'Profile')
 
 # ── Legal ──
