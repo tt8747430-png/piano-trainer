@@ -289,6 +289,7 @@ SP_SRC = (r'''
     const sw = (k, d) => { const on = st[k] ?? d; return { [k + 'On']: on, [k + 'OnBg']: on ? '#44684A' : '#DAD1C8', [k + 'OnX']: on ? 22 : 2, [k + 'T']: () => S({ [k]: !on }) }; };
     const fEmpty = st.demo === 'emptyF';
     const states = [['emptyF', 'Empty folder', fEmpty, { demo: fEmpty ? null : 'emptyF', page: null }], ['arch', 'Nothing archived', page === 'archive' && arch.length === 0, { arch: arch.length ? [] : null, page: 'archive', demo: null }], ['trash', 'Trash is empty', page === 'trash' && trash.length === 0, { trash: trash.length ? [] : null, page: 'trash', demo: null }]]
+      .filter(([k]) => ROOT === 'archive' ? k === 'arch' : ROOT === 'trash' ? k === 'trash' : true)
       .map(([k, l, on, o]) => ({ l, bg: on ? '#332921' : '#EEE9E2', fg: on ? '#FEFDFB' : '#332921', pick: () => S(on ? { demo: null, arch: null, trash: null, page: ROOT } : o) }));
     return { ...common(st, set), states, fEmpty, fFull: !fEmpty, fCount: fEmpty ? 'No songs' : '6 songs · 2 learned', ...sw('ck', true), ...sw('cc', true), ...sw('cl', false), cs, isFolder: !page, isRootPage: !!page && page === ROOT, isSubPage: !!page && page !== ROOT, pageT: titles[page] || '', back: () => S({ page: parent[page] ?? null }), backT: parent[page] ? titles[parent[page]] : 'Hymns',
       isSettings: page === 'settings', isStyle: page === 'style', isArchived: page === 'archived', isArchive: page === 'archive', isTrash: page === 'trash', notArch: page !== 'archive' && page !== 'trash',
@@ -392,12 +393,10 @@ SP_SHEETS = (BSHEET('applyOn', 'Apply style to', GROUP(('action', 'This folder o
              + ASK('delfOn', 'Delete “Hymns”?', 'The folder will be permanently deleted. Its 6 songs will be moved to the Trash.', 'Delete', 'doDelF'))
 SPBODY = (IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH) + IF('isArchive', ARCHIVEP) + IF('isTrash', TRASHP))
 SPBODY_L = IF('notArch', IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH), 'true') + IF('isArchive', ARCHIVEP_L) + IF('isTrash', TRASHP_L)
-# a folder makes what Songs makes, there: the same New, less New group (a group is not in a folder)
-_FNEW = (('New song', '#'), ('Record', '#'), ('New folder', '#'), ('Import', '#'))
 SPICONS = IB('Settings for Hymns', GEARI, 'goSettings')
-spph = (IF('isFolder', TOP('Songs.dc.html', '', SPICONS, 'My songs') + NARROW(FOLDER).replace('padding: 8px 16px 48px', 'padding: 8px 16px 120px', 1) + NEWDIAL(list(_FNEW)[::-1], 40, 'addOn', 'noAdd', 'openAdd', 'closeSheet')) + IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', SPACT_P, 'My songs') + NARROW(SPBODY) + ASELBAR)
+spph = (IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', SPACT_P, 'My songs') + NARROW(SPBODY) + ASELBAR)
         + IF('isSubPage', TOP('', '{{pageT}}', SPACT_P, 'Back', IB('{{backT}}', CHEV_L, 'back')) + NARROW(SPBODY)) + TOASTS)
-splm = (IF('isFolder', LTOP('SongsLaptop.dc.html', SPICONS) + NEWDIAL(list(_FNEW)[::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 48px 56px; display: flex; flex-direction: column; gap: 20px">{FOLDER_L}</main>') + IF('isRootPage', IF('notArch', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html'), 'true') + IF('isArchive', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('isTrash', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)) + IF('isTrash', LCOL(SPBODY_L, 9999)) + ASELBAR_L)
+splm = (IF('isRootPage', IF('notArch', LTITLEBAR('{{pageT}}', SPACT, back='SongsLaptop.dc.html'), 'true') + IF('isArchive', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('isTrash', LPLACEBAR('{{pageT}}', '{{placeN}}', SPACT, PSEARCH('{{searchPh}}', 'aq', 'setAq'))) + IF('notArch', LCOL(SPBODY_L, 704), 'true') + IF('isArchive', LCOL(SPBODY_L, 9999)) + IF('isTrash', LCOL(SPBODY_L, 9999)) + ASELBAR_L)
         + IF('isSubPage', LTITLEBAR('{{pageT}}', SPACT, backact='back') + IF('notArch', LCOL(SPBODY_L.replace('Groups.dc.html', 'GroupsLaptop.dc.html'), 704), 'true') + IF('isTrash', LCOL(SPBODY_L, 9999))) + TOASTL)
 SP_LAP = LAPSHEET(SP_SHEETS, 440)
 for _t, _pic in (('Silent Night', INCIPIT((4, 5, 4, 2))), ('Greensleeves', INCIPIT((2, 4, 5, 6, 5, 4))), ('Christmas', STACK('#F6E7C8')), ('Waltz sketch', INCIPIT((5, 4, 2, 4, 5, 4))), ('Jingle Bells (my version)', INCIPIT(INC['Jingle Bells']))):
