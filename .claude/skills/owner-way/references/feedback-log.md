@@ -1780,3 +1780,13 @@ are reference only, but progressions are facts.
   from its line (16 / 12); the lesson list now starts 12 higher and the cover has 8 more under it. On a level, each
   chapter heading stood 16 under the last chapter and 21 over its own first lesson; chapters are 32 apart now and
   their rows 6 nearer their heading. Phone and laptop; the lines tool notes nothing on any of the four.
+- **Canvas (2026-11-18, owner: "refactor the courses settings like the lesons settings with better structure and also
+  place the delete button apropriately … i dont want the share button to be in the header like in the lessons").**
+  A lesson's and a course's Settings are now one shape, built by one helper (`THINGSET`, r47_edit): the thing at the
+  head (its picture, its name, "Lesson 7 of 13 · Foundations" / "Course · 8 lessons · Beginner"), its facts (Place;
+  Shelf), Share (Share link), Publishing (Status, Versions; Publish changes and Discard changes while there are
+  changes), Your progress (Reset progress), and Delete alone at the foot, 40 below the rest (rare and dangerous, last
+  and apart). The course's old "Share" group that mixed Publish, Versions and Share link is gone; the lesson's link
+  button left its bar (this replaces the ruling "Share link went to the bar"). Settings' phone title is the bar's
+  (17, 600), as every pushed page; on a laptop one column, never Delete at the top right. The learner's own lesson and
+  course settings use the same words ("Your progress") and the same Delete placement.

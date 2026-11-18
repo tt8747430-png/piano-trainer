@@ -42,7 +42,7 @@ __INSJS__    return { ...common(st, set), added, states, editing, reading: !edit
       legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
       pubOn: sheet === 'publish', openPub: () => set({ sheet: 'publish' }), moreOn: sheet === 'more', openMore: () => set({ sheet: 'more' }),
       isChanged: pub === 'changed', isPublished: pub === 'published', publish: () => set({ pub: 'published', sheet: null, toast: 'Published. Learners will receive it the next time they open the app.' }),
-      unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published 8 November' : 'Changes not published',
+      unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published 8 November' : 'Changes not published', verN: '4',
       pubL: (st.pub ?? 'changed') === 'published' ? 'Published' : 'Publish', publishNow: () => (st.pub ?? 'changed') !== 'published' && set({ pub: 'published', sheet: null, toast: 'Published. Learners receive it the next time they open the app.' }), undoPub: () => set({ pub: 'changed', toast: null }), pubUndoOn: /^Published/.test(st.toast || ''), pmPos: st.pmPos ?? 'right: 16px; top: 112px', toastOn: !!st.toast, toastUndo: /deleted|removed|reset|learned|^Published/i.test(st.toast || ''), copyLink: () => set({ toast: 'Link copied' }), dupBlock: () => set({ sheet: null, toast: 'Section duplicated' }), turns: seg(['Text', 'Steps', 'Note', 'Rule'], st.turn ?? 'Text', (x) => set({ turn: x })), tBpmL: (st.tBpm ?? 96) + ' BPM', tSlower: () => set({ tBpm: Math.max(30, (st.tBpm ?? 96) - 1) }), tFaster: () => set({ tBpm: Math.min(240, (st.tBpm ?? 96) + 1) }), tOn: !!st.tPlay, tOff: !st.tPlay, tPlayL: st.tPlay ? 'Stop metronome' : 'Start metronome', tToggle: () => set({ tPlay: !st.tPlay }), exRoots: rootGrid(st.exRoot ?? 0, (i) => set({ exRoot: i })), exKinds: chipsOf(['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor'], st.exKind ?? 'Major', (l) => set({ exKind: l })), clefs: seg(['Treble', 'Bass'], st.clef ?? 'Treble', (l) => set({ clef: l })), opens: chipsOf(['A lesson', 'A chord', 'A scale', 'A key', 'As written'], st.opens ?? 'A scale', (l) => set({ opens: l })), tipNOn: !!st.tipN, tipNotes: () => set({ tipN: !st.tipN }), looks: [['Plain', '#FEFDFB', '#332921'], ['Soft', '#F6E7C8', '#332921'], ['Bold', '#332921', '#FEFDFB'], ['Paper', '#F4EEE4', '#332921']].map(([n, bg, fg]) => ({ n, bg, fg, on: (st.look ?? 'Soft') === n, ring: (st.look ?? 'Soft') === n ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => set({ look: n }) })), resetLook: () => set({ look: 'Soft', sheet: null, toast: 'Style reset' }), lookV: st.look ?? 'Soft', toastT: st.toast || '', closeToast: () => set({ toast: null }), undoRemove: () => set(/^Published/.test(st.toast || '') ? { pub: 'changed', toast: null } : / learned$/.test(st.toast || '') ? { learned: false, toast: null } : { toast: null }),
       removeBlock: () => set({ sheet: null, toast: 'Scale deleted' }),
       nextLesson: () => set({ learned: true, toast: 'How major scales work learned' }), learned: !!st.learned, toggleLearned: () => set({ learned: !st.learned, toast: st.learned ? null : 'Marked learned' }),
@@ -136,8 +136,8 @@ lpops = (POPOVER('insOn', 'Insert', INSBODY, 'right: 300px; top: 72px', 420) + P
 LEARNEDB = LEARNEDT
 # owner, 2026-11-18: "i dotn like that the settigs and hte tools are united … what is the meaning and value for teh
 # metronome or tuner or otehr tools in the lessons? where the user just learn. remove them": no Tools in a lesson;
-# Share link, an act on the lesson, sits in the bar beside its gear, and Settings holds only settings
-RBAR = IB('Share link', LINKI, 'copyLink') + IB('Settings', GEARI, 'openSettings') + EDITBTN
+# Share link is in Settings › Share, as on a course and a song (owner, 2026-11-18: not in the header)
+RBAR = IB('Settings', GEARI, 'openSettings') + EDITBTN
 PMBTN = IB('Publishing', DOTS, 'openPm')
 PUBGO = TB('{{pubL}}', 'publishNow')
 lph = lph.replace('EDITBTN_PLACEHOLDER', '')
@@ -166,11 +166,25 @@ for nm in ('lph', 'llm'):
 # owner, 2026-11-18: "i dont like the structure of these settings": the lesson, then Publishing (its state a value,
 # Versions; Publish changes and Discard changes only while there are changes), then the learner's progress, the loss of
 # the whole lesson last and apart; Share link went to the bar
-SETPAGE = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">How major scales work</span>'
-           f'{CAPS("The lesson")}{GROUP(("link", "Place", "Foundations · Chapter 3 · Lesson 7", "LearnLevelLaptop.dc.html"), bg=SHEET)}'
-           f'{CAPS("Publishing")}{GROUP(("val", "Status", "{{standing}}"), ("link", "Versions", "4", "openVer"), bg=SHEET)}'
-           f'<sc-if value="{{{{isChanged}}}}" hint-placeholder-val="{{{{true}}}}">{GROUP(("action", "Publish changes", "publishNow"), ("action", "Discard changes", "discard", "#B3261E"), bg=SHEET)}</sc-if>'
-           f'{CAPS("Your progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete lesson", "askDel", "#B3261E"), bg=SHEET)}')
+# owner, 2026-11-18: "refactor the courses settings like the lessons settings with better structure and also place the
+# delete button apropriately … i dont want the share button to be in the header": a lesson's and a course's Settings are
+# one shape, the learner's own settings' shape too: the thing at the head (its picture, its name, where it stands), its
+# facts, Share (Share link, out of the bar), Publishing (the state a value, Versions; Publish and Discard only while
+# there are changes), the learner's progress, and the loss of the whole thing alone at the foot, 24 below the rest
+THINGSEC = lambda *parts: f'<section style="display: flex; flex-direction: column; gap: 8px">{"".join(parts)}</section>'
+def THINGHEAD(pic, name, sub):
+    return (f'<div style="display: flex; gap: 16px; align-items: center; padding: 4px 0">{pic}<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">'
+            f'<span style="font-size: 20px; font-weight: 700; text-wrap: balance">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></div></div>')
+def THINGSET(head, facts, kind):
+    return ('<div style="display: flex; flex-direction: column; gap: 24px">' + head + facts
+            + THINGSEC(CAPS('Share'), GROUP(('action', 'Share link', 'copyLink'), bg=SHEET))
+            + THINGSEC(CAPS('Publishing'), GROUP(('val', 'Status', '{{standing}}'), ('link', 'Versions', '{{verN}}', 'openVer'), bg=SHEET),
+                       f'<sc-if value="{{{{isChanged}}}}" hint-placeholder-val="{{{{true}}}}">{GROUP(("action", "Publish changes", "publishNow"), ("action", "Discard changes", "discard", "#B3261E"), bg=SHEET)}</sc-if>')
+            + THINGSEC(CAPS('Your progress'), GROUP(('action', 'Reset progress', 'doReset'), bg=SHEET))
+            + '<div style="margin-top: 16px">' + GROUP(('action', f'Delete {kind}', 'askDel', '#B3261E'), bg=SHEET) + '</div></div>')
+LESSONPIC = f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 32px; background: {SHEET}; box-shadow: inset 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>'
+SETPAGE = THINGSET(THINGHEAD(LESSONPIC, 'How major scales work', 'Lesson 7 of 13 · Foundations'),
+                   THINGSEC(CAPS('The lesson'), GROUP(('link', 'Place', 'Foundations · Chapter 3 · Lesson 7', 'LearnLevelLaptop.dc.html'), bg=SHEET)), 'lesson')
 VERBODY = (f''
            + GROUP(*[('raw', f'<div style="min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 16px"><span style="flex: 1; font-size: 16px">Published {d}</span>{t}<button type="button" onClick="{{{{restore}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Restore</button></div>') for d, t in [('8 November 2026', PILL('Newest', HONEY)), ('2 November 2026', ''), ('28 October 2026', ''), ('20 October 2026', '')]], bg=SHEET))
 STYLEBODY = (CAPS('Look') + f'<div role="radiogroup" aria-label="Look" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{looks}}}}" as="o" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 56px; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; color: {{{{o.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{o.n}}}}</button></sc-for></div>'
@@ -184,13 +198,13 @@ def SPLIT2(page, first, second):
     a, b, c = page.index(first), page.index(second), len(page)
     col = '<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px">'
     return page[:a] + '<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">' + col + page[a:b] + '</div>' + col + page[b:] + '</div></div>'
-SETPAGE_L = SPLIT2(SETPAGE, CAPS('The lesson'), CAPS('Your progress'))
+SETPAGE_L = SETPAGE  # one column on a laptop too, as the learner's own settings: the loss last, never top right
 def PAGEOVER(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     inner_w = 'width: min(1180px, 100%); ' if lap else ''
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">'
             + (f'<div style="height: {54 if not lap else 0}px; flex: none"></div>' if not lap else '')
-            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'
+            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0 0 0 {-4 if not lap else 0}px; font-size: {30 if lap else 17}px; font-weight: {700 if lap else 600}{"; letter-spacing: -0.01em" if lap else ""}">{{{{pageT}}}}</h1></header>'
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; {pad}"><div style="{inner_w}display: flex; flex-direction: column; gap: 16px">'
             f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE_L if lap else SETPAGE}</sc-if></div></main></div></sc-if>')
 lph = SHOWSTATES() + lph.replace('<main class="nos"', '<main class="nos" onScroll="{{secScroll}}"') + PAGEOVER(False) + ASKS

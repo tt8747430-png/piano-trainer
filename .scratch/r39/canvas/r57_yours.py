@@ -167,7 +167,7 @@ def SETTINGS(lesson, lap):
     if not lesson:
         rows += SEC(f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Cover")}<div role="radiogroup" aria-label="Cover" style="display: flex; gap: 12px"><sc-for list="{{{{covers}}}}" as="v" hint-placeholder-count="5">'
                  f'<button type="button" role="radio" aria-label="{{{{v.c}}}}" aria-checked="{{{{v.on}}}}" onClick="{{{{v.pick}}}}" style="width: 52px; height: 52px; border: 0; border-radius: 13px; background: {{{{v.bg}}}}; box-shadow: {{{{v.ring}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI}</button></sc-for></div></div>')
-    rest = SEC(CAPS("Progress"), GROUP(("action", "Reset progress", "reset"), bg=SHEET)) + GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET)
+    rest = SEC(CAPS("Your progress"), GROUP(("action", "Reset progress", "reset"), bg=SHEET)) + '<div style="margin-top: 16px">' + GROUP(("action", "Delete lesson" if lesson else "Delete course", "del", "#B3261E"), bg=SHEET) + '</div>'
     # one column on both sizes, in the phone's order: what it is, then its progress, the loss last and apart (loop round 63:
     # in two columns Delete stood at the laptop's top right, the first thing seen)
     body = sub + rows + rest
