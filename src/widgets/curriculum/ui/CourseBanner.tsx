@@ -11,7 +11,7 @@ export function CourseBanner({ fill, ink }: { fill: string; ink: string }) {
     <div
       aria-hidden
       className={cn(
-        'h-33 overflow-hidden rounded-[18px] ring-1 ring-black/5 ring-inset dark:ring-white/5',
+        'h-33 overflow-hidden rounded-card ring-1 ring-black/5 ring-inset dark:ring-white/5',
         fill,
         ink,
       )}

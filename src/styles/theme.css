@@ -350,6 +350,26 @@
   }
 }
 
+/* A bar's title on a phone: it fades and lifts away over the page's first 40px of scroll while the bar
+   stays (the canvas's data-bar-title); a laptop's bar keeps it. */
+@utility bar-title {
+  animation: bar-title linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0 40px;
+  @variant lg {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+@keyframes bar-title {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
 /* The soft caps every field and group is captioned in (the kit's CAPS): 13 semibold, tracked 0.04em, soft ink. */
 @utility caps {
   font-family: var(--font-sans);

@@ -9,6 +9,9 @@ export const learn = {
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
     of: '{{learned}} of {{total}}',
+    start: 'Start: {{title}}',
+    continue: 'Continue: {{title}}',
+    review: 'Review: {{title}}',
   },
   // The Courses, shelf by shelf.
   shelves: {
