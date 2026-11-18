@@ -131,7 +131,7 @@ def INFOTIP(on, close, label, body, pos='left: 0; top: 32px'):
             f'<div role="dialog" aria-label="{label}" style="position: absolute; {pos}; z-index: 61; width: 300px; max-width: calc(100vw - 32px); box-sizing: border-box; padding: 16px; border-radius: 16px; background: {SHEET}; color: {INK}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; font-size: 15px; line-height: 1.45; text-wrap: pretty; display: flex; flex-direction: column; gap: 12px">{body}</div></sc-if>')
 def SUBJECT(name, sub, size=40, align='left'):
     return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
-H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 16px 0 -4px"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
+H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 16px 0 -4px"><h2 style="margin: 0; font-family: {FONT}; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
 CAPS = lambda t: f'<h3 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
 
 # ── controls ──
