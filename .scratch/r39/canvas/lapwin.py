@@ -109,5 +109,10 @@ def lapwin(h):
         h = h[:at] + exitb + h[at:]
     h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
     h = _ACCT_OLD.sub(_acct, h, count=1)
+    # Profile is the account row's place: on its pages the row wears the current wash, as Learn, Songs and Practice do
+    # on theirs (HIG Sidebars: the selected item shows where you are; a sidebar with nothing current loses the learner)
+    if re.search(r'<title>(Profile|[^<]*from Profile)', h):
+        h = h.replace('<button type="button" data-acct aria-haspopup="menu"', '<button type="button" data-acct aria-current="page" aria-haspopup="menu"', 1)
+        h = h.replace('background: {{lapAcctBg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 'background: #EAE2D7; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 1)
     k = h.rindex('</script>')
     return h[:k] + _LAPJS + h[k:]
