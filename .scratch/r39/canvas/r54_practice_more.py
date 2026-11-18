@@ -256,12 +256,13 @@ LADROW = ('raw', f'<div style="position: relative; min-height: 48px; box-sizing:
           + '<button type="button" role="switch" aria-checked="{{ladOn}}" aria-label="Tempo ladder" onClick="{{ladT}}" style="flex: none; height: 44px; border: 0; padding: 0; background: transparent; display: flex; align-items: center">'
           + TOGGLE('ladOn').replace('role="switch" aria-checked="{{ladOn}}"', 'aria-hidden="true"', 1) + '</button>'
           + INFOTIP('tipOn_lad', 'tip_lad', 'About this', '<p style="margin: 0">Each clean pass raises the tempo a little, up to the target.</p>', 'left: 0; top: 52px') + '</div>')
-PVSET = (IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
+# the setup's sections 24 apart, a heading 8 over its control: each heading reads with what it heads (laws, spacing 3)
+PVSET = ('<div style="display: flex; flex-direction: column; gap: 24px">' + IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
          + IF('isChrom', SEC(CAPS('Chord type'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
          + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WRAPCHIPS('walks')))
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), LADROW, bg=SHEET))
-)
+ + '</div>')
 # the phone's sheet covers Play, so its foot starts the run; on a laptop Play stands beside the Setup popover and starts it
 # a laptop's Setup popover: the exercise's choices in one group, each at its row's end (the kit's segr), so the popover
 # holds every row without scrolling (loop round 63)
