@@ -152,7 +152,7 @@ def COURSECARD(w, href):
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')
 COURSESTRIP = (f'<div class="nos" style="flex: none; display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 0 16px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="4">{COURSECARD("168px", "Course.dc.html")}</sc-for></div>')
 COURSEGRID = (f'<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); gap: 16px"><sc-for list="{{{{coursesHome}}}}" as="k" hint-placeholder-count="5">{COURSECARD("auto", "CourseLaptop.dc.html")}</sc-for></div>')
-SEEALLH = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px">See all</a>'
+SEEALLH = lambda href: f'<a href="{href}" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; margin: -12px 0">See all</a>'
 PLUSI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
 def OWNROW(t, sub, href, kind='lesson'):
     bg, fg, ic = {'lesson': (SHEET, INK, BOOKI.replace("22", "20")), 'learned': (SAGE, '#2F5A35', CHECKI), 'course': (SAGE, INK, FOLDI)}[kind]
@@ -262,7 +262,7 @@ def MEDAL(tier):
 def BROW(name, tier, sub):
     return f'<a href="#" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none">{MEDAL(tier)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
 BOX = lambda inner: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{inner}</div>'
-SEEALL = f'<a href="#" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; height: 44px; display: flex; align-items: center">See all</a>'
+SEEALL = f'<a href="#" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; height: 44px; margin: -12px 0; display: flex; align-items: center">See all</a>'
 BADGES = H2('Badges', SEEALL) + BOX(BROW('Streak Keeper', 'Silver', 'Silver · next: Gold at 14 days') + BROW('Repertoire', 'Bronze', 'Bronze · 4 songs learned') + BROW('Lesson Finisher', 'Bronze', 'Bronze · 6 lessons learned'))
 def AROW(name, sub, got):
     ic = f'<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: {"#DCE9D6" if got else FILL}; color: {"#2F5A35" if got else SOFT}; display: flex; align-items: center; justify-content: center">{CHECKI if got else LOCKI}</span>'
