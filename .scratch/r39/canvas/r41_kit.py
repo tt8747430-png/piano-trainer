@@ -164,7 +164,7 @@ def GROUP(*rows, bg=FILL):
         return f'<div data-group style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
     return f'<div data-group style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
 def BTN(label, act='', href='', kind='primary', h=50, grow=True):
-    bg = {'primary': ACCENT, 'quiet': FILL, 'ink': INK}[kind]; fg = SHEET if kind == 'ink' else INK
+    bg = {'primary': ACCENT, 'quiet': FILL}[kind]; fg = INK
     # min-height: in a column, flex: 1's zero basis squashed it to its text when the column was full (Copy link, 20 tall)
     st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; min-height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
     return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
