@@ -46,7 +46,7 @@ def _staff63():
 # the pattern at reading size (10 a space on a phone), framed to its bar, on the paper: no card round the page's own
 # music (laws, "The page's subject is its largest thing")
 MUSIC63 = (f'<figure style="flex: none; margin: 0; display: flex; flex-direction: column; gap: 12px">' + _staff63() + f'<figcaption style="margin: 0 4px; max-width: 65ch; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</figcaption></figure>')
-H3_63 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
+H3_63 = lambda t: f'<h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
 DESC63 = 'The left hand holds the octave. The right hand keeps its chord under the fingers and rocks in 8ths: the upper notes together, then the lowest note alone. For a G chord after C, that is D and G together, then B.'
 # The hands' ⓘ (loop, 2026-11-15): the pattern's longer description, out of the way until asked for, as InfoTip draws it.
 INFO63 = INFOB('About the hands', 'openDesc', 'descOn') + INFOTIP('descOn', 'closeSheet', 'The hands', DESC63, 'left: 0; top: 36px')

@@ -59,7 +59,7 @@ BELL9 = (f'<button type="button" aria-label="{{{{bellL}}}}" onClick="{{{{goNotes
 def TILE9(icon, v, l, act):
     t = TILE(icon, v, l)
     return t.replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="border: 0; font: inherit; text-align: left; ', 1)[:-4] + '</button>' if act else t.replace('<a href="#"', '<div', 1)[:-4] + '</div>'
-TILES9 = f'<div style="display: flex; gap: 12px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE9(NOTE, "4", "Songs learned", "")}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
+TILES9 = f'<div style="display: flex; gap: 12px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE(NOTE, "4", "Songs learned").replace('<a href="#"', '<a href="AllSongs.dc.html"', 1)}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
 SEEALL9 = lambda act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; margin: -12px 0; border: 0; background: transparent; padding: 0; font: inherit; font-size: 15px; font-weight: 600; color: {LINK}">See all</button>'
 def BROW9(name, tier, sub, act):
     return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'
@@ -142,7 +142,7 @@ SUBS9 = (f'<sc-if value="{{{{isStreak}}}}" hint-placeholder-val="{{{{false}}}}">
 SUBS9L = SUBS9.replace(P9_STREAK, P9_STREAK_L, 1).replace(P9_BADGES, P9_BADGES_L, 1).replace(P9_ACH, P9_ACH_L, 1).replace(P9_HIST, P9_HIST_L, 1)
 MOREB9 = f'<sc-if value="{{{{isNotes}}}}" hint-placeholder-val="{{{{false}}}}">{IB("More", MORE, "openMore")}</sc-if>'
 
-GUEST_P = (f'<div style="display: flex; align-items: center; gap: 16px; padding: 0 4px"><span style="flex: none; width: 76px; height: 76px; border-radius: 38px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>'
+GUEST_P = (f'<div style="display: flex; align-items: center; gap: 16px"><span style="flex: none; width: 76px; height: 76px; border-radius: 38px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></span>'
            f'<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 22px; font-weight: 700">Exploring as a guest</span><span style="font-size: 14px; line-height: 1.4; color: {SOFT}">Your practice is kept on this device. Sign in to keep it on every device.</span>'
            f'<a href="SignIn.dc.html" style="align-self: flex-start; height: 44px; padding: 0 20px; border-radius: 22px; background: {ACCENT}; color: {INK}; font-size: 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center">Sign in</a></div></div>')
 SKEL = lambda h, r=14: f'<div style="height: {h}px; border-radius: {r}px; background: {FILL}"></div>'

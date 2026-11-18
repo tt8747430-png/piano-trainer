@@ -171,7 +171,7 @@ def SONGS_SUB(fname):
     head = ('<div style="height: 40px; display: flex; align-items: center; padding: 0 0 0 44px; margin-top: 4px"><span style="flex: 1; font-size: 13px; font-weight: 600; color: #6B6259">Playlists</span>'
             '<button type="button" aria-label="New playlist" data-tip="New playlist" onClick="{{openFolder}}" style="position: relative; width: 40px; height: 40px; border: 0; border-radius: 20px; background: transparent; color: #4A433C; display: flex; align-items: center; justify-content: center">'
             '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button></div>')
-    rows = (item('All songs', 'SongsLaptop.dc.html', '93') + item('Explore', 'ExploreLaptop.dc.html') + head
+    rows = (item('All songs', 'SongsLaptop.dc.html', '8') + item('Explore', 'ExploreLaptop.dc.html') + head
             + ''.join(item(t, h, '', c) for t, c, h in _SUBPL).replace('padding: 0 12px 0 44px', 'padding: 0 12px 0 72px')
             + '<div role="separator" style="height: 1px; margin: 6px 12px 6px 44px; background: #E9E2D8"></div>'
             + item('Archive', 'ArchiveLaptop.dc.html', '3') + item('Trash', 'TrashLaptop.dc.html', '2'))
