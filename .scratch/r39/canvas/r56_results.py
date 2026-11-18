@@ -173,16 +173,19 @@ def RS_RUNVIEW(lap):
     staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
-    transport = f'<div class="rstr" style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
+    transport = (f'<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}'
+                 f'<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}">Both hands</span>')
     # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
-    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}'
+    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
         return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1018px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
-    # a phone on its side: the transport stands left of the centred music, in the band it leaves bare (round 66)
-    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important; position: relative } '
-             '.rsrun .rstr { position: absolute; left: 16px; top: 4px; z-index: 2 } }</style>')
-    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>' + short
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{DOCK(transport, 186, w="auto")}')
+    # the transport floats, as the Player's: the kit's glass dock 12 above the keys, reserving no space; the music's
+    # scroll ends clear of it (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation").
+    # A phone on its side has a 20 home band, so keys and dock both sit 14 lower (round 66)
+    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important } '
+             '.rsrun ~ [role=toolbar] { bottom: 144px !important } }</style>')
+    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{inner}</main>{DOCK(transport, 158, w="auto")}' + short
 
 
 rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_RESULTS(4, 76, False))
@@ -210,19 +213,20 @@ def PV_LINE(n, cw, v='walk', start=0, last=True):
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
     return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
 def PV_RUN(lap, v):
-    setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
-    transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
-                 f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
+    setup = BTN('Setup', 'openSetup', '', 'plain', 44, False)
+    # the transport floats, as the Player's: the kit's glass dock over the paper, 12 above the keys, reserving no
+    # space (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation")
+    transport = (f'{setup}<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
                 + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{DOCK(transport, 186, w="auto")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}<div style="flex: 1"></div>'
-            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}<div style="flex: 1"></div>'
+            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div></main>{DOCK(transport, 158, w="auto")}')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 244px', 620).replace('max-height: 760px', 'max-height: 600px', 1), 'Practice')
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 262px', 620).replace('max-height: 760px', 'max-height: 600px', 1), 'Practice')
 print('r56 runs ok')

@@ -183,7 +183,7 @@ def BTN(label, act='', href='', kind='primary', h=50, grow=True):
     """A text button: honey for the screen's one act, quiet beside it. Two heights only (laws, similarity: near-miss
     heights read as a mistake): 50 for a page's or sheet's act, 44 compact in a row; 48 and 52 are 50."""
     h = 44 if h < 47 else 50
-    bg = {'primary': ACCENT, 'quiet': FILL}[kind]; fg = INK
+    bg = {'primary': ACCENT, 'quiet': FILL, 'plain': 'transparent'}[kind]; fg = INK  # plain: on glass beside the honey act (one fill per dock)
     # min-height: in a column, flex: 1's zero basis squashed it to its text when the column was full (Copy link, 20 tall)
     st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; min-height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
     return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
