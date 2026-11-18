@@ -98,7 +98,7 @@ CP_SET58 = (LABELLED('Sound', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), ('to
 # "the floating bar … doesnt stand above the content like pinned above the keyboard"): each chord a white box as
 # wide as its beats, its beats ticked along its foot, its name large with the extension raised; a + box ends each
 # section; the section's head Musicca's (name, × n, Variation n, delete, grip); one tap selects a chord, Play starts
-# there, a double tap opens its sheet, Musicca's dialog (Chord root ⌄ quality ⌄, Bass note ⌄, Duration, Suggested
+# there, a tap on the chosen chord opens its sheet (no timed double tap: laws, every gesture has a visible twin), Musicca's dialog (Chord root ⌄ quality ⌄, Bass note ⌄, Duration, Suggested
 # chords four across, Delete · Duplicate · Play from here); the dock floats pinned just above the keys.
 CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const SUP = (c) => { const m = c.match(/^([A-G][♭♯]?)((?:m(?!aj))?)([^/]*)(\/.*)?$/); return m ? { r: m[1] + m[2], x: m[3] || '', b: m[4] || '' } : { r: c, x: '', b: '' }; };
     const VARS = st.vars || [2, 2, 3], sb = st.selB59 || null;
@@ -109,9 +109,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
             ticks: Array.from({ length: L }, (_, k) => ({ bg: now && f0 + k === beatNow ? '#332921' : '#C9BFB5', h: now && f0 + k === beatNow ? '10px' : '6px' })),
             picked, bg: now ? '#F6E7C8' : '#FEFDFB', ring: now || picked ? '0 0 0 2px #B98A32' : '0 0 0 1px #DAD1C8',
             wrong: wrong && ci === cs.length - 1, wrongTip: 'Bar ' + (bi + 1) + ' holds ' + sum + ' beats, not 4',
-            tap: () => { const t = Date.now(), k = si + ':' + bi + ':' + ci, l = this._tap59;
-              if (l && l.k === k && t - l.t < 400) { this._tap59 = null; set({ sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null }); }
-              else { this._tap59 = { k, t }; set({ sel: [si, bi], selC: ci, selB59: [si, bi, ci] }); } } });
+            tap: () => set(picked ? { sheet: 'chord', sel: [si, bi], selC: ci, selB59: [si, bi, ci], pop: null } : { sel: [si, bi], selC: ci, selB59: [si, bi, ci] }) });
           from += L; }); });
       return { m, name, rep: '× ' + rep, vari: 'Variation ' + (VARS[si] ?? 1), tag: follow ? tagLine(TAGS[si] || { mains: [] }) : '', tagOn: follow, openTag: () => set({ sheet: 'tag', tagAt: si }), boxes,
         repUp: () => editSecs((x) => { x[si][2] = (x[si][2] % 4) + 1; }), varUp: () => set({ vars: SECS.map((_, i) => (i === si ? ((VARS[i] ?? 1) % 4) + 1 : VARS[i] ?? 1)), draft: true }),

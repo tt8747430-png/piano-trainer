@@ -602,6 +602,13 @@ owner's, typos fixed.
 
 ## Practice
 
+- **The Chord player asks for no gesture alone (laws, A phone is not a small laptop 6 and Cognitive biases 1,
+  2026-11-18):** a chord's sheet opened only on a double tap inside 400ms, and on a laptop the key's chords went into a
+  bar only by dragging, with "Drag one into a bar." under them as an explanation line. A tap selects a chord and a tap
+  on the chord already chosen opens its sheet (Numbers' and Keynote's tap, then tap again to edit), at any pace; each
+  of the key's chords is a button that puts it in the chosen chord's place, dragging kept as the shortcut, its tooltip
+  "Tap or drag into a bar", and the line under them is gone. A bar's length keeps its drag handle and its twin, the
+  sheet's Duration.
 - **The Chord player's layout is the learner's (2026-11-18, "more user customizable ui like draggable resizable, hidible, minimizable toolbars … genos controls on phone … occupies too much space … saved and resetable in the app setitngs … opens the last opened … settinsg should be refactored"; canvas R76):** Keys, Controls, Genos and Chords are panels placed, sized, minimized and hidden in Edit layout (drag, or tap and tap a place: WCAG 2.5.7), saved per page, reset from the gear or Settings › General › Page layouts with Undo; the Genos Compact by default on a phone and minimizable from its head; the sheet's name a menu of recent sheets, opening on the last; settings regrouped Sound · Playing · Chart · MIDI · Layout; ··· a menu, not a sheet; the Follow switch drew off while on (its colour keys were missing), fixed. Spec: `practice-chord-player.md`, first ruling.
 - **Feedback never lifts the keys (2026-11-18, "something appears under the keyboard as feedback … it lifts the keyboard and puts background under it"):** on Check, the answer came as a 78-tall pink band where the 50-tall buttons were, so the keys rose 28 and sat on a coloured stripe; now the verdict is said under the question in its colour (green right, crimson wrong, ink for a shown answer), and Next takes the buttons' slot at 50, so the keys stay at 670 in every state. No other board drew feedback under its keys. The rule is in `edge-lines/references/laws.md`, "The keys never move".
 - **A pattern's grand staff at reading size (2026-11-18):** the bar was 6 a space in a card with its words; its notes are drawn 23 apart and the view framed to the bar, 10 a space on a phone, on the paper with its line under it as a caption.
