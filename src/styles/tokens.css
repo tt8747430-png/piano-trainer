@@ -56,6 +56,12 @@
   /* A day practised on the streak's calendar (the board's CAL). */
   --p-ember: #e8b48f;
   --p-ember-night: #7a4e33;
+  /* A badge's medal, the metal of its tier (the board's MEDC): the same by day and by night. */
+  --p-medal-bronze: #c98b5a;
+  --p-medal-silver: #a9a39b;
+  --p-medal-gold: #d9a93e;
+  --p-medal-platinum: #8fb3b8;
+  --p-medal-none: #dad1c8;
   --p-crimson: #a34243;
   /* The shade cast by night: near black, warm. */
   --p-night-shade: #0a0705;
@@ -113,6 +119,11 @@
   --eyebrow: var(--p-rust);
   --played: var(--p-copper);
   --practised-day: var(--p-ember);
+  --medal-bronze: var(--p-medal-bronze);
+  --medal-silver: var(--p-medal-silver);
+  --medal-gold: var(--p-medal-gold);
+  --medal-platinum: var(--p-medal-platinum);
+  --medal-none: var(--p-medal-none);
   /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
   --scrim: rgb(51 41 33 / 0.28);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and

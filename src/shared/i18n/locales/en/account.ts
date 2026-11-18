@@ -76,7 +76,6 @@ export const account = {
     achievements: {
       title: 'Achievements',
       seeAll: 'See all',
-      none: 'None earned yet. Learn a song or finish a lesson to earn your first.',
       records: 'Personal records',
       milestones: 'Milestones',
       milestonesSay: 'Earn these once.',
@@ -155,6 +154,9 @@ export const account = {
       title: 'Streak',
       keep: 'Keep the flame alive: practise today to extend your streak.',
       counted: 'Today counts. Practise tomorrow to keep it going.',
+      // Today counted, its reward named: the days to the streak badge's next tier (One outcome per screen).
+      toward_one: 'Today counts. {{count}} more day to the {{tier}} badge.',
+      toward_other: 'Today counts. {{count}} more days to the {{tier}} badge.',
       start: 'Practise today to start a streak.',
       days_one: '{{count}} day streak',
       days_other: '{{count}} day streak',

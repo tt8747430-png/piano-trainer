@@ -110,6 +110,11 @@
   --color-eyebrow: var(--eyebrow);
   --color-played: var(--played);
   --color-practised-day: var(--practised-day);
+  --color-medal-bronze: var(--medal-bronze);
+  --color-medal-silver: var(--medal-silver);
+  --color-medal-gold: var(--medal-gold);
+  --color-medal-platinum: var(--medal-platinum);
+  --color-medal-none: var(--medal-none);
   --color-scrim: var(--scrim);
   --color-key-bed: var(--key-bed);
   --color-key-shade: var(--key-shade);

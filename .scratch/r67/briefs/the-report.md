@@ -158,3 +158,14 @@ Plan, in order: 1 Profile · 2 Settings panes · 3 Sign in and Legal · 4 own le
 | A2-3 | Chips that wrap stand 8 apart | shared/ui/ChoiceChips.tsx (the board's CHIPS: 44 reach, 4 border, 16 in, 8 apart, rows 0), GroupRows GroupChips | built; PublicItemParts' tags are B's |
 | A2-4 | Tooltips in the sans; no Literata or Onest anywhere | styles/index.css, theme.css (Instrument Sans Variable, Iowan Old Style), tooltip.tsx (500 12/16, 8 round, 4×8), package.json, vite.config.ts | built |
 | A2-5 | A confirm's act crimson only for a loss, ink for Publish | shared/ui/primitives/alert-dialog.tsx | built |
+| 21 | The laptop Profile's stats stand beside the name, on the right column | pages/profile/ui/ProfilePage.tsx (rows: learner · tiles, week · badges, history · achievements) | built |
+| 45 | The Profile's tiles wear one ink, the streak alone its flame | ProfilePage Tiles (Soft Ink marks; the flame copper, filled while alive) | built |
+| 46 | A list ends on its last row | pages/profile/ui/ProfileList.tsx (border-t between rows) | built |
+| 69 | Profile's streak names its reward | pages/profile/ui/StreakPage.tsx, account `streakPage.toward` en/ru | built |
+| 119 | Profile on a laptop without rows cut in two (the 52 score tile; no chevron on a laptop) | HistoryPreview RunRow, ProfileList | built |
+| 120 | Profile's week under its own heading on the phone | WeekCard in ProfileSection (heading and summary outside the card) | built |
+| 126 | Profile's two columns share their edges | ProfilePage Cell (stretched, content centred) | built |
+| 130 | A run's result names its run in the bar | pages/profile/ui/RunPage.tsx ("Today, 2:20 PM"); the Early/Late ochre is the Chord player's | built |
+| 136 | Profile on a laptop in rows that meet | ProfilePage (grid, 32 between rows and columns, as the board's code) | built |
+| 142 | The week's chart fills its box on a laptop (150) | WeekCard (72 phone, 150 laptop, the scale 0 and two lines) | built |
+| A2-6 | Badges wear the star medal in their tier's metal; achievements a check or a lock | pages/profile/ui/marks.tsx, tokens `--medal-*` | built |

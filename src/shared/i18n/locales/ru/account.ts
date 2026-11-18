@@ -100,7 +100,6 @@ export const account: LocaleResources['account'] = {
     achievements: {
       title: 'Достижения',
       seeAll: 'Все',
-      none: 'Пока ни одного. Выучите песню или пройдите урок, чтобы получить первое.',
       records: 'Личные рекорды',
       milestones: 'Вехи',
       milestonesSay: 'Их получают один раз.',
@@ -180,6 +179,10 @@ export const account: LocaleResources['account'] = {
       title: 'Серия',
       keep: 'Не дайте огоньку погаснуть: позанимайтесь сегодня, чтобы продлить серию.',
       counted: 'Сегодня засчитано. Позанимайтесь завтра, чтобы продолжить серию.',
+      toward_one: 'Сегодня засчитано. Ещё {{count}} день до значка «{{tier}}».',
+      toward_few: 'Сегодня засчитано. Ещё {{count}} дня до значка «{{tier}}».',
+      toward_many: 'Сегодня засчитано. Ещё {{count}} дней до значка «{{tier}}».',
+      toward_other: 'Сегодня засчитано. Ещё {{count}} дня до значка «{{tier}}».',
       start: 'Позанимайтесь сегодня, чтобы начать серию.',
       days_one: 'Серия: {{count}} день',
       days_few: 'Серия: {{count}} дня',

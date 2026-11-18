@@ -1,11 +1,19 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { Check, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { selectRun, selectTrainerRecord, useProgress, type PracticeRun } from '@/entities/progress'
+import {
+  localDay,
+  selectRun,
+  selectTrainerRecord,
+  useProgress,
+  type PracticeRun,
+} from '@/entities/progress'
 import { runPlaceOf, useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
 import { cn, useMediaQuery } from '@/shared/lib'
 import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { useToday } from '@/widgets/practice-days'
+import { useHistoryDay } from '../model/runs'
 
 /** A figure of the run (canvas 160): its value first and large, its name under it. */
 function Tile({ value, label }: { value: string; label: string }) {
@@ -61,7 +69,8 @@ export function RunPage() {
   const run = useProgress(selectRun(runId))
   const record = useProgress((state) => (run ? selectTrainerRecord(run.key)(state) : undefined))
   const name = useRunName()(run?.key ?? '')
-  const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const clock = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
+  const dayName = useHistoryDay(useToday())
   if (!run || name === null)
     return (
       <div className="flex flex-col gap-6">
@@ -77,8 +86,12 @@ export function RunPage() {
   const best = record && record.best > run.accuracy
   return (
     <div className="flex flex-col gap-6">
-      {/* The PracticeResult board's bar: Back alone, the run's name on the page. */}
-      <ScreenHeader title={name} back={<BackButton />} titleOnPage />
+      {/* The PracticeResult board's bar names the run by when it was played ("Today, 14:20"), never
+          an empty bar; its name heads the page. */}
+      <ScreenHeader
+        title={`${dayName(localDay(new Date(run.at)))}, ${clock.format(new Date(run.at))}`}
+        back={<BackButton />}
+      />
       <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pt-2 pb-docked-8 sm:gap-6 sm:pb-4">
         <div className="flex flex-col items-center gap-2 text-center">
           <span
@@ -99,8 +112,6 @@ export function RunPage() {
             {perfect
               ? t('profile.history.result.perfect')
               : t('profile.history.result.correct', { right, count: run.answered })}
-            {' · '}
-            {when.format(new Date(run.at))}
           </p>
         </div>
         <dl className="grid grid-cols-3 gap-2">

@@ -17,7 +17,7 @@ const SIZE = {
   /** A row's: its tile's size. */
   row: 'size-13 text-2xl',
   /** The Profile's and the Account's, at their top. */
-  hero: 'size-20 text-4xl',
+  hero: 'size-19 text-[2.125rem]',
 } as const
 
 /** Whether a picture is an uploaded one's address, which an image shows. */

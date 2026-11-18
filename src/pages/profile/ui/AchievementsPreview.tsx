@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import type { MilestoneId } from '@/entities/progress'
-import { RowLink, SettingsGroup } from '@/shared/ui'
+import { RowLink } from '@/shared/ui'
+import { ProfileList } from './ProfileList'
 import { ProfileSection } from './ProfileSection'
 import { useDayName } from '../model/format'
 import { useMilestones } from '../model/use-milestones'
@@ -13,7 +14,7 @@ export function MilestoneRow({ id, day }: { id: MilestoneId; day: string | null 
   const dayName = useDayName()
   return (
     <RowLink
-      mark={<MilestoneMark id={id} earned={day !== null} />}
+      mark={<MilestoneMark earned={day !== null} />}
       title={t(`profile.achievements.names.${id}`)}
       detail={
         day
@@ -25,22 +26,26 @@ export function MilestoneRow({ id, day }: { id: MilestoneId; day: string | null 
   )
 }
 
-/** The Profile's achievements: the earned ones first, three, then See all; none yet, said so. */
+/**
+ * The Profile's achievements (ACH9): three, the earned first, newest first, then those still to
+ * earn, each with its lock; then See all.
+ */
 export function AchievementsPreview() {
   const { t } = useTranslation('account')
   const milestones = useMilestones()
-  const earned = milestones.filter((milestone) => milestone.day !== null)
+  const shown = [
+    ...milestones
+      .filter((milestone) => milestone.day !== null)
+      .toSorted((a, b) => (b.day ?? '').localeCompare(a.day ?? '')),
+    ...milestones.filter((milestone) => milestone.day === null),
+  ].slice(0, 3)
   return (
     <ProfileSection title={t('profile.achievements.title')} to="/profile/achievements">
-      <SettingsGroup flush>
-        {earned.length === 0 ? (
-          <p className="px-4 py-3 text-pretty text-muted-foreground">
-            {t('profile.achievements.none')}
-          </p>
-        ) : (
-          earned.slice(0, 3).map((milestone) => <MilestoneRow key={milestone.id} {...milestone} />)
-        )}
-      </SettingsGroup>
+      <ProfileList>
+        {shown.map((milestone) => (
+          <MilestoneRow key={milestone.id} {...milestone} />
+        ))}
+      </ProfileList>
     </ProfileSection>
   )
 }

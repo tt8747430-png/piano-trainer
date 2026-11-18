@@ -17,14 +17,21 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
   under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
-- **The Profile** is the learner at a glance (memory-palaces', canvas 128): their name as its title with the
-  notifications' bell (and Settings on a phone); their picture with Edit photo, the year joined (or a guest's Sign
-  in); three figures (day streak, to Streak; songs learned; practice time); **Last 7 days** (today last), the time and days of seven
-  over one bar a day against the week's most, today in the strong sand, a day not played a flat line, opening
-  Streak's month; the next badge as a ring with its count, under "Next badge" its name and what earns it as a goal (Repertoire · Learn 1 song; a badge's goals are targets, never a state that reads as reached); then the first badges and achievements, each with See
-  all. One column on a phone; two on a laptop, the badges and achievements beside the rest. **Achievements**' personal
-  records are a value over its label (the level its number alone, under "Level"); a record nothing has set yet, Best
-  accuracy before any take, shows "—", never "0 %".
+- **The Profile** is the learner at a glance (memory-palaces', the Profile boards, r50): their name as its title
+  with the bell and the gear in one glass on both sizes; their picture (76, Edit photo a 30 round on its corner), the
+  name at 28 and "@handle · Joined 2025" (or a guest's Sign in); three tiles in one ink, only the flame painted, a
+  streak alive (day streak to Streak, songs learned to Songs, practice time to Practice history, in hours alone from
+  the first); then **Last 7 days**, **Practice history**, **Badges** and **Achievements**, each a 20 bold heading
+  12 over its box, See all at its end. The week's box holds the minutes' scale (0 and two lines) and one bar a day,
+  today in copper and the days before in ember, a day not played a flat stub; the plot is 72 on a phone and 150 on a
+  laptop. A run's row leads with its score in a 52 tile; a badge's with its medal, a white star on its tier's metal
+  (`--medal-*`), and the bar to its next tier; an achievement's with a check on the grass, or a lock before it is
+  earned, the earned first. Each box's last row draws no line. A phone reads one column, the sections 32 apart; a
+  laptop reads rows that meet, 32 apart: the learner beside the tiles, the week beside the badges, the history
+  beside the achievements, each pair stretched to one bottom edge with what it holds centred, and no chevron on
+  their rows. **Streak** names its reward: "Today counts. 2 more days to the Gold badge." while the streak badge has
+  a next tier. **Achievements**' personal records are a value over its label (the level its number alone, under
+  "Level"); a record nothing has set yet, Best accuracy before any take, shows "—", never "0 %".
 - **Settings** (R32, iOS's Settings and macOS's System Settings; `widgets/settings-screen`, its groups one model in
   `model/sections.ts`): the account first (the learner's initial, name, email and one line of the sync, or Sign in),
   then **App** (General: Appearance and Language; Storage and backup), **Piano** (On-screen piano, with Computer
