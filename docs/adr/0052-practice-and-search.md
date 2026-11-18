@@ -134,7 +134,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     to its method book's course;
   - **Every library is the learner's to arrange** (R32, Songs' acts, the built-in books included, as an overlay in
     `pt-practice-library` version 2): each row's More has Rename…, Move to… (a book, a style, a folder of their own),
-    Hide (Show under Hidden) and Restore original name; the pencil in the bar opens Edit, every place and row with
+    Hide (Show under Hidden) and Restore original name; the bar's Edit word (the kit's, beside the title) opens Edit, every place and row with
     its handle in one drag context (memory-palaces' engine and overlay), a place's More renaming, hiding or (their
     own folder) deleting it, asking first, its rows going home. New makes what the page makes (a pattern, a
     progression) and New folder, the kit's `NewDial`, floating at the foot on both sizes (`useLibraryNew`, R67). The

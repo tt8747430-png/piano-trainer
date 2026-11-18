@@ -112,7 +112,7 @@ export function CircleOfFifthsPage() {
             </p>
           </div>
           <section aria-labelledby="key-chords" className="flex flex-col gap-2">
-            <h3 id="key-chords" className="ms-1 font-sans text-sm font-semibold">
+            <h3 id="key-chords" className="font-sans text-sm font-semibold">
               {t('practice:tools.circle.chords')}
             </h3>
             <div className="grid grid-cols-7 gap-1">

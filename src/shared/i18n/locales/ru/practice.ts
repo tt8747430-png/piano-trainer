@@ -591,7 +591,6 @@ export const practice: LocaleResources['practice'] = {
     // New, on a phone's dial and a laptop's bar (canvas 169).
     new: 'Создать',
     edit: {
-      arrange: 'Упорядочить библиотеку',
       rename: 'Переименовать…',
       move: 'Переместить…',
       hide: 'Скрыть',

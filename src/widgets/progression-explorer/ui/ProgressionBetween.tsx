@@ -42,7 +42,7 @@ export function ProgressionBetween({
   const from = chosen === undefined ? undefined : chords[chosen]
   const to = chosen === undefined ? undefined : chords[chosen + 1]
   const heading = (
-    <h3 id={`${id}-title`} className="ms-1 font-sans text-sm font-semibold text-foreground">
+    <h3 id={`${id}-title`} className="font-sans text-sm font-semibold text-foreground">
       {t('progressions.between.title')}
     </h3>
   )
@@ -50,9 +50,7 @@ export function ProgressionBetween({
     return (
       <section aria-labelledby={`${id}-title`} className="flex flex-col gap-2">
         {heading}
-        <p className="ms-1 text-[0.9375rem] text-muted-foreground">
-          {t('progressions.between.none')}
-        </p>
+        <p className="text-[0.9375rem] text-muted-foreground">{t('progressions.between.none')}</p>
       </section>
     )
   const allInKey = (way: PassingChords) => way.chords.every((chord) => chordInKey(chord, musicKey))
@@ -75,9 +73,7 @@ export function ProgressionBetween({
         </Toggle>
       </div>
       {ways.length === 0 ? (
-        <p className="ms-1 text-[0.9375rem] text-muted-foreground">
-          {t('passingChords.noneInKey')}
-        </p>
+        <p className="text-[0.9375rem] text-muted-foreground">{t('passingChords.noneInKey')}</p>
       ) : null}
       {PASSING_CATEGORIES.flatMap((category) =>
         ways.filter((way) => way.category === category),

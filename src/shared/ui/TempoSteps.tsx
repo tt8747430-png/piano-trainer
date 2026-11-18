@@ -44,11 +44,11 @@ export function TempoSteps({
       <p aria-hidden className="text-[0.9375rem] text-muted-foreground">
         {mark ? `${mark} · ${t('metronome.bpm')}` : t('metronome.bpm')}
       </p>
-      <div className="flex w-full items-center justify-center gap-1.5 min-[25rem]:gap-2">
+      <div className="flex w-full items-center justify-between gap-1.5 min-[25rem]:gap-2">
         {STEPS.slice(0, 2).map(step)}
         <p
           className={cn(
-            'min-w-[1.9em] shrink-0 text-center font-bold tracking-[-0.03em]',
+            'min-w-[1.75em] shrink-0 text-center font-bold tracking-[-0.03em]',
             // The board's number keeps the font's own line height, 2 under its tempo's word.
             large ? 'text-[4.5rem]/[normal] lg:text-[7.5rem]/[normal]' : 'text-[4.5rem]/[normal]',
           )}

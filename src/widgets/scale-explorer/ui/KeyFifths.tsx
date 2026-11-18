@@ -69,7 +69,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
       <Link
         to="/practice/circle-of-fifths"
         search={{ key: keyParam(value) }}
-        className="-mt-3 -mb-1.5 ms-1 flex min-h-11 items-center gap-0.5 self-start text-sm font-semibold text-foreground"
+        className="-mt-3 -mb-1.5 flex min-h-11 items-center gap-0.5 self-start text-sm font-semibold text-foreground"
       >
         {t('scales.onCircleOfFifths')}
         <ChevronRight aria-hidden className="size-4" />

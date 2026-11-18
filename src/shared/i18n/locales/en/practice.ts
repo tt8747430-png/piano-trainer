@@ -626,7 +626,6 @@ export const practice = {
     // New, on a phone's dial and a laptop's bar (canvas 169).
     new: 'New',
     edit: {
-      arrange: 'Arrange library',
       rename: 'Rename…',
       move: 'Move to…',
       hide: 'Hide',

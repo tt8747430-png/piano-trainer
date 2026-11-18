@@ -225,7 +225,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         </div>
         <div className="flex min-w-0 flex-col gap-4 lg:gap-6">
           <section className="flex flex-col gap-2">
-            <div className="ms-1 flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5">
               <h3 className="font-sans text-sm font-semibold text-foreground">
                 {t('patterns.hands')}
               </h3>
@@ -252,7 +252,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
           </section>
           {pieces.length > 0 ? (
             <section className="flex flex-col gap-2">
-              <h3 className="ms-1 font-sans text-sm font-semibold text-foreground">
+              <h3 className="font-sans text-sm font-semibold text-foreground">
                 {t('patterns.usedIn')}
               </h3>
               <ul className="card flex flex-col p-1.5">
