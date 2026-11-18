@@ -83,10 +83,12 @@ the courses, its title in the bar.
   lessons and in each course (R38); every lesson's and course's Reset progress works the same way. No Share link:
   sharing them is drawn later. Search finds them.
 - **A lesson is a worksheet**: prose, steps and notes, and examples that play in place on the lesson's keys: chords
-  as the lesson writes them (on a staff, each bar's band printing its chord's name, a lone chord's too), one quality on twelve roots, a scale, an interval's card, a line of notes on its staff,
+  as the lesson writes them (on a staff, each bar's band printing its chord's name, a lone chord's too), one quality on twelve roots, a scale, an interval, a line of notes on its staff,
   voicings written hand by hand, a progression's row, and a pattern heard over its piece's first line (a pattern is
   only ever heard on chords). A question is answered on the keys, a chord's notes in any octave. Links name what they
-  open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
+  open (a chord, a scale, a key, a tool, a trainer, the Player), never a route. No card round an example or a
+  question (the board's blocks, loop 63): each stands on the paper, its name 17 bold on a 44 row with its acts (ⓘ,
+  Play) at its end, its music under it; the keys they play on are the lesson's own, across the page's width.
 - **A lesson's page** is a document, as its editor shows it: where it stands (its level or course, "Lesson 3 of 11"),
   its title in the serif (30, 36 on a laptop), what it teaches and After:, then its sections 32 apart, each its
   heading 22 bold, its words 17 on 1.55 at most 65ch, its steps a numbered list (indented 8, the muted numbers

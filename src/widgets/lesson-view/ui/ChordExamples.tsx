@@ -53,7 +53,7 @@ export function ChordExamples({
   // Written on a staff, the chords are its bars: each bar's band names its chord and plays it.
   if (staff)
     return (
-      <figure className="flex w-fit max-w-full items-start gap-2 card p-3 pl-4">
+      <figure className="flex w-fit max-w-full items-start gap-2">
         <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none">
           <TappableStaff
             music={staff.music}

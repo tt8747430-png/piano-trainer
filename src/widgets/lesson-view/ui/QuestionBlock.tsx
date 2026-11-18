@@ -1,4 +1,4 @@
-import { Check, CircleHelp, Eye, RotateCcw, X, type LucideIcon } from 'lucide-react'
+import { Check, Eye, RotateCcw, X, type LucideIcon } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
@@ -14,8 +14,8 @@ interface QuestionAction {
 }
 
 /**
- * A question answered on the lesson's keys (Pianote's pop quiz), marked with a question's sign: Answer
- * opens it (ringed while open), and the keys tapped are judged as soon as they are as many notes as
+ * A question answered on the lesson's keys (Pianote's pop quiz), on the paper as every example (no card): Answer
+ * opens it, and the keys tapped are judged as soon as they are as many notes as
  * the answer's, each chosen filling one of its dots; a wrong
  * answer can be fixed on the keys or shown. Its button stays one button through every stage, so a
  * keyboard user's focus stays on it; the verdict's region stays in the page, so its words are heard
@@ -54,20 +54,15 @@ export function QuestionBlock({
       role="group"
       aria-labelledby={id}
       data-open={open || undefined}
-      className="flex flex-col gap-3 card p-4 text-base transition-shadow duration-200 ease-out data-open:ring-2 data-open:ring-ring"
+      className="flex flex-col gap-2 text-base"
     >
-      <div className="flex items-start gap-3">
-        <span
-          aria-hidden
-          className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
-        >
-          <CircleHelp className="size-5" />
-        </span>
-        <p id={id} className="min-w-0 flex-1 pt-2 font-semibold text-pretty">
-          {localText(ask, locale)}
-        </p>
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pl-13">
+      <p
+        id={id}
+        className="flex min-h-11 items-center font-sans text-[1.0625rem] font-bold text-pretty"
+      >
+        {localText(ask, locale)}
+      </p>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <p role="status" className="flex min-h-6 items-center gap-2 text-sm empty:sr-only">
           {stage === 'right' ? (
             <span className="inline-flex items-center gap-1.5 font-semibold text-learned">

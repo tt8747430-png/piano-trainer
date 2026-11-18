@@ -1,14 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import {
-  CircleHelp,
-  Copy,
-  FilePen,
-  Paintbrush,
-  Plus,
-  SlidersHorizontal,
-  Trash2,
-  X,
-} from 'lucide-react'
+import { Copy, FilePen, Paintbrush, Plus, SlidersHorizontal, Trash2, X } from 'lucide-react'
 import {
   Component,
   use,
@@ -577,26 +568,18 @@ export function ExampleView({
       {block.kind === 'question' || block.kind === 'link' ? (
         <InStyle style={style}>
           {block.kind === 'question' ? (
-            // The question's card as the lesson shows it, its words typed where they print.
-            <div className="flex flex-col gap-3 card p-4 text-base">
-              <div className="flex items-start gap-3">
-                <span
-                  aria-hidden
-                  className="grid size-10 shrink-0 place-items-center rounded-pill bg-paint-lilac text-on-paint-lilac"
-                >
-                  <CircleHelp className="size-5" />
-                </span>
-                <WordsLine
-                  label={t('edit.doc.ask')}
-                  value={block.ask}
-                  placeholder={words('edit.doc.ask')}
-                  className="h-auto min-h-10 flex-1 rounded-control border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
-                  onChange={(ask) => change({ ...block, ask })}
-                />
-              </div>
+            // The question as the lesson shows it, on the paper, its words typed where they print.
+            <div className="flex flex-col gap-2 text-base">
+              <WordsLine
+                label={t('edit.doc.ask')}
+                value={block.ask}
+                placeholder={words('edit.doc.ask')}
+                className="h-auto min-h-11 rounded-control border-transparent bg-transparent px-0 font-sans text-[1.0625rem] font-bold shadow-none md:text-[1.0625rem] dark:bg-transparent"
+                onChange={(ask) => change({ ...block, ask })}
+              />
               <span
                 aria-hidden
-                className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
+                className="inline-flex h-10 w-fit items-center gap-2 rounded-pill border border-border px-4 text-sm font-medium"
               >
                 <KeysIcon className="size-4" />
                 {words('question.answer')}

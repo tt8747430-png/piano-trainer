@@ -16,8 +16,8 @@ const LINE_TEMPO = 72
 /** The hand a staff's line is played with: the bass's the left, every treble's the right. */
 const handOf = (staff: StaffId): 'rh' | 'lh' => (staff === 'bass' ? 'lh' : 'rh')
 
-/** What the card takes of its room beside its music: its padding, and its controls at its side. */
-const CARD_ROOM = 140
+/** What the example takes of its room beside its music: its controls at its side. */
+const CARD_ROOM = 112
 
 /** The room a note struck takes on a row, in CSS px: how many a row of the card's width holds. */
 const NOTE_ROOM = 34
@@ -91,7 +91,7 @@ export function NotesExample({
   }, [line, score, width])
   return (
     <div ref={space} className="w-full">
-      <figure className="flex w-full max-w-full flex-col gap-2 card p-3 pl-4 sm:w-fit sm:flex-row sm:items-center sm:gap-4">
+      <figure className="flex w-full max-w-full flex-col gap-2 sm:w-fit sm:flex-row sm:items-center sm:gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           {rows.map((row) => (
             <FittedRow key={row.from}>
