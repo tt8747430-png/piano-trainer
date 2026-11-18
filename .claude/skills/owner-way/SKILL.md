@@ -214,6 +214,9 @@ does not read first: write the spec, build it, and log it.
   ending; a long session taken for a reason to hand over. None of these ends a turn. In a loop there is no final report:
   each finished item gets one line saying what changed, then the next item starts in the same turn; the
   dev server stays up for the next screen.
+  A publish the permission check refuses is not a stop either (2026-11-18): the boards are still built,
+  checked, logged, committed and pushed, item after item, and each later change publishes every board
+  changed since the last publish; the refusal is said in one line, once.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
   build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
