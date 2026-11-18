@@ -10,8 +10,11 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
+import type { PracticeLibraryView } from '@/widgets/practice-library'
+import { PATTERN_VIEW } from '../model/pattern-folds'
 import type { FigureChange } from '../model/setup-params'
 import { FigurePage } from './FigurePage'
+import { PatternFilterPage } from './PatternFilterPage'
 import { PatternPage } from './PatternPage'
 import { SettingsSheet } from './SettingsSheet'
 import { SetupContext, type SetupPage } from './setup-context'
@@ -32,7 +35,8 @@ export interface MusicPage extends SettingsRow {
  * pages (`pages`, R31-P), each a row opening it with Back, then `children`, composed by the page: the
  * music's own choices, `PatternCard`, how it plays. The pattern and figure lists open as the sheet's
  * pages, so a sheet never opens over a sheet, and close back to the page they were opened from; each
- * closes a pattern or figure the music cannot play (`fit`).
+ * closes a pattern or figure the music cannot play (`fit`). The patterns' Sort and filter is a page
+ * of its own after theirs, back to them, what they show kept between the two.
  */
 export function PlayerSetup({
   figures,
@@ -47,7 +51,7 @@ export function PlayerSetup({
   pages?: readonly MusicPage[]
   children?: ReactNode
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'common'])
   const [page, setPage] = useState<string>('main')
   const main = useRef<HTMLDivElement>(null)
   /** The list page last open: back on the first page, its row takes the focus again. */
@@ -68,6 +72,10 @@ export function PlayerSetup({
     setPage(from)
   }
   const toMain = () => setPage(from)
+  // What the Pattern sheet shows, kept across its Sort and filter page and while the sheet is open.
+  const [patternView, setPatternView] = useState<PracticeLibraryView>(PATTERN_VIEW)
+  const onPatternView = (change: Partial<PracticeLibraryView>) =>
+    setPatternView((now) => ({ ...now, ...change }))
   const own = pages.find((each) => each.id === page)
   const inner = own
     ? {
@@ -85,51 +93,67 @@ export function PlayerSetup({
             <PatternPage
               value={figures.pattern}
               fit={fit}
+              view={patternView}
+              onView={onPatternView}
               onChoose={(pattern) => choose({ pattern })}
+              onFilter={() => setPage('patternFilter')}
             />
           ),
         }
-      : page === 'rh'
+      : page === 'patternFilter'
         ? {
-            title: t('rh'),
-            onBack: toMain,
+            title: t('common:library.filters.sortTitle'),
+            onBack: () => setPage('pattern'),
             content: (
-              <FigurePage
-                hand="rh"
-                label={t('rh')}
-                ids={RIGHT_FIGURE_IDS}
-                sections={RIGHT_FIGURE_GROUPS.map((group) => ({
-                  label: t(`rhGroup.${group.id}`),
-                  ids: group.figures,
-                }))}
-                figures={RIGHT_FIGURES}
-                value={figures.rh}
-                fit={fit}
-                onChoose={(rh) => choose({ rh })}
+              <PatternFilterPage
+                view={patternView}
+                chosen={figures.pattern}
+                onView={onPatternView}
+                onDone={() => setPage('pattern')}
               />
             ),
           }
-        : page === 'lh'
+        : page === 'rh'
           ? {
-              title: t('lh'),
+              title: t('rh'),
               onBack: toMain,
               content: (
                 <FigurePage
-                  hand="lh"
-                  label={t('lh')}
-                  ids={LEFT_FIGURE_IDS}
-                  sections={LEFT_FIGURE_GROUPS.map((group) => ({
-                    label: t(`lhGroup.${group.id}`),
+                  hand="rh"
+                  label={t('rh')}
+                  ids={RIGHT_FIGURE_IDS}
+                  sections={RIGHT_FIGURE_GROUPS.map((group) => ({
+                    label: t(`rhGroup.${group.id}`),
                     ids: group.figures,
                   }))}
-                  figures={LEFT_FIGURES}
-                  value={figures.lh}
+                  figures={RIGHT_FIGURES}
+                  value={figures.rh}
                   fit={fit}
-                  onChoose={(lh) => choose({ lh })}
+                  onChoose={(rh) => choose({ rh })}
                 />
               ),
             }
-          : null
+          : page === 'lh'
+            ? {
+                title: t('lh'),
+                onBack: toMain,
+                content: (
+                  <FigurePage
+                    hand="lh"
+                    label={t('lh')}
+                    ids={LEFT_FIGURE_IDS}
+                    sections={LEFT_FIGURE_GROUPS.map((group) => ({
+                      label: t(`lhGroup.${group.id}`),
+                      ids: group.figures,
+                    }))}
+                    figures={LEFT_FIGURES}
+                    value={figures.lh}
+                    fit={fit}
+                    onChoose={(lh) => choose({ lh })}
+                  />
+                ),
+              }
+            : null
   return (
     <SettingsSheet
       page={page}

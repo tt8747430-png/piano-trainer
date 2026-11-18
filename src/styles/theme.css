@@ -34,6 +34,7 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-chosen: var(--chosen);
+  --color-chosen-honey: var(--chosen-honey);
   --color-switch-on: var(--switch-on);
   --color-switch-knob: var(--switch-knob);
   --color-popover: var(--popover);

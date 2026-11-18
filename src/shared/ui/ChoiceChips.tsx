@@ -4,9 +4,25 @@ import { cn } from '@/shared/lib'
 import { optionName, type Option, type OptionValue } from './option'
 
 /**
+ * How the chips look: `ink`, the chosen filled in ink with the page's colour on it (canvas 153);
+ * `honey`, on a sheet of choices that each show what they are (the Player's Pattern sheet), each a
+ * card's pill in a hairline, the chosen washed in honey in the honey ring, 36 drawn in a 44 reach.
+ */
+const TONES = {
+  ink: {
+    group: '-my-[5px] gap-1.5',
+    chip: 'min-w-14 border-y-[5px] bg-muted px-3.5 text-sm text-muted-foreground choice data-checked:bg-foreground! data-checked:text-background!',
+  },
+  honey: {
+    group: '-my-1 gap-x-2 gap-y-0',
+    chip: 'gap-1 border-y-4 whitespace-nowrap bg-card px-4 text-[0.8125rem] text-foreground shadow-[inset_0_0_0_1px_var(--color-border)] transition-colors duration-200 ease-out hover:bg-muted data-checked:bg-chosen-honey data-checked:shadow-[inset_0_0_0_1px_var(--color-honey-ring)] data-[empty]:not-data-checked:opacity-45',
+  },
+} as const
+
+/**
  * One choice of a few whose names are too long for a segmented control's track: a row of chips that
- * wraps, every one in sight, the chosen filled in ink with the page's colour on it (canvas 153). A
- * radio group: the arrows move to a chip and choose it.
+ * wraps, every one in sight, in its `tone`. A radio group: the arrows move to a chip and choose it.
+ * A chip's `count` follows its name, soft; one that keeps none dims.
  */
 export function ChoiceChips<V extends OptionValue>({
   label,
@@ -14,6 +30,8 @@ export function ChoiceChips<V extends OptionValue>({
   options,
   onChange,
   scroll = false,
+  tone = 'ink',
+  className,
 }: {
   label: string
   value: V
@@ -21,6 +39,9 @@ export function ChoiceChips<V extends OptionValue>({
   onChange: (value: V) => void
   /** One row that scrolls sideways past the screen's edges, never wrapping (the four levels). */
   scroll?: boolean
+  tone?: keyof typeof TONES
+  /** The room between its rows, where its place sets it (the filters' groups). */
+  className?: string
 }) {
   return (
     <RadioGroup
@@ -31,10 +52,12 @@ export function ChoiceChips<V extends OptionValue>({
         if (picked && picked.value !== value) onChange(picked.value)
       }}
       className={cn(
-        '-my-[5px] flex gap-1.5',
+        'flex',
+        TONES[tone].group,
         scroll
           ? '-mx-(--gutter) scrollbar-none overflow-x-auto overscroll-x-contain px-(--gutter)'
           : 'flex-wrap',
+        className,
       )}
     >
       {options.map((option) => (
@@ -42,9 +65,19 @@ export function ChoiceChips<V extends OptionValue>({
           key={String(option.value)}
           value={option.value}
           aria-label={optionName(option)}
-          className="inline-flex h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-pill border-x-0 border-y-[5px] border-transparent bg-muted bg-clip-padding px-3.5 text-sm font-semibold text-muted-foreground select-none choice focus-visible:-outline-offset-3 data-checked:bg-foreground! data-checked:text-background!"
+          data-empty={option.count === 0 ? '' : undefined}
+          className={cn(
+            'inline-flex h-11 shrink-0 cursor-default items-center justify-center rounded-pill border-x-0 border-transparent bg-clip-padding font-semibold select-none focus-visible:-outline-offset-3',
+            TONES[tone].chip,
+          )}
         >
           {option.label}
+          {option.count === undefined ? null : (
+            <>
+              {' '}
+              <span className="font-medium text-muted-foreground tabular-nums">{option.count}</span>
+            </>
+          )}
         </Radio.Root>
       ))}
     </RadioGroup>
