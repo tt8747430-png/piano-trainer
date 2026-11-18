@@ -170,11 +170,10 @@ PARENT = {'Edit profile': 'Account', 'Email': 'Account', 'Change password': 'Acc
 _THUMB = (f'<sc-for list="{{{{themes}}}}" as="t" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{t.on}}}}" onClick="{{{{t.pick}}}}" style="border: 0; background: transparent; padding: 0; font: inherit; color: {INK}; display: flex; flex-direction: column; align-items: center; gap: 8px">'
           f'<span style="width: 80px; height: 56px; border-radius: 10px; box-shadow: {{{{t.ring}}}}; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(135deg, {{{{t.top}}}} 50%, {{{{t.bot}}}} 50%)"><span style="margin: 7px 7px 0; height: 5px; width: 50%; border-radius: 3px; background: #B4AAA0"></span><span style="margin: 5px 7px 0; flex: 1; border-radius: 5px; background: {{{{t.card}}}}; opacity: .9"></span><span style="margin: 5px 7px 7px; height: 7px; border-radius: 4px; background: {ACCENT}"></span></span>'
           f'<span style="font-size: 13px; font-weight: 600">{{{{t.t}}}}</span></button></sc-for>')
-_LANGSEG = (f'<sc-for list="{{{{langs}}}}" as="l" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{{{l.on}}}}" onClick="{{{{l.pick}}}}" style="height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: {{{{l.ring}}}}; color: {INK}; font: inherit; font-size: 15px; font-weight: {{{{l.fw}}}}">{{{{l.l}}}}</button></sc-for>')
 LTHEME = (f'<section style="display: flex; flex-direction: column; gap: 8px"><div data-group>'
           f'<div style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 12px 0"><span style="flex: 1; font-size: 16px">Theme</span><div role="radiogroup" aria-label="Theme" style="display: flex; gap: 12px">{_THUMB}</div></div></div></section>')
 LLANG = (f'<section style="display: flex; flex-direction: column; gap: 8px">{CAPS("Language")}<div data-group>'
-         f'<div style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 8px 0"><span style="flex: 1; font-size: 16px">App language</span><div role="radiogroup" aria-label="Language" style="display: flex; gap: 8px">{_LANGSEG}</div></div></div></section>')
+         f'<div style="min-height: 56px; display: flex; align-items: center; gap: 16px; padding: 8px 0"><span style="flex: 1; font-size: 16px">App language</span><div style="flex: none; width: 240px">{SEGC("langSeg", 40, 14)}</div></div></div></section>')
 ACTIC_ALL = {**ACTIC, 'No action': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m5.7 5.7 12.6 12.6"></path></svg>'}  # No action wears the ban glyph
 def PAGEBODIES(pre, lap=False):
     out = []
@@ -182,7 +181,9 @@ def PAGEBODIES(pre, lap=False):
         b = body.replace('aspect-ratio: 0.72', 'aspect-ratio: 1.4').replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('Legal.dc.html', 'LegalLaptop.dc.html') if lap else body
         # Apple's places: General holds Software update, Language and the keyboard; Appearance the theme alone; About only the app's facts
         _th, _lg = THEMES[:THEMES.index('<section', 1)], THEMES[THEMES.index('<section', 1):]
-        if p == 'General': b = UPDSEC + (LLANG + body[len(THEMES):] if lap else _lg)
+        # owner, 2026-11-18, "refactor all the settings": by how often each is wanted, Language first and Software update,
+        # the rarest, last; on a phone Language is one segmented row as Touch and Pedal, not two 56-tall boxes
+        if p == 'General': b = (LLANG + body[len(THEMES):] if lap else SEC(GROUP(('seg', 'Language', 'langSeg'), bg=SHEET))) + UPDSEC
         if p == 'Appearance': b = LTHEME if lap else _th
         if lap: b = b.replace('<div style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8').replace('<div role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8', '<div data-group role="radiogroup" style="border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px #DAD1C8')
         out.append(f'<sc-if value="{{{{{pre}{SLUG(p)}}}}}" hint-placeholder-val="{{{{{"true" if (lap and p == "General") else "false"}}}}}">{b}</sc-if>')
@@ -205,7 +206,6 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     const rows = (hl) => GROUPS.map(([h, rs]) => ({ h, rs: rs.map(([l, val]) => ({ l, v: l === 'Appearance' ? (st.theme ?? 'Match system') : l === 'General' ? (st.upd === 'avail' ? 'Update available' : '') : l === 'MIDI devices' ? (minOn ? 'Roland FP-30X' : 'Off') :  val, ic: ICONS[l].u, icc: ICONS[l].c, bg: hl && l === top ? '#E8E1D8' : 'transparent', fw: hl && l === top ? 600 : 400, open: () => S({ page: l, tip: null }) })) }));
     const theme = st.theme ?? 'Match system', lang = st.lang ?? 'English';
     const themes = ['Match system', 'Light', 'Dark'].map((t) => ({ t, on: t === theme, ring: t === theme ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => S({ theme: t }), top: t === 'Dark' ? '#2A231E' : 'rgb(247,243,238)', bot: t === 'Light' ? 'rgb(247,243,238)' : '#2A231E', card: t === 'Dark' ? '#3A312A' : 'rgb(254,253,251)' }));
-    const langs = ['English', 'Русский'].map((l) => ({ l, on: l === lang, ring: l === lang ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', fw: l === lang ? 700 : 500, pick: () => S({ lang: l }) }));
     // account and sync
     const pic = st.pic ?? -1;
     Object.assign(v, { signedIn, signedOut: !signedIn, editorial: !prev, admin: signedIn && !prev, name: 'Ana Popescu', avatar: pic >= 0 ? PICS[pic] : 'A', privV: (st.show ?? true) ? 'Profile shown' : 'Profile hidden',
@@ -269,7 +269,7 @@ SETTINGS_JS = js('const GROUPS = ' + json.dumps(SETGROUPS, ensure_ascii=False) +
     // toast
     v.toastOn = !!st.toast; v.toastT = st.toast || ''; if (st.toast && this._tt !== st.toast) { this._tt = st.toast; const t = st.toast; setTimeout(() => { if ((this.state || {}).toast === t) S({ toast: null }); this._tt = null; }, 2600); }
     return { ...common(st, set), ...v, groups: rows(false), groupsL: rows(true), isList: !page, isPage: !!page, pageT: page || '', lapT: cur, lapBack: !!PARENT[cur], lapBackT: PARENT[cur] || '',
-      back: () => S({ page: PARENT[page] || null, tip: null }), themes, langs, closeSheet: () => S({ sheet: null }), exitPrev: () => S({ prev: false }) };''')
+      back: () => S({ page: PARENT[page] || null, tip: null }), themes, langSeg: seg(['English', 'Русский'], lang, (l) => S({ lang: l })), closeSheet: () => S({ sheet: null }), exitPrev: () => S({ prev: false }) };''')
 
 # the account card at the top of the list: signed in, or a guest's Sign in
 ACCT2 = (f'<sc-if value="{{{{signedIn}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{go_Account}}}}" style="width: 100%; border: 0; display: flex; align-items: center; gap: 16px; padding: 12px 12px 12px 16px; border-radius: 14px; background: {{{{acctBg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; text-align: left">{AVA(52, 24)}'
