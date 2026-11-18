@@ -178,3 +178,6 @@ Plan, in order: 1 Profile · 2 Settings panes · 3 Sign in and Legal · 4 own le
 | 132, 121, 127 | Administration inside the Settings dialog, its pane a Settings pane | SettingsNav (admin mode), SettingsDialogHost `/admin*`, AdminSectionPage via useSettingsPath | built; not shot (needs an administrator's account) |
 | 128 | Check for updates on the rows' edge | settings-pane (rows at 0 inset) | built (measured 551 = row words) |
 | 141 | Settings on a laptop carries only its own panes | SettingsDialogHost PANES | built |
+| 48, 118 | Sign in's name in its bar beside Close; the laptop column 440 under the app's mark | pages/account/ui/AccountScreen.tsx | built (phone and laptop shot against SignIn, SignInLaptop) |
+| 123, 129 | Sign in's fields the one field shape; Forgot password? 8 under its field | FormField, SignInPage (-mt-2) | built; the field's outline keeps the control line for 3:1 (ruling of loop 40) |
+| 185, 30, 129 | Legal one document a page: no tabs, its name in the bar, the date, contents a band of links on a laptop, two columns, the other document a row; headings 20, sections 24 apart on a laptop | pages/legal/ui/LegalPage.tsx, legal `contents` en/ru | built (shot against Legal, LegalLaptop) |

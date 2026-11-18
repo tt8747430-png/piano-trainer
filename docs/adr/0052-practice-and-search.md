@@ -61,6 +61,11 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   red and asked first (the word typed for Delete). Signed out: "You are not signed in.", why it matters, Sign in and
   Create account. **Storage and backup** reads Device storage, Backup, Piano sound, then its two losses together at the
   foot and apart (Remove downloaded piano, Reset progress).
+  **Legal** is one document a page, no tabs: its name in the bar, when it last changed, a heading and a paragraph a
+  section, the other document as one link row at its end; on a laptop the contents a band of links at the top and
+  the text in two columns. **The account pages** (Sign in, Create an account, Forgot, New password) carry their name
+  in the bar beside Close, one column 16 apart (440 and centred under the app's mark on a laptop), every field the
+  one `FormField`.
 - **Practice is three groups** (canvas 160): **Theory** (Chords, Scales and keys, Intervals, Progressions,
   Accompaniment), the pages that explain a thing and practise it where it is explained; **Exercises**, its three books
   (Finger technique, Barry Harris, Piano With Jonny, each with its count and the library's tile, `EXERCISE_BOOKS`),

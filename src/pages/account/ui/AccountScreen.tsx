@@ -5,16 +5,21 @@ import { BackButton, ScreenHeader } from '@/shared/ui'
 
 /**
  * An account page, as the SignIn board: Close in the bar (a step aside, back where it was opened
- * from), the title 32 bold at the head of one narrow column, everything in it 16 apart.
+ * from) and the page's name beside it, as every bar (owner's lines sweep, 2026-11-18: an empty bar
+ * is a hole); one column under it, 16 apart, on the phone's 16 gutter. On a laptop the column is
+ * 440 wide and centred, headed by the app's mark.
  */
 export function AccountScreen({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col">
-      <ScreenHeader title={title} titleOnPage back={<BackButton close />} />
-      <div className="mx-auto flex w-full max-w-sm flex-col gap-4 px-2 pt-1 pb-12">
-        <h1 className="mb-1 font-sans text-[2rem] leading-tight font-bold tracking-[-0.01em] text-balance">
-          {title}
-        </h1>
+      <ScreenHeader title={title} back={<BackButton close />} />
+      <div className="mx-auto flex w-full max-w-110 flex-col gap-4 pt-2 pb-12">
+        <span
+          aria-hidden
+          className="grid size-16 place-items-center self-center rounded-[16px] bg-(--p-ink) font-display text-4xl text-(--p-honey) max-lg:hidden"
+        >
+          𝄞
+        </span>
         {children}
       </div>
     </div>

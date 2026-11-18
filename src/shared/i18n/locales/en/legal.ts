@@ -2,7 +2,7 @@
 // Plain words, a section a heading and its paragraph; the date is when either last changed.
 export const legal = {
   updated: 'Last changed {{date}}',
-  pages: 'Legal pages',
+  contents: 'On this page',
   tab: { privacy: 'Privacy Policy', terms: 'Terms of Service' },
   privacy: {
     title: 'Privacy Policy',
