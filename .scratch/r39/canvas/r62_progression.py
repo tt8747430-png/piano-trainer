@@ -67,12 +67,12 @@ PR_SET62 = GROUP(('seg', 'Written as', 'prWSeg', 200), ('seg', 'Voicing', 'voice
 SHEETS62 = BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('setOn', 'Progression settings', PR_SET62) + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS62 = POPOVER('rootOn', 'Key', ROOTGRID(), 'left: 120px; top: 380px') + POPOVER('setOn', 'Progression settings', PR_SET62) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
 
-ph62 = (TOP62 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
+ph62 = (TOP62 + f'<div style="flex: none; margin: 4px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + TITLE62 + TILES62 + MUSIC62 + WALKS62 + BETWEEN62 + SONGS62 + '</main>'
         + BAR62('left: 12px; right: 12px; bottom: 30px') + PMENU62('left: 50%; translate: -50% 0; bottom: 104px'))
 lm62 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP62)
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
-        + f'<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 28px 40px 120px 40px">'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE62}{TILES62.replace("height: 96px", "height: 120px").replace("font-size: 26px", "font-size: 34px")}{MUSIC62}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{WALKS62}{BETWEEN62}{SONGS62}</div></div></div>'

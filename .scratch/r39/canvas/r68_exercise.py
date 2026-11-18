@@ -30,13 +30,13 @@ LISTEN68 = (f'<button type="button" aria-label="Listen" aria-pressed="{{{{playin
 BAR68 = lambda pos: f'<div role="toolbar" aria-label="Key, start and listen" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{KEYP68}{START68}{LISTEN68}</div>'
 SHEETS68 = BSHEET('rootOn', 'Key', ROOTGRID()) + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS68 = POPOVER('rootOn', 'Key', ROOTGRID(), 'left: calc(50% - 400px); bottom: 100px; top: auto') + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
-ph68 = (TOP68 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
+ph68 = (TOP68 + f'<div style="flex: none; margin: 4px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + TITLE68 + MUSIC68(338) + (ROWS68 + HOW68).replace('<section style="flex: none;', '<section style="flex: none; margin-top: 8px;') + '</main>'+ BAR68('left: 12px; right: 12px; bottom: 30px'))
 ROWS68L = ROWS68.replace(GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('seg', 'Hands', 'handsSeg'), ('seg', 'Rhythm', 'rhythmSeg'), ('seg', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET), GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('segr', 'Hands', 'handsSeg'), ('segr', 'Rhythm', 'rhythmSeg', 400), ('segr', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET))
 assert ROWS68L != ROWS68, 'Exercise rows not found'
 lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP68).replace('FingerTechnique.dc.html', 'FingerTechniqueLaptop.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
-        + f'<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 28px 40px 120px 40px">'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS68L}{HOW68}</div></div></div>'  # the phone's order: the exercise's choices, then How to play (round 58)
