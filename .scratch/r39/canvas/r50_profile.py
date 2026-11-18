@@ -23,7 +23,7 @@ MEDC = {'Bronze': '#C98B5A', 'Silver': '#A9A39B', 'Gold': '#D9A93E', 'Platinum':
 P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILES = ' + json.dumps(MILES, ensure_ascii=False) + ', NOTES = ' + json.dumps(NOTES9, ensure_ascii=False) + ', MEDC = ' + json.dumps(MEDC) + ', RUNS = ' + json.dumps(RUNS9, ensure_ascii=False) + ', MIN30 = ' + json.dumps(MIN30) + ';\n' + r'''
     const S = (o) => set(o), page = st.page ?? null;
     const DAYS = [['M', 18], ['T', 25], ['W', 0], ['T', 32], ['F', 15], ['S', 40], ['S', 22]];
-    const week = DAYS.map(([d, m], i) => ({ d, h: Math.max(4, Math.round(m * 1.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
+    const week = DAYS.map(([d, m], i) => ({ d, h: Math.max(4, Math.round(m * 1.6)) + 'px', hl: Math.max(4, Math.round(m * 3.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
     // the month: November 2026 starts on a Sunday; today is the 11th
     const mon = st.mon ?? 0, M = mon === 0 ? { t: 'November 2026', first: 6, len: 30, done: (d) => d <= 11 && d !== 4, rest: (d) => d === 4, today: 11, n: 10 } : { t: 'October 2026', first: 3, len: 31, done: (d) => [2, 3, 5, 6, 7, 9, 12, 13, 14, 15, 16, 19, 20, 22, 23, 26, 27, 28, 29, 30, 31].includes(d), today: 0, n: 21 };
     const cells = []; for (let i = 0; i < M.first; i++) cells.push({ d: '', bg: 'transparent', ink: '#332921', ring: 'none', a: '' });
@@ -156,6 +156,11 @@ HEROX = IF9('isSigned', HERO_P, 'true') + IF9('isGuest', GUEST_P)
 _WK = WEEK[WEEK.index('<div role="img"'):]
 _WKHEAD = WEEK[:WEEK.index('<div role="img"')]
 WEEKL = H2('Last 7 days', f'<span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span>') + WEEK.replace(_WKHEAD[_WKHEAD.index('<div style="display: flex; justify-content: space-between'):], '').replace('margin-top: 12px">', '">', 1)
+# on a laptop the week's box stands as tall as the Badges beside it, so its chart fills it: the same scale, 3.6px a minute
+# instead of 1.6, never a 72px chart floating in a 248px box (loop round 67, edge-lines: a box's content off its centre)
+WEEKLAP = (WEEKL.replace('height: 72px; position: relative', 'height: 150px; position: relative').replace('position: relative; height: 72px', 'position: relative; height: 150px')
+           .replace('bottom: 58px">40', 'bottom: 138px">40').replace('bottom: 26px">20', 'bottom: 66px">20').replace('bottom: 32px; height: 1px', 'bottom: 72px; height: 1px')
+           .replace('bottom: 64px; height: 1px', 'bottom: 144px; height: 1px').replace('{{w.h}}', '{{w.hl}}'))
 p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="Settings.dc.html"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEKL + HIST9H + BADGES9H + ACH9, "true")}</main>{TABBAR("Profile")}</sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{barT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
@@ -166,7 +171,7 @@ p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
 _CELL = lambda x: f'<div class="pcell" style="display: flex; flex-direction: column; gap: 12px">{x}</div>'  # a row's two boxes share their bottom edge
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 32px; align-items: stretch"><style>.pcell > :last-child{{flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center}} .pcell > :last-child > :last-child, .pcell > :last-child > :last-child > :last-child {{box-shadow: none !important}}</style>'
         f'<div style="display: flex; flex-direction: column; justify-content: center; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX, "true")}</div>'f'<div style="display: flex; flex-direction: column; justify-content: center">{IF9("notLoading", TILES9, "true")}</div>'  # the stats beside the name, on the right column's edges (alignment; no bare band right of the name)
-        f'{IF9("notLoading", (_CELL(WEEKL) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9)).replace(CHEV_R, ""), "true")}</main></sc-if>'
+        f'{IF9("notLoading", (_CELL(WEEKLAP) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9)).replace(CHEV_R, ""), "true")}</main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
 detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
 print('r50 profile ok')
