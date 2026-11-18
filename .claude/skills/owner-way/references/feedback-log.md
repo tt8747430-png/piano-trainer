@@ -1693,6 +1693,7 @@ are reference only, but progressions are facts.
 - **Search's Recent searches belongs to its chips (2026-11-18, the lines; canvas v548):** the heading stood 15 under the field and 11 over its chips, 1.36×, so it read as the field's tail; now 21 above, 1.9× (laws, spacing rule 3).
 - **Settings on a laptop carries only its own panes (loop 63, 2026-11-17):** a course's settings (its name, The course, Share, Progress) were built hidden into the Settings dialog, because the course's settings and the Settings stylesheet shared one name in the generators; the stylesheet has its own name now, and the dialog holds only Settings (one home per thing; canvas v436).
 - **The week's chart fills its box on a laptop (loop round 67; edge-lines: a box's content off its centre, a bare band):** beside the Badges the week's box stood 248 tall around a 72px chart, 78 bare above it and 76 below. On a laptop the chart now draws 3.6px a minute instead of 1.6 (150 tall, the 20 and 40 lines and their labels with it), so it fills the box and both boxes of the row keep one height; the phone keeps its 72. `r50_profile.py`, `WEEKLAP`.
+- **The learner's picture stands on the page's column (loop round 67; the lines, measured by ink: a 4px near-miss):** the Profile's hero (signed in and guest) carried `padding: 0 4px`, so the picture stood 4 in from the column the title, Last 7 days and every box start on (526 against 522 on a laptop, 20 against 16 on a phone). The padding is gone. `r45_places.py` `HERO_P`, `r50_profile.py` `GUEST_P`.
 
 ## Words
 
