@@ -121,8 +121,9 @@ GPOPS = (f'<sc-if value="{{{{searchOn}}}}" hint-placeholder-val="{{{{false}}}}">
 detail('AppLayers', 'Across the app', G_JS, gph, glm, '', GSHEETS, GPOPS, 'Learn')
 _p = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/AppLayersLaptop.dc.html'
 _h = open(_p).read()
-_i = _h.index('<label style="margin: 10px 0; height: 44px')
-_j = _h.index('</label>', _i)
-_h = _h[:_i] + '<button type="button" onClick="{{openSearch}}" aria-label="Search everything" style="width: 100%; border: 0; font: inherit; text-align: left; ' + _h[_i + len('<label style="'):_j] + '</button>' + _h[_j + 8:]
+# the sidebar's Search, a label or already the link lapwin makes of it, opens the palette in place on this board
+_m = re.search(r'<(label|a href="AppLayersLaptop\.dc\.html" data-sidesearch aria-label="Search everything") style="(?:text-decoration: none; )?(margin: 10px 0; height: 44px[^"]*)"', _h)
+_j = _h.index('</label>' if _m.group(1) == 'label' else '</a>', _m.start())
+_h = _h[:_m.start()] + '<button type="button" onClick="{{openSearch}}" aria-label="Search everything" style="width: 100%; border: 0; font: inherit; text-align: left; ' + _m.group(2) + '"' + _h[_m.end():_j] + '</button>' + _h[_j + (8 if _m.group(1) == 'label' else 4):]
 open(_p, 'w').write(_h)
 print('r52 global ok')

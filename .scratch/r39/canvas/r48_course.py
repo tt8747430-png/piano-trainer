@@ -21,7 +21,7 @@ COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS =
       levels: chipsOf(['Beginner', 'Intermediate', 'Advanced', 'Professional'], level, (x) => set({ level: x })), shelfV: shelf, levelV: level,
       weeksL: weeks + ' weeks', fewer: () => set({ weeks: Math.max(1, weeks - 1) }), more: () => set({ weeks: Math.min(52, weeks + 1) }),
       newOn: sheet === 'new', openNew: () => set({ sheet: 'new' }), create: () => set({ sheet: null, toast: 'New lesson added' }),
-      pmOn: sheet === 'pubmenu', openPm: (e) => set({ sheet: 'pubmenu', pmPos: ANCHOR(e, 150) }), propOn: sheet === 'props', openProps: () => set({ sheet: 'props' }),
+      verOn: sheet === 'versions', openVer: () => set({ sheet: 'versions' }), restore: () => set({ sheet: null, toast: 'Version restored' }), propOn: sheet === 'props', openProps: () => set({ sheet: 'props' }),
       page: st.page ?? null, onPage: !!st.page, isSet: st.page === 'settings', isPub: st.page === 'publish', openSettings: () => set({ page: 'settings', sheet: null }), openPub: () => set({ page: 'publish', sheet: null }), closePage: () => set({ page: null }),
       pageT: st.page === 'settings' ? 'Settings' : 'Publish', resetOn: sheet === 'reset', askReset: () => set({ sheet: 'reset' }), doReset: () => set({ sheet: null, toast: 'Progress reset' }), delOn: sheet === 'delete', askDel: () => set({ sheet: 'delete' }),
       publish: () => set({ page: null, toast: 'Published. Learners will receive it the next time they open the app.' }),
@@ -73,11 +73,10 @@ def CBODY(lap):
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT_R = IB('Settings', GEARI, 'openSettings') + EDITR()  # Edit becomes Done in its place
 CSET = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">Intro to Music Reading</span>'
-        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("action", "{{pubL}}", "publishNow"), ("link", "Versions", "3", "#"), ("action", "Share link", "copyLink"), bg=SHEET)}{GROUP(("action", "Discard changes", "closeSheet", "#B3261E"), bg=SHEET)}'
+        f'{CAPS("The course")}{GROUP(("link", "Shelf", "Beginner", "LearnCoursesLaptop.dc.html"), bg=SHEET)}{CAPS("Share")}{GROUP(("action", "{{pubL}}", "publishNow"), ("link", "Versions", "3", "openVer"), ("action", "Share link", "copyLink"), bg=SHEET)}{GROUP(("action", "Discard changes", "closeSheet", "#B3261E"), bg=SHEET)}'
         f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete course", "askDel", "#B3261E"), bg=SHEET)}')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
         f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
-CPM = GROUP(('val', 'Draft', '{{status}}'), ('val', 'Versions', '3'), bg=SHEET) + GROUP(('action', 'Discard changes', 'closeSheet', '#B3261E'), bg=SHEET)
 def CPAGE(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">' + ('' if lap else '<div style="height: 54px; flex: none"></div>')
@@ -86,10 +85,10 @@ def CPAGE(lap):
 CASKS = (ASK('delOn', 'Delete Intro to Music Reading?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete course', 'closeSheet'))
 cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("LearnCourses.dc.html", "", CBAR_R, "Back to Courses")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("LearnCourses.dc.html", "", CEDIT_R, "Back to Courses")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
-csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
+csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('verOn', 'Versions of Intro to Music Reading', VERBODY)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
        f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
-cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + ROWMENU('pmOn', 'Publishing', [('link', 'Versions', '', '#'), ('action', 'Discard changes', 'closeSheet', RED)], 'pmPos', 220)
+cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + POPOVER('verOn', 'Versions of Intro to Music Reading', VERBODY, 'right: 140px; top: 244px', 440)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')
