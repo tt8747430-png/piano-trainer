@@ -632,6 +632,18 @@ the screen, the controls around it.
 4. Enough of it to be read as music: at least two systems or four bars of an exercise or pattern on a phone.
 5. What sets it up (Number, Hands, Tempo) follows it, quieter, never above it or larger.
 
+## The keys never move (owner, 2026-11-18)
+
+The owner: "something appears under the keyboard as feedback of what the user has played and not correctly. this is
+very bad as it lifts the keyboard and puts background under it". The guidelines agree: Apple HIG, Feedback: "integrate
+status and other types of feedback into your interface … near the items they describe"; Material 3: a layout keeps its
+regions fixed while content changes; the lines tool's "controls hold their place".
+
+1. A keyboard, once drawn, keeps its top and height in every state of its page: answered, shown, wrong, right.
+2. A verdict ("Right", "Not quite: it's C E G") is said where the question is, as words in its colour, never as a
+   tinted band or card beside the keys.
+3. An act that replaces another (Next for Show answer · Clear · Check) takes the same slot at the same height.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).

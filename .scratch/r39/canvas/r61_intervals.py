@@ -32,13 +32,13 @@ IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
 assert IV61 != IV, 'IV return not found'
 
 STAFF61 = (lambda: (
-    f'<svg viewBox="0 -18 360 102" width="100%" role="img" aria-label="The interval on the staff" style="display: block; max-width: 420px; margin: 0 auto">'
-    + ''.join(f'<path d="M24 {30 + i * 7}H336" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    f'<svg viewBox="20 -18 238 102" width="100%" role="img" aria-label="The interval on the staff" style="display: block; max-width: 560px; margin: 0 auto">'
+    + ''.join(f'<path d="M24 {30 + i * 7}H254" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
     + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text>'
     + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="0"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
     + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="2"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.y}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.y}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
     + f'<path d="{{{{z.ad}}}}" fill="none" stroke="{INK}" stroke-width="1.4" stroke-linecap="round"></path><path d="{{{{z.bd}}}}" fill="none" stroke="{INK}" stroke-width="2.6"></path></sc-for>'
-    + f'<path d="M334 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
+    + f'<path d="M253 30V58" stroke="{INK}" stroke-width="1"></path></svg>'))()
 INFO61 = '<span style="width: 8px"></span>' + INFOB('About the interval', 'toggleAbout', 'aboutOn')
 ABOUT61 = INFOTIP('aboutOn', 'toggleAbout', '{{name}}', f'<p style="margin: 0">{{{{mean}}}}</p>' + ''.join(f'<div style="display: flex; align-items: baseline; gap: 12px"><span style="flex: none; width: 84px; color: {SOFT}">{k}</span><span style="font-weight: 600">{{{{{v}}}}}</span></div>' for k, v in (('Down', 'downS'), ('Inverts to', 'inv'))), 'left: 0; top: 56px')
 TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display: flex; flex-direction: column; gap: 4px"><div style="display: flex; align-items: center; gap: 2px">'
@@ -46,7 +46,9 @@ TITLE61 = (SHOWSTATES() + f'<div style="position: relative; flex: none; display:
            f'{ABOUT61}</div>')
 HEAR61 = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: {SOFT}">Sounds like</span><span style="font-size: 16px; font-weight: 600">{{{{song}}}}</span></span>'
           f'<button type="button" aria-label="Hear it" data-tip="Hear it" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</button></div>')
-MUSIC61 = CARD(STAFF61 + '<div style="height: 12px"></div>' + HEAR61, '16px 16px 14px')
+# the interval is what the page is for: its staff at reading size (10px a space on a phone), on the paper with what it
+# sounds like under it, no card around the page's own subject (laws, "The page's subject is its largest thing")
+MUSIC61 = f'<figure style="flex: none; margin: 0; display: flex; flex-direction: column; gap: 12px">{STAFF61}{HEAR61}</figure>'
 GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="27">'
           f'<button type="button" role="radio" aria-checked="{{{{i.on}}}}" onClick="{{{{i.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{i.fg}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">'
           f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; opacity: {{{{i.op}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button></sc-for></div>')
