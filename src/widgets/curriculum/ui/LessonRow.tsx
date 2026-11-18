@@ -4,6 +4,7 @@ import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { OpensMark, PAINT, ProgressRing } from '@/shared/ui'
+import { NextMark } from './NextMark'
 
 /**
  * A lesson as a library's row, wherever Learn lists one (a level's chapter, a course, Your lessons,
@@ -71,11 +72,7 @@ export function LessonRow({
         </span>
         {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
       </span>
-      {current ? (
-        <span className="flex h-6.5 shrink-0 items-center rounded-pill bg-primary px-2.5 text-[0.8125rem] font-bold text-primary-foreground">
-          {t('upNext')}
-        </span>
-      ) : null}
+      {current ? <NextMark /> : null}
       {opens ? <OpensMark /> : null}
     </>
   )

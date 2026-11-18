@@ -260,14 +260,14 @@
       --floating-right: 0px;
     }
   }
-  /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
+  /* A screen's side gutter: 16px on a phone, 24px from 640px, 56px beside a sidebar (every laptop board's column). */
   :root {
     --gutter: --spacing(4);
     @variant sm {
       --gutter: --spacing(6);
     }
     @variant lg {
-      --gutter: --spacing(10);
+      --gutter: --spacing(14);
     }
   }
   body {

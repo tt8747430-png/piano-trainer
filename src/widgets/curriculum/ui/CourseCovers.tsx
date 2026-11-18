@@ -1,19 +1,43 @@
 import { Link } from '@tanstack/react-router'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { coursesOn, SHELVES, type Course, SHELF_PAINT } from '@/entities/course'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { useFold } from '@/features/fold-section'
-import { FoldSection, PAINT, SeeAll } from '@/shared/ui'
+import { PAINT, SectionHead, SeeAll } from '@/shared/ui'
+import { NextMark } from './NextMark'
 import { continueStep } from '../model/continue-step'
+import { courseProgress } from '../model/progress'
 
 /** How many covers Learn shows before See all. */
 const SHOWN = 5
 
-/** A course as a cover (the canvas's COURSECARD): its shelf's paint, Next and its shelf over its name, what it teaches under it. */
-function CourseCover({ course, current }: { course: Course; current: boolean }) {
+/** The cover's eyebrow: what the learner hunts for, the course's progress ("3 of 8 lessons", "8 lessons", "Done"). */
+function useCoverState() {
   const { t } = useTranslation('learn')
+  return (course: Course, learned: Parameters<typeof courseProgress>[1]) => {
+    const { done, total } = courseProgress(course, learned)
+    if (total > 0 && done === total) return t('coverDone')
+    if (done > 0) return t('coverLessonsOf', { done, count: total })
+    return t('course.lessonCount', { count: total })
+  }
+}
+
+/**
+ * A course as a cover (the canvas's COURSECARD): its shelf's paint, 128 tall and 14 round, the Next
+ * ring (honey ink on a honey ring, never filled: Continue's is the screen's one filled honey) and its
+ * progress in sentence case over its name in the serif; what it teaches under it, two lines at most.
+ */
+function CourseCover({
+  course,
+  current,
+  state,
+}: {
+  course: Course
+  current: boolean
+  state: string
+}) {
   const locale = useLocale()
   const paint = PAINT[SHELF_PAINT[course.shelf]]
   return (
@@ -25,18 +49,14 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
     >
       <span
         className={cn(
-          'flex h-32 flex-col justify-between rounded-[14px] px-4 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
+          'flex h-32 flex-col justify-between rounded-card px-4 py-3 ring-1 ring-black/6 transition-[filter] duration-200 ease-out ring-inset group-hover:brightness-[0.97] dark:ring-white/5',
           paint.fill,
         )}
       >
         <span className="flex min-h-6 items-center gap-2">
-          {current ? (
-            <span className="flex h-6 shrink-0 items-center rounded-pill bg-primary px-3 text-xs font-bold text-primary-foreground">
-              {t('upNext')}
-            </span>
-          ) : null}
-          <span className="truncate text-[0.6875rem] font-bold tracking-[0.06em] text-muted-foreground uppercase">
-            {t(`shelfShort.${course.shelf}`)}
+          {current ? <NextMark /> : null}
+          <span className="truncate text-xs font-semibold text-muted-foreground tabular-nums">
+            {state}
           </span>
         </span>
         <span className="font-display text-[1.1875rem]/[1.15] text-balance text-foreground">
@@ -51,13 +71,15 @@ function CourseCover({ course, current }: { course: Course; current: boolean }) 
 }
 
 /**
- * Learn's Courses (canvas 163): the first courses of the shelves as covers, the one Continue is in
- * first; a row that scrolls on a phone, five across on a laptop; See all opens the Courses' page.
+ * Learn's Courses (the canvas's COURSESTRIP and COURSEGRID): under the heading and its See all, the
+ * first courses of the shelves as covers, the one Continue is in first; a row that scrolls on a phone,
+ * as many across as fit at 176 each on a laptop. See all opens the Courses' page.
  */
 export function CourseCovers() {
   const { t } = useTranslation('learn')
-  const fold = useFold('learn.courses')
+  const id = useId()
   const learned = useProgress(selectLearned)
+  const stateOf = useCoverState()
   const next = continueStep(learned)
   const current = next && 'course' in next ? next.course.id : undefined
   const all = SHELVES.flatMap((shelf) => coursesOn(shelf))
@@ -67,20 +89,21 @@ export function CourseCovers() {
     SHOWN,
   )
   return (
-    <FoldSection
-      title={t('courses')}
-      fold={fold}
-      action={<SeeAll label={t('seeAll')} render={<Link to="/courses" />} />}
-      className="min-w-0"
-      headingClassName="font-sans text-xl font-bold"
-    >
-      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:px-0">
+    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
+      <SectionHead id={id} title={t('courses')}>
+        <SeeAll label={t('seeAll')} render={<Link to="/courses" />} />
+      </SectionHead>
+      <ul className="-mx-gutter flex snap-x snap-mandatory scroll-px-gutter gap-3 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] lg:gap-4 lg:overflow-visible lg:px-0">
         {shown.map((course) => (
           <li key={course.id} className="flex">
-            <CourseCover course={course} current={course.id === current} />
+            <CourseCover
+              course={course}
+              current={course.id === current}
+              state={stateOf(course, learned)}
+            />
           </li>
         ))}
       </ul>
-    </FoldSection>
+    </section>
   )
 }

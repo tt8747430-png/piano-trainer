@@ -28,6 +28,7 @@ export const learn = {
   },
   progress: '{{learned}} of {{total}} learned',
   lessonOf: 'Lesson {{n}} of {{count}}',
+  continueProgress: 'Progress',
   lessonNumber: 'Lesson {{n}}',
   // A lesson's prerequisites in its contents, by number; how much of it is read, for a screen reader.
   after: 'After {{lessons}}',
@@ -37,6 +38,9 @@ export const learn = {
   current: 'You are here',
   // Where Continue leads, on its row in the Lessons.
   upNext: 'Next',
+  coverDone: 'Done',
+  coverLessonsOf_one: '{{done}} of {{count}} lesson',
+  coverLessonsOf_other: '{{done}} of {{count}} lessons',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   known: '{{known}} of {{total}} known',
@@ -68,7 +72,7 @@ export const learn = {
   // The learner's own lessons and courses (R30-5): Learn's Your lessons and Your courses, their
   // Settings, and the course editor's on an own course.
   own: {
-    title: 'Your lessons and courses',
+    title: 'Made by you',
     course: 'Course',
     lessons: 'Your lessons',
     createLesson: 'Create lesson',
@@ -95,7 +99,7 @@ export const learn = {
     deleted: '“{{title}}” deleted',
     toOwn: 'Back',
     // Canvas 165: their own page, one New for both, a lesson's courses.
-    newOwn: 'New lesson or course',
+    newOwn: 'New',
     new: 'New',
     newLesson: 'New lesson',
     newCourse: 'New course',

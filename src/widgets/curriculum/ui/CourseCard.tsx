@@ -6,6 +6,7 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { OpensMark, PAINT } from '@/shared/ui'
+import { NextMark } from './NextMark'
 import { courseProgress, isComplete } from '../model/progress'
 import { LearnedMeter } from './LearnedMeter'
 
@@ -59,11 +60,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
           <LearnedMeter progress={progress} className="mt-1" />
         ) : null}
       </span>
-      {current ? (
-        <span className="flex h-6.5 shrink-0 items-center rounded-pill bg-primary px-2.5 text-[0.8125rem] font-bold text-primary-foreground">
-          {t('upNext')}
-        </span>
-      ) : null}
+      {current ? <NextMark /> : null}
       <OpensMark />
     </Link>
   )
