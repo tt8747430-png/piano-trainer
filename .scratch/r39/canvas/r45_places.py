@@ -181,7 +181,7 @@ MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCou
 lph = (SHOWSTATES() + f'{TITLEBAR("Learn", SEARCHB)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 176px; display: flex; flex-direction: column; gap: 16px">'
        f'{CONT}{H2("Levels")}{LEVELLIST()}{H2("Courses", SEEALLH("LearnCourses.dc.html"))}{COURSESTRIP}{OWNGROUP()}</main>{TABBAR("Learn")}{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 112)}{LTOAST}')
 llm = (SHOWSTATES() + f'{LTITLEBAR("Learn", "")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">'
-       f'{CONTL}{H2("Levels")}{LEVELLIST(True)}{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}{OWNGROUP(True)}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32)}{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+       f'{CONTL}{H2("Levels")}{LEVELLIST(True)}{H2("Courses", SEEALLH("LearnCoursesLaptop.dc.html"))}{COURSEGRID}{OWNGROUP(True)}</main>{NEWDIAL([('New course', 'newCourse'), ('New lesson', 'newLesson')], 32)}{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px")}')
 detail('Learn', 'Learn', LEARN_JS, lph, llm, '', LSHEETS, LPOPS, 'Learn')
 
 # A level: its line of lessons
@@ -199,7 +199,7 @@ vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholde
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 40px 96px">'
        # the page starts on its title's edge, the head as wide as a line of reading, the chapters' rows across the page
        f'<div style="display: flex; flex-direction: column; gap: 24px"><div style="width: min(640px, 100%)">{LVHEAD.replace('flex: 1; min-width: 0; height: 52px', 'flex: none; min-width: 360px; height: 52px')}</div>{PATHF(True)}</div></main>'
-       f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+       f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px")}')
 detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('chapOn', 'Chapter', CHAPBODY), POPOVER('chapOn', 'Chapter', CHAPBODY, 'left: 600px; top: 240px', 380), 'Learn')
 
 # Courses: every shelf
@@ -225,7 +225,7 @@ cl2 = cl2.replace(CHEV_R, '')
 cl2 = cl2.replace('<section style="display: flex; flex-direction: column; gap: 8px">', '<section style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px">')
 clm2 = (SHOWSTATES('crStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", IB("About the courses", INFOI, "openInfo") + TB("Edit", "editOn"))}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LBACK("LearnLaptop.dc.html", "Back to Learn", "Courses", EDITR())}</sc-if>'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 20px"><div style="display: flex; flex-direction: column; gap: 20px">{cl2}</div></main>'
-        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
+        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px")}')
 detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Courses', MOREC) + BSHEET('infoOn', 'About the courses', INFOBODY) + BSHEET('ncOn', 'New course', NCBODY, 'Cancel'),
        POPOVER('moreOn', 'Courses', MOREC, 'right: 40px; top: 72px', 300) + POPOVER('infoOn', 'About the courses', INFOBODY, 'right: 90px; top: 72px', 380) + LAPSHEET(BSHEET('ncOn', 'New course', NCBODY, 'Cancel'), 480), 'Learn')
 

@@ -93,7 +93,7 @@ cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('verOn', 'Versions of Intro to Music Reading', VERBODY)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
-       f'{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}{CPAGE(True)}{CASKS}')
+       f'{TOASTE.replace("left: 16px; right: 16px; bottom: 112px; z-index: 50", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px; z-index: 50")}{CPAGE(True)}{CASKS}')
 cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + POPOVER('verOn', 'Versions of Intro to Music Reading', VERBODY, 'right: 140px; top: 244px', 440)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')
