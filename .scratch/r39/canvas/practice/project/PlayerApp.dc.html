@@ -86,7 +86,7 @@ button{font:inherit;cursor:pointer}
 </sc-if>
 </sc-if>
 
-<sc-if value="{{notSheet}}" hint-placeholder-val="{{false}}"><div style="position: absolute; left: 16px; right: 16px; top: {{viewHeadTop}}px; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none"><h2 style="margin: 0; text-align: center; font-family: 'Iowan Old Style', 'Palatino', Georgia, serif; font-size: 24px; font-weight: 400; line-height: 1.1; color: #332921">Amazing Grace</h2><p style="margin: 0; text-align: center; font-size: 13px; color: #685E56">Words: John Newton · Music: New Britain</p></div></sc-if>
+<sc-if value="{{notSheet}}" hint-placeholder-val="{{false}}"><div style="position: absolute; left: 16px; right: 16px; top: {{viewHeadTop}}px; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none"><h2 style="margin: 0; text-align: center; font-family: 'Iowan Old Style', 'Palatino', Georgia, serif; font-size: 24px; font-weight: 400; line-height: 1.1; color: #332921">Amazing Grace</h2><p style="margin: 0; text-align: center; font-size: 13px; color: #685E56">Words: John Newton · Music: New Britain</p></div></sc-if>
 <sc-if value="{{isDiagrams}}" hint-placeholder-val="{{false}}">
 <section aria-label="Chord diagrams" style="position: absolute; left: {{padX}}px; right: {{padX}}px; top: {{viewTop}}px; bottom: {{viewBottom}}px; display: flex; flex-direction: column; justify-content: center; gap: {{diagGap}}px">
 <div ref="{{diagRef}}" onScroll="{{diagScroll}}" role="group" aria-label="Chords, one at a time" style="flex: none; margin: 0 -{{padX}}px; padding-left: {{padX}}px; scroll-padding-left: {{padX}}px; display: flex; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; scroll-snap-type: x mandatory; overscroll-behavior-x: contain">
@@ -137,7 +137,7 @@ button{font:inherit;cursor:pointer}
 <sc-if value="{{isGrid}}" hint-placeholder-val="{{false}}">
 <section aria-label="Chord grid" style="position: absolute; left: {{padX}}px; right: {{padX}}px; top: {{viewTop}}px; bottom: 0; padding-bottom: {{viewBottom}}px; box-sizing: border-box; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; display: flex; flex-direction: column; gap: 4px">
 <sc-for list="{{gridSections}}" as="g" hint-placeholder-count="2">
-<h3 style="margin: {{g.mt}}px 0 6px {{gridIndent}}px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #685E56">{{g.label}}</h3>
+<h3 style="margin: {{g.mt}}px 0 4px {{gridIndent}}px; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #685E56">{{g.label}}</h3>
 <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="4">
 <div style="display: flex; gap: 8px">
 <span aria-hidden="true" style="flex: none; width: {{gutter}}px; padding-top: 5px; font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; color: #A39A90">{{r.n}}</span>
@@ -568,7 +568,7 @@ this._settle = setTimeout(() => { const i = Math.round(el.scrollLeft / DEV.slotW
 },
 gridIndent: DEV.gutter + 6, gutter: DEV.gutter, cols: perRow * 3, cellH: keys ? DEV.cellHKeys : DEV.cellH, cellPad: DEV.cellPad, gridFs: keys ? DEV.gridFsKeys : DEV.gridFs,
 gridSections: [1, 2].map((v) => ({
-label: 'Verse ' + v, mt: v === 1 ? 0 : 18,
+label: 'Verse ' + v, mt: v === 1 ? 12 : 24,
 rows: Array.from({ length: 16 / perRow }, (_, r) => {
 const first = r * perRow + 1;
 return {
