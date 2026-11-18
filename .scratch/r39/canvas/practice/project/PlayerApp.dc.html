@@ -141,7 +141,7 @@ button{font:inherit;cursor:pointer}
 <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="4">
 <div style="display: flex; gap: 8px">
 <span aria-hidden="true" style="flex: none; width: {{gutter}}px; padding-top: 5px; font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; color: #A39A90">{{r.n}}</span>
-<div style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat({{cols}}, minmax(0, 1fr)); gap: 4px">
+<div style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat({{cols}}, minmax(0, 1fr)); gap: 1px">
 <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="12">
 <button type="button" aria-label="{{c.aria}}" aria-current="{{c.current}}" onClick="{{c.pick}}" style="visibility: {{c.vis}}; height: {{cellH}}px; box-sizing: border-box; border: 0; border-left: {{c.line}}; border-radius: 3px; padding: 0 0 0 {{cellPad}}px; background: {{c.bg}}; box-shadow: {{c.mark}}; color: {{c.fg}}; display: flex; align-items: center; text-align: left; overflow: visible; position: relative">
 <span style="font-size: {{gridFs}}px; font-weight: 500; line-height: 1; white-space: nowrap">{{c.root}}<sup style="font-size: 0.6em; vertical-align: 0.7em; margin-left: 1px">{{c.ext}}</sup></span>

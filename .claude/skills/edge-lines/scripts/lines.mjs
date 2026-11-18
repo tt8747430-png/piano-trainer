@@ -459,6 +459,8 @@ async function analyse(page, scr, phone) {
     if (a === c || c.r.left < a.r.right - 0.5) continue
     const gap = c.r.left - a.r.right, share = Math.min(a.r.bottom, c.r.bottom) - Math.max(a.r.top, c.r.top)
     if (gap < 1.5 || gap > (phone ? 7.5 : 3.5) || share < 0.5 * Math.min(a.r.height, c.r.height)) continue  // a laptop's pointer: never closer than 4
+    const layer = (el) => { for (let e = el; e; e = e.parentElement) { const st = getComputedStyle(e); if ((st.position === 'absolute' || st.position === 'fixed') && parseInt(st.zIndex) >= 20) return e } return null }
+    if (layer(a.el) !== layer(c.el)) continue  // a float over content is not its neighbour
     const row = a.el.closest('[role=toolbar], [role=tablist], [role=radiogroup], [role=group], nav'); if (row && row.contains(c.el)) continue  // one joined row in its capsule
     if (tg.some((o) => o !== a && o !== c && o.r.left >= a.r.right - 0.5 && o.r.right <= c.r.left + 0.5 && Math.min(o.r.bottom, a.r.bottom) > Math.max(o.r.top, a.r.top))) continue
     const nm = (x) => (x.el.innerText || x.el.getAttribute('aria-label') || x.el.tagName).trim().split('\n')[0].slice(0, 16)
