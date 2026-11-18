@@ -92,7 +92,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
       folderOn: st.sheet === 'folder', openFolder: () => S({ sheet: 'folder' }), fname: st.fname ?? '', named: (e) => S({ fname: e.target.value }), createBg: (st.fname ?? '').trim() ? '#EDC684' : '#EEE9E2', createFg: (st.fname ?? '').trim() ? '#332921' : '#8A7F76', createDis: !(st.fname ?? '').trim(),
       recOn: st.sheet === 'rec', openRec: () => S({ sheet: 'rec' }), clickOn: st.click ?? true, clickOnBg: (st.click ?? true) ? '#44684A' : '#DAD1C8', clickOnX: (st.click ?? true) ? 22 : 2, clickT: () => S({ click: !(st.click ?? true) }),
       cins: seg(['None', '1 bar', '2 bars'], st.cin ?? '1 bar', (x) => S({ cin: x })),
-      impOn: st.sheet === 'imp', openImp: () => S({ sheet: 'imp', imp: false }), impPick: () => S({ imp: true }), impNot: !st.imp, impDone: !!st.imp,
+      impOn: st.sheet === 'imp', openImp: () => S({ sheet: 'imp', imp: false }), impPick: () => { S({ imp: 'reading' }); setTimeout(() => set({ imp: 'done' }), 1600) }, impNot: !st.imp, impReading: st.imp === 'reading', impDone: st.imp === 'done',
       songOn: st.sheet === 'song', openSong: () => S({ sheet: 'song' }), sname: st.sname ?? '', snamed: (e) => S({ sname: e.target.value }), sReady: !!(st.sname ?? '').trim(),
       sBg: (st.sname ?? '').trim() ? '#EDC684' : '#EEE9E2', sFg: (st.sname ?? '').trim() ? '#332921' : '#8A7F76', sDis: !(st.sname ?? '').trim(),
       staves: [['Piano', 'Two staves'], ['Melody', 'One staff'], ['Voice and piano', 'Three staves']].map(([l, b]) => { const on = (st.stv ?? 'Piano') === l; return { l, b, on, bg: on ? '#332921' : '#FEFDFB', fg: on ? '#FEFDFB' : '#332921', sub: on ? 'rgba(254,253,251,.75)' : '#6F655D', pick: () => S({ stv: l }) }; }),
