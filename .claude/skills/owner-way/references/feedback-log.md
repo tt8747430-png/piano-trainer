@@ -1704,6 +1704,15 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Every field names its keyboard (laws, A phone is not a small laptop 5, 2026-11-18):** of the canvas's 50 kinds of
+  field only the email fields and the editor's Bar carried a keyboard; searches, names, titles and passwords opened the
+  plain keys. The kit's `KB` holds each kind once (search, title, text, name, username, email, person, url, code, and a
+  password's current or new autocomplete), and every field names one: the search fields `type="search"` with the
+  search key, a song's, folder's, group's, lesson's or course's name capitalised by words with Done, a description or
+  tag by sentences, Your name and Username their autocomplete, Name or email and the invite link without capitals,
+  the notes field and "Type DELETE" in capitals with no correction, Sign in's password current and Create account's
+  and Settings' new ones new-password. `NAMEFIELD`, `NEWNAME`, Settings' `FIELD`, the account's `INP` and Practice's
+  `INPUT` take the kind as a parameter, so no board patches a field. 62 boards change; none in how they look.
 - **Patched helpers folded into the kit (laws, the design system as layers 1–2, 2026-11-18):** eight `.replace()` patches on a helper's output became the helper's own parameters: `DOCK(…, w=440 | 'auto')` for the centred laptop selection bars (All songs, Your lessons, Takes, the editor's format bar), `BSHEET(…, tall=True)` for Search and Chord type, `SEGC(…, fill=True)` for the Player's mode switch. Every board builds the same picture; Your lessons' bar centres by the same rule as the others. One-off patches with no sibling stay where they are.
 - **Design in four phases (owner, 2026-11-17: "can you learn to work and design the ui in such phases as here", the mebis course "Grundlagen – Knowledge Base", 2. Softwareergonomie):** sketch (the flow and each page's parts, in the spec), wireframe (`WIRE=1` on the lines tool: grey boxes and bars at the device sizes), mockup (the look), prototype (every tap works), each held to the five E's and the laws before the next; written into `ui-and-mockups` (Building a screen, 4) and `redesigning-a-screen` (step 5). The lines tool now also reports a board that throws (the SongSettings board drew blank on a stray `pick`).
 - **The Tuner fills the laptop (loop round 60, 2026-11-16):** the instrument is the page's one focus, but its laptop board drew a 560 gauge in a 1460 column; the gauge is 720 and the note 168, centred on the content column, with Reference pitch under it ("the empty space should be properly used").

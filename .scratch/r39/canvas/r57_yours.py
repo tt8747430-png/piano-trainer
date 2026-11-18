@@ -114,7 +114,7 @@ def TABLE_L():
 SORTB = (f'<button type="button" onClick="{{{{openSort}}}}" style="flex: none; height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">'
          f'{{{{sortL}}}}{CHEV_D}</button>')
 SEARCHF = (f'<label style="flex: none; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 12px; border-radius: 12px; background: {FILL}; color: {SOFT}">{SEARCH}'
-           f'<input aria-label="Search your lessons and courses" placeholder="Search lessons and courses" value="{{{{q}}}}" onInput="{{{{typed}}}}" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">{SORTB}</label>')
+           f'<input {KB["search"]} aria-label="Search your lessons and courses" placeholder="Search lessons and courses" value="{{{{q}}}}" onInput="{{{{typed}}}}" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none">{SORTB}</label>')
 # canvas 167: the + is New's dial, as Songs' (the app's SpeedDial): it turns to a close, the page dims, and New lesson
 # and New course come up over it named in words, the nearest the thumb first; one chosen opens its own short sheet
 # canvas 169: the + is the kit's one New dial (NEWDIAL), as Songs' and the Practice libraries'
@@ -148,7 +148,7 @@ OSET_JS = js(r'''
         .concat(isLesson ? [['In courses, open', sheet === 'ins', { sheet: 'ins' }, { sheet: null }]] : [])
         .concat([['Deleted, with Undo', /deleted$/.test(st.toast || ''), { toast: isLesson ? 'Lesson deleted' : 'Course deleted' }, { toast: null }], ['Progress reset, with Undo', st.toast === 'Progress reset', { toast: 'Progress reset' }, { toast: null }]])
         .map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };''')
-NAMEBODY = lambda v, label: (f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Name")}<input aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"></div>'
+NAMEBODY = lambda v, label: (f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Name")}<input {KB["title"]} aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"></div>'
                              f'<div style="display: flex">{BTN(label, "rename", "", "primary", 50)}</div>')
 INSBODY = GROUP(('raw', f'<sc-for list="{{{{inCourses}}}}" as="k" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{{{k.on}}}}" onClick="{{{{k.pick}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 16px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: 1">{{{{k.c}}}}</span><span style="font-weight: 700; color: #2F5A35">{{{{k.mark}}}}</span></button></sc-for>'), bg=SHEET)
 def SETTINGS(lesson, lap):

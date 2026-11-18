@@ -101,10 +101,22 @@ def LPLACEBAR(title, count='', acts='', search=''):
     return (f'<header data-placebar style="flex: none; height: 88px; display: flex; align-items: center; gap: 12px; padding: 0 56px">'
             f'<h1 style="margin: 0; min-width: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h1>{c}<span style="flex: 1"></span>'
             f'<div style="flex: none; display: flex; align-items: center; gap: 8px">{acts}</div>{search}</header>')
+# The keyboard each kind of field asks for (laws, A phone is not a small laptop 5): every <input> names its kind, so a
+# phone opens the right keys and the port carries them. A password keeps its type from its eye and adds its autocomplete.
+KB = {'search': 'type="search" enterkeyhint="search" autocapitalize="off"',
+      'title': 'type="text" autocapitalize="words" enterkeyhint="done"',
+      'text': 'type="text" autocapitalize="sentences" enterkeyhint="done"',
+      'name': 'type="text" autocomplete="name" autocapitalize="words"',
+      'username': 'type="text" autocomplete="username" autocapitalize="off" spellcheck="false"',
+      'email': 'type="email" autocomplete="email" autocapitalize="off" spellcheck="false"',
+      'person': 'type="text" autocapitalize="off" spellcheck="false" enterkeyhint="done"',
+      'url': 'type="url" autocapitalize="off" spellcheck="false" enterkeyhint="go"',
+      'code': 'type="text" autocapitalize="characters" autocorrect="off" spellcheck="false"',
+      'current-password': 'autocomplete="current-password"', 'new-password': 'autocomplete="new-password"'}
 # the one search field of a place, 320 wide, 44 tall, at the bar's trailing edge
 def PSEARCH(ph, val='q', act='setQ'):
     return (f'<label style="flex: none; width: 320px; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
-            f'<input value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
+            f'<input {KB["search"]} value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
 # A laptop sub-page's column: it starts on the bar title's edge (scan-first 1), never centred under a title at the left.
 LCOL = lambda inner, w: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex"><div style="width: min({w}px, 100%); display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
 # The ⓘ: one glyph for every explanation behind a tap.

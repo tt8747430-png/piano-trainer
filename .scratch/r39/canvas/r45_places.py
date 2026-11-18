@@ -173,7 +173,7 @@ COURSELIST = COURSEROWS[COURSEROWS.index('<sc-for list="{{courses}}"'):]
 # canvas 167 (owner: "popups with meaningful information … show more things with less ui"): About the courses says
 # what a course is in one line, then the shelves themselves with their counts, each a tap to its shelf
 INFOBODY = (f'<p style="margin: 0; font-size: 16px; line-height: 1.5">A course teaches one skill in a few weeks, with songs to read at its end. The levels keep going beside it.</p>')
-CHAPBODY = (f'{CAPS("Name")}<input aria-label="Name" value="{{{{chapT}}}}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
+CHAPBODY = (f'{CAPS("Name")}<input {KB["title"]} aria-label="Name" value="{{{{chapT}}}}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}">'
             + GROUP(('action', 'Remove chapter', 'dropChap', RED), bg=SHEET))
 MOREC = GROUP(('action', 'Edit', 'editOn'), ('action', 'New course', 'openNewCourse'), bg=SHEET)
 

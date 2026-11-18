@@ -111,7 +111,7 @@ INSBODY = INSLIST(CAPS)
 EXBODY = (CAPS('Root') + ROOTGRID('exRoots') + CAPS('Scale') + CHIPS('exKinds') + GROUP(('seg', 'Clef', 'clefs'), bg=SHEET)
           + f'<div style="position: relative; display: flex; align-items: center; justify-content: space-between; min-height: 28px; padding-right: 12px">{CAPS("Notes")}' + INFOB('About Notes', 'tipNotes', 'tipNOn')
           + INFOTIP('tipNOn', 'tipNotes', 'About Notes', 'Each note with its octave, its value after a slash (2 a half, 8 an eighth), r a rest: E4 G4/2 r.', 'right: 0; top: 32px') + '</div>'
-          + f'<input value="C4 D4 E4 F4 G4 A4 B4 C5" aria-label="Notes" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font-family: ui-monospace, Menlo, monospace; font-size: 15px; color: {INK}">'
+          + f'<input {KB["code"]} value="C4 D4 E4 F4 G4 A4 B4 C5" aria-label="Notes" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font-family: ui-monospace, Menlo, monospace; font-size: 15px; color: {INK}">'
           + CAPS('Opens') + CHIPS('opens'))
 BLOCKBODY = GROUP(('link', 'Add below', '', 'openIns'), ('seg', 'Turn into', 'turns'), ('action', 'Duplicate', 'dupBlock'), ('action', 'Delete', 'removeBlock', '#B3261E'), bg=SHEET)
 PUBBODY = (f'<div style="display: flex; align-items: center; gap: 12px"><span style="width: 10px; height: 10px; border-radius: 5px; background: #C26A2E"></span><span style="font-size: 17px; font-weight: 700">{{{{standing}}}}</span></div>'

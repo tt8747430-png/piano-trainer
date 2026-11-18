@@ -110,7 +110,7 @@ INSROW = (f'<button type="button" onClick="{{{{k.add}}}}" style="width: 100%; mi
           + ''.join(f'<sc-if value="{{{{k.i{n}}}}}" hint-placeholder-val="{{{{{"true" if n == 0 else "false"}}}}}">{ICONS[k]}</sc-if>' for n, k in enumerate(KINDS))
           + '</span><span style="flex: 1; font-size: 16px">{{k.k}}</span></button>')
 def INSLIST(label_fn):
-    return (f'<label style="height: 44px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">{SEARCH}<input placeholder="Insert" aria-label="Insert" style="flex: 1; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>'
+    return (f'<label style="height: 44px; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">{SEARCH}<input {KB["search"]} placeholder="Insert" aria-label="Insert" style="flex: 1; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>'
             f'<sc-for list="{{{{ins}}}}" as="g" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 8px">{label_fn("{{g.g}}")}'
             f'<div style="border-radius: 14px; background: {SHEET}; overflow: hidden"><sc-for list="{{{{g.ks}}}}" as="k" hint-placeholder-count="4">{INSROW}</sc-for></div></section></sc-for>')
 ADDED = ('<sc-for list="{{added}}" as="b" hint-placeholder-count="0"><div data-added onClick="{{b.pick}}" style="position: relative; display: flex; flex-direction: column; gap: 12px; border-radius: 8px; outline: 2px solid {{b.ring}}; outline-offset: 6px">'
