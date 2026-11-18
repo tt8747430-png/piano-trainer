@@ -10,7 +10,8 @@ const PLACED = { across: '', centred: 'text-center' } as const
 const OPENS = 'rounded-control px-1 transition-colors duration-200 ease-out hover:bg-foreground/5'
 
 /**
- * The title printed at the sheet's head and the credits under it (ADR 0114, R32-B), as Flat's: a
+ * The title printed at the sheet's head and the credits centred under it, as the Player prints them
+ * (one heading in Play and in Edit, loop 63; ADR 0114, R32-B), as Flat's: a
  * click on either opens Title and credits, the one place the title and every credit are typed.
  * Nothing is printed under it the learner did not write. A lesson's example has no credits: its
  * title is printed alone, named for its lesson.
@@ -32,7 +33,8 @@ export function TitleField({ place }: { place: TitlePlace }) {
             title={t('scoreSettings.credits')}
             onClick={open}
             className={cn(
-              'inline-flex min-h-11 max-w-full items-center justify-center text-balance wrap-break-word',
+              // Its 44 reach grown over and under the title's line, so the title stands where the Player prints it.
+              '-my-2 inline-flex min-h-11 max-w-full items-center justify-center text-balance wrap-break-word',
               OPENS,
             )}
           >
@@ -41,7 +43,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
         )}
       </SheetTitle>
       {place === 'across' || !hasCredits(credits) ? null : example ? (
-        <SheetCredits credits={credits} />
+        <SheetCredits credits={credits} align="center" />
       ) : (
         <button
           type="button"
@@ -49,11 +51,11 @@ export function TitleField({ place }: { place: TitlePlace }) {
           onClick={open}
           // Its reach 44 tall, grown into the room under it, never over the title's.
           className={cn(
-            "relative block w-full text-start before:absolute before:inset-x-0 before:top-0 before:-bottom-6 before:content-['']",
+            "relative block w-full text-center before:absolute before:inset-x-0 before:top-0 before:-bottom-6 before:content-['']",
             OPENS,
           )}
         >
-          <SheetCredits credits={credits} />
+          <SheetCredits credits={credits} align="center" />
         </button>
       )}
     </div>

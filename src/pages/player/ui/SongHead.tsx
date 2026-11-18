@@ -47,7 +47,7 @@ export function SongHead({
       ) : null}
       {acts.length > 0 ? (
         <ActionMenu
-          label={t('settings:bars.more')}
+          label={t('songMenu')}
           align="end"
           trigger={null}
           render={

@@ -7,6 +7,8 @@ export const player: LocaleResources['player'] = {
     title: 'Разделы',
   },
   print: 'Печать',
+  // The menu beside the song's head in the Player's settings, named as the View menu is.
+  songMenu: 'Песня',
   views: {
     backToPlayhead: 'К месту игры',
     pick: 'Выберите вид',
