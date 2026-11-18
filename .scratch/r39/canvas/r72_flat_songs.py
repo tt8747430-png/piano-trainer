@@ -157,8 +157,15 @@ BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div
 # Drive's "New" row, always in sight); Recently played, Folders, then Explore as a shelf with See all, its own page;
 # Archive and Trash in the bar's ··· with All songs, out of the page.
 CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+# A song is a row of one list, not a card of its own (edge-lines' laws, NN/g and M3: homogeneous items are a list; on a
+# phone "consider swapping cards for lists"): the list is one card, each row's hairline from the title's edge (12 + the
+# 56 tile + 16), the first row's clipped by the list's -1 (SONGLIST), as the playlists' inset list draws it.
+SONGHAIR = f'background: linear-gradient({LINE}, {LINE}) no-repeat 84px 0 / calc(100% - 84px) 1px'
+# in Select the title moves right by the checkbox (24 + 16), and its hairline with it
+SONGLIST = lambda inner, grid='display: flex; flex-direction: column': (f'<style>[data-songlist]:has([role=checkbox]) [data-songrow] {{ background-position: 124px 0 !important; background-size: calc(100% - 124px) 1px !important }}</style>'
+                                                                         f'<div data-songlist style="{CARDROW}; overflow: hidden"><div style="{grid}; gap: 0; margin-top: -1px">{inner}</div></div>')
 def SONGROW(song):
-    return (f'<div style="{CARDROW}; min-height: 88px; box-sizing: border-box; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px">'
+    return (f'<div data-songrow style="{SONGHAIR}; min-height: 88px; box-sizing: border-box; display: flex; align-items: center; gap: 4px; padding: 0 4px 0 12px">'
             f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{r.on}}}}" onClick="{{{{r.tap}}}}" aria-label="{{{{r.t}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
             f'<a href="{song}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; padding: 12px 0; color: {INK}; text-decoration: none">{CHECKBOX}<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 12px; background-image: {{{{r.pic}}}}; background-size: cover; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{r.t}}}}</span>'
@@ -166,7 +173,7 @@ def SONGROW(song):
             f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if></div>')
 SEARCHFIELD = (f'<label style="flex: none; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
                f'<input value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your songs" aria-label="Search your songs" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
-LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}"><div style="{grid}"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for></div></sc-if>'
+LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}">' + SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for>') + '</sc-if>'
 OVSEARCH = SEARCHFIELD.replace('flex: none; height: 44px', 'flex: none; height: 48px; border-radius: 24px')
 # What a search found, on the page: the songs as cards, the folders, then the same words in Explore
 FOLDHIT = (f'<sc-for list="{{{{fold}}}}" as="f" hint-placeholder-count="1"><a href="{{FOLDER}}" style="{CARDROW}; min-height: 72px; box-sizing: border-box; padding: 8px 12px; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">'
@@ -308,16 +315,17 @@ LISTPAGE('Folder', 'Hymns', [{'t': a, 's': b, 'v': c, 'when': d, 'add': e, 'pic'
 CHOIR = [('It Is Well', 'Philip P. Bliss · C major', 'Not started', 'Added 2 Nov'), ('Great Is Thy Faithfulness', 'William M. Runyan · D major', 'Not started', 'Added 2 Nov'),
          ('Silent Night', 'Franz Gruber · B♭ major', 'Not started', 'Added 2 Nov'), ('Amazing Grace', 'John Newton · G major', 'Bar 9 of 16', 'Today')]
 LOCK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>'
-def _shrows(song):
-    return ''.join('<div style="position: relative">' + SONGROW(song).replace('{{r.t}}', t).replace('{{r.s}}', sub).replace('{{r.v}}', v).replace('{{r.when}}', w).replace('{{r.pic}}', INCIPIT(INC.get(t, (2, 4))).replace('"', "'")) + '</div>' for t, sub, v, w in CHOIR)
+# In a playlist shared View only, a song's menu holds what a viewer can do: practise it, keep it in a playlist of
+# their own, favourite it; never Edit score, Settings or Archive, which are the sharer's (no misleading acts)
+VIEWITEMS = lambda sfx: [('link', 'Practise', '', 'Player' + sfx), ('action', 'Add to a playlist', 'closeSheet', INK), ('action', 'Favourite', 'closeSheet', INK)]
 _SHHEAD = lambda w: (f'<div style="display: flex; align-items: center; gap: 16px"><span style="flex: none">{PLCOVER(SAGE, False, [t for t, *_ in CHOIR], "M", w)}</span>'
                      f'<span style="min-width: 0; display: flex; flex-direction: column; gap: 4px">'
                      f'<span style="font-size: 15px; color: {SOFT}">Shared by Maria Ionescu in Choir accompanists</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: {SOFT}">{LOCK}View only · 4 songs</span></span></div>')
 # The playlist's name stands in the bar, as every playlist's does (edge-lines 8: an empty bar is a hole); the head
 # under it is the cover and who shared it.
 shph = (f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
-        f'{_SHHEAD(112)}<div style="display: flex; flex-direction: column; gap: 12px">{_shrows("Song.dc.html")}</div></main>{TABBAR("Songs")}')
+        f'{_SHHEAD(112)}{SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="4"><div style="position: relative">{SONGROW("Song.dc.html")}</div></sc-for>')}</main>{TABBAR("Songs")}')
 shlm = (f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 28px">'
-        f'{_SHHEAD(160)}<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">{_shrows("SongLaptop.dc.html")}</div></main>')
-detail('SharedFolder', 'Choir hymns', FLJS(_ROWS), shph, shlm, '', '', '', 'Songs')
+        f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All songs"', 'aria-label="Choir hymns"', 1)}</main>')
+detail('SharedFolder', 'Choir hymns', FLJS([{'t': a, 's': b, 'v': c, 'when': d, 'add': 0, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d in CHOIR]), shph, shlm, '', ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('.dc.html')), ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('Laptop.dc.html')), 'Songs')
 print('flat songs ok')

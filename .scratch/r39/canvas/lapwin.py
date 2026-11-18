@@ -111,7 +111,7 @@ def lapwin(h):
     h = _ACCT_OLD.sub(_acct, h, count=1)
     # Profile is the account row's place: on its pages the row wears the current wash, as Learn, Songs and Practice do
     # on theirs (HIG Sidebars: the selected item shows where you are; a sidebar with nothing current loses the learner)
-    if re.search(r'<title>(Profile|[^<]*from Profile|Settings|Administration|Legal|Sign in)', h):
+    if re.search(r'<title>(Profile|[^<]*from Profile|Settings,|Administration|Legal|Sign in)', h):
         h = h.replace('<button type="button" data-acct aria-haspopup="menu"', '<button type="button" data-acct aria-current="page" aria-haspopup="menu"', 1)
         h = h.replace('background: {{lapAcctBg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 'background: #EAE2D7; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 1)
     # Signed out, the row is no one's: a person's outline and Sign in, and its menu offers Sign in, never another's
