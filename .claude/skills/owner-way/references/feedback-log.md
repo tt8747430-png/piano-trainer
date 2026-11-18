@@ -114,6 +114,7 @@ owner's, typos fixed.
 
 ## Player and editor together
 - **The Player's Pattern sheet holds the library's shape (the layers walker, 2026-11-17):** its place chips were 34 tall in a row cut at the sheet's edge, and Close all a 28-tall link in an orange at 3.9:1. The chips reach 44 as the kit's and wrap in the sheet (nothing is cut in a sheet); Close all reaches 44 in the darker orange (#A8551F, as Continue's label).
+- **The score's systems keep Verovio's spacing (port P4, 2026-11-18):** the board measures 24 between its drawn systems' boxes, chord symbols and bar numbers included; in the app the gap is the engraving's own (`spacingSystem`, the learner's Space between systems on a page), set by ink and not by the 4/8 scale. Nothing is forced to 24: an engraver's spacing outranks a screen's grid (LilyPond, Verovio).
 - **The Player's two saved boards brought level (2026-11-18):** PlayerApp and PlayerDesk come from the published copy, not a generator, and still drew the Pattern sheet's chips 34 tall in a cut row, Close all 28 tall at 3.9:1 and each pattern's hands on one cut line; their chips now reach 44 on the kit chip's 4px transparent edges and wrap, Close all reaches 44 in #A8551F, and the hands line takes two lines (lines tool: 0 problems at 402 and 1710).
 - **The next lyric line readable (loop 63, 2026-11-17, canvas v460):** under the Diagrams view's current line the next one was #A39A90 on the paper, 2.5:1; it is soft ink now (#685E56, 4.5:1 and over), its lighter weight keeping it second (contrast, WCAG 1.4.3). `PlayerApp`, `PlayerDesk`.
 
