@@ -13,8 +13,8 @@ PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: (
       leads: ['None', 'Secondary dominants', 'ii–V'].map((d) => ({ d, on: d === (st.lead ?? 'None'), mark: d === (st.lead ?? 'None') ? '✓' : '', pick: () => set({ lead: d, menu: null }) })),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), fav: !!st.fav, favFill: st.fav ? '#C2554A' : 'none', toggleFav: () => set({ fav: !st.fav }),
       staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], y = (d) => 65 - d * 3.5, names = [], bars = [], notes = [], led = [];
-        P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), third = n === n.toLowerCase() ? 3 : 4, x = 92 + i * 66;
-          names.push({ x, name: ch(n) }); if (i < P.length - 1) bars.push({ d: 'M' + (x + 33) + ' 30V58' });
+        P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), third = n === n.toLowerCase() ? 3 : 4, x = 80 + i * 52;
+          names.push({ x, name: ch(n) }); if (i < P.length - 1) bars.push({ d: 'M' + (x + 26) + ' 30V58' });
           [[l0, rpc], [l0 + 2, (rpc + third) % 12], [l0 + 4, (rpc + 7) % 12]].forEach(([d, pc]) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12, acc = k === 1 ? '♯' : k === 11 ? '♭' : '';
             notes.push({ x, cy: y(d), ax: x - 18, ay: y(d) + 5, acc, hasAcc: !!acc }); if (d <= 0) led.push({ d: 'M' + (x - 10) + ' 65H' + (x + 10) }); }); });
         return { names, bars, notes, led }; })(),
@@ -33,15 +33,17 @@ TITLE62 = (f'<div style="flex: none; display: flex; flex-direction: column; gap:
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{fav}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}; text-wrap: pretty">Bright and singable, the sound of a thousand hits · Pop</p></div>'
            f'<button type="button" aria-label="Key: {{{{keyL}}}}" onClick="{{{{openRoot}}}}" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Key</span><b>{{{{keyL}}}}</b><span style="color: {SOFT}; display: flex">{CHEVS}</span></button></div>')
-STAFF62 = (f'<svg viewBox="0 0 360 84" width="100%" role="img" aria-label="The chords on the staff" style="display: block; max-width: 460px; margin: 0 auto">'
-           + ''.join(f'<path d="M24 {30 + i * 7}H350" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-           + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><path d="M350 30V58" stroke="{INK}" stroke-width="1"></path>'
+STAFF62 = (f'<svg viewBox="20 0 246 84" width="100%" role="img" aria-label="The chords on the staff" style="display: block; max-width: 560px; margin: 0 auto">'
+           + ''.join(f'<path d="M24 {30 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+           + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><path d="M262 30V58" stroke="{INK}" stroke-width="1"></path>'
            + f'<sc-for list="{{{{staff.names}}}}" as="c" hint-placeholder-count="4"><text x="{{{{c.x}}}}" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="{INK}">{{{{c.name}}}}</text></sc-for>'
            + f'<sc-for list="{{{{staff.bars}}}}" as="l" hint-placeholder-count="3"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
            + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="1"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
            + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="12"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
            + f'<sc-if value="{{{{z.hasAcc}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="15" font-family="Noto Music, serif" fill="{INK}">{{{{z.acc}}}}</text></sc-if></sc-for></svg>')
-MUSIC62 = CARD(STAFF62, '16px 16px 14px')
+# the chords on the staff at reading size (10 a space on a phone), framed to its four bars, on the paper: no card round
+# the page's own music (laws, "The page's subject is its largest thing")
+MUSIC62 = f'<figure style="flex: none; margin: 0">{STAFF62}</figure>'
 WALKS62 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">Practise in the Player</h3>'
            f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{walks}}}}" as="p" hint-placeholder-count="5"><a href="PlayProgression.dc.html" style="min-height: 60px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
            f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{p.t}}}}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{p.s}}}}</span></span>{CHEV_RS}</a></sc-for></div></section>')
