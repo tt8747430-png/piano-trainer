@@ -298,7 +298,7 @@ export const quiz: LocaleResources['quiz'] = {
   openChords: 'Открыть в аккордах',
   openScales: 'Открыть в гаммах',
   hint: 'Подсказка',
-  hintNotes: 'Его ноты',
+  hintNotes: 'Его ноты: {{notes}}',
   tally: { right: 'верно {{count}}', wrong: 'ошибок {{count}}', run: 'серия {{count}}' },
   why: {
     chord: '{{notes}} — {{quality}} от {{root}}: {{formula}}',
