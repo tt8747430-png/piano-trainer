@@ -339,6 +339,43 @@ another component's job is a finding.
   13. What a web footer holds (Legal, About, version, Report a problem) lives at the foot of Settings, after its
       groups, never on a working screen; the phone's tab bar is navigation, not a footer, and holds only the places.
 
+## Predictions and suggestions (Uxcel, "What Is AI-Powered UX?", sent 2026-11-18)
+
+Where the app guesses for the learner: chords detected from a recording or an import, a suggested next song or
+lesson, Continue, a level placement, a practice pace. The source's words, then the rule.
+
+- "Show predictions as helpful suggestions, not decisions. Always let users easily accept, change, or ignore these
+  suggestions."
+  1. A guess is drawn as a suggestion (a quiet chip or row labelled Suggested, or a chord in the soft style), with
+     its accept in one tap, a way to change it in place, and a way to dismiss it; it never replaces the learner's own
+     choice or data until accepted.
+- "Predictions that miss the mark feel intrusive and waste interface space."
+  2. At most one suggestion block per screen, below what the learner came for, never above it; a dismissed
+     suggestion does not come back on the same screen in the same session.
+- "Users need to understand when the system is certain versus when it's making an educated guess"; "a weather app
+  might show a percentage chance of rain"; "hiding uncertainty often backfires."
+  3. A detected chord or note that is uncertain is marked as uncertain (a dashed outline, "?") and is the first one a
+     review step goes to; a certain one is drawn plainly. Never a percentage where a musician would not use one.
+- "Good designs include clear ways for users to provide feedback when predictions are wrong."
+  4. Correcting a guess is the same act as editing it (tap the chord, pick the right one); the correction is the
+     feedback, with no separate form.
+- "Balance personalization with transparency by showing users how the system learns from their behavior and giving
+  them control."
+  5. Every personal ordering says why in its head or ⓘ ("Recently played", "From your level"), and the learner can
+     change it (a sort menu) or clear it (Settings › Clear history).
+- Personalization of "layout", "features" and "complexity": "bringing frequently used features forward … keeping
+  interfaces simpler for beginners."
+  6. The frame never rearranges itself by use: bars, places and the order of settings stay where they are (Jakob,
+     consistency). Personal order is allowed only inside lists (Recently used first) and in Continue.
+- "Transparency mechanisms that help users understand … what data influences those decisions"; "clear user controls
+  over what information feeds into models"; "mechanisms for user redress."
+  7. Anything learned from the learner's playing is theirs: Settings shows what is kept and has Clear and Export;
+     Report a problem is reachable from the screen where a guess went wrong (its ··· menu). Never read a learner's
+     data to diagnose (`CLAUDE.md`).
+- "Automation offers consistency and reliability for well-defined tasks."
+  8. Where a rule gives the right answer (a key signature's accidentals, a scale's notes, a chord's tones), the app
+     uses the rule and shows it as fact, never as a guess.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
