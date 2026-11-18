@@ -232,20 +232,17 @@ detail('LearnCourses', 'Courses', LEARN_JS, cph2, clm2, '', BSHEET('moreOn', 'Co
 
 # ── Profile ──
 BELL = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg>'
-BELLB = f'<a href="#" aria-label="Notifications, 2 unread" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: {INK}">{BELL}<span style="position: absolute; top: 6px; right: 5px; min-width: 18px; height: 18px; border-radius: 9px; background: #B3261E; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span></a>'
 FLAME = '<svg viewBox="0 0 24 24" width="20" height="20" fill="#C26A2E" aria-hidden="true"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2.4 1.3-4 2.5-5 0 2 1 3 2 3 0-4 .5-6 .5-8Z"></path></svg>'
-PROFILE_JS = js(r'''
-    const DAYS = [['M', 18], ['T', 25], ['W', 0], ['T', 32], ['F', 15], ['S', 40], ['S', 22]];
-    return { ...common(st, set), week: DAYS.map(([d, m], i) => ({ d, m: m ? m + ' min' : '', h: Math.max(4, Math.round(m * 1.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 })) };''')
-def TILE(icon, v, l):
-    # the figure leads, its icon on the same row at the right, the label one line under it (loop round 60)
+def TILE(icon, v, l, act='', href=''):
+    # the figure leads, its icon on the same row at the right, the label one line under it (loop round 60);
+    # the tile is a button when it acts, a link when it opens a page, a figure alone otherwise
     ic = icon.replace('width="20" height="20"', 'width="18" height="18" style="flex: none"')
-    return (f'<a href="#" style="flex: 1; min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 4px; color: {INK}; text-decoration: none">'
+    tag, att, st = ('button', f' type="button" onClick="{{{{{act}}}}}"', 'border: 0; font: inherit; text-align: left; ') if act else ('a', f' href="{href}"', '') if href else ('div', '', '')
+    return (f'<{tag}{att} style="{st}flex: 1; min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px; display: flex; flex-direction: column; gap: 4px; color: {INK}; text-decoration: none">'
             f'<span style="display: flex; align-items: center; justify-content: space-between; gap: 4px"><span style="font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -0.01em">{v}</span>{ic}</span>'
-            f'<span style="font-size: 13px; line-height: 1.375; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{l}</span></a>')
+            f'<span style="font-size: 13px; line-height: 1.375; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{l}</span></{tag}>')
 NOTE = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{SOFT}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3" fill="{SOFT}"></circle><circle cx="18" cy="16" r="3" fill="{SOFT}"></circle></svg>'
 CLOCK = f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{SOFT}" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>'
-TILES = f'<div style="display: flex; gap: 8px">{TILE(FLAME, "12", "Day streak")}{TILE(NOTE, "4", "Songs learned")}{TILE(CLOCK, "12 h", "Practice time")}</div>'
 WEEK = CARD(f'<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px; font-weight: 700">Last 7 days</span><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">152 min · 6 of 7 days</span></div>'
             f'<div role="img" aria-label="Minutes practised each day this week" style="display: flex; gap: 8px; margin-top: 12px">'
             f'<div aria-hidden="true" style="flex: none; width: 20px; height: 72px; position: relative; font-size: 12px; line-height: 12px; color: {SOFT}; font-variant-numeric: tabular-nums; text-align: right">'
@@ -254,30 +251,20 @@ WEEK = CARD(f'<div style="display: flex; justify-content: space-between; align-i
             f'<span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 32px; height: 1px; background: {FILL}"></span><span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 64px; height: 1px; background: {FILL}"></span>'
             f'<sc-for list="{{{{week}}}}" as="w" hint-placeholder-count="7"><span style="flex: 1; position: relative; height: {{{{w.h}}}}; border-radius: 2px 2px 0 0; background: {{{{w.bg}}}}"></span></sc-for></div>'
             f'<div style="display: flex; gap: 8px"><sc-for list="{{{{week}}}}" as="w" hint-placeholder-count="7"><span style="flex: 1; text-align: center; font-size: 12px; color: {{{{w.ink}}}}; font-weight: {{{{w.fw}}}}">{{{{w.d}}}}</span></sc-for></div></div></div>', '14px 16px 12px')
-RING = lambda have, goal: f'<svg viewBox="0 0 48 48" width="52" height="52" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="{FILL}" stroke-width="5"></circle><circle cx="24" cy="24" r="20" fill="none" stroke="#C26A2E" stroke-width="5" stroke-linecap="round" stroke-dasharray="{125.7 * have / goal:.1f} 126" transform="rotate(-90 24 24)"></circle><text x="24" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="{INK}">{have}/{goal}</text></svg>'
-MILE = CARD(f'<div style="display: flex; align-items: center; gap: 16px">{RING(12, 14)}<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 600; color: #A8551F">Almost there</span><span style="font-size: 16px; font-weight: 600">2 more days to your next Streak Keeper badge</span><span style="font-size: 13px; color: {SOFT}">Gold · 14-day streak</span></div></div>')
 def MEDAL(tier):
     c = {'Bronze': '#C98B5A', 'Silver': '#A9A39B', 'Gold': '#D9A93E', 'Platinum': '#8FB3B8', '': '#DAD1C8'}[tier]
     return f'<span style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {c}; box-shadow: inset 0 0 0 3px rgba(255,255,255,.45); display: flex; align-items: center; justify-content: center; color: #FFFFFF"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg></span>'
-def BROW(name, tier, sub):
-    return f'<a href="#" style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none">{MEDAL(tier)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>'
+def BROW(name, tier, sub, act):
+    return f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; text-decoration: none">{MEDAL(tier)}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
 BOX = lambda inner: f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{inner}</div>'
-SEEALL = f'<a href="#" style="font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none; height: 44px; margin: -12px 0; display: flex; align-items: center">See all</a>'
-BADGES = H2('Badges', SEEALL) + BOX(BROW('Streak Keeper', 'Silver', 'Silver · next: Gold at 14 days') + BROW('Repertoire', 'Bronze', 'Bronze · 4 songs learned') + BROW('Lesson Finisher', 'Bronze', 'Bronze · 6 lessons learned'))
-def AROW(name, sub, got):
+def AROW(name, sub, got, act):
     ic = f'<span style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: {"#DCE9D6" if got else FILL}; color: {"#2F5A35" if got else SOFT}; display: flex; align-items: center; justify-content: center">{CHECKI if got else LOCKI}</span>'
-    return f'<div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{ic}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; color: {INK if got else SOFT}">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span></div>'
-ACH = H2('Achievements', SEEALL) + BOX(AROW('First lesson done', 'Earned 28 October 2026', True) + AROW('First recording', 'Earned 30 October 2026', True) + AROW('A perfect run', 'Not earned yet', False))
+    return f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{ic}<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; color: {INK if got else SOFT}">{name}</span><span style="font-size: 14px; color: {SOFT}">{sub}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
 CAM = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>'
 # the learner's picture stands on the page's column, as every block under it (loop round 67, the lines: a 4px near-miss)
 HERO_P = (f'<div style="display: flex; align-items: center; gap: 16px"><div style="position: relative; flex: none; width: 76px; height: 76px; border-radius: 38px; background: #E9D8C4; display: flex; align-items: center; justify-content: center; font-family: {SERIF}; font-size: 34px">A'
           f'<button type="button" aria-label="Edit profile photo" style="position: absolute; right: -8px; bottom: -8px; width: 44px; height: 44px; border: 0; background: transparent; padding: 0; display: flex; align-items: center; justify-content: center"><span style="width: 30px; height: 30px; border-radius: 15px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{CAM}</span></button></div>'
           f'<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 28px; font-weight: 700; letter-spacing: -0.01em">Ana Popescu</span><span style="font-size: 15px; color: {SOFT}">@ana · Joined 2025</span></div></div>')
-pph = f'''{TOP('', '', BELLB + IB('Settings', GEARI, href='Settings.dc.html'))}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{HERO_P}{TILES}{WEEK}{MILE}{BADGES}{ACH}</main>{TABBAR('Profile')}'''
-plm = (f'{LTOP("", BELLB + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">'
-       f'<div style="display: flex; flex-direction: column; gap: 16px">{HERO_P}{TILES}{WEEK}{MILE}</div><div style="display: flex; flex-direction: column; gap: 12px">{BADGES}{ACH}</div></main>')
-detail('Profile', 'Profile', PROFILE_JS, pph, plm, '', '', '', 'Profile')
 
 # ── Settings ──
 import urllib.parse

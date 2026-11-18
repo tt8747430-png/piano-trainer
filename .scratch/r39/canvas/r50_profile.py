@@ -56,23 +56,16 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
 
 BELL9 = (f'<button type="button" aria-label="{{{{bellL}}}}" onClick="{{{{goNotes}}}}" style="position: relative; {GLASSST}">{BELL}'
          f'<sc-if value="{{{{hasUnread}}}}" hint-placeholder-val="{{{{true}}}}"><span style="position: absolute; top: 6px; right: 5px; min-width: 18px; height: 18px; border-radius: 9px; background: #B3261E; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{{{unread}}}}</span></sc-if></button>')
-def TILE9(icon, v, l, act):
-    t = TILE(icon, v, l)
-    return t.replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="border: 0; font: inherit; text-align: left; ', 1)[:-4] + '</button>' if act else t.replace('<a href="#"', '<div', 1)[:-4] + '</div>'
-TILES9 = f'<div style="display: flex; gap: 12px">{TILE9(FLAME, "12", "Day streak", "goStreak")}{TILE(NOTE, "4", "Songs learned").replace('<a href="#"', '<a href="AllSongs.dc.html"', 1)}{TILE9(CLOCK, "12 h", "Practice time", "goHistory")}</div>'
+TILES9 = f'<div style="display: flex; gap: 12px">{TILE(FLAME, "12", "Day streak", act="goStreak")}{TILE(NOTE, "4", "Songs learned", href="AllSongs.dc.html")}{TILE(CLOCK, "12 h", "Practice time", act="goHistory")}</div>'
 SEEALL9 = lambda act: f'<button type="button" onClick="{{{{{act}}}}}" style="height: 44px; margin: -12px 0; border: 0; background: transparent; padding: 0; font: inherit; font-size: 15px; font-weight: 600; color: {LINK}">See all</button>'
-def BROW9(name, tier, sub, act):
-    return BROW(name, tier, sub).replace('<a href="#" style="', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; ', 1)[:-4] + '</button>'
 def _BSUB(n):
     b = next(x for x in BADGES9 if x[0] == n); nx = next((t for t in b[4] if not t[2].startswith('Reached')), None)
     # how near the next tier is, in its own unit: "Silver · 2 more days to Gold" (the Almost there card said this again)
     if not nx: return (b[1] or 'Not started') + ' · every tier reached'
     k = int(nx[2].split()[0]); u = nx[1].split(' ', 1)[1]; u = u[:-1] if k == 1 and u.endswith('s') else u
     return (f'{b[1]} · ' if b[1] else '') + f'{k} more {u} to {nx[0]}'
-BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW9(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
-def AROW9(name, sub, got, act):
-    return AROW(name, sub, got).replace('<div style="min-height: 60px;', f'<button type="button" onClick="{{{{{act}}}}}" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; color: {INK}; min-height: 60px;', 1)[:-6] + f'<span style="color: {SOFT}; display: flex">{CHEV_R}</span></button>'
-ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW9('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW9('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW9('A perfect run', 'Not earned yet', False, 'goM5'))
+BADGES9H = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW(n, next(x for x in BADGES9 if x[0] == n)[1], _BSUB(n), a) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
+ACH9 = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First lesson done', 'Earned 28 October 2026', True, 'goM1') + AROW('First recording', 'Earned 30 October 2026', True, 'goM0') + AROW('A perfect run', 'Not earned yet', False, 'goM5'))
 
 # ── Practice history (canvas 160): Profile is where every practice run is kept; each row opens its results ──
 RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style="box-sizing: border-box; min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}">'
