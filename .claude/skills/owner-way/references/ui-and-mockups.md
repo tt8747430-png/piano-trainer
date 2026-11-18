@@ -37,7 +37,7 @@ How a screen gets built, and how a question gets drawn. The look is in `DESIGN.m
    2. **Wireframe:** the structure at the real device sizes, no colour and no words: `lines.mjs` with `WIRE=1` draws a board as grey boxes. Judge here what structure decides: one focal point, groups by proximity, edges, the frame shared with sibling pages (the flow), what floats. A screen that does not read as boxes will not read in colour.
    3. **Mockup:** the look on that structure: `DESIGN.md`'s tokens, real songs and labels, both themes; the lines and `seven-questions` run on it.
    4. **Prototype:** every tap works on the canvas (sheets, menus, states, Undo), then the two passes; only then is it ported.
-   Each phase is held to the five E's (effective, efficient, engaging, error tolerant, easy to learn) and the laws in `edge-lines/references/laws.md`. A change to an existing board starts at the phase the change touches: a moved section is a wireframe change, a colour a mockup change.
+   Each phase is held to the five E's (effective, efficient, engaging, error tolerant, easy to learn) and the laws in `edge-lines/references/laws.md`, its spacing ratios and its 15 information-architecture checks (the sketch: rules 1–3 and 7–15; the mockup: 4–6) among them. A change to an existing board starts at the phase the change touches: a moved section is a wireframe change, a colour a mockup change.
 5. **Build what the board's code draws** (`SKILL.md`, Port from the board's code): read the board's generator and
    its kit helpers first, then `shared/ui/index.ts`. Where a kit part or token differs from the board, the kit part
    or token changes to the board's values, everywhere it is used; a part the board draws that the kit lacks is

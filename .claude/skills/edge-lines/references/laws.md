@@ -145,6 +145,133 @@ and forgiven more.
   box that starts inside its neighbour's height and ends below it reads as overlap, not as a column.
 - **Contrast** (WCAG 2.2, 1.4.3): text 4.5:1, large text 3:1.
 
+## Information architecture (Uxcel, "Basic Components of IA" and "What is UX Design?", sent 2026-11-18)
+
+The source's words first, then the instruction each one gives a board. Every instruction is a check with a yes or no.
+
+**The three pillars.** "Information architecture has 3 main pillars: context, content, and users." Context is "the
+goals, mission, constraints, and the devices"; content is "the actual information that needs to be organized"; users
+are "the people who will use the product".
+- Before a page is drawn, write three lines in the spec: its context (phone on the piano's stand, one free hand, a
+  laptop at a desk, offline in a hall), its content (the exact list of things it shows), its user's top task. A part
+  that serves none of the three goes.
+
+**Organization systems.** "Methods used to arrange and categorize information … grouping, labeling, and ordering."
+"Choosing the type of organization system depends on key user tasks. For example, if most users often search for books
+by author, organizing the books alphabetically by author's last name might be best." The screenshot: one undivided
+grid of "Our books" (wrong) against a row of categories, All · Biography · Fiction · Horror · Romance · Mystery ·
+Fantasy, the chosen one shown, then a titled shelf "Biography" with its own ‹ › (right).
+1. A collection of more than about 12 items is never one undivided grid or list: it is grouped by the key the learner
+   hunts by (level, book, key, kind, composer), named in the spec.
+2. The groups are shown as a row of choices at the top, the first one All, the chosen one marked; the content under
+   them is titled with the chosen group's name.
+3. The order inside a group follows the hunt: by a musical order where one exists (learning order, the circle of
+   fifths), else Recently used first; alphabetical only when the learner looks things up by name.
+
+**Labeling systems.** "Grouping items under clear labels like 'Electronics' or 'Furniture' … without using jargon";
+"ensure you use clear and meaningful labels consistently throughout the interface." The screenshot: a menu of
+"Tech & Tools, Ornamentation, Apparel, Children's Playsets, Cooking Tools, Literature, Personal Care" (wrong) against
+"Electronics, Furniture, Clothing, Toys, Kitchen Appliances, Books, Health & Beauty" (right).
+4. A category label is the plain, common name of what it holds, one or two words, the word the learner would type
+   in Search; never a coined or clever name. (Here the musician's term is the common name: Chords, Scales and keys,
+   Accompaniment.)
+5. Labels side by side are the same kind of word and the same level of generality (all nouns for kinds of thing; no
+   one label much broader or narrower than its siblings).
+6. One thing has one label on every screen, in the bar, the sidebar, the tab, Search and the page title.
+
+**Navigation systems.** Global, footer, sidebar, breadcrumbs. "A good navigation system is clear, concise, and helps
+users find what they need quickly." The screenshot: a top bar of "Catalog · Services · About Us · Contact" plus
+"Follow us" icons and "Terms of Use" crammed beside them (wrong) against the four places alone (right).
+7. The main navigation holds only the places (Learn, Songs, Practice, Profile). Nothing else stands beside them:
+   no social links, legal links, promotions or settings rows; those live at the foot of Settings or Profile.
+8. Navigation items are one kind (places), one style, evenly spaced; a sub-place is indented under its place (the
+   laptop sidebar), never a mixed row.
+9. Every page shows where it is: the current place marked in the bar or sidebar, the page's name in its bar, Back to
+   its parent.
+
+**Search systems.** "Save time … especially on large sites"; "auto-suggestions, filters, and advanced search options".
+10. Any collection a learner would hunt in has a search at its top; Search opens with help (recent, suggested) before a
+    word is typed, and its results are grouped by kind with counts.
+
+**Design value.** "What information to present, how much, and when." The screenshot: a hospital menu of "About Us, Our
+Cafeteria Menu, Visitor Guestbook, Gift Shop, Staff Blogs" (wrong) against "Departments ⌄, Specialists ⌄, Patient
+Records, Emergency Care" and one "Book Appointment" button at its foot (right).
+11. A menu or page lists first the things the learner comes for, never the organisation's own pages (about, news,
+    blog); the one main act of the menu is a filled button at its foot.
+12. An item with children shows a chevron ⌄ and opens in place; it never jumps to a page that only lists them.
+
+**Value for users.** The screenshot: a Courses menu listing six single courses, "History 101 … Organic Chemistry"
+(wrong), against three groups, "Undergraduate Courses, Graduate Courses, Online Courses" (right).
+13. A menu shows groups, not a sample of items: at most about seven entries, each a group the learner recognises;
+    single items are reached inside their group. Six items picked from a hundred is a wrong menu.
+
+**Strategy and technology value.** The structure serves the product's goal (here: practice that brings the learner
+back, Continue first) and the data model holds the same groups the screen shows.
+14. The first thing on a place's overview is the learner's next step (Continue); its groups match the model's
+    groups one for one (a level's Journey, a book's exercises), so one name means one set everywhere.
+
+**UX and UI ("What is UX Design?").** UX "focuses on the overall journey"; UI "on what users see and interact with";
+"observing what users do rather than just listening to what they say". The design-thinking stages: empathize,
+define, ideate, prototype, test, "not strictly linear".
+15. A screen change starts from the learner's journey (how they arrive, what they do, where they go next), written in
+    the spec's sketch phase, before any look; a looks-only fix that leaves the journey broken is not done.
+
+## One outcome per screen (Uxcel, "How to Design Landing Pages That Convert", sent 2026-11-18)
+
+The source's words, then the exact instruction for every board (a screen of ours is a page with one outcome, as a
+landing page is: the welcome, an empty library, a song's page, a lesson's end, Explore's song).
+
+- "A landing page commits fully to one outcome … every design choice becomes clearer when measured against a single
+  question: does this help someone take action?"
+  1. Each board's spec names its one outcome in one line (play this song, open the next lesson). Every part is asked
+     "does this help that outcome?"; a part that does not goes, or moves behind a ··· or a fold.
+- "Remove everything on the page that doesn't directly support that information … secondary offers, distracting
+  imagery … even navigation"; "most users read as little as 20% of web copy … limiting your paragraphs to 3-4 lines
+  and add descriptive subheadings for every couple of paragraphs." The screenshot: a five-line headline over a cloud of
+  five images (wrong) against a three-line headline and one picture (right).
+  2. No second offer beside the one act (no banner, promotion or "also try" inside the content).
+  3. One picture per block, the one that shows the thing (the score, the keys, the cover); never a collage.
+  4. A paragraph is at most 4 lines at the column's width (phone 402: about 4 × 45 characters); a lesson section of
+     more than two paragraphs gets a subhead.
+- "Users form a first impression … in 0.05 seconds"; "clear, concise headlines … Shorter is generally better." The
+  screenshot: "Becoming a designer may take years of study. We have a different offer for you" (wrong) against
+  "Become a UX Designer in 6 months" (right).
+  5. A screen's title or headline is one idea in at most about 6 words and two lines; a promise is concrete (a number,
+     a time, a thing) never a setup sentence.
+- Value proposition: "What is the product? How does it benefit users? How does it work?" — "a header, description, and
+  image/video". The screenshot: "We're managing your finances, while you have time enjoying your life moments" (wrong)
+  against "We manage your finances, you savor life's moments" (right): active, present, shorter.
+  6. A welcome or empty state answers the three questions in a header (what), a line (the benefit) and a picture (how
+     it works), in that order, in active present tense.
+- "Avoid jargon … If your product is targeted at a specialized group of users, you may use technical terms, but you
+  should explain what they mean first." The screenshot: "Optimize ROI through curricular frameworks and individualized
+  learning trajectories" (wrong) against "Unlock your full potential with personalized learning paths" (right).
+  7. Words are the learner's words. A musician's term is the learner's word here (the rulings); a term a beginner may
+     not know (voicing, inversion) has an ⓘ the first time it appears on a screen, never a paragraph.
+- CTA: "an accent color … contrasting hue"; "without requiring users to scroll"; "active verbs"; "a larger CTA button";
+  "a minimum touch target of 44x44 CSS pixels". The screenshot: "Start hiring" as a grey button (wrong) against the
+  same in the accent (right).
+  8. The one act is the screen's only honey (accent) fill, 44 high at least (48–56 for the page's main act), its label a
+     verb and its object, and it is on the first screen without scrolling at 402×874 and at 1710×904.
+  9. On a long page (over two screens) the act is reachable from the foot as well: it floats (one FAB) or repeats once
+     at the end, never more than twice.
+- "If there's content below the cut that isn't immediately apparent … use a visual indicator"; "the CTA, main image, and
+  headline are clearly visible without scrolling."
+  10. The first screen never ends on a clean break that looks like the end: the next block's top or a shelf's next
+      cover shows at the fold (a cut card, a peeking cover), so the learner sees there is more.
+- "Use contextual images … that add to the meaning."
+  11. A picture is the content itself (the song's first bars, the chord's keys, a real cover), never stock or a
+      decorative illustration.
+- Social proof and authority ("reviews, ratings, stats"; logos).
+  12. Only where true and on a public thing: Explore's saves and plays, a course's learners; never invented numbers.
+- "Design responsively"; "load times under 2.5 seconds".
+  13. The headline and the act hold at 393, 402, 744, 1024 and 1710 (testing.md); a screen shows its frame at once and
+      fills slow parts with skeletons, never a blank.
+- "Sticky chat elements should be desktop features only … mobile users always complain that sticky chats overlay search
+  results, filters, or worse, the Checkout button."
+  14. Nothing floats over a phone screen's content except the bars and its one floating act; help is a row in Settings
+      and a ⓘ, never a floating bubble.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).

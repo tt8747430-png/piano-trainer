@@ -301,6 +301,18 @@ async function analyse(page, scr, phone) {
   const R = (el) => el.getBoundingClientRect()
   // A glyph centred in a small tile (a chord's 6°, a number in a circle) or a segment's label is a picture, not where words start.
   const centredGlyph = (p) => { for (let e = p, i = 0; e && i < 3; e = e.parentElement, i++) { const c = getComputedStyle(e); if (R(e).width <= 64 && (c.justifyContent === 'center' || c.textAlign === 'center')) return true } return false }
+  // What the eye sees of a block: its painted surfaces, pictures and the text's glyph boxes, never the empty
+  // half-leading or a transparent 44 reach (spacing is perceived between ink, Kubovy & Wagemans; laws.md, Spacing).
+  const inkBox = (el) => {
+    const painted = (e) => { const c = getComputedStyle(e); return opaque(c.backgroundColor) || c.boxShadow !== 'none' || parseFloat(c.borderTopWidth) > 0 }
+    if (painted(el)) return R(el)
+    const rs = []
+    for (const e of el.querySelectorAll('*')) { if (!vis(e)) continue; if (e.matches('svg, img, canvas, video') || painted(e)) rs.push(R(e)) }
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim() ? 1 : 3) })
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) { const range = document.createRange(); range.selectNodeContents(n); const r = range.getBoundingClientRect(); if (r.width && r.height) rs.push(r) }
+    if (!rs.length) return R(el)
+    return { top: Math.min(...rs.map((r) => r.top)), bottom: Math.max(...rs.map((r) => r.bottom)) }
+  }
   const textLeft = (el) => {
     const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.textContent.trim() && !n.parentElement.closest('[aria-hidden=true], svg, [role=radio]') && !centredGlyph(n.parentElement) ? 1 : 3) })
     const n = walk.nextNode()
@@ -393,11 +405,18 @@ async function analyse(page, scr, phone) {
       if (!row.every((k) => Math.abs(R(k).top + R(k).height / 2 - (R(unit).top + R(unit).height / 2)) < 16)) break
       unit = unit.parentElement
     }
-    const prev = unit.previousElementSibling, next = unit.nextElementSibling
+    let prev = unit.previousElementSibling
+    const next = unit.nextElementSibling
+    // A head that opens its section is measured against what stands before the section.
+    for (let up = unit; !prev && up.parentElement && up.parentElement.tagName !== 'MAIN' && up.parentElement.children.length > 1; up = up.parentElement) { if (up !== unit && up.previousElementSibling) { prev = up.previousElementSibling; break } if (up.parentElement.firstElementChild !== up) break; if (up.parentElement.previousElementSibling) { prev = up.parentElement.previousElementSibling; break } }
     if (!next || !vis(next)) continue
     const u = R(unit)
     const below = Math.round(R(next).top - u.bottom)
     const above = prev && vis(prev) ? Math.round(u.top - R(prev).bottom) : null
+    // The same gaps as the eye takes them, ink to ink.
+    const ui = inkBox(unit)
+    const belowI = Math.round(inkBox(next).top - ui.bottom)
+    const aboveI = prev && vis(prev) ? Math.round(ui.top - inkBox(prev).bottom) : null
     // A sheet's or dialog's own title under its grabber is the sheet's name, not a group's heading.
     if (prev && vis(prev) && R(prev).height <= 8) continue
     if (hd.closest('[role=dialog]') && !prev) continue
@@ -406,8 +425,8 @@ async function analyse(page, scr, phone) {
     const htxt = hd.textContent.trim().slice(0, 24)
     if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${htxt}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
     // Kubovy & Wagemans 1995: under 1.5× the grouping is weak; past about 4× the extra space only cuts the section off (laws.md, Spacing).
-    else if (above !== null && below > 0 && above < 1.5 * below) notes.push(`heading “${htxt}”: ${above}px above, ${below}px below, only ${(above / below).toFixed(2)}×: the space above should be 1.5–3× the space below`)
-    else if (above !== null && below > 0 && above >= 56 && above > 4 * below) notes.push(`heading “${htxt}”: ${above}px above, ${below}px below, ${(above / below).toFixed(1)}×: past about 3× the space cuts the section off; bring it to 2–3×`)
+    else if (aboveI !== null && aboveI > 0 && belowI > 0 && aboveI < 1.5 * belowI) notes.push(`heading “${htxt}”: ${aboveI}px above, ${belowI}px below, ink to ink, only ${(aboveI / belowI).toFixed(2)}×: the space above should be 1.5–3× the space below`)
+    else if (aboveI !== null && belowI > 0 && aboveI >= 56 && aboveI > 4 * belowI) notes.push(`heading “${htxt}”: ${aboveI}px above, ${belowI}px below, ink to ink, ${(aboveI / belowI).toFixed(1)}×: past about 3× the space cuts the section off; bring it to 2–3×`)
   }
   // ── Edges that cross: boxes side by side whose tops and bottoms both differ, one starting inside its neighbour's
   // height (owner, 2026-11-17: "the method books box crosses this lines that define where a box finishes").

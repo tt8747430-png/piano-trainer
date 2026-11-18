@@ -86,7 +86,7 @@ sh = SONG_MORE + BSHEET('creditsOn', 'Title and credits', CREDITS)
 _SGBAR = TOP('SongsLaptop.dc.html', '', LEARNED + HEARTB + DOTS()).replace('padding: 0 12px', 'padding: 0', 1)
 lm = f'''<div style="flex: none; padding: 0 40px"><div style="width: min(880px, 100%); margin: 0 auto">{_SGBAR}</div></div>
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 40px 48px">
-<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 28px">
+<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
 <div style="display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: end"><div>{COVER_BIG(348, 20)}</div><div style="display: flex; flex-direction: column; gap: 16px">{TITLE}{FACTS}{ACTS_L}</div></div>
 {SGSTRIP}<sc-if value="{{{{hasChords}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{H2('Chords')}{CHORDS_ROW.replace('display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px', 'display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 2px')}{PROGS}</section></sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{H2('Sections')}{SECTS.replace('Section.dc.html', 'SectionLaptop.dc.html')}</section>
