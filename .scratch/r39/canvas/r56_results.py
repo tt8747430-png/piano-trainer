@@ -158,7 +158,7 @@ RS_JS = lambda mode: js(r'''
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
-RS_KEYS = lambda h, k='kb': KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
+RS_KEYS = lambda h, k='kb': KEYS(h, k).replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
 
 
 def RS_RUNVIEW(lap):
