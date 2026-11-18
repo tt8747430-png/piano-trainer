@@ -182,6 +182,7 @@ export const songs = {
     edit: 'Edit playlist',
     name: 'Name',
     baseName: 'New playlist',
+    search: 'Search this playlist',
     picture: 'Picture',
     paint: 'Colour',
     pictures: {
@@ -246,7 +247,8 @@ export const songs = {
     done: 'Done',
     all: 'Select all',
     none: 'Deselect all',
-    count: 'Selected: {{count}}',
+    count: '{{count}} selected',
+    cancel: 'Cancel',
     toggle: 'Select {{name}}',
     actions: 'Selection actions',
     favourite: 'Favourite',

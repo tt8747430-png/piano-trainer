@@ -13,6 +13,10 @@ const PAINT: Readonly<Record<FolderPaint, string>> = {
   lilac: 'bg-paint-lilac',
 }
 
+/** A playlist's paint as a fill: its cover's, and its swatch in the sidebar; Favourites rose. */
+export const playlistPaint = (paint: FolderPaint | 'rose') =>
+  paint === 'rose' ? 'bg-destructive/15' : PAINT[paint]
+
 /**
  * A playlist's cover (the Songs board's PLCOVER; Flat's playlists, Apple Music's mosaic): a square of
  * its paint holding its first four songs' openings two by two, so it shows the music inside;
@@ -36,11 +40,7 @@ export function PlaylistCover({
   return (
     <span
       aria-hidden
-      className={cn(
-        'relative block shrink-0 rounded-[10px]',
-        paint === 'rose' ? 'bg-destructive/15' : PAINT[paint],
-        className,
-      )}
+      className={cn('relative block shrink-0 rounded-[10px]', playlistPaint(paint), className)}
     >
       {heart ? (
         <Heart className="absolute top-1/2 left-1/2 size-1/2 -translate-1/2 fill-heart text-heart" />

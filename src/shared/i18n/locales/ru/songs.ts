@@ -188,6 +188,7 @@ export const songs: LocaleResources['songs'] = {
     edit: 'Изменить плейлист',
     name: 'Название',
     baseName: 'Новый плейлист',
+    search: 'Поиск в плейлисте',
     picture: 'Значок',
     paint: 'Цвет',
     pictures: {
@@ -254,6 +255,7 @@ export const songs: LocaleResources['songs'] = {
     all: 'Выбрать все',
     none: 'Снять выбор',
     count: 'Выбрано: {{count}}',
+    cancel: 'Отмена',
     toggle: 'Выбрать: {{name}}',
     actions: 'Действия с выбранным',
     favourite: 'В избранное',
