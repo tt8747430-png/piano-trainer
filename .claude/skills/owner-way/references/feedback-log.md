@@ -1358,7 +1358,7 @@ are reference only, but progressions are facts.
   back. No letter shortcut: a letter alone is the piano's. One implementation for all 61 laptop boards
   (`.scratch/r39/canvas/lapwin.py`, run by `index.py`).
 
-- **On a phone the floating bar steps aside while reading (owner, 2026-11-15, the adaptable UI):** scrolling down a
+- **Replaced 2026-11-18 by craft-details' "Bars stay, quietly" (the owner's articles, 2026-11-17: a bar is never hidden by scrolling); the canvas no longer hides it. Was: on a phone the floating bar steps aside while reading (owner, 2026-11-15, the adaptable UI):** scrolling down a
   page past its first 56px slides the floating bar up and out (220ms, the app's one curve); the first move up brings
   it back. Apple HIG, Toolbars (hide bars on swipe so the content has the screen) and Material 3's top app bar (hide
   on scroll, return on scroll up). Under reduced motion it changes without moving. Every phone board with the floating
@@ -1440,6 +1440,7 @@ are reference only, but progressions are facts.
 - **Explore's table holds at 1024 (2026-11-18):** its fixed Type, Shared by and Saves columns left Title and Composer 120 between them, so titles ran to "Amazing Gr…". Title now keeps at least 200, Shared by shares the rest with Composer, and the headings stay on one line; at 1710 the columns read as before.
 - **The phone layout holds at 744, an iPad upright (2026-11-18, every width holds; craft-details 5):** the canvas keyboards drew their keys in fixed pixels from the phone's width, so stretched to 744 the editor's keys stopped two thirds across and Lesson's left a dark band; every 2D keyboard (`calmKeys` in `calm_kit.py` and the tap keys in `r54_practice_more.py`) now places its keys in percent of its own width, the same picture at 402. The Player's score kept its 402 page at the left with the empty rest beside it: the score region now centres on a 402 column (`player/r43_player.py`), the floating piano moves with it, and the sheets' scrim covers the whole screen instead of the phone's 402.
 - **The learner's own lessons and courses are "Made by you" (loop 64, 2026-11-18; one bar shape):** the page's large title "Your lessons and courses" was the one bar title in the app on two lines (beside Select on the phone); the group is now "Made by you" on the Learn overview's heading, its page and the board, one line at 402, true for both kinds (its chips still say All · Lessons · Courses). The app's `learn.ts` title follows at the port, in `en` and `ru`.
+- **The phone's bar stays while the page scrolls (loop 64, 2026-11-18; craft-details, the owner's articles 1):** `index.py` still put a hide-on-scroll script on every phone board (the 2026-11-15 ruling), so reading down a page slid the bar away, against the newer rule that a bar stays on screen, glass, while the page scrolls under it. The script is gone from every board, and the old bullet is marked replaced.
 
 ## Profile and Settings
 - **Profile on a laptop without rows cut in two (the lines' sweep, 2026-11-17):** Practice history's score stood at the row's far end, 440 from the run's name; the score now leads the row in a 52 tile (the row's picture, as every list row leads with one), phone and laptop, and the laptop's rows in Badges, Practice history and Achievements carry no chevron, each the link.
