@@ -90,7 +90,13 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   - an **example** (notes, chords, keys, a question, a link) is drawn as the lesson shows it, with no kind's label
     over it. Chosen, it is outlined and a small toolbar floats over its top edge: **Edit** (its line of text and
     its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;
-    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete;
+    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete. Versions are
+    written there too: each version under its number, its name (the chip's word), caption and its own example's
+    fields, Add a version copying the last, ✕ while two stay;
+  - **Insert** (and `/`) offers the board's kinds in its order (`r47_edit.py`'s INSERT): Text, Steps, Note, Rule;
+    Chords, One chord on every root, Scale, Interval, Notes, Voicings, Pattern (the first built-in pattern over a
+    piece that plays it), Progression, Versions (two versions of a row of chords); Question, Link, Picture. A
+    section's heading and its In short are made from words by Turn into, not inserted;
   - the lessons to read first are the lesson's Settings', not a property in the document (ADR 0053).
     A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
     document's box, which jumped a tap far down a lesson to its start.

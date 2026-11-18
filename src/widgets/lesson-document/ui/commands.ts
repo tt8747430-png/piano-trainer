@@ -1,7 +1,9 @@
 import type { Editor } from '@tiptap/core'
 import { closeHistory } from '@tiptap/pm/history'
 import { NodeSelection, TextSelection } from '@tiptap/pm/state'
-import { blankBlock, type InsertableBlock } from '@/entities/lesson'
+import { blankBlock, type InsertableBlock, type LessonBlock } from '@/entities/lesson'
+import { PATTERN_IDS } from '@/entities/pattern'
+import { piecesPlaying } from '@/entities/piece'
 import type { Locale } from '@/shared/i18n'
 import {
   blockStart,
@@ -16,23 +18,27 @@ import {
 } from '../model/doc-blocks'
 import { blockNode, DOC, type DocNode } from '../model/lesson-doc'
 
-/** What the Insert menu and the slash menu put in: a lesson's block, a section's heading or takeaway. */
-export type Insertable = InsertableBlock | 'section' | 'takeaway'
+/**
+ * What the Insert menu and the slash menu put in: a lesson's block, or a pattern heard over a piece
+ * that plays it. A section's heading and its In short are made from words, by Turn into.
+ */
+export type Insertable = InsertableBlock | 'pattern'
 
+/** The Insert menu's kinds in the board's order (`r47_edit.py`'s INSERT): words, music, then ask and link. */
 export const INSERTABLES: readonly Insertable[] = [
-  'section',
   'text',
   'steps',
   'note',
   'rule',
-  'takeaway',
   'chords',
-  'notes',
-  'progression',
   'grid',
   'scale',
   'interval',
+  'notes',
   'voicings',
+  'pattern',
+  'progression',
+  'variants',
   'question',
   'link',
   'image',
@@ -43,18 +49,27 @@ export const ABOUT_INSERTABLES: readonly Insertable[] = INSERTABLES.filter(
   (kind) => kind !== 'question',
 )
 
-const nodeOf = (kind: Insertable, locale: Locale): DocNode =>
-  kind === 'section'
-    ? { type: DOC.heading, attrs: { level: 2 } }
-    : kind === 'takeaway'
-      ? { type: DOC.takeaway }
-      : blockNode(blankBlock(kind), locale)
+/** A first pattern to write over: the first built-in one some piece plays, over that piece. */
+export function firstPattern(): LessonBlock | null {
+  for (const pattern of PATTERN_IDS) {
+    const piece = piecesPlaying(pattern)[0]
+    if (piece) return { kind: 'pattern', pattern, piece: piece.id }
+  }
+  return null
+}
+
+const nodeOf = (kind: Insertable, locale: Locale): DocNode | null => {
+  const block = kind === 'pattern' ? firstPattern() : blankBlock(kind)
+  return block ? blockNode(block, locale) : null
+}
 
 /**
  * Puts a new block after the one the caret is in (in place of an empty line of its own), the caret
  * in its first words, or the example selected.
  */
 export function insertBlock(editor: Editor, kind: Insertable, locale: Locale): void {
+  const made = nodeOf(kind, locale)
+  if (!made) return
   const { state } = editor
   const fixed = fixedBlocks(state.doc)
   const index = Math.max(selectedBlock(state), fixed - 1)
@@ -65,7 +80,7 @@ export function insertBlock(editor: Editor, kind: Insertable, locale: Locale): v
     here.content.size === 0 &&
     !here.attrs['block']
   const at = blockStart(state.doc, empty ? index : index + 1)
-  const node = state.schema.nodeFromJSON(nodeOf(kind, locale))
+  const node = state.schema.nodeFromJSON(made)
   const tr = empty
     ? state.tr.replaceWith(at, at + (here?.nodeSize ?? 0), node)
     : state.tr.insert(at, node)
