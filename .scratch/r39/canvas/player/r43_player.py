@@ -565,6 +565,13 @@ def floating(t, phone):
 
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
     t = floating(onebar(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone), phone)
+    # Played through: its title on the sheet's 16 column, as its cards and buttons (the lines, 2026-11-18)
+    t = t.replace('gap: 8px; padding: 4px 4px 0 8px"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><h2', 'gap: 8px; padding: 4px 0 0 0"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><h2')
+    # Played through: its two and four columns stand 12 apart, more than a card's own inset, so each reads alone (the lines' proximity)
+    i = t.find('aria-label="Played through"')
+    if i >= 0:
+        j = t.index('</section>', i)
+        t = t[:i] + t[i:j].replace('minmax(0, 1fr)); gap: 8px', 'minmax(0, 1fr)); gap: 12px') + t[j:]
     if phone:  # the floating piano keeps its place over the centred score when the phone layout is wider (744)
         t = t.replace('left: {{kbLeft}}px', 'left: calc({{kbLeft}}px + max(0px, 50% - 201px))')
         t = t.replace('position: absolute; left: 0; top: 0; width: 402px; height: 874px; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)', 'position: absolute; inset: 0; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)')

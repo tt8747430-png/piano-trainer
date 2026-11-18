@@ -25,7 +25,7 @@ lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + LPAD(TOP64).replace('Main.dc.html', 'Laptop.dc.html')
         # one centred column, the tool first and its settings under it (owner, 2026-11-16: "the page has one focus")
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 120px">'
-        + f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}{TEMPO(120)}{BEATS(160)}{ME_ROWS}</div></div>'
+        + f'<div style="width: min(760px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}{TEMPO(120)}{BEATS(112)}{ME_ROWS}</div></div>'
         + BAR64('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('Metronome', 'Metronome, phone', ph64, ME64, BSHEET('subOn', 'Subdivision', SUBLIST))
 laptop('MetronomeLaptop', 'Metronome, laptop', lm64, '', ME64, POPOVER('subOn', 'Subdivision', SUBLIST, 'right: 351px; bottom: 357px'), 'Practice')
