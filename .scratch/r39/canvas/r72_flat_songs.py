@@ -152,7 +152,7 @@ FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 # Files: the field filters where you stand); the four ways to make a song as a strip at the top (Flat's and Google
 # Drive's "New" row, always in sight); Recently played, Folders, then Explore as a shelf with See all, its own page;
 # Archive and Trash in the bar's ··· with All songs, out of the page.
-CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{ICON(TICK, 14)}</span></span></sc-if>')
 # A song is a row of one list, not a card of its own (edge-lines' laws, NN/g and M3: homogeneous items are a list; on a
 # phone "consider swapping cards for lists"): the list is one card, each row's hairline from the title's edge (12 + the
 # 56 tile + 16), the first row's clipped by the list's -1 (SONGLIST), as the playlists' inset list draws it.

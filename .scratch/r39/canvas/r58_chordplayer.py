@@ -78,7 +78,7 @@ CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}
 
 # ── ··· : the draft, sharing, the sheets ──
 CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-             + ACTROW(CHECK.replace('16', '20'), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
+             + ACTROW(ICON(CHECK, 20), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
              + GROUP(('link', 'Share', 'View only', 'openShare'), ('action', 'Save to my progressions', 'saveProg'), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), bg=SHEET))
 CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Everyone with the link sees each change as it is made, and the chord playing.</p>'
             + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
@@ -306,7 +306,7 @@ def GENOS76(pos, wide):
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
-            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>Genos · {{{{arMainL}}}}{EXPI.replace("20", "18")}</button></sc-if>')
+            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>Genos · {{{{arMainL}}}}{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
 # the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar

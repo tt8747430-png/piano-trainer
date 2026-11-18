@@ -58,10 +58,10 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       q, typed: (e) => set({ q: e.target.value }),
       toastOn: !!st.toast, toastT: st.toast || '', undo: () => set({ gone: {}, toast: null }) };''')
 
-BOOKT = BOOKI.replace('22', '20')
+BOOKT = ICON(BOOKI, 20)
 DUPSEL = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>'
 # Select's parts, as Takes' (r59): the checkbox leading a row, a hit over the whole row, the row's ··· gone meanwhile
-YCHECK = lambda v: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; margin: 0 10px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{{v}.ckLine}}}}; background: {{{{{v}.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{{v}.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+YCHECK = lambda v: (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; margin: 0 10px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{{v}.ckLine}}}}; background: {{{{{v}.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{{v}.ckMark}}}}">{ICON(TICK, 14)}</span></span></sc-if>')
 YHIT = lambda v: f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{{v}.on2}}}}" aria-label="{{{{{v}.t}}}}" onClick="{{{{{v}.tap}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
 OFFSEL = lambda x: f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{x}</sc-if>'
 TILE = lambda bg, inner: f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {bg}; display: flex; align-items: center; justify-content: center">{inner}</span>'
@@ -86,7 +86,7 @@ def LIST(lap):
     return (f'<sc-if value="{{{{listOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden; padding: 0 0 0 8px"><sc-for list="{{{{courses}}}}" as="c" hint-placeholder-count="2">{course}</sc-for>'
             f'<sc-for list="{{{{loose}}}}" as="l" hint-placeholder-count="2">{LROW(lh, 44)}</sc-for></div></sc-if>'
             + LEMPTY('noneOn', SEARCH.replace('width="18" height="18"', 'width="26" height="26"'), '{{noneT}}', 'Check the spelling, or search for a word from a lesson’s name.', BTN('Clear search', 'clearQ', kind='quiet', h=48, grow=False))
-            + LEMPTY('bareOn', BOOKI.replace('22', '26'), 'No lessons or courses yet', 'Write a lesson in your own words with +, then gather lessons into a course.', f'<a href="LearnCourses.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Browse the courses</a>'))
+            + LEMPTY('bareOn', ICON(BOOKI, 26), 'No lessons or courses yet', 'Write a lesson in your own words with +, then gather lessons into a course.', f'<a href="LearnCourses.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Browse the courses</a>'))
 # The laptop draws the list as the libraries' table (Songs, Accompaniment; owner, 2026-11-15: "the empty space should be
 # properly used"): a heading row, then rows on the page, the description line split into Length and Progress (the kind is the tile and the chips)
 _COLS = lambda v: (f'<span style="flex: 1; min-width: 0; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{{v}.len}}}}</span>'

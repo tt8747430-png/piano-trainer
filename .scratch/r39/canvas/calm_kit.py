@@ -46,6 +46,8 @@ GLASS = 'rgba(254,253,251,.86)'
 SHADOW = '0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)'
 FONT = "'Instrument Sans', -apple-system, 'Helvetica Neue', sans-serif"
 I = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+# an icon at another size: its width and height only, never a number inside its path
+ICON = lambda svg, px: re.sub(r'width="\d+" height="\d+"', f'width="{px}" height="{px}"', svg, count=1)
 CHEV_L = f'<svg viewBox="0 0 24 24" width="24" height="24" {I}><path d="m15 18-6-6 6-6"></path></svg>'
 CHEV_R = f'<svg viewBox="0 0 24 24" width="18" height="18" {I}><path d="m9 18 6-6-6-6"></path></svg>'
 MORE = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg>'
@@ -108,7 +110,7 @@ def ROWS(*rows):
         sep = f'box-shadow: inset 0 -1px 0 {FILL};' if i < len(rows) - 1 else ''
         kind, label = r[0], r[1]
         if kind == 'step':
-            out.append(f'<div style="min-height: 48px; display: flex; align-items: center; padding: 0 6px 0 16px; {sep}"><span style="flex: 1; font-size: 16px; color: {INK}">{label}</span><button type="button" aria-label="{label}: before" onClick="{{{{{r[3]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L.replace("24", "20")}</button><span style="min-width: 70px; text-align: center; font-size: 16px; font-weight: 600; color: {INK}; font-variant-numeric: tabular-nums">{{{{{r[2]}}}}}</span><button type="button" aria-label="{label}: after" onClick="{{{{{r[4]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_R.replace("18", "20")}</button></div>')
+            out.append(f'<div style="min-height: 48px; display: flex; align-items: center; padding: 0 6px 0 16px; {sep}"><span style="flex: 1; font-size: 16px; color: {INK}">{label}</span><button type="button" aria-label="{label}: before" onClick="{{{{{r[3]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(CHEV_L, 20)}</button><span style="min-width: 70px; text-align: center; font-size: 16px; font-weight: 600; color: {INK}; font-variant-numeric: tabular-nums">{{{{{r[2]}}}}}</span><button type="button" aria-label="{label}: after" onClick="{{{{{r[4]}}}}}" style="width: 40px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{ICON(CHEV_R, 20)}</button></div>')
         elif kind == 'link':
             val = f'<span style="font-size: 16px; color: {SOFT}">{r[2]}</span>' if len(r) > 2 and r[2] else ''
             href = r[3] if len(r) > 3 else ''
