@@ -552,6 +552,66 @@ provide visible alternative controls".
 8. **Big decisions work on the phone too.** Sign in, Publish, Delete account, Empty Trash and sharing with people
    are complete on a phone, with the same words and the same question as on a laptop; nothing says "use a computer".
 
+## Composition (Uxcel, "Intro to Design Composition", sent 2026-11-18)
+
+The source: composition is "the arrangement, alignment, and compilation of text, images, and other UI elements on a
+page"; "every element … is intentional — nothing is random"; "a simple guide: pick a format, use a grid, group
+elements, define the interaction between elements"; "establish a solid hierarchy and a grid before you start worrying
+about aesthetics"; "position elements in ways to naturally lead users to the most important parts, such as the CTA".
+Its picture: a Buy button laid over the product's photo, above its name, is wrong; the same button under the name and
+its line, the photo clear, is right.
+
+1. **Format, then grid, then groups, then the look** (the four phases, `ui-and-mockups`, Building a screen 4): a board
+   names its device (402 or 1710), its columns (one column on a phone; on a laptop the sidebar plus one or two
+   columns on the 56 inset), and its groups before any colour or word is drawn.
+2. **The grid is shared:** every block on a board starts on one of its column edges (16 on a phone; the sidebar's
+   edge and the column edges on a laptop); a block on its own edge is a fault the lines tool marks red.
+3. **The eye's path is the reading order:** the screen reads top to bottom as the learner needs it: what the thing
+   is (the picture, then its name and line), then what it holds, then what can be done with it. The act comes after
+   the facts it depends on, never over the picture and never above the name.
+4. **Nothing is laid over the picture** that is not about the picture: a cover, the staff and the keys carry only
+   their own marks (a play triangle on a cover, the chord's colours on the keys); a button, a price or a title sits
+   beside or under it. The heart may sit at a picture's corner, with its backing (`craft-details`, Over a picture).
+5. **One focal point, made by scale:** the one thing the screen is for is the largest thing on it (the chord's name
+   at 72, the score, a song's cover); everything else steps down the type scale, never sideways to a second thing
+   of the same size.
+6. **Nothing random:** every element on a board answers "what does the learner learn or do with this?" (the
+   `ux-writing` check 1, for pictures and shapes too). A decoration with no answer goes.
+7. **A story across pages:** sibling pages (a level, its lesson, the lesson's next) keep one frame and move only
+   the content, so the learner follows the plot, not the chrome (the lines tool's flow).
+
+## The design system, as layers (Uxcel, "What is a Design System?", sent 2026-11-18)
+
+The source: four layers, "Foundations … Tokens … Core systems … Components", each "a chain of dependency — small
+design choices at the core shape every component"; each layer has "assets, documentation, and processes"; a system
+gives "a shared language": "a designer refers to a color token … and a developer uses the same token in code; both
+know exactly which colour to apply"; "governance … regular reviewing, updating, and versioning".
+
+Our layers, and where each lives:
+
+| Layer | The canvas | The app |
+| ----- | ---------- | ------- |
+| Foundations | `DESIGN.md` (look, type, the named rules) | the same `DESIGN.md` |
+| Tokens | `calm_kit.py`'s constants (`INK`, `SOFT`, `LINE`, `FILL`, `PAGE`, `SHEET`, `LINK`, `ACCENT`) | `DESIGN.md`'s frontmatter, `src/styles/tokens.css` |
+| Core systems | the 4/8 spacing scale, the type scale, the four radii, elevation (glass on what floats) | the same, in `theme.css` |
+| Components | `r41_kit.py`'s helpers (`GROUP`, `BSHEET`, `ROWMENU`, `SEGC`, `BTN`, `DOCK`) | `src/shared/ui` |
+
+1. **A value comes from the layer below, never typed in:** a colour on a board is a kit constant; a gap is on the
+   scale; a radius is one of the four; a size is a type-scale step. A literal hex, a gap of 10 or a radius of 15 in a
+   generator is a drift: replace it with the constant, or add the token to `DESIGN.md` first if it is truly new.
+2. **A component is built once, in the kit:** a part drawn on two boards is a kit helper; a board never rewrites a
+   helper inline or patches its output with `.replace()` to change its look (a post-process is a drifted copy,
+   `design-consistency`). Change the helper, then name every board it changes.
+3. **One name on both sides:** a kit helper and its app component carry the same name or a name the port table maps
+   (the area's spec); a state key on a board names the same state the app's store holds. Words in code follow
+   `CLAUDE.md`'s "Words in code".
+4. **Each part carries its documentation:** a kit helper has a one-line docstring saying what it is for and when not
+   to use it; a token in `DESIGN.md` says its role (`craft-details`, owner's articles 7).
+5. **Governance is the loop:** every change to a token or a helper is a feedback-log bullet naming what changed, why,
+   and the boards it touched, and a commit of its own; nothing in the system changes without that line.
+6. **A change at the core is checked at the edge:** after a token or a core-system change, `checks/regress.py` and a
+   shot of every board that uses it (both sizes), since an inner change reaches every component.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).

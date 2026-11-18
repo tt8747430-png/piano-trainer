@@ -1759,3 +1759,12 @@ are reference only, but progressions are facts.
   portrait first and every feature on its side, sessions resume, thumb's reach, 8 between targets, the keyboard per
   field, a visible twin for every gesture, SVG and rem, big decisions complete on a phone). `seven-questions` 3 points
   to them.
+- **Canvas (2026-11-18, loop): ProfileLaptop's rows meet.** "Last 7 days" stood 8 lower than "Badges" beside it: its
+  caption ("152 min · 6 of 7 days") kept a 44 minimum height though it is no target. It takes its text's height now,
+  and the rows stand 32 apart, not 48 (laws, Spacing: past about 3× the space cuts a section off).
+- **Rules (2026-11-18): Uxcel's "Intro to Design Composition" and "What is a Design System?"** written into
+  `edge-lines/references/laws.md`: Composition (7: format, grid, groups, then the look; one shared grid; the act after
+  the facts it depends on, never over the picture; one focal point by scale; nothing random; one frame across
+  sibling pages) and The design system, as layers (our four layers mapped, canvas and app; values from the layer
+  below; a component once, in the kit; one name both sides; a docstring per helper; governance as the log; a core
+  change checked on every board).
