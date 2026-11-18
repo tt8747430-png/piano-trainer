@@ -683,6 +683,9 @@ export const practice = {
     empty: 'Nothing here yet.',
     table: {
       name: 'Name',
+      exercise: 'Exercise',
+      pattern: 'Pattern',
+      focus: 'Focus',
       book: 'Book',
       style: 'Style',
       level: 'Level',

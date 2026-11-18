@@ -30,8 +30,7 @@ import { ArrangeSheets } from './ArrangeSheets'
 import { LibraryEmpty } from './LibraryEmpty'
 import { LibraryRow } from './LibraryRow'
 import { LibrarySearch } from './LibrarySearch'
-import { LibraryTable } from './LibraryTable'
-import { LibraryTree } from './LibraryTree'
+import { LibraryTable, type TableColumns } from './LibraryTable'
 
 /** How many rows a phone's run shows before Show all. */
 const FOLDED = 5
@@ -65,8 +64,9 @@ function Section({ section, folds }: { section: ShownSection; folds: boolean }) 
 /**
  * One library for Exercises, Accompaniment and Progressions (R30-4), the Songs library's shape: the
  * search with Sort and Filter. On a phone, Favourites while there are some, then each book (or style,
- * or the learner's folder) a run of rows, folded after five, Mine last; from a laptop's width, two
- * panes, the tree of its places beside the table, which its headings sort. Arranged by the learner
+ * or the learner's folder) a run of rows, folded after five, Mine last; from a laptop's width the
+ * same place chips under the title on Back's edge and, under them, the table of those runs, which
+ * its headings sort: no second pane of places beside the sidebar (canvas v439). Arranged by the learner
  * (R32): the places and rows in their order, renamed, moved and hidden as set, each row's More with
  * Rename…, Move to… and Hide; in Edit (`editing`, the pencil in the page's bar) every place and row
  * with its handle, a place's More and New folder. What it shows is the URL's (`view`); the rows,
@@ -79,7 +79,7 @@ export function PracticeLibrary({
   groups,
   groupWord,
   levels,
-  extra,
+  columns,
   mine,
   screen,
   header,
@@ -95,8 +95,8 @@ export function PracticeLibrary({
   groupWord: GroupWord
   /** Whether its content has levels to show, sort and filter by. */
   levels: boolean
-  /** The table's own column, named. */
-  extra?: string
+  /** The laptop table's columns, named as the board names them. */
+  columns: TableColumns
   /** Mine, where the learner makes rows of their own: what an empty Mine offers. */
   mine?: { empty: ReactNode }
   /** The screen's name, for the search's shortcut. */
@@ -191,15 +191,7 @@ export function PracticeLibrary({
           mine={mine?.empty}
         />
       ) : wide ? (
-        <LibraryTable
-          items={shown.items}
-          view={view}
-          groups={arranged.groups}
-          groupWord={groupWord}
-          levels={levels}
-          extra={extra}
-          names={names}
-        />
+        <LibraryTable sections={shown.sections} view={view} levels={levels} columns={columns} />
       ) : (
         <div className="flex flex-col gap-6">
           {shown.sections.map((section) => (
@@ -209,31 +201,11 @@ export function PracticeLibrary({
       )}
     </div>
   )
-  if (!wide)
-    return (
-      <>
-        {bar}
-        {body}
-        {sheets}
-      </>
-    )
   return (
     <>
       {bar}
-      <div className="grid grid-cols-[17rem_minmax(0,1fr)] items-start gap-8">
-        <aside className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pb-4">
-          <LibraryTree
-            kind={kind}
-            place={shown.place}
-            groups={arranged.groups}
-            groupWord={groupWord}
-            mine={mine !== undefined}
-            counts={shown.counts}
-          />
-        </aside>
-        {body}
-        {sheets}
-      </div>
+      {body}
+      {sheets}
     </>
   )
 }

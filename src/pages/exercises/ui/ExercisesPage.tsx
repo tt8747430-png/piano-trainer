@@ -16,7 +16,7 @@ export function ExercisesPage() {
   const view = useSearch({ from: '/shell/practice/exercises' })
   const { groups, items } = useExerciseLibrary()
   const { editing, edit } = useArrangeMode()
-  const made = useLibraryNew('exercises', [])
+  const newDial = useLibraryNew('exercises', [])
   return (
     <div className="flex flex-col gap-4 pb-4">
       <PracticeLibrary
@@ -25,7 +25,6 @@ export function ExercisesPage() {
           title: t('pages.exercises'),
           back: <BackButton />,
           edit,
-          tools: editing ? undefined : made.menu,
         }}
         kind="exercises"
         view={view}
@@ -33,10 +32,11 @@ export function ExercisesPage() {
         groups={groups}
         groupWord="book"
         levels
+        columns={{ name: t('library.table.exercise'), second: t('library.table.focus') }}
         screen={t('pages.exercises')}
         editing={editing}
       />
-      {editing ? null : made.dial}
+      {editing ? null : newDial}
     </div>
   )
 }

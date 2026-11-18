@@ -646,6 +646,9 @@ export const practice: LocaleResources['practice'] = {
     empty: 'Здесь пока ничего нет.',
     table: {
       name: 'Название',
+      exercise: 'Упражнение',
+      pattern: 'Фактура',
+      focus: 'Что развивает',
       book: 'Книга',
       style: 'Стиль',
       level: 'Уровень',
