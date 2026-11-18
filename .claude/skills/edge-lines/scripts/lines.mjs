@@ -159,7 +159,7 @@ async function analyse(page, scr, phone) {
   }).filter((b) => b.x >= scr.x && b.y >= scr.y && b.x < scr.x + scr.w && b.y < scr.y + scr.h)
   // Cards outside the selector: any lighter ringed surface the eye reads as a box.
   for (const el of document.querySelectorAll('div, a, article, li')) {
-    if (!vis(el) || !isCard(el) || blocks.some((b) => b.el === el)) continue
+    if (!vis(el) || !isCard(el) || blocks.some((b) => b.el === el) || (MODAL && !MODAL.contains(el))) continue
     const r = el.getBoundingClientRect()
     if (r.top > scr.y + scr.h || r.left > scr.x + scr.w || r.right < scr.x) continue
     blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: false })
