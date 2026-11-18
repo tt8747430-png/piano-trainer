@@ -247,6 +247,8 @@ export const learn = {
       toolbar: 'Formatting',
       lead: 'Lead in bold',
       insert: 'Insert',
+      insertSearch: 'Insert',
+      noInsert: 'No block called “{{query}}”',
       undo: 'Undo',
       redo: 'Redo',
       blockMenu: 'More: {{name}}',

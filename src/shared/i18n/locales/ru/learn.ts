@@ -242,6 +242,8 @@ export const learn: LocaleResources['learn'] = {
       toolbar: 'Оформление',
       lead: 'Вступление жирным',
       insert: 'Вставить',
+      insertSearch: 'Найти блок',
+      noInsert: 'Блока «{{query}}» нет',
       undo: 'Отменить',
       redo: 'Повторить',
       blockMenu: 'Ещё: {{name}}',

@@ -57,7 +57,7 @@ export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   image: Image,
 }
 
-/** Which group of the Insert menu a kind is in (the board's INSERT): words, music, or ask and link. */
+/** Which group of Insert's sheet a kind is in (the board's INSERT): words, music, or ask and link. */
 const GROUP_OF: Record<Insertable, 'text' | 'music' | 'learner'> = {
   text: 'text',
   steps: 'text',
@@ -77,7 +77,7 @@ const GROUP_OF: Record<Insertable, 'text' | 'music' | 'learner'> = {
   image: 'learner',
 }
 
-/** The Insert menu's and the slash menu's rows: every kind, its picture, its name and its group. */
+/** Insert's sheet's and the slash menu's rows: every kind, its picture, its name and its group. */
 export function insertActions(
   editor: Editor,
   locale: Locale,
@@ -93,7 +93,7 @@ export function insertActions(
     group: t(`edit.doc.groups.${GROUP_OF[kind]}`),
     label: insertableName(kind, t),
     icon: INSERT_ICONS[kind],
-    // Once the menu has closed and given the focus back to its button: the caret then goes into
+    // Once the sheet or menu has closed and given the focus back: the caret then goes into
     // the new block.
     onSelect: () =>
       void setTimeout(() => {
