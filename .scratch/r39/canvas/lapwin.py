@@ -111,8 +111,16 @@ def lapwin(h):
     h = _ACCT_OLD.sub(_acct, h, count=1)
     # Profile is the account row's place: on its pages the row wears the current wash, as Learn, Songs and Practice do
     # on theirs (HIG Sidebars: the selected item shows where you are; a sidebar with nothing current loses the learner)
-    if re.search(r'<title>(Profile|[^<]*from Profile)', h):
+    if re.search(r'<title>(Profile|[^<]*from Profile|Settings|Administration|Legal|Sign in)', h):
         h = h.replace('<button type="button" data-acct aria-haspopup="menu"', '<button type="button" data-acct aria-current="page" aria-haspopup="menu"', 1)
         h = h.replace('background: {{lapAcctBg}}; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 'background: #EAE2D7; display: flex; align-items: center; gap: 12px; padding: 0 12px; color: #1A1612', 1)
+    # Signed out, the row is no one's: a person's outline and Sign in, and its menu offers Sign in, never another's
+    # name and Sign out (a loss named truly, R38; the account row says who is signed in, or that no one is)
+    if '<title>Sign in' in h:
+        h = re.sub(r'(<button type="button" data-acct[^>]*>)<span aria-hidden="true" style="([^"]*)">A</span><span data-sidetext style="([^"]*)">Ana Popescu</span>',
+                   lambda m: m.group(1) + '<span aria-hidden="true" style="' + m.group(2) + '; background: #EEE9E2; color: #685E56"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span data-sidetext style="' + m.group(3) + '">Sign in</span>', h, count=1)
+        h = h.replace('aria-label="Ana Popescu"', 'aria-label="Account"', 1)
+        h = re.sub(r'(<div role="menu" aria-label="Account"[^>]*>)<div style="([^"]*)">ana@example\.com</div><a role="menuitem" href="ProfileLaptop\.dc\.html" style="[^"]*">Profile</a>', r'\1<div style="\2">Not signed in</div>', h, count=1)
+        h = re.sub(r'(<a role="menuitem" href="SignInLaptop\.dc\.html" style="[^"]*">)Sign out</a>', r'\1Sign in</a>', h, count=1)
     k = h.rindex('</script>')
     return h[:k] + _LAPJS + h[k:]
