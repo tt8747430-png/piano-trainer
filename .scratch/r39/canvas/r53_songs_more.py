@@ -113,9 +113,9 @@ FEEDROW = lambda wide: (f'<article style="position: relative; min-width: 0; {_FE
 # On a laptop Explore is All songs' table (owner, 2026-11-17: "the pages change to much from the all songs to explore";
 # edge-lines' laws: "rows of Explore … a list, not a card each"): the same grid, a 60 row on a hairline, the 40 tile,
 # a heading row; Composer its own column, then Type, who shared it, its saves, and ··· to report.
-_XCOLS = 'display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 140px 200px 80px 44px; align-items: center; gap: 16px'
+_XCOLS = 'display: grid; grid-template-columns: minmax(200px, 2.2fr) minmax(0, 1.4fr) 128px minmax(0, 1.2fr) 72px 44px; align-items: center; gap: 16px'
 _XTH = lambda l: f'<span style="font-size: 13px; font-weight: 600; color: {SOFT}">{l}</span>'
-XHEAD = f'<div style="{_XCOLS}; padding: 0 8px 0 12px; height: 40px; border-bottom: 1px solid {LINE}">' + ''.join(_XTH(l) for l in ('Title', 'Composer', 'Type', 'Shared by', 'Saves')) + '<span></span></div>'
+XHEAD = f'<div style="{_XCOLS}; padding: 0 8px 0 12px; height: 40px; white-space: nowrap; border-bottom: 1px solid {LINE}">' + ''.join(_XTH(l) for l in ('Title', 'Composer', 'Type', 'Shared by', 'Saves')) + '<span></span></div>'
 XROW = (f'<div style="{_XCOLS}; position: relative; padding: 0 8px 0 12px; min-height: 60px; border-bottom: 1px solid {LINE}">'
         f'<button type="button" onClick="{{{{x.open}}}}" style="min-width: 0; border: 0; padding: 0; background: transparent; font: inherit; color: {INK}; text-align: left; display: flex; align-items: center; gap: 16px">'
         f'<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.col}}}}; display: flex; align-items: center; justify-content: center; font-family: Literata, Georgia, serif; font-size: {{{{x.chs}}}}; font-weight: 600; white-space: nowrap">{{{{x.ch}}}}</span>'
