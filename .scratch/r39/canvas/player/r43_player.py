@@ -575,6 +575,8 @@ for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
     if phone:  # the floating piano keeps its place over the centred score when the phone layout is wider (744)
         t = t.replace('left: {{kbLeft}}px', 'left: calc({{kbLeft}}px + max(0px, 50% - 201px))')
         t = t.replace('position: absolute; left: 0; top: 0; width: 402px; height: 874px; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)', 'position: absolute; inset: 0; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)')
+        # the keys and the transport hang from the screen's foot, so a shorter screen (a phone on its side) keeps them (round 66)
+        t = t.replace('top: {{kbTop}}px', 'top: calc(100% - 874px + {{kbTop}}px)').replace('calc({{capTop}}px', 'calc(100% - 874px + {{capTop}}px')
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
