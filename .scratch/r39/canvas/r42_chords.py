@@ -881,7 +881,7 @@ def DRAWERS(phone_like):
     if phone_like:
         return BSHEET('isMRoot', 'Root', D_ROOT) + BSHEET('isMType', 'Chord type', D_TYPE, tall=True) + BSHEET('isMBass', 'In the bass', D_BASS)
     return (POPOVER('isMRoot', 'Root', D_ROOT, 'left: calc(50% - 210px); top: 500px', 420) + POPOVER('isMBass', 'In the bass', D_BASS, 'left: calc(50% - 210px); top: 500px', 420)
-            + POPOVER('isMType', 'Chord type', D_TYPE, 'left: calc(50% - 210px); top: 150px', 420).replace('max-height: 760px;', 'height: 620px;'))
+            + POPOVER('isMType', 'Chord type', D_TYPE, 'left: calc(50% - 210px); top: 150px', 420, h='620px'))
 # a switch row is one control: the row is the switch and carries its name
 def SWROW(html, on, act):
     a = '<button type="button" onClick="{{' + act + '}}"'; b = '<span role="switch" aria-checked="{{' + on + '}}"'

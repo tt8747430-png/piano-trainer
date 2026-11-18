@@ -238,11 +238,11 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
 def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
-def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back=''):  # back: a sub-page's Back, left of its centred title
+def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back='', h=''):  # back: a sub-page's Back, left of its centred title; h: a fixed height for a list that changes
     # never past the screen: its height is capped by the room left from its top or bottom on the 904-tall laptop screen
     m = re.search(r'(?:top|bottom): (\d+)px', pos)
     mh = min(760, 904 - int(m.group(1)) - 16) if m else 760
-    out = (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: {mh}px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>')
+    out = (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; {('height: ' + h) if h else f'max-height: {mh}px'}; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>')
     return out.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px">{back}<span style="font-size: 17px; font-weight: 600">{title}</span></div>', 1) if back else out
 
 
