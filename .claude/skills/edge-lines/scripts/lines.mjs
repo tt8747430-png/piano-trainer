@@ -61,7 +61,7 @@ async function open(target, device, steps) {
     // A board's empty full-page layer can sit over the frame; a click that it intercepts is forced.
     if (s.click) await page.locator(s.click).first().click({ timeout: 3000 }).catch(() => page.locator(s.click).first().click({ force: true, timeout: 3000 })).catch((e) => console.log('ERR', e.message.slice(0, 120)))
     if (s.wait) await page.waitForTimeout(s.wait)
-    if (s.scroll) await page.mouse.wheel(0, s.scroll)
+    if (s.scroll) { const v = page.viewportSize(); await page.mouse.move(v.width * 0.6, v.height / 2); await page.mouse.wheel(0, s.scroll); await page.waitForTimeout(300) }  // over the page, never the sidebar
   }
   await page.waitForTimeout(300)
   // WIRE=1: the wireframe phase (ui-and-mockups, Building a screen, 4): no colour, no words, no pictures, only boxes,
