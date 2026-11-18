@@ -162,7 +162,7 @@ def OWNROW(t, sub, href, kind='lesson'):
 NEWROW = lambda t, act: ADDROW(t, act, node=44, pad='0 12px', gap=12)
 def OWNGROUP(lap=False):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
-    head = H2("Your lessons and courses", SEEALLH("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
+    head = H2("Made by you", SEEALLH("LearnYoursLaptop.dc.html" if lap else "LearnYours.dc.html"))
     if lap:
         card = lambda r: r.replace(f'padding: 8px 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {FILL}', f'padding: 10px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; text-decoration: none').replace(f'<span style="display: flex; color: {SOFT}">{CHEV_R}</span>', '')
         return (f'{head}<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">' + card(OWNROW("Sunday service set", "Course · 4 lessons · 1 learned", ch, "course"))

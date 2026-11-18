@@ -907,7 +907,7 @@
       "y": 300,
       "w": 450,
       "h": 920,
-      "title": "Your lessons and courses, phone",
+      "title": "Made by you, phone",
       "is_interactive": true,
       "page": "places"
     },
@@ -1042,7 +1042,7 @@
       "y": 1720,
       "w": 2143,
       "h": 1299,
-      "title": "Your lessons and courses, laptop",
+      "title": "Made by you, laptop",
       "is_interactive": true,
       "page": "places"
     },

@@ -47,7 +47,7 @@ YOURS_JS = js('const Y = ' + json.dumps(YOURS, ensure_ascii=False) + ';\n' + r''
       kinds: chipsOf(['All', 'Lessons', 'Courses'], kind, (x) => set({ kind: x })), sortL: sort, sortOn: sheet === 'sort', openSort: sheetOpen('sort'),
       sorts: seg(['Recent', 'Name'], sort, (x) => set({ sort: x, sheet: null })),
       selOn, selOff: !selOn, canSel: !selOn && any, toggleSel: () => set({ sel: !selOn, picked: [], sheet: null }),
-      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Your lessons and courses', headPad: selOn ? '164px' : '108px',
+      pageT: selOn ? (n ? n + ' selected' : 'Select') : 'Made by you', headPad: selOn ? '164px' : '108px',
       selDup: () => set({ sel: false, picked: [], toast: (n || all.length) === 1 ? 'Copy made' : named(n ? picked : all) + ' copied' }), selDel: () => dropMany(n ? picked : all),
       selDupL: n ? 'Duplicate' : 'Duplicate all', selDelL: n ? 'Delete' : 'Delete all',
       courses, loose, hasLoose: loose.length > 0, looseHead: kind === 'All', states, listOn: any, bareOn: bare || (!any && !ql), notBare: !(bare || (!any && !ql)), noneOn: !bare && !any && !!ql,
@@ -132,7 +132,7 @@ TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("ki
 yph = (f'{TITLEBAR("{{pageT}}", YSEL, "Learn.dc.html", "Back to Learn", wrap=True)}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YSELBAR}{YTOAST}')
 ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{TABLE_L()}', 2000) + YSELBAR_L + FAB(32).replace('right: 16px', 'right: 40px') + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "right: 40px; bottom: 32px; width: 420px")}')
-detail('LearnYours', 'Your lessons and courses', YOURS_JS, yph, ylm, '',
+detail('LearnYours', 'Made by you', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
        POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + LAPSHEET(BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel'), 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
 
