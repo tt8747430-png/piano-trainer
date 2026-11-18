@@ -767,7 +767,6 @@ export const practice = {
     faster: 'Faster by {{step}}',
     tap: 'Tap tempo',
     tapShort: 'Tap',
-    settingsTitle: 'Metronome settings',
     flash: 'Flash on the beat',
     volume: 'Volume',
     off: 'Off',

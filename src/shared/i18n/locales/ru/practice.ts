@@ -738,7 +738,6 @@ export const practice: LocaleResources['practice'] = {
     faster: 'Быстрее на {{step}}',
     tap: 'Темп касанием',
     tapShort: 'Темп',
-    settingsTitle: 'Настройки метронома',
     flash: 'Вспышка на каждую долю',
     volume: 'Громкость',
     off: 'Выкл.',
