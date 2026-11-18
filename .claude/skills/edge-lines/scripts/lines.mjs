@@ -263,7 +263,7 @@ async function analyse(page, scr, phone) {
       // a centred thing (the Tuner's gauge, a sign-in form) is held by its two sides, not a gutter
       if (minL > 20 && !band && Math.abs(minL - (scr.w - maxR)) > 8) problems.push(`the content starts ${minL}px in with nothing in the band at its left: it keeps room for a control not shown; a page's column starts on the 16 gutter, and edit controls float over their block, reserving no space`)
       const hd = [...document.querySelectorAll('header')].find((h) => vis(h) && h.getBoundingClientRect().top - scr.y < 120)
-      const first = [...main.querySelectorAll('*')].filter((e) => vis(e) && e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect().top).filter((t) => t > (hd ? hd.getBoundingClientRect().bottom : 0)).sort((a, b) => a - b)[0]
+      const first = [...main.querySelectorAll('*')].filter((e) => vis(e) && e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect().top).filter((t) => t >= (hd ? hd.getBoundingClientRect().bottom : 0) - 1).sort((a, b) => a - b)[0]
       const hb = hd ? hd.getBoundingClientRect().bottom : 0
       const filled = first !== undefined && [...document.body.querySelectorAll('*')].some((e) => { if (!vis(e) || main.contains(e) || e.contains(main) || (hd && (hd.contains(e) || e.contains(hd)))) return false; const r = e.getBoundingClientRect(); return r.height > 8 && r.width > 40 && r.top >= hb - 4 && r.top < first - 4 && r.left - scr.x < scr.w && r.right > scr.x })
       // a lone instrument centred in the screen (the Circle of fifths) is placed, not left: no band
