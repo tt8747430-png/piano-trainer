@@ -95,9 +95,10 @@ def LTITLEBAR(title, right='', back='', backact=''):
 # explore … the user doesnt understand where it goes"; Jakob's law, NN/g consistency): an 88 bar, the place's name at
 # 56 in 30 bold with its count beside it, the place's acts, then the search pinned at the trailing edge (Finder, Apple
 # Music), so moving between sibling places changes the content and never the frame.
+# both ends on the place's 56 column, so its last act ends where the content ends (edges meet; owner's lines, 2026-11-18)
 def LPLACEBAR(title, count='', acts='', search=''):
     c = f'<span style="flex: none; font-size: 17px; color: {SOFT}; font-variant-numeric: tabular-nums">{count}</span>' if count else ''
-    return (f'<header data-placebar style="flex: none; height: 88px; display: flex; align-items: center; gap: 12px; padding: 0 28px 0 56px">'
+    return (f'<header data-placebar style="flex: none; height: 88px; display: flex; align-items: center; gap: 12px; padding: 0 56px">'
             f'<h1 style="margin: 0; min-width: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{title}</h1>{c}<span style="flex: 1"></span>'
             f'<div style="flex: none; display: flex; align-items: center; gap: 8px">{acts}</div>{search}</header>')
 # the one search field of a place, 320 wide, 44 tall, at the bar's trailing edge
