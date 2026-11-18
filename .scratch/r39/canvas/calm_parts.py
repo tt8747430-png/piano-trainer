@@ -55,8 +55,8 @@ def score_svg(w, sel=None, played=None, size=1.0):
 
 
 # --- hanon
-def hanon(w):
-    notes = [0, 2, 3, 4, 5, 4, 3, 2, 1, 3, 4, 5, 6, 5, 4, 3]; x0, dx = 60, (w - 76) / 16; out = []
+def hanon(w, shift=0):  # shift: the figure's start a step higher, as Hanon's next two bars climb
+    notes = [n + shift for n in [0, 2, 3, 4, 5, 4, 3, 2, 1, 3, 4, 5, 6, 5, 4, 3]]; x0, dx = 60, (w - 76) / 16; out = []
     out.append('<path d="' + ''.join(f'M4 {y}H{w-4}' for y in (26, 34, 42, 50, 58)) + f'" stroke="{INK}" stroke-width="0.9" fill="none"></path><text x="6" y="62" font-size="46" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
     hs = []
     for i, s in enumerate(notes):

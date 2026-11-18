@@ -600,6 +600,8 @@ owner's, typos fixed.
 
 ## Practice
 
+- **An exercise's score leads its page (2026-11-18, "the score in the exercises is very important but it gets so little space … check also all other practice pages"; canvas v552):** the score was one system of two bars in a card, its staff about 8px a space, smaller than the keyboard above and the settings below; now two systems, bars 1–4, on the paper at 1.4× (11px a space on a phone), no card, the setup following it. The rule, with NN/g's Scale, HIG's Layout and Material's Cards, is in `edge-lines/references/laws.md`, "The page's subject is its largest thing".
+
 - **A laptop group's rows one height (2026-11-18, the lines; canvas v551):** a row with a segmented choice at its end (`GROUP`'s `segr`) stood 60 beside the stepper rows' 56 in one group (the exercise's Number, Hands, Rhythm, Next key, Tempo; every practice run's laptop Setup), since the segmented control is 48 with its frame; its row now takes 4 of padding, 56 like the rest (similarity). Changed in the kit, so every laptop group with such a row follows.
 
 - **A practice run's Setup groups by heading (2026-11-18, the lines; canvas v549):** Chord type, Root, Direction, Chord size, In all 12 keys stood 12 apart with their headings 8 over their controls, 1.0×, so each heading read as the end of the row above; the sections now stand 24 apart (laws, spacing 3), on the phone's sheet and the laptop's popover, for the walk, the chromatic walk, the progression and the exercise.

@@ -613,6 +613,25 @@ Our layers, and where each lives:
 6. **A change at the core is checked at the edge:** after a token or a core-system change, `checks/regress.py` and a
    shot of every board that uses it (both sizes), since an inner change reaches every component.
 
+## The page's subject is its largest thing (owner, 2026-11-18, checked against the guidelines)
+
+The owner: "the score in the exercises is very important but it gets so little space and is so small that the user
+doesnt understand that this is the main things on the page. and check also all other practice pages for such things".
+The guidelines say the same: NN/g, "5 Principles of Visual Design in UX" (Scale): "emphasize the most important aspect
+of your design by making them biggest"; Apple HIG, Layout: "Order content by relative importance … the most important
+items near the top and leading side"; Material 3, Cards: "Don't force content into cards when spacing, headlines, or
+dividers would create a simpler visual hierarchy". Shipped music apps agree: forScore, Flat and flowkey give the score
+the screen, the controls around it.
+
+1. Each board names its subject in its spec (the score on an exercise or pattern, the interval on Intervals, the chord's
+   keys on Chords, the scale on Scales). It is the largest block on the first screen at 402×874 and 1710×904, larger
+   than any group of settings, any keyboard strip or any list.
+2. Music is drawn at reading size: a staff space of at least 10px on a phone (a 5-line staff at least 40 tall), the
+   staff across the column's full width; never a thumbnail of the score.
+3. The subject sits on the paper, never in a card on its own page (Cards, below).
+4. Enough of it to be read as music: at least two systems or four bars of an exercise or pattern on a phone.
+5. What sets it up (Number, Hands, Tempo) follows it, quieter, never above it or larger.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
