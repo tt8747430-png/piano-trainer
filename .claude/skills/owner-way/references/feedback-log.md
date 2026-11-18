@@ -1715,6 +1715,7 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **A publish refused as "changed since you last saw it" is checked, never believed (owner, 2026-11-18: "fix the issues that you think that the artifact was changed since your last edit although it wasnt and you compare with the wrong state"):** the artifact service counts only what this conversation read, listed or published; after a compaction it has forgotten the earlier publishes, so my own last build reads as someone else's. At the start of a session and after every compaction, list the canvas's files once (`Artifact` `list`, `scope: "files"`): a listed path counts as seen. When a publish is still refused, compare the published sha256 with the last committed build (`git show HEAD:<board> | sha256sum`): the same means it is my own build, publish; different means someone else changed it: read it, merge, then publish.
 - **Targets side by side stand 8 apart or join (laws, A phone is not a small laptop 4, 2026-11-18; the lines tool's
   new NOTE):** a song row's link and its ··· stood 4 apart (All songs, a playlist), as did a course row's in Made by
   you, whose fold chevron also overlapped its row link by 4 (a −8 margin); the phone Chord player's chord boxes 4
