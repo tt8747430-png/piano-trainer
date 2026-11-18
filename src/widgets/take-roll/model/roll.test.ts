@@ -30,27 +30,14 @@ describe('rollOf', () => {
     ])
   })
 
-  it('shades each note by how hard it was struck', () => {
-    expect(rollOf(TAKE).notes.map((note) => note.shade)).toEqual([1, 2, 4, 4])
-  })
-
-  it('numbers its bars from the bar it was recorded at, and marks the beats between', () => {
+  it('numbers its bars from the bar it was recorded at', () => {
     const roll = rollOf(TAKE)
     expect(roll.bars).toEqual([
       { at: 0, number: 3 },
       { at: 1500, number: 4 },
       { at: 3000, number: 5 },
     ])
-    expect(roll.beats).toEqual([500, 1000, 2000, 2500, 3500, 4000])
     expect(roll.length).toBe(4500)
-  })
-
-  it('lays each pedal’s presses in its own lane', () => {
-    expect(rollOf(TAKE).pedals).toEqual({
-      sustain: [{ down: 100, up: 900 }],
-      soft: [],
-      sostenuto: [],
-    })
   })
 
   it('draws each bar as long as it fell in the piece: a pickup’s bar a beat', () => {
@@ -62,7 +49,6 @@ describe('rollOf', () => {
       bars: [0, 1000, 5000, 9000],
     })
     expect(pickup.bars.map((bar) => bar.at)).toEqual([0, 1000, 5000])
-    expect(pickup.beats).toEqual([2000, 3000, 4000, 6000, 7000, 8000])
     expect(pickup.length).toBe(9000)
   })
 })

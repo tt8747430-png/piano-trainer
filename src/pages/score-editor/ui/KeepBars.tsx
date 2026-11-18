@@ -70,7 +70,7 @@ export function KeepBars({
         </div>
       ))}
       <ActionRow
-        title={t('take.keepIt')}
+        title={t('take.keepIt', numbered)}
         disabled={kept.first === whole.first && kept.last === whole.last}
         onClick={() => setAsking(true)}
       />

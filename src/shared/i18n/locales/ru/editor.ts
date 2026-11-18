@@ -560,12 +560,14 @@ export const editor: LocaleResources['editor'] = {
     stop: 'Стоп',
   },
   take: {
+    title: 'Дубль',
+    recorded: '{{song}} · записан {{day}}',
     name: 'Название',
     play: 'Сыграть',
     keep: 'Оставить такты',
     first: 'Первый такт',
     last: 'Последний такт',
-    keepIt: 'Оставить',
+    keepIt: 'Оставить такты {{first}}–{{last}}',
     keeping: {
       title: 'Оставить такты {{first}}–{{last}}?',
       body: 'Остальные такты будут удалены без возможности восстановления.',
@@ -625,7 +627,15 @@ export const editor: LocaleResources['editor'] = {
     redo: 'Повторить',
     clip: 'Копировать, вырезать или вставить выделение',
   },
-  roll: { label: 'Нот: {{notes}} · тактов: {{bars}}', playFrom: 'Играть с такта {{n}}' },
+  roll: {
+    label: 'Нот: {{notes}} · тактов: {{bars}}',
+    playFrom: 'Играть с такта {{n}}',
+    notes_one: '{{count}} нота',
+    notes_few: '{{count}} ноты',
+    notes_many: '{{count}} нот',
+    notes_other: '{{count}} ноты',
+    playingFrom: 'Звучит с такта {{n}}',
+  },
   printed: {
     tempoMark: 'Темп: {{bpm}}',
     keyAt: 'Ключевые знаки, такт {{bar}}',

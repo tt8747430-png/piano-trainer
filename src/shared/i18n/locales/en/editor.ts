@@ -612,12 +612,14 @@ export const editor = {
   // A take drawn as a piano roll, on its page.
   // A take's own page.
   take: {
+    title: 'Take',
+    recorded: '{{song}} · recorded {{day}}',
     name: 'Name',
     play: 'Play',
     keep: 'Keep bars',
     first: 'First bar',
     last: 'Last bar',
-    keepIt: 'Keep',
+    keepIt: 'Keep bars {{first}}–{{last}}',
     keeping: {
       title: 'Keep bars {{first}}–{{last}}?',
       body: 'All other bars will be permanently deleted.',
@@ -678,7 +680,14 @@ export const editor = {
     redo: 'Redo',
     clip: 'Copy, cut or paste the selection',
   },
-  roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
+  roll: {
+    label: 'Notes: {{notes}} · bars: {{bars}}',
+    playFrom: 'Play from bar {{n}}',
+    // Under a take's roll on its page: how many notes it holds, or where it plays from.
+    notes_one: '{{count}} note',
+    notes_other: '{{count}} notes',
+    playingFrom: 'Playing from bar {{n}}',
+  },
   // What is printed on the score, edited where it is (ADR 0114): the title, a click turning it into a
   // field in its place.
   printed: {
