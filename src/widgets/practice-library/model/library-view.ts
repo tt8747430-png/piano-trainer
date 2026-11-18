@@ -69,8 +69,10 @@ export interface LibraryItem {
   readonly section?: LibrarySection
   /** Its level, where its content has one. */
   readonly stage?: Stage
-  /** The table's extra column (an accompaniment's hands, a progression's numerals). */
+  /** The table's second column where not its line (an accompaniment's hands, a progression's numerals). */
   readonly extra?: string
+  /** The table's third column where the library has no levels (a progression's Key). */
+  readonly third?: string
   /** Words a search finds it by besides its name and lines. */
   readonly words?: readonly string[]
   readonly picture: LibraryPicture

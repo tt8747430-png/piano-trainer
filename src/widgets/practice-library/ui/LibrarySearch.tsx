@@ -56,7 +56,7 @@ export function LibrarySearch({
   groups: readonly LibraryGroup[]
   groupWord: GroupWord
   levels: boolean
-  /** A laptop's two panes: the tree marks the place, and the table's headings sort. */
+  /** A laptop's width: the table's headings sort, so the filters hold no sort. */
   wide: boolean
   screen: string
   names: Readonly<Record<string, string>>
@@ -96,10 +96,7 @@ export function LibrarySearch({
           }),
           off: () => set({ stage: 'any' }),
         },
-    shown.place === ALL ||
-    placeName === undefined ||
-    (wide && !styles) ||
-    placeChips.includes(shown.place)
+    shown.place === ALL || placeName === undefined || placeChips.includes(shown.place)
       ? null
       : { id: 'place', name: placeName, off: () => set({ place: ALL }) },
   ]
@@ -185,18 +182,16 @@ export function LibrarySearch({
   return (
     <div className="flex flex-col gap-3 empty:hidden">
       {at === 'row' ? box : null}
-      {wide ? null : (
-        <ChoiceChips
-          label={t('practice:library.placesLabel')}
-          value={placeChip}
-          scroll
-          options={placeChips.map((value) => ({
-            value,
-            label: value === ALL ? t('practice:library.all') : (names[value] ?? ''),
-          }))}
-          onChange={(place) => set({ place })}
-        />
-      )}
+      <ChoiceChips
+        label={t('practice:library.placesLabel')}
+        value={placeChip}
+        scroll
+        options={placeChips.map((value) => ({
+          value,
+          label: value === ALL ? t('practice:library.all') : (names[value] ?? ''),
+        }))}
+        onChange={(place) => set({ place })}
+      />
       <FilterChips chips={chips.filter((chip) => chip !== null)} />
     </div>
   )

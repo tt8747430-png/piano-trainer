@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useElementSize, useFitZoom } from '@/shared/lib'
+import { useElementSize } from '@/shared/lib'
 import { keyFromParam, type KeyParam } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { noteLine, runSounds, twoHands, type NoteLineMeter } from '@/shared/lib/schedule'
@@ -8,12 +8,19 @@ import { usePlayback } from '@/shared/lib/services'
 import { PlayButton, SheetOption, type ShownKeys } from '@/shared/ui'
 import { barOf, barShown, barsOf, rowsOf } from '../model/notes-example'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
+import { FittedRow } from './FittedRow'
 import { TappableStaff } from './TappableStaff'
 
 /** The tempo a lesson's line of notes plays at: slow enough to read along. */
 const LINE_TEMPO = 72
 /** The hand a staff's line is played with: the bass's the left, every treble's the right. */
 const handOf = (staff: StaffId): 'rh' | 'lh' => (staff === 'bass' ? 'lh' : 'rh')
+
+/** What the card takes of its room beside its music: its padding, and its controls at its side. */
+const CARD_ROOM = 140
+
+/** The room a note struck takes on a row, in CSS px: how many a row of the card's width holds. */
+const NOTE_ROOM = 34
 
 /**
  * A line of notes to read, on the staff it is read on (with a left hand's line under it, both hands
@@ -23,31 +30,6 @@ const handOf = (staff: StaffId): 'rh' | 'lh' => (staff === 'bass' ? 'lh' : 'rh')
  * `onFollow`, `onShow` unless given: the line moving on is not the learner's choice, so a lesson
  * keeps a question opened as it plays.
  */
-/** What the card takes of its room beside its music: its padding, and its controls at its side. */
-const CARD_ROOM = 140
-
-/** The room a note struck takes on a row, in CSS px: how many a row of the card's width holds. */
-const NOTE_ROOM = 34
-
-/** A row drawn whole within the card's width, shrunk where it is wider. */
-function FittedRow({ children }: { children: ReactNode }) {
-  const room = useRef<HTMLDivElement>(null)
-  const drawn = useRef<HTMLDivElement>(null)
-  const zoom = useFitZoom(room, drawn)
-  return (
-    <div ref={room} className="min-w-0">
-      {/* Its zoom as `--fit` too, so a reach drawn inside it (a bar's band) holds 44px on screen. */}
-      <div
-        ref={drawn}
-        className="w-max"
-        style={zoom < 1 ? ({ zoom, '--fit': zoom } as CSSProperties) : undefined}
-      >
-        {children}
-      </div>
-    </div>
-  )
-}
-
 export function NotesExample({
   notes,
   bass,

@@ -1,4 +1,4 @@
-import { Check, Eye, ListChecks, SkipForward, Square, Volume2, X } from 'lucide-react'
+import { Square, Volume2 } from 'lucide-react'
 import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -33,6 +33,8 @@ const FOOT =
   'h-12.5 min-w-0 flex-1 rounded-full px-2 text-[0.9375rem] leading-tight font-bold text-balance whitespace-normal'
 /** The foot's quiet pills, on the sand. */
 const QUIET = 'bg-muted text-foreground hover:bg-foreground/10'
+/** Check, 1.4 of a quiet pill's width, on the sand with soft ink until a key is chosen. */
+const WAITING = 'flex-[1.4] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100'
 
 /** Whether a round asked by ear, or a card, hides this side until it is answered or turned over. */
 function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
@@ -47,25 +49,22 @@ function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
 }
 
 /**
- * A chord to build's Hint (A41): its notes as chips, kept out of sight until asked, a round at a time.
+ * A chord to build's Hint (the Check board's): a 44-tall link under the prompt that turns into its
+ * notes when tapped ("Its notes: C E G"), and back, a round at a time.
  */
 function ChordHint({ tones }: { tones: readonly Tone[] }) {
   const { t } = useTranslation('quiz')
   const [shown, setShown] = useState(false)
-  return shown ? (
-    <ul aria-label={t('hintNotes')} className="flex flex-wrap gap-2">
-      {tones.map((tone) => (
-        <li
-          key={tone.degree}
-          className="rounded-pill bg-muted px-3 py-1 font-display text-lg font-semibold"
-        >
-          {printedNote(tone.note)}
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <Button variant="link" className="self-center px-2" onClick={() => setShown(true)}>
-      {t('hint')}
+  return (
+    <Button
+      variant="link"
+      className="min-h-11 px-2 text-[0.9375rem] font-semibold"
+      aria-expanded={shown}
+      onClick={() => setShown((was) => !was)}
+    >
+      {shown
+        ? t('hintNotes', { notes: tones.map((tone) => printedNote(tone.note)).join(' ') })
+        : t('hint')}
     </Button>
   )
 }
@@ -191,7 +190,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
             : t('quiz:itWas', { answer: words.answer(question) })
   // A card's name, once turned over, is its prompt.
   const heading = card && result ? words.answer(question) : words.prompt(question)
-  // A chord to build is named large, its full name under it, its notes a Hint away.
+  // A chord to build is named large, its notes a Hint away.
   const building = question.mode === 'build-chord' && !question.cadence ? question : null
   const primaryLabel = result
     ? trainer.run.over
@@ -202,104 +201,98 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       : choosesKeys(question)
         ? t('quiz:check')
         : t('quiz:next')
-  const PrimaryIcon = result
-    ? trainer.run.over
-      ? ListChecks
-      : SkipForward
-    : card
-      ? Eye
-      : choosesKeys(question)
-        ? Check
-        : SkipForward
 
   return (
     <section ref={board} className="flex min-h-0 flex-1 flex-col gap-3 landscape-phone:gap-2">
-      <div className="flex items-start gap-3">
-        <div className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center">
-          <h2
-            ref={prompt}
-            tabIndex={-1}
-            className={cn(
-              'text-balance hyphens-auto wrap-break-word outline-none',
-              building
-                ? 'text-[2.5rem] leading-tight landscape-phone:text-3xl'
-                : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
-            )}
-          >
-            {heading}
-          </h2>
-          {building ? (
-            <p className="text-lg text-muted-foreground">
-              {t(`music:quality.${building.quality}`)}
-            </p>
+      {/* As the Check board: the question stands centred in the room over the keys, its Hint under
+          it while it waits and its verdict there once answered, in its colour (grass right, crimson
+          wrong, ink for an answer shown), so nothing at the foot moves and the keys stay put. On a
+          laptop it is one 760 column, as the board's. */}
+      <div className="mx-auto flex w-full max-w-190 flex-1 flex-col">
+        <div className="my-auto flex flex-col gap-3 py-2">
+          <div className="flex items-start gap-3">
+            <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
+              <h2
+                ref={prompt}
+                tabIndex={-1}
+                className={cn(
+                  'text-balance hyphens-auto wrap-break-word outline-none',
+                  building
+                    ? 'text-[2.75rem] leading-tight landscape-phone:text-3xl'
+                    : 'text-3xl sm:text-4xl landscape-phone:text-2xl',
+                )}
+              >
+                {heading}
+              </h2>
+              {building && !result ? (
+                <ChordHint key={trainer.number} tones={building.tones} />
+              ) : null}
+              <div aria-live="polite">
+                {verdict ? (
+                  <p
+                    className={cn(
+                      'flex min-h-11 items-center text-lg font-bold',
+                      result?.correct
+                        ? 'text-learned'
+                        : result?.kind === 'shown'
+                          ? 'text-foreground'
+                          : 'text-destructive',
+                    )}
+                  >
+                    {verdict}
+                  </p>
+                ) : null}
+                {result ? (
+                  <p className="text-balance text-muted-foreground">{words.why(question)}</p>
+                ) : null}
+              </div>
+            </div>
+            {hears ? (
+              <RoundButton
+                label={trainer.hearing ? t('common:stop') : t('quiz:playAgain')}
+                icon={trainer.hearing ? Square : Volume2}
+                onClick={trainer.hear}
+              />
+            ) : null}
+          </div>
+
+          {showsStaff(question) ? (
+            <RoundStaff question={question} hidden={!result && hides(question, 'staff')} />
+          ) : null}
+          {question.mode === 'key-degrees' ? (
+            <DegreeSlots question={question} played={selected} answered={result !== null} />
+          ) : null}
+
+          {choices && isChoice(question) ? (
+            result?.kind === 'choice' || result?.kind === 'shown' ? (
+              <AnsweredChoices
+                choices={choices}
+                answer={choiceAnswer(question)}
+                chosen={result.kind === 'choice' ? result.chosen : null}
+              />
+            ) : (
+              <div
+                role="group"
+                aria-label={t('quiz:answers')}
+                className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+              >
+                {choices.map(({ value, label }) => (
+                  <Button
+                    key={value}
+                    variant="outline"
+                    size="lg"
+                    // A long answer (Imperfect authentic) wraps rather than run past the button.
+                    className="h-auto min-h-12 py-2 text-balance whitespace-normal"
+                    onClick={() => trainer.choose(value)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            )
           ) : null}
         </div>
-        {hears ? (
-          <RoundButton
-            label={trainer.hearing ? t('common:stop') : t('quiz:playAgain')}
-            icon={trainer.hearing ? Square : Volume2}
-            onClick={trainer.hear}
-          />
-        ) : null}
       </div>
-
-      {building && !result ? <ChordHint key={trainer.number} tones={building.tones} /> : null}
-
-      {showsStaff(question) ? (
-        <RoundStaff question={question} hidden={!result && hides(question, 'staff')} />
-      ) : null}
-      {question.mode === 'key-degrees' ? (
-        <DegreeSlots question={question} played={selected} answered={result !== null} />
-      ) : null}
-
-      {/* Right or Not quite, in words and colour, then why. */}
-      <div aria-live="polite" className="flex min-h-7 flex-col gap-1">
-        {verdict ? (
-          <p
-            className={cn(
-              'flex items-center gap-2 text-lg font-semibold',
-              result?.correct ? 'text-learned' : 'text-destructive',
-            )}
-          >
-            {result?.correct ? (
-              <Check aria-hidden className="size-5" />
-            ) : (
-              <X aria-hidden className="size-5" />
-            )}
-            {verdict}
-          </p>
-        ) : null}
-        {result ? <p className="text-muted-foreground">{words.why(question)}</p> : null}
-      </div>
-
-      {choices && isChoice(question) ? (
-        result?.kind === 'choice' || result?.kind === 'shown' ? (
-          <AnsweredChoices
-            choices={choices}
-            answer={choiceAnswer(question)}
-            chosen={result.kind === 'choice' ? result.chosen : null}
-          />
-        ) : (
-          <div
-            role="group"
-            aria-label={t('quiz:answers')}
-            className="grid grid-cols-2 gap-3 lg:grid-cols-4"
-          >
-            {choices.map(({ value, label }) => (
-              <Button
-                key={value}
-                variant="outline"
-                size="lg"
-                // A long answer (Imperfect authentic) wraps rather than run past the button.
-                className="h-auto min-h-12 py-2 text-balance whitespace-normal"
-                onClick={() => trainer.choose(value)}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
-        )
-      ) : null}
 
       {choosing && selected.length === 0 ? (
         <span id={checkHint} className="sr-only">
@@ -307,28 +300,33 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         </span>
       ) : null}
 
-      {/* At the foot, as the Check board: the keys, then the round's acts in one row of pills,
-          Show answer, Clear and the one primary (Check, Reveal, Next), each a word; a round
-          answered by its buttons has no primary until it is answered, its buttons being its act. */}
-      <div className="mt-auto flex flex-col gap-3 pt-2">
-        <LiveKeyboard
-          range={roundRange(asks, question)}
-          selected={
-            choosing || (pressing && question.mode === 'key-degrees')
-              ? new Set(selected)
-              : undefined
-          }
-          lit={lit}
-          marks={marks}
-          outlined={checked?.outlined}
-          wrong={checked?.wrong}
-          onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
-          // A round asks for a chord or its name: the keys do not go down while a round asked by ear
-          // sounds, and a round played on the keys hides their names.
-          namesKeys={!choosesKeys(question) && !pressesKeys(question)}
-          showsSound={!heard || result !== null}
-        />
-        <div className="mx-auto flex w-full max-w-xl gap-2">
+      {/* At the foot, as the Check board: on a phone the keys, then the round's acts in one row of
+          50-tall pills, Show answer, Clear and the one primary (Check, Reveal, Next), each a word;
+          on a laptop the acts in the 760 column over the keys. Next takes the acts' slot at their
+          height, so the keys never move. A round answered by its buttons has no primary until it is
+          answered, its buttons being its act. */}
+      <div className="mt-auto flex flex-col gap-3 pt-2 lg:flex-col-reverse lg:gap-4">
+        {/* The keys run edge to edge, across the screen's gutter. */}
+        <div className="-mx-gutter">
+          <LiveKeyboard
+            range={roundRange(asks, question)}
+            selected={
+              choosing || (pressing && question.mode === 'key-degrees')
+                ? new Set(selected)
+                : undefined
+            }
+            lit={lit}
+            marks={marks}
+            outlined={checked?.outlined}
+            wrong={checked?.wrong}
+            onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
+            // A round asks for a chord or its name: the keys do not go down while a round asked by ear
+            // sounds, and a round played on the keys hides their names.
+            namesKeys={!choosesKeys(question) && !pressesKeys(question)}
+            showsSound={!heard || result !== null}
+          />
+        </div>
+        <div className="mx-auto flex w-full max-w-190 gap-2">
           {!result && !card && !isChoice(question) ? (
             <Button variant="ghost" className={cn(FOOT, QUIET)} onClick={trainer.reveal}>
               {t('quiz:showAnswer')}
@@ -347,12 +345,12 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           {act === null && isChoice(question) ? null : (
             <Button
               ref={primary}
-              className={FOOT}
+              // Check is the widest of the three, honey once a key is chosen and sand until then.
+              className={cn(FOOT, choosing && WAITING)}
               disabled={act === null}
               aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
               onClick={act ?? undefined}
             >
-              <PrimaryIcon aria-hidden />
               {primaryLabel}
             </Button>
           )}

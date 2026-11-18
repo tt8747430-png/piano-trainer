@@ -48,28 +48,26 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
           </h1>
           <MidiButton />
         </header>
-        <div className="-mt-2 flex items-center gap-3 px-1">
+        <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3 px-1">
           <Progress
             value={answered}
             max={plan.length}
             aria-label={progress}
             getAriaValueText={() => progress}
-            className="flex-1"
+            // The run's progress is grass, 8 tall, as the Check's board and every course's.
+            className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
           />
-          <span
-            aria-hidden
-            className="shrink-0 text-[0.8125rem] text-muted-foreground tabular-nums"
-          >
+          <span aria-hidden className="shrink-0 text-sm text-muted-foreground tabular-nums">
             {progress}
           </span>
         </div>
         {/* What it has come to so far, as the Check board's two chips: right in grass, wrong quiet. */}
         {trainer.summary ? null : (
-          <p className="-mt-2 flex gap-2 text-[0.8125rem] font-semibold tabular-nums">
-            <span className="rounded-pill bg-learned/15 px-2.5 py-1 text-learned">
+          <p className="mx-auto -mt-2 flex w-full max-w-190 gap-2 px-1 text-sm font-semibold tabular-nums">
+            <span className="rounded-xl bg-learned/15 px-3 py-1 text-learned">
               {t('quiz:tally.right', { count: right })}
             </span>
-            <span className="rounded-pill bg-muted px-2.5 py-1 text-muted-foreground">
+            <span className="rounded-xl bg-muted px-3 py-1 text-muted-foreground">
               {t('quiz:tally.wrong', { count: answered - right })}
             </span>
           </p>

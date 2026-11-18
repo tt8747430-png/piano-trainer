@@ -25,6 +25,14 @@ export interface ToolPlay {
   onToggle(): void
 }
 
+/** A tool's column widths on a laptop, as complete classes. */
+const COLUMNS = {
+  720: 'lg:max-w-180',
+  760: 'lg:max-w-190',
+  880: 'lg:max-w-220',
+} as const
+type Column = keyof typeof COLUMNS
+
 /**
  * One tool's page (R29 B11), the same for every tool on Practice's Tools: the bar (Back, the tool's
  * name, its own act and ⚙ to its Settings page where it has several settings, A24); the readout or
@@ -35,7 +43,7 @@ export interface ToolPlay {
 export function ToolPage({
   title,
   settings,
-  gear,
+  column,
   actions,
   controls,
   side,
@@ -51,8 +59,12 @@ export function ToolPage({
   title: string
   /** The tool's Settings page, a router `Link`; none where the tool has nothing to set. */
   settings?: useRender.RenderProp
-  /** The tool's gear where its settings open in place, in a sheet (the Metronome's), not a page. */
-  gear?: ReactNode
+  /**
+   * The tool's one centred column on a laptop, as its board draws it (the Tuner's 720, the
+   * Metronome's 760, the Chord finder's 880): the readout first and what sets it under it, never
+   * beside it (the page has one focus). Without it, `side` stands beside the readout.
+   */
+  column?: Column
   /** The bar's buttons after the gear, as the canvas's TOP60 orders them (the Chord finder's Piano). */
   actions?: ReactNode
   /** What sets the tool, under the readout. */
@@ -82,16 +94,15 @@ export function ToolPage({
         title={title}
         back={<BackButton />}
         settings={
-          gear || settings || actions ? (
+          settings || actions ? (
             <>
-              {gear ??
-                (settings ? (
-                  <RoundLink
-                    label={t('practice:settings.open', { page: title })}
-                    icon={Settings}
-                    render={settings}
-                  />
-                ) : null)}
+              {settings ? (
+                <RoundLink
+                  label={t('practice:settings.open', { page: title })}
+                  icon={Settings}
+                  render={settings}
+                />
+              ) : null}
               {actions}
             </>
           ) : undefined
@@ -101,7 +112,9 @@ export function ToolPage({
       {side || start ? (
         <div
           className={cn(
-            'mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] content-start items-start gap-4 pb-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10',
+            column
+              ? cn('mx-auto flex w-full flex-1 flex-col gap-5 pt-2 pb-8 lg:gap-6', COLUMNS[column])
+              : 'mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] content-start items-start gap-4 pb-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10',
             // 16 under the keys, as every Practice board sets the name under its keys.
             keys !== undefined && 'pt-4',
           )}
@@ -111,7 +124,9 @@ export function ToolPage({
             className={
               start
                 ? 'flex min-w-0 flex-col gap-4'
-                : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
+                : column
+                  ? 'flex min-w-0 flex-col items-center gap-4 text-center'
+                  : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
             }
           >
             {children}
