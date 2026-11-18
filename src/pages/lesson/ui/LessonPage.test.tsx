@@ -6,13 +6,6 @@ import { lessonPlace } from '@/entities/lesson'
 import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
-/** The screen bar's Settings (the gear), not the sidebar's. */
-async function openSettings(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByRole('heading', { level: 1 })
-  const bar = document.querySelector<HTMLElement>('[data-slot="screen-bar"]')!
-  await user.click(within(bar).getByRole('link', { name: 'Settings' }))
-}
-
 describe('A lesson', () => {
   it('shows its title over its sections, and no summary', async () => {
     await renderApp('/lessons/reading-chord-symbols')
@@ -21,24 +14,6 @@ describe('A lesson', () => {
     ).toBeInTheDocument()
     expect(screen.queryByText(/name the chords you play/)).not.toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
-  })
-
-  it('reads as one page, or a section at a time as Settings say, remembered', async () => {
-    const user = userEvent.setup()
-    const { settingsStore, router } = await renderApp('/lessons/reading-chord-symbols')
-    await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' })
-    expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
-    expect(screen.queryByRole('link', { name: 'Next' })).toBeNull()
-    await openSettings(user)
-    // How lessons read is chosen on the lesson's Settings, its one home (R29).
-    const reading = await screen.findByRole('radiogroup', { name: 'Lessons read as' })
-    await user.click(within(reading).getByRole('radio', { name: 'A section at a time' }))
-    await act(() =>
-      router.navigate({ to: '/lessons/$lessonId', params: { lessonId: 'reading-chord-symbols' } }),
-    )
-    expect(await screen.findByRole('link', { name: 'Next' })).toBeVisible()
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
-    expect(settingsStore.getState().lessonReading).toBe('sections')
   })
 
   it('links the lessons to read before it, and its journey shows its prerequisites by number', async () => {

@@ -41,7 +41,6 @@ const PAGE_PATHS: Readonly<Record<SettingsPageId, readonly string[]>> = {
 const COMMANDS: Readonly<Record<string, readonly (keyof typeof SETTING_HOMES)[]>> = {
   setTheme: ['theme'],
   setLocale: ['locale'],
-  setLessonReading: ['lessonReading'],
   setPracticeToggle: ['practice.fingerNumbers'],
   setScoreView: ['scoreView.layout'],
   setSound: ['sound.recording'],

@@ -10,8 +10,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { shownText } from '@/shared/test/shown-text'
 import { lessonById, type Lesson } from '@/entities/lesson'
-import { createSettingsStore, SettingsStoreProvider, type LessonReading } from '@/entities/settings'
-import { setLessonReading } from '@/features/set-preference'
+import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi, createFakeArranger } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
@@ -34,17 +33,16 @@ function firstLesson(): Lesson {
 }
 
 const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
-const ONWARD: Onward = { link: <Link to="/" />, onGo: () => {} }
+const ONWARD: Onward = { link: <Link to="/" />, label: 'Next lesson', onGo: () => {} }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
-async function renderLesson(lesson: Lesson = firstLesson(), reading: LessonReading = 'page') {
+async function renderLesson(lesson: Lesson = firstLesson()) {
   const audio = createFakeAudio()
   const store = createSettingsStore({
     storage: createMemoryStorage(),
     languages: ['en'],
     finePointer: false,
   })
-  setLessonReading(store, reading)
   const router = createRouter({
     routeTree: createRootRoute({
       component: () => <LessonView lesson={lesson} up={UP} onward={ONWARD} />,
@@ -118,35 +116,6 @@ describe('LessonView', () => {
       'href',
       expect.stringMatching(/#section-2$/),
     )
-  })
-
-  it('reads a section at a time where the learner chose it: back, the dots, Next, and Done on the last', async () => {
-    const user = userEvent.setup()
-    await renderLesson(firstLesson(), 'sections')
-    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'Reading chord symbols',
-    ])
-    const bar = screen.getByRole('toolbar', { name: 'Lesson' })
-    expect(within(bar).getByRole('button', { name: 'Previous section' })).toBeDisabled()
-    expect(
-      within(bar).getByRole('button', { name: 'In this lesson: section 1 of 10' }),
-    ).toBeVisible()
-    await user.click(within(bar).getByRole('link', { name: 'Next' }))
-    expect(
-      await screen.findByRole('heading', { level: 2, name: 'Numbers and 7ths' }),
-    ).toBeInTheDocument()
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
-    expect(within(bar).getByRole('link', { name: 'Previous section' })).toHaveAttribute(
-      'href',
-      expect.stringMatching(/#section-1$/),
-    )
-    // The last page goes on.
-    await user.click(within(bar).getByRole('button', { name: 'In this lesson: section 2 of 10' }))
-    const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
-    await user.click(within(sheet).getByRole('link', { name: 'Try it' }))
-    expect(await screen.findByRole('heading', { level: 2, name: 'Try it' })).toBeInTheDocument()
-    expect(within(bar).queryByRole('link', { name: 'Next' })).not.toBeInTheDocument()
-    expect(within(bar).getByRole('link', { name: 'Done' })).toHaveAttribute('href', '/')
   })
 
   it('plays a chord example and marks its tones on the keys', async () => {

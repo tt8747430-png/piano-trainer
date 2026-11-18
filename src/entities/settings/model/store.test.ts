@@ -64,12 +64,6 @@ const DEFAULTS = {
 }
 
 describe('createSettingsStore', () => {
-  it('reads a lesson as one page, or a section at a time where that was saved (round 26)', () => {
-    expect(restored({}).lessonReading).toBe('page')
-    expect(restored({ lessonReading: 'sections' }).lessonReading).toBe('sections')
-    expect(restored({ lessonReading: 'scroll' }).lessonReading).toBe('page')
-  })
-
   it('keeps how the Player plays where still valid, as it always did otherwise (B7)', () => {
     expect(
       restored({ playback: { countdown: 'loud', cursor: 'beats', pedal: 'down', speedStep: 3 } })

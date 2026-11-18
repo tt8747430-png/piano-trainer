@@ -52,7 +52,6 @@ describe('settings selectors', () => {
       tipsSeen: [],
       practiceRecent: [],
       paletteRecent: [],
-      lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: true,
       paletteCategory: null,
