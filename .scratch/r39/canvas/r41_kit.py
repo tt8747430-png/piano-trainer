@@ -255,7 +255,12 @@ def TABBAR(cur):
                 f'<span style="font-size: 11px; font-weight: {700 if on else 550}; line-height: 1">{l}</span></a>')
     a = ''.join(one(l, h) for l, h in items)
     edge = ''  # nothing behind what floats (owner, 2026-11-15: floating buttons with a background make no sense)
-    return edge + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
+    # a phone on its side (under 520 high): a compact capsule, centred, each icon beside its word, as iOS's tab bar in
+    # compact height (Apple HIG, Tab bars), so the places stay together and the page keeps its room (round 66)
+    short = ('<style data-tabshort>[data-menuroot] { container-type: size } @container (max-height: 520px) { nav[aria-label="Main"] { left: 50% !important; right: auto !important; '
+             'translate: -50% 0; width: 440px; height: 52px !important; bottom: 24px !important } nav[aria-label="Main"] > a { flex-direction: row !important; height: 40px !important; gap: 6px !important } '
+             'button[aria-label="New"][aria-haspopup] { bottom: 22px !important } ul[role="menu"][aria-label="New"] { bottom: 94px !important } }</style>')
+    return edge + short + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):
