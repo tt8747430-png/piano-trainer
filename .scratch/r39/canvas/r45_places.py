@@ -65,7 +65,7 @@ LEARN_JS = js(PLACES_PRE + r'''
         .concat([{ l: 'Edited by an editor', bg: editing ? '#332921' : '#EEE9E2', pick: () => set({ editing: !editing }) }]),
       contSub: 'Lesson ' + Math.min(L.done + 1, L.n) + ' of ' + L.n, contBar: Math.round(100 * L.done / L.n) + '%', levelSub: L.chip + ' · ' + L.done + ' of ' + L.n + ' learned', levelGo: (L.done === 0 ? 'Start: ' : L.done === L.n ? 'Review: ' : 'Continue: ') + (nxt ? nxt.t : L.ch[0].rows[0].t),
       levelsHome: LV.map((x, i) => ({ i: String(i + 1), l: x.chip, sub: x.t, got: x.done + ' of ' + x.n, ring: 'conic-gradient(#44684A ' + Math.round(100 * x.done / x.n) + '%, #E9E2D8 0)' })),
-      coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: h.replace(/ courses$/, ''), now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
+      coursesHome: CRS.flatMap(([h, cs], si) => cs.map(([t, sub, k]) => ({ t, s: sub, shelf: k === 'done' ? 'Done' : k === 'now' ? '3 of 8 lessons' : '8 lessons', now: k === 'now', later: k !== 'now', paint: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si] }))).sort((a, b) => (b.now ? 1 : 0) - (a.now ? 1 : 0)).slice(0, 5),
       infoOn: sh === 'info', openInfo: () => set({ sheet: 'info' }), editOn: () => set({ sheet: null, editing: true }),
       courses: CRS.map(([h, cs], si) => ({ h, cs: cs.filter(([t]) => !gone[t]).map(([t, s, k]) => ({ t, s, remove: (e) => { e && e.preventDefault && e.preventDefault(); set({ gone: { ...gone, [t]: true }, toast: t + ' removed' }); }, done: k === 'done', notDone: k !== 'done', now: k === 'now', nowR: k === 'now' && !editing, tileBg: ['#DCE9D6', '#D3E5F2', '#F6E7C8', '#E4DCF1'][si], ring: k === 'now' ? '0 0 0 2.5px #EDC684' : 'none' })) })) };''')
 def PATHROW(laptop=False):
@@ -146,7 +146,7 @@ def COURSECARD(w, href):
     # a course's cover is its name printed on its shelf's paint, the shelf above it, as a book's cover; under it its line
     return (f'<a href="{href}" style="flex: none; width: {w}; min-width: 0; display: flex; flex-direction: column; gap: 8px; color: {INK}; text-decoration: none">'
             f'<span style="position: relative; height: 128px; box-sizing: border-box; padding: 12px 16px; border-radius: 14px; background: {{{{k.paint}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.06); display: flex; flex-direction: column; justify-content: space-between">'
-            f'<span style="display: flex; min-height: 24px; align-items: center; gap: 8px"><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{{{{k.shelf}}}}</span></span>'
+            f'<span style="display: flex; min-height: 24px; align-items: center; gap: 8px"><sc-if value="{{{{k.now}}}}" hint-placeholder-val="{{{{false}}}}">{NEXTPILL}</sc-if><span style="font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: {SOFT}">{{{{k.shelf}}}}</span></span>'
             f'<span style="font-family: {SERIF}; font-size: 19px; line-height: 1.15; text-wrap: balance">{{{{k.t}}}}</span>'
             f'</span>'
             f'<span style="font-size: 13px; line-height: 1.35; color: {SOFT}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{k.s}}}}</span></a>')

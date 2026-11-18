@@ -64,7 +64,7 @@ def _lvrow(row, x):
             .replace('{{p.ring}}', f'conic-gradient(#44684A {round(100 * d / n)}%, #E9E2D8 0)'))
 def _crrow(row, c):
     t, sub, shelf, paint, now = c
-    r = row.replace('{{k.t}}', t).replace('{{k.s}}', sub).replace('{{k.shelf}}', shelf).replace('{{k.paint}}', paint)
+    r = row.replace('{{k.t}}', t).replace('{{k.s}}', sub).replace('{{k.shelf}}', '3 of 8 lessons' if now else '8 lessons').replace('{{k.paint}}', paint)
     return r.replace('<sc-if value="{{k.now}}" hint-placeholder-val="{{false}}">', '<sc-if value="{{true}}" hint-placeholder-val="{{true}}">' if now else '<sc-if value="{{false}}" hint-placeholder-val="{{false}}">')
 _CONTF = lambda c: c.replace('{{contT}}', 'Continue · Foundations').replace('{{nextT}}', 'How major scales work').replace('{{contSub}}', 'Lesson 7 of 13').replace('{{contBar}}', '46%')
 _CONT = _CONTF(CONT)
