@@ -1711,6 +1711,13 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **Targets side by side stand 8 apart or join (laws, A phone is not a small laptop 4, 2026-11-18; the lines tool's
+  new NOTE):** a song row's link and its ··· stood 4 apart (All songs, a playlist), as did a course row's in Made by
+  you, whose fold chevron also overlapped its row link by 4 (a −8 margin); the phone Chord player's chord boxes 4
+  apart. A row and its ··· now join (0 apart, one row), the chevron's margin is gone and the course row's left padding
+  takes the 4 so its words stay on the lessons' edge; the phone chart's boxes stand 8 apart (the laptop's 6 is within
+  a pointer's floor of 4). The editor's note strip and folded tool row are each one capsule and now say so
+  (`role="toolbar"`, "The chosen note", "Tools").
 - **A text button is 50, or 44 in a row (laws, similarity: near-miss heights; the design system as layers 2,
   2026-11-18):** the canvas drew its honey and quiet buttons at 44, 48, 50, 52 and 56, with 48 and 52 for the same
   job as 50 (a sheet's Save, an empty state's way out, a run's Start, a result's Practise mistakes), and the

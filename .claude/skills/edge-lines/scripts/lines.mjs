@@ -458,13 +458,13 @@ async function analyse(page, scr, phone) {
   for (const a of tg) for (const c of tg) {
     if (a === c || c.r.left < a.r.right - 0.5) continue
     const gap = c.r.left - a.r.right, share = Math.min(a.r.bottom, c.r.bottom) - Math.max(a.r.top, c.r.top)
-    if (gap < 1.5 || gap > 7.5 || share < 0.5 * Math.min(a.r.height, c.r.height)) continue
+    if (gap < 1.5 || gap > (phone ? 7.5 : 3.5) || share < 0.5 * Math.min(a.r.height, c.r.height)) continue  // a laptop's pointer: never closer than 4
     const row = a.el.closest('[role=toolbar], [role=tablist], [role=radiogroup], [role=group], nav'); if (row && row.contains(c.el)) continue  // one joined row in its capsule
     if (tg.some((o) => o !== a && o !== c && o.r.left >= a.r.right - 0.5 && o.r.right <= c.r.left + 0.5 && Math.min(o.r.bottom, a.r.bottom) > Math.max(o.r.top, a.r.top))) continue
     const nm = (x) => (x.el.innerText || x.el.getAttribute('aria-label') || x.el.tagName).trim().split('\n')[0].slice(0, 16)
     tight.add(`“${nm(a)}” and “${nm(c)}” ${Math.round(gap)}px`)
   }
-  if (tight.size) notes.push(`targets side by side under 8 apart: ${[...tight].slice(0, 6).join(', ')}${tight.size > 6 ? ' …' : ''} (8 edge to edge, or one row split by a hairline)`)
+  if (tight.size) notes.push(`targets side by side under ${phone ? 8 : 4} apart: ${[...tight].slice(0, 6).join(', ')}${tight.size > 6 ? ' …' : ''} (${phone ? 8 : 4} edge to edge, or one row split by a hairline)`)
   // ── Hick: one bar, menu, tab row or list of places offers at most seven choices at once.
   for (const g of document.querySelectorAll('[role=toolbar], [role=menu], [role=tablist], [role=radiogroup], nav, header')) {
     if (!vis(g)) continue

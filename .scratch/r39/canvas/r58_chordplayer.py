@@ -323,7 +323,7 @@ ph58 = (TOP('Main.dc.html', '', BARR) + TRAY
         + f'<sc-if value="{{{{kTop}}}}" hint-placeholder-val="{{{{false}}}}">{KEYS76((72, 112, 168), True)}</sc-if>'
         + f'<sc-if value="{{{{dTop}}}}" hint-placeholder-val="{{{{false}}}}">{DOCKTOP}</sc-if>'
         + f'<sc-if value="{{{{gTop}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 0 16px 8px", False)}</sc-if>'
-        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {{{{chartPad}}}}; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 4, 60, 21, 2)}</main>'
+        + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {{{{chartPad}}}}; display: flex; flex-direction: column; gap: 16px">{SHOWSTATES()}{CHART76(8, 8, 60, 21, 2)}</main>'
         + f'<sc-if value="{{{{gBot}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 8px 16px", False)}</sc-if>'
         + f'<sc-if value="{{{{kBot}}}}" hint-placeholder-val="{{{{true}}}}">{KEYS76((72, 112, 168), False)}</sc-if>'
         + f'<sc-if value="{{{{gFloat}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: absolute; z-index: 41; {{gFloatPos}}", False)}</sc-if>'
