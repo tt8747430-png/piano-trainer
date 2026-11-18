@@ -121,7 +121,8 @@ _PEN = INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'Bright and
 _PEP = SEC(S9CAPS('The progression', 'prog'), TIPCARD('prog', 'Roman numerals, one per bar, separated by spaces: I V vi IV.'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px 16px; font-family: {SERIF}; font-size: 26px; letter-spacing: .04em">I – V – vi – IV</div>')
 _PES = SEC(CAPS('Style'), WRAPCHIPS('styles'))
 _PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET))
-PEEDIT = _PEH + _PEN + _PEP + _PES + _PEL
+# sections 24 apart, 8 inside: a heading sits 3× nearer what it heads than what ends above it (laws, Spacing 2)
+PEEDIT = '<div style="display: flex; flex-direction: column; gap: 24px">' + _PEH + _PEN + _PEP + _PES + _PEL + '</div>'
 # on a laptop what the progression is called stands left, the progression itself and its lines right
 PEEDIT_L = PEEDIT  # one column on a laptop too, in the phone's order (loop round 58)
 PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'), ('action', 'Share link', 'share'), bg=SHEET))
