@@ -213,6 +213,9 @@ def PV_LINE(n, cw, v='walk', start=0, last=True):
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
     return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
 def PV_RUN(lap, v):
+    # where the run stands, as the chord run's row (one sibling shape; Duolingo's bar, reference-apps/duolingo-music 005)
+    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{pvProg}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
+            f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pvT}}}}</span></div>')
     setup = BTN('Setup', 'openSetup', '', 'plain', 44, False)
     # the transport floats, as the Player's: the kit's glass dock over the paper, 12 above the keys, reserving no
     # space (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation")
@@ -220,10 +223,10 @@ def PV_RUN(lap, v):
     transport = (f'{setup}{PLAYBTN(56)}<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>'
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>{prog}</div>'
                 f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{DOCK(transport, 186, w="auto")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}<div style="flex: 1"></div>'
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}{prog}<div style="flex: 1"></div>'
             f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div></main>{DOCK(transport, 158, w="auto")}')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
