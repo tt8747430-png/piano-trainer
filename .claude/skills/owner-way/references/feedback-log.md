@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **The palette's marks in the boards' own serif (type anatomy 7, 2026-11-18):** dynamics, ornaments and articulations (mf, p, tr, >) were set in Instrument Serif, a third face beside Iowan Old Style and Instrument Sans; they keep their engraved bold italic in Iowan now.
 
 - **Loop round 61, the editor boards' menu carries the app's rows (canvas v371):** the four editor boards drew Credits, Instruments, Version history, Layout, MIDI keyboard and Takes, missing Score view, Transpose, Note input, Recording and On-screen piano; they draw the app's three groups now (the score's acts; its settings by name; Export and Print), and the app's MIDI keyboard says the keyboard connected or None, and Export names MusicXML, MIDI, as the boards' values (2026-11-17).
 - **Loop round 61, Record a take in the note band (the Editor boards, loop round 46):** it was a row in the ··· menu; it stands between Piano keys and Play, a crimson dot in its ring, on both sizes, and is gone from the menu; a lesson's example has none (2026-11-17).
