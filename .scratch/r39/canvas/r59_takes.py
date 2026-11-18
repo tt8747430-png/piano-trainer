@@ -81,7 +81,7 @@ TKROWL = (TKROW.replace('<a href="Take.dc.html" style="flex: 1;', '<button type=
 assert TKROWL != TKROW and '</a>' not in TKROWL
 # on a laptop the takes are a row of cards across the top, the chosen one filled, the review the page's width under
 # them (the lines: a list column ending 355 above its neighbour left a bare band)
-TKLISTL = (IF('some', f'<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL.replace(f"box-shadow: inset 0 -1px 0 {FILL}", f"border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}", 1)}</sc-for></div>', 'true'))
+TKLISTL = (IF('some', f'<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(220px, calc((100% - 32px) / 3)), 1fr)); gap: 16px"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROWL.replace(f"box-shadow: inset 0 -1px 0 {FILL}", f"border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px {LINE}", 1)}</sc-for></div>', 'true'))
 tkslm = (LTITLEBAR('{{pageT}}', TKSEL, 'EditorLaptop.dc.html') + SHOWSTATES()  # Back and the title in one bar, as every laptop sub-page (loop round 60)
          + IF('some', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 32px 96px; display: flex; flex-direction: column; gap: 24px">'
               f'<div class="nos" style="display: flex; flex-direction: column; gap: 16px">{TKLISTL}</div>'

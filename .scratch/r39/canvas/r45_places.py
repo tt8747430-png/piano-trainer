@@ -92,7 +92,7 @@ def PATHF(lap):
            f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{c.count}}}}</span></sc-if>'
            f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" aria-label="Chapter: {{{{c.t}}}}" onClick="{{{{c.menu}}}}" style="width: 44px; height: 44px; margin: -8px -10px -8px 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button></sc-if></div>')
     return (f'<sc-for list="{{{{chapters}}}}" as="c" hint-placeholder-count="3"><section style="display: flex; flex-direction: column; gap: 2px">{hdr}'
-            f'<div style="padding: 0{"; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 32px" if lap else ""}">{PATHROW(lap)}</div>{addl}</section></sc-for>'
+            f'<div style="padding: 0{"; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(220px, calc((100% - 64px) / 3)), 1fr)); column-gap: 32px" if lap else ""}">{PATHROW(lap)}</div>{addl}</section></sc-for>'
             f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{ADDCARD('Add chapter', 'addChapter')}</sc-if>')
 METER = f'<span style="display: block; height: 6px; border-radius: 3px; background: {FILL}"><span style="display: block; width: {{{{meter}}}}; height: 6px; border-radius: 3px; background: #44684A"></span></span>'
 CONTBAR = f'<div role="progressbar" aria-label="Level progress" style="margin-top: 0; height: 6px; border-radius: 3px; background: {FILL}; overflow: hidden"><div style="width: {{{{contBar}}}}; height: 100%; border-radius: 3px; background: #44684A"></div></div>'  # the phone and the laptop draw the level's progress alike
@@ -214,7 +214,7 @@ _k = cl2.index('</section></sc-for>') + len('</section></sc-for>')
 # define where a box finishes"; the masonry columns crossed). A course is a thing you open, among its siblings (NN/g cards).
 _LIST = '<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'.replace('{SHEET}', SHEET).replace('{LINE}', LINE)
 assert _LIST in cl2
-cl2 = cl2.replace(_LIST, '<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">')
+cl2 = cl2.replace(_LIST, '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(240px, calc((100% - 32px) / 3)), 1fr)); gap: 16px">')
 _ROW = f'style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL};'
 assert _ROW in cl2
 cl2 = cl2.replace(_ROW, f'style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE};')

@@ -14,7 +14,7 @@ def L(href, lap):  # a phone board's laptop twin
 def body(top, inner, dock='', pad_bottom=118):
     return f'{top}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px {pad_bottom}px; display: flex; flex-direction: column; gap: 16px">{inner}</main>{DOCK(dock) if dock else ""}'
 def lapbody(top, left, right, dock=''):
-    return f'{top}<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; padding: 0 40px 28px 56px"><div style="min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 16px">{left}{DOCK_L(dock) if dock else ""}</div><div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{right}</div></div>'
+    return f'{top}<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) min(420px, 40%); gap: 40px; padding: 0 40px 28px 56px"><div style="min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 16px">{left}{DOCK_L(dock) if dock else ""}</div><div class="nos" style="min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 4px">{right}</div></div>'
 SPACER = '<span style="flex: 1"></span>'
 
 # ═════ Practice overview (R39-4: relevance first, pictures that show the content) ═════
@@ -36,7 +36,7 @@ MAIN = js(r"    return { ...common(st, set),"
 ph = f'''{TITLEBAR('Practice', IB('Search', SEARCH.replace('18', '22'), href='AppLayers.dc.html'))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{PLIST(THEORY)}{H2('Exercises')}{PLIST(EXERCISES)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
-grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
+grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(140px, calc((100% - 64px) / 5)), 1fr)); gap: 16px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'
 lm = f'''<header style="flex: none; height: 88px; display: flex; align-items: center; gap: 8px; padding: 0 28px 0 56px"><h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em">Practice</h1><span style="flex: 1"></span></header><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{grid(THEORY)}{H2('Exercises')}{grid(EXERCISES)}{H2('Tools')}{grid(TOOLS)}</main>'''
 # Practice's own Tools section is the tools' home on this page; the bar's Tools menu, which listed the same five a
