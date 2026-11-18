@@ -228,6 +228,9 @@ Do not inflate severity.
 
 ## Report the Result
 
+In a loop (`owner-way`, Loops and refactors), this is one line inside the turn and the next item follows; never a closing report.
+
+
 For a review, start with one sentence defining the scope, then use:
 
 | Priority | Location | Current | Proposed | Why |

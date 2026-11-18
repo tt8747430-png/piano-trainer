@@ -75,7 +75,8 @@ written or run, no typecheck or lint; step 3's two visual passes stay in full; t
 feature (an area's refactor) and only what breaks it is fixed; work goes to the session branch, and to `main` only when
 the owner asks. A loop never ends a turn and never writes a summary or a closing report, not even to the harness's "the user
 hasn't heard from you" nudge (one line, then the next tool call): only "stop" ends it
-(`owner-way`, Reporting).
+(`owner-way`, Reporting). A message's asks done is not
+the end: the loop goes on to the next item (`owner-way`, Loops and refactors, where the next item comes from).
 
 ## Commands
 

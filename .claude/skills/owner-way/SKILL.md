@@ -139,6 +139,20 @@ wins there.
   Learn, Songs, Practice, the Player, the score editor, Profile, Settings, Search, and round again, each round the
   area's canvas improved first and the app then built to it. Only
   the word "stop" ends it.
+- **A message inside a loop adds work; it never ends the loop** (owner, 2026-11-18: "if you think that you finished
+  the work, you should find yourself work and start from the beginning. you have basically no reason to stop, only if
+  i say \"stop\". and fix all the instuctions that made you stop"): what ended the turn of 2026-11-18 was a list of
+  asks (refactor the settings, research Learn) taken for the whole task: once the list was done a summary was
+  written. The asks of a message go to the front of the queue; when they are done the loop goes straight on to the
+  next item below, in the same turn, with no summary between them. Finishing what was asked is never the end.
+- **Where the next item comes from when nothing is asked,** in this order, never "nothing left":
+  1. the findings noted and not yet fixed (the lines tool's PROBLEM and NOTE lines, a breach seen in the code);
+  2. the lines tool over every board, phone and laptop, one area after another (`edge-lines`), and every finding fixed;
+  3. every board at 393, 744, 852×393 and 1024 (`testing.md`), and every sheet, menu and state opened;
+  4. the rules in `edge-lines/references/laws.md` checked one by one against every board (type anatomy, spacing,
+     the design-system layers: a `.replace()` patch on a helper's output is a drift to fold into the kit);
+  5. the area's reference apps in `piano-data/reference-apps`, read again against its boards;
+  6. then Learn, Songs, Practice, the Player, the editor, Profile, Settings, Search from the start, a fresh look each.
 
 ## Whose decision is it
 
@@ -175,7 +189,8 @@ does not read first: write the spec, build it, and log it.
 - **Before starting:** fetch and check the branch is level with `main`.
 - **Don't stop at all until every task is finished.** A message is not a stop: take it in and carry on; stop only on the
   word "stop". A finished item, a pushed commit or a passing suite is not a stopping point; the next item is. End a turn
-  only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left: start again
+  only when every task is done and nothing is left, then report what you did; in a loop nothing is ever left (the next
+  item comes from the list in Loops and refactors): start again
   from the beginning ([Loops and refactors](#loops-and-refactors)). On "continue", pick up exactly where the work
   stopped.
 - **Answer questions first,** in a line or two, then carry on in the same turn. Outside a loop, asked only to research
