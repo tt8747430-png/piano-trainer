@@ -123,8 +123,9 @@ H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; jus
 CAPS = lambda t: f'<h3 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
 
 # ── controls ──
-def SEGC(lst, h=32, fs=14):
-    return f'<div role="radiogroup" style="flex: none; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
+def SEGC(lst, h=32, fs=14, fill=False):
+    """A segmented choice; fill=True when it takes its row's width (a mode switch across a bar)."""
+    return f'<div role="radiogroup" style="flex: {'1' if fill else 'none'}; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
 def CHIPS(lst):
     return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -4px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 KCHIPS = CHIPS
@@ -171,9 +172,11 @@ def BTN(label, act='', href='', kind='primary', h=50, grow=True):
     return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
 def PLAYBTN(size=52):
     return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>'
-def DOCK(inner, bottom=34, pad=8):
-    """The floating glass bar at the foot of a phone page."""
-    return f'<div role="toolbar" style="position: absolute; left: 16px; right: 16px; bottom: {bottom}px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
+def DOCK(inner, bottom=34, pad=8, w=None):
+    """The floating glass bar at the foot of a page: the phone's full width, or w wide and centred (a laptop's
+    selection bar, 'auto' to hug its acts); not for the laptop's dock in the flow, which is DOCK_L."""
+    place = 'left: 16px; right: 16px;' if w is None else 'left: 50%; transform: translateX(-50%);' + ('' if w == 'auto' else f' width: {w}px;')
+    return f'<div role="toolbar" style="position: absolute; {place} bottom: {bottom}px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
 def DOCK_L(inner, w=560):
     return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
 def CARD(inner, pad='14px 16px', extra=''):
@@ -186,9 +189,12 @@ def ROOTGRID(lst='roots'):
     return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
 def _BSHEET(cond, title, body, done='Done'):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
-def BSHEET(cond, title, body, done='Done'):
-    # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head
+def BSHEET(cond, title, body, done='Done', tall=False):
+    # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head;
+    # tall: a sheet that keeps its full height while its list changes (Search, a chord type's list)
     t = _BSHEET(cond, title, body, done or '')
+    if tall:
+        t = t.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;', 1)
     return re.sub(r'<button[^>]*>' + '</button>', '', t, count=1) if done is None else t
 # A row's ··· menu (owner, 2026-11-17: "what kind of nonsense is to put this delete in this cnetered popup with doen
 # button"; Apple HIG, Pull-down buttons and Menus; Material 3, Menus): a ··· opens a menu at its button, on a phone as

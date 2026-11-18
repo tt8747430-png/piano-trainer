@@ -397,7 +397,7 @@ SPACT_P = (f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{
 # The selection bar, the library's floating glass bar (SELBAR): Restore, and the loss in crimson, on what is picked
 _ASELIN = (SELACT('{{restoreSelL}}', 'restoreSel', RESTOREI) + SELACT('{{binSelL}}', 'binSel', ACTIC['Delete'], RED))
 ASELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_ASELIN, 34)}</sc-if>'
-ASELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_ASELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 440px; bottom: 28px') + '</sc-if>'
+ASELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_ASELIN, 28, w=440) + '</sc-if>'
 SPACT = SPACT_P  # the laptop's bar the same glass capsule
 _AMENUS = (ROWMENU('amoreOn', '{{whoT}}', [('action', 'Restore', 'restoreOne'), ('action', 'Move to Trash', 'binOne', RED)])
            + ROWMENU('tmoreOn', '{{whoT}}', [('action', 'Restore', 'restoreOne'), ('action', 'Delete permanently', 'askPerm', RED)], w=260))

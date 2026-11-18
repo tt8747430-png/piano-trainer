@@ -122,7 +122,7 @@ FAB = lambda bottom: OFFSEL(NEWDIAL([('New course', 'newCourse'), ('New lesson',
 YSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 _YSELIN = SELACT('{{selDupL}}', 'selDup', DUPSEL) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
 YSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_YSELIN, 34)}</sc-if>'
-YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: calc(50% - 220px); width: 440px; bottom: 28px') + '</sc-if>'  # centred on the table, which keeps 56 at each side of the pane
+YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28, w=440) + '</sc-if>'  # centred on the table, which keeps 56 at each side of the pane
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 # a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
 ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))

@@ -47,7 +47,7 @@ TKROW = TKROW.replace('<div style="min-height: 64px; display: flex;', '<div styl
 TKSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 _TKSELIN = SELACT('{{selDlL}}', 'selDl', ACTIC['Export']) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
 TKSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_TKSELIN, 34)}</sc-if>'
-TKSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_TKSELIN, 28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 440px; bottom: 28px') + '</sc-if>'
+TKSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_TKSELIN, 28, w=440) + '</sc-if>'
 TKLIST = (IF('some', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="3">{TKROW}</sc-for></div>', 'true')
           + SHOWSTATES() + EMPTY('none', MUSICN, 'No takes yet', 'Press Record beside Play in the editor, play, then Stop: each take is kept here.'))
 

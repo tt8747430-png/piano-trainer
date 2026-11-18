@@ -874,7 +874,7 @@ D_BASS = (f'<div role="radiogroup" aria-label="In the bass" style="border-radius
           f'<button type="button" role="radio" aria-checked="{{{{r.on}}}}" onClick="{{{{r.pick}}}}" style="width: 100%; min-height: 52px; box-sizing: border-box; border: 0; box-shadow: inset 0 -1px 0 {LINE}; background: transparent; padding: 6px 14px 6px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; font: inherit; text-align: left"><span style="flex: 1; min-width: 0; font-size: 16px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</span><span style="flex: none; width: 18px; font-size: 17px; font-weight: 700; color: #7A5418">{{{{r.mark}}}}</span></button></sc-for></div>')
 def DRAWERS(phone_like):
     if phone_like:
-        return BSHEET('isMRoot', 'Root', D_ROOT) + BSHEET('isMType', 'Chord type', D_TYPE).replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;') + BSHEET('isMBass', 'In the bass', D_BASS)
+        return BSHEET('isMRoot', 'Root', D_ROOT) + BSHEET('isMType', 'Chord type', D_TYPE, tall=True) + BSHEET('isMBass', 'In the bass', D_BASS)
     return (POPOVER('isMRoot', 'Root', D_ROOT, 'left: calc(50% - 210px); top: 500px', 420) + POPOVER('isMBass', 'In the bass', D_BASS, 'left: calc(50% - 210px); top: 500px', 420)
             + POPOVER('isMType', 'Chord type', D_TYPE, 'left: calc(50% - 210px); top: 150px', 420).replace('max-height: 760px;', 'height: 620px;'))
 # a switch row is one control: the row is the switch and carries its name
