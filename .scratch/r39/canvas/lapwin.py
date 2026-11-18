@@ -88,9 +88,7 @@ def _acct(m):
 
 def lapwin(h):
     # Help opened Legal (a misleading link); the User guide's home is Settings › Support (one home)
-    h = re.sub(r'<a role="menuitem" href="LegalLaptop\.dc\.html" style="[^"]*">Help</a>', '', h).replace('<div style="height: 1px; margin: 4px 12px; background: #E4DCD2"></div><a role="menuitem" href="SignInLaptop', '<div style="height: 1px; margin: 4px 12px; background: #DAD1C8"></div><a role="menuitem" href="SignInLaptop')
-    # the account menu wears the kit's one menu shell (MENUSHELL: 6 in, 16 corners, glass), on boards wrapped before it did
-    h = h.replace('position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; padding: 6px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 0 0 1px rgba(26,22,18,0.06), 0 2px 4px rgba(26,22,18,0.08), 0 18px 40px -12px rgba(26,22,18,0.28); display: flex; flex-direction: column; gap: 2px', 'position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('font-size: 13px; color: #6B6259; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@', 'font-size: 13px; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@')
+    h = re.sub(r'<a role="menuitem" href="LegalLaptop\.dc\.html" style="[^"]*">Help</a>', '', h)
     if 'data-lapwin' in h or _LAPHEAD_OLD not in h:
         return h
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)

@@ -711,7 +711,7 @@ return {
       retryHands: () => set({ demo: 'handsLoading' }), showKeys: () => set({ demo: '', kbView: '2d' }),
       midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo] && demo !== 'midiOn', midiSubVal: demo === 'midiOn' ? 'Roland FP-30X' : 'None', midiSubValC: demo === 'midiOn' ? C.ink : C.soft,
       soundSubVal: demo === 'offline' ? 'Lighter piano' : 'Grand piano', soundSubValC: demo === 'offline' ? C.ink : C.soft, soundSub: demo === 'offline' ? 'Offline: a lighter sampled piano plays' : '', soundSubOn: demo === 'offline',
-      textZoom: demo === 'large' ? 1.3 : 1, barZoom: demo === 'large' ? 1.1 : 1,
+      textZoom: demo === 'large' ? 1.3 : 1,
       atMost: seq.length >= 8, mostWord: seq.length + ' of 8 chords', sayMost: () => set({ toast: { t: 'The staff holds 8 chords. Remove one to add another.' } }) }; })(),
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',
@@ -994,7 +994,6 @@ for f in ('Chords', 'ChordsLaptop'):
                          ('Play as: block chord or arpeggio', 'Play as', True), ('Remove {{k.s}}', 'Remove {{k.s}}', True)):
         # a control that already carries its tip (the kit's Back) keeps the one
         h = re.sub(r'aria-label="%s"(?![^>]*data-tip=)' % re.escape(lab), lambda m: 'aria-label="%s" data-tip="%s"%s' % (lab, tip, ' data-tip-up' if up else ''), h)
-    h = h.replace('<div role="toolbar" aria-label="Voicing, sound and hands" style="', '<div role="toolbar" aria-label="Voicing, sound and hands" style="zoom: {{barZoom}}; ')
     h = re.sub(r'(<(?:section|div) role="dialog"[^>]*?style=")', r'\1zoom: {{textZoom}}; ', h)
     open(OUT + f + '.dc.html', 'w').write(h)
 # the app's sidebar goes in last, after this page's own type and spacing passes, so it is every board's drawing

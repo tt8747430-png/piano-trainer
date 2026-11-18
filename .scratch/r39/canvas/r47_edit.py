@@ -144,7 +144,6 @@ LEARNEDB = LEARNEDT
 RBAR = IB('Settings', GEARI, 'openSettings') + EDITBTN
 PMBTN = IB('Publishing', DOTS, 'openPm')
 PUBGO = TB('{{pubL}}', 'publishNow')
-lph = lph.replace('EDITBTN_PLACEHOLDER', '')
 lph = lph.replace(EDITBTN + IB("More", DOTS, "openMore"), RBAR).replace('{LANGSEG}{PUBBTN}', '').replace(LANGSEG + PUBBTN, PUBGO)
 llm = llm.replace(EDITBTN + IB("More", DOTS, "openMore"), RBAR).replace(DSTATUS + LANGSEG + PUBBTN, PUBGO)
 # owner, 2026-11-17: "i dont like this learned chip … in the header and i dont like that i need to scroll to the end to

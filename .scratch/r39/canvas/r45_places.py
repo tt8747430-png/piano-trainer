@@ -198,7 +198,7 @@ vlm = (SHOWSTATES('edStates') + f'<sc-if value="{{{{reading}}}}" hint-placeholde
        # lesson marked Next in the path, and its Levels repeated Learn's, one Back away
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 56px 40px 96px">'
        # the page starts on its title's edge, the head as wide as a line of reading, the chapters' rows across the page
-       f'<div style="display: flex; flex-direction: column; gap: 24px"><div style="width: min(640px, 100%)">{LVHEAD.replace('flex: 1; min-width: 0; height: 52px', 'flex: none; min-width: 360px; height: 52px')}</div>{PATHF(True)}</div></main>'
+       f'<div style="display: flex; flex-direction: column; gap: 24px"><div style="width: min(640px, 100%)">{LVHEAD}</div>{PATHF(True)}</div></main>'
        f'{LTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px")}')
 detail('LearnLevel', 'Foundations', LEARN_JS, vph, vlm, '', BSHEET('chapOn', 'Chapter', CHAPBODY), POPOVER('chapOn', 'Chapter', CHAPBODY, 'left: 600px; top: 240px', 380), 'Learn')
 

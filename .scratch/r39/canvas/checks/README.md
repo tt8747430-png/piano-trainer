@@ -44,3 +44,5 @@ RT=<path to the Design type's dc-runtime.js> CSP=1 node run.mjs <Board> <width> 
   control in its screen that does not leave the board, and measures each layer that opens, two levels deep (New ›
   New lesson): OUTSIDE the screen, a word CUT at its edge, two controls in OVERLAP, a phone's SHEET ON A LAPTOP,
   a SMALL control, an EMPTY layer, a page that THROWS. Its last line counts the layers opened and those with problems.
+
+`python3 checks/dead_replaces.py <scratch dir>` builds a copy of the canvas with every `.replace(a, b)` wrapped and prints each call whose `a` was never found: a patch on a helper's output that silently stopped applying (the laptop take's roll stood at 340×120 for rounds). It names suspects only; remove one, rebuild, and `diff -rq` against a copy of `practice/project` made before is the proof. `index.py:43` (a name with no comma) is expected.
