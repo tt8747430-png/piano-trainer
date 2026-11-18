@@ -3,15 +3,8 @@ import { Users } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { GroupsData } from '@/features/share-folder'
-import { ButtonLink } from '@/shared/ui'
+import { ButtonLink, Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  Empty,
-  EmptyContent,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/shared/ui/primitives/empty'
 
 /**
  * What a group page shows in place of its groups (R32-C): signed out, why groups need an account and
@@ -29,23 +22,15 @@ export function GroupsState({
   actions?: ReactNode
 }) {
   const { t } = useTranslation('songs')
+  // Failed or offline: the kit's one empty state, Try again its one honey way on.
   if (data.kind === 'failed')
     return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Users aria-hidden />
-          </EmptyMedia>
-          <EmptyTitle role="alert">
-            {t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
-          </EmptyTitle>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button variant="soft" size="lg" onClick={onRetry}>
-            {t('groups.retry')}
-          </Button>
-        </EmptyContent>
-      </Empty>
+      <Said
+        icon={Users}
+        title={t(data.reason === 'offline' ? 'groups.offline' : 'groups.failed')}
+        primary
+        action={<Button onClick={onRetry}>{t('groups.retry')}</Button>}
+      />
     )
   // Signed out, or no group yet (the Groups board's first run): a card at the page's start, never a
   // line of text floating mid-screen; what groups are drawn (a group, the faces of a choir),
