@@ -78,7 +78,7 @@ def LROW(href, indent):
             f'{OFFSEL(ROWMORE("l.more", "{{l.t}}"))}</div>')
 def LIST(lap):
     lh, ch = ('LessonLaptop.dc.html', 'CourseLaptop.dc.html') if lap else ('Lesson.dc.html', 'Course.dc.html')
-    course = (f'<div style="position: relative; display: flex; align-items: center; gap: 0; min-height: 64px; padding: 6px 4px 6px 0; box-shadow: inset 0 -1px 0 {FILL}">{YHIT("c")}{YCHECK("c").replace("margin: 0 10px", "margin: 0 18px 0 10px")}'
+    course = (f'<div style="position: relative; display: flex; align-items: center; gap: 0; min-height: 60px; padding: 6px 4px 6px 0; box-shadow: inset 0 -1px 0 {FILL}">{YHIT("c")}{YCHECK("c").replace("margin: 0 10px", "margin: 0 18px 0 10px")}'
               f'<button type="button" aria-label="Show its lessons" aria-expanded="{{{{c.isOpen}}}}" onClick="{{{{c.toggle}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center"><span style="display: flex; transform: {{{{c.chev}}}}; transition: transform .2s cubic-bezier(.22,1,.36,1)">{CHEV_R}</span></button>'
               f'<a href="{ch}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none"><span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 11px; background: {{{{c.paint}}}}; display: flex; align-items: center; justify-content: center">{FOLDI}</span>'
               f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{c.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{c.d}}}}</span></span></a>{OFFSEL(ROWMORE("c.more", "{{c.t}}"))}</div>'
