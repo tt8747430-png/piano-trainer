@@ -63,7 +63,7 @@ def FTILE(c, kind, w=56):
     if kind == 'heart': return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {c}; display: flex; align-items: center; justify-content: center">{HEART_T}</span>'
     if kind == 'shared': return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {c}; display: flex; align-items: center; justify-content: center">{SHARED_T}</span>'
     return TILE56(STACK(c).replace('url("', "url('").replace('")', "')"), w)
-SEEALL = lambda href, n='': f'<a href="{href}" style="min-height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">See all{n}</a>'
+SEEALL = lambda href, n='': f'<a href="{href}" style="min-height: 44px; margin: -12px 0; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">See all{n}</a>'
 SECH = lambda t, right='': f'<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
 CARDROW = f'border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
 
@@ -210,7 +210,7 @@ ROWITEMS = lambda sfx: [('link', 'Practise', '', 'Player' + sfx), ('link', 'Edit
 ADDBTN = IB('New', PLUS, 'openAdd')
 _ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link', 'Trash', '2', 'Trash' + sfx), bg=SHEET)
 ovph = f'''{TITLEBAR('Songs')}
-<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 28px">{SHOWSTATES()}
+<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 32px">{SHOWSTATES()}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if>{RESULTS('Song.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
 <sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP_PH}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All songs', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Song.dc.html')}</div></section>
@@ -318,7 +318,7 @@ _SHHEAD = lambda w: (f'<div style="display: flex; align-items: center; gap: 16px
 # under it is the cover and who shared it.
 shph = (f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
         f'{_SHHEAD(112)}{SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="4"><div style="position: relative">{SONGROW("Song.dc.html")}</div></sc-for>')}</main>{TABBAR("Songs")}')
-shlm = (f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 28px">'
+shlm = (f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 32px">'
         f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All songs"', 'aria-label="Choir hymns"', 1)}</main>')
 detail('SharedFolder', 'Choir hymns', FLJS([{'t': a, 's': b, 'v': c, 'when': d, 'add': 0, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d in CHOIR]), shph, shlm, '', ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('.dc.html')), ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('Laptop.dc.html')), 'Songs')
 print('flat songs ok')
