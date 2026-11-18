@@ -78,7 +78,7 @@ const BADGES = [["Streak Keeper", "Silver", 2, "Practise on days in a row: a day
 
     const S = (o) => set(o), page = st.page ?? null;
     const DAYS = [['M', 18], ['T', 25], ['W', 0], ['T', 32], ['F', 15], ['S', 40], ['S', 22]];
-    const week = DAYS.map(([d, m], i) => ({ d, h: Math.max(4, Math.round(m * 1.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
+    const week = DAYS.map(([d, m], i) => ({ d, h: Math.max(4, Math.round(m * 1.6)) + 'px', hl: Math.max(4, Math.round(m * 3.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
     // the month: November 2026 starts on a Sunday; today is the 11th
     const mon = st.mon ?? 0, M = mon === 0 ? { t: 'November 2026', first: 6, len: 30, done: (d) => d <= 11 && d !== 4, rest: (d) => d === 4, today: 11, n: 10 } : { t: 'October 2026', first: 3, len: 31, done: (d) => [2, 3, 5, 6, 7, 9, 12, 13, 14, 15, 16, 19, 20, 22, 23, 26, 27, 28, 29, 30, 31].includes(d), today: 0, n: 21 };
     const cells = []; for (let i = 0; i < M.first; i++) cells.push({ d: '', bg: 'transparent', ink: '#332921', ring: 'none', a: '' });
