@@ -339,6 +339,47 @@ another component's job is a finding.
   13. What a web footer holds (Legal, About, version, Report a problem) lives at the foot of Settings, after its
       groups, never on a working screen; the phone's tab bar is navigation, not a footer, and holds only the places.
 
+### More from "Common UI Components" (Uxcel, Design Terminology, sent 2026-11-18)
+
+- **Button or link.** "Clicking buttons changes the state of a system … while clicking links redirects you somewhere
+  else and doesn't change the system's state. Plus, links often appear in the text and thus, can be longer."
+  14. What changes something (Play, Save, Add, Delete, a toggle, opening a sheet or menu) is a button; what goes to
+      another page (See all, a lesson's "After: 6 · Half steps…", Find a song in Explore) is a link: link-coloured text
+      or a row with a chevron ›, never drawn as a filled button. A button never navigates and a link never acts.
+- **Navigation.** "A product's navigation should be consistent across all pages."
+  15. The places' bar (phone tab bar, laptop sidebar) is identical on every board that shows it: same items, order,
+      icons, words and current mark.
+- **Hamburger menu.** "A compact way to hide navigation links … particularly useful for mobile."
+  16. No ☰ in this app: the four places are always shown in the tab bar, and a laptop's sidebar folds with its own
+      button (the sidebar glyph), never behind a hamburger.
+- **Breadcrumbs.** "Display users' current location"; "the last item … should stand out … It should not be a link."
+  17. Where a trail is shown (a lesson's "Foundations · Chapter 3 · Lesson 7", Settings' Place row), every step before
+      the last opens its page and the last one, the page itself, is plain ink and not a link.
+- **Containers.** "Divide content into meaningful sections … Rigid containers restrict the size … Flexible containers
+  grow to fit."
+  18. A container is drawn only where it marks a section (laws, Cards: whitespace first); a cover, a keyboard or a
+      staff sits in a rigid box of fixed proportion, a list or text in a flexible one that grows, never a fixed-height
+      box that cuts its words.
+- **Menus.** "Command labels paired with icons, and occasionally, some helper text."
+  19. A menu's items are a short command each, an icon at the left when any item has one (then all do), no helper
+      text unless the item's effect is a loss; the loss last, in crimson, after a hairline.
+- **Toggle / segmented buttons.** "Group 2 functions (sometimes 3) into a single container … All buttons are usually
+  equal in width, and only one button can be selected … highlighted with colors or overlays."
+  20. A segmented control holds 2 to 4 options of equal width, one always chosen and shown by a raised fill; more than
+      four, or options of very different length, become a menu or a radio list.
+- **Inputs.** "Labels, placeholder text, and design cues like icons can guide users."
+  21. A field's label is outside it and always visible; the placeholder shows only an example or format ("e.g. 92");
+      a search field carries the magnifier.
+- **Labels.** "A static piece of text that people can read and copy but not edit … help people understand the current
+  context and what they can do next."
+  22. A label is never tappable unless it is styled as a link or sits in a row that opens; static text and controls are
+      told apart by look (scan-first 4).
+- **Radio buttons.** "Once selected, an option can't be unselected … include a 'None of the above' or similar option."
+  23. As rule 4: Off or None is its own radio when not choosing is a real choice.
+- **Hyperlinks.** "Usually immediately recognizable by its bright color and/or underline."
+  24. A link inside running text is the link colour (`LINK`) and is the only text in that colour; the same colour on
+      plain text is a finding.
+
 ## Predictions and suggestions (Uxcel, "What Is AI-Powered UX?", sent 2026-11-18)
 
 Where the app guesses for the learner: chords detected from a recording or an import, a suggested next song or
