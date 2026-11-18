@@ -60,8 +60,8 @@ const NN = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭'
 function calmKeys(lo, hi, marks, W, H) {
   const ws = []; for (let m = lo; m <= hi; m++) if (NAT.includes(m % 12)) ws.push(m);
   const w = W / ws.length, bw = w * 0.6;
-  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w).toFixed(1), w: w.toFixed(1), h: H, bg: k ? k[0] : '#FEFDFA', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#6B6259', fw: k ? 700 : 500 }; });
-  const blacks = []; for (let m = lo; m <= hi; m++) { if (NAT.includes(m % 12)) continue; const i = ws.indexOf(m - 1); const k = marks[m]; blacks.push({ left: ((i + 1) * w - bw / 2).toFixed(1), w: bw.toFixed(1), h: Math.round(H * 0.62), bg: k ? k[0] : '#332C28', label: k ? k[1] : '' }); }
+  const whites = ws.map((m, i) => { const k = marks[m]; return { left: (i * w / W * 100).toFixed(3) + '%', w: (w / W * 100).toFixed(3) + '%', h: H, bg: k ? k[0] : '#FEFDFA', label: k ? k[1] : (m % 12 === 0 ? 'C' + (Math.floor(m / 12) - 1) : ''), ink: k ? '#332921' : '#6B6259', fw: k ? 700 : 500 }; });
+  const blacks = []; for (let m = lo; m <= hi; m++) { if (NAT.includes(m % 12)) continue; const i = ws.indexOf(m - 1); const k = marks[m]; blacks.push({ left: (((i + 1) * w - bw / 2) / W * 100).toFixed(3) + '%', w: (bw / W * 100).toFixed(3) + '%', h: Math.round(H * 0.62), bg: k ? k[0] : '#332C28', label: k ? k[1] : '' }); }
   return { whites, blacks };
 }
 // a wheel column: seven rows around the chosen one

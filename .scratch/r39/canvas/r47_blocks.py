@@ -12,8 +12,8 @@ BK = 'position: absolute; top: 5px; box-sizing: border-box; border-radius: 0 0 4
 def PKEYS(lst, h):
     """The Player's keys, driven by the board's calmKeys list."""
     return (f'<div role="img" aria-label="The keys" style="position: relative; flex: none; width: 100%; height: {h + 5}px; overflow: hidden; {FRAME}">{FELT}'
-            f'<sc-for list="{{{{{lst}.whites}}}}" as="k" hint-placeholder-count="14"><span style="{WK}; left: {{{{k.left}}}}px; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-weight: {{{{k.fw}}}}">{{{{k.label}}}}</span></sc-for>'
-            f'<sc-for list="{{{{{lst}.blacks}}}}" as="k" hint-placeholder-count="10"><span style="{BK}; left: {{{{k.left}}}}px; width: {{{{k.w}}}}px; height: {{{{k.h}}}}px; background: {{{{k.bg}}}}; color: {INK}">{{{{k.label}}}}</span></sc-for></div>')
+            f'<sc-for list="{{{{{lst}.whites}}}}" as="k" hint-placeholder-count="14"><span style="{WK}; left: {{{{k.left}}}}; width: {{{{k.w}}}}; height: {{{{k.h}}}}px; background: {{{{k.bg}}}}; color: {{{{k.ink}}}}; font-weight: {{{{k.fw}}}}">{{{{k.label}}}}</span></sc-for>'
+            f'<sc-for list="{{{{{lst}.blacks}}}}" as="k" hint-placeholder-count="10"><span style="{BK}; left: {{{{k.left}}}}; width: {{{{k.w}}}}; height: {{{{k.h}}}}px; background: {{{{k.bg}}}}; color: {INK}">{{{{k.label}}}}</span></sc-for></div>')
 
 NAT = [0, 2, 4, 5, 7, 9, 11]
 def SKEYS(lit, lo=60, hi=76, h=96, label='The keys'):

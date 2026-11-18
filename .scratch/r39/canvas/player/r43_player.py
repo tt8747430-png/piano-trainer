@@ -103,6 +103,9 @@ def patch(t, phone):
     # ── fonts and the Chords page's interaction rules ──
     t = t.replace('family=Instrument+Serif&amp;display=swap', 'family=Instrument+Serif&amp;family=Noto+Music&amp;display=swap', 1)
     t = t.replace('</style>', '</style>' + MOTION, 1)
+    # ── the score keeps its page width and centres when the phone layout is wider (an iPad upright, 744) ──
+    t = t.replace('tabindex="0" ref="{{scoreRef}}" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0;', 'tabindex="0" ref="{{scoreRef}}" style="position: absolute; left: max(0px, calc(50% - 201px)); right: max(0px, calc(50% - 201px)); top: 0; bottom: 0;') if phone else t
+    t = t.replace('<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px; bottom: 0; overflow: hidden">', '<main style="position: absolute; left: 0; right: 0; top: {{areaTop}}px; bottom: 0; overflow: hidden; background: #F7F3EE">') if phone else t
     # ── the bar in light glass; the chosen view ink ──
     t = sub(t, r"glass: \w+ \? '[^']*' : '[^']*', glassFg: \w+ \? '[^']*' : '[^']*', glassLine: \w+ \? '[^']*' : '[^']*',", f"glass: '{GLASS}', glassFg: '{INK}', glassLine: '{LINE}',")
     t = sub(t, r"setBg: open === 'settings' \? \(\w+ \? '[^']*' : '[^']*'\) : \(\w+ \? '[^']*' : '[^']*'\),", f"setBg: open === 'settings' ? '{FILL}' : '{GLASS}',")
@@ -562,6 +565,9 @@ def floating(t, phone):
 
 for name, phone in (('PlayerApp', True), ('PlayerDesk', False)):
     t = floating(onebar(headed(grid4(parts(icons(kit(patch((HERE / 'base' / f'{name}.dc.html').read_text(), phone), phone)), phone), phone), phone), phone), phone)
+    if phone:  # the floating piano keeps its place over the centred score when the phone layout is wider (744)
+        t = t.replace('left: {{kbLeft}}px', 'left: calc({{kbLeft}}px + max(0px, 50% - 201px))')
+        t = t.replace('position: absolute; left: 0; top: 0; width: 402px; height: 874px; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)', 'position: absolute; inset: 0; border: 0; padding: 0; background: rgba(26, 22, 18, 0.32)')
     (OUT / f'{name}.dc.html').write_text(t)
 # a board for the new page
 w = (OUT / 'PlayerSettings.dc.html').read_text()
