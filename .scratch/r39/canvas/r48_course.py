@@ -65,7 +65,11 @@ def CBODY(lap):
                  # row is the link, its hover the sign
                  .replace('<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{l.t}}</span>', '<span style="flex: 0 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{l.t}}</span>', 1)
                  .replace(f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><span style="color: {SOFT}; display: flex; padding-right: 4px">{CHEV_R}</span></sc-if>', '', 1))
-        songs = SONGROWS.replace('overflow: hidden">', 'overflow: hidden; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(240px, calc((100% - 0px) / 3)), 1fr))">', 1)
+        # loop round 67: the songs stand bare on the lessons' grid, as the lessons do (one kind of list, one shape;
+        # a box round a homogeneous list is common region overused, NN/g)
+        songs = (SONGROWS.replace(f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">', '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
+                 .replace(f'padding: 8px 12px; box-shadow: inset 0 -1px 0 {FILL};', 'padding: 8px 0;', 1)
+                 .replace('width: 40px; height: 40px; border-radius: 8px;', 'width: 44px; height: 44px; border-radius: 8px;', 1))
         songs = re.sub(r'<span style="color: [^"]*; display: flex[^"]*">' + re.escape(CHEV_R) + '</span>', '', songs)
         return (f'<div style="display: grid; grid-template-columns: 360px minmax(0, 640px); gap: 40px; align-items: stretch">{COVER.replace("height: 132px;", "min-height: 132px; height: 100%;", 1)}<div style="display: flex; flex-direction: column; gap: 16px">{head}{go}</div></div>'
                 f'{H2("Lessons")}{lrows}{H2("Guided songs")}{songs}')
