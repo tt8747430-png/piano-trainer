@@ -178,12 +178,14 @@ STRIP = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div 
 # then Intro I–III and Ending/rit. I–III (a phone's two rows; one row of groups on a laptop), each group named over it.
 # Only what the Genos takes over MIDI (the brief: ACMP, Sync, Auto Fill, Fade and OTS Link have no message).
 LAMP59 = lambda key, label, act, spoken='': f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{key}.on}}}}" aria-label="{spoken or label}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap">{label}</button>'
+# Start/Stop one width in the full and the compact strip (it was 96 in one and 88 in the other)
+START59 = LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px', 1)
 LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" aria-pressed="{{{{l.on}}}}" aria-label="{spoken} {{{{l.n}}}}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 14px; font-weight: 700">{{{{l.n}}}}</button></sc-for>'
 CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">{t}</span>'
 GRP59 = lambda label, cols, inner, grow='1': f'<div role="group" aria-label="{label}" style="flex: {grow} 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">{CAP59(label)}<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 4px">{inner}</div></div>'
 HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 40px"><span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
           f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{arTitle}}}}</span>'
-          + LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 96px') + '</div>')
+          + START59 + '</div>')
 MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
 INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
 END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
@@ -287,7 +289,7 @@ DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}">
 TRAY = (f'<sc-if value="{{{{anyHidden}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 16px 8px"><span style="font-size: 14px; color: {SOFT}">Hidden</span>'
         f'<sc-for list="{{{{hiddenPanels}}}}" as="h" hint-placeholder-count="1"><button type="button" onClick="{{{{h.show}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">+ {{{{h.l}}}}</button></sc-for></div></sc-if>')
 BARR = (f'<sc-if value="{{{{layNot}}}}" hint-placeholder-val="{{{{true}}}}">' + UNDOB + GEAR() + DOTSB + '</sc-if>'
-        + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay').replace('font-weight: 600', 'font-weight: 700', 1) + '</sc-if>')
+        + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay') + '</sc-if>')
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
@@ -300,7 +302,7 @@ def GENOS76(pos, wide):
             + HEAD76 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     comp = (f'<sc-if value="{{{{gCompact}}}}" hint-placeholder-val="{{{{false}}}}"><div role="toolbar" aria-label="Genos style controls" style="position: relative; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
             f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
-            + LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px')
+            + START59
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
