@@ -147,10 +147,11 @@ async function analyse(page, scr, phone) {
   // Where the eye reads a block's left edge: a drawn surface (a fill unlike its parent's, a ring, a border) by its box;
   // anything else by its ink, where its first word, icon or picture starts (owner, 2026-11-18: "fix all the wrong
   // measured pixels": a header's padded box measured against a section's words read as a 12px miss that was not there)
-  const drawn = (el) => { const cs = getComputedStyle(el); return (opaque(bg(el)) && el.parentElement && bg(el) !== bg(el.parentElement)) || /\d/.test(cs.boxShadow) && cs.boxShadow !== 'none' || parseFloat(cs.borderLeftWidth) > 0 && opaque(cs.borderLeftColor) }
+  const drawn = (el) => { const cs = getComputedStyle(el); return (opaque(bg(el)) && el.parentElement && bg(el) !== bg(el.parentElement)) || /\d/.test(cs.boxShadow) && cs.boxShadow !== 'none' || ['Left', 'Top', 'Bottom'].some((k) => parseFloat(cs['border' + k + 'Width']) > 0 && opaque(cs['border' + k + 'Color'])) }  // a rule above or under a table is its drawn edge
   // a bar is a band across its page, and the current row's wash reaches past its words by design: both are read by their words
-  // a row washed among bare siblings of its kind is the current one, whatever its attributes say
-  const washed = (el) => /^(A|BUTTON|LI)$/.test(el.tagName) && opaque(bg(el)) && bg(el) !== bg(el.parentElement) && parseFloat(getComputedStyle(el).borderTopLeftRadius) < el.getBoundingClientRect().height / 2 - 1 && [...(el.parentElement?.parentElement?.querySelectorAll(':scope > * > ' + el.tagName) ?? [])].concat([...(el.parentElement?.children ?? [])]).some((o) => o !== el && o.tagName === el.tagName && !(opaque(bg(o)) && bg(o) !== bg(o.parentElement)))
+  // a row washed among bare siblings of its kind is the current one, whatever its attributes say; a cousin counts only
+  // when each row is wrapped alone (li > a), never a link in a heading beside a grid of cards
+  const washed = (el) => /^(A|BUTTON|LI)$/.test(el.tagName) && opaque(bg(el)) && bg(el) !== bg(el.parentElement) && parseFloat(getComputedStyle(el).borderTopLeftRadius) < el.getBoundingClientRect().height / 2 - 1 && [...(el.parentElement?.children.length === 1 ? el.parentElement.parentElement?.querySelectorAll(':scope > ' + el.parentElement.tagName + ' > ' + el.tagName) ?? [] : [])].concat([...(el.parentElement?.children ?? [])]).some((o) => o !== el && o.tagName === el.tagName && !(opaque(bg(o)) && bg(o) !== bg(o.parentElement)))
   const band = (el) => /^HEADER$/.test(el.tagName) || washed(el) || el.matches('[aria-current]:not([aria-current=false]), [aria-selected=true], [aria-checked=true], [aria-pressed=true]')
   const inkLeft = (el) => {
     if (drawn(el) && !band(el)) return el.getBoundingClientRect().left
@@ -162,7 +163,7 @@ async function analyse(page, scr, phone) {
     }
     return x === Infinity ? el.getBoundingClientRect().left : x
   }
-  const sel = 'header, h1, h2, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
+  const sel = 'header, h1, h2, h3, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
   const blocks = [...document.querySelectorAll(sel)].filter((e) => vis(e) && (!MODAL || MODAL.contains(e))).map((el) => {
     const r = el.getBoundingClientRect()
     const cs = getComputedStyle(el)
@@ -183,6 +184,7 @@ async function analyse(page, scr, phone) {
     if (r.top > scr.y + scr.h || r.left > scr.x + scr.w || r.right < scr.x) continue
     blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: false })
   }
+  const centredWords = (b) => { for (let e = b.el, i = 0; e && i < 2; e = e.parentElement, i++) { const cs = getComputedStyle(e); if (cs.textAlign === 'center' || /flex/.test(cs.display) && cs.flexDirection.startsWith('column') && cs.alignItems === 'center') return b.x - e.getBoundingClientRect().left > 8 } return false }
   const lines = []
   const problems = []
   const notes = []
@@ -198,6 +200,8 @@ async function analyse(page, scr, phone) {
     // Content inside a card sits on the card's inset; the card's own edge is what meets the page's.
     if (region(a) !== region(c)) continue
     const stacked = Math.min(a.r, c.r) > Math.max(a.x, c.x) || Math.abs(a.y - c.y) > 40
+    // centred words (a result's title and its line under it) are held by their middle, not a left edge
+    if ([a, c].some(centredWords)) continue
     if (near(a.x, c.x) && stacked) problems.push(`left edges miss by ${Math.abs(a.x - c.x)}px: ${a.tag} “${a.text}” at ${a.x}, ${c.tag} “${c.text}” at ${c.x}`)
     const side = a.b > c.y && c.b > a.y || Math.abs(a.y - c.y) <= 12
     if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
