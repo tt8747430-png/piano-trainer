@@ -175,8 +175,6 @@ export const songs = {
     archived: 'Archived',
     archivedCount: 'Archived ({{count}})',
     archivedIn: 'Archived from {{name}}',
-    unarchive: 'Unarchive',
-    unarchiveNamed: 'Unarchive {{name}}',
     list: 'Playlists',
     new: 'New playlist',
     edit: 'Edit playlist',
@@ -297,14 +295,28 @@ export const songs = {
     title: 'Title',
     composerKey: 'Composer and key',
     progress: 'Progress',
+    archived: 'Archived',
+    deleted: 'Deleted',
+  },
+  // Archive and Trash in Select (Apple Photos' Recently Deleted): on what is picked, or on all.
+  shelf: {
+    selectTitle: 'Select songs',
+    itemCount_one: '{{count}} item',
+    itemCount_other: '{{count}} items',
+    playlistLine: 'Playlist · {{songs}}',
+    restore: 'Restore',
+    restoreAll: 'Restore all',
+    toTrash: 'Move to Trash',
+    toTrashAll: 'Move all to Trash',
+    delete: 'Delete',
+    deleteAll: 'Delete all',
+    restored_one: 'Restored to the library: {{count}}',
+    restored_other: 'Restored to the library: {{count}}',
   },
   archive: {
     title: 'Archive',
+    search: 'Search the Archive',
     openCount: 'Archive: {{count}}',
-    restoreAll: 'Restore all',
-    restoredAll: 'All items restored to the library',
-    restoreNamed: 'Restore {{name}}',
-    deleted: 'Deleted songs',
     empty: {
       title: 'Nothing archived',
       description: 'Songs and playlists you archive wait here, to be restored whenever you like.',
@@ -313,10 +325,9 @@ export const songs = {
   // The Trash (R34, StemDeck's): the learner's own songs deleted, gone for good once it is emptied.
   trash: {
     title: 'Trash',
+    search: 'Search the Trash',
     openCount: 'Trash: {{count}}',
-    emptyAll: 'Empty Trash',
     emptied: 'Trash emptied',
-    restoreNamed: 'Restore {{name}}',
     deleteForGood: 'Delete permanently',
     emptying: {
       title: 'Empty the Trash?',
@@ -327,6 +338,10 @@ export const songs = {
       title: 'Delete “{{title}}” permanently?',
       body: 'The song and its recordings will be permanently deleted.',
       confirm: 'Delete permanently',
+    },
+    deletingMany: {
+      title: 'Delete {{count}} songs permanently?',
+      body: 'The songs and their recordings will be permanently deleted.',
     },
     cancel: 'Cancel',
     empty: {

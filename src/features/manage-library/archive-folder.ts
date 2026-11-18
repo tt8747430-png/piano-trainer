@@ -3,7 +3,7 @@ import * as edit from './model/layout-edits'
 
 /** A folder, with its songs, out of the library into the archive (ADR 0106). */
 export function archiveFolder(store: LibraryStore, catalog: LibraryCatalog, id: FolderId): void {
-  edit.editLibrary(store, catalog, (layout) => edit.archiveFolder(layout, id))
+  edit.editLibrary(store, catalog, (layout) => edit.archiveFolder(layout, id, Date.now()))
 }
 
 /**

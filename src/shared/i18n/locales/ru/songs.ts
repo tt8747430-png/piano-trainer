@@ -181,8 +181,6 @@ export const songs: LocaleResources['songs'] = {
     archived: 'В архиве',
     archivedCount: 'В архиве ({{count}})',
     archivedIn: 'В архиве из «{{name}}»',
-    unarchive: 'Вернуть',
-    unarchiveNamed: 'Вернуть {{name}}',
     list: 'Плейлисты',
     new: 'Новый плейлист',
     edit: 'Изменить плейлист',
@@ -298,14 +296,32 @@ export const songs: LocaleResources['songs'] = {
     title: 'Название',
     composerKey: 'Композитор и тональность',
     progress: 'Прогресс',
+    archived: 'В архиве',
+    deleted: 'Удалено',
+  },
+  // Архив и корзина в режиме выбора: действие над выбранным или над всем.
+  shelf: {
+    selectTitle: 'Выберите песни',
+    itemCount_one: '{{count}} элемент',
+    itemCount_few: '{{count}} элемента',
+    itemCount_many: '{{count}} элементов',
+    itemCount_other: '{{count}} элемента',
+    playlistLine: 'Плейлист · {{songs}}',
+    restore: 'Восстановить',
+    restoreAll: 'Восстановить всё',
+    toTrash: 'В корзину',
+    toTrashAll: 'Всё в корзину',
+    delete: 'Удалить',
+    deleteAll: 'Удалить всё',
+    restored_one: 'Восстановлено в библиотеке: {{count}}',
+    restored_few: 'Восстановлено в библиотеке: {{count}}',
+    restored_many: 'Восстановлено в библиотеке: {{count}}',
+    restored_other: 'Восстановлено в библиотеке: {{count}}',
   },
   archive: {
     title: 'Архив',
+    search: 'Поиск в архиве',
     openCount: 'Архив: {{count}}',
-    restoreAll: 'Восстановить всё',
-    restoredAll: 'Все элементы восстановлены в библиотеке',
-    restoreNamed: 'Восстановить: {{name}}',
-    deleted: 'Удалённые песни',
     empty: {
       title: 'В архиве пусто',
       description:
@@ -315,10 +331,9 @@ export const songs: LocaleResources['songs'] = {
   // Корзина (R34): удалённые песни ученика, исчезают насовсем, когда корзину очищают.
   trash: {
     title: 'Корзина',
+    search: 'Поиск в корзине',
     openCount: 'Корзина: {{count}}',
-    emptyAll: 'Очистить корзину',
     emptied: 'Корзина очищена',
-    restoreNamed: 'Восстановить: {{name}}',
     deleteForGood: 'Удалить безвозвратно',
     emptying: {
       title: 'Очистить корзину?',
@@ -329,6 +344,10 @@ export const songs: LocaleResources['songs'] = {
       title: 'Удалить «{{title}}» безвозвратно?',
       body: 'Песня и её записи будут удалены безвозвратно.',
       confirm: 'Удалить безвозвратно',
+    },
+    deletingMany: {
+      title: 'Удалить безвозвратно песни ({{count}})?',
+      body: 'Песни и их записи будут удалены безвозвратно.',
     },
     cancel: 'Отмена',
     empty: {

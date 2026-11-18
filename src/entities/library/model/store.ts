@@ -29,7 +29,7 @@ import { isEmptyDetails, sanitiseSongDetails, type SongDetails } from './song-de
 export type CardPlace = FolderId | 'home'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 7
+export const LIBRARY_VERSION = 8
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
@@ -152,6 +152,10 @@ function songLooksOf(saved: unknown): Partial<Record<PieceId, FolderLook>> {
   return looks
 }
 
+/** When something went to the archive or the Trash: a time read, or none known (0). */
+const timeOf = (value: unknown): number =>
+  typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0
+
 /** Stored JSON is untrusted: what reads is kept, each folder and each song once, as many as are kept. */
 function sanitize(persisted: unknown): LibraryState {
   const saved = savedObject<LibraryState>(persisted)
@@ -171,20 +175,22 @@ function sanitize(persisted: unknown): LibraryState {
       if (!isRecord(value)) return []
       if (value.kind === 'song') {
         const [id] = songsOf([value.id], songs)
-        return id ? [{ kind: 'song', id, from: placeOf(value.from) }] : []
+        return id ? [{ kind: 'song', id, from: placeOf(value.from), at: timeOf(value.at) }] : []
       }
       const folder = value.kind === 'folder' ? folderOf(value.folder, songs) : null
       if (!once(folder)) return []
       const subfolders = (Array.isArray(value.subfolders) ? value.subfolders : [])
         .map((each) => folderOf(each, songs))
         .filter(once)
-      return [{ kind: 'folder', folder, subfolders, index: indexOf(value.index) }]
+      return [
+        { kind: 'folder', folder, subfolders, index: indexOf(value.index), at: timeOf(value.at) },
+      ]
     },
   )
   const trash = (Array.isArray(saved.trash) ? saved.trash : []).flatMap((value): TrashedSong[] => {
     if (!isRecord(value)) return []
     const [id] = songsOf([value.id], songs)
-    return id ? [{ id, from: placeOf(value.from) }] : []
+    return id ? [{ id, from: placeOf(value.from), at: timeOf(value.at) }] : []
   })
   // Past every own folder read: none is given again.
   const past =

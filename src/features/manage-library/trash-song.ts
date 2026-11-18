@@ -13,6 +13,6 @@ export function trashSongs(
   ids: readonly PieceId[],
 ): PieceId[] {
   const own = ids.filter(isOwnSongId)
-  edit.editLibrary(store, catalog, (layout) => edit.trashSongs(layout, own))
+  edit.editLibrary(store, catalog, (layout) => edit.trashSongs(layout, own, Date.now()))
   return own
 }
