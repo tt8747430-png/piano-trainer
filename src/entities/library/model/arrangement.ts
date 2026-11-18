@@ -36,6 +36,7 @@ export type ShelvedEntry =
       readonly folder: ShelvedFolder
       readonly subfolders: readonly ShelvedFolder[]
       readonly index: number
+      readonly at: number
     }
 
 /**

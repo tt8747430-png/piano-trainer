@@ -100,9 +100,7 @@ export function SharedFolderPage() {
     },
     {
       key: 'favourite',
-      label: t(
-        favourites.includes(entry.id) ? 'common:library.unfavourite' : 'common:library.favourite',
-      ),
+      label: t(favourites.includes(entry.id) ? 'select.unfavourite' : 'select.favourite'),
       icon: favourites.includes(entry.id) ? HeartOff : Heart,
       paint: 'sand',
       onSelect: () => toggleFavourite(library, entry.id),

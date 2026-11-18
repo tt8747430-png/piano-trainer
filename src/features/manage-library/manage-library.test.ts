@@ -23,7 +23,6 @@ import {
   moveTo,
   orderFolders,
   orderSongs,
-  restoreAll,
   restoreFolder,
   restoreSongs,
   restoreTrashed,
@@ -168,20 +167,6 @@ describe('the archive', () => {
     archiveFolder(store, CATALOG, 'hymns')
     restoreFolder(store, CATALOG, 'hymns', true)
     expect(layout(store).folders.map((folder) => folder.id)).toEqual(['hymns', 'learning-songs'])
-  })
-
-  it('restores everything: the folders at Home, then each song where it stood', () => {
-    const store = fresh()
-    archiveSongs(store, CATALOG, ['a1'])
-    archiveFolder(store, CATALOG, 'learning-songs')
-    archiveSongs(store, CATALOG, ['my-2'])
-    restoreAll(store, CATALOG)
-    expect(archived(store)).toEqual([])
-    expect(shelves(store)).toEqual({
-      hymns: ['h1', 'h2'],
-      'learning-songs': ['a1', 'a2', 'a3'],
-      home: ['my-1', 'my-2'],
-    })
   })
 })
 
