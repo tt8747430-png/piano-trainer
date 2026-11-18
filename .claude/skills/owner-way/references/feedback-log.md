@@ -605,6 +605,7 @@ owner's, typos fixed.
 - **A lesson's steps are a numbered list set as a writing app sets one (owner, 2026-11-18: "the text of the lessons should be correctly structured and formatted", over Obsidian's note; loop round 67):** the steps' numbers stood on the column's edge in ink, the words 24 after them, 4 between items. Now the list is indented 8, each number muted (`SOFT`) and right-aligned in its own 28 column so the words hang on one edge, 6 between items, each item 65ch at most and wrapped so no last word stands alone (`text-wrap: pretty`). Phone and laptop. `r47_edit.py`, `.steps`.
 
 ## Practice
+- **A library folder's chevron stands on its rows' edge (loop round 67; the lines, measured by ink: a 4px near-miss):** on a laptop the folder heads of Progressions, Accompaniment, Jazz vocabulary and Finger technique carried `padding: 0 4px`, so the chevron stood 4 in from the rows' hairlines (510 against 506) and 8 short of their tiles. The head now starts on the hairlines' edge; the tiles stay inset 12 in their rows, as a list's, and the names stay on the header's column (574). `r41_lib.py` `library`.
 
 - **The Chord player asks for no gesture alone (laws, A phone is not a small laptop 6 and Cognitive biases 1,
   2026-11-18):** a chord's sheet opened only on a double tap inside 400ms, and on a laptop the key's chords went into a
