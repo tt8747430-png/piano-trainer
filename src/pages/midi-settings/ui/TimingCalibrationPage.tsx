@@ -12,7 +12,6 @@ export function TimingCalibrationPage() {
   return (
     <SettingsScreen
       title={t('midiSettings.timing.label')}
-      sub
       actions={
         <InfoTip name={t('midiSettings.timing.label')}>{t('midiSettings.timing.info')}</InfoTip>
       }

@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useRouterState } from '@tanstack/react-router'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { lazy, Suspense, useEffect, type ComponentType } from 'react'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { opensInDialog, SettingsDialog } from '@/widgets/settings-screen'
@@ -73,8 +73,11 @@ export function SettingsDialogHost() {
   }, [location])
   const held = new URLSearchParams(location.searchStr).get(SETTINGS_PARAM)
   const path = held !== null && opensInDialog(held) ? held : null
-  if (path === null) return null
-  if (!wide) return <Navigate href={path} replace />
+  // On a phone the place's own page, in the dialog's place in history.
+  useEffect(() => {
+    if (path !== null && !wide) void navigate({ href: path, replace: true })
+  }, [path, wide, navigate])
+  if (path === null || !wide) return null
   const Pane = paneOf(path)
   if (Pane === null) return null
   return (

@@ -12,7 +12,6 @@ export function MidiLogPage() {
   return (
     <SettingsScreen
       title={t('midiSettings.log.label')}
-      sub
       actions={<InfoTip name={t('midiSettings.log.label')}>{t('midiSettings.log.info')}</InfoTip>}
     >
       <MidiLog />

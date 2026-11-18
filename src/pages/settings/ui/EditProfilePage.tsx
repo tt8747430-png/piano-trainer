@@ -85,7 +85,6 @@ function ProfileForm({ profile }: { profile: LearnerProfile }) {
   return (
     <SettingsScreen
       title={t('editProfile.title')}
-      sub
       actions={
         <Button type="submit" form={FORM} variant="soft" disabled={!ready}>
           {saving ? t('editProfile.saving') : t('editProfile.save')}

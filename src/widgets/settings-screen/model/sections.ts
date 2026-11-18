@@ -191,7 +191,9 @@ export function settingsPlaceOf(path: string): SettingsPlace | null {
  * Account"): Edit profile, Email, Change password and Privacy to the account; the MIDI log and its
  * timing to MIDI devices. A place of the list has none.
  */
-export function settingsParentOf(path: string): string | null {
+export function settingsParentOf(
+  path: string,
+): '/settings/account' | '/settings/connect-piano' | null {
   if (path.startsWith('/settings/account/') || path === '/settings/privacy')
     return '/settings/account'
   if (path.startsWith('/settings/connect-piano/')) return '/settings/connect-piano'
