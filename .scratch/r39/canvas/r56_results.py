@@ -112,6 +112,7 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
     return (head, tiles, run, foot) if parts else head + tiles + run + foot
 
 
+# a phone on its side: the acts stand in one row, so the results keep their room (round 66)
 def RS_ACTIONS(perfect, from_profile, lap=False):
     run = 'PlayChordLaptop.dc.html' if lap else 'PlayChord.dc.html'
     done = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
@@ -119,10 +120,10 @@ def RS_ACTIONS(perfect, from_profile, lap=False):
     if perfect:
         main = BTN('Retry at 80 BPM', act, href, 'primary', 52)
         rest = '' if from_profile else BTN('Done', '', done, 'quiet', 52)
-        return f'<div style="display: grid; gap: 8px">{main}{rest}</div>'
+        return f'<div class="rsacts" style="display: grid; gap: 8px">{main}{rest}</div>'
     main = BTN('Practise mistakes', act, href, 'primary', 52)
     rest = BTN('Retry', act, href, 'quiet', 52) + ('' if from_profile else BTN('Done', '', done, 'quiet', 52))
-    return f'<div style="display: grid; gap: 8px">{main}<div style="display: flex; gap: 8px">{rest}</div></div>'
+    return f'<div class="rsacts" style="display: grid; gap: 8px">{main}<div style="display: flex; gap: 8px">{rest}</div></div>'
 
 
 RS_SHOW = (f'<div aria-label="Canvas: show a state" style="flex: none; align-self: center; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 6px; border-radius: 14px; border: 1.5px dashed {LINE}">'
@@ -143,7 +144,8 @@ def RS_RESULTS(per_row, cw, from_profile, lap=False):
         return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 56px 48px; display: flex; flex-direction: column; gap: 24px">'
                 f'{RS_SHOW}{both(side)}</main>')
     return (f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: {8 if from_profile else 16}px 16px 24px; display: flex; flex-direction: column; gap: 20px">{RS_SHOW}{body}</main>'
-            f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>')
+            f'<div style="flex: none; padding: 12px 16px 34px; box-shadow: 0 -1px 0 {LINE}; background: {PAGE}">{acts}</div>'
+            + '<style data-rsacts>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsacts { display: flex !important } .rsacts > * { flex: 1 } }</style>')
 
 
 RS_JS = lambda mode: js(r'''

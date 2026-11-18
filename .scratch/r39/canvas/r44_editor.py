@@ -125,8 +125,13 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
 # the phone's bar has no room for the save status the laptop shows beside Close: it heads the ··· sheet (a status goes in the bar or its menu)
 ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
 ED4 = ED4.replace("keysOn: keys,", "keysOn: keys, keysShown: keys && !open, notKeys: !keys || open,", 1)
+# From 48rem (an iPad, a phone on its side) the palette docks at the right of the score, as the laptop's, never a sheet
+# over it (CLAUDE.md, the score editor; round 66: at 852×393 the sheet and keys left no score at all).
+EDLAY_CSS = ('<style data-edlay>[data-menuroot] { container-type: size } @container (min-width: 768px) { .edlay { display: grid !important; grid-template-columns: minmax(0, 1fr) 380px } '
+             '.edlay > section[data-strip] { min-height: 0; overflow-y: auto; border-radius: 0 !important; box-shadow: -1px 0 0 ' + LINE + ' !important } .edlay > section[data-strip] > button:first-child { display: none } }</style>')
 eph4 = (TIP_CSS + EBAR('Song.dc.html', 'Player.dc.html')
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "7px 12px 8px")}</div>' + SHEETP)
+        + '<div class="edlay" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 12px 16px">{SCOREPAGE(360, 0.95, "7px 12px 8px")}</div>' + SHEETP + '</div>' + EDLAY_CSS)
 
 # the laptop: full screen as the Player; the score, the keys under it; the palette docked at the right
 elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True).replace(MODEBAR_P, MODEBAR_L)
