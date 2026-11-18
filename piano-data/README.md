@@ -119,6 +119,12 @@ and MIDI files and recordings. Names are the titles transliterated.
 - `hymns/arrangements/adam-cand-s-a-trezit-petru-braila/`: Petru Braila's arrangement for strings, with its recording
 - `hymns/choir/`: choir arrangements; `m-a-aflat-al-meu-pastor/` holds _Come, Thou Fount_ (its tune) in several keys
   and arrangements (Jason Tonioli, Kaleb Brasee)
+- `hymns/choir/musescore/`: a church choir's shared MuseScore folder from Google Drive, its names kept as they are:
+  `Cântări corul mixt/` (mixed choir) and `Cântări corul bărbătesc/` (men's choir), one numbered folder per song with
+  its `.mscz` score, PDF and each voice's part, and the mixed choir's contents (`Cuprins 1-100.pdf`, alphabetical
+  too); `MuseScore/` holds the alto and soprano parts (`MuseScore Alt`, `MuseScore Sopran`). MuseScore's own backups
+  (`.mscbackup`) are kept; the recordings and the 172 MB scanned choir book (`Caiet de cor scanat 1-100.pdf`) are
+  left out
 - `hymns/songs/`: songs as sheets, choir and full scores
 - `hymns/ensembles/`: О. Цапук's arrangements for domra and piano, and cello and piano
 - `hymns/hymnals/`: _Песнь возрождения с нотами_, vol. 3; the _Free Worship Piano Collection_
