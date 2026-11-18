@@ -185,7 +185,7 @@ def SPLIT2(page, first, second):
 SETPAGE_L = SPLIT2(SETPAGE, CAPS('The lesson'), CAPS('Share'))
 def PAGEOVER(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
-    inner_w = 'width: 1180px; ' if lap else ''
+    inner_w = 'width: min(1180px, 100%); ' if lap else ''
     return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">'
             + (f'<div style="height: {54 if not lap else 0}px; flex: none"></div>' if not lap else '')
             + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0; font-size: {30 if lap else 28}px; font-weight: 700; letter-spacing: -0.01em">{{{{pageT}}}}</h1></header>'

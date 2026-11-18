@@ -201,7 +201,7 @@ PV_MUSIC = {'walk': PV_WALK,
     'exercise': [[(l, o)] for l, o in (('C', 4), ('E', 4), ('F', 4), ('G', 4), ('A', 4), ('G', 4), ('F', 4), ('E', 4))]}
 def PV_LINE(n, cw, v='walk', start=0, last=True):
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
-    return f'<div style="display: flex; justify-content: center">{cells}</div>'
+    return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
 def PV_STAFF(n, cw, v='walk'):
     return CARD(PV_LINE(n, cw, v), '12px 8px')
 def PV_RUN(lap, v):
@@ -210,7 +210,7 @@ def PV_RUN(lap, v):
                  f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: 1180px; display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: min(1180px, 100%); display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
                 f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
             + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{CARD(PV_LINE(4, 76, v, 0, False) + '<div style="height: 16px"></div>' + PV_LINE(4, 76, v, 4), '12px 8px')}<div style="flex: 1"></div>'
@@ -219,5 +219,5 @@ PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G']
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: 623px; bottom: 244px', 620).replace('max-height: 760px', 'max-height: 600px', 1), 'Practice')
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 244px', 620).replace('max-height: 760px', 'max-height: 600px', 1), 'Practice')
 print('r56 runs ok')
