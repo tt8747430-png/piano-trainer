@@ -258,12 +258,24 @@ landing page is: the welcome, an empty library, a song's page, a lesson's end, E
 - "If there's content below the cut that isn't immediately apparent … use a visual indicator"; "the CTA, main image, and
   headline are clearly visible without scrolling."
   10. The first screen never ends on a clean break that looks like the end: the next block's top or a shelf's next
-      cover shows at the fold (a cut card, a peeking cover), so the learner sees there is more.
+      cover shows at the fold (a cut card, a peeking cover), so the learner sees there is more. The screenshot: a
+      hero that ends flat at the fold under "Get started" (wrong) against the same hero with a small drawn arrow
+      pointing down beside the act (right): where nothing peeks, a quiet ⌄ under the act says there is more.
 - "Use contextual images … that add to the meaning."
   11. A picture is the content itself (the song's first bars, the chord's keys, a real cover), never stock or a
-      decorative illustration.
+      decorative illustration. The screenshot: "Let's travel to Switzerland" over a Paris street (wrong) against the
+      same words over the Alps (right): the picture proves the headline. Here: a song's cover is its own first bars,
+      a chord's card its own keys, a course's its own first piece; never a generic piano photo.
 - Social proof and authority ("reviews, ratings, stats"; logos).
   12. Only where true and on a public thing: Explore's saves and plays, a course's learners; never invented numbers.
+      The screenshot: a vague claim, "Worldwide photographers choose our app", ringed by floating faces (wrong),
+      against quotes, each with its person's face and words ("I've been a professional photographer for 10 years…")
+      (right). And "Trusted by industry leaders worldwide" over faces and grey bars (wrong) against "Trusted by" and
+      five real logos in one row (right). So: proof is specific (a named person's words, a real count, a known
+      name), never an adjective; a count says what was counted ("1,240 saves"), on one line with its thing.
+  12a. A reward or perk is the concrete thing the learner gets, named in the headline: "Subscribe to stay updated on
+      new lessons" (wrong) against "Subscribe and get a free yoga practice session" (right). Here: a streak's or a
+      badge's line names what it unlocks or proves ("7 days: the Arpeggios course opens"), never "keep going".
 - "Design responsively"; "load times under 2.5 seconds".
   13. The headline and the act hold at 393, 402, 744, 1024 and 1710 (testing.md); a screen shows its frame at once and
       fills slow parts with skeletons, never a blank.
