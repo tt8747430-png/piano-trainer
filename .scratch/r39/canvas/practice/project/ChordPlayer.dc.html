@@ -256,7 +256,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',
       sideL: (!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left'), sideR: (!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right'), sideW: cP.size === 'Narrow' ? '320px' : '420px',
-      kHL: KHL[kP.size] + 'px',
+      kHL: KHL[kP.size] + 'px', chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
       hiddenPanels: Object.keys(LAY).filter((k) => LAY[k].hid && (k !== 'genos' || follow)).map((k) => ({ l: NAMES[k], show: () => setP(k, { hid: false }) })),
       anyHidden: layEd && Object.keys(LAY).some((k) => LAY[k].hid && (k !== 'genos' || follow)),
       layMenuOn: st.sheet === 'layMenu', layMenuT: NAMES[lp], layMenuPos: st.layPos ?? 'left: 16px; top: 160px',

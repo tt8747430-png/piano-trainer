@@ -237,7 +237,7 @@ CP58 = CP58.replace("    return { ...common(st, set), sec59,", r"""    const LAY
       chartPad: (base + (dFloat ? 80 : 0) + (gOn && gP.at !== 'top' && gP.at !== 'bottom' ? gH + 8 : 0) + 16) + 'px',
       cOn: !cP.hid, cLeft: !cP.hid && cP.at === 'left', cRight: !cP.hid && cP.at === 'right',
       sideL: (!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left'), sideR: (!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right'), sideW: cP.size === 'Narrow' ? '320px' : '420px',
-      kHL: KHL[kP.size] + 'px',
+      kHL: KHL[kP.size] + 'px', chartCols: ((!cP.hid && cP.at === 'left') || (gOn && gP.at === 'left')) && ((!cP.hid && cP.at === 'right') || (gOn && gP.at === 'right')) ? 8 : 16,
       hiddenPanels: Object.keys(LAY).filter((k) => LAY[k].hid && (k !== 'genos' || follow)).map((k) => ({ l: NAMES[k], show: () => setP(k, { hid: false }) })),
       anyHidden: layEd && Object.keys(LAY).some((k) => LAY[k].hid && (k !== 'genos' || follow)),
       layMenuOn: st.sheet === 'layMenu', layMenuT: NAMES[lp], layMenuPos: st.layPos ?? 'left: 16px; top: 160px',
@@ -343,7 +343,7 @@ lm58 = (LTOP('Laptop.dc.html', BARR) + TRAY.replace('padding: 0 16px 8px', 'padd
         + '<div style="position: relative; flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         + f'<sc-if value="{{{{dTop}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; justify-content: center; padding: 0 0 8px">{DOCKTOP.replace("margin: 0 16px 8px", "width: 560px", 1)}</div></sc-if>'
         + f'<sc-if value="{{{{gTopL}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("position: relative; flex: none; margin: 0 0 12px", True)}</sc-if>'
-        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + SHOWSTATES() + CHART76(16, 6, 76, 28, 1) + '</div>'
+        + '<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 4px 200px">' + SHOWSTATES() + CHART76('{{chartCols}}', 6, 76, 28, 1) + '</div>'
         + f'<div style="position: absolute; left: 0; right: 0; bottom: 12px; z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px">'
         + f'<sc-if value="{{{{gFloatL}}}}" hint-placeholder-val="{{{{false}}}}">{GENOS76("width: 760px", True)}</sc-if>'
         + f'<sc-if value="{{{{dFloatFull}}}}" hint-placeholder-val="{{{{true}}}}"><div style="position: relative">{DOCK_L(CP_DOCK)}{PTAG("pickD", "openLayD", "Controls", "left: 16px; top: -26px")}</div></sc-if>'
