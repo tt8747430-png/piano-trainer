@@ -43,18 +43,34 @@ export function SelectAct({
  * The selection bar at the foot (the boards' SELBAR, a glass DOCK in New's place): 68 tall, the
  * phone's width less its 16 margins, 520 wide and centred on a laptop; it takes the phone's tab bar's
  * place (memory-palaces'). Its acts are `SelectAct`s, and a More where the learner keeps the rest.
+ * Over a sheet (`inSheet`, the takes'), it stands at the sheet's foot as the sheet scrolls, 440 wide
+ * at most, since the screen's floating row lies under the sheet.
  */
-export function SelectDock({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <FloatingActions className="justify-center">
-      <div
-        role="toolbar"
-        aria-label={label}
-        data-takes-tab-bar=""
-        className="glass flex h-17 w-[min(32.5rem,calc(100vw-2rem))] items-center gap-2 rounded-pill px-2"
-      >
-        {children}
-      </div>
-    </FloatingActions>
+export function SelectDock({
+  label,
+  inSheet = false,
+  children,
+}: {
+  label: string
+  inSheet?: boolean
+  children: ReactNode
+}) {
+  const bar = (
+    <div
+      role="toolbar"
+      aria-label={label}
+      data-takes-tab-bar=""
+      className={cn(
+        'glass flex h-17 items-center gap-2 rounded-pill px-2',
+        inSheet ? 'mx-auto w-full max-w-110' : 'w-[min(32.5rem,calc(100vw-2rem))]',
+      )}
+    >
+      {children}
+    </div>
+  )
+  return inSheet ? (
+    <div className="sticky bottom-4 z-10">{bar}</div>
+  ) : (
+    <FloatingActions className="justify-center">{bar}</FloatingActions>
   )
 }

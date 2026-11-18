@@ -578,7 +578,17 @@ export const editor = {
     // The takes' button while the song has none: greyed, its tooltip saying why.
     full: 'Take storage is full. Delete a take to record another.',
     nothing: 'No notes were played.',
-    none: 'No takes yet.',
+    none: 'No takes yet',
+    noneLine: 'Press Record beside Play in the editor, play, then Stop: each take is kept here.',
+    // Select over the takes (the Takes board): the header's word, the title while on, the bar's acts.
+    select: 'Select',
+    cancel: 'Cancel',
+    selectTitle: 'Select takes',
+    selected: '{{count}} selected',
+    downloadAll: 'Download all',
+    deleteAll: 'Delete all',
+    deletedMany_one: 'Take deleted',
+    deletedMany_other: '{{count}} takes deleted',
     detail: '{{length}} · {{bpm}}',
     play: 'Play',
     download: 'Download',
