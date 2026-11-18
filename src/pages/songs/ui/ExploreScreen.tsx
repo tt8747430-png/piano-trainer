@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { LAPTOP, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, LAPTOP, useMediaQuery, useSetSearch } from '@/shared/lib'
 import {
   BackButton,
   ChoiceChips,
@@ -8,17 +8,17 @@ import {
   SearchField,
   Segmented,
 } from '@/shared/ui'
+import { PLACE_COLUMN, PlaceBar } from '@/widgets/song-library'
 import { EXPLORE_CATEGORIES, EXPLORE_KINDS, type SongsHome } from '../model/explore-view'
-import { ExplorePane } from './ExplorePane'
 import { ExploreResults, ExploreSort, useExploreFeed } from './ExploreResults'
 import { FRESH } from './songs-fresh'
 
 /**
  * Explore (B3, D1; the Explore boards, flat.io's search and community lists): what learners published,
- * a page of its own under Songs with Back. On a laptop a pane at the left holds Songs | People and the
- * Kinds with their counts, the search and the order over the list beside it; on a phone the search, Songs
- * | People under it, the kinds as chips and the count with the order. Then the songs as rows, or the
- * people who publish.
+ * a place of Songs. On a laptop the frame every Songs place shares (`PlaceBar`: its name and count,
+ * the search at the bar's trailing edge), then one row: Songs | People, the kinds as chips, the order
+ * at the right; then All songs' table. On a phone, with Back, the search, Songs | People under it, the
+ * kinds as chips and the count with the order, then the songs as one list, or the people who publish.
  */
 export function ExploreScreen({ home }: { home: SongsHome }) {
   const { t } = useTranslation('songs')
@@ -41,6 +41,61 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
     />
   ) : null
   const results = <ExploreResults home={home} feed={feed} onClear={() => show({ q: '' })} />
+  const kinds = (
+    <Segmented
+      label={t('explore.kinds.label')}
+      value={home.kind}
+      options={EXPLORE_KINDS.map((kind) => ({
+        value: kind,
+        label: t(`explore.kinds.${kind}`),
+      }))}
+      onChange={(kind) => show({ kind, by: '' })}
+      compact
+    />
+  )
+  const categories = (
+    <ChoiceChips
+      label={t('explore.categories.label')}
+      value={home.cat}
+      options={EXPLORE_CATEGORIES.map((cat) => ({
+        value: cat,
+        label: t(`explore.categories.${cat}`),
+      }))}
+      onChange={(cat) => show({ cat })}
+      scroll={!laptop}
+    />
+  )
+  // On a laptop the place's frame (LPLACEBAR): the name and its count, the search at the bar's
+  // trailing edge; one row under it, Songs | People, the kinds as chips, the order at the right.
+  if (laptop)
+    return (
+      <div className={cn('flex flex-col gap-4 pb-4', PLACE_COLUMN)}>
+        <PlaceBar
+          title={t('explore.views.explore')}
+          count={
+            songs && feed.browse.kind === 'found' && feed.entries.length > 0
+              ? t(home.cat === 'patterns' ? 'explore.patternCount' : 'explore.songCount', {
+                  count: feed.entries.length,
+                })
+              : undefined
+          }
+          search={search}
+        />
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="w-55 shrink-0">{kinds}</div>
+          <div className="min-w-0 flex-1">{songs ? (byChip ?? categories) : null}</div>
+          {songs ? (
+            <ExploreSort
+              home={home}
+              feed={feed}
+              onSort={(shelf) => show({ shelf })}
+              counted={false}
+            />
+          ) : null}
+        </div>
+        {results}
+      </div>
+    )
   return (
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader
@@ -48,53 +103,17 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
         large
         back={<BackButton label={t('title')} onClick={() => show({ ...FRESH, view: 'mine' })} />}
       />
-      {laptop ? (
-        <div className="grid grid-cols-[17.5rem_minmax(0,1fr)] items-start gap-8">
-          <ExplorePane home={home} />
-          <div className="flex min-w-0 flex-col gap-5">
-            <div className="flex items-center gap-6">
-              <div className="min-w-0 flex-1">{search}</div>
-              {songs ? sort : null}
-            </div>
-            {byChip}
-            {results}
+      <div className="flex min-w-0 flex-col gap-3">
+        {search}
+        {kinds}
+        {songs ? (
+          <div className="flex flex-col gap-1">
+            {byChip ?? categories}
+            {sort}
           </div>
-        </div>
-      ) : (
-        <>
-          <div className="flex min-w-0 flex-col gap-3">
-            {search}
-            <Segmented
-              label={t('explore.kinds.label')}
-              value={home.kind}
-              options={EXPLORE_KINDS.map((kind) => ({
-                value: kind,
-                label: t(`explore.kinds.${kind}`),
-              }))}
-              onChange={(kind) => show({ kind, by: '' })}
-              compact
-            />
-            {songs ? (
-              <div className="flex flex-col gap-1">
-                {byChip ?? (
-                  <ChoiceChips
-                    label={t('explore.categories.label')}
-                    value={home.cat}
-                    options={EXPLORE_CATEGORIES.map((cat) => ({
-                      value: cat,
-                      label: t(`explore.categories.${cat}`),
-                    }))}
-                    onChange={(cat) => show({ cat })}
-                    scroll
-                  />
-                )}
-                {sort}
-              </div>
-            ) : null}
-          </div>
-          {results}
-        </>
-      )}
+        ) : null}
+      </div>
+      {results}
     </div>
   )
 }

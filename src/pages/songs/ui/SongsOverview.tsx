@@ -2,7 +2,7 @@ import { Link, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useLibraryLayout } from '@/entities/library'
 import { useSongImport } from '@/features/song-files'
-import { useMediaQuery, useSetSearch, WIDE } from '@/shared/lib'
+import { LAPTOP, useMediaQuery, useSetSearch } from '@/shared/lib'
 import { RowLink, ScreenHeader, SearchField, SectionHead } from '@/shared/ui'
 import type { SongsHome } from '../model/explore-view'
 import { useLibraryPage } from '../model/use-library-page'
@@ -29,7 +29,7 @@ const LATEST = { sort: 'played', direction: 'descending' } as const
  */
 export function SongsOverview() {
   const { q } = useSearch({ from: '/shell/songs' })
-  const laptop = useMediaQuery(WIDE)
+  const laptop = useMediaQuery(LAPTOP)
   // A laptop's Songs is All songs, in the frame every Songs place shares (the sidebar holds the places).
   return laptop ? <LibraryScreen folder={null} filter={{ q }} all="all" /> : <SongsPhone q={q} />
 }
