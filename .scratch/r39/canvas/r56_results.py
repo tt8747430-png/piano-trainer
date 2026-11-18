@@ -216,7 +216,8 @@ def PV_RUN(lap, v):
     setup = BTN('Setup', 'openSetup', '', 'plain', 44, False)
     # the transport floats, as the Player's: the kit's glass dock over the paper, 12 above the keys, reserving no
     # space (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation")
-    transport = (f'{setup}<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}')
+    # Play at the centre, as the chord run's, the Player's and Flowkey's (reference-apps/flowkey 009): one sibling shape
+    transport = (f'{setup}{PLAYBTN(56)}<span style="padding: 0 8px; white-space: nowrap; font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
                 + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>'
