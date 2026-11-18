@@ -26,7 +26,10 @@ ways, with a time limit and a Next that waits for the answer.
   (`Asks`), drawn never the same twice running. A run counts its rounds (10, 20 or until stopped), times each
   answer, keeps the streak and sums up; a run of cards has no score and keeps no record. The Check, a lesson's
   question and every trainer share one board, whose one primary button never moves: Reveal, Check, or Next greyed
-  until the round is answered, then Next.
+  until the round is answered, then Next. Its board (R67) is one 760 column: the round's progress as a grass bar and
+  "n of m", the prompt (a chord built from its root at 44px), Hint a link toggling "Its notes: …", the verdict one
+  bold line (grass right, ink shown, crimson wrong) with its why muted under it, then the keys, which never lift
+  for the feedback, and the buttons (the waiting one greyed, wider); on a laptop the buttons sit over the keys.
 - **Four drills over the same material.** **Chords** and **Intervals** are each one trainer asked four ways (`Drill`):
   **Flashcards** (one of name, keys and staff shown, the rest revealed), **Name it** (seen on the keys and staff, four
   choices on the same root differing only in quality, so the quality is what is read), **Play it** (a chord built on the

@@ -45,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             id="content"
             tabIndex={-1}
             data-sidebar={shown}
-            className="group/main pt-safe pr-floating pb-foot-6 pl-(--gutter) outline-none print:p-0 landscape-phone:pb-foot-4 landscape-phone:pl-rail lg:pb-foot-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed lg:data-[sidebar=focus]:pl-focus"
+            className="group/main pt-safe pr-floating pb-foot-6 pl-(--gutter) outline-none print:p-0 landscape-phone:pb-foot-4 landscape-phone:pl-safe-left lg:pb-foot-12 lg:pl-sidebar lg:data-[sidebar=collapsed]:pl-sidebar-collapsed lg:data-[sidebar=focus]:pl-focus"
           >
             <FloatingHost screen={screen}>{children}</FloatingHost>
           </main>

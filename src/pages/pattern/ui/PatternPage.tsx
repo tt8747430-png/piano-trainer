@@ -163,7 +163,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
 /**
  * A pattern in the Chords page's shape (canvas 178): Back · Pattern · the keys' tools · More; the keys
  * at the top lighting what it plays; its name in the serif with its ♡, its book and whether it is
- * built in; one card of its bar on the grand staff and what it is; The hands; Used in; one floating
+ * built in; its bar on the grand staff on the paper and what it is; The hands; Used in; one floating
  * bar Loop · Play ⌄ (Play over a bar of C major or a song it is used in) · Practise, the Player. On
  * a laptop the keys run across the top, the pattern on the left, its hands and uses on the right.
  */
@@ -214,9 +214,11 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
             </p>
           </div>
           {more.said}
-          <section className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+          {/* Its bar on the grand staff at reading size, on the paper with its line under it as
+              a caption, no card (canvas, "A pattern's grand staff at reading size"). */}
+          <section className="flex flex-col gap-3">
             <PatternStaff sample={sample} />
-            <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
+            <p className="mx-1 max-w-[65ch] text-[0.9375rem] leading-[1.4] text-pretty text-muted-foreground">
               {localText(pattern.idea, locale)}
             </p>
           </section>

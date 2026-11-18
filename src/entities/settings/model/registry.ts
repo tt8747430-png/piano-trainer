@@ -67,7 +67,6 @@ export type SettingKey = Exclude<SettingsField, NotPreference | `${NotPreference
 export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   theme: 'general',
   locale: 'general',
-  lessonReading: 'lessons',
   'practice.fingerNumbers': 'player',
   'practice.namedNotes': 'player',
   'practice.positions': 'player',

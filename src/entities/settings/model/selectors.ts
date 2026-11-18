@@ -23,7 +23,6 @@ import type {
   SoundSettings,
   Theme,
   TrainerSettings,
-  LessonReading,
 } from './types'
 
 export const selectTheme = (state: SettingsState): Theme => state.theme
@@ -65,9 +64,6 @@ export const selectTipSeen =
   (id: string) =>
   (state: SettingsState): boolean =>
     state.tipsSeen.includes(id)
-
-/** How a lesson reads (round 26): one page, or a section at a time. */
-export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading
 
 /** How every progression is written and voiced (A24). */
 export const selectProgressions = (state: SettingsState): ProgressionsSettings => state.progressions

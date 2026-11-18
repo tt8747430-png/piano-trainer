@@ -19,6 +19,7 @@ export function MakeSheet({
   wide = false,
   dismiss = 'cancel',
   footer,
+  initialFocus,
   children,
 }: {
   open: boolean
@@ -30,6 +31,8 @@ export function MakeSheet({
   dismiss?: 'cancel' | 'close'
   /** What stands under the body, parted by a hairline: its one Create. */
   footer?: ReactNode
+  /** What takes the focus as it opens: its name field, so the phone's keyboard comes up under it. */
+  initialFocus?: () => HTMLElement | true
   children: ReactNode
 }) {
   const { t } = useTranslation('common')
@@ -37,7 +40,12 @@ export function MakeSheet({
   if (!laptop)
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent title={title} dismiss={dismiss} footer={footer}>
+        <SheetContent
+          title={title}
+          dismiss={dismiss}
+          footer={footer}
+          {...(initialFocus ? { initialFocus } : {})}
+        >
           {children}
         </SheetContent>
       </Sheet>
@@ -46,8 +54,9 @@ export function MakeSheet({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
+        {...(initialFocus ? { initialFocus } : {})}
         className={cn(
-          'flex max-h-[86dvh] max-w-none flex-col sm:max-w-none gap-0 rounded-[22px] bg-background p-0 text-base ring-0 shadow-lg',
+          'flex max-h-[86dvh] max-w-none flex-col sm:max-w-none gap-0 rounded-sheet bg-background p-0 text-base',
           wide ? 'w-120' : 'w-110',
         )}
       >

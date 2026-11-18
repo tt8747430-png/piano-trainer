@@ -19,8 +19,9 @@ export function TunerPage() {
   return (
     <ToolPage
       title={t('practice:pages.tuner')}
+      column={720}
       side={
-        <GroupRows label={label}>
+        <GroupRows label={label} surface="sheet">
           <GroupRow label={label} setting="tuner.a4">
             <Stepper
               label={label}

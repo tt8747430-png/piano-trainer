@@ -88,7 +88,10 @@ use one.
   styles. The transport queues each chord 0.1 s ahead from the sheet as it stands, so an edit lands at the next
   chord. **My chord sheets** are `pt-chord-sheets` (version 1, synced as `chord_sheets`): the sheet in hand and
   the learner's own, each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
-  transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`.
+  transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`. No act
+  waits on a gesture alone (R67): a chord's tile is tapped to choose it and tapped again to open its dialog, and
+  dragged to move it; a key chord tapped replaces the chord chosen (or is added at the end when none is), or is
+  dragged into a bar.
   Randomize (`randomProgression`) starts on the tonic, moves by function and closes V–I, each step as likely as
   Piston's table of usual root progressions makes it (usual, sometimes, less often), so I → IV and V → I come
   often and iii seldom.

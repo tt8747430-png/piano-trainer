@@ -23,7 +23,7 @@ TITLE68 = (f'<div style="flex: none; display: flex; flex-direction: column; gap:
 # important near the top): two systems, bars 1-4, drawn at 1.4x (the viewBox narrower than the column), no card
 MUSIC68 = lambda w: (f'<figure style="flex: none; margin: 4px 0 0; display: flex; flex-direction: column; gap: 8px">' + hanon(round(w / 1.4)) + hanon(round(w / 1.4), 2).replace('bars 1 and 2', 'bars 3 and 4')
                      + f'<figcaption style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums">Bars 1–4 of 30</figcaption></figure>')
-H3_68 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
+H3_68 = lambda t: f'<h3 style="margin: 0; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
 ROWS68 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_68("The exercise")}'
           + GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('seg', 'Hands', 'handsSeg'), ('seg', 'Rhythm', 'rhythmSeg'), ('seg', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET) + '</section>')
 HOW68 = (f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_68("How to play")}'

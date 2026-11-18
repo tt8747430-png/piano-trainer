@@ -107,7 +107,7 @@ export function FloatingHost({
         data-slot="floating-host"
         data-hidden={hidden || undefined}
         className={cn(
-          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:left-rail landscape-phone:pr-gutter-safe landscape-phone:mb-safe-4 lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
+          'pointer-events-none fixed inset-x-0 bottom-nav-bar z-20 mb-(--floating-gap) aside:bottom-docked flex px-gutter transition-[translate,opacity] duration-200 ease-out print:hidden data-hidden:translate-y-4 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pr-gutter-safe lg:left-sidebar lg:mb-safe-4 lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
           'justify-end',
         )}
       >
@@ -372,7 +372,7 @@ export function SpeedDial({
             inert={!open}
             data-closing={!open || undefined}
             className={cn(
-              'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-card border border-border bg-raised p-1.5 elevation-3',
+              'dial-card absolute bottom-full mb-4 flex w-max min-w-50 max-w-[calc(100vw-2*var(--gutter))] flex-col gap-0.5 glass rounded-menu p-1.5',
               DIAL_ASIDE,
               DIAL_ALIGN,
             )}
@@ -414,7 +414,7 @@ export function SpeedDialAction({
   // Named by its label; its line says what it does, as its description.
   const named = { 'aria-label': label, 'aria-describedby': detail ? detailId : undefined }
   const look = cn(
-    'w-full justify-start gap-3 rounded-control px-2 pr-5 text-left text-base font-semibold text-foreground transition-colors active:bg-muted',
+    'w-full justify-start gap-3 rounded-menu-item pr-4 pl-2 text-left text-base font-medium text-foreground transition-colors active:bg-muted',
     detail ? 'h-auto min-h-14 py-2' : 'h-12',
   )
   const choose = () => {
@@ -425,7 +425,7 @@ export function SpeedDialAction({
     <>
       <span
         aria-hidden
-        className="grid size-9 shrink-0 place-items-center rounded-control bg-muted text-foreground [&_svg]:size-5"
+        className="grid size-9 shrink-0 place-items-center rounded-menu-item bg-muted text-foreground [&_svg]:size-5"
       >
         <Icon />
       </span>

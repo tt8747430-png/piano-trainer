@@ -1,18 +1,29 @@
-import { LibraryTile } from './LibraryTile'
 import { useRender } from '@base-ui/react/use-render'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useSetSearch } from '@/shared/lib'
 import { HeartToggle, menuOf, RowMore, SortHeading, TABLE_CELL } from '@/shared/ui'
 import type {
-  LibraryGroup,
   LibraryItem,
   PracticeLibraryView,
   PracticeSort,
+  ShownSection,
 } from '../model/library-view'
-import type { GroupWord } from '../model/library-words'
 import { LevelMark } from './LevelMark'
+import { LibraryTile } from './LibraryTile'
 
-/** A row's name cell: its picture, its name over its line, the link to its page. */
+/** A library table's columns, named as its board names them (Exercise · Focus · Level). */
+export interface TableColumns {
+  /** The rows' own name (Exercise, Pattern, Name). */
+  readonly name: string
+  /** The second column: the row's line on a phone, split into a column (Focus, Hands, Numerals). */
+  readonly second: string
+  /** The third, where the library has no levels: its own (a progression's Key). */
+  readonly third?: string
+}
+
+/** A row's name cell: its picture and its name, the link to its page. */
 function NameCell({ item }: { item: LibraryItem }) {
   return useRender({
     render: item.link,
@@ -22,39 +33,105 @@ function NameCell({ item }: { item: LibraryItem }) {
       children: (
         <>
           <LibraryTile picture={item.picture} />
-          <span className="min-w-0">
-            <span className="block font-semibold text-foreground">{item.name}</span>
-            <span className="block truncate text-sm text-muted-foreground">{item.detail}</span>
-          </span>
+          <span className="min-w-0 truncate font-semibold text-foreground">{item.name}</span>
         </>
       ),
     },
   })
 }
 
+/** One book's (or style's) rows under its fold heading, as the phone's runs: its name and count. */
+function SectionRows({
+  section,
+  levels,
+  columns,
+}: {
+  section: ShownSection
+  levels: boolean
+  columns: TableColumns
+}) {
+  const { t } = useTranslation(['practice', 'common'])
+  const [shut, setShut] = useState(false)
+  const span = levels || columns.third ? 4 : 3
+  return (
+    <tbody>
+      <tr>
+        <th scope="colgroup" colSpan={span} className="pt-4 pb-1 text-start">
+          <button
+            type="button"
+            aria-expanded={!shut}
+            onClick={() => setShut((was) => !was)}
+            className="flex min-h-11 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
+          >
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                'size-4 text-muted-foreground transition-transform duration-200',
+                shut && '-rotate-90',
+              )}
+            />
+            {section.name}
+            <span className="text-sm font-normal text-muted-foreground tabular-nums">
+              {section.items.length}
+            </span>
+          </button>
+        </th>
+      </tr>
+      {shut
+        ? null
+        : section.items.map((item) => (
+            <tr
+              key={item.id}
+              className="border-b border-hairline transition-colors hover:bg-muted/60"
+            >
+              <th scope="row" className={cn(TABLE_CELL, 'font-normal')}>
+                <NameCell item={item} />
+              </th>
+              <td className={cn(TABLE_CELL, 'truncate text-sm text-muted-foreground')}>
+                {item.extra ?? item.detail}
+              </td>
+              {levels ? (
+                <td className={cn(TABLE_CELL, 'truncate')}>
+                  {item.stage ? <LevelMark stage={item.stage} /> : null}
+                </td>
+              ) : columns.third ? (
+                <td className={cn(TABLE_CELL, 'truncate text-sm text-muted-foreground')}>
+                  {item.third}
+                </td>
+              ) : null}
+              <td className={cn(TABLE_CELL, 'pe-0')}>
+                <span className="flex items-center justify-end gap-1">
+                  {item.trailing}
+                  <FavouriteHeart item={item} />
+                  <RowMore
+                    label={t('common:library.moreOf', { name: item.name })}
+                    actions={menuOf(item.actions)}
+                  />
+                </span>
+              </td>
+            </tr>
+          ))}
+    </tbody>
+  )
+}
+
 /**
- * A practice library's rows as a table, the laptop's right pane (R30-4, Songs' table): Name (its
- * picture and line), its book or style, its level where the library has levels, the library's own
- * column (the hands, the numerals), and its More. A heading sorts by its column; the sorted one again
- * gives the books' own order back.
+ * A practice library's rows as a table on a laptop (canvas v439, the lines' sweep), under the
+ * place chips, one column from the sidebar: a heading row (its name, the row's line split into its
+ * own column, its level or its own third), then each book's or style's rows under its fold heading,
+ * as the phone's runs. The name and level headings sort; the sorted one again gives the books' own
+ * order back.
  */
 export function LibraryTable({
-  items,
+  sections,
   view,
-  groups,
-  groupWord,
   levels,
-  extra,
-  names,
+  columns,
 }: {
-  items: readonly LibraryItem[]
+  sections: readonly ShownSection[]
   view: PracticeLibraryView
-  groups: readonly LibraryGroup[]
-  groupWord: GroupWord
   levels: boolean
-  extra?: string | undefined
-  /** The names of Mine and Hidden, in the book column. */
-  names: Readonly<Record<string, string>>
+  columns: TableColumns
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const set = useSetSearch<PracticeLibraryView>()
@@ -63,21 +140,23 @@ export function LibraryTable({
       label={label}
       className={className}
       on={view.sort === sort}
-      onSort={() => set({ sort: view.sort === sort && sort !== 'group' ? 'group' : sort })}
+      onSort={() => set({ sort: view.sort === sort ? 'group' : sort })}
     />
   )
-  const groupName = (id: string) => groups.find((group) => group.id === id)?.name ?? names[id] ?? ''
   return (
     <table className="w-full table-fixed border-collapse">
       <caption className="sr-only">{t('practice:library.rows')}</caption>
       <thead className="border-b border-border text-sm text-muted-foreground">
         <tr>
-          {heading('name', t('practice:library.table.name'), 'w-2/5')}
-          {heading('group', t(`practice:library.table.${groupWord}`))}
-          {levels ? heading('level', t('practice:library.table.level'), 'w-40') : null}
-          {extra ? (
-            <th scope="col" className={cn(TABLE_CELL, 'font-semibold')}>
-              {extra}
+          {heading('name', columns.name, 'w-[32%]')}
+          <th scope="col" className={cn(TABLE_CELL, 'font-semibold')}>
+            {columns.second}
+          </th>
+          {levels ? (
+            heading('level', t('practice:library.table.level'), 'w-44')
+          ) : columns.third ? (
+            <th scope="col" className={cn(TABLE_CELL, 'w-44 font-semibold')}>
+              {columns.third}
             </th>
           ) : null}
           <th scope="col" className={cn(TABLE_CELL, 'w-24')}>
@@ -85,39 +164,9 @@ export function LibraryTable({
           </th>
         </tr>
       </thead>
-      <tbody>
-        {items.map((item) => (
-          <tr
-            key={item.id}
-            className="border-b border-hairline transition-colors hover:bg-muted/60"
-          >
-            <th scope="row" className={cn(TABLE_CELL, 'font-normal')}>
-              <NameCell item={item} />
-            </th>
-            <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>
-              {groupName(item.group)}
-            </td>
-            {levels ? (
-              <td className={cn(TABLE_CELL, 'truncate')}>
-                {item.stage ? <LevelMark stage={item.stage} /> : null}
-              </td>
-            ) : null}
-            {extra ? (
-              <td className={cn(TABLE_CELL, 'truncate text-muted-foreground')}>{item.extra}</td>
-            ) : null}
-            <td className={cn(TABLE_CELL, 'pe-0')}>
-              <span className="flex items-center justify-end gap-1">
-                {item.trailing}
-                <FavouriteHeart item={item} />
-                <RowMore
-                  label={t('common:library.moreOf', { name: item.name })}
-                  actions={menuOf(item.actions)}
-                />
-              </span>
-            </td>
-          </tr>
-        ))}
-      </tbody>
+      {sections.map((section) => (
+        <SectionRows key={section.id} section={section} levels={levels} columns={columns} />
+      ))}
     </table>
   )
 }

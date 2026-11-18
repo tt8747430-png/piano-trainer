@@ -1,13 +1,7 @@
 import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  lessonById,
-  lessonPlace,
-  nextLessonId,
-  previousLessonId,
-  type Lesson,
-} from '@/entities/lesson'
+import { lessonById, lessonPlace, nextLessonId, type Lesson } from '@/entities/lesson'
 import {
   isOwnLessonId,
   ownCourseLessons,
@@ -118,7 +112,6 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
   const journey = { to: '/levels/$levelId', params: { levelId: place.journey.id } } as const
   const lessonAt = (id: string | undefined) => (id === undefined ? undefined : lessonById(id))
   const next = lessonAt(nextLessonId(lesson.id))
-  const previous = lessonAt(previousLessonId(lesson.id))
   const journeyTitle = localText(place.journey.title, locale)
   return (
     <LessonScreen
@@ -132,15 +125,6 @@ function LevelLesson({ lesson }: { lesson: Lesson }) {
       }
       track={{
         up: { link: <Link {...journey} />, label: t('track.toJourney'), title: journeyTitle },
-        ...(previous
-          ? {
-              previous: {
-                link: <Link to="/lessons/$lessonId" params={{ lessonId: previous.id }} />,
-                label: t('track.previous'),
-                title: localText(previous.title, locale),
-              },
-            }
-          : {}),
         next: next
           ? {
               link: <Link to="/lessons/$lessonId" params={{ lessonId: next.id }} />,
@@ -182,7 +166,6 @@ function InOwnCourse({ lesson, course }: { lesson: Lesson; course: OwnCourse }) 
   const edit = useEdit(lesson.id)
   const lessons = ownCourseLessons(course, useOwnLessons(selectOwnLessons))
   const at = lessons.findIndex((each) => each.lesson.id === lesson.id)
-  const previous = lessons[at - 1]?.lesson
   const next = lessons[at + 1]?.lesson
   const home = { to: '/courses/$courseId', params: { courseId: course.id } } as const
   const inCourse = (id: string) => (
@@ -202,15 +185,6 @@ function InOwnCourse({ lesson, course }: { lesson: Lesson; course: OwnCourse }) 
       }
       track={{
         up: { link: <Link {...home} />, label: t('track.toCourseLessons'), title: course.title },
-        ...(previous
-          ? {
-              previous: {
-                link: inCourse(previous.id),
-                label: t('track.previous'),
-                title: localText(previous.title, locale),
-              },
-            }
-          : {}),
         next: next
           ? {
               link: inCourse(next.id),

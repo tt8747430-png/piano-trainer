@@ -306,7 +306,7 @@ export const quiz = {
   openScales: 'Open in Scales',
   // A chord to build: its notes, shown once asked.
   hint: 'Hint',
-  hintNotes: 'Its notes',
+  hintNotes: 'Its notes: {{notes}}',
   // How a run stands, beside its round.
   tally: { right: '{{count}} right', wrong: '{{count}} wrong', run: 'Run {{count}}' },
   // Why a round's answer is its answer, said once it is answered.

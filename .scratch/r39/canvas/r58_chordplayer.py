@@ -126,7 +126,7 @@ CP58 = CP58.replace("    return { ...common(st, set), draftOn:", r"""    const S
 assert CP58.count('sec59') == 2, 'R59 patch missed'
 
 def CHART59(cols, gap, bh, bf, plus):
-    sup = f'<sup style="font-size: .58em; vertical-align: .6em; margin-left: 1px">{{{{b.x}}}}</sup>'
+    sup = f'<sup style="font-size: max(12px, .6em); vertical-align: .6em; margin-left: 1px">{{{{b.x}}}}</sup>'
     box = (f'<sc-for list="{{{{x.boxes}}}}" as="b" hint-placeholder-count="8"><button type="button" onClick="{{{{b.tap}}}}" aria-label="{{{{b.label}}}}" style="grid-column: {{{{b.span}}}}; position: relative; min-width: 0; height: {bh}px; padding: 4px 8px 0; border: 0; border-radius: 6px; background: {{{{b.bg}}}}; box-shadow: {{{{b.ring}}}}; color: {INK}; font: inherit; text-align: left; display: flex; align-items: flex-start">'
            f'<span style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: {bf}px; font-weight: 500; line-height: 1.25">{{{{b.r}}}}{sup}{{{{b.b}}}}</span>'
            f'<span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 10px; display: flex"><sc-for list="{{{{b.ticks}}}}" as="t" hint-placeholder-count="4"><span style="flex: 1; display: flex; justify-content: center; align-items: flex-end"><span style="width: 1.5px; height: {{{{t.h}}}}; background: {{{{t.bg}}}}"></span></span></sc-for></span>'
@@ -147,7 +147,7 @@ def CHART59(cols, gap, bh, bf, plus):
 
 POP59 = lambda lbl, act, w, name: f'<button type="button" onClick="{{{{{act}}}}}" aria-label="{name}: {{{{{lbl}}}}}" style="flex: none; min-width: {w}px; height: 44px; padding: 0 12px 0 12px; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px">{{{{{lbl}}}}}<span style="display: flex; color: {SOFT}">{CHEV_D}</span></button>'
 ROW59 = lambda label, inner: ('raw', f'<div style="min-height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 16px"><span style="flex: 1; font-size: 16px">{label}</span>{inner}</div>')
-SUGG59 = f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{suggest59}}}}" as="s" hint-placeholder-count="8"><button type="button" onClick="{{{{s.pick}}}}" style="height: 44px; min-width: 0; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 17px; font-weight: 500">{{{{s.r}}}}<sup style="font-size: .6em; vertical-align: .55em">{{{{s.x}}}}</sup>{{{{s.b}}}}</button></sc-for></div>'
+SUGG59 = f'<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{suggest59}}}}" as="s" hint-placeholder-count="8"><button type="button" onClick="{{{{s.pick}}}}" style="height: 44px; min-width: 0; border: 0; border-radius: 10px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; color: {INK}; font: inherit; font-size: 17px; font-weight: 500">{{{{s.r}}}}<sup style="font-size: max(12px, .6em); vertical-align: .55em">{{{{s.x}}}}</sup>{{{{s.b}}}}</button></sc-for></div>'
 QBTN = lambda svg, label, act: f'<button type="button" onClick="{{{{{act}}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap">{svg}{label}</button>'
 CP_CHORD59 = (GROUP(ROW59('Chord', POP59('rootPopL', 'openRootPop', 72, 'Root') + POP59('qualPopL', 'openQualPop', 120, 'Quality')),
                     ROW59('Bass note', POP59('bassPopL', 'openBassPop', 136, 'Bass note')), ('step', 'Duration', 'selLen', 'lenDn', 'lenUp'))
@@ -178,12 +178,14 @@ STRIP = (f'<sc-if value="{{{{arOn}}}}" hint-placeholder-val="{{{{true}}}}"><div 
 # then Intro I–III and Ending/rit. I–III (a phone's two rows; one row of groups on a laptop), each group named over it.
 # Only what the Genos takes over MIDI (the brief: ACMP, Sync, Auto Fill, Fade and OTS Link have no message).
 LAMP59 = lambda key, label, act, spoken='': f'<button type="button" onClick="{{{{{act}}}}}" aria-pressed="{{{{{key}.on}}}}" aria-label="{spoken or label}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{{key}.bg}}}}; color: {{{{{key}.fg}}}}; box-shadow: {{{{{key}.ring}}}}; font: inherit; font-size: 14px; font-weight: 700; white-space: nowrap">{label}</button>'
+# Start/Stop one width in the full and the compact strip (it was 96 in one and 88 in the other)
+START59 = LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px', 1)
 LAMPS59 = lambda lst, spoken: f'<sc-for list="{{{{{lst}}}}}" as="l" hint-placeholder-count="3"><button type="button" onClick="{{{{l.pick}}}}" aria-pressed="{{{{l.on}}}}" aria-label="{spoken} {{{{l.n}}}}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 0; border-radius: 9px; background: {{{{l.bg}}}}; color: {{{{l.fg}}}}; box-shadow: {{{{l.ring}}}}; font: inherit; font-size: 14px; font-weight: 700">{{{{l.n}}}}</button></sc-for>'
 CAP59 = lambda t: f'<span style="font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">{t}</span>'
 GRP59 = lambda label, cols, inner, grow='1': f'<div role="group" aria-label="{label}" style="flex: {grow} 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">{CAP59(label)}<div style="display: grid; grid-template-columns: repeat({cols}, minmax(0, 1fr)); gap: 4px">{inner}</div></div>'
 HEAD59 = (f'<div style="display: flex; align-items: center; gap: 8px; min-height: 40px"><span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
           f'<span aria-live="polite" style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{arTitle}}}}</span>'
-          + LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 96px') + '</div>')
+          + START59 + '</div>')
 MAINS59 = GRP59('Main', 5, LAMPS59('arMains', 'Main') + LAMP59('arBreak', 'Break', 'tBreak'), '5')
 INTRO59 = GRP59('Intro', 3, LAMPS59('arIntros', 'Intro'), '3')
 END59 = GRP59('Ending/rit.', 3, LAMPS59('arEndings', 'Ending'), '3')
@@ -287,7 +289,7 @@ DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}">
 TRAY = (f'<sc-if value="{{{{anyHidden}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 16px 8px"><span style="font-size: 14px; color: {SOFT}">Hidden</span>'
         f'<sc-for list="{{{{hiddenPanels}}}}" as="h" hint-placeholder-count="1"><button type="button" onClick="{{{{h.show}}}}" style="height: 44px; padding: 0 14px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {FILL}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600">+ {{{{h.l}}}}</button></sc-for></div></sc-if>')
 BARR = (f'<sc-if value="{{{{layNot}}}}" hint-placeholder-val="{{{{true}}}}">' + UNDOB + GEAR() + DOTSB + '</sc-if>'
-        + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay').replace('font-weight: 600', 'font-weight: 700', 1) + '</sc-if>')
+        + f'<sc-if value="{{{{layEdit}}}}" hint-placeholder-val="{{{{false}}}}">' + TB('Reset', 'resetLay') + TB('Done', 'doneLay') + '</sc-if>')
 
 # the Genos, three sizes: Full (every control), Compact (Start/Stop and Main A–D in a row), Minimized (a pill)
 MINI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M5 12h14"></path></svg>'
@@ -300,7 +302,7 @@ def GENOS76(pos, wide):
             + HEAD76 + (f'<div style="display: flex; gap: 16px">{INTRO59}{MAINS59}{END59}</div>' if wide else f'{MAINS59}<div style="display: flex; gap: 12px">{INTRO59}{END59}</div>') + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     comp = (f'<sc-if value="{{{{gCompact}}}}" hint-placeholder-val="{{{{false}}}}"><div role="toolbar" aria-label="Genos style controls" style="position: relative; height: 64px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; {CARDST}">'
             f'<span style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>'
-            + LAMP59('arStart', 'Start/Stop', 'togglePlay').replace('min-width: 44px', 'flex: none; min-width: 88px')
+            + START59
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'

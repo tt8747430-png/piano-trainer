@@ -40,13 +40,10 @@ export function ChordFace({
   )
 }
 
-/** A second tap within this many milliseconds is a double tap: the chord's sheet opens. */
-const DOUBLE_TAP_MS = 350
-
 /**
  * A chord as Musicca's box (canvas 173): as many of its row's beat columns wide as its beats, its name
  * large at its top left with its extension raised, a tick for each beat along its foot (the beat
- * sounding taller, in ink). One tap selects it (Play then starts there), a double tap opens its sheet.
+ * sounding taller, in ink). A tap selects it (Play then starts there), a tap on it chosen opens its sheet.
  * Selected or sounding it wears the honey ring, sounding on the honey wash too. Selected, its right
  * edge carries Musicca's handle: dragged, it sets its length in whole beats, nothing else retimed.
  * Held a quarter of a second by a finger, or dragged by a mouse, it lifts and lands before any chord
@@ -89,7 +86,6 @@ export function ChordTile({
     id,
   })
   const symbol = printedSymbol(chordSymbol(chord))
-  const lastTap = useRef(0)
   // Auto-scroll: the chord sounding is kept in sight as the sheet plays, clear of the bar above and
   // of the keys and what floats over them below; instant under reduced motion.
   const box = useRef<HTMLDivElement>(null)
@@ -118,16 +114,8 @@ export function ChordTile({
       acts.resize(place, beats + (event.key === 'ArrowRight' ? 1 : -1))
     }
   }
-  const onTap = () => {
-    const now = performance.now()
-    if (now - lastTap.current < DOUBLE_TAP_MS) {
-      lastTap.current = 0
-      acts.open(place)
-    } else {
-      lastTap.current = now
-      acts.select(place)
-    }
-  }
+  // A tap selects it, a tap on it chosen opens its sheet, at any pace (Numbers' and Keynote's).
+  const onTap = () => (selected ? acts.open(place) : acts.select(place))
   /** Musicca's handle: the pointer's travel in beat widths, from the box's own width. */
   const onStretch = (event: PointerEvent<HTMLSpanElement>) => {
     event.stopPropagation()

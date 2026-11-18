@@ -646,6 +646,9 @@ export const practice: LocaleResources['practice'] = {
     empty: 'Здесь пока ничего нет.',
     table: {
       name: 'Название',
+      exercise: 'Упражнение',
+      pattern: 'Фактура',
+      focus: 'Что развивает',
       book: 'Книга',
       style: 'Стиль',
       level: 'Уровень',
@@ -655,7 +658,6 @@ export const practice: LocaleResources['practice'] = {
     },
     kinds: {
       exercises: {
-        tree: 'Упражнения по книгам',
         search: 'Поиск упражнений',
         noMatch: 'Нет упражнений по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у упражнения, затем «Добавить в избранное».',
@@ -667,7 +669,6 @@ export const practice: LocaleResources['practice'] = {
         show_other: 'Показать {{count}} упражнения',
       },
       accompaniment: {
-        tree: 'Аккомпанемент по книгам',
         search: 'Поиск аккомпанемента',
         noMatch: 'Нет фактур по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у фактуры, затем «Добавить в избранное».',
@@ -679,7 +680,6 @@ export const practice: LocaleResources['practice'] = {
         show_other: 'Показать {{count}} фактуры',
       },
       progressions: {
-        tree: 'Последовательности по стилям',
         search: 'Поиск последовательностей',
         noMatch: 'Нет последовательностей по запросу «{{query}}».',
         favouritesHint: 'Нажмите ⋯ у последовательности, затем «Добавить в избранное».',
@@ -738,7 +738,6 @@ export const practice: LocaleResources['practice'] = {
     faster: 'Быстрее на {{step}}',
     tap: 'Темп касанием',
     tapShort: 'Темп',
-    settingsTitle: 'Настройки метронома',
     flash: 'Вспышка на каждую долю',
     volume: 'Громкость',
     off: 'Выкл.',
@@ -923,8 +922,8 @@ export const practice: LocaleResources['practice'] = {
     chords: 'Аккорды',
     loopSection: 'Повторять этот раздел',
     keyChords: 'Аккорды {{key}}',
-    keyChordsHint: 'Перетащите аккорд в такт.',
-    keyChord: '{{chord}}: перетащите в такт или нажмите, чтобы добавить в конец',
+    keyChord: '{{chord}}: нажмите или перетащите в такт',
+    keyChordTip: 'Нажмите или перетащите в такт',
     arranger: {
       title: '{{name}} на Genos',
       tag: '{{name}} на Genos: {{marks}}',

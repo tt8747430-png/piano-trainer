@@ -8,7 +8,6 @@
 #   PlayWalk, PlayChromatic, PlayProgression, PlayExercise — the Player's variants: their setup over the Player
 # Exec'd by r41.py after r53_songs_more (uses its IF, NARROW, WIDE, PAGEHEAD_L, H1, TOASTS, TOAST_JS, STRIP, EMPTY).
 
-WRAPCHIPS = lambda lst: KCHIPS(lst).replace('flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -4px -16px; padding: 0 16px', 'display: flex; flex-wrap: wrap; gap: 0 6px; margin: -4px 0')
 # A piano whose keys are buttons: k.tap marks or unmarks a key (the trainer's Play it, the Check)
 def TAPKEYS(lst, h):
     return (f'<div style="position: relative; flex: none; width: 100%; height: {h}px; overflow: hidden; background: {LINE}">'
@@ -85,7 +84,7 @@ CKRES = (RES_T + IF('checkDone', CARD(f'<div style="display: flex; align-items: 
          + SEC(CAPS('Skills'), GROUP(('link', 'D major', 'Open in Chords', 'Chords.dc.html'), ('link', 'G major scale', 'Open in Scales', 'Scales.dc.html'), bg=SHEET))
          + f'<div style="display: flex; gap: 8px">{BTN("Again", "again", "", "quiet", 50)}{BTN("Done", "", "Song.dc.html", "primary", 50)}</div>')
 TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{levels}}}}" as="l" hint-placeholder-count="6"><button type="button" onClick="{{{{l.pick}}}}" style="width: 100%; min-height: 52px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{l.l}}}}</span><span style="font-weight: 700">{{{{l.mark}}}}</span></button></sc-for></div>')
-             + BSHEET('customOn', 'Chord qualities', f'<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 16px; font-weight: 600">{{{{recT}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{incN}}}}</span></div>{WRAPCHIPS("quals")}'
+             + BSHEET('customOn', 'Chord qualities', f'<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 16px; font-weight: 600">{{{{recT}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{incN}}}}</span></div>{WCHIPS("quals")}'
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
         + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
@@ -120,7 +119,7 @@ DRAFTPILL = f'<button type="button" onClick="{{{{openPublishing}}}}" style="heig
 _PEH = f'<div style="display: flex; align-items: center; gap: 8px">{DRAFTPILL}<span style="font-size: 13px; color: {SOFT}">Editors only · learners see the published version</span></div>'
 _PEN = INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'Bright and singable, the sound of a thousand hits', kb='text')
 _PEP = SEC(S9CAPS('The progression', 'prog'), TIPCARD('prog', 'Roman numerals, one per bar, separated by spaces: I V vi IV.'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px 16px; font-family: {SERIF}; font-size: 26px; letter-spacing: .04em">I – V – vi – IV</div>')
-_PES = SEC(CAPS('Style'), WRAPCHIPS('styles'))
+_PES = SEC(CAPS('Style'), WCHIPS('styles'))
 _PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET))
 # sections 24 apart, 8 inside: a heading sits 3× nearer what it heads than what ends above it (laws, Spacing 2)
 PEEDIT = '<div style="display: flex; flex-direction: column; gap: 24px">' + _PEH + _PEN + _PEP + _PES + _PEL + '</div>'
@@ -259,8 +258,8 @@ LADROW = ('raw', f'<div style="position: relative; min-height: 48px; box-sizing:
           + INFOTIP('tipOn_lad', 'tip_lad', 'About this', '<p style="margin: 0">Each clean pass raises the tempo a little, up to the target.</p>', 'left: 0; top: 52px') + '</div>')
 # the setup's sections 24 apart, a heading 8 over its control: each heading reads with what it heads (laws, spacing 3)
 PVSET = ('<div style="display: flex; flex-direction: column; gap: 24px">' + IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>'))
-         + IF('isChrom', SEC(CAPS('Chord type'), WRAPCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
-         + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WRAPCHIPS('walks')))
+         + IF('isChrom', SEC(CAPS('Chord type'), WCHIPS('fams')) + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>'))
+         + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('In all 12 keys'), WCHIPS('walks')))
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
                       + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(('step', 'Octaves', 'octV', 'oDn', 'oUp'), ('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), LADROW, bg=SHEET))
  + '</div>')

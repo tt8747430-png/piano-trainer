@@ -138,13 +138,15 @@ CAPS = lambda t: f'<h3 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 
 def SEGC(lst, h=32, fs=14, fill=False):
     """A segmented choice; fill=True when it takes its row's width (a mode switch across a bar)."""
     return f'<div role="radiogroup" style="flex: {'1' if fill else 'none'}; display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: {FILL}"><sc-for list="{{{{{lst}}}}}" as="o" hint-placeholder-count="3"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 0; border-radius: 9px; background: {{{{o.bg}}}}; box-shadow: {{{{o.sh}}}}; color: {INK}; font: inherit; font-size: {fs}px; font-weight: {{{{o.fw}}}}; white-space: nowrap">{{{{o.l}}}}</button></sc-for></div>'
-def CHIPS(lst):
-    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; overflow-x: auto; margin: -4px -16px; padding: 0 16px"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
+def CHIPS(lst, wrap=False, bleed=True):
+    # a row of chips scrolls to the screen's edges (bleed); in a sheet or beside a control the row wraps, never cut at its edge
+    lay = 'flex-wrap: wrap; row-gap: 0; margin: -4px 0' if wrap else 'overflow-x: auto; margin: -4px -16px; padding: 0 16px' if bleed else 'overflow-x: auto; margin: -4px 0; padding: 0'
+    return f'<div class="nos" role="radiogroup" style="flex: none; display: flex; gap: 8px; {lay}"><sc-for list="{{{{{lst}}}}}" as="p" hint-placeholder-count="4"><button type="button" onClick="{{{{p.pick}}}}" style="flex: none; min-width: 44px; height: 44px; padding: 0 16px; border: solid transparent; border-width: 4px 0; background-clip: padding-box; border-radius: 22px; background-color: {{{{p.bg}}}}; color: {{{{p.fg}}}}; font: inherit; font-size: 14px; font-weight: 600">{{{{p.l}}}}</button></sc-for></div>'
 KCHIPS = CHIPS
 # In a sheet the choices wrap, never cut at its edge ("nothing is cut")
 # A caption and the control it names, 8 apart, so the sheet's 16 falls between fields, not inside one (proximity)
 LABELLED = lambda t, ctrl: f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS(t)}{ctrl}</div>'
-WCHIPS = lambda lst: CHIPS(lst).replace('overflow-x: auto; margin: -4px -16px; padding: 0 16px', 'flex-wrap: wrap; row-gap: 0; margin: -4px 0', 1)
+WCHIPS = lambda lst: CHIPS(lst, wrap=True)
 def STEPPER(val, dn, up, w=64):
     b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'
     return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, "−", "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, "+", "More")}</div>'

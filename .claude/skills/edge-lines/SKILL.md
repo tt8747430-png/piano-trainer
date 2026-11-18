@@ -78,6 +78,16 @@ parts dashed green, moved or resized red with an arrow from where they were, new
 Run it for every pair of sibling pages a change touches (the places of one area, the tabs of one page, a list and its
 item), and for a sheet opening over its page.
 
+**How it measures** (owner, 2026-11-18: "fix all the wrong measured pixels"): a block's left edge is where the eye
+reads it: a drawn surface (its own fill, ring or border) by its box, anything else by its first word, icon or picture.
+A bar is a band and keeps its Back on the kit's 12, so it is left out of edge pairs; the current row's wash and a bar's
+band are read by their words; what runs the screen's full width has no edge to meet. Room made by centring (a column
+centred in what is left, a margin set to auto) is room, not a gap. A sheet docked at the screen's foot, or a box whose
+row bleeds to its edges (the keys), is not judged by its insets, and a row hung outside its box is not its content. A
+board is opened at the device asked for (`mac` is a laptop, whatever the board's name). Scroll steps wheel over the
+page, never the sidebar. A finding the tool prints is a fault to fix on the board; a misreading is a fault in the tool,
+fixed in the tool the same turn, never kept as a list of known false reads.
+
 Then **look at the shot** (Read the png). The script finds near-misses and off-scale gaps; only the eye finds the rest.
 
 ## 2. Ask of the shot, in this order

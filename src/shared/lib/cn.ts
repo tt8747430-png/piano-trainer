@@ -10,7 +10,20 @@ import { createCn } from 'cn/config'
 export const cn = createCn({
   extend: {
     classGroups: {
-      rounded: [{ rounded: ['control', 'card', 'sheet', 'pill', 'key-black', 'key-white'] }],
+      rounded: [
+        {
+          rounded: [
+            'control',
+            'card',
+            'sheet',
+            'menu',
+            'menu-item',
+            'pill',
+            'key-black',
+            'key-white',
+          ],
+        },
+      ],
     },
   },
 })

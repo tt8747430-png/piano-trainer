@@ -52,7 +52,7 @@ const sameChord = (a: Chord, b: Chord) =>
   sameNote(a.root, b.root) && a.quality === b.quality && a.bass === undefined
 
 /**
- * A chord's sheet as Musicca's dialog (canvas 173), opened by a double tap on it, its bar's !, or a
+ * A chord's sheet as Musicca's dialog (canvas 173), opened by a tap on it chosen, its bar's !, or a
  * letter typed on it (the symbol then typed): titled by its name; Chord (its root ⌄ and quality ⌄),
  * Bass note ⌄, Duration − n beats +; Suggested chords four across (the key's, a tap takes one); then
  * Delete, Duplicate and Play from here at its foot.

@@ -18,7 +18,7 @@ export function AccompanimentPage() {
   const { groups, items, mine } = useAccompanimentLibrary()
   const { editing, edit } = useArrangeMode()
   const navigate = useNavigate()
-  const made = useLibraryNew('accompaniment', [
+  const newDial = useLibraryNew('accompaniment', [
     {
       key: 'pattern',
       label: t('patterns.new'),
@@ -34,7 +34,6 @@ export function AccompanimentPage() {
           title: t('pages.accompaniment'),
           back: <BackButton />,
           edit,
-          tools: editing ? undefined : made.menu,
         }}
         kind="accompaniment"
         view={view}
@@ -42,7 +41,7 @@ export function AccompanimentPage() {
         groups={groups}
         groupWord="book"
         levels
-        extra={t('library.table.hands')}
+        columns={{ name: t('library.table.pattern'), second: t('library.table.hands') }}
         {...(mine
           ? {
               mine: {
@@ -61,7 +60,7 @@ export function AccompanimentPage() {
         screen={t('pages.accompaniment')}
         editing={editing}
       />
-      {editing ? null : made.dial}
+      {editing ? null : newDial}
     </div>
   )
 }

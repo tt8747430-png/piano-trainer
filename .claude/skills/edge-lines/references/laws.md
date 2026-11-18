@@ -482,7 +482,8 @@ pressed; `DESIGN.md`, Typography). Each rule is a yes-or-no check on a board's s
 - **Serif:** serifs "create a feeling of sophistication, trust, and world-class quality."
   7. The serif is the name of the thing (a song, a chord, a lesson, a screen's title: the Serif Names Rule); it never
      sets a button, a tab, a chip, a field or a key label. One serif and one sans on every board: no third family
-     (Noto Music only for a music sign that stands alone).
+     (Noto Music only for a music sign that stands alone). The sidebar's wordmark, Piano Trainer in Instrument Serif,
+     is the logo, a picture, and no third family.
 - **Kerning:** "certain letter combinations (… W, Y, V, or T) have large gaps"; "kerning that looks fine at small
   sizes … becomes unbalanced … when enlarged for headlines."
   8. Kerning is the font's: `font-kerning: normal` everywhere (the default); no board turns it off.

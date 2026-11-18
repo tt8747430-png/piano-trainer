@@ -9,37 +9,36 @@ import { stepOf, type StepId } from '@/entities/step'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
-import { AboutView } from '@/widgets/lesson-view'
 import {
   CourseBanner,
   CourseLessons,
   CourseOverview,
   courseProgress,
+  CourseTitle,
   GuidedSongs,
   openCourseStep,
 } from '@/widgets/curriculum'
 import { OwnCoursePage } from './OwnCoursePage'
 
 /**
- * The course's one way in, the wide honey button along its card's foot (its board): Start course,
- * or Continue onto the step to take; Review, onto its first lesson, once every one is learned.
+ * The course's one way in, the honey 50 under its meter (the canvas's BTN): Start, Continue or
+ * Review and the step it opens ("Continue: The bass clef"); Review opens its first lesson.
  */
 function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
+  const locale = useLocale()
   const learned = useProgress(selectLearned)
   const progress = courseProgress(course, learned)
   const open = openCourseStep(course, learned)
-  const step = stepOf(open ?? courseStepIds(course)[0])
-  if (!step || (step.kind !== 'course-lesson' && step.kind !== 'piece')) return null
-  const label = !open
-    ? t('course.review')
-    : progress.done === 0
-      ? t('course.start')
-      : t('course.continue')
+  const first = courseStepIds(course)[0]
+  const id = open ?? first
+  const step = id ? stepOf(id) : undefined
+  if (!id || !step || (step.kind !== 'course-lesson' && step.kind !== 'piece')) return null
+  const word = !open ? 'review' : progress.done === 0 ? 'start' : 'continue'
   return (
     <ButtonLink
       size="lg"
-      className="h-13 w-full rounded-pill px-5 text-base font-bold"
+      className="w-full lg:w-auto lg:min-w-90"
       render={
         step.kind === 'piece' ? (
           // A guided song's page, where it is played and marked learned.
@@ -52,7 +51,7 @@ function CourseAction({ course }: { course: Course }) {
         )
       }
     >
-      {label}
+      {t(`journey.${word}`, { title: stepTitle(course, id, locale) ?? '' })}
     </ButtonLink>
   )
 }
@@ -68,10 +67,13 @@ function stepTitle(course: Course, id: StepId, locale: Locale): string | undefin
 }
 
 /**
- * A course's page (ADR 0053, 0061), its board's: its cover in its level's paint, what it teaches,
- * its facts as chips, how much is learned and what is next over a meter, its one way in in honey;
- * its About, where an editor wrote one (R29 B9); then its lessons numbered as taught, the next
- * ringed, and its guided songs. A course of the learner's own (R30-5) reads as `OwnCoursePage`.
+ * A course's page (ADR 0053, 0061; the Course boards): the bar holds Back, the gear and an editor's
+ * Edit; the cover in its shelf's paint, the course's name as the page's serif heading under it, what
+ * it teaches, its facts in one line, how much is learned over a meter and its one way in; then its
+ * lessons on the level's timeline and its guided songs. No About: what it teaches is said once, in
+ * the summary. On a laptop the head is a band across the top (the cover beside the words), the
+ * lessons four across and the songs on the same grid. A course of the learner's own (R30-5) reads as
+ * `OwnCoursePage`.
  */
 export function CoursePage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })
@@ -92,13 +94,12 @@ function AppCourse({ courseId }: { courseId: string }) {
   const progress = courseProgress(course, learned)
   const paint = PAINT[SHELF_PAINT[course.shelf]]
   const next = openCourseStep(course, learned)
+  const title = localText(course.title, locale)
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 pb-8">
       <ScreenHeader
-        title={localText(course.title, locale)}
-        // A course's name in full over its page, as a song's: the bar echoes it once scrolled.
-        large
-        named
+        title={title}
+        titleOnPage
         back={<BackButton />}
         settings={
           <RoundLink
@@ -122,31 +123,23 @@ function AppCourse({ courseId }: { courseId: string }) {
             : undefined
         }
       />
-      {/* A laptop: the course held in view on the left, its lessons and songs beside it. */}
-      <div className="-mt-4 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
-        <div className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-4 lg:w-100 lg:flex-none">
-          <CourseOverview
-            cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
-            summary={localText(course.summary, locale)}
-            facts={[
-              t(`common:stage.${course.stage}`),
-              t('course.lessonCount', { count: course.lessons.length }),
-              ...(course.songs.length > 0
-                ? [t('course.songCount', { count: course.songs.length })]
-                : []),
-              t('course.weekCount', { count: course.weeks }),
-            ]}
-            progress={progress}
-            next={next ? stepTitle(course, next, locale) : undefined}
-            action={<CourseAction course={course} />}
-          />
-          {/* Its About (R29 B9): the editor's document, each block in its own style. */}
-          <AboutView about={course.about} label={t('course.about')} />
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-8">
-          <CourseLessons course={course} next={next} />
-          <GuidedSongs course={course} />
-        </div>
+      <div className="-mt-6 flex min-w-0 flex-col gap-8 lg:-mt-4">
+        <CourseOverview
+          cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
+          title={<CourseTitle>{title}</CourseTitle>}
+          summary={localText(course.summary, locale)}
+          facts={[
+            t(`common:stage.${course.stage}`),
+            ...(course.songs.length > 0
+              ? [t('course.songCount', { count: course.songs.length })]
+              : []),
+            t('course.weekCount', { count: course.weeks }),
+          ]}
+          progress={progress}
+          action={<CourseAction course={course} />}
+        />
+        <CourseLessons course={course} next={next} />
+        <GuidedSongs course={course} />
       </div>
     </div>
   )
