@@ -261,6 +261,9 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 - **Card Paper** (`card`, `popover`, `raised`): cards, sheets, popovers, controls at rest, what floats.
 - **Sand** (`muted`, `accent`): hover and pressed fills, tracks.
 - **Soft Line** (`border`, `chosen`): 1px round a card, and the selected fill of a segment, tab or place, a step darker than hover; a chosen chip (a library's All · Favourites · Mine, any `ChoiceChips`) is filled in ink with the page's colour on it (canvas 153).
+- **Honey wash** (`chosen-honey`, its edge `honey-ring`): the one exception to the Neutral Choice Rule, as the
+  PlayerApp board draws it, on the Player's Pattern sheet alone: the pattern playing, its place chip and its Sort and
+  filter chips (`ChoiceChips` `tone="honey"`, card pills in a hairline), and Sort and filter while one is on.
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
 - **Hairline** (`hairline`): a divider inside a card.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.

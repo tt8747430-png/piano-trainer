@@ -16,6 +16,8 @@ export interface Option<V extends OptionValue> {
   readonly short?: string
   /** Why it cannot be chosen, where it cannot: a segment greyed, saying so in its tooltip. */
   readonly reason?: string | undefined
+  /** How many it keeps, after its label in soft ink (a filter's chip); none, it dims. */
+  readonly count?: number
 }
 
 /**

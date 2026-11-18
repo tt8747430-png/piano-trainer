@@ -122,6 +122,12 @@
    * darker than the hover's muted sand, so hover never looks chosen; neutral, as the chosen is.
    */
   --chosen: var(--p-line);
+  /*
+   * What the music plays now among choices that each show what they are (the Player's Pattern
+   * sheet, the board's #FBF1DD): a honey wash, its edge the honey ring. Drawn from the action and the
+   * card, so it follows the theme.
+   */
+  --chosen-honey: color-mix(in oklab, var(--primary) 25%, var(--card));
   /* A switch, the canvas's SWITCH: the sage track when on, the white knob over it. */
   --switch-on: #7fb685;
   --switch-knob: #ffffff;
@@ -361,6 +367,7 @@
     --wheel-near: color-mix(in oklab, var(--primary) 22%, var(--card));
     --wheel-relative: color-mix(in oklab, var(--primary) 34%, var(--background));
     --wheel-near-inner: color-mix(in oklab, var(--primary) 13%, var(--background));
+    --chosen-honey: color-mix(in oklab, var(--primary) 40%, var(--card));
   }
   @media screen {
     [data-theme='dark'] {

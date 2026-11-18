@@ -2,8 +2,12 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Music4, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BackButton, ButtonLink } from '@/shared/ui'
-import { PracticeLibrary, useArrangeMode, useLibraryNew } from '@/widgets/practice-library'
-import { useAccompanimentLibrary } from '../model/use-accompaniment-library'
+import {
+  PracticeLibrary,
+  useAccompanimentLibrary,
+  useArrangeMode,
+  useLibraryNew,
+} from '@/widgets/practice-library'
 
 /**
  * Accompaniment (R30-4, R32): the accompaniment patterns as a library, the Songs library's shape,

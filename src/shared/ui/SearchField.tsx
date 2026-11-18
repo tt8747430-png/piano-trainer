@@ -1,6 +1,7 @@
 import { Search, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
   InputGroup,
@@ -8,6 +9,15 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from './primitives/input-group'
+
+/**
+ * Where the box stands: on a page, in the muted fill; on a sheet of the paper's colour (the Player's
+ * Pattern sheet), the card's, 40 tall.
+ */
+const SURFACES = {
+  page: 'h-11 bg-muted dark:bg-muted',
+  sheet: 'h-10 bg-card dark:bg-card',
+} as const
 
 /**
  * A screen's search box, with a clear button while it holds text and, joined to its end, what sorts
@@ -24,6 +34,7 @@ export function SearchField({
   hint,
   end,
   autoFocus = false,
+  surface = 'page',
 }: {
   value: string
   onChange: (value: string) => void
@@ -37,6 +48,7 @@ export function SearchField({
   end?: ReactNode
   /** The cursor starts in it, on a screen that is for searching. */
   autoFocus?: boolean
+  surface?: keyof typeof SURFACES
 }) {
   const { t } = useTranslation('common')
   const input = useRef<HTMLInputElement>(null)
@@ -60,7 +72,7 @@ export function SearchField({
     enabled: screen !== undefined,
   })
   return (
-    <InputGroup className="h-11 rounded-control border-transparent bg-muted dark:bg-muted">
+    <InputGroup className={cn('rounded-control border-transparent', SURFACES[surface])}>
       <InputGroupAddon>
         <Search aria-hidden className="size-5" />
       </InputGroupAddon>

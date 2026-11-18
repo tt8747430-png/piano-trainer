@@ -33,12 +33,54 @@ export interface ArrangedLibraryView {
   readonly items: readonly LibraryItem[]
 }
 
+/** A library's row as the learner placed it: where it stands, Hidden's while hidden. */
+export type PlacedItem = LibraryItem & {
+  /** Its own place, before any move. */
+  readonly home: string
+  readonly renamed: boolean
+}
+
 /**
- * A Practice library as the learner arranged it (R32): the books (or styles) and their own folders
- * in their order, renamed and hidden as set; each row in the place it was moved to, under its name,
- * hidden with its place or alone; each row's More adding Rename…, Move to…, Hide (Show under Hidden)
- * and, renamed, Restore original name. A row whose page keeps its own hiding (a pattern, which the
- * Player's picker leaves out) hides through it (`item.hide`).
+ * A Practice library's places and rows as the learner arranged them (R32), with no acts: the books
+ * (or styles) and their own folders in their order, renamed and hidden as set; each row in the
+ * place it was moved to, under its name, Hidden's while hidden with its place or alone. A row whose
+ * page keeps its own hiding (a pattern, which the Player's picker leaves out) hides through it
+ * (`item.hide`). The library's page and the Player's Pattern sheet read it alike.
+ */
+export function useLibraryArrangement({
+  kind,
+  items,
+  groups,
+}: {
+  kind: LibraryKind
+  items: readonly LibraryItem[]
+  groups: readonly LibraryGroup[]
+}): {
+  readonly places: readonly ArrangedPlace[]
+  readonly groups: readonly LibraryGroup[]
+  readonly items: readonly PlacedItem[]
+} {
+  const arrangement = usePracticeLibrary(selectArrangement(kind))
+  const places = arrangedPlaces(groups, arrangement)
+  const rows = arrangedItems(items, places, arrangement).map((item): PlacedItem => {
+    const hiddenHere = item.hide ? item.hide.hidden : item.hidden
+    return {
+      ...item,
+      group: hiddenHere || item.home === HIDDEN ? HIDDEN : item.group,
+    }
+  })
+  return {
+    places,
+    groups: places
+      .filter((place) => !place.hidden)
+      .map((place) => ({ id: place.id, name: place.name })),
+    items: rows,
+  }
+}
+
+/**
+ * A Practice library as the learner arranged it (`useLibraryArrangement`), each row's More adding
+ * Rename…, Move to…, Hide (Show under Hidden) and, renamed, Restore original name.
  */
 export function useArrangedLibrary({
   kind,
@@ -53,18 +95,9 @@ export function useArrangedLibrary({
 }): ArrangedLibraryView {
   const { t } = useTranslation('practice')
   const store = usePracticeLibraryStoreApi()
-  const arrangement = usePracticeLibrary(selectArrangement(kind))
-  const places = arrangedPlaces(groups, arrangement)
-  const arranged = arrangedItems(
-    // A row the page has hidden already stays Hidden's; the rest stand in their own place.
-    items,
-    places,
-    arrangement,
-  )
+  const arranged = useLibraryArrangement({ kind, items, groups })
   const change = (apply: Parameters<typeof arrangeLibrary>[2]) => arrangeLibrary(store, kind, apply)
-  const rows = arranged.map((item): LibraryItem => {
-    const hiddenHere = item.hide ? item.hide.hidden : item.hidden
-    const group = hiddenHere || item.home === HIDDEN ? HIDDEN : item.group
+  const rows = arranged.items.map((item): LibraryItem => {
     const setHidden = (hidden: boolean) => {
       if (item.hide) item.hide.toggle()
       else change((each) => setItemHidden(each, item.id, hidden))
@@ -76,7 +109,6 @@ export function useArrangedLibrary({
     }
     return {
       ...item,
-      group,
       actions: [
         ...item.actions,
         {
@@ -100,7 +132,7 @@ export function useArrangedLibrary({
                   onSheet({ kind: 'move', id: item.id, name: item.name, home: item.home }),
               },
             ]),
-        group === HIDDEN
+        item.group === HIDDEN
           ? {
               key: 'show',
               label: t('library.edit.show'),
@@ -132,13 +164,7 @@ export function useArrangedLibrary({
       ],
     }
   })
-  return {
-    places,
-    groups: places
-      .filter((place) => !place.hidden)
-      .map((place) => ({ id: place.id, name: place.name })),
-    items: rows,
-  }
+  return { places: arranged.places, groups: arranged.groups, items: rows }
 }
 
 /** A row moved to another place, or home, with Undo in the toast. */

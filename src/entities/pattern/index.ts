@@ -48,7 +48,7 @@ export {
 export { PatternsStoreProvider, usePatterns, usePatternsStoreApi } from './model/context'
 export { usePatternBook } from './model/use-pattern-book'
 export { ACCOMPANIMENT_PARTS, isAccompanimentPart, type AccompanimentPart } from './model/parts'
-export { partOfShelf, pickerShelves } from './model/shelves'
+export { partOfShelf } from './model/shelves'
 export { patternsIn } from './model/groups'
 export { followsInversion } from './model/plays-chord'
 export {
@@ -76,7 +76,6 @@ export {
   type StyleBook,
 } from './model/styles'
 export { METHOD_PATTERNS } from './model/method-patterns'
-export { useFullShelfName } from './ui/use-full-shelf-name'
 export { usePartName } from './ui/use-part-name'
 export { usePatternName } from './ui/use-pattern-name'
 export { useShelfName } from './ui/use-shelf-name'
