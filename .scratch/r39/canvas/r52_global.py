@@ -66,11 +66,12 @@ def _crrow(row, c):
     t, sub, shelf, paint, now = c
     r = row.replace('{{k.t}}', t).replace('{{k.s}}', sub).replace('{{k.shelf}}', shelf).replace('{{k.paint}}', paint)
     return r.replace('<sc-if value="{{k.now}}" hint-placeholder-val="{{false}}">', '<sc-if value="{{true}}" hint-placeholder-val="{{true}}">' if now else '<sc-if value="{{false}}" hint-placeholder-val="{{false}}">')
-_CONT = CONT.replace('{{contT}}', 'Continue · Foundations').replace('{{nextT}}', 'How major scales work').replace('{{contSub}}', 'Lesson 7 of 13')
+_CONTF = lambda c: c.replace('{{contT}}', 'Continue · Foundations').replace('{{nextT}}', 'How major scales work').replace('{{contSub}}', 'Lesson 7 of 13').replace('{{contBar}}', '46%')
+_CONT = _CONTF(CONT)
 _LEV = lambda lap: _fill(LEVELLIST(lap), list(enumerate(_LVS)), _lvrow)
 UNDER = _CONT + H2('Levels') + _LEV(False) + H2('Courses', SEEALLH('LearnCourses.dc.html')) + _fill(COURSESTRIP, _CRS, _crrow) + OWNGROUP()
 # the laptop's Learn as LearnLaptop draws it: Continue, Levels as four cards, Courses, then the learner's own as three
-UNDER_L = (_CONT + H2('Levels') + _LEV(True) + H2('Courses', SEEALLH('LearnCoursesLaptop.dc.html')) + _fill(COURSEGRID, _CRS, _crrow) + OWNGROUP(True))
+UNDER_L = (_CONTF(CONTL) + H2('Levels') + _LEV(True) + H2('Courses', SEEALLH('LearnCoursesLaptop.dc.html')) + _fill(COURSEGRID, _CRS, _crrow) + OWNGROUP(True))
 
 # round 41: a suggestion wears its place's picture (a lesson the white circle it wears in Your lessons; a place its square), as Practice's rows do, over a line saying where it lives
 LESSONT = f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: #FEFDFB; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>'
