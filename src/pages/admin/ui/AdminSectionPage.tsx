@@ -1,9 +1,13 @@
-import { useParams } from '@tanstack/react-router'
 import type { JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { NotOpen } from '@/widgets/content-editor'
-import { isAdminSection, SettingsScreen, type AdminSection } from '@/widgets/settings-screen'
+import {
+  isAdminSection,
+  SettingsScreen,
+  useSettingsPath,
+  type AdminSection,
+} from '@/widgets/settings-screen'
 import { AccountsTab } from './AccountsTab'
 import { ActivityTab } from './ActivityTab'
 import { ComponentsTab } from './ComponentsTab'
@@ -36,7 +40,8 @@ const SECTIONS: Readonly<Record<AdminSection, () => JSX.Element>> = {
 export function AdminSectionPage() {
   const { t } = useTranslation('admin')
   const { account } = useAccount()
-  const { section: name } = useParams({ from: '/shell/admin/$section' })
+  // Its address, or the dialog's on a laptop, where the page behind holds the route.
+  const name = useSettingsPath().replace(/^\/admin\//, '')
   const section: AdminSection = isAdminSection(name) ? name : 'overview'
   const Section = SECTIONS[section]
   return (

@@ -13,13 +13,20 @@ import { Avatar, OpensMark } from '@/shared/ui'
  * and email, and one line of where the sync stands; it opens their Account, where Sync lives.
  * Signed out, it asks them to sign in and says why.
  */
-export function AccountCard({ current = false }: { current?: boolean }) {
+export function AccountCard({
+  current = false,
+  plain = false,
+}: {
+  current?: boolean
+  /** The laptop dialog's nav row (LACCT): no card, a 36 picture, the name 15 semibold. */
+  plain?: boolean
+}) {
   const { account } = useAccount()
   const { status } = useSync()
   const online = useOnline()
   const now = useMinute()
   const line = syncLine(online ? status : { ...status, state: 'offline' }, now)
-  return <AccountCardFace account={account} line={line} current={current} />
+  return <AccountCardFace account={account} line={line} current={current} plain={plain} />
 }
 
 /** The time now, to the minute: "Synced 2 min ago" keeps up while Settings stays open. */
@@ -37,11 +44,14 @@ export function AccountCardFace({
   account,
   line,
   current = false,
+  plain = false,
 }: {
   account: Account | null
   line: SyncLine
   /** Whether the account is the page open beside the list (a laptop). */
   current?: boolean
+  /** A plain row in the laptop dialog's nav, no card (LACCT). */
+  plain?: boolean
 }) {
   const { t } = useTranslation('settings')
   const locale = useLocale()
@@ -62,25 +72,45 @@ export function AccountCardFace({
   })()
   const synced = line.kind === 'synced'
   return (
-    <nav aria-label={t('account.label')} className="overflow-hidden card">
+    <nav aria-label={t('account.label')} className={plain ? undefined : 'overflow-hidden card'}>
       <Link
         to={account ? '/settings/account' : '/account/sign-in'}
         data-current={current ? '' : undefined}
-        className="flex min-h-19 items-center gap-4 py-3 pr-3 pl-4 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 data-current:bg-muted"
+        data-active={plain && current ? '' : undefined}
+        className={cn(
+          'flex items-center focus-visible:-outline-offset-3',
+          plain
+            ? 'gap-3 rounded-[10px] px-3 py-1.5 choice'
+            : 'min-h-19 gap-4 py-3 pr-3 pl-4 transition-colors duration-200 ease-out hover:bg-muted data-current:bg-muted',
+        )}
       >
-        <Avatar name={account ? account.name || account.email : null} size="row" />
+        <Avatar
+          name={account ? account.name || account.email : null}
+          size={plain ? 'nav' : 'row'}
+        />
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="truncate text-lg font-bold">
+          <span
+            className={cn(
+              'truncate',
+              plain ? 'text-[0.9375rem] font-semibold' : 'text-[1.0625rem] font-bold',
+              !account && !plain && 'text-link',
+            )}
+          >
             {account ? account.name || account.email : t('account.signIn')}
           </span>
-          <span className="line-clamp-2 text-sm text-pretty text-muted-foreground">
+          <span
+            className={cn(
+              'line-clamp-2 text-pretty text-muted-foreground',
+              plain ? 'text-[0.8125rem]' : 'text-sm',
+            )}
+          >
             {account ? account.email : t('account.why')}
           </span>
           {account ? (
             <span
               data-slot="sync-line"
               className={cn(
-                'flex items-center gap-1 text-sm',
+                'flex items-center gap-1 text-[0.8125rem]',
                 line.kind === 'failed'
                   ? 'text-destructive'
                   : synced

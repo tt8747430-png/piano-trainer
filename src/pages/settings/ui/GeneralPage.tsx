@@ -1,54 +1,53 @@
 import { useTranslation } from 'react-i18next'
-import {
-  selectLocale,
-  selectTheme,
-  THEMES,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
+import { selectLocale, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { TypingSwitch } from '@/features/live-keyboard'
-import { setLocale, setTheme } from '@/features/set-preference'
+import { setLocale } from '@/features/set-preference'
 import { ShortcutsButton } from '@/features/shortcuts-help'
 import { LOCALES } from '@/shared/i18n'
 import { hasFinePointer } from '@/shared/lib'
-import { SettingsGroup } from '@/shared/ui'
-import { SettingsScreen } from '@/widgets/settings-screen'
-import { AppearanceChoice, LanguageChoice } from './GeneralChoices'
+import { GroupRow, GroupSegmented, Segmented, SettingsGroup } from '@/shared/ui'
+import { SettingsScreen, UpdateRows, useSettingsDialog } from '@/widgets/settings-screen'
 
 /**
- * Settings › General (canvas 128, "these are very heavy to read"): Appearance as three small screens
- * (Match system split light and dark, Light, Dark), then Language as English | Русский, each its own
- * name, the chosen ringed in ink; on a computer, Computer keyboard last (the board's P_GENERAL): its
- * switch and Shortcuts, what the letters do behind its ⓘ (none on a phone, which has no letters to
- * play). How a lesson reads is the lesson's own Settings'; the library's bars are Settings › Library's.
+ * Settings › General, placed as Apple places it and ordered by use (owner, 2026-11-18, "refactor all
+ * the settings"; the board's P_GENERAL): Language first, one segmented English | Русский, the shape
+ * Touch and Pedal wear (under its name on a phone, at the App language row's end in the laptop's
+ * dialog); on a computer, Computer keyboard, its switch and Shortcuts, what the letters do behind its
+ * ⓘ (none on a phone, which has no letters to play); Software update, the rarest, last. The theme
+ * is Appearance's own place.
  */
 export function GeneralPage() {
   const { t } = useTranslation(['settings', 'common'])
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
-  const theme = useSettings(selectTheme)
+  const inDialog = useSettingsDialog() !== null
+  const languages = LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))
   return (
     <SettingsScreen title={t('pages.general')}>
-      <SettingsGroup bare title={t('theme.label')}>
-        <div data-setting="theme">
-          <AppearanceChoice
-            label={t('theme.label')}
-            value={theme}
-            options={THEMES.map((value) => ({ value, label: t(`theme.${value}`) }))}
-            onChange={(value) => setTheme(settings, value)}
-          />
-        </div>
-      </SettingsGroup>
-      <SettingsGroup bare title={t('language.label')}>
-        <div data-setting="locale">
-          <LanguageChoice
+      {inDialog ? (
+        <SettingsGroup flush title={t('language.label')}>
+          <GroupRow label={t('language.app')} setting="locale">
+            <div className="w-60 shrink-0">
+              <Segmented
+                label={t('language.app')}
+                value={locale}
+                options={languages}
+                onChange={(value) => setLocale(settings, value)}
+              />
+            </div>
+          </GroupRow>
+        </SettingsGroup>
+      ) : (
+        <SettingsGroup flush>
+          <GroupSegmented
+            setting="locale"
             label={t('language.label')}
             value={locale}
-            options={LOCALES.map((value) => ({ value, label: t(`language.${value}`) }))}
+            options={languages}
             onChange={(value) => setLocale(settings, value)}
           />
-        </div>
-      </SettingsGroup>
+        </SettingsGroup>
+      )}
       {hasFinePointer() ? (
         <SettingsGroup
           flush
@@ -59,6 +58,9 @@ export function GeneralPage() {
           <ShortcutsButton />
         </SettingsGroup>
       ) : null}
+      <SettingsGroup flush title={t('about.update.label')}>
+        <UpdateRows />
+      </SettingsGroup>
     </SettingsScreen>
   )
 }

@@ -169,3 +169,12 @@ Plan, in order: 1 Profile · 2 Settings panes · 3 Sign in and Legal · 4 own le
 | 136 | Profile on a laptop in rows that meet | ProfilePage (grid, 32 between rows and columns, as the board's code) | built |
 | 142 | The week's chart fills its box on a laptop (150) | WeekCard (72 phone, 150 laptop, the scale 0 and two lines) | built |
 | A2-6 | Badges wear the star medal in their tier's metal; achievements a check or a lock | pages/profile/ui/marks.tsx, tokens `--medal-*` | built |
+| 10, 135, 137 | Settings on a laptop is claude.ai's dialog, 22 round, over the page it came from | app/settings-dialog (opensAsDialog, SettingsDialogHost, `?settings=`), widgets/settings-screen SettingsDialog, SettingsNav, SettingsScreen, theme.css `settings-pane` | built (Escape and × return to the page behind; measured 1200 × window−96, nav 264, pane ≤720) |
+| 131 | Settings placed where Apple places them: General holds Language, the keyboard and Software update; Appearance its own place; About the app's facts | pages/settings GeneralPage, AppearancePage (new), pages/about AboutPage, sections.ts | built |
+| 139 | General by use, Language one segmented control (at the App language row's end on a laptop) | pages/settings/ui/GeneralPage.tsx | built; Page layouts left: the app has no saved page layouts to list |
+| 138 | Every Settings page in one structure: Account's head, Profile, Sign-in and security, Sync, Editorial access, Sign out, Delete 16 apart; Email its own page; Storage's losses together at the foot | AccountSettingsPage, EmailPage (new), SyncGroup, StoragePage, PianoSoundGroup RemovePianoRow, DangerGroup className, EditProfilePage (email row gone) | built; signed in not shot (no account here) |
+| 134 | The selection toolbar's settings show each act's icon on a 36 sand tile; the preview glyph over word | widgets/bar-editor BarEditor (ActFace, BarPreview) | built |
+| 133 | Swipe actions show each act's icon; No action the ban sign; the trailing side's ⓘ | SwipeActionsPage, GroupLink `mark` | built |
+| 132, 121, 127 | Administration inside the Settings dialog, its pane a Settings pane | SettingsNav (admin mode), SettingsDialogHost `/admin*`, AdminSectionPage via useSettingsPath | built; not shot (needs an administrator's account) |
+| 128 | Check for updates on the rows' edge | settings-pane (rows at 0 inset) | built (measured 551 = row words) |
+| 141 | Settings on a laptop carries only its own panes | SettingsDialogHost PANES | built |

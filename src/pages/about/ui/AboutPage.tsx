@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { APP_BUILD, APP_VERSION } from '@/shared/config'
 import { SettingsGroup } from '@/shared/ui'
-import { SettingsScreen, UpdateRows } from '@/widgets/settings-screen'
+import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** What the app is made with, each under its own licence (R29 B9): who made it and where it is from. */
 const CREDITS = [
@@ -46,7 +46,7 @@ function GroupLink({ title, to }: { title: string; to: '/legal/privacy' | '/lega
 /**
  * Settings › Support › About (R29 B9, R32; iOS's About, memory-palaces'): a Settings page like the
  * rest (the sidebar beside it on a laptop, Back on a phone). The app's tile, its version and build beside it;
- * Software update (where it stands, Check for updates) and the licence; Legal, the Privacy Policy and
+ * the licence (Software update is General's, as Apple's About keeps only the device's facts); Legal, the Privacy Policy and
  * the Terms of Service as full rows; then the acknowledgements for everything it is made with.
  */
 export function AboutPage() {
@@ -69,9 +69,6 @@ export function AboutPage() {
           </p>
         </div>
       </div>
-      <SettingsGroup flush title={t('about.update.label')}>
-        <UpdateRows />
-      </SettingsGroup>
       <SettingsGroup flush>
         <dl className="flex min-h-13 items-center justify-between gap-4 px-4 py-2">
           <dt>{t('aboutPage.licence')}</dt>

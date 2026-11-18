@@ -1,6 +1,8 @@
 export {
   AccountSettingsPage,
+  AppearancePage,
   ChangePasswordPage,
+  EmailPage,
   EditProfilePage,
   ProfilePrivacyPage,
   GeneralPage,

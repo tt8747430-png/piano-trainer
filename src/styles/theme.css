@@ -389,6 +389,50 @@
 }
 
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
+/*
+ * The laptop Settings dialog's pane (the board's SETCSS): every group a sentence-case heading, 16
+ * semibold in ink, 4 over its rows; the rows lie on the pane, no card, 56 tall, parted by hairlines,
+ * their words on the pane's edge; a footer on that edge too.
+ */
+@utility settings-pane {
+  & [data-slot='settings-group'] {
+    gap: --spacing(1);
+  }
+  & [data-slot='settings-head'] {
+    padding-inline: 0;
+  }
+  & [data-slot='settings-heading'] {
+    padding-inline: 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--foreground);
+  }
+  & [data-slot='settings-card'] {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+    padding-inline: 0;
+  }
+  & [data-slot='settings-card'] > * {
+    min-height: --spacing(14);
+    padding-inline: 0;
+    border-radius: 0;
+  }
+  & [data-slot='settings-card'] > [data-slot='switch-row'] {
+    padding-inline: 0;
+  }
+  & [data-slot='settings-card'] > :hover {
+    background: transparent;
+  }
+  & [data-slot='settings-foot'] {
+    padding-inline: 0;
+  }
+}
 @utility card {
   @apply rounded-card border border-border bg-card;
 }

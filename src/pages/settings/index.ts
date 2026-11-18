@@ -1,4 +1,6 @@
 export { AccountSettingsPage } from './ui/AccountSettingsPage'
+export { AppearancePage } from './ui/AppearancePage'
+export { EmailPage } from './ui/EmailPage'
 export { GeneralPage } from './ui/GeneralPage'
 export { FeedbackPage } from './ui/FeedbackPage'
 export { SelectToolbarPage } from './ui/SelectToolbarPage'

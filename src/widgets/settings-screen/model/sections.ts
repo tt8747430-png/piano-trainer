@@ -8,7 +8,8 @@ import {
   History,
   Info,
   LayoutGrid,
-  Book,
+  CircleHelp,
+  Moon,
   TriangleAlert,
   MessagesSquare,
   ArrowRightToLine,
@@ -25,6 +26,7 @@ import { SelectionBarIcon } from '@/shared/ui'
 export interface SettingsPageEntry {
   readonly to:
     | '/settings/general'
+    | '/settings/appearance'
     | '/settings/storage'
     | '/settings/connect-piano'
     | '/settings/select-toolbar'
@@ -34,6 +36,7 @@ export interface SettingsPageEntry {
     | '/settings/about'
   readonly title:
     | 'pages.general'
+    | 'pages.appearance'
     | 'pages.storage'
     | 'pages.connectPiano'
     | 'pages.selectionToolbar'
@@ -63,6 +66,7 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
     title: 'groups.general.label',
     pages: [
       { to: '/settings/general', title: 'pages.general', icon: SunMedium, paint: 'sky' },
+      { to: '/settings/appearance', title: 'pages.appearance', icon: Moon, paint: 'lilac' },
       { to: '/settings/storage', title: 'pages.storage', icon: Database, paint: 'grass' },
     ],
   },
@@ -98,7 +102,7 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
   {
     title: 'groups.support.label',
     pages: [
-      { to: '/settings/how-to-use', title: 'pages.guide', icon: Book, paint: 'sky' },
+      { to: '/settings/how-to-use', title: 'pages.guide', icon: CircleHelp, paint: 'sky' },
       {
         to: '/settings/feedback',
         title: 'pages.feedback',
@@ -180,4 +184,27 @@ export function settingsPlaceOf(path: string): SettingsPlace | null {
       if (path === page.to || page.under?.some((prefix) => path.startsWith(prefix)))
         return { kind: 'page', to: page.to }
   return null
+}
+
+/**
+ * Where a page under a page goes back to inside the laptop's Settings dialog (the board's "Back to
+ * Account"): Edit profile, Email, Change password and Privacy to the account; the MIDI log and its
+ * timing to MIDI devices. A place of the list has none.
+ */
+export function settingsParentOf(path: string): string | null {
+  if (path.startsWith('/settings/account/') || path === '/settings/privacy')
+    return '/settings/account'
+  if (path.startsWith('/settings/connect-piano/')) return '/settings/connect-piano'
+  return null
+}
+
+/**
+ * Whether a path opens inside the laptop's Settings dialog (claude.ai's, the board's SETDLG): Settings
+ * itself, its places and the pages under them, the account's, and Administration's. The legal pages
+ * are documents of their own, and a Practice page's Settings stands beside its page.
+ */
+export function opensInDialog(path: string): boolean {
+  if (path === '/settings' || path === '/settings/') return true
+  if (path.startsWith('/legal/')) return false
+  return settingsPlaceOf(path) !== null
 }
