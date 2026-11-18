@@ -1711,6 +1711,15 @@ are reference only, but progressions are facts.
 - No ubiquitous-language glossary (2026-11-05): "i dont want the ubiquitous language anymore".
 
 ## Process
+- **A text button is 50, or 44 in a row (laws, similarity: near-miss heights; the design system as layers 2,
+  2026-11-18):** the canvas drew its honey and quiet buttons at 44, 48, 50, 52 and 56, with 48 and 52 for the same
+  job as 50 (a sheet's Save, an empty state's way out, a run's Start, a result's Practise mistakes), and the
+  Metronome's Start at 52 beside its own 50 Tap tempo. `BTN` now has two heights, 50 for a page's or sheet's act and
+  44 compact in a row, and snaps any other; the Metronome's Start and the lesson's dock are 50 by hand. The Player's
+  end-of-song Practise bars, Play again and Next were 12-round rectangles (48 honey, 44 white with a shadow) and its
+  pattern sheet's Show n a 44 rectangle: all are `BTN`'s pill now. The update toast, 16 round and 56 tall, is the
+  toast's 14 and 52. The round Play (52) and the + (56) are other shapes and keep theirs. The lines tool gains a NOTE
+  for targets side by side 2–7 apart (8, or one joined row).
 - **Every field names its keyboard (laws, A phone is not a small laptop 5, 2026-11-18):** of the canvas's 50 kinds of
   field only the email fields and the editor's Bar carried a keyboard; searches, names, titles and passwords opened the
   plain keys. The kit's `KB` holds each kind once (search, title, text, name, username, email, person, url, code, and a
