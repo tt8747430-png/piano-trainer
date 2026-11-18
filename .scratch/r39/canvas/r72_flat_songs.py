@@ -145,10 +145,6 @@ def PLAYLISTROWS(href, shared_href, w=64, card=True):
 # the same four rows from the phone's dial and the laptop's New ▾, on the overview, All songs and a playlist.
 _NEW = (('New song', 'openSong'), ('Record', 'openRec'), ('Import', 'openImp'), ('New playlist', 'openFolder'))
 FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
-BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 64px 24px; text-align: center">'
-         f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
-         f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">Write one with +, import MusicXML or MIDI, or find one in Explore.</span>'
-         f'<a href="Explore.dc.html" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a></div></sc-if>')
 
 # ── Songs: one page (owner, 2026-11-17: "i dont like that the search leads to a whole new page … i dont like this tab
 # layout of the my songs and explore. and i dont like the new where it sits. is is not very visible and the archive and
@@ -194,8 +190,8 @@ def EXSHELF(w, n, href):
                    f'<span style="width: {w}px">{cover(t, by, notes=INC.get(t, (2, 4, 3, 5, 4, 2, 0)))}</span>'
                    f'<span style="font-size: 15px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{t}</span>'
                    f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{who}</span></a>' for t, by, who in EXPUB[:n])
-BAREP = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 48px 24px 16px; text-align: center">'
-         f'<span style="font-size: 20px; font-weight: 700">Your songs live here</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 320px">Write one, record one at the piano, or import MusicXML or MIDI.</span></div></sc-if>')
+BAREP = EMPTY('bare', '♪', 'Your songs live here', 'Write one, record one at the piano, or import MusicXML or MIDI.', f'<a href="Explore.dc.html" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a>')  # the kit's one empty state, its next act a link
+BAREP_PH = EMPTY('bare', '♪', 'Your songs live here', 'Write one with +, record one at the piano, or import MusicXML or MIDI.')  # the phone's Explore shelf follows: no second way there
 def SONGSEC(song, allh, grid):
     rows = ''.join(f'<div style="position: relative">' + SONGROW(song).replace('{{r.t}}', t).replace('{{r.s}}', sub).replace('{{r.v}}', v).replace('{{r.when}}', w).replace('{{r.pic}}', INCIPIT(INC.get(t, (2, 4))).replace('"', "'")) + '</div>' for t, sub, v, w, _ in SONGS_ALL[:5])
     return (f'<section style="display: flex; flex-direction: column; gap: 12px">{SECH("Songs")}<div style="{grid}">{rows}</div>'
@@ -216,7 +212,7 @@ _ARCHCARD = lambda sfx: GROUP(('link', 'Archive', '3', 'Archive' + sfx), ('link'
 ovph = f'''{TITLEBAR('Songs')}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 28px">{SHOWSTATES()}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{OVSEARCH}</sc-if>{RESULTS('Song.dc.html', 'Folder.dc.html', 'Explore.dc.html', 'display: flex; flex-direction: column; gap: 12px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
-<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}
+<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP_PH}
 <sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}"><section style="display: flex; flex-direction: column; gap: 12px">{SECH('All songs', SEEALL('AllSongs.dc.html'))}<div class="nos" style="{_SHELFPH}">{RECENT(132, 8).replace('{SONG}', 'Song.dc.html')}</div></section>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Playlists')}<div style="{CARDROW}; padding: 0 0 0 12px; display: flex; flex-direction: column">{PLAYLISTROWS('Folder.dc.html', 'SharedFolder.dc.html', 56, 'list')}</div></section>
 {_ARCHCARD('.dc.html')}
@@ -253,7 +249,7 @@ _PTITLE = lambda t: f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{tr
 _SELBAR_L = SELBAR(28).replace('left: 16px; right: 16px; bottom: 28px', 'left: 50%; transform: translateX(-50%); width: 520px; bottom: 28px')
 ovlm = LPLACEBAR(_PTITLE('All songs'), '{{count}}', _PACTS(), PSEARCH('Search your songs', 'q', 'typed')) + f'''<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 120px; display: flex; flex-direction: column; gap: 24px">{SHOWSTATES()}
 <div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{RESULTS('SongLaptop.dc.html', 'FolderLaptop.dc.html', 'ExploreLaptop.dc.html', 'display: flex; flex-direction: column; gap: 8px').replace('SECH("Folders")', 'SECH("Playlists")').replace('>Folders<', '>Playlists<')}
-<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></sc-if></div>
+<sc-if value="{{{{noQ}}}}" hint-placeholder-val="{{{{true}}}}">{BAREP}<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><style>nav[aria-label=Main] a > span[style*="tabular-nums"] {{ display: none }} nav[aria-label=Main] a:has(> span[style*="margin-left: -28px"]) ~ a:has(> span[style*="margin-left: -28px"]) {{ display: none !important }}</style></sc-if><sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{LTABLE}</sc-if></sc-if></div>
 </main>{_SELBAR_L}'''
 _SLAB = lambda t, v='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px"><span style="font-size: 13px; font-weight: 600; color: {SOFT}">{t}</span>{v}</div>'
 _TILE = 'border: 0; border-radius: 12px; background: {{o.bg}}; color: {{o.fg}}; box-shadow: 0 0 0 1px ' + LINE + '; font: inherit; padding: 0; min-width: 0'
@@ -285,10 +281,7 @@ detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New f
 # ── All songs ──
 NOMATCH = (f'<sc-if value="{{{{none}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 24px; text-align: center"><span style="width: 56px; height: 56px; border-radius: 28px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{SEARCH.replace("width=\"18\" height=\"18\"", "width=\"24\" height=\"24\"")}</span>'
            f'<span style="font-size: 18px; font-weight: 700">{{{{noneT}}}}</span><span style="font-size: 15px; color: {SOFT}">Check the spelling, or try a composer’s name.</span>{BTN("Clear search", "clear", kind="quiet", h=44, grow=False)}</div></sc-if>')
-FEMPTY = (f'<sc-if value="{{{{bare}}}}" hint-placeholder-val="{{{{false}}}}"><div style="{CARDROW}; flex: 1; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 48px 24px; text-align: center">'
-          f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {SKY}; display: flex; align-items: center; justify-content: center; color: {INK}">{EMPTYICON["♪"]}</span>'
-          f'<span style="font-size: 20px; font-weight: 700">Nothing in this folder yet</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 300px">The songs you put in this folder show here.</span>'
-          f'<a href="{{ALL}}" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a></div></sc-if>')
+FEMPTY = EMPTY('bare', '♪', 'Nothing in this playlist yet', 'The songs you put in this playlist show here.', f'<a href="{{ALL}}" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a>')  # the kit's one empty state (r53's EMPTY): no box, 18 over 15
 FOLDERITEMS = lambda sfx: [('action', 'Rename', 'closeSheet', INK), ('action', 'Colour', 'closeSheet', INK), ('link', 'Share', '', 'Groups' + sfx), ('action', 'Archive playlist', 'closeSheet', RED)]
 def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
