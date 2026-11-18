@@ -28,7 +28,7 @@ G_JS = js('const SRCH = ' + json.dumps(SRCH, ensure_ascii=False) + r''';
     const m = MS[midi];
     const lang = st.lang ?? 'English';
     return { ...common(st, set), q: st.q ?? '', setQ: (e) => S({ q: e.target.value }), clearQ: () => S({ q: '' }), typing: !!q, notTyping: !q, groups, found: groups.length > 0, nothing: !!q && !groups.length,
-      openSearch: () => S({ sheet: 'search' }), searchOn: st.sheet === 'search', recent: (k) => () => S({ q: k }), r0: () => S({ q: 'canon' }), r1: () => S({ q: 'cmaj7' }), r2: () => S({ q: 'scales' }), hasRecent: !st.noRecent, clearRecent: () => S({ noRecent: true }),
+      openSearch: () => S({ sheet: 'search' }), searchOn: st.sheet === 'search' || st.sheet === undefined,  /* opens on the palette: every Search links here */ recent: (k) => () => S({ q: k }), r0: () => S({ q: 'canon' }), r1: () => S({ q: 'cmaj7' }), r2: () => S({ q: 'scales' }), hasRecent: !st.noRecent, clearRecent: () => S({ noRecent: true }),
       openMidi: () => S({ sheet: 'midi' }), midiOn: st.sheet === 'midi', midiT: m[0], midiS: m[1], midiB: m[2], midiDot: m[3], midiHasB: !!m[2], midiBusy: midi === 'busy', midiL: midi === 'on' ? 'MIDI keyboard, connected' : 'MIDI keyboard', midiLit: midi === 'on' ? '#44684A' : 'transparent',
       midiGo: () => { if (midi === 'on') return; if (midi === 'none' || midi === 'idle') { S({ midi: 'busy' }); setTimeout(() => S({ midi: (st.tries ?? 0) % 2 ? 'on' : 'none', tries: (st.tries ?? 0) + 1 }), 1100); } },
       openKeys: () => S({ sheet: 'keys' }), keysOn: st.sheet === 'keys', closeSheet: () => S({ sheet: null }),

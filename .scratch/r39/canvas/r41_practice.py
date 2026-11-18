@@ -33,7 +33,7 @@ TOOLS = [('chart', 'Chord player', 'Lead sheets with backing', '', 'ChordPlayer.
 MAIN = js(r"    return { ...common(st, set),"
            r" states: [['Theory and Exercises folded', !!(st.folds && st.folds[0] && st.folds[1]), { folds: { 0: true, 1: true } }, { folds: {} }]]"
            r".map(([l, on, o, off]) => ({ l, bg: on ? '#332921' : '#EEE9E2', pick: () => set(on ? off : o) })) };")
-ph = f'''{TITLEBAR('Practice', IB('Search', SEARCH.replace('18', '22'), href='#'))}
+ph = f'''{TITLEBAR('Practice', IB('Search', SEARCH.replace('18', '22'), href='AppLayers.dc.html'))}
 <main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 130px; display: flex; flex-direction: column; gap: 16px">
 {SHOWSTATES()}{H2('Theory')}{PLIST(THEORY)}{H2('Exercises')}{PLIST(EXERCISES)}{H2('Tools')}{PLIST(TOOLS)}</main>{TABBAR('Practice')}'''
 grid = lambda rows: '<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px">' + ''.join(PCARD(p, t, s, v, L(h, True)) for p, t, s, v, h in rows) + '</div>'

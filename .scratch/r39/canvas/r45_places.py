@@ -128,7 +128,7 @@ LPOPS = POPOVER('pickOn', 'New', NEWPICK, 'right: 60px; top: 300px', 300) + LAPS
 # ═════ Learn, refactored (canvas 163; owner: "make proper refactor of the lessons and cources and the header and the
 # structure and organization"): one overview in Practice's shape (Continue, Levels, Courses, your own), a page per
 # level, a page for all courses; the title in the bar (TITLEBAR), never a bar of two buttons over an empty row. ═════
-SEARCHB = IB('Search', SEARCH.replace('18', '22'), href='#')
+SEARCHB = IB('Search', SEARCH.replace('18', '22'), href='AppLayers.dc.html')  # the one search palette, drawn on AppLayers
 LVRING = (f'<span aria-hidden="true" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {{{{p.ring}}}}; display: flex; align-items: center; justify-content: center">'
         f'<span style="width: 36px; height: 36px; border-radius: 18px; background: {SHEET}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{p.i}}}}</span></span>')
 def LEVELLIST(lap=False):

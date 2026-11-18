@@ -27,7 +27,7 @@ _LAPFIRST = ['240px minmax(0px, 1fr)', '280px minmax(0px, 1fr)']
 _LAPCSS = ('<style data-lapcss>'
         '[data-lapwin][data-side="off"] { grid-template-columns: 76px minmax(0, 1fr) !important }'
         ' [data-side="off"] > nav { padding-left: 14px !important; padding-right: 14px !important; align-items: center }'
-        ' [data-side="off"] [data-sidetext], [data-side="off"] > nav > label > span, [data-side="off"] > nav > label > kbd, [data-side="off"] > nav a > span:not([aria-hidden]) { display: none !important }'
+        ' [data-side="off"] [data-sidetext], [data-side="off"] > nav > label > span, [data-side="off"] > nav > label > kbd, [data-side="off"] > nav > a > kbd, [data-side="off"] > nav a > span:not([aria-hidden]) { display: none !important }'
         ' [data-side="off"] [data-sidehead] { flex-direction: column; height: auto !important; padding: 0 !important; gap: 4px !important }'
         ' [data-side="off"] > nav > label { width: 48px; padding: 0 !important; justify-content: center }'
         ' [data-side="off"] > nav a { width: 48px; padding: 0 !important; justify-content: center; font-size: 0 !important; gap: 0 !important }'
@@ -108,6 +108,11 @@ def lapwin(h):
     if at > 0:
         h = h[:at] + exitb + h[at:]
     h = h.replace(_LAPHEAD_OLD, _LAPHEAD, 1).replace('</head>', _LAPCSS + '</head>', 1)
+    # the sidebar's Search opens the one search palette, drawn on AppLayersLaptop (it was a label that did nothing)
+    _si = h.find('<label style="margin: 10px 0; height: 44px')
+    if _si >= 0:
+        _sj = h.index('</label>', _si)
+        h = h[:_si] + '<a href="AppLayersLaptop.dc.html" data-sidesearch aria-label="Search everything" style="text-decoration: none; ' + h[_si + len('<label style="'):_sj] + '</a>' + h[_sj + 8:]
     h = _ACCT_OLD.sub(_acct, h, count=1)
     # Profile is the account row's place: on its pages the row wears the current wash, as Learn, Songs and Practice do
     # on theirs (HIG Sidebars: the selected item shows where you are; a sidebar with nothing current loses the learner)
