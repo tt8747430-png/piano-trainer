@@ -379,8 +379,6 @@ export interface SettingsState {
    * notation): its Recent group, eight at most, each still in its own category.
    */
   paletteRecent: readonly string[]
-  /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
-  lessonReading: LessonReading
   /** How Progressions writes and voices every progression (A24). */
   progressions: ProgressionsSettings
   /** How Intervals plays them all, and how fast (canvas 176). */
@@ -420,12 +418,6 @@ export interface TunerSettings {
   readonly a4: number
 }
 export const DEFAULT_TUNER: TunerSettings = { a4: 440 }
-
-/** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
-export const LESSON_READINGS = ['page', 'sections'] as const
-export type LessonReading = (typeof LESSON_READINGS)[number]
-export const isLessonReading = (value: unknown): value is LessonReading =>
-  LESSON_READINGS.some((reading) => reading === value)
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,

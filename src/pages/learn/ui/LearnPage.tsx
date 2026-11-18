@@ -1,34 +1,40 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScreenHeader } from '@/shared/ui'
+import { NewDial, ScreenHeader } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
-import { CourseCovers, LevelRows, OwnItems } from '@/widgets/curriculum'
+import {
+  CourseCovers,
+  LevelRows,
+  NewOwnSheet,
+  OwnItems,
+  useNewOwnActions,
+  type OwnKind,
+} from '@/widgets/curriculum'
 
 /**
- * Learn (ADR 0053, canvas 163), the app's first place: its title in the bar with Search, as every
- * place's; then Continue, the four Levels, each opening its page, the Courses' first covers with See
- * all, and Your lessons and courses. A laptop sets Continue across the page, the Levels beside the
- * learner's own under it, the Courses across under them (the LearnLaptop board's).
+ * Learn (ADR 0053; the Learn and LearnLaptop boards), the app's first place, in the examples' one
+ * order: its title in the bar with Search; Continue (flowkey's Continue learning), the four Levels
+ * (the path), the Courses on a shelf with See all, then Made by you. Sections stand 32 apart, each
+ * head 12 over what it heads, on both sizes; a laptop lays each section across the page (the Levels
+ * four cards, the Courses five, the learner's own three), never two columns that end apart. The
+ * floating honey + at the bottom right makes a lesson or a course, the screen's one honey act.
  */
 export function LearnPage() {
   const { t } = useTranslation('learn')
+  const [making, setMaking] = useState<OwnKind | null>(null)
+  const newActions = useNewOwnActions(setMaking)
   return (
     <div className="flex flex-col pb-8">
       <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-      <div className="mt-1 grid min-w-0 gap-8 lg:grid-cols-2 lg:items-start lg:gap-x-8">
-        <div className="min-w-0 lg:col-span-2">
-          <ContinueAction />
-        </div>
-        <div className="min-w-0">
-          <LevelRows />
-        </div>
-        <div className="min-w-0 lg:col-span-2 lg:row-start-3">
-          <CourseCovers />
-        </div>
-        <div className="min-w-0 lg:col-start-2 lg:row-start-2">
-          <OwnItems />
-        </div>
+      <div className="mt-1 flex min-w-0 flex-col gap-8">
+        <ContinueAction />
+        <LevelRows />
+        <CourseCovers />
+        <OwnItems />
       </div>
+      <NewDial label={t('own.newOwn')} actions={newActions} />
+      <NewOwnSheet kind={making} onClose={() => setMaking(null)} />
     </div>
   )
 }

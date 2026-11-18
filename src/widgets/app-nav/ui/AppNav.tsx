@@ -136,7 +136,7 @@ const SEARCH_KEY: Combo = { code: 'KeyK', mod: true }
 const SETTINGS_KEY: Combo = { code: 'Comma', mod: true }
 
 const PLACE_LINK =
-  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-[1.625rem] text-[0.6875rem] font-[550] text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:rounded-control lg:rounded-control lg:font-semibold lg:aria-[current=page]:font-semibold focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
+  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-[1.625rem] text-xs font-medium text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:h-10 landscape-phone:flex-row landscape-phone:gap-1.5 landscape-phone:rounded-pill lg:rounded-menu-item lg:font-medium lg:aria-[current=page]:font-semibold focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
 
 /**
  * A place in the navigation: its icon over its name in the phone's bar, beside it in the sidebar,
@@ -257,43 +257,46 @@ export function AppNav() {
       data-slot="app-nav"
       data-sidebar={sidebar}
       data-away={away ? '' : undefined}
-      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden landscape-phone:pointer-events-auto landscape-phone:border-border landscape-phone:bg-card lg:border-border landscape-phone:px-0 lg:pointer-events-auto lg:bg-card lg:px-0 landscape-phone:inset-y-0 landscape-phone:right-auto landscape-phone:flex landscape-phone:w-rail landscape-phone:flex-col landscape-phone:justify-center landscape-phone:border-t-0 landscape-phone:border-r landscape-phone:pb-0 landscape-phone:pl-safe-left lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
+      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden lg:border-border lg:pointer-events-auto lg:bg-card lg:px-0 lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
     >
       <div className="hidden h-20 shrink-0 items-center gap-0.5 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
         <p
           aria-hidden
-          className="min-w-0 flex-1 truncate pl-2 font-display text-lg leading-tight font-semibold group-data-[sidebar=collapsed]/nav:hidden"
+          className="min-w-0 flex-1 truncate pl-3 font-display text-2xl leading-tight font-normal group-data-[sidebar=collapsed]/nav:hidden"
         >
           {t('appName')}
         </p>
-        <button
-          type="button"
-          aria-label={toggleLabel}
-          title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
-          aria-expanded={!collapsed}
-          onClick={toggle}
-          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
-        >
-          <ToggleIcon aria-hidden className="size-5" />
-        </button>
-        <button
-          type="button"
-          aria-label={t('nav.focus')}
-          title={t('nav.focusTip')}
-          onClick={() => setFocusMode(true)}
-          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
-        >
-          <Maximize aria-hidden className="size-5" />
-        </button>
+        {/* The sidebar's two buttons in one glass capsule (lapwin.py's head). */}
+        <div className="flex shrink-0 rounded-pill glass lg:group-data-[sidebar=collapsed]/nav:flex-col">
+          <button
+            type="button"
+            aria-label={toggleLabel}
+            title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
+            aria-expanded={!collapsed}
+            onClick={toggle}
+            className="grid size-11 shrink-0 place-items-center rounded-pill text-foreground transition-colors duration-200 ease-out hover:bg-muted"
+          >
+            <ToggleIcon aria-hidden className="size-5" />
+          </button>
+          <button
+            type="button"
+            aria-label={t('nav.focus')}
+            title={t('nav.focusTip')}
+            onClick={() => setFocusMode(true)}
+            className="grid size-11 shrink-0 place-items-center rounded-pill text-foreground transition-colors duration-200 ease-out hover:bg-muted"
+          >
+            <Maximize aria-hidden className="size-5" />
+          </button>
+        </div>
       </div>
       {sidebarShown ? (
         <div className="flex px-3 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
           <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
         </div>
       ) : null}
-      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-auto landscape-phone:rounded-none landscape-phone:bg-transparent landscape-phone:p-0 landscape-phone:shadow-none landscape-phone:backdrop-filter-none lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none landscape-phone:mx-0 landscape-phone:w-full landscape-phone:flex-col landscape-phone:px-1 landscape-phone:pt-0 lg:mx-0 lg:max-w-none lg:flex-col lg:px-3 lg:pt-0">
+      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:rounded-[1.625rem] lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:px-3 lg:pt-0">
         {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => (
-          <li key={place.to} className="flex-1 landscape-phone:flex-none lg:flex-none">
+          <li key={place.to} className="flex-1 lg:flex-none">
             <PlaceLink place={place} collapsed={collapsed} />
           </li>
         ))}

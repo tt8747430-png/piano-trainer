@@ -9,11 +9,14 @@ export const learn = {
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
     of: '{{learned}} of {{total}}',
+    start: 'Start: {{title}}',
+    continue: 'Continue: {{title}}',
+    review: 'Review: {{title}}',
   },
   // The Courses, shelf by shelf.
   shelves: {
-    beginner: 'Beginner courses',
-    intermediate: 'Intermediate courses',
+    beginner: 'Beginner',
+    intermediate: 'Intermediate',
     technique: 'Technique and exercises',
     chords: 'Chords and improvisation',
     'method-books': 'Method books',
@@ -28,6 +31,7 @@ export const learn = {
   },
   progress: '{{learned}} of {{total}} learned',
   lessonOf: 'Lesson {{n}} of {{count}}',
+  continueProgress: 'Progress',
   lessonNumber: 'Lesson {{n}}',
   // A lesson's prerequisites in its contents, by number; how much of it is read, for a screen reader.
   after: 'After {{lessons}}',
@@ -37,6 +41,9 @@ export const learn = {
   current: 'You are here',
   // Where Continue leads, on its row in the Lessons.
   upNext: 'Next',
+  coverDone: 'Done',
+  coverLessonsOf_one: '{{done}} of {{count}} lesson',
+  coverLessonsOf_other: '{{done}} of {{count}} lessons',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   known: '{{known}} of {{total}} known',
@@ -68,7 +75,7 @@ export const learn = {
   // The learner's own lessons and courses (R30-5): Learn's Your lessons and Your courses, their
   // Settings, and the course editor's on an own course.
   own: {
-    title: 'Your lessons and courses',
+    title: 'Made by you',
     course: 'Course',
     lessons: 'Your lessons',
     createLesson: 'Create lesson',
@@ -89,13 +96,13 @@ export const learn = {
     renameCourse: 'Rename course',
     renamed: 'Renamed',
     duplicate: 'Duplicate',
-    duplicated: 'Duplicated',
+    duplicated: 'Copy made',
     deleteLesson: 'Delete lesson',
     deleteCourse: 'Delete course',
     deleted: '“{{title}}” deleted',
     toOwn: 'Back',
     // Canvas 165: their own page, one New for both, a lesson's courses.
-    newOwn: 'New lesson or course',
+    newOwn: 'New',
     new: 'New',
     newLesson: 'New lesson',
     newCourse: 'New course',
@@ -118,8 +125,30 @@ export const learn = {
     delete: 'Delete',
     more: 'More for {{title}}',
     showLessons: 'Show its lessons',
-    empty: 'Write your own lessons, and put them together into courses.',
-    noMatch: 'Nothing matches “{{query}}”.',
+    // Made by you as its board draws it (LearnYours): Select, the table's columns, the empty states.
+    select: 'Select',
+    selectedCount_one: '{{count}} selected',
+    selectedCount_other: '{{count}} selected',
+    duplicateAll: 'Duplicate all',
+    deleteAll: 'Delete all',
+    copied: '{{things}} copied',
+    deletedMany: '{{things}} deleted',
+    lessonsCounted_one: '{{count}} lesson',
+    lessonsCounted_other: '{{count}} lessons',
+    coursesCounted_one: '{{count}} course',
+    coursesCounted_other: '{{count}} courses',
+    and: ' and ',
+    learned: 'Learned',
+    learnedOf: '{{done}} of {{total}} learned',
+    columnName: 'Name',
+    columnLength: 'Length',
+    columnProgress: 'Progress',
+    searchHint: 'Search lessons and courses',
+    bareTitle: 'No lessons or courses yet',
+    bareLine: 'Write a lesson in your own words with +, then gather lessons into a course.',
+    browseCourses: 'Browse the courses',
+    noMatch: 'No results for “{{query}}”',
+    noMatchLine: 'Check the spelling, or search for a word from a lesson’s name.',
     clear: 'Clear search',
   },
   course: {
@@ -147,6 +176,7 @@ export const learn = {
   // The lessons to read before this one, each a link.
   afterLinks: 'After:',
   contents: 'In this lesson',
+  lessonLearned: '“{{title}}” learned',
   inThisLesson: 'In this lesson',
   sectionOf: 'Section {{at}} of {{of}}',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
@@ -211,11 +241,6 @@ export const learn = {
     languages: 'Written in',
     noLanguage: 'Not yet in full',
     opening: 'Opening…',
-  },
-  reading: {
-    title: 'Lessons read as',
-    page: 'One page',
-    sections: 'A section at a time',
   },
   edit: {
     doc: {

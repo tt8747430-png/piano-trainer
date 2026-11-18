@@ -1,4 +1,4 @@
-import { Minimize, PencilLine } from 'lucide-react'
+import { Minimize } from 'lucide-react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, setFocusMode, useFocusMode } from '@/shared/lib'
@@ -8,9 +8,10 @@ import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
 
 /**
- * A screen's Edit (iOS's Edit · Done, Notion's in-place edit): the pencil right after the title, so it
- * reads as "edit this"; while editing, Done in its place, so the control never moves between modes.
- * The screen enters Edit in place; it passes only the acts that apply while editing.
+ * A screen's Edit (the canvas's EDITR; Apple HIG, Edit buttons): the glass word Edit at the bar's end;
+ * while editing, Done in its place, so the control never moves between modes, and the screen's
+ * Publish (`publish`), a glass word that acts in one tap, just before it. The screen enters Edit in
+ * place; it passes only the acts that apply while editing.
  */
 export interface EditAction {
   readonly editing: boolean
@@ -18,8 +19,10 @@ export interface EditAction {
   readonly onDone: () => void
   /** Done waits (a take recording, a save under way). */
   readonly disabled?: boolean
-  /** What ✎ edits, where Edit alone would not say: a song's page edits its score (R31-S). */
+  /** What Edit edits, where Edit alone would not say: a song's page edits its score (R31-S). */
   readonly label?: string
+  /** While editing, the glass word before Done: Publish, Published once done (a lesson, a course). */
+  readonly publish?: ReactNode
 }
 
 export type ScreenHeaderProps = {
@@ -43,8 +46,9 @@ export type ScreenHeaderProps = {
    */
   column?: boolean | 'until-laptop'
   /** The page shows its title itself, large under the bar (a document, read or in Edit): the bar
-   * keeps it for a screen reader alone, never saying it twice, and leaves its room to the tools. */
-  titleOnPage?: boolean
+   * keeps it for a screen reader alone, never saying it twice, and leaves its room to the tools.
+   * `phone`: only on a phone; a laptop's 88 bar names the page (a level's, a course's). */
+  titleOnPage?: boolean | 'phone'
   /** A large title that is a name and may wrap (a course's, Your lessons and courses): 24 on a phone. */
   named?: boolean
 } & (
@@ -85,7 +89,7 @@ export function ScreenHeader({
   named = false,
   column = false,
 }: ScreenHeaderProps) {
-  const { shown, report, hold } = useScreenBar()
+  const { report } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
   const pageHeading = usePageHeading<HTMLHeadingElement>(title)
   useEffect(() => {
@@ -102,25 +106,17 @@ export function ScreenHeader({
     return () => {
       observer.disconnect()
       report(NO_BAR_SIZE)
-      hold(false)
     }
-  }, [report, hold])
+  }, [report])
   const header = (
     <header
       ref={bar}
       data-slot="screen-bar"
-      data-hidden={shown ? undefined : ''}
-      // A control focused holds the bar; the heading, focused as the screen opens, does not.
-      onFocus={(event) => hold(event.target !== pageHeading.ref.current)}
-      onBlur={(event) =>
-        hold(
-          event.relatedTarget !== pageHeading.ref.current &&
-            event.currentTarget.contains(event.relatedTarget),
-        )
-      }
       className={cn(
-        // The boards' bar: the page's own paper under it, no band and no line, its buttons the glass.
-        'sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:translate-y-0 print:px-0 duration-200 ease-out motion-safe:transition-[translate] data-hidden:-translate-y-full',
+        // The boards' floating bar (data-float): it stays while the page scrolls under it, its buttons
+        // the glass and its title fading as the page leaves the top (craft-details, Bars stay,
+        // quietly); a laptop's bar stands over the page on its paper, as the boards' 88 bar.
+        'pointer-events-none sticky top-0 z-30 -mx-gutter -mt-safe px-gutter pt-safe *:pointer-events-auto lg:bg-background print:static print:mx-0 print:px-0',
       )}
     >
       {large ? (
@@ -137,13 +133,14 @@ export function ScreenHeader({
             <h1
               {...pageHeading}
               className={cn(
-                'min-w-0 font-sans outline-none',
+                'bar-title min-w-0 font-sans outline-none',
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',
-                titleOnPage && 'sr-only',
+                titleOnPage === true && 'sr-only',
+                titleOnPage === 'phone' && 'max-lg:sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',
               )}
@@ -151,19 +148,13 @@ export function ScreenHeader({
               {title}
             </h1>
             {views}
-            {edit ? (
-              edit.editing ? (
-                <EditDone action={edit} />
-              ) : (
-                <EditPencil onEdit={edit.onEdit} label={edit.label} />
-              )
-            ) : null}
           </div>
-          {tools || settings || more ? (
+          {tools || settings || more || edit ? (
             <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">
-              {tools}
-              {settings}
-              {more}
+              {edit?.editing ? null : tools}
+              {edit?.editing ? null : settings}
+              {edit?.editing ? null : more}
+              {edit ? <EditWord action={edit} /> : null}
             </div>
           ) : null}
         </div>
@@ -189,13 +180,14 @@ export function ScreenHeader({
               {...pageHeading}
               className={cn(
                 // A laptop page's title is its 30 bold, as the boards' LPAD.
-                'min-w-0 font-sans outline-none lg:text-[1.875rem] lg:font-bold lg:tracking-[-0.01em]',
+                'bar-title min-w-0 font-sans outline-none lg:text-[1.875rem] lg:font-bold lg:tracking-[-0.01em]',
                 large
                   ? 'line-clamp-2 text-[1.75rem] leading-[1.15] font-bold tracking-[-0.01em] text-balance wrap-break-word hyphens-auto'
                   : 'truncate text-[1.0625rem] font-semibold',
                 // A name that may wrap takes a step down on a phone, as the boards' TITLEBAR (24 to 28).
                 large && named && 'max-sm:text-2xl',
-                titleOnPage && 'sr-only',
+                titleOnPage === true && 'sr-only',
+                titleOnPage === 'phone' && 'max-lg:sr-only',
                 // A place's views say where it is: its name stays the page's heading, unseen.
                 views && 'sr-only',
               )}
@@ -203,19 +195,13 @@ export function ScreenHeader({
               {title}
             </h1>
             {views}
-            {edit ? (
-              edit.editing ? (
-                <EditDone action={edit} />
-              ) : (
-                <EditPencil onEdit={edit.onEdit} label={edit.label} />
-              )
-            ) : null}
           </div>
           {/* The bar's glass circles stand 8 apart, as the boards' IB. */}
           <div className="ms-2 flex shrink-0 items-center gap-2 print:hidden">
-            {tools}
-            {settings}
-            {more}
+            {edit?.editing ? null : tools}
+            {edit?.editing ? null : settings}
+            {edit?.editing ? null : more}
+            {edit ? <EditWord action={edit} /> : null}
           </div>
         </div>
       )}
@@ -240,35 +226,29 @@ export function ExitFocus({ className }: { className?: string }) {
   )
 }
 
-/** The pencil beside the title: quiet, the title's own act, a 44px target. */
-function EditPencil({ onEdit, label: named }: { onEdit: () => void; label?: string }) {
+/**
+ * Edit at the bar's end, a glass word; while editing, Done in the same place, the screen's Publish
+ * before it (the canvas's EDITR).
+ */
+function EditWord({ action }: { action: EditAction }) {
   const { t } = useTranslation('common')
-  const label = named ?? t('editMode.edit')
+  if (!action.editing)
+    return (
+      <Button variant="bar" className="shrink-0 px-4" onClick={action.onEdit}>
+        {action.label ?? t('editMode.edit')}
+      </Button>
+    )
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label={label}
-      title={label}
-      className="shrink-0 text-muted-foreground print:hidden"
-      onClick={onEdit}
-    >
-      <PencilLine aria-hidden />
-    </Button>
-  )
-}
-
-/** Done, in the pencil's place beside the title while the screen is in Edit. */
-function EditDone({ action }: { action: EditAction }) {
-  const { t } = useTranslation('common')
-  return (
-    <Button
-      variant="bar"
-      disabled={action.disabled}
-      className="ms-1 shrink-0 rounded-pill px-4 font-semibold"
-      onClick={action.onDone}
-    >
-      {t('editMode.done')}
-    </Button>
+    <>
+      {action.publish}
+      <Button
+        variant="bar"
+        disabled={action.disabled}
+        className="shrink-0 px-4"
+        onClick={action.onDone}
+      >
+        {t('editMode.done')}
+      </Button>
+    </>
   )
 }

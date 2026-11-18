@@ -1,41 +1,38 @@
 import { PianoButton } from '@/widgets/practice-pages'
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import type { StepId } from '@/entities/step'
-import { useProgressStoreApi } from '@/entities/progress'
-import { LearnedButton, useLearned } from '@/features/mark-learned'
+import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/progress'
+import { markLearned, unmarkLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { ButtonLink, RoundLink, ScreenHeader, type EditAction } from '@/shared/ui'
+import { RoundLink, say, ScreenHeader, type EditAction } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
-import { ToolsButton } from '@/widgets/tools-sheet'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
 export interface WayLink {
   readonly link: ReactElement
-  /** Which way it is: Previous lesson, Next lesson, Back to the journey. */
+  /** Which way it is: Next lesson, Back to the journey. */
   readonly label: string
   /** The lesson it leads to, by name; none where the way leads back. */
   readonly title?: string
 }
 
-/** Where a lesson leads: up to what it is part of, back to the lesson before, on to the next. */
+/** Where a lesson leads: up to what it is part of, on to the next. */
 export interface LessonTrack {
   readonly up: UpLink
-  readonly previous?: WayLink
   readonly next: WayLink
 }
 
 /**
- * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
- * its title with Learned in its bar, where it is (`place`), the lesson under its
- * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
- * phone, read a page at a time, the bar's Done). Its Settings (round 28, a song's gear) in the bar;
- * its lesson editor there too where it may be edited (`edit`: an editor's, ADR 0116; the learner's
- * own, R30-5).
+ * A lesson, a journey's or a course's (ADR 0053, 0061; the canvas's Lesson boards): its bar Back, the
+ * keys' fold, the gear and Edit where it may be edited (`edit`: an editor's, ADR 0116; the learner's
+ * own, R30-5); its head (where it is, `place`, its title, what it teaches, After:) and its sections in
+ * one centred column; its foot's bar with Next lesson, which goes on and marks it learned, Undo in
+ * the toast. No Learned in the bar, no Tools in a lesson.
  */
 export function LessonLayout({
   lesson,
@@ -67,21 +64,25 @@ export function LessonLayout({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const { learn } = useLearned(step)
   const progress = useProgressStoreApi()
+  const learned = useProgress(selectIsLearned(step))
   const summary = localText(lesson.summary, locale)
+  const title = localText(lesson.title, locale)
+  // Going on learns the lesson, said with Undo; one learned already goes on in silence.
+  const goOn = () => {
+    if (learned) return
+    markLearned(progress, step, new Date())
+    say(t('lessonLearned', { title }), {
+      label: t('settings.undo'),
+      onClick: () => unmarkLearned(progress, step),
+    })
+  }
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 lg:max-w-[64.75rem]">
+    <div className="flex w-full flex-col gap-2 pb-36 lg:pt-2">
       <ScreenHeader
-        title={localText(lesson.title, locale)}
+        title={title}
         back={back}
-        tools={
-          <>
-            <LearnedButton step={step} bar worded />
-            <PianoButton />
-            <ToolsButton />
-          </>
-        }
+        tools={<PianoButton />}
         settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
         edit={edit}
         // A document: its title large on the page, as the lesson editor shows it (Edit looks as it
@@ -92,13 +93,12 @@ export function LessonLayout({
         key={lesson.id}
         lesson={lesson}
         up={track.up}
-        onward={{ link: track.next.link, onGo: learn }}
-        end={(paged) => <LessonEnd track={track} onGo={learn} paged={paged} />}
+        onward={{ link: track.next.link, label: track.next.label, onGo: goOn }}
         onRead={(section) => recordSectionRead(progress, step, section)}
         head={
           // The canvas's head: where it is (Lesson 7 of 13 · Foundations), its title, what it
           // teaches, and the lessons to read first.
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <nav
               aria-label={t('placeLabel')}
               className="text-[0.875rem] font-semibold text-eyebrow print:hidden"
@@ -107,12 +107,12 @@ export function LessonLayout({
             </nav>
             <p
               aria-hidden
-              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance sm:text-4xl"
+              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-4xl/[1.15]"
             >
-              {localText(lesson.title, locale)}
+              {title}
             </p>
             {summary ? (
-              <p className="text-[1.0625rem] leading-normal text-pretty text-muted-foreground">
+              <p className="max-w-[65ch] text-[1.0625rem]/normal text-pretty text-muted-foreground">
                 {summary}
               </p>
             ) : null}
@@ -136,51 +136,6 @@ export function LessonLayout({
         }
       />
     </div>
-  )
-}
-
-/** One of a lesson's ends as a card: which way it is, the lesson it leads to, its arrow. */
-function EndLink({ way, onGo, primary }: { way: WayLink; onGo?: () => void; primary: boolean }) {
-  return (
-    <ButtonLink
-      variant={primary ? 'default' : 'surface'}
-      onClick={onGo}
-      render={way.link}
-      className={
-        primary
-          ? 'h-auto min-h-16 justify-between gap-3 rounded-control px-4 py-3 text-left whitespace-normal sm:col-start-2'
-          : 'h-auto min-h-16 justify-start gap-3 rounded-control px-4 py-3 text-left whitespace-normal'
-      }
-    >
-      {primary ? null : <ArrowLeft aria-hidden className="shrink-0" />}
-      <span className="flex min-w-0 flex-col">
-        <span className="text-xs font-medium opacity-80">{way.label}</span>
-        <span className="font-display text-lg text-balance">{way.title ?? way.label}</span>
-      </span>
-      {primary ? <ArrowRight aria-hidden className="shrink-0" /> : null}
-    </ButtonLink>
-  )
-}
-
-/**
- * A lesson's end: the lesson before and the way on side by side; going on learns it. Read a page at a
- * time, the bar's Done is the way on: the end keeps the lesson before.
- */
-function LessonEnd({
-  track,
-  onGo,
-  paged,
-}: {
-  track: LessonTrack
-  onGo: () => void
-  paged: boolean
-}) {
-  if (paged && !track.previous) return null
-  return (
-    <footer className="mt-8 grid gap-3 border-t border-border pt-6 print:hidden sm:grid-cols-2">
-      {track.previous ? <EndLink way={track.previous} primary={false} /> : null}
-      {paged ? null : <EndLink way={track.next} onGo={onGo} primary />}
-    </footer>
   )
 }
 

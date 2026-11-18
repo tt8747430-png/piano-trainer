@@ -1,7 +1,7 @@
 /* `dark:` follows the app's theme attribute, not the OS, so shadcn primitives obey the setting. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
-@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+@custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 520px) and (max-width: 1023px));
 /* A phone held upright narrower than 390px: the transport's seven controls a size down. */
 @custom-variant small-phone (@media (max-width: 389.98px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
@@ -21,7 +21,7 @@
 /* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
    screen's floating actions stand at its side, over the keys, not over the little height left. */
 @custom-variant aside {
-  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+  @media (orientation: landscape) and (max-height: 520px), (width >= 64rem) {
     :root:has([data-slot='docked']) & {
       @slot;
     }
@@ -154,7 +154,8 @@
  */
 @theme {
   /*
-   * One shape scale (R14, DESIGN.md Shapes): a control 12 · a card 14 · a sheet 20 · a pill round.
+   * One shape scale (R14, DESIGN.md Shapes): a control 12 · a card 14 · a menu or popover 16, its
+   * items 10 (concentric in its 6 inset) · a sheet and a centred dialog 22 · a pill round.
    * The keys are drawings, not controls: a black key's foot 6, a white key's 9; a row's 30px tile,
    * a mark, 8 (canvas 128). Everything else takes `rounded-control`, `-card`, `-sheet` or `-pill`; Tailwind's own sizes, which the shadcn
    * primitives keep in their classes, resolve to the same scale (`src/styles/shapes.test.ts`). In
@@ -166,7 +167,9 @@
   --card-min-chord: 8.5rem;
   --card-min-row: 18rem;
   --card-min-tile: 11rem;
-  --radius-sheet: calc(var(--radius) + 8px);
+  --radius-sheet: calc(var(--radius) + 10px);
+  --radius-menu: calc(var(--radius) + 4px);
+  --radius-menu-item: calc(var(--radius) - 2px);
   --radius-pill: calc(infinity * 1px);
   --radius-key-black: calc(var(--radius) - 6px);
   --radius-key-white: calc(var(--radius) - 3px);
@@ -226,12 +229,14 @@
     }
   }
   /* The phone's tab bar, a glass capsule 64 high floating over the home indicator (the canvas's
-     TABBAR): what sits at the screen's foot stays above it. Beside a rail or a sidebar, nothing. */
+     TABBAR): what sits at the screen's foot stays above it. On a phone on its side it is the compact
+     capsule (52 high, 24 over the foot, as iOS's in compact height); beside a sidebar, nothing. */
   :root {
     --tab-bar-foot: max(--spacing(3), calc(env(safe-area-inset-bottom) - --spacing(1)));
     --nav-bar: calc(--spacing(16) + var(--tab-bar-foot));
     @variant landscape-phone {
-      --nav-bar: 0px;
+      --tab-bar-foot: --spacing(6);
+      --nav-bar: calc(--spacing(13) + var(--tab-bar-foot));
     }
     @variant lg {
       --nav-bar: 0px;
@@ -245,7 +250,7 @@
     --floating-left: 0px;
     --floating-right: 0px;
   }
-  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+  @media (orientation: landscape) and (max-height: 520px), (width >= 64rem) {
     :root:has([data-slot='docked']) {
       --floating-foot: 0px;
       --floating-right: var(--floating-inline, 0px);
@@ -255,14 +260,14 @@
       --floating-right: 0px;
     }
   }
-  /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
+  /* A screen's side gutter: 16px on a phone, 24px from 640px, 56px beside a sidebar (every laptop board's column). */
   :root {
     --gutter: --spacing(4);
     @variant sm {
       --gutter: --spacing(6);
     }
     @variant lg {
-      --gutter: --spacing(10);
+      --gutter: --spacing(14);
     }
   }
   body {
@@ -343,6 +348,37 @@
   html:has([data-slot='docked']) {
     scroll-padding-top: calc(--spacing(20) + max(--spacing(4), env(safe-area-inset-top)));
   }
+}
+
+/* A bar's title on a phone: it fades and lifts away over the page's first 40px of scroll while the bar
+   stays (the canvas's data-bar-title); a laptop's bar keeps it. */
+@utility bar-title {
+  animation: bar-title linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0 40px;
+  @variant lg {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+@keyframes bar-title {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+/* The soft caps every field and group is captioned in (the kit's CAPS): 13 semibold, tracked 0.04em, soft ink. */
+@utility caps {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
 }
 
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
@@ -640,18 +676,10 @@
 @utility pl-focus {
   padding-left: calc(var(--gutter) + var(--floating-left));
 }
-/* A phone on its side: its places a rail down the left (5rem, clear of a notch there), the screen
-   clear of it by a gutter, and of the floating actions where they stand at its left. */
+/* A phone on its side: the screen clear of a notch at its left by a gutter, and of the floating
+   actions where they stand at its left. */
 @utility pl-safe-left {
-  padding-left: env(safe-area-inset-left);
-}
-@utility w-rail {
-  width: calc(--spacing(20) + env(safe-area-inset-left));
-}
-@utility pl-rail {
-  padding-left: calc(
-    --spacing(20) + env(safe-area-inset-left) + var(--gutter) + var(--floating-left)
-  );
+  padding-left: calc(env(safe-area-inset-left) + var(--gutter) + var(--floating-left));
 }
 /* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
 @utility min-w-longest-word {
@@ -762,6 +790,12 @@
   box-shadow:
     inset 0 1px 0 var(--glass-honey-lit),
     0 0 0 1px rgb(176 122 42 / 0.28),
+    var(--elevation-2);
+}
+/* A layer over the page that is not glass (a dialog, a popover): the line ring and the float's shade. */
+@utility layer-shadow {
+  box-shadow:
+    0 0 0 1px var(--border),
     var(--elevation-2);
 }
 @utility elevation-2 {
@@ -945,10 +979,7 @@
   }
 }
 
-/* What is docked beside the rail or the sidebar starts where the screen does. */
-@utility left-rail {
-  left: calc(--spacing(20) + env(safe-area-inset-left));
-}
+/* What is docked beside the sidebar starts where the screen does. */
 @utility left-sidebar {
   left: --spacing(64);
 }

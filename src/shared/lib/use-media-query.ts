@@ -2,7 +2,7 @@ import { useCallback, useSyncExternalStore } from 'react'
 
 /** A phone on its side, as `theme.css`'s `landscape-phone` variant says it: short and wide. */
 export const LANDSCAPE_PHONE =
-  '(orientation: landscape) and (max-height: 500px) and (max-width: 1023px)'
+  '(orientation: landscape) and (max-height: 520px) and (max-width: 1023px)'
 
 /** A laptop: the sidebar shows, Settings a place of its own. */
 export const LAPTOP = '(min-width: 64rem)'

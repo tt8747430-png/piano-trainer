@@ -239,7 +239,7 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
       </label>
       <div className="-mx-4 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 scrollbar-none">
         {!typing && recent.length > 0 ? (
-          <section className="flex flex-col gap-2">
+          <section className="flex flex-col gap-2 pt-2">
             <Caps>{t('recent')}</Caps>
             <div className="flex flex-wrap gap-2">
               {recent.map((each) => (

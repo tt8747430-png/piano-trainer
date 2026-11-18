@@ -32,7 +32,7 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   (Selection toolbar, Swipe actions: memory-palaces' and iOS Mail's, pages of Settings' own), **Support** (User guide,
   Report a problem: a page with its field in sight, greyed offline; About, the version or a waiting update as its
   value), and for an administrator **Administration**. Only what concerns the whole app (R29: the Player's, the
-  editor's and each Practice page's settings are behind their own gear; how lessons read is a lesson's Settings').
+  editor's and each Practice page's settings are behind their own gear').
   **On a phone** one grouped list, each row its icon in a coloured square, each page pushed with Back (to Settings,
   or to the page it is under). **From 80rem** (`WIDE`; under it the sidebar leaves the page too narrow) the two panes of the libraries (Songs' tree and list): the
   sidebar (17rem, `TreeItem` rows with a painted swatch, the account first, the groups headed) stands sticky under the
