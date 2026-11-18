@@ -376,6 +376,41 @@ lesson, Continue, a level placement, a practice pace. The source's words, then t
   8. Where a rule gives the right answer (a key signature's accidentals, a scale's notes, a chord's tones), the app
      uses the rule and shows it as fact, never as a guess.
 
+## Cognitive biases: in the learner and in us (Uxcel, "Cognitive Biases", sent 2026-11-18)
+
+- **False consensus.** "People assume that others think the same way they do … a designer loves using shortcut keys
+  … might design a software interface that relies heavily on these shortcuts."
+  1. Every act reachable by a shortcut or a gesture (a swipe, a long press, a letter key) is also a visible control
+     or a menu item; a shortcut is never the only way.
+  2. A design choice the owner has not ruled and the references do not settle is checked against two shipped apps'
+     screenshots (`piano-data/reference-apps`, the web) before it is drawn, never decided by our own taste alone.
+- **Halo and horn.** "If their first interaction is negative, they might continue to view the app negatively"; the
+  search "often forms users' initial impressions"; "simplify the account setup."
+  3. The first screens a new learner meets (welcome, Learn's first run, the first song played, Search) are checked
+     first in every round, at every width; Search answers the first letter with results or help, never a blank.
+  4. Nothing asks for an account before the first song plays; signing in is offered after a thing worth saving
+     exists (accounts optional, ADR 0116).
+- **Confirmation bias.** "Favor information that confirms their existing beliefs"; "have someone not involved in the
+  project review."
+  5. A fix is checked by a measure that could prove it wrong (the lines tool, a shot after the change, a fresh look at a
+     stale shot's date), never by looking for what confirms it. A shot's file time is checked before it is judged.
+- **Negativity bias.** "A single issue … can seem more significant than many of its good features"; "keep navigation
+  and search functions in standard locations"; "ensure that error messages are helpful and polite."
+  6. The worst moment of each flow (a failed import, a wrong note, a lost connection) is drawn as carefully as its
+     best: the error says what happened, what is kept, and the one act that fixes it, beside the place it failed.
+  7. Search, Back, Settings and the places stay where the platform puts them on every board.
+- **Anchoring.** "Rely heavily on the first piece of information they see"; "well-chosen numerical default values …
+  set expectations"; "providing an upfront time estimate."
+  8. Every number control starts on the usual value (tempo at the piece's marked tempo, Wait mode's pace at 100%, a
+     metronome at 4/4 and 80), and the default is shown as the default (grey, scan-first 5).
+  9. A wait over about 2 seconds (an import, an export, a recording's analysis) says how long it will take or how far
+     it has got, before it starts.
+- **Framing.** "Different presentations of the same information lead to different conclusions"; "use neutral language
+  … rather than asking users if they 'love' a new feature, ask how they 'feel'."
+  10. Progress is framed as what was done and what is next ("6 of 13 lessons", "2 more days to Gold"), never as a
+      failure count; a result after practice names the bars to work on as the next step, not as a score lost.
+  11. A loss is framed truly as a loss (R38), never softened into a gain; feedback prompts ask in neutral words.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
