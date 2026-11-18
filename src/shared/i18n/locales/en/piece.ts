@@ -79,9 +79,6 @@ export const piece = {
   shareLinked: 'Link copied. Anyone who opens it sees the chords as you play them.',
   shareFailed: 'The link could not be made here.',
   shareTooLong: 'This song is too long to fit in a link.',
-  deleting: {
-    says: 'The song moves to the Trash in Songs, to be restored until the Trash is emptied.',
-  },
   scaleOf: 'Scale: {{scale}}',
   // What is said of a song or study, behind its ⓘ.
   aboutMore: 'More',
@@ -212,7 +209,6 @@ export const piece = {
     open: 'Settings',
     library: 'Library',
     folder: 'Playlist',
-    favourite: 'Favourite',
     home: 'Library',
     archived: 'Archived',
     share: 'Share',
