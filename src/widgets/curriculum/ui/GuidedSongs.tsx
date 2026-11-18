@@ -22,7 +22,7 @@ export function GuidedSongs({ course }: { course: Course }) {
       <h2 id={id} className="font-sans text-xl font-bold">
         {t('course.songs')}
       </h2>
-      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden lg:[&_[data-slot=row-chevron]]:hidden">
+      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden lg:[&>li>*]:px-0 lg:[&_[data-slot=row-chevron]]:hidden">
         {songs.map((piece) => (
           <EntryRow key={piece.id} entry={piece} />
         ))}
