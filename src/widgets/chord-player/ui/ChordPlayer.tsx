@@ -642,6 +642,12 @@ export function ChordPlayer({
               musicKey={shown.key}
               chords={tiles}
               onAdd={(chord) => {
+                // A tap puts it in the chosen chord's place, keeping that chord's length; with
+                // none chosen, after the last chord.
+                if (picked && chordAt(picked)) {
+                  inSection(picked.section, (each) => setChord(each, picked.index, chord))
+                  return
+                }
                 const last = shown.sections.length - 1
                 const held = shown.sections[last]
                 if (!held) return

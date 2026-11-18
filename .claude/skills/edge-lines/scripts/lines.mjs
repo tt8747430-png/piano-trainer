@@ -37,7 +37,8 @@ const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromi
 // Opens a target at a device and returns the page and the screen's rectangle in it.
 async function open(target, device, steps) {
   const board = !target.startsWith('http')
-  const lap = /Laptop$/.test(target) || target === 'Laptop'
+  // a laptop board by the device it is shot at (PlayerDesk ends in no "Laptop" and was opened as a phone, its crop a 450 sliver)
+  const lap = /Laptop$/.test(target) || target === 'Laptop' || device[0] >= 1000
   const [dw, dh] = device
   const page = await browser.newPage({ viewport: board ? (lap ? { width: 2000, height: 1160 } : { width: 450, height: 952 }) : { width: dw, height: dh }, deviceScaleFactor: 1 })
   // A screen that throws is broken before any line is drawn (the SongSettings board drew blank on 'pick is not defined').
@@ -143,7 +144,26 @@ async function analyse(page, scr, phone) {
   }
   // a dialog over a scrim is the screen while it is open: the page behind it is not measured against it
   const MODAL = [...document.querySelectorAll('[role=dialog], [role=alertdialog]')].filter(vis).find((d) => { if (d.getAttribute('aria-modal') === 'true') return true; const pr = d.previousElementSibling; if (!pr) return false; const cs = getComputedStyle(pr); return cs.position === 'absolute' && /rgba\(/.test(cs.backgroundColor) && pr.getBoundingClientRect().width > d.getBoundingClientRect().width + 40 })
-  const sel = 'header, h1, h2, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
+  // Where the eye reads a block's left edge: a drawn surface (a fill unlike its parent's, a ring, a border) by its box;
+  // anything else by its ink, where its first word, icon or picture starts (owner, 2026-11-18: "fix all the wrong
+  // measured pixels": a header's padded box measured against a section's words read as a 12px miss that was not there)
+  const drawn = (el) => { const cs = getComputedStyle(el); return (opaque(bg(el)) && el.parentElement && bg(el) !== bg(el.parentElement)) || /\d/.test(cs.boxShadow) && cs.boxShadow !== 'none' || ['Left', 'Top', 'Bottom'].some((k) => parseFloat(cs['border' + k + 'Width']) > 0 && opaque(cs['border' + k + 'Color'])) }  // a rule above or under a table is its drawn edge
+  // a bar is a band across its page, and the current row's wash reaches past its words by design: both are read by their words
+  // a row washed among bare siblings of its kind is the current one, whatever its attributes say; a cousin counts only
+  // when each row is wrapped alone (li > a), never a link in a heading beside a grid of cards
+  const washed = (el) => /^(A|BUTTON|LI)$/.test(el.tagName) && opaque(bg(el)) && bg(el) !== bg(el.parentElement) && parseFloat(getComputedStyle(el).borderTopLeftRadius) < el.getBoundingClientRect().height / 2 - 1 && [...(el.parentElement?.children.length === 1 ? el.parentElement.parentElement?.querySelectorAll(':scope > ' + el.parentElement.tagName + ' > ' + el.tagName) ?? [] : [])].concat([...(el.parentElement?.children ?? [])]).some((o) => o !== el && o.tagName === el.tagName && !(opaque(bg(o)) && bg(o) !== bg(o.parentElement)))
+  const band = (el) => /^HEADER$/.test(el.tagName) || washed(el) || el.matches('[aria-current]:not([aria-current=false]), [aria-selected=true], [aria-checked=true], [aria-pressed=true]')
+  const inkLeft = (el) => {
+    if (drawn(el) && !band(el)) return el.getBoundingClientRect().left
+    let x = Infinity
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT)
+    for (let n = w.currentNode; n; n = w.nextNode()) {
+      if (n.nodeType === 3) { if (!n.textContent.trim()) continue; const rg = document.createRange(); rg.selectNodeContents(n); for (const q of rg.getClientRects()) if (q.width > 0) x = Math.min(x, q.left) }
+      else if (n !== el && (vis(n) && (/^(svg|img|canvas|video|input|select|textarea)$/i.test(n.tagName) || drawn(n) && !band(n)))) { x = Math.min(x, n.getBoundingClientRect().left); if (!/^svg$/i.test(n.tagName)) w.nextSibling() }
+    }
+    return x === Infinity ? el.getBoundingClientRect().left : x
+  }
+  const sel = 'header, h1, h2, h3, aside, nav, main > *, section, [role=toolbar], [role=table], [role=tablist], [data-float], [class~=card]'
   const blocks = [...document.querySelectorAll(sel)].filter((e) => vis(e) && (!MODAL || MODAL.contains(e))).map((el) => {
     const r = el.getBoundingClientRect()
     const cs = getComputedStyle(el)
@@ -152,7 +172,7 @@ async function analyse(page, scr, phone) {
       tag: el.tagName.toLowerCase() + (el.getAttribute('role') ? '[' + el.getAttribute('role') + ']' : ''),
       text: (el.innerText || el.getAttribute('aria-label') || '').trim().split('\n')[0].slice(0, 32),
       // A block centred in a row is read by its row's top: the row is the edge the eye lines up.
-      x: Math.round(r.left), y: Math.round(rowTop(el)), r: Math.round(r.right), b: Math.round(r.bottom),
+      x: Math.round(inkLeft(el)), y: Math.round(rowTop(el)), r: Math.round(r.right), b: Math.round(r.bottom),
       card: isCard(el),
       floating: cs.position === 'fixed' || cs.position === 'absolute',
     }
@@ -164,12 +184,14 @@ async function analyse(page, scr, phone) {
     if (r.top > scr.y + scr.h || r.left > scr.x + scr.w || r.right < scr.x) continue
     blocks.push({ el, tag: 'card', text: (el.innerText || '').trim().split('\n')[0].slice(0, 32), x: Math.round(r.left), y: Math.round(r.top), r: Math.round(r.right), b: Math.round(r.bottom), card: true, floating: false })
   }
+  const centredWords = (b) => { for (let e = b.el, i = 0; e && i < 2; e = e.parentElement, i++) { const cs = getComputedStyle(e); if (cs.textAlign === 'center' || /flex/.test(cs.display) && cs.flexDirection.startsWith('column') && cs.alignItems === 'center') return b.x - e.getBoundingClientRect().left > 8 } return false }
   const lines = []
   const problems = []
   const notes = []
   const near = (a, b) => Math.abs(a - b) >= 1 && Math.abs(a - b) <= 12
   // Left edges and tops: blocks that nearly share an edge.
-  const big = blocks.filter((b) => !b.floating && b.r - b.x > 60)
+  // a bar keeps its Back on the kit's 12 and is read by its own rule; what runs the screen's width has no edge to meet
+  const big = blocks.filter((b) => !b.floating && b.r - b.x > 60 && !/^header/.test(b.tag) && b.el.getBoundingClientRect().width < scr.w - 2)
   // The nearest surface (a lighter rounded box) holding a block: its content aligns to its inset.
   const region = (b) => { for (let p = b.el.parentElement; p && p !== document.body; p = p.parentElement) { const cs = getComputedStyle(p); if (parseFloat(cs.borderTopLeftRadius) >= 8 && opaque(bg(p)) && p.parentElement && bg(p) !== bg(p.parentElement) && p.getBoundingClientRect().width >= 160) return p } return null }
   for (let i = 0; i < big.length; i++) for (let j = i + 1; j < big.length; j++) {
@@ -178,6 +200,8 @@ async function analyse(page, scr, phone) {
     // Content inside a card sits on the card's inset; the card's own edge is what meets the page's.
     if (region(a) !== region(c)) continue
     const stacked = Math.min(a.r, c.r) > Math.max(a.x, c.x) || Math.abs(a.y - c.y) > 40
+    // centred words (a result's title and its line under it) are held by their middle, not a left edge
+    if ([a, c].some(centredWords)) continue
     if (near(a.x, c.x) && stacked) problems.push(`left edges miss by ${Math.abs(a.x - c.x)}px: ${a.tag} “${a.text}” at ${a.x}, ${c.tag} “${c.text}” at ${c.x}`)
     const side = a.b > c.y && c.b > a.y || Math.abs(a.y - c.y) <= 12
     if (near(a.y, c.y) && side && (a.r <= c.x || c.r <= a.x)) problems.push(`tops miss by ${Math.abs(a.y - c.y)}px: ${a.tag} “${a.text}” at ${a.y}, ${c.tag} “${c.text}” at ${c.y}`)
@@ -198,6 +222,8 @@ async function analyse(page, scr, phone) {
     for (let i = 1; i < kids.length; i++) {
       const a = kids[i - 1].r, c = kids[i].r
       if (getComputedStyle(kids[i].el).position === 'absolute') continue
+      // room made by centring (a column centred in what is left, or a margin set to auto) is room, not a step
+      if (/center/.test(getComputedStyle(p).justifyContent) || [kids[i - 1].el, kids[i].el].some((k) => /auto/.test(k.getAttribute('style') ?? '') && /margin[^;]*auto/.test(k.getAttribute('style') ?? ''))) continue
       if (c.top >= a.bottom - 1) {
         const g = Math.round(c.top - a.bottom)
         if (g > 0 && g < 200) gaps.push({ x: Math.round(Math.max(a.left, c.left) + 6), y1: Math.round(a.bottom), y2: Math.round(c.top), g, bad: !SCALE.includes(g) })
@@ -237,7 +263,7 @@ async function analyse(page, scr, phone) {
       // a centred thing (the Tuner's gauge, a sign-in form) is held by its two sides, not a gutter
       if (minL > 20 && !band && Math.abs(minL - (scr.w - maxR)) > 8) problems.push(`the content starts ${minL}px in with nothing in the band at its left: it keeps room for a control not shown; a page's column starts on the 16 gutter, and edit controls float over their block, reserving no space`)
       const hd = [...document.querySelectorAll('header')].find((h) => vis(h) && h.getBoundingClientRect().top - scr.y < 120)
-      const first = [...main.querySelectorAll('*')].filter((e) => vis(e) && e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect().top).filter((t) => t > (hd ? hd.getBoundingClientRect().bottom : 0)).sort((a, b) => a - b)[0]
+      const first = [...main.querySelectorAll('*')].filter((e) => vis(e) && e.getBoundingClientRect().height > 0 && e.getBoundingClientRect().width > 0).map((e) => e.getBoundingClientRect().top).filter((t) => t >= (hd ? hd.getBoundingClientRect().bottom : 0) - 1).sort((a, b) => a - b)[0]
       const hb = hd ? hd.getBoundingClientRect().bottom : 0
       const filled = first !== undefined && [...document.body.querySelectorAll('*')].some((e) => { if (!vis(e) || main.contains(e) || e.contains(main) || (hd && (hd.contains(e) || e.contains(hd)))) return false; const r = e.getBoundingClientRect(); return r.height > 8 && r.width > 40 && r.top >= hb - 4 && r.top < first - 4 && r.left - scr.x < scr.w && r.right > scr.x })
       // a lone instrument centred in the screen (the Circle of fifths) is placed, not left: no band
@@ -338,7 +364,8 @@ async function analyse(page, scr, phone) {
   for (const b of blocks.filter((b) => (b.card || b.el.tagName === 'ASIDE') && !b.el.closest('nav'))) {
     const box = R(b.el)
     const cs = getComputedStyle(b.el)
-    const rows = rowsOf(b.el)
+    // a row placed outside its box (a grabber or a tab hung over the edge) is not what the box holds
+    const rows = rowsOf(b.el).filter((e) => { const r = R(e); return r.top >= box.top - 1 && r.bottom <= box.bottom + 1 })
     if (rows.length === 0) continue
     const rr = rows.map(R)
     const ink = { l: Math.min(...rr.map((r) => r.left)), t: Math.min(...rr.map((r) => r.top)), r: Math.max(...rr.map((r) => r.right)), b: Math.max(...rr.map((r) => r.bottom)) }
@@ -350,7 +377,11 @@ async function analyse(page, scr, phone) {
     rel.push({ k: 'in', x: box.left, y: box.top + 10, w: inL, label: inL })
     rel.push({ k: 'inv', x: box.left + 10, y: box.top, h: inT, label: inT })
     rel.push({ k: 'inv', x: box.left + 10, y: ink.b, h: inB, label: inB })
-    if (Math.abs(inT - inB) > 4 && inT < 40 && inB < 40) problems.push(`${named(b)}: top inset ${inT} and bottom inset ${inB} differ (an unbalanced box: the content sits off its centre)`)
+    // a sheet docked at the screen's foot runs its content to the foot by design
+    const docked = box.bottom >= scr.y + scr.h - 2
+    // a row bled to the box's full width (the keys at a sheet's foot) is the box's edge, not an inset
+    const bleeds = rr.some((r) => r.width >= box.width - 2 && (Math.abs(r.bottom - box.bottom) <= 1 || Math.abs(r.top - box.top) <= 1))
+    if (!docked && !bleeds && Math.abs(inT - inB) > 4 && inT < 40 && inB < 40) problems.push(`${named(b)}: top inset ${inT} and bottom inset ${inB} differ (an unbalanced box: the content sits off its centre)`)
     // Stacked rows: the gaps between them, against the card's inset (inner closer than the edge, NN/g proximity).
     const stacked = rr.every((r, i) => i === 0 || r.top >= rr[i - 1].bottom - 1)
     if (stacked && rows.length >= 2) {

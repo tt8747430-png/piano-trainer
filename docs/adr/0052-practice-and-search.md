@@ -85,24 +85,29 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     and Harmonise: the chords that hold a melody note);
   - Intervals (canvas 170): the interval chosen (`iv=`, the perfect 5th first) is the page's subject: its name, with
     an ⓘ holding what it sounds like, songs it rises and falls in (each language its own titles) and what it inverts
-    to; its size and notes ("7 semitones · C up to G"); a card of its staff and the song it sounds like, with Hear it;
+    to; its size and notes ("7 semitones · C up to G"); its staff on the paper, the song it sounds like under it, with Hear it;
     the page's pinned keys show it. Under it Simple · Compound and the intervals as tiles, seven a row, each its short
     name and semitones (the tritone twice, A4 and d5; the compound ones a chord symbol names, ♭9 to 13); a tile chooses
     and plays. Then From (the root) and Play as, **Ascending · Descending · Harmonic** (`way=`), in a column beside
     the interval on a laptop; **Play all** floats. The cards with a staff are the lessons';
   - **Exercises, Accompaniment and Progressions are one library** (`widgets/practice-library`, R30-4), the Songs
     library's shape and its own parts (the kit's `FilterSheet`, `FilterChips`, `SortChoice`, `RowMore`,
-    `FavouriteMark`, `TreeItem`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level;
-    Style for Progressions, the tree's own place); on a phone Favourites while there are some, each book (or style) a
-    run of rows folded after five with Show all n, Mine last, a row its picture (a progression's its chords as tiles
-    tinted by role, `ProgressionTiles`, R34), name, line and level (pips and its
-    number), ♡ in its ⋯ and on a swipe; from 64rem the tree (All, Favourites, the books, Mine, Hidden; a count of
-    none hidden; 44px rows) beside a table its headings sort (Name, Book, Level; Accompaniment's Hands, each figure's
-    name; Progressions' chords). Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and `sort` are
-    remembered. Creating is the floating honey +. A level is the content's: an exercise's own, a pattern's its book's
+    `FavouriteMark`, `SortHeading`): the search with Sort (Book or Style, Name, Level) and Filter (Level; Style for
+    Progressions), and under it the places as chips on both sizes (All, Favourites, the books or styles, Mine,
+    Hidden); on a phone Favourites while there are some, each book (or style) a run of rows folded after five with
+    Show all n, Mine last, a row its picture (a progression's its chords as tiles tinted by role, `ProgressionTiles`,
+    R34), name, line and level (pips and its number), ♡ in its ⋯ and on a swipe; from 64rem no places pane (R67): one
+    table, its rows under each place's heading and folded as the phone's, its columns Name, then the kind's own
+    (Exercises: Exercise and Level; Accompaniment: Pattern and Level; Progressions: its chords and Major or Minor), ♡
+    and ⋯ at the row's end, its headings sorting. Its view (`q`, `sort`, `place`, `stage`) is the URL's; `place` and
+    `sort` are remembered. Creating is the floating honey + on both sizes. A level is the content's: an exercise's own, a pattern's its book's
     course's, a study's its own; the rhythm styles, the learner's patterns and every progression have none, so
     Progressions shows, sorts and filters by no level;
-  - Exercises: its three books; an exercise's page has the ♡ in its bar;
+  - Exercises: its three books; an exercise's page has the ♡ in its bar, and its score leads it (R67): its first four
+    bars, two systems of two, fitted together to the column (one 880 column on a laptop), then its choices as rows
+    with the value at the row's end (Hands, Rhythm, Next key, Octaves), How in a card last;
+  - The subject of Intervals, a progression's chords and a pattern's bar stand on the paper, never in a card, a
+    caption under them (R67);
   - Accompaniment: each method book (named in the interface's script: Bobrova, Боброва) and the rhythm styles a
     place of its **patterns only** (R32: content kinds apart), with links to the book's course in Learn and its songs
     in Songs; Mine the learner's patterns, Hidden the built-ins they hid (through `pt-patterns`, so the Player's
@@ -113,8 +118,8 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
     Hide (Show under Hidden) and Restore original name; the pencil in the bar opens Edit, every place and row with
     its handle in one drag context (memory-palaces' engine and overlay), a place's More renaming, hiding or (their
     own folder) deleting it, asking first, its rows going home. New makes what the page makes (a pattern, a
-    progression) and New folder, the kit's `NewDial` on a phone and `NewMenu` in the bar on a laptop
-    (`useLibraryNew`, canvas 169). The sort's first choice is Manual;
+    progression) and New folder, the kit's `NewDial`, floating at the foot on both sizes (`useLibraryNew`, R67). The
+    sort's first choice is Manual;
   - Progressions opens on its library (each style a place, Mine the learner's own). A progression's page
     (`/practice/progressions/$id`, the library's or `mine-n`) has its ♡, its Key and Chords (size), approach chords, its
     chords with their roles and bass moves, the Player's diagrams and staff, Play it in the Chord player, practising in
@@ -138,11 +143,13 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   Accompaniment and Exercises have no gear, and nothing redirects to the app's Settings. The page's gear opens it (`?from=` names the page, so Back returns
   there); Settings does not list them (R29). The page keeps what you look at.
 - **The Metronome** (`/practice/metronome`), its face in Chordify's order: the BPM large between −10 −1 +1 +10, a
-  slider and Tap tempo (the average of the last five taps), a square a beat (the first larger, the one sounding
-  filled, a tap cycling accent · beat · silent), one honey Play. Every setting is in place, as Chordify's (R32; no
-  gear, no settings page): under it, beside it on a laptop, Rhythm (Time signature, Sound: Click, Beep, Drum kit;
-  Subdivision: None, Eighth notes, Triplets, Sixteenth notes, Swung eighths), then Practice aids, the speed trainer
-  and silent bars, each a switch whose rows open in place and read as a sentence. A click's and a beep's accent is an octave up; the drum grooves are A39's (rock in 4:
+  slider labelled at its ends (30 and 300) and Tap tempo (the average of the last five taps), a square a beat (the
+  first larger, the one sounding filled, a tap cycling accent · beat · silent), one honey Play. Every setting is in
+  one home, one group of rows under the face (R67; no gear, no settings page): Time signature (a stepper),
+  Subdivision (None, Eighth notes, Triplets, Sixteenth notes, Swung eighths) and Sound (Click, Beep, Drum kit) each
+  its value opening a sheet of choices, Volume (a stepper), Flash on the beat (a switch), then the Speed trainer and
+  Silent bars, each its value ("Off", or what it does) opening its sheet. On a laptop the page is one centred column
+  of 760 (`ToolPage`'s `column`; the Tuner's 720), as the board. A click's and a beep's accent is an octave up; the drum grooves are A39's (rock in 4:
   kick 1 and 3, snare 2 and 4; a waltz: kick 1, snare 2 and 3; 6/8: kick 1, snare 4; odd meters by their groups), the
   hat on the subdivision, the kick and snare one loudness.
   Beats are planned on the audio clock a second and a half ahead and topped up by a timer; a change while it plays

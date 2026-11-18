@@ -76,7 +76,7 @@ RS_LEGEND = (f'<div style="display: flex; flex-wrap: wrap; justify-content: cent
 def RS_TILE(fig, unit, sub, label):
     """A stat tile, the same three rows in every tile (round 63): the figure (its unit quieter), one line of context,
     the label; 16 inset, rows closer than the inset, so the three read as one group and the tiles as siblings."""
-    u = f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}"> {unit}</span>' if unit else ''
+    u = f'<span style="font-size: 15px; font-weight: 600; letter-spacing: 0; color: {SOFT}"> {unit}</span>' if unit else ''
     return (f'<div class="rs-rise" style="min-width: 0; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 16px; display: flex; flex-direction: column; gap: 2px">'
             f'<span style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap">{fig}{u}</span>'
             f'<span style="font-size: 13px; color: {SOFT}; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{sub}</span>'
@@ -158,7 +158,7 @@ RS_JS = lambda mode: js(r'''
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
-RS_KEYS = lambda h, k='kb': KEYS(h).replace('kb.', k + '.').replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
+RS_KEYS = lambda h, k='kb': KEYS(h, k).replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
 
 
 def RS_RUNVIEW(lap):

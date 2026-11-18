@@ -11,7 +11,7 @@ import { useIntervalName } from './use-interval-name'
 /**
  * The interval chosen, the page's subject (canvas 170): its name and, behind its ⓘ, what it sounds
  * like, a song it falls in and what it inverts to (its size and notes are the keys' and the tiles');
- * then the card of its staff and the song it sounds like, with Hear it.
+ * then its staff on the paper and the song it sounds like, with Hear it.
  */
 export function IntervalHero({
   name,
@@ -37,7 +37,7 @@ export function IntervalHero({
   if (inverse) facts.push({ label: t('intervals.inverts'), value: said(inverse).title })
   const heard = songs?.up[locale][0]
   return (
-    <section aria-labelledby="interval-chosen" className="flex flex-col gap-4">
+    <section aria-labelledby="interval-chosen" className="flex flex-col gap-2 lg:gap-3">
       <div className="flex items-center gap-0.5">
         <h2
           id="interval-chosen"
@@ -59,8 +59,9 @@ export function IntervalHero({
           </div>
         </InfoTip>
       </div>
-      {/* Its notes on the staff, what it sounds like and Hear it: the Scales page's music card. */}
-      <div className="flex flex-col gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+      {/* The page's subject (canvas, "The interval leads Intervals"): its notes on the staff at
+          reading size on the paper, no card round it, what it sounds like and Hear it under it. */}
+      <figure className="flex flex-col gap-3">
         <section
           aria-label={t('intervals.written')}
           className="flex w-full min-w-40 justify-center"
@@ -91,7 +92,7 @@ export function IntervalHero({
             )}
           </Button>
         </div>
-      </div>
+      </figure>
     </section>
   )
 }

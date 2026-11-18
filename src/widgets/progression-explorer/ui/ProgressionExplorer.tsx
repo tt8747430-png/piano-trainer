@@ -41,7 +41,7 @@ import { ProgressionSongs } from './ProgressionSongs'
  * A progression's page in the Chords page's shape (canvas 177): the keys at the top; its name in the
  * serif with its ♡ (`favourite`), how it sounds and its style (`about`), and Key; for a line typed or
  * kept (`typed`), its numerals and the mode they are read in; its chords as tiles by role with each
- * root's move, then one card of the chords on the staff with what it teaches (`note`); practising it
+ * root's move, then the chords on the staff on the paper with what it teaches (`note`); practising it
  * through the keys in the Player, Passing chords, and the songs it is heard in with Open in the Chord
  * player. One floating bar: Loop, Play with what it plays (Chords, Approach chords), Practise. On a
  * laptop the keys run across the top over the progression and, beside it, the rest. How it is written
@@ -126,14 +126,16 @@ export function ProgressionExplorer({
             chooses
           >
             <RowRoles />
-            <div className="flex flex-col items-center gap-3 rounded-2xl bg-card px-4 pt-4 pb-3.5 ring-1 ring-border">
+            {/* The chords on the staff at reading size, on the paper with no card round them
+                (canvas, "A progression's chords on the staff at reading size"). */}
+            <figure className="flex flex-col items-center gap-3">
               <RowStaff />
               {note ? (
-                <p className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
+                <figcaption className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
                   {note}
-                </p>
+                </figcaption>
               ) : null}
-            </div>
+            </figure>
             <RowPlay
               variant="pieces"
               practise={{

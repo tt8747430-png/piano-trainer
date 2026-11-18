@@ -683,6 +683,9 @@ export const practice = {
     empty: 'Nothing here yet.',
     table: {
       name: 'Name',
+      exercise: 'Exercise',
+      pattern: 'Pattern',
+      focus: 'Focus',
       book: 'Book',
       style: 'Style',
       level: 'Level',
@@ -692,7 +695,6 @@ export const practice = {
     },
     kinds: {
       exercises: {
-        tree: 'Exercises by book',
         search: 'Search exercises',
         noMatch: 'No exercises match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
@@ -702,7 +704,6 @@ export const practice = {
         show_other: 'Show {{count}} exercises',
       },
       accompaniment: {
-        tree: 'Accompaniment by book',
         search: 'Search accompaniment',
         noMatch: 'No patterns match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
@@ -712,7 +713,6 @@ export const practice = {
         show_other: 'Show {{count}} patterns',
       },
       progressions: {
-        tree: 'Progressions by style',
         search: 'Search progressions',
         noMatch: 'No progressions match “{{query}}”.',
         favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',
@@ -767,7 +767,6 @@ export const practice = {
     faster: 'Faster by {{step}}',
     tap: 'Tap tempo',
     tapShort: 'Tap',
-    settingsTitle: 'Metronome settings',
     flash: 'Flash on the beat',
     volume: 'Volume',
     off: 'Off',
@@ -943,8 +942,8 @@ export const practice = {
     chords: 'Chords',
     loopSection: 'Loop this section',
     keyChords: '{{key}} chords',
-    keyChordsHint: 'Drag one into a bar.',
-    keyChord: '{{chord}}: drag into a bar, or tap to add it at the end',
+    keyChord: '{{chord}}: tap or drag into a bar',
+    keyChordTip: 'Tap or drag into a bar',
     arranger: {
       title: '{{name}} on the Genos',
       tag: '{{name}} on the Genos: {{marks}}',

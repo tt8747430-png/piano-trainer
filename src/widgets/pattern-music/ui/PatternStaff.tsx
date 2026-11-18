@@ -19,7 +19,7 @@ export function PatternStaff({ sample }: { sample: PatternSample }) {
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
         <TappableStaff music={sample.music} score={score} tempo={NOTE_TEMPO} />
       </div>
-      <figcaption className="text-sm text-muted-foreground">
+      <figcaption className="mx-1 text-sm text-muted-foreground">
         {sample.piece
           ? t('patterns.over', { piece: entryTitles(sample.piece, locale).primary })
           : t('patterns.overC')}
