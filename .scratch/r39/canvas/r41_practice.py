@@ -361,8 +361,8 @@ CP_SET = (LABELLED('Instruments', GROUP(('toggle', 'Piano', 'cpPiOn', 'cpPiT'), 
           + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html')))
 _BACKP = f'<button type="button" aria-label="Back to Chord player settings" onClick="{{{{backSet}}}}" style="position: absolute; left: -8px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{CHEV_L}</button>'
 _PBODY = PS.PIANO_SHEET(False, 3, 4)
-CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY).replace('max-height: 86%', 'max-height: calc(100% - 124px)', 1).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', _BACKP + '<span style="font-size: 17px; font-weight: 600">Piano</span>', 1)
-CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400).replace('<span style="font-size: 17px; font-weight: 600">Piano</span>', f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px">{_BACKP}<span style="font-size: 17px; font-weight: 600">Piano</span></div>', 1)
+CP_PSHEET = BSHEET('pianoOn', 'Piano', _PBODY, back=_BACKP, maxh='calc(100% - 124px)')
+CP_PPOP = POPOVER('pianoOn', 'Piano', _PBODY, 'right: 40px; top: 64px', 400, back=_BACKP)
 
 CP = CP.replace("    const play = st.playing ? (st.at ?? [0, 2])", CP_PIANO_JS + "    const play = st.playing ? [slot.si, slot.bi]", 1).replace("styleOn: st.sheet === 'style',", "styleOn: st.sheet === 'style', ...cpPiano,", 1)
 CP = 'const PT_BUNDLE = ' + json.dumps(PT_BUNDLE_CP) + ';\n' + CP.replace('class Component extends DCLogic {\n', 'class Component extends DCLogic {' + CP_LIFE, 1)

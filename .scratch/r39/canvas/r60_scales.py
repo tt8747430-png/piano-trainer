@@ -98,7 +98,7 @@ TEMPOPOP = lambda pos: (f'<sc-if value="{{{{tempoMenu}}}}" hint-placeholder-val=
 BAR60 = lambda pos: f'<div role="toolbar" aria-label="Tempo, play and hands" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{TEMPOBTN}{PLAYSC}{HANDSSC}</div>'
 ROUND60 = lambda label, svg, act: IB(label, svg, act)  # the kit's one bar button
 TOP60 = TOP('Main.dc.html', 'Scales and keys', ROUND60("Settings", COG, "openSet") + ROUND60("Piano", KEYSI, "openKeys"), 'Back to Practice')
-KB60 = lambda k, h: KEYS(h, k).replace('border-radius: 14px;', 'border-radius: 0;', 1)
+KB60 = lambda k, h: KEYS(h, k, edge=True)
 import sys; sys.path.insert(0, '/home/user/piano-trainer/.scratch/r39/canvas'); import piano_sheet as PS
 SC_KEYS60 = PS.PIANO_SHEET_2D()  # the one Piano sheet, its 2D part
 SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)

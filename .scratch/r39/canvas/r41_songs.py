@@ -112,7 +112,7 @@ def EDTOP(done):
     return (f'<header style="flex: none; height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 8px 0 16px"><a href="{done}" style="height: 44px; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 17px; font-weight: 600">Done</a><span style="flex: 1"></span>'
             f'{IB("Undo", UNDO)}{IB("Redo", REDO)}<span style="width: 1px; height: 22px; background: {LINE}; margin: 0 6px"></span>'
             f'<button type="button" aria-label="Piano keys" aria-pressed="{{{{keysOn}}}}" onClick="{{{{toggleKeys}}}}" style="width: 40px; height: 36px; border: 0; border-radius: 10px; background: {{{{keysBg}}}}; color: {{{{keysFg}}}}; display: flex; align-items: center; justify-content: center">{KEYSI}</button>'
-            f'<span style="width: 4px"></span>{PLAYBTN(36).replace("22", "16").replace("20", "15")}{DOTS()}</header>')
+            f'<span style="width: 4px"></span>{PLAYBTN(36, (16, 15))}{DOTS()}</header>')
 # The score lies on the page as the Player's does, no sheet of paper under it: Play and Edit keep it in place (loop round 62).
 def SCOREPAGE(w, size, pad):
     lap = size > 1.1  # the Player's heading, value for value: one heading on the score in Play and in Edit
@@ -127,7 +127,7 @@ PALETTE = (f'<div style="flex: none; border-radius: 18px 18px 0 0; background: {
            f'<button type="button" aria-label="Open the palette" onClick="{{{{toggleFull}}}}" style="align-self: center; width: 60px; height: 18px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></span></button>'
            f'<sc-if value="{{{{folded}}}}" hint-placeholder-val="{{{{true}}}}"><div class="nos" style="display: flex; gap: 8px; overflow-x: auto; padding: 0 12px"><sc-for list="{{{{tools}}}}" as="t" hint-placeholder-count="9">{TILE}</sc-for></div><div class="nos" style="overflow-x: auto; padding: 0 12px"><div style="width: 560px">{SEGC("cats", 30, 13)}</div></div></sc-if>'
            f'<sc-if value="{{{{full}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 330px; overflow-y: auto; padding: 0 12px; display: flex; flex-direction: column; gap: 12px"><sc-for list="{{{{all}}}}" as="a" hint-placeholder-count="6">{CAPS("{{a.c}}")}<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{{{a.tools}}}}" as="t" hint-placeholder-count="6">{TILE}</sc-for></div></sc-for></div></sc-if></div>')
-PIANO = lambda k, h: f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; background: {SHEET}; padding: 0 0 26px">{KEYS(h).replace("kb.", k + ".").replace("border-radius: 14px;", "border-radius: 0;")}</div></sc-if>'
+PIANO = lambda k, h: f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; background: {SHEET}; padding: 0 0 26px">{KEYS(h, k, edge=True)}</div></sc-if>'
 ED_MORE = GROUP(('link', 'Instruments and staves', 'Piano', ''), ('link', 'Page layout', '', ''), ('link', 'Playback sound', 'Grand piano', ''), ('link', 'MIDI keyboard', 'Not connected', ''), bg=SHEET)
 eph = f'''{EDTOP('Song.dc.html')}
 <div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 10px 12px">{SCOREPAGE(360, 0.95, '14px 12px 8px')}</div>

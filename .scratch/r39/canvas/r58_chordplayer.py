@@ -310,7 +310,7 @@ def GENOS76(pos, wide):
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
 # the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar
-DOCKFULL = DOCK(CP_DOCK, 0).replace('bottom: 0px;', '{{dockPos}};', 1)
+DOCKFULL = DOCK(CP_DOCK, '{{dockPos}}')
 DOCKFULL = DOCKFULL[:-len('</div>')] + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: -26px') + '</div>'
 PLAYONLY = f'<div style="position: absolute; right: 16px; {{{{dockPos}}}}; z-index: 40; width: 68px; height: 68px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; justify-content: center">{PLAYBTN()}' + PTAG('pickD', 'openLayD', 'Controls', 'right: 0; top: -50px') + '</div>'
 DOCKTOP = f'<div role="toolbar" style="position: relative; flex: none; margin: 0 16px 8px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; gap: 8px">{CP_DOCK}' + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: 12px') + '</div>'

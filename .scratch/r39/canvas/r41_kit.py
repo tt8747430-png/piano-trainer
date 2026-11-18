@@ -179,21 +179,21 @@ def GROUP(*rows, bg=FILL):
     if bg == SHEET:
         return f'<div data-group style="flex: none; border-radius: 14px; background: {bg}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">{"".join(out)}</div>'
     return f'<div data-group style="flex: none; border-radius: 12px; background: {bg}; overflow: hidden">{"".join(out)}</div>'
-def BTN(label, act='', href='', kind='primary', h=50, grow=True):
+def BTN(label, act='', href='', kind='primary', h=50, grow=True, fg=INK, attrs=''):
     """A text button: honey for the screen's one act, quiet beside it. Two heights only (laws, similarity: near-miss
     heights read as a mistake): 50 for a page's or sheet's act, 44 compact in a row; 48 and 52 are 50."""
     h = 44 if h < 47 else 50
-    bg = {'primary': ACCENT, 'quiet': FILL, 'plain': 'transparent'}[kind]; fg = INK  # plain: on glass beside the honey act (one fill per dock)
+    bg = {'primary': ACCENT, 'quiet': FILL, 'plain': 'transparent'}[kind]  # fg: a state's ink (a disabled Clear); attrs: extra attributes, first; plain: on glass beside the honey act (one fill per dock)
     # min-height: in a column, flex: 1's zero basis squashed it to its text when the column was full (Copy link, 20 tall)
     st = f'{"flex: 1;" if grow else "flex: none;"} min-width: 0; height: {h}px; min-height: {h}px; padding: 0 20px; border: 0; border-radius: {h // 2}px; background: {bg}; color: {fg}; font: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; white-space: nowrap'
-    return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
-def PLAYBTN(size=52):
-    return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button>'
-def DOCK(inner, bottom=34, pad=8, w=None):
+    return f'<a href="{href}" style="{st}">{label}</a>' if href else f'<button {attrs}type="button" {("onClick=\"{{" + act + "}}\"") if act else ""} style="{st}">{label}</button>'
+def PLAYBTN(size=52, glyph=(22, 20)):  # glyph: the play and stop marks' sizes, smaller in a small button
+    return f'<button type="button" aria-label="{{{{playLabel}}}}" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="flex: none; width: {size}px; height: {size}px; border: 0; border-radius: {size // 2}px; background: {ACCENT}; color: {INK}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOP.replace('"20"', f'"{glyph[1]}"')}</sc-if><sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY.replace('"22"', f'"{glyph[0]}"')}</sc-if></button>'
+def DOCK(inner, bottom=34, pad=8, w=None):  # bottom: px, or a state's placement ('{{dockPos}}') given whole
     """The floating glass bar at the foot of a page: the phone's full width, or w wide and centred (a laptop's
     selection bar, 'auto' to hug its acts); not for the laptop's dock in the flow, which is DOCK_L."""
     place = 'left: 16px; right: 16px;' if w is None else 'left: 50%; transform: translateX(-50%);' + ('' if w == 'auto' else f' width: {w}px;')
-    return f'<div role="toolbar" style="position: absolute; {place} bottom: {bottom}px; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
+    return f'<div role="toolbar" style="position: absolute; {place} {bottom if isinstance(bottom, str) else f'bottom: {bottom}px'}; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
 def DOCK_L(inner, w=560):
     return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
 def CARD(inner, pad='14px 16px', extra=''):
@@ -206,10 +206,15 @@ def ROOTGRID(lst='roots'):
     return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
 def _BSHEET(cond, title, body, done='Done'):
     return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
-def BSHEET(cond, title, body, done='Done', tall=False):
+def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
+    # back: a sub-page's Back before its title; maxh: a cap other than 86% (a sheet over a bar that stays in reach)
     # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head;
     # tall: a sheet that keeps its full height while its list changes (Search, a chord type's list)
     t = _BSHEET(cond, title, body, done or '')
+    if back:
+        t = t.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', back + f'<span style="font-size: 17px; font-weight: 600">{title}</span>', 1)
+    if maxh:
+        t = t.replace('max-height: 86%', 'max-height: ' + maxh, 1)
     if tall:
         t = t.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;', 1)
     return re.sub(r'<button[^>]*>' + '</button>', '', t, count=1) if done is None else t
@@ -233,11 +238,13 @@ def ROWMENU(cond, label, items, posvar='menuPos', w=240):
 def MENUSHELL(cond, label, body, posvar='menuPos', w=240):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div>'
             f'<div role="menu" aria-label="{label}" style="position: absolute; {{{{{posvar}}}}}; z-index: 61; width: {w}px; box-sizing: border-box; padding: 6px; border-radius: 16px; {GLASSFX}; display: flex; flex-direction: column; transform-origin: top right">{body}</div></sc-if>')
-def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380):
+def POPOVER(cond, title, body, pos='right: 40px; top: 64px', w=380, back=''):  # back: a sub-page's Back, left of its centred title
     # never past the screen: its height is capped by the room left from its top or bottom on the 904-tall laptop screen
     m = re.search(r'(?:top|bottom): (\d+)px', pos)
     mh = min(760, 904 - int(m.group(1)) - 16) if m else 760
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: {mh}px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>'
+    out = (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60"></div><div role="dialog" aria-label="{title}" style="position: absolute; {pos}; z-index: 61; width: {w}px; max-height: {mh}px; overflow-y: auto; box-sizing: border-box; border-radius: 16px; background: {PAGE}; padding: 16px 16px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px" class="nos"><span style="font-size: 17px; font-weight: 600">{title}</span>{body}</div></sc-if>')
+    return out.replace(f'<span style="font-size: 17px; font-weight: 600">{title}</span>', f'<div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 44px">{back}<span style="font-size: 17px; font-weight: 600">{title}</span></div>', 1) if back else out
+
 
 def js(body):
     return 'class Component extends DCLogic {\n  renderVals() {\n    const st = this.state || {}; const set = (o) => this.setState(o);\n' + R41PRE + '\n' + body + '\n  }\n}\n'
