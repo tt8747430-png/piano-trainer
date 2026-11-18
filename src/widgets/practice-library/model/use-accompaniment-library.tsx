@@ -19,25 +19,32 @@ import {
   type AccompanimentPart,
   type BookPattern,
   type PatternId,
+  type PatternRef,
 } from '@/entities/pattern'
 import { toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
 import type { RowAction } from '@/shared/ui'
-import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
+import { MINE, type LibraryGroup, type LibraryItem } from './library-view'
 
 /** The books Accompaniment lists, in its order: the method books, then the rhythm styles. */
 const BOOKS: readonly AccompanimentPart[] = [...METHOD_BOOK_IDS, 'styles']
 
+/** The id of a pattern's row in the Accompaniment library, its Recently used and its favourites. */
+export const patternItemId = (ref: PatternRef): string => `pattern:${ref}`
+
 /**
  * The Accompaniment library's books and rows (R30-4, R32): patterns only, each method book (Called to
  * Play, Called to Play 2, Боброва, Gorshkov) and the rhythm styles a place of its patterns, and the
- * patterns the learner made Mine; the books' courses and songs are Learn's and Songs'. A built-in pattern hides as its page hides it (the Player's picker leaves it out
- * too), so Hidden and the picker agree. A pattern's level is its book's course's; the styles' and the
- * learner's have none.
+ * patterns the learner made Mine; the books' courses and songs are Learn's and Songs'. A built-in
+ * pattern hides as its page hides it (the Player's Pattern sheet leaves it out too), so Hidden and
+ * the sheet agree. A pattern's level is its book's course's; the styles' and the learner's have none.
+ * Accompaniment and the Player's Pattern sheet read the same rows; `patterns` gives each row's
+ * pattern by its id.
  */
 export function useAccompanimentLibrary(): {
   groups: readonly LibraryGroup[]
   items: readonly LibraryItem[]
+  patterns: ReadonlyMap<string, BookPattern>
   mine: boolean
 } {
   const { t } = useTranslation(['practice', 'common'])
@@ -47,7 +54,7 @@ export function useAccompanimentLibrary(): {
   const book = usePatternBook()
   const favourites = usePatterns(selectFavourites)
   const hidden = usePatterns(selectHidden)
-  const patterns = usePatternsStoreApi()
+  const store = usePatternsStoreApi()
   const groups = BOOKS.map((part): LibraryGroup => ({ id: part, name: partName(part) }))
   const favouriteAction = (favourite: boolean, onSelect: () => void): RowAction => ({
     key: 'favourite',
@@ -70,7 +77,7 @@ export function useAccompanimentLibrary(): {
   ): LibraryItem => {
     const favourite = favourites.includes(pattern.ref)
     return {
-      id: `pattern:${pattern.ref}`,
+      id: patternItemId(pattern.ref),
       name: localText(pattern.name, locale),
       detail: localText(pattern.idea, locale),
       group,
@@ -88,31 +95,35 @@ export function useAccompanimentLibrary(): {
         />
       ),
       favourite,
-      actions: [favouriteAction(favourite, () => toggleFavourite(patterns, pattern.ref))],
+      actions: [favouriteAction(favourite, () => toggleFavourite(store, pattern.ref))],
       ...(builtIn
         ? {
             hide: {
               hidden: hidden.includes(builtIn),
-              toggle: () => toggleHidden(patterns, builtIn),
+              toggle: () => toggleHidden(store, builtIn),
             },
           }
         : {}),
     }
   }
+  const patterns = new Map<string, BookPattern>()
   const builtInItems = PATTERN_GROUPS.flatMap((group) => {
     const part = partOfShelf(group)
     if (part === 'yours') return []
     const stage = isMethodBookId(part) ? courseById(part)?.stage : undefined
-    const shelf = shelfName({ shelf: group, patterns: [] })
+    const shelf = shelfName({ shelf: group })
     return patternsIn(group).flatMap((id) => {
       const pattern = book.get(id)
-      return pattern ? [patternItem(pattern, part, shelf, stage, id)] : []
+      if (!pattern) return []
+      patterns.set(patternItemId(pattern.ref), pattern)
+      return [patternItem(pattern, part, shelf, stage, id)]
     })
   })
-  const own = book.own.map((pattern) =>
-    patternItem(pattern, MINE, shelfName({ shelf: 'own', patterns: [] }), undefined),
-  )
+  const own = book.own.map((pattern) => {
+    patterns.set(patternItemId(pattern.ref), pattern)
+    return patternItem(pattern, MINE, shelfName({ shelf: 'own' }), undefined)
+  })
   // Each book's patterns in the books' order, then the learner's own.
   const byBook = BOOKS.flatMap((part) => builtInItems.filter((item) => item.group === part))
-  return { groups, items: [...byBook, ...own], mine: true }
+  return { groups, items: [...byBook, ...own], patterns, mine: true }
 }

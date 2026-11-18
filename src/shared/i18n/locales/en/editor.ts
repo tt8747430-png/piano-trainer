@@ -578,7 +578,17 @@ export const editor = {
     // The takes' button while the song has none: greyed, its tooltip saying why.
     full: 'Take storage is full. Delete a take to record another.',
     nothing: 'No notes were played.',
-    none: 'No takes yet.',
+    none: 'No takes yet',
+    noneLine: 'Press Record beside Play in the editor, play, then Stop: each take is kept here.',
+    // Select over the takes (the Takes board): the header's word, the title while on, the bar's acts.
+    select: 'Select',
+    cancel: 'Cancel',
+    selectTitle: 'Select takes',
+    selected: '{{count}} selected',
+    downloadAll: 'Download all',
+    deleteAll: 'Delete all',
+    deletedMany_one: 'Take deleted',
+    deletedMany_other: '{{count}} takes deleted',
     detail: '{{length}} · {{bpm}}',
     play: 'Play',
     download: 'Download',
@@ -602,12 +612,14 @@ export const editor = {
   // A take drawn as a piano roll, on its page.
   // A take's own page.
   take: {
+    title: 'Take',
+    recorded: '{{song}} · recorded {{day}}',
     name: 'Name',
     play: 'Play',
     keep: 'Keep bars',
     first: 'First bar',
     last: 'Last bar',
-    keepIt: 'Keep',
+    keepIt: 'Keep bars {{first}}–{{last}}',
     keeping: {
       title: 'Keep bars {{first}}–{{last}}?',
       body: 'All other bars will be permanently deleted.',
@@ -668,7 +680,14 @@ export const editor = {
     redo: 'Redo',
     clip: 'Copy, cut or paste the selection',
   },
-  roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
+  roll: {
+    label: 'Notes: {{notes}} · bars: {{bars}}',
+    playFrom: 'Play from bar {{n}}',
+    // Under a take's roll on its page: how many notes it holds, or where it plays from.
+    notes_one: '{{count}} note',
+    notes_other: '{{count}} notes',
+    playingFrom: 'Playing from bar {{n}}',
+  },
   // What is printed on the score, edited where it is (ADR 0114): the title, a click turning it into a
   // field in its place.
   printed: {

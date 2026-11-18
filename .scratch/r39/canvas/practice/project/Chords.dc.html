@@ -853,7 +853,7 @@ return {
       retryHands: () => set({ demo: 'handsLoading' }), showKeys: () => set({ demo: '', kbView: '2d' }),
       midiSub: MIDI[demo] || '', midiSubOn: !!MIDI[demo] && demo !== 'midiOn', midiSubVal: demo === 'midiOn' ? 'Roland FP-30X' : 'None', midiSubValC: demo === 'midiOn' ? C.ink : C.soft,
       soundSubVal: demo === 'offline' ? 'Lighter piano' : 'Grand piano', soundSubValC: demo === 'offline' ? C.ink : C.soft, soundSub: demo === 'offline' ? 'Offline: a lighter sampled piano plays' : '', soundSubOn: demo === 'offline',
-      textZoom: demo === 'large' ? 1.3 : 1, barZoom: demo === 'large' ? 1.1 : 1,
+      textZoom: demo === 'large' ? 1.3 : 1,
       atMost: seq.length >= 8, mostWord: seq.length + ' of 8 chords', sayMost: () => set({ toast: { t: 'The staff holds 8 chords. Remove one to add another.' } }) }; })(),
   playMain: () => st.playing ? stopAll() : (scope === 'All' ? playSeq() : play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up')),
   scopeList: [['All', 'All ' + seq.length + ' chords, in order'], ['One', 'Only ' + sym + slash]].map(([v, l]) => ({ l, on: v === scope, mark: v === scope ? '✓' : '', pick: () => { set({ scope: v, sheet: null }); if (v === 'All') playSeq(); else play(playMode !== 'Block', playMode === 'UpDown' ? 'Up and down' : 'Up'); } })), openPlayAs: () => set({ sheet: st.sheet === 'playAs' ? null : 'playAs' }), isPlayAs: sh === 'playAs',

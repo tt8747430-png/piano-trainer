@@ -1,42 +1,36 @@
 import { useNavigate } from '@tanstack/react-router'
-import {
-  Archive,
-  CheckCheck,
-  ListChecks,
-  ListX,
-  Palette,
-  PencilLine,
-  Settings,
-  Users,
-} from 'lucide-react'
+import { Archive, Palette, PencilLine, Settings, Users } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, useLibraryLayout, type ShelvedFolder } from '@/entities/library'
 import { ShareFolderSheet, useFolderShare } from '@/features/share-folder'
-import { useForgetScreens, useUp } from '@/shared/lib'
+import { useForgetScreens, useMediaQuery, useUp } from '@/shared/lib'
 import {
   BackButton,
+  LIBRARY_PANES,
   MoreMenu,
-  RoundButton,
   ScreenHeader,
   type EditAction,
   type MenuAction,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { PlaceBar } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
  * A list's bar (R72's LISTPAGE): Back, which goes up a level, named so; its title, All songs,
- * Favourites or the folder's name; Select, and New on a laptop; in a folder the board's ··· (Rename,
- * Colour, Share, Archive folder, then its Settings). While Select is on, the count chosen is its
- * title, with Select all and Done.
+ * Favourites or the folder's name; Select, a word; in a folder the board's ··· (Rename, Colour, Share,
+ * Archive folder, then its Settings). While Select is on, the count chosen is its title and Cancel
+ * ends it. On a laptop it is the place's bar (`PlaceBar`): no Back, the sidebar holding the places,
+ * the count beside the name and the search at its trailing edge.
  */
 export function LibraryHeader({
   page,
   folder,
   all = false,
   edit,
-  add,
+  search,
+  count,
 }: {
   page: LibraryPage
   folder: ShelvedFolder | null
@@ -44,9 +38,12 @@ export function LibraryHeader({
   all?: 'all' | 'favourites' | false
   /** The folder's Edit, where it may be renamed. */
   edit?: EditAction
-  /** New, on a laptop: the primary action, last of the tools (`NewMenu`). */
-  add?: ReactNode
+  /** A laptop's search, at its bar's trailing edge (LPLACEBAR). */
+  search?: ReactNode
+  /** How many it lists, beside its name on a laptop. */
+  count?: string | undefined
 }) {
+  const laptop = useMediaQuery(LIBRARY_PANES)
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { folders } = useLibraryLayout()
@@ -58,45 +55,35 @@ export function LibraryHeader({
   const [sharing, setSharing] = useState(false)
   // Select only where there is something to choose.
   const chooses = page.view.shown > 0 || page.view.folders.length > 0
+  // Select, a word as the boards' TB; Cancel while it is on, the count chosen then the title.
+  const selectButton = select.on ? (
+    <Button variant="bar" onClick={select.exit}>
+      {t('select.cancel')}
+    </Button>
+  ) : chooses ? (
+    <Button variant="bar" onClick={() => select.start()}>
+      {t('select.start')}
+    </Button>
+  ) : null
+  const chosenTitle = t('select.count', { count: select.count })
   if (select.on)
-    return (
-      <ScreenHeader
-        title={t('select.count', { count: select.count })}
-        // Round, as Select was: the bar keeps its one row at 320px, the rows under it still.
-        tools={
-          <RoundButton
-            label={t(select.all ? 'select.none' : 'select.all')}
-            icon={select.all ? ListX : CheckCheck}
-            onClick={select.toggleAll}
-          />
-        }
-        // Done ends Select at the bar's very end, where Edit's Done stands (A3).
-        more={
-          <Button variant="soft" onClick={select.exit}>
-            {t('select.done')}
-          </Button>
-        }
-      />
+    return laptop ? (
+      <PlaceBar title={chosenTitle} acts={selectButton} search={search} />
+    ) : (
+      <ScreenHeader title={chosenTitle} tools={selectButton} />
     )
-  if (all)
-    return (
+  if (all) {
+    const title = all === 'favourites' ? t('places.favourites') : t('all.title')
+    return laptop ? (
+      <PlaceBar title={title} count={count} acts={selectButton} search={search} />
+    ) : (
       <ScreenHeader
-        title={all === 'favourites' ? t('places.favourites') : t('all.title')}
+        title={title}
         back={<BackButton label={t('folder.up', { name: t('title') })} onClick={up} />}
-        tools={
-          <>
-            {chooses ? (
-              <RoundButton
-                label={t('select.start')}
-                icon={ListChecks}
-                onClick={() => page.select.start()}
-              />
-            ) : null}
-            {add}
-          </>
-        }
+        tools={selectButton}
       />
     )
+  }
   if (!folder) return null
   const name = nameOf(folder)
   const above = folder.parent ? folders.find((each) => each.id === folder.parent) : undefined
@@ -140,42 +127,48 @@ export function LibraryHeader({
         void navigate({ to: '/songs/folders/$folderId/settings', params: { folderId: folder.id } }),
     },
   ]
+  const more = edit?.editing ? null : (
+    <MoreMenu
+      label={t('folder.more', { name })}
+      actions={actions.filter((action): action is MenuAction => action !== false)}
+    />
+  )
   return (
     <>
-      <ScreenHeader
-        title={name}
-        back={
-          <BackButton
-            label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
-            onClick={up}
-          />
-        }
-        // While its name and colour are edited only Done stands beside its name.
-        tools={
-          edit?.editing ? null : (
-            <>
-              {chooses ? (
-                <RoundButton
-                  label={t('select.start')}
-                  icon={ListChecks}
-                  onClick={() => page.select.start()}
-                />
-              ) : null}
-              {add}
-            </>
-          )
-        }
-        // The board's ···: Rename, Colour, Share, Archive folder, then its Settings (Card style, Move, Delete).
-        more={
-          edit?.editing ? null : (
-            <MoreMenu
-              label={t('folder.more', { name })}
-              actions={actions.filter((action): action is MenuAction => action !== false)}
+      {laptop ? (
+        <PlaceBar
+          title={name}
+          count={count}
+          acts={
+            edit?.editing ? (
+              <Button variant="bar" onClick={edit.onDone}>
+                {t('select.done')}
+              </Button>
+            ) : (
+              <>
+                {more}
+                {selectButton}
+              </>
+            )
+          }
+          search={search}
+        />
+      ) : (
+        <ScreenHeader
+          title={name}
+          back={
+            <BackButton
+              label={t('folder.up', { name: above ? nameOf(above) : t('title') })}
+              onClick={up}
             />
-          )
-        }
-        edit={edit?.editing ? edit : undefined}
-      />
+          }
+          // While its name and colour are edited only Done stands beside its name.
+          tools={edit?.editing ? null : selectButton}
+          // The board's ···: Rename, Colour, Share, Archive folder, then its Settings.
+          more={more}
+          edit={edit?.editing ? edit : undefined}
+        />
+      )}
       <ShareFolderSheet open={sharing} onOpenChange={setSharing} folder={shareOf(folder)} />
     </>
   )

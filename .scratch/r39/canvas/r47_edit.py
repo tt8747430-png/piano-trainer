@@ -70,7 +70,7 @@ def DOC(lap=False):
     handle = ''
     ex = (f'<sc-if value="{{{{s.isScale}}}}" hint-placeholder-val="{{{{true}}}}"><figure style="position: relative; margin: 8px 0 0; display: flex; flex-direction: column; gap: 12px">'
           f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span style="flex: 1; font-size: 17px; font-weight: 700">{{{{verName}}}}</span>'
-          f'<button type="button" aria-label="The colours" aria-expanded="{{{{legendOn}}}}" data-tip="The colours" onClick="{{{{toggleLegend}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{INFOI.replace('22', '20')}</button>'
+          f'<button type="button" aria-label="The colours" aria-expanded="{{{{legendOn}}}}" data-tip="The colours" onClick="{{{{toggleLegend}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{ICON(INFOI, 20)}</button>'
           f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
           f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'{KEYSOF(kbn, kh)}<sc-if value="{{{{legendOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="dialog" aria-label="The colours" style="position: absolute; right: 8px; top: 60px; z-index: 20; width: 248px; box-sizing: border-box; padding: 12px 16px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
@@ -144,7 +144,6 @@ LEARNEDB = LEARNEDT
 RBAR = IB('Settings', GEARI, 'openSettings') + EDITBTN
 PMBTN = IB('Publishing', DOTS, 'openPm')
 PUBGO = TB('{{pubL}}', 'publishNow')
-lph = lph.replace('EDITBTN_PLACEHOLDER', '')
 lph = lph.replace(EDITBTN + IB("More", DOTS, "openMore"), RBAR).replace('{LANGSEG}{PUBBTN}', '').replace(LANGSEG + PUBBTN, PUBGO)
 llm = llm.replace(EDITBTN + IB("More", DOTS, "openMore"), RBAR).replace(DSTATUS + LANGSEG + PUBBTN, PUBGO)
 # owner, 2026-11-17: "i dont like this learned chip … in the header and i dont like that i need to scroll to the end to

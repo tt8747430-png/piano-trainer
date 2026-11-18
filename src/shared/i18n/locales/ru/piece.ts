@@ -77,9 +77,6 @@ export const piece: LocaleResources['piece'] = {
   shareFailed: 'Здесь ссылку сделать не удалось.',
   shareTooLong: 'Песня слишком длинная, чтобы поместиться в ссылку.',
   delete: 'Удалить',
-  deleting: {
-    says: 'Песня попадёт в корзину в «Песнях»: её можно восстановить, пока корзину не очистят.',
-  },
   aboutMore: 'Ещё',
   about: { song: 'О песне', study: 'Об этюде' },
   scaleOf: 'Гамма: {{scale}}',
@@ -212,7 +209,6 @@ export const piece: LocaleResources['piece'] = {
     open: 'Настройки',
     library: 'Библиотека',
     folder: 'Плейлист',
-    favourite: 'В избранном',
     home: 'Библиотека',
     archived: 'В архиве',
     share: 'Поделиться',

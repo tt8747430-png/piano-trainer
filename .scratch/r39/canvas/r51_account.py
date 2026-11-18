@@ -60,11 +60,11 @@ V_FORGOT = (f'<sc-if value="{{{{isForgot}}}}" hint-placeholder-val="{{{{false}}}
             f'<div style="display: flex">{BTN("Send the link", "sendLink", "", "primary", 50)}</div><div style="display: flex; justify-content: center">{LINKB("Back to sign in", "goIn")}</div></sc-if>')
 V_FSENT = DONEPAGE('isForgotSent', MAILI, SKY, 'Check your email', '{{fsentT}}', f'<div style="display: flex; justify-content: center">{LINKB("Back to sign in", "goIn")}</div>')
 V_NEW = f'<sc-if value="{{{{isNew}}}}" hint-placeholder-val="{{{{false}}}}">{PW}<div style="display: flex">{BTN("Save password", "savePw", "", "primary", 50)}</div></sc-if>'
-V_SAVED = DONEPAGE('isSaved', CHECKI.replace('20', '36'), SAGE, 'Your new password is saved.', 'You are signed in on this device.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
+V_SAVED = DONEPAGE('isSaved', ICON(CHECKI, 36), SAGE, 'Your new password is saved.', 'You are signed in on this device.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
 SPIN = f'<span style="width: 36px; height: 36px; border-radius: 18px; border: 4px solid {FILL}; border-top-color: {INK}; box-sizing: border-box; animation: spin 900ms linear infinite"></span><style>@keyframes spin {{ to {{ transform: rotate(360deg) }} }} @media (prefers-reduced-motion: reduce) {{ * {{ animation: none !important }} }}</style>'
 V_WORK = DONEPAGE('isWorking', SPIN, FILL, 'Signing you in…', 'This takes a moment.', '')
 V_FAIL = DONEPAGE('isFailed', '<span style="font-size: 34px; font-weight: 700">!</span>', '#F6DEDA', 'This link didn’t work', 'It may have expired or been used already. Sign in again, or ask for a new link.', f'<div style="display: flex">{BTN("Sign in again", "goIn", "", "primary", 50)}</div>')
-V_DONE = DONEPAGE('isDone', CHECKI.replace('20', '36'), SAGE, 'You’re signed in', 'Your library syncs across your devices from now on.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
+V_DONE = DONEPAGE('isDone', ICON(CHECKI, 36), SAGE, 'You’re signed in', 'Your library syncs across your devices from now on.', f'<div style="display: flex">{BTN("Continue", "", "Settings.dc.html", "primary", 50)}</div>')
 SIBODY = V_IN + V_CREATE + V_SENT + V_FORGOT + V_FSENT + V_NEW + V_SAVED + V_WORK + V_FAIL + V_DONE
 # the demo's own switches, outside the drawn screen's flow: offline, and a failed sign-in link
 # the bar holds the page's name beside Close, phone and laptop, as every page's (one bar shape; lines.mjs, an empty bar)

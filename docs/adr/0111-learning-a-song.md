@@ -29,7 +29,7 @@ no card on top.
   Duplicate, Archive or Restore); Share (Publish with its state, a page of its own at
   `/songs/$pieceId/publish`; Share link; Export…); and apart, Delete (to the Trash at once, with Undo, ADR 0106) or
   Reset to the original, asked first. A study has no library rows.
-- **A section's page** (`…/sections/$section`) teaches it:
+- **A section's page** (`…/sections/$section`) teaches it: its name on the paper (its rounds large, its bars and chords; no card), 8 under the bar, then its ways in, every row 56; one column on a phone, the Section board's two on a laptop (Chords and In time, then One change at a time and Patterns), each row's state beside its words with no chevron, on the 56 column.
   - **Chords**, open: each learned by **three holds** in its sheet: its keys held together on a MIDI keyboard or the
     sheet's keys, every key let go since the last. Each hold is heard (an accented click) and seen ("1 of 3").
   - Then three folds, closed until asked for, each with an ⓘ: **In time** (the Player in Listen, looped over the

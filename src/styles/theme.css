@@ -34,6 +34,7 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-chosen: var(--chosen);
+  --color-chosen-honey: var(--chosen-honey);
   --color-switch-on: var(--switch-on);
   --color-switch-knob: var(--switch-knob);
   --color-popover: var(--popover);
@@ -93,6 +94,8 @@
   --color-hand-rh-wash: var(--hand-rh-wash);
   --color-hand-lh-wash: var(--hand-lh-wash);
   --color-hand-staff-wash: var(--hand-staff-wash);
+  --color-roll-upper: var(--roll-upper);
+  --color-roll-lower: var(--roll-lower);
 
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);

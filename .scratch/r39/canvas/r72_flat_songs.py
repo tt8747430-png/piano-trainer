@@ -152,7 +152,7 @@ FOLDERSHEET = LFOLDERSHEET  # the library kit's one New folder sheet (r41_lib)
 # Files: the field filters where you stand); the four ways to make a song as a strip at the top (Flat's and Google
 # Drive's "New" row, always in sight); Recently played, Folders, then Explore as a shelf with See all, its own page;
 # Archive and Trash in the bar's ··· with All songs, out of the page.
-CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{TICK.replace("18", "14")}</span></span></sc-if>')
+CHECKBOX = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{ICON(TICK, 14)}</span></span></sc-if>')
 # A song is a row of one list, not a card of its own (edge-lines' laws, NN/g and M3: homogeneous items are a list; on a
 # phone "consider swapping cards for lists"): the list is one card, each row's hairline from the title's edge (12 + the
 # 56 tile + 16), the first row's clipped by the list's -1 (SONGLIST), as the playlists' inset list draws it.
@@ -275,7 +275,7 @@ RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
 _LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
-NEWPOP = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">' + NEWDIAL([(l, g.replace('.dc.html', 'Laptop.dc.html')) for l, g in _NEW][::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + '</sc-if>'
+NEWPOP = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">' + NEWDIAL(list(_NEW)[::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + '</sc-if>'
 PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
 detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('{{menuPos}}') + NEWPOP + ROWMENU('rowOn', '{{rowT}}', ROWITEMS('Laptop.dc.html')) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 

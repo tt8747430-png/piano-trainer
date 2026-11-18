@@ -86,7 +86,7 @@ export function StyleList({
                       <span className="font-semibold text-pretty">{name}</span>
                       {style.shelf ? (
                         <span className="text-sm text-muted-foreground">
-                          {shelfName({ shelf: style.shelf, patterns: [] })}
+                          {shelfName({ shelf: style.shelf })}
                         </span>
                       ) : null}
                     </span>

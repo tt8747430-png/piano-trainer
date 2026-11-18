@@ -91,7 +91,7 @@ export function PlayedThrough({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent title={t('done.title')} description={t('done.of', { hands })} floating>
         <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1 card px-4 py-3">
               <span className="text-[1.875rem] leading-tight font-bold tracking-[-0.02em] tabular-nums">
                 {t('done.percent', { score: pass.score })}
@@ -118,7 +118,7 @@ export function PlayedThrough({
           <p className="mx-1 mt-2 -mb-1 text-sm font-semibold tracking-[0.04em] text-muted-foreground uppercase">
             {t('done.bars')}
           </p>
-          <div role="group" aria-label={t('done.barsLabel')} className="grid grid-cols-4 gap-2">
+          <div role="group" aria-label={t('done.barsLabel')} className="grid grid-cols-4 gap-3">
             {groups.map((group) => {
               const ringed = weak !== null && weak.first >= group.first && weak.first <= group.last
               const label = t('done.group', { first: group.first + 1, last: group.last + 1 })
@@ -177,10 +177,10 @@ export function PlayedThrough({
               </Button>
             ) : null}
             <div className="grid grid-cols-2 gap-2">
-              <Button variant={weak ? 'soft' : 'default'} onClick={close(onAgain)}>
+              <Button size="lg" variant={weak ? 'soft' : 'default'} onClick={close(onAgain)}>
                 {t('done.again')}
               </Button>
-              <Button variant="soft" onClick={close(onTryPlay)}>
+              <Button size="lg" variant="soft" onClick={close(onTryPlay)}>
                 {t('done.tryPlay')}
               </Button>
             </div>

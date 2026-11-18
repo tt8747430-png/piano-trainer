@@ -46,8 +46,8 @@ details.
     where the learner is and opens it in the score editor with Record pressed;
   - **New is one list, opened one way** (canvas v390; owner, 2026-11-17: "the floating actions should also be consistent
     how they open"): New song, Record, Import, New playlist, on My songs, All songs and a playlist alike; on a phone
-    the honey + at the bottom right opens them as a card above it (`NewDial`), on a laptop the honey New ▾ at the
-    bar's end as a menu (`NewMenu`); a group is made on Groups;
+    the honey + at the bottom right opens them as a card above it (`NewDial`), on a laptop the same floating + (what
+    creates floats, one honey act a screen); a group is made on Groups;
   - New song, Record and New playlist are one `MakeSheet`: a bottom sheet on a phone, a dialog centred on a laptop
     (480 for a form, 440 for a name), Cancel in its header and Create at its foot;
   - **New folder** (R72's NEWNAME): a sheet of its name alone, Cancel in its header and Create at its foot; its colour
@@ -56,9 +56,9 @@ details.
     New folder at its foot;
   - the song's Settings (ADR 0111): the ♡, Move to…, Archive or Restore; a song's row and page also
     Export…, one sheet of MusicXML, MIDI and Share link (ADR 0107).
-- **An empty place invites** (R72's BAREP and FEMPTY, `Said invite`): an empty folder or Favourites is one card saying
-  what shows there, with Add songs from your library (All songs); an empty library says where songs live and points
-  to Explore, since New already sits in the bar or the dial.
+- **An empty place is the kit's one empty state** (`Said`, no box): an empty playlist or Favourites says what shows
+  there, with Add songs from your library (All songs); an empty library says where songs live and points to Explore,
+  since New already floats.
 - **Every move, archive and favourite toasts with Undo**, which puts it back exactly where it stood.
 - **Deleting a folder deletes its songs and folders**, but the app's content is never destroyed: what the learner
   made goes (an own folder for good, their songs to the Trash); what the app brought goes to the archive (a built-in
@@ -67,8 +67,14 @@ details.
   toast with Undo, as nothing is lost yet; it is gone, with its recordings, only once deleted permanently from the
   Trash or the Trash emptied, each asked first. Restore puts it back where it stood (`trash`; `trashSongs`, `restoreTrashed`,
   `emptyTrash`). My songs lists the Archive and the Trash as rows with their counts.
+- **Archive and Trash have Select** (`ShelfList`; Apple Photos' Recently Deleted): Select in the bar, Cancel while on,
+  the title "n selected"; a check leading each row; the floating glass selection bar with Restore and Move to Trash
+  (Archive, the second only while every chosen item is the learner's own song) or Restore and Delete permanently
+  (Trash, asked first), on what is chosen or on all while nothing is. Each row's ··· is a menu at its button: Restore,
+  then the loss in crimson. No Restore pill on a row, no Restore all or Empty Trash in the bar. Each entry keeps when
+  it was archived or trashed (`at`), which the laptop's table shows in its own column.
 - **The archive is a place** (`/songs/archive`, from its row on My songs): archived songs and folders,
-  newest first, each with Restore; Restore all; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
+  newest first; Delete of the learner's own (a song to the Trash, a folder asked). Restore puts a song back where
   it stood while that folder is in the library, else at Home, last; a folder back with everything under it. An
   archived song still opens by its link, from Learn and from Search, which says it is archived.
 - **One search, one sort** (R72, Flat's library; no filter page, no place chips, no tree): the search in the URL,
@@ -99,24 +105,30 @@ details.
   the favourites; the learner's folders; Shared with me), then the Archive and the Trash, each a row with its count.
   Search is the bar's round button and opens **All songs** (`/songs/all`, `favourites` in its URL for the card): every
   song in one list, searched and sorted, Select and New in its bar. A phone stacks the search over the count; a laptop
-  sets the search, 520 wide, beside it. The laptop's overview has no tree beside it: the folder cards three across.
-- **A song's row is a card of its own** (R72's SONGROW, the default Card style): 88 tall, its first notes in a 56
+  sets the search, 520 wide, beside it.
+- **On a laptop, Songs is one frame** (canvas v408, Apple Music's sidebar): while Songs is current its places are
+  sub-items under it in the sidebar (`SongsPlaces`): All songs with its count, Explore, Playlists with + and each
+  playlist on its paint (Favourites first, shared ones among them), a hairline, Archive and Trash with their counts.
+  All songs (the laptop's `/songs`), a playlist, Explore, Archive, Trash and a shared playlist share one bar
+  (`PlaceBar`): the name in 30 bold with its count, the acts, Select beside the search, the search 320 wide at the
+  end, both ends on the 56 column (`PLACE_COLUMN`). Under it the songs are one table on the paper (`SongTable`), its
+  folders first; Select turns each row into its check.
+- **A song list on a phone is one list** (2026-11-18, the default Card style List): one card holding its rows, a
+  hairline from the title's edge (84), moving right with the title in Select. A row (R72's SONGROW): its first notes in a 56
   tile, its title over its composer and key and a third line saying where it stands and when it was last played
   ("Bar 9 of 16 · Today", "Learned · 9 Nov", "Not started", a learner's own song never played "Not started · Added
   today"); ··· at its end on every pointer holds its acts,
-  Favourite among them, so the row carries no heart. The cards stand 12 apart, two across on a laptop, in All songs
-  and a folder alike; a folder shows no place chips. The List style keeps one card with hairlines.
+  Favourite among them, so the row carries no heart; a folder shows no place chips.
 - **Over the songs, their count and their sort** (R72's COUNTROW, `CountSort`): "5 songs" quiet at the start, the sort
   in the link's colour with ⇅ at the end, a menu of the four sorts and, under a line, Ascending · Descending. A folder's name is its bar's title beside Back (no head under the bar), then Select, where there is something to choose, and the board's ···: Rename and Colour (its name and paint edited in place under the bar, as wide as the search), Share with a group, Archive folder (at once, with Undo, back to where it stood), and Folder settings (Card style, Move, Delete).
 - **Explore is a feed** (R72, Flat's community): the search, of songs and people, word by word over each title and composer as the library's search reads its own (People by name); Songs | People (`Segmented`,
   compact); for Songs the kinds as chips, All, Classical, Folk, Pop, Hymns, Studies (the items tagged with Publish's
-  suggested tag of that name) and Patterns; the count and its order (New, Most saved, Top rated, `CountSort`), then a
-  card per item (`ExploreFeedCard`): who shared it at its head with ··· that reports it (`ReportDialog`, in
-  `widgets/song-preview`, the public song's page's too); its tile on its paint with Play at its corner, its title, who
-  wrote it and its key, a link to its page; at its foot its saves (a heart), its stars where enough rated it, and
-  Original or Arrangement on sky or lilac. People lists who publishes, the most published first, each a card of their
-  picture, name and count, opening their songs alone (`by` in the URL, a chip that takes it off). One column on a
-  phone, three across on a laptop; no shelves.
+  suggested tag of that name) and Patterns; the count and its order (Newest, Most saved, Top rated, `CountSort`).
+  On a laptop it is All songs' table (`ExploreFeedCard` `table`, `EXPLORE_COLUMNS`): Title · Composer · Type ·
+  Shared by · Saves, 60 rows on hairlines, the 40 tile with its opening chord, and the bar's row Songs | People, the
+  kinds and the order under the place bar; on a phone one list of rows, the 56 tile and the 84 hairline. A row's ···
+  reports it (`ReportDialog`, in `widgets/song-preview`, the public song's page's too). People lists who publishes,
+  the most published first, opening their songs alone (`by` in the URL, a chip that takes it off); no shelves.
 
 ## Consequences
 

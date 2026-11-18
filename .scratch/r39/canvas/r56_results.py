@@ -18,6 +18,11 @@ RS_MARKS = {2: ('early', 40), 6: ('wrong', [('G', 4), ('B', 4), ('D', 5), ('E', 
 RS_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion']
 
 
+# The runs' foot is the Practice pages' bar of pieces (Chords, Scales, the Chord finder): glass pieces, an icon over its
+# caption, and the honey Play capsule at the centre (owner, 2026-11-18: "the floating actions guidelines are broken")
+SLIDERSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M6 21v-7M6 10V3M12 21v-9M12 8V3M18 21v-5M18 12V3M3 14h6M9 8h6M15 16h6"></path></svg>'
+TEMPOI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>'
+RUNBAR = lambda pos, inner, label: (f'<div role="toolbar" aria-label="{label}" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{inner}</div>')
 def RS_STEP(l, o):
     return RS_LET.index(l) + 7 * (o - 4)
 
@@ -158,7 +163,7 @@ RS_JS = lambda mode: js(r'''
       again: () => S({ view: 'run', playing: false }), closeSheet: () => S({ sheet: null }) };''')
 
 # the run, in the Player: the bar (Close, the exercise, Wait mode), the staff with the run, the keys, the transport
-RS_KEYS = lambda h, k='kb': KEYS(h, k).replace('border-radius: 14px;', 'border-radius: 0;', 1).replace('box-shadow: 0 0 0 1px #DAD1C8', 'box-shadow: none', 1)  # the one instrument, edge to edge
+RS_KEYS = lambda h, k='kb': KEYS(h, k, edge=True, ring=False)  # the one instrument, edge to edge
 
 
 def RS_RUNVIEW(lap):
@@ -173,16 +178,18 @@ def RS_RUNVIEW(lap):
     staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
-    transport = f'<div class="rstr" style="display: flex; align-items: center; justify-content: center; gap: 12px"><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">72 BPM</span>{PLAYBTN(56)}<span style="font-size: 14px; color: {SOFT}">Both hands</span></div>'
+    transport = PIECE('Tempo', '72 BPM', TEMPOI) + PLAYCAP() + PIECE('Hands', 'Both', HANDI)
     # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
-    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}'
+    inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
         return (bar + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1018px; max-width: 100%; display: flex; flex-direction: column; gap: 8px">{staff}{prog}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
-    # a phone on its side: the transport stands left of the centred music, in the band it leaves bare (round 66)
-    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important; position: relative } '
-             '.rsrun .rstr { position: absolute; left: 16px; top: 4px; z-index: 2 } }</style>')
-    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{inner}</main>' + short
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Setup, play and tempo")}')
+    # the transport floats, as the Player's: the kit's glass dock 12 above the keys, reserving no space; the music's
+    # scroll ends clear of it (owner, 2026-11-18: "the floating actions guidelines are broken by that implementation").
+    # A phone on its side has a 20 home band, so keys and dock both sit 14 lower (round 66)
+    short = ('<style data-rsrun>[data-menuroot] { container-type: size } @container (max-height: 520px) { .rsrun { padding-bottom: 20px !important } '
+             '.rsrun ~ [role=toolbar] { bottom: 144px !important } }</style>')
+    return bar + f'<main class="rsrun" style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{inner}</main>{RUNBAR("left: 12px; right: 12px; bottom: 158px", transport, "Tempo, play and hands")}' + short
 
 
 rs_ph = RS_MOTION + IF('isRun', RS_RUNVIEW(False), 'true') + IF('isResults', RS_RESULTS(4, 76, False))
@@ -197,7 +204,8 @@ print('r56 results ok')
 # Round 41: the Player's runs (walk the chords, a chromatic walk, a progression in 12 keys, an exercise) in the run
 # view's parts, where a wireframe stood (a staff with no clef and grey dots, keys with no black keys in a card): the
 # chords engraved on the treble staff, the one piano edge to edge at the foot with the first chord's tones in their
-# paints, the transport centred under the staff; Setup opens the run's choices, as before.
+# paints, the transport centred under the staff; Setup opens the run's choices, as before. Round 68: the music stands
+# on the paper as the chord run's does (round 63), never in a lone card, at its 1.35 on a laptop.
 PV_WALK = [[('C', 4), ('E', 4), ('G', 4)], [('D', 4), ('F', 4), ('A', 4)], [('E', 4), ('G', 4), ('B', 4)], [('F', 4), ('A', 4), ('C', 5)], [('G', 4), ('B', 4), ('D', 5)], [('A', 4), ('C', 5), ('E', 5)], [('B', 4), ('D', 5), ('F', 5)], [('C', 5), ('E', 5), ('G', 5)]]
 _F, _S = '♭', '♯'
 PV_MUSIC = {'walk': PV_WALK,
@@ -208,22 +216,22 @@ PV_MUSIC = {'walk': PV_WALK,
 def PV_LINE(n, cw, v='walk', start=0, last=True):
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
     return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
-def PV_STAFF(n, cw, v='walk'):
-    return CARD(PV_LINE(n, cw, v), '12px 8px')
 def PV_RUN(lap, v):
-    setup = BTN('Setup', 'openSetup', '', 'quiet', 44, False)
-    transport = (f'<div style="display: flex; align-items: center; justify-content: center; gap: 12px">{setup}'
-                 f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tempoV}}}}</span>{PLAYBTN(56)}</div>')
+    # where the run stands, as the chord run's row (one sibling shape; Duolingo's bar, reference-apps/duolingo-music 005)
+    prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{pvProg}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
+            f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pvT}}}}</span></div>')
+    # floating 12 above the keys, reserving no space; Play at the centre, as the Player's and Flowkey's (flowkey 009)
+    transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoV}}', TEMPOI, 'onClick="{{openSetup}}"')
     if lap:
         return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="width: min(1180px, 100%); display: flex; flex-direction: column; gap: 16px">{PV_STAFF(8, 140, v)}</div>'
-                f'<div style="flex: 1"></div>{transport}</main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>')
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>{prog}</div>'
+                f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Tempo, play and hands")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{CARD(PV_LINE(4, 76, v, 0, False) + '<div style="height: 16px"></div>' + PV_LINE(4, 76, v, 4), '12px 8px')}<div style="flex: 1"></div>'
-            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>{transport}</main>')
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}{prog}<div style="flex: 1"></div>'
+            f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div></main>{RUNBAR("left: 12px; right: 12px; bottom: 158px", transport, "Setup, play and tempo")}')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
          "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
-    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 244px', 620).replace('max-height: 760px', 'max-height: 600px', 1), 'Practice')
+    detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 250px', 620), 'Practice')
 print('r56 runs ok')

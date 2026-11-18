@@ -11,6 +11,8 @@ export const player = {
   print: 'Print',
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
+  // The menu beside the song's head in the Player's settings, named as the View menu is.
+  songMenu: 'Song',
   views: {
     backToPlayhead: 'Back to the music',
     pick: 'Pick your view',
@@ -268,6 +270,18 @@ export const player = {
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
+  /** The Pattern sheet (the Accompaniment library's shape): its search, folds, rows and filters. */
+  patternSheet: {
+    search: 'Search patterns',
+    closeAll: 'Close all',
+    openAll: 'Open all',
+    az: 'A–Z',
+    ungraded: 'Not graded',
+    noMatch: 'No patterns match',
+    listen: 'Listen to {{name}}',
+    stop: 'Stop {{name}}',
+    reset: 'Reset',
+  },
   /** Under a pattern that plays its own shapes, the hand's position is faded. */
   inversion: { own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */

@@ -15,40 +15,20 @@ const isFolderPaint = isOneOf(FOLDER_PAINTS)
 /**
  * A row (the Songs board's PLAYLISTROWS): on a phone a row of one inset list, a hairline from the
  * name's edge to the right between rows as an inset grouped list draws it, one common region for the
- * whole list and never a card a row (NN/g, common region; `edge-lines`); a quiet row in a laptop's pane.
+ * whole list and never a card a row (NN/g, common region; `edge-lines`). A laptop's are the sidebar's.
  */
-const ROW = {
-  list: "relative min-h-18 gap-4 py-2 pr-3 hover:bg-muted/60 [li+li>&]:before:absolute [li+li>&]:before:top-0 [li+li>&]:before:right-0 [li+li>&]:before:left-18 [li+li>&]:before:h-px [li+li>&]:before:bg-border [li+li>&]:before:content-['']",
-  pane: 'min-h-14 gap-3 rounded-[12px] px-2 py-2 hover:bg-muted',
-} as const
+const ROW =
+  "relative min-h-18 gap-4 py-2 pr-3 hover:bg-muted/60 [li+li>&]:before:absolute [li+li>&]:before:top-0 [li+li>&]:before:right-0 [li+li>&]:before:left-18 [li+li>&]:before:h-px [li+li>&]:before:bg-border [li+li>&]:before:content-['']"
 
-function Face({
-  cover,
-  name,
-  line,
-  pane,
-}: {
-  cover: ReactNode
-  name: string
-  line: string
-  pane: boolean
-}) {
+function Face({ cover, name, line }: { cover: ReactNode; name: string; line: string }) {
   return (
     <>
       {cover}
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span
-          className={cn('truncate font-semibold', pane ? 'text-[0.9375rem]' : 'text-[1.0625rem]')}
-        >
-          {name}
-        </span>
-        <span
-          className={cn('truncate text-muted-foreground', pane ? 'text-[0.8125rem]' : 'text-sm')}
-        >
-          {line}
-        </span>
+        <span className="truncate text-[1.0625rem] font-semibold">{name}</span>
+        <span className="truncate text-sm text-muted-foreground">{line}</span>
       </span>
-      {pane ? null : <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />}
+      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
     </>
   )
 }
@@ -67,12 +47,10 @@ function useFirstSongs(ids: readonly PieceId[]): Entry[] {
 function OwnPlaylist({
   folder,
   holds,
-  pane,
   className,
 }: {
   folder: ShelvedFolder
   holds: FolderHolds
-  pane: boolean
   className: string
 }) {
   const nameOf = useFolderName()
@@ -80,12 +58,11 @@ function OwnPlaylist({
     <li className="flex min-w-0">
       <Link to="/songs/folders/$folderId" params={{ folderId: folder.id }} className={className}>
         <Face
-          pane={pane}
           cover={
             <PlaylistCover
               paint={folder.paint}
               songs={useFirstSongs(folder.songs)}
-              className={pane ? 'size-10' : 'size-14'}
+              className="size-14"
             />
           }
           name={nameOf(folder)}
@@ -100,10 +77,10 @@ function OwnPlaylist({
  * The learner's playlists (owner, 2026-11-17: "what about copiing the flat layout and its playlists";
  * Flat's Playlists, the Songs board's PLAYLISTROWS): Favourites first, then their own, then those a
  * group shared with them, each its mosaic cover, its name and what it holds; a shared one wears the
- * sharer's face, says who, and opens itself (never Groups). A phone's are one inset list of rows; a
- * laptop's pane holds quieter rows (`pane`). A new playlist is made from New, or the pane's +.
+ * sharer's face, says who, and opens itself (never Groups): one inset list of rows on a phone (a
+ * laptop's are the sidebar's `SongsPlaces`). A new playlist is made from New.
  */
-export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: boolean }) {
+export function Playlists({ page }: { page: LibraryPage }) {
   const { t } = useTranslation('songs')
   const repertoire = useRepertoire()
   const favourites = useLibrary((state) => state.favourites)
@@ -112,15 +89,14 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
   const shared = data.kind === 'ready' ? data.shared.filter((folder) => !folder.mine) : []
   const row = cn(
     'flex min-w-0 flex-1 items-center text-foreground transition-colors duration-150 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
-    pane ? ROW.pane : ROW.list,
+    ROW,
   )
-  const cover = pane ? 'size-10' : 'size-14'
+  const cover = 'size-14'
   return (
-    <ul className={cn('flex flex-col', !pane && 'card overflow-hidden pl-3')}>
+    <ul className="card flex flex-col overflow-hidden pl-3">
       <li className="flex min-w-0">
         <Link to="/songs/all" search={{ favourites: true }} className={row}>
           <Face
-            pane={pane}
             cover={<PlaylistCover paint="rose" heart className={cover} />}
             name={t('places.favourites')}
             line={favouritesLine}
@@ -128,7 +104,7 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
         </Link>
       </li>
       {page.view.folders.map(({ folder, ...holds }) => (
-        <OwnPlaylist key={folder.id} folder={folder} holds={holds} pane={pane} className={row} />
+        <OwnPlaylist key={folder.id} folder={folder} holds={holds} className={row} />
       ))}
       {shared.map((folder) => {
         const songs = readSharedEntries(folder.songs).flatMap((entry) => {
@@ -143,7 +119,6 @@ export function Playlists({ page, pane = false }: { page: LibraryPage; pane?: bo
               className={row}
             >
               <Face
-                pane={pane}
                 cover={
                   <PlaylistCover
                     paint={isFolderPaint(folder.paint) ? folder.paint : 'grass'}

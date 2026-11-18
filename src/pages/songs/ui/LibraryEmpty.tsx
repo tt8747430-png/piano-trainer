@@ -39,13 +39,11 @@ export function LibraryEmpty({
         }
       />
     )
-  // A folder or Favourites with nothing in it (R72's FEMPTY): a card saying what shows here, with the
+  // A folder or Favourites with nothing in it: the one empty state, saying what shows here, with the
   // way to All songs.
   if (place !== 'home')
     return (
       <Said
-        invite={place === 'folder' ? 'sky' : 'sand'}
-        card
         icon={place === 'folder' ? Music : Heart}
         title={t(place === 'folder' ? 'folder.emptyTitle' : 'places.emptyFavourites')}
         description={t(
@@ -57,7 +55,6 @@ export function LibraryEmpty({
   // A library with nothing in it (R72's BAREP): where songs live, the three ways in, and Explore.
   return (
     <Said
-      invite="yellow"
       icon={Music}
       title={t('homeEmpty.title')}
       description={t('homeEmpty.description')}

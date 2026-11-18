@@ -82,11 +82,13 @@ function Tile({ id, kind, size }: { id: string; kind: PublicKind; size: 'head' |
   )
 }
 
-/** A field's quiet label over it (the board's 13 semibold Soft Ink), its control under it. */
+/** A field's label over it in the small capitals every form's labels wear (canvas v550), its control under it. */
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="mx-1 text-[0.8125rem] font-semibold text-muted-foreground">{label}</span>
+      <span className="mx-1 text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase">
+        {label}
+      </span>
       {children}
     </div>
   )
@@ -354,7 +356,10 @@ function PublishForm({
         ) : null}
       </Field>
       <div className="flex flex-col gap-2">
-        <label htmlFor={id} className="mx-1 text-[0.8125rem] font-semibold text-muted-foreground">
+        <label
+          htmlFor={id}
+          className="mx-1 text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+        >
           {t('public.description')}
         </label>
         <Textarea

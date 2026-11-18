@@ -78,7 +78,7 @@ CP_TAG = (f'<sc-if value="{{{{tagIsFirst}}}}" hint-placeholder-val="{{{{true}}}}
 
 # ── ··· : the draft, sharing, the sheets ──
 CP_MORE58 = (f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}"><div style="border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
-             + ACTROW(CHECK.replace('16', '20'), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
+             + ACTROW(ICON(CHECK, 20), 'Save', 'saveDraft', LINK) + f'<div style="height: 1px; margin-left: 48px; background: {LINE}"></div>' + ACTROW(UNDO, 'Discard draft', 'discardDraft', '#B3261E') + '</div></sc-if>'
              + GROUP(('link', 'Share', 'View only', 'openShare'), ('action', 'Save to my progressions', 'saveProg'), ('link', 'Open in Progressions', '', 'Progressions.dc.html'), bg=SHEET))
 CP_SHARE = (f'<p style="margin: 0 4px; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Everyone with the link sees each change as it is made, and the chord playing.</p>'
             + f'<div style="border-radius: 12px; background: {FILL}">' + SEGROW('People with the link', 'shareSeg') + '</div>'
@@ -262,7 +262,7 @@ CP58 = CP58.replace("states: [{ l: 'Following the Genos', bg: follow ? '#332921'
 assert 'Genos minimized' in CP58
 
 # the sheet's name opens the sheets: the last opened first, as it opens on (a chart opens where it was left)
-CHEVD20 = CHEV_D.replace('width="16" height="16"', 'width="18" height="18"')
+CHEVD20 = CHEV_D
 TITLE76 = (f'<button type="button" data-menuroot-anchor onClick="{{{{openSheets}}}}" aria-label="Chord sheet: {{{{sheetsL}}}}. Open another" style="flex: 0 1 auto; min-width: 0; height: 44px; margin: -6px 0; padding: 0; border: 0; background: transparent; color: {INK}; font: inherit; display: flex; align-items: center; gap: 4px">'
            f'<span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 22px; font-weight: 600">{{{{sheetsL}}}}</span><span style="flex: none; color: {SOFT}; display: flex">{CHEVD20}</span></button>')
 _t0 = '<span style="font-size: 22px; font-weight: 600">My verse and chorus</span>'
@@ -306,11 +306,11 @@ def GENOS76(pos, wide):
             + f'<div role="group" aria-label="Main" style="flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px">{LAMPS59("arMains", "Main")}</div>'
             + ICB('gFullT', 'Full', EXPI) + ICB('gMinT', 'Minimize', MINI) + PTAG('pickG', 'openLayG', 'Genos', 'right: 8px; top: -22px') + '</div></sc-if>')
     pill = (f'<sc-if value="{{{{gMin}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{gFullT}}}}" aria-label="Genos, {{{{arMainL}}}}: show its controls" style="position: relative; height: 44px; box-sizing: border-box; padding: 0 12px 0 14px; border: 0; border-radius: 22px; {GLASSFX}; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
-            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>Genos · {{{{arMainL}}}}{EXPI.replace("20", "18")}</button></sc-if>')
+            f'<span style="width: 8px; height: 8px; border-radius: 4px; background: {{{{arDot}}}}"></span>Genos · {{{{arMainL}}}}{ICON(EXPI, 18)}</button></sc-if>')
     return f'<div style="{pos}">{full}{comp}{pill}</div>'
 
 # the Controls: Full (Style · Key · Tempo · Repeats · Play) or Play only, floating or as a row under the bar
-DOCKFULL = DOCK(CP_DOCK, 0).replace('bottom: 0px;', '{{dockPos}};', 1)
+DOCKFULL = DOCK(CP_DOCK, '{{dockPos}}')
 DOCKFULL = DOCKFULL[:-len('</div>')] + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: -26px') + '</div>'
 PLAYONLY = f'<div style="position: absolute; right: 16px; {{{{dockPos}}}}; z-index: 40; width: 68px; height: 68px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; justify-content: center">{PLAYBTN()}' + PTAG('pickD', 'openLayD', 'Controls', 'right: 0; top: -50px') + '</div>'
 DOCKTOP = f'<div role="toolbar" style="position: relative; flex: none; margin: 0 16px 8px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; {GLASSFX}; display: flex; align-items: center; gap: 8px">{CP_DOCK}' + PTAG('pickD', 'openLayD', 'Controls', 'left: 8px; top: 12px') + '</div>'

@@ -1,41 +1,13 @@
 import { Fragment, type ReactNode } from 'react'
 import { BAR_CATALOG, barOf, useSettings, type BarAct } from '@/entities/settings'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import { Archive, Ellipsis, FolderOutput } from 'lucide-react'
+import { Archive, Ellipsis, Folder, FolderOutput, Heart, Trash2, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
-import { cn } from '@/shared/lib'
 import { FloatingActions } from '@/shared/ui'
-import { DropZone, useCarrying } from '@/widgets/song-library'
+import { DropZone, SelectAct, SelectDock, useCarrying } from '@/widgets/song-library'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
-
-/** One of the dock's buttons (R72's SELBAR): its name alone, 52 tall, sharing the width; greyed while
- * nothing chosen can take it. */
-const DOCK_BUTTON = 'h-13 min-w-0 flex-1 rounded-pill px-1 text-[0.9375rem] font-semibold'
-
-function BarAction({
-  label,
-  onClick,
-  disabled,
-  destructive = false,
-}: {
-  label: string
-  onClick: () => void
-  disabled: boolean
-  destructive?: boolean
-}) {
-  return (
-    <Button
-      variant="ghost"
-      disabled={disabled}
-      onClick={onClick}
-      className={cn(DOCK_BUTTON, destructive && 'text-destructive')}
-    >
-      {label}
-    </Button>
-  )
-}
 
 /**
  * Select's bar at the foot (R72's SELBAR, a glass dock in New's place): by default Add to folder,
@@ -64,27 +36,42 @@ export function SelectionBar({
   const chosen = useSettings((state) => barOf(state.bars, 'select.songs'))
   const acts: Partial<Record<BarAct, ReactNode>> = {
     favourite: (
-      <BarAction
+      <SelectAct
         label={t(select.allFavourite ? 'select.unfavourite' : 'select.favourite')}
+        icon={Heart}
         onClick={select.favourite}
         disabled={noSongs}
       />
     ),
     move: page.may('moveOut') ? (
-      <BarAction label={t('select.move')} onClick={select.move} disabled={!select.movable} />
+      <SelectAct
+        label={t('select.move')}
+        icon={Folder}
+        onClick={select.move}
+        disabled={!select.movable}
+      />
     ) : null,
-    export: <BarAction label={t('select.export')} onClick={select.export} disabled={noSongs} />,
+    export: (
+      <SelectAct
+        label={t('select.export')}
+        icon={Upload}
+        onClick={select.export}
+        disabled={noSongs}
+      />
+    ),
     archive: (
-      <BarAction
+      <SelectAct
         label={t('select.archive')}
+        icon={Archive}
         onClick={select.archive}
         disabled={!select.archivable}
         destructive
       />
     ),
     delete: page.may('deleteSong') ? (
-      <BarAction
+      <SelectAct
         label={t('select.delete')}
+        icon={Trash2}
         onClick={select.delete}
         disabled={!select.deletable}
         destructive
@@ -122,41 +109,35 @@ export function SelectionBar({
     )
   }
   return (
-    // Centred under the cards, as the board's dock (DOCK_L), never in New's corner.
-    <FloatingActions className="justify-center">
-      <div
-        role="toolbar"
-        aria-label={t('select.actions')}
-        // Select's bar takes the phone's tab bar's place (memory-palaces'): one bar at the foot.
-        data-takes-tab-bar=""
-        className="glass flex h-17 w-[min(35rem,calc(100vw-2rem))] items-center gap-1 rounded-pill px-2"
-      >
-        {shown.map((act) => (
-          <Fragment key={act}>{acts[act]}</Fragment>
-        ))}
-        {rest.length > 0 ? (
-          <Popover>
-            <PopoverTrigger
-              render={
-                <Button variant="ghost" size="icon" className="size-11 shrink-0 rounded-pill" />
-              }
-              aria-label={t('select.more')}
-            >
-              <Ellipsis aria-hidden className="size-5" />
-            </PopoverTrigger>
-            <PopoverContent
-              side="top"
-              align="end"
-              aria-label={t('select.more')}
-              className="glass flex w-auto gap-2 rounded-pill px-2 py-2"
-            >
-              {rest.map((act) => (
-                <Fragment key={act}>{acts[act]}</Fragment>
-              ))}
-            </PopoverContent>
-          </Popover>
-        ) : null}
-      </div>
-    </FloatingActions>
+    <SelectDock label={t('select.actions')}>
+      {shown.map((act) => (
+        <Fragment key={act}>{acts[act]}</Fragment>
+      ))}
+      {rest.length > 0 ? (
+        <Popover>
+          <PopoverTrigger
+            render={
+              <Button
+                variant="ghost"
+                className="h-13 min-w-0 flex-1 flex-col gap-0.5 rounded-pill px-1 text-xs font-semibold"
+              />
+            }
+          >
+            <Ellipsis aria-hidden className="size-5" />
+            {t('select.more')}
+          </PopoverTrigger>
+          <PopoverContent
+            side="top"
+            align="end"
+            aria-label={t('select.more')}
+            className="glass flex w-auto gap-2 rounded-pill px-2 py-2"
+          >
+            {rest.map((act) => (
+              <Fragment key={act}>{acts[act]}</Fragment>
+            ))}
+          </PopoverContent>
+        </Popover>
+      ) : null}
+    </SelectDock>
   )
 }

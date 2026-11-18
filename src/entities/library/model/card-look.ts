@@ -16,7 +16,7 @@ export interface CardLook {
 }
 
 export const DEFAULT_CARD_LOOK: CardLook = {
-  style: { ...DEFAULT_STYLE, layout: 'card' },
+  style: { ...DEFAULT_STYLE, layout: 'list' },
   show: { key: true, chords: false, progress: true },
 }
 

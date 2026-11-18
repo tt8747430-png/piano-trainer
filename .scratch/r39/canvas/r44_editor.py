@@ -120,7 +120,7 @@ SHEETP = (f'<section aria-label="Palette" data-strip style="flex: none; position
           f'<sc-if value="{{{{folded}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Tools" class="nos" style="display: flex; gap: 4px; overflow-x: auto; padding: 0 16px 8px"><sc-for list="{{{{tools}}}}" as="t" hint-placeholder-count="12">{TOOL}</sc-for></div></sc-if>'
           f'<sc-if value="{{{{open}}}}" hint-placeholder-val="{{{{false}}}}"><div class="nos" style="max-height: 300px; overflow-y: auto; padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 16px">{ED_SECTIONS()}</div></sc-if>'
           + CATBAR +
-          f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{KEYS(112).replace("border-radius: 14px;", "border-radius: 0;")}</div></sc-if>'
+          f'<sc-if value="{{{{keysShown}}}}" hint-placeholder-val="{{{{true}}}}"><div style="padding: 0 0 26px">{KEYS(112, edge=True)}</div></sc-if>'
           f'<sc-if value="{{{{notKeys}}}}" hint-placeholder-val="{{{{false}}}}"><div style="height: 26px"></div></sc-if></section>')
 # the phone's bar has no room for the save status the laptop shows beside Close: it heads the ··· sheet (a status goes in the bar or its menu)
 ED_SAVED = f'<p role="status" style="margin: -8px 0 0; text-align: center; font-size: 13px; color: {SOFT}">Saved on this device</p>'
@@ -138,7 +138,7 @@ elm4 = (TIP_CSS + EBAR('SongLaptop.dc.html', 'PlayerLaptop.dc.html', title=True)
         + f'<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px">'
         f'<div style="min-width: 0; min-height: 0; display: flex; flex-direction: column">'
         f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 48px 24px; display: flex; justify-content: center"><div style="width: 800px">{SCOREPAGE(760, 1.3, "10px 40px 16px")}</div></div>'
-        f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{KEYS(170).replace("kb.", "kbL.").replace("border-radius: 14px;", "border-radius: 0;")}</div></sc-if></div>'
+        f'<sc-if value="{{{{keysOn}}}}" hint-placeholder-val="{{{{true}}}}"><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{KEYS(170, "kbL", edge=True)}</div></sc-if></div>'
         f'<aside aria-label="Palette" data-strip style="min-height: 0; display: flex; flex-direction: column; background: {SHEET}; box-shadow: -1px 0 0 {LINE}">'
         + STRIP() + f'<div style="height: 1px; margin: 0 16px; background: {LINE}"></div>'
         f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 20px">{ED_SECTIONS()}</div></aside></div>')
@@ -188,7 +188,7 @@ def full_laptop(fname, title, main, js_, pops=''):
 """
     open(OUT + fname + '.dc.html', 'w').write(html)
 
-phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, (BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html')) + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel') + BSHEET('instOn', 'Instruments', ED_INST) + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel')).replace('max-height: 86%', 'max-height: calc(100% - 124px)'))
+phone('Editor', 'Score editor, phone', SHOWSTATES() + eph4, ED4, BSHEET('moreOn', 'Amazing Grace', ED_SAVED + ED_MENU('.dc.html'), maxh='calc(100% - 124px)') + BSHEET('creditsOn', 'Credits', ED_CREDITS, 'Cancel', maxh='calc(100% - 124px)') + BSHEET('instOn', 'Instruments', ED_INST, maxh='calc(100% - 124px)') + BSHEET('pickInstOn', 'Add an instrument', ED_PICK, 'Cancel', maxh='calc(100% - 124px)'))
 # Go to bar (research F11, Flat's and Dorico's ⌘G): a small card over the sheet's head, the bar's number and its count
 GOTO_FIELD = '<div style="display: flex; align-items: center; gap: 12px"><input value="9" aria-label="Bar" type="text" inputmode="numeric" enterkeyhint="go" style="width: 96px; height: 48px; box-sizing: border-box; padding: 0 16px; border: 0; border-radius: 12px; background: #FEFDFB; box-shadow: 0 0 0 2px #332921; font: inherit; font-size: 17px; font-variant-numeric: tabular-nums; color: #332921; outline: none"><span style="font-size: 15px; color: #7A6E64; font-variant-numeric: tabular-nums">of 16</span></div>'
 ED4L = ED4.replace("['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }]]", "['The menu open', st.sheet === 'more', { sheet: 'more' }, { sheet: null }], ['Go to bar (⌘G)', st.sheet === 'goto', { sheet: 'goto' }, { sheet: null }]]").replace("moreOn: st.sheet === 'more',", "moreOn: st.sheet === 'more', gotoOn: st.sheet === 'goto',", 1)

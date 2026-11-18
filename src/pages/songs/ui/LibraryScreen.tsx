@@ -16,16 +16,18 @@ import {
 import { useRepertoire } from '@/entities/piece'
 import { editFolder, FolderEditPanel, type FolderEdit } from '@/features/manage-library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
-import { useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { PLACE_COLUMN } from '@/widgets/song-library'
 import type { FolderSearch, SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
 import { LibraryBrowse } from './LibraryBrowse'
 import { LibraryDialogs } from './LibraryDialogs'
 import { LibraryEmpty } from './LibraryEmpty'
 import { LibraryHeader } from './LibraryHeader'
-import { LibrarySearch } from './LibrarySearch'
+import { LibrarySearch, SearchEverywhere } from './LibrarySearch'
 import { LibrarySelect } from './LibrarySelect'
-import { NewActions, NewMenu } from './NewActions'
+import { LibraryTable } from './LibraryTable'
+import { NewActions } from './NewActions'
 import { SelectionBar } from './SelectionBar'
 
 /**
@@ -96,10 +98,16 @@ export function LibraryScreen({
     : all === 'favourites'
       ? t('places.favourites')
       : t('all.title')
-  // The search, quiet while nothing is in the list to search; Select hides it with the count.
+  // The search, quiet while nothing is in the list to search; on a phone Select hides it with the
+  // count, a laptop's bar keeps it (one frame).
   const search =
-    page.select.on || (empty && !view.filtering) ? null : (
-      <LibrarySearch filter={filter} screen={screen} />
+    (page.select.on && !laptop) || (empty && !view.filtering) ? null : (
+      <LibrarySearch
+        filter={filter}
+        screen={screen}
+        label={folder ? t('folder.search') : undefined}
+        inBar={laptop}
+      />
     )
   // How many it shows and its sort, the way it runs under a line (R72's COUNTROW and SORTMENU).
   const count =
@@ -118,16 +126,13 @@ export function LibraryScreen({
       />
     )
   return (
-    <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
+    <div className={cn('flex flex-col gap-4 pb-4', laptop && PLACE_COLUMN)} {...drop.dropProps}>
       <LibraryHeader
         page={page}
         folder={folder}
         all={all}
-        add={
-          laptop ? (
-            <NewMenu page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-          ) : undefined
-        }
+        search={laptop ? search : undefined}
+        count={empty ? undefined : t('folder.songCount', { count: view.shown })}
         edit={
           folder && renames
             ? {
@@ -149,12 +154,12 @@ export function LibraryScreen({
           />
         </div>
       ) : null}
-      {/* A laptop sets the search (520) beside the count; a phone stacks them (the LISTPAGE board). */}
-      {laptop && search ? (
-        <div className="flex items-center gap-6">
-          <div className="w-130 shrink-0">{search}</div>
-          {count ? <div className="min-w-0 flex-1">{count}</div> : null}
-        </div>
+      {/* A phone stacks the search and the count with its sort (the LISTPAGE board); a laptop's are
+          in its bar and its table's head. */}
+      {laptop ? (
+        filter.q.trim() === '' ? null : (
+          <SearchEverywhere query={filter.q} />
+        )
       ) : (
         <>
           {search}
@@ -166,6 +171,13 @@ export function LibraryScreen({
           page={page}
           place={folder ? 'folder' : all === 'favourites' ? 'favourites' : 'home'}
           filter={filter}
+          onClear={clear}
+        />
+      ) : laptop ? (
+        <LibraryTable
+          page={page}
+          place={folder?.id ?? 'home'}
+          noFolders={all !== false}
           onClear={clear}
         />
       ) : page.select.on ? (
@@ -195,10 +207,8 @@ export function LibraryScreen({
         </div>
       ) : null}
       {!page.select.on ? (
-        laptop ? null : (
-          <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-        )
-      ) : empty ? (
+        <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+      ) : empty || laptop ? (
         <SelectionBar page={page} folder={folder} />
       ) : null}
       <LibraryDialogs page={page} folder={folder} />

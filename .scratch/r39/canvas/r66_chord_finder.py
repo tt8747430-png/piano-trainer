@@ -25,10 +25,8 @@ ROWS66 = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}">' + 
     ('link', 'In these keys', '{{inKeys}}', ''), bg=SHEET) + '</sc-if>'
 ERASEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path><path d="M22 21H7"></path><path d="m5 11 9 9"></path></svg>'
 CHORDSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
-PIECE66 = lambda label, cap, icon, extra='': (f'<button type="button" aria-label="{label}" {extra} style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; '
-                                              f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{icon}<span style="font-size: 12px; font-weight: 600">{cap}</span></button>')
-PLAY66 = (f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{togglePlay}}}}" style="pointer-events: auto; flex: none; width: 176px; border: 0; {TINTGRP}; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">'
-          f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}</sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}</sc-if><span>Play</span></button>')
+PIECE66 = PIECE  # the kit's glass piece (r42): an icon over its caption
+PLAY66 = PLAYCAP()
 BAR66 = lambda pos: (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><div role="toolbar" aria-label="Clear, play and open in Chords" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">'
                      + PIECE66('Clear the keys', 'Clear', ERASEI, 'onClick="{{clear}}"') + PLAY66 + PIECE66('Open in Chords', 'Chords', CHORDSI) + '</div></sc-if>')
 CF_SET66 = GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), ('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'), ('toggle', 'Remember the chords played', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'))
