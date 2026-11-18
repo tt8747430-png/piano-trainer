@@ -138,7 +138,7 @@ def patch(t, phone):
     pace = pace.replace('aria-label="Pace: {{paceLabel}}"', 'aria-label="Practice: {{paceLabel}}"')
     if phone:
         cap = lambda bg='transparent', fg=INK: f'width: 48px; height: 48px; padding: 0; border: 0; border-radius: 24px; background: {bg}; color: {fg}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px'
-        word = lambda v: f'<span style="font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap">{{{{{v}}}}}</span>'
+        word = lambda v: f'<span style="font-size: 12px; font-weight: 600; line-height: 1; white-space: nowrap">{{{{{v}}}}}</span>'
         pace = restyle(pace, cap(), small(svg(pace)) + word('paceCap'))
         loop = restyle(loop, cap('{{loopBg}}', '{{loopFg}}'), small(svg(loop)) + word('loopCap'))
         hands = restyle(hands, cap(), HANDSI + word('handsCap'))
@@ -226,7 +226,7 @@ def kit(t, phone):
     t = t.replace('padding: 6px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 15px; color: #332921',
                   'padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921')
     t = t.replace('border-radius: 9px; background: #E7E0D6', 'border-radius: 9px; background: #EEE9E2')
-    t = t.replace('<p style="margin: 6px 14px -4px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #685E56">',
+    t = t.replace('<p style="margin: 6px 14px -4px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">',
                   '<p style="margin: 6px 4px -4px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #685E56">')  # the kit's CAPS, as every group label (rounds 15, 25)
     # the next lyric line reads at 4.5:1 in soft ink (was #A39A90, 2.5:1); its lighter weight keeps it second (loop 63)
     t = t.replace('line-height: 1.2; color: #A39A90">{{lineNext}}', 'line-height: 1.2; color: #685E56">{{lineNext}}')
