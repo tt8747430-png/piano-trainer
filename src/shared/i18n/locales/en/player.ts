@@ -11,6 +11,8 @@ export const player = {
   print: 'Print',
   // The Player's views of the music (ADR 0108), Pick your view's (R29); each names its own part of the
   // screen.
+  // The menu beside the song's head in the Player's settings, named as the View menu is.
+  songMenu: 'Song',
   views: {
     backToPlayhead: 'Back to the music',
     pick: 'Pick your view',

@@ -93,7 +93,7 @@ export function BeatStrip({
                     data-looped={looped ? '' : undefined}
                     onClick={() => onBeat(ticks[cell] ?? 0)}
                     className={cn(
-                      'relative size-9 shrink-0 rounded-[3px] lg:size-13',
+                      'relative size-11 shrink-0 rounded-[3px] lg:size-13',
                       at === 0 && 'border-l-3 border-foreground',
                       now
                         ? 'bg-foreground text-background'

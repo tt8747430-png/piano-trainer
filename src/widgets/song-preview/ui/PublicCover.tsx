@@ -13,10 +13,13 @@ import { openingBars } from '../model/opening-bars'
 export function PublicCover({
   entry,
   tile = false,
+  cell = false,
   className,
 }: {
   entry: PublicEntry
   tile?: boolean
+  /** A table row's 40 tile: its chord in the book's serif at 13, so Gmaj7 fits. */
+  cell?: boolean
   className?: string
 }) {
   const paint = PAINT[itemPaint(entry.id)]
@@ -36,7 +39,13 @@ export function PublicCover({
       {!bars || !first ? (
         <AudioWaveform className={tile ? 'size-6' : 'size-8'} />
       ) : tile ? (
-        <ChordText symbol={first} className="text-xl font-semibold [&_*]:text-current" />
+        <ChordText
+          symbol={first}
+          className={cn(
+            '[&_*]:text-current',
+            cell ? 'font-serif text-[0.8125rem] font-bold' : 'text-xl font-semibold',
+          )}
+        />
       ) : (
         <span className="flex max-w-full items-center gap-3 font-serif text-[1.375rem] font-semibold">
           {bars.map((bar, index) => (

@@ -19,7 +19,7 @@ import {
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
 import { duplicateSong } from '@/features/edit-piece'
-import { FavouriteSwitch, useLibraryActs, useSongActions } from '@/features/manage-library'
+import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
@@ -60,7 +60,7 @@ export function SongSettingsPage() {
 /**
  * A song's Settings (R32-C; Noji's and memory-palaces' deck settings): how the song lives in the
  * library and how it leaves it, the page editing what it says of itself. The song at the head; its
- * Library (Folder, Favourite, Duplicate, Archive or Restore); Share (Publish with its state, Share
+ * Library (Playlist, Duplicate, Archive or Restore); Share (Publish with its state, Share
  * link, Export…); and last, apart, the learner's own music given up: Delete, or Reset to the
  * original, asked first.
  */
@@ -135,11 +135,14 @@ function SongSettings({ piece }: { piece: Piece }) {
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
     <div className="flex flex-col gap-2 pb-8">
-      <ScreenHeader column title={t('settings.title')} back={<BackButton />} />
+      <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      {/* Every thing's Settings (canvas v550): the head (THINGHEAD), its groups 24 apart, the loss of
+          the whole song 40 apart at the foot; on a laptop Library and Share side by side under the
+          head, the loss its own card across both, on the bar title's edge. */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-5 lg:px-[calc(3.5rem-var(--gutter))]">
         {/* The song at the head: what these settings are for (R32-C). */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 lg:col-span-2">
           {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
           <SongCoverPicker piece={piece} className="w-16 text-2xl" />
           <div className="flex min-w-0 flex-col gap-0.5">
@@ -158,7 +161,6 @@ function SongSettings({ piece }: { piece: Piece }) {
                 onClick={() => library.actions.find((each) => each.key === 'move')?.onSelect()}
               />
             )}
-            <FavouriteSwitch piece={piece.id} label={t('settings.favourite')} />
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
             {copyable ? (
               <ActionRow title={t('settings.duplicate')} onClick={() => setCopying(true)} />
@@ -199,10 +201,8 @@ function SongSettings({ piece }: { piece: Piece }) {
           />
         </SettingsGroup>
         {ownMusic ? (
-          <div ref={danger}>
-            <DangerGroup
-              footnote={t(ownMusic.kind === 'song' ? 'deleting.says' : 'resetting.says')}
-            >
+          <div ref={danger} className="-mt-2 lg:col-span-2">
+            <DangerGroup>
               <DangerRow
                 title={t(ownMusic.kind === 'song' ? 'settings.deleteSong' : 'reset')}
                 onClick={() => (ownMusic.kind === 'song' ? trash(ownMusic.id) : setAsking(true))}

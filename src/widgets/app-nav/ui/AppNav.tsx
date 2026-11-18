@@ -18,6 +18,7 @@ import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/share
 import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 import { useSearchPalette } from '@/widgets/search-palette'
+import { SongsPlaces, useSongsPlaceShown } from '@/widgets/song-library'
 import { SidebarAccount } from './SidebarAccount'
 import { SidebarRecents } from './SidebarRecents'
 import { SidebarSearch } from './SidebarSearch'
@@ -251,6 +252,8 @@ export function AppNav() {
   // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
   // the Profile as its last tab.
   const sidebarShown = useMediaQuery(SIDEBAR_SHOWN)
+  const songsOpen = pathname === '/songs' || pathname.startsWith('/songs/')
+  const songsPlaceShown = useSongsPlaceShown()
   return (
     <nav
       aria-label={t('nav.label')}
@@ -295,11 +298,23 @@ export function AppNav() {
         </div>
       ) : null}
       <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:rounded-[1.625rem] lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:px-3 lg:pt-0">
-        {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => (
-          <li key={place.to} className="flex-1 lg:flex-none">
-            <PlaceLink place={place} collapsed={collapsed} />
-          </li>
-        ))}
+        {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => {
+          // Songs' places under Songs while it is current (the board's SONGS_SUB); the one shown
+          // wears the wash, Songs then only bold.
+          const sub = place.to === '/songs' && sidebarShown && !collapsed && songsOpen
+          return (
+            <li
+              key={place.to}
+              className={cn(
+                'flex-1 lg:flex-none',
+                sub && songsPlaceShown && '[&>a[aria-current=page]]:bg-transparent!',
+              )}
+            >
+              <PlaceLink place={place} collapsed={collapsed} />
+              {sub ? <SongsPlaces /> : null}
+            </li>
+          )
+        })}
       </ul>
       {sidebarShown ? (
         <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-3 pb-4">

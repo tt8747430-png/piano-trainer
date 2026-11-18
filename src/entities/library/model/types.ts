@@ -67,12 +67,19 @@ export interface SongPlace {
  * `index` say where it stood among the folders there.
  */
 export type ArchiveEntry =
-  | { readonly kind: 'song'; readonly id: PieceId; readonly from: SongPlace }
+  | {
+      readonly kind: 'song'
+      readonly id: PieceId
+      readonly from: SongPlace
+      /** When it was archived (ms): the Archive's Archived column. */
+      readonly at: number
+    }
   | {
       readonly kind: 'folder'
       readonly folder: SavedFolder
       readonly subfolders: readonly SavedFolder[]
       readonly index: number
+      readonly at: number
     }
 
 /**
@@ -82,6 +89,8 @@ export type ArchiveEntry =
 export interface TrashedSong {
   readonly id: PieceId
   readonly from: SongPlace
+  /** When it was deleted (ms): the Trash's Deleted column. */
+  readonly at: number
 }
 
 /** How the library's songs are listed (R72, Flat's library): by when played, title, composer or when added. */

@@ -49,6 +49,8 @@
   --p-ochre: #a8742a;
   /* The canvas's eyebrow: a small line naming where something is (Continue, Lesson 7 of 13). */
   --p-rust: #a8551f;
+  --p-roll-amber: #f2b33d;
+  --p-roll-blue: #8fb3d9;
   --p-rust-night: #e39a66;
   /* A song's bars played through (canvas 125's bar map). */
   --p-copper: #c26a2e;
@@ -242,6 +244,12 @@
   --hand-rh-ink: var(--p-brick-deep);
   --hand-lh-ink: var(--p-lilac-deep);
   --hand-staff-ink: var(--p-grass-deep);
+  /*
+   * A take's piano roll (the Takes and Take boards' PROLL): the notes above the split in amber, those
+   * under it in blue, so the two staves a take is written into read apart at a glance; only on a roll.
+   */
+  --roll-upper: var(--p-roll-amber);
+  --roll-lower: var(--p-roll-blue);
 
   /*
    * The keys: paper keys parted by a soft line, a warm black, on their bed. By

@@ -20,6 +20,7 @@ export function LibraryBrowse({
   place,
   moreFolders,
   noFolders = false,
+  foldersOnly = false,
   onClear,
 }: {
   page: LibraryPage
@@ -29,6 +30,8 @@ export function LibraryBrowse({
   moreFolders?: ReactNode
   /** All songs: its songs alone, the folders left to My songs. */
   noFolders?: boolean
+  /** Its folders alone: a laptop's table lists the songs (`LibraryTable`). */
+  foldersOnly?: boolean
   onClear: () => void
 }) {
   const { t } = useTranslation(['songs', 'common'])
@@ -81,7 +84,7 @@ export function LibraryBrowse({
             <section aria-label={t('folder.list')}>{folderRows}</section>
           )
         ) : null}
-        {view.groups.map((group) => {
+        {(foldersOnly ? [] : view.groups).map((group) => {
           if (group.entries.length === 0) return null
           const folds = group.key === 'all' && !unfolded && group.entries.length > FOLDED
           const rows = (

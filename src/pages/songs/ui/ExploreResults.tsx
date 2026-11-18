@@ -1,6 +1,7 @@
 import { ArrowUpDown, SearchX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PublicSort } from '@/shared/api/public-library'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { Said } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -10,7 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/primitives/dropdown-menu'
-import { ExploreFeedCard } from '@/widgets/song-preview'
+import { EXPLORE_COLUMNS, ExploreFeedCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
 import { useExploreBrowse } from '../model/use-explore-browse'
 import { ExplorePeople } from './ExplorePeople'
@@ -43,10 +44,13 @@ export function ExploreSort({
   home,
   feed,
   onSort,
+  counted = true,
 }: {
   home: SongsHome
   feed: ExploreFeed
   onSort: (sort: PublicSort) => void
+  /** The count beside it: a laptop's is in the place's bar. */
+  counted?: boolean
 }) {
   const { t } = useTranslation('songs')
   if (feed.browse.kind !== 'found' || feed.entries.length === 0) return null
@@ -54,9 +58,13 @@ export function ExploreSort({
   const patterns = home.cat === 'patterns'
   return (
     <div className="flex shrink-0 items-center justify-end gap-4 px-1">
-      <span className="text-[0.9375rem] font-semibold text-muted-foreground tabular-nums">
-        {t(patterns ? 'explore.patternCount' : 'explore.songCount', { count: feed.entries.length })}
-      </span>
+      {counted ? (
+        <span className="text-[0.9375rem] font-semibold text-muted-foreground tabular-nums">
+          {t(patterns ? 'explore.patternCount' : 'explore.songCount', {
+            count: feed.entries.length,
+          })}
+        </span>
+      ) : null}
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label={`${t('explore.sort')}: ${t(`explore.shelves.${sort}`)}`}
@@ -100,6 +108,7 @@ export function ExploreResults({
   onClear: () => void
 }) {
   const { t } = useTranslation('songs')
+  const laptop = useMediaQuery(LAPTOP)
   const { browse, retry, entries } = feed
   const patterns = home.kind !== 'people' && home.cat === 'patterns'
   const query = home.q.trim()
@@ -123,12 +132,37 @@ export function ExploreResults({
         />
       ) : entries.length === 0 ? (
         <ExploreEmpty />
-      ) : (
-        <ul aria-label={t('explore.views.explore')} className="flex flex-col gap-2">
+      ) : laptop ? (
+        // All songs' table (2026-11-17: "the pages change to much from the all songs to explore").
+        <div
+          role="table"
+          aria-label={t('explore.views.explore')}
+          className="border-t border-border"
+        >
+          <div role="row" className={`${EXPLORE_COLUMNS} h-10 border-b border-border`}>
+            {(['title', 'composer', 'type', 'sharedBy', 'saves'] as const).map((column) => (
+              <span
+                key={column}
+                role="columnheader"
+                className="text-[0.8125rem] font-semibold text-muted-foreground"
+              >
+                {t(`table.${column}`)}
+              </span>
+            ))}
+            <span role="columnheader" aria-hidden />
+          </div>
           {entries.map((entry) => (
-            <li key={entry.id} className="min-w-0">
-              <ExploreFeedCard entry={entry} />
-            </li>
+            <ExploreFeedCard key={entry.id} entry={entry} table />
+          ))}
+        </div>
+      ) : (
+        // One card holding the rows, the hairline from the title's edge (84: 12, the 56 tile, 16).
+        <ul
+          aria-label={t('explore.views.explore')}
+          className="card flex flex-col overflow-hidden [&>li+li]:relative [&>li+li]:before:absolute [&>li+li]:before:top-0 [&>li+li]:before:right-0 [&>li+li]:before:left-21 [&>li+li]:before:h-px [&>li+li]:before:bg-border [&>li+li]:before:content-['']"
+        >
+          {entries.map((entry) => (
+            <ExploreFeedCard key={entry.id} entry={entry} />
           ))}
         </ul>
       )}
