@@ -176,6 +176,7 @@ export const learn = {
   // The lessons to read before this one, each a link.
   afterLinks: 'After:',
   contents: 'In this lesson',
+  lessonLearned: '“{{title}}” learned',
   inThisLesson: 'In this lesson',
   sectionOf: 'Section {{at}} of {{of}}',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
