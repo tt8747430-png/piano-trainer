@@ -12,7 +12,7 @@ assert CF66 != CF, 'Chord finder return not found'
 TOP66 = TOP60.replace('Scales and keys</span>', 'Chord finder</span>').replace(ROUND60("Settings", COG, "openSet"), ROUND60("Chord finder settings", COG, "openSet"))
 CHEVS66 = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
 TITLE66 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; flex-direction: column; gap: 4px">'
-           f'<h2 aria-live="polite" style="margin: 0; font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em">{{{{name}}}}</h2>'
+           f'<h2 aria-live="polite" style="margin: 0; font-family: {SERIF}; font-size: 44px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em">{{{{name}}}}</h2>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}; text-wrap: pretty">{{{{sub}}}}</p></div>'
            f'<button type="button" aria-label="Imaj7 in C major: the key it is spelled in" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Imaj7 in</span><b>C major</b><span style="color: {SOFT}; display: flex">{CHEVS66}</span></button></div>')
 TRY66 = (f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><div role="list" aria-label="Chords to try" style="display: flex; flex-wrap: wrap; gap: 8px">'
@@ -38,7 +38,7 @@ lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex;
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
         + f'{SHOWSTATES()}<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
-        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE66.replace("font-size: 44px", "font-size: 64px")}{TRY66}{NOTES66}</div>'
+        + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE66}{TRY66}{NOTES66}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS66}</div></div></div>'
         + BAR66('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')
 phone('ChordFinder', 'Chord finder, phone', ph66, CF66, BSHEET('setOn', 'Chord finder settings', CF_SET66) + BSHEET('keysOn', 'Piano', SC_KEYS60))
