@@ -16,8 +16,11 @@ import { RollPlayhead } from './RollPlayhead'
 /** A bar's width and a key's lane, in the roll's own units (it is drawn to its width). */
 const BAR = 100
 const LANE = 8
-/** The least a bar is drawn on screen, in px: a long take scrolls sideways rather than squeeze. */
-const LEAST_BAR_PX = 24
+/**
+ * The least a bar is drawn on screen, in px: a long take scrolls sideways rather than squeeze; where
+ * its number is a button under it, a finger's 44.
+ */
+const LEAST_BAR_PX = { roll: 24, numbered: 44 } as const
 
 /**
  * The split point (A40, Flat's staff divider): a line across the roll under the key the upper staff
@@ -141,7 +144,7 @@ export function TakeRoll({
       <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-none">
         <div
           className="flex flex-col gap-2"
-          style={{ width: `max(100%, ${count * LEAST_BAR_PX}px)` }}
+          style={{ width: `max(100%, ${count * LEAST_BAR_PX[bars ? 'numbered' : 'roll']}px)` }}
         >
           <div className={cn('relative', className)}>
             <svg

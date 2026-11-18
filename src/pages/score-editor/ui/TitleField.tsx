@@ -33,8 +33,9 @@ export function TitleField({ place }: { place: TitlePlace }) {
             title={t('scoreSettings.credits')}
             onClick={open}
             className={cn(
-              // Its 44 reach grown over and under the title's line, so the title stands where the Player prints it.
-              '-my-2 inline-flex min-h-11 max-w-full items-center justify-center text-balance wrap-break-word',
+              // The title's line alone, where the Player prints it; its 44 reach grown above it, clear of the
+              // credits' reach under it.
+              "relative inline-flex max-w-full items-center justify-center text-balance wrap-break-word before:absolute before:inset-x-0 before:-top-4 before:bottom-0 before:content-['']",
               OPENS,
             )}
           >
