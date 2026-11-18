@@ -22,14 +22,14 @@ TITLE63 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-directio
 def _staff63():
     y = lambda d: 58 - d * 3.5          # treble: d=0 is E4 on the bottom line
     yb = lambda d: 112 - d * 3.5        # bass: d=0 is G2 on the bottom line
-    s = ''.join(f'<path d="M24 {30 + i * 7}H350" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    s += ''.join(f'<path d="M24 {84 + i * 7}H350" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    s += f'<path d="M24 30V112" stroke="{INK}" stroke-width="1.2"></path><path d="M350 30V112" stroke="{INK}" stroke-width="1"></path>'
+    s = ''.join(f'<path d="M24 {30 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    s += ''.join(f'<path d="M24 {84 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    s += f'<path d="M24 30V112" stroke="{INK}" stroke-width="1.2"></path><path d="M270 30V112" stroke="{INK}" stroke-width="1"></path>'
     s += f'<text x="27" y="62" font-size="42" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="104" font-size="30" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
     s += f'<text x="62" y="16" font-size="13" font-weight="700" fill="{INK}">C</text>'
     # the right hand: C4 then G4 E4 G4, twice, in eighths (C4 on a ledger line below the staff)
     steps = [-2, 2, 0, 2, -2, 2, 0, 2]
-    xs = [92 + i * 31 for i in range(8)]
+    xs = [80 + i * 23 for i in range(8)]
     for i, (x, d) in enumerate(zip(xs, steps)):
         cy = y(d)
         s += f'<ellipse cx="{x}" cy="{cy:.1f}" rx="5.2" ry="3.8" transform="rotate(-20 {x} {cy:.1f})" fill="{INK}"></ellipse>'
@@ -42,8 +42,10 @@ def _staff63():
         cy = yb(d)
         s += f'<ellipse cx="96" cy="{cy:.1f}" rx="6.4" ry="4.2" transform="rotate(-20 96 {cy:.1f})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
     s += f'<path d="M86 {yb(-2):.1f}H106M86 {yb(-4):.1f}H106" stroke="{INK}" stroke-width="1"></path>'
-    return f'<svg viewBox="0 0 360 132" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; max-width: 460px; margin: 0 auto">{s}</svg>'
-MUSIC63 = CARD(_staff63() + f'<p style="margin: 12px 4px 0; max-width: 65ch; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</p>', '16px 16px 14px')
+    return f'<svg viewBox="20 0 254 132" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; max-width: 560px; margin: 0 auto">{s}</svg>'
+# the pattern at reading size (10 a space on a phone), framed to its bar, on the paper: no card round the page's own
+# music (laws, "The page's subject is its largest thing")
+MUSIC63 = (f'<figure style="flex: none; margin: 0; display: flex; flex-direction: column; gap: 12px">' + _staff63() + f'<figcaption style="margin: 0 4px; max-width: 65ch; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</figcaption></figure>')
 H3_63 = lambda t: f'<h3 style="margin: 0 0 0 4px; font-size: 14px; font-weight: 600; color: {INK}">{t}</h3>'
 DESC63 = 'The left hand holds the octave. The right hand keeps its chord under the fingers and rocks in 8ths: the upper notes together, then the lowest note alone. For a G chord after C, that is D and G together, then B.'
 # The hands' ⓘ (loop, 2026-11-15): the pattern's longer description, out of the way until asked for, as InfoTip draws it.
