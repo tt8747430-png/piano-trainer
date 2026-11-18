@@ -264,7 +264,7 @@ export const player: LocaleResources['player'] = {
   },
   inversion: { own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
-    label: 'Во всех 12 тональностях',
+    label: 'Тональности',
     one: 'Одна тональность',
     'semitones-up': 'Хроматически вверх',
     'semitones-down': 'Хроматически вниз',

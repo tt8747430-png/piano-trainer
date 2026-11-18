@@ -286,7 +286,7 @@ export const player = {
   inversion: { own: 'This pattern plays its own shapes.' },
   /** A progression through the keys, back home at the end. */
   keyWalk: {
-    label: 'In all 12 keys',
+    label: 'Keys',
     one: 'One key',
     'semitones-up': 'Chromatically, rising',
     'semitones-down': 'Chromatically, falling',
