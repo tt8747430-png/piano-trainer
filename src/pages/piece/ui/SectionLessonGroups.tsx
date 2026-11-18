@@ -31,56 +31,61 @@ export function SectionLessonGroups({
   const patternName = usePatternName()
   // One change alone is the sequence itself: its own row adds nothing (ADR 0111, amended).
   const oneAtATime = changes.length > 1 ? changes : []
+  // Two columns on a laptop, as the Section board: the chords and in time, then the changes and patterns.
   return (
-    <>
-      <ChordLessons pieceId={piece.id} performance={performance} chords={chords} />
-      {sequences.length > 0 ? (
-        <SettingsGroup title={t('learnSection.inTime')} info={t('learnSection.inTimeInfo')} flush>
-          {sequences.map((sequence) => (
-            <LessonRow
-              key={sequence.key}
-              pieceId={piece.id}
-              lesson={sequence}
-              title={sequence.symbols.map(printedSymbol).join(' · ')}
-            />
-          ))}
-        </SettingsGroup>
-      ) : null}
-      {oneAtATime.length > 0 ? (
-        <SettingsGroup
-          title={t('learnSection.oneChange')}
-          info={t('learnSection.oneChangeInfo')}
-          flush
-        >
-          {oneAtATime.map((change) => (
-            <LessonRow
-              key={`${change.from} ${change.to}`}
-              pieceId={piece.id}
-              lesson={change}
-              title={t('learnSection.change', {
-                from: printedSymbol(change.from),
-                to: printedSymbol(change.to),
-              })}
-            />
-          ))}
-        </SettingsGroup>
-      ) : null}
-      {patterns.length > 0 ? (
-        <SettingsGroup
-          title={t('learnSection.pattern', { count: patterns.length })}
-          info={t('learnSection.patternInfo')}
-          flush
-        >
-          {patterns.map((pattern) => (
-            <LessonRow
-              key={pattern.pattern}
-              pieceId={piece.id}
-              lesson={pattern}
-              title={`${patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })} · ${t('learnSection.patternOn', { chord: printedSymbol(pattern.symbol) })}`}
-            />
-          ))}
-        </SettingsGroup>
-      ) : null}
-    </>
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+      <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
+        <ChordLessons pieceId={piece.id} performance={performance} chords={chords} />
+        {sequences.length > 0 ? (
+          <SettingsGroup title={t('learnSection.inTime')} info={t('learnSection.inTimeInfo')} flush>
+            {sequences.map((sequence) => (
+              <LessonRow
+                key={sequence.key}
+                pieceId={piece.id}
+                lesson={sequence}
+                title={sequence.symbols.map(printedSymbol).join(' · ')}
+              />
+            ))}
+          </SettingsGroup>
+        ) : null}
+      </div>
+      <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
+        {oneAtATime.length > 0 ? (
+          <SettingsGroup
+            title={t('learnSection.oneChange')}
+            info={t('learnSection.oneChangeInfo')}
+            flush
+          >
+            {oneAtATime.map((change) => (
+              <LessonRow
+                key={`${change.from} ${change.to}`}
+                pieceId={piece.id}
+                lesson={change}
+                title={t('learnSection.change', {
+                  from: printedSymbol(change.from),
+                  to: printedSymbol(change.to),
+                })}
+              />
+            ))}
+          </SettingsGroup>
+        ) : null}
+        {patterns.length > 0 ? (
+          <SettingsGroup
+            title={t('learnSection.pattern', { count: patterns.length })}
+            info={t('learnSection.patternInfo')}
+            flush
+          >
+            {patterns.map((pattern) => (
+              <LessonRow
+                key={pattern.pattern}
+                pieceId={piece.id}
+                lesson={pattern}
+                title={`${patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })} · ${t('learnSection.patternOn', { chord: printedSymbol(pattern.symbol) })}`}
+              />
+            ))}
+          </SettingsGroup>
+        ) : null}
+      </div>
+    </div>
   )
 }
