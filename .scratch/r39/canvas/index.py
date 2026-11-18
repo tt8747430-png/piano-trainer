@@ -81,15 +81,17 @@ for b in boards:
         h0 = open(P + b).read(); h1 = folds(lapwin(keyface(h0)), b[:-8])
         # the bar floats (owner, 2026-11-15: "the headers … dont make sense to have background when we have floating buttons"):
         # its glass buttons stand over the page, which starts under them and scrolls beneath; nothing is painted behind them
-        h1 = re.sub(r'<style data-floatcss>.*?</style>', '', h1, flags=re.S)
-        if 'header data-float' in h1 and 'data-floatcss' not in h1:
-            h1 = h1.replace('</head>', '<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none }'
+        FL = ('<style data-floatcss>header[data-float] { z-index: 30; pointer-events: none }'
                             ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) { margin-bottom: -56px }'
                             ' header[data-float] > * { pointer-events: auto }'
                             ' header[data-float] + [style*=\"flex-direction: column\"], header[data-float] + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style) { border-top: 56px solid transparent; background-clip: padding-box }'
                             ' :has(> header[data-float]) { timeline-scope: --page } header[data-float] + * { scroll-timeline: --page y }'
                             ' header[data-float]:has(+ [style*=\"flex-direction: column\"], + :not([style*=\"display: flex\"]):not([style*=\"display: grid\"]):not(sc-if):not(style)) [data-bar-title] { animation: bar-title linear both; animation-timeline: --page; animation-range: 0 40px }'
-                            ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style></head>', 1)
+                            ' @keyframes bar-title { to { opacity: 0; transform: translateY(-6px) } }</style>')
+        if 'header data-float' in h1:  # rewritten where it stands, so a rebuild is byte-stable
+            h1 = re.sub(r'<style data-floatcss>.*?</style>', lambda m: FL, h1, count=1, flags=re.S) if 'data-floatcss' in h1 else h1.replace('</head>', FL + '</head>', 1)
+        else:
+            h1 = re.sub(r'<style data-floatcss>.*?</style>', '', h1, flags=re.S)
         # the bar stays while the page scrolls under it (craft-details, the owner's articles 1, 2026-11-17: "never hidden by
         # scrolling"); the hide-on-scroll of 2026-11-15 is stripped from every board
         h1 = re.sub(r'<style data-barhide>.*?</style>', '', h1, flags=re.S)
