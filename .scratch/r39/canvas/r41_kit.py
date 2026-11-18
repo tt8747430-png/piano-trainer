@@ -356,3 +356,6 @@ PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}
 # A phone on its side (852×393): a page's pinned keys scroll with the page, so the page keeps its room (round 66).
 KBPAGE_CSS = '''<style data-kbpage>[data-menuroot] { container-type: size } @container (max-height: 520px) { .kbpage { overflow-y: auto } .kbpage > main { flex: none !important; overflow: visible !important } }</style>'''
 KBPAGE_OPEN = '<div class="kbpage" style="flex: 1; min-height: 0; display: flex; flex-direction: column">'
+
+# the link glyph: one icon for a link, on every board (Groups' Join with a link, a lesson's Share link)
+LINKI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>'

@@ -272,7 +272,7 @@ GR_SHEETS = (NEWNAME('newOn', 'New group', 'Group name', 'ngName', 'typeNG', 'ma
              + ASK('rmOn', '{{rmT}}', 'They will lose access to the folders shared with this group.', 'Remove', 'doRm')
              + ASK('delOn', 'Delete Choir accompanists?', 'Members will lose access to every folder shared with this group. Your own folders are not affected.', 'Delete', 'doDel')
              + ASK('stopOn', 'Stop sharing Choir hymns?', 'Members of Choir accompanists will no longer see this folder. The folder stays in your library.', 'Stop sharing', 'doStop'))
-grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>', 'openJoin'), 'Songs')
+grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', LINKI, 'openJoin'), 'Songs')
                    + NARROW(GLIST) + STRIP() + IF('canNew', NEWFAB('New group', 'openNew', 40)) + f'<div style="height: 30px; flex: none"></div>', 'true')
         + IF('isGroup', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))

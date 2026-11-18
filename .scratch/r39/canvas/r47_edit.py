@@ -42,14 +42,14 @@ __INSJS__    return { ...common(st, set), added, states, editing, reading: !edit
       legendOn: !!st.legend, toggleLegend: () => set({ legend: !st.legend }), exOn: sheet === 'example', openEx: () => set({ sheet: 'example' }), tocOn: sheet === 'toc', openToc: () => set({ sheet: 'toc' }), menuOn: sheet === 'block', openBlock: () => set({ sheet: 'block' }), blkT: T(LS.secs[st.blk ?? 0], 'h'),
       pubOn: sheet === 'publish', openPub: () => set({ sheet: 'publish' }), moreOn: sheet === 'more', openMore: () => set({ sheet: 'more' }),
       isChanged: pub === 'changed', isPublished: pub === 'published', publish: () => set({ pub: 'published', sheet: null, toast: 'Published. Learners will receive it the next time they open the app.' }),
-      unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published' : 'Has changes',
+      unpublish: () => set({ pub: 'changed', sheet: null, toast: 'Unpublished' }), standing: pub === 'published' ? 'Published 8 November' : 'Changes not published',
       pubL: (st.pub ?? 'changed') === 'published' ? 'Published' : 'Publish', publishNow: () => (st.pub ?? 'changed') !== 'published' && set({ pub: 'published', sheet: null, toast: 'Published. Learners receive it the next time they open the app.' }), undoPub: () => set({ pub: 'changed', toast: null }), pubUndoOn: /^Published/.test(st.toast || ''), pmPos: st.pmPos ?? 'right: 16px; top: 112px', toastOn: !!st.toast, toastUndo: /deleted|removed|reset|learned|^Published/i.test(st.toast || ''), copyLink: () => set({ toast: 'Link copied' }), dupBlock: () => set({ sheet: null, toast: 'Section duplicated' }), turns: seg(['Text', 'Steps', 'Note', 'Rule'], st.turn ?? 'Text', (x) => set({ turn: x })), tBpmL: (st.tBpm ?? 96) + ' BPM', tSlower: () => set({ tBpm: Math.max(30, (st.tBpm ?? 96) - 1) }), tFaster: () => set({ tBpm: Math.min(240, (st.tBpm ?? 96) + 1) }), tOn: !!st.tPlay, tOff: !st.tPlay, tPlayL: st.tPlay ? 'Stop metronome' : 'Start metronome', tToggle: () => set({ tPlay: !st.tPlay }), exRoots: rootGrid(st.exRoot ?? 0, (i) => set({ exRoot: i })), exKinds: chipsOf(['Major', 'Natural minor', 'Harmonic minor', 'Melodic minor'], st.exKind ?? 'Major', (l) => set({ exKind: l })), clefs: seg(['Treble', 'Bass'], st.clef ?? 'Treble', (l) => set({ clef: l })), opens: chipsOf(['A lesson', 'A chord', 'A scale', 'A key', 'As written'], st.opens ?? 'A scale', (l) => set({ opens: l })), tipNOn: !!st.tipN, tipNotes: () => set({ tipN: !st.tipN }), looks: [['Plain', '#FEFDFB', '#332921'], ['Soft', '#F6E7C8', '#332921'], ['Bold', '#332921', '#FEFDFB'], ['Paper', '#F4EEE4', '#332921']].map(([n, bg, fg]) => ({ n, bg, fg, on: (st.look ?? 'Soft') === n, ring: (st.look ?? 'Soft') === n ? '0 0 0 2.5px #332921' : '0 0 0 1px #DAD1C8', pick: () => set({ look: n }) })), resetLook: () => set({ look: 'Soft', sheet: null, toast: 'Style reset' }), lookV: st.look ?? 'Soft', toastT: st.toast || '', closeToast: () => set({ toast: null }), undoRemove: () => set(/^Published/.test(st.toast || '') ? { pub: 'changed', toast: null } : / learned$/.test(st.toast || '') ? { learned: false, toast: null } : { toast: null }),
       removeBlock: () => set({ sheet: null, toast: 'Scale deleted' }),
       nextLesson: () => set({ learned: true, toast: 'How major scales work learned' }), learned: !!st.learned, toggleLearned: () => set({ learned: !st.learned, toast: st.learned ? null : 'Marked learned' }),
       learnedBg: st.learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: st.learned ? '#9BC093' : '#DAD1C8', learnedFg: st.learned ? '#2F5A35' : '#332921',
       page: st.page ?? null, onPage: !!st.page, isSet: st.page === 'settings', isPubPage: st.page === 'publish', openSettings: () => set({ page: 'settings', sheet: null }), openPubPage: () => set({ page: 'publish', sheet: null }), closePage: () => set({ page: null, sheet: null }),
       pageT: st.page === 'settings' ? 'Settings' : 'Publish',
-      toolsOn: sheet === 'tools', openTools: () => set({ sheet: 'tools' }), pmOn: sheet === 'pubmenu', openPm: (e) => set({ sheet: 'pubmenu', pmPos: ANCHOR(e, 150) }), verOn: sheet === 'versions', openVer: () => set({ sheet: 'versions' }),
+      pmOn: sheet === 'pubmenu', openPm: (e) => set({ sheet: 'pubmenu', pmPos: ANCHOR(e, 150) }), verOn: sheet === 'versions', openVer: () => set({ sheet: 'versions' }),
       styleOn: sheet === 'style', openStyle: () => set({ sheet: 'style' }), discard: () => set({ sheet: null, toast: 'Changes discarded' }), restore: () => set({ sheet: null, pub: 'published', toast: 'Restored. Learners will receive it the next time they open the app.' }),
       resetOn: sheet === 'reset', askReset: () => set({ sheet: 'reset' }), doReset: () => set({ sheet: null, toast: 'Progress reset' }), delOn: sheet === 'delete', askDel: () => set({ sheet: 'delete' }),
       secAt: String((st.secAt ?? 0) + 1), prevSec: () => goSec(Math.max(0, (st.secAt ?? 0) - 1)), nextSec: () => goSec(Math.min(LS.secs.length - 1, (st.secAt ?? 0) + 1)),
@@ -132,10 +132,12 @@ llm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTO
        f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnLevelLaptop.dc.html", IB("Settings", GEARI, "openSettings") + EDITR())}</sc-if>'
        f'{PREVBAR_L}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 40px 140px; display: flex; flex-direction: column; gap: 32px">{DOC(True)}</main><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(FMT, 32).replace("left: 16px; right: 16px;", "left: 50%; transform: translateX(-50%);")}</sc-if>{TOASTE.replace("bottom: 112px; z-index: 50", "bottom: 32px; left: auto; right: 40px; width: 420px; z-index: 50")}')
 lpops = (POPOVER('insOn', 'Insert', INSBODY, 'right: 300px; top: 72px', 420) + POPOVER('exOn', 'Scale', EXBODY, 'right: 260px; top: 260px', 460) + POPOVER('menuOn', '{{blkT}}', BLOCKBODY, 'left: 600px; top: 180px', 320) + POPOVER('moreOn', 'How major scales work', MOREBODY, 'right: 28px; top: 64px', 320))
-TOOLSI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8L13.5 3h-3ZM12 15l5-7"></path></svg>'
 # canvas 164: Learned says itself (scan-first 3: an icon alone left the learner guessing): a pill, grass once learned
 LEARNEDB = LEARNEDT
-RBAR = IB('Tools', TOOLSI, 'openTools') + IB('Settings', GEARI, 'openSettings') + EDITBTN
+# owner, 2026-11-18: "i dotn like that the settigs and hte tools are united … what is the meaning and value for teh
+# metronome or tuner or otehr tools in the lessons? where the user just learn. remove them": no Tools in a lesson;
+# Share link, an act on the lesson, sits in the bar beside its gear, and Settings holds only settings
+RBAR = IB('Share link', LINKI, 'copyLink') + IB('Settings', GEARI, 'openSettings') + EDITBTN
 PMBTN = IB('Publishing', DOTS, 'openPm')
 PUBGO = TB('{{pubL}}', 'publishNow')
 lph = lph.replace('EDITBTN_PLACEHOLDER', '')
@@ -161,18 +163,18 @@ for nm in ('lph', 'llm'):
     assert '<div role="dialog" aria-label="The colours"' in globals()[nm]
     globals()[nm] = globals()[nm].replace('<sc-if value="{{legendOn}}" hint-placeholder-val="{{false}}"><div role="dialog" aria-label="The colours"', VCH + '<sc-if value="{{legendOn}}" hint-placeholder-val="{{false}}"><div role="dialog" aria-label="The colours"', 1)
 # the pages: Settings and Publish, over the lesson, Back to it
+# owner, 2026-11-18: "i dont like the structure of these settings": the lesson, then Publishing (its state a value,
+# Versions; Publish changes and Discard changes only while there are changes), then the learner's progress, the loss of
+# the whole lesson last and apart; Share link went to the bar
 SETPAGE = (f'<span style="margin: -6px 4px 0; font-size: 15px; color: {SOFT}">How major scales work</span>'
            f'{CAPS("The lesson")}{GROUP(("link", "Place", "Foundations · Chapter 3 · Lesson 7", "LearnLevelLaptop.dc.html"), bg=SHEET)}'
-           f'{CAPS("Share")}{GROUP(("action", "{{pubL}}", "publishNow"), ("link", "Versions", "4", "openVer"), ("action", "Share link", "copyLink"), bg=SHEET)}{GROUP(("action", "Discard changes", "discard", "#B3261E"), bg=SHEET)}'
-           f'{CAPS("Progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete lesson", "askDel", "#B3261E"), bg=SHEET)}')
+           f'{CAPS("Publishing")}{GROUP(("val", "Status", "{{standing}}"), ("link", "Versions", "4", "openVer"), bg=SHEET)}'
+           f'<sc-if value="{{{{isChanged}}}}" hint-placeholder-val="{{{{true}}}}">{GROUP(("action", "Publish changes", "publishNow"), ("action", "Discard changes", "discard", "#B3261E"), bg=SHEET)}</sc-if>'
+           f'{CAPS("Your progress")}{GROUP(("action", "Reset progress", "doReset"), bg=SHEET)}{GROUP(("action", "Delete lesson", "askDel", "#B3261E"), bg=SHEET)}')
 VERBODY = (f''
            + GROUP(*[('raw', f'<div style="min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 16px"><span style="flex: 1; font-size: 16px">Published {d}</span>{t}<button type="button" onClick="{{{{restore}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Restore</button></div>') for d, t in [('8 November 2026', PILL('Newest', HONEY)), ('2 November 2026', ''), ('28 October 2026', ''), ('20 October 2026', '')]], bg=SHEET))
 STYLEBODY = (CAPS('Look') + f'<div role="radiogroup" aria-label="Look" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{looks}}}}" as="o" hint-placeholder-count="4"><button type="button" role="radio" aria-checked="{{{{o.on}}}}" onClick="{{{{o.pick}}}}" style="height: 56px; border: 0; border-radius: 12px; background: {{{{o.bg}}}}; box-shadow: {{{{o.ring}}}}; color: {{{{o.fg}}}}; font: inherit; font-size: 15px; font-weight: 600">{{{{o.n}}}}</button></sc-for></div>'
              + GROUP(('action', 'Reset to default', 'resetLook'), bg=SHEET))
-TOOLSBODY = (f'<div style="display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}"><span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">Metronome</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{tBpmL}}}}</span></span>'
-             f'<button type="button" aria-label="Slower" onClick="{{{{tSlower}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px">−</button><button type="button" aria-label="Faster" onClick="{{{{tFaster}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 20px">+</button><button type="button" aria-label="{{{{tPlayL}}}}" aria-pressed="{{{{tOn}}}}" onClick="{{{{tToggle}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {ACCENT}; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{tOn}}}}" hint-placeholder-val="{{{{false}}}}">{STOP}</sc-if><sc-if value="{{{{tOff}}}}" hint-placeholder-val="{{{{true}}}}">{PLAY}</sc-if></button></div>'
-             + GROUP(('link', 'Tuner', 'Off', 'Tuner.dc.html'), ('link', 'Open Metronome', '', 'Metronome.dc.html'), bg=SHEET)
-             + f'<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">' + ''.join(f'<a href="{h}" style="min-height: 52px; border-radius: 12px; background: {c}; color: {INK}; text-decoration: none; font-size: 15px; font-weight: 600; display: flex; align-items: center; padding: 0 12px">{n}</a>' for n, h, c in [('Chords', 'Chords.dc.html', PEACH), ('Scales and keys', 'Scales.dc.html', SKY), ('Intervals', 'Intervals.dc.html', SAGE), ('Chord finder', 'ChordFinder.dc.html', LILAC)]) + '</div>')
 def ASK(cond, t, b, ok, go):
     return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="alertdialog" aria-label="{t}" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 372px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 8px">'
             f'<span style="font-size: 18px; font-weight: 700">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">{b}</span><div style="display: flex; gap: 8px; margin-top: 8px"><button type="button" onClick="{{{{closeSheet}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Cancel</button>'
@@ -182,7 +184,7 @@ def SPLIT2(page, first, second):
     a, b, c = page.index(first), page.index(second), len(page)
     col = '<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px">'
     return page[:a] + '<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">' + col + page[a:b] + '</div>' + col + page[b:] + '</div></div>'
-SETPAGE_L = SPLIT2(SETPAGE, CAPS('The lesson'), CAPS('Share'))
+SETPAGE_L = SPLIT2(SETPAGE, CAPS('The lesson'), CAPS('Your progress'))
 def PAGEOVER(lap):
     pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     inner_w = 'width: min(1180px, 100%); ' if lap else ''
@@ -193,8 +195,8 @@ def PAGEOVER(lap):
             f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE_L if lap else SETPAGE}</sc-if></div></main></div></sc-if>')
 lph = SHOWSTATES() + lph.replace('<main class="nos"', '<main class="nos" onScroll="{{secScroll}}"') + PAGEOVER(False) + ASKS
 llm = SHOWSTATES() + llm.replace('<main class="nos"', '<main class="nos" onScroll="{{secScroll}}"') + PAGEOVER(True) + ASKS
-lsh = lsh + BSHEET('toolsOn', 'Tools', TOOLSBODY) + BSHEET('verOn', 'Versions of How major scales work', VERBODY) + BSHEET('styleOn', 'Style: Scale', STYLEBODY)
-lpops = lpops + POPOVER('toolsOn', 'Tools', TOOLSBODY, 'right: 140px; top: 64px', 380) + POPOVER('verOn', 'Versions of How major scales work', VERBODY, 'right: 120px; top: 64px', 440) + POPOVER('styleOn', 'Style: Scale', STYLEBODY, 'right: 260px; top: 200px', 420)
+lsh = lsh + BSHEET('verOn', 'Versions of How major scales work', VERBODY) + BSHEET('styleOn', 'Style: Scale', STYLEBODY)
+lpops = lpops + POPOVER('verOn', 'Versions of How major scales work', VERBODY, 'right: 120px; top: 64px', 440) + POPOVER('styleOn', 'Style: Scale', STYLEBODY, 'right: 260px; top: 200px', 420)
 BLOCKBODY2 = GROUP(('link', 'Add below', '', 'openIns'), ('seg', 'Turn into', 'turns'), ('link', 'Edit', '', 'openEx'), ('link', 'Style', '{{lookV}}', 'openStyle'), ('action', 'Duplicate', 'dupBlock'), ('action', 'Delete', 'removeBlock', '#B3261E'), bg=SHEET)
 lsh = lsh.replace(BLOCKBODY, BLOCKBODY2); lpops = lpops.replace(BLOCKBODY, BLOCKBODY2)
 detail('Lesson', 'How major scales work', LESSON_JS, lph, llm, '', lsh, lpops, 'Learn')
