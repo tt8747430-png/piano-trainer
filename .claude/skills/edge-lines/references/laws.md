@@ -284,6 +284,61 @@ landing page is: the welcome, an empty library, a song's page, a lesson's end, E
   14. Nothing floats over a phone screen's content except the bars and its one floating act; help is a row in Settings
       and a ⓘ, never a floating bubble.
 
+## Which component for which job (Uxcel, "Common UI Components Part I", sent 2026-11-18)
+
+The source's sentence for each component, then the instruction that holds on every board. A component used for
+another component's job is a finding.
+
+- **Button.** "Allow users to perform actions with a single click or tap"; "Use action verbs on button labels … so
+  they can act without reading supporting text."
+  1. A button does one act now, and its label is a verb (and its object): Play, Add to library, Next lesson. Never a
+     noun alone ("Settings" is a row or an icon, not a button), never "OK" or "Yes".
+  2. A button needs no line of text under it to be understood; if it does, its label is wrong.
+- **Checkbox.** "Multiple options to be selected … simultaneously"; "a checkmark inside" when on, "empty" when off;
+  "a label beside them … alone … or stacked."
+  3. Several independent picks from one list (Select mode's rows, a filter's options) are checkboxes, the label on
+     the right of the box, the whole row tapping it. Off is an empty ring, on is filled with a check (scan-first 5).
+- **Radio button.** "Only allow one"; "filled with a dot" when chosen; "once an option is selected, it cannot be
+  returned to that state … If the deselected state is important, you'll need to give users an alternative."
+  4. One choice of several that are all shown and exclusive is a radio group (or a segmented control when there are
+     two to four short options); one option is always chosen, the usual one by default. "None" is an option of its
+     own when it is a real choice (Off, None), never a radio that cannot be unticked.
+- **Toggle switch.** "Alternate between two options that cannot coexist … on and off"; "effective for tasks where the
+  response is instantaneous"; "make sure the on and off states … are immediately apparent."
+  5. On/off for a setting that takes effect at once is a switch, its row's label the thing switched ("Count-in"),
+     never a switch that needs a Save; on is filled with the track coloured, off is grey, both readable without colour
+     (the knob's side).
+- **Text input.** "Recognize different types of data … auto-format … switch the mobile keyboard."
+  6. Every field names its kind (`type`/`inputmode`: a tempo is numeric, an email is email, a search is search) and
+     carries a visible label; a value with a known form (BPM, 3/4) formats as typed and accepts loose input (Postel).
+- **Menu.** "Context-sensitive … appear when you need them and disappear when you don't."
+  7. A menu opens from the control the learner touched, holds the acts for that thing only, and closes on a tap
+     outside (ui-and-mockups: a ··· opens a menu at its button). Never a menu of one item; never the screen's main
+     act hidden in a menu.
+- **Form.** "Collect as little information as necessary to complete the user's action."
+  8. A form (New song, New playlist, sign in) asks only what the act needs now; everything else has a default and is
+     changed later in the thing's settings. Its one act is at its foot.
+- **Modal.** "Disable the rest of the elements … while keeping them visible"; "used sparingly, either in response to
+  an action users have taken or to warn them about something important"; "any time a modal is triggered indirectly,
+  it interrupts the flow."
+  9. A modal (a dialog, a sheet that blocks) opens only from the learner's own tap or for a loss that cannot be undone
+     (`ConfirmDialog`); never on arrival, never for news or a prompt to rate, sign in or upgrade.
+- **Card.** "Compact, self-contained information containers that present a snippet of content … like digital index
+  cards"; "may also contain interactive elements … such as a Learn More button."
+  10. As "Cards" below: a card is a thing you open, among siblings; at most one act of its own besides opening it.
+- **Table.** "Rows and columns … each row … a single entry, while columns categorize"; "headers provide labels for
+  columns"; "filters … sorting … search."
+  11. Data compared across several attributes (All songs on a laptop, Explore, the Admin lists) is a table: one row per
+      thing, a header row naming every column, numbers right-aligned in tabular digits, sorting from the header or a
+      sort menu, and search above it.
+- **Header.** "Navigational landmarks … essential context"; "keep the design of your header uniform throughout."
+  12. Every screen's bar is the one bar (`ScreenHeader`, `ScoreBar` on the Player and editor): Back at the left, the
+      page's name, its own acts at the right, the same height and inset on every board (`lines.mjs` flow checks it).
+- **Footer.** "Information that is useful but not necessarily the primary focus … contact information, links to
+  privacy policies or terms of use … closure."
+  13. What a web footer holds (Legal, About, version, Report a problem) lives at the foot of Settings, after its
+      groups, never on a working screen; the phone's tab bar is navigation, not a footer, and holds only the places.
+
 ## Cards: where they belong, and where not
 
 **NN/g, "Cards: UI-Component Definition"** ([Laubheimer 2016](https://www.nngroup.com/articles/cards-component/)).
