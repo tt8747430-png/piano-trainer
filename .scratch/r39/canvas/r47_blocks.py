@@ -66,7 +66,7 @@ P17 = 'margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; outline: 
 
 BLOCKS = {
     'Text': f'<p contenteditable="true" style="{P17}; color: {SOFT}">Write here, or type / for music.</p>',
-    'Steps': f'<ol style="margin: 0; padding-left: 24px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 4px"><li contenteditable="true" style="outline: none">Start on any key.</li><li contenteditable="true" style="outline: none; color: {SOFT}">The next step</li></ol>',
+    'Steps': f'<style data-steps>.steps {{ list-style: none; padding: 0 !important; counter-reset: st }} .steps li {{ counter-increment: st; display: grid; grid-template-columns: 24px minmax(0, 1fr) }} .steps li::before {{ content: counter(st) "."; font-variant-numeric: tabular-nums }}</style><ol class="steps" style="margin: 0; padding-left: 24px; font-size: 17px; line-height: 1.55; display: flex; flex-direction: column; gap: 4px"><li contenteditable="true" style="outline: none">Start on any key.</li><li contenteditable="true" style="outline: none; color: {SOFT}">The next step</li></ol>',
     'Note': f'<aside style="padding: 12px 16px; border-radius: 12px; background: {FILL}; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">Note</span><span contenteditable="true" style="font-size: 16px; line-height: 1.45; outline: none">A sharp raises a note by a half step; a flat lowers it.</span></aside>',
     'Rule': f'<hr style="margin: 8px 0; border: 0; height: 1px; background: {LINE}">',
     'Chords': BHEAD('C · F · G') + '<div style="display: flex; gap: 8px">' + TILE('', 'C', 'C E G') + TILE('', 'F', 'F A C') + TILE('', 'G', 'G B D') + '</div>',
