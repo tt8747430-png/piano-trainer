@@ -403,7 +403,11 @@ async function analyse(page, scr, phone) {
     if (hd.closest('[role=dialog]') && !prev) continue
     // An eyebrow (a small line just above, smaller than the heading) is part of the heading, not a group before it.
     if (prev && vis(prev) && parseFloat(getComputedStyle(prev).fontSize) < parseFloat(getComputedStyle(hd).fontSize) * 0.8 && R(prev).height < 24) continue
-    if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${hd.textContent.trim().slice(0, 24)}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
+    const htxt = hd.textContent.trim().slice(0, 24)
+    if (above !== null && above >= 0 && below >= 0 && below >= above && above < 64) problems.push(`heading “${htxt}”: ${below}px to what it heads, ${above}px to what is above: it reads as the end of the last group`)
+    // Kubovy & Wagemans 1995: under 1.5× the grouping is weak; past about 4× the extra space only cuts the section off (laws.md, Spacing).
+    else if (above !== null && below > 0 && above < 1.5 * below) notes.push(`heading “${htxt}”: ${above}px above, ${below}px below, only ${(above / below).toFixed(2)}×: the space above should be 1.5–3× the space below`)
+    else if (above !== null && below > 0 && above >= 56 && above > 4 * below) notes.push(`heading “${htxt}”: ${above}px above, ${below}px below, ${(above / below).toFixed(1)}×: past about 3× the space cuts the section off; bring it to 2–3×`)
   }
   // ── Edges that cross: boxes side by side whose tops and bottoms both differ, one starting inside its neighbour's
   // height (owner, 2026-11-17: "the method books box crosses this lines that define where a box finishes").

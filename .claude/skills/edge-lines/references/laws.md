@@ -21,6 +21,65 @@ aren't available." iTunes' Update button at the window's foot, in "a separate co
 - Here: Play sits on the music it plays; a page's acts sit where the eye already is. A coloured strip under content
   reads as outside it.
 
+### Spacing: how close groups things, how far separates them, how far is too far (researched 2026-11-18)
+
+The owner: "how much spacing should they have to be related and how much to differentiate from other, but not too
+much spacing? … take more specific and precise instructions". The sources, with their numbers:
+
+- **Kubovy & Wagemans 1995, "Grouping by proximity and multistability in dot lattices"** (Psychological Science
+  6(4):225–234). Viewers saw dot lattices for 300ms and said which way the dots grouped. The pull of a gap falls off
+  exponentially with its length: f(v) = e^(−α(v/a − 1)), where a is the shortest gap and v another. Across seven
+  observers α ran 6.72–11.57 (α ≈ 8 in their worked figure). The ratios they tested were 1.0, 1.26, 1.59 and 2.0,
+  steps of about 1.26 (Weber's law: the eye judges distance by ratio, not by pixels). With α ≈ 8, how strongly a
+  gap r times the shortest one still pulls, against the shortest:
+  | r (wider gap ÷ narrower) | 1.1 | 1.25 | 1.5 | 2 | 3 |
+  | --- | --- | --- | --- | --- | --- |
+  | pull of the wider gap | 0.45 | 0.14 | 0.02 | 0.0003 | ≈0 |
+  So under about 1.25 the grouping is ambiguous (people split); from 1.5 it is near-certain; at 2 it is certain.
+  Past 2–3× the eye gains nothing more: the extra space separates nothing further, it only empties the page.
+- **Jakob Nielsen, "Gestalt Principles for Visual UI Design" (2026):** "The practical lever is the ratio of space,
+  not its absolute amount: a form field 'belongs' to its label when the gap between them is visibly smaller than the
+  gap to the next field. When labels sit equidistant… roughly half of them guess wrong." And the other way: "Squeeze
+  everything together and you trigger a grouping collapse." His audit: "Is the gap inside each group unmistakably
+  smaller than the gap between groups?"; "Do the strongest cues (spacing, border, color, alignment, and motion) agree
+  about the same structure?"; "Does the hierarchy survive mobile reflow, text enlargement…?"; "Specify internal vs.
+  external spacing… in the component library."
+- **Refactoring UI (Wathan & Schoger), "Establish a spacing and sizing system":** "make sure no two values in your scale
+  are ever closer than about 25%" (their example scale 4, 8, 12, 16, 24, 32, 48, 64, 96, 128). On grouping: "Avoid
+  ambiguous spacing… if the margin below a form label is the same as the margin below its input, the form group won't
+  feel obviously connected… always ensure there's more space around the group than within it." And: "Start with too
+  much white space, then remove it until you're happy" — the end point is the least space that still groups.
+- **Atlassian Design System, spacing tokens:** 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80. Small (0–8) "for small
+  and compact pieces of UI"; medium (12–24) "for larger and less dense pieces"; large (32–80) "for the largest pieces of
+  UI and for layout elements". "Group similar items together using similar spacing."
+- **Uxcel:** "External spacing ≥ internal spacing. Keep outer ≥ inner." Micro whitespace inside a group, macro between
+  sections.
+- **Material 3, list item tokens** (material-web `md.comp.list.list-item`): one line 56, two lines 72, three lines 88
+  high; 16 leading and trailing; 10 above and below the text. Rows touch (0 apart) and are told apart by their
+  padding and a divider, so a list is one group by construction.
+
+**The rules, with numbers, for every board and port:**
+
+1. **Between ÷ within ≥ 1.5, aim for 2.** The gap that separates two groups is at least 1.5 times the gap inside
+   them (8 inside → 12 at the very least, 16 best; 12 → 24; 16 → 32). Under 1.25 the grouping is a coin toss.
+2. **No more than about 3×, past the smallest step that works.** Once separation is certain (2×), more space says
+   nothing more: 8 inside → sections 16–24 apart, not 48; 16 inside → 32, at most 48. A gap over 4× its neighbours'
+   (and 56 or more) cuts a thing off from what it belongs to (the owner's "too much spacing").
+3. **A heading belongs to what it heads:** the space above it is at least 1.5×, best 2–3×, the space below it
+   (section label 8 above its rows → 16–24 above the label).
+4. **A box's edge outranks its rows:** a card's inset is at least its row gap (outer ≥ inner), and its distance to the
+   next box at least its inset.
+5. **Two neighbouring steps are never both used for one job:** 12 and 16 side by side read as a mistake, not as two
+   levels (Refactoring UI's 25%: 12 → 16 is 33%, enough between levels; 14 → 16 is not). Use the scale's steps:
+   4, 8, 12, 16, 24, 32, 48, 64.
+6. **Levels:** inside a control 4–8; between rows of one group 0–12; between groups and sections 16–32 (phone),
+   24–48 (laptop); between whole regions of a laptop page 48–64. Each level about 2× the one below it.
+7. **Agree with the other cues:** when a hairline or a box already groups, the spacing must say the same thing, never
+   the opposite (Nielsen).
+
+`lines.mjs` holds rule 3 (PROBLEM at under 1×, NOTE under 1.5× and over 4×) and rule 4 (PROBLEM when rows sit as far
+apart as the edge).
+
 **Common region** ([NN/g, Harley 2020](https://www.nngroup.com/articles/common-region/); Palmer 1992;
 [Laws of UX](https://lawsofux.com/law-of-common-region/)). "Items within a boundary are perceived as a group and
 assumed to share some common characteristic or functionality." It is strong: it "can overpower other grouping
