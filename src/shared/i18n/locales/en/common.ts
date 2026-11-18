@@ -16,12 +16,11 @@ export const common = {
     collapse: 'Collapse the sidebar',
     open: 'Open the sidebar',
     recents: 'Recents',
-    guest: 'Guest',
+    notSignedIn: 'Not signed in',
     // Focus (the canvas's laptop window): the sidebar and side panels hidden, Esc or Exit focus to leave.
     focus: 'Focus',
     focusTip: 'Hide the sidebar and panels',
     exitFocus: 'Exit focus',
-    help: 'Help',
     signIn: 'Sign in',
   },
   errors: {

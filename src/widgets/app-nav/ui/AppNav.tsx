@@ -136,7 +136,7 @@ const SEARCH_KEY: Combo = { code: 'KeyK', mod: true }
 const SETTINGS_KEY: Combo = { code: 'Comma', mod: true }
 
 const PLACE_LINK =
-  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-[1.625rem] text-xs font-medium text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:h-10 landscape-phone:flex-row landscape-phone:gap-1.5 landscape-phone:rounded-pill lg:rounded-control lg:font-semibold lg:aria-[current=page]:font-semibold focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
+  'flex h-13 flex-col items-center justify-center gap-[3px] rounded-[1.625rem] text-xs font-medium text-muted-foreground choice aria-[current=page]:font-bold landscape-phone:h-10 landscape-phone:flex-row landscape-phone:gap-1.5 landscape-phone:rounded-pill lg:rounded-menu-item lg:font-medium lg:aria-[current=page]:font-semibold focus-visible:-outline-offset-3 lg:h-11 lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-base lg:group-data-[sidebar=collapsed]/nav:justify-center lg:group-data-[sidebar=collapsed]/nav:px-0'
 
 /**
  * A place in the navigation: its icon over its name in the phone's bar, beside it in the sidebar,
@@ -262,29 +262,32 @@ export function AppNav() {
       <div className="hidden h-20 shrink-0 items-center gap-0.5 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
         <p
           aria-hidden
-          className="min-w-0 flex-1 truncate pl-2 font-display text-lg leading-tight font-semibold group-data-[sidebar=collapsed]/nav:hidden"
+          className="min-w-0 flex-1 truncate pl-3 font-display text-2xl leading-tight font-normal group-data-[sidebar=collapsed]/nav:hidden"
         >
           {t('appName')}
         </p>
-        <button
-          type="button"
-          aria-label={toggleLabel}
-          title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
-          aria-expanded={!collapsed}
-          onClick={toggle}
-          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
-        >
-          <ToggleIcon aria-hidden className="size-5" />
-        </button>
-        <button
-          type="button"
-          aria-label={t('nav.focus')}
-          title={t('nav.focusTip')}
-          onClick={() => setFocusMode(true)}
-          className="grid size-10 shrink-0 place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground"
-        >
-          <Maximize aria-hidden className="size-5" />
-        </button>
+        {/* The sidebar's two buttons in one glass capsule (lapwin.py's head). */}
+        <div className="flex shrink-0 rounded-pill glass lg:group-data-[sidebar=collapsed]/nav:flex-col">
+          <button
+            type="button"
+            aria-label={toggleLabel}
+            title={keyHint(toggleLabel, SIDEBAR_KEY, mac)}
+            aria-expanded={!collapsed}
+            onClick={toggle}
+            className="grid size-11 shrink-0 place-items-center rounded-pill text-foreground transition-colors duration-200 ease-out hover:bg-muted"
+          >
+            <ToggleIcon aria-hidden className="size-5" />
+          </button>
+          <button
+            type="button"
+            aria-label={t('nav.focus')}
+            title={t('nav.focusTip')}
+            onClick={() => setFocusMode(true)}
+            className="grid size-11 shrink-0 place-items-center rounded-pill text-foreground transition-colors duration-200 ease-out hover:bg-muted"
+          >
+            <Maximize aria-hidden className="size-5" />
+          </button>
+        </div>
       </div>
       {sidebarShown ? (
         <div className="flex px-3 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
