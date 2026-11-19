@@ -1232,6 +1232,7 @@ are reference only, but progressions are facts.
 - **Show what the device has:** Computer keys only on a computer.
 
 ## Navigation and bars
+- **Search as its board (loop, the board-to-app port, 2026-11-19):** a result or suggestion row is the board's 60 (SROW9, SUG): its title and line at normal leading where 1.5 had made it 63, its hairline drawn inside the row (an inset shadow, not a border adding 1); the Archived badge 24 tall. No results is the one empty state (`Said`): the search mark on its honey tile, the title, the line, and Clear search as the board's quiet 48 pill (`Said`'s `quiet`), where a 44 chip in light type stood with no picture.
 - **The boards' status bar is the phone's 62 (loop, the board-to-app port, 2026-11-19):** measuring the Metronome, every phone board's bar stood 8 above the app's; the boards drew a 54 status bar lifted from an old template, where the owner's iPhone 17 Pro, and the app's safe-area inset, is 62 (testing.md). The kit's status bar is now 62 on every phone board, the bar centred at 90 as in the app.
 - **A phone sheet as the boards' BSHEET (loop, the board-to-app port, 2026-11-19):** a sheet rose to the screen's height less 96, so Search's tall sheet covered half the bar's Learn; the board's sheet is at most 86% of the screen (a tall one exactly that), its top at 122 on the 874 phone with the bar in sight. Its head sat 6 high: the title is now centred 44 under the sheet's top and the body starts at 79, as BSHEET's 6 + handle + 16 + 36-row (`Sheet`).
 
