@@ -26,7 +26,7 @@ function ShelfSection({ shelf, current }: { shelf: Shelf; current: string | unde
       <h2 id={id} className="px-4 font-sans text-sm font-semibold text-muted-foreground lg:px-0">
         {t(`shelves.${shelf}`)}
       </h2>
-      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(15rem,calc((100%-2rem)/3)),1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden">
+      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(15rem,calc((100%-2rem)/3)),1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden">
         {courses.map((course) => (
           <li key={course.id}>
             <CourseCard course={course} current={course.id === current} />

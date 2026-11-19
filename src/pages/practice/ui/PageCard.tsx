@@ -23,7 +23,7 @@ export function PageCard({
     render: link,
     props: {
       className:
-        'flex min-h-44 flex-col gap-2.5 card rounded-[16px] p-3.5 transition-colors duration-200 ease-out hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'flex min-h-44 flex-col gap-2.5 card rounded-[16px] p-3.5 transition-colors duration-200 ease-out hover:ring-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       children: (
         <>
           <span

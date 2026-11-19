@@ -68,7 +68,7 @@ export function LevelRows() {
       <ul
         className={cn(
           'flex flex-col rows-hairline overflow-hidden card',
-          'lg:grid lg:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden',
+          'lg:grid lg:grid-cols-[repeat(auto-fit,minmax(13.75rem,1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden',
         )}
       >
         {allJourneys().map((journey, i) => (

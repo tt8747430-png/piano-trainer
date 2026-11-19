@@ -91,7 +91,8 @@ export function TunerReadout({
   const octave = pitch ? Math.floor(pitch.key / 12) - 1 : 4
   if (heard.kind === 'denied')
     return (
-      <div role="alert" data-fill className="flex w-full flex-1 flex-col justify-center">
+      // 40 around it on a laptop, as the board's (the kit's empty state stands 56).
+      <div role="alert" data-fill className="flex w-full flex-1 flex-col justify-center lg:-my-4">
         <Said
           icon={MicOff}
           title={t('tuner.noMicrophone')}

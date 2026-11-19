@@ -439,7 +439,7 @@
   }
 }
 @utility card {
-  @apply rounded-card border border-border bg-card;
+  @apply rounded-card bg-card ring-1 ring-border;
 }
 
 /*

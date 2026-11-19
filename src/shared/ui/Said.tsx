@@ -32,7 +32,7 @@ export function Said({
         <Icon aria-hidden className="size-6.5" />
       </span>
       {/* A long query breaks rather than run off the screen. */}
-      <p role="status" className="text-lg font-bold text-balance wrap-break-word">
+      <p role="status" className="text-[1.125rem]/[normal] font-bold text-balance wrap-break-word">
         {title}
       </p>
       {description ? (
@@ -43,7 +43,7 @@ export function Said({
       {action ? (
         <div
           className={cn(
-            'mt-1 flex flex-wrap justify-center gap-2',
+            'mt-2 flex flex-wrap justify-center gap-3',
             primary
               ? '*:h-12.5 *:rounded-pill *:border-0 *:bg-primary *:px-5 *:font-bold *:text-primary-foreground *:hover:brightness-95'
               : quiet

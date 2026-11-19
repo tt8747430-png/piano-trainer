@@ -109,7 +109,7 @@ export function OwnItems() {
       className="min-w-0"
       action={<SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />}
     >
-      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden">
+      <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden">
         {rows.map((row) => (
           <li key={row.key}>
             <OwnLink link={row.link}>

@@ -111,7 +111,9 @@ export function ToolPage({
           className={cn(
             column
               ? cn(
-                  'mx-auto flex w-full flex-1 flex-col pt-2 pb-8 lg:gap-6',
+                  'mx-auto flex w-full flex-1 flex-col pt-2 lg:gap-6',
+                  // With nothing floating (the Tuner), its rows end 40 above the screen's foot, as its board.
+                  play ? 'pb-8' : '-mb-4.5 lg:mb-0 lg:pb-8',
                   // A page that starts at its left edge (the Chord finder) keeps its parts 16 apart, as its board.
                   start ? 'gap-4' : 'gap-5',
                   COLUMNS[column],
@@ -127,8 +129,9 @@ export function ToolPage({
               start
                 ? 'flex min-w-0 flex-col gap-4'
                 : column
-                  ? // A state that fills (the Tuner's No microphone) takes the column's height, its rows at the foot.
-                    'flex min-w-0 flex-col items-center gap-4 text-center has-data-fill:flex-1'
+                  ? // A state that fills (the Tuner's No microphone) takes a phone's height, its rows at the foot;
+                    // on a laptop it stands in the column over its rows.
+                    'flex min-w-0 flex-col items-center gap-4 text-center max-lg:has-data-fill:flex-1'
                   : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
             }
           >

@@ -596,7 +596,7 @@ export function OwnLibrary() {
               <span className="min-w-0 flex-[1.2]">{t('own.columnProgress')}</span>
               <span className="w-11 shrink-0" />
             </div>
-            <ul className="flex flex-col rows-hairline overflow-hidden card ps-2 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:ps-0">
+            <ul className="flex flex-col rows-hairline overflow-hidden card ps-2 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:ps-0">
               {shownCourses.map((course) => {
                 const open = (opened.has(course.id) || needle !== '') && kind !== 'courses'
                 const inside = lessonsOf(course).filter(

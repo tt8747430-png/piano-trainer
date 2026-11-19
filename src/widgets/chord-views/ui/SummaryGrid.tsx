@@ -75,7 +75,7 @@ export function SummaryGrid({
                   onClick={() => play(chord.symbol)}
                   className={cn(
                     'card flex w-full flex-col items-center gap-2 p-3 transition-colors duration-200 ease-out hover:bg-muted',
-                    isNow && 'border-foreground',
+                    isNow && 'ring-foreground',
                   )}
                 >
                   {diagram ? <ChordDiagram chord={diagram} /> : null}
@@ -133,7 +133,7 @@ export function SummaryGrid({
                   onClick={() => onGo(card.chord)}
                   className={cn(
                     'card flex w-full flex-col items-center gap-2 p-3 transition-colors duration-200 ease-out hover:bg-muted',
-                    isNow && 'border-foreground',
+                    isNow && 'ring-foreground',
                   )}
                 >
                   <span className="self-start text-xs text-muted-foreground tabular-nums">
