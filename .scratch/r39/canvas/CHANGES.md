@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the Practice libraries' laptop rows: a built-in row's ··· (Favourite, Rename…, Move to…, Hide with Undo) as the app's, hidden in Edit with its room kept; the acts one 92 box so the columns stand under the header; the shelf's grip over the rows' · Progressions,ProgressionsLaptop,Accompaniment,AccompanimentLaptop,FingerTechnique,FingerTechniqueLaptop,JazzVocabulary,JazzVocabularyLaptop · pending
 
 
 ## Changes

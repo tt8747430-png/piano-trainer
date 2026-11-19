@@ -154,10 +154,10 @@ export const songs = {
     folderArchived: '“{{name}}” archived with its songs',
     restored: '“{{title}}” restored to the library',
     restoredMany: 'Restored to the library: {{count}}',
-    favouritedOne: '“{{title}}” added to favourites',
-    unfavouritedOne: '“{{title}}” removed from favourites',
-    favourited: 'Added to favourites: {{count}}',
-    unfavourited: 'Removed from favourites: {{count}}',
+    favouritedOne: '“{{title}}” added to Favourites',
+    unfavouritedOne: '“{{title}}” removed from Favourites',
+    favourited: 'Added to Favourites: {{count}}',
+    unfavourited: 'Removed from Favourites: {{count}}',
   },
   // Move to… (Mindscape's DestinationSheet).
   move: {

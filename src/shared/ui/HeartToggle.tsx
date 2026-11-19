@@ -13,7 +13,7 @@ export function HeartToggle({
   className,
 }: {
   pressed: boolean
-  /** What a tap does: Favourite, or Remove from favourites. */
+  /** What a tap does: Favourite, or Remove from Favourites. */
   label: string
   onToggle: () => void
   className?: string

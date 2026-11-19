@@ -189,7 +189,7 @@ describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
     await opened()
     const first = within(shelf('Bobrova')).getAllByRole('button', { name: /^More for / })[0]
     await user.click(first ?? document.body)
-    await user.click(await screen.findByRole('menuitem', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Add to Favourites' }))
     expect(patternsStore.getState().favourites).toHaveLength(1)
   })
 

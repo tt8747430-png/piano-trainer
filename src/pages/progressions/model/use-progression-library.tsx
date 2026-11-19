@@ -19,9 +19,6 @@ import { numeralsLine, parseNumerals } from '@/shared/lib/music'
 import type { RowAction } from '@/shared/ui'
 import { MINE, type LibraryGroup, type LibraryItem } from '@/widgets/practice-library'
 
-/** Numerals as a row reads them, spaced: "I – V – vi – IV". */
-const spaced = (line: string): string => line.split('–').join(' – ')
-
 /**
  * The Progressions library's styles and rows (canvas, Progressions): each style of the library a
  * place, each progression its chords as columns in their roles' paints, its name over its numerals (in its major
@@ -55,7 +52,7 @@ export function useProgressionLibrary(): {
       return {
         id: progression.id,
         name: localText(progression.name, locale),
-        detail: spaced(numerals),
+        detail: numerals,
         third: t(minor ? 'music:key.minorMode' : 'music:key.majorMode'),
         group: style,
         words: [
@@ -78,7 +75,7 @@ export function useProgressionLibrary(): {
     return {
       id: progression.id,
       name: progression.name,
-      detail: spaced(numeralsLine(parsed)),
+      detail: numeralsLine(parsed),
       words: [numeralsLine(parsed)],
       group: MINE,
       picture: { chords: parsed, minor: false },

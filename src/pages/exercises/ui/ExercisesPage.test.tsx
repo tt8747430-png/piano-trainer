@@ -44,7 +44,7 @@ describe('Practice → Exercises, the library on a phone (R30-4)', () => {
     const { practiceLibraryStore } = await renderApp('/practice/exercises')
     expect(screen.queryByRole('region', { name: 'Favourites' })).not.toBeInTheDocument()
     await user.click(await screen.findByRole('button', { name: 'More for Hanon' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Add to favourites' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Add to Favourites' }))
     const favourites = await screen.findByRole('region', { name: 'Favourites' })
     expect(within(favourites).getByRole('link', { name: /^Hanon / })).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 2 })[0]).toHaveTextContent('Favourites')

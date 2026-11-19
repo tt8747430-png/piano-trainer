@@ -281,7 +281,7 @@ export function useLibraryPage(
       toggleAll: () =>
         setChosen((was) => (rows.every((key) => was.has(key)) ? new Set() : new Set(rows))),
       exit,
-      /** Favourite for every song chosen; where all already are, Remove from favourites. */
+      /** Favourite for every song chosen; where all already are, Remove from Favourites. */
       allFavourite: chosenSongs.length > 0 && chosenSongs.every((id) => favourites.includes(id)),
       favourite: () => {
         acts.favourite(chosenSongs, !chosenSongs.every((id) => favourites.includes(id)))

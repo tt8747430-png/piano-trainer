@@ -21,15 +21,15 @@ export interface TableColumns {
 }
 
 /**
- * The board's row: 12 in, the 40 picture, 16 to the name, its three cells 16 apart, 16 to the 44
- * heart; what is left (the width less these 160) is shared by `shares`. A column runs from its
+ * The board's row: 12 in, the 40 picture, 16 to the name, its three cells 16 apart, 16 to its 92
+ * acts (the ♡ and its More); what is left (the width less these 208) is shared by `shares`. A column runs from its
  * cell's 12 padding to the next one's, so the words stand where the board's do. (A table's
  * columns take no `calc()` of a percentage, so the widths are worked out from the table's own.)
  */
 function widths(shares: TableColumns['shares'], width: number) {
   const total = shares[0] + shares[1] + shares[2]
-  const part = (share: number) => ((width - 160) * share) / total
-  return width > 0 ? { name: 72 + part(shares[0]), third: part(shares[2]) - 20 } : undefined
+  const part = (share: number) => ((width - 208) * share) / total
+  return width > 0 ? { name: 72 + part(shares[0]), third: 28 + part(shares[2]) } : undefined
 }
 
 /** A row's cell: 12 a side, its row 56 tall (the board's). */

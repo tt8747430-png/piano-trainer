@@ -708,7 +708,7 @@ export const practice = {
       exercises: {
         search: 'Search exercises',
         noMatch: 'No exercises match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on an exercise, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on an exercise, then Add to Favourites.',
         all: 'All exercises',
         mineEmpty: 'Nothing of your own here yet.',
         show_one: 'Show {{count}} exercise',
@@ -717,7 +717,7 @@ export const practice = {
       accompaniment: {
         search: 'Search accompaniment',
         noMatch: 'No patterns match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on a pattern, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on a pattern, then Add to Favourites.',
         all: 'All accompaniment',
         mineEmpty: 'Patterns you make are kept here.',
         show_one: 'Show {{count}} pattern',
@@ -726,7 +726,7 @@ export const practice = {
       progressions: {
         search: 'Search progressions',
         noMatch: 'No progressions match “{{query}}”.',
-        favouritesHint: 'Tap ⋯ on a progression, then Add to favourites.',
+        favouritesHint: 'Tap ⋯ on a progression, then Add to Favourites.',
         all: 'All progressions',
         mineEmpty: 'Progressions you keep are here.',
         show_one: 'Show {{count}} progression',

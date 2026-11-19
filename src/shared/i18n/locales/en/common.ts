@@ -45,8 +45,8 @@ export const common = {
   // A library's chrome (Songs', Practice's; ADR 0106): favourites, the search's sort, the filters.
   library: {
     favourites: 'Favourites',
-    favourite: 'Add to favourites',
-    unfavourite: 'Remove from favourites',
+    favourite: 'Add to Favourites',
+    unfavourite: 'Remove from Favourites',
     moreOf: 'More for {{name}}',
     sort: 'Sort',
     clearFilters: 'Clear filters',
