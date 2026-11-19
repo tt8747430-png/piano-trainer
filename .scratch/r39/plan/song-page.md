@@ -60,14 +60,4 @@ credits opens as a dialog.
   A musician numbers the pickup 0 and the first full bar 1: one pure helper from `shared/lib/arrangement`
   (the layout's `pickup` ticks) turns a bar's index into its printed number, used everywhere a number prints,
   the URL's loop param included. Romashki (`gorshkov/romashki.ts`) has a pickup too.
-- **The takes are a page on the boards, a sheet in the app.** The Takes boards (`r59_takes.py`) draw a page:
-  on a phone Back to the editor, "Takes", Select at the right, the rows 80 tall (a 44 Play circle, the name,
-  "length · tempo", ···), Review your recording a page of it with Back to Takes; on a laptop the shell's page
-  (the sidebar, the 88 head), the takes in a row of cards and the picked take's review under them, inline.
-  The app's `TakesSheet` is a bottom sheet over the editor (Select at the left, Done at the right, rows 64).
-  The review writes into the editor's live draft (`RecordReview` reads the caret's bar, the key, the staves;
-  `use-editor-takes` dispatches `take` into the editor store), so the page cannot leave the editor: it is a
-  child route of `editRoute`, `/edit/$pieceId/takes` (and `?review=take-n`), drawn over the mounted editor,
-  the editor's `takes` URL flag and the sheet gone, `TakePage`'s links and `parents.ts` pointed at it. The
-  laptop's shell around it (the sidebar) is the one part a full-screen route cannot draw: the board's laptop
-  Takes takes the editor's frame instead, its bar the 56 with Back.
+- **The takes, ported (2026-11-19):** a page over the editor, held by the URL's `takes` (a review writes into the live draft, so it stays inside the editor): on a phone Back, Takes, Select, the rows 64, Review your recording a page of it; on a laptop the takes a row of three cards, the picked one filled, its review under them on the title's edge. Left: the laptop board draws it in the shell (the sidebar, the 88 head), where the full-screen page has neither; the board takes the editor's frame when the editor's laptop boards are next ported.

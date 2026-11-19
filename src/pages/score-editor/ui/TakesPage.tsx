@@ -1,5 +1,6 @@
 import { Download, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { selectRoomLeft, selectTake, selectTakesOf, useTakes, type TakeId } from '@/entities/take'
@@ -33,10 +34,17 @@ export function TakesPage() {
     page.kind === 'write' ? selectTake(state, page.id) : undefined,
   )
   const [picked, setPicked] = useState<ReadonlySet<TakeId> | null>(null)
+  // On a laptop the takes are a row of cards and the one picked is reviewed under them (the
+  // TakesLaptop board): a take just kept, else the one last picked, else the newest.
+  const laptop = useMediaQuery('(min-width: 64rem)')
+  const [pickedId, setPickedId] = useState<TakeId | null>(null)
+  const reviewed = laptop
+    ? (writing ?? list.find((take) => take.id === pickedId) ?? list[0])
+    : undefined
   // A take deleted meanwhile is no longer chosen.
   const chosen = picked ? list.filter((take) => picked.has(take.id)) : []
   const acting = chosen.length > 0 ? chosen : list
-  const selecting = picked !== null && !writing && list.length > 0
+  const selecting = picked !== null && (!writing || laptop) && list.length > 0
   const choose = (id: TakeId) =>
     setPicked((now) => {
       const next = new Set(now)
@@ -58,13 +66,14 @@ export function TakesPage() {
       },
     })
   }
-  const title = writing
-    ? t('review.title')
-    : selecting
-      ? chosen.length > 0
-        ? t('recorder.selected', { count: chosen.length })
-        : t('recorder.selectTitle')
-      : t('recorder.title')
+  const title =
+    writing && !laptop
+      ? t('review.title')
+      : selecting
+        ? chosen.length > 0
+          ? t('recorder.selected', { count: chosen.length })
+          : t('recorder.selectTitle')
+        : t('recorder.title')
   if (!takes.open) return null
   const close = () => {
     setPicked(null)
@@ -80,24 +89,43 @@ export function TakesPage() {
       <div className="flex flex-col gap-2 px-gutter-safe pt-safe pb-safe lg:gap-6 lg:pt-1.5 lg:[--gutter:--spacing(6)]">
         <ScreenHeader
           title={title}
-          back={<BackButton onClick={writing ? () => takes.show(TAKES_PAGE) : close} />}
+          back={<BackButton onClick={writing && !laptop ? () => takes.show(TAKES_PAGE) : close} />}
           tools={
-            !writing && list.length > 0 ? (
+            (!writing || laptop) && list.length > 0 ? (
               <Button variant="bar" onClick={() => setPicked(selecting ? null : new Set())}>
                 {t(selecting ? 'recorder.cancel' : 'recorder.select')}
               </Button>
             ) : undefined
           }
         />
-        {writing ? (
+        {writing && !laptop ? (
           <RecordReview take={writing} />
         ) : (
-          <div className="flex flex-col gap-4">
+          // On a laptop the column stands on the title's edge, after Back (the board's 96 in, 40 out).
+          <div className="flex flex-col gap-4 lg:ps-18 lg:pe-4">
             {page.kind === 'takes' && page.nothingPlayed ? (
               <p role="status">{t('recorder.nothing')}</p>
             ) : null}
             {room === 0 ? <p>{t('recorder.full')}</p> : null}
-            <TakeList list={list} picked={selecting ? picked : null} onChoose={choose} />
+            <TakeList
+              list={list}
+              picked={selecting ? picked : null}
+              onChoose={choose}
+              {...(reviewed
+                ? {
+                    current: reviewed.id,
+                    onPick: (id: TakeId) => {
+                      setPickedId(id)
+                      if (writing) takes.show(TAKES_PAGE)
+                    },
+                  }
+                : {})}
+            />
+            {reviewed && !selecting ? (
+              <section aria-label={t('review.title')} className="mt-2 flex flex-col gap-4">
+                <RecordReview key={reviewed.id} take={reviewed} />
+              </section>
+            ) : null}
             {selecting ? (
               <SelectDock label={title}>
                 <SelectAct

@@ -17,6 +17,8 @@ const buttonVariants = cva(
           'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
         destructive:
           'border-destructive bg-card text-destructive hover:bg-destructive/10 focus-visible:outline-destructive',
+        // The boards' quiet BTN: the act beside the honey one in a pair (Discard · Save to score), on the fill.
+        quiet: 'bg-muted text-foreground hover:brightness-97',
         // A second action beside the honey one (Arpeggio, Hear these notes): paper, drawn in line.
         soft: 'border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
         surface:

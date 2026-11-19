@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
 import { ActionMenu, PlayButton, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { cn } from '@/shared/lib/cn'
 import { SelectCheck } from '@/widgets/song-library'
 import { useScoreEditorContext } from '../model/editor-context'
 import { useTakeTitle } from '../model/use-take-title'
@@ -22,6 +23,8 @@ export function TakeRow({
   onPlay,
   chosen,
   onChoose,
+  current,
+  onPick,
 }: {
   take: Take
   playing: boolean
@@ -29,6 +32,10 @@ export function TakeRow({
   /** Whether it is chosen while Select is on; undefined while it is off. */
   chosen?: boolean
   onChoose: () => void
+  /** On a laptop the take reviewed under the cards (the TakesLaptop board's filled card). */
+  current?: boolean
+  /** On a laptop its name picks the take to review, in place of opening its page. */
+  onPick?: () => void
 }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
@@ -54,25 +61,47 @@ export function TakeRow({
       </li>
     )
   return (
-    <li aria-labelledby={name} className="flex min-h-16 items-center gap-3 py-2 pr-1 pl-3">
+    <li
+      aria-labelledby={name}
+      className={cn(
+        'flex min-h-16 items-center gap-3 py-2 pr-1 pl-3',
+        onPick && 'card',
+        current && 'bg-muted',
+      )}
+    >
       <PlayButton
         label={t('recorder.play')}
         playing={playing}
         onClick={onPlay}
-        className="border-0 bg-muted hover:bg-muted/70 [&_svg]:size-4.5"
+        className={cn(
+          'border-0 [&_svg]:size-4.5',
+          current ? 'bg-card hover:bg-card/70' : 'bg-muted hover:bg-muted/70',
+        )}
       />
       <div className="min-w-0 flex-1">
         <TakeName
           take={take}
           title={
-            <Link
-              id={name}
-              to="/edit/$pieceId/takes/$takeId"
-              params={{ pieceId: take.pieceId, takeId: take.id }}
-              className="flex min-h-6 items-center truncate"
-            >
-              {title}
-            </Link>
+            onPick ? (
+              <button
+                type="button"
+                id={name}
+                aria-current={current}
+                onClick={onPick}
+                className="flex min-h-6 w-full items-center truncate text-left"
+              >
+                {title}
+              </button>
+            ) : (
+              <Link
+                id={name}
+                to="/edit/$pieceId/takes/$takeId"
+                params={{ pieceId: take.pieceId, takeId: take.id }}
+                className="flex min-h-6 items-center truncate"
+              >
+                {title}
+              </Link>
+            )
           }
         />
       </div>

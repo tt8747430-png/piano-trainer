@@ -15,11 +15,16 @@ export function TakeList({
   list,
   picked,
   onChoose,
+  current,
+  onPick,
 }: {
   list: readonly Take[]
   /** The takes chosen while Select is on; null while it is off. */
   picked: ReadonlySet<TakeId> | null
   onChoose: (id: TakeId) => void
+  /** On a laptop: the take reviewed under the cards, which stand in a row of three. */
+  current?: TakeId
+  onPick?: (id: TakeId) => void
 }) {
   const { t } = useTranslation('editor')
   const playback = usePlayback<TakeId>()
@@ -29,7 +34,11 @@ export function TakeList({
   return (
     <ul
       aria-label={t('recorder.title')}
-      className="flex flex-col overflow-hidden card rows-hairline"
+      className={
+        onPick && !picked
+          ? 'grid grid-cols-3 gap-4'
+          : 'flex flex-col overflow-hidden card rows-hairline'
+      }
     >
       {list.map((take) => (
         <TakeRow
@@ -41,6 +50,9 @@ export function TakeList({
           }
           {...(picked ? { chosen: picked.has(take.id) } : {})}
           onChoose={() => onChoose(take.id)}
+          {...(onPick && !picked
+            ? { current: take.id === current, onPick: () => onPick(take.id) }
+            : {})}
         />
       ))}
     </ul>
