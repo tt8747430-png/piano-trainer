@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { MusicView } from '@/entities/settings'
-import { MenuSection } from '@/shared/ui'
+import { GroupRow, GroupRows, MenuSection } from '@/shared/ui'
 import { DiagramsFields } from './DiagramsFields'
 import { GridFields } from './GridFields'
 import { LyricsFields } from './LyricsFields'
@@ -29,10 +29,11 @@ export function ViewSection({
     case 'sheet':
       return (
         <MenuSection title={t('views.sheet')} className="gap-4">
-          <div className="flex min-h-11 items-center justify-between gap-3">
-            <span className="text-base">{t('music:sheet.layout.label')}</span>
-            <SheetLayoutTools />
-          </div>
+          <GroupRows surface="sheet">
+            <GroupRow label={t('music:sheet.layout.label')}>
+              <SheetLayoutTools />
+            </GroupRow>
+          </GroupRows>
           <SheetViewFields />
         </MenuSection>
       )
