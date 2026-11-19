@@ -544,7 +544,8 @@ export function OwnLibrary() {
           </>
         }
       />
-      <div className="flex flex-col gap-3">
+      {/* The column starts 8 under the bar, flush under the laptop's title, as the board's. */}
+      <div className="mt-2 flex flex-col gap-3 lg:mt-4">
         {none ? null : (
           <>
             <div className="lg:hidden">{search}</div>
