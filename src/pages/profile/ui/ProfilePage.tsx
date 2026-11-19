@@ -39,7 +39,8 @@ export function ProfilePage() {
     ? `${t('common:nav.settings')}, ${t('settings:about.update.ready')}`
     : t('common:nav.settings')
   return (
-    <div className="flex flex-col gap-1 lg:gap-6">
+    // The learner 8 under the head on a phone and 16 on a laptop, as the boards start a place's content.
+    <div className="flex flex-col gap-2 lg:gap-4">
       <ScreenHeader
         column="until-laptop"
         title={account ? name || account.email : t('profile.title')}

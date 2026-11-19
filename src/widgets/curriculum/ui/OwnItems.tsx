@@ -51,7 +51,7 @@ function OwnLink({ link, children }: { link: ReactElement; children: ReactNode }
     render: link,
     props: {
       className:
-        'group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 lg:card lg:py-2.5',
+        'group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 lg:card lg:min-h-21 lg:py-2.5',
       children,
     },
   })

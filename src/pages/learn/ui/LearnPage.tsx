@@ -27,7 +27,8 @@ export function LearnPage() {
   return (
     <div className="flex flex-col pb-8">
       <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
-      <div className="mt-1 flex min-w-0 flex-col gap-8">
+      {/* Continue 8 under the head on a phone and 16 on a laptop, as the boards start a place's content. */}
+      <div className="mt-2 flex min-w-0 flex-col gap-8 lg:mt-4">
         <ContinueAction />
         <LevelRows />
         <CourseCovers />

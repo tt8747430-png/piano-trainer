@@ -28,7 +28,7 @@ export function CourseCard({ course, current }: { course: Course; current: boole
       to="/courses/$courseId"
       params={{ courseId: course.id }}
       aria-current={current ? 'step' : undefined}
-      className="group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 lg:h-full lg:card lg:py-2.5"
+      className="group flex min-h-20 items-center gap-3 px-3 py-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3 lg:h-full lg:card lg:min-h-21 lg:py-2.5"
     >
       <span
         className={cn(
