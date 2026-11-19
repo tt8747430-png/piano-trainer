@@ -383,6 +383,7 @@ export const EXERCISES: readonly Exercise[] = [
     group: 'technique',
     stage: 'intermediate',
     name: { en: 'Hanon', ru: 'Ганон' },
+    book: { en: 'The Virtuoso Pianist', ru: 'Пианист-виртуоз' },
     trains: {
       en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
       ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',

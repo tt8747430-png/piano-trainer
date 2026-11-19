@@ -15,8 +15,9 @@ import {
   type NoteMarks,
   type SpelledNote,
   type Tick,
+  TICKS_PER_BEAT,
 } from '@/shared/lib/music'
-import { BAR, BAR_BEATS } from './time'
+import { BAR_BEATS } from './time'
 
 /** A note of an exercise's line, in one hand. */
 export interface LineNote {
@@ -48,30 +49,34 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
 }
 
 /**
- * An exercise's notes and harmony as the Player plays and writes them: bars of 4/4 to the end of the
- * last note, four bars a line, a chord at each passage's start (heard, and shown by the chord views,
+ * An exercise's notes and harmony as the Player plays and writes them: bars of 4/4 (of `beats`
+ * quarters where it says, Hanon's 2/4) to the end of the last note, four bars a line, a chord at each passage's start (heard, and shown by the chord views,
  * but printed on none of its score), the notes that start together grouped.
  */
 export function exercisePerformance(music: {
   readonly key: Key
   readonly notes: readonly LineNote[]
   readonly harmony: readonly Harmony[]
+  /** The quarters in its bar, where not four. */
+  readonly beats?: number
 }): Performance {
+  const beats = music.beats ?? BAR_BEATS
+  const barTicks = beats * TICKS_PER_BEAT
   const end = Math.max(...music.notes.map((n) => n.startTick + n.durationTicks), 1)
-  const barCount = Math.ceil(end / BAR)
+  const barCount = Math.ceil(end / barTicks)
   const harmonyStarts = music.harmony.map((h) => h.startTick)
   const chords = music.harmony.map((h, i) => ({
     ...h.chord,
     symbol: chordSymbol(h.chord),
     tones: spellChord(h.chord.root, h.chord.quality),
     startTick: h.startTick,
-    durationTicks: (harmonyStarts[i + 1] ?? barCount * BAR) - h.startTick,
-    bar: Math.floor(h.startTick / BAR),
+    durationTicks: (harmonyStarts[i + 1] ?? barCount * barTicks) - h.startTick,
+    bar: Math.floor(h.startTick / barTicks),
     pattern: 'exercise',
   }))
   const bars: PerformanceBar[] = Array.from({ length: barCount }, (_, bar) => ({
-    startTick: bar * BAR,
-    beats: BAR_BEATS,
+    startTick: bar * barTicks,
+    beats,
     section: 0,
     line: Math.floor(bar / BARS_A_LINE),
     chords: chords.flatMap((chord, i) => (chord.bar === bar ? [i] : [])),
@@ -87,16 +92,16 @@ export function exercisePerformance(music: {
   notes.forEach((n, i) => onsets.set(n.startTick, [...(onsets.get(n.startTick) ?? []), i]))
   const beatGroups = [...onsets].map(([tick, members]): BeatGroup => ({
     tick,
-    bar: Math.floor(tick / BAR),
+    bar: Math.floor(tick / barTicks),
     chord: sounding(harmonyStarts, tick),
     notes: members,
   }))
   return {
     key: music.key,
-    meter: '4/4',
+    meter: `${beats}/4`,
     // A drill, not a song: its score prints no chord symbol and no staff name (A41).
     plain: true,
-    totalTicks: barCount * BAR,
+    totalTicks: barCount * barTicks,
     bars,
     chords,
     notes,

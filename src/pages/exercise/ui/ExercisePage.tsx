@@ -1,7 +1,7 @@
 import { PracticeFavouriteButton, useMarkPracticeUsed } from '@/features/manage-practice-library'
 import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { Volume2 } from 'lucide-react'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   exerciseChoice,
@@ -14,10 +14,10 @@ import {
 import { selectTempo, useProgress } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { PianoButton } from '@/widgets/practice-pages'
-import { FittedRow, TappableStaff } from '@/features/play-example'
+import { TappableStaff } from '@/features/play-example'
 import { arrangeExercise } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
-import { useSetSearch } from '@/shared/lib'
+import { useElementSize, useSetSearch } from '@/shared/lib'
 import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { keysAround, midiOf, noteParam, printedNote, type Hand } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
@@ -45,8 +45,9 @@ import { EndRow } from './EndRow'
 /** How many bars the page writes, in two systems: the figure's first climbs (canvas v552). */
 const OPENING_BARS = 4
 const BARS_A_SYSTEM = 2
-/** The score at 1.4 times a staff's own size, shrunk to the column where it is wider. */
-const SCORE_SCALE = 1.4
+/** The column's width at which a staff space is the board's 12.3px (scale 1 draws 10), and the largest it grows to. */
+const STAFF_WIDTH = 301
+const MAX_SCALE = 1.3
 /** How far one press of Tempo's − or + moves it. */
 const TEMPO_STEP = 4
 
@@ -67,6 +68,8 @@ export function ExercisePage() {
 function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation(['practice', 'player'])
   const locale = useLocale()
+  const column = useRef<HTMLDivElement>(null)
+  const { width } = useElementSize(column)
   useMarkPracticeUsed('exercises', exercise.id)
   const search = useSearch({ from: '/shell/practice/exercises/$exerciseId' })
   const setSearch = useSetSearch<ExercisePageSearch>()
@@ -91,7 +94,8 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
     [performance],
   )
   const shownBars = Math.min(OPENING_BARS, performance.bars.length)
-  const source = t(`practice:exercises.groups.${exercise.group}`)
+  const group = t(`practice:exercises.groups.${exercise.group}`)
+  const source = exercise.book ? `${localText(exercise.book, locale)} · ${group}` : group
   const reached = useProgress(selectTempo(tempoKey(exercise, choice)))
   const tempo = search.tempo ?? reached ?? exercise.tempo
   const name = exercise.fields.hanon
@@ -143,23 +147,24 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">{source}</p>
           </div>
           <figure className="mt-1 flex flex-col gap-2">
-            {/* The systems drawn at one size, shrunk together to the column where wider. */}
-            <FittedRow>
-              <div className="flex flex-col gap-2">
-                {systems.map((system) => (
-                  <TappableStaff
-                    key={system.from}
-                    music={system.music}
-                    score={system.score}
-                    staff={shownHand === 'lh' ? 'bass' : 'treble'}
-                    scale={SCORE_SCALE}
-                    firstBar={system.from + 1}
-                    continues={system.from > 0}
-                    tempo={tempo}
-                  />
-                ))}
-              </div>
-            </FittedRow>
+            {/* Each system spans the column, its staff the board's size (12.3 a space at 370, 13 at 880). */}
+            <div ref={column} className="flex min-w-0 flex-col gap-2">
+              {width > 0
+                ? systems.map((system) => (
+                    <TappableStaff
+                      key={system.from}
+                      music={system.music}
+                      score={system.score}
+                      staff={shownHand === 'lh' ? 'bass' : 'treble'}
+                      scale={Math.min(MAX_SCALE, width / STAFF_WIDTH)}
+                      fill={width}
+                      firstBar={system.from + 1}
+                      continues={system.from > 0}
+                      tempo={tempo}
+                    />
+                  ))
+                : null}
+            </div>
             <figcaption className="text-[0.8125rem] text-muted-foreground tabular-nums">
               {t('practice:exercisePage.bars', {
                 last: shownBars,

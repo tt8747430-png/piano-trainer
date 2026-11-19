@@ -72,6 +72,8 @@ export interface Exercise {
   readonly group: ExerciseGroup
   readonly stage: Stage
   readonly name: LocalText
+  /** The book it comes from, where it has one, named before its group on its page. */
+  readonly book?: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
   /** How to play it, in plain words: what its page says over its fingering's picture (A41). */

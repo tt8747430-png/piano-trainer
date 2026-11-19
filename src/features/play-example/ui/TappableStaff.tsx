@@ -40,6 +40,7 @@ export function TappableStaff({
   score,
   staff,
   scale,
+  fill,
   fingers,
   names = false,
   symbols = true,
@@ -59,6 +60,8 @@ export function TappableStaff({
   /** One staff of the grand staff; the grand staff where none. */
   staff?: StaffId | undefined
   scale?: number
+  /** The width its line is justified to, drawn smaller where its music is wider. */
+  fill?: number | undefined
   fingers?: boolean
   /** Each notehead carries its note's name. */
   names?: boolean
@@ -145,6 +148,7 @@ export function TappableStaff({
       muted={muted}
       names={names}
       {...(scale === undefined ? {} : { scale })}
+      fill={fill}
       {...(fingers === undefined ? {} : { fingers })}
       selected={
         marked === null
