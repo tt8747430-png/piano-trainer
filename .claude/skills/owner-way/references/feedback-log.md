@@ -348,6 +348,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **The library's sheets dim the window like every other (loop, 2026-11-19):** the one-scrim pass (`r70_scrim.py`) ran before the Songs generator (`r72`), so Songs, All songs and a playlist kept the sheet's old 28% scrim and, on a laptop, left the sidebar bright beside a dimmed column. Every generator now draws its scrim at 32% and the pass runs last, so it reaches every board: on a laptop New song dims the sidebar too.
+
 - **The library's laptop sheets are the kit's (loop, laws: one implementation; 2026-11-19):** Songs, All songs and a folder on a laptop centred New song, Import and Record through their own `_LAPSHEET`, a copy of the kit's `LAPSHEET` with its own width and box model. It now calls `LAPSHEET`; measured in the runtime, New song stays 480 × 746 on both builds. `r72_flat_songs.py`.
 - **Explore's kinds stay one row at 1024 (loop, tablet widths, 2026-11-19):** beside Songs · People the seven chips wrapped to two rows; below 1280 they take their own row under it, beside it again from 1280 (`ExploreScreen`).
 - **Explore's song page in the canvas's faces; every laptop floating action 16 in and 32 up (laws, type anatomy and one shape, 2026-11-18):** the public song page's section names and chord cells were Literata and Onest, faces the canvas dropped for Iowan Old Style and Instrument Sans; they are the kit's SERIF and FONT. Its laptop Add to my library stood 40 and 40 from the corner, the section's Practise 16 and 40 and Your lessons' + 40 and 32, where every library's + stands 16 in and 32 up; all now stand there (a dead `.replace()` that looked for a 116 bottom is gone). Every board's hover tooltip was set in Onest too: it is the sans.
