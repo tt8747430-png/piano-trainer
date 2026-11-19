@@ -73,7 +73,7 @@ const WITH_NAME =
   'h-[3.125rem] w-auto min-w-0 flex-1 gap-2 bg-muted px-5 text-base font-bold whitespace-nowrap hover:brightness-95 [&_svg:not([class*=size-])]:size-[1.125rem]'
 /** A control with a short caption under its picture (the Player's transport, its canvas). */
 const WITH_CAPTION =
-  'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-[0.6875rem] leading-none font-semibold [&_svg]:size-5'
+  'w-auto min-w-12 flex-col gap-0.5 px-2 max-sm:min-w-11 max-sm:px-1 text-xs/[normal] font-semibold [&_svg]:size-5'
 /**
  * The bar's honey primary, the canvas's PLAYBTN: a 52px circle at its right end; named (Start), its
  * primary BTN, a pill 50 tall taking the room left.
