@@ -8,9 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · no dim under what floats: the kit's FLOAT on bars, the tab bar, the + and the floating bars (was SHADOW's 28px blur); (app) --elevation-float · every board (all docks and floating actions) · pending
 
 ## Changes
+
+- 2026-11-19 · be5cf3e7 · no dim under what floats: the kit's FLOAT on bars, the tab bar, the + and the floating bars (was SHADOW's 28px blur); (app) --elevation-float · every board (all docks and floating actions) · v615
 
 - 2026-11-19 · bd0d9245 · one title picker: Scales' name as Chords' PART (44, 56 on a laptop, 54 tall, one faint chevron; was 40, 64 tall, two chevrons); the kit's PART end pad 8 at its source (a pass rewrote 9) · Scales,ScalesLaptop · v614
 - 2026-11-19 · ae0596ad · Chord finder: the empty picker says Spelled in; keys 8 under the bar on Scales, Intervals, Progression, Pattern, Chord finder (were 4); the Practice pages' floating bars on the 34 safe area (were 30); (app) the finder's line under the name at normal line height · ChordFinder,ChordFinderLaptop,CircleOfFifths,Exercise,Intervals,Metronome,Pattern,Progression,Scales · v613
