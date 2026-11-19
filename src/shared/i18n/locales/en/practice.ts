@@ -375,7 +375,6 @@ export const practice = {
   patterns: {
     // A pattern's page (canvas 178): its bar's title, its hands, Play's menu, Practise's piece.
     title: 'Pattern',
-    hands: 'The hands',
     builtIn: 'Built-in',
     yours: 'Your pattern',
     playOver: 'Play over',
@@ -385,8 +384,6 @@ export const practice = {
     favourite: 'Favourite',
     rightHand: 'Right hand',
     leftHand: 'Left hand',
-    overC: 'Over a bar of C major',
-    over: 'Over the first line of {{piece}}',
     usedIn: 'Used in',
     makeOwn: 'Make your own from it',
     hide: 'Hide from the Player',

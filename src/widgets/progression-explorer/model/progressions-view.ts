@@ -4,7 +4,7 @@ import {
   progressionMode,
   type LibraryProgression,
 } from '@/entities/progression-library'
-import type { PatternId } from '@/entities/pattern'
+import type { PatternRef } from '@/entities/pattern'
 import type { ProgressionsSettings } from '@/entities/settings'
 import {
   keyFromParam,
@@ -128,9 +128,9 @@ export interface InPlayer {
   readonly p: string
   readonly key: KeyParam
   readonly chordSize?: Exclude<ChordSize, 'triads'>
-  readonly pattern?: PatternId
-  readonly inversion: Inversion
-  readonly nearest: boolean
+  readonly pattern?: PatternRef
+  readonly inversion?: Inversion
+  readonly nearest?: boolean
 }
 
 /**

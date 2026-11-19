@@ -352,7 +352,6 @@ export const practice: LocaleResources['practice'] = {
   },
   patterns: {
     title: 'Фактура',
-    hands: 'Руки',
     builtIn: 'Встроенная',
     yours: 'Ваша фактура',
     playOver: 'Играть на',
@@ -362,8 +361,6 @@ export const practice: LocaleResources['practice'] = {
     favourite: 'Избранное',
     rightHand: 'Правая рука',
     leftHand: 'Левая рука',
-    overC: 'На такте C мажора',
-    over: 'На первой строке песни «{{piece}}»',
     usedIn: 'Где звучит',
     makeOwn: 'Сделать свою на её основе',
     hide: 'Скрыть из плеера',
