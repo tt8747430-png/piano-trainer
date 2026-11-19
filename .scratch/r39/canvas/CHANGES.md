@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the kit's stepper − and + as Lucide's minus and plus at 20, stroke 2, as the app draws them (they were the font's glyphs); the Metronome's Flash on the beat switch given its track and knob (its colour and place were never set, so it drew a bare ring) · AllSongs,AllSongsLaptop,ChordPlayer,ChordPlayerLaptop,Exercise,ExerciseLaptop,Folder,FolderLaptop,Metronome,MetronomeLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,Settings,SettingsLaptop,Songs,SongsLaptop,Take,TakeLaptop,Tuner,TunerLaptop · pending
 
 
 ## Changes

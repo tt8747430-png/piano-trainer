@@ -153,9 +153,12 @@ KCHIPS = CHIPS
 # A caption and the control it names, 8 apart, so the sheet's 16 falls between fields, not inside one (proximity)
 LABELLED = lambda t, ctrl: f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS(t)}{ctrl}</div>'
 WCHIPS = lambda lst: CHIPS(lst, wrap=True)
+# Lucide's minus and plus at 20, stroke 2, as the app's Stepper draws them (they were the font's − and + at 20)
+STEP_MINUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg>'
+STEP_PLUS = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5v14"></path></svg>'
 def STEPPER(val, dn, up, w=64):
-    b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 20px">{s}</button>'
-    return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, "−", "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, "+", "More")}</div>'
+    b = lambda a, s, l: f'<button type="button" aria-label="{l}" onClick="{{{{{a}}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; font: inherit; display: inline-flex; align-items: center; justify-content: center">{s}</button>'
+    return f'<div style="flex: none; display: flex; align-items: center; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}">{b(dn, STEP_MINUS, "Less")}<span style="min-width: {w}px; text-align: center; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums">{{{{{val}}}}}</span>{b(up, STEP_PLUS, "More")}</div>'
 def TOGGLE(on, face=False):  # face: the switch's picture inside a row that is itself the switch, hidden from readers
     return f'<span {"aria-hidden=\"true\"" if face else f"role=\"switch\" aria-checked=\"{{{{{on}}}}}\""} style="flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{on}Bg}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12); position: relative"><span style="position: absolute; top: 2px; left: {{{{{on}X}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>'
 def GROUP(*rows, bg=FILL):
