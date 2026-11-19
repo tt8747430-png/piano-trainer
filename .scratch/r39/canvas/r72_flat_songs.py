@@ -128,7 +128,7 @@ def PLCOVER(c, heart, songs, face, w=64):
     else:
         body = ''
     fs = max(20, w // 3)
-    badge = (f'<span style="position: absolute; right: -4px; bottom: -4px; width: {fs}px; height: {fs}px; border-radius: 50%; background: #E9D8C4; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: {max(11, fs // 2)}px; font-weight: 700; color: {INK}">{face}</span>' if face else '')
+    badge = (f'<span style="position: absolute; right: -4px; bottom: -4px; width: {fs}px; height: {fs}px; border-radius: 50%; background: #E9D8C4; box-shadow: 0 0 0 2px {SHEET}; display: flex; align-items: center; justify-content: center; font-size: {max(12, fs // 2)}px; font-weight: 700; color: {INK}">{face}</span>' if face else '')
     return f'<span aria-hidden="true" style="position: relative; flex: none; display: block; width: {w}px; height: {w}px; border-radius: {max(8, w // 6)}px; background: {c}">{body}{badge}</span>'
 def PLAYLISTROWS(href, shared_href, w=64, card=True):
     listed = card == 'list'
