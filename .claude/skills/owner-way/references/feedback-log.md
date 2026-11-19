@@ -111,7 +111,7 @@ owner's, typos fixed.
 - **Tempo:** a large accent circle with BPM and its word, beat units below; hold and swipe to a full-screen ruler, Largo to
   Presto.
 - **One control each,** one key picker, one stepper and menu style.
-- **The Player's small buttons reach 44 (2026-11-19, the lines; 44px targets):** the Practice sheet's − and + of the tempo and its Tap stood 40, as did a pattern row's heart and Listen and the Pattern sheet's Sort and filter; each is now 44, the size of every other touch target on the phone.
+- **The Player's small buttons reach 44 (2026-11-19, the lines; 44px targets):** on the phone and the laptop alike, the Practice sheet's − and + of the tempo and its Tap stood 40, as did a pattern row's heart and Listen and the Pattern sheet's Sort and filter; each is now 44, the size of every other touch target on the phone.
 
 ## Player and editor together
 - **The Player's Pattern sheet holds the library's shape (the layers walker, 2026-11-17):** its place chips were 34 tall in a row cut at the sheet's edge, and Close all a 28-tall link in an orange at 3.9:1. The chips reach 44 as the kit's and wrap in the sheet (nothing is cut in a sheet); Close all reaches 44 in the darker orange (#A8551F, as Continue's label).
