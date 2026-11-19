@@ -13,7 +13,7 @@ import { useStepTitle } from '@/widgets/curriculum'
 import { TrainerBoard } from '@/widgets/trainer-board'
 import { CheckResult } from './CheckResult'
 
-function CheckFlow({ plan }: { plan: CheckPlan }) {
+function CheckFlow({ plan, again }: { plan: CheckPlan; again: () => void }) {
   const { t } = useTranslation(['quiz', 'common'])
   const store = useProgressStoreApi()
   const stepTitle = useStepTitle()
@@ -40,19 +40,25 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
         title={t('quiz:checkTitle', { title })}
         back={<RoundButton label={t('common:close')} icon={X} onClick={close} />}
       />
-      <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3 px-1">
-        <Progress
-          value={answered}
-          max={plan.length}
-          aria-label={progress}
-          getAriaValueText={() => progress}
-          // The run's progress is grass, 8 tall, as the Check's board and every course's.
-          className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
-        />
-        <span aria-hidden className="shrink-0 text-sm/[normal] text-muted-foreground tabular-nums">
-          {progress}
-        </span>
-      </div>
+      {/* The results keep the bar alone, as the board's. */}
+      {trainer.summary ? null : (
+        <div className="mx-auto -mt-2 flex w-full max-w-190 items-center gap-3 px-1">
+          <Progress
+            value={answered}
+            max={plan.length}
+            aria-label={progress}
+            getAriaValueText={() => progress}
+            // The run's progress is grass, 8 tall, as the Check's board and every course's.
+            className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
+          />
+          <span
+            aria-hidden
+            className="shrink-0 text-sm/[normal] text-muted-foreground tabular-nums"
+          >
+            {progress}
+          </span>
+        </div>
+      )}
       {/* What it has come to so far, as the Check board's two chips: right in grass, wrong quiet. */}
       {trainer.summary ? null : (
         <p className="mx-auto flex w-full max-w-190 gap-2 px-1 text-sm/[normal] font-semibold tabular-nums">
@@ -70,6 +76,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
           correct={right}
           title={title}
           newlyLearned={!learnedBefore}
+          onAgain={again}
           onDone={close}
         />
       ) : (
@@ -80,13 +87,17 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
 }
 
 /** The check's questions, drawn once from the evidence as it opens: each skill as often as it still needs. */
-function CheckDraw({ of }: { of: StepId }) {
+function CheckDraw({ of, again }: { of: StepId; again: () => void }) {
   const progress = useProgressStoreApi()
   const [plan] = useState(() => checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())))
-  return plan ? <CheckFlow plan={plan} /> : null
+  return plan ? <CheckFlow plan={plan} again={again} /> : null
 }
 
 export function CheckPage() {
   const { of } = useSearch({ from: '/shell/check' })
-  return of ? <CheckDraw key={of} of={of} /> : null
+  // Again draws the check afresh from the evidence as it now stands.
+  const [attempt, setAttempt] = useState(0)
+  return of ? (
+    <CheckDraw key={`${of}:${attempt}`} of={of} again={() => setAttempt((n) => n + 1)} />
+  ) : null
 }

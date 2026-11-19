@@ -302,6 +302,11 @@ export const quiz = {
   progress: 'Round {{n}} of {{total}}',
   score: '{{correct}} of {{total}}',
   marked: '{{title}} is now marked learned.',
+  skills: 'Skills',
+  chordsFirst_one: 'One chord to practise first, then check again.',
+  chordsFirst_other: '{{count}} chords to practise first, then check again.',
+  scaleFirst: 'The scale to practise first, then check again.',
+  again: 'Again',
   openChords: 'Open in Chords',
   openScales: 'Open in Scales',
   // A chord to build: its notes, shown once asked.

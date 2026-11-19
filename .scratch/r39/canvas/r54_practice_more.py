@@ -1,7 +1,7 @@
 # R54: Practice and editor routes still missing strings from src/shared/i18n/locales/en:
 #   Trainer         — /practice/quiz/$trainerId: setup (Drill, Shown, Level or Custom with its selection sheet, Timing,
 #                     Rounds, the record line), a Play it round on the piano (Check, Clear, Show answer), Results
-#   Check           — /check?of=: a song's chords checked before it is marked learned, and its result
+#   Check           — /check?of=: a chord or scale step checked before it is marked learned, and its result
 #   ProgressionEdit — EDITOR: /practice/progressions/$id/edit, /settings, /publish (the draft's Publish), others' gate
 #   Pattern         — /practice/accompaniment/patterns/$ref (built-in or own), /new and /edit, /publish
 #   Take            — /edit/$pieceId/takes/$takeId: name, play, piano roll, Keep bars, Download, Delete
@@ -32,10 +32,10 @@ TR_SRC = r'''
     const inc = st.inc ?? REC, isRec = inc.length === REC.length && REC.every((q) => inc.includes(q));
     const tl = st.tl ?? 0, TL = ['Off', '5 s', '10 s', '20 s', '30 s'], rounds = st.rounds ?? 10, RN = (n) => n === 0 ? 'Until stopped' : String(n);
     const auto = st.auto ?? true;
-    // the round: Build E♭m7 (E♭ G♭ B♭ D♭) or, for a Check, a song's chord
-    const CK = [['Build G', [55, 59, 62], 'G B D'], ['Build C', [60, 64, 67], 'C E G'], ['Build D', [62, 66, 69], 'D F♯ A'], ['Build Em', [64, 67, 71], 'E G B'], ['Build D7', [62, 66, 69, 72], 'D F♯ A C'], ['Build Am', [57, 60, 64], 'A C E']];
+    // the round: Build E♭m7 (E♭ G♭ B♭ D♭) or, for a Check, a chord of its step (Triads: the app's 28 rounds, each quality until known)
+    const CK = [['Build D♭', [61, 65, 68], 'D♭ F A♭'], ['Build Em', [64, 67, 71], 'E G B'], ['Build F♯°', [54, 57, 60], 'F♯ A C'], ['Build A♭+', [56, 60, 64], 'A♭ C E'], ['Build B♭m', [58, 61, 65], 'B♭ D♭ F'], ['Build G', [55, 59, 62], 'G B D']];
     const TRQ = [['Build E♭m7', [63, 66, 70, 73], 'E♭ G♭ B♭ D♭'], ['Build A♭maj7', [56, 60, 63, 67], 'A♭ C E♭ G'], ['Build F♯°', [54, 57, 60], 'F♯ A C']];
-    const SET = MODE === 'check' ? CK : TRQ, total = MODE === 'check' ? CK.length : (rounds || 10), n = st.n ?? (MODE === 'check' ? 2 : 3);
+    const SET = MODE === 'check' ? CK : TRQ, total = MODE === 'check' ? 28 : (rounds || 10), n = st.n ?? (MODE === 'check' ? 2 : 3);
     const [prompt, want, notes] = SET[(n - 1) % SET.length];
     const on = st.on ?? [], verdict = st.verdict ?? null, right = st.right ?? (MODE === 'check' ? 1 : 2), wrong = st.wrong ?? 0;
     const tap = (m) => verdict ? null : S({ on: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] });
@@ -49,7 +49,7 @@ TR_SRC = r'''
       ['A wrong answer', verdict === 'wrong', { view: 'run', on: [want[0], want[1] + 1], verdict: 'wrong', wrong: 1 }, { on: [], verdict: null, wrong: 0 }],
       ['A right answer', verdict === 'right', { view: 'run', on: want, verdict: 'right', right: 2 }, { on: [], verdict: null, right: 1 }],
       ['The answer shown', verdict === 'shown', { view: 'run', on: [], verdict: 'shown' }, { verdict: null }],
-      ['Results', view === 'results', { view: 'results', verdict: null, on: [] }, { view: 'run' }]]
+      ['Results', view === 'results', { view: 'results', verdict: null, on: [], right: 26 }, { view: 'run', right: 1 }]]
       .map(([l, on2, o, off]) => ({ l, bg: on2 ? '#332921' : '#EEE9E2', pick: () => S(on2 ? off : o) }));
     return { ...common(st, set), states, isRun: view === 'run', isResults: view === 'results', isCheck: MODE === 'check',
       drills: seg(['Flashcards', 'Name it', 'Play it', 'By ear'], drill, (x) => S({ drill: x })), shownSeg: seg(['Name', 'Keys', 'Staff'], shown, (x) => S({ shown: x })),
@@ -79,24 +79,26 @@ TRRUN = (f'<div style="display: flex; align-items: center; gap: 12px"><div style
 TRBTNS = (IF('waiting', f'<div style="display: flex; gap: 8px">{BTN("Show answer", "showAns", "", "quiet", 50)}{BTN("Clear", "clear", "", "quiet", 50, fg="{{clearInk}}", attrs='aria-disabled="{{checkNot}}" ')}<button type="button" onClick="{{{{check}}}}" aria-disabled="{{{{checkNot}}}}" style="flex: 1.4; height: 50px; border: 0; border-radius: 25px; background: {{{{checkBg}}}}; color: {{{{checkInk}}}}; font: inherit; font-size: 16px; font-weight: 700">Check</button></div>', 'true')
           + IF('answered', f'<div style="display: flex">{BTN("{{nextT}}", "next", "", "primary", 50)}</div>'))
 RES_T = (f'<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 0"><span style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: {SOFT}">RESULTS</span><span style="font-size: 56px; font-weight: 700; font-variant-numeric: tabular-nums">{{{{resT}}}}</span></div>')
-CKRES = (RES_T + IF('checkDone', CARD(f'<div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 20px; background: #DCE9D6; color: #2F5A35; display: flex; align-items: center; justify-content: center">{ICON(CHECK, 20)}</span><span style="font-size: 16px; font-weight: 600">Amazing Grace is now marked learned.</span></div>'), 'true')
-         + IF('checkShort', CARD('<span style="font-size: 16px; line-height: 1.45">Two chords to practise first, then check again.</span>'))
-         + SEC(CAPS('Skills'), GROUP(('link', 'D major', 'Open in Chords', 'Chords.dc.html'), ('link', 'G major scale', 'Open in Scales', 'Scales.dc.html'), bg=SHEET))
-         + f'<div style="display: flex; gap: 8px">{BTN("Again", "again", "", "quiet", 50)}{BTN("Done", "", "Song.dc.html", "primary", 50)}</div>')
+CKRES = (RES_T + IF('checkDone', CARD(f'<div style="display: flex; align-items: center; gap: 12px"><span style="width: 40px; height: 40px; border-radius: 20px; background: #DCE9D6; color: #2F5A35; display: flex; align-items: center; justify-content: center">{ICON(CHECK, 20)}</span><span style="font-size: 16px; font-weight: 600">Triads is now marked learned.</span></div>'), 'true')
+         + IF('checkShort', CARD('<span style="font-size: 16px; line-height: 1.45">2 chords to practise first, then check again.</span>')
+              # the Check's skills still to practise, each a way to its explorer (the app's: a step's qualities, or its scale)
+              + SEC(CAPS('Skills'), GROUP(('link', 'Diminished', 'Open in Chords', 'Chords.dc.html'), ('link', 'Augmented', 'Open in Chords', 'Chords.dc.html'), bg=SHEET)))
+         + f'<div style="display: flex; gap: 8px">{BTN("Again", "again", "", "quiet", 50)}{BTN("Done", "", "Chords.dc.html", "primary", 50)}</div>')
 TR_SHEETS = (BSHEET('levelOn', 'Level', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{levels}}}}" as="l" hint-placeholder-count="6"><button type="button" onClick="{{{{l.pick}}}}" style="width: 100%; min-height: 52px; border: 0; background: transparent; box-shadow: inset 0 -1px 0 {FILL}; color: {INK}; font: inherit; font-size: 16px; text-align: left; display: flex; align-items: center; padding: 0 16px"><span style="flex: 1">{{{{l.l}}}}</span><span style="font-weight: 700">{{{{l.mark}}}}</span></button></sc-for></div>')
              + BSHEET('customOn', 'Chord qualities', f'<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 16px; font-weight: 600">{{{{recT}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{incN}}}}</span></div>{WCHIPS("quals")}'
                       f'<div style="display: flex; gap: 8px; flex-wrap: wrap">{BTN("Select all", "selAll", "", "quiet", 44, False)}{BTN("Clear", "clearSel", "", "quiet", 44, False)}{IF("notRec", BTN("Restore recommended", "restore", "", "quiet", 44, False))}</div>'))
 trph = (''  # the Quiz's Trainer and its setup removed (canvas 160); the Check starts at its run
-        + IF('isRun', TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html'))
+        + IF('isRun', TOP('', 'Check: Triads', '', 'Close', CLOSEB('Chords.dc.html'))
               + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 12px">{TRRUN}<div style="flex: none; margin: 0 -16px">{TAPKEYS("kb", 112)}</div>{TRBTNS}</main>')
-        + IF('isResults', TOP('', '', '', 'Back', '<span style="width: 44px"></span>') + NARROW(CKRES)) + TOASTS)
+        # the results keep the run's bar (Close and the check's name), as every screen keeps its way back
+        + IF('isResults', TOP('', 'Check: Triads', '', 'Close', CLOSEB('Chords.dc.html')) + NARROW(CKRES)) + TOASTS)
 LTR = lambda s: s.replace('Chords.dc.html', 'ChordsLaptop.dc.html').replace('Scales.dc.html', 'ScalesLaptop.dc.html').replace('Song.dc.html', 'SongLaptop.dc.html').replace('"Settings.dc.html"', '"SettingsLaptop.dc.html"')
 trlm = (''
-        + IF('isRun', LPAD(TOP('', 'Check: Amazing Grace', '', 'Close', CLOSEB('Song.dc.html')))
+        + IF('isRun', LPAD(TOP('', 'Check: Triads', '', 'Close', CLOSEB('Chords.dc.html')))
               + f'<main style="flex: 1; min-height: 0; padding: 8px 0 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1; width: 760px; display: flex; flex-direction: column; gap: 16px">{TRRUN}</div><div style="width: 760px">{TRBTNS}</div></main>'
               + f'<div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{TAPKEYS("kbL", 170)}</div>')
-        + IF('isResults', LTOP('', '') + WIDE(LTR(CKRES), 560)) + TOASTL)
-for stem, mode, ttl in (('Check', "'check'", 'Check a song before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
+        + IF('isResults', LPAD(TOP('', 'Check: Triads', '', 'Close', CLOSEB('Chords.dc.html'))) + WIDE(LTR(CKRES), 560)) + TOASTL)
+for stem, mode, ttl in (('Check', "'check'", 'Check a step before it is marked learned'),):  # the Quiz's Trainer removed (canvas 160)
     detail(stem, ttl, js(TR_SRC.replace('__MODE__', mode)), SHOWSTATES() + trph, SHOWSTATES() + LTR(trlm), '', TR_SHEETS, LAPSHEET(TR_SHEETS), 'Practice')
 print('r54 trainer, check ok')
 

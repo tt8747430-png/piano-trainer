@@ -1,25 +1,32 @@
 import { Link } from '@tanstack/react-router'
+import { Check } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ratingOf, selectAllAnswers, selectIsLearned, useProgress } from '@/entities/progress'
 import type { CheckPlan } from '@/features/trainer'
 import { skillOf } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
-import { ButtonLink, RatingMark } from '@/shared/ui'
+import { GroupLink, SettingsGroup } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
-/** The score, each skill's rating with a way to the explorer for a gap, and whether the step is now learned. */
+/**
+ * The Check's results (`r54_practice_more.py`'s `CKRES`): Results over the score, a card saying where the step
+ * stands (marked learned, or what to practise first), the skills still to practise each a way to its explorer,
+ * then Again beside the honey Done.
+ */
 export function CheckResult({
   plan,
   correct,
   title,
   newlyLearned,
+  onAgain,
   onDone,
 }: {
   plan: CheckPlan
   correct: number
   title: string
   newlyLearned: boolean
+  onAgain: () => void
   onDone: () => void
 }) {
   const { t } = useTranslation(['quiz', 'music'])
@@ -28,54 +35,71 @@ export function CheckResult({
   const score = useRef<HTMLParagraphElement>(null)
   // The score replaces the question whose Next ended the check: it takes the focus, and is read.
   useEffect(() => score.current?.focus(), [])
+  const gaps = plan.skills.filter((skillId) => ratingOf(answers, skillId) !== 'known')
+  const scales = gaps.some((skillId) => skillOf(skillId).kind === 'scale')
 
   return (
-    <section className="flex flex-1 flex-col gap-6">
-      <p
-        ref={score}
-        tabIndex={-1}
-        className="font-display text-7xl font-semibold tabular-nums outline-none"
-      >
-        {t('score', { correct, total: plan.length })}
-      </p>
+    <section className="mx-auto -mt-1 flex w-full max-w-140 flex-col gap-4 lg:-mt-3">
+      <div className="flex flex-col items-center gap-1 py-3">
+        <span className="text-[0.8125rem] leading-[normal] font-bold tracking-[0.04em] text-muted-foreground uppercase">
+          {t('results')}
+        </span>
+        <p
+          ref={score}
+          tabIndex={-1}
+          className="text-[3.5rem] leading-[normal] font-bold tabular-nums outline-none"
+        >
+          {t('score', { correct, total: plan.length })}
+        </p>
+      </div>
       {learned && newlyLearned ? (
-        <p className="text-lg font-semibold text-learned">{t('marked', { title })}</p>
+        <div className="flex items-center gap-3 card p-4">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-grass text-on-paint-grass">
+            <Check aria-hidden className="size-5" />
+          </span>
+          <p className="font-semibold">{t('marked', { title })}</p>
+        </div>
       ) : null}
-      <ul className="flex flex-col rows-hairline card">
-        {plan.skills.map((skillId) => {
-          const skill = skillOf(skillId)
-          const rating = ratingOf(answers, skillId)
-          // A chord opens in Chords, a scale in Scales.
-          const { name, explorerLink, openLabel } =
-            skill.kind === 'chord'
-              ? {
-                  name: t(`music:quality.${skill.quality}`),
-                  explorerLink: (
-                    <Link to="/practice/chords" search={qualityParams(skill.quality)} />
-                  ),
-                  openLabel: t('openChords'),
-                }
-              : {
-                  name: t(`music:scaleKind.${skill.scale}`),
-                  explorerLink: <Link to="/practice/scales" search={{ kind: skill.scale }} />,
-                  openLabel: t('openScales'),
-                }
-          return (
-            <li key={skillId} className="flex min-h-14 items-center gap-3 px-4">
-              <RatingMark rating={rating} />
-              <span className="flex-1">{name}</span>
-              {rating === 'known' ? null : (
-                <ButtonLink variant="link" className="px-0" render={explorerLink}>
-                  {openLabel}
-                </ButtonLink>
-              )}
-            </li>
-          )
-        })}
-      </ul>
-      <Button size="lg" className="mt-auto" onClick={onDone}>
-        {t('done')}
-      </Button>
+      {gaps.length > 0 ? (
+        <>
+          <p className="card p-4 leading-[1.45]">
+            {scales ? t('scaleFirst') : t('chordsFirst', { count: gaps.length })}
+          </p>
+          <SettingsGroup title={t('skills')} flush>
+            {gaps.map((skillId) => {
+              const skill = skillOf(skillId)
+              // A chord opens in Chords, a scale in Scales.
+              return skill.kind === 'chord' ? (
+                <GroupLink
+                  key={skillId}
+                  label={t(`music:quality.${skill.quality}`)}
+                  value={t('openChords')}
+                  render={<Link to="/practice/chords" search={qualityParams(skill.quality)} />}
+                />
+              ) : (
+                <GroupLink
+                  key={skillId}
+                  label={t(`music:scaleKind.${skill.scale}`)}
+                  value={t('openScales')}
+                  render={<Link to="/practice/scales" search={{ kind: skill.scale }} />}
+                />
+              )
+            })}
+          </SettingsGroup>
+        </>
+      ) : null}
+      <div className="flex gap-2">
+        <Button
+          variant="quiet"
+          className="h-12.5 flex-1 rounded-full text-base font-bold"
+          onClick={onAgain}
+        >
+          {t('again')}
+        </Button>
+        <Button className="h-12.5 flex-1 rounded-full text-base font-bold" onClick={onDone}>
+          {t('done')}
+        </Button>
+      </div>
     </section>
   )
 }

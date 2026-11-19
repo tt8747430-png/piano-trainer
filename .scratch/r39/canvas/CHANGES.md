@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the Check checks a step the app checks (Triads, its 28 rounds), not a song; its results keep the run's bar and list only the skills to practise · Check,CheckLaptop · **pending**
+
 
 
 

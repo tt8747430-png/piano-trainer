@@ -33,10 +33,11 @@ import { useRoundWords } from './use-round-words'
 const FOOT =
   'h-12.5 min-w-0 flex-1 basis-0 rounded-full px-5 text-base leading-tight font-bold whitespace-nowrap'
 /** The foot's quiet pills, on the sand. */
-const QUIET = 'bg-muted text-foreground hover:bg-foreground/10'
-/** Check, 1.4 of a quiet pill's share, 6 a side, on the sand with soft ink until a key is chosen. */
+const QUIET =
+  'bg-muted text-foreground hover:bg-foreground/10 disabled:text-foreground/45 disabled:opacity-100'
+/** Check, 1.4 of a quiet pill's share, 6 a side, on the sand with faded ink until a key is chosen, as Clear. */
 const WAITING =
-  'flex-[1.4] px-1.5 disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100'
+  'flex-[1.4] px-1.5 disabled:bg-muted disabled:text-foreground/45 disabled:opacity-100'
 
 /**
  * The keys as the Check board draws them, widened to a round's keys: C3 to C5 on a phone (15 white keys
@@ -245,7 +246,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
               {building && !result ? (
                 <ChordHint key={trainer.number} tones={building.tones} />
               ) : null}
-              <div aria-live="polite" className="flex flex-col items-center gap-2">
+              <div aria-live="polite" className="flex flex-col items-center gap-2 empty:-mt-2">
                 {verdict ? (
                   <p
                     className={cn(
