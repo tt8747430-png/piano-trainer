@@ -1,5 +1,5 @@
 import {
-  noteName,
+  printedNote,
   pitchClass,
   spellChord,
   type Chord,
@@ -26,7 +26,7 @@ export const scaleShown = (placed: readonly PlacedTone[]): ShownKeys => ({
   marks: new Map(
     placed.map((key) => [
       key.midi,
-      { tone: key.tone.role === 'root' ? 'tonic' : 'scale', label: noteName(key.tone.note) },
+      { tone: key.tone.role === 'root' ? 'tonic' : 'scale', label: printedNote(key.tone.note) },
     ]),
   ),
 })
@@ -41,7 +41,7 @@ export function voicedShown(chord: Chord, keys: readonly Midi[]): ShownKeys {
   for (const key of keys) {
     const tone = tones.find((each) => each.pitchClass === pitchClass(key))
     if (tone) marks.set(key, nameMark(tone))
-    else if (chord.bass) marks.set(key, { tone: 'scale', label: noteName(chord.bass) })
+    else if (chord.bass) marks.set(key, { tone: 'scale', label: printedNote(chord.bass) })
   }
   return { keys, marks }
 }

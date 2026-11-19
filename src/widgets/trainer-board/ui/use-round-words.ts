@@ -10,7 +10,7 @@ import {
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import {
   keyFromParam,
-  noteName,
+  printedNote,
   parseKey,
   printedSymbol,
   writtenName,
@@ -92,7 +92,7 @@ export function useRoundWords() {
       case 'build-interval':
         return t('quiz:prompt.buildInterval', {
           interval: t(`music:interval.${question.interval}.name`).toLowerCase(),
-          note: noteName(question.lowNote),
+          note: printedNote(question.lowNote),
         })
       case 'name-scale':
         return t('quiz:prompt.nameScale')
@@ -164,9 +164,9 @@ export function useRoundWords() {
       case 'name-scale':
         return scaleName(question.root, question.kind)
       case 'read-note':
-        return writtenName(question.key, question.spelled)
+        return printedSymbol(writtenName(question.key, question.spelled))
       case 'key-degrees':
-        return question.notes.map((tone) => noteName(tone.note)).join(' ')
+        return question.notes.map((tone) => printedNote(tone.note)).join(' ')
       case 'key-signature':
         return `${keyName(question.key)}: ${signatureCount(signatureOption(question.key))}`
       case 'chord-role':
@@ -178,10 +178,16 @@ export function useRoundWords() {
       case 'interval-card':
         return t('quiz:intervalAnswer', {
           interval: t(`music:interval.${question.interval}.name`),
-          low: noteName(question.lowNote),
-          high: noteName(question.highNote),
+          low: printedNote(question.lowNote),
+          high: printedNote(question.highNote),
         })
     }
+  }
+
+  /** A build's answer as its notes, as the Check board says it ("The answer: G B D"); else its name. */
+  function notes(question: Question): string {
+    const said = whyAnswer(question).values.notes
+    return typeof said === 'string' && said !== '' ? said : answer(question)
   }
 
   /**
@@ -266,5 +272,5 @@ export function useRoundWords() {
     }
   }
 
-  return { prompt, options, answer, why }
+  return { prompt, options, answer, notes, why }
 }

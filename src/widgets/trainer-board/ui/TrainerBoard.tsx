@@ -17,8 +17,8 @@ import {
   type Question,
   type TrainerRun,
 } from '@/features/trainer'
-import { cn, useWakeLock } from '@/shared/lib'
-import { type Midi, printedNote, type Tone } from '@/shared/lib/music'
+import { cn, LAPTOP, useMediaQuery, useWakeLock } from '@/shared/lib'
+import { type KeyRange, midi, type Midi, printedNote, rangeOf, type Tone } from '@/shared/lib/music'
 import { RoundButton, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
@@ -29,12 +29,24 @@ import { useRoundShortcuts } from './use-round-shortcuts'
 import { useRoundWords } from './use-round-words'
 
 /** A pill of the round's foot, as the Check board's: 50 tall, sharing the row, 15 bold. */
+/** The foot's pills as the Check board's BTN: 50 tall at 16 bold, 20 a side, shared from a zero basis. */
 const FOOT =
-  'h-12.5 min-w-0 flex-1 rounded-full px-2 text-[0.9375rem] leading-tight font-bold text-balance whitespace-normal'
+  'h-12.5 min-w-0 flex-1 basis-0 rounded-full px-5 text-base leading-tight font-bold whitespace-nowrap'
 /** The foot's quiet pills, on the sand. */
 const QUIET = 'bg-muted text-foreground hover:bg-foreground/10'
-/** Check, 1.4 of a quiet pill's width, on the sand with soft ink until a key is chosen. */
-const WAITING = 'flex-[1.4] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100'
+/** Check, 1.4 of a quiet pill's share, 6 a side, on the sand with soft ink until a key is chosen. */
+const WAITING =
+  'flex-[1.4] px-1.5 disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100'
+
+/**
+ * The keys as the Check board draws them, widened to a round's keys: C3 to C5 on a phone (15 white keys
+ * across 402, the keys' least width) and C2 to C7 at 170 on a laptop.
+ */
+const KEYS: Readonly<Record<'phone' | 'laptop', KeyRange>> = {
+  phone: { from: midi(48), to: midi(72) },
+  laptop: { from: midi(36), to: midi(96) },
+}
+const LAPTOP_KEYS_PX = 170
 
 /** Whether a round asked by ear, or a card, hides this side until it is answered or turned over. */
 function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
@@ -81,9 +93,11 @@ function ChordHint({ tones }: { tones: readonly Tone[] }) {
 export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Asks }) {
   // The screen stays on while a round is on the screen: a phone on the stand does not lock mid-song.
   useWakeLock()
+  const laptop = useMediaQuery(LAPTOP)
   const { t } = useTranslation(['quiz', 'common', 'music'])
   const words = useRoundWords()
   const { question, selected, result } = trainer.round
+  const round = roundRange(asks, question, laptop ? KEYS.laptop : KEYS.phone)
   const prompt = useRef<HTMLHeadingElement>(null)
   const primary = useRef<HTMLButtonElement>(null)
   const checkHint = useId()
@@ -174,6 +188,10 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
     (result ? isChoice(question) : !hides(question, 'keys') && (card || isChoice(question)))
       ? new Set(targetKeys(question))
       : undefined
+  // A build is answered on the keys, which then show it painted: its verdict names its notes, as the
+  // Check board says it ("The answer: G B D"), with no line of reasons under it.
+  const builds = choosesKeys(question)
+  const answerSaid = builds ? words.notes(question) : words.answer(question)
   const verdict = !result
     ? null
     : result.kind === 'revealed'
@@ -181,13 +199,13 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       : result.correct
         ? t('quiz:right')
         : result.kind === 'shown'
-          ? t('quiz:itIs', { answer: words.answer(question) })
+          ? t('quiz:itIs', { answer: answerSaid })
           : result.kind === 'keys' && result.wrongBass && question.mode === 'build-chord'
             ? t('quiz:wrongBass', {
-                answer: words.answer(question),
+                answer: answerSaid,
                 bass: printedNote(question.tones[question.inversion ?? 0]?.note ?? question.root),
               })
-            : t('quiz:itWas', { answer: words.answer(question) })
+            : t('quiz:itWas', { answer: answerSaid })
   // A card's name, once turned over, is its prompt.
   const heading = card && result ? words.answer(question) : words.prompt(question)
   // A chord to build is named large, its notes a Hint away.
@@ -209,7 +227,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           wrong, ink for an answer shown), so nothing at the foot moves and the keys stay put. On a
           laptop it is one 760 column, as the board's. */}
       <div className="mx-auto flex w-full max-w-190 flex-1 flex-col">
-        <div className="my-auto flex flex-col gap-3 py-2">
+        <div className="my-auto flex flex-col gap-3 py-2 landscape-phone:py-0">
           <div className="flex items-start gap-3">
             <div className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center">
               <h2
@@ -227,11 +245,11 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
               {building && !result ? (
                 <ChordHint key={trainer.number} tones={building.tones} />
               ) : null}
-              <div aria-live="polite">
+              <div aria-live="polite" className="flex flex-col items-center gap-2">
                 {verdict ? (
                   <p
                     className={cn(
-                      'flex min-h-11 items-center text-lg font-bold',
+                      'flex min-h-11 items-center text-lg font-bold landscape-phone:min-h-0 landscape-phone:text-base',
                       result?.correct
                         ? 'text-learned'
                         : result?.kind === 'shown'
@@ -242,7 +260,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
                     {verdict}
                   </p>
                 ) : null}
-                {result ? (
+                {result && !builds ? (
                   <p className="text-balance text-muted-foreground">{words.why(question)}</p>
                 ) : null}
               </div>
@@ -309,7 +327,10 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         {/* The keys run edge to edge, across the screen's gutter. */}
         <div className="-mx-gutter">
           <LiveKeyboard
-            range={roundRange(asks, question)}
+            range={round}
+            // Answered, the keys turn to the answer, all of it in sight (a scale reaching F♯5 on a phone).
+            inView={result ? rangeOf(targetKeys(question)) : undefined}
+            height={laptop ? LAPTOP_KEYS_PX : undefined}
             selected={
               choosing || (pressing && question.mode === 'key-degrees')
                 ? new Set(selected)

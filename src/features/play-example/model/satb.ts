@@ -1,5 +1,5 @@
 import {
-  noteName,
+  printedNote,
   pitchClass,
   spellChord,
   type Chord,
@@ -35,7 +35,7 @@ export function satbShown(
     if (was !== undefined && was !== key && !voiced.includes(was))
       marks.set(was, { tone, label, ghost: true })
     const spelled = tones.find((each) => each.pitchClass === pitchClass(key))?.note
-    marks.set(key, { tone, label, ...(spelled ? { note: noteName(spelled) } : {}) })
+    marks.set(key, { tone, label, ...(spelled ? { note: printedNote(spelled) } : {}) })
   })
   return { keys, marks }
 }

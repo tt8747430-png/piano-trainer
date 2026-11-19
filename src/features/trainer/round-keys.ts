@@ -3,7 +3,7 @@ import {
   keyScale,
   MIDDLE_C,
   midi,
-  noteName,
+  printedNote,
   pitchClass,
   placeChord,
   placeScale,
@@ -78,14 +78,14 @@ export function answerMarks(question: Question): Map<Midi, KeyMark> {
     question.mode === 'interval-card'
   ) {
     return new Map<Midi, KeyMark>([
-      [question.low, { tone: 'tonic', label: noteName(question.lowNote) }],
-      [question.high, { tone: 'scale', label: noteName(question.highNote) }],
+      [question.low, { tone: 'tonic', label: printedNote(question.lowNote) }],
+      [question.high, { tone: 'scale', label: printedNote(question.highNote) }],
     ])
   }
   const keys = placed(question)
   if (keys.length > 0)
     return new Map(
-      keys.map((key) => [key.midi, { tone: key.tone.role, label: noteName(key.tone.note) }]),
+      keys.map((key) => [key.midi, { tone: key.tone.role, label: printedNote(key.tone.note) }]),
     )
   return new Map(targetKeys(question).map((key) => [key, { tone: 'scale', label: '' }]))
 }
@@ -107,18 +107,19 @@ const READING_LEAST: KeyRange = { from: midi(48), to: midi(71) }
 
 /**
  * The keyboard a round is answered on: for Reading notes every note its run asks, the same for each
- * round so the keys never point at the answer; else the quiz range grown to hold the answer.
+ * round so the keys never point at the answer; else the quiz range grown to hold the answer. A screen
+ * that draws its own least keys (the Check's, by phone and laptop) passes them as `least`.
  */
-export function roundRange(asks: Asks, question: Question): KeyRange {
+export function roundRange(asks: Asks, question: Question, least?: KeyRange): KeyRange {
   if (asks.kind === 'notes')
     return keyboardRange(
       asks.notes.map((n) => n.key),
-      READING_LEAST,
+      least ?? READING_LEAST,
     )
   const cadence = cadenceOf(question)
   return keyboardRange(
     cadence ? [...targetKeys(question), ...cadenceChords(cadence).flat()] : targetKeys(question),
-    QUIZ_RANGE,
+    least ?? QUIZ_RANGE,
   )
 }
 

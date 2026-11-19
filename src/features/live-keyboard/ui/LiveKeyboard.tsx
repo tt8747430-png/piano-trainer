@@ -54,15 +54,17 @@ export function LiveKeyboard({
   /** Space holds the pedal while typing plays the keys: off where the screen gives Space a job. */
   spacePedal?: boolean
   /**
-   * The keys carry their names as the learner chose: off where a key's name is the answer (a round
-   * played on the keys), whatever the setting.
+   * The keys carry their names as the learner chose: where a key's name is the answer (a round played
+   * on the keys), only each C's.
    */
   namesKeys?: boolean
   /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
   showsSound?: boolean
 }) {
   const { typing, namedKeys } = useSettings(selectKeyboard)
-  const settings = { namedKeys: namesKeys ? namedKeys : ('none' as const) }
+  // Where a key's name is the answer only the octaves' C stays named, as the Check board draws its
+  // keys, and none where the learner named none.
+  const settings = { namedKeys: namesKeys || namedKeys === 'none' ? namedKeys : ('c' as const) }
   const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
   const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')

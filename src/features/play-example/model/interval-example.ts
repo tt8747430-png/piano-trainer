@@ -3,7 +3,7 @@ import {
   midi,
   midiOf,
   note,
-  noteName,
+  printedNote,
   spellAbove,
   spellsAbove,
   TICKS_PER_BEAT,
@@ -28,7 +28,7 @@ interface IntervalExample {
 }
 
 /** The lower key in the root's paint, named, as a chord's root is painted on the Chords page. */
-const lowerMark = (root: SpelledNote): KeyMark => ({ tone: 'root', label: noteName(root) })
+const lowerMark = (root: SpelledNote): KeyMark => ({ tone: 'root', label: printedNote(root) })
 
 /** The root alone, in octave 4, in the root's paint: the keys before an interval is played. */
 export function intervalRoot(root: SpelledNote): ShownKeys {
@@ -52,7 +52,7 @@ export function intervalExample(root: SpelledNote, name: IntervalName): Interval
   const high = midi(low + interval.semitones)
   // The upper first, so a unison's one key keeps the root's paint.
   const marks = new Map<Midi, KeyMark>([
-    [high, { tone: '5th', label: noteName(upper) }],
+    [high, { tone: '5th', label: printedNote(upper) }],
     [low, lowerMark(root)],
   ])
   return {

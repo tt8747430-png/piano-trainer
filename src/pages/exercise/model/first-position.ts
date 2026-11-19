@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { noteName, type Hand, type Midi } from '@/shared/lib/music'
+import { printedNote, type Hand, type Midi } from '@/shared/lib/music'
 import type { KeyMark, ShownKeys } from '@/shared/ui'
 
 /**
@@ -40,7 +40,7 @@ export function firstPosition(performance: Performance, hand: Hand, tonic: numbe
     const spelled = performance.notes.find((note) => note.midi === key)?.spelled
     marks.set(key, {
       tone: key % 12 === tonic ? 'tonic' : 'scale',
-      ...(spelled ? { label: noteName(spelled) } : {}),
+      ...(spelled ? { label: printedNote(spelled) } : {}),
     })
   }
   return { keys, marks }

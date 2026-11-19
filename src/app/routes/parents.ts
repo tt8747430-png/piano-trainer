@@ -223,7 +223,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       params: { exerciseId: param(from, 'exerciseId') },
     }),
   // The Check: up to the explorer its step is done on, the step's panel open, where it was asked.
-  '/full-screen/check': (from) => {
+  '/shell/check': (from) => {
     const { search } = from
     const of = text(search.of) ?? ''
     if (of.startsWith('scale:')) {

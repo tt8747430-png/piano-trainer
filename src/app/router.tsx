@@ -1089,7 +1089,7 @@ const takeRoute = createRoute({
 })
 
 const checkRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/check',
   notFoundComponent: notFoundIn('learn'),
   validateSearch: validateCheckSearch,
@@ -1201,6 +1201,7 @@ const routeTree = rootRoute.addChildren([
     studyRoute,
     studySectionRoute,
     takeRoute,
+    checkRoute,
   ]),
   fullScreenRoute.addChildren([
     playerRoute,
@@ -1210,7 +1211,6 @@ const routeTree = rootRoute.addChildren([
     exerciseRoute,
     editRoute,
     exampleEditRoute,
-    checkRoute,
   ]),
 ])
 
