@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   keyboardRange,
   MIDDLE_OCTAVES,
@@ -38,7 +38,9 @@ export function PinnedKeyboard({
   screen = 'reading',
   place,
   fitInView = false,
+  sized,
   className,
+  children,
 }: {
   /** The keys to hold in view, each marked as the page shows it. */
   shown: ShownKeys
@@ -59,8 +61,15 @@ export function PinnedKeyboard({
   place?: 'top' | undefined
   /** Narrows its keys until the keys shown fit its width, both hands of a chord (the Chord player). */
   fitInView?: boolean
+  /**
+   * The page's own height for them (the Chord player's Keys panel, R76): they stand that tall and show
+   * whatever another page's Piano folded, the page hiding them itself.
+   */
+  sized?: number
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
+  /** What the page draws over the keys: Edit layout's outline and tag. */
+  children?: ReactNode
 }) {
   // At the screen's foot, where the hands play (the boards' one piano); under the bar where the keys
   // are the page's stage.
@@ -80,7 +89,7 @@ export function PinnedKeyboard({
     })
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys
   // Hidden from the Piano sheet, nothing stands where the keys stood.
-  if (folded) return null
+  if (folded && sized === undefined) return null
   const body = (
     <LiveKeyboard
       range={range ?? widest}
@@ -93,7 +102,7 @@ export function PinnedKeyboard({
       onKeyPress={onKeyPress}
       spotlight
       fitInView={fitInView}
-      height={laptop ? LAPTOP_KEYS_PX : PHONE_KEYS_PX}
+      height={sized ?? (laptop ? LAPTOP_KEYS_PX : PHONE_KEYS_PX)}
     />
   )
   // Edge to edge (R34): the dock's gutters and foot are the keys' own.
@@ -101,12 +110,14 @@ export function PinnedKeyboard({
     return (
       <Docked bleed className="vt-keys">
         {body}
+        {children}
       </Docked>
     )
   return (
     // 8 under the bar, as every Practice board draws the keys (a page's own 16 gap less 8).
     <Pinned bleed className={cn('vt-keys -mt-2', className)}>
       {body}
+      {children}
     </Pinned>
   )
 }

@@ -19,7 +19,7 @@ import {
 } from './types'
 
 export const CHORD_SHEETS_STORAGE_KEY = 'pt-chord-sheets'
-export const CHORD_SHEETS_VERSION = 1
+export const CHORD_SHEETS_VERSION = 2
 export { DEFAULT_SHEET_SETTINGS }
 
 /** The style a sheet plays in when none it names is known: the Chord player's first, Pop 1. */
@@ -33,7 +33,18 @@ export interface ChordSheetsState {
   readonly mine: readonly SavedChordSheet[]
   /** The next sheet's number: a deleted id is never reused. */
   readonly nextId: number
+  /**
+   * The sheets opened last, the latest first (R76): My chord sheets by id, the sheet in hand as
+   * `IN_HAND`. The sheet's name in the Chord player's bar opens them.
+   */
+  readonly recent: readonly RecentSheet[]
 }
+
+/** The sheet in hand among the recent sheets. */
+export const IN_HAND = 'in-hand'
+export type RecentSheet = string
+/** The recent sheets the bar's menu lists. */
+export const MOST_RECENT_SHEETS = 5
 export type ChordSheetsStore = StoreApi<ChordSheetsState>
 
 /** A new sheet: one empty Verse in C major, 4/4, in Pop 1 at 100. */
@@ -45,7 +56,7 @@ export const NEW_ENTRY: ChordSheetEntry = {
   settings: DEFAULT_SHEET_SETTINGS,
 }
 
-const INITIAL: ChordSheetsState = { scratch: NEW_ENTRY, mine: [], nextId: 1 }
+const INITIAL: ChordSheetsState = { scratch: NEW_ENTRY, mine: [], nextId: 1, recent: [] }
 
 export const createChordSheetsStore = (saving: SavingOptions = {}): ChordSheetsStore =>
   createSavedStore(
@@ -140,5 +151,11 @@ function sanitize(persisted: unknown): ChordSheetsState {
     scratch: readEntry(saved.scratch) ?? NEW_ENTRY,
     mine: mine.slice(0, MOST_SHEETS),
     nextId: Math.max(between(saved.nextId, 1, Number.MAX_SAFE_INTEGER, 1), past),
+    recent: (Array.isArray(saved.recent) ? saved.recent : [])
+      .filter(
+        (id: unknown, at: number, all: readonly unknown[]): id is string =>
+          (id === IN_HAND || (typeof id === 'string' && seen.has(id))) && all.indexOf(id) === at,
+      )
+      .slice(0, MOST_RECENT_SHEETS),
   }
 }

@@ -34,7 +34,6 @@ import {
   DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_PROGRESSIONS,
-  ARRANGER_PLACES,
   DEFAULT_CHORD_PLAYER,
   DEFAULT_CHORDS,
   isChordLabels,
@@ -97,7 +96,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 54
+export const SETTINGS_VERSION = 55
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -322,8 +321,6 @@ function chordPlayerSettings(value: unknown): ChordPlayerSettings {
     names: isProgressionNames(saved.names) ? saved.names : DEFAULT_CHORD_PLAYER.names,
     voicing: isProgressionVoicing(saved.voicing) ? saved.voicing : DEFAULT_CHORD_PLAYER.voicing,
     follow: typeof saved.follow === 'boolean' ? saved.follow : DEFAULT_CHORD_PLAYER.follow,
-    arranger:
-      ARRANGER_PLACES.find((place) => place === saved.arranger) ?? DEFAULT_CHORD_PLAYER.arranger,
   }
 }
 

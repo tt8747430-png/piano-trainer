@@ -13,5 +13,8 @@ export const selectSaved =
   (state: ChordSheetsState): SavedChordSheet | undefined =>
     id === undefined ? undefined : state.mine.find((sheet) => sheet.id === id)
 
+/** The sheets opened last, the latest first: one value until one is opened. */
+export const selectRecent = (state: ChordSheetsState): ChordSheetsState['recent'] => state.recent
+
 /** My chord sheets, newest first. */
 export const selectMine = (state: ChordSheetsState): readonly SavedChordSheet[] => state.mine

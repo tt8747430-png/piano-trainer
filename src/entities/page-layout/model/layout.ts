@@ -8,15 +8,30 @@ export const PLACES = ['top', 'float', 'bottom', 'left', 'right'] as const
 export type Place = (typeof PLACES)[number]
 const isPlace = isOneOf(PLACES)
 
+/** Every size a panel has, by its kind: the keys', the controls', the Genos', the chords'. */
+export const PANEL_SIZES = [
+  'small',
+  'medium',
+  'large',
+  'full',
+  'play',
+  'compact',
+  'minimized',
+  'narrow',
+  'wide',
+] as const
+export type PanelSize = (typeof PANEL_SIZES)[number]
+const isPanelSize = isOneOf(PANEL_SIZES)
+
 /** The places a laptop alone has room for: a column beside the content. */
 const SIDES: readonly Place[] = ['left', 'right']
 
 /** One panel of a page: the places it may stand, its sizes, where and how large it comes. */
 export interface PanelSpec {
   readonly places: readonly Place[]
-  readonly sizes: readonly string[]
+  readonly sizes: readonly PanelSize[]
   readonly place: Place
-  readonly size: string
+  readonly size: PanelSize
   /** Only a laptop draws it (the key's Chords beside the chart). */
   readonly laptopOnly?: true
 }
@@ -60,7 +75,7 @@ export type PanelOf<P extends LayoutPage> = keyof (typeof PAGE_PANELS)[P] & stri
 /** A panel as the learner left it. */
 export interface PanelLayout {
   readonly place: Place
-  readonly size: string
+  readonly size: PanelSize
   readonly hidden: boolean
 }
 
@@ -149,7 +164,7 @@ export const changedPages = (changed: ChangedLayouts): LayoutPage[] =>
 export type PanelChange =
   | { readonly panel: string; readonly kind: 'hidden' }
   | { readonly panel: string; readonly kind: 'place'; readonly place: Place }
-  | { readonly panel: string; readonly kind: 'size'; readonly size: string }
+  | { readonly panel: string; readonly kind: 'size'; readonly size: PanelSize }
 
 /** What the learner changed of a page, panel by panel in its order: a hidden panel says only that. */
 export function changesOf(changed: ChangedLayouts, page: LayoutPage): PanelChange[] {
@@ -180,7 +195,7 @@ export function readLayouts(saved: unknown): ChangedLayouts {
       if (!isRecord(layout)) continue
       changed = withPanel(changed, page, panel, {
         ...(isPlace(layout.place) ? { place: layout.place } : {}),
-        ...(typeof layout.size === 'string' ? { size: layout.size } : {}),
+        ...(isPanelSize(layout.size) ? { size: layout.size } : {}),
         ...(typeof layout.hidden === 'boolean' ? { hidden: layout.hidden } : {}),
       })
     }

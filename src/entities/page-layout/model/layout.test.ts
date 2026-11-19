@@ -3,6 +3,7 @@ import {
   changedPages,
   changesOf,
   layoutOf,
+  panelSpec,
   placeOn,
   placesFor,
   readLayouts,
@@ -35,7 +36,7 @@ describe('withPanel', () => {
   })
 
   it('ignores a place or size the panel cannot take', () => {
-    expect(withPanel({}, 'chord-player', 'dock', { place: 'left', size: 'huge' })).toEqual({})
+    expect(withPanel({}, 'chord-player', 'dock', { place: 'left', size: 'compact' })).toEqual({})
   })
 })
 
@@ -54,12 +55,7 @@ describe('changesOf', () => {
 
 describe('placesFor and placeOn', () => {
   it('leaves the columns beside the content to a laptop; a phone floats what stands in one', () => {
-    const spec = {
-      places: ['top', 'float', 'bottom', 'left', 'right'] as const,
-      sizes: [],
-      place: 'right',
-      size: '',
-    } as const
+    const spec = panelSpec('chord-player', 'genos')
     expect(placesFor(spec, false)).toEqual(['top', 'float', 'bottom'])
     expect(placesFor(spec, true)).toHaveLength(5)
     expect(placeOn('right', false)).toBe('float')

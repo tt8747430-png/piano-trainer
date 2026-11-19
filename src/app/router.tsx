@@ -91,7 +91,11 @@ import {
   circleSearch,
   readChordFinderSearch,
 } from './routes/tool-search'
-import { chordPlayerSearch, chordPlayerSettingsSearch } from './routes/chord-player-search'
+import {
+  chordPlayerSearch,
+  chordPlayerSettingsSearch,
+  readChordPlayerSearch,
+} from './routes/chord-player-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -761,10 +765,12 @@ const chordFinderRoute = createRoute({
 })
 
 // The Chord player (R29 CP1): a chord sheet of sections played by a band in a style; its own Settings.
+// Opened plainly, the sheet last open (R76).
 const chordPlayerRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/chord-player',
   ...chordPlayerSearch,
+  ...remembered(readChordPlayerSearch, [], ['sheet']),
   component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerPage'),
 })
 const chordPlayerSettingsRoute = createRoute({

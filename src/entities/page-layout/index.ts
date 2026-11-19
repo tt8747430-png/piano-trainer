@@ -4,6 +4,7 @@ export {
   LAYOUT_PAGES,
   layoutOf,
   PAGE_PANELS,
+  PANEL_SIZES,
   panelSpec,
   panelsOf,
   placeOn,
@@ -16,6 +17,7 @@ export {
   type PanelChange,
   type PanelLayout,
   type PanelOf,
+  type PanelSize,
   type PanelSpec,
   type Place,
 } from './model/layout'
