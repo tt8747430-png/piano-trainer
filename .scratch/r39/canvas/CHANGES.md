@@ -8,10 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · one list card on a sheet: hand-copied 12 lists to the kit's 14 ringed card; Chords' post-build patch gone · ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,Exercise,ExerciseLaptop,Intervals,IntervalsLaptop,Metronome,MetronomeLaptop,Pattern,PatternLaptop,Progression,ProgressionLaptop,Scales,ScalesLaptop,Takes,TakesLaptop · **pending**
+(none)
 
 ## Changes
 
+- 2026-11-19 · fe799f01 · one list card on a sheet: hand-copied 12 lists to the kit's 14 ringed card; Chords' post-build patch gone · ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,Exercise,ExerciseLaptop,Intervals,IntervalsLaptop,Metronome,MetronomeLaptop,Pattern,PatternLaptop,Progression,ProgressionLaptop,Scales,ScalesLaptop,Takes,TakesLaptop · v605
 - 2026-11-19 · b7d3efef · Chords: the post-build type rewrite (17→16, 15→14) removed; sheet titles and Done 17 as every board · Chords, ChordsLaptop · v604
 - 2026-11-19 · 658ebae0 · Chord player: chord sheet's Root, Quality, Bass, Duration and Delete at the 12 control corner (also the app's ChordDialog) · ChordPlayer, ChordPlayerLaptop · v602
 - 2026-11-19 · efdaa434 · one segmented control, 44 tall at 14px, as the app's Segmented · boards in the commit · published by v601
