@@ -18,7 +18,7 @@ _LAPHEAD_OLD = '<div style="height: 44px; display: flex; align-items: center; pa
 _LAPBTN = 'width: 44px; height: 44px; flex: none; border: 0; border-radius: 22px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center'
 _LAPHEAD = ('<div data-sidehead style="height: 44px; display: flex; align-items: center; gap: 2px; padding: 0 0 0 12px">'
          '<span data-sidetext style="flex: 1; min-width: 0; font-family: \'Instrument Serif\', Georgia, serif; font-size: 24px; white-space: nowrap">Piano Trainer</span>'
-         '<div data-sidebtns style="flex: none; display: flex; border-radius: 22px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)">'
+         '<div data-sidebtns style="flex: none; display: flex; border-radius: 22px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10)">'
          '<button type="button" data-lapbtn aria-label="{{lapSideL}}" data-tip="{{lapSideL}}" aria-expanded="{{lapSideOn}}" onClick="{{lapSideT}}" style="' + _LAPBTN + '">' + _PANEL + '</button>'
          '<button type="button" data-lapbtn aria-label="Focus" data-tip="Focus: hide the sidebar and panels" onClick="{{lapFocusT}}" style="' + _LAPBTN + '">' + _FOCUS + '</button></div></div>')
 # the runtime writes each style back as the browser serialises it (minmax(0px, …))
@@ -94,7 +94,7 @@ def lapwin(h):
     m = re.search(r'<div (style="[^"]*grid-template-columns: 248px minmax\(0, 1fr\)[^"]*")>', h)
     if not m:
         return h
-    glass = ('background: rgba(254,253,251,.86); color: #332921; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)')
+    glass = ('background: rgba(254,253,251,.86); color: #332921; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10)')
     exitb = ('<button type="button" data-focusexit aria-label="Exit focus" data-tip="Exit focus (Esc)" onClick="{{lapFocusT}}" style="flex: none; width: 44px; height: 44px; '
              'margin-right: 8px; padding: 0; border: 0; border-radius: 22px; %s; backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8); '
              'align-items: center; justify-content: center; font: inherit">%s</button>' % (glass, _EXIT))

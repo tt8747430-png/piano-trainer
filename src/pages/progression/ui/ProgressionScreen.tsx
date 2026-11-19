@@ -153,7 +153,6 @@ export function ProgressionScreen({
           listed ? <PracticeFavouriteButton kind="progressions" id={listed.id} /> : undefined
         }
         about={about}
-        note={library?.note ? localText(library.note, locale) : undefined}
       />
       {open === 'keep' ? (
         <KeepProgressionSheet

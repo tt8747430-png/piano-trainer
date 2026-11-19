@@ -830,16 +830,19 @@
   box-shadow: 0 2px 3px var(--key-cast);
 }
 
+@utility elevation-float {
+  box-shadow: var(--elevation-float);
+}
 @utility elevation-1 {
   box-shadow: var(--elevation-1);
 }
-/* What floats over the page (the canvas's docks): the glass, its line ring and the three-layer shade. */
+/* What floats over the page (the canvas's docks): the glass, its line ring and the float's tight lift. */
 @utility glass {
   background-color: var(--glass);
   backdrop-filter: blur(24px) saturate(1.8);
   box-shadow:
     0 0 0 1px var(--border),
-    var(--elevation-2);
+    var(--elevation-float);
 }
 /* Icons side by side share one glass capsule, each keeping its 44 target (the boards' `_glassgroups`; bars.md,
    2026-11-16; Apple HIG, Toolbars: "Group toolbar items logically"): the run's inner corners square off and
@@ -875,7 +878,7 @@
   box-shadow:
     inset 0 1px 0 var(--glass-honey-lit),
     0 0 0 1px rgb(176 122 42 / 0.28),
-    var(--elevation-2);
+    var(--elevation-float);
 }
 /* A layer over the page that is not glass (a dialog, a popover): the line ring and the float's shade. */
 @utility layer-shadow {

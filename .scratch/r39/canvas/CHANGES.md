@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · no dim under what floats: the kit's FLOAT on bars, the tab bar, the + and the floating bars (was SHADOW's 28px blur); (app) --elevation-float · every board (all docks and floating actions) · pending
+
 ## Changes
 
 - 2026-11-19 · bd0d9245 · one title picker: Scales' name as Chords' PART (44, 56 on a laptop, 54 tall, one faint chevron; was 40, 64 tall, two chevrons); the kit's PART end pad 8 at its source (a pass rewrote 9) · Scales,ScalesLaptop · v614

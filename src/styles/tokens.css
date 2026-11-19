@@ -225,6 +225,11 @@
   --shade: var(--p-ink);
   --shade-near: 12%;
   --shade-far: 14%;
+  /* What floats over the page (bars, the tab bar, the floating actions): a tight lift with no shade pooled
+     under it (the canvas's FLOAT; owner, 2026-11-19: "i dont like this dim under the floating actions"). */
+  --elevation-float:
+    0 1px 2px color-mix(in oklab, var(--shade) 10%, transparent),
+    0 2px 6px -2px color-mix(in oklab, var(--shade) 10%, transparent);
   --elevation-1:
     0 1px 2px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
     0 3px 8px -2px color-mix(in oklab, var(--shade) var(--shade-far), transparent);

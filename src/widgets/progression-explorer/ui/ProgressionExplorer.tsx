@@ -41,7 +41,7 @@ import { ProgressionSongs } from './ProgressionSongs'
  * A progression's page in the Chords page's shape (canvas 177): the keys at the top; its name in the
  * serif with its ♡ (`favourite`), how it sounds and its style (`about`), and Key; for a line typed or
  * kept (`typed`), its numerals and the mode they are read in; its chords as tiles by role with each
- * root's move, then the chords on the staff on the paper with what it teaches (`note`); practising it
+ * root's move, then the chords on the staff on the paper; practising it
  * through the keys in the Player, Passing chords, and the songs it is heard in with Open in the Chord
  * player. One floating bar: Loop and Play with what it plays (Chords, Approach chords); it is practised by
  * its Practise rows alone. On a
@@ -55,7 +55,6 @@ export function ProgressionExplorer({
   name,
   favourite,
   about,
-  note,
 }: {
   view: ProgressionsView
   onChange: (view: ProgressionsView) => void
@@ -66,8 +65,6 @@ export function ProgressionExplorer({
   favourite?: ReactNode
   /** How it sounds and its style, under its name. */
   about?: string | undefined
-  /** What it teaches, in a line, under its chords. */
-  note?: string | undefined
 }) {
   const { t } = useTranslation(['music', 'practice'])
   const scaleName = useScaleName()
@@ -94,7 +91,9 @@ export function ProgressionExplorer({
                 {favourite}
               </div>
               {about ? (
-                <p className="ms-0.5 text-[0.9375rem] text-pretty text-muted-foreground">{about}</p>
+                <p className="ms-0.5 text-[0.9375rem]/[normal] text-pretty text-muted-foreground">
+                  {about}
+                </p>
               ) : null}
             </div>
             {view.mode ? (
@@ -129,13 +128,8 @@ export function ProgressionExplorer({
             <RowRoles />
             {/* The chords on the staff at reading size, on the paper with no card round them
                 (canvas, "A progression's chords on the staff at reading size"). */}
-            <figure className="flex flex-col items-center gap-3">
+            <figure className="flex flex-col items-center">
               <RowStaff />
-              {note ? (
-                <figcaption className="mx-1 self-stretch text-[0.9375rem] leading-snug text-pretty text-muted-foreground">
-                  {note}
-                </figcaption>
-              ) : null}
             </figure>
             <RowPlay
               variant="pieces"

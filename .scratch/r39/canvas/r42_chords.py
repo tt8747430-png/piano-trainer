@@ -782,7 +782,7 @@ PLAYI = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><pat
 # in its own group on the trailing side. So three shapes, no capsule around them: the keyboard (what the page
 # shows) · the chord (what is chosen) · Play (what you hear), the last one tinted honey.
 GLASSGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; {GLASSFX}'
-TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: rgba(237,198,132,.82); backdrop-filter: blur(24px) saturate(1.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28), {SHADOW}'
+TINTGRP = f'height: 56px; box-sizing: border-box; border-radius: 28px; background: rgba(237,198,132,.82); backdrop-filter: blur(24px) saturate(1.8); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 0 0 1px rgba(176,122,42,.28), {FLOAT}'
 # A floating bar's pieces (Apple, iOS 26 toolbars): glass pieces, an icon over its caption, and the one honey Play capsule
 PIECE = lambda label, cap, icon, extra='': (f'<button type="button" aria-label="{label}" {extra} style="pointer-events: auto; flex: none; min-width: 72px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; '
                                               f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{icon}<span style="font-size: 12px; font-weight: 600">{cap}</span></button>')

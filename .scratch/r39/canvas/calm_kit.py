@@ -45,6 +45,8 @@ main>*{flex:none}
 # ── tokens (the calm Chords page's, light) ──
 PAGE, SHEET, INK, SOFT, FILL, LINE, LINK, ACCENT = '#F7F3EE', '#FEFDFB', '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#356890', '#EDC684'
 GLASS = 'rgba(254,253,251,.86)'
+# What floats over the page (bars, the tab bar, the floating actions): a tight lift, no pooled dim under it (owner, 2026-11-19).
+FLOAT = '0 1px 2px rgba(51,41,33,.10), 0 2px 6px -2px rgba(51,41,33,.10)'
 SHADOW = '0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)'
 FONT = "'Instrument Sans', -apple-system, 'Helvetica Neue', sans-serif"
 I = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'

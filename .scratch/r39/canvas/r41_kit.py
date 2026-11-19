@@ -29,7 +29,7 @@ const sheetOf = (st, set) => ({ sheet: st.sheet || '', closeSheet: () => set({ s
 
 # ── the bar ──
 # one glass for every control that floats over the page (bars, floating actions, the transport): DESIGN.md, Placement
-GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}'
+GLASSFX = f'background: {GLASS}; -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}'
 GLASSST = f'flex: none; width: 44px; height: 44px; box-sizing: border-box; border-radius: 22px; border: 0; {GLASSFX}; color: {INK}; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0'
 # The one switch between the Player and the editor (owner, 2026-11-16: "proper way to switch from the player to editor not
 # like this two different controls in the editor and in the player"): Play · Edit in one glass capsule at the centre of
@@ -197,9 +197,9 @@ def DOCK(inner, bottom=34, pad=8, w=None):  # bottom: px, or a state's placement
     """The floating glass bar at the foot of a page: the phone's full width, or w wide and centred (a laptop's
     selection bar, 'auto' to hug its acts); not for the laptop's dock in the flow, which is DOCK_L."""
     place = 'left: 16px; right: 16px;' if w is None else 'left: 50%; transform: translateX(-50%);' + ('' if w == 'auto' else f' width: {w}px;')
-    return f'<div role="toolbar" style="position: absolute; {place} {bottom if isinstance(bottom, str) else f'bottom: {bottom}px'}; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div>'
+    return f'<div role="toolbar" style="position: absolute; {place} {bottom if isinstance(bottom, str) else f'bottom: {bottom}px'}; z-index: 40; height: 68px; box-sizing: border-box; padding: 0 {pad}px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; align-items: center; gap: 8px">{inner}</div>'
 def DOCK_L(inner, w=560):
-    return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
+    return f'<div style="flex: none; display: flex; justify-content: center"><div role="toolbar" style="width: {w}px; height: 68px; box-sizing: border-box; padding: 0 8px; border-radius: 34px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; align-items: center; gap: 8px">{inner}</div></div>'
 def CARD(inner, pad='16px', extra=''):
     return f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: {pad}; {extra}">{inner}</div>'
 def ROOTGRID(lst='roots'):
@@ -295,7 +295,7 @@ def TABBAR(cur):
     short = ('<style data-tabshort>[data-menuroot] { container-type: size } @container (max-height: 520px) { nav[aria-label="Main"] { left: 50% !important; right: auto !important; '
              'translate: -50% 0; width: 440px; height: 52px !important; bottom: 24px !important } nav[aria-label="Main"] > a { flex-direction: row !important; height: 40px !important; gap: 6px !important } '
              'button[aria-label="New"][aria-haspopup] { bottom: 22px !important } ul[role="menu"][aria-label="New"] { bottom: 94px !important } }</style>')
-    return edge + short + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; gap: 2px">{a}</nav>'
+    return edge + short + f'<nav aria-label="Main" style="position: absolute; left: 16px; right: 16px; bottom: 30px; z-index: 40; height: 64px; box-sizing: border-box; padding: 6px; border-radius: 32px; background: {GLASS}; backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px {LINE}, {FLOAT}; display: flex; gap: 2px">{a}</nav>'
 
 # small pictures that show the content (Practice's rows and cards)
 def pic(kind, s=44):
@@ -357,11 +357,11 @@ def NEWDIAL(items, bottom, on='dialOn', off='noDial', toggle='openDial', close='
     card = (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 29; background: rgba(247,243,238,.6)"></div>'
             f'<ul role="menu" aria-label="New" style="position: absolute; right: 16px; bottom: {bottom + 72}px; transform-origin: bottom right; z-index: 31; min-width: 200px; margin: 0; box-sizing: border-box; list-style: none; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; {GLASSFX}">'
             + ''.join(_newitem(l, g) for l, g in items) + '</ul></sc-if>')
-    return card + (f'<button type="button" aria-label="New" data-tip="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">'
+    return card + (f'<button type="button" aria-label="New" data-tip="New" aria-haspopup="menu" aria-expanded="{{{{{on}}}}}" onClick="{{{{{toggle}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {FLOAT}; display: flex; align-items: center; justify-content: center">'
                    f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}">{_NEWX}</sc-if><sc-if value="{{{{{off}}}}}" hint-placeholder-val="{{{{true}}}}">{_NEWPLUS}</sc-if></button>')
 def NEWFAB(label, act, bottom):
     """A floating New with one thing to make: the same 56 honey + as NEWDIAL, at the bottom right, its name in its tip."""
-    return (f'<button type="button" aria-label="{label}" data-tip="{label}" onClick="{{{{{act}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {SHADOW}; display: flex; align-items: center; justify-content: center">{_NEWPLUS}</button>')
+    return (f'<button type="button" aria-label="{label}" data-tip="{label}" onClick="{{{{{act}}}}}" style="position: absolute; right: 16px; bottom: {bottom}px; z-index: 31; width: 56px; height: 56px; border: 0; border-radius: 28px; background: {ACCENT}; color: {INK}; box-shadow: {FLOAT}; display: flex; align-items: center; justify-content: center">{_NEWPLUS}</button>')
 def NEWMENU(items):
     """The same New as a menu, the floating +'s list (NEWDIAL)."""
     return f'<ul role="menu" aria-label="New" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px">' + ''.join(_newitem(l, g) for l, g in items) + '</ul>'

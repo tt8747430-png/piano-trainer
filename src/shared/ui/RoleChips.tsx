@@ -57,11 +57,11 @@ export function RoleTile({
         )}
       >
         {numeral ? (
-          <span className="max-w-full truncate font-serif text-[1.625rem] leading-tight lg:text-[2.125rem]">
+          <span className="max-w-full truncate font-serif text-[1.625rem]/[normal] lg:text-[2.125rem]/[normal]">
             {printedSymbol(numeral)}
           </span>
         ) : null}
-        <span className="max-w-full truncate text-[0.9375rem] font-bold">
+        <span className="max-w-full truncate text-[0.9375rem]/[normal] font-bold">
           {printedSymbol(chord)}
         </span>
       </button>

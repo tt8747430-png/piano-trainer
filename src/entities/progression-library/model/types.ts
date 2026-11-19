@@ -37,8 +37,6 @@ export interface ProgressionDetails {
   readonly name: LocalText
   /** How it sounds, in one short line under its name. */
   readonly character: LocalText
-  /** What it teaches, in a line. */
-  readonly note?: LocalText
   /** The pattern its Player opens with, where it has one of its own. */
   readonly pattern?: PatternId
   /** The chord size it opens at, where triads would lose what it teaches. */

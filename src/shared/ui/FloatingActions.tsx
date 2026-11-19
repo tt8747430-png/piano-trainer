@@ -172,11 +172,11 @@ export function FloatingActions({
 const PRESS =
   'transition-[scale,box-shadow,background-color,filter] duration-150 ease-out active:scale-96'
 /** The main floating action: 56px, honey, the highest shade. */
-const FAB = `size-14 rounded-pill elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB = `size-14 rounded-pill elevation-float [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** The main action with its name beside its icon (an extended FAB). */
-const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+const FAB_EXTENDED = `h-14 gap-2 rounded-pill px-5 pl-4 elevation-float [&_svg:not([class*=size-])]:size-6 ${PRESS}`
 /** A second action: 48px, the raised paper with its soft line, a lower shade. */
-export const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
+export const MINI_FAB = `size-12 rounded-pill border-border bg-raised elevation-float hover:bg-muted [&_svg:not([class*=size-])]:size-5 ${PRESS}`
 /** A second action with its words: a 48px pill of the same paper. */
 
 /**
@@ -354,7 +354,7 @@ export function SpeedDial({
           aria-expanded={open}
           aria-controls={open ? id : undefined}
           onClick={() => (open ? close() : setShown('open'))}
-          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted elevation-2')}
+          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted')}
         >
           <Icon
             aria-hidden
