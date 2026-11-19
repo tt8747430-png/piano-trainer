@@ -146,9 +146,10 @@ export function ToolPage({
           <div className="flex w-full flex-col gap-6">{side}</div>
         </div>
       ) : (
-        // The picture centred in the board's room: 24 under the bar (8 on a laptop), 120 above the screen's foot
-        // (the page's own room ends 126 above it, so the column reaches 6 into the foot's pad).
-        <div className="mx-auto -mb-1.5 flex w-full max-w-3xl flex-1 flex-col gap-6 pt-6 lg:pt-2">
+        // The picture centred in the board's room: 24 under the bar and 120 above the screen's foot on a phone (the
+        // page's own room ends 126 above it, so the column reaches 6 into the foot's pad); 8 under it and 112 above
+        // the foot on a laptop, as the Circle of fifths' laptop board centres its wheel.
+        <div className="mx-auto -mb-1.5 flex w-full max-w-3xl flex-1 flex-col gap-6 pt-6 lg:mb-1 lg:pt-2">
           <section
             aria-label={title}
             className="flex min-h-56 flex-1 flex-col items-center justify-center gap-4 text-center"

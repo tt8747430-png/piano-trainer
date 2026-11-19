@@ -132,11 +132,11 @@
   /* What dims the page under a sheet or a dialog (the board's BSHEET): warm ink, no blur. */
   --scrim: rgb(51 41 33 / 0.28);
   /* The Circle of fifths' washes (canvas 182): the chosen key's neighbours outside, its relative and
-     its neighbours inside, honey lighter each step out. Drawn from the action and the page, so they
-     follow the theme. */
-  --wheel-near: color-mix(in oklab, var(--primary) 45%, var(--card));
-  --wheel-relative: color-mix(in oklab, var(--primary) 58%, var(--background));
-  --wheel-near-inner: color-mix(in oklab, var(--primary) 18%, var(--background));
+     its neighbours inside, honey lighter each step out. Drawn from the action and the card, so they
+     follow the theme; by Day within 2 of the board's #F6E7C8, #F3D9A8 and #FAF0DC. */
+  --wheel-near: color-mix(in oklab, var(--primary) 43%, var(--card));
+  --wheel-relative: color-mix(in oklab, var(--primary) 70%, var(--card));
+  --wheel-near-inner: color-mix(in oklab, var(--primary) 26%, var(--card));
   /* What is chosen: an item checked in umber, neutral, so colour keeps meaning something. */
   --selected: var(--p-ink);
   --selected-foreground: var(--p-paper-card);
