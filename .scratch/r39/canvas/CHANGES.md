@@ -10,7 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
-- 2026-11-19 · (this commit) · Chord finder: the empty picker says Spelled in; keys 8 under the bar on Scales, Intervals, Progression, Pattern, Chord finder (were 4); the Practice pages' floating bars on the 34 safe area (were 30); (app) the finder's line under the name at normal line height · ChordFinder,ChordFinderLaptop,CircleOfFifths,Exercise,Intervals,Metronome,Pattern,Progression,Scales · pending
+- 2026-11-19 · ae0596ad · Chord finder: the empty picker says Spelled in; keys 8 under the bar on Scales, Intervals, Progression, Pattern, Chord finder (were 4); the Practice pages' floating bars on the 34 safe area (were 30); (app) the finder's line under the name at normal line height · ChordFinder,ChordFinderLaptop,CircleOfFifths,Exercise,Intervals,Metronome,Pattern,Progression,Scales · v613
 - 2026-11-19 · 06731f79 · the phone's status bar 62 tall, as the owner's iPhone 17 Pro and the app's inset (was 54): every phone bar 8 lower, where the app draws it · every phone board (54) · v612
 - 2026-11-19 · e0ddd0f4 · Chords: the leftover 56 spacer under the bar gone, the 3D keys 8 under the bar as every page's (was 62, a bare band) · Chords,ChordsLaptop · v611
 - 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · v611
