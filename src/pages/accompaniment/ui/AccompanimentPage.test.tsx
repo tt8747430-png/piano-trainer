@@ -106,7 +106,7 @@ describe('Practice → Accompaniment, the library on a phone (R30-4)', () => {
     const user = userEvent.setup()
     const { practiceLibraryStore } = await renderApp('/practice/accompaniment')
     await opened()
-    await user.click(screen.getByRole('button', { name: 'Arrange library' }))
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
     const places = await screen.findByRole('list', { name: 'Places' })
     expect(within(places).getByRole('button', { name: 'Reorder Gorshkov' })).toBeInTheDocument()
     await user.click(within(places).getByRole('button', { name: 'Gorshkov: more' }))
