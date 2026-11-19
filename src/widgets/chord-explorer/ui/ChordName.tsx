@@ -51,7 +51,7 @@ export function ChordName({
     <div
       role="group"
       aria-label={printedNote(root) + printedSymbol(shown.suffix)}
-      className="flex flex-wrap items-stretch justify-center gap-1.5"
+      className="flex flex-wrap items-stretch justify-start gap-2"
     >
       <NotePicker
         bare

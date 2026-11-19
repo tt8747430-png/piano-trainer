@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · Chords laptop: Practise in the Player in one column with chevrons, as its siblings; (app) the chord name's pickers on the left edge, 8 apart · ChordsLaptop · **pending**
 
 ## Changes
 
