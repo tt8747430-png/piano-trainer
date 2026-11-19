@@ -254,16 +254,20 @@ library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Rece
   'sections': _ASECS},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 'x', 3.4), ('Level', 'v', .8)),
   add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', 'openFolder')), arrange=True)
-library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
-  'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Intermediate', 1]]}],
-  'sections': [{'g': 'The Virtuoso Pianist', 'rows': [Rw('Hanon', 'Finger independence', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',))]},
-               {'g': 'Five-finger position', 'rows': [Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')), arrange=True)
-library('JazzVocabulary', 'Jazz vocabulary', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': [], 'open': {},
-  'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Advanced', 1], ['Professional', 2]]}],
-  'sections': [{'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', LILAC, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', LILAC, 'Exercise.dc.html', (), ('Professional',))]},
-               {'g': 'Piano With Jonny', 'rows': [Rw('2-5-1 scale', 'Swung 8ths over a ii–V–I', 'Beginner', '251', SKY, 'Exercise.dc.html', (), ('Beginner',)), Rw('Rapid switch', 'One line through all twelve keys', 'Professional', '12', SKY, 'Exercise.dc.html', (), ('Professional',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')), arrange=True)
+# The app's exercise shelves (data/exercises.json, app_data.mjs), each source's exercises as useExerciseLibrary lists
+# them: its mark on its source's paint, its line what it trains, its level its own (Jazz vocabulary drew four invented)
+_EX = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/data/exercises.json', encoding='utf8'))
+_EXPAINT = {'grass': SAGE, 'lilac': LILAC, 'sky': SKY, 'sand': FILL}
+def _exlib(stem, title, shelf, recent=()):
+    rows = lambda g, rec: [Rw(r['name'], r['line'], r['stage'], r['mark'], _EXPAINT[g['paint']], 'Exercise.dc.html', ('Recently used',) if r['name'] in recent else (), (r['stage'],)) for r in g['rows'] if not rec or r['name'] in recent]
+    secs = [{'g': g['name'], 'rows': rows(g, False)} for g in _EX[shelf]]  # Recently used a place, as the board drew it
+    every = [r for g in _EX[shelf] for r in g['rows']]
+    library(stem, title, {'places': ['All', 'Favourites', 'Recently used'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': list(recent[:1]), 'open': {},
+      'filters': [{'name': 'Level', 'opts': [[st, n] for st in ('Beginner', 'Intermediate', 'Advanced', 'Professional') if (n := sum(1 for r in every if r['stage'] == st))]}],
+      'sections': secs},
+      back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New folder', 'openFolder'),), arrange=True)
+_exlib('FingerTechnique', 'Finger technique', 'technique', ('Hanon',))
+_exlib('JazzVocabulary', 'Jazz vocabulary', 'jazz')
 
 # ═════ A progression (Hooktheory: the chords coloured by function, the moves drawn) ═════
 PR = js(r'''

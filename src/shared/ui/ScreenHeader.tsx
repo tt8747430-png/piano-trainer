@@ -118,10 +118,10 @@ export function ScreenHeader({
         // quietly); a laptop's bar stands over the page on its paper.
         'pointer-events-none sticky top-0 z-30 -mx-gutter -mt-safe px-gutter pt-safe *:pointer-events-auto lg:bg-background print:static print:mx-0 print:px-0',
         // The laptop boards' three heads: a place's 88 head, its title on the 56 column (LPLACEBAR);
-        // a large title after Back in the same 88, Back 44 in (LTITLEBAR); a page's 56 bar flush at
+        // a large title after Back in the same 88, Back 44 in and its last button 28 from the edge; a page's 56 bar flush at
         // the top, Back 40 in and its last button 28 from the trailing edge (LPAD). Each Back's -4 optical
         // inset is the row's.
-        large ? back && 'lg:px-12' : 'lg:pr-7 lg:pl-11 lg:pt-0',
+        large ? back && 'lg:ps-12 lg:pe-7' : 'lg:pr-7 lg:pl-11 lg:pt-0',
       )}
     >
       {large ? (

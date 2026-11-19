@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the exercise shelves: the app's real exercises (Jazz vocabulary drew four invented), no Mine or New exercise (a learner's study is a song), the + with one thing to make acting at once; a Practice library's laptop bar ends 28 from the edge (was 56), as every sub-page bar · FingerTechnique,FingerTechniqueLaptop,JazzVocabulary,JazzVocabularyLaptop,ProgressionsLaptop,AccompanimentLaptop · pending
 
 
 ## Changes
