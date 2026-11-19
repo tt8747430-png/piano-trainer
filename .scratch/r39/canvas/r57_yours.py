@@ -152,7 +152,8 @@ NAMEBODY = lambda v, label: (f'<div style="display: flex; flex-direction: column
 INSBODY = GROUP(('raw', f'<sc-for list="{{{{inCourses}}}}" as="k" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{{{k.on}}}}" onClick="{{{{k.pick}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 16px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: 1">{{{{k.c}}}}</span><span style="font-weight: 700; color: #2F5A35">{{{{k.mark}}}}</span></button></sc-for>'), bg=SHEET)
 def SETTINGS(lesson, lap):
     name = 'Warm-up before church' if lesson else 'Sunday service set'
-    head = LTITLEBAR('Settings', '', ("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html") if lap else TOP(("Lesson" if lesson else "Course") + ".dc.html", 'Settings')
+    # one shape for every Settings page of a lesson or course (a level's lesson, a course: CPAGE), on both sizes
+    head = LTOP(("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html", '', 'Settings') if lap else TOP(("Lesson" if lesson else "Course") + ".dc.html", 'Settings')
     if lesson:
         rows = (SEC(CAPS('The lesson'), GROUP(('link', 'Name', name, 'openName'), ('link', 'In courses', '{{insL}}', 'openIns'), ('action', 'Duplicate', 'dup'), bg=SHEET)))
     else:
@@ -170,8 +171,8 @@ def SETTINGS(lesson, lap):
     # one column on both sizes, in the phone's order: what it is, then its progress, the loss last and apart (loop round 63:
     # in two columns Delete stood at the laptop's top right, the first thing seen)
     body = sub + rows + rest
-    pad = 'padding: 4px 56px 60px' if lap else 'padding: 4px 16px 40px'
-    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 704px; " if lap else ""}display: flex; flex-direction: column; gap: 24px">{body}</div></main>'
+    pad = 'padding: 24px 56px 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
+    return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"width: min(1180px, 100%); " if lap else ""}display: flex; flex-direction: column; gap: 24px">{body}</div></main>'
             + (TOAST(28, laptop=True, always=True) if lap else TOAST(40, always=True)))
 for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')

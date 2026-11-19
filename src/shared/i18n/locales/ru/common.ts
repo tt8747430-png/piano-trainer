@@ -3,7 +3,7 @@ import type { LocaleResources } from '../../types'
 export const common: LocaleResources['common'] = {
   appName: 'Тренажёр фортепиано',
   skipToContent: 'К содержимому',
-  progressGroup: 'Прогресс',
+  progressGroup: 'Ваш прогресс',
   back: 'Назад',
   editMode: { label: 'Режим', play: 'Играть', editing: 'Правка', edit: 'Изменить', done: 'Готово' },
   nav: {

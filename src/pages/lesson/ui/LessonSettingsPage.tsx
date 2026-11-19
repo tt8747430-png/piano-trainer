@@ -134,7 +134,7 @@ function LessonSettings({
       ? `${t('place', { n: where.n, total: where.total })} · ${where.level}`
       : where.course
   return (
-    <div className="flex flex-col gap-2 pb-8">
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
       <ScreenHeader column="until-laptop" title={t('settings.title')} back={back} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
         <ThingHead

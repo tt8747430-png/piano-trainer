@@ -29,7 +29,7 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
   const title = localText(lesson.title, locale)
   const step = lessonStepId(lesson.id)
   return (
-    <div className="flex flex-col gap-2 pb-8">
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
       <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:max-w-295">
         <ThingHead
@@ -39,7 +39,7 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
             </span>
           }
           name={title}
-          line={t('own.yourLesson')}
+          line={t('own.lessonLine', { count: lesson.sections.length })}
         />
         <OwnItemRows
           title={title}

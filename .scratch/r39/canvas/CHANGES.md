@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · your own lesson's and course's Settings in the one Settings shape: the 56 bar, the centred 1180 column, 8 under the bar (24 on a laptop) · YourLessonSettings,YourLessonSettingsLaptop,YourCourseSettings,YourCourseSettingsLaptop · pending
+
 - 2026-11-19 · 5acca61d · a lesson: the real lesson's count (7 of 11), summary and Russian title · Lesson,LessonLaptop · v623
 
 - 2026-11-19 · 7671f3d9 · a course: lesson rows 68 as a level's (were 80), laptop lessons in four columns (a dead replace kept one), laptop column on the 56 (was 40), the real course's words, lessons and songs · Course,CourseLaptop · v622

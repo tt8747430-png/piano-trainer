@@ -18,8 +18,8 @@ export function ThingHead({
     <div className="flex items-center gap-4 py-1">
       {mark}
       <div className="flex min-w-0 flex-col gap-0.5">
-        <p className="text-xl font-bold text-balance">{name}</p>
-        <p className="text-sm wrap-anywhere text-muted-foreground">{line}</p>
+        <p className="text-xl/[normal] font-bold text-balance">{name}</p>
+        <p className="text-sm/[normal] wrap-anywhere text-muted-foreground">{line}</p>
       </div>
     </div>
   )
