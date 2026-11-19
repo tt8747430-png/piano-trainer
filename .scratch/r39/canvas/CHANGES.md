@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · one laptop sub-page bar: LTITLEBAR the 56 (was 88), Back 40 in, the title 12 after it, the content 24 under · AdminLaptop,AppLayersLaptop,ArchiveLaptop,ExploreLaptop,GroupsLaptop,LearnLaptop,LearnYoursLaptop,LegalLaptop,PatternLaptop,PatternNewLaptop,ProfileLaptop,ProgressionEditLaptop,SectionLaptop,SettingsLaptop,SharedFolderLaptop,SongSettingsLaptop,TakesLaptop,TrashLaptop · pending
 ## Changes
 
+- 2026-11-19 · 9d4524ac · one laptop sub-page bar: LTITLEBAR the 56 (was 88), Back 40 in, the title 12 after it, the content 24 under · AdminLaptop,AppLayersLaptop,ArchiveLaptop,ExploreLaptop,GroupsLaptop,LearnLaptop,LearnYoursLaptop,LegalLaptop,PatternLaptop,PatternNewLaptop,ProfileLaptop,ProgressionEditLaptop,SectionLaptop,SettingsLaptop,SharedFolderLaptop,SongSettingsLaptop,TakesLaptop,TrashLaptop · v635
 - 2026-11-19 · ebd14b74 · a shared playlist: a Signed out state in the app's words, no tab bar off the four places · SharedFolder,SharedFolderLaptop · v634
 - 2026-11-19 · 32bf0598 · Groups: signed out says playlists, no Join with a link while signed out, no second New group with none (the + and the laptop's New) · Groups,GroupsLaptop · v634
 - 2026-11-19 · 9d413f93 · the takes: rows 64 (were 80, content-box), the Play glyph 20, the app's dates (Nov 9, 2026, 6:41 PM; a take recorded November 9) · Takes,TakesLaptop,Take,TakeLaptop · v633
