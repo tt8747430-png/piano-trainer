@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a song's Settings: the built-in song as the app shows it (Duplicate, Archive, Share link, Export…), "Your own copy" a state with Folder, Publish and Delete; the laptop's 56 bar and centred 1180 column, Library and Share 32 apart · SongSettings,SongSettingsLaptop,Section,SectionLaptop · pending
-
 ## Changes
+
+- 2026-11-19 · 1125e52f · a song's Settings: the built-in song as the app shows it (Duplicate, Archive, Share link, Export…), "Your own copy" a state with Folder, Publish and Delete; the laptop's 56 bar and centred 1180 column, Library and Share 32 apart · SongSettings,SongSettingsLaptop,Section,SectionLaptop · v629
 
 - 2026-11-19 · 855d55ef · a song: the tune as the app's Amazing Grace holds it (the eighths on "zing" and "a", G⁷ on "grace", no D on "like", the words' own punctuation), its credit New Britain (American folk tune), its progressions the three it uses, one section (Verse, bars 1–16), Details as a built-in song reads them · Song,SongLaptop,Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v628
 
