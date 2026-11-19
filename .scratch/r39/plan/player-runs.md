@@ -1,41 +1,64 @@
-# The runs in the Player (loop, the board-to-app port, 2026-11-19)
+# The runs' own view (loop, the board-to-app port, 2026-11-19)
 
 ## The rulings as they stand
 
-- A run (the walk, the chromatic walk, a progression in 12 keys, an exercise, the chord run) opens the Player: CLAUDE.md,
-  "The Player (`/play/$pieceId`): one screen over any Performance"; `practice-chords.md`, "each opening the Player";
-  `r54_practice_more.py`'s own header, "the Player's variants: their setup over the Player".
-- Its setup (the walk's Root and Chord size; the chromatic walk's chord and direction; a progression's keys; an
-  exercise's hands and keys) lives in the Player's gear, as a song's, in the app (`PlayerLayout`'s `setup`, inside
-  the settings sheet): one home for a run's settings, the Player's gear.
-- Each run says where it stands and its music stands on the paper (feedback log, 2026-11-18); its transport floats as
-  the Player's (2026-11-18).
+- A run (walk the chords of a key, a chromatic walk, a progression in all 12 keys, an exercise; the chord practice run)
+  plays in the run view, the canvas's deliberate design (round 41, "the Player's runs … in the run view's parts, where
+  a wireframe stood"; round 63, the chord run's music on the paper; round 66, a phone on its side; round 68, every
+  run's music on the paper at the chord run's 1.35 on a laptop), not in the song Player's chrome.
+- "A run's transport floats, as the Player's" (owner, 2026-11-18: "the floating actions guidelines are broken by that
+  implementation"): the kit's glass pieces 12 above the keys, reserving no space; Setup a plain piece, the honey Play
+  capsule at the centre, the tempo a piece.
+- "Every run says where it stands" (2026-11-18): a progress row under the music, "Chord 1 of 8", "Key 1 of 12".
+- "Every run's music on the paper" (2026-11-18): never in a lone card; the phone's two lines of four bars under the
+  bar, the laptop's eight bars at 1.35, centred in the band over the transport.
+- "A practice run's Setup groups by heading" (2026-11-18, canvas v549): sections 24 apart, a heading 8 over its control.
 
 ## Source
 
-- The pairing of 2026-11-19: `/play/walk` against `PlayWalk`. The app draws the Player (× · the score's view · gear;
-  the walk on a grand staff with its chord names, the left hand's root and the pedal; the floating keys with the
-  hands; Wait or Listen · Loop, ‹ ▶ ›, Both · 3D). The board draws a stripped screen of its own: the bar × · title ·
-  gear, a treble staff of triads only, a progress row, the keys at the foot, a floating Setup · Play · 72 BPM, and a
-  Setup sheet open at the start; on a laptop the eight bars float mid-screen, cut at the right edge, under a Setup
-  popover that covers them.
-- The Player board (`Editor`, Play mode) draws the same Player the app draws: × · Play | Edit · score · gear, the
-  grand staff, Wait · Loop, ‹ ▶ ›, Both · 3D.
+- The boards `PlayWalk`, `PlayChromatic`, `PlayProgression`, `PlayExercise` and their laptops, written by
+  `r56_results.py` (`PV_RUN`, `PV_LINE`, `RS_CELL`, `RS_KEYS`, `RUNBAR`, `PIECE`, `PLAYCAP`) with `r54_practice_more.py`
+  (`PV_SRC`, `PVSET`, `PVSETL`, `PVSTART`, `PVBAR`); `PlayChord` (the chord run and its results) in `r56_results.py`
+  (`RS_RUNVIEW`, `RS_RESULTS`).
+- The pairing of 2026-11-19: `/play/walk` draws the song Player (× · the score's view · gear, the grand staff with the
+  left hand's root and the pedal, the floating keys with the hands, Wait · Loop, ‹ ▶ ›, Both · 3D); the board draws the
+  run view. No "Chord 1 of 8" string exists in the app.
 
 ## Today
 
-- App: `src/pages/player/ui/WalkPlayerPage.tsx`, `ChromaticPlayerPage.tsx`, `ProgressionPlayerPage.tsx`,
-  `ExercisePlayerPage.tsx` over `PlayerLayout.tsx`; setups `WalkSetup.tsx`, `ChromaticSetup.tsx`,
-  `ProgressionSetup.tsx`, `ExerciseSetup.tsx`.
-- Canvas: `PlayWalk`, `PlayChromatic`, `PlayProgression`, `PlayExercise` (and their laptops) from
-  `r54_practice_more.py`; `PlayChord` from `r56_results.py`.
+- `src/pages/player/ui/WalkPlayerPage.tsx`, `ChromaticPlayerPage.tsx`, `ProgressionPlayerPage.tsx`,
+  `ExercisePlayerPage.tsx`, each over `PlayerLayout.tsx`, their setups (`WalkSetup.tsx`, `ChromaticSetup.tsx`,
+  `ProgressionSetup.tsx`, `ExerciseSetup.tsx`) inside the Player's gear sheet (`PlayerLayout`'s `setup`).
 
-## Will build (canvas)
+## Will build (app), value for value from the boards
 
-- The run boards redrawn as the Player board in Play mode, value for value from its generator (`r44_editor.py`): its
-  bar without Play | Edit (a run is not a piece one edits), the run's title in the music's head, its music on the
-  grand staff as the app engraves it, the progress row under the music, the floating keys with the hands, the
-  Player's transport; the gear's sheet holding the run's Setup first, as the app's.
-- What goes: the run screen's own floating Setup · Play · BPM dock and the Setup sheet open at the start.
+Phone (402):
+1. The bar (`PVBAR`, the kit's `TOP`): Close (× glass 44, to where the run was opened from), the run's title
+   ("Walk the chords in C major", "Chromatic walk: minor 7th chords", "I – V – vi – IV in C", "Hanon No. 1: in C"),
+   the gear (Player settings) at its end.
+2. `main`, padding 4 16 34, a column 16 apart: the music as two lines of four bars (`PV_LINE(4, 76)`: a treble clef
+   cell 40 wide, then each chord a whole-note cell 76 wide on a five-line staff 82 tall, lines at .8 and 50%, the
+   last bar's end line 1.2); the progress row (8 tall track in Fill, radius 4, the done part #44684A; the count 14px
+   soft, tabular, 12 from it); a spring; the keys edge to edge (`RS_KEYS(112)`: 112 tall, F3 to G5, the current
+   chord's tones in their role paints with their names).
+3. The floating dock (`RUNBAR`, left 12 right 12, bottom 158, gap 12): Setup (sliders icon over "Setup"), the honey
+   Play capsule (`PLAYCAP`), Tempo (gauge icon over "72 BPM"); Setup and Tempo open the Setup.
+4. The Setup sheet (`BSHEET('setupOn', 'Setup', PVSTART, 'Close')`), open when the run starts: the walk's Root (the
+   root grid) and Chord size (Triads | Sevenths); the chromatic walk's Chord type chips, Root, Direction (Up · Down ·
+   Up and down); a progression's Chord size and Keys chips (One key · Chromatically, rising · Circle of fifths, rising
+   · Circle of fifths, falling); an exercise's Exercise and Key rows, Rhythm (Even · Dotted · Reverse dotted), Hands
+   (Right hand · Left hand · Both), Next key (Circle of fifths · Chromatic), Octaves and Tempo steppers, Tempo ladder
+   with its ⓘ; sections 24 apart; Start (honey, 52) at its foot.
+
+Laptop (1710):
+5. The bar as `LTOP`, the music's eight bars in one line at zoom 1.35 in a 1177 column with the progress row, centred
+   in the band between the bar and the keys; the keys 170 tall under a hairline; the dock centred, bottom 186; Setup a
+   popover 620 wide above the dock (`PVSETL`: the exercise's rows at each row's end), Play beside it starting the run.
+
+What goes from the runs: the song Player's chrome (the score's view button, Wait · Loop, ‹ ›, Both · 3D, the floating
+keys with the hands) and the Setup inside the gear's sheet.
+
+Open to build after: `PlayChord` (the chord practice run and its results) against the app's chord practice.
 </content>
 </invoke>
+<parameter name="file_path">/home/user/piano-trainer/.scratch/r39/plan/player-runs.md
