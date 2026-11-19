@@ -153,17 +153,19 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             <div ref={column} className="flex min-w-0 flex-col gap-2">
               {width > 0
                 ? systems.map((system) => (
-                    <TappableStaff
-                      key={system.from}
-                      music={system.music}
-                      score={system.score}
-                      staff={shownHand === 'lh' ? 'bass' : 'treble'}
-                      scale={Math.min(MAX_SCALE, width / STAFF_WIDTH)}
-                      fill={width}
-                      firstBar={system.from + 1}
-                      continues={system.from > 0}
-                      tempo={tempo}
-                    />
+                    // the board's system: 138 tall, its staff 49 under its top (r68_exercise)
+                    <div key={system.from} className="pt-2.5 pb-1">
+                      <TappableStaff
+                        music={system.music}
+                        score={system.score}
+                        staff={shownHand === 'lh' ? 'bass' : 'treble'}
+                        scale={Math.min(MAX_SCALE, width / STAFF_WIDTH)}
+                        fill={width}
+                        firstBar={system.from + 1}
+                        continues={system.from > 0}
+                        tempo={tempo}
+                      />
+                    </div>
                   ))
                 : null}
             </div>

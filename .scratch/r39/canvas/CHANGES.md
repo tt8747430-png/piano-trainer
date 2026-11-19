@@ -11,6 +11,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-19 · e1b4cc7e · Exercise: the keys 8 under the bar, as its siblings (its generator kept 4) · Exercise · pending
+
 - 2026-11-19 · 5d55594e · the Practice libraries' laptop head as LTITLEBAR (88, Back 44 in) and their column on the 56 every other laptop board keeps (was 40, its own head) · AccompanimentLaptop,FingerTechniqueLaptop,JazzVocabularyLaptop,ProgressionsLaptop · v617
 
 - 2026-11-19 · be5cf3e7 · no dim under what floats: the kit's FLOAT on bars, the tab bar, the + and the floating bars (was SHADOW's 28px blur); (app) --elevation-float · every board (all docks and floating actions) · v615
