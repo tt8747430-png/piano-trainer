@@ -11,6 +11,7 @@ import {
   noteFromParam,
   placeMinorKeyChords,
   placeScaleChords,
+  keysAround,
   spellScale,
   printedNote,
 } from '@/shared/lib/music'
@@ -77,6 +78,10 @@ export function RunView({
     [root, kind, start, octaves, fingering, rhythm, hands, direction],
   )
   const tonic = noteFromParam(root)
+  const shown = runShown(run, hands)
+  // The boards' keys round the run's first key: a fifth under it to a twelfth over it on a phone,
+  // an octave under it to three over it on a laptop.
+  const least = keysAround(Math.min(...shown.keys), [5, 19], [12, 36])
   const tones = spellScale(tonic, kind)
   const layers = useSettings(selectScaleStaff)
   const musicKey = keyOfScale(root, kind)
@@ -133,7 +138,7 @@ export function RunView({
   const standard = hasStandardFingering(kind)
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" />}
+      keyboard={<PinnedKeyboard shown={shown} place="top" least={least} />}
       heading={choice}
       music={
         <section className="flex flex-col gap-3 overflow-hidden rounded-card bg-card px-3 py-4 ring-1 ring-border">

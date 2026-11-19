@@ -46,6 +46,8 @@ export {
   WHITE_KEYS,
   isBlackKey,
   keyboardRange,
+  keysAround,
+  type KeysAround,
   octaveOf,
   printedKeyName,
   rangeOf,

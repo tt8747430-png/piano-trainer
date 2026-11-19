@@ -88,11 +88,10 @@ export function runShown(run: ScaleRun, hands: Hands): ShownKeys {
   const octave = hands === 'lh' ? -12 : 0
   const played = (notes: readonly PlacedTone[]) =>
     notes.map((note) => ({ ...note, midi: midi(note.midi + octave) }))
-  return {
-    keys: run.music.notes.map((note) => note.midi),
-    marks: new Map([
-      ...scaleShown(played(run.down.placed)).marks,
-      ...scaleShown(played(run.placed)).marks,
-    ]),
-  }
+  const marks = new Map([
+    ...scaleShown(played(run.down.placed)).marks,
+    ...scaleShown(played(run.placed)).marks,
+  ])
+  // The keys it lights, one octave of the run, so the keyboard stands round them as its boards draw it.
+  return { keys: [...marks.keys()], marks }
 }

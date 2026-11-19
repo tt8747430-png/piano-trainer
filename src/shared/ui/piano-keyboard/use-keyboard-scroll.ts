@@ -14,7 +14,7 @@ import type { KeyRange } from '@/shared/lib/music'
 import { scrollStore } from './use-scroll-view'
 
 /**
- * The keyboard's scrolling: it opens centred on `inView` (its top where wider than the view; else on `span`, where the range that fills
+ * The keyboard's scrolling: it opens on `span` where that range fits the view, edge to edge; else centred on `inView` (its top where wider than the view; else on `span`, where the range that fills
  * its width sits), and centres again when the key size changes. When the range changes the keys
  * keep the same point in the middle, and `inView` is brought into sight moving no further than that
  * (`scrollToReveal`; of a stretch wider than the view, its top): the keys never swing from one
@@ -46,9 +46,13 @@ export function useKeyboardScroll(
     const behavior = opened.current ? motion : 'instant'
     opened.current = true
     if (now.scrollWidth <= now.clientWidth) return
-    const left = inView
-      ? scrollToShow(now, spanOf(keys, inView))
-      : scrollToCentre(now, (span.left + span.right) / 200)
+    // A range that fits the view is shown whole, edge to edge, as the boards draw it; a wider one
+    // opens on the keys asked for.
+    const fits = ((span.right - span.left) / 100) * now.scrollWidth <= now.clientWidth + 1
+    const left =
+      inView && !fits
+        ? scrollToShow(now, spanOf(keys, inView))
+        : scrollToCentre(now, (span.left + span.right) / 200)
     element.scrollTo({ left, behavior })
   })
 

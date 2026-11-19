@@ -1190,6 +1190,8 @@ owner's, typos fixed.
 
 - **The Chord finder's keys as its boards draw them (2026-11-19):** the phone's keys stood on the middle two octaves (C4 to B5); the board's are C3 to C5 across the 402 (15 whites at 26.8), the laptop's C2 to C6 across the page (29 at 50.4). `PinnedKeyboard` takes the range it starts from (`least`), grown as a chord needs; a fitted white may reach 52 (was 48), as wide as any laptop board draws one.
 
+- **Scales' and Intervals' keys as their boards draw them (2026-11-19):** the keys stood on the middle two octaves grown to the B over the run, opened on the lit notes, so part keys stood at both edges; now Scales stands a fifth under the run's first key to a twelfth over it on a phone (C major: G3 to G5) and an octave under to three over on a laptop (C3 to C7), Intervals a fifth under its lower note to an eleventh over (a compound one a tone under to two octaves and a tone over) and the same laptop span (`keysAround`, an end on a black key moved down to its white). The keyboard grows only for a key outside its range, a range that fits the view opens edge to edge, and Scales' keys are the run's lit octave, not the left hand's too.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

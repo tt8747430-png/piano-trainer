@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { selectIntervals, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { intervalExample, writesInterval } from '@/features/play-example'
-import { noteFromParam, noteParam, pitchClassOf, printedNote } from '@/shared/lib/music'
+import { keysAround, noteFromParam, noteParam, pitchClassOf, printedNote } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -61,6 +61,11 @@ export function IntervalExplorer({
   // An interval no letter writes over this root (past a double sharp or flat) falls back to the 5th.
   const chosen: RowInterval = writesInterval(root, view.iv) ? view.iv : 'P5'
   const example = useMemo(() => intervalExample(root, chosen), [root, chosen])
+  // The boards' keys round the lower note: a fifth under it to an eleventh over it on a phone (a
+  // compound one a tone under it to two octaves and a tone over), an octave under to three over on a laptop.
+  const low = Math.min(...example.shown.keys)
+  const compound = Math.max(...example.shown.keys) - low > 12
+  const least = keysAround(low, compound ? [2, 26] : [7, 17], [12, 36])
   const score = useMemo(
     () => notate(intervalMusic(example.music, view.way)),
     [example.music, view.way],
@@ -82,7 +87,7 @@ export function IntervalExplorer({
     // The board's one column (`r61_intervals.py`): the keys edge to edge, 28 over a centred column
     // 880 wide at most, its name, its music and every interval in one grid, 24 apart on a laptop.
     <div className="flex flex-col gap-4 lg:gap-7">
-      <PinnedKeyboard shown={example.shown} place="top" fitInView />
+      <PinnedKeyboard shown={example.shown} place="top" least={least} fitInView />
       <div className="flex min-w-0 flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         <IntervalHero
           name={chosen}

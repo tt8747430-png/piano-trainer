@@ -4,6 +4,7 @@ import {
   MIDDLE_OCTAVES,
   rangeOf,
   type KeyRange,
+  type KeysAround,
   type Midi,
 } from '@/shared/lib/music'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
@@ -30,7 +31,7 @@ const LAPTOP_KEYS_PX = 180
 export function PinnedKeyboard({
   shown,
   range,
-  least = MIDDLE_OCTAVES,
+  least,
   keyPlays,
   outlined,
   selected,
@@ -46,8 +47,11 @@ export function PinnedKeyboard({
   /** The keys to hold in view, each marked as the page shows it. */
   shown: ShownKeys
   range?: KeyRange | undefined
-  /** The keys it starts from, grown as far as the keys shown need (the Chord finder's C3 to C5); the middle two octaves by default. */
-  least?: KeyRange | undefined
+  /**
+   * The keys it starts from on a phone and on a laptop, as the page's boards draw them (the Chord
+   * finder's C3 to C5 and C2 to C6), grown as far as the keys shown need; the middle two octaves by default.
+   */
+  least?: KeysAround | undefined
   /** What a key plays (Chords view: a degree's chord). */
   keyPlays?: ((key: Midi) => readonly Midi[]) | undefined
   /** Keys ringed inside: the chords that hold the note, an answer's missing notes. */
@@ -83,7 +87,10 @@ export function PinnedKeyboard({
   const [opened] = useState(keys)
   // Its octaves: `least`, grown to every key it has shown (a chord found from A3), never
   // shrunk, so no lit key falls off its edge and the keys never jump back.
-  const wanted = keyboardRange([...opened, ...keys], least)
+  const wanted = keyboardRange(
+    [...opened, ...keys],
+    least ? (laptop ? least.laptop : least.phone) : MIDDLE_OCTAVES,
+  )
   const [widest, setWidest] = useState(wanted)
   if (wanted.from < widest.from || wanted.to > widest.to)
     setWidest({
