@@ -42,7 +42,7 @@ export function useExerciseLibrary(shelf: ExerciseShelf): {
     return {
       id: exercise.id,
       name: localText(exercise.name, locale),
-      detail: localText(exercise.trains, locale),
+      detail: localText(exercise.focus ?? exercise.trains, locale),
       group,
       stage: exercise.stage,
       picture: { text: exercise.mark ?? '', paint: GROUP_PAINT[group] ?? 'sand' },

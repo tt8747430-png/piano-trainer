@@ -93,6 +93,8 @@ export interface Exercise {
   readonly name: LocalText
   /** Its tile's few characters on its shelf's row: Hanon's numbers (1–20), a chord's sign (6°). */
   readonly mark?: string
+  /** What it is for, in a few words: its row's line on its shelf (the canvas's Focus). */
+  readonly focus?: LocalText
   /** What it trains, in a line (whose idea it is, its group says). */
   readonly trains: LocalText
   /** How to play it, in plain words: what its page says over its fingering's picture (A41). */
