@@ -10,6 +10,7 @@ import type { LibraryPicture } from '../model/library-view'
  */
 export function LibraryTile({ picture }: { picture: LibraryPicture }) {
   if ('icon' in picture) return <TileMark large icon={picture.icon} paint={picture.paint} />
+  if ('drawn' in picture) return picture.drawn
   if ('chords' in picture)
     return (
       <span

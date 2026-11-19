@@ -56,6 +56,8 @@ export type LibraryPicture =
   | { readonly icon: LucideIcon; readonly paint: Paint }
   | { readonly text: string; readonly paint: Paint }
   | { readonly chords: readonly Numeral[]; readonly minor: boolean }
+  /** A picture the page draws (a pattern's roll in small), where the library cannot. */
+  | { readonly drawn: ReactNode }
 
 /** One row of a practice library: an exercise, a pattern, a study, a progression. */
 export interface LibraryItem {
