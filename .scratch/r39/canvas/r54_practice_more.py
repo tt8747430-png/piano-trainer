@@ -256,31 +256,34 @@ PV_SRC = r'''
     return { ...common(st, set), title: T[V], pvProg: V === 'walk' ? '6.7%' : V === 'progression' && walk === 'One key' ? '25%' : V === 'exercise' ? '8.3%' : '7.7%', pvT: V === 'walk' ? 'Chord 1 of 15' : V === 'progression' && walk === 'One key' ? 'Chord 1 of 4' : V === 'exercise' ? 'Key 1 of 12' : 'Key 1 of 13', isWalk: V === 'walk', isChrom: V === 'chromatic', isProg: V === 'progression', isEx: V === 'exercise', playing: !!st.playing, notPlaying: !st.playing, playLabel: st.playing ? 'Stop' : 'Play', togglePlay: () => S({ playing: !st.playing, open: false }), setupOn: open, openSetup: () => S({ open: true }), startIt: () => S({ open: false, playing: true }),
       rootsG: rootGrid(ROOTS.indexOf(root), (i) => S({ root: ROOTS[i] })), sizes: A('size', ['Triads', '7ths', '9ths'], 'Triads'), dirs: A('dir', ['Up', 'Down', 'Up and down', 'Circle of fifths'], 'Up'),
       fams: chipsOf(['Major 7th', 'Dominant 7th', 'Minor 7th', 'Half-diminished'], st.fam ?? 'Minor 7th', (x) => S({ fam: x })), walks: chipsOf(['One key', 'Chromatically, rising', 'Chromatically, falling', 'Chromatically, up and back', 'In whole steps, rising', 'In whole steps, falling', 'Circle of fifths, falling', 'Circle of fifths, rising', 'In minor thirds', 'In major thirds'], walk, (x) => S({ walk: x })),
-      rhythms: A('rh', ['Even', 'Dotted', 'Reverse dotted'], 'Even'), hands: A('hands', ['Left', 'Both', 'Right'], 'Both'), nextKey: A('nk', ['Circle of fifths', 'Chromatic'], 'Circle of fifths'), voicings: A('vc', ['Close', 'Drop 2'], 'Close'),
+      paces: A('pace', ['Play', 'Wait mode'], 'Play'), isWait: (st.pace ?? 'Play') === 'Wait mode', rhythms: A('rh', ['Even', 'Dotted', 'Reverse dotted'], 'Even'), hands: A('hands', ['Left', 'Both', 'Right'], 'Both'), nextKey: A('nk', ['Circle of fifths', 'Chromatic'], 'Circle of fifths'), voicings: A('vc', ['Close', 'Drop 2'], 'Close'),
       tempoV: String(st.bpm ?? (V === 'exercise' ? 60 : 72)), tempoC: (st.bpm ?? (V === 'exercise' ? 60 : 72)) + ' BPM', bDn: () => S({ bpm: (st.bpm ?? (V === 'exercise' ? 60 : 72)) - 4 }), bUp: () => S({ bpm: (st.bpm ?? (V === 'exercise' ? 60 : 72)) + 4 }), octV: String(st.oct ?? 2), oDn: () => S({ oct: Math.max(1, (st.oct ?? 2) - 1) }), oUp: () => S({ oct: Math.min(4, (st.oct ?? 2) + 1) }),
       ladOn: !!st.lad, ladOnBg: st.lad ? '#44684A' : '#DAD1C8', ladOnX: st.lad ? 22 : 2, ladT: () => S({ lad: !st.lad }), tipOn_lad: st.tip === 'lad', tip_lad: () => S({ tip: st.tip === 'lad' ? null : 'lad' }),
       closeSheet: () => S({ open: false }) };'''
 # the tempo ladder is a row of the tempo's group, its ⓘ beside its name: no heading saying its name again (loop round 63)
-TEMPOROW = GROUP(('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92), bg=SHEET)
+TEMPOROW = GROUP(('step', 'Tempo', 'tempoV', 'bDn', 'bUp', 92))
 # an exercise's Tempo carries the tempo ladder's ⓘ: the ladder climbs the tempo on its own (the app's rung picker gone)
 LADROW = ('raw', f'<div style="position: relative; min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 6px 6px 16px"><span style="font-size: 16px">Tempo</span>'
           + INFOB('About the tempo ladder', 'tip_lad', 'tipOn_lad') + '<span style="flex: 1"></span>' + STEPPER('tempoV', 'bDn', 'bUp')
           + INFOTIP('tipOn_lad', 'tip_lad', 'Tempo ladder', '<p style="margin: 0">In Wait mode the ladder climbs one rung once four passes in a row are clean, and steps back a rung after a slip.</p>', 'left: 0; top: 52px') + '</div>')
 # the setup's sections 24 apart, a heading 8 over its control: each heading reads with what it heads (laws, spacing 3)
-PVSET = ('<div style="display: flex; flex-direction: column; gap: 24px">' + IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + TEMPOROW)
+# every run's Setup opens on its Pace (Play · Wait mode), as the app's; Wait mode is said in the bar while it is on
+PACESEC = SEC(CAPS('Pace'), f'<div style="display: grid">{SEGC("paces", 44, 14)}</div>')
+WAITPILL = IF('isWait', f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center; white-space: nowrap">Wait mode</span>')
+PVSET = ('<div style="display: flex; flex-direction: column; gap: 24px">' + PACESEC + IF('isWalk', SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + TEMPOROW)
          + IF('isChrom', SEC(CAPS('Chord types'), f'<button type="button" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; display: flex; align-items: center; gap: 8px; color: {INK}; font: inherit; font-size: 16px; text-align: left"><span style="color: {SOFT}">Chord types</span><b style="flex: 1">m7</b><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg></button>') + SEC(CAPS('Root'), ROOTGRID('rootsG')) + SEC(CAPS('Direction'), f'<div style="display: grid">{SEGC("dirs", 44, 14)}</div>') + TEMPOROW)
          + IF('isProg', SEC(CAPS('Chord size'), f'<div style="display: grid">{SEGC("sizes", 44, 14)}</div>') + SEC(CAPS('Keys'), WCHIPS('walks')) + TEMPOROW)
          + IF('isEx', GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', '{{title}}'.replace('{{title}}', 'C major'), ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
-                      + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(LADROW, bg=SHEET))
+                      + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(LADROW))
  + '</div>')
 # the phone's sheet covers Play, so its foot starts the run; on a laptop Play stands beside the Setup popover and starts it
 # a laptop's Setup popover: the exercise's choices in one group, each at its row's end (the kit's segr), so the popover
 # holds every row without scrolling (loop round 63)
 _PVEX = (GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), bg=SHEET) + SEC(CAPS('Rhythm'), f'<div style="display: grid">{SEGC("rhythms", 44, 14)}</div>') + SEC(CAPS('Hands'), f'<div style="display: grid">{SEGC("hands", 44, 14)}</div>')
-         + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(LADROW, bg=SHEET))
+         + SEC(CAPS('Next key'), f'<div style="display: grid">{SEGC("nextKey", 44, 14)}</div>') + GROUP(LADROW))
 assert _PVEX in PVSET, 'exercise setup not found'
 PVSETL = PVSET.replace(_PVEX, GROUP(('link', 'Exercise', 'No. 1', ''), ('link', 'Key', 'C major', ''), ('segr', 'Rhythm', 'rhythms', 340), ('segr', 'Hands', 'hands', 300), ('segr', 'Next key', 'nextKey', 260), LADROW, bg=SHEET))
 PVSTART = PVSET + f'<div style="display: flex">{BTN("Start", "startIt", "", "primary", 52)}</div>'
-PVBAR = TOP('', '{{title}}', IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
+PVBAR = TOP('', '{{title}}', WAITPILL + IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB('Practice.dc.html'))
 # the four runs' Player is drawn in r56_results.py, from the run view's parts (round 41)
 print('r54 take, player variants ok')

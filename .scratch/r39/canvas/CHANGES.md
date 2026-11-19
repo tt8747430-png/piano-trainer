@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · every run's Setup opens on its Pace (Play · Wait mode), Wait mode said in the bar beside the gear while on, as the app's; the Tempo group the kit's fill, as the app's group · PlayWalk,PlayWalkLaptop,PlayChromatic,PlayChromaticLaptop,PlayProgression,PlayProgressionLaptop,PlayExercise,PlayExerciseLaptop · pending
 ## Changes
 
 - 2026-11-19 · 144db54b · an exercise's run as the app plays it: Hanon No. 1 engraved for real on the grand staff (sixteenths beamed in 2/4, the left hand from C2; were eight whole notes), two lines of two bars on a phone and four at 1.35 on a laptop, its title the app's (Hanon No. 1: C major), Hands Left · Both · Right, no Octaves; every run's Setup ends with Tempo, an exercise's with the tempo ladder's ⓘ (the Tempo piece opened a Setup with no tempo) · PlayWalk,PlayWalkLaptop,PlayChromatic,PlayChromaticLaptop,PlayProgression,PlayProgressionLaptop,PlayExercise,PlayExerciseLaptop · v654
