@@ -16,7 +16,7 @@ export const piece = {
   // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
   learnSection: {
     title: 'Learn the {{section}}',
-    rounds: '{{n}} ×',
+    rounds: '{{n}}×',
     noChords: 'No chord symbols',
     // Each group of lessons named by what it does, a word or two; how it does it behind its ⓘ
     // (ADR 0111).

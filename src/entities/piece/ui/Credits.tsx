@@ -5,7 +5,7 @@ import { useCreditNames } from './use-credit-names'
 /** Who wrote it: each role in the learner's language, the names as printed, a folk tune's words said. */
 export function Credits({
   credits,
-  className = 'text-[0.9375rem] text-pretty text-muted-foreground',
+  className = 'text-[0.9375rem]/[normal] text-pretty text-muted-foreground',
 }: {
   credits: readonly Credit[]
   /** Its type where it stands smaller (a cover's line under the title). */

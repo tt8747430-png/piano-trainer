@@ -3,12 +3,14 @@
 # --- song
 
 # ── the score: Amazing Grace, melody, chords and words ──
-MEL = [('D4', 1, 'A', ''), ('G4', 2, 'ma', 'G'), ('B4', 1, 'zing', ''), ('B4', 2, 'grace,', ''), ('A4', 1, 'how', ''), ('G4', 2, 'sweet', 'C'), ('E4', 1, 'the', ''),
-       ('D4', 2, 'sound', 'G'), ('D4', 1, 'that', ''), ('G4', 2, 'saved', 'G'), ('B4', 1, 'a', ''), ('B4', 2, 'wretch', ''), ('A4', 1, 'like', 'D'), ('D5', 3, 'me.', 'D')]
+MEL = [('D4', 1, 'A', ''), ('G4', 2, 'ma', 'G'), ('B4', .5, 'zing', ''), ('G4', .5, '', ''), ('B4', 2, 'grace!', 'G⁷'), ('A4', 1, 'How', ''), ('G4', 2, 'sweet', 'C'), ('E4', 1, 'the', ''),
+       ('D4', 2, 'sound,', 'G'), ('D4', 1, 'That', ''), ('G4', 2, 'saved', 'G'), ('B4', .5, 'a', ''), ('G4', .5, '', ''), ('B4', 2, 'wretch', 'G'), ('A4', 1, 'like', ''), ('D5', 3, 'me!', 'D')]
+# New Britain as the app's Amazing Grace holds it (Wikipedia's score of the hymn): the slurred eighths take one syllable,
+# the chords are the app's chart, bar by bar (G · G7 · C · G · G · G · D)
 STEP = {'D4': -1, 'E4': 0, 'G4': 2, 'A4': 3, 'B4': 4, 'D5': 6}
 def score_svg(w, sel=None, played=None, size=1.0):
     """Two systems of the melody on a treble staff, 3/4, G major, chords over it and words under it. sel: index in honey."""
-    sp = 8 * size; out = []; systems = [MEL[:5], MEL[5:11], MEL[11:]]; gy = 0; idx = 0; H = 0; acc = 2
+    sp = 8 * size; out = []; first8 = True; beam_x = 0; systems = [MEL[:6], MEL[6:13], MEL[13:]]; gy = 0; idx = 0; H = 0; acc = 2
     for si, sysn in enumerate(systems):
         top = gy + 34 * size; base = top + 4 * sp
         out.append('<path d="' + ''.join(f'M4 {top + i * sp:.1f}H{w - 4}' for i in range(5)) + f'" stroke="{INK}" stroke-width="0.9"></path>')
@@ -40,12 +42,22 @@ def score_svg(w, sel=None, played=None, size=1.0):
             if STEP[p] < 0: out.append(f'<path d="M{x - 9 * size:.1f} {base + sp:.1f}H{x + 9 * size:.1f}" stroke="{INK}" stroke-width="0.9"></path>')
             hollow = b >= 2
             out.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{5.6 * size:.1f}" ry="{4 * size:.1f}" transform="rotate(-20 {x:.1f} {y:.1f})" fill="{"none" if hollow else col}" stroke="{col}" stroke-width="{1.8 if hollow else 0}"></ellipse>')
-            up = STEP[p] < 4
+            eighth = b == .5; up = eighth or STEP[p] < 4
             sx = x + (5.2 if up else -5.2) * size
-            out.append(f'<path d="M{sx:.1f} {y:.1f}V{y + (-3.5 if up else 3.5) * sp:.1f}" stroke="{col}" stroke-width="1.2"></path>')
+            if eighth:
+                pair = sysn[k - 1:k + 1] if k and sysn[k - 1][1] == .5 and not first8 else sysn[k:k + 2]
+                ty = min(base - STEP[q] * sp / 2 for q, _, _, _ in pair) - 3.5 * sp
+                out.append(f'<path d="M{sx:.1f} {y:.1f}V{ty:.1f}" stroke="{col}" stroke-width="1.2"></path>')
+                if first8: beam_x = sx
+                else: out.append(f'<path d="M{beam_x:.1f} {ty + 1.5 * size:.1f}H{sx:.1f}" stroke="{col}" stroke-width="{3.2 * size:.1f}"></path>')
+                first8 = not first8
+            else:
+                out.append(f'<path d="M{sx:.1f} {y:.1f}V{y + (-3.5 if up else 3.5) * sp:.1f}" stroke="{col}" stroke-width="1.2"></path>')
             if b == 3: out.append(f'<circle cx="{x + 10 * size:.1f}" cy="{y - (sp / 2 if STEP[p] % 2 == 0 else 0):.1f}" r="{1.6 * size:.1f}" fill="{col}"></circle>')
             if ch: out.append(f'<text x="{x - 5:.1f}" y="{top - 10 * size:.1f}" font-size="{15 * size:.0f}" font-weight="700" fill="{INK}">{ch}</text>')
             out.append(f'<text x="{x:.1f}" y="{base + 26 * size:.1f}" text-anchor="middle" font-size="{14 * size:.0f}" fill="{col}">{syl}</text>')
+            if syl and k + 1 < len(sysn) and not sysn[k + 1][2]:
+                out.append(f'<path d="M{x + len(syl) * 3.9 * size + 2:.1f} {base + 27 * size:.1f}H{x + adv[k] + 5 * size:.1f}" stroke="{col}" stroke-width="1"></path>')
             x += adv[k]; acc += b
             if acc % 3 == 0 and idx < last:
                 out.append(f'<path d="M{x - adv[k] * 0.5:.1f} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="0.9"></path>')

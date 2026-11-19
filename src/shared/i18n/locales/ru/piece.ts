@@ -15,7 +15,7 @@ export const piece: LocaleResources['piece'] = {
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',
-    rounds: '{{n}} ×',
+    rounds: '{{n}}×',
     noChords: 'Без аккордов',
     chords: 'Аккорды',
     chordsInfo_one: 'Возьмите каждый аккорд на клавишах {{count}} раз, чтобы выучить его.',

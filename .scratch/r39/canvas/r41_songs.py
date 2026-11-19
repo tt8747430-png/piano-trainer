@@ -52,7 +52,7 @@ SG = js(r'''
     const CH = [['G', [55, 59, 62]], ['G7', [55, 59, 62, 65]], ['C', [60, 64, 67]], ['D', [62, 66, 69]], ['D7', [62, 66, 69, 72]], ['Em', [64, 67, 71]]];
     const demo = st.demo ?? null, fresh = demo === 'new', long = demo === 'long', bare = demo === 'nochords';
     const states = [['new', 'Never played'], ['long', 'A long title'], ['nochords', 'No chord symbols']].map(([k, l]) => ({ l, bg: demo === k ? '#332921' : '#EEE9E2', fg: demo === k ? '#FEFDFB' : '#332921', pick: () => set({ demo: demo === k ? null : k }) }));
-    return { ...common(st, set), states, played: !fresh, fresh, hasChords: !bare, titleT: long ? 'Fantaisie-Impromptu in C♯ minor, Op. 66' : 'Amazing Grace', coverBy: long ? 'Frédéric Chopin' : 'Words: John Newton · Music: New Britain', creditT: long ? 'Frédéric Chopin · published after his death, 1855' : 'Words: John Newton · Music: New Britain, an American folk tune', creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
+    return { ...common(st, set), states, played: !fresh, fresh, hasChords: !bare, titleT: long ? 'Fantaisie-Impromptu in C♯ minor, Op. 66' : 'Amazing Grace', coverBy: long ? 'Frédéric Chopin' : 'Words: John Newton · Music: New Britain (American folk tune)', creditT: long ? 'Frédéric Chopin · published after his death, 1855' : 'Words: John Newton · Music: New Britain (American folk tune)', creditsOn: st.sheet === 'credits', openCredits: () => set({ sheet: 'credits' }),
       learned, notLearned: !learned, toggleLearned: () => set({ learned: !learned }), learnedBg: learned ? '#DCE9D6' : 'rgba(254,253,251,.86)', learnedLine: learned ? '#9BC093' : '#DAD1C8', learnedFg: learned ? '#2F5A35' : '#332921',
       fav, heartFill: fav ? '#B84A3E' : 'none', heartStroke: fav ? '#B84A3E' : '#332921', toggleFav: () => set({ fav: !fav }),
       chords: CH.map(([c, ns], i) => { const kb = calmKeys(53, 76, Object.fromEntries(ns.map((n) => [n, [i === hear ? '#EDC684' : '#E9C4B8', '']])), 104, 46); const m = c.match(/^([A-G][♭♯]?m?)(\d+)$/); return { c, r: m ? m[1] : c, x: m ? m[2] : '', kb, ring: i === hear ? '0 0 0 2px #EDC684' : '0 0 0 1px #DAD1C8', hear: () => set({ hear: i }) }; }) };''')
@@ -67,9 +67,9 @@ ACTS_OF = lambda pl: f'<div style="display: flex; gap: 8px">{BTN(ICON(PLAY, 18) 
 FIRST_OF = lambda pl: f'<sc-if value="{{{{fresh}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex">{BTN(ICON(PLAY, 18) + " Practise", href=pl)}</div></sc-if>'  # before a first play: one honey Practise, the column's width
 ACTS, ACTS_L = [f'<sc-if value="{{{{played}}}}" hint-placeholder-val="{{{{true}}}}">{ACTS_OF(p)}</sc-if>{FIRST_OF(p)}' for p in ('Player.dc.html', 'PlayerLaptop.dc.html')]
 SGSTRIP = f'<div aria-label="Canvas: show a state" style="display: none"><sc-for list="{{{{states}}}}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{{{p.pick}}}}" style="background: {{{{p.bg}}}}">{{{{p.l}}}}</button></sc-for></div>'
-SECTS = GROUP(('link', 'Verse', '2× · bars 1–16', 'Section.dc.html'), ('link', 'Ending', 'bars 13–16', 'Section.dc.html'), bg=SHEET)
-PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Perfect cadence', 'I – IV – V – I', 'Progression.dc.html'), bg=SHEET)
-DETAILS = GROUP(('link', 'Level', 'Beginner', ''), ('link', 'Genre', 'Hymn', ''), ('link', 'Language', 'English', ''), ('link', 'Tags', 'Add tags', ''), bg=SHEET)
+SECTS = GROUP(('link', 'Verse', 'bars 1–16', 'Section.dc.html'), bg=SHEET)  # the song's one section, as the app holds it
+PROGS = GROUP(('link', 'Gospel hymn', 'I – IV – I – V', 'Progression.dc.html'), ('link', 'Authentic cadence', 'I – V – I', 'Progression.dc.html'), ('link', 'Plagal cadence', 'I – IV – I', 'Progression.dc.html'), bg=SHEET)
+DETAILS = GROUP(('link', 'Level', 'Intermediate', ''), ('link', 'Genre', 'Not set', ''), ('link', 'Language', 'Not set', ''), ('link', 'Tags', 'Not set', ''), bg=SHEET)  # a built-in song's, as the app reads them: its course's level, the rest the learner's to set
 SONG_MORE = ROWMENU('moreOn', 'Amazing Grace', [('link', 'Edit score', '', 'Editor.dc.html'), ('link', 'Edit the original', '', 'EditorDraft.dc.html'), ('link', 'Settings', '', 'SongSettings.dc.html')])
 CREDITS = GROUP(('link', 'Title', 'Amazing Grace', ''), ('link', 'Words', 'John Newton', ''), ('link', 'Music', 'New Britain', ''), bg=SHEET)
 ph = f'''{TOP('Songs.dc.html', '', LEARNED + HEARTB + DOTS())}
@@ -119,9 +119,9 @@ def SCOREPAGE(w, size, pad):
     t, c, v, g = (36, 15, 14, 24) if lap else (24, 13, 12, 16)
     return (f'<div style="padding: {pad}; display: flex; flex-direction: column">'
             f'<h2 style="margin: 0; text-align: center; font-family: {SERIF}; font-size: {t}px; font-weight: 400; line-height: 1.1; color: {INK}">Amazing Grace</h2>'
-            f'<p style="margin: 8px 0 0; text-align: center; font-size: {c}px; color: {SOFT}">Words: John Newton · Music: New Britain</p>'
+            f'<p style="margin: 8px 0 0; text-align: center; font-size: {c}px; color: {SOFT}">Words: John Newton · Music: New Britain (American folk tune)</p>'
             f'<div style="margin: {g}px 0 4px; font-size: {v}px; font-variant-numeric: tabular-nums; color: {SOFT}">1 · Verse 1 · <svg aria-hidden="true" width="8" height="13" viewBox="0 0 8 13" style="display: inline-block; vertical-align: -1px; margin: 0 2px"><ellipse cx="3.4" cy="10.6" rx="3.3" ry="2.3" transform="rotate(-20 3.4 10.6)" fill="currentColor"></ellipse><path d="M6.3 10V0.5" stroke="currentColor" stroke-width="1.2"></path></svg>= 80</div>'
-            + score_svg(w, sel=5, size=size).replace(ACCENT, '#85B8DC') + '</div>')
+            + score_svg(w, sel=6, size=size).replace(ACCENT, '#85B8DC') + '</div>')
 TILE = f'<button type="button" onClick="{{{{t.pick}}}}" style="flex: none; min-width: 46px; height: 46px; padding: 0 8px; border: 0; border-radius: 11px; background: {{{{t.bg}}}}; color: {{{{t.fg}}}}; box-shadow: 0 0 0 1px {LINE}; font-family: \'Noto Music\', {FONT}; font-size: {{{{t.fs}}}}px; font-weight: 600">{{{{t.l}}}}</button>'
 PALETTE = (f'<div style="flex: none; border-radius: 18px 18px 0 0; background: {SHEET}; box-shadow: 0 -1px 0 {LINE}, 0 -10px 24px -18px rgba(51,41,33,.4); padding: 4px 0 6px; display: flex; flex-direction: column; gap: 8px">'
            f'<button type="button" aria-label="Open the palette" onClick="{{{{toggleFull}}}}" style="align-self: center; width: 60px; height: 18px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center"><span style="width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></span></button>'
