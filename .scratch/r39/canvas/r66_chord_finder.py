@@ -9,6 +9,21 @@ CF66 = CF.replace("kb: calmKeys(48, 76, marks, 370, 170), kbL: calmKeys(36, 84, 
     "tryIt: () => set({ held: [52, 60, 67, 71] }), keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), "
     "playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), inKeys: 'C major, G major, E minor', numIn: empty ? 'Spelled in' : 'Imaj7 in', states: [{ l: 'Nothing played', bg: empty ? '#332921' : '#EEE9E2', pick: () => set({ held: empty ? null : [] }) }] };")
 assert CF66 != CF, 'Chord finder return not found'
+# The board held to the app's readings (loop, 2026-11-19): E3 C4 G4 B4 is the close voicing with its 3rd voice
+# dropped, so the app says Drop 3; it has no second name (Em(♭6) is no quality the app knows), and it lies in five keys
+# (a minor key's raised 6th and 7th counted, as the app reads one). C6 is the chord read two ways, Also read as Am7/C.
+_CF = CF66
+CF66 = CF66.replace("const held = st.held ?? [52, 60, 67, 71], empty = held.length === 0;",
+    "const held = st.held ?? [52, 60, 67, 71], empty = held.length === 0, c6 = held.join() === '60,64,67,69';")
+CF66 = CF66.replace("const R = { 52: [ROLE[3], 'E'], 60: [ROLE[1], 'C'], 67: [ROLE[5], 'G'], 71: [ROLE[7], 'B'] }",
+    "const R = { 52: [ROLE[3], 'E'], 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'], 69: [ROLE[6], 'A'], 71: [ROLE[7], 'B'] }")
+CF66 = CF66.replace("name: empty ? 'Play a chord' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : 'C major 7th, 1st inversion',",
+    "name: empty ? 'Play a chord' : c6 ? 'C6' : 'Cmaj7/E', sub: empty ? 'Hold three or more keys, here or on your piano' : c6 ? 'C major 6th' : 'C major 7th, 1st inversion · Drop 3',")
+CF66 = CF66.replace("notes: [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']].map(([n, d]) => ({ n, d })), alts: ['Em(♭6)'].map((a) => ({ a })),",
+    "notes: (c6 ? [['C', 'root · bass'], ['E', '3rd'], ['G', '5th'], ['A', '6th']] : [['E', '3rd · bass'], ['C', 'root'], ['G', '5th'], ['B', '7th']]).map(([n, d]) => ({ n, d })), alts: (c6 ? ['Am7/C'] : []).map((a) => ({ a })), twoWays: c6, oneWay: !c6,")
+CF66 = CF66.replace("inKeys: 'C major, G major, E minor', numIn: empty ? 'Spelled in' : 'Imaj7 in', states: [{ l: 'Nothing played', bg: empty ? '#332921' : '#EEE9E2', pick: () => set({ held: empty ? null : [] }) }] };",
+    "inKeys: c6 ? 'C major, G major, F major, A minor, E minor, G minor, D minor' : 'C major, G major, A minor, E minor, D minor', numIn: empty ? 'Spelled in' : c6 ? 'I6 in' : 'Imaj7 in', states: [{ l: 'Nothing played', bg: empty ? '#332921' : '#EEE9E2', pick: () => set({ held: empty ? null : [] }) }, { l: 'C6, read two ways', bg: c6 ? '#332921' : '#EEE9E2', pick: () => set({ held: c6 ? null : [60, 64, 67, 69] }) }] };")
+assert CF66.count('c6') >= 8, 'Chord finder readings not replaced'
 TOP66 = TOP60.replace('Scales and keys</span>', 'Chord finder</span>').replace(ROUND60("Settings", COG, "openSet"), ROUND60("Chord finder settings", COG, "openSet"))
 CHEVS66 = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
 TITLE66 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; flex-direction: column; gap: 4px">'
@@ -19,10 +34,12 @@ TRY66 = (f'<sc-if value="{{{{empty}}}}" hint-placeholder-val="{{{{false}}}}"><di
          + ''.join(f'<button type="button" role="listitem" onClick="{{{{tryIt}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 15px; font-weight: 600">{t}</button>' for t in ('C major', 'A minor 7th', 'D dominant 7th'))
          + '</div></sc-if>')
 NOTES66 = CF_NOTES.replace('height: 64px', 'height: 72px').replace('font-size: 22px', 'font-size: 24px')
-ROWS66 = f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}">' + GROUP(
-    ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>'),
-    ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>'),
-    ('link', 'In these keys', '{{inKeys}}', ''), bg=SHEET) + '</sc-if>'
+_ALSO66 = ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Also read as</span>{CHIPL("alts", "a")}</div>')
+_PLAYED66 = ('raw', f'<div style="padding: 12px 16px; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; color: {SOFT}">Played</span>{CHIPL("played", "p")}</div>')
+_KEYS66 = ('link', 'In these keys', '{{inKeys}}', '')
+# Also read as only for a chord with a second name, as the app shows it
+ROWS66 = (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{true}}}}"><sc-if value="{{{{twoWays}}}}" hint-placeholder-val="{{{{false}}}}">' + GROUP(_ALSO66, _PLAYED66, _KEYS66, bg=SHEET)
+          + f'</sc-if><sc-if value="{{{{oneWay}}}}" hint-placeholder-val="{{{{true}}}}">' + GROUP(_PLAYED66, _KEYS66, bg=SHEET) + '</sc-if></sc-if>')
 ERASEI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path><path d="M22 21H7"></path><path d="m5 11 9 9"></path></svg>'
 CHORDSI = f'<svg viewBox="0 0 24 24" width="22" height="22" {I}><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
 PIECE66 = PIECE  # the kit's glass piece (r42): an icon over its caption

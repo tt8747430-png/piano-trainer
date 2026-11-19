@@ -169,7 +169,9 @@ def GROUP(*rows, bg=FILL):
         lab = f'<span style="flex: 1; min-width: 0; font-size: 16px">{r[1]}</span>'
         base = f'min-height: 48px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 6px 12px 6px 16px; {sep}'
         if k == 'link':  # label, value, href or act
-            val = f'<span style="font-size: 16px; color: {SOFT}; white-space: nowrap">{r[2]}</span>' if r[2] else ''
+            # the label whole, the value taking the rest and cut with an ellipsis at its end, as the app's GroupLink
+            lab = f'<span style="flex: none; font-size: 16px">{r[1]}</span>'
+            val = f'<span style="flex: 1; min-width: 0; font-size: 16px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right">{r[2]}</span>' if r[2] else '<span style="flex: 1"></span>'
             tgt = r[3] if len(r) > 3 else ''
             if tgt.endswith('.html') or tgt == '#':
                 out.append(f'<a href="{tgt}" style="{base} color: {INK}; text-decoration: none">{lab}{val}<span style="color: {SOFT}; display: flex">{CHEV_R}</span></a>')
