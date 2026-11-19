@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib'
 import type { BarWords } from '../model/bar-words'
-import { CellChords } from './CellChords'
+import { CellChords, type ChordFace } from './CellChords'
 
 /** No words under a bar. */
 const NO_WORDS: BarWords = []
@@ -27,6 +27,7 @@ export function BarCells({
   sounding = null,
   playing = false,
   looped = false,
+  face,
 }: {
   number: number
   /** Each beat's chords, those starting in it. */
@@ -38,6 +39,8 @@ export function BarCells({
   sounding?: number | null
   playing?: boolean
   looped?: boolean
+  /** Its chords' face: the Player's Grid or a song's chart. */
+  face: ChordFace
 }) {
   return (
     <>
@@ -64,7 +67,12 @@ export function BarCells({
               {number}
             </span>
           ) : null}
-          <CellChords symbols={chords} span={roomAfter(cells, beat)} className="relative z-10" />
+          <CellChords
+            symbols={chords}
+            span={roomAfter(cells, beat)}
+            face={face}
+            className="relative z-10"
+          />
         </span>
       ))}
       {words.map((verse, index) =>

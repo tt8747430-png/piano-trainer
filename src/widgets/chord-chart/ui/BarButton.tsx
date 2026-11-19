@@ -94,8 +94,11 @@ export function BarButton({
         sounding={sounding}
         playing={playing}
         looped={looped}
+        face={tap === 'go' ? 'grid' : 'chart'}
       />
-      {playing ? <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" /> : null}
+      {playing ? (
+        <Square aria-hidden className="absolute top-1.5 right-1.5 size-3 fill-current" />
+      ) : null}
     </button>
   )
 }
