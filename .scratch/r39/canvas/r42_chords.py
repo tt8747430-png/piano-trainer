@@ -932,15 +932,15 @@ for f in ('RandomChords', 'RandomChordsLaptop', 'ChordTrainer', 'ChordTrainerLap
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
 for f in ('ChordsApp', 'ChordsDesk', 'ChordsB', 'ChordsBLaptop'):  # B, the chord shelf, was drawn in v80 and not chosen
     if os.path.exists(OUT + f + '.dc.html'): os.remove(OUT + f + '.dc.html')
-# one type scale on this page (review, canvas 90): 15 and 17, from the shared sheet kit, fold into 14 and 16
+# the kit's type scale, as every board's: sheet titles and Done 17, as Scales' and Intervals'
 for f in ('Chords', 'ChordsLaptop'):
-    h = open(OUT + f + '.dc.html').read().replace('font-size: 17px', 'font-size: 16px')
+    h = open(OUT + f + '.dc.html').read()
     exec(open('/home/user/piano-trainer/.scratch/r39/canvas/states_tool.py').read().split('def _script')[0])
     TOOL = _tool(f.endswith('Laptop'))
     a = '<div style="width: 450px; height: 920px; position: relative; font-family: ' if not f.endswith('Laptop') else '<img src="'
     assert a in h, f
     i = h.index(a); j = h.index('>', i) + 1 if not f.endswith('Laptop') else i
-    h = h[:j] + TOOL + h[j:].replace('font-size: 15px', 'font-size: 14px')
+    h = h[:j] + TOOL + h[j:]
     # one system on this page (consistency audit, canvas 91): spacing on 4/8 steps (2 stays, as the hairline inside
     # segmented rows); cards 16 round everywhere; the switch knob on the page's surface and ink shadow; no 800 weight
     STEP = {5: 4, 6: 8, 7: 8, 9: 8, 10: 12, 14: 16, 18: 16, 22: 24}
