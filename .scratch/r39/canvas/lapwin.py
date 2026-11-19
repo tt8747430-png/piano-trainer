@@ -26,7 +26,7 @@ _LAPCOLS = ['minmax(0px, 1fr) 420px', 'minmax(0px, 1fr) 400px', 'minmax(0px, 1fr
 _LAPFIRST = ['240px minmax(0px, 1fr)', '280px minmax(0px, 1fr)']
 _LAPCSS = ('<style data-lapcss>'
         '[data-lapwin][data-side="off"] { grid-template-columns: 76px minmax(0, 1fr) !important }'
-        ' [data-side="off"] > nav { padding-left: 14px !important; padding-right: 14px !important; align-items: center }'
+        ' [data-side="off"] > nav { padding-left: 16px !important; padding-right: 16px !important; align-items: center }'
         ' [data-side="off"] [data-sidetext], [data-side="off"] > nav > label > span, [data-side="off"] > nav > label > kbd, [data-side="off"] > nav > a > kbd, [data-side="off"] > nav a > span:not([aria-hidden]) { display: none !important }'
         ' [data-side="off"] [data-sidehead] { flex-direction: column; height: auto !important; padding: 0 !important; gap: 4px !important }'
         ' [data-side="off"] > nav > label { width: 48px; padding: 0 !important; justify-content: center }'
@@ -77,7 +77,7 @@ def _acct(m):
     menu = ('<sc-if value="{{lapAcctOn}}" hint-placeholder-val="{{false}}"><div onClick="{{lapAcctT}}" style="position: fixed; inset: 0; z-index: 70"></div>'
             '<div role="menu" data-acctmenu aria-label="' + name + '" style="position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; '
             'display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)">'
-            '<div style="padding: 8px 12px 10px; font-size: 13px; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@example.com</div>'
+            '<div style="padding: 8px 12px; font-size: 13px; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@example.com</div>'
             '<a role="menuitem" href="ProfileLaptop.dc.html" style="' + _MI + '">Profile</a>'
             '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Settings</a>'
             '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Language<span style="color: #6B6259">English</span></a>'

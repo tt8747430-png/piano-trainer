@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · laptop sidebar 16 in (was 14), account email line 8 × 12 · every laptop board (52) · **pending**
 
 ## Changes
 
