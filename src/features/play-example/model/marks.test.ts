@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import {
-  midi,
-  note,
-  placeChord,
-  placeScale,
-  placeScaleChords,
-  spellChord,
-} from '@/shared/lib/music'
-import { chordShown, chordsRange, scaleShown } from './marks'
+import { midi, note, placeChord, placeScale, spellChord } from '@/shared/lib/music'
+import { chordShown, scaleShown } from './marks'
 
 describe('chordShown', () => {
   it('shows a chord’s keys, each by its role and degree', () => {
@@ -25,12 +18,5 @@ describe('scaleShown', () => {
     expect(shown.keys).toHaveLength(8)
     expect(shown.marks.get(midi(62))).toEqual({ tone: 'tonic', label: '1', note: 'D' })
     expect(shown.marks.get(midi(65))).toEqual({ tone: 'scale', label: '♭3', note: 'F' })
-  })
-})
-
-describe('chordsRange', () => {
-  it('spans every key the chords play, from the tonic to the top of the last chord', () => {
-    expect(chordsRange(placeScaleChords(note('C'), 'major', 3, 0))).toEqual({ from: 60, to: 77 })
-    expect(chordsRange(placeScaleChords(note('C'), 'major', 4, 0))).toEqual({ from: 60, to: 81 })
   })
 })

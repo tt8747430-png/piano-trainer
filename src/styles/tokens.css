@@ -301,6 +301,8 @@
   --key-scale: var(--p-yellow);
   --on-key-scale: var(--p-ink);
   --key-tonic: var(--p-brick);
+  /* A chord's keys on a small picture of the keys (the boards' MINIKEYS, #E9C4B8): brick washed into the ivory. */
+  --key-chord: color-mix(in oklab, var(--p-brick) 60%, var(--key-white));
   --on-key-tonic: var(--p-ink);
   /* The focused key's ring, in two tones so it shows on any key's colour: dark outside, light inside. */
   --key-focus: var(--p-ink);

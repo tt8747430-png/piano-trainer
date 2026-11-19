@@ -1,12 +1,9 @@
 import {
   noteName,
   pitchClass,
-  rangeOf,
   spellChord,
   type Chord,
-  type KeyRange,
   type Midi,
-  type PlacedScaleChord,
   type PlacedTone,
   type RowPosition,
   voiceLead,
@@ -33,10 +30,6 @@ export const scaleShown = (placed: readonly PlacedTone[]): ShownKeys => ({
     ]),
   ),
 })
-
-/** Every key the chords play, from the tonic up: the keyboard fills its width with them. */
-export const chordsRange = (chords: readonly PlacedScaleChord[]): KeyRange | undefined =>
-  rangeOf(chords.flatMap((placed) => placed.tones.map((tone) => tone.midi)))
 
 /**
  * A chord's keys as a row voices them, each painted by its role in the chord and named (the bass

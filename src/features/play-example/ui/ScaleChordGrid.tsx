@@ -1,10 +1,8 @@
-import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { noteName, printedSymbol, type PlacedScaleChord } from '@/shared/lib/music'
+import { printedSymbol, type PlacedScaleChord } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { KeyDiagram } from '@/shared/ui'
-import { chordsRange } from '../model/marks'
+import { MiniKeys } from '@/shared/ui'
 
 /** A chord's play is its own: after the scale changes, no chord of the new ones is pressed. */
 const idOf = (placed: PlacedScaleChord) =>
@@ -17,16 +15,14 @@ const idOf = (placed: PlacedScaleChord) =>
  * 40rem the seven in a row.
  */
 export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[] }) {
-  const { t } = useTranslation('music')
   const playback = usePlayback<string>()
-  const range = chordsRange(chords)
   const columns = chords.reduce<PlacedScaleChord[][]>((all, placed) => {
     const last = all.at(-1)
     if (last?.[0]?.chord.degree === placed.chord.degree) last.push(placed)
     else all.push([placed])
     return all
   }, [])
-  if (!range) return null
+  if (chords.length === 0) return null
   return (
     <div className="-mx-gutter flex gap-2 overflow-x-auto px-gutter py-0.5 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-7 sm:overflow-visible sm:p-0">
       {columns.map((column) => (
@@ -48,15 +44,7 @@ export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[]
                   playing && 'ring-2 ring-primary',
                 )}
               >
-                <KeyDiagram
-                  keys={keys}
-                  range={range}
-                  label={t('chordDiagram', {
-                    symbol,
-                    notes: placed.tones.map((tone) => noteName(tone.tone.note)).join(' '),
-                  })}
-                  className="w-26 sm:w-full"
-                />
+                <MiniKeys keys={keys} sounding={playing} className="sm:w-full" />
                 <span className="flex flex-col items-center">
                   <span className="text-base font-bold">{symbol}</span>
                   <span className="-mt-0.5 text-[0.8125rem] text-muted-foreground">
