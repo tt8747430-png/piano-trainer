@@ -37,6 +37,7 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
+  ThingHead,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { useSongPublish } from '../model/use-song-publish'
@@ -134,21 +135,17 @@ function SongSettings({ piece }: { piece: Piece }) {
   const original =
     editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece) ? piece : null
   return (
-    <div className="flex flex-col gap-2 pb-8">
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
       <ScreenHeader column="until-laptop" title={t('settings.title')} back={<BackButton />} />
       <ShareSaid said={shared.said} />
-      {/* Every thing's Settings (canvas v550): the head (THINGHEAD), its groups 24 apart, the loss of
-          the whole song 40 apart at the foot; on a laptop Library and Share side by side under the
-          head, the loss its own card across both, on the bar title's edge. */}
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-x-5 lg:px-[calc(3.5rem-var(--gutter))]">
+      {/* The one Settings shape (canvas v550, YourLessonSettings): the head (THINGHEAD), its groups 24
+          apart, the loss of the whole song 40 apart at the foot; on a laptop the centred 1180 column 24
+          under the 56 bar, Library and Share side by side, the loss its own card across both. */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 lg:grid lg:max-w-295 lg:grid-cols-2 lg:items-start lg:gap-x-8">
         {/* The song at the head: what these settings are for (R32-C). */}
-        <div className="flex items-center gap-4 lg:col-span-2">
-          {/* Its cover's picture is chosen here, a tap on it (R32-C): the page's cover is its music. */}
-          <SongCoverPicker piece={piece} className="w-16 text-2xl" />
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="font-sans text-xl/tight font-bold text-balance">{title}</p>
-            {byline ? <p className="truncate text-sm text-muted-foreground">{byline}</p> : null}
-          </div>
+        <div className="lg:col-span-2">
+          {/* Its cover's picture is chosen here, a tap on it (R32-C): the library's tile. */}
+          <ThingHead mark={<SongCoverPicker piece={piece} />} name={title} line={byline} />
         </div>
         {inLibrary ? (
           <SettingsGroup flush title={t('settings.library')}>
