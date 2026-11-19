@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { printedSymbol, type RoleOf } from '@/shared/lib/music'
-import { InfoTip } from './InfoTip'
 import { PAINT, ROLE_PAINT } from './paint'
 
 /**
@@ -72,7 +71,7 @@ export function RoleTile({
 
 /**
  * What the tiles' paints mean, in one line under them (Tonic, Predominant, Dominant), the terms
- * theory books use and what each move does behind its ⓘ.
+ * theory books use, with no ⓘ, as the Progression board draws it.
  */
 export function RoleLegend() {
   const { t } = useTranslation('music')
@@ -91,20 +90,6 @@ export function RoleLegend() {
             {t(`harmony.role.${role}`)}
           </span>
         ))}
-        <InfoTip name={t('harmony.legend.name')}>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5">
-            {(['home', 'away', 'tension', 'sad', 'fifth', 'third', 'second', 'back'] as const).map(
-              (term) => (
-                <div key={term} className="contents">
-                  <dt className="font-semibold whitespace-nowrap">
-                    {t(`harmony.legend.terms.${term}.name`)}
-                  </dt>
-                  <dd>{t(`harmony.legend.terms.${term}.text`)}</dd>
-                </div>
-              ),
-            )}
-          </dl>
-        </InfoTip>
       </span>
     </div>
   )

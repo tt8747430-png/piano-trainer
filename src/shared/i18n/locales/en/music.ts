@@ -331,31 +331,6 @@ export const music = {
       second: { down: '2nd down →', up: '2nd up →' },
       same: 'Root stays →',
     },
-    legend: {
-      name: 'Tonic, predominant, dominant',
-      terms: {
-        home: { name: 'Tonic', text: 'The tonic and the chords that stand in for it: at rest.' },
-        away: {
-          name: 'Predominant',
-          text: 'The subdominant family (IV, ii): moving off from the tonic.',
-        },
-        tension: {
-          name: 'Dominant',
-          text: 'The dominant family (V, vii°): pulling back to the tonic.',
-        },
-        sad: {
-          name: 'Sad, soft, bright',
-          text: 'A minor chord in a major key (vi, the relative minor, sad; ii and iii soft), or a major chord in a minor key (bright).',
-        },
-        fifth: { name: '5th down', text: 'The strongest pull, how most cadences close.' },
-        third: { name: '3rd down', text: 'Mild: the two chords share two notes.' },
-        second: { name: '2nd up', text: 'Fresh: the two chords share no note.' },
-        back: {
-          name: '5th up, 3rd up, 2nd down',
-          text: 'The same moves the other way: they step back.',
-        },
-      },
-    },
     playChain: 'Play the chain',
   },
   // A row of chords that play, named for a screen reader.
