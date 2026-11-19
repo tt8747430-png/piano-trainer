@@ -2,7 +2,7 @@ import { selectRecent, usePracticeLibrary } from '@/entities/practice-library'
 import { useDeferredValue, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { useMediaQuery, useSetSearch } from '@/shared/lib'
+import { cn, useMediaQuery, useSetSearch } from '@/shared/lib'
 import {
   FilteredNotice,
   FoldSection,
@@ -130,19 +130,6 @@ export function PracticeLibrary({
       placeOf={(id) => arranged.items.find((item) => item.id === id)?.group ?? ''}
     />
   )
-  if (editing)
-    return (
-      <>
-        <ScreenHeader {...header} />
-        <ArrangeList
-          kind={kind}
-          places={arranged.places}
-          items={arranged.items}
-          onSheet={setSheet}
-        />
-        {sheets}
-      </>
-    )
   const collator = new Intl.Collator(locale)
   const shown = libraryShown(
     arranged.items,
@@ -168,7 +155,9 @@ export function PracticeLibrary({
       tools={
         wide ? (
           <>
-            <LibrarySearch at="bar" {...search} />
+            <div inert={editing} className={cn('contents', editing && '*:opacity-50')}>
+              <LibrarySearch at="bar" {...search} />
+            </div>
             {header.tools}
           </>
         ) : (
@@ -180,13 +169,26 @@ export function PracticeLibrary({
   const body = (
     // On a phone the search stands 8 under the bar, as the boards' library column.
     <div className="flex min-w-0 flex-col gap-4 max-lg:-mt-2">
-      <LibrarySearch at={wide ? 'under' : 'row'} {...search} />
+      {/* In Edit the search and the places stay where they are, inert (the board's): nothing moves */}
+      <div
+        inert={editing}
+        className={cn('flex flex-col gap-4 empty:hidden', editing && 'opacity-50')}
+      >
+        <LibrarySearch at={wide ? 'under' : 'row'} {...search} />
+      </div>
       <FilteredNotice
         shown={shown.items.length}
         hidden={shown.filtering ? shown.scope - shown.items.length : 0}
         onClear={() => set({ q: '', stage: 'any' })}
       />
-      {shown.items.length === 0 ? (
+      {editing ? (
+        <ArrangeList
+          kind={kind}
+          places={arranged.places}
+          items={arranged.items}
+          onSheet={setSheet}
+        />
+      ) : shown.items.length === 0 ? (
         <LibraryEmpty
           kind={kind}
           view={view}

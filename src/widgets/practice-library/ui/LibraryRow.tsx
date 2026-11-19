@@ -1,4 +1,5 @@
 import { useRender } from '@base-ui/react/use-render'
+import type { CSSProperties, ReactNode, Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import {
@@ -25,11 +26,19 @@ const LEADING = ['favourite'] as const
  * and line, its level (or a progression's key) at its right in words (the board's), a link to its page; its ♡, one tap; its More under a mouse, a swipe to the
  * right for Favourite under a finger.
  */
-export function LibraryRow({ item }: { item: LibraryItem }) {
+/** A row in Edit (the board's): its handle where its heart stood, its face as it reads, no link. */
+export interface RowArranging {
+  readonly handle: ReactNode
+  readonly ref: Ref<HTMLLIElement>
+  readonly style: CSSProperties
+  readonly lifted: boolean
+}
+
+export function LibraryRow({ item, arrange }: { item: LibraryItem; arrange?: RowArranging }) {
   const { t } = useTranslation('common')
   const favourite = item.actions.find((action) => action.key === 'favourite')
   const body = useRender({
-    render: item.link,
+    render: arrange ? <div /> : item.link,
     props: {
       className: cn(ROW_BODY, ROW_LIBRARY_FACE, 'pl-3'),
       children: (
@@ -53,6 +62,19 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
       ),
     },
   })
+  if (arrange)
+    return (
+      <li
+        ref={arrange.ref}
+        style={arrange.style}
+        className={cn('min-w-0 bg-card', arrange.lifted && 'opacity-0')}
+      >
+        <div className={cn(ROW_FLAT, 'gap-3')}>
+          {body}
+          {arrange.handle}
+        </div>
+      </li>
+    )
   return (
     <li className="min-w-0">
       <SwipeRow leading={swipeOf(item.actions, LEADING)} className="h-full">
