@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a section: Amazing Grace's real Verse (six chords at 3 holds, three lines in time, nine changes, one pattern, the app's ⓘ words), every row 56, the head with no 2× for a section played once; laptop on the 56 bar, the head 24 under it · Section,SectionLaptop,SongSettings,SongSettingsLaptop · pending
+
 ## Changes
 
 - 2026-11-19 · 1125e52f · a song's Settings: the built-in song as the app shows it (Duplicate, Archive, Share link, Export…), "Your own copy" a state with Folder, Publish and Delete; the laptop's 56 bar and centred 1180 column, Library and Share 32 apart · SongSettings,SongSettingsLaptop,Section,SectionLaptop · v629

@@ -40,7 +40,8 @@ export function SettingsGroup({
       {title ? (
         <div
           data-slot="settings-head"
-          className={cn('flex items-center gap-1', !heading && 'px-4')}
+          // With an ⓘ the head is the boards' S9CAPS row, 28 tall, the words centred on it.
+          className={cn('flex items-center gap-1', !heading && 'px-4', info && 'min-h-7')}
         >
           <h2
             id={id}

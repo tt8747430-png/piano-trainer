@@ -31,13 +31,14 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
   if (!lessons) return null
   const heading = headings[section] ?? ''
   return (
-    <div className="flex flex-col gap-2 pb-4">
+    <div className="flex flex-col gap-2 pb-4 lg:gap-4">
       <ScreenHeader
         column="until-laptop"
         title={t('learnSection.title', { section: heading })}
         back={<BackButton />}
       />
-      {/* The section's name on the paper, then its ways in: one column on a phone; on a laptop the
+      {/* The section's name on the paper, 24 under the bar on a laptop as every page under a song (its
+          Settings), then its ways in: one column on a phone; on a laptop the
           Section board's two, the chords and in time at the left, the changes and patterns at the
           right, every row 56 and, there, its state beside its words with no chevron far from them. */}
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 lg:mx-0 lg:max-w-none lg:gap-5 lg:px-[calc(3.5rem-var(--gutter))] [&_.group\/row]:min-h-14 lg:[&_.group\/row>span:has([data-slot=row-title])]:flex-none lg:[&_[data-slot=row-chevron]]:hidden">
