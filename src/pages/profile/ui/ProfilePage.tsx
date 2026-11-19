@@ -45,9 +45,9 @@ export function ProfilePage() {
         title={account ? name || account.email : t('profile.title')}
         large
         tools={
-          // The bell and Settings share one glass capsule on both sizes (BELL9 and the gear).
-          <div className="flex items-center rounded-pill glass">
-            <span className="relative">
+          // The bell and Settings, each its own 44 glass circle 8 apart, as every board's bar (IB).
+          <div className="flex items-center gap-2">
+            <span className="relative rounded-pill glass">
               <ButtonLink
                 variant="tool"
                 size="icon"
@@ -66,7 +66,7 @@ export function ProfilePage() {
                 </span>
               ) : null}
             </span>
-            <span className="relative">
+            <span className="relative rounded-pill glass">
               <ButtonLink
                 variant="tool"
                 size="icon"
