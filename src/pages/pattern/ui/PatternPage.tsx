@@ -198,7 +198,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         more={<MoreMenu actions={more.actions} />}
       />
       <PinnedKeyboard shown={shown} place="top" least={PATTERN_KEYS} />
-      <div className="flex flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
+      <div className="flex flex-col gap-4 lg:mx-auto lg:mt-2 lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-0.5">
@@ -208,9 +208,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
               <FavouriteButton pattern={pattern} />
             </div>
             <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
-              {own
-                ? t('patterns.yours')
-                : partName(partOfShelf(pattern.group))}
+              {own ? t('patterns.yours') : partName(partOfShelf(pattern.group))}
             </p>
           </div>
           {more.said}

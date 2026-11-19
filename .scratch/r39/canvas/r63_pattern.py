@@ -5,7 +5,7 @@
 # C major, Amazing Grace) · Practise (the Player). The editor and Publish stay r54's.
 PA63 = PA_SRC.replace("return { ...common(st, set), isPattern:", r'''const loop = !!st.loop, over = st.over63 ?? 'A bar of C major';
     const marks = { 36: [ROLE[1], 'C'], 48: [ROLE[1], 'C'], 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] };
-    return { ...common(st, set), kbE: calmKeys(36, 69, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
+    return { ...common(st, set), kbE: calmKeys(43, 67, marks, 402, 150), kbLE: calmKeys(29, 84, marks, 1462, 180),
       loop, toggleLoop: () => S({ loop: !loop }), loopTint: loop ? '#332921' : 'rgba(254,253,251,.86)', loopInk: loop ? '#FEFDFB' : '#332921',
       playMenu: st.menu === 'play', closeMenu: () => S({ menu: null }), openPlay: () => S({ menu: st.menu === 'play' ? null : 'play' }),
       states: [{ l: 'Looping', bg: st.loop ? '#332921' : '#EEE9E2', pick: () => set({ loop: !st.loop }) }], playing: !!st.playing, notPlaying: !st.playing, toggle: () => S({ playing: !st.playing, menu: null }),
@@ -18,7 +18,7 @@ TOP63 = TOP63.replace('</div></header>', ROUND60('More', MORE, 'openMore') + '</
 TITLE63 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px">'
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance">{{{{name}}}}</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
-           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play · Level 1", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
+           f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
 def _staff63():
     y = lambda d: 58 - d * 3.5          # treble: d=0 is E4 on the bottom line
     yb = lambda d: 112 - d * 3.5        # bass: d=0 is G2 on the bottom line
@@ -27,14 +27,16 @@ def _staff63():
     s += f'<path d="M24 30V112" stroke="{INK}" stroke-width="1.2"></path><path d="M270 30V112" stroke="{INK}" stroke-width="1"></path>'
     s += f'<text x="27" y="62" font-size="42" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="104" font-size="30" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
     s += f'<text x="62" y="16" font-size="13" font-weight="700" fill="{INK}">C</text>'
-    # the right hand: C4 then G4 E4 G4, twice, in eighths (C4 on a ledger line below the staff)
-    steps = [-2, 2, 0, 2, -2, 2, 0, 2]
+    # the right hand rocks in eighths, as the app plays M2: the upper notes together (E4 G4), then the lowest
+    # alone (C4, on a ledger line below the staff), four times
+    steps = [(0, 2), (-2,)] * 4
     xs = [80 + i * 23 for i in range(8)]
-    for i, (x, d) in enumerate(zip(xs, steps)):
-        cy = y(d)
-        s += f'<ellipse cx="{x}" cy="{cy:.1f}" rx="5.2" ry="3.8" transform="rotate(-20 {x} {cy:.1f})" fill="{INK}"></ellipse>'
-        s += f'<path d="M{x + 4.6} {cy:.1f}V{y(9):.1f}" stroke="{INK}" stroke-width="1.1"></path>'
-        if d <= -2: s += f'<path d="M{x - 9} {y(-2):.1f}H{x + 9}" stroke="{INK}" stroke-width="1"></path>'
+    for i, (x, ds) in enumerate(zip(xs, steps)):
+        for d in ds:
+            cy = y(d)
+            s += f'<ellipse cx="{x}" cy="{cy:.1f}" rx="5.2" ry="3.8" transform="rotate(-20 {x} {cy:.1f})" fill="{INK}"></ellipse>'
+        s += f'<path d="M{x + 4.6} {y(min(ds)):.1f}V{y(9):.1f}" stroke="{INK}" stroke-width="1.1"></path>'
+        if min(ds) <= -2: s += f'<path d="M{x - 9} {y(-2):.1f}H{x + 9}" stroke="{INK}" stroke-width="1"></path>'
     for a, b in ((0, 3), (4, 7)):
         s += f'<path d="M{xs[a] + 4.6} {y(9):.1f}L{xs[b] + 4.6} {y(9):.1f}" stroke="{INK}" stroke-width="4"></path>'
     # the left hand: an octave, C2 and C3, a whole note
@@ -55,7 +57,7 @@ PRACT63 = (f'<section style="flex: none; display: flex; flex-direction: column; 
            f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">'
            + ''.join(f'<a href="Player.dc.html" style="min-height: 60px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; color: {INK}; text-decoration: none; box-shadow: inset 0 -1px 0 {LINE}">'
                      f'<span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAYM}</span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{t}</span><span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{d}</span></span>{CHEV_RS}</a>'
-                     for t, d in [('In C major', 'C F G C, round and round'), ('Chromatically, rising', 'C D♭ D E♭ …')]) + '</div></section>')
+                     for t, d in [('In C major', 'C G Am F, round and round'), ('Chromatically, rising', 'C G Am F · D♭ A♭ B♭m G♭ …'), ('Chromatically, falling', 'C G Am F · B F♯ G♯m E …'), ('In whole steps, rising', 'C G Am F · D A Bm G …'), ('Circle of fifths, falling', 'C G Am F · F C Dm B♭ …'), ('In minor thirds', 'C G Am F · E♭ B♭ Cm A♭ …')]) + '</div></section>')
 USED63 = f'<section style="flex: none; display: flex; flex-direction: column; gap: 8px">{H3_63("Used in")}' + GROUP(('link', 'Amazing Grace', 'Verse', 'Song.dc.html'), ('link', 'Called to Play, lesson 12', '', 'Lesson.dc.html'), bg=SHEET) + '</section>'
 HIDDEN63 = IF('hidden', CARD(f'<span style="font-size: 15px; line-height: 1.45">Hidden from the Player’s list and from its book. You can still find it under Hidden.</span>'))
 PLAYPA = PLAYPR.replace('aria-label="What it plays"', 'aria-label="Play over"')

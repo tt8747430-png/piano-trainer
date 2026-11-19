@@ -147,7 +147,7 @@ PA_SRC = r'''
     const RHG = [['Chords', ['Block chords', 'Off-beat chords']], ['Broken chords', ['Broken chords', 'Alberti']], ['Moving voices', ['Inner voice']], ['With the melody', ['Melody on top']], ['Styles', ['Ballad', 'Stride', 'Bossa nova']]];
     const LHG = [['Held', ['Whole notes', 'Half notes']], ['Octaves', ['Octaves', 'Broken octaves']], ['Arpeggios', ['Up the chord', 'Up and down']], ['Bass lines', ['Root and fifth', 'Walking']], ['Styles', ['Stride', 'Boogie']]];
     const grp = (G, cur, k) => G.map(([g, xs]) => ({ g, xs: xs.map((x) => ({ l: x, bg: x === cur ? '#332921' : '#EEE9E2', fg: x === cur ? '#FEFDFB' : '#332921', pick: () => S({ [k]: x }) })) }));
-    const name = own ? (st.name ?? 'Broken chords (mine)') : 'Broken chords';
+    const name = own ? (st.name ?? 'Broken chords (mine)') : '2 · Broken chords';
     return { ...common(st, set), isPattern: page === 'pattern', isEditor: page === 'new' || page === 'edit', notEditor: !(page === 'new' || page === 'edit'), isPublish: page === 'publish', notPattern: page !== 'pattern',
       pageT: { pattern: name, new: 'New pattern', edit: 'Edit pattern', publish: 'Publish' }[page], name, setName: (e) => S({ name: e.target.value }), own, builtIn: !own,
       favOn: fav, heartFill: fav ? '#B3261E' : 'none', heartInk: fav ? '#B3261E' : '#332921', toggleFav: () => { S({ fav: !fav }); toast(fav ? 'Removed from Favourites.' : 'Added to Favourites.'); },
@@ -167,7 +167,7 @@ def ROLL(w):
     grid = ''.join(f'<path d="M{i * cell:.1f} 0V68" stroke="{FILL}" stroke-width="{1.5 if i % 2 == 0 else .8}"></path>' for i in range(9))
     return f'<svg viewBox="0 0 {w} 68" width="100%" role="img" aria-label="The right hand plays the chord broken in eighths; the left hand plays octaves in quarters" style="display: block">{grid}{rh}{lh}<path d="M0 36H{w}" stroke="{LINE}"></path></svg>'
 PATP = (IF('deleted', EMPTY('deleted', '♪', 'Pattern deleted', 'It left your patterns and the Player’s list. Undo brings it back.')) + IF('notDeleted',
-        f'<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: 14px; color: {SOFT}">{IF("builtIn", "Called to Play · Level 1", "true")}{IF("own", "Your pattern · from Broken chords")}</span></div>'
+        f'<div style="display: flex; align-items: center; gap: 8px"><span style="font-size: 14px; color: {SOFT}">{IF("builtIn", "Called to Play", "true")}{IF("own", "Your pattern · from Broken chords")}</span></div>'
         + IF('hidden', CARD(f'<span style="font-size: 15px; line-height: 1.45">Hidden from the Player’s list and from its book. You can still find it under Hidden.</span>'))
         + CARD(f'<div style="display: flex; flex-direction: column; gap: 12px"><div style="display: grid">{SEGC("over", 44, 14)}</div>{ROLL(340)}<div style="display: flex; justify-content: space-between; font-size: 13px; color: {SOFT}"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 5px; background: #F2B33D"></span>Right hand</span><span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 5px; background: #8FB3D9"></span>Left hand</span></div></div>')
         + GROUP(('val', 'Right hand', '{{rhT}}'), ('val', 'Left hand', '{{lhT}}'), bg=SHEET)
