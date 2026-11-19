@@ -381,6 +381,21 @@ EMPTYICON = {
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
 
 # Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
+# One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.
+# A phone toast spans the 16 gutters; a laptop's is 460 wide, centred. `undo` names the handler; `always` shows Undo
+# with no toastUndo condition; `hint` is the placeholder the condition shows while drawing.
+def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
+    pos = (f'left: 50%; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
+           else f'left: 16px; right: 16px; bottom: {bottom}px')
+    btn = (f'<button type="button" onClick="{{{{{undo}}}}}" style="height: 44px; padding: 0 12px; border: 0; '
+           f'background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button>')
+    if not always:
+        btn = f'<sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{{hint}}}}}">{btn}</sc-if>'
+    return (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
+            f'{pos}; z-index: {z}; min-height: 52px; box-sizing: border-box; border-radius: 14px; background: {INK}; '
+            f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
+            f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
+
 PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
                         f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')
 

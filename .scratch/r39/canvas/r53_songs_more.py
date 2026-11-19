@@ -18,8 +18,8 @@ def STRIP(lst='demo'):
 EMPTY = lambda cond, icon, t, b, btns='': _EMPTY(cond, EMPTYICON.get(icon, icon), EMPTY_T(t), b, btns)
 _EMPTY = lambda cond, icon, t, b, btns='': (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center"><span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; color: {INK}; font-size: 26px; display: flex; align-items: center; justify-content: center">{icon}</span>'
                                            f'<span style="font-size: 18px; font-weight: 700">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 340px">{b}</span>{btns}</div></sc-if>')
-TOASTS = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 40px; z-index: 56; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px"><span style="flex: 1">{{{{toastT}}}}</span><sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></sc-if></div></sc-if>'
-TOASTL = TOASTS.replace('left: 16px; right: 16px; bottom: 40px', 'left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px')
+TOASTS = TOAST(40, z=56)
+TOASTL = TOAST(28, z=56, laptop=True)
 TOAST_JS = r'''
     const toast = (t, undo) => S({ toast: t, toastUndo: !!undo });
     if (st.toast && this._tt !== st.toast) { this._tt = st.toast; const t = st.toast; setTimeout(() => { if ((this.state || {}).toast === t) S({ toast: null }); this._tt = null; }, 2800); }

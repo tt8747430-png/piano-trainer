@@ -823,8 +823,8 @@ B_TR = ('<div style="display: flex; align-items: center; gap: 12px"><button type
   + '<section aria-label="Chords to transpose" style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px"><h4 style="margin: 0; font-size: 14px; font-weight: 600; color: ' + SOFT + '">Chords to transpose</h4><span style="margin-left: auto; font-size: 14px; color: ' + SOFT + '; font-variant-numeric: tabular-nums">{{trCount}}</span><button type="button" onClick="{{trAll}}" style="height: 44px; margin: -6px 0; padding: 0 4px; border: 0; background: transparent; color: #356890; font: inherit; font-size: 15px; font-weight: 600; white-space: nowrap">{{trAllLab}}</button></div>'
   + '<div role="group" aria-label="Chords to transpose" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px"><sc-for list="{{trChords}}" as="o" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{o.on}}" aria-label="{{o.aria}}" data-tip="{{o.tip}}" onClick="{{o.pick}}" style="position: relative; height: 56px; min-width: 0; padding: 0 6px; border: 0; border-radius: 12px; background: {{o.bg}}; box-shadow: {{o.ring}}; color: {{o.tc}}; font: inherit; white-space: nowrap; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><sc-if value="{{o.on}}" hint-placeholder-val="{{true}}"><span aria-hidden="true" style="position: absolute; top: 5px; right: 5px; width: 16px; height: 16px; border-radius: 8px; background: #4B4038; display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FEFDFB" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span></sc-if><span style="font-family: ' + SERIF + '; font-size: 17px; font-weight: 700">{{o.s}}</span></button></sc-for></div></section>'
   )
-TOAST = f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 100px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; box-sizing: border-box; font-size: 15px"><span style="flex: 1">{{{{toastT}}}}</span><sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" onClick="{{{{undoRemove}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></sc-if></div></sc-if>'
-TOAST_L = TOAST.replace('left: 16px; right: 16px; bottom: 100px', 'left: 50%; transform: translateX(-50%); width: 460px; bottom: 100px')
+CTOAST = TOAST(100, 'undoRemove', hint='true')
+CTOAST_L = TOAST(100, 'undoRemove', laptop=True, hint='true')
 
 
 # The app's own 3D hands (src/widgets/piano-hands, createStage), bundled by pthands_vite.config.mjs, run live in the
@@ -894,7 +894,7 @@ PIANOBTN = lambda: GLASSBTN('Piano', KEYSI, 'openKeys')
 DOCK_A_PHONE = ''  # no band behind the floating buttons
 DOCK_A_LAPTOP = ''
 def LAYERS(phone_like, concept):
-    out = (TOAST if phone_like else TOAST_L) + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('96px' if phone_like else '92px'))
+    out = (CTOAST if phone_like else CTOAST_L) + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('96px' if phone_like else '92px'))
     if phone_like:
         out += HANDSMENU('right: 12px; bottom: 96px' if concept == 'A' else 'right: 12px; bottom: 150px')
         for cond, title, body in (('isKeys', 'Piano', B_PIANO), ('isNext', '{{nextTitle}}', B_NEXT), ('isTr', 'Key', B_TR), ('isVMenu', 'Voicing', VLIST)):

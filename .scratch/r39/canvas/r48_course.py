@@ -89,11 +89,11 @@ def CPAGE(lap):
             f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; {pad}"><div style="{"width: min(1180px, 100%); " if lap else ""}display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{CSET}</sc-if></div></main></div></sc-if>')
 CASKS = (ASK('delOn', 'Delete Intro to Music Reading?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete course', 'closeSheet'))
 cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("LearnCourses.dc.html", "", CBAR_R, "Back to Courses")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("LearnCourses.dc.html", "", CEDIT_R, "Back to Courses")}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOASTE.replace("bottom: 112px", "bottom: 40px")}{CPAGE(False)}{CASKS}')
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOAST(40, 'undoRemove')}{CPAGE(False)}{CASKS}')
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('verOn', 'Versions of Intro to Music Reading', VERBODY)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
-       f'{TOASTE.replace("left: 16px; right: 16px; bottom: 112px; z-index: 50", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px; z-index: 50")}{CPAGE(True)}{CASKS}')
+       f'{TOAST(28, 'undoRemove', laptop=True)}{CPAGE(True)}{CASKS}')
 cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + POPOVER('verOn', 'Versions of Intro to Music Reading', VERBODY, 'right: 140px; top: 244px', 440)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
 print('r48 course ok')

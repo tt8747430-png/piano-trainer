@@ -362,6 +362,6 @@ _MI = lambda l, a, col=INK: f'<button type="button" role="menuitem" onClick="{{{
 MORE76 = MENUSHELL('moreOn', 'Chord sheet', f'<sc-if value="{{{{draftOn}}}}" hint-placeholder-val="{{{{false}}}}">' + _MI('Save', 'saveDraft') + _MI('Discard draft', 'discardDraft', RED) + f'<div role="separator" style="height: 1px; margin: 6px 12px; background: {LINE}"></div></sc-if>'
                    + _MI('Share…', 'openShare') + _MI('Edit layout', 'openLay') + _MI('Save to my progressions', 'saveProg')
                    + '<a role="menuitem" href="Progressions.dc.html" style="width: 100%; height: 44px; box-sizing: border-box; border-radius: 10px; padding: 0 12px; display: flex; align-items: center; color: ' + INK + '; font-size: 16px; text-decoration: none">Open in Progressions</a>', 'menuPos', 260)
-TOAST76 = TOASTS.replace('bottom: 40px', 'bottom: 256px')
-detail('ChordPlayer', 'Chord player', CP58, ph58 + TOAST76, lm58 + TOASTL.replace('bottom: 28px', 'bottom: 296px'), '', SH58(BSHEET, CP_PSHEET) + MORE76 + SHEETS76 + LAYMENU_P,
+TOAST76 = TOAST(256, z=56)
+detail('ChordPlayer', 'Chord player', CP58, ph58 + TOAST76, lm58 + TOAST(296, z=56, laptop=True), '', SH58(BSHEET, CP_PSHEET) + MORE76 + SHEETS76 + LAYMENU_P,
        (SH58(lambda c, t, b: POPOVER(c, t, b, 'left: 140px; top: 160px', 460), CP_PPOP, lambda c, t, b: POPOVER(c, t, b, 'left: 580px; bottom: 300px', 320)) + MORE76 + SHEETS76 + LAYMENU_L).replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html'))

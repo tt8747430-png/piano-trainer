@@ -126,12 +126,11 @@ YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">
 SORTBODY = f'{SEGC("sorts", 44, 15)}'
 # a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
 ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))
-YTOAST = (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 112px; z-index: 50; min-height: 52px; border-radius: 14px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
-          f'<span style="flex: 1">{{{{toastT}}}}</span><button type="button" onClick="{{{{undo}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button></div></sc-if>')
+YTOAST = TOAST(112, always=True)
 TOOLROW = f'<div style="display: flex; align-items: center; gap: 8px">{CHIPS("kinds")}</div>'
 yph = (f'{TITLEBAR("{{pageT}}", YSEL, "Learn.dc.html", "Back to Learn")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 12px">'
        f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{SEARCHF}{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{LIST(False)}</main>{FAB(40)}{YSELBAR}{YTOAST}')
-ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{TABLE_L()}', 2000) + YSELBAR_L + FAB(32) + f'{YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px")}')
+ylm = (f'{LTITLEBAR("{{pageT}}", f"<sc-if value=\"{{{{notBare}}}}\" hint-placeholder-val=\"{{{{true}}}}\"><div style=\"width: 420px\">{SEARCHF}</div></sc-if>" + YSEL, "LearnLaptop.dc.html")}' + LCOL(f'{SHOWSTATES()}<sc-if value="{{{{notBare}}}}" hint-placeholder-val="{{{{true}}}}">{TOOLROW.replace("margin: -4px -16px; padding: 0 16px", "margin: -4px 0; padding: 0")}</sc-if>{TABLE_L()}', 2000) + YSELBAR_L + FAB(32) + f'{TOAST(28, laptop=True, always=True)}')
 detail('LearnYours', 'Made by you', YOURS_JS, yph, ylm, '',
        BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel') + BSHEET('sortOn', 'Sort', SORTBODY) + ROWBODY,
        POPOVER('pickOn', 'New', NEWMENU([('New lesson', 'newLesson'), ('New course', 'newCourse')]), 'right: 28px; top: 76px', 300) + LAPSHEET(BSHEET('newOn', '{{newT}}', NEWBODY, 'Cancel'), 440) + POPOVER('sortOn', 'Sort', SORTBODY, 'right: 149px; top: 76px', 360) + ROWBODY.replace('{{rowOpen}}', '{{rowOpenL}}').replace('{{rowSet}}', '{{rowSetL}}'), 'Learn')
@@ -173,7 +172,7 @@ def SETTINGS(lesson, lap):
     body = sub + rows + rest
     pad = 'padding: 4px 56px 60px' if lap else 'padding: 4px 16px 40px'
     return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"max-width: 704px; " if lap else ""}display: flex; flex-direction: column; gap: 24px">{body}</div></main>'
-            + (YTOAST.replace("left: 16px; right: 16px; bottom: 112px", "left: 50%; transform: translateX(-50%); width: 460px; bottom: 28px") if lap else YTOAST.replace('bottom: 112px', 'bottom: 40px')))
+            + (TOAST(28, laptop=True, always=True) if lap else TOAST(40, always=True)))
 for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')
     sh = BSHEET('nameOn', 'Rename', NAMEBODY(nm, 'Rename')) + (BSHEET('insOn', 'In courses', INSBODY) if lesson else '')
