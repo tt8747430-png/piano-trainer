@@ -401,6 +401,7 @@ export const practice = {
       mine: '{{name}} (mine)',
       save: 'Save',
       cancel: 'Cancel',
+      roll: '{{rh}} in the right hand, {{lh}} in the left',
     },
   },
   // The Chord finder (ADR 0052): a chord played or tapped, named, spelled and written.

@@ -35,7 +35,8 @@ export function ChoiceChips<V extends OptionValue>({
   className,
 }: {
   label: string
-  value: V
+  /** The chosen one; none where the choice is another group's (a hand's figures by family). */
+  value: V | null
   options: readonly Option<V>[]
   onChange: (value: V) => void
   /** One row that scrolls sideways past the screen's edges, never wrapping (the four levels). */
@@ -68,11 +69,11 @@ export function ChoiceChips<V extends OptionValue>({
           aria-label={optionName(option)}
           data-empty={option.count === 0 ? '' : undefined}
           className={cn(
-            'inline-flex h-11 shrink-0 cursor-default items-center justify-center rounded-pill border-x-0 border-transparent bg-clip-padding font-semibold select-none focus-visible:-outline-offset-3',
+            'inline-flex h-11 max-w-full shrink-0 cursor-default items-center justify-center rounded-pill border-x-0 border-transparent bg-clip-padding font-semibold select-none focus-visible:-outline-offset-3',
             TONES[tone].chip,
           )}
         >
-          {option.label}
+          <span className="truncate">{option.label}</span>
           {option.count === undefined ? null : (
             <>
               {' '}

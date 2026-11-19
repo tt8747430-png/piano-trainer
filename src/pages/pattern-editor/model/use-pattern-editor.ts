@@ -8,7 +8,6 @@ import {
   type OwnPatternId,
 } from '@/entities/pattern'
 import { saveOwnPattern, type OwnPatternDraft } from '@/features/manage-patterns'
-import { useShownKeys } from '@/features/play-example'
 import { useUp } from '@/shared/lib'
 import { usePatternSample } from '@/widgets/pattern-music'
 
@@ -37,7 +36,6 @@ export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
   const { rh, lh } = draft
   const book = useMemo(() => patternBook([{ id: HEARD, name: '', rh, lh }]), [rh, lh])
   const sample = usePatternSample(book.require(HEARD), book)
-  const [shown, show] = useShownKeys(`${rh} ${lh}`, sample.shown)
   const save = () => {
     const saved = saveOwnPattern(store, draft, id)
     if (!saved) return
@@ -47,5 +45,5 @@ export function usePatternEditor(start: OwnPatternDraft, id?: OwnPatternId) {
       replace: true,
     })
   }
-  return { draft, change, sample, shown, show, save, cancel, savable: ownName(draft.name) !== null }
+  return { draft, change, sample, save, cancel, savable: ownName(draft.name) !== null }
 }
