@@ -169,7 +169,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
                   ))
                 : null}
             </div>
-            <figcaption className="text-[0.8125rem] text-muted-foreground tabular-nums">
+            <figcaption className="text-[0.8125rem] leading-[normal] text-muted-foreground tabular-nums">
               {t('practice:exercisePage.bars', {
                 last: shownBars,
                 count: performance.bars.length,
@@ -179,7 +179,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         </div>
         <div className="mt-2 flex flex-col gap-6 lg:mt-0">
           <section className="flex min-w-0 flex-col gap-2">
-            <h3 className="font-sans text-sm font-semibold text-foreground">
+            <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">
               {t('practice:exercisePage.options')}
             </h3>
             <GroupRows surface="sheet">
@@ -289,7 +289,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             </GroupRows>
           </section>
           <section className="flex flex-col gap-2">
-            <h3 className="font-sans text-sm font-semibold text-foreground">
+            <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">
               {t('practice:exercisePage.how')}
             </h3>
             <p className="card p-4 text-[0.9375rem] leading-[1.45] text-pretty">

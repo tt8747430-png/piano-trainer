@@ -85,7 +85,7 @@ export function GroupField({
   return (
     <div data-setting={setting} className={cn('flex flex-col gap-2 py-3 ps-4 pe-3', className)}>
       {label ? (
-        <span aria-hidden className="text-base">
+        <span aria-hidden className="text-base leading-[normal]">
           {label}
         </span>
       ) : null}
