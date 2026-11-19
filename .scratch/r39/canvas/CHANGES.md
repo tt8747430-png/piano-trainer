@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Accompaniment: the app's 48 real patterns under its five books (were twelve invented under four), each picture the app's own roll, the Level filter counted from them (Texture and Feel, which the app has not, gone) · Accompaniment,AccompanimentLaptop · pending
 
 
 ## Changes

@@ -1,3 +1,4 @@
+import json
 # R41 Practice: each page to its own reference, in the calm language, holding R39's rulings (every control labelled,
 # a gear for the page's settings, a key or root from the root grid, fingering never on the keys, libraries in the one
 # library shape).
@@ -228,15 +229,30 @@ library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recent
   'sections': _PSECS},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('Key', 'v', .6)),
   add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', 'openFolder')), arrange=True)
-library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, '400 Piano Chord Progressions': False, 'Classical': False, 'Rhythm styles': False},
-  'filters': [{'name': 'Level', 'opts': [['Beginner', 9], ['Intermediate', 6], ['Advanced', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
-  'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Beginner', '♩♩', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Beginner', '♫', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Broken', 'Straight'))]},
-               {'g': 'Called to Play', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Beginner', '♩♩', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Beginner', '♫', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Broken', 'Straight')), Rw('Waltz', 'Left: root on 1 · Right: chord on 2 and 3', 'Beginner', '♩♪', LILAC, 'Pattern.dc.html', (), ('Beginner', 'Block', 'Waltz')), Rw('Arpeggio 1–5–8', 'One arpeggio through both hands', 'Intermediate', '♬', LILAC, 'Pattern.dc.html', (), ('Intermediate', 'Arpeggio', 'Straight'))]},
-               {'g': 'Called to Play, level 2', 'rows': [Rw('Runs down to the root', 'The 2nd and 5th, then 3–2–1', 'Advanced', '♬', LILAC, 'Pattern.dc.html', (), ('Advanced', 'Broken', 'Straight'))]},
-               {'g': '400 Piano Chord Progressions', 'rows': [Rw('Broken chord, 6/8', 'Left: dotted half · Right: eighths', 'Intermediate', '♫', LILAC, 'Pattern.dc.html', (), ('Intermediate', 'Broken', 'Straight')), Rw('Afterbeats, 6/8', 'Left: on the beat · Right: on the afterbeat', 'Intermediate', '♪♩', LILAC, 'Pattern.dc.html', (), ('Intermediate', 'Block', 'Straight')), Rw('Bass and chord, 4/4', 'Left: half note · Right: quarter, half', 'Beginner', '♩♩', LILAC, 'Pattern.dc.html', (), ('Beginner', 'Block', 'Straight'))]},
-               {'g': 'Classical', 'rows': [Rw('Alberti bass', 'Left: root, 5th, 3rd, 5th', 'Intermediate', '♬', LILAC, 'Pattern.dc.html', (), ('Intermediate', 'Broken', 'Straight'))]},
-               {'g': 'Rhythm styles', 'rows': [Rw('Ballad', 'Root and 5th, chords on 2 and 4', 'Beginner', '♩', LILAC, 'Pattern.dc.html', (), ('Beginner', 'Block', 'Straight')), Rw('Swing comping', 'Short chords off the beat', 'Advanced', '♪', LILAC, 'Pattern.dc.html', (), ('Advanced', 'Block', 'Swing'))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 's', 3.4), ('Level', 'v', .8)),
+# The app's own patterns (data/accompaniment.json, written by app_data.mjs from the app's source), so the board holds
+# what the app holds: its five books in their order, each pattern's name, idea, hands and level, and its picture the
+# notes PatternTile draws (the board drew twelve invented patterns under four invented books).
+_ACC = json.load(open('/home/user/piano-trainer/.scratch/r39/canvas/data/accompaniment.json', encoding='utf8'))
+def _tileurl(notes):
+    end = max([a + d for a, d, _, _ in notes] or [0])
+    def level(part):
+        ps = sorted({m for _, _, m, q in notes if q == part})
+        return lambda m: 1.5 if len(ps) < 2 else round(ps.index(m) / (len(ps) - 1) * 3)
+    lv = {'rh': level('rh'), 'lh': level('lh')}
+    bars = ''.join(f'<rect x="{6 + 32 * a / end:.1f}" y="{33 - ((4 if q == "rh" else 0) + lv[q](m)) * 3.5:.1f}" width="{max(1.6, 32 * d / end - .6):.1f}" height="2.6" rx="1.3" fill="{"%23332921" if q == "rh" else "%237A6BB0"}"/>' for a, d, m, q in notes) if end else ''
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44"><rect width="44" height="44" fill="{LILAC.replace("#", "%23")}"/><path d="M6 21.5h32" stroke="%23332921" stroke-opacity=".12"/>{bars}</svg>'
+    return 'url("data:image/svg+xml,' + svg.replace('"', "'").replace('<', '%3C').replace('>', '%3E').replace(' ', '%20') + '")'
+_ARECENT = ('1 · Bass + chords', '2 · Broken chords')
+def _arow(r, recent=False):
+    w = Rw(r['name'], r['idea'], r['stage'], '', LILAC, 'Pattern.dc.html', ('Recently used',) if recent else (), (r['stage'],) if r['stage'] else ())
+    w.update(pic=_tileurl(r['notes']), x=r['hands'])
+    return w
+_AROWS = [r for sec in _ACC for r in sec['rows']]
+_ASECS = [{'g': 'Recently used', 'rows': [_arow(r, True) for t in _ARECENT for r in _AROWS[:20] if r['name'] == t]}] + [{'g': sec['name'], 'rows': [_arow(r, r['name'] in _ARECENT) for r in sec['rows']]} for sec in _ACC]
+library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['2 · Broken chords'], 'open': {},
+  'filters': [{'name': 'Level', 'opts': [[st, sum(1 for r in _AROWS if r['stage'] == st)] for st in ('Beginner', 'Intermediate', 'Advanced')]}],
+  'sections': _ASECS},
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 'x', 3.4), ('Level', 'v', .8)),
   add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', 'openFolder')), arrange=True)
 library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Intermediate', 1]]}],

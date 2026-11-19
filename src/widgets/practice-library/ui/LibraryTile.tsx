@@ -26,7 +26,15 @@ export function LibraryTile({
         className={small ? size : undefined}
       />
     )
-  if ('drawn' in picture) return picture.drawn
+  if ('drawn' in picture)
+    return small ? (
+      // a drawn picture (a pattern's roll) at the table's 40 too, its 44 viewBox scaled
+      <span className="contents [&>[data-slot=row-tile]]:size-10 [&>[data-slot=row-tile]]:rounded-[9px]">
+        {picture.drawn}
+      </span>
+    ) : (
+      picture.drawn
+    )
   if ('chords' in picture)
     return (
       <span
