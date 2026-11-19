@@ -24,16 +24,51 @@ export interface RunResult {
   readonly averageMs: number
 }
 
-/** One practice run as the history keeps it (canvas 160): where, how it went, and when (ISO). */
-export interface PracticeRun {
+/** One practice run as the history keeps it (canvas 160): a quiz's or a run played, where, how it went, when (ISO). */
+export type PracticeRun = QuizRun | PlayedRun
+
+/** A trainer's quiz run: its answers right out of 100, the most in a row, how many and how long each took. */
+export interface QuizRun extends RunResult {
+  readonly kind: 'quiz'
   readonly id: string
   readonly key: RunKey
-  readonly accuracy: number
-  readonly answered: number
-  readonly streak: number
-  readonly averageMs: number
   readonly at: string
 }
+
+/**
+ * How a bar of a run played in Wait mode went (the practice machine's pass): played at once, with a
+ * slip (a wrong key), or after a pause of over two beats (shown, never scored).
+ */
+export type RunStep = 'clean' | 'slip' | 'pause'
+
+/** A note of a run's chord on the treble staff: its diatonic steps above middle C and its accidental. */
+export interface StaffNote {
+  /** Diatonic steps from C4: E4 is 2, B3 is −1. */
+  readonly step: number
+  readonly accidental: -2 | -1 | 0 | 1 | 2
+}
+
+/** A run played to its end in Wait mode (the run view's results, `PlayChord`): what it was and how each bar went. */
+export interface PlayedRun {
+  readonly kind: 'played'
+  readonly id: string
+  readonly key: RunKey
+  /** Its name as it was played ("Cmaj7: Inversions"). */
+  readonly title: string
+  /** The route that plays it again, with its choices. */
+  readonly href: string
+  readonly tempo: number
+  /** Each bar's step, in order. */
+  readonly steps: readonly RunStep[]
+  /** Each bar's chord as the run walks it, a whole note on the treble staff; none for an engraved line. */
+  readonly chords: readonly (readonly StaffNote[])[]
+  /** The pass's score: its share of bars with no slip, a whole percent. */
+  readonly accuracy: number
+  readonly at: string
+}
+
+/** A run played as it is kept, before its id and its time. */
+export type PlayedResult = Omit<PlayedRun, 'kind' | 'id' | 'key' | 'at'>
 
 /** How many runs the history keeps, the latest. */
 export const HISTORY_KEPT = 200

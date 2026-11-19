@@ -19,7 +19,11 @@ import {
   FIRSTS,
   HISTORY_KEPT,
   type Answer,
+  type PlayedRun,
   type PracticeRun,
+  type QuizRun,
+  type RunStep,
+  type StaffNote,
   type FirstId,
   type ProgressState,
   type RunKey,
@@ -28,7 +32,7 @@ import {
 import { songPlay, SONGS_KEPT } from './songs'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 11
+export const PROGRESS_VERSION = 12
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -187,12 +191,40 @@ function sanitize(persisted: unknown): ProgressState {
   }
 }
 
-/** A run the history can show: its place, its numbers in range and a real time; else none. */
+/** A run the history can show: a quiz's or a played one, its place, its numbers in range and a real time; else none. */
 function practiceRun(value: unknown): PracticeRun | undefined {
-  const { key, accuracy, answered, streak, averageMs, at } = savedObject<PracticeRun>(value)
+  const saved = savedObject<PracticeRun>(value)
+  const { key, accuracy, at } = saved
   if (typeof key !== 'string' || !isRunKey(key) || !isPercent(accuracy)) return undefined
+  if (typeof at !== 'string' || Number.isNaN(Date.parse(at))) return undefined
+  const id = `${key}@${at}`
+  if (saved.kind === 'played') {
+    const { title, href, tempo, steps, chords } = savedObject<PlayedRun>(value)
+    if (typeof title !== 'string' || typeof href !== 'string' || !href.startsWith('/'))
+      return undefined
+    if (!isTempo(tempo) || !Array.isArray(steps) || steps.length < 1 || !steps.every(isRunStep))
+      return undefined
+    if (!Array.isArray(chords) || !chords.every(isStaffChord)) return undefined
+    return { kind: 'played', id, key, title, href, tempo, steps, chords, accuracy, at }
+  }
+  const { answered, streak, averageMs } = savedObject<QuizRun>(value)
   if (!isCount(answered) || answered < 1 || !isCount(streak) || !isCount(averageMs))
     return undefined
-  if (typeof at !== 'string' || Number.isNaN(Date.parse(at))) return undefined
-  return { id: `${key}@${at}`, key, accuracy, answered, streak, averageMs, at }
+  return { kind: 'quiz', id, key, accuracy, answered, streak, averageMs, at }
 }
+
+const isRunStep = (value: unknown): value is RunStep =>
+  value === 'clean' || value === 'slip' || value === 'pause'
+
+const isStaffChord = (value: unknown): value is readonly StaffNote[] =>
+  Array.isArray(value) &&
+  value.every((note: unknown) => {
+    if (!isRecord(note)) return false
+    const { step, accidental } = note
+    return (
+      Number.isInteger(step) &&
+      typeof accidental === 'number' &&
+      Number.isInteger(accidental) &&
+      Math.abs(accidental) <= 2
+    )
+  })

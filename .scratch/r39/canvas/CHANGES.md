@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a wrong chord in a run's results is drawn as written, no red note: Wait mode keeps a slip, not the keys · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · **pending**
+
 
 
 

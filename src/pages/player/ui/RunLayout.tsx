@@ -1,8 +1,10 @@
 import { Gauge, SlidersHorizontal, SlidersVertical, X } from 'lucide-react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useLocation } from '@tanstack/react-router'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectDays, streak, useProgress } from '@/entities/progress'
+import { useProgressStoreApi, type PlayedRun } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
+import { recordPlayedRun } from '@/features/record-run'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
@@ -25,9 +27,7 @@ import {
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Progress } from '@/shared/ui/primitives/progress'
-import { useToday } from '@/widgets/practice-days'
 import {
-  PlayedThrough,
   usePlayerShortcuts,
   WaitLine,
   type PracticePlayer,
@@ -35,8 +35,15 @@ import {
 } from '@/widgets/practice-player'
 import { PlayerPlayback } from '@/widgets/player-settings'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
-import { runChords, runPlace, soundingKeys, type RunPlace } from '../model/run-music'
-import { RunStaff } from './RunStaff'
+import { AllPractice, RunResults, RunStaff } from '@/widgets/run-results'
+import {
+  playedKey,
+  playedSteps,
+  runChords,
+  runPlace,
+  soundingKeys,
+  type RunPlace,
+} from '../model/run-music'
 import { SongHead } from './SongHead'
 
 /** The run boards' keys: F3 to G5 on a phone (`calmKeys(53, 79)`), C2 to C7 on a laptop (`calmKeys(36, 96)`). */
@@ -109,7 +116,7 @@ export function RunLayout({
         : t('player:run.chord', { at: place.at, of: place.of })
   // The eight bars round the chord sounding: the page it falls on.
   const first = Math.floor(current / SHOWN) * SHOWN
-  const shown = chords.slice(first, first + SHOWN)
+  const shownNotes = chords.slice(first, first + SHOWN).map((each) => each.notes)
   const chord = chords[current]
   // A run of whole-note chords lights its chord; an engraved line the keys sounding now.
   const sounding = useMemo(
@@ -135,20 +142,70 @@ export function RunLayout({
     ],
     acts: [],
   }
-  // Played through, as the song Player's: opened as a Wait pass reaches the run's end.
+  // A Wait pass played to its end is kept in Practice history, and the run opens its results
+  // (`PlayChord`'s results, full screen); Retry and Practise mistakes come back to the run.
   const finished = player.feedback?.kind === 'finished' ? player.feedback : null
-  const isFinished = finished !== null
-  const [doneOpen, setDoneOpen] = useState(false)
+  const store = useProgressStoreApi()
+  const location = useLocation()
+  const [result, setResult] = useState<{
+    readonly run: PlayedRun
+    readonly best: number | null
+    readonly attempt: number
+  } | null>(null)
+  // The pass kept last, by its number, so a pass is kept once however often this runs.
+  const kept = useRef(-1)
+  const pass = practice.state.passes
   useEffect(() => {
-    if (isFinished) setDoneOpen(true)
-  }, [isFinished])
-  const days = useProgress(selectDays)
-  const today = useToday()
+    if (finished === null || kept.current === pass) return
+    kept.current = pass
+    const key = playedKey(location.pathname, location.searchStr)
+    const before = store.getState().trainers[key]
+    const steps = playedSteps(finished.bars, finished.slips, finished.pauses)
+    const at = new Date()
+    recordPlayedRun(
+      store,
+      key,
+      {
+        title,
+        href: location.href,
+        tempo: player.tempo,
+        steps,
+        chords:
+          music === undefined && chords.length === steps.length
+            ? chords.map((each) => each.notes)
+            : [],
+        accuracy: finished.score,
+      },
+      at,
+    )
+    const run = store.getState().history[0]
+    if (run?.kind === 'played')
+      setResult({ run, best: before ? before.best : null, attempt: (before?.runs ?? 0) + 1 })
+  }, [finished, pass, store, location, title, player.tempo, music, chords])
   const waits = view.mode === 'wait'
   const start = () => {
     setSetupOpen(false)
     practice.play()
   }
+  const again = (then: () => void) => {
+    setResult(null)
+    then()
+    practice.play()
+  }
+  if (result)
+    return (
+      <div className="flex min-h-screen-free flex-col px-4 lg:px-14">
+        <RunResults
+          run={result.run}
+          best={result.best}
+          attempt={result.attempt}
+          onMistakes={(bars) => again(() => player.setLoop(bars))}
+          onRetry={(tempo) => again(() => player.setTempo(tempo))}
+          done={onClose}
+          profile={<AllPractice />}
+        />
+      </div>
+    )
   return (
     <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
@@ -176,12 +233,14 @@ export function RunLayout({
           {music ??
             (laptop ? (
               <div className="[zoom:1.35]">
-                <RunStaff chords={shown} cell={104} end />
+                <RunStaff chords={shownNotes} cell={104} end />
               </div>
             ) : (
               <>
-                <RunStaff chords={shown.slice(0, 4)} cell={76} end={false} />
-                {shown.length > 4 ? <RunStaff chords={shown.slice(4)} cell={76} end /> : null}
+                <RunStaff chords={shownNotes.slice(0, 4)} cell={76} end={false} />
+                {shownNotes.length > 4 ? (
+                  <RunStaff chords={shownNotes.slice(4)} cell={76} end />
+                ) : null}
               </>
             ))}
           {waits ? <WaitLine feedback={player.feedback} /> : null}
@@ -243,22 +302,6 @@ export function RunLayout({
           <Gauge aria-hidden />
         </FloatingPiece>
       </div>
-      {finished ? (
-        <PlayedThrough
-          open={doneOpen}
-          onOpenChange={setDoneOpen}
-          pass={finished}
-          hands={t(`common:hands.${view.hands}`)}
-          bestBefore={null}
-          tempo={player.tempo}
-          ownTempo={player.ownTempo}
-          streak={streak(days, today)}
-          onPractise={player.setLoop}
-          onLoopBars={player.setLoop}
-          onAgain={practice.play}
-          onTryPlay={() => player.listenAt(player.tempo)}
-        />
-      ) : null}
       <Sheet
         swipeDirection={laptop ? 'right' : 'down'}
         modal={!laptop}

@@ -1,18 +1,21 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Check, Star } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   localDay,
   selectRun,
   selectTrainerRecord,
   useProgress,
-  type PracticeRun,
+  type PlayedRun,
+  type QuizRun,
 } from '@/entities/progress'
 import { runPlaceOf, useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
 import { cn, useMediaQuery } from '@/shared/lib'
 import { BackButton, ButtonLink, Docked, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
+import { RunResults } from '@/widgets/run-results'
 import { useHistoryDay } from '../model/runs'
 
 /** A figure of the run (canvas 160): its value first and large, its name under it. */
@@ -31,7 +34,7 @@ function Tile({ value, label }: { value: string; label: string }) {
  * Retry: the trainer again at the run's own level and drill; docked at the foot on a phone, under
  * the figures on a wider screen (canvas 160).
  */
-function Retry({ run }: { run: PracticeRun }) {
+function Retry({ run }: { run: QuizRun }) {
   const { t } = useTranslation('account')
   const wide = useMediaQuery('(min-width: 40rem)')
   const place = runPlaceOf(run.key)
@@ -58,19 +61,63 @@ function Retry({ run }: { run: PracticeRun }) {
 }
 
 /**
- * A practice run's results, opened from Practice history (canvas 160, PracticeResult): its mark
- * (a star for a perfect run), its name, how many were right and when; Accuracy, In a row and the
- * time per answer as tiles; the personal best beside it; Retry at the foot.
+ * A practice run's results, opened from Practice history (canvas 160, PracticeResult): a run played
+ * as its run ends in it (`RunResults`), a trainer's quiz as its own; the bar names it by when it was
+ * played ("Today, 14:20"), never an empty bar.
  */
 export function RunPage() {
-  const { t } = useTranslation('account')
   const locale = useLocale()
   const { runId } = useParams({ from: '/shell/profile/history/$runId' })
   const run = useProgress(selectRun(runId))
-  const record = useProgress((state) => (run ? selectTrainerRecord(run.key)(state) : undefined))
-  const name = useRunName()(run?.key ?? '')
   const clock = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
   const dayName = useHistoryDay(useToday())
+  const header = (at: string) => (
+    <ScreenHeader
+      title={`${dayName(localDay(new Date(at)))}, ${clock.format(new Date(at))}`}
+      back={<BackButton />}
+    />
+  )
+  if (run?.kind === 'played')
+    return (
+      <div className="flex flex-col">
+        {header(run.at)}
+        <PlayedResult run={run} />
+      </div>
+    )
+  return <QuizResult run={run} header={header} />
+}
+
+/** A run played, from Profile: its attempt among its key's runs, its best, and the run to play again. */
+function PlayedResult({ run }: { run: PlayedRun }) {
+  const navigate = useNavigate()
+  const record = useProgress(selectTrainerRecord(run.key))
+  const later = useProgress(
+    (state) => state.history.filter((each) => each.key === run.key && each.at > run.at).length,
+  )
+  const again = () => void navigate({ href: run.href })
+  return (
+    <RunResults
+      run={run}
+      best={record ? record.best : null}
+      attempt={Math.max(1, (record?.runs ?? 1) - later)}
+      onMistakes={again}
+      onRetry={again}
+    />
+  )
+}
+
+/** A trainer's quiz run: its mark, its name, how many were right; Accuracy, In a row, Per answer; Retry. */
+function QuizResult({
+  run,
+  header,
+}: {
+  run: QuizRun | undefined
+  header: (at: string) => ReactNode
+}) {
+  const { t } = useTranslation('account')
+  const locale = useLocale()
+  const record = useProgress((state) => (run ? selectTrainerRecord(run.key)(state) : undefined))
+  const name = useRunName()(run?.key ?? '')
   if (!run || name === null)
     return (
       <div className="flex flex-col gap-6">
@@ -86,12 +133,7 @@ export function RunPage() {
   const best = record && record.best > run.accuracy
   return (
     <div className="flex flex-col gap-6">
-      {/* The PracticeResult board's bar names the run by when it was played ("Today, 14:20"), never
-          an empty bar; its name heads the page. */}
-      <ScreenHeader
-        title={`${dayName(localDay(new Date(run.at)))}, ${clock.format(new Date(run.at))}`}
-        back={<BackButton />}
-      />
+      {header(run.at)}
       <div className="mx-auto flex w-full max-w-xl flex-col gap-5 pt-2 pb-docked-8 sm:gap-6 sm:pb-4">
         <div className="flex flex-col items-center gap-2 text-center">
           <span

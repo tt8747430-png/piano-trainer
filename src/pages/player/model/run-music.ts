@@ -1,3 +1,4 @@
+import type { RunKey as HistoryKey, RunStep, StaffNote } from '@/entities/progress'
 import type { Performance } from '@/shared/lib/arrangement'
 import {
   letterIndex,
@@ -8,13 +9,6 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 
-/** One note of a run's chord on the treble staff: its steps above middle C and its written accidental. */
-export interface RunNote {
-  /** Diatonic steps from C4: E4 is 2, B3 is −1. */
-  readonly step: number
-  readonly accidental: SpelledNote['accidental']
-}
-
 /** One key of a run's chord on the piano: its role's paint and its note as the chord spells it. */
 export interface RunKey {
   readonly midi: Midi
@@ -24,7 +18,7 @@ export interface RunKey {
 
 /** A run's chord as the run view shows it: a whole note on the treble staff, its keys lit. */
 export interface RunChord {
-  readonly notes: readonly RunNote[]
+  readonly notes: readonly StaffNote[]
   readonly keys: readonly RunKey[]
 }
 
@@ -89,4 +83,39 @@ export function soundingKeys(
     return tone ? [{ midi: key, role: tone.role, note: tone.note }] : []
   })
   return { keys, marked }
+}
+
+/** A short, steady name for a text: FNV-1a, in base 36. */
+function hashOf(text: string): string {
+  let hash = 0x811c9dc5
+  for (const char of text) {
+    hash ^= char.codePointAt(0) ?? 0
+    hash = Math.imul(hash, 0x01000193) >>> 0
+  }
+  return hash.toString(36)
+}
+
+/**
+ * Where a played run's attempts are counted: the run (its path, `/play/exercise/hanon-1`) and its
+ * choices (its search), so the same run with the same root and tempo ladder is the same key.
+ */
+export function playedKey(pathname: string, search: string): HistoryKey {
+  const run = pathname
+    .split('/')
+    .filter((part) => part !== '' && part !== 'play')
+    .join('-')
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9-]+/g, '-')
+  return `play:${run || 'run'}:${hashOf(search)}`
+}
+
+/** Each bar of a Wait pass as it went: a slip, else a pause of over two beats, else played at once. */
+export function playedSteps(
+  bars: number,
+  slips: Readonly<Partial<Record<number, number>>>,
+  pauses: Readonly<Partial<Record<number, number>>>,
+): RunStep[] {
+  return Array.from({ length: bars }, (_, bar): RunStep =>
+    (slips[bar] ?? 0) > 0 ? 'slip' : (pauses[bar] ?? 0) > 0 ? 'pause' : 'clean',
+  )
 }

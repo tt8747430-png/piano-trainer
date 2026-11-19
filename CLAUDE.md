@@ -138,7 +138,8 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
 - **The score editor** (`/edit/$pieceId`): the Player's score in Edit mode, sharing its bar. A docked panel
   from 48rem, a bottom sheet on a phone. `pages/score-editor`; `widgets/score-sheet`, `mode-switch`;
   `features/score-editor`, `edit-piece`, `record-take`.
-- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications.
+- **The Profile** (`/profile`): the learner, badges, achievements, streak, notifications, practice history (a run's
+  results, `widgets/run-results`, as a run ends in them).
 - **Elsewhere:** Search is a palette (`widgets/search-palette`); Settings (`widgets/settings-screen`) holds only what is
   app-wide; each screen's own settings are its gear's; the account pages, Legal, the Admin area (`/admin`).
 

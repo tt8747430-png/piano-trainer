@@ -1,1 +1,1 @@
-export { recordRun } from './record-run'
+export { recordPlayedRun, recordRun } from './record-run'

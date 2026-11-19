@@ -19,6 +19,28 @@
   of two bars on a phone, one of four on a laptop at 1.35, the playhead bringing its line; its place is Key k of 12
   round Next key's order, Next key › at the row's end after a pass; the keys light the notes sounding now.
 
+## A run's results (2026-11-19, from `PlayChord` and `PracticeResult`, `r56_results.py`'s `RS_RESULTS`)
+
+- **Source:** the boards end a run in its results, full screen, and Profile › Practice history opens the same page
+  ("Today, 14:20" in its bar). The app ended a run in the song Player's Played through sheet and recorded nothing,
+  so Practice history held only the old trainer's quiz runs.
+- **Will build:**
+  1. `entities/progress`: a run kept is a quiz run (`kind: 'quiz'`, as today) or a played run (`kind: 'played'`):
+     its title as played, the route that plays it again (`href`), its tempo, each bar's step (`clean`, `slip` or
+     `pause`, the practice machine's slips and pauses of the pass), its chords on the treble staff when it walks
+     whole-note chords (`RunNote`s), its accuracy (the pass's score) and when. The store's version goes up.
+  2. A run's Wait pass played to its end is recorded (`recordPlayedRun`) and the run opens its results, in the run's
+     own full-screen frame: the bar is Close and the time ("Today, 14:20"); the verdict (✓ on sage, ★ on honey for
+     100%), the title 26 bold; three tiles (Accuracy "92% · 11 of 12", Pauses "2 · of 12 chords", Tempo "72 BPM · In
+     Wait mode"); The run (four chords a line on a phone, six on a laptop, each marked ✓, Wrong notes or Paused) and
+     its legend; Practise mistakes (honey, the bars with a slip looped) over Retry and Done, at the foot on a phone;
+     "Personal best n% · Attempt k" and "All practice in Profile ›" under them.
+  3. Profile's history rows read a played run as "72 BPM · 14:20"; its page is the same results with Back, no Done
+     and no Profile link; Practise mistakes and Retry open the run again (`href`).
+- **Built (2026-11-19):** `widgets/run-results` (`RunResults`, `RunStaff`), `withPlayedRun`, `recordPlayedRun`, the
+  progress store at version 12; measured within 3 of `PracticeResult` and `PracticeResultLaptop` at 402 and 1710. The
+  wrong chord is drawn as written on the boards too: Wait mode keeps that a bar slipped, never which keys.
+
 ## Source
 
 - The boards `PlayWalk`, `PlayChromatic`, `PlayProgression`, `PlayExercise` and their laptops, written by

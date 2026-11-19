@@ -15,7 +15,7 @@ RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4
 RS_RUN = [RS_INV[i % 4] for i in range(12)]
 # what happened at each chord in Wait mode, which waits for it: None is right at once; ('paused',) took over two beats
 # (the practice machine's pauses, shown, never scored); ('wrong', played notes, the wrong one), a slip
-RS_MARKS = {2: ('paused',), 6: ('wrong', [('G', 4), ('B', 4), ('D', 5), ('E', 5)], ('D', 5)), 10: ('paused',)}
+RS_MARKS = {2: ('paused',), 6: ('wrong',), 10: ('paused',)}
 RS_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion']
 
 
@@ -75,9 +75,8 @@ def RS_RUNSTAFF(per_row, cw, perfect):
     for r in range(0, 12, per_row):
         cells = [f'<div style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL([], 34, clef=True)}<span style="height: 32px"></span></div>']
         for i in range(r, r + per_row):
-            m = None if perfect else RS_MARKS.get(i)
-            notes, red = (m[1], m[2]) if m and m[0] == 'wrong' else (RS_RUN[i], None)
-            cells.append(f'<div role="listitem" aria-label="{RS_NAMES[i % 4]}" style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL(notes, cw, red, last=(i == r + per_row - 1))}'
+            # every bar draws the chord as written: Wait mode keeps a slip, not which keys were pressed
+            cells.append(f'<div role="listitem" aria-label="{RS_NAMES[i % 4]}" style="flex: none; display: flex; flex-direction: column; align-items: center">{RS_CELL(RS_RUN[i], cw, None, last=(i == r + per_row - 1))}'
                          f'<span style="height: 32px; font-size: 12px; line-height: 16px; white-space: nowrap; text-align: center">{RS_CAP(i, perfect)}</span></div>')
         rows.append(f'<div role="list" style="display: flex; justify-content: center">{"".join(cells)}</div>')
     return '<div style="display: flex; flex-direction: column; gap: 4px">' + ''.join(rows) + '</div>'

@@ -11,25 +11,34 @@ export interface RunLine {
   readonly accuracy: string
 }
 
-/** Each run as its row reads (canvas 160), a run of a trainer the app no longer has left out. */
+/** Each run as its row reads (canvas 160): a run played by its tempo; a quiz of a trainer the app no longer has left out. */
 export function useRunLines(): (runs: readonly PracticeRun[]) => readonly RunLine[] {
-  const { t } = useTranslation('account')
+  const { t } = useTranslation(['account', 'music'])
   const locale = useLocale()
   const runName = useRunName()
   const clock = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
   return (runs) =>
     runs.flatMap((run) => {
+      const time = clock.format(new Date(run.at))
+      const accuracy = t('profile.history.accuracy', { percent: run.accuracy })
+      // A run played reads its tempo ("72 BPM · 14:20"), a quiz how many it answered.
+      if (run.kind === 'played')
+        return [
+          {
+            id: run.id,
+            name: run.title,
+            detail: `${t('music:bpm', { tempo: run.tempo })} · ${time}`,
+            accuracy,
+          },
+        ]
       const name = runName(run.key)
       if (name === null) return []
       return [
         {
           id: run.id,
           name,
-          detail: t('profile.history.row', {
-            time: clock.format(new Date(run.at)),
-            count: run.answered,
-          }),
-          accuracy: t('profile.history.accuracy', { percent: run.accuracy }),
+          detail: t('profile.history.row', { time, count: run.answered }),
+          accuracy,
         },
       ]
     })

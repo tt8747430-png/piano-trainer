@@ -1,8 +1,9 @@
-import type { RunChord, RunNote } from '../model/run-music'
+import type { ReactNode } from 'react'
+import type { StaffNote } from '@/entities/progress'
 
 /** The board's staff (`RS_CELL`): five lines 8 apart, the bottom one E4 at 48, in a view 82 tall from −6. */
 const lineY = (step: number) => 48 - (step - 2) * 4
-const ACCIDENTAL_SIGNS: Readonly<Record<RunNote['accidental'], string>> = {
+const ACCIDENTAL_SIGNS: Readonly<Record<StaffNote['accidental'], string>> = {
   [-2]: '𝄫',
   [-1]: '♭',
   0: '',
@@ -28,10 +29,17 @@ function StaffLines({ width, end }: { width: number; end: boolean }) {
 }
 
 /** A bar of one whole-note chord, as an engraver sets it: a second's upper note to the right, a ledger under C4. */
-function ChordCell({ chord, width, end }: { chord: RunChord; width: number; end: boolean }) {
+function ChordCell({
+  chord,
+  width,
+  end,
+}: {
+  chord: readonly StaffNote[]
+  width: number
+  end: boolean
+}) {
   const cx = width / 2 - 3
-  const steps = [...chord.notes].sort((a, b) => a.step - b.step)
-  let shifted = false
+  const steps = [...chord].sort((a, b) => a.step - b.step)
   // Accidentals stand in columns left of the chord, the highest nearest it, each moving a column
   // out when one stands less than a sixth above it in the column (Gould, Behind Bars: chords).
   const columns: number[][] = []
@@ -43,9 +51,14 @@ function ChordCell({ chord, width, end }: { chord: RunChord; width: number; end:
     columns[at]?.push(note.step)
     column.set(note.step, at)
   }
-  const heads = steps.map((note, index) => {
+  // A second's upper note stands to the right, the next note back on the stem's side.
+  const shifts: boolean[] = []
+  for (const [index, note] of steps.entries()) {
     const previous = steps[index - 1]
-    shifted = previous !== undefined && note.step - previous.step === 1 && !shifted
+    shifts.push(previous !== undefined && note.step - previous.step === 1 && !shifts[index - 1])
+  }
+  const heads = steps.map((note, index) => {
+    const shifted = shifts[index] ?? false
     const x = cx + (shifted ? 10 : 0)
     const y = lineY(note.step)
     return (
@@ -98,32 +111,58 @@ function ChordCell({ chord, width, end }: { chord: RunChord; width: number; end:
 /**
  * One line of a run's music on the paper (the run boards' `PV_LINE`): the treble clef's cell 40 wide,
  * then each chord a whole note in its own bar, `cell` wide, the line's last bar closed when it ends
- * the music shown.
+ * the music shown; with `marks`, each bar's mark under it in a row 32 tall (the results' `RS_RUNSTAFF`).
  */
 export function RunStaff({
   chords,
   cell,
   end,
+  marks,
+  clefWidth = 40,
 }: {
-  chords: readonly RunChord[]
+  chords: readonly (readonly StaffNote[])[]
   cell: number
   end: boolean
+  marks?: readonly ReactNode[]
+  /** The clef's cell: 40 in the run, 34 in its results (`RS_CELL`'s clef). */
+  clefWidth?: number
 }) {
+  const clef = (
+    <svg
+      viewBox={`0 -6 ${clefWidth} 82`}
+      width={clefWidth}
+      height={82}
+      aria-hidden
+      className="block shrink-0"
+    >
+      <StaffLines width={clefWidth} end={false} />
+      <text x={2} y={54} fontFamily="Noto Music, serif" fontSize={40} fill="currentColor">
+        𝄞
+      </text>
+    </svg>
+  )
   return (
-    <div className="flex [justify-content:safe_center] overflow-hidden text-foreground">
-      <svg viewBox="0 -6 40 82" width={40} height={82} aria-hidden className="block shrink-0">
-        <StaffLines width={40} end={false} />
-        <text x={2} y={54} fontFamily="Noto Music, serif" fontSize={40} fill="currentColor">
-          𝄞
-        </text>
-      </svg>
+    <div
+      role={marks ? 'list' : undefined}
+      className="flex [justify-content:safe_center] overflow-hidden text-foreground"
+    >
+      <div className="flex shrink-0 flex-col items-center">
+        {clef}
+        {marks ? <span className="h-8" /> : null}
+      </div>
       {chords.map((chord, index) => (
-        <ChordCell
+        <div
           key={index}
-          chord={chord}
-          width={cell}
-          end={end && index === chords.length - 1}
-        />
+          role={marks ? 'listitem' : undefined}
+          className="flex shrink-0 flex-col items-center"
+        >
+          <ChordCell chord={chord} width={cell} end={end && index === chords.length - 1} />
+          {marks ? (
+            <span className="h-8 text-center text-xs leading-4 whitespace-nowrap">
+              {marks[index]}
+            </span>
+          ) : null}
+        </div>
       ))}
     </div>
   )
