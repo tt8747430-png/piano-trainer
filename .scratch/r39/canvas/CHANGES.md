@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Explore's kinds as the app's and its ruling: Hymns in, Other out · Explore,ExploreLaptop · pending
+
 ## Changes
 
 - 2026-11-19 · 50a043a7 · Archive and Trash: the States box (their empty states could not be opened), playlists not folders in the empty line and an archived playlist's row, rows 64 (phone) and 60 (laptop) as meant, the hairline inside · Archive,ArchiveLaptop,Trash,TrashLaptop · v626

@@ -248,7 +248,12 @@ export function AppNav() {
   // A phone's tab bar is the places' own (memory-palaces'): on what a place opens it steps away, Back
   // the way out, and the screen has the whole height.
   const pathname = useRouterState({ select: (state) => state.location.pathname })
-  const away = !PLACES.some(({ to }) => to === pathname)
+  // Explore is a page My songs opens (the Explore board: Back, its name, no tab bar), though its view
+  // is written into the place's URL.
+  const exploring = useRouterState({
+    select: (state) => new URLSearchParams(state.location.searchStr).get('view') === 'explore',
+  })
+  const away = exploring || !PLACES.some(({ to }) => to === pathname)
   // A laptop's sidebar puts the learner at its foot, under Search and Settings; a phone's bar keeps
   // the Profile as its last tab.
   const sidebarShown = useMediaQuery(SIDEBAR_SHOWN)

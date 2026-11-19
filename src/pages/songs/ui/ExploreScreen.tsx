@@ -50,7 +50,6 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
         label: t(`explore.kinds.${kind}`),
       }))}
       onChange={(kind) => show({ kind, by: '' })}
-      compact
     />
   )
   const categories = (
@@ -83,7 +82,9 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
         />
         <div className="flex min-w-0 flex-col items-start gap-3 xl:flex-row xl:items-center xl:gap-4">
           <div className="w-55 shrink-0">{kinds}</div>
-          <div className="min-w-0 flex-1 max-xl:w-full">{songs ? (byChip ?? categories) : null}</div>
+          <div className="min-w-0 flex-1 max-xl:w-full">
+            {songs ? (byChip ?? categories) : null}
+          </div>
           {songs ? (
             <ExploreSort
               home={home}
@@ -100,10 +101,11 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
     <div className="flex flex-col gap-4 pb-4">
       <ScreenHeader
         title={t('explore.views.explore')}
-        large
         back={<BackButton label={t('title')} onClick={() => show({ ...FRESH, view: 'mine' })} />}
       />
-      <div className="flex min-w-0 flex-col gap-3">
+      {/* The Explore board's column: the search 8 under the bar, Songs | People 16 under it, the
+          kinds 12 under that. */}
+      <div className="-mt-2 flex min-w-0 flex-col gap-4">
         {search}
         {kinds}
         {songs ? (
