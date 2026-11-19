@@ -123,7 +123,7 @@ function AppCourse({ courseId }: { courseId: string }) {
             : undefined
         }
       />
-      <div className="-mt-6 flex min-w-0 flex-col gap-8 lg:-mt-4">
+      <div className="-mt-6 flex min-w-0 flex-col gap-8">
         <CourseOverview
           cover={<CourseBanner fill={paint.fill} ink={paint.ink} />}
           title={<CourseTitle>{title}</CourseTitle>}

@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a course: lesson rows 68 as a level's (were 80), laptop lessons in four columns (a dead replace kept one), laptop column on the 56 (was 40), the real course's words, lessons and songs · Course,CourseLaptop · pending
+
 - 2026-11-19 · 1956b88c · the shelves hold the app's real courses, five shelves in its paints (were an invented four) · Learn,LearnLaptop,LearnCourses,LearnCoursesLaptop,LearnLevel,LearnLevelLaptop · v621
 
 - 2026-11-19 · fdd88a9f · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · v620

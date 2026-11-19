@@ -48,7 +48,7 @@ export function CourseOverview({
           {summary ? (
             <p className="text-base/normal text-pretty text-muted-foreground">{summary}</p>
           ) : null}
-          <p className="text-sm text-muted-foreground">{facts.join(' · ')}</p>
+          <p className="text-sm/[normal] text-muted-foreground">{facts.join(' · ')}</p>
         </div>
         {progress.total > 0 ? (
           <div className="flex flex-col gap-2">
@@ -59,7 +59,7 @@ export function CourseOverview({
               </p>
             ) : (
               <>
-                <p className="text-sm text-muted-foreground tabular-nums">
+                <p className="text-sm/[normal] text-muted-foreground tabular-nums">
                   {t('progress', { learned: progress.done, total: progress.total })}
                 </p>
                 <ProgressBar done={progress.done} total={progress.total} />
@@ -80,7 +80,7 @@ export function CourseTitle({ children }: { children: ReactNode }) {
   return (
     <p
       aria-hidden
-      className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-4xl/[1.15]"
+      className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-[2.25rem]/[1.15]"
     >
       {children}
     </p>

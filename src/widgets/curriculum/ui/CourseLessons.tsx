@@ -25,8 +25,8 @@ export function CourseLessons({ course, next }: { course: Course; next: StepId |
   const numberOf = (lessonId: string) =>
     course.lessons.findIndex((each) => each.id === lessonId) + 1
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-1">
-      <h2 id={id} className="font-sans text-xl font-bold">
+    <section aria-labelledby={id} className="flex flex-col">
+      <h2 id={id} className="font-sans text-xl leading-[normal] font-bold">
         {t('course.lessons')}
       </h2>
       <LessonLine across={4}>

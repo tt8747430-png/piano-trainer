@@ -19,7 +19,7 @@ export function GuidedSongs({ course }: { course: Course }) {
   if (songs.length === 0) return null
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="font-sans text-xl font-bold">
+      <h2 id={id} className="font-sans text-xl leading-[normal] font-bold">
         {t('course.songs')}
       </h2>
       <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fill,minmax(max(12.5rem,calc((100%-4.5rem)/4)),1fr))] lg:gap-x-6 lg:overflow-visible lg:rounded-none lg:ring-0 lg:bg-transparent lg:[&>li]:after:hidden lg:[&>li>*]:px-0 lg:[&_[data-slot=row-chevron]]:hidden">

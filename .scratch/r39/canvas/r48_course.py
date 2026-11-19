@@ -2,9 +2,9 @@ import re
 # R48: a course (pages/course, the course editor): its page for a learner, the same page in an editor's Edit mode
 # (title and summary in place, Properties: Shelf, Level, Length; Lessons dragged, removed, "Or add one back", Add
 # lesson), its Settings page and Publish. Labels from learn.ts (course, own, edit.course, settings). Exec'd by r41.py.
-CRS = {'t': 'Intro to Music Reading', 's': 'Read notes on both staves at sight, one clef at a time, then together. Each lesson ends with a song to read.',
-       'lessons': [['The staff and the treble clef', 'learned'], ['Notes on the lines', 'learned'], ['Notes in the spaces', 'learned'], ['The bass clef', 'next'], ['Ledger lines', ''], ['The grand staff', ''], ['Reading both hands', ''], ['Sight-reading a little every day', 'unpub']],
-       'songs': [['Ode to Joy', 'Beethoven · Beginner'], ['Twinkle, Twinkle, Little Star', 'Traditional · Beginner'], ['Amazing Grace', 'John Newton · Beginner']]}
+CRS = {'t': 'Intro to Music Reading', 's': 'Learn to read notes, starting at the keyboard. You meet pitch and the octave, then the staff, the treble and bass clefs, ledger lines, and sharps, flats and naturals.',
+       'lessons': [['Pitch and the piano', 'learned'], ['The staff', 'learned'], ['The treble clef', 'learned'], ['Notes above the treble staff', 'next'], ['The bass clef', ''], ['Notes below the bass staff', ''], ['Accidentals', 'unpub']],
+       'songs': [['Yankee Doodle', 'Traditional · C major'], ['Oh! Susanna', 'Stephen Foster · C major']]}
 CRPICS = {t: INCIPIT(INC.get(t, (2, 4))) for t, _ in CRS['songs']}
 COURSE_JS = js('const CR = ' + json.dumps(CRS, ensure_ascii=False) + ', CRPICS = ' + json.dumps(CRPICS) + ';\n' + r'''
     const editing = !!st.editing, sheet = st.sheet ?? null, gone = st.gone ?? {}, weeks = st.weeks ?? 4, shelf = st.shelf ?? 'Beginner', level = st.level ?? 'Beginner';
@@ -31,10 +31,10 @@ COVER = (f'<div aria-hidden="true" style="flex: none; height: 132px; margin-bott
          f'<svg viewBox="0 0 400 132" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><g stroke="#9DBA92" stroke-width="1.6">' + ''.join(f'<line x1="0" x2="400" y1="{44 + i * 11}" y2="{44 + i * 11}"></line>' for i in range(5)) + '</g>'
          + ''.join(f'<ellipse cx="{70 + i * 46}" cy="{88 - (i % 4) * 5.5}" rx="7.5" ry="5.6" fill="#3F6B45" transform="rotate(-20 {70 + i * 46} {88 - (i % 4) * 5.5})"></ellipse><line x1="{77 + i * 46}" x2="{77 + i * 46}" y1="{86 - (i % 4) * 5.5}" y2="{52 - (i % 4) * 5.5}" stroke="#3F6B45" stroke-width="1.6"></line>' for i in range(7)) + '</svg></div>')
 # the course's facts are a line, not chips: a chip is a value you change in place (scan-first 4; loop round 63)
-FACTS = f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Beginner · 3 songs · 4 weeks</p>'
+FACTS = f'<p style="margin: 0; font-size: 14px; color: {SOFT}">Beginner · 2 songs · 7 weeks</p>'
 GRIPS = '<span role="button" aria-label="Move: {{l.t}}" style="flex: none; width: 44px; height: 44px; color: #685E56; display: flex; align-items: center; justify-content: center; cursor: grab">' + GRIP + '</span>'
 # canvas 164: a course's lessons are the line a level's are (one spine through the tiles, no card round them)
-LROWS = (f'<div style="position: relative; margin-top: -12px"><span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span><sc-for list="{{{{lessons}}}}" as="l" hint-placeholder-count="8"><a href="Lesson.dc.html" style="position: relative; min-height: 64px; display: flex; align-items: center; gap: 16px; padding: 8px 8px 8px 0; border-radius: 12px; color: {INK}; text-decoration: none">'
+LROWS = (f'<div style="position: relative; margin-top: -12px"><span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span><sc-for list="{{{{lessons}}}}" as="l" hint-placeholder-count="8"><a href="Lesson.dc.html" style="position: relative; min-height: 68px; display: flex; align-items: center; gap: 16px; padding: 0 8px 0 0; border-radius: 12px; color: {INK}; text-decoration: none">'
          f'<span style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: {{{{l.tileBg}}}}; box-shadow: {{{{l.ring}}}}; color: #2F5A35; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center"><sc-if value="{{{{l.learned}}}}" hint-placeholder-val="{{{{false}}}}">{CHECKI}</sc-if><sc-if value="{{{{l.todo}}}}" hint-placeholder-val="{{{{true}}}}"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 4px; background: {LINE}"></span></sc-if><sc-if value="{{{{l.next}}}}" hint-placeholder-val="{{{{false}}}}"><span style="color: {INK}; display: flex">{ICON(BOOKI, 20)}</span></sc-if></span>'
          f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{l.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{l.n}}}}<sc-if value="{{{{l.unpub}}}}" hint-placeholder-val="{{{{false}}}}"><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"> · <span style="color: #A8551F; font-weight: 600">Not published yet</span></sc-if></sc-if></span></span>'
          f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><sc-if value="{{{{l.next}}}}" hint-placeholder-val="{{{{false}}}}"><span style="flex: none; height: 26px; padding: 0 12px; border-radius: 13px; background: transparent; box-shadow: inset 0 0 0 1.5px {ACCENT}; color: #7A5418; font-size: 13px; font-weight: 700; display: flex; align-items: center">Next</span></sc-if></sc-if>'
@@ -51,15 +51,15 @@ def CBODY(lap):
     head = (f'<div style="display: flex; flex-direction: column; gap: 8px">' + h1 +
             f'<p contenteditable="{{{{editing}}}}" style="margin: 0; font-size: 16px; line-height: 1.5; color: {SOFT}; outline: none">{{{{s}}}}</p>'
             f'{FACTS}</div>')
-    go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 8 learned</span></div>{METER.replace("{{meter}}", "37%")}'
-          f'<div style="display: flex; margin-top: 4px">{BTN("Continue: The bass clef", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
+    go = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}"><div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px; color: {SOFT}"><span>3 of 7 learned</span></div>{METER.replace("{{meter}}", "43%")}'
+          f'<div style="display: flex; margin-top: 4px">{BTN("Continue: Notes above the treble staff", "", "Lesson.dc.html", "primary", 52)}</div></div></sc-if>')
     # loop round 59: no About: what the course teaches is said once, in the summary under its name, as a level's goal
     if lap:  # owner, 2026-11-17: "these empty spaces on the left under the sections should not be … the same for the
         # courses and lessons": the course's head is a band across the top (cover, then its name, goal, progress and
         # Continue), its lessons flow in two balanced columns under it and its songs in a row of three; no side
         # column that runs out (lines.mjs: a bare band under a column)
         lrows = (LROWS.replace('<span aria-hidden="true" style="position: absolute; left: 21px; top: 32px; bottom: 32px; width: 2px; background: #B9CDB3"></span>', '', 1)
-                 .replace('<div style="position: relative">', '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
+                 .replace('<div style="position: relative; margin-top: -12px">', '<div style="margin-top: -12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(max(200px, calc((100% - 72px) / 4)), 1fr)); column-gap: 24px">', 1)
                  .replace('<a href="Lesson.dc.html" style="position: relative;', '<a href="Lesson.dc.html" style="break-inside: avoid; position: relative;', 1)
                  # a row ends where its words end (owner, 2026-11-17, the rows marked: "why don't you flag such
                  # things"): the title takes its own width, Next stands beside it, and the far chevron goes; the whole
@@ -78,7 +78,7 @@ def CBODY(lap):
 CBAR_R = IB('Settings', GEARI, 'openSettings') + TB('Edit', 'edit')
 CEDIT_R = IB('Settings', GEARI, 'openSettings') + EDITR()  # Edit becomes Done in its place
 COURSEPIC = f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 14px; background: {SAGE}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.08); color: {INK}; display: flex; align-items: center; justify-content: center">{FOLDI.replace('width="20" height="20"', 'width="26" height="26"')}</span>'
-CSET = THINGSET(THINGHEAD(COURSEPIC, 'Intro to Music Reading', 'Course · 8 lessons · Beginner'),
+CSET = THINGSET(THINGHEAD(COURSEPIC, 'Intro to Music Reading', 'Course · 7 lessons · Beginner'),
                 THINGSEC(CAPS('The course'), GROUP(('link', 'Shelf', 'Beginner', 'LearnCoursesLaptop.dc.html'), bg=SHEET)), 'course')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
         f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
@@ -92,7 +92,7 @@ cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOAST(40, 'undoRemove')}{CPAGE(False)}{CASKS}')
 csh = BSHEET('newOn', 'New lesson', CNEW, 'Cancel') + BSHEET('verOn', 'Versions of Intro to Music Reading', VERBODY)
 clm = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{LTOP("LearnCoursesLaptop.dc.html", CBAR_R)}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{LTOP("LearnCoursesLaptop.dc.html", CEDIT_R)}</sc-if>'
-       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 40px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
+       f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 56px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(True)}</main>'
        f'{TOAST(28, 'undoRemove', laptop=True)}{CPAGE(True)}{CASKS}')
 cpops = LAPSHEET(BSHEET('newOn', 'New lesson', CNEW, 'Cancel'), 440) + POPOVER('verOn', 'Versions of Intro to Music Reading', VERBODY, 'right: 140px; top: 244px', 440)
 detail('Course', 'Intro to Music Reading', COURSE_JS, SHOWSTATES() + cph, SHOWSTATES() + clm, '', csh, cpops, 'Learn')
