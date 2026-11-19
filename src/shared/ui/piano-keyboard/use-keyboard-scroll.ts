@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, type RefObject } from 'react'
 import {
   keepCentre,
+  onWhiteEdge,
   scrollToCentre,
   scrollToReveal,
   scrollToShow,
@@ -47,11 +48,11 @@ export function useKeyboardScroll(
     opened.current = true
     if (now.scrollWidth <= now.clientWidth) return
     // A range that fits the view is shown whole, edge to edge, as the boards draw it; a wider one
-    // opens on the keys asked for.
+    // opens on the keys asked for, on a whole white key at its left.
     const fits = ((span.right - span.left) / 100) * now.scrollWidth <= now.clientWidth + 1
     const left =
       inView && !fits
-        ? scrollToShow(now, spanOf(keys, inView))
+        ? onWhiteEdge(now, keys, scrollToShow(now, spanOf(keys, inView)))
         : scrollToCentre(now, (span.left + span.right) / 200)
     element.scrollTo({ left, behavior })
   })
