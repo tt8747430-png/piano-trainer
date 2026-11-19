@@ -13,6 +13,11 @@
 - "Every run's music on the paper" (2026-11-18): never in a lone card; the phone's two lines of four bars under the
   bar, the laptop's eight bars at 1.35, centred in the band over the transport.
 - "A practice run's Setup groups by heading" (2026-11-18, canvas v549): sections 24 apart, a heading 8 over its control.
+- Every run's Setup ends with Tempo, a stepper (2026-11-19): the Tempo piece opens Setup, which had no tempo in it. An
+  exercise's Tempo carries the tempo ladder's ⓘ; the ladder's rung picker went (a second control for the tempo).
+- An exercise's music is its real line engraved (2026-11-19): the grand staff as the app's engraver sets it, two lines
+  of two bars on a phone, one of four on a laptop at 1.35, the playhead bringing its line; its place is Key k of 12
+  round Next key's order, Next key › at the row's end after a pass; the keys light the notes sounding now.
 
 ## Source
 
@@ -24,7 +29,12 @@
   left hand's root and the pedal, the floating keys with the hands, Wait · Loop, ‹ ▶ ›, Both · 3D); the board draws the
   run view. No "Chord 1 of 8" string exists in the app.
 
-## Today
+## Built (2026-11-19: 374fee51 the chord runs, 171cfeb2 the exercise)
+
+- `RunLayout`, `RunStaff`, `run-music` in `src/pages/player`; every run route under the shell. The rest of this file
+  is the plan as it was written.
+
+## Today (before the port)
 
 - `src/pages/player/ui/WalkPlayerPage.tsx`, `ChromaticPlayerPage.tsx`, `ProgressionPlayerPage.tsx`,
   `ExercisePlayerPage.tsx`, each over `PlayerLayout.tsx`, their setups (`WalkSetup.tsx`, `ChromaticSetup.tsx`,

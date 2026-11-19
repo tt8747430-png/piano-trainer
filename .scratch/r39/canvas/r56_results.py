@@ -221,7 +221,62 @@ PV_MUSIC = {'walk': PV_WALK,
                   [('E', 4), ('G', 4), ('B', 4), ('D', 5)], [('F', 4), ('A', 4, _F), ('C', 5), ('E', 5, _F)], [('F', 4, _S), ('A', 4), ('C', 5, _S), ('E', 5)], [('G', 4), ('B', 4, _F), ('D', 5), ('F', 5)]],
     'progression': [[('C', 4), ('E', 4), ('G', 4)], [('B', 3), ('D', 4), ('G', 4)], [('C', 4), ('E', 4), ('A', 4)], [('C', 4), ('F', 4), ('A', 4)]] * 2,
     'exercise': [[(l, o)] for l, o in (('C', 4), ('E', 4), ('F', 4), ('G', 4), ('A', 4), ('G', 4), ('F', 4), ('E', 4))]}
+
+# Round 69: an exercise's line engraved as the app's engraver sets it (Verovio, the grand staff in lines): Hanon No. 1
+# in C, its sixteenths beamed four to a beat in 2/4, the right hand from C4 and the left an octave under, each bar's
+# figure a step up (C E F G A G F E, D F G A B A G F, …); the bar number over each line but the first.
+HANON = [[0, 2, 3, 4, 5, 4, 3, 2]]
+HANON = [[d + k for d in HANON[0]] for k in range(4)]
+def PV_HANON(w, bars, first):
+    tre = lambda s: 48 - (s - 2) * 4          # diatonic steps from C4; E4 the treble's bottom line at 48
+    bas = lambda s: 136 - (s - 7 + 3) * 4     # the left hand two octaves under, from C2: steps from C3 less 7, G2 at 136
+    lines = ''.join(f'<path d="M14 {16 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path><path d="M14 {104 + i * 8}H{w}" stroke="{INK}" stroke-width=".8" opacity=".5"></path>' for i in range(5))
+    out = lines + f'<path d="M14.5 16V136" stroke="{INK}" stroke-width="1.2"></path><path d="M{w - .6} 16V48M{w - .6} 104V136" stroke="{INK}" stroke-width="1.2"></path>'
+    out += f'<path d="M11 16C4 24 12 62 5 76C12 90 4 128 11 136C1 124 9 90 2 76C9 62 1 28 11 16Z" fill="{INK}"></path>'
+    out += f'<text x="18" y="54" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄞</text><text x="18" y="120" font-family="Noto Music, serif" font-size="40" fill="{INK}">𝄢</text>'
+    x0 = 52
+    if first == 0:
+        out += ''.join(f'<text x="58" y="{y}" text-anchor="middle" font-family="Noto Music, serif" font-size="19" font-weight="700" fill="{INK}">{d}</text>' for y, d in ((31, 2), (47, 4), (119, 2), (135, 4)))
+        x0 = 72
+    else:
+        out += f'<text x="14" y="4" font-size="11" fill="{SOFT}">{first + 1}</text>'
+    bw = (w - x0) / bars
+    for b in range(bars):
+        bx = x0 + b * bw
+        if b:
+            out += f'<path d="M{bx:.1f} 16V48M{bx:.1f} 104V136" stroke="{INK}" stroke-width=".8"></path>'
+        steps = HANON[(first + b) % 4]
+        for g in range(2):
+            xs = [bx + 10 + (g * 4 + i) * (bw - 18) / 8 for i in range(4)]
+            for staff, yf, off, up in ((0, tre, 0, True), (1, bas, 0, True)):
+                ys = [yf(st) for st in steps[g * 4:g * 4 + 4]]
+                for x, y, st in zip(xs, ys, steps[g * 4:g * 4 + 4]):
+                    out += f'<ellipse cx="{x:.1f}" cy="{y}" rx="4.6" ry="3.4" transform="rotate(-24 {x:.1f} {y})" fill="{INK}"></ellipse>'
+                    if staff == 0 and st <= 0:
+                        out += f'<path d="M{x - 7:.1f} 56H{x + 7:.1f}" stroke="{INK}" stroke-width="1"></path>'
+                    if staff == 1:
+                        out += ''.join(f'<path d="M{x - 7:.1f} {ly}H{x + 7:.1f}" stroke="{INK}" stroke-width="1"></path>' for ly in (144, 152) if y >= ly)
+                if up:
+                    by0, by1 = ys[0] - 26, ys[-1] - 26
+                    top = min(by0, by1, min(ys) - 22)
+                    sl = max(-4, min(4, by1 - by0)); a, z = top + max(0, sl), top + max(0, -sl)
+                    sx = [x + 4.2 for x in xs]
+                else:
+                    by0, by1 = ys[0] + 26, ys[-1] + 26
+                    bot = max(by0, by1, max(ys) + 22)
+                    sl = max(-4, min(4, by1 - by0)); a, z = bot + min(0, sl), bot + min(0, -sl)
+                    sx = [x - 4.2 for x in xs]
+                beam = lambda t: a + (z - a) * (t - sx[0]) / (sx[-1] - sx[0])
+                for x, y in zip(sx, ys):
+                    out += f'<path d="M{x:.1f} {y}V{beam(x):.1f}" stroke="{INK}" stroke-width="1.1"></path>'
+                d = 1 if up else -1
+                for k in (0, 1):
+                    y0, y1 = a + d * 6 * k, z + d * 6 * k
+                    out += f'<path d="M{sx[0]:.1f} {y0:.1f}L{sx[-1]:.1f} {y1:.1f}L{sx[-1]:.1f} {y1 + d * 3.6:.1f}L{sx[0]:.1f} {y0 + d * 3.6:.1f}Z" fill="{INK}"></path>'
+    return f'<svg viewBox="0 -8 {w} 184" width="{w}" height="184" aria-hidden="true" style="display: block; flex: none">{out}</svg>'
 def PV_LINE(n, cw, v='walk', start=0, last=True):
+    if v == 'exercise':
+        return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{PV_HANON(cw, n, start)}</div>'
     cells = RS_CELL([], 40, clef=True) + ''.join(RS_CELL(PV_MUSIC[v][i], cw, last=(last and i == start + n - 1)) for i in range(start, start + n))
     return f'<div style="display: flex; justify-content: safe center; overflow: hidden">{cells}</div>'
 def PV_RUN(lap, v):
@@ -229,16 +284,16 @@ def PV_RUN(lap, v):
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{pvProg}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{pvT}}}}</span></div>')
     # floating 12 above the keys, reserving no space; Play at the centre, as the Player's and Flowkey's (flowkey 009)
-    transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoV}}', TEMPOI, 'onClick="{{openSetup}}"')
+    transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoC}}', TEMPOI, 'onClick="{{openSetup}}"')
     if lap:
         return (LPAD(PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html'))
-                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>{prog}</div>'
+                + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(4, 872, v) if v == 'exercise' else PV_LINE(8, 104, v)}</div>{prog}</div>'
                 f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Tempo, play and hands")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
-            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{PV_LINE(4, 76, v, 0, False)}{PV_LINE(4, 76, v, 4)}{prog}<div style="flex: 1"></div>'
+            + f'<main style="flex: 1; min-height: 0; padding: 4px 16px 34px; display: flex; flex-direction: column; gap: 16px">{(PV_LINE(2, 370, v, 0) + PV_LINE(2, 370, v, 2)) if v == 'exercise' else (PV_LINE(4, 76, v, 0, False) + PV_LINE(4, 76, v, 4))}{prog}<div style="flex: 1"></div>'
             f'<div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div></main>{RUNBAR("left: 12px; right: 12px; bottom: 158px", transport, "Setup, play and tempo")}')
 PV_CT = {"'walk'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }", "'progression'": "{ 60: [ROLE[1], 'C'], 64: [ROLE[3], 'E'], 67: [ROLE[5], 'G'] }",
-         "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 60: [ROLE[1], 'C'] }"}
+         "'chromatic'": "{ 60: [ROLE[1], 'C'], 63: [ROLE[3], 'E♭'], 67: [ROLE[5], 'G'], 70: [ROLE[7], 'B♭'] }", "'exercise'": "{ 36: [ROLE[1], 'C'], 60: [ROLE[1], 'C'] }"}
 PV_KB = lambda v: "const CT = " + PV_CT[v] + ";\n    return { kb: calmKeys(53, 79, CT, 402, 112), kbL: calmKeys(36, 96, CT, 1462, 170),"
 for stem, v, ttl in (('PlayWalk', "'walk'", 'The Player: walk the chords of a key'), ('PlayChromatic', "'chromatic'", 'The Player: a chromatic walk'), ('PlayProgression', "'progression'", 'The Player: a progression, in all 12 keys'), ('PlayExercise', "'exercise'", 'The Player: an exercise')):
     detail(stem, ttl, js(PV_SRC.replace('__V__', v).replace('    return {', '    ' + PV_KB(v), 1)), PV_RUN(False, v.strip("'")), PV_RUN(True, v.strip("'")), '', BSHEET('setupOn', 'Setup', PVSTART, 'Close'), POPOVER('setupOn', 'Setup', PVSETL, 'left: calc(50% - 310px); bottom: 250px', 620), 'Practice')
