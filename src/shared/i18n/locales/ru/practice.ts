@@ -801,7 +801,6 @@ export const practice: LocaleResources['practice'] = {
     progressions: 'Последовательности',
     opened: 'Открыто: {{name}}',
     undo: 'Отменить',
-    redo: 'Вернуть',
     more: 'Гармоническая сетка',
     saveAs: 'Сохранить в мои сетки…',
     sheets: {
@@ -965,7 +964,6 @@ export const practice: LocaleResources['practice'] = {
       'В такте {{bar}} {{count}} долей, а не {{beats}}: нажмите, чтобы задать длительности',
     wrongBar_other:
       'В такте {{bar}} {{count}} доли, а не {{beats}}: нажмите, чтобы задать длительности',
-    file: 'Файл',
     draft: {
       label: 'Черновик',
       save: 'Сохранить',
@@ -974,7 +972,6 @@ export const practice: LocaleResources['practice'] = {
       discarded: 'Черновик удалён',
     },
     dock: { key: 'Тональность', plays: 'Повторы', untilStop: 'До остановки' },
-    chords: 'Аккорды',
     loopSection: 'Повторять этот раздел',
     keyChords: 'Аккорды {{key}}',
     keyChord: '{{chord}}: нажмите или перетащите в такт',
@@ -1051,7 +1048,6 @@ export const practice: LocaleResources['practice'] = {
     transport: 'Плеер аккордов',
     play: 'Играть',
     stop: 'Стоп',
-    inPlayer: 'Заниматься в плеере',
     inProgressions: 'Открыть в последовательностях',
     shortcuts: {
       group: 'Плеер аккордов',

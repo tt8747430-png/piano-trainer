@@ -107,7 +107,7 @@ const samePanel = (a: PanelLayout, b: PanelLayout): boolean =>
 
 /** A page's panels as they stand: the learner's changes over how each came. */
 export function layoutOf<P extends LayoutPage>(changed: ChangedLayouts, page: P): PageLayout<P> {
-  const own = changed[page] ?? {}
+  const own: Readonly<Record<string, PanelLayout>> = changed[page] ?? {}
   const specs = specsOf(page)
   return Object.fromEntries(
     Object.entries(specs).map(([panel, spec]) => [panel, own[panel] ?? fresh(spec)]),

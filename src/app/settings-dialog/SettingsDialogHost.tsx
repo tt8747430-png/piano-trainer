@@ -10,6 +10,9 @@ const adminScreens = () => import('../routes/admin-screens')
 /** Each place the dialog opens, by its address: the same page its route shows on a phone. */
 const PANES: Readonly<Record<string, ComponentType>> = {
   '/settings/general': lazy(() => screens().then((loaded) => ({ default: loaded.GeneralPage }))),
+  '/settings/general/layouts': lazy(() =>
+    screens().then((loaded) => ({ default: loaded.PageLayoutsPage })),
+  ),
   '/settings/appearance': lazy(() =>
     screens().then((loaded) => ({ default: loaded.AppearancePage })),
   ),

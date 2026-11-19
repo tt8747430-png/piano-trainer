@@ -65,7 +65,13 @@ export const SETTINGS_GROUPS: readonly SettingsGroupEntry[] = [
   {
     title: 'groups.general.label',
     pages: [
-      { to: '/settings/general', title: 'pages.general', icon: SunMedium, paint: 'sky' },
+      {
+        to: '/settings/general',
+        title: 'pages.general',
+        icon: SunMedium,
+        paint: 'sky',
+        under: ['/settings/general/'],
+      },
       { to: '/settings/appearance', title: 'pages.appearance', icon: Moon, paint: 'lilac' },
       { to: '/settings/storage', title: 'pages.storage', icon: Database, paint: 'grass' },
     ],
@@ -193,10 +199,11 @@ export function settingsPlaceOf(path: string): SettingsPlace | null {
  */
 export function settingsParentOf(
   path: string,
-): '/settings/account' | '/settings/connect-piano' | null {
+): '/settings/account' | '/settings/connect-piano' | '/settings/general' | null {
   if (path.startsWith('/settings/account/') || path === '/settings/privacy')
     return '/settings/account'
   if (path.startsWith('/settings/connect-piano/')) return '/settings/connect-piano'
+  if (path.startsWith('/settings/general/')) return '/settings/general'
   return null
 }
 

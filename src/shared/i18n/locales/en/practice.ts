@@ -828,7 +828,6 @@ export const practice = {
     progressions: 'Progressions',
     opened: 'Opened {{name}}',
     undo: 'Undo',
-    redo: 'Redo',
     more: 'Chord sheet',
     saveAs: 'Save as my chord sheet…',
     sheets: {
@@ -985,7 +984,6 @@ export const practice = {
     wrongBar_one: 'Bar {{bar}} holds {{count}} beat, not {{beats}}: tap to set its chords’ lengths',
     wrongBar_other:
       'Bar {{bar}} holds {{count}} beats, not {{beats}}: tap to set its chords’ lengths',
-    file: 'File',
     draft: {
       label: 'Draft',
       save: 'Save',
@@ -994,7 +992,6 @@ export const practice = {
       discarded: 'Draft discarded',
     },
     dock: { key: 'Key', plays: 'Repeats', untilStop: 'Until Stop' },
-    chords: 'Chords',
     loopSection: 'Loop this section',
     keyChords: '{{key}} chords',
     keyChord: '{{chord}}: tap or drag into a bar',
@@ -1067,7 +1064,6 @@ export const practice = {
     transport: 'Chord player',
     play: 'Play',
     stop: 'Stop',
-    inPlayer: 'Practise in the Player',
     inProgressions: 'Open in Progressions',
     shortcuts: { group: 'Chord player', playStop: 'Play or stop', undo: 'Undo', redo: 'Redo' },
     settings: {

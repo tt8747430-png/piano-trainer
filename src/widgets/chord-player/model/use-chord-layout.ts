@@ -10,6 +10,7 @@ import {
   usePageLayoutsStoreApi,
   type PanelLayout,
   type PanelOf,
+  type PanelSize,
   type Place,
 } from '@/entities/page-layout'
 import { resetPageLayout, restoreLayouts, setPanel } from '@/features/arrange-page-layout'
@@ -33,7 +34,7 @@ export interface ChordLayout {
   /** The places a panel may go at this size. */
   places(panel: ChordPanel): readonly Place[]
   /** The sizes a panel has. */
-  sizes(panel: ChordPanel): readonly string[]
+  sizes(panel: ChordPanel): readonly PanelSize[]
   set(panel: ChordPanel, change: Partial<PanelLayout>): void
 }
 

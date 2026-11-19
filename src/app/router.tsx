@@ -283,6 +283,13 @@ const generalRoute = createRoute({
   ...opensAsDialog,
   component: lazyRouteComponent(settingsScreens, 'GeneralPage'),
 })
+// General › Page layouts (R76): each page whose panels the learner arranged, reset from here.
+const pageLayoutsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/general/layouts',
+  ...opensAsDialog,
+  component: lazyRouteComponent(settingsScreens, 'PageLayoutsPage'),
+})
 // The bars a learner arranges (R29 B10), Settings › Library's pages (R32).
 // Appearance, its own place (Apple's Display & Brightness): the theme.
 const appearanceRoute = createRoute({
@@ -1112,6 +1119,7 @@ const routeTree = rootRoute.addChildren([
     adminSectionRoute,
     settingsRoute,
     generalRoute,
+    pageLayoutsRoute,
     appearanceRoute,
     selectToolbarRoute,
     swipeActionsRoute,
