@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · the public song's chart: card 14, bar cells 8/12 · Explore, ExploreLaptop · **pending**
 
 ## Changes
 
