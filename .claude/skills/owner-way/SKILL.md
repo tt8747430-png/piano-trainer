@@ -216,7 +216,14 @@ does not read first: write the spec, build it, and log it.
   dev server stays up for the next screen.
   A publish the permission check refuses is not a stop either (2026-11-18): the boards are still built,
   checked, logged, committed and pushed, item after item, and each later change publishes every board
-  changed since the last publish; the refusal is said in one line, once.
+  changed since the last publish; the refusal is said in one line, once (owner, 2026-11-19: "the artifact
+  publish shoudnt stop you from continuing"). A publish refused because the published boards were not read is
+  answered by reading them (`action: "read"` with their paths) and publishing again.
+- **Every canvas change goes in the ledger before the next item** (owner, 2026-11-19: "record your changes before
+  compacting … so that the changes record of your changes to the artifact are not compacted and deleted"):
+  `.scratch/r39/canvas/CHANGES.md`, one line newest first (date, commit, what, boards, version or **pending**),
+  committed with the change. `.claude/hooks/canvas-ledger.sh` prints it on PreCompact and after a compaction or
+  resume; a publish sends the Pending section's boards too, then moves those lines to Changes with the version.
 - **Rounds:** a round closes with its items done, its report, an `impeccable` audit and the full gate (in a loop, the
   build alone), before the next starts. Keep the brief's order.
 - **Work inline by default; make the exception when the work calls for it.** Each agent costs about a session, so one
