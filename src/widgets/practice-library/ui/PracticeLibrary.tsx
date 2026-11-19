@@ -187,6 +187,7 @@ export function PracticeLibrary({
           places={arranged.places}
           items={arranged.items}
           onSheet={setSheet}
+          table={wide ? { levels, columns } : undefined}
         />
       ) : shown.items.length === 0 ? (
         <LibraryEmpty

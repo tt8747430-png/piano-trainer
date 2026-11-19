@@ -1,4 +1,5 @@
 import { LibraryRow } from './LibraryRow'
+import { FoldHeadRow, ItemRow, spanOf, TableFrame, type TableColumns } from './LibraryTable'
 import { LibraryTile } from './LibraryTile'
 import {
   closestCenter,
@@ -20,7 +21,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   deleteFolder,
@@ -45,6 +46,9 @@ import {
 import type { LibraryItem } from '../model/library-view'
 import type { LibraryKind } from '../model/library-words'
 import type { ArrangeSheet } from '../model/use-arranged-library'
+
+/** On a laptop Edit arranges the table itself (the board's): its columns, read by each place and row. */
+const TableOf = createContext<{ levels: boolean; columns: TableColumns } | null>(null)
 
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
 const DROP_ANIMATION = { duration: 200, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
@@ -114,6 +118,37 @@ function SortablePlace({
 }) {
   const sortable = useSortable({ id })
   const [shut, setShut] = useState(false)
+  const table = useContext(TableOf)
+  const style = {
+    transform: CSS.Translate.toString(sortable.transform),
+    transition: sortable.transition,
+  }
+  if (table)
+    return (
+      <tbody
+        ref={sortable.setNodeRef}
+        style={style}
+        className={cn(sortable.isDragging && 'opacity-0')}
+      >
+        <FoldHeadRow
+          span={spanOf(table.levels, table.columns)}
+          name={name}
+          count={count}
+          mark={mark}
+          shut={shut}
+          onToggle={() => setShut((now) => !now)}
+          action={
+            <>
+              {menu}
+              <Handle label={label} sortable={sortable} />
+              {/* over the rows' handles, the More's room kept */}
+              <span aria-hidden className="w-12" />
+            </>
+          }
+        />
+        {shut ? null : children}
+      </tbody>
+    )
   return (
     <li
       ref={sortable.setNodeRef}
@@ -146,6 +181,33 @@ function SortablePlace({
 function SortableRow({ id, item }: { id: string; item: LibraryItem }) {
   const { t } = useTranslation('practice')
   const sortable = useSortable({ id })
+  const table = useContext(TableOf)
+  const handle = (
+    <Handle label={t('library.edit.moveRow', { name: item.name })} sortable={sortable} />
+  )
+  if (table)
+    return (
+      <ItemRow
+        item={item}
+        levels={table.levels}
+        columns={table.columns}
+        arrange={{
+          ref: sortable.setNodeRef,
+          style: {
+            transform: CSS.Translate.toString(sortable.transform),
+            transition: sortable.transition,
+          },
+          lifted: sortable.isDragging,
+        }}
+        // where the heart stood, the More's room kept
+        trailing={
+          <>
+            {handle}
+            <span aria-hidden className="w-11" />
+          </>
+        }
+      />
+    )
   return (
     <LibraryRow
       item={item}
@@ -175,11 +237,14 @@ export function ArrangeList({
   places,
   items,
   onSheet,
+  table,
 }: {
   kind: LibraryKind
   places: readonly ArrangedPlace[]
   items: readonly LibraryItem[]
   onSheet: (sheet: ArrangeSheet) => void
+  /** On a laptop: the table's columns, so Edit arranges the table as it reads. */
+  table?: { levels: boolean; columns: TableColumns } | undefined
 }) {
   const { t } = useTranslation('practice')
   const store = usePracticeLibraryStoreApi()
@@ -207,6 +272,97 @@ export function ArrangeList({
   const held = readArrangeId(inHand)
   const heldPlace = held?.kind === 'place' ? places.find((place) => place.id === held.place) : null
   const heldRow = held?.kind === 'row' ? items.find((item) => item.id === held.id) : null
+  const placeList = places.map((place) => {
+    const rows = items.filter((item) => item.group === place.id)
+    return (
+      <SortablePlace
+        key={place.id}
+        id={placeDragId(place.id)}
+        label={t('library.edit.movePlace', { name: place.name })}
+        name={place.name}
+        mark={place.hidden ? t('library.edit.hiddenPlace') : undefined}
+        count={rows.length}
+        menu={
+          <ActionMenu
+            label={t('library.edit.placeMenu', { name: place.name })}
+            align="end"
+            trigger={<Ellipsis aria-hidden />}
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-11"
+                aria-label={t('library.edit.placeMenu', { name: place.name })}
+                title={t('library.edit.placeMenu', { name: place.name })}
+              />
+            }
+            actions={[
+              {
+                key: 'rename',
+                label: t('library.edit.rename'),
+                icon: PencilLine,
+                onSelect: () => onSheet({ kind: 'renamePlace', id: place.id, name: place.name }),
+              },
+              place.hidden
+                ? {
+                    key: 'show',
+                    label: t('library.edit.show'),
+                    icon: Eye,
+                    onSelect: () => change((each) => setPlaceHidden(each, place.id, false)),
+                  }
+                : {
+                    key: 'hide',
+                    label: t('library.edit.hide'),
+                    icon: EyeOff,
+                    onSelect: () => change((each) => setPlaceHidden(each, place.id, true)),
+                  },
+              ...(place.builtIn
+                ? []
+                : [
+                    {
+                      key: 'delete',
+                      label: t('library.edit.deleteFolder.action'),
+                      icon: Trash2,
+                      destructive: true,
+                      onSelect: () => void askDelete(place),
+                    },
+                  ]),
+            ]}
+          />
+        }
+      >
+        {rows.length > 0 ? (
+          <SortableContext
+            items={rows.map((row) => rowDragId(place.id, row.id))}
+            strategy={verticalListSortingStrategy}
+          >
+            {table ? (
+              rows.map((row) => (
+                <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
+              ))
+            ) : (
+              <ul className={GROUPED_LIST}>
+                {rows.map((row) => (
+                  <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
+                ))}
+              </ul>
+            )}
+          </SortableContext>
+        ) : table ? (
+          <tr>
+            <td
+              colSpan={spanOf(table.levels, table.columns)}
+              className="px-3 py-2 text-sm text-muted-foreground"
+            >
+              {t('library.edit.emptyPlace')}
+            </td>
+          </tr>
+        ) : (
+          <p className="px-3 text-sm text-muted-foreground">{t('library.edit.emptyPlace')}</p>
+        )}
+      </SortablePlace>
+    )
+  })
   return (
     <div className="flex flex-col gap-4">
       <DndContext
@@ -230,89 +386,17 @@ export function ArrangeList({
           items={places.map((place) => placeDragId(place.id))}
           strategy={verticalListSortingStrategy}
         >
-          <ul aria-label={t('library.edit.places')} className="flex flex-col gap-4">
-            {places.map((place) => {
-              const rows = items.filter((item) => item.group === place.id)
-              return (
-                <SortablePlace
-                  key={place.id}
-                  id={placeDragId(place.id)}
-                  label={t('library.edit.movePlace', { name: place.name })}
-                  name={place.name}
-                  mark={place.hidden ? t('library.edit.hiddenPlace') : undefined}
-                  count={rows.length}
-                  menu={
-                    <ActionMenu
-                      label={t('library.edit.placeMenu', { name: place.name })}
-                      align="end"
-                      trigger={<Ellipsis aria-hidden />}
-                      render={
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="size-11"
-                          aria-label={t('library.edit.placeMenu', { name: place.name })}
-                          title={t('library.edit.placeMenu', { name: place.name })}
-                        />
-                      }
-                      actions={[
-                        {
-                          key: 'rename',
-                          label: t('library.edit.rename'),
-                          icon: PencilLine,
-                          onSelect: () =>
-                            onSheet({ kind: 'renamePlace', id: place.id, name: place.name }),
-                        },
-                        place.hidden
-                          ? {
-                              key: 'show',
-                              label: t('library.edit.show'),
-                              icon: Eye,
-                              onSelect: () =>
-                                change((each) => setPlaceHidden(each, place.id, false)),
-                            }
-                          : {
-                              key: 'hide',
-                              label: t('library.edit.hide'),
-                              icon: EyeOff,
-                              onSelect: () =>
-                                change((each) => setPlaceHidden(each, place.id, true)),
-                            },
-                        ...(place.builtIn
-                          ? []
-                          : [
-                              {
-                                key: 'delete',
-                                label: t('library.edit.deleteFolder.action'),
-                                icon: Trash2,
-                                destructive: true,
-                                onSelect: () => void askDelete(place),
-                              },
-                            ]),
-                      ]}
-                    />
-                  }
-                >
-                  {rows.length > 0 ? (
-                    <SortableContext
-                      items={rows.map((row) => rowDragId(place.id, row.id))}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      <ul className={GROUPED_LIST}>
-                        {rows.map((row) => (
-                          <SortableRow key={row.id} id={rowDragId(place.id, row.id)} item={row} />
-                        ))}
-                      </ul>
-                    </SortableContext>
-                  ) : (
-                    <p className="px-3 text-sm text-muted-foreground">
-                      {t('library.edit.emptyPlace')}
-                    </p>
-                  )}
-                </SortablePlace>
-              )
-            })}
-          </ul>
+          {table ? (
+            <TableOf.Provider value={table}>
+              <TableFrame levels={table.levels} columns={table.columns}>
+                {placeList}
+              </TableFrame>
+            </TableOf.Provider>
+          ) : (
+            <ul aria-label={t('library.edit.places')} className="flex flex-col gap-4">
+              {placeList}
+            </ul>
+          )}
         </SortableContext>
         <DragOverlay dropAnimation={reduced ? null : DROP_ANIMATION}>
           {heldRow && held?.kind === 'row' ? (

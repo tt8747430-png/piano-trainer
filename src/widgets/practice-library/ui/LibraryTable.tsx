@@ -1,6 +1,6 @@
 import { useRender } from '@base-ui/react/use-render'
 import { ChevronDown } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, useElementSize } from '@/shared/lib'
 import { HeartToggle, menuOf, RowMore } from '@/shared/ui'
@@ -39,9 +39,9 @@ const HEAD_CELL =
   'px-3 pt-[1.625rem] pb-2 text-start align-bottom leading-4 font-semibold shadow-[inset_0_-1px_0_var(--color-border)]'
 
 /** A row's name cell: its picture and its name, the link to its page. */
-function NameCell({ item }: { item: LibraryItem }) {
+function NameCell({ item, still }: { item: LibraryItem; still: boolean }) {
   return useRender({
-    render: item.link,
+    render: still ? <div /> : item.link,
     props: {
       className:
         'flex min-h-10 min-w-0 items-center gap-4 rounded-control focus-visible:-outline-offset-3',
@@ -57,6 +57,103 @@ function NameCell({ item }: { item: LibraryItem }) {
   })
 }
 
+/** A book's (or style's) fold head across the table: its chevron, name and count; in Edit its acts. */
+export function FoldHeadRow({
+  span,
+  name,
+  count,
+  mark,
+  shut,
+  onToggle,
+  action,
+}: {
+  span: number
+  name: string
+  count: number
+  mark?: string | undefined
+  shut: boolean
+  onToggle: () => void
+  action?: ReactNode
+}) {
+  return (
+    <tr>
+      <th scope="colgroup" colSpan={span} className="pt-2 text-start">
+        <span className="flex items-center">
+          <button
+            type="button"
+            aria-expanded={!shut}
+            onClick={onToggle}
+            className="-mx-1 flex min-h-10 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
+          >
+            <ChevronDown
+              aria-hidden
+              className={cn(
+                'size-4 text-muted-foreground transition-transform duration-200',
+                shut && '-rotate-90',
+              )}
+            />
+            {name}
+            <span className="text-sm font-normal text-muted-foreground tabular-nums">{count}</span>
+            {mark ? (
+              <span className="text-sm font-normal text-muted-foreground">· {mark}</span>
+            ) : null}
+          </button>
+          {action ? <span className="ms-auto flex items-center">{action}</span> : null}
+        </span>
+      </th>
+    </tr>
+  )
+}
+
+/** A row of the table: its name cell, its line, its level or third, then its own acts. */
+export function ItemRow({
+  item,
+  levels,
+  columns,
+  trailing,
+  arrange,
+}: {
+  item: LibraryItem
+  levels: boolean
+  columns: TableColumns
+  trailing: ReactNode
+  /** In Edit: no link, the row moving as it is dragged. */
+  arrange?: { ref: Ref<HTMLTableRowElement>; style: CSSProperties; lifted: boolean }
+}) {
+  return (
+    <tr
+      ref={arrange?.ref}
+      style={arrange?.style}
+      // the board's row is 56, its hairline inside it
+      className={cn(
+        'h-14 shadow-[inset_0_-1px_0_var(--color-hairline)] transition-colors',
+        arrange ? 'bg-background' : 'hover:bg-muted/60',
+        arrange?.lifted && 'opacity-0',
+      )}
+    >
+      <th scope="row" className={cn(CELL, 'font-normal')}>
+        <NameCell item={item} still={arrange !== undefined} />
+      </th>
+      <td className={cn(CELL, 'truncate text-sm text-muted-foreground')}>
+        {item.extra ?? item.detail}
+      </td>
+      {levels ? (
+        <td className={cn(CELL, 'truncate')}>
+          {item.stage ? <LevelMark stage={item.stage} /> : null}
+        </td>
+      ) : columns.third ? (
+        <td className={cn(CELL, 'truncate text-sm text-muted-foreground')}>{item.third}</td>
+      ) : null}
+      <td className={cn(CELL, 'px-0')}>
+        <span className="flex items-center justify-end gap-1">{trailing}</span>
+      </td>
+    </tr>
+  )
+}
+
+/** How many columns a fold head spans. */
+export const spanOf = (levels: boolean, columns: TableColumns) => (levels || columns.third ? 4 : 3)
+
 /** One book's (or style's) rows under its fold heading, as the phone's runs: its name and count. */
 function SectionRows({
   section,
@@ -69,63 +166,34 @@ function SectionRows({
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const [shut, setShut] = useState(false)
-  const span = levels || columns.third ? 4 : 3
   return (
     <tbody>
-      <tr>
-        <th scope="colgroup" colSpan={span} className="pt-2 text-start">
-          <button
-            type="button"
-            aria-expanded={!shut}
-            onClick={() => setShut((was) => !was)}
-            className="-mx-1 flex min-h-10 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
-          >
-            <ChevronDown
-              aria-hidden
-              className={cn(
-                'size-4 text-muted-foreground transition-transform duration-200',
-                shut && '-rotate-90',
-              )}
-            />
-            {section.name}
-            <span className="text-sm font-normal text-muted-foreground tabular-nums">
-              {section.items.length}
-            </span>
-          </button>
-        </th>
-      </tr>
+      <FoldHeadRow
+        span={spanOf(levels, columns)}
+        name={section.name}
+        count={section.items.length}
+        shut={shut}
+        onToggle={() => setShut((was) => !was)}
+      />
       {shut
         ? null
         : section.items.map((item) => (
-            <tr
+            <ItemRow
               key={item.id}
-              // the board's row is 56, its hairline inside it
-              className="h-14 shadow-[inset_0_-1px_0_var(--color-hairline)] transition-colors hover:bg-muted/60"
-            >
-              <th scope="row" className={cn(CELL, 'font-normal')}>
-                <NameCell item={item} />
-              </th>
-              <td className={cn(CELL, 'truncate text-sm text-muted-foreground')}>
-                {item.extra ?? item.detail}
-              </td>
-              {levels ? (
-                <td className={cn(CELL, 'truncate')}>
-                  {item.stage ? <LevelMark stage={item.stage} /> : null}
-                </td>
-              ) : columns.third ? (
-                <td className={cn(CELL, 'truncate text-sm text-muted-foreground')}>{item.third}</td>
-              ) : null}
-              <td className={cn(CELL, 'px-0')}>
-                <span className="flex items-center justify-end gap-1">
+              item={item}
+              levels={levels}
+              columns={columns}
+              trailing={
+                <>
                   {item.trailing}
                   <FavouriteHeart item={item} />
                   <RowMore
                     label={t('common:library.moreOf', { name: item.name })}
                     actions={menuOf(item.actions)}
                   />
-                </span>
-              </td>
-            </tr>
+                </>
+              }
+            />
           ))}
     </tbody>
   )
@@ -146,6 +214,25 @@ export function LibraryTable({
   sections: readonly ShownSection[]
   levels: boolean
   columns: TableColumns
+}) {
+  return (
+    <TableFrame levels={levels} columns={columns}>
+      {sections.map((section) => (
+        <SectionRows key={section.id} section={section} levels={levels} columns={columns} />
+      ))}
+    </TableFrame>
+  )
+}
+
+/** The table, its columns at the board's shares and its header row; its books' bodies inside. */
+export function TableFrame({
+  levels,
+  columns,
+  children,
+}: {
+  levels: boolean
+  columns: TableColumns
+  children: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
   const table = useRef<HTMLTableElement>(null)
@@ -179,9 +266,7 @@ export function LibraryTable({
           </th>
         </tr>
       </thead>
-      {sections.map((section) => (
-        <SectionRows key={section.id} section={section} levels={levels} columns={columns} />
-      ))}
+      {children}
     </table>
   )
 }
