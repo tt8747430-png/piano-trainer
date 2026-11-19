@@ -1176,6 +1176,8 @@ owner's, typos fixed.
 
 - **The Metronome ported from its board, measured (loop, 2026-11-19):** the slider runs 20 to 300 as drawn (it began at 30, so the board's 40 BPM state was reachable but its end was not); the tempo's word stands 8 under the bar (a pt-3 had set it 20), the slider 20 from the tempo and the beats; a beat's number 12 semibold, paper on the accent; every floating piece's word 12 semibold and the floating Start 17 bold, as every board's PLAYCAP and caption.
 
+- **The Tuner ported from its board's states (loop, 2026-11-19):** nothing heard is a faint dash with no octave, Listening in soft ink and the needle at rest in the line colour, Play or sing a note under the arc (it showed a faint A4 and A4 = 440 Hz, the row's own value said twice); a heard note hides that line; no microphone is the kit's one empty state (No microphone, Allow the microphone in the browser to use the tuner., Try again in honey) in the readout's place, filling the column with Reference pitch at its foot, where it was a grey line and a soft pill under a dial that could not move. The note stands 24 under the bar, 168 on a laptop with its 720 arc, and its row 32 under the arc, as drawn.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

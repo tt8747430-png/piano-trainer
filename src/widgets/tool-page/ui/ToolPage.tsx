@@ -125,7 +125,8 @@ export function ToolPage({
               start
                 ? 'flex min-w-0 flex-col gap-4'
                 : column
-                  ? 'flex min-w-0 flex-col items-center gap-4 text-center'
+                  ? // A state that fills (the Tuner's No microphone) takes the column's height, its rows at the foot.
+                    'flex min-w-0 flex-col items-center gap-4 text-center has-data-fill:flex-1'
                   : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
             }
           >

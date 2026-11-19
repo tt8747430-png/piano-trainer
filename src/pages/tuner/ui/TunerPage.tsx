@@ -37,7 +37,10 @@ export function TunerPage() {
         </GroupRows>
       }
     >
-      <TunerReadout listening large />
+      {/* 24 under the bar and 32 over its row, as the board's page. */}
+      <div className="mt-4 mb-3 flex w-full flex-1 flex-col lg:mb-2">
+        <TunerReadout listening large />
+      </div>
     </ToolPage>
   )
 }
