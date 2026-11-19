@@ -1184,6 +1184,8 @@ owner's, typos fixed.
 
 - **The Circle of fifths ported from its board (loop, 2026-11-19; the board's ruling "the page has one focus"):** the key's name (the serif, 22, 36 on a laptop) and its signature stand in the wheel's empty centre; the line "relative A minor" and the seven chord tiles under the wheel go, since the wheel lights the relative minor and the key's chords and Scales and keys holds the chords with their keys drawn. The wheel is the page alone, 370 on a phone (its 16 gutters kept) and up to 640 on a laptop.
 
+- **Practice's overview ported from its board, and the board's folds back (loop, 2026-11-19):** the bar is Search alone: the Tools button left it (round 58's ruling; the Tools have their section on the page), and with it the whole Tools menu, which no bar on any board holds any more; the first heading stands 22 under the title, as drawn. The board had lost its folds: the fold pass matched the heading row only before a spacing change, so Learn, Practice and Profile drew plain headings for two rounds; it now matches the row as written and keeps the words where they were.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

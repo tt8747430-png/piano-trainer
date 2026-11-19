@@ -36,7 +36,7 @@ const TICKS = Array.from({ length: 21 }, (_, place) => {
 })
 
 /**
- * The Tuner's face (canvas 180), the same in the Player's sheet and on its own page, as the board's
+ * The Tuner's face (canvas 180), its page's readout, listening while it is open, as the board's
  * `NOTE` and `GAUGE`: the note heard large with its octave lowered, how far it is in words (In tune in
  * grass, else so many cents flat or sharp) and its frequency; under it the needle on an arc ±50 cents
  * with the in-tune band, read against the A4 the Tuner keeps. While nothing is heard the note is a
@@ -44,15 +44,10 @@ const TICKS = Array.from({ length: 21 }, (_, place) => {
  * microphone is refused or missing, the kit's empty state, No microphone with Try again, in its place.
  */
 export function TunerReadout({
-  listening,
   microphone = openBrowserMicrophone,
-  large = false,
 }: {
-  listening: boolean
   /** Where its sound comes from: the browser's microphone, or a test's. */
   microphone?: OpenMicrophone
-  /** On its own page: the note and gauge larger on a laptop. */
-  large?: boolean
 }) {
   const { t } = useTranslation('player')
   const { a4 } = useSettings(selectTuner)
@@ -60,7 +55,6 @@ export function TunerReadout({
   // Each Try again asks for the microphone afresh.
   const [attempt, setAttempt] = useState(0)
   useEffect(() => {
-    if (!listening) return
     let closed = false
     let release = () => {}
     let timer: ReturnType<typeof setInterval> | undefined
@@ -87,7 +81,7 @@ export function TunerReadout({
       release()
       setHeard({ kind: 'listening' })
     }
-  }, [listening, microphone, a4, attempt])
+  }, [microphone, a4, attempt])
   const pitch = heard.kind === 'pitch' ? heard : null
   const cents = pitch ? Math.max(-50, Math.min(50, pitch.cents)) : 0
   const off = pitch ? Math.round(pitch.cents) : 0
@@ -120,7 +114,7 @@ export function TunerReadout({
           className={cn(
             'font-bold',
             pitch === null && 'text-border',
-            large ? 'text-[6rem]/none lg:text-[10.5rem]/none' : 'text-[6rem]/none',
+            'text-[6rem]/none lg:text-[10.5rem]/none',
           )}
         >
           {name}
@@ -165,7 +159,7 @@ export function TunerReadout({
         aria-valuemax={50}
         aria-valuenow={Math.round(cents)}
         viewBox="0 0 320 188"
-        className={cn('block w-full', large ? 'max-w-[340px] lg:max-w-[720px]' : 'max-w-[340px]')}
+        className="block w-full max-w-[340px] lg:max-w-[720px]"
       >
         <path
           d="M43.9 104A134 134 0 0 1 276.1 104"

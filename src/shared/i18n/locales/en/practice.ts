@@ -746,20 +746,6 @@ export const practice = {
     tuner: {
       settings: 'Reference pitch',
     },
-    // The Tools sheet over any screen.
-    sheet: {
-      metronome: 'Metronome',
-      start: 'Start metronome',
-      stop: 'Stop metronome',
-      slower: 'Slower',
-      faster: 'Faster',
-      tempo: '{{bpm}} BPM',
-      tuner: 'Tuner',
-      off: 'Off',
-      listening: 'Listening · {{reference}}',
-      openMetronome: 'Open Metronome',
-      open: 'Tools',
-    },
   },
   metronome: {
     info: 'Set the tempo with − and +, the slider, or Tap tempo: tap it in time and the Metronome takes the tempo of your last taps. The squares are the bar’s beats: tap one to make it an accent, a plain beat or silent. Space starts and stops it; ↑ and ↓ change the tempo by 1, with Shift by 10.',

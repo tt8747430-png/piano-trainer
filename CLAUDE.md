@@ -127,7 +127,7 @@ This is the app as built. The canvas runs ahead: a ruling drawn but not yet port
   folders shared with them: `pages/groups`, `shared/api/groups`.
 - **Practice** (`/practice`): Theory (Chords, Scales and keys, Intervals, Progressions, Accompaniment), Exercises by
   book, the Tools last (the Chord player, Metronome, Tuner, Chord finder, Circle of fifths), each tool's settings
-  in place (the Chord finder's on its own page); the bar's Tools menu is `widgets/tools-sheet`. Exercises,
+  in place (the Chord finder's on its own page); the Tools have no menu in any bar. Exercises,
   Accompaniment (patterns only) and Progressions are one library, `widgets/practice-library`, arranged by the learner;
   its favourites, arrangements and the learner's progressions `entities/practice-library`; a progression's page is
   `pages/progression`.

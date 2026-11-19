@@ -13,7 +13,6 @@ import {
   usePageWords,
   type PracticePageId,
 } from '@/widgets/practice-pages'
-import { ToolsButton } from '@/widgets/tools-sheet'
 import { PageCard } from './PageCard'
 
 /** One place Practice lists: a page, or a book of exercises opening the library at its place. */
@@ -90,7 +89,7 @@ function useGroups(): readonly {
 
 /**
  * Practice (the canvas's Practice board): Theory, the pages that explain a thing and practise it
- * there; Exercises, by book; the Tools last, also a tap away from the bar's Tools on a phone. Each
+ * there; Exercises, by book; the Tools last, their one home here (the bar has no Tools menu). Each
  * group is a heading over one card of rows on a phone (a 44px tile, the name over one line) and
  * cards five across on a laptop.
  */
@@ -99,19 +98,9 @@ export function PracticePage() {
   const groups = useGroups()
   return (
     <div className="flex flex-col">
-      <ScreenHeader
-        title={t('title')}
-        large
-        tools={
-          <>
-            <span className="contents lg:hidden">
-              <ToolsButton worded />
-            </span>
-            <PlaceActions />
-          </>
-        }
-      />
-      <div className="mt-1 flex flex-col gap-8">
+      <ScreenHeader title={t('title')} large tools={<PlaceActions />} />
+      {/* The first heading 22 under the title, as the board's fold row. */}
+      <div className="mt-4.5 flex flex-col gap-8">
         {groups.map(({ id, places }) => (
           <PracticeGroup
             key={id}
