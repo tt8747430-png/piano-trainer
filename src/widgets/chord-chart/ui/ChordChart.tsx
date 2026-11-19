@@ -77,6 +77,7 @@ export function ChordChart({
   words = NO_WORDS,
   onBar,
   rowBeats,
+  rowBars,
   className,
 }: {
   performance: Performance
@@ -92,6 +93,8 @@ export function ChordChart({
   words?: ReadonlyMap<number, BarWords>
   /** How many beats a row holds: the screen's room by default. */
   rowBeats?: number
+  /** How many bars a row holds, where chosen: the Grid's Bars per row. */
+  rowBars?: number
   /** Where it stands in its page. */
   className?: string
 } & (
@@ -154,11 +157,12 @@ export function ChordChart({
       shown.map(({ cells, slot }) => ({ cells: cells.length, slot })),
     ),
     room,
+    rowBars,
   )
   return (
     <div
       className={cn('flex flex-col', grid ? 'gap-0' : 'gap-6', className)}
-      style={{ maxWidth: `${columns * BEAT_MOST}rem` }}
+      style={grid ? undefined : { maxWidth: `${columns * BEAT_MOST}rem` }}
     >
       {sections.map(({ heading, bars, shown }, section) => (
         <section
@@ -171,7 +175,7 @@ export function ChordChart({
             <h2
               id={`${sectionAnchor(section)}-heading`}
               className={cn(
-                'ms-[22px] mb-1 font-sans text-xs font-bold tracking-[0.04em] text-muted-foreground uppercase',
+                'ms-[22px] mb-1 font-sans sm:ms-8 sm:mb-1.5 text-xs font-bold tracking-[0.04em] text-muted-foreground uppercase',
                 section > 0 && 'mt-6',
               )}
             >
@@ -255,7 +259,7 @@ export function ChordChart({
               <div key={index} className="flex gap-2 break-inside-avoid">
                 <span
                   aria-hidden
-                  className="w-4 shrink-0 pt-[5px] text-right text-[10px] text-muted-foreground/60 tabular-nums"
+                  className="w-4 shrink-0 pt-[5px] sm:w-[26px] text-right text-[10px] text-muted-foreground/60 tabular-nums"
                 >
                   {first ? first.written + 1 : null}
                 </span>

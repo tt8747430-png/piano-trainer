@@ -34,6 +34,7 @@ export const player = {
     textSize: { label: 'Text size', smaller: 'Smaller text', larger: 'Larger text' },
     // Why the words' switch is greyed (ADR 0108).
     noWords: 'The music has no words',
+    barsPerRow: 'Bars per row',
     mode: {
       label: 'Mode',
       animated: 'Animated',

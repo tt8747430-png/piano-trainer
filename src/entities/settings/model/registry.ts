@@ -109,6 +109,7 @@ export const SETTING_HOMES: Readonly<Record<SettingKey, SettingsPageId>> = {
   'scoreView.layout': 'player',
   'scoreView.music': 'player',
   'scoreView.diagrams': 'player',
+  'scoreView.gridBars': 'player',
   'scoreView.chordNames': 'player',
   'scoreView.lyrics': 'player',
   'scoreView.pinned': 'player',

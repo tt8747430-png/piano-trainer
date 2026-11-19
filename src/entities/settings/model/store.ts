@@ -53,6 +53,7 @@ import {
   detectLocale,
   isDiagramsMode,
   isTextSize,
+  isGridBars,
   isOtherHandLook,
   isCountdown,
   isSpeedStep,
@@ -96,7 +97,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 56
+export const SETTINGS_VERSION = 57
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -355,6 +356,7 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
     diagrams: isDiagramsMode(saved.diagrams) ? saved.diagrams : DEFAULT_SCORE_VIEW.diagrams,
+    gridBars: isGridBars(saved.gridBars) ? saved.gridBars : DEFAULT_SCORE_VIEW.gridBars,
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
     pinned: switched('pinned'),

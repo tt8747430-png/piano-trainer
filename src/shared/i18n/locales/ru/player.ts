@@ -26,6 +26,7 @@ export const player: LocaleResources['player'] = {
     },
     textSize: { label: 'Размер текста', smaller: 'Мельче', larger: 'Крупнее' },
     noWords: 'В музыке нет текста',
+    barsPerRow: 'Тактов в строке',
     mode: {
       label: 'Режим',
       animated: 'Анимация',

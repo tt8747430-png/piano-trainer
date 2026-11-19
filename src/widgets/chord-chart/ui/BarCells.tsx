@@ -53,7 +53,7 @@ export function BarCells({
           data-looped={looped ? '' : undefined}
           className={cn(
             face === 'grid'
-              ? '@container relative flex h-11 items-center overflow-visible rounded-[3px] ps-2 first:border-l-3 first:border-foreground'
+              ? '@container relative flex h-11 items-center overflow-visible rounded-[3px] ps-2 first:border-l-3 first:border-foreground sm:h-[66px] sm:ps-3.5'
               : '@container relative flex h-12 items-end overflow-visible border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:h-14 landscape-phone:h-11',
             sounding === beat
               ? 'bg-foreground text-background'

@@ -1,4 +1,5 @@
 import type { ScoreHeader } from '@/entities/piece'
+import { useGridBars } from '@/entities/settings'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { writtenBarOf, type BarRange, type PlayedBeat } from '@/features/practice'
@@ -52,6 +53,7 @@ export function GridView({
 }) {
   const { t } = useTranslation('player')
   const bar = writtenBarOf(performance, beat.bar)
+  const perRow = useGridBars()
   const sung = useMemo(() => (words ? gridWords(performance) : undefined), [words, performance])
   const scroller = useRef<HTMLElement>(null)
   // The bar last kept in sight; none before the Grid opens.
@@ -77,9 +79,10 @@ export function GridView({
       className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-3.5 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
       <ViewTitle title={title} credits={credits} />
-      <div className="relative mx-auto w-full">
+      <div className="relative mx-auto w-full lg:px-24">
         <ChordChart
           tap="go"
+          rowBars={perRow}
           performance={performance}
           headings={headings}
           playing={bar}

@@ -9,13 +9,17 @@ const INSET = 0.5
 const LEAST = 0.75
 
 /**
- * How a chart sets its chords, as its board does: the Player's Grid (`grid`, PlayerViewGrid) in the
- * sans at 500, 19 at most; a song's chart (`chart`, the Explore board's) in the book serif at 700, 22.
+ * How a chart sets its chords, as its board does: the Player's Grid (`grid`, PlayerViewGrid and
+ * PlayerDesk) in the sans at 500, 19 at most on a phone and 28 from 640px; a song's chart (`chart`,
+ * the Explore board's) in the book serif at 700, 22.
  */
 export type ChordFace = 'grid' | 'chart'
-const FACE: Record<ChordFace, { most: number; look: string }> = {
-  grid: { most: 1.1875, look: 'font-medium' },
-  chart: { most: 1.375, look: 'font-display font-bold' },
+const FACE: Record<ChordFace, { most: string; look: string }> = {
+  grid: {
+    most: 'var(--chord-most)',
+    look: 'font-medium [--chord-most:1.1875rem] sm:[--chord-most:1.75rem]',
+  },
+  chart: { most: '1.375rem', look: 'font-display font-bold' },
 }
 
 /**
@@ -53,7 +57,7 @@ export function CellChords({
         className,
       )}
       style={{
-        fontSize: `clamp(${LEAST}rem, calc((${span} * 100cqi - ${INSET}rem) / ${width.toFixed(3)}), ${FACE[face].most}rem)`,
+        fontSize: `clamp(${LEAST}rem, calc((${span} * 100cqi - ${INSET}rem) / ${width.toFixed(3)}), ${FACE[face].most})`,
       }}
     >
       {printed.map((symbol, i) => {

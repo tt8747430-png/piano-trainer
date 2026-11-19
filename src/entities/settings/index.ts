@@ -21,7 +21,9 @@ export {
   DIAGRAMS_MODES,
   MUSIC_VIEWS,
   TEXT_SIZES,
+  GRID_BARS,
   type TextSize,
+  type GridBars,
   type DiagramsMode,
   type MusicView,
   type ScoreViewSettings,
@@ -97,6 +99,7 @@ export {
   selectTrainer,
 } from './model/selectors'
 export { SettingsStoreProvider, useSettings, useSettingsStoreApi } from './model/context'
+export { useGridBars } from './model/use-grid-bars'
 export {
   NOT_PREFERENCES,
   SETTING_HOMES,

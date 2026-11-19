@@ -233,6 +233,12 @@ export const DIAGRAMS_MODES = ['animated', 'summary'] as const
 export type DiagramsMode = (typeof DIAGRAMS_MODES)[number]
 
 /**
+ * How many bars a row of the Grid holds (PlayerViewGrid's Bars per row): two, or four.
+ */
+export const GRID_BARS = [2, 4] as const
+export type GridBars = (typeof GRID_BARS)[number]
+
+/**
  * Chords over lyrics' text sizes (ADR 0108, Chordify's font size): its words and chords as a percent
  * of their own size, smallest first, a step at a time by its − and +.
  */
@@ -250,6 +256,8 @@ export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly music: MusicView
   readonly diagrams: DiagramsMode
+  /** The Grid's bars a row; none chosen, the screen's: two on a phone, four from 640px (its boards). */
+  readonly gridBars: GridBars | null
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -281,6 +289,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
+  gridBars: null,
   chordNames: true,
   lyrics: true,
   pinned: true,
@@ -566,6 +575,7 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
+export const isGridBars = isOneOf(GRID_BARS)
 export const isOtherHandLook = isOneOf(OTHER_HAND_LOOKS)
 export const isCountdown = isOneOf(COUNTDOWNS)
 export const isSpeedStep = isOneOf(SPEED_STEPS)
