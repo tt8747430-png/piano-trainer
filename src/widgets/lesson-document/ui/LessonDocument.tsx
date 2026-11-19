@@ -240,7 +240,7 @@ function ToolbarDock({
         'lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed lg:group-data-[sidebar=focus]/main:left-0',
       )}
     >
-      <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-2">
+      <div className="pointer-events-auto max-w-full rounded-control border border-border bg-raised p-1 elevation-float">
         {children}
       </div>
     </div>

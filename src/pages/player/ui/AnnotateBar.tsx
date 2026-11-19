@@ -113,7 +113,7 @@ export function AnnotateBar({
     <div
       role="toolbar"
       aria-label={t('annotate.bar')}
-      className="card absolute inset-x-0 top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-1 p-1 shadow-md"
+      className="card absolute inset-x-0 top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-1 p-1 elevation-float"
     >
       {staves.length > 1 ? (
         <Segmented

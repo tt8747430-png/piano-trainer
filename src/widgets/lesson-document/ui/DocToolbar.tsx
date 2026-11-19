@@ -113,7 +113,7 @@ export function TextBubble({ editor }: { editor: Editor }) {
         const top = state.doc.maybeChild(selectedBlock(state))?.type.name
         return top === DOC.paragraph || top === DOC.steps
       }}
-      className="z-40 flex items-center rounded-control border border-border bg-raised p-1 elevation-2"
+      className="z-40 flex items-center rounded-control border border-border bg-raised p-1 elevation-float"
     >
       <ToolButton
         label={t('edit.doc.lead')}

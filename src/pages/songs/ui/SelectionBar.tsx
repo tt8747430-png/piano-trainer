@@ -92,7 +92,7 @@ export function SelectionBar({
           role="group"
           aria-label={t('drag.zones')}
           data-takes-tab-bar=""
-          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-3"
+          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-card border border-border bg-raised p-1 elevation-float"
         >
           {folder && page.may('moveOut') ? (
             <DropZone
