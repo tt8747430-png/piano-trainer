@@ -163,7 +163,7 @@ export function LibrarySheet({
                         <span className="font-semibold text-pretty">
                           {localText(progression.name, locale)}
                         </span>
-                        <span className="font-display text-muted-foreground">
+                        <span className="text-muted-foreground">
                           {libraryLine(progression, inMinor)}
                         </span>
                       </button>

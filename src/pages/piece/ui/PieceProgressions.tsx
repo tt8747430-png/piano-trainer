@@ -36,7 +36,7 @@ export function PieceProgressions({ piece }: { piece: Piece }) {
               className="flex min-h-12 items-center gap-3 px-4 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3"
             >
               <span className="min-w-0 flex-1 truncate">{localText(progression.name, locale)}</span>
-              <span className="shrink-0 font-display text-muted-foreground">
+              <span className="shrink-0 whitespace-nowrap text-muted-foreground">
                 {libraryLine(progression, key.minor)}
               </span>
               <OpensMark />

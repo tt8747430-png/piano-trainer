@@ -241,9 +241,9 @@ function appliedText(of: AppliedDegree): string {
   return (of.shift < 0 ? '♭' : of.shift > 0 ? '#' : '') + (of.minor ? roman.toLowerCase() : roman)
 }
 
-/** Numerals as a line to read, a dash between them: `ii–V–I`. */
+/** Numerals as a line to read, a dash between them: `ii – V – I`. */
 export const numeralsLine = (numerals: readonly Numeral[]): string =>
-  numerals.map(numeralText).join('–')
+  numerals.map(numeralText).join(' – ')
 
 /** Numerals as a URL holds them: joined by hyphens, flats as `b`. */
 export const numeralsParam = (numerals: readonly Numeral[]): string =>
