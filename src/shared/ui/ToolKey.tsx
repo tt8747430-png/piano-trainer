@@ -61,7 +61,7 @@ export function ToolKey({
             aria-disabled={off || undefined}
             onClick={off ? (event) => event.preventDefault() : onClick}
             className={cn(
-              'h-12 min-w-0 rounded-control landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground aria-disabled:cursor-not-allowed aria-disabled:text-muted-foreground/40 aria-disabled:hover:bg-transparent [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-control landscape-phone:h-11 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-muted aria-pressed:bg-chosen aria-pressed:text-foreground aria-disabled:cursor-not-allowed aria-disabled:text-muted-foreground/40 aria-disabled:hover:bg-transparent [&_svg:not([class*=size-])]:size-5',
               className,
             )}
             {...props}

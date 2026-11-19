@@ -15,7 +15,7 @@ const PRESSED = 'aria-pressed:bg-muted aria-pressed:text-foreground aria-pressed
  * row a rounded wash when chosen, in a section a cell of its ruled table.
  */
 const TILE =
-  'h-12 min-w-12 shrink-0 rounded-control border-0 bg-transparent px-2 text-muted-foreground shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 active:scale-100 landscape-phone:h-10 landscape-phone:min-w-10'
+  'h-12 min-w-12 shrink-0 rounded-control border-0 bg-transparent px-2 text-muted-foreground shadow-none hover:bg-accent hover:text-foreground focus-visible:-outline-offset-3 active:scale-100 landscape-phone:h-11 landscape-phone:min-w-11'
 
 /** A tile two wide: a term's words, a barline's drawing. */
 const WIDE = 'min-w-24 px-3'
