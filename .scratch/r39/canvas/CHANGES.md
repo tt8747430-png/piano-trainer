@@ -10,8 +10,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
-- 2026-11-19 · (this commit) · the phone's status bar 62 tall, as the owner's iPhone 17 Pro and the app's inset (was 54): every phone bar 8 lower, where the app draws it · every phone board (54) · pending
-
+- 2026-11-19 · 06731f79 · the phone's status bar 62 tall, as the owner's iPhone 17 Pro and the app's inset (was 54): every phone bar 8 lower, where the app draws it · every phone board (54) · v612
 - 2026-11-19 · e0ddd0f4 · Chords: the leftover 56 spacer under the bar gone, the 3D keys 8 under the bar as every page's (was 62, a bare band) · Chords,ChordsLaptop · v611
 - 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · v611
 - 2026-11-19 · 8d285648 · Chords laptop: Practise in the Player in one column with chevrons, as its siblings; (app) the chord name's pickers on the left edge, 8 apart · ChordsLaptop · v610
