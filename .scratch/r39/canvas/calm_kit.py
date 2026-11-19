@@ -7,7 +7,9 @@ import json, re, shutil
 OUT = '/home/user/piano-trainer/.scratch/r39/canvas/practice/project/'
 src = open(OUT + 'Main.dc.html').read()
 lap = open(OUT + 'Laptop.dc.html').read()
-STATUS = re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: 54px;.*?</span></div>)', src, re.S).group(1)
+# the status bar as the owner's iPhone 17 Pro has it: 62 tall (testing.md, the device's safe area; the app's
+# inset), the board's bar under it as the app's
+STATUS = re.sub(r'height: \d+px;', 'height: 62px;', re.search(r'(<div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 402px; height: \d+px;.*?</span></div>)', src, re.S).group(1), count=1)
 SIDE = re.search(r'(<nav aria-label="Main" style="background: #FBF8F3.*?</nav>)', lap, re.S).group(1)
 # the sidebar as drawn, before index.py's lapwin.py gives it the rail and Focus buttons
 SIDE = re.sub(r'<div data-sidehead.*?</button></div></div>', '<div style="height: 44px; display: flex; align-items: center; padding: 0 12px; font-family: \'Instrument Serif\', Georgia, serif; font-size: 27px">Piano Trainer</div>', SIDE, count=1, flags=re.S)
@@ -129,7 +131,7 @@ def WHEEL(cols):
 def phone(fname, title, body, js, sheets='', bg=PAGE):
     html = HEAD % title + f"""<div style="width: 450px; height: 920px; position: relative; font-family: {FONT}">
 <div data-menuroot style="position: absolute; left: 24px; top: 23px; width: 402px; height: 874px; overflow: hidden; border-radius: 62px; background: {bg}; color: {INK}; display: flex; flex-direction: column">
-<div style="flex: none; height: 54px; position: relative">{STATUS}</div>
+<div style="flex: none; height: 62px; position: relative">{STATUS}</div>
 {body}
 {sheets}
 <div aria-hidden="true" style="position: absolute; left: 134px; bottom: 8px; width: 134px; height: 5px; border-radius: 9999px; background: {INK}; z-index: 90"></div>
