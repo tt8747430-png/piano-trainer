@@ -481,8 +481,8 @@ const arpIdx = Array.from({ length: playMode === 'UpDown' ? 2 * arpN - 1 : arpN 
 const addOn = !arpOn && seq.length < 8;
 const KS = 1.5; // one staff size: more chords scroll, never shrink (R42 v106)
 // one chord and many are drawn alike (owner, v111: "it seams that it uses different controls with different features"): each in its own bar
-// a lone chord's bar keeps room for its note names (they are shown for one chord only); the staff runs the card's width
-const LW = seq.length === 1 && !arpOn && keyLabel !== 'None' ? 16 : 0, MINSW = 228;
+// the staff prints no note names (owner, 2026-11-16: "duplicate content"), so a lone chord's bar keeps no room for them; the staff runs the card's width
+const LW = 0, MINSW = 228;
 const SLOT = 86, X0 = 64 + sigW + 4, AX = X0 + 26, SW = arpOn ? Math.max(MINSW, AX + (arpIdx.length - 1) * ARP + 40) : Math.max(MINSW, X0 + LW + seq.length * SLOT + (addOn ? 56 : 20)), addX = X0 + LW + SLOT * seq.length + 28;
 const sv = (() => { const all = { notes: [], ledg: [], digits: [], cols: [] }, per = [], alt = {}; let vt = 12, vbot = 168;
   seq.forEach((c, i) => { const o = symOf(c); const cx = X0 + LW + SLOT * (i + 0.5);
