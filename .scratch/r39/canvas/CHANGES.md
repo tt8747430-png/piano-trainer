@@ -8,10 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a Practice page's laptop keys 8 under the bar on every board (Scales, Intervals, Progression, Exercise were flush, Pattern 24 inside the bar); Intervals' Play all in Lucide's list-video · IntervalsLaptop,Intervals,ScalesLaptop,ProgressionLaptop,PatternLaptop,ExerciseLaptop · pending
-
 ## Changes
 
+- 2026-11-19 · 703233f3 · a Practice page's laptop keys 8 under the bar on every board (Scales, Intervals, Progression, Exercise were flush, Pattern 24 inside the bar); Intervals' Play all in Lucide's list-video · IntervalsLaptop,Intervals,ScalesLaptop,ProgressionLaptop,PatternLaptop,ExerciseLaptop · v639
 - 2026-11-19 · 0ed8b48a · Scales: its practise rows the app's six real exercises with their openings (were invented rows opening no drill); its keys on the staff's tonic for G, A, B (an octave low) · Scales,ScalesLaptop · v638
 
 - 2026-11-19 · eadfe3cf · Chords: a lone chord keeps no room for note names the staff no longer prints (its bar starts at the clef's room) · Chords,ChordsLaptop · v637
