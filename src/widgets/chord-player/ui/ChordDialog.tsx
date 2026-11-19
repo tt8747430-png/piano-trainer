@@ -202,7 +202,7 @@ export function ChordDialog({
                   <button
                     type="button"
                     onClick={() => take(each)}
-                    className="h-11 min-w-0 flex-1 rounded-[10px] bg-card text-[17px] font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
+                    className="h-11 min-w-0 flex-1 rounded-control bg-card text-[17px] font-medium shadow-[0_0_0_1px_var(--color-border)] transition-colors duration-150 ease-out hover:bg-muted"
                   >
                     <LeadSymbol text={printedChord(each)} />
                   </button>
@@ -216,7 +216,7 @@ export function ChordDialog({
               onClick={onRemove}
               aria-label={t('chordPlayer.chord.remove')}
               title={t('chordPlayer.chord.remove')}
-              className="grid size-11 shrink-0 place-items-center rounded-[10px] bg-destructive/12 text-destructive transition-colors duration-150 ease-out hover:bg-destructive/20"
+              className="grid size-11 shrink-0 place-items-center rounded-control bg-destructive/12 text-destructive transition-colors duration-150 ease-out hover:bg-destructive/20"
             >
               <Trash2 aria-hidden className="size-5" />
             </button>
@@ -238,7 +238,7 @@ export function ChordDialog({
 
 /** A pop-up's look in the sheet's rows, Musicca's select: white, ringed, its value and ⌄. */
 const POP =
-  'h-11 rounded-[10px] border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
+  'h-11 rounded-control border-0 bg-card px-3 font-normal shadow-[0_0_0_1px_var(--color-border)] [&_span]:font-normal'
 
 /** One of the sheet's rows (canvas 173): its name, its controls at its end. */
 function DialogRow({ label, children }: { label: string; children: ReactNode }) {
@@ -264,7 +264,7 @@ function SheetAct({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-[10px] bg-muted px-3 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
+      className="flex h-11 min-w-0 flex-[1_1_auto] items-center justify-center gap-2 rounded-control bg-muted px-3 text-[15px] font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:brightness-95"
     >
       {icon}
       <span className="truncate">{children}</span>
