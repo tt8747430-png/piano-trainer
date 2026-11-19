@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import type { ReactElement, ReactNode } from 'react'
 import { stageRank, type Stage } from '@/entities/step'
 import { matchesQuery } from '@/shared/lib'
+import type { Numeral } from '@/shared/lib/music'
 import type { Paint, RowAction } from '@/shared/ui'
 import type { GroupWord } from './library-words'
 
@@ -48,13 +49,13 @@ export interface LibrarySection {
 }
 
 /**
- * A row's picture: its kind's icon on a painted tile, or a progression's chords as tiles tinted by
- * role (R34), under its name on a phone and in the table's column for them.
+ * A row's picture: its book's or kind's icon on its paint, a few words of its music, or a progression's
+ * chords as columns in their roles' paints (the board's, loop round 58).
  */
-/** A row's picture: its book's or kind's icon, or a few words of its music (a progression's first numerals). */
 export type LibraryPicture =
   | { readonly icon: LucideIcon; readonly paint: Paint }
   | { readonly text: string; readonly paint: Paint }
+  | { readonly chords: readonly Numeral[]; readonly minor: boolean }
 
 /** One row of a practice library: an exercise, a pattern, a study, a progression. */
 export interface LibraryItem {

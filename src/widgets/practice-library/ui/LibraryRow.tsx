@@ -22,7 +22,7 @@ const LEADING = ['favourite'] as const
 
 /**
  * A row of a practice library on a phone (canvas, Songs' row in its grouped card): its picture, name
- * and line, its level at its right in words (the board's), a link to its page; its ♡, one tap; its More under a mouse, a swipe to the
+ * and line, its level (or a progression's key) at its right in words (the board's), a link to its page; its ♡, one tap; its More under a mouse, a swipe to the
  * right for Favourite under a finger.
  */
 export function LibraryRow({ item }: { item: LibraryItem }) {
@@ -39,7 +39,14 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
             title={item.name}
             detail={item.detail}
             trailing={
-              item.trailing ?? (item.stage ? <LevelMark stage={item.stage} short /> : undefined)
+              item.trailing ??
+              (item.stage ? (
+                <LevelMark stage={item.stage} short />
+              ) : item.third ? (
+                <span className="shrink-0 text-sm whitespace-nowrap text-muted-foreground">
+                  {item.third}
+                </span>
+              ) : undefined)
             }
           />
         </>
