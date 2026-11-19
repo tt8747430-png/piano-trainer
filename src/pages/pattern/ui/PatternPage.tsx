@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { CopyPlus, Eye, EyeOff, Globe, Heart, PencilLine, Trash2 } from 'lucide-react'
+import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -39,7 +39,7 @@ import {
   InfoTip,
   MoreMenu,
   NotFound,
-  RoundButton,
+  NameHeart,
   say,
   ScreenHeader,
   type MenuAction,
@@ -57,12 +57,10 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   const store = usePatternsStoreApi()
   const favourite = usePatterns(selectIsFavourite(pattern.ref))
   return (
-    <RoundButton
+    <NameHeart
+      pressed={favourite}
       label={t('patterns.favourite')}
-      icon={Heart}
-      aria-pressed={favourite}
-      onClick={() => toggleFavourite(store, pattern.ref)}
-      className="text-muted-foreground aria-pressed:text-destructive aria-pressed:[&_svg]:fill-current"
+      onToggle={() => toggleFavourite(store, pattern.ref)}
     />
   )
 }
