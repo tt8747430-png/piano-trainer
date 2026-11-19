@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, lastWeek, selectDays, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { ProfileSection } from './ProfileSection'
@@ -39,8 +39,8 @@ export function WeekCard() {
   const played = week.filter((day) => day.practised).length
   const most = Math.max(...week.map((day) => day.minutes))
   const step = STEPS.find((each) => each * 2 >= most) ?? STEPS.at(-1) ?? 240
-  const letter = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
-  const named = new Intl.DateTimeFormat(locale, { weekday: 'long' })
+  const letter = new Intl.DateTimeFormat(formatLocale(locale), { weekday: 'narrow' })
+  const named = new Intl.DateTimeFormat(formatLocale(locale), { weekday: 'long' })
   return (
     <ProfileSection
       fold="week"

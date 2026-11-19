@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
+import { formatLocale } from '@/shared/lib'
 
 type Listed =
   | { readonly state: 'loading' }
@@ -54,7 +55,10 @@ export function VersionsDialog({
       setListed({ state: 'loading' })
     }
   }, [open, versions])
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const date = new Intl.DateTimeFormat(formatLocale(locale), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>

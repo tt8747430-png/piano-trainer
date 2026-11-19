@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, type PracticeRun } from '@/entities/progress'
 import { useRunName } from '@/features/trainer'
 import { useLocale } from '@/shared/i18n'
+import { formatLocale } from '@/shared/lib'
 
 /** A run as Practice history shows it: its name, its time and count, its accuracy. */
 export interface RunLine {
@@ -16,7 +17,7 @@ export function useRunLines(): (runs: readonly PracticeRun[]) => readonly RunLin
   const { t } = useTranslation(['account', 'music'])
   const locale = useLocale()
   const runName = useRunName()
-  const clock = new Intl.DateTimeFormat(locale, { timeStyle: 'short' })
+  const clock = new Intl.DateTimeFormat(formatLocale(locale), { timeStyle: 'short' })
   return (runs) =>
     runs.flatMap((run) => {
       const time = clock.format(new Date(run.at))
@@ -48,7 +49,11 @@ export function useRunLines(): (runs: readonly PracticeRun[]) => readonly RunLin
 export function useHistoryDay(today: string): (day: string) => string {
   const { t } = useTranslation('account')
   const locale = useLocale()
-  const format = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' })
+  const format = new Intl.DateTimeFormat(formatLocale(locale), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
   const yesterday = localDay(dateOfDay(today, -1))
   return (day) =>
     day === today

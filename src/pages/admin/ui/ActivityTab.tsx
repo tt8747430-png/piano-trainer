@@ -4,6 +4,7 @@ import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 const ACTIONS = [
   'set-role',
@@ -41,7 +42,7 @@ export function ActivityTab() {
                   {isAction(entry.action) ? t(`activity.actions.${entry.action}`) : entry.action}
                 </span>
                 <span className="truncate text-sm text-muted-foreground">
-                  {new Intl.DateTimeFormat(locale, {
+                  {new Intl.DateTimeFormat(formatLocale(locale), {
                     dateStyle: 'medium',
                     timeStyle: 'short',
                   }).format(new Date(entry.at))}{' '}

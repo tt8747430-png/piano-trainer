@@ -22,7 +22,7 @@ import { saveOwnPattern } from '@/features/manage-patterns'
 import type { NetFailure } from '@/shared/api/network'
 import type { PublicEntry, PublicRating } from '@/shared/api/public-library'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { LAPTOP, useMediaQuery } from '@/shared/lib'
+import { formatLocale, LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
 import { BackButton, ButtonLink, Fab, FloatingActions, Said, ScreenHeader } from '@/shared/ui'
@@ -214,7 +214,7 @@ export function PublicSongPage() {
     ...keyFacts,
     {
       name: t('public.publishedOn'),
-      value: new Date(entry.publishedAt).toLocaleDateString(i18n.language, {
+      value: new Date(entry.publishedAt).toLocaleDateString(formatLocale(i18n.language), {
         day: 'numeric',
         month: 'long',
         year: 'numeric',

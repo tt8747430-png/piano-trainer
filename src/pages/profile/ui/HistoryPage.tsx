@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { dateOfDay, localDay, selectHistory, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
@@ -35,8 +35,12 @@ function MonthChart() {
   const most = Math.max(...month.map((day) => day.seconds))
   // The scale's top: the next whole half hour above the most practised day, at least 30 minutes.
   const top = Math.max(30, Math.ceil(most / 60 / 30) * 30)
-  const short = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' })
-  const named = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' })
+  const short = new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'short' })
+  const named = new Intl.DateTimeFormat(formatLocale(locale), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
   return (
     <div className="flex flex-col gap-3 card px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">

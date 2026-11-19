@@ -8,6 +8,7 @@ import { ChoiceChips, ConfirmDialog, SearchField } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 const ROLES = ['learner', 'editor', 'admin'] as const satisfies readonly AccountRole[]
 
@@ -39,7 +40,7 @@ export function AccountsTab() {
     else setRole(account, role)
   }
   const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso))
+    new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'medium' }).format(new Date(iso))
   return (
     <div className="flex flex-col gap-4">
       <SearchField value={query} onChange={setQuery} label={t('accounts.search')} />

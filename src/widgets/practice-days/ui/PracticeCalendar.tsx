@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { dateOfDay, monthOf, selectDays, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
+import { cn, formatLocale } from '@/shared/lib'
 import { useToday } from '../model/use-today'
 
 /** The month's arrows, the board's CAL: bare 44 circles at the card's sides. */
@@ -27,9 +27,16 @@ export function PracticeCalendar({ title }: { title: string }) {
   const shown = dateOfDay(today)
   shown.setDate(1)
   shown.setMonth(shown.getMonth() + shift)
-  const month = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(shown)
-  const long = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' })
-  const narrow = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
+  const month = new Intl.DateTimeFormat(formatLocale(locale), {
+    month: 'long',
+    year: 'numeric',
+  }).format(shown)
+  const long = new Intl.DateTimeFormat(formatLocale(locale), {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
+  const narrow = new Intl.DateTimeFormat(formatLocale(locale), { weekday: 'narrow' })
   // A Monday to Sunday week for the column names: 5–11 January 2026.
   const weekdays = Array.from({ length: 7 }, (_, i) => narrow.format(new Date(2026, 0, 5 + i, 12)))
   return (

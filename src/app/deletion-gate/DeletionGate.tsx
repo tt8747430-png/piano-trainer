@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
+import { formatLocale } from '@/shared/lib'
 
 /**
  * Signed in to an account that is to be deleted (ADR 0116): the learner keeps it (the deletion is
@@ -41,7 +42,9 @@ export function DeletionGate() {
   const date =
     purgeAfter === null
       ? ''
-      : new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(purgeAfter))
+      : new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(
+          new Date(purgeAfter),
+        )
   return (
     <AlertDialog open={account !== null && purgeAfter !== null}>
       {/* The AppLayers board's gate, the welcome's box: 22 corners, 24 above and 20 about, a 20 title. */}

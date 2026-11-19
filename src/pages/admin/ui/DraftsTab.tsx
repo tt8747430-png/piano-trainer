@@ -17,6 +17,7 @@ import { useContentEditing } from '@/shared/lib/content-editing'
 import { RowLink } from '@/shared/ui'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 const ICONS: Readonly<Record<ContentKind, LucideIcon>> = {
   piece: Music,
@@ -71,7 +72,10 @@ export function DraftsTab() {
   const editing = useContentEditing()
   const load = useCallback(() => editing.drafts(), [editing])
   const { loaded, reload } = useLoaded(load)
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const date = new Intl.DateTimeFormat(formatLocale(locale), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
   const nameOf = (draft: DraftListing) => {
     const title = draft.title
     const name = isLocalText(title)

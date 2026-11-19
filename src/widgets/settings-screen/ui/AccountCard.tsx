@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Account } from '@/shared/api/auth'
 import { useLocale } from '@/shared/i18n'
-import { cn, useOnline } from '@/shared/lib'
+import { cn, formatLocale, useOnline } from '@/shared/lib'
 import { useAccount, useSync } from '@/shared/lib/account'
 import { syncLine, type SyncLine } from '@/shared/lib/sync'
 import { Avatar, OpensMark } from '@/shared/ui'
@@ -59,10 +59,10 @@ export function AccountCardFace({
     switch (line.kind) {
       case 'synced':
         return t('sync.line.synced', {
-          when: new Intl.RelativeTimeFormat(locale, { numeric: 'auto', style: 'short' }).format(
-            line.ago.value,
-            line.ago.unit,
-          ),
+          when: new Intl.RelativeTimeFormat(formatLocale(locale), {
+            numeric: 'auto',
+            style: 'short',
+          }).format(line.ago.value, line.ago.unit),
         })
       case 'waiting':
         return t('sync.line.waiting', { count: line.count })

@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useReducer, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { useOnline } from '@/shared/lib'
+import { formatLocale, useOnline } from '@/shared/lib'
 import { authProblem, useAccount, useLearnerProfile, useLearnerView } from '@/shared/lib/account'
 import {
   Avatar,
@@ -135,7 +135,7 @@ function Guest({ scheduled }: { scheduled: string | null }) {
           {scheduled === null
             ? t('accountPage.signedOutWhy')
             : t('accountPage.delete.scheduled', {
-                date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
+                date: new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'long' }).format(
                   new Date(scheduled),
                 ),
               })}

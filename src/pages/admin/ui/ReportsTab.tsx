@@ -8,6 +8,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { useLoaded } from '../model/use-loaded'
 import { useChangeProblem } from '../model/use-change-problem'
 import { FailureLine, LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 /** The reasons a report gives, as the Public library's Report sheet offers them. */
 const REASONS = ['not-theirs', 'offensive', 'spam', 'broken'] as const
@@ -54,7 +55,7 @@ export function ReportsTab() {
                       ? t(`songs:public.reasons.${report.reason}`)
                       : report.reason}{' '}
                     ·{' '}
-                    {new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+                    {new Intl.DateTimeFormat(formatLocale(locale), { dateStyle: 'medium' }).format(
                       new Date(report.reportedAt),
                     )}
                   </p>

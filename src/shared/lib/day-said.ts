@@ -1,3 +1,4 @@
+import { formatLocale } from './format-locale'
 const DAY = 86_400_000
 
 /**
@@ -11,7 +12,9 @@ export function daySaid(at: string | number, locale: string, now: number, opens 
   )
   const said =
     days < 7
-      ? new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-days, 'day')
-      : new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' }).format(then)
+      ? new Intl.RelativeTimeFormat(formatLocale(locale), { numeric: 'auto' }).format(-days, 'day')
+      : new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'short' }).format(
+          then,
+        )
   return opens ? said.charAt(0).toLocaleUpperCase(locale) + said.slice(1) : said
 }

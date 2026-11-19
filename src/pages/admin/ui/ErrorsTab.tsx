@@ -5,6 +5,7 @@ import { useAdmin } from '@/shared/lib/admin'
 import { groupErrors, splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 /**
  * Administration › Error log: what went wrong on learners' devices (their own reports are
@@ -20,7 +21,10 @@ export function ErrorsTab() {
     return result.ok ? { ok: true as const, value: splitReports(result.value).errors } : result
   }, [admin])
   const { loaded, reload } = useLoaded(load)
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const date = new Intl.DateTimeFormat(formatLocale(locale), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
   return (
     <LoadedState loaded={loaded} reload={reload}>
       {(entries) =>

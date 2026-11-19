@@ -24,13 +24,14 @@ import { useSongTitle } from '../model/use-song-title'
 import { useTakePlay } from '../model/use-take-play'
 import { KeepBars } from './KeepBars'
 import { TakeNameField } from './TakeNameField'
+import { formatLocale } from '@/shared/lib'
 
 /** One formatter a language: the day a take was recorded, as its page says it ("9 November"). */
 const days = new Map<Locale, Intl.DateTimeFormat>()
 function dayFormat(locale: Locale): Intl.DateTimeFormat {
   const known = days.get(locale)
   if (known) return known
-  const format = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' })
+  const format = new Intl.DateTimeFormat(formatLocale(locale), { day: 'numeric', month: 'long' })
   days.set(locale, format)
   return format
 }

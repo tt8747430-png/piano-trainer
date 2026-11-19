@@ -1,6 +1,7 @@
 export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
 export { daySaid } from './day-said'
+export { formatLocale } from './format-locale'
 export {
   partsFromParams,
   partsParams,

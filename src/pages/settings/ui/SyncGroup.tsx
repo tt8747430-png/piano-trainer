@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
-import { cn, useOnline } from '@/shared/lib'
+import { cn, formatLocale, useOnline } from '@/shared/lib'
 import { useSync } from '@/shared/lib/account'
 import { syncLine } from '@/shared/lib/sync'
 import { GroupRow, SettingsGroup } from '@/shared/ui'
@@ -30,10 +30,10 @@ export function SyncGroup() {
   const when =
     last.kind === 'synced'
       ? t('sync.last', {
-          when: new Intl.RelativeTimeFormat(locale, { numeric: 'auto', style: 'short' }).format(
-            last.ago.value,
-            last.ago.unit,
-          ),
+          when: new Intl.RelativeTimeFormat(formatLocale(locale), {
+            numeric: 'auto',
+            style: 'short',
+          }).format(last.ago.value, last.ago.unit),
         })
       : null
   return (

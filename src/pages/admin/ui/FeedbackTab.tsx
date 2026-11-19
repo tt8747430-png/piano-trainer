@@ -5,6 +5,7 @@ import { useAdmin } from '@/shared/lib/admin'
 import { splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
+import { formatLocale } from '@/shared/lib'
 
 /**
  * Administration › Feedback (R32): what learners wrote in Settings › Report a problem, apart from the
@@ -20,7 +21,10 @@ export function FeedbackTab() {
     return result.ok ? { ok: true as const, value: splitReports(result.value).feedback } : result
   }, [admin])
   const { loaded, reload } = useLoaded(load)
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
+  const date = new Intl.DateTimeFormat(formatLocale(locale), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
   return (
     <LoadedState loaded={loaded} reload={reload}>
       {(feedback) =>
