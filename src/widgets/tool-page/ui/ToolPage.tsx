@@ -26,11 +26,13 @@ export interface ToolPlay {
 }
 
 /** A tool's column widths on a laptop, as complete classes. */
+// The Metronome's laptop column starts 16 under its bar and keeps its parts 24 apart, as its board.
 const COLUMNS = {
   720: 'lg:max-w-180',
-  760: 'lg:max-w-190',
+  760: 'lg:max-w-190 lg:pt-4',
   880: 'lg:max-w-220',
 } as const
+const SECTION_GAPS: Partial<Record<Column, string>> = { 760: 'lg:gap-5' }
 type Column = keyof typeof COLUMNS
 
 /**
@@ -131,7 +133,10 @@ export function ToolPage({
                 : column
                   ? // A state that fills (the Tuner's No microphone) takes a phone's height, its rows at the foot;
                     // on a laptop it stands in the column over its rows.
-                    'flex min-w-0 flex-col items-center gap-4 text-center max-lg:has-data-fill:flex-1'
+                    cn(
+                      'flex min-w-0 flex-col items-center gap-4 text-center max-lg:has-data-fill:flex-1',
+                      SECTION_GAPS[column],
+                    )
                   : 'flex min-h-56 flex-col items-center justify-center gap-4 text-center lg:sticky lg:top-24'
             }
           >
