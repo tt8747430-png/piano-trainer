@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a song's Publish: a Signed out state (the app's card and Sign in), the own copy's Playlist · Library row (was Folder · Hymns) · SongSettings,SongSettingsLaptop · pending
-- 2026-11-19 · (this commit) · a song's Duplicate toast says where the copy goes: "added to your songs" (it named Hymns) · SongSettings,SongSettingsLaptop,Section,SectionLaptop · pending
-
 ## Changes
+
+- 2026-11-19 · 91e57412 · a song's Publish: a Signed out state (the app's card and Sign in), the own copy's Playlist · Library row (was Folder · Hymns) · SongSettings,SongSettingsLaptop · v632
+- 2026-11-19 · ee61cc65 · a song's Duplicate toast says where the copy goes: "added to your songs" (it named Hymns) · SongSettings,SongSettingsLaptop,Section,SectionLaptop · v632
 
 - 2026-11-19 · 590beba8 · a take: its name the kit's NAMEFIELD (52, 14, 17; was 20 bold) and every hand-made Name field with it, each bar of its strip 44 with the take scrolling, the laptop on the 56 bar with the content 24 under it and the roll 220 tall · Take,TakeLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,ProgressionEdit,ProgressionEditLaptop · v631
 
