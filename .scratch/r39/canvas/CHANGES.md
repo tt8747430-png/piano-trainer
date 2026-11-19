@@ -8,11 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Chords: the leftover 56 spacer under the bar gone, the 3D keys 8 under the bar as every page's (was 62, a bare band) · Chords,ChordsLaptop · **pending**
-- 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · **pending**
-
 ## Changes
 
+- 2026-11-19 · e0ddd0f4 · Chords: the leftover 56 spacer under the bar gone, the 3D keys 8 under the bar as every page's (was 62, a bare band) · Chords,ChordsLaptop · v611
+- 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · v611
 - 2026-11-19 · 8d285648 · Chords laptop: Practise in the Player in one column with chevrons, as its siblings; (app) the chord name's pickers on the left edge, 8 apart · ChordsLaptop · v610
 - 2026-11-19 · 23d09364 · laptop sidebar 16 in (was 14), account email line 8 × 12 · every laptop board (52) · v609
 - 2026-11-19 · e08c7c81 · the kit's CARD pads 16 all round (was 14 × 16); Settings' Paused card and folds on the scale · AppLayers,AppLayersLaptop,Check,CheckLaptop,Exercise,ExerciseLaptop,Explore,ExploreLaptop,Learn,LearnLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,Profile,ProfileLaptop,ProgressionEdit,ProgressionEditLaptop,Section,SectionLaptop,Settings,SettingsLaptop,SongSettings,SongSettingsLaptop · v608
