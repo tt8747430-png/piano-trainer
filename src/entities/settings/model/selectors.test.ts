@@ -49,7 +49,6 @@ describe('settings selectors', () => {
       editing: DEFAULT_EDITING,
       foldedSections: ['chords.tensions'],
       welcomed: true,
-      tipsSeen: [],
       practiceRecent: [],
       paletteRecent: [],
       sidebar: 'collapsed',

@@ -91,7 +91,6 @@ export {
   selectPaletteRecent,
   selectEditorMode,
   selectSidebar,
-  selectTipSeen,
   selectWelcomed,
   selectSound,
   selectTheme,

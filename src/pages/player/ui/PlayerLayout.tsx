@@ -2,13 +2,8 @@ import { Download, Eye, Printer, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
-import {
-  selectScoreView,
-  selectTipSeen,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { retireTip, setScoreView } from '@/features/set-preference'
+import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setScoreView } from '@/features/set-preference'
 import { selectDays, streak, useProgress } from '@/entities/progress'
 import { useToday } from '@/widgets/practice-days'
 import {
@@ -59,7 +54,6 @@ import { PlayerExport } from './PlayerExport'
 import type { MusicXmlFormat } from '@/features/song-files'
 import { PickView, ViewMenu } from './PickView'
 import { SongHead } from './SongHead'
-import { CoachLine } from './CoachLine'
 import type { ScoreAnnotation } from '@/shared/lib/notation'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -208,15 +202,8 @@ export function PlayerLayout({
   // Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
   const [exporting, setExporting] = useState(false)
-  // The coach's line (R29 B8, R31-P): shown until put away by its × or done (Play pressed in
-  // Listen), remembered for good.
   const settingsStore = useSettingsStoreApi()
-  const tip = `coach.${view.mode}`
-  const coached = useSettings(selectTipSeen(tip))
   const playing = practice.state.playing
-  useEffect(() => {
-    if (playing && view.mode === 'listen') retireTip(settingsStore, tip)
-  }, [playing, view.mode, settingsStore, tip])
   // The Settings' head's ··· (its canvas): the music's acts only, in parts: the song's, practice's,
   // the tools, sharing. Every setting is the gear's; Share link is the head's own button.
   const moreMenu: MenuAction[] = (
@@ -357,10 +344,6 @@ export function PlayerLayout({
         }
       />
       <PlayerArea area="sheet" className="relative">
-        {/* The tip floats over the music's foot, taking no row and covering no control (R32). */}
-        {!coached && !practice.state.playing && !annotating ? (
-          <CoachLine mode={view.mode} onClose={() => retireTip(settingsStore, tip)} />
-        ) : null}
         {annotating}
         {shown === 'sheet' ? (
           <SheetMusic

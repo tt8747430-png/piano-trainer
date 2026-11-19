@@ -95,11 +95,6 @@ export const player = {
       circle: 'Circle',
     },
   },
-  coach: {
-    listen: 'Tap a note to start from there, then press Play.',
-    wait: 'Press Play, then play each highlighted note.',
-    close: 'Dismiss tip',
-  },
   // The modes at the learner's own pace, in the transport's Pace (R36, flowkey's).
   modes: {
     wait: { name: 'Wait mode', line: 'The music waits for the right notes.' },

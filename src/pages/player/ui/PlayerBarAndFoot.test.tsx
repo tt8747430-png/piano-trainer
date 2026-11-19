@@ -1,8 +1,7 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { createMemoryStorage } from '@/shared/lib'
 
 type User = ReturnType<typeof userEvent.setup>
 
@@ -101,35 +100,11 @@ describe('the Player’s bar, foot and More (R31-P)', () => {
     expect(voice).toHaveAccessibleDescription('Not available in this browser')
   })
 
-  it('coaches in one line until put away, the progress along the score’s head', async () => {
-    const user = userEvent.setup()
+  it('shows the progress along the score’s head', async () => {
     await renderApp('/play/bz5')
-    expect(await screen.findByText('Press Play to hear the song.')).toBeInTheDocument()
-    expect(screen.getByRole('progressbar', { name: 'Progress' })).toHaveAttribute(
+    expect(await screen.findByRole('progressbar', { name: 'Progress' })).toHaveAttribute(
       'aria-valuenow',
       '0',
     )
-    await user.click(screen.getByRole('button', { name: 'Dismiss tip' }))
-    expect(screen.queryByText('Press Play to hear the song.')).toBeNull()
-  })
-
-  it('remembers a tip put away: it shows on no later visit (R31-P)', async () => {
-    const user = userEvent.setup()
-    const storage = createMemoryStorage()
-    const { settingsStore, unmount } = await renderApp('/play/bz5', { storage })
-    await user.click(await screen.findByRole('button', { name: 'Dismiss tip' }))
-    expect(settingsStore.getState().tipsSeen).toContain('coach.listen')
-    unmount()
-    await renderApp('/play/bz5', { storage })
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument()
-    expect(screen.queryByText('Press Play to hear the song.')).toBeNull()
-  })
-
-  it('retires Listen’s tip once Play is pressed (R31-P)', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/play/bz5')
-    await screen.findByText('Press Play to hear the song.')
-    await user.click(screen.getByRole('button', { name: 'Play' }))
-    await waitFor(() => expect(settingsStore.getState().tipsSeen).toContain('coach.listen'))
   })
 })

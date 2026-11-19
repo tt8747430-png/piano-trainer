@@ -370,8 +370,6 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
-  /** The tips put away or done (R31-P), by their ids (`coach.listen`): a tip shows until then. */
-  tipsSeen: readonly string[]
   /** Practice's pages opened from its list, the latest first (R30-4): its Continue's two. */
   practiceRecent: readonly string[]
   /**

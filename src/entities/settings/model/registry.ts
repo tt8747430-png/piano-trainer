@@ -34,7 +34,6 @@ export const NOT_PREFERENCES = [
   'editorMode',
   'foldedSections',
   'welcomed',
-  'tipsSeen',
   'practiceRecent',
   'paletteRecent',
   'chordFinder.chords',
