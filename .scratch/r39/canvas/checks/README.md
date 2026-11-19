@@ -46,3 +46,10 @@ RT=<path to the Design type's dc-runtime.js> CSP=1 node run.mjs <Board> <width> 
   a SMALL control, an EMPTY layer, a page that THROWS. Its last line counts the layers opened and those with problems.
 
 `python3 checks/dead_replaces.py <scratch dir>` builds a copy of the canvas with every `.replace(a, b)` wrapped and prints each call whose `a` was never found: a patch on a helper's output that silently stopped applying (the laptop take's roll stood at 340×120 for rounds). It names suspects only; remove one, rebuild, and `diff -rq` against a copy of `practice/project` made before is the proof. `index.py:43` (a name with no comma) is expected.
+
+## The board against the app by text (`port/tdiff.py`)
+
+`RT=$RT python3 checks/port/tdiff.py <route> <Board> <w> <h>`, run from `.scratch/r39/canvas` with the dev server on
+5191: every visible text's own box, size, weight and colour on the board and on the app's route, aligned at the first
+text both show; it prints only what differs (BOARD ONLY, APP ONLY, DIFF pos/font/color). Run it before any screenshot
+of a port; shoot only what it flags.
