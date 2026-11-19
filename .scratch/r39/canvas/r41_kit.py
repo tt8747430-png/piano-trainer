@@ -404,6 +404,14 @@ def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
             f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
             f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
 
+# One question before a loss that cannot be undone, or an act that reaches other people (CLAUDE.md, ConfirmDialog):
+# a scrim, a 372 card centred, the question (18 bold), what is lost (15 soft), an optional field, then Keep and the act
+# side by side. The act is crimson for a loss, ink when it only reaches others (Publish); `ok_bg`/`ok_ink` bind it to state.
+def ASK(cond, t, b, ok, go, danger=True, cancel='closeSheet', keep='Cancel', field='', ok_bg=None, ok_ink='#FFFFFF', ok_attrs=''):
+    bg = ok_bg or ('#B3261E' if danger else INK)
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{cancel}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="alertdialog" aria-label="{t}" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 372px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 8px">'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">{b}</span>{field}<div style="display: flex; gap: 8px; margin-top: 8px"><button type="button" onClick="{{{{{cancel}}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">{keep}</button>'
+            f'<button type="button" onClick="{{{{{go}}}}}"{ok_attrs} style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {bg}; color: {ok_ink}; font: inherit; font-size: 16px; font-weight: 700; white-space: nowrap">{ok}</button></div></div></sc-if>')
 PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
                         f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')
 
