@@ -24,7 +24,7 @@ export function SortHeading({
       <button
         type="button"
         onClick={onSort}
-        className="-mx-2 inline-flex min-h-9 items-center gap-1 rounded-control px-2 font-semibold hover:bg-muted"
+        className="-mx-2 inline-flex min-h-9 items-center gap-1 rounded-control px-2 font-semibold hover:bg-muted pointer-coarse:min-h-11"
       >
         {label}
         {on ? <ArrowDown aria-hidden className="size-3.5" /> : null}

@@ -89,10 +89,10 @@ export function ProfilePage() {
       {/* A phone: the learner, the tiles, the week, the history, the badges, the achievements, 16
           apart and each section 32 under the one before. A laptop: the pairs in rows 32 apart. */}
       <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-8">
-        <div className="flex flex-col justify-center gap-4">
+        <div className="flex flex-col justify-center gap-4 lg:max-xl:col-span-2">
           <Hero />
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center lg:max-xl:col-span-2">
           <Tiles />
         </div>
         <Cell>

@@ -36,9 +36,9 @@ DASKS = (ASKP('pubAskOn', 'Publish Amazing Grace?', 'All learners will receive t
          + ASK('discOn', 'Discard changes?', 'The score will revert to its published version, and your changes will be lost.', 'Discard', 'doDisc'))
 def GATES(back):
     return (EMPTY('isOpening', '…', 'Opening…', 'The original is fetched from the server, so this draft is the one other editors see.')
-            + EMPTY('isOpenOff', '⌁', 'You’re offline.', 'It will open when you reconnect.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Songs", "", back, "quiet", 48, False)}</div>')
-            + EMPTY('isFailed', '!', 'It couldn’t be opened.', 'Check your connection, then try again.', f'<div style="display: flex; gap: 8px; margin-top: 6px">{BTN("Try again", "retry", "", "primary", 48, False)}</div>')
-            + EMPTY('isLearner', '✎', 'Only editors can modify this.', 'A built-in song is changed by the app’s editors. Make your own copy from its ··· menu.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Songs", "", back, "primary", 48, False)}</div>'))
+            + EMPTY('isOpenOff', '⌁', 'You’re offline.', 'It will open when you reconnect.', f'{BTN("Back to Songs", "", back, "quiet", 48, False)}')
+            + EMPTY('isFailed', '!', 'It couldn’t be opened.', 'Check your connection, then try again.', f'{BTN("Try again", "retry", "", "primary", 48, False)}')
+            + EMPTY('isLearner', '✎', 'Only editors can modify this.', 'A built-in song is changed by the app’s editors. Make your own copy from its ··· menu.', f'{BTN("Back to Songs", "", back, "primary", 48, False)}'))
 GHEAD = lambda back: f'<header style="flex: none; height: 60px; display: flex; align-items: center; padding: 8px 16px"><a href="{back}" aria-label="Close the editor" style="width: 44px; height: 44px; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{XI}</a></header>'
 
 edph = (IF('isLive', eph4, 'true')

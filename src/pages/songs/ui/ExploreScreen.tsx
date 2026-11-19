@@ -81,9 +81,9 @@ export function ExploreScreen({ home }: { home: SongsHome }) {
           }
           search={search}
         />
-        <div className="flex min-w-0 items-center gap-4">
+        <div className="flex min-w-0 flex-col items-start gap-3 xl:flex-row xl:items-center xl:gap-4">
           <div className="w-55 shrink-0">{kinds}</div>
-          <div className="min-w-0 flex-1">{songs ? (byChip ?? categories) : null}</div>
+          <div className="min-w-0 flex-1 max-xl:w-full">{songs ? (byChip ?? categories) : null}</div>
           {songs ? (
             <ExploreSort
               home={home}

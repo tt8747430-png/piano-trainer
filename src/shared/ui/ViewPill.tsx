@@ -57,7 +57,7 @@ export function ViewPill<V extends string>({
             'hover:not-data-checked:text-foreground data-checked:bg-foreground data-checked:font-semibold data-checked:text-background data-disabled:opacity-40',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
             size === 'views' &&
-              'h-[2.125rem] w-28 min-w-0 px-0 text-sm font-semibold max-sm:w-auto max-sm:px-3',
+              'relative h-[2.125rem] w-28 min-w-0 px-0 text-sm font-semibold max-sm:w-auto max-sm:px-3 pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-[5px]',
           )}
         >
           {Icon ? <Icon aria-hidden className="size-5 sm:hidden" /> : null}

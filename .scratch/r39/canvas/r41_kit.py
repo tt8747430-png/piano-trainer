@@ -132,7 +132,8 @@ def INFOTIP(on, close, label, body, pos='left: 0; top: 32px'):
 def SUBJECT(name, sub, size=40, align='left'):
     return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
 H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 16px 0 -4px"><h2 style="margin: 0; font-family: {FONT}; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
-CAPS = lambda t: f'<h3 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
+# a group's caption stands on its rows' text (16 in); over tiles or chips that start on the column, inset=0
+CAPS = lambda t, inset=16: f'<h3 style="margin: 0 0 0 {inset}px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
 
 # ── controls ──
 def SEGC(lst, h=32, fs=14, fill=False):
@@ -205,7 +206,7 @@ def ROOTGRID(lst='roots'):
                 f'style="height: 44px; min-width: 0; padding: 0; border: 0; border-radius: 11px; background: {{{{r.bg}}}}; box-shadow: {{{{r.sh}}}}; color: {INK}; font: inherit; font-size: 18px; font-weight: {{{{r.fw}}}}">{{{{r.l}}}}</button></sc-for></div>')
     return f'<div role="radiogroup" aria-label="Root" style="display: flex; flex-direction: column; gap: 8px">{track("a")}{track("b")}</div>'
 def _BSHEET(cond, title, body, done='Done'):
-    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.28)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
+    return f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><style>[role=dialog].nos > * {{ flex-shrink: 0 }}</style><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div><section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0; background: {PAGE}; padding: 6px 16px 40px; display: flex; flex-direction: column; gap: 16px" class="nos"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div><div style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 36px"><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{closeSheet}}}}" style="position: absolute; right: 0; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">{done}</button></div>{body}</section></sc-if>'
 def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
     # back: a sub-page's Back before its title; maxh: a cap other than 86% (a sheet over a bar that stays in reach)
     # done=None: a sheet whose foot closes it (Sort and filter's Show n) carries no second way out in its head;
@@ -377,10 +378,44 @@ EMPTYICON = {
     '⌫': _EI('<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'),
     '✎': _EI('<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>'),
     '…': _EI('<path d="M21 12a9 9 0 1 1-6.219-8.56"/>'),
+    '⌕': _EI('<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>'),
 }
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
+# One empty state, every board: the honey tile with its picture, the title (18 bold), one line why (15 soft), and the
+# way out 16 below (owner-way: every empty state has one clear next action). EMPTYICON names the pictures.
+def EMPTY(cond, icon, t, b, btns=''):
+    acts = f'<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px">{btns}</div>' if btns else ''
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center">'
+            f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; color: {INK}; display: flex; align-items: center; justify-content: center">{EMPTYICON.get(icon, icon)}</span>'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{EMPTY_T(t)}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 340px; text-wrap: pretty">{b}</span>{acts}</div></sc-if>')
 
 # Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
+# One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.
+# A phone toast spans the 16 gutters; a laptop's is 460 wide, centred. `undo` names the handler; `always` shows Undo
+# with no toastUndo condition; `hint` is the placeholder the condition shows while drawing.
+def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
+    pos = (f'left: 50%; transform: translateX(-50%); width: 460px; bottom: {bottom}px' if laptop
+           else f'left: 16px; right: 16px; bottom: {bottom}px')
+    btn = (f'<button type="button" onClick="{{{{{undo}}}}}" style="height: 44px; padding: 0 12px; border: 0; '
+           f'background: transparent; color: {ACCENT}; font: inherit; font-size: 15px; font-weight: 700">Undo</button>')
+    if not always:
+        btn = f'<sc-if value="{{{{toastUndo}}}}" hint-placeholder-val="{{{{{hint}}}}}">{btn}</sc-if>'
+    return (f'<sc-if value="{{{{toastOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; '
+            f'{pos}; z-index: {z}; min-height: 52px; box-sizing: border-box; border-radius: 14px; background: {INK}; '
+            f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
+            f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
+
+# One centred form or note over a scrim (a laptop's New song, Report, the welcome): a 22-round card, 20 in, 12 between
+# its parts, at most 48 narrower than the screen. ASK is its question form.
+DIALOGBOX = lambda inner, w=372, close='closeSheet', label='': (f'<div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-modal="true"' + (f' aria-label="{label}"' if label else '') + f' style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: {w}px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{inner}</div>')
+# One question before a loss that cannot be undone, or an act that reaches other people (CLAUDE.md, ConfirmDialog):
+# a scrim, a 372 card centred, the question (18 bold), what is lost (15 soft), an optional field, then Keep and the act
+# side by side. The act is crimson for a loss, ink when it only reaches others (Publish); `ok_bg`/`ok_ink` bind it to state.
+def ASK(cond, t, b, ok, go, danger=True, cancel='closeSheet', keep='Cancel', field='', ok_bg=None, ok_ink='#FFFFFF', ok_attrs=''):
+    bg = ok_bg or ('#B3261E' if danger else INK)
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{{cancel}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="alertdialog" aria-label="{t}" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 372px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 8px">'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{t}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">{b}</span>{field}<div style="display: flex; gap: 8px; margin-top: 8px"><button type="button" onClick="{{{{{cancel}}}}}" style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">{keep}</button>'
+            f'<button type="button" onClick="{{{{{go}}}}}"{ok_attrs} style="flex: 1; height: 44px; border: 0; border-radius: 22px; background: {bg}; color: {ok_ink}; font: inherit; font-size: 16px; font-weight: 700; white-space: nowrap">{ok}</button></div></div></sc-if>')
 PREVPILL = lambda pos, on='prevOn', ex='exitPrev': (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; {pos}; z-index: 55; height: 52px; box-sizing: border-box; padding: 0 4px 0 18px; border-radius: 26px; background: {INK}; color: {SHEET}; display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 15px; font-weight: 600; box-shadow: {SHADOW}">'
                         f'Previewing as learner<button type="button" onClick="{{{{{ex}}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 15px; font-weight: 700">Exit</button></div></sc-if>')
 

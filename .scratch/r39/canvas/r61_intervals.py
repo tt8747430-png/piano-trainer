@@ -14,6 +14,7 @@ IV61 = IV.replace("allSeg: seg(", r'''steps: STEP,
       ab: AB[tile], playL: 'Play ' + AB[tile], wayL: way,
       ways: ['Ascending', 'Descending', 'Harmonic'].map((d) => ({ d, on: d === way, mark: d === way ? '✓' : '', pick: () => set({ way: d, menu: null }) })),
       ivs: TL.map(([a, semis], i) => ({ a, s: String(semis), on: i === tile, bg: i === tile ? '#332921' : '#FEFDFB', fg: i === tile ? '#FEFDFB' : '#332921', sub: i === tile ? '#FEFDFB' : '#685E56', op: i === tile ? 0.72 : 1, pick: () => set({ tile: i }) })),
+      get ivsS() { return this.ivs.slice(0, 14) }, get ivsC() { return this.ivs.slice(14) },
       menu: st.menu || '', playMenu: st.menu === 'play', closeMenu: () => set({ menu: null }), openPlay: () => set({ menu: st.menu === 'play' ? null : 'play' }),
       playing: !!st.playing, notPlaying: !st.playing, toggle: () => set({ playing: !st.playing, allP: false, menu: null }),
       allPlaying: !!st.allP, notAllPlaying: !st.allP, toggleAll: () => set({ allP: !st.allP, playing: false }),
@@ -49,9 +50,12 @@ HEAR61 = (f'<div style="display: flex; align-items: center; gap: 12px"><span sty
 # the interval is what the page is for: its staff at reading size (10px a space on a phone), on the paper with what it
 # sounds like under it, no card around the page's own subject (laws, "The page's subject is its largest thing")
 MUSIC61 = f'<figure style="flex: none; margin: 0; display: flex; flex-direction: column; gap: 12px">{STAFF61}{HEAR61}</figure>'
-GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{ivs}}}}" as="i" hint-placeholder-count="27">'
-          f'<button type="button" role="radio" aria-checked="{{{{i.on}}}}" onClick="{{{{i.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{i.fg}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">'
-          f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; opacity: {{{{i.op}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button></sc-for></div>')
+# simple intervals, then compound ones beyond the octave (Hick: 27 at once read as one wall; the musician's two groups)
+_IVTILE = (f'<button type="button" role="radio" aria-checked="{{{{i.on}}}}" onClick="{{{{i.pick}}}}" style="height: 52px; border: 0; border-radius: 12px; background: {{{{i.bg}}}}; box-shadow: 0 0 0 1px {LINE}; color: {{{{i.fg}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">'
+          f'<span style="font-size: 16px; font-weight: 700">{{{{i.a}}}}</span><span style="font-size: 12px; color: {{{{i.sub}}}}; opacity: {{{{i.op}}}}; font-variant-numeric: tabular-nums">{{{{i.s}}}}</span></button>')
+_IVGRID = lambda lst, n: f'<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px"><sc-for list="{{{{{lst}}}}}" as="i" hint-placeholder-count="{n}">' + _IVTILE + '</sc-for></div>'
+GRID61 = (f'<div role="radiogroup" aria-label="Interval" style="flex: none; display: flex; flex-direction: column; gap: 16px">'
+          + ''.join(f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS(t, 0)}{_IVGRID(l, n)}</div>' for t, l, n in (('Simple', 'ivsS', 14), ('Compound', 'ivsC', 13))) + '</div>')
 # the floating bar, as Scales': the left is where the interval is played from, the centre Play with how, the right all of them
 FROMBTN = f'<button type="button" aria-label="From: {{{{fromL}}}}" aria-haspopup="dialog" onClick="{{{{openRoot}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; color: {INK}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05"><span style="font-size: 18px; font-weight: 700">{{{{fromL}}}}</span><span style="font-size: 12px; font-weight: 600; color: {SOFT}">From</span></button>'
 LISTI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="M3 6h12M3 12h12M3 18h7"></path><path d="M17 13v8l5-4z" fill="currentColor"></path></svg>'

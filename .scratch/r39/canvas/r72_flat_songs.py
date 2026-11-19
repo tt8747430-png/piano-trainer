@@ -190,7 +190,7 @@ def EXSHELF(w, n, href):
                    f'<span style="width: {w}px">{cover(t, by, notes=INC.get(t, (2, 4, 3, 5, 4, 2, 0)))}</span>'
                    f'<span style="font-size: 15px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{t}</span>'
                    f'<span style="font-size: 13px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{who}</span></a>' for t, by, who in EXPUB[:n])
-BAREP = EMPTY('bare', '♪', 'Your songs live here', 'Write one, record one at the piano, or import MusicXML or MIDI.', f'<a href="Explore.dc.html" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a>')  # the kit's one empty state, its next act a link
+BAREP = EMPTY('bare', '♪', 'Your songs live here', 'Write one, record one at the piano, or import MusicXML or MIDI.', f'<a href="Explore.dc.html" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Find a song in Explore</a>')  # the kit's one empty state, its next act a link
 BAREP_PH = EMPTY('bare', '♪', 'Your songs live here', 'Write one with +, record one at the piano, or import MusicXML or MIDI.')  # the phone's Explore shelf follows: no second way there
 def SONGSEC(song, allh, grid):
     rows = ''.join(f'<div style="position: relative">' + SONGROW(song).replace('{{r.t}}', t).replace('{{r.s}}', sub).replace('{{r.v}}', v).replace('{{r.when}}', w).replace('{{r.pic}}', INCIPIT(INC.get(t, (2, 4))).replace('"', "'")) + '</div>' for t, sub, v, w, _ in SONGS_ALL[:5])
@@ -274,15 +274,14 @@ RECFORM = (f'<div style="display: flex; flex-direction: column; gap: 16px">'
 RECSHEET = BSHEET('recOn', 'Record', RECFORM, 'Cancel')
 IMPSHEET = BSHEET('impOn', 'Import', IMPFORM, 'Close')
 SONGSHEET = BSHEET('songOn', 'New song', SONGFORM, 'Cancel')
-_LAPSHEET = lambda h: h.replace('left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 61; width: 480px; max-height: 86%; overflow-y: auto; box-sizing: border-box; border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px').replace('Editor.dc.html', 'EditorLaptop.dc.html')
+_LAPSHEET = lambda h: LAPSHEET(h).replace('Editor.dc.html', 'EditorLaptop.dc.html')   # the library's one laptop sheet, links to the laptop editor
 NEWPOP = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">' + NEWDIAL(list(_NEW)[::-1], 32, 'addOn', 'noAdd', 'openAdd', 'closeSheet') + '</sc-if>'
 PLAYSHEET_L = LFOLDERSHEET_L.replace('New folder', 'New playlist')
 detail('Songs', 'Songs', FLJS(_ROWS), ovph, ovlm, '', FOLDERSHEET.replace('New folder', 'New playlist') + SONGSHEET + IMPSHEET + RECSHEET, SORTMENU('{{menuPos}}') + NEWPOP + ROWMENU('rowOn', '{{rowT}}', ROWITEMS('Laptop.dc.html')) + PLAYSHEET_L + _LAPSHEET(SONGSHEET) + _LAPSHEET(IMPSHEET).replace('Song.dc.html', 'SongLaptop.dc.html') + _LAPSHEET(RECSHEET).replace('Settings.dc.html', 'SettingsLaptop.dc.html'), 'Songs')
 
 # ── All songs ──
-NOMATCH = (f'<sc-if value="{{{{none}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 24px; text-align: center"><span style="width: 56px; height: 56px; border-radius: 28px; background: {FILL}; color: {SOFT}; display: flex; align-items: center; justify-content: center">{SEARCH.replace("width=\"18\" height=\"18\"", "width=\"24\" height=\"24\"")}</span>'
-           f'<span style="font-size: 18px; font-weight: 700">{{{{noneT}}}}</span><span style="font-size: 15px; color: {SOFT}">Check the spelling, or try a composer’s name.</span>{BTN("Clear search", "clear", kind="quiet", h=44, grow=False)}</div></sc-if>')
-FEMPTY = EMPTY('bare', '♪', 'Nothing in this playlist yet', 'The songs you put in this playlist show here.', f'<a href="{{ALL}}" style="margin-top: 4px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a>')  # the kit's one empty state (r53's EMPTY): no box, 18 over 15
+NOMATCH = EMPTY('none', '⌕', '{{noneT}}', 'Check the spelling, or try a composer’s name.', BTN('Clear search', 'clear', kind='quiet', h=48, grow=False))
+FEMPTY = EMPTY('bare', '♪', 'Nothing in this playlist yet', 'The songs you put in this playlist show here.', f'<a href="{{ALL}}" style="min-height: 44px; display: inline-flex; align-items: center; padding: 0 8px; color: {LINK}; font-size: 16px; font-weight: 600; text-decoration: none">Add songs from your library</a>')  # the kit's one empty state (r53's EMPTY): no box, 18 over 15
 FOLDERITEMS = lambda sfx: [('action', 'Rename', 'closeSheet', INK), ('action', 'Colour', 'closeSheet', INK), ('link', 'Share', '', 'Groups' + sfx), ('action', 'Archive playlist', 'closeSheet', RED)]
 def LISTPAGE(stem, title, rows, back, backlabel, folder=False):
     head = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{title}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{{{{selT}}}}</sc-if>'
