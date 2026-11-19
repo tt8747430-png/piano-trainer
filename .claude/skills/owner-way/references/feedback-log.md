@@ -1194,6 +1194,8 @@ owner's, typos fixed.
 
 - **An exercise's, a progression's and a pattern's keys as their boards (2026-11-19):** an exercise a fifth under its first key to a twelfth over on a phone (five-finger: G3 to G5), an octave under to three over on a laptop (C3 to C7); a progression C3 to C5 and C2 to C6; a pattern C2 to A4 and F1 to C6. Where the music reaches past the phone's range (a progression's upper chords, a pattern's two hands) the keys grow and scroll, never cutting a lit key.
 
+- **Chords' 3D keys 8 under the bar on the board too (2026-11-19):** the board kept a 56 spacer of its own after the bar, which the float pass already spaces, so the keys stood 62 under the bar over a bare band; the spacer is gone (phone and laptop), as the app draws it (no control reserves space it does not use).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Chords: the leftover 56 spacer under the bar gone, the 3D keys 8 under the bar as every page's (was 62, a bare band) · Chords,ChordsLaptop · **pending**
 - 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · **pending**
 
 ## Changes
