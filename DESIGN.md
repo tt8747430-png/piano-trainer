@@ -390,9 +390,13 @@ with sand, as the boards' `CARD` and `GROUP` draw them (a 1px ring that takes no
 
 ### Shadow Vocabulary
 
-- **Elevation 1** (`elevation-1`): resting second actions.
-- **Elevation 2** (`elevation-2`): the main action and the transport.
-- **Elevation 3** (`elevation-3`): under a pointer, or an open dial.
+- **Float** (`elevation-float`, in `glass` and `glass-honey`): every bar, the tab bar, the floating actions (the + and
+  the mini actions) and the floating bars of the Practice pages, a tight lift of two layers (0 1px 2px and 0 2px 6px
+  -2px, ink at 10%) with no shade pooled under it (owner, 2026-11-19: "i dont like this dimm under the floatign
+  actions"; the canvas's `FLOAT`). It does not deepen under a pointer; a press shows by colour.
+- **Elevation 1** (`elevation-1`): a row lifted while it is dragged, a resting second action inside content.
+- **Elevation 2** (`elevation-2`): dialogs and sheets that stand above the page (the canvas's `SHADOW`).
+- **Elevation 3** (`elevation-3`): a dragged card, an open dial.
 - **Popover** (`shadow-md` with a 1px ring of ink at 10%): popovers and menus, opening 5px inside the safe area, clear
   of the notch, the status bar and the home indicator.
 
