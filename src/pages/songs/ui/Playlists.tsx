@@ -25,8 +25,8 @@ function Face({ cover, name, line }: { cover: ReactNode; name: string; line: str
     <>
       {cover}
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="truncate text-[1.0625rem] font-semibold">{name}</span>
-        <span className="truncate text-sm text-muted-foreground">{line}</span>
+        <span className="truncate text-base/[normal] font-semibold">{name}</span>
+        <span className="truncate text-sm/[normal] text-muted-foreground">{line}</span>
       </span>
       <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
     </>
