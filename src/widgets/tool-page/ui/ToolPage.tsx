@@ -137,7 +137,9 @@ export function ToolPage({
           <div className="flex w-full flex-col gap-6">{side}</div>
         </div>
       ) : (
-        <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 pb-8">
+        // The picture centred in the board's room: 24 under the bar, 120 above the screen's foot on a phone
+        // (the page's own room ends 126 above it, so the column reaches 6 into the foot's pad).
+        <div className="mx-auto -mb-1.5 flex w-full max-w-3xl flex-1 flex-col gap-6 pt-6">
           <section
             aria-label={title}
             className="flex min-h-56 flex-1 flex-col items-center justify-center gap-4 text-center"

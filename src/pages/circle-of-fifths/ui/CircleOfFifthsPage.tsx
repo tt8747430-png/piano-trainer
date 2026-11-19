@@ -111,7 +111,9 @@ export function CircleOfFifthsPage() {
         >
           {name(key)}
         </h2>
-        <p className="text-[0.8125rem] text-muted-foreground lg:text-[0.9375rem]">{signature}</p>
+        <p className="text-[0.8125rem] leading-[normal] text-muted-foreground lg:text-[0.9375rem]">
+          {signature}
+        </p>
       </KeyWheel>
       <p className="sr-only">{t('practice:tools.circle.majors')}</p>
     </ToolPage>

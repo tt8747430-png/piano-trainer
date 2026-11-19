@@ -125,7 +125,7 @@ export function FloatingPlayPiece({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-6 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
     >
       {playing ? (
         <Square aria-hidden className="size-4.5 fill-current" />
@@ -146,7 +146,7 @@ export function FloatingPlayLink({ label, render }: { label: string; render: Rea
     <ButtonLink
       variant="ghost"
       render={render}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-6 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
     >
       <Play aria-hidden className="size-4.5 fill-current" />
       <span>{label}</span>
