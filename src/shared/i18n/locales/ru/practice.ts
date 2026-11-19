@@ -377,6 +377,7 @@ export const practice: LocaleResources['practice'] = {
       save: 'Сохранить',
       cancel: 'Отмена',
       roll: '{{rh}} в правой руке, {{lh}} в левой',
+      howItPlays: 'Как звучит',
     },
   },
   scaleStaff: {

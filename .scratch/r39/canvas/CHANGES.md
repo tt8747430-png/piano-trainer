@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · New pattern: the app's 45 and 27 figures under their families (were twelve invented ones), opening unnamed on Whole-note chord over Root, whole note with its roll (opened as a copy of Broken chords) · PatternNew,PatternNewLaptop,Pattern,PatternLaptop · **pending**
+
 
 ## Changes
 

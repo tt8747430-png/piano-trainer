@@ -9,6 +9,7 @@ import {
 } from '@/entities/pattern'
 import type { OwnPatternDraft } from '@/features/manage-patterns'
 import { localText, useLocale } from '@/shared/i18n'
+import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { BackButton, ChoiceChips, Labelled, NameField, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { PatternRoll } from '@/widgets/pattern-music'
@@ -34,14 +35,16 @@ export function PatternEditor({
   const { t } = useTranslation(['practice', 'player'])
   const locale = useLocale()
   const { draft, change, sample, save, cancel, savable } = usePatternEditor(start, id)
+  // The laptop board's roll is taller for its width, under its caption (PATED_L).
+  const wide = useMediaQuery(LAPTOP)
   const rhName = localText(RIGHT_FIGURES[draft.rh].name, locale)
   const lhName = localText(LEFT_FIGURES[draft.lh].name, locale)
   const acts = (
-    <div className="flex gap-2">
-      <Button type="button" size="lg" variant="soft" onClick={cancel}>
+    <div className="flex w-full gap-2">
+      <Button type="button" size="lg" variant="quiet" className="flex-1" onClick={cancel}>
         {t('practice:patterns.editor.cancel')}
       </Button>
-      <Button type="submit" size="lg" disabled={!savable}>
+      <Button type="submit" size="lg" className="flex-1" disabled={!savable}>
         {t('practice:patterns.editor.save')}
       </Button>
     </div>
@@ -50,7 +53,7 @@ export function PatternEditor({
     <div className="flex flex-col gap-4">
       <ScreenHeader title={title} back={<BackButton />} />
       <form
-        className="flex w-full flex-col gap-4 lg:mx-auto lg:max-w-295 lg:gap-8"
+        className="-mt-2 flex w-full flex-col gap-4 lg:mt-2 lg:max-w-295"
         onSubmit={(event) => {
           event.preventDefault()
           save()
@@ -66,10 +69,16 @@ export function PatternEditor({
             />
             <div className="mt-auto hidden lg:flex">{acts}</div>
           </div>
-          <div className="card p-4">
+          <div className="card flex flex-col gap-3 p-4">
+            {wide ? (
+              <span className="text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground">
+                {t('practice:patterns.editor.howItPlays')}
+              </span>
+            ) : null}
             <PatternRoll
               sample={sample}
               label={t('practice:patterns.editor.roll', { rh: rhName, lh: lhName })}
+              units={wide ? 280 : 340}
             />
           </div>
         </div>
@@ -127,7 +136,10 @@ function FigureGroup<V extends string>({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <span aria-hidden className="mx-4 text-[0.8125rem] font-semibold text-muted-foreground">
+      <span
+        aria-hidden
+        className="mx-4 text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground"
+      >
         {label}
       </span>
       <ChoiceChips

@@ -1,6 +1,6 @@
 import type { PatternSample } from '../model/pattern-sample'
 
-/** The roll's drawing room: a bar's width to its height, as the board's ROLL (340 × 68). */
+/** The roll's drawing room: a bar's width to its height, as the board's ROLL (340 × 68 on a phone, 280 × 68 on a laptop). */
 const WIDTH = 340
 const HEIGHT = 68
 /** Each hand's lane: the right hand's over the middle line, the left hand's under it. */
@@ -12,7 +12,16 @@ const NOTE = 7
  * hand amber over the middle line and the left hand blue under it, higher notes higher, on a grid of
  * its beats. `label` says it for readers.
  */
-export function PatternRoll({ sample, label }: { sample: PatternSample; label: string }) {
+export function PatternRoll({
+  sample,
+  label,
+  units = WIDTH,
+}: {
+  sample: PatternSample
+  label: string
+  /** The bar's width in the drawing's units: fewer draw it taller for its width (the laptop's 280). */
+  units?: number
+}) {
   const notes = sample.sounds.flatMap((sound) =>
     sound.kind === 'note' && (sound.part === 'rh' || sound.part === 'lh')
       ? [{ ...sound, part: sound.part }]
@@ -22,7 +31,7 @@ export function PatternRoll({ sample, label }: { sample: PatternSample; label: s
   // A line on every beat of every bar, the bars' own lines stronger.
   const count = Number.parseInt(sample.music.meter, 10)
   const beats = Math.max(sample.music.bars.length, 1) * count
-  const x = (seconds: number) => (end > 0 ? (seconds / end) * WIDTH : 0)
+  const x = (seconds: number) => (end > 0 ? (seconds / end) * units : 0)
   const lane = (part: 'rh' | 'lh') => {
     const pitches = notes.filter((note) => note.part === part).map((note) => note.midi)
     const low = Math.min(...pitches)
@@ -35,16 +44,16 @@ export function PatternRoll({ sample, label }: { sample: PatternSample; label: s
   }
   const y = { rh: lane('rh'), lh: lane('lh') }
   return (
-    <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label={label} className="block w-full">
+    <svg viewBox={`0 0 ${units} ${HEIGHT}`} role="img" aria-label={label} className="block w-full">
       {Array.from({ length: beats + 1 }, (_, beat) => (
         <path
           key={beat}
-          d={`M${(beat / beats) * WIDTH} 0V${HEIGHT}`}
+          d={`M${(beat / beats) * units} 0V${HEIGHT}`}
           className="stroke-muted"
           strokeWidth={beat % count === 0 ? 1.5 : 0.8}
         />
       ))}
-      <path d={`M0 ${HEIGHT / 2 + 2}H${WIDTH}`} className="stroke-border" />
+      <path d={`M0 ${HEIGHT / 2 + 2}H${units}`} className="stroke-border" />
       {notes.map((note, index) => (
         <rect
           key={index}
