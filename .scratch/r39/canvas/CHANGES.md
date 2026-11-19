@@ -8,13 +8,13 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · Admin flags · the Enabled for segments 44 tall (were 40, under the 44 target) · Admin,AdminLaptop · pending
-- 2026-11-19 · Admin groups · a group's member rows 60 as their code says (they measured 72), its sections 16 apart · Admin · pending
 
 
 
 ## Changes
 
+- 2026-11-19 · 5f53b7cf · Feature flags' Enabled for segments 44 tall (were 40, under the 44 target) · Admin,AdminLaptop · v666
+- 2026-11-19 · 70430513 · a group's member rows 60 as their code says (they measured 72), its sections 16 apart · Admin · v666
 - 2026-11-19 · 1d9bb014 · Administration's section pages stand 8 under the bar; the Overview's headings 8 over their groups, its groups 16 apart · Admin · v665
 - 2026-11-19 · 80a00669 · Administration's phone list stands 8 under the bar, as every Settings page · Admin · v665
 - 2026-11-19 · 0207eedb · Legal's laptop text on the 56 gutter both sides, as every laptop page (it stood 44 and 40) · LegalLaptop · v664
