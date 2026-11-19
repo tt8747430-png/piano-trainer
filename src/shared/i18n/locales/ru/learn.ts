@@ -43,6 +43,8 @@ export const learn: LocaleResources['learn'] = {
   coverLessonsOf_other: '{{done}} из {{count}} урока',
   continue: 'Продолжить',
   known: 'Знаю {{known}} из {{total}}',
+  knownOne: 'Знаю',
+  notKnownYet: 'Пока не знаю',
   days: {
     keep: 'Позанимайтесь сегодня, чтобы не прервать серию.',
     done: 'Сегодня вы уже занимались.',

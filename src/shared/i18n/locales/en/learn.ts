@@ -47,6 +47,9 @@ export const learn = {
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   known: '{{known}} of {{total}} known',
+  // One skill (a scale) is known or not yet; a family of chord qualities counts them.
+  knownOne: 'Known',
+  notKnownYet: 'Not known yet',
   // The days practised: opening a piece in the Player, or answering a quiz round.
   days: {
     keep: 'Practise today to keep it going.',

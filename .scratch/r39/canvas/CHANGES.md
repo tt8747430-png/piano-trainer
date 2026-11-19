@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · pending
+
 
 ## Changes
 

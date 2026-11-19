@@ -68,9 +68,11 @@ function StepRow({
         ]
       : [
           t(`kind.${step.kind}`),
-          skills.length > 0
-            ? t('known', { known: knownCount(skills, answers), total: skills.length })
-            : null,
+          skills.length === 1
+            ? t(knownCount(skills, answers) === 1 ? 'knownOne' : 'notKnownYet')
+            : skills.length > 0
+              ? t('known', { known: knownCount(skills, answers), total: skills.length })
+              : null,
         ]
   const Icon = step.kind === 'lesson' ? null : ICON[step.kind]
   return (
@@ -194,11 +196,7 @@ export function LevelLessons({ journey }: { journey: Journey }) {
           className="text-sm tabular-nums"
         />
         {go ? (
-          <ButtonLink
-            size="lg"
-            className="mt-1 w-full lg:w-auto lg:min-w-90 lg:self-start"
-            render={<StepLink step={go} />}
-          >
+          <ButtonLink size="lg" className="mt-1 w-full" render={<StepLink step={go} />}>
             {t(`learn:journey.${goWord}`, { title: stepTitle(go).primary })}
           </ButtonLink>
         ) : null}

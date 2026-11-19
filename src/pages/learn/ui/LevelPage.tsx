@@ -52,7 +52,8 @@ function Level({ journey }: { journey: Journey }) {
   return (
     <div className="flex flex-col pb-8">
       {bar(null)}
-      <div className="mt-1 flex min-w-0 flex-col gap-4 lg:mt-4 lg:ps-13">
+      {/* On a laptop the column starts on the title's edge, 16 under the head, as the board's LearnLevel. */}
+      <div className="mt-1 flex min-w-0 flex-col gap-4 lg:mt-8 lg:ps-10">
         <p
           aria-hidden
           className="font-display text-[1.875rem]/[1.15] font-semibold tracking-[-0.01em] text-balance lg:hidden"
