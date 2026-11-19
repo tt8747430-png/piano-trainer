@@ -63,7 +63,7 @@ function TakeView({ take }: { take: Take }) {
       say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
     })
   return (
-    <div className="flex flex-col gap-4 pb-8">
+    <div className="flex flex-col gap-2 pb-8 lg:gap-6">
       <ScreenHeader
         column="until-laptop"
         title={t('take.title')}

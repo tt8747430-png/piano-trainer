@@ -56,7 +56,10 @@ export function KeepBars({
   return (
     <SettingsGroup title={t('take.keep')} flush>
       {rows.map((row) => (
-        <div key={row.key} className="flex min-h-14 items-center justify-between gap-3 px-4 py-2">
+        <div
+          key={row.key}
+          className="flex min-h-14 items-center justify-between gap-3 py-1.5 ps-4 pe-3"
+        >
           <span className="min-w-0">{row.label}</span>
           <Stepper
             label={row.label}

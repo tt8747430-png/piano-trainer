@@ -233,7 +233,7 @@ export function TakeRoll({
         </div>
       </div>
       {bars ? (
-        <p role="status" className="text-[0.8125rem] text-muted-foreground tabular-nums">
+        <p role="status" className="text-[0.8125rem]/4 text-muted-foreground tabular-nums">
           {playingBar === null
             ? t('roll.notes', { count: take.notes.length })
             : t('roll.playingFrom', { n: playingBar })}
