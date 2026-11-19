@@ -362,6 +362,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **All songs on a phone as its board, measured (port, 2026-11-19):** the search stood 16 under the bar and the search, count and list 16 apart; the board's LISTPAGE keeps 4 and 12. A song's row was 86 with its title on a 22 line and its two lines on 20; it is SONGROW's 88, the title on 20, its lines at their normal height 2 apart.
+
 - **All songs on a laptop as its board, measured (port, 2026-11-19):** the sidebar's Songs places stood 2 under Songs where the board keeps the sidebar's 6 between places plus their own 2; they stand 8 under it. A table row's cover sat 14 from its title, the title on a 20 line; 16 and its normal line, as the board. The board's own rows drew 61 (the hairline outside the 60), so the board is 60 as the ruling says.
 
 - **Explore's cover is a picture (loop, laws: the 12px type floor; 2026-11-19):** each shared song's cover draws its first page, with its title at 10px and its composer at 7px, the only text under 12 on any board, read out twice beside the card's own 15px title. The miniature is `aria-hidden` now: its print is part of the picture, and the card's words are what is read.

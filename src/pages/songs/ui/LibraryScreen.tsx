@@ -126,7 +126,10 @@ export function LibraryScreen({
       />
     )
   return (
-    <div className={cn('flex flex-col gap-4 pb-4', laptop && PLACE_COLUMN)} {...drop.dropProps}>
+    <div
+      className={cn('flex flex-col gap-3 pb-4', laptop && cn('gap-4', PLACE_COLUMN))}
+      {...drop.dropProps}
+    >
       <LibraryHeader
         page={page}
         folder={folder}
@@ -162,7 +165,8 @@ export function LibraryScreen({
         )
       ) : (
         <>
-          {search}
+          {/* 4 under the bar, as the board's column starts */}
+          <div className="-mt-2">{search}</div>
           {count}
         </>
       )}

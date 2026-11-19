@@ -19,9 +19,12 @@ import { useEntryFace } from '@/widgets/piece-list'
 import { useCardLook } from './card-look'
 import { useSongStatus } from './use-song-status'
 
-/** A song card's face as R72's SONGROW lays it: 16 between its parts, its tile 56 with 12 corners. */
+/**
+ * A song card's face as R72's SONGROW lays it: 16 between its parts, its tile 56 with 12 corners, its
+ * title on a 20 line and its two lines at their normal height, 2 apart.
+ */
 export const SONG_FACE =
-  'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl'
+  'gap-4 py-3 pl-3 [&_[data-slot=row-tile]]:size-14 [&_[data-slot=row-tile]]:rounded-xl **:data-[slot=row-title]:leading-5 **:data-[slot=row-detail]:mt-0.5 **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-status]:mt-0.5 **:data-[slot=row-status]:leading-[normal]'
 
 /**
  * What a song's card shows, read or chosen in Select (R72's SONGROW): its first notes, its title over
@@ -82,7 +85,7 @@ export function SongRow({
       >
         <div
           className={cn(
-            style.layout === 'list' ? ROW_FLAT : cn(ROW_CARD, 'min-h-22'),
+            cn(style.layout === 'list' ? ROW_FLAT : ROW_CARD, 'min-h-22'),
             'has-[>a:hover]:bg-muted',
           )}
         >

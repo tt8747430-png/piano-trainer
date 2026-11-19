@@ -157,7 +157,7 @@ export function ScreenHeader({
             {views}
           </div>
           {tools || settings || more || edit ? (
-            <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">
+            <div className="ms-auto -me-1 flex shrink-0 items-center gap-2 lg:me-0 print:hidden">
               {edit?.editing ? null : tools}
               {edit?.editing ? null : settings}
               {edit?.editing ? null : more}
@@ -203,8 +203,9 @@ export function ScreenHeader({
             </h1>
             {views}
           </div>
-          {/* The bar's glass circles stand 8 apart, as the boards' IB. */}
-          <div className="ms-2 flex shrink-0 items-center gap-2 print:hidden">
+          {/* The bar's glass circles stand 8 apart, as the boards' IB; on a phone the last 12 from the
+              edge, as Back stands at the start (TOP's 12). */}
+          <div className="ms-2 -me-1 flex shrink-0 items-center gap-2 lg:me-0 print:hidden">
             {edit?.editing ? null : tools}
             {edit?.editing ? null : settings}
             {edit?.editing ? null : more}
