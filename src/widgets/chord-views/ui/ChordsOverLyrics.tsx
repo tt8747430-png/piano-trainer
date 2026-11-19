@@ -148,16 +148,13 @@ export function ChordsOverLyrics({
           width; the strip above runs across the view. The width is in rem: a width in the font's own
           `ch` had Chrome restyle the whole screen at every beat played. Its text at the size chosen,
           every length in its lines in `em`. */}
-      <div
-        className="mx-auto flex w-full max-w-2xl flex-col gap-[0.75em]"
-        style={{ fontSize: `${textSize}%` }}
-      >
+      <div className="mx-auto flex w-full max-w-2xl flex-col" style={{ fontSize: `${textSize}%` }}>
         {shown.map(({ line, index, starts }) => {
           const heading = headings[line.section]
           return (
             <Fragment key={index}>
               {starts && heading ? (
-                <h2 className="pt-[0.75em] text-[0.875em] tracking-[0.3em] text-muted-foreground uppercase">
+                <h2 className="pt-[1.6667em] pb-[0.3333em] font-sans text-[0.75em] font-bold tracking-[0.04em] text-muted-foreground uppercase first:pt-[1em]">
                   {heading}
                 </h2>
               ) : null}
