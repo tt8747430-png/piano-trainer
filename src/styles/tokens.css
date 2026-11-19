@@ -144,6 +144,10 @@
   --secondary-foreground: var(--p-sky-mist-ink);
   --muted: var(--p-sand-100);
   --muted-foreground: var(--p-ink-soft);
+  /* The laptop sidebar's places (calm_kit's side rail): a place in a deeper soft ink, the current one in the
+     deepest ink, so the rail reads quieter than the page's own ink yet never as faint as a caption. */
+  --nav-foreground: #4a433c;
+  --nav-current-foreground: #1a1612;
   /*
    * The one selected fill (R15): a segment, a chip, a tab, a place, a tool, a picker's cell. A step
    * darker than the hover's muted sand, so hover never looks chosen; neutral, as the chosen is.
@@ -319,6 +323,8 @@
   [data-theme='dark'] {
     --background: var(--p-dusk-950);
     --foreground: var(--p-dusk-ink);
+    --nav-foreground: var(--p-dusk-muted);
+    --nav-current-foreground: var(--p-dusk-ink);
     --card: var(--p-dusk-900);
     --card-foreground: var(--p-dusk-ink);
     --popover: var(--p-dusk-900);

@@ -42,6 +42,8 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-selected: var(--selected);
+  --color-nav-foreground: var(--nav-foreground);
+  --color-nav-current-foreground: var(--nav-current-foreground);
   --color-selected-foreground: var(--selected-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -722,9 +724,9 @@
 @utility pb-safe-2 {
   padding-bottom: max(--spacing(2), env(safe-area-inset-bottom));
 }
-/* A screen beside the laptop's sidebar: clear of it, open (16rem) or collapsed (4.5rem), by a gutter. */
+/* A screen beside the laptop's sidebar: clear of it, open (15.5rem, the boards' 248) or collapsed (4.5rem), by a gutter. */
 @utility pl-sidebar {
-  padding-left: calc(--spacing(64) + var(--gutter) + var(--floating-left));
+  padding-left: calc(--spacing(62) + var(--gutter) + var(--floating-left));
 }
 @utility pl-sidebar-collapsed {
   padding-left: calc(--spacing(18) + var(--gutter) + var(--floating-left));
