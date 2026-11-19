@@ -69,7 +69,8 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
 export function KeyGrid({ label, children }: { label?: string | undefined; children: ReactNode }) {
   const group = { role: label ? 'group' : undefined, 'aria-label': label }
   const form = usePaletteForm()
-  // Inside Recent's grid, a category's own grids give their keys to it.
+  // Inside Recent's grid, a category's own grids give their keys to it; every key, however deep,
+  // narrows to its 44 cell.
   const inRecent = use(RecentTools) !== null
   return (
     <div
@@ -78,7 +79,7 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
       className={
         form === 'bar' || inRecent
           ? 'contents'
-          : 'grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] overflow-hidden rounded-card border border-hairline bg-card [&>*]:min-w-0! [&>*]:rounded-none! [&>*]:shadow-[1px_0_0_var(--color-hairline),0_1px_0_var(--color-hairline)]! [&>[data-span=wide]]:col-span-2'
+          : 'grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))] overflow-hidden rounded-card border border-hairline bg-card [&_button]:min-w-0! [&>*]:rounded-none! [&>*]:shadow-[1px_0_0_var(--color-hairline),0_1px_0_var(--color-hairline)]! [&>[data-span=wide]]:col-span-2'
       }
     >
       {children}

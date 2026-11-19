@@ -5,6 +5,7 @@ was either built or is still open. Add a ruling here the same day it is given an
 owner's, typos fixed.
 
 ## Score editor
+- **Recent's keys in their 44 cells (loop, the board-to-app port, 2026-11-19):** on a laptop the docked palette's Recent row drew 48-wide keys 44 apart, each over the next (the harness's OVERLAP, seven times); its keys sit inside their categories' wrappers, out of reach of the grid's `min-w-0` for its direct children. Every key in a grid now narrows to its cell, as the EditorLaptop board's row.
 - **The palette's marks in the boards' own serif (type anatomy 7, 2026-11-18):** dynamics, ornaments and articulations (mf, p, tr, >) were set in Instrument Serif, a third face beside Iowan Old Style and Instrument Sans; they keep their engraved bold italic in Iowan now.
 
 - **Loop round 61, the editor boards' menu carries the app's rows (canvas v371):** the four editor boards drew Credits, Instruments, Version history, Layout, MIDI keyboard and Takes, missing Score view, Transpose, Note input, Recording and On-screen piano; they draw the app's three groups now (the score's acts; its settings by name; Export and Print), and the app's MIDI keyboard says the keyboard connected or None, and Export names MusicXML, MIDI, as the boards' values (2026-11-17).
