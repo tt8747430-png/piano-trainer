@@ -129,7 +129,8 @@ export function ToolPage({
             aria-label={title}
             className={
               start
-                ? 'flex min-w-0 flex-col gap-4'
+                ? // 16 apart on a phone, 20 on a laptop, as the Chord finder's boards.
+                  'flex min-w-0 flex-col gap-4 lg:gap-5'
                 : column
                   ? // A state that fills (the Tuner's No microphone) takes a phone's height, its rows at the foot;
                     // on a laptop it stands in the column over its rows.

@@ -32,9 +32,11 @@ BAR66 = lambda pos: (f'<sc-if value="{{{{found}}}}" hint-placeholder-val="{{{{tr
 CF_SET66 = GROUP(('toggle', 'Slash chords for inversions', 'cfSlOn', 'cfSlT'), ('toggle', 'Keys that contain the chord', 'cfKOn', 'cfKT'), ('toggle', 'Key’s scale on the keyboard', 'cfScOn', 'cfScT'), ('toggle', 'Remember the chords played', 'cfHOn', 'cfHT'), ('action', 'Forget the chords played', 'closeSheet')) + GROUP(('link', 'Connect a piano', 'Not connected', 'Settings.dc.html'))
 ph66 = (TOP66 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 8px -16px 0">{KB60("kbE", 150)}</div>'
         + SHOWSTATES() + TITLE66 + TRY66 + NOTES66 + ROWS66 + '</main>' + BAR66('left: 12px; right: 12px; bottom: 34px'))
+# The keys 8 under the bar and the name 16 under the keys, as the phone board and every Practice page (the column's
+# 24 gap less 8): the keys had stood 24 inside the bar (a -32 margin).
 lm66 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP66).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
-        + f'{SHOWSTATES()}<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'{SHOWSTATES()}<div style="flex: none; margin: 0 -40px -8px -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE66}{TRY66}{NOTES66}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{ROWS66}</div></div></div>'

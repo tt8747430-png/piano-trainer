@@ -68,7 +68,8 @@ export function PickerShell({
           {label}
         </span>
       )}
-      <span aria-hidden className="min-w-0 truncate font-semibold">
+      {/* The value bold, as the boards set a picker field (a progression's Key, the finder's Spelled in). */}
+      <span aria-hidden className="min-w-0 truncate font-bold">
         {value}
       </span>
       <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-muted-foreground" />
