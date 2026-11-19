@@ -8,7 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · pending
+- 2026-11-19 · (this commit) · the shelves hold the app's real courses, five shelves in its paints (were an invented four) · Learn,LearnLaptop,LearnCourses,LearnCoursesLaptop,LearnLevel,LearnLevelLaptop · pending
+
+- 2026-11-19 · fdd88a9f · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · v620
 
 
 ## Changes
