@@ -362,6 +362,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **A playlist's bar as LISTPAGE's (port, 2026-11-19):** its ··· stood after Select on a phone; it stands before it, Select keeping the trailing place on every list as on a laptop. A bar's word button (Select) carried a 1px clear border beside its glass ring, 2 wider than the board's; the bar's button has the ring alone.
+
 - **All songs on a phone as its board, measured (port, 2026-11-19):** the search stood 16 under the bar and the search, count and list 16 apart; the board's LISTPAGE keeps 4 and 12. A song's row was 86 with its title on a 22 line and its two lines on 20; it is SONGROW's 88, the title on 20, its lines at their normal height 2 apart.
 
 - **All songs on a laptop as its board, measured (port, 2026-11-19):** the sidebar's Songs places stood 2 under Songs where the board keeps the sidebar's 6 between places plus their own 2; they stand 8 under it. A table row's cover sat 14 from its title, the title on a 20 line; 16 and its normal line, as the board. The board's own rows drew 61 (the hairline outside the 60), so the board is 60 as the ruling says.

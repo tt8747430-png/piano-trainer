@@ -162,10 +162,17 @@ export function LibraryHeader({
               onClick={up}
             />
           }
-          // While its name and colour are edited only Done stands beside its name.
-          tools={edit?.editing ? null : selectButton}
-          // The board's ···: Rename, Colour, Share, Archive folder, then its Settings.
-          more={more}
+          // The board's ··· (Rename, Colour, Share, Archive folder, then its Settings), then Select,
+          // which keeps the trailing place on every list; while its name and colour are edited only Done
+          // stands beside its name.
+          tools={
+            edit?.editing ? null : (
+              <>
+                {more}
+                {selectButton}
+              </>
+            )
+          }
           edit={edit?.editing ? edit : undefined}
         />
       )}
