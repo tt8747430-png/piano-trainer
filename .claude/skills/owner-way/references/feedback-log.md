@@ -1188,6 +1188,8 @@ owner's, typos fixed.
 
 - **Learn's and Profile's sections fold again, as their boards (2026-11-19):** the R67 port had drawn Levels, Courses, Made by you, Last 7 days, Practice history, Badges and Achievements with plain headings, copied while the boards' fold pass was broken; each is a `FoldSection` with a remembered `useFold` now. The fold's heading is the boards' value for value on every overview: a 24 line in a 44 reach, the chevron 18 at stroke 2.2 in ink at 55%, the body 12 under the line (was a 28 line and a 20 chevron in soft ink, the body 2 lower; Practice's too).
 
+- **The Chord finder's keys as its boards draw them (2026-11-19):** the phone's keys stood on the middle two octaves (C4 to B5); the board's are C3 to C5 across the 402 (15 whites at 26.8), the laptop's C2 to C6 across the page (29 at 50.4). `PinnedKeyboard` takes the range it starts from (`least`), grown as a chord needs; a fitted white may reach 52 (was 48), as wide as any laptop board draws one.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

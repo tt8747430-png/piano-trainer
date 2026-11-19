@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { useKeyName } from '@/shared/i18n'
-import { partsParams, useSetSearch } from '@/shared/lib'
-import { keyFromParam, keyParam, noteParam } from '@/shared/lib/music'
+import { LAPTOP, partsParams, useMediaQuery, useSetSearch } from '@/shared/lib'
+import { keyFromParam, keyParam, midi, noteParam, type KeyRange } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -36,6 +36,10 @@ import {
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
 
+/** The keys the boards draw: C3 to C5 across a phone, C2 to C6 across a laptop, grown when a chord reaches past them. */
+const PHONE_KEYS: KeyRange = { from: midi(48), to: midi(72) }
+const LAPTOP_KEYS: KeyRange = { from: midi(36), to: midi(84) }
+
 /** The chords an empty Chord finder offers to try (R32), as its URL writes keys: C, Am7, D7. */
 const TRY = [
   ['major', '60-64-67'],
@@ -58,6 +62,7 @@ export function ChordFinderPage() {
   const change = useSetSearch<ChordFinderView>()
   const finder = useChordFinder(view)
   const playback = usePlayback<'chord'>()
+  const laptop = useMediaQuery(LAPTOP)
   const keyName = useKeyName()
   const [keysOpen, setKeysOpen] = useState(false)
   const { keys, finding } = finder
@@ -94,6 +99,7 @@ export function ChordFinderPage() {
         <PinnedKeyboard
           place="top"
           className="mt-2"
+          least={laptop ? LAPTOP_KEYS : PHONE_KEYS}
           screen="playing"
           shown={{
             keys,
