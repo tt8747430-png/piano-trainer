@@ -4,6 +4,7 @@ import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
 import { LibraryStoreProvider } from '@/entities/library'
 import { NotificationsStoreProvider } from '@/entities/notification'
 import { OwnLessonsStoreProvider } from '@/entities/own-lessons'
+import { PageLayoutsStoreProvider } from '@/entities/page-layout'
 import { PatternsStoreProvider } from '@/entities/pattern'
 import { PracticeLibraryStoreProvider } from '@/entities/practice-library'
 import { PiecesStoreProvider } from '@/entities/piece'
@@ -92,19 +93,21 @@ export function App({
                                       >
                                         <ChordSheetsStoreProvider store={stores.chordSheets}>
                                           <NotificationsStoreProvider store={stores.notifications}>
-                                            <ServicesProvider services={services}>
-                                              <LocaleSync />
-                                              <AudioUnlock />
-                                              <MidiReconnect />
-                                              <MidiSync />
-                                              <ThemeProvider>
-                                                <ShortcutsProvider>
-                                                  <RouterProvider router={router} />
-                                                  <Toaster />
-                                                  <Confirmer />
-                                                </ShortcutsProvider>
-                                              </ThemeProvider>
-                                            </ServicesProvider>
+                                            <PageLayoutsStoreProvider store={stores.pageLayouts}>
+                                              <ServicesProvider services={services}>
+                                                <LocaleSync />
+                                                <AudioUnlock />
+                                                <MidiReconnect />
+                                                <MidiSync />
+                                                <ThemeProvider>
+                                                  <ShortcutsProvider>
+                                                    <RouterProvider router={router} />
+                                                    <Toaster />
+                                                    <Confirmer />
+                                                  </ShortcutsProvider>
+                                                </ThemeProvider>
+                                              </ServicesProvider>
+                                            </PageLayoutsStoreProvider>
                                           </NotificationsStoreProvider>
                                         </ChordSheetsStoreProvider>
                                       </DiagramInversionsStoreProvider>

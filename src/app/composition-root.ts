@@ -14,6 +14,7 @@ import {
   NOTIFICATIONS_STORAGE_KEY,
   type NotificationsStore,
 } from '@/entities/notification'
+import { createPageLayoutsStore, type PageLayoutsStore } from '@/entities/page-layout'
 import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
 import {
   createOwnLessonsStore,
@@ -84,6 +85,7 @@ export interface Stores {
   readonly notifications: NotificationsStore
   readonly practiceLibrary: PracticeLibraryStore
   readonly ownLessons: OwnLessonsStore
+  readonly pageLayouts: PageLayoutsStore
 }
 
 /**
@@ -107,6 +109,7 @@ export function createStores(
     notifications: createNotificationsStore(saving),
     practiceLibrary: createPracticeLibraryStore(saving),
     ownLessons: createOwnLessonsStore(saving),
+    pageLayouts: createPageLayoutsStore(saving),
   }
 }
 
