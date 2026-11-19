@@ -113,7 +113,7 @@ ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("
 # the right robs the focus"): on a laptop the scale leads one centred column, the key's rows and Practise follow it in
 # that column, and the floating bar is centred on it.
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
-        + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin-top: 8px">{KB60("kbLE", 180)}</div>'
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60F(56)}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
         + f'{KEYG60}{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')

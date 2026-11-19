@@ -110,9 +110,9 @@ export function IntervalHero({
             onClick={onPlay}
           >
             {playing ? (
-              <Square aria-hidden className="fill-current" />
+              <Square aria-hidden className="size-3.5 fill-current" />
             ) : (
-              <Play aria-hidden className="fill-current" />
+              <Play aria-hidden className="size-3.5 fill-current" />
             )}
           </Button>
         </div>

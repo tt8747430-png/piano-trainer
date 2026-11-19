@@ -1,4 +1,4 @@
-import { ListMusic } from 'lucide-react'
+import { ListVideo } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectIntervals, useSettings } from '@/entities/settings'
@@ -150,7 +150,7 @@ export function IntervalExplorer({
             aria-pressed={playback.playing === 'all'}
             onClick={playAll}
           >
-            <ListMusic aria-hidden />
+            <ListVideo aria-hidden />
           </FloatingPiece>
         </FloatingPieces>
       </FloatingActions>

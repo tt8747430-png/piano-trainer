@@ -72,7 +72,7 @@ ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos"
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
 lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'
-        + f'<div style="flex: none; margin: -32px -40px 0 -40px">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin: 0 -40px 0 -40px">{KB60("kbLE", 180)}</div>'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE63}{HIDDEN63}{MUSIC63}</div>'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 24px">{LPA(PRACT63)}{LPA(USED63)}</div></div></div>'

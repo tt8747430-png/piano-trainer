@@ -73,7 +73,7 @@ ph62 = (TOP62 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("
         + TITLE62 + TILES62 + MUSIC62 + WALKS62 + BETWEEN62 + SONGS62 + '</main></div>' + KBPAGE_CSS
         + BAR62('left: 12px; right: 12px; bottom: 34px') + PMENU62('left: 50%; translate: -50% 0; bottom: 104px'))
 lm62 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP62)
-        + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin-top: 8px">{KB60("kbLE", 180)}</div>'
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 28px 40px 120px 40px">'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE62}{TILES62.replace("height: 96px", "height: 120px").replace("font-size: 26px", "font-size: 34px")}{MUSIC62}</div>'

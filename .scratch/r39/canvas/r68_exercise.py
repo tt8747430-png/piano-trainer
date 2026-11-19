@@ -40,7 +40,7 @@ ph68 = (TOP68 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("
 ROWS68L = ROWS68.replace(GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('seg', 'Hands', 'handsSeg'), ('seg', 'Rhythm', 'rhythmSeg'), ('seg', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET), GROUP(('step', 'Number', 'noL', 'noDn', 'noUp'), ('segr', 'Hands', 'handsSeg'), ('segr', 'Rhythm', 'rhythmSeg', 400), ('segr', 'Next key', 'orderSeg'), ('step', 'Tempo', 'bpmL', 'bpmDn', 'bpmUp', 80), ('step', 'Target tempo', 'tgL', 'tgDn', 'tgUp', 80), bg=SHEET))
 assert ROWS68L != ROWS68, 'Exercise rows not found'
 lm68 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP68).replace('FingerTechnique.dc.html', 'FingerTechniqueLaptop.dc.html')
-        + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
+        + f'<div style="flex: none; margin-top: 8px">{KB60("kbLE", 180)}</div>'
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 28px 40px 120px 40px">'
         + f'<div style="width: min(880px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">'
         + f'<div style="min-width: 0; display: flex; flex-direction: column; gap: 20px">{TITLE68}{MUSIC68(760)}</div>'
