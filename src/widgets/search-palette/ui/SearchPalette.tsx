@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useStore } from 'zustand'
 import { selectRecentSearches } from '@/entities/views'
-import { rememberSearch } from '@/features/remember-view'
+import { forgetSearches, rememberSearch } from '@/features/remember-view'
 import { pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { stepLink } from '@/entities/step'
@@ -239,8 +239,17 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
       </label>
       <div className="-mx-4 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 scrollbar-none">
         {!typing && recent.length > 0 ? (
-          <section className="flex flex-col gap-2 pt-2">
-            <Caps>{t('recent')}</Caps>
+          <section className="mb-2 flex flex-col gap-2 pt-2">
+            <div className="-my-2.5 flex items-center justify-between">
+              <Caps>{t('recent')}</Caps>
+              <button
+                type="button"
+                className="h-11 rounded-control px-1 text-[0.9375rem] font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                onClick={() => forgetSearches(views)}
+              >
+                {t('clearRecent')}
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2">
               {recent.map((each) => (
                 <Chip key={each} onClick={() => ask(each)}>
@@ -337,7 +346,7 @@ function Caps({ id, children }: { id?: string; children: ReactNode }) {
   return (
     <p
       id={id}
-      className="px-1 text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+      className="px-4 text-[0.8125rem]/4 font-semibold tracking-[0.04em] text-muted-foreground uppercase"
     >
       {children}
     </p>
@@ -350,7 +359,7 @@ function Chip({ onClick, children }: { onClick: () => void; children: ReactNode 
     <button
       type="button"
       onClick={onClick}
-      className="h-11 rounded-pill bg-muted px-3.5 text-[0.9375rem] transition-colors duration-200 ease-out hover:bg-accent"
+      className="h-11 rounded-pill bg-muted px-4 text-[0.9375rem] transition-colors duration-200 ease-out hover:bg-accent"
     >
       {children}
     </button>

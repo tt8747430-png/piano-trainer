@@ -11,6 +11,7 @@ export const search: LocaleResources['search'] = {
   clear: 'Очистить поиск',
   archived: 'В архиве',
   recent: 'Недавние запросы',
+  clearRecent: 'Очистить',
   suggested: 'Подсказки',
   hint: 'Стрелки вверх и вниз — по результатам, Enter открывает, Escape закрывает.',
   everywhere: 'Искать везде',

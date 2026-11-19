@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · search suggestions 60 as their code says (measured 76) · AppLayers,AppLayersLaptop · pending
+
 
 
 

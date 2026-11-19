@@ -13,6 +13,7 @@ export const search = {
   archived: 'Archived',
   // What the palette shows before anything is typed.
   recent: 'Recent searches',
+  clearRecent: 'Clear',
   suggested: 'Suggestions',
   // How to use it, said to a screen reader.
   hint: 'Up and down move through the results, Enter opens one, Escape closes.',

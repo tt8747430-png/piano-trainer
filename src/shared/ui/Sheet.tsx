@@ -179,7 +179,7 @@ export function SheetContent({
           render={
             <Button
               variant="ghost"
-              className="col-start-3 row-start-1 justify-self-end px-2 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
+              className="col-start-3 row-start-1 justify-self-end px-1 text-[1.0625rem] font-semibold text-link hover:bg-transparent hover:underline"
             />
           }
         >
