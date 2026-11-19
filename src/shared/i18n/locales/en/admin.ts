@@ -136,7 +136,6 @@ export const admin = {
   },
   drafts: {
     none: 'No drafts. Editors’ changes appear here until they are published.',
-    label: 'Drafts',
     unpublished: 'Not yet published',
     edited: 'Edited {{date}}',
     kinds: {

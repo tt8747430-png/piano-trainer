@@ -145,7 +145,6 @@ export const admin: LocaleResources['admin'] = {
   },
   drafts: {
     none: 'Черновиков нет. Изменения редакторов появляются здесь до публикации.',
-    label: 'Черновики',
     unpublished: 'Ещё не опубликовано',
     edited: 'Изменено {{date}}',
     kinds: {

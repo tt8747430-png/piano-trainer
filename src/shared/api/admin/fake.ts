@@ -42,6 +42,7 @@ export function createFakeAdmin({
   const note = (action: string, target: string) =>
     void log.unshift({
       at: new Date(Date.UTC(2026, 9, 29, 12, log.length)).toISOString(),
+      adminId: null,
       action,
       target,
     })

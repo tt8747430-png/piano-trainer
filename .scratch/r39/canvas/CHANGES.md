@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · Admin logs · Feedback, Error log, Audit log and Drafts say a day as the library does (10 Nov, Today 09:14, Yesterday) · Admin,AdminLaptop · pending
 
 
 

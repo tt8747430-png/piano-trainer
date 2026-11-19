@@ -42,9 +42,11 @@ export interface Report {
   readonly reportedAt: string
 }
 
-/** One thing an admin did: when, what, to what. */
+/** One thing an admin did: when, who, what, to what. */
 export interface LogEntry {
   readonly at: string
+  /** The administrator's account; none once it is gone. */
+  readonly adminId: string | null
   readonly action: string
   readonly target: string
 }

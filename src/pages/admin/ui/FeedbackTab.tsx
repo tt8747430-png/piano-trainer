@@ -5,11 +5,12 @@ import { useAdmin } from '@/shared/lib/admin'
 import { splitReports } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
-import { formatLocale } from '@/shared/lib'
+import { daySaid } from '@/shared/lib'
+import { SettingsGroup } from '@/shared/ui'
 
 /**
  * Administration › Feedback (R32): what learners wrote in Settings › Report a problem, apart from the
- * Error log, the newest first: the text in full, then when, on which screen and in which build.
+ * Error log, the newest first, one card as the Admin board's: the day it came, then the text in full.
  * Anonymous, as sent.
  */
 export function FeedbackTab() {
@@ -21,10 +22,6 @@ export function FeedbackTab() {
     return result.ok ? { ok: true as const, value: splitReports(result.value).feedback } : result
   }, [admin])
   const { loaded, reload } = useLoaded(load)
-  const date = new Intl.DateTimeFormat(formatLocale(locale), {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  })
   return (
     <LoadedState loaded={loaded} reload={reload}>
       {(feedback) =>
@@ -32,24 +29,20 @@ export function FeedbackTab() {
           <p className="text-muted-foreground">{t('feedback.none')}</p>
         ) : (
           <section className="flex flex-col gap-2">
-            <ol aria-label={t('sections.feedback')} className="flex flex-col rows-hairline card">
+            <SettingsGroup flush>
               {feedback.map((each) => (
-                <li
+                <div
                   key={`${each.at} ${each.text}`}
-                  className="flex min-w-0 flex-col gap-1 px-4 py-3"
+                  className="flex min-w-0 flex-col gap-1 px-4 py-3 leading-[normal]"
                 >
-                  <p className="font-medium wrap-break-word whitespace-pre-line">{each.text}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('errors.where', {
-                      date: date.format(new Date(each.at)),
-                      path: each.path,
-                      build: each.build,
-                    })}
-                  </p>
-                </li>
+                  <span className="text-[0.8125rem] text-muted-foreground">
+                    {daySaid(each.at, locale, Date.now())}
+                  </span>
+                  <p className="leading-[1.4] wrap-break-word whitespace-pre-line">{each.text}</p>
+                </div>
               ))}
-            </ol>
-            <p className="px-3 text-sm text-muted-foreground">{t('feedback.footnote')}</p>
+            </SettingsGroup>
+            <p className="mx-1 text-[0.8125rem] text-muted-foreground">{t('feedback.footnote')}</p>
           </section>
         )
       }
