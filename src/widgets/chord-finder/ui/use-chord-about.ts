@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import {
   alteredSymbol,
   keysHolding,
-  noteName,
   numeralText,
   printedNote,
   printedSymbol,
@@ -58,7 +57,7 @@ export function useChordAbout(): (found: FoundChord, telling: Telling) => string
           ? t(`music:inversionName.${word}`)
           : slash
             ? null
-            : t('practice:chordFinder.bass', { note: noteName(found.bass) })
+            : t('practice:chordFinder.bass', { note: printedNote(found.bass) })
       const voicing = keys ? voicingKind(keys, found) : undefined
       const altered = alteredSymbol(found)
       const { root, quality } = found.chord
