@@ -97,7 +97,9 @@ export const admin = {
     invalidKey: 'Use lowercase letters, digits and hyphens, starting with a letter.',
   },
   reports: {
-    none: 'No open reports.',
+    none: 'No open reports',
+    noneLine: 'A song or lesson a learner reports shows here.',
+    dismissed: 'Report dismissed',
     by: 'by {{name}}',
     hidden: 'Hidden',
     hide: 'Hide',

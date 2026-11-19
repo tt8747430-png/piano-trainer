@@ -18,7 +18,7 @@ colors:
   sky-deep: '#356890'
   grass-deep: '#44684A'
   ochre: '#A8742A'
-  crimson: '#A34243'
+  crimson: '#B3261E'
   white: '#FFFFFF'
   paint-brick: '#E19E8C'
   paint-yellow: '#E8C67D'
