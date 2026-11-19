@@ -114,13 +114,14 @@ export function ProfilePage() {
 
 /**
  * A section's place on the page (the board's `pcell`): on a phone 32 under the one before; on a
- * laptop its box stretches to its neighbour's bottom, what it holds centred in it.
+ * laptop its box stretches to its neighbour's bottom, what it holds centred in it: the box is the last
+ * child of the fold's body (the section's last child), so the fold's own grid is never centred.
  */
 function Cell({ className, children }: { className?: string; children: ReactNode }) {
   return (
     <div
       className={cn(
-        'flex min-w-0 flex-col max-lg:mt-4 lg:[&>section]:flex-1 lg:[&>section>:last-child]:flex-1 lg:[&>section>:last-child]:justify-center',
+        'flex min-w-0 flex-col max-lg:mt-4 lg:[&>section]:flex-1 lg:[&>section>:last-child]:flex-1 lg:[&>section>:last-child>div>:last-child]:flex-1 lg:[&>section>:last-child>div>:last-child]:justify-center',
         className,
       )}
     >
