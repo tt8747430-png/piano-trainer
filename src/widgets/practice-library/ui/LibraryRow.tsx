@@ -31,7 +31,7 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
   const body = useRender({
     render: item.link,
     props: {
-      className: cn(ROW_BODY, ROW_LIBRARY_FACE),
+      className: cn(ROW_BODY, ROW_LIBRARY_FACE, 'pl-3'),
       children: (
         <>
           <LibraryTile picture={item.picture} />
@@ -56,7 +56,8 @@ export function LibraryRow({ item }: { item: LibraryItem }) {
   return (
     <li className="min-w-0">
       <SwipeRow leading={swipeOf(item.actions, LEADING)} className="h-full">
-        <div className={cn(ROW_FLAT, 'has-[>a:hover]:bg-muted')}>
+        {/* the board's row: its picture 12 in, 12 between its level and its heart (r41_lib) */}
+        <div className={cn(ROW_FLAT, 'gap-3 has-[>a:hover]:bg-muted')}>
           {body}
           {favourite ? (
             <HeartToggle

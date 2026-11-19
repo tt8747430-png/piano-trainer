@@ -5,7 +5,7 @@ import type { LibraryPicture } from '../model/library-view'
 
 /**
  * A practice row's picture at its head (canvas, the Practice libraries): its icon on its paint, as a
- * Songs folder's; its music's first words in its paint's ink on its wash; or a progression's chords as
+ * Songs folder's; its mark (its music's first words) in ink on its paint's wash; or a progression's chords as
  * columns on the card's paper, each in its role's paint (tonic, predominant, dominant), 28 tall, 2 apart.
  */
 export function LibraryTile({
@@ -53,10 +53,11 @@ export function LibraryTile({
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid shrink-0 place-items-center rounded-control px-1 text-center text-sm leading-none font-semibold whitespace-nowrap',
+        // its mark in ink at 700 on its paint's wash (the boards' rows: 14, 13 on a laptop's 40)
+        'grid shrink-0 place-items-center rounded-control px-1 text-center leading-none font-bold whitespace-nowrap text-foreground',
+        small ? 'text-[0.8125rem]' : 'text-sm',
         size,
         PAINT[picture.paint].fill,
-        PAINT[picture.paint].ink,
       )}
     >
       {picture.text}
