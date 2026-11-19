@@ -356,9 +356,7 @@ export const practice = {
     },
     between: {
       title: 'Passing chords',
-      line: 'Chords that lead from one chord to the next',
       none: 'Every chord here is the same: type or choose a progression that changes chords.',
-      pair: 'From chord to chord',
     },
     style: {
       pop: 'Pop',
@@ -498,8 +496,6 @@ export const practice = {
   passingChords: {
     into: '{{chords}} into {{to}}',
     inKey: 'In the key',
-    onlyInKey: 'In the key only',
-    noneInKey: 'No way between these chords stays in the key.',
     chromatic: 'Chromatic',
     category: {
       dominant: 'Dominant',

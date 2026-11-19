@@ -83,7 +83,7 @@ export function ProgressionExplorer({
   return (
     <div className="flex flex-col gap-4">
       <PinnedKeyboard shown={shown} place="top" />
-      <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start lg:gap-10">
+      <div className="flex flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
@@ -175,9 +175,6 @@ export function ProgressionExplorer({
           <ProgressionBetween
             chords={played.map((numeral) => numeralChord(numeral, key, view.size))}
             musicKey={key}
-            at={view.between}
-            inKey={view.inKey === true}
-            onChange={(next) => onChange({ ...view, ...next })}
             onShow={setShown}
           />
           <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined}>

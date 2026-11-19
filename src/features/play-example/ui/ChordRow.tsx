@@ -34,6 +34,7 @@ import {
   RoleTile,
   RoleTiles,
   PlayButton,
+  PlayRow,
   PlayLabel,
   type ShownKeys,
   unmarked,
@@ -269,6 +270,22 @@ export function RowRoles() {
  * it plays), the honey one Enter plays too, and the way into the Player (`practise`); soft beside other
  * examples, named as it is used there (Play the chain).
  */
+/**
+ * The row as one of a card's play rows (a progression's Passing chords, the board's BETWEEN62): Play's
+ * circle at its start, what it plays over one line of why; a tap plays the row here.
+ */
+export function RowPlayLine({ title, detail }: { title: string; detail: string }) {
+  const { playing, playRow } = useRow()
+  return (
+    <PlayRow
+      here
+      title={title}
+      detail={detail}
+      render={<button type="button" aria-pressed={playing === 'row'} onClick={playRow} />}
+    />
+  )
+}
+
 export function RowPlay({
   variant,
   label,

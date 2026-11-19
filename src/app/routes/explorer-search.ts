@@ -214,11 +214,6 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
     p: readNumerals(raw.p, openingLine(key)),
     size: valueOr(isChordSize, raw.size, PROGRESSIONS_DEFAULTS.size),
     lead: isLeadIn(raw.lead) ? raw.lead : undefined,
-    between:
-      typeof raw.between === 'number' && Number.isInteger(raw.between) && raw.between > 0
-        ? raw.between
-        : undefined,
-    inKey: raw.inKey === true ? true : undefined,
     mode: isChurchMode(raw.mode) ? raw.mode : undefined,
   }
 }
@@ -241,7 +236,7 @@ export const progressionsSearch = {
 }
 
 // A library's or the learner's own progression's page (R30-4): the key it is shown in, its chord size
-// (its own where left out), what leads into each chord, Passing chords' pair and In the key only.
+// (its own where left out) and what leads into each chord.
 const PROGRESSION_DEFAULTS: ProgressionSearch = { key: C_MAJOR_PARAM }
 export function readProgressionSearch(raw: Raw): ProgressionSearch {
   const line = readProgressionsSearch(raw)
@@ -249,8 +244,6 @@ export function readProgressionSearch(raw: Raw): ProgressionSearch {
     key: line.key,
     size: isChordSize(raw.size) ? raw.size : undefined,
     lead: line.lead,
-    between: line.between,
-    inKey: line.inKey,
   }
 }
 export const progressionSearch = routeSearch(readProgressionSearch, PROGRESSION_DEFAULTS)

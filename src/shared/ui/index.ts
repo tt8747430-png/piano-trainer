@@ -67,7 +67,7 @@ export {
   FloatingPlayPiece,
   FloatingPlaySplit,
 } from './FloatingPieces'
-export { PractiseRow, PractiseRows } from './PractiseRows'
+export { PlayRow, PractiseRow, PractiseRows } from './PractiseRows'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
 export { LoopGrip } from './LoopGrip'

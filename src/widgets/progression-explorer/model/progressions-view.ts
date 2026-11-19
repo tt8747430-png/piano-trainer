@@ -38,10 +38,6 @@ export interface ProgressionsView {
   readonly mode?: ChurchMode
   readonly size: ChordSize
   readonly lead?: LeadIn
-  /** Passing chords: the chord they lead from, by its place in the row; the next one after it. */
-  readonly between?: number
-  /** Passing chords: only the ways whose chords are all the key's. */
-  readonly inKey?: boolean
 }
 
 /**
@@ -154,14 +150,12 @@ export function playerSearch(view: ProgressionsView, settings: ProgressionsSetti
 
 /**
  * A library's or the learner's own progression's URL (R30-4): the key it is shown in, its chord size
- * (its own where left out), what leads into each chord, and Passing chords' pair and In the key only.
+ * (its own where left out) and what leads into each chord.
  */
 export interface ProgressionSearch {
   readonly key: KeyParam
   readonly size?: ChordSize
   readonly lead?: LeadIn
-  readonly between?: number
-  readonly inKey?: boolean
 }
 
 /** A progression's URL as a view, its line yet to be written in. */
@@ -207,10 +201,8 @@ export function keptView(search: ProgressionSearch, kept: KeptLine): Progression
 }
 
 /** The URL of a progression's page for the view it changed to: all but its line and mode. */
-export const progressionSearch = ({
+export const progressionSearch = ({ key, size, lead }: ProgressionsView): ProgressionSearch => ({
   key,
   size,
   lead,
-  between,
-  inKey,
-}: ProgressionsView): ProgressionSearch => ({ key, size, lead, between, inKey })
+})

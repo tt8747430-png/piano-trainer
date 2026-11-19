@@ -336,9 +336,7 @@ export const practice: LocaleResources['practice'] = {
     },
     between: {
       title: 'Проходящие аккорды',
-      line: 'Аккорды, что ведут от одного аккорда к следующему',
       none: 'Здесь все аккорды одинаковы: введите или выберите последовательность со сменой аккордов.',
-      pair: 'От аккорда к аккорду',
     },
     style: {
       pop: 'Поп',
@@ -472,8 +470,6 @@ export const practice: LocaleResources['practice'] = {
   passingChords: {
     into: '{{chords}} в {{to}}',
     inKey: 'В тональности',
-    onlyInKey: 'Только в тональности',
-    noneInKey: 'Между этими аккордами нет пути внутри тональности.',
     chromatic: 'Хроматический',
     category: {
       dominant: 'Доминантовые',

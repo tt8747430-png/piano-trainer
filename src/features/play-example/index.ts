@@ -4,7 +4,7 @@ export { intervalExample, intervalRoot, writesInterval } from './model/interval-
 export { IntervalCard } from './ui/IntervalCard'
 export { NotesExample } from './ui/NotesExample'
 export { progressionRow, rowMoves, symbolsRow } from './model/chord-row'
-export { ChordRow, RowPlay, RowRoles, RowStaff } from './ui/ChordRow'
+export { ChordRow, RowPlay, RowPlayLine, RowRoles, RowStaff } from './ui/ChordRow'
 export { ScaleExample } from './ui/ScaleExample'
 export { VoicingsExample } from './ui/VoicingsExample'
 export { ScaleChordGrid } from './ui/ScaleChordGrid'
