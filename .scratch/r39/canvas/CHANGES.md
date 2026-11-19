@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · Admin overview · Administration's section pages stand 8 under the bar; the Overview's headings 8 over their groups, its groups 16 apart · Admin · pending
+
 - 2026-11-19 · Admin list · Administration's phone list stands 8 under the bar, as every Settings page · Admin · pending
 
 
