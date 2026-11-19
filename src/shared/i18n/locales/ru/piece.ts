@@ -201,9 +201,7 @@ export const piece: LocaleResources['piece'] = {
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Удалить песню',
     duplicate: 'Создать копию',
-    duplicateTitle: 'Создать копию «{{title}}»?',
-    duplicateBody:
-      'В вашу библиотеку будет добавлена редактируемая копия песни. Оригинал останется без изменений.',
+    duplicated: '«{{title}}» добавлена в ваши песни',
     copyTitle: '{{title}} (копия)',
     title: 'Настройки',
     open: 'Настройки',

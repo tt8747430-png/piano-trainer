@@ -16,9 +16,10 @@ import {
   type Piece,
   type PieceId,
 } from '@/entities/piece'
+import { useTakesStoreApi } from '@/entities/take'
 import { selectView } from '@/entities/views'
 import { useOriginalDraft } from '@/features/edit-original'
-import { duplicateSong } from '@/features/edit-piece'
+import { deleteSong, duplicateSong } from '@/features/edit-piece'
 import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
@@ -28,7 +29,6 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   BackButton,
   ButtonLink,
-  ConfirmDialog,
   NotFound,
   DangerGroup,
   ActionRow,
@@ -38,6 +38,7 @@ import {
   ScreenHeader,
   SettingsGroup,
   ThingHead,
+  say,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { useSongPublish } from '../model/use-song-publish'
@@ -81,14 +82,20 @@ function SongSettings({ piece }: { piece: Piece }) {
   const library = useSongActions(piece)
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
-  const [copying, setCopying] = useState(false)
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
+  const takesStore = useTakesStoreApi()
+  // Duplicate makes the copy at once, a gain and no loss (the SongSettings board): Undo in its toast
+  // deletes it again.
   const duplicate = () => {
     if (isDegreePiece(piece)) return
-    const id = duplicateSong(piecesStore, piece, t('settings.copyTitle', { title }))
-    void navigate({ to: '/songs/$pieceId', params: { pieceId: id } })
+    const copy = t('settings.copyTitle', { title })
+    const id = duplicateSong(piecesStore, piece, copy)
+    say(t('settings.duplicated', { title: copy }), {
+      label: t('songs:library.undo'),
+      onClick: () => deleteSong(piecesStore, takesStore, id),
+    })
   }
   const acts = useLibraryActs()
   const forget = useForgetScreens()
@@ -159,9 +166,7 @@ function SongSettings({ piece }: { piece: Piece }) {
               />
             )}
             {/* Duplicate (R29 B9): a copy as the learner's own, a song in degrees aside. */}
-            {copyable ? (
-              <ActionRow title={t('settings.duplicate')} onClick={() => setCopying(true)} />
-            ) : null}
+            {copyable ? <ActionRow title={t('settings.duplicate')} onClick={duplicate} /> : null}
             <ActionRow
               title={t(archived ? 'songs:library.restore' : 'songs:library.archive')}
               onClick={() =>
@@ -210,15 +215,6 @@ function SongSettings({ piece }: { piece: Piece }) {
       </div>
       {inLibrary ? library.sheet : null}
       <SongExportSheet piece={exporting ? piece : null} onOpenChange={setExporting} />
-      <ConfirmDialog
-        open={copying}
-        onOpenChange={setCopying}
-        title={t('settings.duplicateTitle', { title })}
-        body={t('settings.duplicateBody')}
-        action={t('settings.duplicate')}
-        destructive={false}
-        onConfirm={duplicate}
-      />
       {ownMusic?.kind === 'version' ? (
         <ResetVersionAsk
           piece={ownMusic}

@@ -201,9 +201,7 @@ export const piece = {
     exportLine: 'MusicXML, MIDI',
     deleteSong: 'Delete song',
     duplicate: 'Duplicate',
-    duplicateTitle: 'Duplicate {{title}}?',
-    duplicateBody:
-      'An editable copy of this song is added to your library. The original remains unchanged.',
+    duplicated: '{{title}} added to your songs',
     copyTitle: '{{title}} (copy)',
     title: 'Settings',
     open: 'Settings',
