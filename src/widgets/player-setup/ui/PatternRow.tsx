@@ -69,7 +69,7 @@ export function PatternRow({
         aria-label={listen}
         title={listen}
         onClick={onListen}
-        className="grid size-10 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3"
+        className="grid size-11 shrink-0 place-items-center rounded-pill text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground focus-visible:-outline-offset-3"
       >
         {playing ? (
           <Square aria-hidden strokeWidth={0} className="size-3 fill-current" />
@@ -81,7 +81,7 @@ export function PatternRow({
         pressed={item.favourite}
         label={favourite}
         onToggle={onFavourite}
-        className="size-10"
+        className="size-11"
       />
     </div>
   )

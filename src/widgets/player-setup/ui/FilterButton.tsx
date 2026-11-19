@@ -28,7 +28,7 @@ export function FilterButton({
       title={label}
       onClick={onOpen}
       className={cn(
-        'relative grid size-10 shrink-0 place-items-center rounded-control text-foreground transition-colors duration-200 ease-out focus-visible:-outline-offset-3 [&_svg]:size-5',
+        'relative grid size-11 shrink-0 place-items-center rounded-control text-foreground transition-colors duration-200 ease-out focus-visible:-outline-offset-3 [&_svg]:size-5',
         on
           ? 'bg-chosen-honey shadow-[inset_0_0_0_1.5px_var(--color-honey-ring)]'
           : 'bg-card hover:bg-muted',
