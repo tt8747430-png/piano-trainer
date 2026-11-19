@@ -50,3 +50,13 @@ credits opens as a dialog.
 - Song page (loop round 10, built to canvas 125): the first page as its cover (the opening lines engraved on a card), the title large in sans with its pencil to the editor, the credits one line, Key · Time · Tempo as three columns, Chords headed in sans, progressions as rows in one card; Learned worded, the heart and the gear in the bar. The cover's picture is chosen at Settings' head. Continue from bar N with the bar map built in loop round 13: the Player keeps each song's place (`progress.songs`, the bars played through, where it stopped, the times and seconds); once played, Continue from bar N in honey and From the start stand under the facts with the map, and the floating Play goes.
 - Song Settings (loop round 10, built to canvas 133): its head as drawn, the cover (its picture chosen with a tap, moved here from the song page) beside the title in sans and "its other name or who wrote it · Your song". Kept against the board: the rows' tiles (canvas 128's settings rows) and no Favourite switch, since the heart in the song's bar is its one way.
 - Section (loop round 10, built to canvas 133): In time, One change at a time and Patterns open with their rows, as drawn, never folded heads with nothing under them; the song page's Sections head in sans like Chords.
+
+## Open finding (2026-11-19, the board-to-app port)
+
+- **A pickup is numbered bar 1.** Amazing Grace now opens with its pickup (`_@1`), and every printed bar number
+  counts it: the Verse row reads "bars 1–17", the song's place "Bar n of 17", the Player's labels and loop
+  params (`features/practice/loop.ts` `loopParam`, `shared/ui/LoopGrip.tsx`, `shared/ui/score/bar-labels.ts`,
+  `pages/piece/ui/SectionRows.tsx`, `SectionCard.tsx`, `widgets/chord-chart`, `widgets/progression-explorer`).
+  A musician numbers the pickup 0 and the first full bar 1: one pure helper from `shared/lib/arrangement`
+  (the layout's `pickup` ticks) turns a bar's index into its printed number, used everywhere a number prints,
+  the URL's loop param included. Romashki (`gorshkov/romashki.ts`) has a pickup too.
