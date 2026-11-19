@@ -167,10 +167,10 @@ def SONGROW(song):
             f'<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{{{r.t}}}}</span>'
             f'<span style="font-size: 14px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.s}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.v}}}} · {{{{r.when}}}}</span></span></a>'
             f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="More for {{{{r.t}}}}" data-tip="More" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if></div>')
-SEARCHFIELD = (f'<label style="flex: none; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
-               f'<input {KB["search"]} value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your songs" aria-label="Search your songs" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
+SEARCHFIELD = (SEARCHBOX()
+               + f'<input {KB["search"]} value="{{{{q}}}}" onInput="{{{{typed}}}}" placeholder="Search your songs" aria-label="Search your songs" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 LIST = lambda song, grid: f'<sc-if value="{{{{some}}}}" hint-placeholder-val="{{{{true}}}}">' + SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="8"><div style="position: relative">{SONGROW(song)}</div></sc-for>') + '</sc-if>'
-OVSEARCH = SEARCHFIELD.replace('flex: none; height: 44px', 'flex: none; height: 48px; border-radius: 24px')
+OVSEARCH = SEARCHFIELD  # the one search box (the kit's SEARCHBOX), on the overview as on every list
 # What a search found, on the page: the songs as cards, the folders, then the same words in Explore
 FOLDHIT = (f'<sc-for list="{{{{fold}}}}" as="f" hint-placeholder-count="1"><a href="{{FOLDER}}" style="{CARDROW}; min-height: 72px; box-sizing: border-box; padding: 8px 12px; display: flex; align-items: center; gap: 16px; color: {INK}; text-decoration: none">'
            f'<span aria-hidden="true" style="flex: none; width: 56px; height: 56px; border-radius: 12px; background: {{{{f.c}}}}"></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{f.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{f.n}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></a></sc-for>')
@@ -219,7 +219,7 @@ ovph = f'''{TITLEBAR('Songs')}
 </sc-if>
 <section style="display: flex; flex-direction: column; gap: 12px">{SECH('Explore', SEEALL('Explore.dc.html'))}<div class="nos" style="{_SHELFPH}">{EXSHELF(132, 6, 'Explore.dc.html')}</div></section></sc-if>
 </main>{NEWDIAL(list(_NEW)[::-1], 112, 'addOn', 'noAdd', 'openAdd', 'closeSheet')}{TABBAR('Songs')}'''
-_LSEARCH = OVSEARCH.replace('flex: none; height: 48px', 'flex: none; width: 360px; height: 44px; border-radius: 22px')
+_LSEARCH = OVSEARCH.replace('flex: none; height: 44px', 'flex: none; width: 360px; height: 44px')
 _PANEROW = lambda label, n, href: f'<a href="{href}" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; border-radius: 10px; color: {INK}; text-decoration: none; font-size: 15px; font-weight: 600">{label}<span style="font-weight: 400; color: {SOFT}; font-variant-numeric: tabular-nums">{n}</span></a>'
 # The laptop is Flat's library (owner's screenshots of flat.io/library, 2026-11-17): a pane at the left, Playlists
 # (each its mosaic, name and count; New playlist last) and, apart at its foot, Archive and Trash with counts; the

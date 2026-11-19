@@ -113,10 +113,10 @@ KB = {'search': 'type="search" enterkeyhint="search" autocapitalize="off"',
       'url': 'type="url" autocapitalize="off" spellcheck="false" enterkeyhint="go"',
       'code': 'type="text" autocapitalize="characters" autocorrect="off" spellcheck="false"',
       'current-password': 'autocomplete="current-password"', 'new-password': 'autocomplete="new-password"'}
-# the one search field of a place, 320 wide, 44 tall, at the bar's trailing edge
+# the one search box (SEARCHBOX) of a place, 320 wide, at the bar's trailing edge
 def PSEARCH(ph, val='q', act='setQ'):
-    return (f'<label style="flex: none; width: 320px; height: 44px; box-sizing: border-box; border-radius: 22px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: {SOFT}">{SEARCH}'
-            f'<input {KB["search"]} value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
+    return (SEARCHBOX().replace('flex: none;', 'flex: none; width: 320px;', 1)
+            + f'<input {KB["search"]} value="{{{{{val}}}}}" onInput="{{{{{act}}}}}" placeholder="{ph}" aria-label="{ph}" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
 # A laptop sub-page's column: it starts on the bar title's edge (scan-first 1), never centred under a title at the left.
 LCOL = lambda inner, w: f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex"><div style="width: min({w}px, 100%); display: flex; flex-direction: column; gap: 16px">{inner}</div></main>'
 # The ⓘ: one glyph for every explanation behind a tap.
@@ -133,6 +133,9 @@ def SUBJECT(name, sub, size=40, align='left'):
     return f'<div style="flex: none; display: flex; flex-direction: column; gap: 4px; text-align: {align}"><h1 style="margin: 0; font-size: {size}px; line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap">{name}</h1><p style="margin: 0; font-size: 15px; color: {SOFT}">{sub}</p></div>'
 H2 = lambda t, right='': f'<div style="display: flex; align-items: baseline; justify-content: space-between; margin: 16px 0 -4px"><h2 style="margin: 0; font-family: {FONT}; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
 # a group's caption stands on its rows' text (16 in); over tiles or chips that start on the column, inset=0
+# a screen's search box, as the app's SearchField: 44 tall, the control's 12 corners, sand, 12 in, the magnifier 8 before
+# the words; grow=True where it shares its row (a sort or a filter beside it)
+SEARCHBOX = lambda grow=False: f'<label style="{"flex: 1; min-width: 0" if grow else "flex: none"}; height: 44px; box-sizing: border-box; border-radius: 12px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">{SEARCH}'
 CAPS = lambda t, inset=16: f'<h3 style="margin: 0 0 0 {inset}px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{t}</h3>'
 
 # ── controls ──

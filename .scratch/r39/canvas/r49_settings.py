@@ -324,9 +324,8 @@ LADMIN = (f'<sc-if value="{{{{admin}}}}" hint-placeholder-val="{{{{true}}}}"><a 
 # Settings and a close ×; on the left a search field and the places in groups, the open one on the sand wash; on the
 # right the place's sections, each a heading and plain rows (the name, its value or control at the row's end) parted by
 # hairlines, no cards and no capitals.
-LSEARCH = (f'<label style="height: 40px; border-radius: 10px; background: {FILL}; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: {SOFT}">'
-           f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>'
-           f'<input {KB["search"]} aria-label="Search settings" placeholder="Search" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 15px; color: {INK}; outline: none"></label>')
+LSEARCH = (SEARCHBOX()
+           + f'<input {KB["search"]} aria-label="Search settings" placeholder="Search" style="flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}; outline: none"></label>')
 s9lm = (SETDLG(f'{LSEARCH}{LACCT}{LNAV}{LADMIN}',
         f'{SETCSS}<div style="display: flex; flex-direction: column; gap: 32px">'
         f'<div style="min-height: 40px; display: flex; align-items: center; gap: 8px; margin: 0 0 -12px"><sc-if value="{{{{lapBack}}}}" hint-placeholder-val="{{{{false}}}}">{IB("Back to {{lapBackT}}", CHEV_L, "back")}</sc-if>'
