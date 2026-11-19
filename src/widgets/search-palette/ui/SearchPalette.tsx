@@ -19,7 +19,7 @@ import { stepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, LAPTOP, useMediaQuery, type Up } from '@/shared/lib'
 import { printedSymbol } from '@/shared/lib/music'
-import { LessonIcon, PAGE_TILES, Sheet, SheetContent, TileMark } from '@/shared/ui'
+import { LessonIcon, PAGE_TILES, Said, Sheet, SheetContent, TileMark } from '@/shared/ui'
 import {
   Dialog,
   DialogContent,
@@ -263,11 +263,17 @@ export function SearchPalette({ initial, onClose }: { initial: string; onClose: 
           ))}
         </div>
         {typing && options.length === 0 ? (
-          <div role="status" className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-            <p className="text-lg font-bold text-balance">{t('none', { query: wanted.trim() })}</p>
-            <p className="text-[0.9375rem] text-pretty text-muted-foreground">{t('noneHint')}</p>
-            <Chip onClick={() => ask('')}>{t('clear')}</Chip>
-          </div>
+          <Said
+            icon={Search}
+            title={t('none', { query: wanted.trim() })}
+            description={t('noneHint')}
+            quiet
+            action={
+              <button type="button" onClick={() => ask('')}>
+                {t('clear')}
+              </button>
+            }
+          />
         ) : null}
       </div>
       {wide ? (
@@ -381,23 +387,23 @@ function PaletteSection({
             onClick={() => onChoose(option)}
             // The board's SROW9 and SUG: 60 tall, its picture, 12 apart, its chevron at 12 from the edge.
             className={cn(
-              'flex min-h-15 cursor-pointer items-center gap-3 border-b border-hairline px-3 py-2 last:border-b-0',
+              'flex min-h-15 cursor-pointer items-center gap-3 px-3 py-2 shadow-[inset_0_-1px_0_var(--color-hairline)] last:shadow-none',
               option === active && 'bg-muted',
             )}
           >
             {option.picture}
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="line-clamp-2 text-base font-semibold text-pretty">
+              <span className="line-clamp-2 text-base/[normal] font-semibold text-pretty">
                 {option.title}
               </span>
               {option.detail ? (
-                <span className="line-clamp-1 text-[0.8125rem] text-muted-foreground">
+                <span className="line-clamp-1 text-[0.8125rem]/[normal] text-muted-foreground">
                   {option.detail}
                 </span>
               ) : null}
             </span>
             {option.archived ? (
-              <span className="rounded-pill bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+              <span className="flex h-6 shrink-0 items-center rounded-pill bg-muted px-2 text-xs font-semibold text-muted-foreground">
                 {t('archived')}
               </span>
             ) : null}

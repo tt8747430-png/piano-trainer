@@ -5,8 +5,8 @@ import { cn } from '@/shared/lib'
 /**
  * A state with nothing to list, the kit's one empty state (the canvas's EMPTY, r53): a 72 honey tile
  * of 18 corners with its icon in ink, what is empty in 18 bold, a 15 line where it teaches what to
- * try, 8 apart, 56 above and below, and no box round it. At most one way on: a link, or, back from a
- * failure (Try again), the screen's one honey pill. The same on a first-run library, an emptied
+ * try, 8 apart, 56 above and below, and no box round it. At most one way on: a link, a quiet 48 pill, or,
+ * back from a failure (Try again), the screen's one honey pill. The same on a first-run library, an emptied
  * folder, Archive, Trash, Notifications and a search with no result.
  */
 export function Said({
@@ -15,6 +15,7 @@ export function Said({
   description,
   action,
   primary = false,
+  quiet = false,
 }: {
   icon: LucideIcon
   title: string
@@ -22,6 +23,8 @@ export function Said({
   action?: ReactNode
   /** Its way on is the screen's one action (Try again after a failure): a honey pill, not a link. */
   primary?: boolean
+  /** …or a quiet sand pill, the board's quiet BTN at 48 (Clear search, Join with a link). */
+  quiet?: boolean
 }) {
   return (
     <div className="flex flex-col items-center gap-2 px-5 py-14 text-center">
@@ -43,7 +46,9 @@ export function Said({
             'mt-1 flex flex-wrap justify-center gap-2',
             primary
               ? '*:h-12.5 *:rounded-pill *:border-0 *:bg-primary *:px-5 *:font-bold *:text-primary-foreground *:hover:brightness-95'
-              : '*:min-h-11 *:border-0 *:bg-transparent *:px-2 *:text-base *:font-semibold *:text-link *:shadow-none *:hover:bg-transparent *:hover:underline',
+              : quiet
+                ? '*:h-12 *:rounded-pill *:border-0 *:bg-muted *:px-5 *:text-base *:font-bold *:text-foreground *:hover:brightness-95'
+                : '*:min-h-11 *:border-0 *:bg-transparent *:px-2 *:text-base *:font-semibold *:text-link *:shadow-none *:hover:bg-transparent *:hover:underline',
           )}
         >
           {action}
