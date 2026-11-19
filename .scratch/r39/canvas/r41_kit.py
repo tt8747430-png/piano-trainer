@@ -404,6 +404,9 @@ def TOAST(bottom, undo='undo', z=50, laptop=False, always=False, hint='false'):
             f'color: {SHEET}; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 16px; font-size: 15px">'
             f'<span style="flex: 1">{{{{toastT}}}}</span>{btn}</div></sc-if>')
 
+# One centred form or note over a scrim (a laptop's New song, Report, the welcome): a 22-round card, 20 in, 12 between
+# its parts, at most 48 narrower than the screen. ASK is its question form.
+DIALOGBOX = lambda inner, w=372, close='closeSheet', label='': (f'<div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-modal="true"' + (f' aria-label="{label}"' if label else '') + f' style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: {w}px; max-width: calc(100% - 48px); box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px">{inner}</div>')
 # One question before a loss that cannot be undone, or an act that reaches other people (CLAUDE.md, ConfirmDialog):
 # a scrim, a 372 card centred, the question (18 bold), what is lost (15 soft), an optional field, then Keep and the act
 # side by side. The act is crimson for a loss, ink when it only reaches others (Publish); `ok_bg`/`ok_ink` bind it to state.

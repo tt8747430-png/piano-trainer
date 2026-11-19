@@ -220,7 +220,7 @@ exlm = (IF('isMain', IF('isList', LPLACEBAR('Explore', '{{countT}}', '', PSEARCH
         + IF('isSong', LTITLEBAR('{{sT}}', backact='back') + FULLW(PUB_L) + PUBFLOAT(16, 32))
         + IF('isShared', LTITLEBAR('A shared song', backact='back') + LCOL(SHARED.replace('Songs.dc.html', 'SongsLaptop.dc.html'), 560)) + TOASTL)
 detail('Explore', 'Explore', EX_JS, exph, exlm, '', BSHEET('reportOn', 'Report this song?', REPBODY, 'Close'),
-       f'<sc-if value="{{{{reportOn}}}}" hint-placeholder-val="{{{{false}}}}"><div onClick="{{{{closeSheet}}}}" style="position: absolute; inset: 0; z-index: 70; background: rgba(51,41,33,.32)"></div><div role="dialog" aria-label="Report this song?" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 71; width: 440px; box-sizing: border-box; border-radius: 22px; background: {PAGE}; padding: 20px; box-shadow: 0 0 0 1px {LINE}, {SHADOW}; display: flex; flex-direction: column; gap: 12px"><span style="font-size: 18px; font-weight: 700">Report this song?</span>{REPBODY}</div></sc-if>', 'Songs')
+       f'<sc-if value="{{{{reportOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DIALOGBOX('<span style="font-size: 18px; font-weight: 700">Report this song?</span>' + REPBODY, 440, label='Report this song?') + '</sc-if>', 'Songs')
 
 # ════ Groups ════
 GR_JS = js(r'''
