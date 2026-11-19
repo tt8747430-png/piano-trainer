@@ -8,13 +8,13 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Legal's laptop text on the 56 gutter both sides, as every laptop page (it stood 44 and 40) · LegalLaptop · pending
 
 
 
 
 ## Changes
 
+- 2026-11-19 · 0207eedb · Legal's laptop text on the 56 gutter both sides, as every laptop page (it stood 44 and 40) · LegalLaptop · v664
 - 2026-11-19 · 8a032912 · the Check checks a step the app checks (Triads, its 28 rounds), not a song; its results keep the run's bar and list only the skills to practise · Check,CheckLaptop · v662
 - 2026-11-19 · 2d3edb75 · a wrong chord in a run's results is drawn as written, no red note: Wait mode keeps a slip, not the keys · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · v661
 - 2026-11-19 · 33ecdb79 · a run's results say what Wait mode measures: Pauses (of 12 chords) for Timing, marks ✓ · Wrong notes · Paused, never early or late · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · v660
