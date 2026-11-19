@@ -1186,6 +1186,8 @@ owner's, typos fixed.
 
 - **Practice's overview ported from its board, and the board's folds back (loop, 2026-11-19):** the bar is Search alone: the Tools button left it (round 58's ruling; the Tools have their section on the page), and with it the whole Tools menu, which no bar on any board holds any more; the first heading stands 22 under the title, as drawn. The board had lost its folds: the fold pass matched the heading row only before a spacing change, so Learn, Practice and Profile drew plain headings for two rounds; it now matches the row as written and keeps the words where they were.
 
+- **Learn's and Profile's sections fold again, as their boards (2026-11-19):** the R67 port had drawn Levels, Courses, Made by you, Last 7 days, Practice history, Badges and Achievements with plain headings, copied while the boards' fold pass was broken; each is a `FoldSection` with a remembered `useFold` now. The fold's heading is the boards' value for value on every overview: a 24 line in a 44 reach, the chevron 18 at stroke 2.2 in ink at 55%, the body 12 under the line (was a 28 line and a 20 chevron in soft ink, the body 2 lower; Practice's too).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

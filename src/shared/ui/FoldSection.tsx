@@ -54,7 +54,13 @@ export function FoldSection({
   const heading = (
     <Heading
       id={headingId}
-      className={cn(info || action ? 'min-w-0' : undefined, action && 'flex-1', headingClassName)}
+      className={cn(
+        info || action ? 'min-w-0' : undefined,
+        action && 'flex-1',
+        headingClassName,
+        // A folding heading's line is 24, its 44 reach grown 10 over and under it (the boards' folds).
+        fold && 'leading-6',
+      )}
     >
       {fold ? (
         <button
@@ -63,7 +69,7 @@ export function FoldSection({
           aria-controls={bodyId}
           onClick={fold.toggle}
           // Its reach is 44px tall, grown over the room round the heading, which stays put.
-          className="-my-2 flex min-h-11 w-full items-center gap-2 rounded-control py-2 text-left"
+          className="-my-2.5 flex min-h-11 w-full items-center gap-2 rounded-control py-2.5 text-left"
         >
           {title}
           {count === undefined ? null : (
@@ -71,8 +77,9 @@ export function FoldSection({
           )}
           <ChevronDown
             aria-hidden
+            strokeWidth={2.2}
             className={cn(
-              'size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out',
+              'size-4.5 shrink-0 text-foreground/55 transition-transform duration-200 ease-out',
               open ? '' : '-rotate-90',
             )}
           />

@@ -40,7 +40,11 @@ export function AchievementsPreview() {
     ...milestones.filter((milestone) => milestone.day === null),
   ].slice(0, 3)
   return (
-    <ProfileSection title={t('profile.achievements.title')} to="/profile/achievements">
+    <ProfileSection
+      fold="achievements"
+      title={t('profile.achievements.title')}
+      to="/profile/achievements"
+    >
       <ProfileList>
         {shown.map((milestone) => (
           <MilestoneRow key={milestone.id} {...milestone} />

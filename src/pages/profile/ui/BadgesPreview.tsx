@@ -42,7 +42,7 @@ export function BadgesPreview() {
     [figures],
   )
   return (
-    <ProfileSection title={t('profile.badges.title')} to="/profile/badges">
+    <ProfileSection fold="badges" title={t('profile.badges.title')} to="/profile/badges">
       <ProfileList>
         {badges.slice(0, 3).map((badge) => (
           <BadgeRow key={badge.id} badge={badge} />

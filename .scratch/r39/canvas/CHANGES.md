@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · **pending**
+- 2026-11-19 · 0e092e8e · the overview pages' sections fold again: the fold pass matched the heading row only before its spacing changed · Main,Laptop,Learn,LearnLaptop,Profile,ProfileLaptop · **pending**
 
 ## Changes
 

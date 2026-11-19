@@ -31,6 +31,7 @@ export function HistoryPreview() {
   const lines = useRunLines()(useProgress(selectHistory).slice(0, 3))
   return (
     <ProfileSection
+      fold="history"
       title={t('profile.history.title')}
       to={lines.length > 0 ? '/profile/history' : undefined}
     >

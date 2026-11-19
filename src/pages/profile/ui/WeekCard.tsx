@@ -43,6 +43,7 @@ export function WeekCard() {
   const named = new Intl.DateTimeFormat(locale, { weekday: 'long' })
   return (
     <ProfileSection
+      fold="week"
       title={t('profile.week.title')}
       aside={
         <span className="text-[0.9375rem] text-muted-foreground tabular-nums">

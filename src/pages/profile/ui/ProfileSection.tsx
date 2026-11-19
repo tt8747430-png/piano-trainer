@@ -1,20 +1,25 @@
 import { Link } from '@tanstack/react-router'
-import { useId, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SectionHead, SeeAll } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { FoldSection, SeeAll } from '@/shared/ui'
 
 /**
- * A Profile section (the boards' H2 over its box): its name, 20 bold, 12 over what it heads, with
- * See all to the section's own page at the heading's end while there is more to see, or what the
- * heading says beside it (the week's summary). Its box is the last child, so a laptop's row can
- * stretch it to its neighbour's height.
+ * A Profile section (the boards' H2 over its box, folding as the boards' folds): its name, 20 bold,
+ * the heading the button that folds the box away, remembered as `fold` names it; See all to the
+ * section's own page at the heading's end while there is more to see, or what the heading says
+ * beside it (the week's summary). Its box is the last child, so a laptop's row can stretch it to its
+ * neighbour's height.
  */
 export function ProfileSection({
+  fold: foldId,
   title,
   to,
   aside,
   children,
 }: {
+  /** The section's name in the folds the learner left: `profile.<fold>`. */
+  fold: 'week' | 'history' | 'badges' | 'achievements'
   title: string
   /** The section's own page: See all opens it; none while it holds nothing to see. */
   to?: '/profile/badges' | '/profile/achievements' | '/profile/history'
@@ -23,13 +28,14 @@ export function ProfileSection({
   children: ReactNode
 }) {
   const { t } = useTranslation('account')
-  const id = useId()
+  const fold = useFold(`profile.${foldId}`)
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <SectionHead id={id} title={title}>
-        {to ? <SeeAll label={t('profile.badges.seeAll')} render={<Link to={to} />} /> : aside}
-      </SectionHead>
+    <FoldSection
+      title={title}
+      fold={fold}
+      action={to ? <SeeAll label={t('profile.badges.seeAll')} render={<Link to={to} />} /> : aside}
+    >
       {children}
-    </section>
+    </FoldSection>
   )
 }

@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { allJourneys, type Journey } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { OpensMark, SectionHead } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { FoldSection, OpensMark } from '@/shared/ui'
 import { journeyProgress } from '../model/progress'
 
 /** A level's number in a ring of how much of it is learned (the canvas's LVRING): 44, its 36 face inside. */
@@ -26,7 +26,7 @@ function LevelRing({ n, share }: { n: number; share: number }) {
 }
 
 /**
- * Learn's Levels (the canvas's LEVELLIST), under their plain heading: on a phone one card of 64 rows,
+ * Learn's Levels (the canvas's LEVELLIST), under their heading that folds them away (the boards' folds): on a phone one card of 64 rows,
  * each its number in its ring, its stage ("Beginner"), its book, how many of its steps are learned and
  * a chevron; on a laptop four cards in a row (as many as fit at 220 each), each ending where its words
  * end, the count after the book ("Foundations · 6 of 13") and no chevron: the card is the link.
@@ -34,7 +34,7 @@ function LevelRing({ n, share }: { n: number; share: number }) {
 export function LevelRows() {
   const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
-  const id = useId()
+  const fold = useFold('learn.levels')
   const learned = useProgress(selectLearned)
   const row = (journey: Journey, i: number) => {
     const progress = journeyProgress(journey, learned)
@@ -64,8 +64,7 @@ export function LevelRows() {
     )
   }
   return (
-    <section aria-labelledby={id} className="flex flex-col gap-3">
-      <SectionHead id={id} title={t('learn:levels')} />
+    <FoldSection title={t('learn:levels')} fold={fold}>
       <ul
         className={cn(
           'flex flex-col rows-hairline overflow-hidden card',
@@ -76,6 +75,6 @@ export function LevelRows() {
           <li key={journey.id}>{row(journey, i)}</li>
         ))}
       </ul>
-    </section>
+    </FoldSection>
   )
 }

@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Check, Library } from 'lucide-react'
 import { useRender } from '@base-ui/react/use-render'
-import { useId, type ReactElement, type ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   ownCourseLessons,
@@ -13,7 +13,8 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { lessonStepId } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { LessonIcon, OpensMark, PAINT, SectionHead, SeeAll } from '@/shared/ui'
+import { useFold } from '@/features/fold-section'
+import { FoldSection, LessonIcon, OpensMark, PAINT, SeeAll } from '@/shared/ui'
 
 /** How many of the learner's own Learn shows; the rest are on their page. */
 const SHOWN = 3
@@ -66,7 +67,7 @@ function OwnLink({ link, children }: { link: ReactElement; children: ReactNode }
 export function OwnItems() {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const id = useId()
+  const fold = useFold('learn.own')
   const lessons = useOwnLessons(selectOwnLessons)
   const courses = useOwnLessons(selectOwnCourses)
   const learned = useProgress(selectLearned)
@@ -102,10 +103,12 @@ export function OwnItems() {
     })),
   ]
   return (
-    <section aria-labelledby={id} className="flex min-w-0 flex-col gap-3">
-      <SectionHead id={id} title={t('own.title')}>
-        <SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />
-      </SectionHead>
+    <FoldSection
+      title={t('own.title')}
+      fold={fold}
+      className="min-w-0"
+      action={<SeeAll label={t('seeAll')} render={<Link to="/your-lessons" />} />}
+    >
       <ul className="flex flex-col rows-hairline overflow-hidden card lg:grid lg:grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] lg:gap-4 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:[&>li]:after:hidden">
         {rows.map((row) => (
           <li key={row.key}>
@@ -122,6 +125,6 @@ export function OwnItems() {
           </li>
         ))}
       </ul>
-    </section>
+    </FoldSection>
   )
 }
