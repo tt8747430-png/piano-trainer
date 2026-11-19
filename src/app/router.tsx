@@ -218,6 +218,13 @@ const adminSectionRoute = createRoute({
   },
   component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
 })
+// A group of Administration › Groups (the Admin board): its members, its flags, Delete group.
+const adminGroupRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/admin/groups/$group',
+  ...opensAsDialog,
+  component: lazyRouteComponent(adminScreens, 'AdminSectionPage'),
+})
 // The Profile (round 3): the learner, the days they practised, their record.
 const profileRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -1119,6 +1126,7 @@ const routeTree = rootRoute.addChildren([
     notificationsRoute,
     adminRoute,
     adminSectionRoute,
+    adminGroupRoute,
     settingsRoute,
     generalRoute,
     pageLayoutsRoute,

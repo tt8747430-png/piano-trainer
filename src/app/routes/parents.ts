@@ -143,6 +143,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/settings/connect-piano/timing': () => up({ to: '/settings/connect-piano' }),
   '/shell/admin': toSettings,
   '/shell/admin/$section': ({ wide }) => (wide ? null : up({ to: '/admin' })),
+  '/shell/admin/groups/$group': () => up({ to: '/admin/$section', params: { section: 'groups' } }),
   '/shell/legal/privacy': toAbout,
   '/shell/legal/terms': toAbout,
   '/shell/account/sign-in': accountUp,

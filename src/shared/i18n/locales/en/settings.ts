@@ -36,6 +36,7 @@ export const settings = {
     appearance: 'Appearance',
     storage: 'Storage and backup',
     connectPiano: 'MIDI devices',
+    adminGroups: 'Groups',
     computerKeys: 'Computer keyboard',
     selectionToolbar: 'Selection toolbar',
     swipeActions: 'Swipe actions',

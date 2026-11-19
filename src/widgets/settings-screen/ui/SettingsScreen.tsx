@@ -11,6 +11,7 @@ const PARENT_TITLE = {
   '/settings/account': 'accountPage.title',
   '/settings/connect-piano': 'pages.connectPiano',
   '/settings/general': 'pages.general',
+  '/admin/groups': 'pages.adminGroups',
 } as const
 
 /**
@@ -47,7 +48,9 @@ export function SettingsScreen({
         <div className="-mb-3 flex min-h-10 items-center gap-2">
           {parent && back ? (
             <Link
-              to={parent}
+              {...(parent === '/admin/groups'
+                ? { to: '/admin/$section', params: { section: 'groups' } }
+                : { to: parent })}
               aria-label={back}
               title={back}
               className="-ml-3 grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-200 ease-out hover:bg-muted"

@@ -34,6 +34,7 @@ export const settings: LocaleResources['settings'] = {
     appearance: 'Оформление',
     storage: 'Хранилище и копии',
     connectPiano: 'MIDI-устройства',
+    adminGroups: 'Группы',
     computerKeys: 'Клавиатура компьютера',
     selectionToolbar: 'Панель выделения',
     swipeActions: 'Действия смахивания',

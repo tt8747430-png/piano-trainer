@@ -199,11 +199,12 @@ export function settingsPlaceOf(path: string): SettingsPlace | null {
  */
 export function settingsParentOf(
   path: string,
-): '/settings/account' | '/settings/connect-piano' | '/settings/general' | null {
+): '/settings/account' | '/settings/connect-piano' | '/settings/general' | '/admin/groups' | null {
   if (path.startsWith('/settings/account/') || path === '/settings/privacy')
     return '/settings/account'
   if (path.startsWith('/settings/connect-piano/')) return '/settings/connect-piano'
   if (path.startsWith('/settings/general/')) return '/settings/general'
+  if (path.startsWith('/admin/groups/')) return '/admin/groups'
   return null
 }
 

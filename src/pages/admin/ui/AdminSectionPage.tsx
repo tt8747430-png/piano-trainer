@@ -14,7 +14,7 @@ import { ComponentsTab } from './ComponentsTab'
 import { DraftsTab } from './DraftsTab'
 import { ErrorsTab } from './ErrorsTab'
 import { FeedbackTab } from './FeedbackTab'
-import { GroupsTab } from './GroupsTab'
+import { AdminGroupPage, GroupsTab } from './GroupsTab'
 import { OverviewTab } from './OverviewTab'
 import { ReportsTab } from './ReportsTab'
 import { SwitchesTab } from './SwitchesTab'
@@ -41,8 +41,11 @@ export function AdminSectionPage() {
   const { t } = useTranslation('admin')
   const { account } = useAccount()
   // Its address, or the dialog's on a laptop, where the page behind holds the route.
-  const name = useSettingsPath().replace(/^\/admin\//, '')
+  const [name = '', item] = useSettingsPath()
+    .replace(/^\/admin\//, '')
+    .split('/')
   const section: AdminSection = isAdminSection(name) ? name : 'overview'
+  if (section === 'groups' && item && account?.role === 'admin') return <AdminGroupPage id={item} />
   const Section = SECTIONS[section]
   return (
     <SettingsScreen title={t(`sections.${section}`)}>

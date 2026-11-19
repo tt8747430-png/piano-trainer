@@ -21,7 +21,8 @@ export interface AddGroup {
 }
 
 /**
- * A list's last row (round 25): "+ Add lesson", which opens the app's New sheet: its name, then
+ * A list's last row (round 25; the board kit's `ADDROW`: 56 tall, a 36 sand circle with its +, the words in the
+ * link colour): "+ Add lesson", which opens the app's New sheet: its name, then
  * Create. Where items may be added (lessons taken out of a course; for the learner's own course, their
  * lessons and the app's, R30-5), the sheet lists them too in their groups, narrowed by the name typed,
  * each added by a tap. Why one was not made is said in the sheet.
@@ -29,6 +30,7 @@ export interface AddGroup {
 export function AddRow({
   label,
   title,
+  nameLabel,
   createLabel,
   failed: failedLine,
   found = [],
@@ -39,6 +41,8 @@ export function AddRow({
   label: string
   /** The sheet's title: "New lesson". */
   title: string
+  /** Its field's label, "Name" unless it finds by more (an account's "Name or email"). */
+  nameLabel?: string
   /** Its button: "Create lesson". */
   createLabel: string
   /** Said where a new one was not made. */
@@ -79,11 +83,11 @@ export function AddRow({
     <>
       <button
         type="button"
-        className="flex min-h-12 items-center gap-1 rounded-control pr-3 text-left font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted/60 hover:text-foreground"
+        className="flex min-h-14 w-full items-center gap-3 rounded-control px-4 text-left font-semibold text-link transition-colors duration-150 ease-out hover:bg-muted/60 focus-visible:-outline-offset-3"
         onClick={() => setOpen(true)}
       >
-        <span aria-hidden className="grid size-11 shrink-0 place-items-center">
-          <Plus className="size-4" />
+        <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-pill bg-muted">
+          <Plus className="size-5" strokeWidth={2.2} />
         </span>
         {label}
       </button>
@@ -91,7 +95,7 @@ export function AddRow({
         open={open}
         onOpenChange={close}
         title={title}
-        nameLabel={t('edit.order.name')}
+        nameLabel={nameLabel ?? t('edit.order.name')}
         name={name}
         onName={setName}
         createLabel={createLabel}

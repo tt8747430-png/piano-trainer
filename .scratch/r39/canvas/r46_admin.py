@@ -101,9 +101,9 @@ def ADM_SECTIONS(P):
                     f'{STACK}<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 600">{{{{g.g}}}}</span><span style="{SUB}; font-variant-numeric: tabular-nums">{{{{g.m}}}}</span></span><span style="color: {SOFT}; display: flex">{CHEV_R}</span></button></sc-for>')
              + '</sc-if>')
     ASEC = lambda *p: f'<section style="display: flex; flex-direction: column; gap: 8px">{"".join(p)}</section>'
-    gone = ('<sc-if value="{{gOne}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 28px">'
+    gone = ('<sc-if value="{{gOne}}" hint-placeholder-val="{{false}}"><div style="display: flex; flex-direction: column; gap: 16px">'
             + ASEC(CAPS('{{gMembersT}}'),
-                   ROWS(f'<sc-for list="{{{{gMembers}}}}" as="m" hint-placeholder-count="2"><div style="min-height: 60px; display: flex; align-items: center; gap: 16px; padding: 6px 4px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">{AV("m")}<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">{{{{m.x}}}}</span><span style="{SUB}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{{{m.e}}}}</span></span>'
+                   ROWS(f'<sc-for list="{{{{gMembers}}}}" as="m" hint-placeholder-count="2"><div style="min-height: 60px; box-sizing: border-box; display: flex; align-items: center; gap: 16px; padding: 6px 4px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}">{AV("m")}<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px">{{{{m.x}}}}</span><span style="{SUB}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{{{m.e}}}}</span></span>'
                         f'<button type="button" aria-label="More for {{{{m.x}}}}" data-tip="More" onClick="{{{{m.menu}}}}" style="flex: none; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></div></sc-for>'
                         + ADDROW('Add member', 'openAddM')),
                    # Show all sits under the card, under Add member, a quiet link (owner, 2026-11-16: "why the show all is not under the add member")
