@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · Admin accounts · Accounts' faces 36 in the sans and its roles FILL chips 36 tall, as the board's groups and flags; last sign-in said as the library says a day (8 Nov) · Admin,AdminLaptop · pending
 
 
 
 ## Changes
 
+- 2026-11-19 · 7835667d · Accounts' faces 36 in the sans and its roles FILL chips 36 tall, as the board's groups and flags; last sign-in said as the library says a day (8 Nov) · Admin,AdminLaptop · v667
 - 2026-11-19 · 5f53b7cf · Feature flags' Enabled for segments 44 tall (were 40, under the 44 target) · Admin,AdminLaptop · v666
 - 2026-11-19 · 70430513 · a group's member rows 60 as their code says (they measured 72), its sections 16 apart · Admin · v666
 - 2026-11-19 · 1d9bb014 · Administration's section pages stand 8 under the bar; the Overview's headings 8 over their groups, its groups 16 apart · Admin · v665
