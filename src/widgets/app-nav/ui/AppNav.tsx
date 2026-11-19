@@ -260,7 +260,7 @@ export function AppNav() {
       data-slot="app-nav"
       data-sidebar={sidebar}
       data-away={away ? '' : undefined}
-      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden lg:border-border lg:pointer-events-auto lg:bg-card lg:px-0 lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
+      className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) lg:border-border lg:pointer-events-auto lg:bg-card lg:px-0 lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
     >
       <div className="hidden h-20 shrink-0 items-center gap-0.5 px-4 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
         <p

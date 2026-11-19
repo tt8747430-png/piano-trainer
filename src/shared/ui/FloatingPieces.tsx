@@ -17,12 +17,6 @@ export function FloatingPieces({ label, children }: { label: string; children: R
       aria-label={label}
       className="mx-auto flex items-center justify-center gap-3"
     >
-      {/* The page fades out under the pieces alone, as the canvas's 112px edge: clear, then the page
-          from 30%, so a page that fits the screen keeps its last row in sight. */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-x-0 bottom-0 -z-10 h-28 bg-linear-to-b from-transparent to-background to-30%"
-      />
       {children}
     </div>
   )
