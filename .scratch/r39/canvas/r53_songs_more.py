@@ -60,7 +60,9 @@ EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + '; const INC =
       esorts: ['Newest', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'Newest'), mark: l === (st.esort ?? 'Newest') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, inLib: false }) };''')
 _STAFF = INCIPIT((0, 2, 4, 3, 5, 4)).replace('url("', "url('").replace('")', "')")
-_PAGE = lambda w, h: (f'<span style="width: {w}px; height: {h}px; box-sizing: border-box; border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(51,41,33,.12), 0 6px 14px -8px rgba(51,41,33,.35); padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px">'
+# a picture of the song's first page: its title and composer repeat the card's own words below, so it is hidden from
+# readers and its small print is part of the picture, not text to read (laws, type floor)
+_PAGE = lambda w, h: (f'<span aria-hidden="true" style="width: {w}px; height: {h}px; box-sizing: border-box; border-radius: 6px; background: #FFFFFF; box-shadow: 0 0 0 1px rgba(51,41,33,.12), 0 6px 14px -8px rgba(51,41,33,.35); padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 2px">'
                       f'<span style="max-width: 100%; font-family: {SERIF}; font-size: 10px; line-height: 1.2; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical">{{{{x.t}}}}</span><span style="font-size: 7px; color: {SOFT}">{{{{x.by}}}}</span>'
                       f'<span style="width: 100%; flex: 1; background: {_STAFF} center / contain no-repeat"></span></span>')
 PCARD = (f'<button type="button" onClick="{{{{x.open}}}}" style="flex: none; width: 150px; border: 0; background: transparent; padding: 0; font: inherit; color: {INK}; text-align: left; display: flex; flex-direction: column; gap: 8px">'

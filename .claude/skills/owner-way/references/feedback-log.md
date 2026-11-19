@@ -348,6 +348,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Explore's cover is a picture (loop, laws: the 12px type floor; 2026-11-19):** each shared song's cover draws its first page, with its title at 10px and its composer at 7px, the only text under 12 on any board, read out twice beside the card's own 15px title. The miniature is `aria-hidden` now: its print is part of the picture, and the card's words are what is read.
+
 - **The library's sheets dim the window like every other (loop, 2026-11-19):** the one-scrim pass (`r70_scrim.py`) ran before the Songs generator (`r72`), so Songs, All songs and a playlist kept the sheet's old 28% scrim and, on a laptop, left the sidebar bright beside a dimmed column. Every generator now draws its scrim at 32% and the pass runs last, so it reaches every board: on a laptop New song dims the sidebar too. The tooltip pass (`r71_tips.py`) had the same hole: the library's icon-only buttons (each row's ···, the sidebar's +) named themselves on no pointer; it runs last as well, and 108 buttons on the Songs boards now show their name after the half-second wait.
 
 - **The library's laptop sheets are the kit's (loop, laws: one implementation; 2026-11-19):** Songs, All songs and a folder on a laptop centred New song, Import and Record through their own `_LAPSHEET`, a copy of the kit's `LAPSHEET` with its own width and box model. It now calls `LAPSHEET`; measured in the runtime, New song stays 480 × 746 on both builds. `r72_flat_songs.py`.
