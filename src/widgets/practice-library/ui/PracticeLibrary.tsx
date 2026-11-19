@@ -10,8 +10,8 @@ import {
   LIBRARY_PANES,
   ScreenHeader,
   type ScreenHeaderProps,
+  ShowAll,
 } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import {
   FAVOURITES,
   RECENT,
@@ -46,6 +46,8 @@ function Section({ section, folds }: { section: ShownSection; folds: boolean }) 
       title={section.name}
       count={section.items.length}
       fold={{ open: !shut, toggle: () => setShut((now) => !now) }}
+      // the board's head: 44 with its words centred (6 under the section's top), the card 8 under it
+      className="gap-3.5 pt-1.5"
     >
       <ul className={GROUPED_LIST}>
         {(folded ? section.items.slice(0, FOLDED) : section.items).map((item) => (
@@ -53,9 +55,10 @@ function Section({ section, folds }: { section: ShownSection; folds: boolean }) 
         ))}
       </ul>
       {folded ? (
-        <Button variant="soft" className="self-start" onClick={() => setOpen(true)}>
-          {t('library.showAll', { count: section.items.length })}
-        </Button>
+        <ShowAll
+          label={t('library.showAll', { count: section.items.length })}
+          onClick={() => setOpen(true)}
+        />
       ) : null}
     </FoldSection>
   )
@@ -175,7 +178,8 @@ export function PracticeLibrary({
     />
   )
   const body = (
-    <div className="flex min-w-0 flex-col gap-4">
+    // On a phone the search stands 8 under the bar, as the boards' library column.
+    <div className="flex min-w-0 flex-col gap-4 max-lg:-mt-2">
       <LibrarySearch at={wide ? 'under' : 'row'} {...search} />
       <FilteredNotice
         shown={shown.items.length}
@@ -191,9 +195,9 @@ export function PracticeLibrary({
           mine={mine?.empty}
         />
       ) : wide ? (
-        <LibraryTable sections={shown.sections} view={view} levels={levels} columns={columns} />
+        <LibraryTable sections={shown.sections} levels={levels} columns={columns} />
       ) : (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           {shown.sections.map((section) => (
             <Section key={section.id} section={section} folds={!narrowed} />
           ))}

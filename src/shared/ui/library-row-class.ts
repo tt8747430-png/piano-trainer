@@ -23,7 +23,7 @@ export const GROUPED_LIST = 'card flex flex-col rows-line overflow-hidden'
  * is what is hunted for, and its line one line, cut with an ellipsis.
  */
 export const ROW_LIBRARY_FACE =
-  '**:data-[slot=row-title]:font-semibold **:data-[slot=row-detail]:line-clamp-1'
+  '**:data-[slot=row-title]:font-semibold **:data-[slot=row-title]:leading-[1.25] **:data-[slot=row-detail]:line-clamp-1'
 
 /** What only a mouse reaches (More on a library row): a finger has the swipe and the long press. */
 export const POINTER_ONLY = 'pointer-coarse:hidden'

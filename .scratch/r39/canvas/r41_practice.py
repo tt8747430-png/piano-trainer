@@ -201,16 +201,31 @@ def Rw(t, s, v, i, c, href, places=(), tags=(), ic=INK):
     if t in ROLLS: r.update(i='', pic=_rollurl(t))
     if href == 'Progression.dc.html': r.update(i='', pic=_progurl(s))
     return r
+# The app's own library (src/entities/progression-library/content/library.ts), read at build so the board holds
+# what the app holds: its nine styles in their order, each progression's first line spaced as the rows print it
+# (the board drew an invented four styles of two or three, Royal Road under Pop, a ii–V–I the library does not have).
+import re as _re
+_PLIB = open('/home/user/piano-trainer/src/entities/progression-library/content/library.ts', encoding='utf8').read()
+_PLIB = _PLIB[_PLIB.index('const LIBRARY = ['):]
+_STYLES = {'pop': ('Pop', HONEY), 'rock': ('Rock', PEACH), 'jazz': ('Jazz', SKY), 'blues': ('Blues', LILAC), 'classical': ('Classical', SAGE),
+           'soul': ('R&B / Soul', PEACH), 'gospel': ('Gospel', HONEY), 'modal': ('Modal', SKY), 'theory': ('Theory', SAGE)}
+_PROGS = []
+for _m in _re.finditer(r"entry\(\s*'(\w+)',\s*'([\w-]+)',\s*\{([^}]*)\},\s*'((?:[^'\\]|\\.)*)'", _PLIB):
+    _st, _id, _lines, _en = _m.groups()
+    _mj = _re.search(r"major: '([^']*)'", _lines); _mn = _re.search(r"minor: '([^']*)'", _lines)
+    _line = (_mj or _mn).group(1)
+    _PROGS.append((_st, _en.replace("\\'", "'"), ' – '.join(_line.split()), 'Major' if _mj else 'Minor', bool(_mj), bool(_mn)))
+_RECENT = ('Axis of Awesome', 'Jazz cadence')
+def _prow(st, t, line, key, recent=False):
+    return Rw(t, line, key, '', _STYLES[st][1], 'Progression.dc.html', ('Recently used',) if recent else (), ('Major key' if key == 'Major' else 'Minor key',))
+_PSECS = [{'g': 'Recently used', 'rows': [_prow(st, t, l, k, True) for r in _RECENT for (st, t, l, k, _, _) in _PROGS if t == r]}]
+for _k, (_name, _c) in _STYLES.items():
+    _PSECS.append({'g': _name, 'rows': [_prow(st, t, l, k, t in _RECENT) for (st, t, l, k, _, _) in _PROGS if st == _k]})
+_PSECS.append({'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', 'Major', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]})
 library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name'], 'favs': ['Axis of Awesome'], 'open': {},
-  'filters': [{'name': 'Key', 'opts': [['Major key', 18], ['Minor key', 8]]}],
+  'filters': [{'name': 'Key', 'opts': [['Major key', sum(1 for p in _PROGS if p[4])], ['Minor key', sum(1 for p in _PROGS if p[5])]]}],
   # at All the last opened lead the page, as in every Practice library (loop, 2026-11-15; round 58)
-  'sections': [{'g': 'Recently used', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', 'Major', '', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('ii–V–I', 'ii7 – V7 – Imaj7', 'Major', '', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',))]},
-               {'g': 'Pop', 'rows': [Rw('Axis of Awesome', 'I – V – vi – IV', 'Major', 'I V', HONEY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('50s doo-wop', 'I – vi – IV – V', 'Major', 'I vi', HONEY, 'Progression.dc.html', (), ('Major key',)), Rw('Royal Road', 'IV – V – iii – vi', 'Major', 'IV', HONEY, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Jazz', 'rows': [Rw('ii–V–I', 'ii7 – V7 – Imaj7', 'Major', 'ii', SKY, 'Progression.dc.html', ('Recently used',), ('Major key',)), Rw('Rhythm changes', 'I – vi – ii – V', 'Major', 'I vi', SKY, 'Progression.dc.html', (), ('Major key',)), Rw('Cycle of dominants', 'I7 – IV7 – ♭VII7 – ♭III7', 'Major', 'V7', SKY, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Blues', 'rows': [Rw('12-bar blues', 'I7 – IV7 – I7 – I7 – IV7 – IV7 – I7 – I7 – V7 – IV7 – I7 – V7', 'Major', 'I7', LILAC, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Cadences', 'rows': [Rw('Perfect cadence', 'I – IV – V – I', 'Major', 'V I', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Plagal cadence', 'I – IV – I', 'Major', 'IV I', SAGE, 'Progression.dc.html', (), ('Major key',))]},
-               {'g': 'Classical', 'rows': [Rw('Pachelbel', 'I – V – vi – iii – IV – I – IV – V', 'Major', 'I V', SAGE, 'Progression.dc.html', (), ('Major key',)), Rw('Andalusian cadence', 'i – ♭VII – ♭VI – V', 'Minor', 'i', SAGE, 'Progression.dc.html', (), ('Minor key',))]},
-               {'g': 'Mine', 'rows': [Rw('Verse of my song', 'I – iii – IV – V', 'Major', 'I', FILL, 'Progression.dc.html', ('Mine',), ('Major key',))]}]},
+  'sections': _PSECS},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('Key', 'v', .6)),
   add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', 'openFolder')))
 library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, '400 Piano Chord Progressions': False, 'Classical': False, 'Rhythm styles': False},

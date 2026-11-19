@@ -63,6 +63,7 @@ export function ProgressionsPage() {
           name: t('library.table.name'),
           second: t('library.table.numerals'),
           third: t('music:key.label'),
+          shares: [2, 3, 0.6],
         }}
         mine={{
           empty: (

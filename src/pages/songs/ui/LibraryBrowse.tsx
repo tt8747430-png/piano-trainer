@@ -4,8 +4,7 @@ import { DEFAULT_CARD_LOOK, useFolderName, useLibrary, type CardPlace } from '@/
 import { CardLookProvider, FolderRow, LibraryRows, SongRow } from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 import { folderActions, songActions } from './row-actions'
-import { FilteredNotice, FoldSection, type Fold } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FilteredNotice, FoldSection, type Fold, ShowAll } from '@/shared/ui'
 
 /** How many of Home's every song show before Show all. */
 const FOLDED = 10
@@ -100,9 +99,10 @@ export function LibraryBrowse({
                 ))}
               </LibraryRows>
               {folds ? (
-                <Button variant="soft" className="self-start" onClick={() => setUnfolded(true)}>
-                  {t('library.showAll', { count: group.entries.length })}
-                </Button>
+                <ShowAll
+                  label={t('library.showAll', { count: group.entries.length })}
+                  onClick={() => setUnfolded(true)}
+                />
               ) : null}
             </>
           )

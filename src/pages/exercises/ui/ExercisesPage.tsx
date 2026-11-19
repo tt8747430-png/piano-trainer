@@ -34,7 +34,11 @@ export function ExercisesPage() {
         groups={groups}
         groupWord="book"
         levels
-        columns={{ name: t('library.table.exercise'), second: t('library.table.focus') }}
+        columns={{
+          name: t('library.table.exercise'),
+          second: t('library.table.focus'),
+          shares: [2, 3, 1],
+        }}
         screen={title}
         editing={editing}
       />

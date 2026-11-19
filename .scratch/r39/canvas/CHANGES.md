@@ -12,6 +12,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-19 · (this commit) · the Practice libraries: the app's 57 real progressions in their nine styles (were invented), each shelf folded at five with the quiet Show all n › under its card, the cards 14 round (were 12), the laptop table's rows flush at 56 (each stood 8 apart in a gapped column) · Progressions,ProgressionsLaptop,Accompaniment,AccompanimentLaptop,FingerTechnique,FingerTechniqueLaptop,JazzVocabulary,JazzVocabularyLaptop · v644
 - 2026-11-19 · (this commit) · Edit progression: the draft's acts in the bar as every editor's (the glass ··· Publishing, the honey Publish, the gear; it drew a Draft pill under the bar), its lines said once (The progression's card repeated the major line), the real minor line (i VI III VII; was i v VI iv) · ProgressionEdit,ProgressionEditLaptop · v643
 - 2026-11-19 · cc0c0f79 · New pattern: the app's 45 and 27 figures under their families (were twelve invented ones), opening unnamed on Whole-note chord over Root, whole note with its roll (opened as a copy of Broken chords) · PatternNew,PatternNewLaptop,Pattern,PatternLaptop · v642
 

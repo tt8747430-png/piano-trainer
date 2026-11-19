@@ -55,7 +55,11 @@ export function AccompanimentPage() {
         groups={groups}
         groupWord="book"
         levels
-        columns={{ name: t('library.table.pattern'), second: t('library.table.hands') }}
+        columns={{
+          name: t('library.table.pattern'),
+          second: t('library.table.hands'),
+          shares: [2, 3.4, 0.8],
+        }}
         {...(mine
           ? {
               mine: {
