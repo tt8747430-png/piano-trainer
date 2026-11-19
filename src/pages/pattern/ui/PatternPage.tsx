@@ -210,7 +210,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
             <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">
               {own
                 ? t('patterns.yours')
-                : `${partName(partOfShelf(pattern.group))} · ${t('patterns.builtIn')}`}
+                : partName(partOfShelf(pattern.group))}
             </p>
           </div>
           {more.said}
