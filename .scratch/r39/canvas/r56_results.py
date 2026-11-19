@@ -39,11 +39,19 @@ def RS_CELL(notes, w, red=None, last=False, clef=False):
     accs = {RS_STEP(n[0], n[1]): n[2] for n in notes if len(n) > 2}
     steps = sorted(RS_STEP(n[0], n[1]) for n in notes)
     cx, out, prev, shifted = w / 2 - 3, '', None, False
+    # accidentals in columns left of the chord, the highest nearest, one moving out when another stands
+    # less than a sixth above it in its column (Gould, Behind Bars), as the app's RunStaff
+    cols, col = [], {}
+    for s in sorted(accs, reverse=True):
+        at = next((i for i, c in enumerate(cols) if all(t - s >= 6 for t in c)), None)
+        if at is None:
+            cols.append([]); at = len(cols) - 1
+        cols[at].append(s); col[s] = at
     for s in steps:
         shifted = (prev is not None and s - prev == 1 and not shifted)
         x = cx + (10 if shifted else 0)
         if s in accs:
-            out += f'<text x="{cx - 16:.1f}" y="{y(s) + 4}" font-family="Noto Music, serif" font-size="14" fill="{INK}">{accs[s]}</text>'
+            out += f'<text x="{cx - 16 - 8 * col[s]:.1f}" y="{y(s) + 4}" font-family="Noto Music, serif" font-size="14" fill="{INK}">{accs[s]}</text>'
         if s <= 0:
             out += f'<path d="M{cx - 9} 56H{cx + 9 + (10 if shifted else 0)}" stroke="{INK}" stroke-width="1"></path>'
         c = RS_RED if red and RS_STEP(*red) == s else INK
@@ -223,7 +231,7 @@ def PV_RUN(lap, v):
     # floating 12 above the keys, reserving no space; Play at the centre, as the Player's and Flowkey's (flowkey 009)
     transport = PIECE('Setup', 'Setup', SLIDERSI, 'onClick="{{openSetup}}"') + PLAYCAP() + PIECE('Tempo', '{{tempoV}}', TEMPOI, 'onClick="{{openSetup}}"')
     if lap:
-        return (PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html')
+        return (LPAD(PVBAR.replace('Practice.dc.html', 'Laptop.dc.html').replace('PlayerSettings.dc.html', 'PlayerLaptop.dc.html'))
                 + f'<main style="flex: 1; min-height: 0; padding: 8px 56px 16px; display: flex; flex-direction: column; align-items: center; gap: 16px"><div style="flex: 1"></div><div style="width: 1177px; max-width: 100%; display: flex; flex-direction: column; gap: 8px"><div style="zoom: 1.35">{PV_LINE(8, 104, v)}</div>{prog}</div>'
                 f'<div style="flex: 1"></div></main><div style="flex: none; box-shadow: 0 -1px 0 {LINE}">{RS_KEYS(170, "kbL")}</div>{RUNBAR("left: 50%; translate: -50% 0; bottom: 186px", transport, "Tempo, play and hands")}')
     return (PVBAR.replace('Practice.dc.html', 'Main.dc.html')
