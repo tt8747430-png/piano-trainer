@@ -9,7 +9,8 @@ import { ADMIN_ENTRY, SETTINGS_GROUPS, type SettingsPageEntry } from '../model/s
 import { AccountCard } from './AccountCard'
 
 /** Settings' rows stand 52 with 8 over and under, as the board's `SROW` (a list row elsewhere is 48). */
-const ROWS = '[&_[data-slot=settings-card]>*]:min-h-13 [&_[data-slot=settings-card]>*]:py-2'
+export const SETTINGS_ROWS =
+  '[&_[data-slot=settings-card]>*]:min-h-13 [&_[data-slot=settings-card]>*]:py-2'
 
 /**
  * Settings' list on a phone (the Settings board, iOS's Settings): the account card first, then App,
@@ -40,7 +41,7 @@ export function SettingsList() {
           key={group.title}
           flush
           title={t(`settings:${group.title}`)}
-          className={ROWS}
+          className={SETTINGS_ROWS}
         >
           {group.pages.map((page) => (
             <RowLink
@@ -55,7 +56,7 @@ export function SettingsList() {
         </SettingsGroup>
       ))}
       {account?.role === 'admin' ? (
-        <SettingsGroup flush className={ROWS}>
+        <SettingsGroup flush className={SETTINGS_ROWS}>
           <RowLink
             title={t('admin:title')}
             icon={ADMIN_ENTRY.icon}

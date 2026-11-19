@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · Admin list · Administration's phone list stands 8 under the bar, as every Settings page · Admin · pending
+
 
 
 
