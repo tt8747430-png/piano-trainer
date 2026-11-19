@@ -1,6 +1,8 @@
 import { Play, Square } from 'lucide-react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import { useElementSize } from '@/shared/lib'
 import { INTERVALS, spanInterval } from '@/shared/lib/music'
 import type { notate } from '@/shared/lib/notation'
 import { InfoTip, LazyScoreView } from '@/shared/ui'
@@ -27,6 +29,8 @@ export function IntervalHero({
 }) {
   const { t } = useTranslation('practice')
   const locale = useLocale()
+  const staff = useRef<HTMLElement>(null)
+  const { width } = useElementSize(staff)
   const said = useIntervalName()
   const { title } = said(name)
   const songs = intervalSongs(name)
@@ -73,11 +77,13 @@ export function IntervalHero({
       {/* The page's subject (canvas, "The interval leads Intervals"): its notes on the staff at
           reading size on the paper, no card round it, what it sounds like and Hear it under it. */}
       <figure className="flex flex-col gap-3">
+        {/* The staff spans the column, to the board's 560 (`STAFF61`), its two notes spread along it. */}
         <section
+          ref={staff}
           aria-label={t('intervals.written')}
-          className="flex w-full min-w-40 justify-center"
+          className="mx-auto flex w-full max-w-140 min-w-40 justify-center"
         >
-          <LazyScoreView score={score} />
+          {width > 0 ? <LazyScoreView score={score} fill={width} /> : null}
         </section>
         <div className="flex items-center gap-3">
           <div className="flex min-w-0 flex-1 flex-col">
