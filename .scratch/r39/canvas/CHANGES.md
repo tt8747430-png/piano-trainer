@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Scales: its practise rows the app's six real exercises with their openings (were invented rows opening no drill); its keys on the staff's tonic for G, A, B (an octave low) · Scales,ScalesLaptop · pending
-
 ## Changes
+
+- 2026-11-19 · 0ed8b48a · Scales: its practise rows the app's six real exercises with their openings (were invented rows opening no drill); its keys on the staff's tonic for G, A, B (an octave low) · Scales,ScalesLaptop · v638
 
 - 2026-11-19 · eadfe3cf · Chords: a lone chord keeps no room for note names the staff no longer prints (its bar starts at the clef's room) · Chords,ChordsLaptop · v637
 - 2026-11-19 · a8bab1cf · the Practice pages' floating bar: Chords' bar back (Voicing · Play chord ⌄ · Hands, lost with its fade), the honey Play one piece (176 growing to its words, word 16 in; was 152, 168, 184) · Chords,ChordsLaptop,Scales,ScalesLaptop,Intervals,IntervalsLaptop,Progression,ProgressionLaptop,Pattern,PatternLaptop,Exercise,ExerciseLaptop · v636
