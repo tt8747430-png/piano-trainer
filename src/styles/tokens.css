@@ -155,9 +155,9 @@
    * card, so it follows the theme.
    */
   --chosen-honey: color-mix(in oklab, var(--primary) 25%, var(--card));
-  /* A switch, the canvas's SWITCH: the sage track when on, the white knob over it. */
+  /* A switch, the canvas's SWITCH: the sage track when on, the knob in the cards' paper over it. */
   --switch-on: #7fb685;
-  --switch-knob: #ffffff;
+  --switch-knob: var(--p-paper-card);
   --accent: var(--p-sand-100);
   --accent-foreground: var(--p-ink);
   --link: var(--p-sky-deep);

@@ -136,7 +136,7 @@ export function RunView({
       keyboard={<PinnedKeyboard shown={runShown(run, hands)} place="top" />}
       heading={choice}
       music={
-        <section className="flex flex-col gap-3 overflow-hidden rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+        <section className="flex flex-col gap-3 overflow-hidden rounded-card bg-card px-3 py-4 ring-1 ring-border">
           <ScaleSheet music={written} hands={hands} fingers />
           {/* The fingers stand on the staves; only a scale with none says so (the board's FING60). */}
           {standard ? null : (

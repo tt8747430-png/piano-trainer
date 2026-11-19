@@ -107,9 +107,7 @@ export function AchievementPage() {
           >
             {t('profile.achievements.how')}
           </h2>
-          <p className="card px-4 py-3.5 text-pretty">
-            {t(`profile.achievements.ways.${achievementId}`)}
-          </p>
+          <p className="card p-4 text-pretty">{t(`profile.achievements.ways.${achievementId}`)}</p>
         </section>
       </div>
     </div>

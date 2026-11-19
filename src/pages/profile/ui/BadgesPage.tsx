@@ -67,7 +67,7 @@ export function BadgePage() {
           >
             {t('profile.badges.how')}
           </h2>
-          <p className="card px-4 py-3.5 text-pretty">{t(`profile.badges.ways.${id}`)}</p>
+          <p className="card p-4 text-pretty">{t(`profile.badges.ways.${id}`)}</p>
         </section>
         <section aria-labelledby="badge-tiers" className="flex flex-col gap-1.5">
           <div className="flex items-baseline justify-between gap-3 px-1">

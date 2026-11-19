@@ -15,7 +15,8 @@ import {
 import { Tipped } from './Tipped'
 
 /** A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink. */
-const ITEM = 'min-h-10 pointer-coarse:min-h-11 justify-between gap-3 rounded-[8px] px-3 text-[0.9375rem]'
+const ITEM =
+  'min-h-10 pointer-coarse:min-h-11 justify-between gap-3 rounded-[8px] px-3 text-[0.9375rem]'
 
 /**
  * The sidebar's foot as Claude's (canvas v392; owner: "the side bar is not done like the for example
@@ -73,8 +74,13 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
     <div className="mt-auto flex">
       <DropdownMenu>
         {collapsed ? <Tipped label={name}>{trigger}</Tipped> : trigger}
-        <DropdownMenuContent side="top" align="start" sideOffset={8} className="w-(--anchor-width) gap-0.5">
-          <div className="truncate px-3 pt-2 pb-2.5 text-[0.8125rem] text-muted-foreground">
+        <DropdownMenuContent
+          side="top"
+          align="start"
+          sideOffset={8}
+          className="w-(--anchor-width) gap-0.5"
+        >
+          <div className="truncate px-3 py-2 text-[0.8125rem] text-muted-foreground">
             {account ? account.email : t('nav.notSignedIn')}
           </div>
           {account ? (

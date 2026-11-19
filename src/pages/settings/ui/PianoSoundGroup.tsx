@@ -33,7 +33,7 @@ export function PianoSoundGroup() {
       ) : sound.state === 'known' ? (
         <>
           {/* The board's offline card: the grand and how much is kept, its bar, then where it stands. */}
-          <div className="flex flex-col gap-2 px-4 py-3.5">
+          <div className="flex flex-col gap-2 p-4">
             <p className="flex items-baseline justify-between gap-3 tabular-nums">
               <span className="font-semibold">{t('player:pianoSheet.grand')}</span>
               <span className="text-sm whitespace-nowrap text-muted-foreground">

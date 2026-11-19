@@ -169,7 +169,7 @@ function Published({
   const url = `${window.location.origin}/songs/public/${publicId}`
   return (
     <div className="flex w-full max-w-130 flex-col gap-4">
-      <div className="flex items-center gap-3 card px-4 py-3.5">
+      <div className="flex items-center gap-3 card p-4">
         <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-paint-tile-grass" />
         <span className="flex-1 font-semibold">{t('public.inLibrary')}</span>
         <span className="text-sm text-muted-foreground">

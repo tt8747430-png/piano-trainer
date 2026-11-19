@@ -235,7 +235,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
                 </InfoTip>
               ) : null}
             </div>
-            <dl className="flex flex-col rows-line overflow-hidden rounded-2xl bg-card ring-1 ring-border">
+            <dl className="flex flex-col rows-line overflow-hidden rounded-card bg-card ring-1 ring-border">
               {[
                 [t('patterns.rightHand'), localText(RIGHT_FIGURES[pattern.rh].name, locale)],
                 [t('patterns.leftHand'), localText(LEFT_FIGURES[pattern.lh].name, locale)],

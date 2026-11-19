@@ -277,7 +277,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             <h3 className="font-sans text-sm font-semibold text-foreground">
               {t('practice:exercisePage.how')}
             </h3>
-            <p className="card px-4 py-3.5 text-[0.9375rem] leading-[1.45] text-pretty">
+            <p className="card p-4 text-[0.9375rem] leading-[1.45] text-pretty">
               {localText(exercise.how, locale)}
             </p>
           </section>

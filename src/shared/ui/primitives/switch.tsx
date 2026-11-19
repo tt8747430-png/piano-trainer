@@ -14,7 +14,7 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
     >
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
-        // Its knob, 27 round, white, a soft ink shadow under it, 20 over when on.
+        // Its knob, 27 round, the cards' paper, a soft ink shadow under it, 20 over when on.
         className="pointer-events-none block size-[1.6875rem] rounded-full bg-switch-knob shadow-[0_2px_4px_rgb(51_41_33/0.2)] transition-transform data-checked:translate-x-5 data-unchecked:translate-x-0"
       />
     </SwitchPrimitive.Root>

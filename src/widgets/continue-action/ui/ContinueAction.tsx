@@ -85,7 +85,7 @@ export function ContinueAction() {
     </>
   )
   const className =
-    'group flex items-center gap-4 card px-4 py-3.5 transition-colors duration-200 ease-out hover:border-input'
+    'group flex items-center gap-4 card p-4 transition-colors duration-200 ease-out hover:border-input'
   return (
     <section aria-labelledby={id}>
       {step.kind === 'piece' ? (

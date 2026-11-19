@@ -262,7 +262,7 @@ export function AppNav() {
       data-away={away ? '' : undefined}
       className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:-z-10 before:h-30 before:bg-linear-to-b before:from-transparent before:to-background/70 landscape-phone:before:hidden lg:before:hidden lg:border-border lg:pointer-events-auto lg:bg-card lg:px-0 lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
     >
-      <div className="hidden h-20 shrink-0 items-center gap-0.5 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
+      <div className="hidden h-20 shrink-0 items-center gap-0.5 px-4 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
         <p
           aria-hidden
           className="min-w-0 flex-1 truncate pl-3 font-display text-2xl leading-tight font-normal group-data-[sidebar=collapsed]/nav:hidden"
@@ -293,7 +293,7 @@ export function AppNav() {
         </div>
       </div>
       {sidebarShown ? (
-        <div className="flex px-3 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
+        <div className="flex px-4 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
           <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
         </div>
       ) : null}
@@ -317,7 +317,7 @@ export function AppNav() {
         })}
       </ul>
       {sidebarShown ? (
-        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-3 pb-4">
+        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-4 pb-4">
           {collapsed ? <span /> : <SidebarRecents />}
           <SidebarAccount collapsed={collapsed} />
         </div>

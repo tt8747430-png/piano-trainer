@@ -26,10 +26,7 @@ export function SuggestionCard({
   const titleId = useId()
   const [first, second] = way.chords
   return (
-    <article
-      aria-labelledby={titleId}
-      className="rounded-2xl bg-card px-4 py-3.5 ring-1 ring-border"
-    >
+    <article aria-labelledby={titleId} className="rounded-card bg-card p-4 ring-1 ring-border">
       <ChordRow chords={[from, ...way.chords, to].map((chord) => ({ chord }))} onShow={onShow}>
         <header className="flex items-baseline gap-2">
           <h4 id={titleId} className="flex-1 text-base font-bold">

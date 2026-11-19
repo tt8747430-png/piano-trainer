@@ -178,7 +178,7 @@ export function ChordExplorer({
       <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[51.25rem]">
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
-        <section className="flex flex-col gap-3 rounded-2xl bg-card px-3 py-4 ring-1 ring-border">
+        <section className="flex flex-col gap-3 rounded-card bg-card px-3 py-4 ring-1 ring-border">
           <ChordSheet
             chords={sheet}
             at={sounding ?? chosenAt}
