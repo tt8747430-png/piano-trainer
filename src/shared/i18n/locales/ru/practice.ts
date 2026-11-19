@@ -250,12 +250,10 @@ export const practice: LocaleResources['practice'] = {
     },
   },
   progressions: {
-    practise: 'Отработать',
-    // A progression's page (canvas 177): its bar's title, Play's menu, Practise's piece.
+    // A progression's page (canvas 177): its bar's title and Play's menu.
     title: 'Последовательность',
     plays: 'Что играть',
     chords: 'Аккорды',
-    inPlayer: 'Отработать в плеере',
     edit: {
       open: 'Править последовательность',
       new: 'Новая в библиотеке',
@@ -281,7 +279,10 @@ export const practice: LocaleResources['practice'] = {
     majorLine: 'Эти ступени — мажорной тональности.',
     minorLine: 'Эти ступени — минорной тональности.',
     playIn: 'Сыграть в тональности {{key}}',
-    throughKeys: 'Отработать по тональностям в плеере',
+    practiseRows: 'Отработать в плеере',
+    // The first Practise row: the progression in the key shown, round and round (the board's walks).
+    inKeyRow: 'В тональности {{key}}',
+    roundAndRound: '{{chords}}, по кругу',
     inChordPlayer: 'Открыть в плеере аккордов',
     inChordPlayerLine: 'С группой, в любом стиле',
     mine: {

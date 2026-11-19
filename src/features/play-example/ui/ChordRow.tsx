@@ -315,7 +315,10 @@ export function RowPlay({
             >
               <KeysIcon aria-hidden />
             </FloatingPieceLink>
-          ) : null}
+          ) : (
+            // With no Practise its place stays empty, so Play keeps the centre (the board's BAR62).
+            <span aria-hidden className="w-18 shrink-0" />
+          )}
         </FloatingPieces>
       </FloatingActions>
     )

@@ -269,12 +269,10 @@ export const practice = {
     },
   },
   progressions: {
-    practise: 'Practise',
-    // A progression's page (canvas 177): its bar's title, Play's menu, Practise's piece.
+    // A progression's page (canvas 177): its bar's title and Play's menu.
     title: 'Progression',
     plays: 'What it plays',
     chords: 'Chords',
-    inPlayer: 'Practise in the Player',
     edit: {
       open: 'Edit the progression',
       new: 'New in the library',
@@ -300,7 +298,10 @@ export const practice = {
     majorLine: 'These numerals are a major key’s.',
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
-    throughKeys: 'Practise through the keys in the Player',
+    practiseRows: 'Practise in the Player',
+    // The first Practise row: the progression in the key shown, round and round (the board's walks).
+    inKeyRow: 'In {{key}}',
+    roundAndRound: '{{chords}}, round and round',
     inChordPlayer: 'Open in the Chord player',
     inChordPlayerLine: 'With a band, in any style',
     // The learner's own progressions, Mine (R30-4): kept from a line typed, renamed, deleted.

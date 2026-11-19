@@ -43,7 +43,8 @@ import { ProgressionSongs } from './ProgressionSongs'
  * kept (`typed`), its numerals and the mode they are read in; its chords as tiles by role with each
  * root's move, then the chords on the staff on the paper with what it teaches (`note`); practising it
  * through the keys in the Player, Passing chords, and the songs it is heard in with Open in the Chord
- * player. One floating bar: Loop, Play with what it plays (Chords, Approach chords), Practise. On a
+ * player. One floating bar: Loop and Play with what it plays (Chords, Approach chords); it is practised by
+ * its Practise rows alone. On a
  * laptop the keys run across the top over the progression and, beside it, the rest. How it is written
  * and voiced is Progressions' Settings, read here.
  */
@@ -138,11 +139,6 @@ export function ProgressionExplorer({
             </figure>
             <RowPlay
               variant="pieces"
-              practise={{
-                label: t('practice:progressions.inPlayer'),
-                caption: t('practice:progressions.practise'),
-                render: <Link to="/play/progression" search={playerSearch(view, settings)} />,
-              }}
               menuLabel={t('practice:progressions.plays')}
               menu={(trigger) => (
                 <ActionMenu
