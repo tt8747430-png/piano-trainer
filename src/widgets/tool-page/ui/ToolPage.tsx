@@ -113,7 +113,12 @@ export function ToolPage({
         <div
           className={cn(
             column
-              ? cn('mx-auto flex w-full flex-1 flex-col gap-5 pt-2 pb-8 lg:gap-6', COLUMNS[column])
+              ? cn(
+                  'mx-auto flex w-full flex-1 flex-col pt-2 pb-8 lg:gap-6',
+                  // A page that starts at its left edge (the Chord finder) keeps its parts 16 apart, as its board.
+                  start ? 'gap-4' : 'gap-5',
+                  COLUMNS[column],
+                )
               : 'mx-auto grid w-full max-w-6xl flex-1 grid-cols-[minmax(0,1fr)] content-start items-start gap-4 pb-8 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10',
             // 16 under the keys, as every Practice board sets the name under its keys.
             keys !== undefined && 'pt-4',

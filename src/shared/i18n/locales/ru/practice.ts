@@ -409,7 +409,7 @@ export const practice: LocaleResources['practice'] = {
     },
     // The line under the name (canvas 181): "C major 7th, 1st inversion · Imaj7 in C major".
     named: '{{quality}} от {{root}}',
-    numeralIn: '{{numeral}} в тональности {{key}}',
+    numeralPicker: '{{numeral}} в',
     spelledIn: 'Запись в тональности',
     spelledInInfo:
       'Знаки альтерации следуют тональности: одна и та же чёрная клавиша — си-бемоль в фа мажоре и ля-диез в си мажоре; у каждого аккорда указана его ступень.',

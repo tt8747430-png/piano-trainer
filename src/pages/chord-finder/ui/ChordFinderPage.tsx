@@ -30,6 +30,7 @@ import {
   ChordTrail,
   readingAt,
   readingMarks,
+  useChordNumeral,
   useKeysHolding,
 } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
@@ -62,6 +63,8 @@ export function ChordFinderPage() {
   const { keys, finding } = finder
   const reading = finding.kind === 'chord' ? readingAt(finding.readings, finder.reading) : undefined
   const holding = useKeysHolding(finder.inKeys ? reading : undefined)
+  // Imaj7 in C major: the chord's numeral leads the key it is spelled in, that key's one home.
+  const numeral = useChordNumeral(reading, finder.musicKey)
   // Chords shows a chord over its bass only to its 3rd inversion and in four notes or fewer: a chord it
   // would show over another bass (C9/E as C9) is not offered.
   const opensInChords = reading !== undefined && (!reading.bass || reading.inversion !== undefined)
@@ -84,6 +87,7 @@ export function ChordFinderPage() {
     <ToolPage
       title={t('practice:pages.chordFinder')}
       start
+      column={880}
       actions={<PianoButton screen="playing" />}
       settings={<Link to="/settings/chord-finder" search={{ from: 'chord-finder' }} />}
       keys={
@@ -140,7 +144,7 @@ export function ChordFinderPage() {
       }
       side={
         rows ? (
-          <GroupRows>
+          <GroupRows surface="sheet">
             {finding.kind === 'chord' ? (
               <ChordReadings
                 readings={finding.readings}
@@ -171,11 +175,14 @@ export function ChordFinderPage() {
           reading={finder.reading}
           slash={finder.slash}
           keysFolded={folded}
-          musicKey={finder.musicKey}
         />
         <KeyPicker
           className="self-start"
-          label={t('practice:chordFinder.spelledIn')}
+          label={
+            numeral
+              ? t('practice:chordFinder.numeralPicker', { numeral })
+              : t('practice:chordFinder.spelledIn')
+          }
           value={keyFromParam(view.key)}
           onChange={(key) => change({ key: keyParam(key) })}
         />

@@ -5,7 +5,6 @@ import {
   printedNote,
   printedSymbol,
   type FoundChord,
-  type Key,
   type Midi,
 } from '@/shared/lib/music'
 import { GroupChips } from '@/shared/ui'
@@ -15,14 +14,14 @@ import { chordLabel, useChordAbout } from './use-chord-about'
 /** Where the chord shown comes from: keys held on the keyboard, the chord last played, keys tapped. */
 export type ChordSource = 'held' | 'last' | 'tapped'
 
-/** The page's name and the line under it, as the canvas's Chord finder sets them: large, bold, at the left. */
+/** The page's name and the line under it, as the canvas's Chord finder sets them: the book serif, 44 bold on both sizes, at the left. */
 function Named({ name, line, quiet = false }: { name: ReactNode; line?: string; quiet?: boolean }) {
   return (
     <div className="flex flex-col gap-1">
       <h2
         className={cn(
-          'font-sans text-[2.75rem] leading-[1.05] font-bold tracking-[-0.02em] text-balance lg:text-[4rem]',
-          quiet && 'text-[2.25rem] lg:text-[3rem]',
+          'font-display text-[2.75rem] leading-[1.05] font-bold tracking-[-0.01em] text-balance',
+          quiet && 'text-[2.25rem]',
         )}
       >
         {name}
@@ -45,7 +44,6 @@ export function ChordName({
   reading,
   slash,
   keysFolded,
-  musicKey,
 }: {
   finding: Finding
   keys: readonly Midi[]
@@ -55,8 +53,6 @@ export function ChordName({
   slash: boolean
   /** The page's keys are folded away: a chord comes from a MIDI keyboard, or the keys come back. */
   keysFolded: boolean
-  /** The key the page spells in: the chord's numeral there ends the line under its name. */
-  musicKey: Key
 }) {
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
@@ -86,7 +82,7 @@ export function ChordName({
       return (
         <Named
           name={printedSymbol(chordLabel(shown, slash))}
-          line={about(shown, { keys, slash, musicKey }).join(' · ')}
+          line={about(shown, { keys, slash }).join(' · ')}
         />
       )
     }

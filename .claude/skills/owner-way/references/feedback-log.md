@@ -1178,6 +1178,8 @@ owner's, typos fixed.
 
 - **The Tuner ported from its board's states (loop, 2026-11-19):** nothing heard is a faint dash with no octave, Listening in soft ink and the needle at rest in the line colour, Play or sing a note under the arc (it showed a faint A4 and A4 = 440 Hz, the row's own value said twice); a heard note hides that line; no microphone is the kit's one empty state (No microphone, Allow the microphone in the browser to use the tuner., Try again in honey) in the readout's place, filling the column with Reference pitch at its foot, where it was a grey line and a soft pill under a dial that could not move. The note stands 24 under the bar, 168 on a laptop with its 720 arc, and its row 32 under the arc, as drawn.
 
+- **The Chord finder ported from its board (loop, 2026-11-19):** the chord's name in the book serif, 44 bold on both sizes (it was the sans, 64 on a laptop); its numeral leads the key picker, Imaj7 in C major, that key's one home, and leaves the line under the name; its rows are the white ringed card; on a laptop one centred 880 column with the rows under the notes, where the rows stood in a right-hand column.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

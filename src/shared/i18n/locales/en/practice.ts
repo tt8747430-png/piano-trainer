@@ -431,7 +431,7 @@ export const practice = {
     try: { major: 'C major', minor7: 'A minor 7th', dominant7: 'D dominant 7th' },
     // The line under the name (canvas 181): "C major 7th, 1st inversion · Imaj7 in C major".
     named: '{{root}} {{quality, lowercase}}',
-    numeralIn: '{{numeral}} in {{key}}',
+    numeralPicker: '{{numeral}} in',
     spelledIn: 'Spelled in',
     spelledInInfo:
       'Accidentals follow this key: the same black key is B♭ in F major and A♯ in B major, and each chord shows its numeral in the key.',
