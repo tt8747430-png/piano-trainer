@@ -85,11 +85,7 @@ export function ChordTrail({
   return (
     <GroupChips label={t('practice:chordFinder.played')}>
       {before.map((name, i) => (
-        <span
-          key={i}
-          aria-label={name.heard}
-          className="flex h-8 items-center rounded-pill px-3 text-[0.9375rem] font-semibold"
-        >
+        <span key={i} aria-label={name.heard}>
           {name.symbol}
         </span>
       ))}

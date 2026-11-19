@@ -125,7 +125,7 @@ export function ChordNotes({ found, keys }: { found: FoundChord; keys: readonly 
           key={tile.degree}
           className="flex h-18 flex-col items-center justify-center rounded-xl bg-card ring-1 ring-border"
         >
-          <span className="text-2xl font-bold">{tile.note}</span>
+          <span className="text-[1.5rem]/[normal] font-bold">{tile.note}</span>
           <span className="text-xs text-muted-foreground">
             {tile.bass ? t('chordFinder.bassDegree', { degree: tile.part }) : tile.part}
           </span>
@@ -165,7 +165,7 @@ export function ChordReadings({
           type="button"
           aria-label={t('chordFinder.reading', { symbol: printedSymbol(label) })}
           onClick={() => onReading(at)}
-          className="flex h-11 items-center rounded-pill px-3 text-[0.9375rem] font-semibold transition-colors hover:bg-foreground/[0.06] focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="transition-[filter] before:absolute before:inset-x-0 before:-inset-y-1.5 hover:brightness-95 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           {printedSymbol(label)}
         </button>

@@ -233,12 +233,17 @@ export function GroupAction({
   )
 }
 
-/** A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows. */
+/**
+ * A row of values under a quiet heading (Also read as, Played), as the canvas's `GROUP` raw rows and
+ * its `CHIPL`: each value a 32 sand pill, 8 apart; one that acts reaches 44 by its `::before`.
+ */
 export function GroupChips({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <section aria-label={label} className="flex flex-col gap-2 px-4 py-2.5">
+    <section aria-label={label} className="flex flex-col gap-2 px-4 py-3">
       <h3 className="font-sans text-sm font-normal text-muted-foreground">{label}</h3>
-      <div className="flex flex-wrap gap-2">{children}</div>
+      <div className="flex flex-wrap gap-2 *:relative *:flex *:h-8 *:items-center *:rounded-pill *:bg-muted *:px-3 *:text-[0.9375rem] *:font-semibold">
+        {children}
+      </div>
     </section>
   )
 }
