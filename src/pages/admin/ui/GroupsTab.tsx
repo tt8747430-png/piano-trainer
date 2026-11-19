@@ -2,7 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronRight, Ellipsis, Plus, Users } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { AdminAccount, FeatureSwitch, Group } from '@/shared/api/admin'
+import type { FeatureSwitch, Group } from '@/shared/api/admin'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import { useAdmin } from '@/shared/lib/admin'
 import {
@@ -27,6 +27,7 @@ import {
 import { AddRow } from '@/widgets/content-editor'
 import { SettingsScreen } from '@/widgets/settings-screen'
 import { useChangeProblem } from '../model/use-change-problem'
+import { Face, nameOf } from './Face'
 import { useLoaded } from '../model/use-loaded'
 import { FailureLine, LoadedState } from './LoadedState'
 
@@ -52,25 +53,6 @@ function useGroupsData() {
 
 /** A group's page shows its first members, then Show all under the card (the Admin board). */
 const FOLDED = 5
-
-const nameOf = (account: AdminAccount) => account.name.trim() || account.email
-const initial = (name: string) => (Array.from(name)[0] ?? '?').toLocaleUpperCase()
-
-/** A person's initial on the sand, as the Admin board's faces. */
-function Face({ name, size }: { name: string; size: 'stack' | 'row' }) {
-  return (
-    <span
-      aria-hidden
-      className={
-        size === 'stack'
-          ? '-me-1.5 grid size-8 shrink-0 place-items-center rounded-pill bg-paint-sand text-sm ring-2 ring-card'
-          : 'grid size-9 shrink-0 place-items-center rounded-pill bg-paint-sand text-[0.9375rem]'
-      }
-    >
-      {initial(name)}
-    </span>
-  )
-}
 
 /**
  * Administration › Groups (the Admin board): the groups as rows, each its first members' faces, its
@@ -200,7 +182,7 @@ export function AdminGroupPage({ id }: { id: string }) {
                     <Face name={nameOf(account)} size="row" />
                     <span className="flex min-w-0 flex-1 flex-col gap-0.5 leading-[normal]">
                       <span className="truncate">{nameOf(account)}</span>
-                      <span className="truncate text-sm text-muted-foreground">
+                      <span className="truncate text-sm leading-[normal] text-muted-foreground">
                         {account.email}
                       </span>
                     </span>

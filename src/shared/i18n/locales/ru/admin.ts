@@ -48,7 +48,10 @@ export const admin: LocaleResources['admin'] = {
   notAdmin: 'Раздел доступен только администраторам',
   accounts: {
     search: 'Поиск по имени или эл. почте',
-    none: 'Подходящих аккаунтов нет.',
+    none: 'Учётных записей пока нет.',
+    noneFor: 'Нет учётной записи «{{query}}»',
+    noneLine: 'Поищите по другому имени или почте.',
+    clear: 'Очистить поиск',
     role: 'Роль: {{name}}',
     roles: { learner: 'Ученик', editor: 'Редактор', admin: 'Администратор' },
     joined: 'Регистрация {{date}}',

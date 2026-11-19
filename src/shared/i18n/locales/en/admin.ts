@@ -48,7 +48,10 @@ export const admin = {
   notAdmin: 'Administration requires an administrator account',
   accounts: {
     search: 'Search by name or email',
-    none: 'No matching accounts.',
+    none: 'No accounts yet.',
+    noneFor: 'No account matches “{{query}}”',
+    noneLine: 'Search by another name or email.',
+    clear: 'Clear search',
     role: 'Role for {{name}}',
     roles: { learner: 'Learner', editor: 'Editor', admin: 'Administrator' },
     joined: 'Joined {{date}}',

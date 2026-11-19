@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · Admin accounts · Accounts' faces 36 in the sans and its roles FILL chips 36 tall, as the board's groups and flags; last sign-in said as the library says a day (8 Nov) · Admin,AdminLaptop · pending
 
 
 
