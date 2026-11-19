@@ -8,18 +8,15 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · 95e5a5b1 · your own lesson's and course's Settings in the one Settings shape: the 56 bar, the centred 1180 column, 8 under the bar (24 on a laptop) · YourLessonSettings,YourLessonSettingsLaptop,YourCourseSettings,YourCourseSettingsLaptop · v624
-
-- 2026-11-19 · 5acca61d · a lesson: the real lesson's count (7 of 11), summary and Russian title · Lesson,LessonLaptop · v623
-
-- 2026-11-19 · 7671f3d9 · a course: lesson rows 68 as a level's (were 80), laptop lessons in four columns (a dead replace kept one), laptop column on the 56 (was 40), the real course's words, lessons and songs · Course,CourseLaptop · v622
-
-- 2026-11-19 · 1956b88c · the shelves hold the app's real courses, five shelves in its paints (were an invented four) · Learn,LearnLaptop,LearnCourses,LearnCoursesLaptop,LearnLevel,LearnLevelLaptop · v621
-
-- 2026-11-19 · fdd88a9f · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · v620
-
-
 ## Changes
+
+- 2026-11-19 · (this commit) · All songs' laptop table rows 60 as the ruling says (the board drew 61, its border outside the height); (app) the sidebar's Songs places 8 under Songs (were 2), a row's cover 16 from its title (was 14) · SongsLaptop,AllSongsLaptop,FolderLaptop,SharedFolderLaptop · v625
+
+- 2026-11-19 · 95e5a5b1 · your own lesson's and course's Settings in the one Settings shape: the 56 bar, the centred 1180 column, 8 under the bar (24 on a laptop) · YourLessonSettings,YourLessonSettingsLaptop,YourCourseSettings,YourCourseSettingsLaptop · v624
+- 2026-11-19 · 5acca61d · a lesson: the real lesson's count (7 of 11), summary and Russian title · Lesson,LessonLaptop · v623
+- 2026-11-19 · 7671f3d9 · a course: lesson rows 68 as a level's (were 80), laptop lessons in four columns (a dead replace kept one), laptop column on the 56 (was 40), the real course's words, lessons and songs · Course,CourseLaptop · v622
+- 2026-11-19 · 1956b88c · the shelves hold the app's real courses, five shelves in its paints (were an invented four) · Learn,LearnLaptop,LearnCourses,LearnCoursesLaptop,LearnLevel,LearnLevelLaptop · v621
+- 2026-11-19 · fdd88a9f · a level's scale lesson wears stairs, never a bar chart (its ruling) · LearnLevel,LearnLevelLaptop · v620
 
 - 2026-11-19 · dad864f5 · Chord finder laptop: the keys 8 under the bar, the name 16 under them (were 24 inside the bar) · ChordFinderLaptop · v619
 

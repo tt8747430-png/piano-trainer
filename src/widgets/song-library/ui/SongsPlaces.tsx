@@ -94,7 +94,7 @@ export function SongsPlaces() {
   const is = (kind: Here['kind'], id?: string) =>
     here.kind === kind && (id === undefined || ('id' in here && here.id === id))
   return (
-    <div role="group" aria-label={t('library.label')} className="mt-0.5 mb-1 flex flex-col gap-0.5">
+    <div role="group" aria-label={t('library.label')} className="mt-2 mb-1 flex flex-col gap-0.5">
       <Link to="/songs" search={{ view: 'mine' }} {...item(is('all'))}>
         <Face label={t('all.title')} count={songs} />
       </Link>
