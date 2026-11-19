@@ -12,8 +12,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
-- 2026-11-19 · 80a00669 · Administration's phone list stands 8 under the bar, as every Settings page · Admin · v665
 - 2026-11-19 · 1d9bb014 · Administration's section pages stand 8 under the bar; the Overview's headings 8 over their groups, its groups 16 apart · Admin · v665
+- 2026-11-19 · 80a00669 · Administration's phone list stands 8 under the bar, as every Settings page · Admin · v665
 - 2026-11-19 · 0207eedb · Legal's laptop text on the 56 gutter both sides, as every laptop page (it stood 44 and 40) · LegalLaptop · v664
 - 2026-11-19 · 8a032912 · the Check checks a step the app checks (Triads, its 28 rounds), not a song; its results keep the run's bar and list only the skills to practise · Check,CheckLaptop · v662
 - 2026-11-19 · 2d3edb75 · a wrong chord in a run's results is drawn as written, no red note: Wait mode keeps a slip, not the keys · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · v661
