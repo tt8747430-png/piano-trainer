@@ -1196,6 +1196,8 @@ owner's, typos fixed.
 
 - **Chords' 3D keys 8 under the bar on the board too (2026-11-19):** the board kept a 56 spacer of its own after the bar, which the float pass already spaces, so the keys stood 62 under the bar over a bare band; the spacer is gone (phone and laptop), as the app draws it (no control reserves space it does not use).
 
+- **Songs' search 8 under the title, its shelf 32 under the search, as the board (2026-11-19):** the phone's search stood 27 under the title's words (the board's 19) and All songs 28 under it (32).
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

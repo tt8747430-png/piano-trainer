@@ -55,7 +55,8 @@ function SongsPhone({ q }: { q: string }) {
   return (
     <div className="flex flex-col gap-4 pb-24">
       <ScreenHeader title={t('title')} large />
-      {search}
+      {/* 8 under the title, as the board's search (the column's 16 less 8). */}
+      {search ? <div className="-mt-2">{search}</div> : null}
       {query ? (
         <SongsFound page={page} query={query} onClear={() => show({ q: '' })} />
       ) : empty ? (
@@ -64,7 +65,7 @@ function SongsPhone({ q }: { q: string }) {
           <ExploreShelf />
         </div>
       ) : (
-        <div className="mt-3 flex flex-col gap-7">
+        <div className="mt-4 flex flex-col gap-7">
           <AllSongsShelf songs={recent.view.groups.flatMap((group) => group.entries)} />
           <section aria-labelledby="songs-playlists" className="flex flex-col gap-3">
             <SectionHead id="songs-playlists" title={t('folder.list')} />
