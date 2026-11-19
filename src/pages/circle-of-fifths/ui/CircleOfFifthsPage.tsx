@@ -102,7 +102,7 @@ export function CircleOfFifthsPage() {
         </FloatingPieceLink>
       }
       side={
-        <section aria-label={name(key)} className="flex flex-col gap-5">
+        <section aria-label={name(key)} className="@container flex flex-col gap-5">
           <div className="flex flex-col gap-1">
             <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
               {name(key)}
@@ -115,7 +115,7 @@ export function CircleOfFifthsPage() {
             <h3 id="key-chords" className="font-sans text-sm font-semibold">
               {t('practice:tools.circle.chords')}
             </h3>
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-4 gap-1 @xs:grid-cols-7">
               {chords.map((chord) => (
                 <button
                   key={chord.symbol}
