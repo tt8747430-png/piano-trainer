@@ -1,7 +1,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { printedSymbol, type ChordFingers, type Midi, type PlacedChord } from '@/shared/lib/music'
+import { printedSymbol, type ChordFingers, type PlacedChord } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordBars } from '@/shared/lib/schedule'
 import { LazyScoreView } from '@/shared/ui'
@@ -29,14 +29,13 @@ export interface SheetChord {
   readonly symbol: string
 }
 
-/** A word set beside a head: its name left of the chord, its finger right of it. */
+/** A head's finger, set right of the chord. */
 interface HeadMark {
   readonly key: string
   readonly text: string
   readonly left: number
   readonly top: number
   readonly size: number
-  readonly end: boolean
 }
 
 /** Where a bar stands across the staff, in the staff's pixels: its edges and its chord's middle. */
@@ -56,15 +55,12 @@ interface BarPlace {
 export function ChordSheet({
   chords,
   at,
-  labels,
   onPick,
   onName,
   onAdd,
 }: {
   chords: readonly SheetChord[]
   at: number
-  /** What each of the chosen chord's heads carries left of it, as the Piano sheet's Labels says. */
-  labels: ReadonlyMap<Midi, string>
   /** A bar tapped: its chord chosen (and played). */
   onPick: (at: number) => void
   /** A chord's name tapped: the chord to change. */
@@ -101,14 +97,10 @@ export function ChordSheet({
         measures.flatMap((measure, i) => {
           const chord = chords[i]
           if (!chord) return []
-          const staves = [chord.placed.rh, chord.placed.lh].filter((hand) => hand.length > 0)
           const hands = [chord.fingers.rh, chord.fingers.lh].filter(
             (_, side) => (side === 0 ? chord.placed.rh : chord.placed.lh).length,
           )
-          const names = staves.map((hand) =>
-            hand.map((tone) => (several ? '' : (labels.get(tone.midi) ?? ''))),
-          )
-          return headMarks(staff, measure, `${i}`, names, hands)
+          return headMarks(staff, measure, `${i}`, hands)
         }),
       )
     }
@@ -121,7 +113,7 @@ export function ChordSheet({
       watch.disconnect()
       resize.disconnect()
     }
-  }, [chords, at, labels, several])
+  }, [chords, at, several])
   // The chosen bar kept in view as chords are added or chosen.
   const chosen = bars[at]
   useLayoutEffect(() => {
@@ -227,11 +219,7 @@ export function ChordSheet({
             <span
               key={mark.key}
               aria-hidden
-              className={
-                mark.end
-                  ? 'pointer-events-none absolute -translate-y-1/2 font-sans leading-none font-bold text-foreground italic'
-                  : 'pointer-events-none absolute -translate-x-full -translate-y-1/2 font-sans leading-none font-bold whitespace-nowrap text-foreground'
-              }
+              className="pointer-events-none absolute -translate-y-1/2 font-sans leading-none font-bold text-foreground italic"
               style={{ left: mark.left, top: mark.top, fontSize: mark.size }}
             >
               {mark.text}
@@ -315,16 +303,15 @@ function barPlace(staff: HTMLElement, measure: SVGGElement): BarPlace {
 }
 
 /**
- * Each head's name and finger in one bar, staff by staff top down (the right hand's, then the
- * left's), the heads read from the bottom as the hand's notes are placed: the name 0.6 of a space
- * left of the leftmost head or accidental at 0.87 spaces, the finger a space past its rightmost
- * head at 1.1, each a space at least over the one below, as the canvas's 13 and 11 on its 10.
+ * Each head's finger in one bar, staff by staff top down (the right hand's, then the left's), the
+ * heads read from the bottom as the hand's notes are placed: a space past its rightmost head at 1.1,
+ * each a space at least over the one below, as the canvas's 11 on its 10. The staff carries no note
+ * names: the keys above already say them (loop round 58, "the Chords staff says each thing once").
  */
 function headMarks(
   staff: HTMLElement,
   measure: SVGGElement,
   bar: string,
-  names: readonly (readonly string[])[],
   fingers: readonly (readonly (number | undefined)[])[],
 ): HeadMark[] {
   const box = staff.getBoundingClientRect()
@@ -336,31 +323,11 @@ function headMarks(
     const [first] = heads
     if (!first) return []
     const space = first.height
-    const leftmost = Math.min(
-      ...[...lines.querySelectorAll('g.note .notehead, g.note g.accid')].map(
-        (part) => part.getBoundingClientRect().left,
-      ),
-    )
-    const nameAt = leftmost - origin.left - space * 0.6
     const fingerAt = Math.max(...heads.map((h) => h.right)) - origin.left + space
-    let nameAbove = Infinity
     let fingerAbove = Infinity
     return heads.flatMap((head, i) => {
       const level = head.top + head.height / 2 - origin.top
       const out: HeadMark[] = []
-      const name = names[s]?.[i] ?? ''
-      if (name) {
-        const nameTop = Math.min(level, nameAbove - space)
-        nameAbove = nameTop
-        out.push({
-          key: `n${bar}-${s}-${i}`,
-          text: name,
-          left: nameAt,
-          top: nameTop,
-          size: space * 0.87,
-          end: false,
-        })
-      }
       const finger = fingers[s]?.[i]
       if (finger !== undefined) {
         const fingerTop = Math.min(level, fingerAbove - space)
@@ -371,7 +338,6 @@ function headMarks(
           left: fingerAt,
           top: fingerTop,
           size: space * 1.1,
-          end: true,
         })
       }
       return out
