@@ -12,30 +12,35 @@ PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: (
       sizes: ['Triads', '7ths', '9ths'].map((d) => ({ d, on: d === (st.size ?? 'Triads'), mark: d === (st.size ?? 'Triads') ? '✓' : '', pick: () => set({ size: d, menu: null }) })),
       leads: ['None', 'Secondary dominants', 'ii–V'].map((d) => ({ d, on: d === (st.lead ?? 'None'), mark: d === (st.lead ?? 'None') ? '✓' : '', pick: () => set({ lead: d, menu: null }) })),
       keysOn: st.sheet === 'keys', openKeys: () => set({ sheet: 'keys' }), fav: !!st.fav, favFill: st.fav ? '#C2554A' : 'none', toggleFav: () => set({ fav: !st.fav }),
-      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], y = (d) => 65 - d * 3.5, names = [], bars = [], notes = [], led = [];
+      staff: (() => { const L = 'CDEFGAB', NAT = [0, 2, 4, 5, 7, 9, 11], y = (d) => 65 - d * 3.5, names = [], bars = [], notes = [], led = [], bass = [];
         P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), third = n === n.toLowerCase() ? 3 : 4, x = 80 + i * 52;
-          names.push({ x, name: ch(n) }); if (i < P.length - 1) bars.push({ d: 'M' + (x + 26) + ' 30V58' });
+          names.push({ x, name: ch(n) }); if (i < P.length - 1) bars.push({ d: 'M' + (x + 26) + ' 30V120' });
+          // the left hand's root on the bass staff, C3 to B3 (the ruling: "the left hand's root is on it")
+          { const k = ((rpc - NAT[l0]) % 12 + 12) % 12, acc = k === 1 ? '♯' : k === 11 ? '♭' : '', cy = 109.5 - l0 * 3.5; bass.push({ x, cy, ax: x - 18, ay: cy + 5, acc, hasAcc: !!acc }); }
           [[l0, rpc], [l0 + 2, (rpc + third) % 12], [l0 + 4, (rpc + 7) % 12]].forEach(([d, pc]) => { const k = ((pc - NAT[d % 7]) % 12 + 12) % 12, acc = k === 1 ? '♯' : k === 11 ? '♭' : '';
             notes.push({ x, cy: y(d), ax: x - 18, ay: y(d) + 5, acc, hasAcc: !!acc }); if (d <= 0) led.push({ d: 'M' + (x - 10) + ' 65H' + (x + 10) }); }); });
-        return { names, bars, notes, led }; })(),
+        return { names, bars, notes, led, bass }; })(),
       walks: [['In C major', 'C G Am F, round and round'], ['Chromatically, rising', 'C G Am F · D♭ A♭ B♭m G♭ …'], ['Chromatically, falling', 'C G Am F · B F♯ G♯m E …'], ['In whole steps, rising', 'C G Am F · D A Bm G …'], ['Circle of fifths, falling', 'C G Am F · F C Dm B♭ …'], ['In minor thirds', 'C G Am F · E♭ B♭ Cm A♭ …']].map(([t, s]) => ({ t, s })) };''').replace("const cur = P[at]", "const lo62 = 48, cur = P[at]")
 assert PR62 != PR, 'PR return not found'
 
 TILES62 = (f'<div style="display: flex; align-items: stretch; gap: 8px"><sc-for list="{{{{tiles}}}}" as="t" hint-placeholder-count="4"><div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><button type="button" onClick="{{{{t.pick}}}}" style="width: 100%; height: 96px; border: 0; border-radius: 14px; background: {{{{t.bg}}}}; box-shadow: {{{{t.ring}}}}; color: {INK}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-family: {SERIF}; font-size: 26px">{{{{t.n}}}}</span><span style="font-size: 15px; font-weight: 700">{{{{t.c}}}}</span></button><span style="font-size: 12px; color: {SOFT}; height: 14px">{{{{t.move}}}} →</span></div></sc-for></div>'
          f'<div style="display: flex; gap: 16px; font-size: 13px; color: {SOFT}">' + ''.join(f'<span style="display: flex; align-items: center; gap: 8px"><span style="width: 10px; height: 10px; border-radius: 5px; background: {c}; box-shadow: 0 0 0 1px {LINE}"></span>{l}</span>' for l, c in (('Tonic', PEACH), ('Predominant', SKY), ('Dominant', SAGE))) + '</div>')
 HEARTI = '<svg viewBox="0 0 24 24" width="22" height="22" fill="{{favFill}}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>'
-# Back is Up to the Progressions library (its parent); Edit, a word in its own capsule, trailing as on a lesson (loop round 58)
-EDIT62 = f'<a href="ProgressionEdit.dc.html" style="{TBST}; text-decoration: none">Edit</a>'
-TOP62 = TOP('Progressions.dc.html', 'Progression', ROUND60('Settings', COG, 'openSet') + ROUND60('Piano', KEYSI, 'openKeys') + EDIT62, 'Back to Progressions')
+# Back is Up to the Progressions library (its parent); a built-in progression has no Edit: a learner makes their own
+# from it (the ruling: "a learner edits a copy"), the row under Passing chords
+TOP62 = TOP('Progressions.dc.html', 'Progression', ROUND60('Settings', COG, 'openSet') + ROUND60('Piano', KEYSI, 'openKeys'), 'Back to Progressions')
 CHEVS = f'<svg viewBox="0 0 24 24" width="16" height="16" {I}><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>'
 TITLE62 = (f'<div style="flex: none; display: flex; flex-direction: column; gap: 12px"><div style="display: flex; flex-direction: column; gap: 4px">'
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance">Axis of Awesome</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{fav}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}; text-wrap: pretty">Bright and singable, the sound of a thousand hits · Pop</p></div>'
            f'<button type="button" aria-label="Key: {{{{keyL}}}}" onClick="{{{{openRoot}}}}" style="align-self: flex-start; height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid {LINE}; background: {SHEET}; color: {INK}; font: inherit; font-size: 16px; display: flex; align-items: center; gap: 8px"><span style="color: {SOFT}">Key</span><b>{{{{keyL}}}}</b><span style="color: {SOFT}; display: flex">{CHEVS}</span></button></div>')
-STAFF62 = (f'<svg viewBox="20 0 246 84" width="100%" role="img" aria-label="The chords on the staff" style="display: block; max-width: 560px; margin: 0 auto">'
-           + ''.join(f'<path d="M24 {30 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-           + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><path d="M262 30V58" stroke="{INK}" stroke-width="1"></path>'
+STAFF62 = (f'<svg viewBox="20 0 246 132" width="100%" role="img" aria-label="The chords on the grand staff" style="display: block; max-width: 560px; margin: 0 auto">'
+           + ''.join(f'<path d="M24 {30 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path><path d="M24 {92 + i * 7}H262" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+           + f'<text x="26" y="64" font-size="44" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="113" font-size="40" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
+           + f'<path d="M24 30V120" stroke="{INK}" stroke-width="1.4"></path><path d="M262 30V120" stroke="{INK}" stroke-width="1"></path>'
+           + f'<sc-for list="{{{{staff.bass}}}}" as="z" hint-placeholder-count="4"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="6.4" ry="4.2" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
+           + f'<sc-if value="{{{{z.hasAcc}}}}" hint-placeholder-val="{{{{false}}}}"><text x="{{{{z.ax}}}}" y="{{{{z.ay}}}}" font-size="15" font-family="Noto Music, serif" fill="{INK}">{{{{z.acc}}}}</text></sc-if></sc-for>'
            + f'<sc-for list="{{{{staff.names}}}}" as="c" hint-placeholder-count="4"><text x="{{{{c.x}}}}" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="{INK}">{{{{c.name}}}}</text></sc-for>'
            + f'<sc-for list="{{{{staff.bars}}}}" as="l" hint-placeholder-count="3"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
            + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="1"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
