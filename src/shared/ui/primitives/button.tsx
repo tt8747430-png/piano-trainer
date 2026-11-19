@@ -30,13 +30,12 @@ const buttonVariants = cva(
         tool: 'rounded-full font-semibold text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-chosen',
       },
       // Every size is at least a 44px touch target, so the CLI's smaller sizes are gone. A text
-      // button has two heights (the kit's BTN): 44 compact in a row, 50 for a page's or a sheet's act.
+      // button has two heights (the kit's BTN): 44 compact in a row, 50 for a page's or a sheet's act,
+      // each 20 in at its sides, 16 at the side an icon leads or trails.
       size: {
         default:
-          'h-11 gap-2 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
+          'h-11 gap-2 px-5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
         lg: 'h-12.5 gap-2 px-5 text-base has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
-        // The same 50 as `lg`, named by four screens in agent B's and C's areas this round; folded into `lg` at the merge.
-        pill: 'h-12.5 gap-2 px-5 text-base has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
         // Icons in icon-only buttons are 20px; text buttons keep 16px beside the label.
         icon: "size-11 [&_svg:not([class*='size-'])]:size-5",
         'icon-lg': "size-12 [&_svg:not([class*='size-'])]:size-5",

@@ -73,7 +73,7 @@ export function CheckResult({
           )
         })}
       </ul>
-      <Button size="pill" className="mt-auto" onClick={onDone}>
+      <Button size="lg" className="mt-auto" onClick={onDone}>
         {t('done')}
       </Button>
     </section>

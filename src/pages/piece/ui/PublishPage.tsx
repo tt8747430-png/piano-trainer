@@ -14,6 +14,8 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { DraftPublishScreen } from '@/widgets/content-editor'
 import { PublishScreen } from '@/features/publish'
 import { BackButton, ButtonLink, NotFound, TileMark } from '@/shared/ui'
+import { PieceMark } from '@/widgets/piece-cover'
+import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 
 /** The route's song, or the way back where it is gone or cannot be published. */
@@ -36,6 +38,7 @@ export function PublishPage() {
  */
 function Publish({ piece }: { piece: Piece }) {
   const { item, title, publishing } = useSongPublish(piece)
+  const line = useSongByline(piece)
   const { account } = useAccount()
   if (!item && editsContent(account) && hasEditableOriginal(piece.id) && !isDegreePiece(piece))
     return <OriginalPublish piece={piece} title={title} />
@@ -49,7 +52,19 @@ function Publish({ piece }: { piece: Piece }) {
     )
   return (
     <PublishScreen
-      item={{ id: item.sourceId, kind: item.kind, title: item.title, meta: item.meta }}
+      item={{
+        id: item.sourceId,
+        kind: item.kind,
+        title: item.title,
+        meta: item.meta,
+        // The song's library tile at the head's 64, as its Settings' (SongCover).
+        mark: (
+          <span className="block shrink-0 [&_[data-slot=row-tile]]:size-16 [&_[data-slot=row-tile]]:rounded-[10px]">
+            <PieceMark entry={piece} />
+          </span>
+        ),
+        line,
+      }}
       publishing={publishing}
       back={<BackButton />}
     />

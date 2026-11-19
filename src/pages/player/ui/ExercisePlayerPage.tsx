@@ -91,7 +91,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       performance={performance}
       status={
         goOn ? (
-          <Button variant="soft" size="pill" onClick={goOn}>
+          <Button variant="soft" size="lg" onClick={goOn}>
             {t('exercise.nextKey')}
             <SkipForward data-icon="inline-end" aria-hidden />
           </Button>

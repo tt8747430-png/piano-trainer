@@ -88,11 +88,11 @@ export function RunResults({
         </RowGroup>
       )}
       <div className="flex flex-wrap gap-3">
-        <Button variant="soft" size="pill" onClick={onDone}>
+        <Button variant="soft" size="lg" onClick={onDone}>
           {t('done')}
         </Button>
         {missed.length > 0 ? (
-          <Button variant="soft" size="pill" onClick={onAgain}>
+          <Button variant="soft" size="lg" onClick={onAgain}>
             <RotateCcw data-icon="inline-start" aria-hidden />
             {t('summary.again')}
           </Button>

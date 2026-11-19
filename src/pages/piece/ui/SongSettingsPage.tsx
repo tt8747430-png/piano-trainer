@@ -10,8 +10,6 @@ import {
   usePieces,
   usePiecesStoreApi,
   useRepertoire,
-  entryTitles,
-  shownCredits,
   type ChartPiece,
   type Piece,
   type PieceId,
@@ -23,7 +21,6 @@ import { deleteSong, duplicateSong } from '@/features/edit-piece'
 import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
-import { useLocale } from '@/shared/i18n'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
@@ -41,6 +38,7 @@ import {
   say,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
+import { useSongByline } from '../model/use-song-byline'
 import { useSongPublish } from '../model/use-song-publish'
 import { ResetVersionAsk } from './ResetVersionAsk'
 import { SongCoverPicker } from './SongCover'
@@ -72,9 +70,6 @@ function SongSettings({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const { item, title, publishing } = useSongPublish(piece)
-  // Its other name (as the other language writes it), in a line under the title.
-  const subtitle = entryTitles(piece, useLocale()).secondary
-  const [writer] = shownCredits(piece)
   const shared = useShareSong()
   const router = useRouter()
   const layout = useLibraryLayout()
@@ -126,13 +121,7 @@ function SongSettings({ piece }: { piece: Piece }) {
     )
     if (what) shared.share(what)
   }
-  // Under the title (canvas 133): its other name or who wrote it, and Your song where it is the learner's.
-  const byline = [
-    subtitle ?? (writer && 'names' in writer ? writer.names : undefined),
-    own ? t('settings.yourSong') : undefined,
-  ]
-    .filter(Boolean)
-    .join(' · ')
+  const byline = useSongByline(piece)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion

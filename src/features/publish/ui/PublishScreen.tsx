@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { AudioWaveform, LogIn, Music, Plus, X } from 'lucide-react'
+import { AudioWaveform, Music, Plus, X } from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,6 +25,7 @@ import {
   Segmented,
   Sheet,
   SheetContent,
+  ThingHead,
   say,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -46,6 +47,10 @@ import { PublishSaid } from './PublishSaid'
 export type PublishPreview = Pick<PublicEntry, 'kind' | 'title' | 'meta'> & {
   /** What its tile's paint is drawn from, as its row's will be: its own id among the learner's. */
   readonly id: string
+  /** Its own tile where it has one, as the library wears it (a song's cover); else its kind's. */
+  readonly mark?: ReactNode
+  /** The line under its name, as its Settings head it (a song's who wrote it · Your song). */
+  readonly line?: string
 }
 
 /** The tags offered beside the learner's own, one tap each (R72's suggested tags). */
@@ -117,28 +122,22 @@ export function PublishScreen({
   const { t } = useTranslation(['songs', 'editor'])
   const live = publishing.state === 'published' || publishing.state === 'changed'
   return (
-    <div className="flex min-h-screen-free flex-col gap-6">
+    <div className="flex min-h-screen-free flex-col gap-2 lg:gap-6">
       <ScreenHeader title={t('editor:publishPage.title')} back={back} />
       <PublishSaid said={publishing.said} />
-      <div className="flex w-full flex-1 flex-col gap-6">
-        <div className="flex items-center gap-4">
-          <Tile id={item.id} kind={item.kind} size="head" />
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="text-xl font-bold text-balance break-words">
-              {publishing.face.title || item.title}
-            </span>
-            <span className="text-sm text-muted-foreground">
-              {[publishing.face.composer, t('public.yours')].filter(Boolean).join(' · ')}
-            </span>
-          </div>
-        </div>
+      <div className="flex w-full flex-1 flex-col gap-4 lg:gap-6">
+        {/* The thing's head as its Settings', the boards' THINGHEAD (canvas v550). */}
+        <ThingHead
+          mark={item.mark ?? <Tile id={item.id} kind={item.kind} size="head" />}
+          name={publishing.face.title || item.title}
+          line={
+            item.line ?? [publishing.face.composer, t('public.yours')].filter(Boolean).join(' · ')
+          }
+        />
         {!publishing.signedIn ? (
           <div className="flex flex-col items-start gap-3 card p-4">
             <p className="text-pretty text-muted-foreground">{t('public.publishSignIn')}</p>
-            <ButtonLink render={<Link to="/account/sign-in" />}>
-              <LogIn data-icon="inline-start" aria-hidden />
-              {t('public.signIn')}
-            </ButtonLink>
+            <ButtonLink render={<Link to="/account/sign-in" />}>{t('public.signIn')}</ButtonLink>
           </div>
         ) : live && publishing.publicId ? (
           <Published publishing={publishing} publicId={publishing.publicId} />

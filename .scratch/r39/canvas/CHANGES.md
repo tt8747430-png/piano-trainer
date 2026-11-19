@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a song's Publish: a Signed out state (the app's card and Sign in), the own copy's Playlist · Library row (was Folder · Hymns) · SongSettings,SongSettingsLaptop · pending
 - 2026-11-19 · (this commit) · a song's Duplicate toast says where the copy goes: "added to your songs" (it named Hymns) · SongSettings,SongSettingsLaptop,Section,SectionLaptop · pending
 
 ## Changes
