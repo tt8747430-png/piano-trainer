@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { hasCredits, SheetCredits, SheetTitle, type TitlePlace } from '@/shared/ui'
+import { hasCredits, LINES_HEAD, SheetCredits, SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** The title: at the line's head across, else centred. */
@@ -23,7 +23,12 @@ export function TitleField({ place }: { place: TitlePlace }) {
   const example = meta.kind === 'example'
   const open = () => view.setGear('credits')
   return (
-    <div className={PLACED[place === 'across' ? 'across' : 'centred']}>
+    <div
+      className={cn(
+        PLACED[place === 'across' ? 'across' : 'centred'],
+        place === 'lines' && LINES_HEAD,
+      )}
+    >
       <SheetTitle title={meta.title} place={place}>
         {example ? (
           meta.title

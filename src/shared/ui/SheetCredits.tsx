@@ -33,9 +33,12 @@ export function SheetCredits({
       ) : null}
       {line ? (
         <p
+          // Centred over lines down the screen at the boards' 13, 15 from 640px; a page's at its print size.
           className={cn(
-            'font-sans text-[0.8125rem] leading-snug text-pretty wrap-break-word text-muted-foreground',
-            align === 'center' ? 'text-center' : 'text-end',
+            'font-sans text-pretty wrap-break-word text-muted-foreground',
+            align === 'center'
+              ? 'text-center text-[0.8125rem]/[normal] sm:text-[0.9375rem]/[normal]'
+              : 'text-end text-[0.8125rem] leading-snug',
           )}
         >
           {line}
