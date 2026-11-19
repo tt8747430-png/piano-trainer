@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Profile's badges keep their 6px bars under the line (the loop-62 ruling's script was out of the build) · Profile,ProfileLaptop · pending
+
 ## Changes
 
 - 2026-11-19 · 03e13f9b · the editor's palette opens on Recent, as its ruling (loop round 57) and the app (it drew Notes); its phone keys D3 to E5 at the kit's 26 a white, as the app (C3 to G5 at 21, under the floor) · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v657

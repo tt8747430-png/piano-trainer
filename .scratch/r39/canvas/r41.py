@@ -33,6 +33,7 @@ exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r66_chord_finder.py').re
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r67_circle.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r68_exercise.py').read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r72_flat_songs.py').read())
+exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r74_badge_bars.py').read())
 exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r75_player_views.py").read())
 exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r73_laptop_links.py').read())
 exec(open("/home/user/piano-trainer/.scratch/r39/canvas/r71_tips.py").read())
