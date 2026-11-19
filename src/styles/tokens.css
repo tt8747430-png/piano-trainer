@@ -109,6 +109,9 @@
   --honey-ring: var(--p-honey-deep);
   /* The chosen among equals on a card (Played through's weakest bars): honey's wash under its ring. */
   --honey-wash: #fbf1dd;
+  /* Edit layout (R76): a panel's dashed outline, and the honey zones a panel may be put in. */
+  --layout-edge: #b98a32;
+  --layout-zone: rgb(237 198 132 / 0.28);
   /* A bar's slips, none to three or more (Played through, canvas 122): sand, then warming to honey. */
   --slip-0: #e4ddd3;
   --slip-1: #f8d9c2;
@@ -318,6 +321,8 @@
     --primary-foreground: var(--p-dusk-950);
     --honey-ring: var(--p-honey-night);
     --honey-wash: color-mix(in oklab, var(--p-honey-night) 18%, var(--card));
+    --layout-edge: var(--p-honey-night);
+    --layout-zone: color-mix(in oklab, var(--p-honey-night) 24%, transparent);
     --slip-0: var(--p-dusk-control);
     --slip-1: color-mix(in oklab, #f0a877 35%, var(--card));
     --slip-2: color-mix(in oklab, #f0a877 70%, var(--card));
@@ -404,6 +409,7 @@
     --wheel-relative: color-mix(in oklab, var(--primary) 34%, var(--background));
     --wheel-near-inner: color-mix(in oklab, var(--primary) 13%, var(--background));
     --chosen-honey: color-mix(in oklab, var(--primary) 40%, var(--card));
+    --layout-edge: var(--p-honey-ink);
   }
   @media screen {
     [data-theme='dark'] {

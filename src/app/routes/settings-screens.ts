@@ -6,6 +6,7 @@ export {
   EditProfilePage,
   ProfilePrivacyPage,
   GeneralPage,
+  PageLayoutsPage,
   FeedbackPage,
   SelectToolbarPage,
   SwipeActionsPage,

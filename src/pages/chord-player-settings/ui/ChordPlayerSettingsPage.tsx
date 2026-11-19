@@ -1,7 +1,8 @@
-import { Link, useSearch } from '@tanstack/react-router'
+import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BAND_PARTS, COUNT_INS, type CountIn } from '@/entities/chord-sheet'
+import { selectLayoutChanged, usePageLayouts } from '@/entities/page-layout'
 import { styleBook, usePatternBook } from '@/entities/pattern'
 import {
   PROGRESSION_VOICINGS,
@@ -17,6 +18,7 @@ import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangem
 import { useServices } from '@/shared/lib/services'
 import {
   BackButton,
+  GroupAction,
   RowButton,
   RowLink,
   say,
@@ -29,7 +31,7 @@ import {
   SwitchRow,
 } from '@/shared/ui'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
-import { useChordSheet } from '@/widgets/chord-player'
+import { useChordSheet, useResetChordLayout } from '@/widgets/chord-player'
 
 const PERCENT = { style: 'unit', unit: 'percent' } as const
 const STEP = 5
@@ -84,12 +86,13 @@ function useArrangerStatus(on: boolean): ArrangerStatus | null {
 type Opened = 'countIn' | 'volume' | 'time'
 
 /**
- * The Chord player's Settings (`/practice/chord-player/settings`), canvas 171's grouped rows: Instruments
- * (each a switch, at least one on, a part the style has none of not drawn), Playing (Count-in › and
- * Volume ›, each opening its sheet: the bars counted in; the volume and each instrument's level),
- * Music (Time signature ›, Written as, Voicing), the on-screen piano's and a connected piano's own
- * pages, then Follow a MIDI arranger. The key heard and the times through are the dock's Key and
- * Repeats. All but Written as, Voicing and Follow belong to the sheet open, saved with it.
+ * The Chord player's Settings (`/practice/chord-player/settings`, canvas R76), by how often each is
+ * wanted: Sound (Piano, Bass and Drums, each a switch, at least one on, a part the style has none of
+ * not drawn; Volume ›, the volume and each instrument's level), Playing (Count-in ›, Voicing), Chart
+ * (Time signature ›, Written as), MIDI (Connect a piano ›, Follow a MIDI arranger, the Arranger it
+ * hears), Layout (Edit layout, Reset layout with Undo, Every page's layout ›). The key heard and the
+ * times through are the dock's Key and Repeats. All but Written as, Voicing, Follow and the layout
+ * belong to the sheet open, saved with it.
  */
 export function ChordPlayerSettingsPage() {
   const { t } = useTranslation('practice')
@@ -103,6 +106,9 @@ export function ChordPlayerSettingsPage() {
   const arranger = useArrangerStatus(prefs.follow)
   const midi = useMidiSummary()
   const [opened, setOpened] = useState<Opened | null>(null)
+  const navigate = useNavigate()
+  const resetLayout = useResetChordLayout()
+  const layoutChanged = usePageLayouts(selectLayoutChanged('chord-player'))
   if (!hand) return null
   const { settings } = hand.entry
   const style = book.get(hand.entry.style)
@@ -125,7 +131,7 @@ export function ChordPlayerSettingsPage() {
       <ScreenHeader title={t('chordPlayer.settings.title')} back={<BackButton />} />
       <div className="mx-auto grid w-full max-w-5xl gap-4 lg:grid-cols-2 lg:items-start">
         <div className="flex flex-col gap-4">
-          <SettingsGroup flush title={t('chordPlayer.settings.instruments')}>
+          <SettingsGroup flush title={t('chordPlayer.settings.sound')}>
             {drawn.map((part) => {
               const last = settings[part].on && onCount === 1
               return (
@@ -140,6 +146,12 @@ export function ChordPlayerSettingsPage() {
                 />
               )
             })}
+            <RowButton
+              title={t('chordPlayer.settings.volume')}
+              value={formatPercent(locale, settings.volume)}
+              opens
+              onClick={() => setOpened('volume')}
+            />
           </SettingsGroup>
           <SettingsGroup flush title={t('chordPlayer.settings.playing')}>
             <RowButton
@@ -148,14 +160,25 @@ export function ChordPlayerSettingsPage() {
               opens
               onClick={() => setOpened('countIn')}
             />
-            <RowButton
-              title={t('chordPlayer.settings.volume')}
-              value={formatPercent(locale, settings.volume)}
-              opens
-              onClick={() => setOpened('volume')}
-            />
+            <div className="border-t border-hairline px-4 py-3">
+              <SettingField
+                label={t('chordPlayer.settings.voicing')}
+                info={t('chordPlayer.settings.voicingInfo')}
+                setting="chordPlayer.voicing"
+              >
+                <Segmented
+                  label={t('chordPlayer.settings.voicing')}
+                  value={prefs.voicing}
+                  options={PROGRESSION_VOICINGS.map((value) => ({
+                    value,
+                    label: t(`chordPlayer.settings.voicings.${value}`),
+                  }))}
+                  onChange={(voicing) => setChordPlayer(settingsStore, { voicing })}
+                />
+              </SettingField>
+            </div>
           </SettingsGroup>
-          <SettingsGroup flush title={t('chordPlayer.settings.music')}>
+          <SettingsGroup flush title={t('chordPlayer.settings.chart')}>
             <RowButton
               title={t('chordPlayer.settings.time')}
               value={hand.sheet.meter}
@@ -175,34 +198,15 @@ export function ChordPlayerSettingsPage() {
                 />
               </SettingField>
             </div>
-            <div className="border-t border-hairline px-4 py-3">
-              <SettingField
-                label={t('chordPlayer.settings.voicing')}
-                info={t('chordPlayer.settings.voicingInfo')}
-                setting="chordPlayer.voicing"
-              >
-                <Segmented
-                  label={t('chordPlayer.settings.voicing')}
-                  value={prefs.voicing}
-                  options={PROGRESSION_VOICINGS.map((value) => ({
-                    value,
-                    label: t(`chordPlayer.settings.voicings.${value}`),
-                  }))}
-                  onChange={(voicing) => setChordPlayer(settingsStore, { voicing })}
-                />
-              </SettingField>
-            </div>
           </SettingsGroup>
         </div>
-        <div className="flex flex-col gap-4 lg:pt-[22px]">
-          <SettingsGroup flush>
+        <div className="flex flex-col gap-4">
+          <SettingsGroup flush title={t('chordPlayer.settings.midi')}>
             <RowLink
               title={t('chordPlayer.settings.connectPiano')}
               value={midi}
               render={<Link to="/settings/connect-piano" />}
             />
-          </SettingsGroup>
-          <SettingsGroup flush>
             <SwitchRow
               label={t('chordPlayer.settings.follow')}
               info={t('chordPlayer.settings.followInfo')}
@@ -210,12 +214,32 @@ export function ChordPlayerSettingsPage() {
               checked={prefs.follow}
               onCheckedChange={(follow) => setChordPlayer(settingsStore, { follow })}
             />
-            <div className="flex min-h-13 items-center justify-between gap-3 py-2 pr-4 pl-4 text-base">
+            <div className="flex min-h-13 items-center justify-between gap-3 border-t border-hairline py-2 pr-4 pl-4 text-base">
               <span>{t('chordPlayer.settings.arranger')}</span>
               <span className="truncate text-muted-foreground" aria-live="polite">
                 {arrangerValue}
               </span>
             </div>
+          </SettingsGroup>
+          <SettingsGroup flush title={t('chordPlayer.settings.layout')}>
+            <GroupAction
+              label={t('chordPlayer.layout.edit')}
+              onClick={() =>
+                void navigate({
+                  to: '/practice/chord-player',
+                  search: { ...(sheetId === undefined ? {} : { sheet: sheetId }), layout: 'edit' },
+                })
+              }
+            />
+            <GroupAction
+              label={t('chordPlayer.layout.resetLayout')}
+              disabled={!layoutChanged}
+              onClick={resetLayout}
+            />
+            <RowLink
+              title={t('chordPlayer.layout.everyPage')}
+              render={<Link to="/settings/general/layouts" />}
+            />
           </SettingsGroup>
         </div>
       </div>

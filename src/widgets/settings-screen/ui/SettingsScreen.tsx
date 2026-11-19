@@ -10,6 +10,7 @@ import { settingsParentOf } from '../model/sections'
 const PARENT_TITLE = {
   '/settings/account': 'accountPage.title',
   '/settings/connect-piano': 'pages.connectPiano',
+  '/settings/general': 'pages.general',
 } as const
 
 /**

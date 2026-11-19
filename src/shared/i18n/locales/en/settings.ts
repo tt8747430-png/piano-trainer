@@ -42,6 +42,33 @@ export const settings = {
     guide: 'User guide',
     feedback: 'Report a problem',
     about: 'About',
+    pageLayouts: 'Page layouts',
+  },
+  // Settings › General › Page layouts (R76): each page whose panels the learner arranged.
+  layouts: {
+    label: 'Layout',
+    changed: 'Changed by you',
+    asCame: 'As it came',
+    allAsCame: 'As they came',
+    count_one: '{{count}} changed',
+    count_other: '{{count}} changed',
+    reset: 'Reset',
+    resetName: 'Reset {{page}}’s layout',
+    resetAll: 'Reset every page',
+    pageReset: '{{page}}’s layout reset',
+    allReset: 'Every page’s layout reset',
+    undo: 'Undo',
+    pages: { 'chord-player': 'Chord player' },
+    more: '+ {{count}} more',
+    hidden: '{{panel}} hidden',
+    place: {
+      top: '{{panel}} at the top',
+      float: '{{panel}} floating',
+      bottom: '{{panel}} at the bottom',
+      left: '{{panel}} on the left',
+      right: '{{panel}} on the right',
+    },
+    size: '{{panel}} {{size}}',
   },
   // Storage and backup's Piano sound.
   piano: {

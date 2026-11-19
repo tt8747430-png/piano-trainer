@@ -1,16 +1,16 @@
 import { Link } from '@tanstack/react-router'
-import { FilePlus2, Link2, Save, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
 import { ShareChordSheet } from '@/features/share-chord-sheet'
 import { NewSheet, RoundLink } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
-import { PianoButton } from '@/widgets/practice-pages'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
 
 /**
- * The Chord player (`/practice/chord-player`, canvas 171): the widget's bar, chart and dock, given
- * the page's acts on the sheet's file (New, Save as my chord sheet…, Share) and its gear.
+ * The Chord player (`/practice/chord-player`, canvas R76): the widget's bar, chart and panels, given
+ * the page's acts on the sheet's file (Save as my chord sheet… for the sheet in hand, Share…, New
+ * sheet), Edit layout in the URL, and its gear.
  */
 export function ChordPlayerPage() {
   const { t } = useTranslation('practice')
@@ -24,30 +24,21 @@ export function ChordPlayerPage() {
           sheetId={page.sheetId}
           name={page.name}
           routes={page.routes}
+          editing={page.editing}
+          onEditing={page.setEditing}
+          onNew={() => void page.startNew()}
           more={[
             {
-              key: 'new',
-              label: t('chordPlayer.newSheet'),
-              icon: FilePlus2,
-              group: t('chordPlayer.file'),
-              onSelect: () => void page.startNew(),
-            },
-            {
               key: 'save',
-              group: t('chordPlayer.file'),
+              group: 'draft',
+              unnamed: true,
               label: t('chordPlayer.saveAs'),
-              icon: Save,
+              // The sheet in hand is kept by naming it; one of mine saves its draft.
+              hidden: page.sheetId !== undefined,
               onSelect: () => page.setSaving(''),
             },
-            {
-              key: 'share',
-              group: t('chordPlayer.file'),
-              label: t('chordPlayer.online.share'),
-              icon: Link2,
-              onSelect: page.share,
-            },
+            { key: 'share', label: t('chordPlayer.shareMenu'), onSelect: page.share },
           ]}
-          piano={<PianoButton />}
           settings={
             <RoundLink
               label={t('settings.open', { page: t('pages.chordPlayer') })}

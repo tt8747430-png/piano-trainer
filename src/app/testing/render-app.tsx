@@ -120,6 +120,7 @@ export async function renderApp(
     notificationsStore: stores.notifications,
     practiceLibraryStore: stores.practiceLibrary,
     ownLessonsStore: stores.ownLessons,
+    pageLayoutsStore: stores.pageLayouts,
     audio,
     midi,
     auth,

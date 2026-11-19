@@ -196,18 +196,22 @@ export function GroupAction({
   label,
   onClick,
   destructive = false,
+  disabled = false,
 }: {
   label: string
   onClick: () => void
   destructive?: boolean
+  /** Nothing to do yet (Reset layout on a page as it came). */
+  disabled?: boolean
 }) {
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={onClick}
       className={cn(
         ROW,
-        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
         destructive ? 'text-destructive' : 'text-link',
       )}
     >

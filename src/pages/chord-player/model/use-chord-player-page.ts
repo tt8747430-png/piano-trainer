@@ -7,7 +7,7 @@ import {
   useChordSheetsStoreApi,
   type ChordSheetEntry,
 } from '@/entities/chord-sheet'
-import { holdSheet, saveAsMine, startNew } from '@/features/manage-chord-sheets'
+import { holdSheet, markOpened, saveAsMine, startNew } from '@/features/manage-chord-sheets'
 import { openLink } from '@/features/share-chord-sheet'
 import { useChordShare } from '@/shared/lib/chord-share'
 import { lineSheet, sheetToText } from '@/shared/lib/arrangement'
@@ -19,8 +19,9 @@ import {
   parseNumerals,
   type Numeral,
 } from '@/shared/lib/music'
+import { useSetSearch } from '@/shared/lib'
 import { confirm, say } from '@/shared/ui'
-import { useChordSheet, type ChordPlayerRoutes } from '@/widgets/chord-player'
+import { useChordSheet, type ChordPlayerRoutes, type ChordPlayerView } from '@/widgets/chord-player'
 
 /**
  * The Chord player page's acts (R29 CP4, CP5): the sheet open (one of My chord sheets, or the sheet in
@@ -31,6 +32,7 @@ export function useChordPlayerPage() {
   const { t } = useTranslation('practice')
   const view = useSearch({ from: '/shell/practice/chord-player' })
   const navigate = useNavigate()
+  const setSearch = useSetSearch<ChordPlayerView>()
   const store = useChordSheetsStoreApi()
   const hand = useChordSheet(view.sheet)
   const saved = useChordSheets(selectSaved(view.sheet))
@@ -86,6 +88,12 @@ export function useChordPlayerPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view.p, view.link])
 
+  // The sheet open goes first among the recent sheets, the bar's menu (R76).
+  const found = hand !== null
+  useEffect(() => {
+    if (found) markOpened(store, view.sheet)
+  }, [store, view.sheet, found])
+
   // An id that names none of My chord sheets (deleted, or another device's) opens the sheet in hand.
   useEffect(() => {
     if (view.sheet !== undefined && !hand) openSheet(undefined)
@@ -112,6 +120,9 @@ export function useChordPlayerPage() {
     name,
     sheetId: view.sheet,
     routes,
+    /** Edit layout, its URL's `layout=edit`, the entry replaced. */
+    editing: view.layout === 'edit',
+    setEditing: (on: boolean) => setSearch({ layout: on ? 'edit' : undefined }),
     saving,
     setSaving,
     async startNew() {

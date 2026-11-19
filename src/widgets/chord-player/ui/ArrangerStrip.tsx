@@ -1,12 +1,19 @@
-import { ChevronDown, ChevronUp, PanelBottom, PanelRight } from 'lucide-react'
+import { ChevronDown, ChevronUp, Minus, Play, Square } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
 import { cn } from '@/shared/lib'
-import type { ArrangerPlace } from '@/entities/settings'
 import type { ArrangerFollow } from '../model/use-arranger-follow'
 
 const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
+
+/** The Genos panel's three sizes (R76): every control, Start/Stop and Main A–D in a row, or a pill. */
+export type GenosSize = 'full' | 'compact' | 'minimized'
+
+/** The card the panel is drawn on, 14 round: floating over the page, or flat in a laptop's column. */
+const CARD =
+  'rounded-[14px] bg-card shadow-[0_0_0_1px_var(--color-border),0_1px_3px_rgb(51_41_33/0.12),0_6px_14px_-4px_rgb(51_41_33/0.14),0_14px_28px_-8px_rgb(51_41_33/0.14)]'
+const FLAT_CARD = 'rounded-[14px] bg-card shadow-[0_0_0_1px_var(--color-border)]'
 
 /** A panel button and its lamp, as the Genos lights it: on (chosen), or off. */
 function Lamp({
@@ -18,7 +25,7 @@ function Lamp({
   onClick,
 }: {
   on: boolean
-  label: string
+  label: ReactNode
   spoken?: string
   className?: string
   /** No arranger connected: nothing to press. */
@@ -67,7 +74,7 @@ function Group({
     >
       <span
         aria-hidden
-        className="text-[11px] font-semibold tracking-[.04em] text-muted-foreground uppercase"
+        className="text-xs font-semibold tracking-[.04em] text-muted-foreground uppercase"
       >
         {label}
       </span>
@@ -82,28 +89,31 @@ function Group({
 }
 
 /**
- * The arranger's style controls (canvas 173), a card over the dock while the Chord player follows
- * it, every control in view, none scrolled away: its state and Start/Stop on its head; Main A–D
- * (pressed again while playing, its Fill-in) and Break; Intro I–III and Ending/rit. I–III. Two rows
- * on a phone, one row of groups on a laptop (`wide`). Each lamp lit as the panel's. Only what the
- * Genos takes over MIDI is here (Yamaha's Rhythm Start and Stop, Section Control). Its head folds it
- * to that one line, or (on a laptop) moves it to the side column and back (`place`, saved).
+ * The arranger's style controls (canvas R76), a panel of the page while the Chord player follows
+ * it, in one of three sizes changed from its own head at any time, edit or not: **Full**, every
+ * control in view (its state and Start/Stop on its head; Main A–D, pressed again while playing its
+ * Fill-in, and Break; Intro I–III and Ending/rit. I–III; two rows on a phone, one row of groups on a
+ * laptop's wide strip, `wide`); **Compact**, Start/Stop and Main A–D in one 64 row; **Minimized**, a
+ * glass pill ("Genos · Main A") that opens it in full. Each lamp lit as the panel's. Only what the
+ * Genos takes over MIDI is here (Yamaha's Rhythm Start and Stop, Section Control). `flat` draws it
+ * without its shadow, in a laptop's side column; `children` is what Edit layout draws over it.
  */
 export function ArrangerStrip({
   follow,
   device,
+  size,
   wide = false,
-  place,
-  canSide = false,
-  onPlace,
+  flat = false,
+  onSize,
+  children,
 }: {
   follow: ArrangerFollow
   device: string
+  size: GenosSize
   wide?: boolean
-  place: ArrangerPlace
-  /** A side column to move into: a laptop's. */
-  canSide?: boolean
-  onPlace(place: ArrangerPlace): void
+  flat?: boolean
+  onSize(size: GenosSize): void
+  children?: ReactNode
 }) {
   const { t } = useTranslation('practice')
   const section = follow.section
@@ -123,6 +133,97 @@ export function ArrangerStrip({
         ? t('chordPlayer.arranger.playingMain', { device, main })
         : t('chordPlayer.arranger.playing', { device })
       : t('chordPlayer.arranger.waiting', { device })
+  const dot = (
+    <span
+      aria-hidden
+      className={cn(
+        'size-2 shrink-0 rounded-full',
+        follow.running ? 'bg-learned' : 'bg-muted-foreground',
+      )}
+    />
+  )
+  const startStop = (
+    <Lamp
+      disabled={off}
+      on={follow.running}
+      label={t('chordPlayer.arranger.startStop')}
+      className="min-w-22 shrink-0 px-3"
+      onClick={follow.toggle}
+    />
+  )
+  const minimize = (
+    <HeadButton label={t('chordPlayer.arranger.minimize')} onClick={() => onSize('minimized')}>
+      <Minus aria-hidden />
+    </HeadButton>
+  )
+  const mainLamps = MAINS.map((each) => (
+    <Lamp
+      disabled={off}
+      key={each}
+      on={main === each}
+      label={each}
+      spoken={t('chordPlayer.arranger.main', { main: each })}
+      onClick={() =>
+        follow.press(main === each && follow.running ? SECTION.fill[each] : SECTION.main[each])
+      }
+    />
+  ))
+  if (size === 'minimized') {
+    // With no section chosen yet the pill names the arranger alone.
+    const named = main
+      ? t('chordPlayer.arranger.pill', { device, main: t('chordPlayer.arranger.main', { main }) })
+      : device
+    return (
+      <div className="relative w-fit">
+        <button
+          type="button"
+          aria-label={t('chordPlayer.arranger.pillLabel', { name: named })}
+          onClick={() => onSize('full')}
+          className="flex h-11 items-center gap-2 rounded-pill glass pr-3 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:bg-muted [&_svg]:size-[18px]"
+        >
+          {dot}
+          {named}
+          <ChevronUp aria-hidden />
+        </button>
+        {children}
+      </div>
+    )
+  }
+  if (size === 'compact')
+    return (
+      <div
+        role="toolbar"
+        aria-label={t('chordPlayer.arranger.strip', { device })}
+        className={cn(
+          'relative flex h-16 w-full min-w-0 items-center gap-2 pr-2 pl-3',
+          flat ? FLAT_CARD : CARD,
+        )}
+      >
+        {/* A phone's 341 holds Main A–D at 44 only with Start/Stop as its glyph; its lamp says it runs. */}
+        <Lamp
+          disabled={off}
+          on={follow.running}
+          label={follow.running ? <Square aria-hidden /> : <Play aria-hidden />}
+          spoken={t('chordPlayer.arranger.startStop')}
+          className="grid w-11 shrink-0 place-items-center [&_svg]:size-5"
+          onClick={follow.toggle}
+        />
+        <div
+          role="group"
+          aria-label={t('chordPlayer.arranger.mainLabel')}
+          className="grid min-w-0 flex-1 grid-cols-4 gap-1 sm:max-w-80"
+        >
+          {mainLamps}
+        </div>
+        <div className="ml-auto flex shrink-0">
+          <HeadButton label={t('chordPlayer.arranger.full')} onClick={() => onSize('full')}>
+            <ChevronUp aria-hidden />
+          </HeadButton>
+          {minimize}
+        </div>
+        {children}
+      </div>
+    )
   const intro = (
     <Group label={t('chordPlayer.arranger.introLabel')} columns={3} grow={3}>
       {ARRANGER_NUMBERS.map((n) => (
@@ -139,18 +240,7 @@ export function ArrangerStrip({
   )
   const mains = (
     <Group label={t('chordPlayer.arranger.mainLabel')} columns={5} grow={5}>
-      {MAINS.map((each) => (
-        <Lamp
-          disabled={off}
-          key={each}
-          on={main === each}
-          label={each}
-          spoken={t('chordPlayer.arranger.main', { main: each })}
-          onClick={() =>
-            follow.press(main === each && follow.running ? SECTION.fill[each] : SECTION.main[each])
-          }
-        />
-      ))}
+      {mainLamps}
       <Lamp
         disabled={off}
         on={section === SECTION.break}
@@ -177,54 +267,26 @@ export function ArrangerStrip({
     <div
       role="toolbar"
       aria-label={t('chordPlayer.arranger.strip', { device })}
-      className="flex w-full min-w-0 flex-col gap-2 rounded-[16px] bg-card px-3 pt-2 pb-3 shadow-[0_0_0_1px_var(--color-border),0_1px_3px_rgb(51_41_33/0.12),0_6px_14px_-4px_rgb(51_41_33/0.14),0_14px_28px_-8px_rgb(51_41_33/0.14)]"
+      className={cn(
+        'relative flex w-full min-w-0 flex-col gap-2 px-3 pt-2 pb-3',
+        flat ? FLAT_CARD : CARD,
+      )}
     >
       <div className="flex min-h-10 items-center gap-2">
-        <span
-          aria-hidden
-          className={cn(
-            'size-2 shrink-0 rounded-full',
-            follow.running ? 'bg-learned' : 'bg-muted-foreground',
-          )}
-        />
+        {dot}
         <span
           className="line-clamp-2 min-w-0 flex-1 text-sm font-semibold text-pretty"
           aria-live="polite"
         >
           {title}
         </span>
-        {off ? null : (
-          <Lamp
-            disabled={off}
-            on={follow.running}
-            label={t('chordPlayer.arranger.startStop')}
-            className="min-w-24 shrink-0 px-3"
-            onClick={follow.toggle}
-          />
-        )}
-        {canSide || place === 'side' ? (
-          <HeadButton
-            label={t(
-              place === 'side' ? 'chordPlayer.arranger.toDock' : 'chordPlayer.arranger.toSide',
-            )}
-            onClick={() => onPlace(place === 'side' ? 'card' : 'side')}
-          >
-            {place === 'side' ? <PanelBottom aria-hidden /> : <PanelRight aria-hidden />}
-          </HeadButton>
-        ) : null}
-        {place !== 'side' ? (
-          <HeadButton
-            label={t(
-              place === 'folded' ? 'chordPlayer.arranger.show' : 'chordPlayer.arranger.hide',
-            )}
-            expanded={place !== 'folded'}
-            onClick={() => onPlace(place === 'folded' ? 'card' : 'folded')}
-          >
-            {place === 'folded' ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
-          </HeadButton>
-        ) : null}
+        {off ? null : startStop}
+        <HeadButton label={t('chordPlayer.arranger.compact')} onClick={() => onSize('compact')}>
+          <ChevronDown aria-hidden />
+        </HeadButton>
+        {minimize}
       </div>
-      {place === 'folded' ? null : wide ? (
+      {wide ? (
         <div className="flex gap-4">
           {intro}
           {mains}
@@ -239,19 +301,18 @@ export function ArrangerStrip({
           </div>
         </>
       )}
+      {children}
     </div>
   )
 }
 
-/** One of the strip's head buttons: an icon, 44 square, named. */
+/** One of the panel's head buttons: an icon, 44 square, named. */
 function HeadButton({
   label,
-  expanded,
   onClick,
   children,
 }: {
   label: string
-  expanded?: boolean
   onClick(): void
   children: ReactNode
 }) {
@@ -260,9 +321,8 @@ function HeadButton({
       type="button"
       aria-label={label}
       title={label}
-      aria-expanded={expanded}
       onClick={onClick}
-      className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+      className="-my-0.5 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
     >
       {children}
     </button>
