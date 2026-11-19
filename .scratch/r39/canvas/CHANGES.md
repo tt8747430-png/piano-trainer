@@ -8,9 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a pattern: Broken chords' right hand as it plays (the upper notes together, then the lowest; was an Alberti line), the six practise rows over C G Am F (were two over C F G C), the book's number in its name, no invented Level 1, the phone keys at the kit's width (G2 to G4) · Pattern,PatternLaptop,PatternNew,PatternNewLaptop · **pending**
 
 ## Changes
+
+- 2026-11-19 · 13b7c172 · a pattern: Broken chords' right hand as it plays (the upper notes together, then the lowest; was an Alberti line), the six practise rows over C G Am F (were two over C F G C), the book's number in its name, no invented Level 1, the phone keys at the kit's width (G2 to G4) · Pattern,PatternLaptop,PatternNew,PatternNewLaptop · v641
 
 - 2026-11-19 · 1418993c · a progression: the grand staff with the left hand's root (was a treble staff alone, against its ruling), no Edit in a built-in's bar (a learner edits a copy) · Progression,ProgressionLaptop · v640
 - 2026-11-19 · 703233f3 · a Practice page's laptop keys 8 under the bar on every board (Scales, Intervals, Progression, Exercise were flush, Pattern 24 inside the bar); Intervals' Play all in Lucide's list-video · IntervalsLaptop,Intervals,ScalesLaptop,ProgressionLaptop,PatternLaptop,ExerciseLaptop · v639
