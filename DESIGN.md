@@ -264,6 +264,9 @@ Warm neutrals and seven quiet paints. Each role has a day value, a night value a
 - **Honey wash** (`chosen-honey`, its edge `honey-ring`): the one exception to the Neutral Choice Rule, as the
   PlayerApp board draws it, on the Player's Pattern sheet alone: the pattern playing, its place chip and its Sort and
   filter chips (`ChoiceChips` `tone="honey"`, card pills in a hairline), and Sort and filter while one is on.
+- **Layout edge, Layout zone** (`layout-edge`, `layout-zone`): Edit layout on the Chord player alone (R76): a panel's
+  2px dashed outline in deep honey, and the honey wash of a place a panel may be put in. Never a focus ring, a
+  selection or a card's line; outside Edit layout nothing wears them.
 - **Control Line** (`input`): 1px round a control, firm enough to find it (3:1).
 - **Hairline** (`hairline`): a divider inside a card.
 - **Ink, Soft Ink** (`foreground`, `muted-foreground`): text, secondary text, the navigation's icons.
