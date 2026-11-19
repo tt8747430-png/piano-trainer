@@ -295,6 +295,7 @@ export const songs: LocaleResources['songs'] = {
     songs: 'Песни',
     title: 'Название',
     composerKey: 'Композитор и тональность',
+    composerKind: 'Композитор и вид',
     progress: 'Прогресс',
     composer: 'Композитор',
     type: 'Тип',

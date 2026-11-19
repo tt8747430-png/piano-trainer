@@ -1,5 +1,6 @@
 export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
+export { daySaid } from './day-said'
 export {
   partsFromParams,
   partsParams,

@@ -294,6 +294,7 @@ export const songs = {
     songs: 'Songs',
     title: 'Title',
     composerKey: 'Composer and key',
+    composerKind: 'Composer and kind',
     progress: 'Progress',
     composer: 'Composer',
     type: 'Type',

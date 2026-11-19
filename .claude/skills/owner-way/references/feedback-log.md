@@ -362,6 +362,8 @@ owner's, typos fixed.
 
 ## Library, adding, publishing
 
+- **Archive and Trash as their boards, measured (port, 2026-11-19):** on a phone their rows were 80 with a 56 cover 16 from the title; ARCHROW's are 64, a 44 cover with 8 corners 12 from the title over its line, each at its normal height, the list (or the empty state) 8 under the bar. On a laptop the table took three equal columns and rows 64 with the Title head 54 in; it is ATABLE's 2.2fr · 1.6fr · 120 · 44, rows 60, the head on the row's edge, "Composer and kind" (it holds playlists too), and the day said as the library says it (Today, 3 days ago, then 12 Nov; it said November 19), one `daySaid` for both. The boards: the empty Archive said folders (playlists, as every string), an archived playlist read "Folder · 6 songs", the States box was missing (its states could not be opened), and the rows drew 80 and 61 by their box model where they mean 64 and 60.
+
 - **A playlist's bar as LISTPAGE's (port, 2026-11-19):** its ··· stood after Select on a phone; it stands before it, Select keeping the trailing place on every list as on a laptop. A bar's word button (Select) carried a 1px clear border beside its glass ring, 2 wider than the board's; the bar's button has the ring alone.
 
 - **All songs on a phone as its board, measured (port, 2026-11-19):** the search stood 16 under the bar and the search, count and list 16 apart; the board's LISTPAGE keeps 4 and 12. A song's row was 86 with its title on a 22 line and its two lines on 20; it is SONGROW's 88, the title on 20, its lines at their normal height 2 apart.

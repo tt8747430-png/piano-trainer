@@ -293,7 +293,7 @@ print('r53 explore, groups ok')
 # ════ Folder and Archive: a folder, its settings, card style, archived; Archive; Trash ════
 SP_SRC = (r'''
     const S = (o) => set(o), ROOT = __ROOT__, page = st.page === undefined ? ROOT : st.page;''' + TOAST_JS + r'''
-    const arch = st.arch ?? [['Silent Night', 'Gruber · Christmas', '__PIC_Silent_Night__', '12 Nov'], ['Greensleeves', 'Traditional · Folk', '__PIC_Greensleeves__', '3 Nov'], ['Christmas', 'Folder · 6 songs', '__PIC_Christmas__', '28 Oct']];
+    const arch = st.arch ?? [['Silent Night', 'Gruber · Christmas', '__PIC_Silent_Night__', '12 Nov'], ['Greensleeves', 'Traditional · Folk', '__PIC_Greensleeves__', '3 Nov'], ['Christmas', 'Playlist · 6 songs', '__PIC_Christmas__', '28 Oct']];
     const trash = st.trash ?? [['Waltz sketch', 'Deleted 9 November', '__PIC_Waltz_sketch__', '9 Nov', 'Written by you · A minor'], ['Jingle Bells (my version)', 'Deleted 2 November', '__PIC_Jingle_Bells_(my_version)__', '2 Nov', 'Pierpont · Christmas']];
     const fArch = st.fArch ?? [['Holy, Holy, Holy', 'Dykes · D major'], ['Rock of Ages', 'Hastings · E♭ major']];
     const cs = st.cs ?? 'Soft', lay = st.lay ?? 'List';
@@ -356,24 +356,24 @@ CSTYLE = (PREVCARD + SEC(CAPS('Presets'), f'<div style="display: grid">{SEGC("pr
 _ACK = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{x.ckLine}}}}; background: {{{{x.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{x.ckMark}}}}">{CHECK}</span></span></sc-if>')
 _AHIT = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" role="checkbox" aria-checked="{{{{x.on}}}}" aria-label="{{{{x.t}}}}" onClick="{{{{x.tap}}}}" style="position: absolute; inset: 0; z-index: 1; border: 0; background: transparent"></button></sc-if>'
 _AMORE = f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="More for {{{{x.t}}}}" aria-haspopup="menu" data-tip="More" onClick="{{{{x.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if>'
-ARCHROW = lambda lst, act=None, label=None: (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="position: relative; min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
+ARCHROW = lambda lst, act=None, label=None: (f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="position: relative; box-sizing: border-box; min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">'
                                    f'{_AHIT}{_ACK}<span style="flex: none; width: 44px; height: 44px; border-radius: 8px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span><span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{x.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{x.s}}}}</span></span>'
                                    f'{_AMORE}</div></sc-for></div>')
 FARCH = (f'<span style="font-size: 15px; color: {SOFT}">Archived from Hymns</span>' + IF('fArchAny', f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden"><sc-for list="{{{{fArch}}}}" as="x" hint-placeholder-count="2"><div style="min-height: 60px; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; box-shadow: inset 0 -1px 0 {FILL}">{COV("", HONEY, 40)}<span style="flex: 1; display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">{{{{x.t}}}}</span><span style="font-size: 14px; color: {SOFT}">{{{{x.s}}}}</span></span><button type="button" onClick="{{{{x.un}}}}" style="height: 44px; padding: 0 12px; border: 0; border-radius: 22px; background: {FILL}; font: inherit; font-size: 14px; font-weight: 600; color: {INK}">Unarchive</button></div></sc-for></div>', 'true'))
 ARCHIVEP = (IF('archAny', ARCHROW('arch'), 'true')
-            + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.'))
+            + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and playlists you archive wait here, to be restored whenever you like.'))
 _TRASHROW = (f'<button type="button" onClick="{{{{goTrash}}}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 14px; background: transparent; color: {SOFT}; font: inherit; font-size: 15px; text-align: left; display: flex; align-items: center; gap: 12px; padding: 0 16px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"></path></svg><span style="flex: 1">Trash · {{{{trashN}}}}</span>{CHEV_R}</button>')
 # On a laptop Archive and Trash are the library's table: Title · Kind · when it went, and ··· on each row; Select in
 # the bar, the bulk acts in the selection bar (ui-and-mockups: every list of the learner's things has Select).
 _ACOLSG = 'display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 120px 44px; align-items: center; gap: 16px'
 # the library's table, as All songs draws it (r72 _LTHEAD and LROW): a 40 head on a rule, Title over the cover, 60 rows
 _ACOLS = lambda when: f'<div style="{_ACOLSG}; padding: 0 8px 0 12px; height: 40px; border-bottom: 1px solid {LINE}">' + ''.join(f'<span style="font-size: 13px; font-weight: 600; color: {SOFT}">{h}</span>' for h in ('Title', 'Composer and kind', when)) + '<span></span></div>'
-ATABLE = lambda lst, when: (f'<div style="display: flex; flex-direction: column">{_ACOLS(when)}<sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="{_ACOLSG}; position: relative; min-height: 60px; padding: 0 8px 0 12px; border-bottom: 1px solid {LINE}">'
+ATABLE = lambda lst, when: (f'<div style="display: flex; flex-direction: column">{_ACOLS(when)}<sc-for list="{{{{{lst}}}}}" as="x" hint-placeholder-count="3"><div style="{_ACOLSG}; position: relative; box-sizing: border-box; min-height: 60px; padding: 0 8px 0 12px; border-bottom: 1px solid {LINE}">'
                             f'{_AHIT}<span style="min-width: 0; display: flex; align-items: center; gap: 16px">{_ACK}<span style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {{{{x.c}}}}; box-shadow: inset 0 0 0 1px rgba(51,41,33,.1)"></span>'
                             f'<span style="min-width: 0; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.t}}}}</span></span><span style="min-width: 0; font-size: 15px; color: {SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{x.k}}}}</span><span style="font-size: 15px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{x.w}}}}</span>'
                             f'<span style="display: flex; justify-content: flex-end">{_AMORE}</span></div></sc-for></div>')
 ARCHIVEP_L = (IF('archAny', ATABLE('arch', 'Archived'), 'true')
-              + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and folders you archive wait here, to be restored whenever you like.'))
+              + EMPTY('archNone', ARCHIVE, 'Nothing archived', 'Songs and playlists you archive wait here, to be restored whenever you like.'))
 TRASHP_L = (IF('trashAny', ATABLE('trash', 'Deleted'), 'true')
             + EMPTY('trashNone', '⌫', 'The Trash is empty', 'Songs you delete wait here until you empty the Trash. Restore one to put it back where it was.'))
 TRASHP = (IF('trashAny', ARCHROW('trash'), 'true')
@@ -391,8 +391,8 @@ SP_SHEETS = (BSHEET('applyOn', 'Apply style to', GROUP(('action', 'This folder o
              + ASK('permOn', '{{permT}}', '{{permB}}', 'Delete', 'doPerm')
              + ASK('allOn', 'Apply to all folders?', 'This style will replace the current style of all 9 places, including Library home.', 'Apply', 'doAll')
              + ASK('delfOn', 'Delete “Hymns”?', 'The folder will be permanently deleted. Its 6 songs will be moved to the Trash.', 'Delete', 'doDelF'))
-SPBODY = (IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH) + IF('isArchive', ARCHIVEP) + IF('isTrash', TRASHP))
-SPBODY_L = IF('notArch', IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH), 'true') + IF('isArchive', ARCHIVEP_L) + IF('isTrash', TRASHP_L)
+SPBODY = (SHOWSTATES() + IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH) + IF('isArchive', ARCHIVEP) + IF('isTrash', TRASHP))
+SPBODY_L = SHOWSTATES() + IF('notArch', IF('isSettings', FSET) + IF('isStyle', CSTYLE) + IF('isArchived', FARCH), 'true') + IF('isArchive', ARCHIVEP_L) + IF('isTrash', TRASHP_L)
 SPICONS = IB('Settings for Hymns', GEARI, 'goSettings')
 spph = (IF('isRootPage', TOP('Songs.dc.html', '{{pageT}}', SPACT_P, 'My songs') + NARROW(SPBODY) + ASELBAR)
         + IF('isSubPage', TOP('', '{{pageT}}', SPACT_P, 'Back', IB('{{backT}}', CHEV_L, 'back')) + NARROW(SPBODY)) + TOASTS)

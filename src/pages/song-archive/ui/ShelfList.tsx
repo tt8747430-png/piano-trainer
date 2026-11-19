@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { FolderTile, useFolderName, type ShelvedEntry } from '@/entities/library'
 import { entryTitles, PieceLink, useRepertoire, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, daySaid, useMediaQuery } from '@/shared/lib'
 import {
   BackButton,
   LIBRARY_PANES,
@@ -30,7 +30,7 @@ export interface ShelfItem {
 
 /** The laptop table's columns (the ArchiveLaptop board): Title, Composer and key, when, ···. */
 const COLUMNS =
-  'grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_2.75rem] items-center gap-4 pr-2 pl-3'
+  'grid grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_7.5rem_2.75rem] items-center gap-4 pr-2 pl-3'
 
 /** What a row shows: its mark, its title and its line. */
 interface Face {
@@ -93,7 +93,7 @@ function ShelfItemRow(props: RowProps) {
 /** The day it went there: "12 November". */
 function useDay(at: number): string {
   const locale = useLocale()
-  return at > 0 ? new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(at) : ''
+  return at > 0 ? daySaid(at, locale, Date.now()) : ''
 }
 
 function ShelfRow({
@@ -119,9 +119,11 @@ function ShelfRow({
   )
   const lead = cn(
     'flex min-w-0 flex-1 items-center rounded-control text-left text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none',
+    // The boards' ATABLE on a laptop (a 40 cover 16 from its title) and ARCHROW on a phone (a 44 cover
+    // with 8 corners, 12 from its title over its line, each at its normal height).
     laptop
-      ? 'gap-3.5 [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]'
-      : 'min-h-20 gap-4 py-3',
+      ? 'gap-4 [&_[data-slot=row-tile]]:size-10 [&_[data-slot=row-tile]]:rounded-[9px]'
+      : 'min-h-12 gap-3 py-2 [&_[data-slot=row-tile]]:size-11 [&_[data-slot=row-tile]]:rounded-lg **:data-[slot=row-detail]:leading-[normal] **:data-[slot=row-title]:leading-[normal]',
   )
   // In Select a tap chooses the row, its check leading it; else a song opens, a playlist is a face.
   const body =
@@ -150,7 +152,7 @@ function ShelfRow({
     )
   if (laptop)
     return (
-      <div role="row" className={`${COLUMNS} min-h-16 border-b border-border`}>
+      <div role="row" className={`${COLUMNS} min-h-15 border-b border-border`}>
         <span role="cell" className="min-w-0">
           {body}
         </span>
@@ -166,7 +168,7 @@ function ShelfRow({
       </div>
     )
   return (
-    <li className="flex min-w-0 items-center gap-1 pr-1 pl-4">
+    <li className="flex min-h-16 min-w-0 items-center gap-1 pr-1 pl-4">
       {body}
       {more}
     </li>
@@ -289,18 +291,18 @@ export function ShelfList({
         <ScreenHeader title={heading} back={back ?? <BackButton />} tools={selectButton} />
       )}
       {items.length === 0 ? (
-        empty
+        // 8 under the bar on a phone, as the boards' NARROW column
+        <div className={cn(!laptop && '-mt-2')}>{empty}</div>
       ) : laptop ? (
         <div role="table" aria-label={title}>
           <div role="row" className={`${COLUMNS} h-10 border-b border-border`}>
-            {[t('table.title'), t('table.composerKey'), when].map((name, index) => (
+            {[t('table.title'), t('table.composerKind'), when].map((name, index) => (
               <span
                 key={name}
                 role="columnheader"
                 className={cn(
                   'text-[0.8125rem] font-semibold text-muted-foreground',
-                  index === 0 && 'pl-[3.375rem]',
-                  index === 0 && selecting && 'pl-23',
+                  index === 0 && selecting && 'pl-10',
                 )}
               >
                 {name}
@@ -317,6 +319,7 @@ export function ShelfList({
           className={cn(
             "card flex flex-col overflow-hidden [&>li+li]:relative [&>li+li]:before:absolute [&>li+li]:before:top-0 [&>li+li]:before:right-0 [&>li+li]:before:h-px [&>li+li]:before:bg-border [&>li+li]:before:content-['']",
             selecting ? '[&>li+li]:before:left-29' : '[&>li+li]:before:left-19',
+            '-mt-2',
           )}
         >
           {rows}
