@@ -49,8 +49,8 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
   return (
     <div className="flex flex-col">
       <ScreenHeader column="until-laptop" title={t(`${page}.title`)} back={<BackButton />} />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-1 pt-1 pb-12 lg:mx-0 lg:max-w-none lg:gap-6 lg:pt-4 lg:pb-14">
-        <p className="text-sm text-muted-foreground">{t('updated', { date })}</p>
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-1 pt-1 pb-12 lg:mx-0 lg:max-w-none lg:gap-6 lg:px-0 lg:pt-6 lg:pb-14">
+        <p className="text-sm leading-[normal] text-muted-foreground">{t('updated', { date })}</p>
         <nav
           aria-label={t('contents')}
           className="flex flex-wrap items-center gap-x-2 gap-y-1 max-lg:hidden"
@@ -75,7 +75,7 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
               id={`legal-${key}`}
               className="flex scroll-mt-4 flex-col gap-2 lg:mb-6 lg:break-inside-avoid"
             >
-              <h2 className="font-sans text-xl font-bold">{heading}</h2>
+              <h2 className="font-sans text-xl leading-[normal] font-bold">{heading}</h2>
               <p className="max-w-[65ch] text-pretty leading-[1.55]">{text}</p>
             </section>
           ))}

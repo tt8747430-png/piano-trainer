@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Legal's laptop text on the 56 gutter both sides, as every laptop page (it stood 44 and 40) · LegalLaptop · pending
+
 
 
 

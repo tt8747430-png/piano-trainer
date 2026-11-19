@@ -94,7 +94,7 @@ lgph = (f'{TOP("Settings.dc.html", "{{docT}}", "", "Settings")}<main class="nos"
 # laptop (owner, 2026-11-17: "these empty spaces on the left under the sections should not be"): the bar's edge is the
 # page's edge; the contents are a band of links at the top, and the text runs in two columns of a readable measure,
 # as a printed policy, so no side column runs out and no band of the width is left bare
-lglm = (f'{LTITLEBAR("{{docT}}", back="SettingsLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 40px 56px 44px; display: flex; flex-direction: column; gap: 24px">'
+lglm = (f'{LTITLEBAR("{{docT}}", back="SettingsLaptop.dc.html")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 56px; display: flex; flex-direction: column; gap: 24px">'
         f'{LHEAD}'
         f'<nav aria-label="On this page" style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px"><span style="padding-right: 4px; font-size: 13px; font-weight: 600; color: {SOFT}">On this page</span>'
         f'<sc-for list="{{{{secs}}}}" as="s" hint-placeholder-count="8"><a href="{{{{s.href}}}}" style="min-height: 40px; padding: 8px 12px; box-sizing: border-box; border-radius: 20px; background: {FILL}; color: {INK}; text-decoration: none; font-size: 14px; font-weight: 500; display: flex; align-items: center">{{{{s.h}}}}</a></sc-for></nav>'
