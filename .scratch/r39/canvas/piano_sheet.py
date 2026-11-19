@@ -29,7 +29,7 @@ PIC2D = '<g><rect x="2" y="4" width="44" height="20" rx="2"></rect><path d="M8.3
 
 def SWITCH(v):  # the Chords page's switch: 51 by 31, green when on
     return (f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}">'
-            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>')
+            f'<span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: {SHEET}; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>')
 
 
 def SWROW(label, v, sep=''):

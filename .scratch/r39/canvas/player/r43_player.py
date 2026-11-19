@@ -187,7 +187,7 @@ CARD = 'background: #FEFDFB; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,
 ROW = 'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: #332921'
 SEP = 'border-top: 1px solid #E9E2D8; margin-top: -1px'
 def SWITCH(v):  # the Chords page's switch (R42 v85): 51 by 31, green when on
-    return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)"></span></span>'
+    return f'<span aria-hidden="true" style="position: relative; flex: none; width: 51px; height: 31px; border-radius: 16px; background: {{{{{v}.track}}}}"><span style="position: absolute; top: 2px; left: {{{{{v}.knob}}}}px; width: 27px; height: 27px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)"></span></span>'
 def VCARD(v, icon, name, inner=''):
     dot = (f'<span aria-hidden="true" style="flex: none; width: 22px; height: 22px; border-radius: 11px; background: {{{{{v}.dot}}}}; box-shadow: {{{{{v}.dotRing}}}}; color: #FEFDFB; display: flex; align-items: center; justify-content: center">'
            f'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{{{{v}.mk}}}}"><path d="m5 12 5 5 9-10"></path></svg></span>')
@@ -235,7 +235,7 @@ def kit(t, phone):
     t = re.sub(r'width: 44px; height: 26px; (padding: 0; border: 0; )?border-radius: 9999px; background: \{\{([\w.]+)\}\}',
                r'width: 51px; height: 31px; \1border-radius: 16px; background: {{\2}}', t)
     t = re.sub(r'top: 3px; left: \{\{([\w.]+)\}\}px; width: 20px; height: 20px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba\(26,22,18,0\.3\)',
-               r'top: 2px; left: {{\1}}px; width: 27px; height: 27px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', t)
+               r'top: 2px; left: {{\1}}px; width: 27px; height: 27px; border-radius: 14px; background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)', t)
     t = sub(t, r"track: ([^?,]+)\? '#B07A2A' : '#D9D1C6', knob: ([^?,]+)\? 21 : 3", r"track: \1? '#7FB685' : '#DAD1C8', knob: \2? 22 : 2", n=0)
     # a sheet's title: centred, with Done on a phone (the Chords sheets); left on a laptop's popover
     if phone:

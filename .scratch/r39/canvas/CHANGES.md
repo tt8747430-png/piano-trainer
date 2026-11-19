@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · one switch knob: paper face, ink shadow in the kit's TOGGLE, Piano sheet and Player; Chords' patch gone · Admin,AdminLaptop,AllSongs,AllSongsLaptop,Archive,ArchiveLaptop,ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,Folder,FolderLaptop,Groups,GroupsLaptop,Metronome,MetronomeLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PlayerApp,PlayerDesk,Settings,SettingsLaptop,Songs,SongsLaptop,Takes,TakesLaptop,Trash,TrashLaptop · **pending**
 
 ## Changes
 

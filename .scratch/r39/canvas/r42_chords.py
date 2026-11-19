@@ -951,7 +951,6 @@ for f in ('Chords', 'ChordsLaptop'):
     for _k, _m in enumerate(_menus): h = h.replace(_m, f'\x00MENU{_k}\x00', 1)
     h = re.sub(r'((?:padding|gap|margin)(?:-[a-z]+)?: )([^;"\'{}]+)', _snap, h)
     for _k, _m in enumerate(_menus): h = h.replace(f'\x00MENU{_k}\x00', _m, 1)
-    h = h.replace('background: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2)', 'background: #FEFDFB; box-shadow: 0 2px 4px rgba(51,41,33,.2)')
     # motion (seven questions, canvas 95): each layer comes from where it was asked for, short and eased out; it
     # leaves at once. Menus grow from the bar, the phone's sheets rise from the edge, the laptop's popovers from their
     # side, the toast slides up; nothing moves under reduced motion
