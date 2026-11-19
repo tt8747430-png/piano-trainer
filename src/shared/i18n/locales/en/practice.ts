@@ -277,9 +277,9 @@ export const practice = {
       open: 'Edit the progression',
       new: 'New in the library',
       bar: 'Edit progression',
+      linesInfo:
+        'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.',
       lines: 'Lines',
-      heading: 'The progression',
-      info: 'Its name and how it sounds in both languages, its style, and its numerals in a major key, a minor key or both.',
       name: 'Name',
       character: 'How it sounds',
       style: 'Style',

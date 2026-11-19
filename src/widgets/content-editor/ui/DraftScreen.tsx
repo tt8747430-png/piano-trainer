@@ -1,6 +1,7 @@
 import { CircleAlert, LoaderCircle, Lock, Pencil, WifiOff } from 'lucide-react'
-import { Fragment, type ReactElement, type ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import { DraftActions, DraftStatus, PublishWord, type ContentDraft } from '@/features/edit-original'
 import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
@@ -66,6 +67,7 @@ export function NotOpen({
 export function DraftScreen<T>({
   draft,
   heading,
+  form = false,
   title,
   back,
   backTo,
@@ -82,6 +84,10 @@ export function DraftScreen<T>({
   draft: ContentDraft<T>
   /** The screen's heading. */
   heading: string
+  /** A form whose fields hold the name (a progression), as its board's LCOL: on a laptop the bar names
+   * the page and the column stands on the 56 edge, 704 at most; otherwise a document showing its title
+   * large under the bar (a lesson), its column centred. */
+  form?: boolean
   /** The item's name, said in the strip's dialogs. */
   title: string
   /** The screen's Back (`BackButton`). */
@@ -132,12 +138,12 @@ export function DraftScreen<T>({
     </NotOpen>
   ) : null
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-8">
+    <div className={cn('flex w-full flex-col gap-4 pb-8', !form && 'mx-auto max-w-3xl')}>
       <ScreenHeader
         title={heading}
         back={back}
-        // The document shows the item's title large under the bar.
-        titleOnPage
+        // A document shows the item's title large under the bar; a form's fields hold its name.
+        titleOnPage={form ? 'phone' : true}
         // Where the draft stands, then Publish and the draft's menu, at the bar's end: nothing under
         // the bar (the language is the menu's, ticked there).
         tools={
@@ -175,7 +181,9 @@ export function DraftScreen<T>({
         // its foot on a laptop (WIDE), not the form's 16.
         <div className="-mt-2 lg:-mt-4">{gate}</div>
       ) : load.state === 'ready' ? (
-        <Fragment key={draft.opened}>{children(load.value)}</Fragment>
+        <div key={draft.opened} className={cn(form && '-mt-2 lg:mt-2 lg:max-w-176')}>
+          {children(load.value)}
+        </div>
       ) : null}
     </div>
   )

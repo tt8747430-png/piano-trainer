@@ -11,6 +11,7 @@ import {
   say,
   SettingsGroup,
   type MenuAction,
+  RoundButton,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { ContentDraft } from '../model/use-content-draft'
@@ -108,16 +109,9 @@ export function DraftActions({
       <ActionMenu
         label={t('original.more')}
         align="end"
-        trigger={<Ellipsis aria-hidden />}
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-11 shrink-0 rounded-pill"
-            aria-label={t('original.more')}
-            title={t('original.more')}
-          />
-        }
+        trigger={null}
+        // The bar's glass circle, as every bar button on the boards (IB) and the song's ···.
+        render={<RoundButton label={t('original.more')} icon={Ellipsis} className="shrink-0" />}
         actions={[
           ...more,
           ...(publishPage

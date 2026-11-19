@@ -6,16 +6,18 @@ import { PROGRESSION_STYLES, type LibraryProgression } from '@/entities/progress
 import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
-import { Dropdown, InfoTip, RoundLink, TypedField } from '@/shared/ui'
-import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
+import { cn } from '@/shared/lib'
+import { ChoiceChips, FormField, Labelled, NameField, RoundLink, SettingsGroup } from '@/shared/ui'
+import { DraftScreen } from '@/widgets/content-editor'
 
 /** A line of numerals as the field holds it: none where it is empty. */
 const lineOf = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
 
 /**
- * The progression as one document in one language (round 21): its name as the page's heading and
- * how it sounds under it, written in place; its style and its lines of numerals as properties, a
- * line that does not read saying which word. Each change saved to the draft as it rests.
+ * The progression as its board's form (`r54_practice_more.py`'s PEEDIT), in one language: its name
+ * and how it sounds as fields, its style as chips, its lines of numerals typed in the serif in one
+ * card, a key to a row, a line that does not read saying so under it. Each change saved to the draft
+ * as it rests. Sections 24 apart, 8 inside.
  */
 function ProgressionDocument({
   initial,
@@ -45,62 +47,100 @@ function ProgressionDocument({
       ...(lines.major === undefined && lines.minor === undefined ? { major } : lines),
     } as LibraryProgression)
   }
-  const unread = (line: string) => (parseNumerals(line) ? null : t('progressions.unread'))
+  const unread = (line: string) => line.trim() !== '' && !parseNumerals(line)
+  const major = progression.major ?? ''
+  const minor = progression.minor ?? ''
+  const wrong = unread(major) || unread(minor)
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <DocText
-          size="title"
-          label={t('progressions.edit.name')}
-          value={progression.name}
-          locale={locale}
-          placeholder={words('progressions.edit.name')}
-          onChange={(name) => change({ ...progression, name })}
+      <NameField
+        label={t('progressions.edit.name')}
+        value={progression.name[locale]}
+        placeholder={words('progressions.edit.name')}
+        aria-invalid={progression.name[locale].trim() === '' || undefined}
+        onChange={(event) =>
+          change({ ...progression, name: { ...progression.name, [locale]: event.target.value } })
+        }
+      />
+      <FormField
+        label={t('progressions.edit.character')}
+        value={progression.character[locale]}
+        placeholder={words('progressions.edit.character')}
+        aria-invalid={progression.character[locale].trim() === '' || undefined}
+        onChange={(event) =>
+          change({
+            ...progression,
+            character: { ...progression.character, [locale]: event.target.value },
+          })
+        }
+      />
+      <Labelled label={t('progressions.edit.style')}>
+        <ChoiceChips
+          label={t('progressions.edit.style')}
+          value={progression.style}
+          options={PROGRESSION_STYLES.map((value) => ({
+            value,
+            label: t(`progressions.style.${value}`),
+          }))}
+          onChange={(style) => change({ ...progression, style })}
         />
-        <DocText
-          label={t('progressions.edit.character')}
-          value={progression.character}
-          locale={locale}
-          placeholder={words('progressions.edit.character')}
-          onChange={(character) => change({ ...progression, character })}
+      </Labelled>
+      <SettingsGroup
+        title={t('progressions.edit.lines')}
+        info={t('progressions.edit.linesInfo')}
+        flush
+      >
+        <LineRow
+          label={t('progressions.edit.major')}
+          value={major}
+          wrong={unread(major)}
+          onChange={(line) => setLines(line, minor)}
         />
-      </div>
-      <Properties label={t('progressions.edit.heading')}>
-        <PropertyRow name={t('progressions.edit.style')}>
-          <Dropdown
-            bare
-            className="max-w-full"
-            label={t('progressions.edit.style')}
-            value={progression.style}
-            options={PROGRESSION_STYLES.map((value) => ({
-              value,
-              label: t(`progressions.style.${value}`),
-            }))}
-            onChange={(style) => change({ ...progression, style })}
-          />
-        </PropertyRow>
-      </Properties>
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-1">
-          <h2 className="font-sans text-xl font-bold">{t('progressions.edit.lines')}</h2>
-          <InfoTip name={t('progressions.edit.lines')}>{t('progressions.edit.info')}</InfoTip>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <TypedField
-            label={t('progressions.edit.major')}
-            value={progression.major ?? ''}
-            error={unread(progression.major ?? '')}
-            onChange={(major) => setLines(major, progression.minor ?? '')}
-          />
-          <TypedField
-            label={t('progressions.edit.minor')}
-            value={progression.minor ?? ''}
-            error={unread(progression.minor ?? '')}
-            onChange={(minor) => setLines(progression.major ?? '', minor)}
-          />
-        </div>
-      </div>
+        <LineRow
+          label={t('progressions.edit.minor')}
+          value={minor}
+          wrong={unread(minor)}
+          onChange={(line) => setLines(major, line)}
+        />
+      </SettingsGroup>
+      {wrong ? (
+        <p role="alert" className="-mt-4 mx-4 text-sm text-destructive">
+          {t('progressions.unread')}
+        </p>
+      ) : null}
     </div>
+  )
+}
+
+/** A key's line of numerals, typed at its row's end in the book serif (the board's GROUP `val` row). */
+function LineRow({
+  label,
+  value,
+  wrong,
+  onChange,
+}: {
+  label: string
+  value: string
+  wrong: boolean
+  onChange: (line: string) => void
+}) {
+  return (
+    <label className="flex min-h-12 items-center gap-3 ps-4 pe-4 text-base">
+      <span className="shrink-0">{label}</span>
+      <input
+        value={value}
+        aria-invalid={wrong || undefined}
+        autoCapitalize="off"
+        autoComplete="off"
+        spellCheck={false}
+        enterKeyHint="done"
+        onChange={(event) => onChange(event.target.value)}
+        className={cn(
+          'min-w-0 flex-1 bg-transparent text-end font-display text-base outline-none',
+          wrong && 'text-destructive',
+        )}
+      />
+    </label>
   )
 }
 
@@ -134,6 +174,7 @@ export function ProgressionEditor({
     <DraftScreen
       draft={draft}
       heading={t('progressions.edit.bar')}
+      form
       title={title}
       back={back}
       backTo={{ link: toProgressions, label: t('progressions.edit.back') }}

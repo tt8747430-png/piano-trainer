@@ -107,7 +107,7 @@ PE_SRC = r'''
     return { ...common(st, set), isEditor: role === 'Editor', isLearner: role !== 'Editor', isEdit: page === 'edit', isSet: page === 'settings', isPub: page === 'publish', notEdit: page !== 'edit',
       pageT: { edit: 'Edit progression', settings: 'Settings', publish: 'Publish' }[page], back: () => S({ page: page === 'publish' ? 'settings' : 'edit' }), backT: page === 'publish' ? 'Settings' : 'Edit progression',
       goSet: () => S({ page: 'settings', sheet: null }), goPub: () => S({ page: 'publish', sheet: null }), draftT: draft, styles: chipsOf(['Pop', 'Rock', 'Jazz', 'Blues', 'Classical', 'R&B / Soul', 'Gospel', 'Modal', 'Theory'], style, (x) => S({ style: x, draft: 'Draft · 3 changes' })),
-      name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }), openPublishing: () => S({ sheet: 'publishing' }), publishingOn: st.sheet === 'publishing',
+      name, setName: (e) => S({ name: e.target.value, draft: 'Draft · 3 changes' }),
       discard: () => { S({ sheet: 'discard' }); }, discardOn: st.sheet === 'discard', doDiscard: () => { S({ sheet: null, draft: 'Published · no changes' }); toast('Changes discarded'); },
       publish: () => { S({ draft: 'Published · no changes', page: 'edit', sheet: null }); toast('Published. Learners will receive it the next time they open the app.'); }, share: () => toast('Link copied'),
       tipOn_prog: st.tip === 'prog', tip_prog: () => S({ tip: st.tip === 'prog' ? null : 'prog' }), tipOn_lines: st.tip === 'lines', tip_lines: () => S({ tip: st.tip === 'lines' ? null : 'lines' }),
@@ -115,28 +115,30 @@ PE_SRC = r'''
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };'''
 # a field's label is the form's one label: the CAPS heading on the 16 inset, as the sections under it (loop round 63)
 INPUT = lambda label, val, act='', kb='title': f'<label style="display: flex; flex-direction: column; gap: 8px"><span style="margin: 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: {SOFT}">{label}</span><input {KB[kb]} value="{val}" {("onInput=\"{{" + act + "}}\" ") if act else ""}aria-label="{label}" style="height: {52 if label == 'Name' else 48}px; border: 0; border-radius: {14 if label == 'Name' else 12}px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 16px; font: inherit; font-size: {17 if label == 'Name' else 16}px; color: {INK}; outline: none"></label>'
-DRAFTPILL = f'<button type="button" onClick="{{{{openPublishing}}}}" style="height: 44px; padding: 0 12px; border: solid transparent; border-width: 6px 0; background-clip: padding-box; border-radius: 22px; background: {HONEY}; color: {INK}; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; flex: none; display: flex; align-items: center; gap: 4px">{{{{draftT}}}}{CHEV_D}</button>'
-_PEH = f'<div style="display: flex; align-items: center; gap: 8px">{DRAFTPILL}<span style="font-size: 13px; color: {SOFT}">Editors only · learners see the published version</span></div>'
+# the draft's acts in the bar, as every editor's (loop round 60, EditorDraft: nothing hangs under the bar): its ···
+# (the language it is written in, Discard changes) and the honey Publish, the way to its Publish page
+PUBB = f'<button type="button" onClick="{{{{goPub}}}}" style="flex: none; height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {ACCENT}; color: {INK}; font: inherit; font-size: 16px; font-weight: 700">Publish</button>'
+PEACTS = IB('Publishing', DOTS, 'openMore') + PUBB + IB('Settings', GEARI, 'goSet')
+PEMENU = ROWMENU('moreOn', 'Publishing', [('action', 'English ✓', 'closeSheet'), ('action', 'Русский', 'closeSheet'), ('action', 'Discard changes', 'discard', RED)])
 _PEN = INPUT('Name', '{{name}}', 'setName') + INPUT('How it sounds', 'Bright and singable, the sound of a thousand hits', kb='text')
-_PEP = SEC(S9CAPS('The progression', 'prog'), TIPCARD('prog', 'Roman numerals, one per bar, separated by spaces: I V vi IV.'), f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 12px 16px; font-family: {SERIF}; font-size: 26px; letter-spacing: .04em">I – V – vi – IV</div>')
 _PES = SEC(CAPS('Style'), WCHIPS('styles'))
-_PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i v VI iv</span>'), bg=SHEET))
+# a key's line typed at its row's end in the serif; the progression is its lines, said once (its card repeated the major one)
+_PEL = SEC(S9CAPS('Lines', 'lines'), TIPCARD('lines', 'The same progression written for a major and a minor key; the learner hears the one that suits the key they choose.'), GROUP(('val', 'In a major key', '<span style="font-family: ' + SERIF + '">I V vi IV</span>'), ('val', 'In a minor key', '<span style="font-family: ' + SERIF + '">i VI III VII</span>'), bg=SHEET))
 # sections 24 apart, 8 inside: a heading sits 3× nearer what it heads than what ends above it (laws, Spacing 2)
-PEEDIT = '<div style="display: flex; flex-direction: column; gap: 24px">' + _PEH + _PEN + _PEP + _PES + _PEL + '</div>'
-# on a laptop what the progression is called stands left, the progression itself and its lines right
+PEEDIT = '<div style="display: flex; flex-direction: column; gap: 24px">' + _PEN + _PES + _PEL + '</div>'
 PEEDIT_L = PEEDIT  # one column on a laptop too, in the phone's order (loop round 58)
 PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'), ('action', 'Share link', 'share'), bg=SHEET))
          + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET)))
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
          + f'<div style="display: flex; gap: 8px">{BTN("Discard changes", "discard", "", "quiet", 50)}{BTN("Publish", "publish", "", "primary", 50)}</div>')
 PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Make your own from it at the foot of the progression’s page.', f'{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}')
-PESHEETS = (BSHEET('publishingOn', 'Publishing', GROUP(('link', 'Publish…', '', 'goPub'), ('action', 'Discard changes', 'discard', RED), bg=SHEET)) + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
+PESHEETS = (PEMENU + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
 PEBODY = IF('isEdit', PEEDIT, 'true') + IF('isSet', PESET) + IF('isPub', PEPUB)
 PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
-peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', 'Edit progression', IB('Settings', GEARI, 'goSet'), 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
+peph = (IF('isEditor', IF('isEdit', TOP('Progression.dc.html', '', PEACTS, 'Axis of Awesome'), 'true') + IF('notEdit', TOP('', '{{pageT}}', '', 'Back', IB('{{backT}}', CHEV_L, 'back'))) + NARROW(PEBODY), 'true')
         + IF('isLearner', TOP('Progression.dc.html', '', '', 'Axis of Awesome') + NARROW(PEGATE)) + STRIP() + f'<div style="height: 26px; flex: none"></div>' + TOASTS)
 LPE = lambda s: s.replace('Progressions.dc.html', 'ProgressionsLaptop.dc.html').replace('Progression.dc.html', 'ProgressionLaptop.dc.html')
-pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', IB('Settings', GEARI, 'goSet'), back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 704), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
+pelm = (IF('isEditor', IF('isEdit', LTITLEBAR('{{pageT}}', PEACTS, back='ProgressionLaptop.dc.html'), 'true') + IF('notEdit', LTITLEBAR('{{pageT}}', backact='back')) + IF('isEdit', LCOL(PEEDIT_L, 704), 'true') + IF('notEdit', LCOL(PEBODY_L, 640)), 'true')
         + IF('isLearner', LTOP('ProgressionLaptop.dc.html', '') + WIDE(LPE(PEGATE), 640)) + STRIP() + TOASTL)
 detail('ProgressionEdit', 'Edit a progression (editors)', js(PE_SRC), peph, pelm, '', PESHEETS, LAPSHEET(PESHEETS), 'Practice')
 

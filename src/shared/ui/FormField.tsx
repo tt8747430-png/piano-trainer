@@ -55,7 +55,7 @@ export function FormField({
           aria-describedby={error === undefined ? undefined : `${id}-error`}
           {...(email ? { autoComplete: 'email', autoCapitalize: 'off', spellCheck: false } : {})}
           {...input}
-          className="pl-4 text-base"
+          className="pl-4 text-base md:text-base"
         />
         {password ? (
           <InputGroupAddon align="inline-end">
