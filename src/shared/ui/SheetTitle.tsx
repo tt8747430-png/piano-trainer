@@ -3,12 +3,13 @@ import { cn } from '@/shared/lib'
 import { usePageHeading } from './use-page-heading'
 
 /**
- * Where a title is printed: centred over a page as it prints, or over lines down the screen; at the
+ * Where a title is printed: centred over a page as it prints, or over lines down the screen (the boards' 24, 36 on a laptop, at 1.1); at the
  * head of one line across, where the line starts.
  */
 const PLACES = {
   page: 'text-center text-3xl font-normal',
-  lines: 'text-center text-2xl font-normal sm:text-4xl landscape-phone:text-xl',
+  lines:
+    'text-center text-[1.5rem]/[1.1] font-normal sm:text-[2.25rem]/[1.1] landscape-phone:text-xl',
   across: 'text-xl',
 } as const
 export type TitlePlace = keyof typeof PLACES

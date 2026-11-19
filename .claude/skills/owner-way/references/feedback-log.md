@@ -148,6 +148,7 @@ owner's, typos fixed.
 - **Chord names** are not cluttered or too big; a long chord never breaks the layout.
 
 ## Player views and settings
+- **The score's title as its boards print it (loop, the board-to-app port, 2026-11-19):** PlayerApp and Editor print the title 24 at 1.1, EditorLaptop and PlayerDesk 36 at 1.1; the app's was 22 and 34 at the theme's leading. `SheetTitle`'s lines place is 24 and 36 at 1.1 now, Play and Edit alike, and the editor's title keeps its 44 reach (20 above the shorter line).
 - **A scrolling keyboard opens on a whole key (loop, the board-to-app port, 2026-11-19):** a range wider than the view opened wherever the lit notes put it, so the editor's keys began on part of a white key at the left; the Editor board starts on a whole C3. Now the opening scroll lands on the nearest white key's edge (`onWhiteEdge`), everywhere the piano scrolls.
 - **No coach tip over the Player's music (loop, the board-to-app port, 2026-11-19):** a first visit floated "Tap a note to start from there, then press Play." over the second system, covering its notes; no Player board draws it and no ruling keeps it, so it went with its remembered `tipsSeen` (the settings store's version bumped). The transport and the score say what to do.
 - **The view capsule's segments reach 44 on touch (loop, tablet widths, 2026-11-19):** Sheet · Diagrams · Grid · Lyrics are 34 tall inside the 44 glass capsule, and on an iPad the 5 above and below answered nothing; a coarse pointer's reach now fills the capsule (`ViewPill`'s `before`), the drawing unchanged.

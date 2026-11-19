@@ -35,7 +35,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
             className={cn(
               // The title's line alone, where the Player prints it; its 44 reach grown above it, clear of the
               // credits' reach under it.
-              "relative inline-flex max-w-full items-center justify-center text-balance wrap-break-word before:absolute before:inset-x-0 before:-top-4 before:bottom-0 before:content-['']",
+              "relative inline-flex max-w-full items-center justify-center text-balance wrap-break-word before:absolute before:inset-x-0 before:-top-5 before:bottom-0 before:content-['']",
               OPENS,
             )}
           >
