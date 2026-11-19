@@ -68,7 +68,10 @@ Laptop (1710):
 What goes from the runs: the song Player's chrome (the score's view button, Wait · Loop, ‹ ›, Both · 3D, the floating
 keys with the hands) and the Setup inside the gear's sheet.
 
-Open to build after: `PlayChord` (the chord practice run and its results) against the app's chord practice.
+The chord run (`PlayChord`) is the app's Inversions exercise in the run view (2026-11-19): its board now wears the
+run view's bar and transport. Still to port: its results as a full-screen page kept in Profile › Practice history
+(canvas 160; the app opens Played through, the song Player's sheet, and records only a trainer's runs), and its staff
+as the app engraves it (the grand staff, half-note chords, Key 1 of 12; the board draws whole notes on the treble).
 </content>
 </invoke>
 <parameter name="file_path">/home/user/piano-trainer/.scratch/r39/plan/player-runs.md

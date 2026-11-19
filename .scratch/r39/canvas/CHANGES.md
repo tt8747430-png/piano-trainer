@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the chord run in the run view's shape, as the app runs it (the Inversions exercise): its bar Close · Inversions: Cmaj7 · Wait mode · the gear, its transport Setup · Play · Tempo (was Tempo · Play · Hands, with no Setup and no gear) · PlayChord,PlayChordLaptop · pending
 ## Changes
 
 - 2026-11-19 · c9835124 · every run's Setup opens on its Pace (Play · Wait mode), Wait mode said in the bar beside the gear while on, as the app's; the Tempo group the kit's fill, as the app's group · PlayWalk,PlayWalkLaptop,PlayChromatic,PlayChromaticLaptop,PlayProgression,PlayProgressionLaptop,PlayExercise,PlayExerciseLaptop · v655

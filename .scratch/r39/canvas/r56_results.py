@@ -177,7 +177,8 @@ RS_KEYS = lambda h, k='kb': KEYS(h, k, edge=True, ring=False)  # the one instrum
 def RS_RUNVIEW(lap):
     close = 'ChordsLaptop.dc.html' if lap else 'Chords.dc.html'
     wait = f'<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: {FILL}; font-size: 13px; font-weight: 600; display: flex; align-items: center; white-space: nowrap">Wait mode</span>'
-    bar = TOP('', f'<span style="font-family: {SERIF}">Cmaj7</span> · Inversions', wait, 'Close', CLOSEB(close), n=2)  # the pill is two buttons wide
+    # the run view's bar, as every run's: Close, the exercise as the app titles it, Wait mode beside the gear
+    bar = TOP('', 'Inversions: Cmaj7', wait + IB('Player settings', GEARI, '', 'PlayerSettings.dc.html'), 'Close', CLOSEB(close))
     bar = LPAD(bar) if lap else bar
     # round 63: the run's music is the page's subject, so it stands on the paper, never in a lone card (edge-lines law
     # 3); on a laptop it is set larger (zoom 1.35) and centred in the band over the transport, never a 760px card
@@ -186,7 +187,8 @@ def RS_RUNVIEW(lap):
     staff = f'<div style="zoom: 1.35">{staff}</div>' if lap else staff
     prog = (f'<div style="display: flex; align-items: center; gap: 12px"><div style="flex: 1; height: 8px; border-radius: 4px; background: {FILL}"><div style="width: {{{{prog}}}}; height: 8px; border-radius: 4px; background: #44684A"></div></div>'
             f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{chordT}}}}</span></div>')
-    transport = PIECE('Tempo', '72 BPM', TEMPOI) + PLAYCAP() + PIECE('Hands', 'Both', HANDI)
+    # Setup · Play · Tempo, as every run's (the run boards' RUNBAR)
+    transport = PIECE('Setup', 'Setup', SLIDERSI) + PLAYCAP() + PIECE('Tempo', '60 BPM', TEMPOI)
     # the music scrolls in what is left, the keys and Play stay at the foot (a phone on its side, round 66)
     inner = f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 80px; display: flex; flex-direction: column; gap: 16px">{staff}{prog}</div><div style="flex: none; margin: 0 -16px">{RS_KEYS(112)}</div>'
     if lap:
