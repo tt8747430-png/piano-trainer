@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a song: the tune as the app's Amazing Grace holds it (the eighths on "zing" and "a", G⁷ on "grace", no D on "like", the words' own punctuation), its credit New Britain (American folk tune), its progressions the three it uses, one section (Verse, bars 1–16), Details as a built-in song reads them · Song,SongLaptop,Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · **pending**
-
 ## Changes
+
+- 2026-11-19 · 855d55ef · a song: the tune as the app's Amazing Grace holds it (the eighths on "zing" and "a", G⁷ on "grace", no D on "like", the words' own punctuation), its credit New Britain (American folk tune), its progressions the three it uses, one section (Verse, bars 1–16), Details as a built-in song reads them · Song,SongLaptop,Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v628
 
 - 2026-11-19 · fc61fafe · Explore's kinds as the app's and its ruling: Hymns in, Other out · Explore,ExploreLaptop · v627
 
