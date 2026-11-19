@@ -129,7 +129,7 @@ PESET = (SEC(CAPS('Share'), GROUP(('link', 'Publish…', '{{draftT}}', 'goPub'),
          + SEC(GROUP(('action', 'Remove from the library', 'discard', RED), bg=SHEET)))
 PEPUB = (CARD(f'<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: {SOFT}">WHAT CHANGED</span><span style="font-size: 16px">Name, Style</span><span style="font-size: 14px; color: {SOFT}">Edited today by Ana Popescu</span></div>')
          + f'<div style="display: flex; gap: 8px">{BTN("Discard changes", "discard", "", "quiet", 50)}{BTN("Publish", "publish", "", "primary", 50)}</div>')
-PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Make your own from it at the foot of the progression’s page.', f'<div style="display: flex; margin-top: 6px">{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}</div>')
+PEGATE = EMPTY('isLearner', '✎', 'Only an editor edits a progression.', 'Ask an editor, or use Make your own from it at the foot of the progression’s page.', f'{BTN("Back to Progressions", "", "Progressions.dc.html", "primary", 48, False)}')
 PESHEETS = (BSHEET('publishingOn', 'Publishing', GROUP(('link', 'Publish…', '', 'goPub'), ('action', 'Discard changes', 'discard', RED), bg=SHEET)) + ASK('discardOn', 'Discard your changes?', 'The draft goes back to the published version. This can’t be undone.', 'Discard', 'doDiscard'))
 PEBODY = IF('isEdit', PEEDIT, 'true') + IF('isSet', PESET) + IF('isPub', PEPUB)
 PEBODY_L = IF('isSet', PESET) + IF('isPub', PEPUB)
@@ -225,12 +225,12 @@ _TKL = lambda rw=340, rh=120: (f'<label style="display: flex; flex-direction: co
 _TKR = (SEC(CAPS('Keep bars'), GROUP(('step', 'First bar', 'firstV', 'fDn', 'fUp'), ('step', 'Last bar', 'lastV', 'lDn', 'lUp'), ('action', '{{keepL}}', 'askKeep'), bg=SHEET))
           + '<div style="margin-top: 8px">' + SEC(GROUP(('action', 'Delete', 'del', RED), bg=SHEET)) + '</div>')  # the loss apart, 24 under Keep bars
 TKBODY = (IF('notDeleted', _TKL() + _TKR, 'true')
-          + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
+          + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}'))
 # on a laptop the recording stands left, its roll large; what to do with it stands right
 # on a laptop one column: the name, the take and its roll the page's width, then Keep bars as a form under the music it
 # trims and Delete apart under it; no side column ending above the roll (the lines: a bare band beside the roll)
 TKBODY_L = (IF('notDeleted', f'<div style="display: flex; flex-direction: column; gap: 16px">' + _TKL(1300, 220) + f'<div style="width: min(560px, 100%); display: flex; flex-direction: column; gap: 16px">' + _TKR + '</div></div>', 'true')
-          + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'<div style="display: flex; margin-top: 6px">{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}</div>'))
+          + SHOWSTATES() + EMPTY('deleted', MUSICN, 'Take deleted', 'Undo brings it back.', f'{BTN("Go to the takes", "", "Editor.dc.html", "primary", 48, False)}'))
 DLI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>'
 TKASK = ASK('keepOn', '{{keepT}}', 'All other bars will be permanently deleted.', 'Keep', 'doKeep')
 tkph = TOP('Editor.dc.html', 'Take', IB('Download', DLI, 'download'), 'Amazing Grace') + NARROW(TKBODY) + TOASTS

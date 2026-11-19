@@ -377,8 +377,16 @@ EMPTYICON = {
     '⌫': _EI('<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'),
     '✎': _EI('<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>'),
     '…': _EI('<path d="M21 12a9 9 0 1 1-6.219-8.56"/>'),
+    '⌕': _EI('<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>'),
 }
 EMPTY_T = lambda t: t[:-1] if t.endswith('.') and not t.endswith('..') else t   # a said state's title takes no full stop
+# One empty state, every board: the honey tile with its picture, the title (18 bold), one line why (15 soft), and the
+# way out 16 below (owner-way: every empty state has one clear next action). EMPTYICON names the pictures.
+def EMPTY(cond, icon, t, b, btns=''):
+    acts = f'<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px">{btns}</div>' if btns else ''
+    return (f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 56px 20px; text-align: center">'
+            f'<span style="width: 72px; height: 72px; border-radius: 18px; background: {HONEY}; color: {INK}; display: flex; align-items: center; justify-content: center">{EMPTYICON.get(icon, icon)}</span>'
+            f'<span style="font-size: 18px; font-weight: 700; text-wrap: balance">{EMPTY_T(t)}</span><span style="font-size: 15px; line-height: 1.45; color: {SOFT}; max-width: 340px; text-wrap: pretty">{b}</span>{acts}</div></sc-if>')
 
 # Previewing as learner: one floating pill, never a band under the bar (ui-and-mockups: nothing hangs under a bar)
 # One toast, every board (owner-way, Undo instead of asking): ink capsule 52 tall, the text, then Undo at its end.

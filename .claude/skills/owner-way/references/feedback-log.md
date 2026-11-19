@@ -1170,6 +1170,8 @@ are reference only, but progressions are facts.
 
 ## Navigation and bars
 
+- **One empty state, every board (loop, laws: one implementation; 2026-11-19):** the kit had two copies of the empty state (`LEMPTY` in the library, `EMPTY` in Songs' sub-pages) and two boards drew their own: Search's "No results" (a primary Clear search) and a playlist's no-match (a 56 grey circle). Each caller also wrapped its buttons its own way, 6 (off the scale), 8 or 4 under the text. Now one `EMPTY` in `r41_kit.py`: the 72 honey tile, 18 bold over 15 soft, the way out 16 below in one centred row; the search picture is `EMPTYICON['⌕']`. A no-match's Clear search is quiet everywhere. Songs' no-match above "In Explore" keeps its compact form, since results follow it.
+
 - **One toast, every board (loop, laws: a `.replace()` patch is a drift; 2026-11-19):** seven hand-written toasts (Learn, the lesson, the course, Your lessons, Settings, Songs' sub-pages, Chords) and fourteen `.replace()` patches of their place became the kit's `TOAST(bottom, undo, z, laptop)`. They had drifted: five lacked `box-sizing`, so they stood 60 tall where Chords and the library stood 52, and the lesson's text carried its own 12 padding. Every toast is now 52 tall, 16 in from the gutters on a phone and 460 wide centred on a laptop, its Undo 44 at its end. `r41_kit.py`, `TOAST`.
 
 - **The sidebar reaches 44 on a touch screen (loop, tablet widths, 2026-11-19):** at 1024×768 with a finger the sidebar's rows were 40 tall (Songs' places, New playlist's +, the recents, the account menu's items) and the song table's title links 40 in their 60 row; each now takes 44 under a coarse pointer (`pointer-coarse:`), the mouse keeping the denser 40 (craft-details, Hit area).
