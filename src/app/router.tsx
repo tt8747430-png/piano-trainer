@@ -69,7 +69,9 @@ import { learnEditSearch, lessonSearch } from './routes/learn-search'
 import {
   exercisePageSearch,
   PRACTICE_LIBRARY_KEPT,
+  exercisesSearch,
   practiceLibrarySearch,
+  readExercisesSearch,
   readPracticeLibrarySearch,
   readTrainerSearch,
   trainerSearch,
@@ -630,8 +632,8 @@ const practiceRoute = createRoute({
 const exercisesRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/exercises',
-  ...practiceLibrarySearch,
-  ...remembered(readPracticeLibrarySearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
+  ...exercisesSearch,
+  ...remembered(readExercisesSearch, PRACTICE_LIBRARY_KEPT, PRACTICE_LIBRARY_KEPT),
   component: lazyRouteComponent(practiceScreens, 'ExercisesPage'),
 })
 // An exercise's page (A41): what it trains, how to play it, and what to start it at.

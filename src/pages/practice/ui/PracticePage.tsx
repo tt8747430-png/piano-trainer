@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { ReactElement, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BOOK_IDS, EXERCISE_BOOKS, exercisesIn } from '@/entities/exercise'
+import { EXERCISE_SHELVES, exercisesOnShelf, SHELF_TILES } from '@/entities/exercise'
 import { selectMetronome, selectTuner, useSettings } from '@/entities/settings'
 import { useFold } from '@/features/fold-section'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
@@ -44,7 +44,7 @@ function PracticeGroup({
   )
 }
 
-/** Practice's groups, each its places in order: Theory, Exercises by book, the Tools last. */
+/** Practice's groups, each its places in order: Theory, Exercises by shelf, the Tools last. */
 function useGroups(): readonly {
   id: 'theory' | 'exercises' | 'tools'
   places: readonly Place[]
@@ -75,12 +75,12 @@ function useGroups(): readonly {
     { id: 'theory', places: pagesOf('theory') },
     {
       id: 'exercises',
-      places: BOOK_IDS.map((book) => ({
-        key: book,
-        title: t(`exercises.groups.${book}`),
-        detail: t('exercises.count', { count: exercisesIn(book).length }),
-        tile: EXERCISE_BOOKS[book],
-        link: <Link to="/practice/exercises" search={{ place: book }} state={OPEN_PLAINLY} />,
+      places: EXERCISE_SHELVES.map((shelf) => ({
+        key: shelf,
+        title: t(`exercises.shelves.${shelf}`),
+        detail: t('exercises.count', { count: exercisesOnShelf(shelf).length }),
+        tile: SHELF_TILES[shelf],
+        link: <Link to="/practice/exercises" search={{ book: shelf }} state={OPEN_PLAINLY} />,
       })),
     },
     { id: 'tools', places: pagesOf('tools') },
@@ -89,7 +89,7 @@ function useGroups(): readonly {
 
 /**
  * Practice (the canvas's Practice board): Theory, the pages that explain a thing and practise it
- * there; Exercises, by book; the Tools last, their one home here (the bar has no Tools menu). Each
+ * there; Exercises, by shelf; the Tools last, their one home here (the bar has no Tools menu). Each
  * group is a heading over one card of rows on a phone (a 44px tile, the name over one line) and
  * cards five across on a laptop.
  */

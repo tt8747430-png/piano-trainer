@@ -110,6 +110,22 @@ const Drill: PagePicture = ({ className }) => (
   </Frame>
 )
 
+/** Jazz vocabulary: Barry Harris's 6th-diminished, its sign alone (the canvas's `sixdim`). */
+const SixDim: PagePicture = ({ className }) => (
+  <Frame className={className}>
+    <text
+      x={22}
+      y={28.5}
+      textAnchor="middle"
+      fontSize={15}
+      fontWeight={700}
+      className={cn('font-sans', INK)}
+    >
+      6°
+    </text>
+  </Frame>
+)
+
 /** A jazz book: swung eighths under a triplet's 3. */
 const Swing: PagePicture = ({ className }) => (
   <Frame className={className}>
@@ -220,6 +236,7 @@ export const PAGE_PICTURES = {
   roll: Roll,
   drill: Drill,
   swing: Swing,
+  sixdim: SixDim,
   chart: Chart,
   metro: Metro,
   needle: Needle,

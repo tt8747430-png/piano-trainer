@@ -1,4 +1,5 @@
 import type { RegisteredRouter, RouteIds, ValidateNavigateOptions } from '@tanstack/react-router'
+import { exerciseOf, isExerciseId, shelfOf } from '@/entities/exercise'
 import type { Up } from '@/shared/lib'
 import type { RouterContext } from '../router'
 import { readChordsSearch, readProgressionsSearch, readScalesSearch } from './explorer-search'
@@ -317,7 +318,12 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   },
   '/shell/practice/trainer/$trainerId': toPractice,
   '/shell/practice/exercises': toPractice,
-  '/shell/practice/exercises/$exerciseId': () => up({ to: '/practice/exercises' }),
+  // An exercise's page: up to its shelf, where it has one; a scale's or a chord's to Practice.
+  '/shell/practice/exercises/$exerciseId': (from) => {
+    const id = param(from, 'exerciseId')
+    const shelf = isExerciseId(id) ? shelfOf(exerciseOf(id).group) : undefined
+    return shelf ? up({ to: '/practice/exercises', search: { book: shelf } }) : toPractice(from)
+  },
   '/shell/practice/accompaniment': toPractice,
   '/shell/practice/accompaniment/patterns/new': toAccompaniment,
   '/shell/practice/accompaniment/patterns/$patternRef': toPatternPlace,

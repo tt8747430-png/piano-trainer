@@ -584,10 +584,12 @@ export const practice: LocaleResources['practice'] = {
     groups: {
       scales: 'Гаммы',
       arpeggios: 'Арпеджио',
-      technique: 'Техника пальцев',
       barryHarris: 'Барри Харрис',
       jonny: 'Piano With Jonny',
+      virtuoso: 'Пианист-виртуоз',
+      fiveFinger: 'Позиция пяти пальцев',
     },
+    shelves: { technique: 'Техника пальцев', jazz: 'Джазовый словарь' },
     count_one: '{{count}} упражнение',
     count_few: '{{count}} упражнения',
     count_many: '{{count}} упражнений',

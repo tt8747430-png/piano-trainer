@@ -171,6 +171,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'sixth-diminished',
+    mark: '6°',
     group: 'barryHarris',
     stage: 'advanced',
     name: { en: '6th-diminished scale', ru: 'Секстово-уменьшённая гамма' },
@@ -190,6 +191,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'sixth-diminished-chords',
+    mark: '6°7',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: '6th-diminished chords', ru: 'Секстово-уменьшённые аккорды' },
@@ -209,6 +211,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'dominant-scale',
+    mark: 'V7',
     group: 'barryHarris',
     stage: 'advanced',
     name: { en: 'Dominant scale down', ru: 'Доминантовая гамма вниз' },
@@ -228,6 +231,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'from-third',
+    mark: '3–9',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: 'Arpeggios from the 3rd', ru: 'Арпеджио от терции' },
@@ -247,6 +251,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'drop-two',
+    mark: 'D2',
     group: 'barryHarris',
     stage: 'professional',
     name: { en: 'Drop-2 7ths', ru: 'Септаккорды Drop 2' },
@@ -266,6 +271,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'two-five-one-scale',
+    mark: '251',
     group: 'jonny',
     stage: 'beginner',
     name: { en: '2-5-1 scale', ru: 'Гамма 2-5-1' },
@@ -285,6 +291,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'inner-voice',
+    mark: '7→6',
     group: 'jonny',
     stage: 'intermediate',
     name: { en: 'Inner voice', ru: 'Внутренний голос' },
@@ -304,6 +311,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'modes',
+    mark: '1–7',
     group: 'jonny',
     stage: 'advanced',
     name: { en: 'Modes', ru: 'Лады' },
@@ -323,6 +331,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'rapid-switch',
+    mark: '12',
     group: 'jonny',
     stage: 'professional',
     name: { en: 'Rapid switch', ru: 'Быстрая смена' },
@@ -342,6 +351,7 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'pattern-shifting',
+    mark: 'seq',
     group: 'jonny',
     stage: 'professional',
     name: { en: 'Pattern shifting', ru: 'Перенос фигуры' },
@@ -361,7 +371,8 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'five-finger',
-    group: 'technique',
+    mark: '1–5',
+    group: 'fiveFinger',
     stage: 'beginner',
     name: { en: 'Five-finger position', ru: 'Позиция пяти пальцев' },
     trains: {
@@ -380,10 +391,10 @@ export const EXERCISES: readonly Exercise[] = [
   },
   {
     id: 'hanon',
-    group: 'technique',
+    mark: '1–20',
+    group: 'virtuoso',
     stage: 'intermediate',
     name: { en: 'Hanon', ru: 'Ганон' },
-    book: { en: 'The Virtuoso Pianist', ru: 'Пианист-виртуоз' },
     trains: {
       en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
       ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',

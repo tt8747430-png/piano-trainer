@@ -7,6 +7,7 @@ import {
   exerciseChoice,
   exerciseOf,
   isExerciseId,
+  shelfOf,
   tempoKey,
   type Exercise,
   type ExerciseChoice,
@@ -95,7 +96,8 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   )
   const shownBars = Math.min(OPENING_BARS, performance.bars.length)
   const group = t(`practice:exercises.groups.${exercise.group}`)
-  const source = exercise.book ? `${localText(exercise.book, locale)} · ${group}` : group
+  const shelf = shelfOf(exercise.group)
+  const source = shelf ? `${group} · ${t(`practice:exercises.shelves.${shelf}`)}` : group
   const reached = useProgress(selectTempo(tempoKey(exercise, choice)))
   const tempo = search.tempo ?? reached ?? exercise.tempo
   const name = exercise.fields.hanon

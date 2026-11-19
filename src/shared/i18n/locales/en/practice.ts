@@ -618,10 +618,13 @@ export const practice = {
     groups: {
       scales: 'Scales',
       arpeggios: 'Arpeggios',
-      technique: 'Finger technique',
       barryHarris: 'Barry Harris',
       jonny: 'Piano With Jonny',
+      virtuoso: 'The Virtuoso Pianist',
+      fiveFinger: 'Five-finger position',
     },
+    // The shelves Practice lists under Exercises, each a page of its sources.
+    shelves: { technique: 'Finger technique', jazz: 'Jazz vocabulary' },
     // A book's line on Practice: how many exercises it holds.
     count_one: '{{count}} exercise',
     count_other: '{{count}} exercises',
