@@ -5,4 +5,4 @@
  * name (half-whole diminished) wraps within the screen rather than running past it.
  */
 export const TITLE_PART =
-  'h-auto min-h-12 max-w-full items-center gap-1.5 whitespace-normal [&>span]:min-w-0 [&>span]:text-left [&>span]:text-balance rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-[9px] pb-1 ps-3 font-display text-[2.75rem] leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold [&>svg]:h-[0.9375rem] [&>svg]:w-2.5 [&>svg]:text-foreground [&>svg]:opacity-55'
+  'h-auto min-h-12 max-w-full items-center gap-2 whitespace-normal [&>span]:min-w-0 [&>span]:text-left [&>span]:text-balance rounded-[14px] [&>span]:flex [&>span]:items-center border-0 bg-muted pt-0.5 pe-2 pb-1 ps-3 font-display text-[2.75rem] leading-[1.1] font-bold hover:bg-muted md:text-[3.5rem] [&>span]:font-bold [&>svg]:h-[0.9375rem] [&>svg]:w-2.5 [&>svg]:text-foreground [&>svg]:opacity-55'

@@ -45,10 +45,10 @@ SC60 = SC.replace("      chords: tri, ss: { sig, notes: notesS, led } };", r''' 
       practiseT: 'Practise ' + tonic + ' ' + KINDS[kind].toLowerCase() + ' in the Player' };''')
 assert SC60 != SC, 'SC return not found'
 
-PILL60 = lambda label, val, act: (f'<button type="button" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="flex: none; height: 64px; padding: 0 12px 0 16px; border: 0; border-radius: 14px; background: {FILL}; color: {INK}; '
-                                  f'display: flex; align-items: center; gap: 8px; font: inherit"><span style="font-family: {SERIF}; font-size: 40px; font-weight: 700; line-height: 1; white-space: nowrap">{{{{{val}}}}}</span>'
-                                  f'<span style="display: flex; flex-direction: column; color: {SOFT}; margin-top: -2px">{CHEV_U2}{CHEV_D2}</span></button>')
-TITLE60 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; gap: 8px">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
+# The name as its pop-up buttons, the kit's one title part (Chords' PART and CHEV_UD): 44 serif, 54 tall, 12/8 in, 8 apart.
+PILL60 = lambda label, val, act: (f'<button type="button" aria-haspopup="dialog" aria-label="{label}: {{{{{val}}}}}" onClick="{{{{{act}}}}}" style="{PART}; flex: none">{{{{{val}}}}}{CHEV_UD}</button>')
+TITLE60F = lambda fs: (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; font-family: {SERIF}; font-size: {fs}px; font-weight: 700; line-height: 1.1">{PILL60("Tonic", "tonicL", "openRoot")}{PILL60("Scale", "kindLow", "openKind")}</div></div>')
+TITLE60 = TITLE60F(44)
 def GRANDSTAFF(label):
     """The scale on a grand staff, each hand on its staff with its fingers, as the books print a scale (and the example's 006)."""
     tre = SCALESTAFF(label)
@@ -112,7 +112,7 @@ ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("
 # that column, and the floating bar is centred on it.
 lm60 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP60)
         + f'<div style="flex: none">{KB60("kbLE", 180)}</div>'
-        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
+        + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 28px 0 120px"><div style="width: min(880px, calc(100% - 80px)); margin: 0 auto; display: flex; flex-direction: column; gap: 24px">{TITLE60F(56)}' + VIEW60(7).replace('" style="display: block">', '" style="display: block; max-width: 640px; margin: 0 auto">')
         + f'{KEYG60}{PRACT60}</div></div>'
         + BAR60('left: 50%; translate: -50% 0; bottom: 24px; width: 560px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 100px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'left: calc(50% + 160px); bottom: 100px') + TEMPOPOP('left: calc(50% - 400px); bottom: 100px') + '</div>')
 phone('Scales', 'Scales and keys, phone', ph60, SC60, SHEETS60)

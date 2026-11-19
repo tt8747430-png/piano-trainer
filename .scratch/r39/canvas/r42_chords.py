@@ -859,7 +859,7 @@ def ch_js(D, W, KH, minOct, mini_w):
 # ══ The redesign, two concepts side by side (R42 v80; research: .scratch/r42/plan/chords-research.md) ══
 CHEV_UD = '<svg viewBox="0 0 12 18" width="10" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; align-self: center; opacity: .55"><path d="m2.500 6.500 3.500-3.500 3.500 3.500M2.500 11.500l3.500 3.500 3.500-3.500"></path></svg>'
 # each part is a pop-up button and looks like one: a filled pill with the up-down chevrons (Apple HIG, pop-up buttons)
-PART = f'border: 0; background: {FILL}; margin: 0; min-height: 48px; padding: 2px 9px 4px 12px; border-radius: 14px; color: {INK}; font: inherit; white-space: nowrap; display: inline-flex; align-items: baseline; gap: 8px'
+PART = f'border: 0; background: {FILL}; margin: 0; min-height: 48px; padding: 2px 8px 4px 12px; border-radius: 14px; color: {INK}; font: inherit; white-space: nowrap; display: inline-flex; align-items: baseline; gap: 8px'
 # A: the name is the control: three pop-up buttons read as one chord symbol (chord-trainer's row; Apple's pop-up button)
 def NAME_A(fs):
     return (f'<div style="flex: none; display: flex; flex-direction: column; align-items: flex-start; gap: 8px">'  # on the column's left edge, as Scales' name (round 58)

@@ -137,7 +137,7 @@ export const SCALES_DEFAULTS: ScalesSearch = {
   marks: 'fingers',
   octaves: 1,
   rhythm: 'even',
-  tempo: 80,
+  tempo: 72,
   hands: 'both',
 }
 const isScaleStep = (value: unknown): value is ScaleStepId =>
