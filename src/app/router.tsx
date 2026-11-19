@@ -1033,7 +1033,7 @@ const progressionPlayerRoute = createRoute({
 
 // An exercise its own rule writes; each remembers its own view, under its own path.
 const exerciseRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/exercise/$exerciseId',
   notFoundComponent: notFoundIn('exercises'),
   ...exerciseSearch,
@@ -1208,12 +1208,7 @@ const routeTree = rootRoute.addChildren([
     chromaticRoute,
     progressionPlayerRoute,
   ]),
-  fullScreenRoute.addChildren([
-    playerRoute,
-    exerciseRoute,
-    editRoute,
-    exampleEditRoute,
-  ]),
+  fullScreenRoute.addChildren([playerRoute, exerciseRoute, editRoute, exampleEditRoute]),
 ])
 
 /**

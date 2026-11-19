@@ -9,7 +9,7 @@ import {
 import { localText, useLocale } from '@/shared/i18n'
 import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
 import { fingeringsOf, isInversion, spellChord } from '@/shared/lib/music'
-import { Dropdown, InversionChoice, NamedSegmented, Segmented } from '@/shared/ui'
+import { Dropdown, InversionChoice, Labelled, NamedSegmented, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /**
@@ -43,26 +43,30 @@ export function ExerciseWayFields({
         />
       ) : null}
       {fields.rhythm ? (
-        <Segmented
-          label={t('exercise.rhythm.label')}
-          value={choice.rhythm}
-          options={HANON_RHYTHMS.map((value) => ({
-            value,
-            label: t(`exercise.rhythm.${value}`),
-          }))}
-          onChange={(rhythm) => onChange({ rhythm })}
-        />
+        <Labelled label={t('exercise.rhythm.label')}>
+          <Segmented
+            label={t('exercise.rhythm.label')}
+            value={choice.rhythm}
+            options={HANON_RHYTHMS.map((value) => ({
+              value,
+              label: t(`exercise.rhythm.${value}`),
+            }))}
+            onChange={(rhythm) => onChange({ rhythm })}
+          />
+        </Labelled>
       ) : null}
       {fields.fingering && fingerings.length > 1 ? (
-        <Segmented
-          label={t('exercise.fingering')}
-          value={choice.fingering}
-          options={fingerings.map((value) => ({
-            value,
-            label: t(`exercise.fingerings.${value}`),
-          }))}
-          onChange={(fingering) => onChange({ fingering })}
-        />
+        <Labelled label={t('exercise.fingering')}>
+          <Segmented
+            label={t('exercise.fingering')}
+            value={choice.fingering}
+            options={fingerings.map((value) => ({
+              value,
+              label: t(`exercise.fingerings.${value}`),
+            }))}
+            onChange={(fingering) => onChange({ fingering })}
+          />
+        </Labelled>
       ) : null}
       {fields.inversion ? (
         <InversionChoice
@@ -96,26 +100,30 @@ export function ExerciseWayFields({
         />
       ) : null}
       {fields.voicing ? (
-        <Segmented
-          label={t('exercise.voicing')}
-          value={choice.voicing}
-          options={VOICINGS.map((voicing) => ({
-            value: voicing,
-            label: t(`exercise.voicings.${voicing}`),
-          }))}
-          onChange={(voicing) => onChange({ voicing })}
-        />
+        <Labelled label={t('exercise.voicing')}>
+          <Segmented
+            label={t('exercise.voicing')}
+            value={choice.voicing}
+            options={VOICINGS.map((voicing) => ({
+              value: voicing,
+              label: t(`exercise.voicings.${voicing}`),
+            }))}
+            onChange={(voicing) => onChange({ voicing })}
+          />
+        </Labelled>
       ) : null}
       {fields.from ? (
-        <Segmented
-          label={t('exercise.from')}
-          value={choice.from}
-          options={CHORD_TONES.map((from) => ({
-            value: from,
-            label: t(`exercise.chordTones.${from}`),
-          }))}
-          onChange={(from) => onChange({ from })}
-        />
+        <Labelled label={t('exercise.from')}>
+          <Segmented
+            label={t('exercise.from')}
+            value={choice.from}
+            options={CHORD_TONES.map((from) => ({
+              value: from,
+              label: t(`exercise.chordTones.${from}`),
+            }))}
+            onChange={(from) => onChange({ from })}
+          />
+        </Labelled>
       ) : null}
     </>
   )

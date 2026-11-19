@@ -218,7 +218,7 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
         })
       : up({ to: '/practice/progressions/line', search: line })
   },
-  '/full-screen/play/exercise/$exerciseId': (from) =>
+  '/shell/play/exercise/$exerciseId': (from) =>
     up({
       to: '/practice/exercises/$exerciseId',
       params: { exerciseId: param(from, 'exerciseId') },

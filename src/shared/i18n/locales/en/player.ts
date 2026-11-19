@@ -9,6 +9,8 @@ export const player = {
     tempo: 'Tempo',
     play: 'Play',
     start: 'Start',
+    slower: 'Slower',
+    faster: 'Faster',
   },
   // The bar's More (ADR 0108, 0107): a piece's information and its sections as sheets, Share as the
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned

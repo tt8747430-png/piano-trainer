@@ -70,3 +70,23 @@ export function runPlace(chord: number, chords: number, keys: number): RunPlace 
   const perKey = Math.max(1, Math.round(chords / keys))
   return { unit: 'key', at: Math.min(keys, Math.floor(chord / perKey) + 1), of: keys }
 }
+
+/**
+ * The keys an engraved run (an exercise's line) sounds at a beat group, lowest first, and those of
+ * them that are a tone of its chord, to be painted as that tone; the others light plain.
+ */
+export function soundingKeys(
+  performance: Performance,
+  at: number,
+): { readonly keys: readonly Midi[]; readonly marked: readonly RunKey[] } {
+  const group = performance.beatGroups[at]
+  const keys = [
+    ...new Set(group?.notes.flatMap((index) => performance.notes[index]?.midi ?? []) ?? []),
+  ].sort((a, b) => a - b)
+  const chord = group?.chord === undefined ? undefined : performance.chords[group.chord]
+  const marked = keys.flatMap((key): RunKey[] => {
+    const tone = chord?.tones.find((each) => each.pitchClass === pitchClass(key))
+    return tone ? [{ midi: key, role: tone.role, note: tone.note }] : []
+  })
+  return { keys, marked }
+}

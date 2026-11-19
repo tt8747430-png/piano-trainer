@@ -1,5 +1,5 @@
 import { useParams, useSearch } from '@tanstack/react-router'
-import { SkipForward } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
@@ -7,13 +7,19 @@ import { useProgressStoreApi } from '@/entities/progress'
 import { recordExercised } from '@/features/record-practised'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
 import { useUp, useSetSearch } from '@/shared/lib'
-import { printedChord } from '@/shared/lib/music'
+import { pitchClassOf, printedChord, type SpelledNote } from '@/shared/lib/music'
 import { exercisePatch, type ExerciseSearch } from '../model/exercise-search'
 import { nextKey } from '../model/next-key'
 import { useExercisePlayer } from '../model/use-exercise-player'
+import { HandsSegmented, Labelled, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { ExerciseSetup } from './ExerciseSetup'
-import { PlayerLayout } from './PlayerLayout'
+import { SettingsSheet } from '@/widgets/player-setup'
+import { PlayingSection } from '@/widgets/practice-player'
+import { SheetMusic, type SheetViewChoice } from '@/widgets/sheet-music'
+import { ExerciseMusicFields } from './ExerciseMusicFields'
+import { ExerciseWayFields } from './ExerciseWayFields'
+import { RunLayout } from './RunLayout'
+import { ScalePracticeFields } from './ScalePracticeFields'
 
 /**
  * What an exercise is played on, as its title says it: its scale, its chord (printed as the sheets
@@ -32,9 +38,23 @@ function useExerciseOf(exercise: Exercise, choice: ExerciseChoice): string {
   }
 }
 
-/** An exercise in the Player: its rule's line in the learner's key and choices, sheet music and all. */
+/** An exercise's line on the paper: its music in lines, as the run boards' (`PV_RUN`). */
+const RUN_SHEET: SheetViewChoice = {
+  layout: 'vertical',
+  chordNames: false,
+  lyrics: false,
+  hidden: [],
+}
+/** An exercise's line has no sections. */
+const NO_HEADINGS: readonly string[] = []
+
+/** A key's place, from 1, in the round Next key walks from C: by fifths (C G D …) or by half steps. */
+const keyPlace = (root: SpelledNote, order?: 'chromatic') =>
+  ((pitchClassOf(root) * (order === 'chromatic' ? 1 : 7)) % 12) + 1
+
+/** An exercise in the run view: its rule's line engraved in the learner's key and choices, its keys round the circle. */
 export function ExercisePlayerPage() {
-  const { exerciseId } = useParams({ from: '/full-screen/play/exercise/$exerciseId' })
+  const { exerciseId } = useParams({ from: '/shell/play/exercise/$exerciseId' })
   return isExerciseId(exerciseId) ? (
     <ExerciseScreen key={exerciseId} exercise={exerciseOf(exerciseId)} />
   ) : null
@@ -42,8 +62,10 @@ export function ExercisePlayerPage() {
 
 function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation('player')
+  const { t: tp } = useTranslation('practice')
+  const [page, setPage] = useState('main')
   const locale = useLocale()
-  const search = useSearch({ from: '/full-screen/play/exercise/$exerciseId' })
+  const search = useSearch({ from: '/shell/play/exercise/$exerciseId' })
   const close = useUp()
   const setSearch = useSetSearch<ExerciseSearch>()
   const { choice, performance, player, view, changeSetup } = useExercisePlayer(
@@ -77,8 +99,12 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
           })
         }
       : null
+  // Where it stands: the key's place in the round Next key walks from C (Key 1 of 12); one key, none.
+  const place = exercise.options.oneKey
+    ? null
+    : { unit: 'key' as const, at: keyPlace(choice.root, search.order), of: 12 }
   return (
-    <PlayerLayout
+    <RunLayout
       title={t('exercise.title', {
         name: exercise.fields.hanon
           ? t('exercise.hanon.name', { number: choice.hanon })
@@ -89,24 +115,77 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       view={view}
       player={player}
       performance={performance}
-      status={
+      keys={1}
+      place={place}
+      tempoInfo={{ name: t('tempoLadder.label'), text: t('tempoLadder.info') }}
+      music={
+        // Two lines in sight, the playhead bringing its line, as the run boards' two lines of bars.
+        <div className="h-80 w-full [--float-room:0px] lg:h-68">
+          <SheetMusic
+            view={RUN_SHEET}
+            title=""
+            performance={performance}
+            headings={NO_HEADINGS}
+            current={player.practice.state.beatGroup}
+            loop={player.loop}
+            playing={playing}
+            fingers={player.fingers}
+            names={player.names}
+            positions={player.positions}
+            muted={player.muted}
+            onJump={player.practice.jumpToBeatGroup}
+            onLoopChange={player.setLoop}
+          />
+        </div>
+      }
+      next={
         goOn ? (
-          <Button variant="soft" size="lg" onClick={goOn}>
+          <Button variant="link" className="h-11 shrink-0 px-0 text-sm" onClick={goOn}>
             {t('exercise.nextKey')}
-            <SkipForward data-icon="inline-end" aria-hidden />
+            <ChevronRight data-icon="inline-end" aria-hidden />
           </Button>
         ) : null
       }
       setup={
-        <ExerciseSetup
-          exercise={exercise}
-          choice={choice}
-          player={player}
-          hands={view.hands}
-          swing={view.swing}
-          onChange={changeSetup}
-          onSwing={player.setSwing}
-        />
+        <>
+          <ExerciseMusicFields exercise={exercise} choice={choice} onChange={changeSetup} />
+          <ExerciseWayFields exercise={exercise} choice={choice} onChange={changeSetup} />
+          {exercise.fields.handOctaves ? (
+            <ScalePracticeFields
+              choice={choice}
+              player={player}
+              hands={view.hands}
+              onChange={changeSetup}
+            />
+          ) : (
+            <Labelled label={tp('exercisePage.hands')}>
+              <HandsSegmented
+                label={tp('exercisePage.hands')}
+                value={view.hands}
+                onChange={player.setHands}
+                painted
+              />
+            </Labelled>
+          )}
+          {exercise.options.oneKey ? null : (
+            <Labelled label={tp('exercisePage.order')}>
+              <Segmented
+                label={tp('exercisePage.order')}
+                value={search.order ?? 'fifths'}
+                options={(['fifths', 'chromatic'] as const).map((each) => ({
+                  value: each,
+                  label: tp(`exercisePage.orders.${each}`),
+                }))}
+                onChange={(each) => setSearch({ order: each === 'chromatic' ? each : undefined })}
+              />
+            </Labelled>
+          )}
+        </>
+      }
+      settings={
+        <SettingsSheet page={page} onPage={setPage}>
+          <PlayingSection swing={view.swing} onSwing={player.setSwing} />
+        </SettingsSheet>
       }
     />
   )

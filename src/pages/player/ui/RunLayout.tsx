@@ -4,15 +4,20 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { midi, type KeyRange } from '@/shared/lib/music'
+import { TEMPO_RANGE } from '@/shared/lib/schedule'
+import { midi, type KeyRange, type Midi } from '@/shared/lib/music'
 import {
   FloatingPiece,
   FloatingPlayPiece,
+  GroupRow,
+  GroupRows,
+  InfoTip,
   nameMark,
   RoundButton,
   ScreenHeader,
   Sheet,
   SheetContent,
+  Stepper,
   type KeyMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -24,7 +29,7 @@ import {
 } from '@/widgets/practice-player'
 import { PlayerPlayback } from '@/widgets/player-settings'
 import { SettingsExtrasContext, type SettingsExtras } from '@/widgets/player-setup'
-import { runChords, runPlace } from '../model/run-music'
+import { runChords, runPlace, soundingKeys, type RunPlace } from '../model/run-music'
 import { RunStaff } from './RunStaff'
 import { SongHead } from './SongHead'
 
@@ -34,6 +39,8 @@ const LAPTOP_KEYS: KeyRange = { from: midi(36), to: midi(96) }
 /** The run boards' keys stand 112 tall on a phone, 170 on a laptop (`RS_KEYS`). */
 const PHONE_KEYS_PX = 112
 const LAPTOP_KEYS_PX = 170
+/** A tempo step, as the exercise page's and the boards' stepper (± 4). */
+const TEMPO_STEP = 4
 /** The music shown at once: two lines of four bars on a phone, one of eight on a laptop (`PV_LINE`). */
 const SHOWN = 8
 
@@ -54,6 +61,10 @@ export function RunLayout({
   keys,
   setup,
   settings,
+  music,
+  place: placed,
+  next,
+  tempoInfo,
 }: {
   title: string
   onClose: () => void
@@ -66,6 +77,14 @@ export function RunLayout({
   setup: ReactNode
   /** The gear's sheet: how the run is played (its pattern, its feel). */
   settings: ReactNode
+  /** The run's own music, engraved, where its chords are not whole notes (an exercise's line). */
+  music?: ReactNode
+  /** Where it stands, where the run counts it itself (an exercise's keys); `null` says nothing. */
+  place?: RunPlace | null
+  /** The act after a pass, at the progress row's end (an exercise's Next key). */
+  next?: ReactNode
+  /** How the run's tempo moves on its own, in the Tempo row's ⓘ (an exercise's tempo ladder). */
+  tempoInfo?: { readonly name: string; readonly text: string }
 }) {
   const { t } = useTranslation(['player', 'music', 'common'])
   const laptop = useMediaQuery(LAPTOP)
@@ -75,21 +94,28 @@ export function RunLayout({
   const [setupOpen, setSetupOpen] = useState(true)
   const chords = useMemo(() => runChords(performance), [performance])
   const current = performance.beatGroups[practice.state.beatGroup]?.chord ?? 0
-  const place = runPlace(current, chords.length, keys)
+  const place = placed === undefined ? runPlace(current, chords.length, keys) : placed
   const where =
-    place.unit === 'key'
-      ? t('player:run.key', { at: place.at, of: place.of })
-      : t('player:run.chord', { at: place.at, of: place.of })
+    place === null
+      ? ''
+      : place.unit === 'key'
+        ? t('player:run.key', { at: place.at, of: place.of })
+        : t('player:run.chord', { at: place.at, of: place.of })
   // The eight bars round the chord sounding: the page it falls on.
   const first = Math.floor(current / SHOWN) * SHOWN
   const shown = chords.slice(first, first + SHOWN)
   const chord = chords[current]
-  const marks = useMemo(
+  // A run of whole-note chords lights its chord; an engraved line the keys sounding now.
+  const sounding = useMemo(
     () =>
-      new Map<ReturnType<typeof midi>, KeyMark>(
-        chord?.keys.map((key) => [key.midi, nameMark(key)]) ?? [],
-      ),
-    [chord],
+      music === undefined
+        ? { keys: chord?.keys.map((key) => key.midi) ?? [], marked: chord?.keys ?? [] }
+        : soundingKeys(performance, practice.state.beatGroup),
+    [music, chord, performance, practice.state.beatGroup],
+  )
+  const marks = useMemo(
+    () => new Map<Midi, KeyMark>(sounding.marked.map((key) => [key.midi, nameMark(key)])),
+    [sounding],
   )
   const extras: SettingsExtras = {
     head: <SongHead title={title} detail={t('music:bpm', { tempo: player.tempo })} acts={[]} />,
@@ -123,35 +149,39 @@ export function RunLayout({
           1.35 in a 1177 column. */}
       <div className="flex flex-1 flex-col gap-4 pt-1 lg:-mb-8 lg:items-center lg:justify-center lg:pt-2">
         <div className="flex w-full flex-col gap-4 lg:max-w-[73.5625rem] lg:gap-2">
-          {laptop ? (
-            <div className="[zoom:1.35]">
-              <RunStaff chords={shown} cell={104} end />
+          {music ??
+            (laptop ? (
+              <div className="[zoom:1.35]">
+                <RunStaff chords={shown} cell={104} end />
+              </div>
+            ) : (
+              <>
+                <RunStaff chords={shown.slice(0, 4)} cell={76} end={false} />
+                {shown.length > 4 ? <RunStaff chords={shown.slice(4)} cell={76} end /> : null}
+              </>
+            ))}
+          {place === null ? null : (
+            <div className="flex items-center gap-3">
+              <Progress
+                value={place.at}
+                max={place.of}
+                aria-label={where}
+                getAriaValueText={() => where}
+                className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
+              />
+              <span
+                aria-hidden
+                className="shrink-0 text-sm/[normal] text-muted-foreground tabular-nums"
+              >
+                {where}
+              </span>
+              {next}
             </div>
-          ) : (
-            <>
-              <RunStaff chords={shown.slice(0, 4)} cell={76} end={false} />
-              {shown.length > 4 ? <RunStaff chords={shown.slice(4)} cell={76} end /> : null}
-            </>
           )}
-          <div className="flex items-center gap-3">
-            <Progress
-              value={place.at}
-              max={place.of}
-              aria-label={where}
-              getAriaValueText={() => where}
-              className="flex-1 [&_[data-slot=progress-indicator]]:bg-learned [&_[data-slot=progress-track]]:h-2"
-            />
-            <span
-              aria-hidden
-              className="shrink-0 text-sm/[normal] text-muted-foreground tabular-nums"
-            >
-              {where}
-            </span>
-          </div>
         </div>
       </div>
       <PinnedKeyboard
-        shown={{ keys: chord?.keys.map((key) => key.midi) ?? [], marks }}
+        shown={{ keys: sounding.keys, marks }}
         range={laptop ? LAPTOP_KEYS : PHONE_KEYS}
         sized={laptop ? LAPTOP_KEYS_PX : PHONE_KEYS_PX}
         screen="playing"
@@ -197,8 +227,39 @@ export function RunLayout({
         <SheetContent title={t('player:setup')} rising dismiss="close">
           <div className="flex flex-col gap-6">
             {setup}
+            <GroupRows>
+              <GroupRow
+                label={
+                  tempoInfo ? (
+                    <span className="inline-flex items-center gap-1">
+                      {t('player:run.tempo')}
+                      <InfoTip name={tempoInfo.name}>{tempoInfo.text}</InfoTip>
+                    </span>
+                  ) : (
+                    t('player:run.tempo')
+                  )
+                }
+              >
+                <Stepper
+                  label={t('player:run.tempo')}
+                  value={player.tempo}
+                  min={TEMPO_RANGE.min}
+                  max={TEMPO_RANGE.max}
+                  step={TEMPO_STEP}
+                  typed
+                  format={(tempo) => t('music:bpm', { tempo })}
+                  onChange={player.setTempo}
+                  decrease={t('player:run.slower')}
+                  increase={t('player:run.faster')}
+                />
+              </GroupRow>
+            </GroupRows>
             {laptop ? null : (
-              <Button size="lg" className="-mt-2 h-13 w-full text-[1.0625rem] font-bold" onClick={start}>
+              <Button
+                size="lg"
+                className="-mt-2 h-13 w-full text-[1.0625rem] font-bold"
+                onClick={start}
+              >
                 {t('player:run.start')}
               </Button>
             )}

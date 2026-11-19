@@ -10,6 +10,8 @@ export const player: LocaleResources['player'] = {
     tempo: 'Темп',
     play: 'Играть',
     start: 'Начать',
+    slower: 'Медленнее',
+    faster: 'Быстрее',
   },
   more: 'Ещё',
   sections: {
