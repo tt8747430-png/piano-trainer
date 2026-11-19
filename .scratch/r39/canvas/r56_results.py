@@ -3,8 +3,8 @@
 #   PracticeResult — the same results opened from Profile › Practice history
 #   Profile        — gains Practice history: a 30-day chart, the runs by day, "Stored on this device"
 # The results follow memory-palaces' ResultScreen (an icon circle, the title, one line, a row of stat tiles, the actions
-# pinned at the foot) and what Piano Marvel, Melodics and Yousician show after a run: every chord marked right, wrong,
-# early or late and by how much; your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
+# pinned at the foot) and what Piano Marvel, Melodics and Yousician show after a run: every chord marked right, a slip or
+# a pause (Wait mode waits, so it has no early or late); your best beside this score. Exec'd by r41.py after r55_editor_draft; uses
 # r53_songs_more's IF and r50_profile's pieces. Helpers carry the RS_ prefix.
 
 RS_SAGE, RS_SAGE_INK, RS_RED, RS_OCHRE = '#DCE9D6', '#2F5A35', '#A1352B', '#8A5D16'
@@ -13,8 +13,9 @@ RS_LET = 'CDEFGAB'
 RS_INV = [[('C', 4), ('E', 4), ('G', 4), ('B', 4)], [('E', 4), ('G', 4), ('B', 4), ('C', 5)],
           [('G', 4), ('B', 4), ('C', 5), ('E', 5)], [('B', 3), ('C', 4), ('E', 4), ('G', 4)]]
 RS_RUN = [RS_INV[i % 4] for i in range(12)]
-# what happened at each chord: None is right and on time; ('early'|'late', ms); ('wrong', played notes, the wrong one)
-RS_MARKS = {2: ('early', 40), 6: ('wrong', [('G', 4), ('B', 4), ('D', 5), ('E', 5)], ('D', 5)), 9: ('early', 25), 10: ('late', 60)}
+# what happened at each chord in Wait mode, which waits for it: None is right at once; ('paused',) took over two beats
+# (the practice machine's pauses, shown, never scored); ('wrong', played notes, the wrong one), a slip
+RS_MARKS = {2: ('paused',), 6: ('wrong', [('G', 4), ('B', 4), ('D', 5), ('E', 5)], ('D', 5)), 10: ('paused',)}
 RS_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion']
 
 
@@ -66,7 +67,7 @@ def RS_CAP(i, perfect):
         return f'<span style="color: {RS_SAGE_INK}; font-weight: 700" aria-label="Correct">✓</span>'
     if m[0] == 'wrong':
         return f'<span style="color: {RS_RED}; font-weight: 600">Wrong notes</span>'
-    return f'<span style="color: {RS_OCHRE}; font-weight: 600; font-variant-numeric: tabular-nums">{m[0].capitalize()}<br>{m[1]} ms</span>'
+    return f'<span style="color: {RS_OCHRE}; font-weight: 600">Paused</span>'
 
 
 def RS_RUNSTAFF(per_row, cw, perfect):
@@ -83,7 +84,7 @@ def RS_RUNSTAFF(per_row, cw, perfect):
 
 
 RS_LEGEND = (f'<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; font-size: 13px; color: {SOFT}">'
-             f'<span><b style="color: {RS_SAGE_INK}">✓</b> Correct</span><span><b style="color: {RS_RED}">●</b> Wrong notes</span><span><b style="color: {RS_OCHRE}">●</b> Early or late</span></div>')
+             f'<span><b style="color: {RS_SAGE_INK}">✓</b> Correct</span><span><b style="color: {RS_RED}">●</b> Wrong notes</span><span><b style="color: {RS_OCHRE}">●</b> Paused</span></div>')
 
 
 def RS_TILE(fig, unit, sub, label):
@@ -112,7 +113,7 @@ def RS_BODY(per_row, cw, perfect, from_profile, lap=False, parts=False):
             f'<h1 class="rs-rise rs-d1" style="margin: 8px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -0.01em"><span style="font-family: {SERIF}">Cmaj7</span> · Inversions</h1></div>')
     tiles = (f'<div class="rs-rise rs-d2" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: {16 if lap else 12}px">'
              + RS_TILE('100%' if perfect else '92%', '', '12 of 12' if perfect else '11 of 12', 'Accuracy')
-             + RS_TILE('12' if perfect else '9', 'on time', 'None early or late' if perfect else '2 early · 1 late', 'Timing')
+             + RS_TILE('0' if perfect else '2', '', 'of 12 chords', 'Pauses')
              + RS_TILE('72', 'BPM', 'In Wait mode', 'Tempo') + '</div>')
     run = (f'<section class="rs-rise rs-d3" aria-label="The run" style="display: flex; flex-direction: column; gap: 8px"><h2 style="margin: 0; font-size: 14px; font-weight: 600">The run</h2>'
            + f'<div style="display: flex; flex-direction: column; gap: 8px">{RS_RUNSTAFF(per_row, cw, perfect)}{"" if perfect else RS_LEGEND}</div>' + '</section>')

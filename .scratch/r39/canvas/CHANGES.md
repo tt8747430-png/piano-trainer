@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a run's results say what Wait mode measures: Pauses (of 12 chords) for Timing, marks ✓ · Wrong notes · Paused, never early or late · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · pending
+
 
 
 ## Changes
