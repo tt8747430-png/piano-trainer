@@ -1182,6 +1182,8 @@ owner's, typos fixed.
 
 - **The Chord player ported from its board, measured (loop, 2026-11-19):** the sheet's name stands 4 under the bar (it was 16), its sections 16 under it and their pills 8 apart, as drawn; the floating bar's words (Style, Key, Tempo, Repeats) 12, the type floor, where they were 11.
 
+- **The Circle of fifths ported from its board (loop, 2026-11-19; the board's ruling "the page has one focus"):** the key's name (the serif, 22, 36 on a laptop) and its signature stand in the wheel's empty centre; the line "relative A minor" and the seven chord tiles under the wheel go, since the wheel lights the relative minor and the key's chords and Scales and keys holds the chords with their keys drawn. The wheel is the page alone, 370 on a phone (its 16 gutters kept) and up to 640 on a laptop.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

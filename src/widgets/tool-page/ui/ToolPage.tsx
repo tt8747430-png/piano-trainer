@@ -53,7 +53,6 @@ export function ToolPage({
   after,
   keys,
   start = false,
-  centred = false,
   children,
 }: {
   title: string
@@ -82,8 +81,6 @@ export function ToolPage({
   keys?: ReactNode
   /** The readout at the page's left, top down, as a page's name and what follows it (the Chord finder's). */
   start?: boolean
-  /** The side beside the picture centred on it from a laptop's width (the Circle of fifths' key). */
-  centred?: boolean
   /** The readout or the picture. */
   children: ReactNode
 }) {
@@ -137,9 +134,7 @@ export function ToolPage({
           >
             {children}
           </section>
-          <div className={cn('flex w-full flex-col gap-6', centred && 'lg:self-center')}>
-            {side}
-          </div>
+          <div className="flex w-full flex-col gap-6">{side}</div>
         </div>
       ) : (
         <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 pb-8">
