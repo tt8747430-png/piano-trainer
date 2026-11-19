@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a run's results say what Wait mode measures: Pauses (of 12 chords) for Timing, marks ✓ · Wrong notes · Paused, never early or late · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · pending
 
 
 
 ## Changes
 
+- 2026-11-19 · 33ecdb79 · a run's results say what Wait mode measures: Pauses (of 12 chords) for Timing, marks ✓ · Wrong notes · Paused, never early or late · PracticeResult,PracticeResultLaptop,PlayChord,PlayChordLaptop · v660
 - 2026-11-19 · 59faffaf · Profile's First run state (tiles 0, flat week with its line, no notifications, badges not started, achievements locked, history empty with Open Practice); the badge tiers the app's table · Profile,ProfileLaptop · v659
 - 2026-11-19 · adfe6dac · Profile's badges keep their 6px bars under the line (the loop-62 ruling's script was out of the build) · Profile,ProfileLaptop · v658
 - 2026-11-19 · 03e13f9b · the editor's palette opens on Recent, as its ruling (loop round 57) and the app (it drew Notes); its phone keys D3 to E5 at the kit's 26 a white, as the app (C3 to G5 at 21, under the floor) · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v657
