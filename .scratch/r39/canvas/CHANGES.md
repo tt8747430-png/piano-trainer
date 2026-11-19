@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · the kit's CARD pads 16 all round (was 14 × 16); Settings' Paused card and folds on the scale · AppLayers,AppLayersLaptop,Check,CheckLaptop,Exercise,ExerciseLaptop,Explore,ExploreLaptop,Learn,LearnLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,Profile,ProfileLaptop,ProgressionEdit,ProgressionEditLaptop,Section,SectionLaptop,Settings,SettingsLaptop,SongSettings,SongSettingsLaptop · **pending**
 
 ## Changes
 
