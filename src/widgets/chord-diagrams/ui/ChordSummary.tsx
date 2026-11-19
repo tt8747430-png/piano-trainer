@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn, useScrollMotion } from '@/shared/lib'
-import { printedSymbol } from '@/shared/lib/music'
+import { noteName, printedSymbol } from '@/shared/lib/music'
+import { LeadSymbol, MiniKeys } from '@/shared/ui'
 import { ChordDiagram } from './ChordDiagram'
 import { ChordSheet } from './ChordSheet'
 
@@ -64,6 +65,14 @@ export function ChordSummary({
               <button
                 type="button"
                 aria-current={now ? 'true' : undefined}
+                aria-label={
+                  follows
+                    ? undefined
+                    : t('chordDiagram', {
+                        symbol: printedSymbol(each.symbol),
+                        notes: each.notes.map(noteName).join(' '),
+                      })
+                }
                 onClick={() =>
                   onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
                 }
@@ -72,15 +81,17 @@ export function ChordSummary({
                   // Following the music, a quiet cell; on a song's page, the canvas's chord card.
                   follows
                     ? 'gap-0.5 rounded-control border border-transparent px-1.5 py-1 transition-colors duration-200 ease-out hover:bg-muted'
-                    : 'gap-1.5 rounded-[14px] bg-card p-2.5 shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
+                    : 'gap-2 rounded-card bg-card p-3 shadow-[0_0_0_1px_var(--color-border)] transition-[filter] duration-200 ease-out hover:brightness-[0.97]',
                   now && 'border-foreground',
                 )}
               >
-                {/* Every chord on the same keys, the same size. */}
-                <ChordDiagram
-                  chord={each}
-                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-[2.875rem] w-auto'}
-                />
+                {/* Every chord on the same keys, the same size: following the music the Diagrams' keys,
+                    on a song's page the boards' mini keys (CHORDS_ROW). */}
+                {follows ? (
+                  <ChordDiagram chord={each} className="h-8 w-auto landscape-phone:h-6" />
+                ) : (
+                  <MiniKeys keys={each.keys} />
+                )}
                 <span
                   aria-hidden
                   className={cn(
@@ -91,7 +102,11 @@ export function ChordSummary({
                     follows && !now && 'text-muted-foreground',
                   )}
                 >
-                  {printedSymbol(each.symbol)}
+                  {follows ? (
+                    printedSymbol(each.symbol)
+                  ) : (
+                    <LeadSymbol text={printedSymbol(each.symbol)} />
+                  )}
                 </span>
               </button>
             </li>

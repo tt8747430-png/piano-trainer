@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib'
 import { printedSymbol, type PlacedScaleChord } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { MiniKeys } from '@/shared/ui'
+import { LeadSymbol, MiniKeys } from '@/shared/ui'
 
 /** A chord's play is its own: after the scale changes, no chord of the new ones is pressed. */
 const idOf = (placed: PlacedScaleChord) =>
@@ -46,7 +46,9 @@ export function ScaleChordGrid({ chords }: { chords: readonly PlacedScaleChord[]
               >
                 <MiniKeys keys={keys} sounding={playing} className="sm:w-full" />
                 <span className="flex flex-col items-center">
-                  <span className="text-base font-bold">{symbol}</span>
+                  <span className="text-base font-bold">
+                    <LeadSymbol text={symbol} />
+                  </span>
                   <span className="-mt-0.5 text-[0.8125rem] text-muted-foreground">
                     {placed.numeral}
                   </span>
