@@ -83,7 +83,7 @@ const SG = (st, set, list) => Object.fromEntries(list.map(([k, opts, d]) => [k +
     const SIGW = sg === 0 ? 'no sharps or flats' : (Math.abs(sg) + (sg > 0 ? (sg === 1 ? ' sharp' : ' sharps') : (sg === -1 ? ' flat' : ' flats')));
     const enh = (k) => { if (okFor(k)(rl, ra)) return {}; for (let l = 0; l < 7; l++) for (const a of [0, 1, -1]) if ((NP[l] + a + 12) % 12 === root && okFor(k)(l, a)) return { rl: l, ra: a }; return {}; };
     const tab = st.tab ?? 'Scale', hands = st.hands ?? 'Both', oct = st.oct ?? 1;
-    const ivs = IV[kind], marks = {}, lo = 48 + root - (root > 6 ? 12 : 0) + 12;
+    const ivs = IV[kind], marks = {}, lo = 60 + root;
     ivs.concat([12]).forEach((iv, i) => { const m = lo + iv; marks[m] = [i % 7 === 0 ? ROLE[1] : '#F3D9A8', i === ivs.length ? tonic : spell(i)]; });
     // the triads on each degree, from the scale's own notes (a pentatonic or blues takes its parent scale's)
     const PK = [0, 1, 2, 3, 4, 5, 0, 1, 1][kind], PIV = IV[PK], RN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];

@@ -95,8 +95,14 @@ export function RunView({
           : [],
     [tonic, kind, tones.length],
   )
+  // The staff engraves the scale up one octave from its start, as its board draws it (GRANDSTAFF):
+  // the run's octaves and direction are how it plays, not what is printed.
+  const engraved = useMemo(
+    () => scaleRunOf({ root, kind, start, octaves: 1, fingering, rhythm, hands, direction: 'up' }),
+    [root, kind, start, fingering, rhythm, hands],
+  )
   // The theory written on the playing hand's staff (A43), the right hand's when both play.
-  const { music, placed, down } = run
+  const { music, placed } = engraved
   const written = useMemo(() => {
     const at = characteristicDegree(kind)
     const own = spellScale(noteFromParam(root), kind)
@@ -112,7 +118,7 @@ export function RunView({
     return runStaff(
       music,
       hands === 'lh' ? 'lh' : 'rh',
-      [...placed, ...down.placed],
+      placed,
       'fingers',
       layers,
       {
@@ -128,7 +134,7 @@ export function RunView({
       at === undefined ? undefined : own[at]?.degree,
       compared,
     )
-  }, [music, placed, down, hands, layers, t, root, kind, compare])
+  }, [music, placed, hands, layers, t, root, kind, compare])
   const startTone = tones[start - 1] ?? tones[0]
   const startName = startTone ? printedNote(startTone.note) : ''
   const playback = usePlayback<'up-down'>()

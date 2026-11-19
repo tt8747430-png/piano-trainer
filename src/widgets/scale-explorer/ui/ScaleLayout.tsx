@@ -40,7 +40,7 @@ export function ScaleLayout({
       {keyboard}
       <div className="flex min-w-0 flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         {heading}
-        {music ? <div className="lg:mx-auto lg:w-full lg:max-w-160">{music}</div> : null}
+        {music}
         {children}
       </div>
       {bar}

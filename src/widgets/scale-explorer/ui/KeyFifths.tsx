@@ -57,7 +57,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
       >
         {printedSymbol(keySymbol(key))}
         {size === 'major' && signatureMark(key) ? (
-          <span className="absolute top-1.5 right-2 font-sans text-xs font-semibold text-muted-foreground">
+          <span className="absolute top-1.5 right-2 font-sans text-xs leading-[normal] font-medium text-muted-foreground">
             {signatureMark(key)}
           </span>
         ) : null}
@@ -69,7 +69,7 @@ export function KeyFifths({ value, kind }: { value: Key; kind: ScaleKind }) {
       <Link
         to="/practice/circle-of-fifths"
         search={{ key: keyParam(value) }}
-        className="-mt-3 -mb-1.5 flex min-h-11 items-center gap-0.5 self-start text-sm font-semibold text-foreground"
+        className="-my-3 flex min-h-11 items-center gap-0.5 self-start text-sm font-semibold text-foreground"
       >
         {t('scales.onCircleOfFifths')}
         <ChevronRight aria-hidden className="size-4" />
