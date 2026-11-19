@@ -7,7 +7,7 @@
 
 TKS_SRC = r'''
     const S = (o) => set(o);''' + TOAST_JS + r'''
-    const ALL = [{ id: 3, n: 'Take 3', d: '9 November, 18:41 · 0:41 · 92 BPM' }, { id: 2, n: '9 November, 18:20', d: '0:52 · 92 BPM' }, { id: 1, n: '9 November, 18:02', d: '0:38 · 88 BPM' }];
+    const ALL = [{ id: 3, n: 'Take 3', d: 'Nov 9, 2026, 6:41 PM · 0:41 · 92 BPM' }, { id: 2, n: 'Nov 9, 2026, 6:20 PM', d: '0:52 · 92 BPM' }, { id: 1, n: 'Nov 9, 2026, 6:02 PM', d: '0:38 · 88 BPM' }];
     const gone = st.gone || [], takes = ALL.filter((t) => !gone.includes(t.id)), at = ALL.find((t) => t.id === st.at) || ALL[0];
     const review = st.page === 'review', grid = st.grid || '1/8', raw = !!st.hideRaw, into = st.into || 'Both staves';
     const drop = (id) => S({ gone: gone.concat([id]), sheet: null, page: null, last: id, toast: 'Take deleted', toastUndo: true });
@@ -34,8 +34,8 @@ TKS_SRC = r'''
       discard: () => drop(at.id), save: () => S({ page: null, toast: 'Written into bars 3–10', toastUndo: false }) };'''
 
 PLAYMINI = (f'<button type="button" aria-label="Play" onClick="{{{{r.play}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: {{{{r.pbg}}}}; color: {INK}; display: flex; align-items: center; justify-content: center">'
-            f'<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg></button>')
-TKROW = (f'<div style="min-height: 64px; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{PLAYMINI}'
+            f'<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"></path></svg></button>')
+TKROW = (f'<div style="min-height: 64px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 4px 8px 12px; box-shadow: inset 0 -1px 0 {FILL}">{PLAYMINI}'
          f'<a href="Take.dc.html" style="flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; justify-content: center; color: {INK}; text-decoration: none"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{{{r.n}}}}</span><span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.d}}}}</span></a>'
          f'<button type="button" aria-label="Take actions" onClick="{{{{r.more}}}}" style="flex: none; width: 44px; height: 44px; border: 0; background: transparent; color: {INK}; display: flex; align-items: center; justify-content: center">{MORE}</button></div>')
 TKCHECK = (f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; margin: 0 10px; box-sizing: border-box; border-radius: 12px; border: 2px solid {{{{r.ckLine}}}}; background: {{{{r.ckBg}}}}; color: {SHEET}; display: flex; align-items: center; justify-content: center"><span style="display: flex; opacity: {{{{r.ckMark}}}}">{ICON(TICK, 14)}</span></span></sc-if>')
@@ -43,7 +43,7 @@ TKHIT = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}"><but
 assert TKROW.count('{PLAYMINI}') == 0 and TKROW.count(PLAYMINI) == 1
 _TKMORE = TKROW[TKROW.index('<button type="button" aria-label="Take actions"'):TKROW.index('</button></div>', TKROW.index('aria-label="Take actions"')) + len('</button>')]
 TKROW = TKROW.replace(_TKMORE, f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{_TKMORE}</sc-if>', 1)
-TKROW = TKROW.replace('<div style="min-height: 64px; display: flex;', '<div style="position: relative; min-height: 64px; display: flex;', 1).replace(PLAYMINI, TKHIT + TKCHECK + f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYMINI}</sc-if>', 1)
+TKROW = TKROW.replace('<div style="min-height: 64px; box-sizing: border-box; display: flex;', '<div style="position: relative; min-height: 64px; box-sizing: border-box; display: flex;', 1).replace(PLAYMINI, TKHIT + TKCHECK + f'<sc-if value="{{{{selOff}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYMINI}</sc-if>', 1)
 TKSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("Select", "toggleSel")}</sc-if><sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{TB("Cancel", "toggleSel")}</sc-if>'
 _TKSELIN = SELACT('{{selDlL}}', 'selDl', ACTIC['Export']) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
 TKSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_TKSELIN, 34)}</sc-if>'

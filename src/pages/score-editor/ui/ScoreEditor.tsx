@@ -36,7 +36,7 @@ import { EditorSheet } from './EditorSheet'
 import { FieldDocked } from './field-docked'
 import { OpenField } from './OpenField'
 import { RecordingBar } from './RecordingBar'
-import { TakesSheet } from './TakesSheet'
+import { TakesPage } from './TakesPage'
 import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
@@ -277,7 +277,7 @@ function EditorScreen({
       <FieldDocked value={typing}>
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
-      <TakesSheet />
+      <TakesPage />
       <EditorGear draft={draft} own={own} />
     </>
   )

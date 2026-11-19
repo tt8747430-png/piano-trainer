@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the takes: rows 64 (were 80, content-box), the Play glyph 20, the app's dates (Nov 9, 2026, 6:41 PM; a take recorded November 9) · Takes,TakesLaptop,Take,TakeLaptop · pending
 ## Changes
 
 - 2026-11-19 · 91e57412 · a song's Publish: a Signed out state (the app's card and Sign in), the own copy's Playlist · Library row (was Folder · Hymns) · SongSettings,SongSettingsLaptop · v632
