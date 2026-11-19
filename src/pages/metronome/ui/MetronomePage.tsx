@@ -78,9 +78,9 @@ export function MetronomePage() {
         large
         onStep={metronome.nudge}
       />
-      {/* The slider between its ends, 20 and 300, in 12 soft ink, as the board's TEMPO. */}
+      {/* The slider between its ends, 20 and 300, in 12 soft ink, 20 from the tempo and the beats, as the board's TEMPO. */}
       <div
-        className="mb-1 flex h-7 w-full items-center gap-3 text-xs text-muted-foreground tabular-nums"
+        className="my-1 flex h-7 w-full items-center gap-3 text-xs text-muted-foreground tabular-nums"
         data-setting="metronome.bpm"
       >
         <span aria-hidden>{BPM_RANGE.min}</span>

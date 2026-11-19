@@ -40,7 +40,7 @@ export function TempoSteps({
   }
   return (
     // On its own page, 14 under the bar's buttons as the Metronome board sets it.
-    <div className={cn('flex w-full flex-col items-center gap-0.5', large && 'pt-3')}>
+    <div className="flex w-full flex-col items-center gap-0.5">
       <p aria-hidden className="text-[0.9375rem] text-muted-foreground">
         {mark ? `${mark} · ${t('metronome.bpm')}` : t('metronome.bpm')}
       </p>

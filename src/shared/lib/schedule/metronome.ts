@@ -38,7 +38,7 @@ export const METRONOME_SOUNDS = ['click', 'beep', 'drum'] as const
 export type MetronomeSound = (typeof METRONOME_SOUNDS)[number]
 
 /** The tempos the Metronome keeps, in beats a minute. */
-export const BPM_RANGE = { min: 30, max: 300 } as const
+export const BPM_RANGE = { min: 20, max: 300 } as const
 
 /** A tempo the Metronome keeps: whole beats a minute, within its range. */
 export const clampBpm = (bpm: number): number =>

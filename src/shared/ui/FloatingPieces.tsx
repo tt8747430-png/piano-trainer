@@ -30,8 +30,7 @@ export function FloatingPieces({ label, children }: { label: string; children: R
 
 const PIECE =
   'glass h-14 w-18 shrink-0 flex-col gap-0.5 rounded-pill px-1 text-foreground hover:bg-glass active:scale-96 [&_svg:not([class*=size-])]:size-5.5'
-const CAPTION =
-  'max-w-16 text-center text-[0.6875rem] leading-[1.05] font-semibold whitespace-normal'
+const CAPTION = 'max-w-16 text-center text-xs leading-[1.05] font-semibold whitespace-normal'
 
 /**
  * A piece whose word is one short one (Key, Listen, BPM): round, 56 wide, as the Scales and Exercise
@@ -126,7 +125,7 @@ export function FloatingPlayPiece({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground active:scale-96 disabled:opacity-50"
     >
       {playing ? (
         <Square aria-hidden className="size-4.5 fill-current" />
@@ -147,7 +146,7 @@ export function FloatingPlayLink({ label, render }: { label: string; render: Rea
     <ButtonLink
       variant="ghost"
       render={render}
-      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-base font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
+      className="glass-honey flex h-14 min-w-44 shrink-0 items-center justify-center gap-2 rounded-pill px-4 text-[1.0625rem] font-bold whitespace-nowrap text-primary-foreground hover:bg-transparent active:scale-96"
     >
       <Play aria-hidden className="size-4.5 fill-current" />
       <span>{label}</span>

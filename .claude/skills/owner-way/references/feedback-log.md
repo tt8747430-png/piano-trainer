@@ -1174,6 +1174,8 @@ owner's, typos fixed.
 - **New pattern as its board (port, 2026-11-19, `r54_practice_more.py`'s PATED and PATED_L):** the name, how it plays as a piano roll (the right hand amber over the line, the left blue under it, a line on every beat; `PatternRoll`), then each hand's figures as chips under their family's name, Cancel · Save at the foot; the two dropdowns, the staff card with its Play and the keys at the foot are gone. On a laptop the name with Cancel · Save and the roll are a band across the top, the two hands side by side under it. A chip with a long name truncates within the row, never past the screen (`ChoiceChips`).
 - **An exercise's opening bars print plain (port, 2026-11-19, the Exercise board):** its staff had the key's chord over bar 1 and a 4/4; a drill's line prints neither (A41), and its tap bands go by the bars' numbers.
 
+- **The Metronome ported from its board, measured (loop, 2026-11-19):** the slider runs 20 to 300 as drawn (it began at 30, so the board's 40 BPM state was reachable but its end was not); the tempo's word stands 8 under the bar (a pt-3 had set it 20), the slider 20 from the tempo and the beats; a beat's number 12 semibold, paper on the accent; every floating piece's word 12 semibold and the floating Start 17 bold, as every board's PLAYCAP and caption.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

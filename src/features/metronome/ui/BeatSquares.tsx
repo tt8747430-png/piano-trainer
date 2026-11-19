@@ -75,10 +75,10 @@ export function BeatSquares({
                 <span
                   aria-hidden
                   className={cn(
-                    'absolute start-2 top-1.5 text-xs tabular-nums',
+                    'absolute start-2 top-1.5 text-xs font-semibold tabular-nums',
                     level === 'normal' || level === 'silent'
                       ? 'text-muted-foreground'
-                      : 'text-background',
+                      : 'text-card',
                   )}
                 >
                   {beat + 1}
