@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · one laptop sub-page bar: LTITLEBAR the 56 (was 88), Back 40 in, the title 12 after it, the content 24 under · AdminLaptop,AppLayersLaptop,ArchiveLaptop,ExploreLaptop,GroupsLaptop,LearnLaptop,LearnYoursLaptop,LegalLaptop,PatternLaptop,PatternNewLaptop,ProfileLaptop,ProgressionEditLaptop,SectionLaptop,SettingsLaptop,SharedFolderLaptop,SongSettingsLaptop,TakesLaptop,TrashLaptop · pending
 ## Changes
 
 - 2026-11-19 · ebd14b74 · a shared playlist: a Signed out state in the app's words, no tab bar off the four places · SharedFolder,SharedFolderLaptop · v634

@@ -56,7 +56,7 @@ export function SharedFolderPage() {
     data.kind === 'ready' ? data.groups.find((each) => each.id === folder?.groupId) : undefined
   if (!folder)
     return (
-      <div className="flex w-full flex-col gap-2 pb-8 lg:gap-8 [&>*:not([data-slot=screen-bar])]:max-w-220">
+      <div className="flex w-full flex-col gap-2 pb-8 lg:gap-6 [&>*:not([data-slot=screen-bar])]:max-w-220">
         <ScreenHeader title={t('groups.sharedWithMe')} back={<BackButton />} />
         {/* The SharedFolder board's states: the kit's one empty state, worded for a playlist. */}
         {data.kind === 'loading' ? (

@@ -41,7 +41,7 @@ export function GroupsPage() {
   const sharedWithMe = data.kind === 'ready' ? data.shared.filter((each) => !each.mine) : []
   return (
     // Two lists 880 wide under the title on a laptop, never a grid of cards (canvas v441).
-    <div className="flex w-full flex-col gap-2 pb-8 lg:gap-8 [&>*:not([data-slot=screen-bar])]:max-w-220">
+    <div className="flex w-full flex-col gap-2 pb-8 lg:gap-6 [&>*:not([data-slot=screen-bar])]:max-w-220">
       <ScreenHeader
         title={t('groups.title')}
         back={<BackButton />}
