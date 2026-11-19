@@ -278,11 +278,11 @@ def PTAG(pick, menu, name, pos='left: 8px; top: 8px'):
             + GRIPB(pick, name) + f'<button type="button" onClick="{{{{{menu}}}}}" aria-label="{name}: place, size or hide" style="height: 44px; padding: 0 8px 0 0; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 4px">{name}{CHEV_D}</button></div></sc-if>')
 LAYMENU = MENUSHELL('layMenuOn', '{{layMenuT}}',
     f'<div style="padding: 6px 8px 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">Place</div><div style="display: grid; padding: 0 4px">{{PLACE}}</div>'
-    f'<div style="padding: 10px 8px 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">Size</div><div style="display: grid; padding: 0 4px 6px">{SEGC("sizeSeg", 40, 13)}</div>'
+    f'<div style="padding: 10px 8px 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: {SOFT}">Size</div><div style="display: grid; padding: 0 4px 6px">{SEGC("sizeSeg", 44, 14)}</div>'
     f'<div role="separator" style="height: 1px; margin: 4px 12px; background: {LINE}"></div><button type="button" role="menuitem" onClick="{{{{hideP}}}}" style="width: 100%; height: 44px; border: 0; border-radius: 10px; background: transparent; padding: 0 12px; text-align: left; color: {INK}; font: inherit; font-size: 16px">Hide</button>',
     'layMenuPos', 300)
-LAYMENU_P = LAYMENU.replace('{PLACE}', SEGC('placeSegP', 40, 13))
-LAYMENU_L = LAYMENU.replace('{PLACE}', SEGC('placeSeg', 40, 13))
+LAYMENU_P = LAYMENU.replace('{PLACE}', SEGC('placeSegP', 44, 14))
+LAYMENU_L = LAYMENU.replace('{PLACE}', SEGC('placeSeg', 44, 14))
 # while a panel is picked, the places it may go light up as honey zones; a tap there puts it there
 ZONE = lambda cond, act, label, pos: f'<sc-if value="{{{{{cond}}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{{act}}}}}" aria-label="Put it {label}" style="position: absolute; {pos}; z-index: 46; border: 2px dashed #B98A32; border-radius: 14px; background: rgba(237,198,132,.28); color: {INK}; font: inherit; font-size: 15px; font-weight: 700">{label}</button></sc-if>'
 DRAGHINT = f'<sc-if value="{{{{dragOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="status" style="position: absolute; left: 50%; top: 100px; transform: translateX(-50%); z-index: 47; height: 36px; padding: 0 14px; border-radius: 18px; background: {INK}; color: {SHEET}; display: flex; align-items: center; font-size: 14px; font-weight: 600; white-space: nowrap">{{{{dragT}}}}</div></sc-if>'

@@ -123,7 +123,7 @@ YSEL = f'<sc-if value="{{{{canSel}}}}" hint-placeholder-val="{{{{true}}}}">{TB("
 _YSELIN = SELACT('{{selDupL}}', 'selDup', DUPSEL) + SELACT('{{selDelL}}', 'selDel', ACTIC['Delete'], RED)
 YSELBAR = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">{DOCK(_YSELIN, 34)}</sc-if>'
 YSELBAR_L = f'<sc-if value="{{{{selOn}}}}" hint-placeholder-val="{{{{false}}}}">' + DOCK(_YSELIN, 28, w=440) + '</sc-if>'  # centred on the table, which keeps 56 at each side of the pane
-SORTBODY = f'{SEGC("sorts", 44, 15)}'
+SORTBODY = f'{SEGC("sorts", 44, 14)}'
 # a row's ··· is a menu at its button (owner, 2026-11-17), never a sheet with Done
 ROWBODY = (ROWMENU('rowOn', '{{rowT}}', [('link', 'Open', '', '{{rowOpen}}'), ('action', 'Duplicate', 'closeSheet'), ('link', 'Settings', '', '{{rowSet}}'), ('action', 'Delete', 'removeRow', RED)]))
 YTOAST = TOAST(112, always=True)
