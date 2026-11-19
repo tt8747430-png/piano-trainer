@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Archive and Trash: the States box (their empty states could not be opened), playlists not folders in the empty line and an archived playlist's row, rows 64 (phone) and 60 (laptop) as meant, the hairline inside · Archive,ArchiveLaptop,Trash,TrashLaptop · pending
-
 ## Changes
+
+- 2026-11-19 · 50a043a7 · Archive and Trash: the States box (their empty states could not be opened), playlists not folders in the empty line and an archived playlist's row, rows 64 (phone) and 60 (laptop) as meant, the hairline inside · Archive,ArchiveLaptop,Trash,TrashLaptop · v626
 
 - 2026-11-19 · (this commit) · All songs' laptop table rows 60 as the ruling says (the board drew 61, its border outside the height); (app) the sidebar's Songs places 8 under Songs (were 2), a row's cover 16 from its title (was 14) · SongsLaptop,AllSongsLaptop,FolderLaptop,SharedFolderLaptop · v625
 
