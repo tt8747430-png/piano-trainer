@@ -129,16 +129,19 @@ export function SheetContent({
         // gear): a card hung 8 under the bar's buttons at their right edge, 400 wide (420 `wide`), as tall as
         // it holds, 16 round with the hairline and the second shade; it fades in place.
         LAPTOP_CARD,
-        // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
+        // At most 86% of the screen's height, as the boards' BSHEET: the bar stays in sight above it.
+        'data-[swipe-axis=y]:[--drawer-content-max-height:calc(var(--app-height,100dvh)*0.86)]',
+        // The room anchored while no keyboard is up: the phone's keyboard never squeezes it. A tall
+        // sheet stands at that whole 86% (BSHEET's `tall`).
         tall &&
-          'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
+          'h-[calc(var(--app-height,100dvh)*0.86)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
         full &&
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
         floating && FLOATING_CARD,
         wide && 'data-[swipe-axis=x]:data-[swipe-direction=right]:w-105',
       )}
     >
-      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-1 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
+      <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
         {back ? <div className="col-start-1 row-start-1 justify-self-start">{back}</div> : null}
         <div className="col-start-2 row-start-1 flex min-w-0 flex-col items-center gap-0.5 pt-2.5">
           <div className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-1">
