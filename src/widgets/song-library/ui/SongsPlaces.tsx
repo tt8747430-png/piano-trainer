@@ -36,7 +36,7 @@ function useHere(): Here {
 
 /** A sub-item (the board's SONGS_SUB `item`): 40 tall, its words on the Songs label's edge (44). */
 const ITEM =
-  'choice flex h-10 items-center gap-2 rounded-[10px] pr-3 text-[0.9375rem] font-medium text-foreground aria-[current=page]:font-semibold focus-visible:-outline-offset-3'
+  'choice flex h-10 items-center pointer-coarse:h-11 gap-2 rounded-[10px] pr-3 text-[0.9375rem] font-medium text-foreground aria-[current=page]:font-semibold focus-visible:-outline-offset-3'
 
 /** What a sub-item's link carries: its shape (a playlist's further in, for its paint) and its mark. */
 const item = (current: boolean, swatch = false) => ({
@@ -101,7 +101,7 @@ export function SongsPlaces() {
       <Link to="/songs" search={{ view: 'explore' }} {...item(is('explore'))}>
         <Face label={t('explore.views.explore')} />
       </Link>
-      <div className="mt-1 flex h-10 items-center pl-11">
+      <div className="mt-1 flex h-10 items-center pointer-coarse:h-11 pl-11">
         <span className="flex-1 text-[0.8125rem] font-semibold text-muted-foreground">
           {t('folder.list')}
         </span>
@@ -111,7 +111,7 @@ export function SongsPlaces() {
             aria-label={t('folder.new')}
             title={t('folder.new')}
             onClick={() => setMaking({ kind: 'new', parent: null })}
-            className="choice grid size-10 place-items-center rounded-full focus-visible:-outline-offset-3"
+            className="choice grid size-10 place-items-center pointer-coarse:size-11 rounded-full focus-visible:-outline-offset-3"
           >
             <Plus aria-hidden className="size-4.5" />
           </button>

@@ -132,9 +132,9 @@ export function PracticePage() {
                 />
               ))}
             </ul>
-            <ul className="hidden grid-cols-5 gap-3 lg:grid">
+            <ul className="hidden grid-cols-3 gap-3 lg:grid xl:grid-cols-5">
               {places.map(({ key, ...place }) => (
-                <li key={key} className="flex [&>a]:flex-1">
+                <li key={key} className="flex min-w-0 [&>a]:flex-1">
                   <PageCard {...place} />
                 </li>
               ))}

@@ -15,7 +15,7 @@ import {
 import { Tipped } from './Tipped'
 
 /** A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink. */
-const ITEM = 'min-h-10 justify-between gap-3 rounded-[8px] px-3 text-[0.9375rem]'
+const ITEM = 'min-h-10 pointer-coarse:min-h-11 justify-between gap-3 rounded-[8px] px-3 text-[0.9375rem]'
 
 /**
  * The sidebar's foot as Claude's (canvas v392; owner: "the side bar is not done like the for example
