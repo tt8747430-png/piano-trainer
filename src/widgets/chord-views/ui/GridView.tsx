@@ -74,7 +74,7 @@ export function GridView({
     <section
       ref={scroller}
       aria-label={t('views.grid')}
-      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto px-3 overscroll-contain *:shrink-0"
+      className="-mx-3 flex h-full scroll-pb-(--float-room) flex-col gap-3.5 overflow-y-auto px-3 overscroll-contain *:shrink-0"
     >
       <ViewTitle title={title} credits={credits} />
       <div className="relative mx-auto w-full">
@@ -90,7 +90,7 @@ export function GridView({
         />
         {loop ? <GridLoopGrips performance={performance} loop={loop} onLoop={onLoop} /> : null}
       </div>
-      <div aria-hidden className="-mt-6 h-(--float-room) shrink-0" />
+      <div aria-hidden className="-mt-3.5 h-(--float-room) shrink-0" />
       <BackToPlayhead follow={follow} />
     </section>
   )

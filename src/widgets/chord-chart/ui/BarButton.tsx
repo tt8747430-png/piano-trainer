@@ -81,7 +81,7 @@ export function BarButton({
       data-bar={number - 1}
       onClick={(event) => onTap(beatTapped(event.target))}
       className={cn(
-        BAR,
+        tap === 'go' ? 'relative grid min-w-0 auto-rows-min gap-px' : BAR,
         'group/bar text-left transition-colors duration-200 ease-out focus-visible:-outline-offset-3',
       )}
       style={{ ...style, gridTemplateColumns: `repeat(${cells.length}, minmax(0, 1fr))` }}

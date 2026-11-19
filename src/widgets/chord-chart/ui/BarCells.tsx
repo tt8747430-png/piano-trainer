@@ -52,17 +52,21 @@ export function BarCells({
           data-sounding={sounding === beat ? '' : undefined}
           data-looped={looped ? '' : undefined}
           className={cn(
-            '@container relative flex h-12 items-end overflow-visible border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:h-14 landscape-phone:h-11',
+            face === 'grid'
+              ? '@container relative flex h-11 items-center overflow-visible rounded-[3px] ps-2 first:border-l-3 first:border-foreground'
+              : '@container relative flex h-12 items-end overflow-visible border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:h-14 landscape-phone:h-11',
             sounding === beat
               ? 'bg-foreground text-background'
               : playing
                 ? 'bg-secondary text-secondary-foreground'
                 : looped
                   ? 'bg-ring/15'
-                  : 'group-hover/bar:bg-muted/60',
+                  : face === 'grid'
+                    ? 'bg-card group-hover/bar:bg-muted'
+                    : 'group-hover/bar:bg-muted/60',
           )}
         >
-          {beat === 0 ? (
+          {beat === 0 && face === 'chart' ? (
             <span className="absolute top-1 left-1 text-xs leading-none tabular-nums opacity-60">
               {number}
             </span>
