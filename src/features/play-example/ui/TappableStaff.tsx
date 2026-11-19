@@ -11,8 +11,12 @@ import { notesShown } from '../model/notes-example'
 import { namesAt, noteColumns, passage, staffAt } from '../model/staff-taps'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
 
-/** The chord a bar starts with, printed as the sheets print it (`C♯m7`); none for a bar of no chord. */
+/**
+ * The chord a bar starts with, printed as the sheets print it (`C♯m7`); none for a bar of no chord,
+ * nor on a drill's plain line, whose bars go by their numbers (A41).
+ */
 function barSymbol(music: TimedMusic, start: Tick): string | undefined {
+  if (music.plain) return undefined
   const symbol = music.chords.find((chord) => chord.startTick === start)?.symbol
   return symbol === undefined ? undefined : printedSymbol(symbol)
 }

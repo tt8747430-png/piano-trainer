@@ -3,7 +3,8 @@ import type { TimedMusic } from '@/shared/lib/notation'
 
 /**
  * A Performance's bars from `from` up to `to` as music a staff writes, its time starting at the
- * first of them: their bars, notes, chords and pedal, the rest left out.
+ * first of them: their bars, notes, chords and pedal, the rest left out. A drill's line, as the board's
+ * Exercise prints it: no chord symbol, no staff name and no time signature (A41).
  */
 function barsBetween(performance: Performance, from: number, to: number): TimedMusic {
   const start = performance.bars[from]?.startTick ?? 0
@@ -11,6 +12,8 @@ function barsBetween(performance: Performance, from: number, to: number): TimedM
   const within = (tick: number) => tick >= start && tick < end
   return {
     ...performance,
+    plain: true,
+    timeHidden: true,
     bars: performance.bars
       .slice(from, to)
       .map((bar) => ({ ...bar, startTick: bar.startTick - start })),
