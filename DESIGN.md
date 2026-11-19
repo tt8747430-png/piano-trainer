@@ -124,7 +124,7 @@ rounded:
   white-key: '9px'
   control: '12px'
   card: '14px'
-  sheet: '20px'
+  sheet: '22px'
   pill: '9999px'
 spacing:
   gutter: '16px'
@@ -401,7 +401,7 @@ lip and a black key's slope draw a piano and appear nowhere else.
 ## Shapes
 
 One scale of four corners, and a corner is never written any other way (`src/styles/shapes.test.ts`): a control 12px, a
-card 14px, a sheet 20px, a pill round. Every line is 1px; only focus rings and the keys' rings are wider.
+card 14px, a sheet 22px, a pill round. Every line is 1px; only focus rings and the keys' rings are wider.
 
 Something inside a shape takes its holder's shape, so a fill reaches the edges: an item in a capsule is a pill, the first
 row of a card takes the card's corner. The keys are drawings, not controls: a black key's foot 6px, a white key's 9px,
