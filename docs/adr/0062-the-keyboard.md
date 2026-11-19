@@ -33,8 +33,9 @@ swung and re-zoomed as a page showed other keys. Each screen that wanted a compu
 - **Typing** reads physical keys (`code`), so every layout plays the same notes; never from a text field, with a
   modifier held, or on auto-repeat.
 - **The keys show or hide from the bar's Piano** (owner, 2026-11-17: "the same floating keyboard everywhere"): every
-  page with keys has the one Piano in its bar (`PianoButton`, the Chord player's too; the Player's and the editor's
-  their own), opening the Piano sheet whose first row shows or hides them over the saved fold (`folded`, and
+  page with keys has the one Piano in its bar (`PianoButton`; the Player's and the editor's their own; the Chord
+  player has none, its keys being a panel of its layout, shown, hidden and sized there and deaf to the saved fold,
+  ADR 0052), opening the Piano sheet whose first row shows or hides them over the saved fold (`folded`, and
   `foldedLandscape` on a phone on its side, where a reading page opens with them hidden; a screen played on,
   `screen="playing"`, keeps them out). Hidden, nothing stands where they stood: no strip, no pedal, nothing floats.
 - **Names on narrow keys:** All keys on a phone (a white key under 12px, a container query) name middle C alone,

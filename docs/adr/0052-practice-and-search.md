@@ -155,6 +155,48 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   three chords to try (C major, A minor 7th, D dominant 7th); the staff waits for a chord. Its Settings are grouped
   (Chord names: slash chords for inversions; Analysis: the keys that contain it, the key's scale on the keyboard;
   History: keep the last chords) on their own page, not a sheet.
+- **The Chord player's screen** (`/practice/chord-player`, canvas R76, `r58_chordplayer.py`; the sheet and its
+  engine are ADR 0112's). The chart is the page and never moves; four **panels** stand round it, each the learner's
+  to place, size and hide: the **Keys** (Top or Bottom; Small, Medium, Large: 72, 112, 168 on a phone, 110, 170,
+  240 from 64rem), the **Controls** (Style · Key · Tempo · Repeats · Play; Floating or at the Top; Full or Play
+  only), the **Genos** while Follow a MIDI arranger is on (Top, Floating, Bottom, and from 80rem Left or Right;
+  Full, Compact, Minimized) and, from 80rem, the key's **Chords** (Left or Right; Narrow 320 or Wide 420). They
+  come as the board's `LAY0`: keys at the foot, medium; controls floating, full; Genos compact on the right (so
+  floating on a phone); chords wide on the right. The model is `entities/page-layout` (`PAGE_PANELS`, `withPanel`,
+  `changesOf`), stored as `pt-page-layouts` (version 1, the panels changed and only those) on the device alone:
+  not synced, since a phone's screen and a laptop's differ, and in the backup. One layout serves both sizes; a side
+  place reads as Floating on a phone, which has no column. The writes are `features/arrange-page-layout`
+  (`setPanel`, `resetPageLayout`, `resetEveryLayout`, `restoreLayouts`). In the floating stack the Genos floats
+  above the controls and stands under them at the Bottom; the controls at the Top, and every panel at the Top,
+  stand in the page's flow under the bar; Play only floats at the end.
+  - **Edit layout** (`?layout=edit`, so Back leaves it), from ··· or the Settings page's Layout: each panel
+    outlined (2px dashed `layout-edge`) with its tag, a grip and its name, glass, 44 tall. The grip drags by mouse
+    or held finger; a tap on it (WCAG 2.5.7) lights the places it may go as honey zones (`layout-zone`, "Tap
+    where Keys goes"), and a tap there puts it; the name opens its menu (Place, Size, Hide; 300 wide). Hidden
+    panels wait in a tray under the bar ("Hidden", "+ Keys"); the bar holds Reset and Done. Each change is said in
+    a toast ("Genos moved to the top"). The keys' handle at their edge cycles their size, or drags to the
+    nearest. The Genos pill has no tag, as the board.
+  - **The Genos never takes the phone:** Compact is a 64 row, Start/Stop as its ▶ glyph and Main A–D at 44 (a
+    phone's 341 holds the four only so; the lamp lit says it runs, so the dot goes), Full and Minimize at its end;
+    Full adds Intro, Main, Break and Ending under its head; Minimized is a glass pill ("Genos · Main A", the
+    arranger alone before a section is chosen) that opens it Full. Its head minimizes it at any time, edit or not.
+  - **Reset:** the Settings page's Reset layout, with Undo (`useResetChordLayout`); Settings › General › Layout ›
+    Page layouts (`/settings/general/layouts`, General showing "n changed" or "As they came") lists each page,
+    what changed ("Keys at the top + 3 more", or "As it came") and its Reset, then Reset every page, each with
+    Undo in its toast.
+  - **The last sheet opens:** the route remembers `sheet` (`remembered`), so a plain open returns to it; the name
+    in the bar's place is a menu (the kit's `ActionMenu`) of the sheets opened last, the open one checked, then New
+    sheet and All chord sheets (the library sheet). Opening a sheet marks it (`markOpened`).
+  - **Its Settings page**, by how often each is wanted: Sound (Piano, Bass, Drums, Volume), Playing (Count-in,
+    Voicing), Chart (Time signature, Written as), MIDI (Connect a piano, Follow a MIDI arranger, Arranger), Layout
+    (Edit layout and Reset layout as action rows, Every page's layout ›). The arranger's old place setting
+    (`chordPlayer.arranger`) is gone, its job the Genos panel's (settings version 55).
+  - **···** is the kit's menu at its button: Save and Discard draft while there is a draft (Save as my chord
+    sheet… for the sheet in hand; Discard is not crimson, since the menu would move a loss last), Share…, Edit
+    layout, Save to my progressions (the chart's numerals, into Mine; hidden when the chart has none), Open in
+    Progressions, then Randomize chords, kept from the Musicca ruling the board predates. Redo, the File menu and
+    Practise in the Player left with the board; the bar's Piano too (ADR 0062). The laptop's aside holds the
+    key's Chords alone, the style list gone as on the board.
 - **A Practice page has a Settings page only where it holds several settings of its own** (A24, R18, R32) at
   `/settings/<page>` (scales, progressions, chord-finder; the Chord player's its own): how the page sounds and looks
   every time, then rows to the on-screen piano and a connected piano. A single setting stays in place (the Tuner's A4,

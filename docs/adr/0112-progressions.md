@@ -86,8 +86,8 @@ use one.
   bass's line of degrees and the drums' 16-step grid a bar, a fill on a section's last bar its last time round and
   a crash on its first beat, swing as triplets (`arrangeStyle`); Accompaniment's patterns are its piano-only
   styles. The transport queues each chord 0.1 s ahead from the sheet as it stands, so an edit lands at the next
-  chord. **My chord sheets** are `pt-chord-sheets` (version 1, synced as `chord_sheets`): the sheet in hand and
-  the learner's own, each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
+  chord. **My chord sheets** are `pt-chord-sheets` (version 2, synced as `chord_sheets`): the sheet in hand,
+  the learner's own and the five opened last (`recent`, the sheet in hand among them as `in-hand`), each its text, style, tempo and how it plays (instruments, count-in, repeat, volume,
   transpose, set on the Chord player's Settings); Written as and Voicing are `pt-settings.chordPlayer`. No act
   waits on a gesture alone (R67): a chord's tile is tapped to choose it and tapped again to open its dialog, and
   dragged to move it; a key chord tapped replaces the chord chosen (or is added at the end when none is), or is
