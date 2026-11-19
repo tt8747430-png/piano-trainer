@@ -34,7 +34,7 @@ export function IntervalTiles({
           >
             <h3
               id={`interval-group-${group}`}
-              className="font-sans text-[0.8125rem] font-semibold tracking-[0.04em] text-muted-foreground uppercase"
+              className="font-sans text-[0.8125rem]/[normal] font-semibold tracking-[0.04em] text-muted-foreground uppercase"
             >
               {t(`intervals.group.${group}`)}
             </h3>
@@ -51,14 +51,14 @@ export function IntervalTiles({
                     title={title}
                     onClick={() => onPick(name)}
                     className={cn(
-                      'flex h-13 w-full flex-col items-center justify-center gap-px rounded-xl bg-card ring-1 ring-border transition-colors hover:bg-muted',
+                      'flex h-13 w-full flex-col items-center justify-center gap-px rounded-xl bg-card leading-[normal] ring-1 ring-border transition-colors hover:bg-muted',
                       on && 'bg-selected text-selected-foreground hover:bg-selected',
                     )}
                   >
                     <span className="font-bold">{short}</span>
                     <span
                       className={cn(
-                        'text-xs tabular-nums',
+                        'text-xs/[normal] tabular-nums',
                         on ? 'opacity-70' : 'text-muted-foreground',
                       )}
                     >

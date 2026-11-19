@@ -11,6 +11,9 @@ import { INVERSIONS, type RowInterval } from '../model/interval-rows'
 import { intervalSongs } from '../model/interval-songs'
 import { useIntervalName } from './use-interval-name'
 
+/** The width at which the engraving's lines stand the board's 7 units apart (11 at 370): its scale 1. */
+const STAFF_WIDTH = 343
+
 /**
  * The interval chosen, the page's subject (canvas 170): its name and, behind its ⓘ, what it sounds
  * like, a song it falls in and what it inverts to (its size and notes are the keys' and the tiles');
@@ -77,13 +80,17 @@ export function IntervalHero({
       {/* The page's subject (canvas, "The interval leads Intervals"): its notes on the staff at
           reading size on the paper, no card round it, what it sounds like and Hear it under it. */}
       <figure className="flex flex-col gap-3">
-        {/* The staff spans the column, to the board's 560 (`STAFF61`), its two notes spread along it. */}
+        {/* The staff spans the column, to the board's 560 (`STAFF61`), its two notes spread along it, in
+            the board's picture: a room 238 by 102 of its units, 7 between the lines, so it grows with the
+            width (159 tall at 370, 240 at 560) and the page holds still whichever interval it shows. */}
         <section
           ref={staff}
           aria-label={t('intervals.written')}
-          className="mx-auto flex w-full max-w-140 min-w-40 justify-center"
+          className="mx-auto flex aspect-[238/102] w-full max-w-140 min-w-40 items-center justify-center"
         >
-          {width > 0 ? <LazyScoreView score={score} fill={width} /> : null}
+          {width > 0 ? (
+            <LazyScoreView score={score} fill={width} scale={width / STAFF_WIDTH} />
+          ) : null}
         </section>
         <div className="flex items-center gap-3">
           <div className="flex min-w-0 flex-1 flex-col">
