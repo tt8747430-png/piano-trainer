@@ -46,7 +46,7 @@ import {
 import { PatternPieces, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { EntryRow } from '@/widgets/piece-list'
 import { useForgetScreens } from '@/shared/lib'
-import { C_MAJOR, keyParam } from '@/shared/lib/music'
+import { C_MAJOR, keyParam, keysAround } from '@/shared/lib/music'
 import { PROGRESSION } from '@/features/practice'
 import { ProgressionPractice } from '@/widgets/progression-explorer'
 
@@ -197,7 +197,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         settings={<PianoButton />}
         more={<MoreMenu actions={more.actions} />}
       />
-      <PinnedKeyboard shown={shown} place="top" />
+      <PinnedKeyboard shown={shown} place="top" least={PATTERN_KEYS} />
       <div className="flex flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
@@ -305,3 +305,6 @@ export function PatternPage() {
     </NotFound>
   )
 }
+
+/** The board's keys under both hands: C2 to A4 on a phone, F1 to C6 on a laptop. */
+const PATTERN_KEYS = keysAround(48, [12, 21], [19, 36])

@@ -1192,6 +1192,8 @@ owner's, typos fixed.
 
 - **Scales' and Intervals' keys as their boards draw them (2026-11-19):** the keys stood on the middle two octaves grown to the B over the run, opened on the lit notes, so part keys stood at both edges; now Scales stands a fifth under the run's first key to a twelfth over it on a phone (C major: G3 to G5) and an octave under to three over on a laptop (C3 to C7), Intervals a fifth under its lower note to an eleventh over (a compound one a tone under to two octaves and a tone over) and the same laptop span (`keysAround`, an end on a black key moved down to its white). The keyboard grows only for a key outside its range, a range that fits the view opens edge to edge, and Scales' keys are the run's lit octave, not the left hand's too.
 
+- **An exercise's, a progression's and a pattern's keys as their boards (2026-11-19):** an exercise a fifth under its first key to a twelfth over on a phone (five-finger: G3 to G5), an octave under to three over on a laptop (C3 to C7); a progression C3 to C5 and C2 to C6; a pattern C2 to A4 and F1 to C6. Where the music reaches past the phone's range (a progression's upper chords, a pattern's two hands) the keys grow and scroll, never cutting a lit key.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files

@@ -19,7 +19,7 @@ import { arrangeExercise } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { useSetSearch } from '@/shared/lib'
 import { HANON_NUMBERS, HANON_RHYTHMS } from '@/shared/lib/exercise'
-import { midiOf, noteParam, printedNote, type Hand } from '@/shared/lib/music'
+import { keysAround, midiOf, noteParam, printedNote, type Hand } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import {
@@ -120,7 +120,13 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         back={<BackButton />}
         settings={<PianoButton />}
       />
-      <PinnedKeyboard shown={shown} place="top" />
+      <PinnedKeyboard
+        shown={shown}
+        place="top"
+        // The board's keys round the first key: a fifth under it to a twelfth over on a phone, an
+        // octave under to three over on a laptop.
+        least={keysAround(Math.min(...shown.keys, 60), [5, 19], [12, 36])}
+      />
       {/* One column, as the board's (canvas v552): its name with its ♡ and its book, then the score,
           which leads the page at reading size on the paper, then The exercise and How to play,
           each heading 24 under what is above it and 8 over its group. On a laptop the column is

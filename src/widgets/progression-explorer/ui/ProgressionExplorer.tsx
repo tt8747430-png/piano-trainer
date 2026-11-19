@@ -16,6 +16,7 @@ import { useScaleName } from '@/shared/i18n'
 import {
   keyFromParam,
   keyParam,
+  keysAround,
   numeralChord,
   numeralGrows,
   printedSymbol,
@@ -81,7 +82,7 @@ export function ProgressionExplorer({
   const lead = view.lead ?? 'none'
   return (
     <div className="flex flex-col gap-4">
-      <PinnedKeyboard shown={shown} place="top" />
+      <PinnedKeyboard shown={shown} place="top" least={PROGRESSION_KEYS} />
       <div className="flex flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-3">
@@ -198,3 +199,6 @@ export function ProgressionExplorer({
     </div>
   )
 }
+
+/** The board's keys under the chords: C3 to C5 on a phone, C2 to C6 on a laptop. */
+const PROGRESSION_KEYS = keysAround(48, [0, 24], [12, 36])
