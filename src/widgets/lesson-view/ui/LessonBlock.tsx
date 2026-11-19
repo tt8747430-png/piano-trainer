@@ -147,7 +147,7 @@ function BlockBody({
         // As a writing app sets a numbered list (the canvas's .steps): indented 8, each number muted
         // and right-aligned in its own 28 column so the words hang on one edge, 6 between items, each
         // 65ch at most and wrapped with no word alone on its last line.
-        <ol className="flex flex-col gap-1.5 ps-2 [counter-reset:step]">
+        <ol className="flex flex-col gap-2 ps-2 [counter-reset:step]">
           {block.steps.map((step) => (
             <li
               key={step.en}
