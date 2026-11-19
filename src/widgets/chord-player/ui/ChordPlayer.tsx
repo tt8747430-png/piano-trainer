@@ -539,7 +539,8 @@ export function ChordPlayer({
     inColumn(where) ? (
       <aside
         className={cn(
-          'hidden min-w-0 flex-col gap-6 pt-1 pb-6 xl:flex focus-mode:hidden',
+          // Its head 8 under the bar, as the board's column (the chart lifts its own 12).
+          'hidden min-w-0 flex-col gap-6 pt-1 pb-6 xl:-mt-4 xl:flex focus-mode:hidden',
           where === 'left' && 'xl:order-first',
         )}
       >
@@ -689,13 +690,15 @@ export function ChordPlayer({
           {/* From 80rem the chart's column and, beside it, the columns the panels were put in. */}
           <div
             className={cn(
-              'flex flex-col gap-4 xl:grid xl:items-start xl:gap-10 focus-mode:grid-cols-1',
+              // 40 from the window's trailing edge, as the board's (the page keeps 56).
+              'flex flex-col gap-4 xl:-mr-4 xl:grid xl:items-start xl:gap-10 focus-mode:grid-cols-1',
               sideWide ? columns.wide : columns.narrow,
             )}
           >
             <div
               ref={column}
-              className="flex min-w-0 flex-col gap-4"
+              // The chart 4 in from its column, as the board's scroll pads it.
+              className="flex min-w-0 flex-col gap-4 xl:px-1"
               style={{ paddingBottom: 'calc(var(--over-foot, 0px) + 1.5rem)' }}
             >
               {/* The chart, a lead sheet on its paper: its name, its sections, Add section; its name 4

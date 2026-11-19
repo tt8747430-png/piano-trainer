@@ -150,12 +150,14 @@ export function SheetSection({
         >
           <Trash2 aria-hidden className="size-[18px]" />
         </button>
+        {/* A spacer, then the grip on the row's edge, as the board's head: the name shrinks before the grip moves. */}
+        <span aria-hidden className="flex-1" />
         <button
           ref={setActivatorNodeRef}
           type="button"
           aria-label={t('chordPlayer.drag', { name })}
           title={t('chordPlayer.drag', { name })}
-          className="-mr-3 ml-auto grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
+          className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-control text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted active:cursor-grabbing"
           {...attributes}
           {...listeners}
         >
