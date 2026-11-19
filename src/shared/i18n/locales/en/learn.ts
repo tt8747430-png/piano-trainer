@@ -374,7 +374,7 @@ export const learn = {
     },
     // The editor's bar: what is edited; the document under it names which.
     back: 'Back to the lesson',
-    editorsOnly: 'Only an editor edits a lesson.',
+    editorsOnly: 'Only an editor edits a lesson',
     unreadable:
       'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     order: {
@@ -394,7 +394,7 @@ export const learn = {
       addFailed: 'It could not be made: one of that name may be there already.',
     },
     courses: {
-      editorsOnly: 'Only an editor manages the courses.',
+      editorsOnly: 'Only an editor manages the courses',
       empty: 'No courses on this shelf. A course’s Shelf puts it here.',
     },
     journey: {
@@ -428,7 +428,7 @@ export const learn = {
       stage: 'Level',
       weeks: 'Length',
       back: 'Back to the course',
-      editorsOnly: 'Only an editor edits a course.',
+      editorsOnly: 'Only an editor edits a course',
       unreadable:
         'The title and the summary need words in both languages. Put them right, then publish.',
     },

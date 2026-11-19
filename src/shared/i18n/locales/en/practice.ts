@@ -286,7 +286,9 @@ export const practice = {
       major: 'In a major key',
       minor: 'In a minor key',
       back: 'Back to Progressions',
-      editorsOnly: 'Only an editor edits a progression.',
+      editorsOnly: 'Only an editor edits a progression',
+      editorsWhy:
+        'Ask an editor, or use Make your own from it at the foot of the progression’s page.',
       unreadable:
         'The name and how it sounds need words in both languages, and a line of numerals must read. Put them right, then publish.',
       create: 'Create progression',

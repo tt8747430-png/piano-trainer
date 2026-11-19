@@ -95,7 +95,10 @@ function ProgressionSettings({ progression }: { progression: LibraryProgression 
             )}
           </>
         ) : (
-          <NotOpen line={t('practice:progressions.edit.editorsOnly')} />
+          <NotOpen
+            line={t('practice:progressions.edit.editorsOnly')}
+            why={t('practice:progressions.edit.editorsWhy')}
+          />
         )}
       </div>
     </div>

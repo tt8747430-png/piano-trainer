@@ -45,7 +45,7 @@ export const admin = {
   failed: 'Could not load. Try again in a moment.',
   refused: 'The server declined the request.',
   again: 'Try again',
-  notAdmin: 'Administration requires an administrator account.',
+  notAdmin: 'Administration requires an administrator account',
   accounts: {
     search: 'Search by name or email',
     none: 'No matching accounts.',

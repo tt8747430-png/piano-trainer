@@ -45,7 +45,7 @@ export function AdminPage() {
           </SettingsGroup>
         ))
       ) : (
-        <NotOpen line={t('notAdmin')} />
+        <NotOpen kind="admins" line={t('notAdmin')} />
       )}
     </SettingsScreen>
   )

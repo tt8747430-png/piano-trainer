@@ -24,7 +24,7 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { editorTarget, originalTarget } from '../model/editor-target'
-import { NotOpen } from './NotOpen'
+import { NotOpen } from '@/widgets/content-editor'
 import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
@@ -61,10 +61,11 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
     const opened = load.value
     return originalTarget(piece, musicOf(opened), (music) => save(draftWithMusic(opened, music)))
   }, [load, piece, save])
-  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
   if (load.state === 'failed' || !target)
     return (
       <NotOpen
+        kind={load.state === 'failed' && load.reason === 'offline' ? 'offline' : 'failed'}
         line={t(
           load.state === 'failed' && load.reason === 'offline'
             ? 'original.offline'
@@ -110,12 +111,17 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
 function MadeOriginal({ id }: { id: string }) {
   const { t } = useTranslation('editor')
   const load = useMadeSong(id)
-  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'loading') return <NotOpen kind="opening" line={t('original.opening')} />
   if (load.state === 'failed')
-    return <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')} />
+    return (
+      <NotOpen
+        kind={load.reason === 'offline' ? 'offline' : 'failed'}
+        line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
+      />
+    )
   if (load.state === 'none')
     return (
-      <NotOpen line={t('original.failed')}>
+      <NotOpen kind="failed" line={t('original.failed')}>
         <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
       </NotOpen>
     )

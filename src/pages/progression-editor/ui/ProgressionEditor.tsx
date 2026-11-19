@@ -138,6 +138,7 @@ export function ProgressionEditor({
       back={back}
       backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
       editorsOnly={t('progressions.edit.editorsOnly')}
+      editorsWhy={t('progressions.edit.editorsWhy')}
       unreadable={t('progressions.edit.unreadable')}
       language={{ value: locale, onChange: setLocale }}
       // Its Publish page and its Settings (R29 B6): every item's acts in the same places.

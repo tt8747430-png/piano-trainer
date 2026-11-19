@@ -99,9 +99,12 @@ export function DraftPublishScreen<T>({
         {!editsContent(account) ? (
           <NotOpen line={t('original.editorsOnly')} />
         ) : load.state === 'loading' || published === null ? (
-          <NotOpen line={t('original.opening')} />
+          <NotOpen kind="opening" line={t('original.opening')} />
         ) : load.state === 'failed' ? (
-          <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}>
+          <NotOpen
+            kind={load.reason === 'offline' ? 'offline' : 'failed'}
+            line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}
+          >
             <Button onClick={draft.reopen}>{t('original.retry')}</Button>
           </NotOpen>
         ) : (

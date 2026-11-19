@@ -775,10 +775,14 @@ export const editor = {
   original: {
     draft: 'Publishing',
     opening: 'Opening…',
-    offline: 'You’re offline. It will open when you reconnect.',
-    failed: 'It couldn’t be opened.',
+    openingWhy:
+      'The original is fetched from the server, so this draft is the one other editors see.',
+    offline: 'You’re offline',
+    offlineWhy: 'It will open when you reconnect.',
+    failed: 'It couldn’t be opened',
+    failedWhy: 'Check your connection, then try again.',
     retry: 'Try again',
-    editorsOnly: 'Only editors can modify this.',
+    editorsOnly: 'Only editors can modify this',
     toSongs: 'Back to Songs',
     drafted: 'Not published',
     saving: 'Saving…',

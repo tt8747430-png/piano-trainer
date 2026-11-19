@@ -1,35 +1,59 @@
-import { Lock } from 'lucide-react'
+import { CircleAlert, LoaderCircle, Lock, Pencil, WifiOff } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DraftActions, DraftStatus, PublishWord, type ContentDraft } from '@/features/edit-original'
 import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ButtonLink, ScreenHeader, type EditAction } from '@/shared/ui'
+import { ButtonLink, Said, ScreenHeader, type EditAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { languageActions } from './LanguageChoice'
 
+/** Each reason the form is not open, its picture (the boards' EMPTYICON: ✎, …, ⌁, !). */
+const WHY_ICONS = {
+  editors: Pencil,
+  admins: Lock,
+  opening: LoaderCircle,
+  offline: WifiOff,
+  failed: CircleAlert,
+  missing: CircleAlert,
+} as const
+
 /**
- * A screen saying why the form is not open (yet), as the app's route states draw theirs: a 72 lock
- * on the sand, its line 17 semibold, and what to do, 48 tall.
+ * A screen saying why the form is not open (yet), as the editor boards draw it (`r55_editor_draft`): the
+ * kit's one empty state, its picture for the reason, what stops it, a line on what happens or what to do,
+ * and the way on: the honey pill (Try again, the way back to one who cannot edit), or the quiet one back
+ * while offline.
  */
-export function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
+export function NotOpen({
+  kind = 'editors',
+  line,
+  why,
+  quiet = false,
+  children,
+}: {
+  kind?: keyof typeof WHY_ICONS
+  line: string
+  /** What to do instead; opening, offline and failed say their own. */
+  why?: string
+  /** The way on is the quiet pill (back, while offline), not the honey one. */
+  quiet?: boolean
+  children?: ReactNode
+}) {
+  const { t } = useTranslation('editor')
+  const detail =
+    why ??
+    (kind === 'opening' || kind === 'offline' || kind === 'failed'
+      ? t(`original.${kind}Why`)
+      : undefined)
   return (
-    <div className="flex min-h-80 flex-1 flex-col items-center justify-center gap-2.5 p-6 text-center">
-      <span
-        aria-hidden
-        className="flex size-18 items-center justify-center rounded-full bg-muted text-foreground"
-      >
-        <Lock className="size-7" />
-      </span>
-      <p role="status" className="max-w-[340px] text-[1.0625rem] font-semibold text-balance">
-        {line}
-      </p>
-      {children ? (
-        <div className="mt-2 flex flex-wrap justify-center gap-2 *:h-12 *:rounded-full *:px-5 *:text-base *:font-bold">
-          {children}
-        </div>
-      ) : null}
-    </div>
+    <Said
+      icon={WHY_ICONS[kind]}
+      title={line}
+      {...(detail ? { description: detail } : {})}
+      action={children}
+      primary={!quiet}
+      quiet={quiet}
+    />
   )
 }
 
@@ -46,6 +70,7 @@ export function DraftScreen<T>({
   back,
   backTo,
   editorsOnly,
+  editorsWhy,
   unreadable,
   language,
   edit,
@@ -63,8 +88,10 @@ export function DraftScreen<T>({
   back: ReactNode
   /** A router `Link` to the item's own page, with its label. */
   backTo: { link: ReactElement; label: string }
-  /** What anyone but an editor is told. */
+  /** What anyone but an editor is told… */
   editorsOnly: string
+  /** …and what they can do instead. */
+  editorsWhy?: string
   /** What is said where a publish is refused for a draft that does not read. */
   unreadable: string
   /** The language the document is written in: chosen in the draft's menu, ticked there. */
@@ -89,6 +116,21 @@ export function DraftScreen<T>({
   const { load } = draft
   const editor = editsContent(account)
   const open = editor && load.state === 'ready'
+  const gate = !editor ? (
+    <NotOpen line={editorsOnly} {...(editorsWhy ? { why: editorsWhy } : {})}>
+      <ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>
+    </NotOpen>
+  ) : load.state === 'loading' ? (
+    <NotOpen kind="opening" line={t('original.opening')} />
+  ) : load.state === 'failed' && load.reason === 'offline' ? (
+    <NotOpen kind="offline" line={t('original.offline')} quiet>
+      <ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>
+    </NotOpen>
+  ) : load.state === 'failed' ? (
+    <NotOpen kind="failed" line={t('original.failed')}>
+      <Button onClick={draft.reopen}>{t('original.retry')}</Button>
+    </NotOpen>
+  ) : null
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-8">
       <ScreenHeader
@@ -128,19 +170,13 @@ export function DraftScreen<T>({
             : undefined
         }
       />
-      {!editor ? (
-        <NotOpen line={editorsOnly}>
-          <ButtonLink render={backTo.link}>{backTo.label}</ButtonLink>
-        </NotOpen>
-      ) : load.state === 'loading' ? (
-        <NotOpen line={t('original.opening')} />
-      ) : load.state === 'failed' ? (
-        <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')}>
-          <Button onClick={draft.reopen}>{t('original.retry')}</Button>
-        </NotOpen>
-      ) : (
+      {gate ? (
+        // The gate stands where the boards' column starts: 8 under the bar on a phone (NARROW), on
+        // its foot on a laptop (WIDE), not the form's 16.
+        <div className="-mt-2 lg:-mt-4">{gate}</div>
+      ) : load.state === 'ready' ? (
         <Fragment key={draft.opened}>{children(load.value)}</Fragment>
-      )}
+      ) : null}
     </div>
   )
 }

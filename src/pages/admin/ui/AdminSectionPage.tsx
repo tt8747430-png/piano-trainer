@@ -46,7 +46,7 @@ export function AdminSectionPage() {
   const Section = SECTIONS[section]
   return (
     <SettingsScreen title={t(`sections.${section}`)}>
-      {account?.role === 'admin' ? <Section /> : <NotOpen line={t('notAdmin')} />}
+      {account?.role === 'admin' ? <Section /> : <NotOpen kind="admins" line={t('notAdmin')} />}
     </SettingsScreen>
   )
 }
