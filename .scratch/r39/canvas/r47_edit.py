@@ -7,9 +7,9 @@
 _B = dict(globals()); exec(open('/home/user/piano-trainer/.scratch/r39/canvas/r47_blocks.py').read(), _B)  # its own namespace: its names never shadow the kit's
 PKEYS, ADDED, INSLIST, INS_JS = _B['PKEYS'], _B['ADDED'], _B['INSLIST'], _B['INS_JS']
 LESSON = {
-  'place': 'Lesson 7 of 13', 'title': 'How major scales work', 'titleRu': 'Как устроены мажорные гаммы',
-  'summary': 'Build a major scale on any key from one pattern of whole and half steps.',
-  'summaryRu': 'Постройте мажорную гамму от любой клавиши по одной схеме тонов и полутонов.',
+  'place': 'Lesson 7 of 11', 'title': 'How major scales work', 'titleRu': 'Как устроена мажорная гамма',
+  'summary': 'Build a major scale on any note from one pattern of steps, number its degrees and finger C major.',
+  'summaryRu': 'Строить мажорную гамму от любой ноты по одной схеме, нумеровать её ступени и играть до мажор с аппликатурой.',
   'secs': [
     {'h': 'One pattern for every key', 'hRu': 'Одна схема для всех тональностей',
      'p': 'Every major scale climbs by the same pattern of whole and half steps. Start on C and only white keys fit it.',
@@ -185,7 +185,7 @@ def THINGSET(head, facts, kind):
             + THINGSEC(CAPS('Your progress'), GROUP(('action', 'Reset progress', 'doReset'), bg=SHEET))
             + '<div style="margin-top: 16px">' + GROUP(('action', f'Delete {kind}', 'askDel', '#B3261E'), bg=SHEET) + '</div></div>')
 LESSONPIC = f'<span aria-hidden="true" style="flex: none; width: 64px; height: 64px; border-radius: 32px; background: {SHEET}; box-shadow: inset 0 0 0 1px {LINE}; color: {INK}; display: flex; align-items: center; justify-content: center">{BOOKI}</span>'
-SETPAGE = THINGSET(THINGHEAD(LESSONPIC, 'How major scales work', 'Lesson 7 of 13 · Foundations'),
+SETPAGE = THINGSET(THINGHEAD(LESSONPIC, 'How major scales work', 'Lesson 7 of 11 · Foundations'),
                    THINGSEC(CAPS('The lesson'), GROUP(('link', 'Place', 'Foundations · Chapter 3 · Lesson 7', 'LearnLevelLaptop.dc.html'), bg=SHEET)), 'lesson')
 VERBODY = (f''
            + GROUP(*[('raw', f'<div style="min-height: 56px; display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 16px"><span style="flex: 1; font-size: 16px">Published {d}</span>{t}<button type="button" onClick="{{{{restore}}}}" style="height: 44px; padding: 0 12px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 15px; font-weight: 600">Restore</button></div>') for d, t in [('8 November 2026', PILL('Newest', HONEY)), ('2 November 2026', ''), ('28 October 2026', ''), ('20 October 2026', '')]], bg=SHEET))

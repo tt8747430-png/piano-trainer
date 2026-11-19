@@ -78,7 +78,7 @@ export function LessonLayout({
     })
   }
   return (
-    <div className="flex w-full flex-col gap-2 pb-36 lg:pt-2">
+    <div className="flex w-full flex-col gap-2 pb-36 lg:gap-4 lg:pt-2">
       <ScreenHeader
         title={title}
         back={back}
@@ -101,13 +101,13 @@ export function LessonLayout({
           <div className="flex flex-col gap-2">
             <nav
               aria-label={t('placeLabel')}
-              className="text-[0.875rem] font-semibold text-eyebrow print:hidden"
+              className="text-[0.875rem]/[normal] font-semibold text-eyebrow print:hidden"
             >
               {place}
             </nav>
             <p
               aria-hidden
-              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-4xl/[1.15]"
+              className="font-display text-[1.875rem]/[1.15] font-semibold text-balance lg:text-[2.25rem]/[1.15]"
             >
               {title}
             </p>
