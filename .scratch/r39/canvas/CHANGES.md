@@ -8,9 +8,9 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · a take: its name the kit's NAMEFIELD (52, 14, 17; was 20 bold) and every hand-made Name field with it, each bar of its strip 44 with the take scrolling, the laptop on the 56 bar with the content 24 under it and the roll 220 tall · Take,TakeLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,ProgressionEdit,ProgressionEditLaptop · pending
-
 ## Changes
+
+- 2026-11-19 · 590beba8 · a take: its name the kit's NAMEFIELD (52, 14, 17; was 20 bold) and every hand-made Name field with it, each bar of its strip 44 with the take scrolling, the laptop on the 56 bar with the content 24 under it and the roll 220 tall · Take,TakeLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,ProgressionEdit,ProgressionEditLaptop · v631
 
 - 2026-11-19 · dfdf1286 · a section: Amazing Grace's real Verse (six chords at 3 holds, three lines in time, nine changes, one pattern, the app's ⓘ words), every row 56, the head with no 2× for a section played once; laptop on the 56 bar, the head 24 under it · Section,SectionLaptop,SongSettings,SongSettingsLaptop · v630
 
