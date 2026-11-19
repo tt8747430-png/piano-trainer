@@ -8,10 +8,10 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Profile's badges keep their 6px bars under the line (the loop-62 ruling's script was out of the build) · Profile,ProfileLaptop · pending
 
 ## Changes
 
+- 2026-11-19 · adfe6dac · Profile's badges keep their 6px bars under the line (the loop-62 ruling's script was out of the build) · Profile,ProfileLaptop · v658
 - 2026-11-19 · 03e13f9b · the editor's palette opens on Recent, as its ruling (loop round 57) and the app (it drew Notes); its phone keys D3 to E5 at the kit's 26 a white, as the app (C3 to G5 at 21, under the floor) · Editor,EditorLaptop,EditorDraft,EditorDraftLaptop · v657
 - 2026-11-19 · 33ead558 · the chord run in the run view's shape, as the app runs it (the Inversions exercise): its bar Close · Inversions: Cmaj7 · Wait mode · the gear, its transport Setup · Play · Tempo (was Tempo · Play · Hands, with no Setup and no gear) · PlayChord,PlayChordLaptop · v656
 - 2026-11-19 · c9835124 · every run's Setup opens on its Pace (Play · Wait mode), Wait mode said in the bar beside the gear while on, as the app's; the Tempo group the kit's fill, as the app's group · PlayWalk,PlayWalkLaptop,PlayChromatic,PlayChromaticLaptop,PlayProgression,PlayProgressionLaptop,PlayExercise,PlayExerciseLaptop · v655
