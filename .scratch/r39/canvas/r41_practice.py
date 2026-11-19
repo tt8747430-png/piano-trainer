@@ -227,7 +227,7 @@ library('Progressions', 'Progressions', {'places': ['All', 'Favourites', 'Recent
   # at All the last opened lead the page, as in every Practice library (loop, 2026-11-15; round 58)
   'sections': _PSECS},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Name', 't', 2), ('Numerals', 's', 3), ('Key', 'v', .6)),
-  add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', 'openFolder')))
+  add_items=(('New progression', 'ProgressionEdit.dc.html'), ('New folder', 'openFolder')), arrange=True)
 library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Broken chords'], 'open': {'Called to Play, level 2': False, '400 Piano Chord Progressions': False, 'Classical': False, 'Rhythm styles': False},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 9], ['Intermediate', 6], ['Advanced', 4]]}, {'name': 'Texture', 'opts': [['Block', 5], ['Broken', 7], ['Arpeggio', 4]]}, {'name': 'Feel', 'opts': [['Straight', 12], ['Swing', 3], ['Waltz', 2]]}],
   'sections': [{'g': 'Recently used', 'rows': [Rw('Bass + chords', 'Left: octave held · Right: chord on each beat', 'Beginner', '♩♩', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Block', 'Straight')), Rw('Broken chords', 'Right hand rocks in 8ths', 'Beginner', '♫', LILAC, 'Pattern.dc.html', ('Recently used',), ('Beginner', 'Broken', 'Straight'))]},
@@ -237,17 +237,17 @@ library('Accompaniment', 'Accompaniment', {'places': ['All', 'Favourites', 'Rece
                {'g': 'Classical', 'rows': [Rw('Alberti bass', 'Left: root, 5th, 3rd, 5th', 'Intermediate', '♬', LILAC, 'Pattern.dc.html', (), ('Intermediate', 'Broken', 'Straight'))]},
                {'g': 'Rhythm styles', 'rows': [Rw('Ballad', 'Root and 5th, chords on 2 and 4', 'Beginner', '♩', LILAC, 'Pattern.dc.html', (), ('Beginner', 'Block', 'Straight')), Rw('Swing comping', 'Short chords off the beat', 'Advanced', '♪', LILAC, 'Pattern.dc.html', (), ('Advanced', 'Block', 'Swing'))]}]},
   back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Pattern', 't', 2), ('Hands', 's', 3.4), ('Level', 'v', .8)),
-  add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', 'openFolder')))
+  add_items=(('New pattern', 'PatternNew.dc.html'), ('New folder', 'openFolder')), arrange=True)
 library('FingerTechnique', 'Finger technique', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': ['Hanon'], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Intermediate', 1]]}],
   'sections': [{'g': 'The Virtuoso Pianist', 'rows': [Rw('Hanon', 'Finger independence', 'Intermediate', '1–20', SAGE, 'Exercise.dc.html', ('Recently used',), ('Intermediate',))]},
                {'g': 'Five-finger position', 'rows': [Rw('Five-finger position', "A key's first five notes, up and down", 'Beginner', '1–5', SAGE, 'Exercise.dc.html', (), ('Beginner',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')), arrange=True)
 library('JazzVocabulary', 'Jazz vocabulary', {'places': ['All', 'Favourites', 'Recently used', 'Mine'], 'sorts': ['As arranged', 'Name', 'Level'], 'favs': [], 'open': {},
   'filters': [{'name': 'Level', 'opts': [['Beginner', 1], ['Advanced', 1], ['Professional', 2]]}],
   'sections': [{'g': 'Barry Harris', 'rows': [Rw('6th-diminished scale', 'Eight notes to the octave', 'Advanced', '6°', LILAC, 'Exercise.dc.html', (), ('Advanced',)), Rw('Drop-2 7ths', "The key's 7th chords up and down", 'Professional', 'D2', LILAC, 'Exercise.dc.html', (), ('Professional',))]},
                {'g': 'Piano With Jonny', 'rows': [Rw('2-5-1 scale', 'Swung 8ths over a ii–V–I', 'Beginner', '251', SKY, 'Exercise.dc.html', (), ('Beginner',)), Rw('Rapid switch', 'One line through all twelve keys', 'Professional', '12', SKY, 'Exercise.dc.html', (), ('Professional',))]}]},
-  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')))
+  back='Main.dc.html', back_l='Laptop.dc.html', table_cols=(('Exercise', 't', 2), ('Focus', 's', 3), ('Level', 'v', 1)), add_items=(('New exercise', 'Editor.dc.html'), ('New folder', 'openFolder')), arrange=True)
 
 # ═════ A progression (Hooktheory: the chords coloured by function, the moves drawn) ═════
 PR = js(r'''
