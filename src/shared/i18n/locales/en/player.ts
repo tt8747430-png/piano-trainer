@@ -1,6 +1,15 @@
 export const player = {
   // The bar's button that shows or hides the piano keys under the music (R29, Flat's).
   setup: 'Setup',
+  // A run's own view (the run boards): where it stands, its floating acts and its Setup's Start.
+  run: {
+    chord: 'Chord {{at}} of {{of}}',
+    key: 'Key {{at}} of {{of}}',
+    transport: 'Setup, play and tempo',
+    tempo: 'Tempo',
+    play: 'Play',
+    start: 'Start',
+  },
   // The bar's More (ADR 0108, 0107): a piece's information and its sections as sheets, Share as the
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
   // to it).
@@ -142,20 +151,7 @@ export const player = {
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
-  progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
-  /** A piece walked through the keys, from the learner's key. */
-  /** A walk through the keys, as a title says it. */
-  walking: {
-    'semitones-up': 'up by semitones',
-    'semitones-down': 'down by semitones',
-    'semitones-up-down': 'up and down by semitones',
-    'tones-up': 'up by whole tones',
-    'tones-down': 'down by whole tones',
-    fifths: 'down the circle of fifths',
-    'fifths-up': 'up the circle of fifths',
-    'minor-thirds': 'up by minor thirds',
-    'major-thirds': 'up by major thirds',
-  },
+  progression: { title: '{{numerals}} in {{key}}' },
   chromatic: { title: 'Chromatically: {{chords}}', fifths: 'Circle of fifths: {{chords}}' },
   qualities: 'Chord types',
   direction: 'Direction',

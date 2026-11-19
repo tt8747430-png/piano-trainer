@@ -2,6 +2,15 @@ import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
+  // Свой вид прохода (доски проходов): где он сейчас, его плавающие действия и «Начать» в настройке.
+  run: {
+    chord: 'Аккорд {{at}} из {{of}}',
+    key: 'Тональность {{at}} из {{of}}',
+    transport: 'Параметры, игра и темп',
+    tempo: 'Темп',
+    play: 'Играть',
+    start: 'Начать',
+  },
   more: 'Ещё',
   sections: {
     title: 'Разделы',
@@ -133,18 +142,7 @@ export const player: LocaleResources['player'] = {
   key: 'Тональность',
   root: 'Основной тон',
   walk: { title: 'Аккорды по ступеням: {{scale}}' },
-  progression: { title: '{{numerals}}: {{key}}', walking: '{{numerals}} от {{key}}, {{walk}}' },
-  walking: {
-    'semitones-up': 'вверх по полутонам',
-    'semitones-down': 'вниз по полутонам',
-    'semitones-up-down': 'вверх и вниз по полутонам',
-    'tones-up': 'вверх по тонам',
-    'tones-down': 'вниз по тонам',
-    fifths: 'вниз по квинтовому кругу',
-    'fifths-up': 'вверх по квинтовому кругу',
-    'minor-thirds': 'вверх по малым терциям',
-    'major-thirds': 'вверх по большим терциям',
-  },
+  progression: { title: '{{numerals}}: {{key}}' },
   chromatic: { title: 'Хроматически: {{chords}}', fifths: 'По квинтовому кругу: {{chords}}' },
   qualities: 'Виды аккордов',
   direction: 'Направление',

@@ -1003,7 +1003,7 @@ const playerRoute = createRoute({
 })
 
 const walkRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/walk',
   notFoundComponent: notFoundIn('scales'),
   ...walkSearch,
@@ -1016,7 +1016,7 @@ const walkRoute = createRoute({
 })
 
 const chromaticRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/chromatic',
   ...chromaticSearch,
   ...remembered(readChromaticSearch, CHROMATIC_KEPT),
@@ -1024,7 +1024,7 @@ const chromaticRoute = createRoute({
 })
 
 const progressionPlayerRoute = createRoute({
-  getParentRoute: () => fullScreenRoute,
+  getParentRoute: () => shellRoute,
   path: '/play/progression',
   ...progressionPlayerSearch,
   ...remembered(readProgressionPlayerSearch, PROGRESSION_KEPT),
@@ -1204,12 +1204,12 @@ const routeTree = rootRoute.addChildren([
     studySectionRoute,
     takeRoute,
     checkRoute,
-  ]),
-  fullScreenRoute.addChildren([
-    playerRoute,
     walkRoute,
     chromaticRoute,
     progressionPlayerRoute,
+  ]),
+  fullScreenRoute.addChildren([
+    playerRoute,
     exerciseRoute,
     editRoute,
     exampleEditRoute,

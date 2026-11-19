@@ -199,14 +199,14 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       params: { pieceId: param(from, 'pieceId') },
       search: { takes: true },
     }),
-  '/full-screen/play/walk': ({ search }) =>
+  '/shell/play/walk': ({ search }) =>
     up({
       to: '/practice/scales',
       search: readScalesSearch({ root: search.root, kind: search.kind, show: 'chords' }),
     }),
-  '/full-screen/play/chromatic': toPractice,
+  '/shell/play/chromatic': toPractice,
   // The Player of a progression: up to its page, the library's where the line is the library's.
-  '/full-screen/play/progression': async ({ search }) => {
+  '/shell/play/progression': async ({ search }) => {
     const line = readProgressionsSearch({ p: search.p, key: search.key })
     const { libraryLineId } = await import('./progression-place')
     const progressionId = libraryLineId(line.p, line.key)

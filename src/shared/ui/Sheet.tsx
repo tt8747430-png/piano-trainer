@@ -50,6 +50,20 @@ const LAPTOP_CARD = [
   'data-[swipe-axis=x]:data-[swipe-direction=right]:[&>[data-slot=drawer-swipe-handle]]:hidden',
 ].join(' ')
 
+/**
+ * `rising` on a laptop: a run's Setup (the run boards' `PVSETL` popover), 620 wide, centred over the
+ * floating bar it opens from beside the sidebar, its foot 250 over the window's.
+ */
+const RISING_CARD = [
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:top-auto',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:right-auto',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:bottom-62.5',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:left-[calc(50%+7.75rem-19.375rem)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:w-155',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:max-h-[calc(var(--app-height,100dvh)-16.625rem)]',
+  'data-[swipe-axis=x]:data-[swipe-direction=right]:[--closed-transform:translate3d(0,0.5rem,0)]',
+].join(' ')
+
 /** What opens a sheet: the drawer's own trigger, named for the sheet. */
 export { DrawerTrigger as SheetTrigger } from './primitives/drawer'
 
@@ -90,6 +104,7 @@ export function SheetContent({
   tall = false,
   floating = false,
   wide = false,
+  rising = false,
   initialFocus,
   dismiss = 'done',
 }: {
@@ -114,6 +129,8 @@ export function SheetContent({
   floating?: boolean
   /** On a laptop, the card 420 wide, as the board's POPOVER draws a list of kinds (Insert). */
   wide?: boolean
+  /** On a laptop, the card rising over the floating bar it opens from: a run's Setup. */
+  rising?: boolean
   /** What takes the focus as it opens, in place of the panel: a picker's value. */
   initialFocus?: () => HTMLElement | true
   /** Its header's way out: Done; Cancel on a sheet that makes something (the canvas's NEWNAME); Close once it reports what was made (Import). */
@@ -139,6 +156,7 @@ export function SheetContent({
           'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
         floating && FLOATING_CARD,
         wide && 'data-[swipe-axis=x]:data-[swipe-direction=right]:w-105',
+        rising && RISING_CARD,
       )}
     >
       <DrawerHeader className="grid grid-cols-[minmax(3.5rem,1fr)_auto_minmax(3.5rem,1fr)] items-start gap-2 px-4 pt-2.5 pb-2 text-center landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-center">
@@ -172,7 +190,7 @@ export function SheetContent({
               : t('done')}
         </DrawerClose>
       </DrawerHeader>
-      <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-4 pt-1 pb-6 *:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-1 scroll-pt-9 overflow-y-auto px-4 pt-1 pb-6 group-data-[swipe-axis=y]/drawer-popup:pb-10 *:shrink-0">
         {children}
       </div>
       {footer ? (
