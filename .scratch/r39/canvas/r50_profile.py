@@ -2,12 +2,12 @@
 # and an achievement, Notifications with Mark all read, Clear all and the empty state. Labels from the en strings
 # (pages/profile). Rebuilds the Profile boards drawn by r45_places; exec'd by r41.py after r49_settings.
 
-BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row: a day counts once you play for five minutes.', [('Bronze', '3 days', 'Reached 14 October'), ('Silver', '7 days', 'Reached 6 November'), ('Gold', '14 days', '2 to go'), ('Platinum', '30 days', 'Locked')], '12 days'),
-           ('Repertoire', 'Bronze', 1, 'Learn songs: every section of a song learned at full speed.', [('Bronze', '1 song', 'Reached 3 November'), ('Silver', '5 songs', '1 to go'), ('Gold', '15 songs', 'Locked'), ('Platinum', '40 songs', 'Locked')], '4 songs'),
-           ('Lesson Finisher', 'Bronze', 1, 'Finish lessons in Learn, at any level.', [('Bronze', '5 lessons', 'Reached 28 October'), ('Silver', '15 lessons', '9 to go'), ('Gold', '40 lessons', 'Locked'), ('Platinum', '100 lessons', 'Locked')], '6 lessons'),
-           ('Scale Master', '', 0, 'Finish a scale’s practice run on Scales and keys with every key correct.', [('Bronze', '3 scales', '1 to go'), ('Silver', '12 scales', 'Locked'), ('Gold', '24 scales', 'Locked'), ('Platinum', '30 scales', 'Locked')], '2 scales'),
-           ('Daily Devotion', 'Silver', 2, 'Practise for a long stretch in one day.', [('Bronze', '15 minutes', 'Reached 20 October'), ('Silver', '30 minutes', 'Reached 9 November'), ('Gold', '60 minutes', '20 to go'), ('Platinum', '120 minutes', 'Locked')], '40 minutes'),
-           ('Library Builder', 'Gold', 3, 'Keep songs in your library: added, imported or written.', [('Bronze', '5 songs', 'Reached 2 March 2025'), ('Silver', '20 songs', 'Reached 4 June 2025'), ('Gold', '50 songs', 'Reached 1 October'), ('Platinum', '100 songs', '42 to go')], '58 songs')]
+BADGES9 = [('Streak Keeper', 'Silver', 2, 'Practise on days in a row. Your longest run counts.', [('Bronze', '3 days', 'Reached 14 October'), ('Silver', '7 days', 'Reached 6 November'), ('Gold', '30 days', '14 to go'), ('Platinum', '100 days', 'Locked')], '16 days'),
+           ('Repertoire', 'Bronze', 1, 'Mark a song Learned on its page in Songs.', [('Bronze', '1 song', 'Reached 3 November'), ('Silver', '5 songs', '1 to go'), ('Gold', '15 songs', 'Locked'), ('Platinum', '40 songs', 'Locked')], '4 songs'),
+           ('Lesson Finisher', 'Bronze', 1, 'Finish lessons in Learn.', [('Bronze', '1 lesson', 'Reached 28 October'), ('Silver', '10 lessons', '4 to go'), ('Gold', '30 lessons', 'Locked'), ('Platinum', '75 lessons', 'Locked')], '6 lessons'),
+           ('Scale Master', '', 0, 'Play a key’s chords in the Player: each of the 24 keys counts once.', [('Bronze', '3 keys', '1 to go'), ('Silver', '8 keys', 'Locked'), ('Gold', '15 keys', 'Locked'), ('Platinum', '24 keys', 'Locked')], '2 keys'),
+           ('Daily Devotion', 'Silver', 2, 'Practise on any day. Every day you practise counts.', [('Bronze', '7 days', 'Reached 20 October'), ('Silver', '30 days', 'Reached 9 November'), ('Gold', '100 days', '62 to go'), ('Platinum', '365 days', 'Locked')], '38 days'),
+           ('Library Builder', 'Gold', 3, 'Make your own songs and playlists in Songs.', [('Bronze', '1 song or playlist', 'Reached 2 March 2025'), ('Silver', '5 songs or playlists', 'Reached 4 June 2025'), ('Gold', '15 songs or playlists', 'Reached 1 October'), ('Platinum', '40 songs or playlists', '24 to go')], '16 songs or playlists')]
 RECORDS = [('Level', 'Level 7'), ('Longest streak', '16 days'), ('Best accuracy', '94%'), ('Days practised', '38')]
 MILES = [('First lesson done', 'Earned 28 October 2026', 'Finish any lesson in Learn.'), ('First recording', 'Earned 30 October 2026', 'Record a take in the score editor.'),
          ('First published song', '', 'Publish a song of your own to Explore.'), ('First MIDI session', 'Earned 12 October 2026', 'Play a song on a MIDI keyboard.'), ('A perfect run', '', 'Play a whole song in Wait mode with no wrong notes.')]
@@ -23,7 +23,8 @@ MEDC = {'Bronze': '#C98B5A', 'Silver': '#A9A39B', 'Gold': '#D9A93E', 'Platinum':
 P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILES = ' + json.dumps(MILES, ensure_ascii=False) + ', NOTES = ' + json.dumps(NOTES9, ensure_ascii=False) + ', MEDC = ' + json.dumps(MEDC) + ', RUNS = ' + json.dumps(RUNS9, ensure_ascii=False) + ', MIN30 = ' + json.dumps(MIN30) + ';\n' + r'''
     const S = (o) => set(o), page = st.page ?? null;
     const DAYS = [['M', 18], ['T', 25], ['W', 0], ['T', 32], ['F', 15], ['S', 40], ['S', 22]];
-    const week = DAYS.map(([d, m], i) => ({ d, h: Math.max(4, Math.round(m * 1.6)) + 'px', hl: Math.max(4, Math.round(m * 3.6)) + 'px', bg: i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
+    const none = st.who === 'First run';  // the first run: nothing played yet, the days a flat baseline
+    const week = DAYS.map(([d, m], i) => ({ d, h: (none ? 0 : Math.max(4, Math.round(m * 1.6))) + 'px', hl: (none ? 0 : Math.max(4, Math.round(m * 3.6))) + 'px', bg: none ? '#EEE9E2' : i === 6 ? '#C26A2E' : (m ? '#E8B48F' : '#EEE9E2'), ink: i === 6 ? '#332921' : '#685E56', fw: i === 6 ? 700 : 500 }));
     // the month: November 2026 starts on a Sunday; today is the 11th
     const mon = st.mon ?? 0, M = mon === 0 ? { t: 'November 2026', first: 6, len: 30, done: (d) => d <= 11 && d !== 4, rest: (d) => d === 4, today: 11, n: 10 } : { t: 'October 2026', first: 3, len: 31, done: (d) => [2, 3, 5, 6, 7, 9, 12, 13, 14, 15, 16, 19, 20, 22, 23, 26, 27, 28, 29, 30, 31].includes(d), today: 0, n: 21 };
     const cells = []; for (let i = 0; i < M.first; i++) cells.push({ d: '', bg: 'transparent', ink: '#332921', ring: 'none', a: '' });
@@ -32,7 +33,7 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const badges = BADGES.map(([n, tier, k]) => ({ n, sub: ((nx) => { if (!nx) return (tier || 'Not started') + ' · every tier reached'; const k = parseInt(nx[2], 10), u = nx[1].split(' ').slice(1).join(' '), one = k === 1 ? u.replace(/s$/, '') : u; return (tier ? tier + ' · ' : '') + k + ' more ' + one + ' to ' + nx[0]; })(BADGES.find((b) => b[0] === n)[4].find((x) => !x[2].startsWith('Reached'))), med: MEDC[tier], open: () => S({ page: n }) }));
     const tiers = badge ? badge[4].map(([t, goal, s]) => ({ t, goal, s, med: MEDC[t], dim: s === 'Locked' ? 0.45 : 1, ink: s.startsWith('Reached') ? '#44684A' : '#685E56' })) : [];
     const mile = MILES.find((m) => m[0] === page);
-    const read = !!st.read, cleared = !!st.cleared, gone = st.gone ?? [];
+    const read = !!st.read, cleared = !!st.cleared || st.who === 'First run', gone = st.gone ?? [];
     const groups = cleared ? [] : NOTES.map(([h, rs]) => ({ h, rs: rs.filter(([t]) => !gone.includes(t)).map(([t, w, k, u]) => ({ t, w, unread: u && !read, fw: u && !read ? 700 : 500, ic: { lvl: '★', acc: '◎', badge: '★', mile: '✓', streak: '♨' }[k], icbg: k === 'badge' ? MEDC[t.split(' ')[0]] : { lvl: '#F6E7C8', acc: '#D3E5F2', mile: '#DCE9D6', streak: '#F3D2C8' }[k], icfg: k === 'badge' ? '#FFFFFF' : '#332921', rm: () => S({ gone: [...gone, t] }) })) })).filter((g) => g.rs.length);
     const unread = read || cleared ? 0 : 2;
     const titles = { streak: 'Streak', badges: 'Badges', ach: 'Achievements', notes: 'Notifications', history: 'Practice history' };
@@ -40,9 +41,9 @@ P9_JS = js('const BADGES = ' + json.dumps(BADGES9, ensure_ascii=False) + ', MILE
     const runDays = RUNS.map(([h, rs]) => ({ h, rs: rs.map(runRow) })), runLatest = RUNS[0][1].concat(RUNS[1][1]).slice(0, 3).map(runRow);
     const bars30 = MIN30.map((m, i) => ({ h: (m / 60 * 100).toFixed(1) + '%', bg: i === 29 ? '#C26A2E' : '#E8B48F', a: (i === 29 ? 'Today' : (30 - i - 1) + ' days ago') + ': ' + m + ' min' }));
     const back = page && (BADGES.some((b) => b[0] === page) ? 'badges' : MILES.some((m) => m[0] === page) ? 'ach' : null);
-    const who = st.who ?? 'Signed in';
-    return { ...common(st, set), isSigned: who === 'Signed in', isGuest: who === 'Guest', isLoading: who === 'Loading', notLoading: who !== 'Loading',
-      whoDemo: ['Signed in', 'Guest', 'Loading'].map((l) => ({ l, bg: who === l ? '#332921' : '#EEE9E2', fg: who === l ? '#FEFDFB' : '#332921', pick: () => S({ who: l }) })), week, isMain: !page, isSub: !!page, pageT: titles[page] || page || '', backT: back ? titles[back] : 'Profile', goBack: () => S({ page: back }),
+    const who = st.who ?? 'Signed in', fresh = who === 'First run';
+    return { ...common(st, set), isSigned: who === 'Signed in', isGuest: who === 'Guest' || fresh, isFresh: fresh, notFresh: !fresh, weekSum: fresh ? '0 min · 0 of 7 days' : '152 min · 6 of 7 days', ax2: fresh ? '10' : '40', ax1: fresh ? '5' : '20', isLoading: who === 'Loading', notLoading: who !== 'Loading',
+      whoDemo: ['Signed in', 'Guest', 'First run', 'Loading'].map((l) => ({ l, bg: who === l ? '#332921' : '#EEE9E2', fg: who === l ? '#FEFDFB' : '#332921', pick: () => S({ who: l }) })), week, isMain: !page, isSub: !!page, pageT: titles[page] || page || '', backT: back ? titles[back] : 'Profile', goBack: () => S({ page: back }),
       isStreak: page === 'streak', isBadges: page === 'badges', isBadge: !!badge, isAch: page === 'ach', isMile: !!mile, isNotes: page === 'notes', isHistory: page === 'history', goHistory: () => S({ page: 'history' }), runDays, runLatest, bars30, showH1: !badge && !mile, barT: badge || mile ? '' : (titles[page] || page || ''),
       subW: ['streak', 'badges', 'history'].includes(page) ? 1180 : 704, goStreak: () => S({ page: 'streak' }), goBadges: () => S({ page: 'badges' }), goAch: () => S({ page: 'ach' }), goNotes: () => S({ page: 'notes' }),
       goB0: () => S({ page: 'Streak Keeper' }), goB1: () => S({ page: 'Repertoire' }), goB2: () => S({ page: 'Lesson Finisher' }), goM0: () => S({ page: 'First recording' }), goM1: () => S({ page: 'First lesson done' }), goM5: () => S({ page: 'A perfect run' }),
@@ -74,6 +75,18 @@ RUNROW9 = (f'<a href="PracticeResult.dc.html" aria-label="{{{{r.aria}}}}" style=
            f'<span style="font-size: 14px; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{r.sub}}}}</span></span>'
            f'<span style="flex: none; display: flex; color: {SOFT}">{CHEV_R}</span></a>')
 HIST9H = H2('Practice history', SEEALL9('goHistory')) + BOX(f'<sc-for list="{{{{runLatest}}}}" as="r" hint-placeholder-count="3">{RUNROW9}</sc-for>')
+# the first run (a guest who has played nothing): the figures at 0, Badges not started over empty bars, no
+# achievement yet, and Practice history's empty card with its one next step (craft-details: every empty state has one)
+_NOBAR = '<span aria-hidden="true" style="display: block; height: 6px; margin-top: 4px; border-radius: 9999px; background: #EEE9E2"></span>'
+def _FIRST(n):
+    b = next(x for x in BADGES9 if x[0] == n); k, u = b[4][0][1].split(' ', 1)
+    return f'{k} more {u[:-1] if k == "1" and u.endswith("s") else u} to Bronze'
+TILES9N = f'<div style="display: flex; gap: 12px">{TILE(FLAME, "0", "Day streak", act="goStreak")}{TILE(NOTE, "0", "Songs learned", href="AllSongs.dc.html")}{TILE(CLOCK, "0 min", "Practice time", act="goHistory")}</div>'
+BADGES9N = H2('Badges', SEEALL9('goBadges')) + BOX(''.join(BROW(n, '', _FIRST(n), a, _NOBAR) for n, a in (('Streak Keeper', 'goB0'), ('Repertoire', 'goB1'), ('Lesson Finisher', 'goB2'))))
+ACH9N = H2('Achievements', SEEALL9('goAch')) + BOX(AROW('First lesson done', 'Not earned yet', False, 'goM1') + AROW('First recording', 'Not earned yet', False, 'goM0') + AROW('A perfect run', 'Not earned yet', False, 'goM5'))
+HIST9N = H2('Practice history') + BOX(f'<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 16px 16px 8px"><span style="font-size: 15px; line-height: 1.45; color: {SOFT}">No practice yet. Every run in Practice is kept here.</span>'
+                                      f'<a href="Main.dc.html" style="height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600; color: {LINK}; text-decoration: none">Open Practice</a></div>')
+FRESH9 = lambda learner, first: IF9('notFresh', learner, 'true') + IF9('isFresh', first)
 CHART30 = CARD(f'<div style="display: flex; flex-direction: column; gap: 12px"><div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">'
                f'<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">9 h 34 min</span><span style="font-size: 13px; color: {SOFT}">The last 30 days</span></span>'
                f'<span style="font-size: 13px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">↑ 1 h 10 min on the 30 days before</span></div>'
@@ -154,8 +167,12 @@ WEEKL = H2('Last 7 days', f'<span style="font-size: 15px; color: {SOFT}; font-va
 WEEKLAP = (WEEKL.replace('height: 72px; position: relative', 'height: 150px; position: relative').replace('position: relative; height: 72px', 'position: relative; height: 150px')
            .replace('bottom: 58px">40', 'bottom: 138px">40').replace('bottom: 26px">20', 'bottom: 66px">20').replace('bottom: 32px; height: 1px', 'bottom: 72px; height: 1px')
            .replace('bottom: 64px; height: 1px', 'bottom: 144px; height: 1px').replace('{{w.h}}', '{{w.hl}}'))
+_WKOVER = IF9('isFresh', f'<span style="position: absolute; left: 0; right: 0; top: 4px; text-align: center; font-size: 14px; color: {SOFT}">Play anything today and it shows here.</span>')
+_WKV = lambda x: (x.replace('152 min · 6 of 7 days', '{{weekSum}}').replace('">40</span>', '">{{ax2}}</span>').replace('">20</span>', '">{{ax1}}</span>')
+                  .replace(f'align-items: flex-end; box-shadow: inset 0 -1px 0 {LINE}">', f'align-items: flex-end; box-shadow: inset 0 -1px 0 {LINE}">' + _WKOVER, 1))
+WEEKL, WEEKLAP = _WKV(WEEKL), _WKV(WEEKLAP)
 p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="Settings.dc.html"))}'
-        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + TILES9 + WEEKL + HIST9H + BADGES9H + ACH9, "true")}</main>{TABBAR("Profile")}</sc-if>'
+        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 130px; display: flex; flex-direction: column; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX + FRESH9(TILES9, TILES9N) + WEEKL + FRESH9(HIST9H, HIST9N) + FRESH9(BADGES9H, BADGES9N) + FRESH9(ACH9, ACH9N), "true")}</main>{TABBAR("Profile")}</sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("", "{{barT}}", MOREB9, "Back", IB("{{backT}}", CHEV_L, "goBack"))}'
         f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 48px; display: flex; flex-direction: column; gap: 16px">{SUBS9}</main></sc-if>' + P9_ASK)
 # On a laptop the Profile is rows, each holding a pair whose tops meet (owner, 2026-11-17, edge-lines: two free columns
@@ -164,8 +181,8 @@ p9ph = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{TIT
 _CELL = lambda x: f'<div class="pcell" style="display: flex; flex-direction: column; gap: 12px">{x}</div>'  # a row's two boxes share their bottom edge
 # the rows take their own height, 32 apart; free height stays at the foot, never inside the head row
 p9lm = (f'<sc-if value="{{{{isMain}}}}" hint-placeholder-val="{{{{true}}}}">{LTITLEBAR("Profile", BELL9 + IB("Settings", GEARI, href="SettingsLaptop.dc.html"))}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 32px; align-items: stretch; align-content: start"><style>.pcell > :last-child{{flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center}} .pcell > :last-child > :last-child, .pcell > :last-child > :last-child > :last-child {{box-shadow: none !important}}</style>'
-        f'<div style="display: flex; flex-direction: column; justify-content: center; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX, "true")}</div>'f'<div style="display: flex; flex-direction: column; justify-content: center">{IF9("notLoading", TILES9, "true")}</div>'  # the stats beside the name, on the right column's edges (alignment; no bare band right of the name)
-        f'{IF9("notLoading", (_CELL(WEEKLAP) + _CELL(BADGES9H) + _CELL(HIST9H) + _CELL(ACH9)).replace(CHEV_R, ""), "true")}</main></sc-if>'
+        f'<div style="display: flex; flex-direction: column; justify-content: center; gap: 16px">{WHO9}{IF9("isLoading", LOAD_P)}{IF9("notLoading", HEROX, "true")}</div>'f'<div style="display: flex; flex-direction: column; justify-content: center">{IF9("notLoading", FRESH9(TILES9, TILES9N), "true")}</div>'  # the stats beside the name, on the right column's edges (alignment; no bare band right of the name)
+        f'{IF9("notLoading", (_CELL(WEEKLAP) + _CELL(FRESH9(BADGES9H, BADGES9N)) + _CELL(FRESH9(HIST9H, HIST9N)) + _CELL(FRESH9(ACH9, ACH9N))).replace(CHEV_R, ""), "true")}</main></sc-if>'
         f'<sc-if value="{{{{isSub}}}}" hint-placeholder-val="{{{{false}}}}">' + LTITLEBAR('{{barT}}', MOREB9, backact='goBack') + LCOL(SUBS9L, '{{subW}}') + '</sc-if>' + P9_ASK)
-detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
+detail('Profile', 'Profile', P9_JS, p9ph, p9lm.replace('SignIn.dc.html', 'SignInLaptop.dc.html').replace('<a href="Main.dc.html" style="height: 44px', '<a href="Laptop.dc.html" style="height: 44px').replace('PracticeResult.dc.html', 'PracticeResultLaptop.dc.html'), '', BSHEET('moreOn', 'Notifications', MOREBODY9), POPOVER('moreOn', 'Notifications', MOREBODY9, 'right: 120px; top: 64px', 300), 'Profile')
 print('r50 profile ok')

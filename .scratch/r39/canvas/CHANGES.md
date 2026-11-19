@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Profile's First run state (tiles 0, flat week with its line, no notifications, badges not started, achievements locked, history empty with Open Practice); the badge tiers the app's table · Profile,ProfileLaptop · pending
+
 
 ## Changes
 

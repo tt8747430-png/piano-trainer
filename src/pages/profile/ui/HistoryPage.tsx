@@ -7,7 +7,7 @@ import { BackButton, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { useToday } from '@/widgets/practice-days'
 import { usePracticeTime } from '../model/format'
 import { byDay, useHistoryDay, useRunLines } from '../model/runs'
-import { RunRow } from './HistoryPreview'
+import { NoHistory, RunRow } from './HistoryPreview'
 
 const DAYS = 30
 
@@ -117,8 +117,8 @@ export function HistoryPage() {
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
         <MonthChart />
         {days.length === 0 ? (
-          <SettingsGroup>
-            <p className="py-1 text-pretty text-muted-foreground">{t('profile.history.none')}</p>
+          <SettingsGroup flush>
+            <NoHistory />
           </SettingsGroup>
         ) : (
           days.map(({ day, lines: shown }) => (

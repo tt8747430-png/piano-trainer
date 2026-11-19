@@ -113,6 +113,7 @@ export const account = {
     history: {
       title: 'Practice history',
       none: 'No practice yet. Every run in Practice is kept here.',
+      open: 'Open Practice',
       today: 'Today',
       yesterday: 'Yesterday',
       row: '{{time}} · {{count}} answered',

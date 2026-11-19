@@ -138,6 +138,7 @@ export const account: LocaleResources['account'] = {
     history: {
       title: 'История занятий',
       none: 'Занятий пока нет. Здесь сохраняется каждое занятие в разделе «Практика».',
+      open: 'Открыть «Практику»',
       today: 'Сегодня',
       yesterday: 'Вчера',
       row: '{{time}} · ответов: {{count}}',

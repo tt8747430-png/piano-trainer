@@ -25,7 +25,25 @@ export function RunRow({ id, name, detail, accuracy }: RunLine) {
   )
 }
 
-/** The Profile's Practice history (canvas 160): the last three runs, then See all; none yet, said so. */
+/** No run kept yet (the board's first run): what the history holds, and Open Practice, its one next step. */
+export function NoHistory() {
+  const { t } = useTranslation('account')
+  return (
+    <div className="flex flex-col items-start gap-1 px-4 pt-4 pb-2">
+      <p className="text-[0.9375rem] leading-[1.45] text-pretty text-muted-foreground">
+        {t('profile.history.none')}
+      </p>
+      <Link
+        to="/practice"
+        className="flex h-11 items-center rounded-control text-[0.9375rem] font-semibold text-link focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
+        {t('profile.history.open')}
+      </Link>
+    </div>
+  )
+}
+
+/** The Profile's Practice history (canvas 160): the last three runs, then See all; none yet, said so with Open Practice, its one next step. */
 export function HistoryPreview() {
   const { t } = useTranslation('account')
   const lines = useRunLines()(useProgress(selectHistory).slice(0, 3))
@@ -37,7 +55,7 @@ export function HistoryPreview() {
     >
       <ProfileList>
         {lines.length === 0 ? (
-          <p className="px-4 py-3 text-pretty text-muted-foreground">{t('profile.history.none')}</p>
+          <NoHistory />
         ) : (
           lines.map((line) => <RunRow key={line.id} {...line} />)
         )}
