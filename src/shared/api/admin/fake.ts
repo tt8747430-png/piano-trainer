@@ -91,11 +91,6 @@ export function createFakeAdmin({
         switches.set(feature.key, feature)
         note('save-switch', feature.key)
       }),
-    deleteSwitch: (key) =>
-      ask(async () => {
-        switches.delete(key)
-        note('delete-switch', key)
-      }),
     reports: () => ask(async () => held),
     hide: (itemId, hidden) =>
       ask(async () => {

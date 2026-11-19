@@ -71,7 +71,6 @@ export interface AdminPort {
   setMember(groupId: string, userId: string, member: boolean): Promise<NetResult<void>>
   switches(): Promise<NetResult<readonly FeatureSwitch[]>>
   saveSwitch(feature: FeatureSwitch): Promise<NetResult<void>>
-  deleteSwitch(key: string): Promise<NetResult<void>>
   reports(): Promise<NetResult<readonly Report[]>>
   /** Hides a song from the Public library, or shows it again. */
   hide(itemId: string, hidden: boolean): Promise<NetResult<void>>

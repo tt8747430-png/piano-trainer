@@ -32,6 +32,8 @@ const SECTIONS: Readonly<Record<AdminSection, () => JSX.Element>> = {
   components: ComponentsTab,
 }
 
+const OWN_SCREEN: ReadonlySet<AdminSection> = new Set(['groups', 'flags'])
+
 /**
  * One section of Administration (R32): a Settings page under its name, the sidebar beside it on a
  * laptop, Back to Administration's list on a phone. An administrator's alone. The route turns away
@@ -47,6 +49,8 @@ export function AdminSectionPage() {
   const section: AdminSection = isAdminSection(name) ? name : 'overview'
   if (section === 'groups' && item && account?.role === 'admin') return <AdminGroupPage id={item} />
   const Section = SECTIONS[section]
+  // Groups and Feature flags hold their New in the pane's title row, so each draws its own screen.
+  if (OWN_SCREEN.has(section) && account?.role === 'admin') return <Section />
   return (
     <SettingsScreen title={t(`sections.${section}`)}>
       {account?.role === 'admin' ? <Section /> : <NotOpen kind="admins" line={t('notAdmin')} />}

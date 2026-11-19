@@ -93,12 +93,11 @@ export function GroupsTab() {
     })
   }
   return (
-    <div className="flex flex-col gap-4">
-      {laptop ? (
-        <Button className="self-end" onClick={() => setNaming('')}>
-          {t('groups.new')}
-        </Button>
-      ) : (
+    <SettingsScreen
+      title={t('sections.groups')}
+      actions={laptop ? <Button onClick={() => setNaming('')}>{t('groups.new')}</Button> : null}
+    >
+      {laptop ? null : (
         <FloatingActions>
           <Fab label={t('groups.new')} icon={Plus} onClick={() => setNaming('')} />
         </FloatingActions>
@@ -157,7 +156,7 @@ export function GroupsTab() {
         createLabel={t('groups.add')}
         onCreate={create}
       />
-    </div>
+    </SettingsScreen>
   )
 }
 

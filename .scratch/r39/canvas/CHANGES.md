@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · Admin flags · the Enabled for segments 44 tall (were 40, under the 44 target) · Admin,AdminLaptop · pending
 - 2026-11-19 · Admin groups · a group's member rows 60 as their code says (they measured 72), its sections 16 apart · Admin · pending
 
 
