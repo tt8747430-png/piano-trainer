@@ -8,13 +8,13 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · search suggestions 60 as their code says (measured 76) · AppLayers,AppLayersLaptop · pending
 
 
 
 
 ## Changes
 
+- 2026-11-19 · eb9fcaa1 · search suggestions 60 as their code says (measured 76) · AppLayers,AppLayersLaptop · v669
 - 2026-11-19 · cd82d5cb · Feedback, Error log, Audit log and Drafts say a day as the library does (10 Nov, Today 09:14, Yesterday) · Admin,AdminLaptop · v668
 - 2026-11-19 · 7835667d · Accounts' faces 36 in the sans and its roles FILL chips 36 tall, as the board's groups and flags; last sign-in said as the library says a day (8 Nov) · Admin,AdminLaptop · v667
 - 2026-11-19 · 5f53b7cf · Feature flags' Enabled for segments 44 tall (were 40, under the 44 target) · Admin,AdminLaptop · v666
