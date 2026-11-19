@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · Accompaniment: the app's 48 real patterns under its five books (were twelve invented under four), each picture the app's own roll, the Level filter counted from them (Texture and Feel, which the app has not, gone) · Accompaniment,AccompanimentLaptop · pending
 
 
 ## Changes
 
+- 2026-11-19 · cd9c6abf · Accompaniment: the app's 48 real patterns under its five books (were twelve invented under four), each picture the app's own roll, the Level filter counted from them (Texture and Feel, which the app has not, gone) · Accompaniment,AccompanimentLaptop · v647
 - 2026-11-19 · (this commit) · the Practice libraries' Edit drawn, as the app arranges them and as the course's Edit: Edit and Done in the bar, every shelf and row where it reads, a row's heart giving way to its grip, a shelf's ··· (Rename, Hide or Show) and grip at its head's end, a hidden shelf marked Hidden, the search and place chips inert at half; phone and the laptop table · Progressions,ProgressionsLaptop,Accompaniment,AccompanimentLaptop,FingerTechnique,FingerTechniqueLaptop,JazzVocabulary,JazzVocabularyLaptop · v646
 - 2026-11-19 · (this commit) · the Practice libraries: the app's 57 real progressions in their nine styles (were invented), each shelf folded at five with the quiet Show all n › under its card, the cards 14 round (were 12), the laptop table's rows flush at 56 (each stood 8 apart in a gapped column) · Progressions,ProgressionsLaptop,Accompaniment,AccompanimentLaptop,FingerTechnique,FingerTechniqueLaptop,JazzVocabulary,JazzVocabularyLaptop · v644
 - 2026-11-19 · (this commit) · Edit progression: the draft's acts in the bar as every editor's (the glass ··· Publishing, the honey Publish, the gear; it drew a Draft pill under the bar), its lines said once (The progression's card repeated the major line), the real minor line (i VI III VII; was i v VI iv) · ProgressionEdit,ProgressionEditLaptop · v643
