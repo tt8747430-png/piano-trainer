@@ -841,6 +841,34 @@
     0 0 0 1px var(--border),
     var(--elevation-2);
 }
+/* Icons side by side share one glass capsule, each keeping its 44 target (the boards' `_glassgroups`; bars.md,
+   2026-11-16; Apple HIG, Toolbars: "Group toolbar items logically"): the run's inner corners square off and
+   its inner edges are clipped, so the ring and the shade run round the whole capsule; a text button keeps its own. */
+.bar-round:has(+ .bar-round),
+.bar-round + .bar-round {
+  background-clip: border-box;
+}
+.bar-round:has(+ .bar-round) {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  clip-path: inset(-32px 0 -32px -32px);
+}
+.bar-round + .bar-round {
+  margin-inline-start: -0.5rem;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  clip-path: inset(-32px -32px -32px 0);
+}
+.bar-round + .bar-round:has(+ .bar-round) {
+  clip-path: inset(-32px 0);
+}
+/* A disabled one in the run dims its icon alone, so the capsule stays one glass. */
+.bar-round:is(:has(+ .bar-round), .bar-round + *):disabled {
+  opacity: 1;
+  & > svg {
+    opacity: 0.5;
+  }
+}
 @utility glass-honey {
   background-color: var(--glass-honey);
   backdrop-filter: blur(24px) saturate(1.8);

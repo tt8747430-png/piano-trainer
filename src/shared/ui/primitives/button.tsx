@@ -44,6 +44,8 @@ const buttonVariants = cva(
         play: "size-18 rounded-full [&_svg:not([class*='size-'])]:size-7",
       },
     },
+    // A bar's 44 glass circle: a run of them side by side shares one capsule (theme.css, `.bar-round`).
+    compoundVariants: [{ variant: 'bar', size: 'icon', class: 'bar-round' }],
     defaultVariants: {
       variant: 'default',
       size: 'default',

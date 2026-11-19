@@ -19,7 +19,7 @@ export function ScaleChoice({
 }) {
   const { t } = useTranslation(['practice', 'music'])
   return (
-    <h2 aria-label={name} className="flex min-w-0 flex-wrap items-stretch gap-1.5">
+    <h2 aria-label={name} className="flex min-w-0 flex-wrap items-stretch gap-2">
       <NotePicker
         bare
         label={t('practice:scales.tonic')}
