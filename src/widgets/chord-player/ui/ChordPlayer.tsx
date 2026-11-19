@@ -698,8 +698,9 @@ export function ChordPlayer({
               className="flex min-w-0 flex-col gap-4"
               style={{ paddingBottom: 'calc(var(--over-foot, 0px) + 1.5rem)' }}
             >
-              {/* The chart, a lead sheet on its paper: its name, its sections, Add section. */}
-              <div className="flex flex-col gap-[18px]">
+              {/* The chart, a lead sheet on its paper: its name, its sections, Add section; its name 4
+                  under the bar, as the board's. */}
+              <div className="-mt-3 flex flex-col gap-4">
                 <div className="flex min-w-0 items-center gap-2">
                   <SheetsMenu
                     name={name}

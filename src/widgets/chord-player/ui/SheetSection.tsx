@@ -102,7 +102,7 @@ export function SheetSection({
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn('flex min-w-0 flex-col gap-2', isDragging && 'opacity-0')}
     >
-      <div className="flex min-h-11 items-center gap-1.5">
+      <div className="flex min-h-11 items-center gap-2">
         <button
           type="button"
           onClick={onOpen}

@@ -1180,6 +1180,8 @@ owner's, typos fixed.
 
 - **The Chord finder ported from its board (loop, 2026-11-19):** the chord's name in the book serif, 44 bold on both sizes (it was the sans, 64 on a laptop); its numeral leads the key picker, Imaj7 in C major, that key's one home, and leaves the line under the name; its rows are the white ringed card; on a laptop one centred 880 column with the rows under the notes, where the rows stood in a right-hand column.
 
+- **The Chord player ported from its board, measured (loop, 2026-11-19):** the sheet's name stands 4 under the bar (it was 16), its sections 16 under it and their pills 8 apart, as drawn; the floating bar's words (Style, Key, Tempo, Repeats) 12, the type floor, where they were 11.
+
 ## Sounds
 
 The best free ones: CC0 (VCSL) for the metronome and kit, Salamander (CC-BY, credit in About) for the piano. Musicca's files
