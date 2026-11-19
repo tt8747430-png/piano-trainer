@@ -1,9 +1,9 @@
 import { X } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/primitives/button'
 import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/shared/ui/primitives/dialog'
-import { SettingsDialogContext } from '../model/dialog-context'
+import { SettingsDialogContext, type AdminCounts } from '../model/dialog-context'
 import { settingsPlaceOf } from '../model/sections'
 import { SettingsNav } from './SettingsNav'
 
@@ -26,6 +26,9 @@ export function SettingsDialog({
 }) {
   const { t } = useTranslation('settings')
   const place = settingsPlaceOf(path === '/settings' ? '/settings/general' : path)
+  // What waits in Administration's sections, handed up by its panes for the nav to carry.
+  const [counts, setCounts] = useState<AdminCounts>({})
+  const dialog = useMemo(() => ({ path, showCounts: setCounts }), [path])
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
       <DialogContent
@@ -55,10 +58,10 @@ export function SettingsDialog({
             aria-label={t('title')}
             className="scrollbar-none flex min-h-0 flex-col gap-5 overflow-y-auto overscroll-contain border-r border-border px-3 pt-4 pb-5"
           >
-            <SettingsNav place={place} />
+            <SettingsNav place={place} counts={counts} />
           </nav>
           <div className="min-h-0 min-w-0 overflow-y-auto overscroll-contain px-8 pt-4 pb-10">
-            <SettingsDialogContext value={{ path }}>
+            <SettingsDialogContext value={dialog}>
               <div className="flex flex-col">{children}</div>
             </SettingsDialogContext>
           </div>

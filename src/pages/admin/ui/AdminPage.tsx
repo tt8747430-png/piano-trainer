@@ -9,9 +9,9 @@ import {
   ADMIN_SECTIONS,
   SETTINGS_ROWS,
   SettingsScreen,
-  type AdminSection,
 } from '@/widgets/settings-screen'
 import { useOverview } from '../model/use-overview'
+import { waitingIn } from '../model/waiting'
 
 /**
  * The sections, one group of Settings' rows; Content reports, Error log and Drafts carry what waits
@@ -20,18 +20,7 @@ import { useOverview } from '../model/use-overview'
 function Sections() {
   const { t } = useTranslation('admin')
   const { loaded } = useOverview()
-  const waiting = (section: AdminSection): string | undefined => {
-    if (loaded.kind !== 'ready') return undefined
-    const count =
-      section === 'reports'
-        ? loaded.value.reports
-        : section === 'errors'
-          ? loaded.value.errorsThisWeek
-          : section === 'drafts'
-            ? loaded.value.unpublished
-            : 0
-    return count > 0 ? String(count) : undefined
-  }
+  const waiting = loaded.kind === 'ready' ? waitingIn(loaded.value) : {}
   return (
     <SettingsGroup flush className={SETTINGS_ROWS}>
       {ADMIN_SECTIONS.map((section) => (
@@ -40,7 +29,7 @@ function Sections() {
           title={t(`sections.${section}`)}
           icon={ADMIN_PICTURES[section].icon}
           paint={ADMIN_PICTURES[section].paint}
-          value={waiting(section)}
+          value={waiting[section] ? String(waiting[section]) : undefined}
           render={<Link to="/admin/$section" params={{ section }} />}
         />
       ))}

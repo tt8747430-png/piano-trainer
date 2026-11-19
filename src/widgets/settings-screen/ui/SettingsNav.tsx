@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronLeft, Search, ShieldUser } from 'lucide-react'
 import { useState } from 'react'
+import type { AdminCounts } from '../model/dialog-context'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { useAppUpdate } from '@/shared/lib/app-update'
@@ -27,7 +28,14 @@ const HEAD =
  * on the chosen wash; Administration last for an administrator. Inside Administration the same nav is
  * "‹ Settings" over its sections, one shell for both.
  */
-export function SettingsNav({ place }: { place: SettingsPlace | null }) {
+export function SettingsNav({
+  place,
+  counts,
+}: {
+  place: SettingsPlace | null
+  /** What waits in Administration's sections, carried at their rows' ends. */
+  counts: AdminCounts
+}) {
   const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
   const { status } = useAppUpdate()
@@ -52,7 +60,12 @@ export function SettingsNav({ place }: { place: SettingsPlace | null }) {
                 className={ROW}
               >
                 <Icon aria-hidden className="size-4.5 shrink-0 text-muted-foreground" />
-                {t(`admin:sections.${section}`)}
+                <span className="min-w-0 flex-1">{t(`admin:sections.${section}`)}</span>
+                {counts[section] ? (
+                  <span className="text-[0.8125rem] text-muted-foreground tabular-nums">
+                    {counts[section]}
+                  </span>
+                ) : null}
               </Link>
             )
           })}

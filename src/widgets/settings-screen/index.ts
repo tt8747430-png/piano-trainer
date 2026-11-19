@@ -1,4 +1,9 @@
-export { useSettingsDialog, useSettingsPath } from './model/dialog-context'
+export {
+  useAdminNavCounts,
+  useSettingsDialog,
+  useSettingsPath,
+  type AdminCounts,
+} from './model/dialog-context'
 export {
   ADMIN_PICTURES,
   ADMIN_SECTIONS,

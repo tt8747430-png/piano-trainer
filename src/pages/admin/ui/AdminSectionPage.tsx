@@ -1,13 +1,17 @@
-import type { JSX } from 'react'
+import { useMemo, type JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { NotOpen } from '@/widgets/content-editor'
 import {
   isAdminSection,
   SettingsScreen,
+  useAdminNavCounts,
+  useSettingsDialog,
   useSettingsPath,
   type AdminSection,
 } from '@/widgets/settings-screen'
+import { useOverview } from '../model/use-overview'
+import { waitingIn } from '../model/waiting'
 import { AccountsTab } from './AccountsTab'
 import { ActivityTab } from './ActivityTab'
 import { ComponentsTab } from './ComponentsTab'
@@ -32,6 +36,14 @@ const SECTIONS: Readonly<Record<AdminSection, () => JSX.Element>> = {
   components: ComponentsTab,
 }
 
+/** Hands the Settings dialog's nav what waits in the sections, as the AdminLaptop board's nav counts. */
+function NavCounts() {
+  const { loaded } = useOverview()
+  const counts = useMemo(() => (loaded.kind === 'ready' ? waitingIn(loaded.value) : null), [loaded])
+  useAdminNavCounts(counts)
+  return null
+}
+
 const OWN_SCREEN: ReadonlySet<AdminSection> = new Set(['groups', 'flags'])
 
 /**
@@ -47,12 +59,27 @@ export function AdminSectionPage() {
     .replace(/^\/admin\//, '')
     .split('/')
   const section: AdminSection = isAdminSection(name) ? name : 'overview'
-  if (section === 'groups' && item && account?.role === 'admin') return <AdminGroupPage id={item} />
+  const dialog = useSettingsDialog()
+  const counts = dialog && account?.role === 'admin' ? <NavCounts /> : null
+  if (section === 'groups' && item && account?.role === 'admin')
+    return (
+      <>
+        {counts}
+        <AdminGroupPage id={item} />
+      </>
+    )
   const Section = SECTIONS[section]
   // Groups and Feature flags hold their New in the pane's title row, so each draws its own screen.
-  if (OWN_SCREEN.has(section) && account?.role === 'admin') return <Section />
+  if (OWN_SCREEN.has(section) && account?.role === 'admin')
+    return (
+      <>
+        {counts}
+        <Section />
+      </>
+    )
   return (
     <SettingsScreen title={t(`sections.${section}`)}>
+      {counts}
       {account?.role === 'admin' ? <Section /> : <NotOpen kind="admins" line={t('notAdmin')} />}
     </SettingsScreen>
   )
