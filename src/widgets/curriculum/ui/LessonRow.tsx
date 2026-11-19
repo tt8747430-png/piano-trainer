@@ -71,7 +71,7 @@ export function LessonRow({
           )}
         </span>
       </ProgressRing>
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5 lg:flex-none">
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5 lg:flex-initial">
         <span className={cn('text-base/snug text-pretty', current ? 'font-bold' : 'font-semibold')}>
           {said ? <span className="sr-only">{said}: </span> : null}
           {title}
@@ -144,7 +144,7 @@ export function LessonStop({
   return (
     <li
       className={cn(
-        'relative before:absolute before:top-0 before:start-5.25 before:h-1/2 before:w-0.5 after:absolute after:start-5.25 after:top-1/2 after:h-1/2 after:w-0.5 lg:before:hidden lg:after:hidden',
+        'relative min-w-0 before:absolute before:top-0 before:start-5.25 before:h-1/2 before:w-0.5 after:absolute after:start-5.25 after:top-1/2 after:h-1/2 after:w-0.5 lg:before:hidden lg:after:hidden',
         first ? 'before:hidden' : reached ? 'before:bg-paint-full-grass' : 'before:bg-border',
         last ? 'after:hidden' : passed ? 'after:bg-paint-full-grass' : 'after:bg-border',
       )}
