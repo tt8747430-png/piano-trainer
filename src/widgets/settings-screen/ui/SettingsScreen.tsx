@@ -43,7 +43,7 @@ export function SettingsScreen({
     const parent = settingsParentOf(dialog.path)
     const back = parent ? t('dialog.back', { page: t(PARENT_TITLE[parent]) }) : null
     return (
-      <div className="settings-pane flex flex-col gap-8">
+      <div className="settings-pane flex flex-col gap-7">
         <div className="-mb-3 flex min-h-10 items-center gap-2">
           {parent && back ? (
             <Link

@@ -59,7 +59,7 @@ export function SettingsDialog({
           </nav>
           <div className="min-h-0 min-w-0 overflow-y-auto overscroll-contain px-8 pt-4 pb-10">
             <SettingsDialogContext value={{ path }}>
-              <div className="flex max-w-180 flex-col">{children}</div>
+              <div className="flex flex-col">{children}</div>
             </SettingsDialogContext>
           </div>
         </div>

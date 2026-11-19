@@ -271,7 +271,7 @@ export const common: LocaleResources['common'] = {
     },
     summary: {
       unavailable: 'Недоступно',
-      off: 'Выключено',
+      off: 'Не подключено',
       denied: 'Запрещено',
       connecting: 'Подключение…',
       noDevice: 'Нет устройства',

@@ -287,7 +287,7 @@ export const common = {
     // A Settings row's value: the MIDI keyboard's state in a word or a name.
     summary: {
       unavailable: 'Not available',
-      off: 'Off',
+      off: 'Not connected',
       denied: 'Blocked',
       connecting: 'Connecting…',
       noDevice: 'No device',

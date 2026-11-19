@@ -8,6 +8,9 @@ import { RowLink, SettingsGroup } from '@/shared/ui'
 import { ADMIN_ENTRY, SETTINGS_GROUPS, type SettingsPageEntry } from '../model/sections'
 import { AccountCard } from './AccountCard'
 
+/** Settings' rows stand 52 with 8 over and under, as the board's `SROW` (a list row elsewhere is 48). */
+const ROWS = '[&_[data-slot=settings-card]>*]:min-h-13 [&_[data-slot=settings-card]>*]:py-2'
+
 /**
  * Settings' list on a phone (the Settings board, iOS's Settings): the account card first, then App,
  * Piano, Library and Support, each row its icon in a solid square and, where it has one, its value in
@@ -33,7 +36,12 @@ export function SettingsList() {
     <div className="flex flex-col gap-4">
       <AccountCard />
       {SETTINGS_GROUPS.map((group) => (
-        <SettingsGroup key={group.title} flush title={t(`settings:${group.title}`)}>
+        <SettingsGroup
+          key={group.title}
+          flush
+          title={t(`settings:${group.title}`)}
+          className={ROWS}
+        >
           {group.pages.map((page) => (
             <RowLink
               key={page.to}
@@ -47,7 +55,7 @@ export function SettingsList() {
         </SettingsGroup>
       ))}
       {account?.role === 'admin' ? (
-        <SettingsGroup flush>
+        <SettingsGroup flush className={ROWS}>
           <RowLink
             title={t('admin:title')}
             icon={ADMIN_ENTRY.icon}

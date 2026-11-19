@@ -30,7 +30,7 @@ export function GeneralPage() {
       {inDialog ? (
         <SettingsGroup flush title={t('language.label')}>
           <GroupRow label={t('language.app')} setting="locale">
-            <div className="w-60 shrink-0">
+            <div className="w-60 shrink-0 py-1.5">
               <Segmented
                 label={t('language.app')}
                 value={locale}

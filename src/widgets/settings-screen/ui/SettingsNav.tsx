@@ -18,7 +18,8 @@ const ROW =
   'flex h-10 w-full items-center gap-3 rounded-[10px] px-3 text-[0.9375rem] choice focus-visible:-outline-offset-3 data-active:font-semibold'
 
 /** A group's small heading over its rows (LNAV's h3): 13 semibold in Soft Ink. */
-const HEAD = 'px-3 pb-1 font-sans text-[0.8125rem] font-semibold text-muted-foreground'
+const HEAD =
+  'px-3 pb-1 font-sans text-[0.8125rem] leading-[normal] font-semibold text-muted-foreground'
 
 /**
  * The laptop Settings dialog's nav (the board's LSEARCH, LACCT, LNAV, LADMIN; claude.ai's): a search

@@ -421,6 +421,8 @@
   & [data-slot='settings-card'] {
     border: 0;
     border-radius: 0;
+    /* The card's ring is a shadow: none on the pane. */
+    box-shadow: none;
     background: transparent;
     overflow: visible;
     padding-inline: 0;
