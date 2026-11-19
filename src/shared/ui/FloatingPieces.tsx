@@ -180,7 +180,7 @@ export function FloatingPlaySplit({
         type="button"
         aria-pressed={playing}
         onClick={onPlay}
-        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-3 text-base font-bold whitespace-nowrap"
+        className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-l-pill ps-4 pe-3 text-[1.0625rem] font-bold whitespace-nowrap"
       >
         {playing ? (
           <Square aria-hidden className="size-4.5 fill-current" />

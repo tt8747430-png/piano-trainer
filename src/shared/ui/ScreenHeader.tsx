@@ -126,7 +126,9 @@ export function ScreenHeader({
       {large ? (
         <div
           className={cn(
-            'flex min-h-14 items-center gap-1.5 py-1 sm:gap-2',
+            'flex min-h-14 items-center py-1',
+            // after Back the title stands 12 off it, 8 on a laptop (TITLEBAR, LTITLEBAR)
+            back ? 'gap-3 lg:gap-2' : 'gap-1.5 sm:gap-2',
             column && 'mx-auto w-full max-w-2xl',
             column === 'until-laptop' && 'lg:mx-0 lg:max-w-none',
           )}

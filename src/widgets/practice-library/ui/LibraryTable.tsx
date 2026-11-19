@@ -29,11 +29,13 @@ function NameCell({ item }: { item: LibraryItem }) {
     render: item.link,
     props: {
       className:
-        'flex min-h-11 min-w-0 items-center gap-3 rounded-control py-1 focus-visible:-outline-offset-3',
+        'flex min-h-10 min-w-0 items-center gap-4 rounded-control focus-visible:-outline-offset-3',
       children: (
         <>
-          <LibraryTile picture={item.picture} />
-          <span className="min-w-0 truncate font-semibold text-foreground">{item.name}</span>
+          <LibraryTile small picture={item.picture} />
+          <span className="min-w-0 truncate text-[0.9375rem] font-semibold text-foreground">
+            {item.name}
+          </span>
         </>
       ),
     },
@@ -56,12 +58,12 @@ function SectionRows({
   return (
     <tbody>
       <tr>
-        <th scope="colgroup" colSpan={span} className="pt-4 pb-1 text-start">
+        <th scope="colgroup" colSpan={span} className="pt-2 text-start">
           <button
             type="button"
             aria-expanded={!shut}
             onClick={() => setShut((was) => !was)}
-            className="-mx-1 flex min-h-11 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
+            className="-mx-1 flex min-h-10 items-center gap-2 rounded-control px-1 text-base font-bold text-foreground transition-colors hover:text-foreground/80"
           >
             <ChevronDown
               aria-hidden
@@ -146,16 +148,17 @@ export function LibraryTable({
   return (
     <table className="w-full table-fixed border-collapse">
       <caption className="sr-only">{t('practice:library.rows')}</caption>
-      <thead className="border-b border-border text-sm text-muted-foreground">
+      <thead className="border-b border-border text-[0.8125rem] text-muted-foreground">
         <tr>
-          {heading('name', columns.name, 'w-[32%]')}
+          {/* the board's shares (Name 2 · line 3 · level or key), the name's heading on its words' edge */}
+          {heading('name', columns.name, 'w-[38%] ps-[4.25rem]')}
           <th scope="col" className={cn(TABLE_CELL, 'font-semibold')}>
             {columns.second}
           </th>
           {levels ? (
-            heading('level', t('practice:library.table.level'), 'w-44')
+            heading('level', t('practice:library.table.level'), 'w-[14%]')
           ) : columns.third ? (
-            <th scope="col" className={cn(TABLE_CELL, 'w-44 font-semibold')}>
+            <th scope="col" className={cn(TABLE_CELL, 'w-[10%] font-semibold')}>
               {columns.third}
             </th>
           ) : null}

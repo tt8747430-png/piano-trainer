@@ -8,15 +8,34 @@ import type { LibraryPicture } from '../model/library-view'
  * Songs folder's; its music's first words in its paint's ink on its wash; or a progression's chords as
  * columns on the card's paper, each in its role's paint (tonic, predominant, dominant), 28 tall, 2 apart.
  */
-export function LibraryTile({ picture }: { picture: LibraryPicture }) {
-  if ('icon' in picture) return <TileMark large icon={picture.icon} paint={picture.paint} />
+export function LibraryTile({
+  picture,
+  small = false,
+}: {
+  picture: LibraryPicture
+  /** In a laptop's table: 40 with a 9 corner, as the board's rows (r41_lib's table). */
+  small?: boolean
+}) {
+  const size = small ? 'size-10 rounded-[9px]' : 'size-11'
+  if ('icon' in picture)
+    return (
+      <TileMark
+        large
+        icon={picture.icon}
+        paint={picture.paint}
+        className={small ? size : undefined}
+      />
+    )
   if ('drawn' in picture) return picture.drawn
   if ('chords' in picture)
     return (
       <span
         data-slot="row-tile"
         aria-hidden
-        className="flex size-11 shrink-0 gap-0.5 overflow-hidden rounded-[10px] bg-card px-1 py-2 ring-1 ring-border"
+        className={cn(
+          'flex shrink-0 gap-0.5 overflow-hidden rounded-[10px] bg-card px-1 py-2 ring-1 ring-border',
+          size,
+        )}
       >
         {picture.chords.map((numeral, i) => (
           <span
@@ -34,7 +53,8 @@ export function LibraryTile({ picture }: { picture: LibraryPicture }) {
       data-slot="row-tile"
       aria-hidden
       className={cn(
-        'grid size-11 shrink-0 place-items-center rounded-control px-1 text-center text-sm leading-none font-semibold whitespace-nowrap',
+        'grid shrink-0 place-items-center rounded-control px-1 text-center text-sm leading-none font-semibold whitespace-nowrap',
+        size,
         PAINT[picture.paint].fill,
         PAINT[picture.paint].ink,
       )}

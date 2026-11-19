@@ -12,7 +12,7 @@ import { optionName, type Option, type OptionValue } from './option'
 const TONES = {
   ink: {
     group: '-my-1 gap-x-2 gap-y-0',
-    chip: 'min-w-11 border-y-4 bg-muted px-4 text-sm text-muted-foreground choice data-checked:bg-foreground! data-checked:text-background!',
+    chip: 'min-w-11 border-y-4 bg-muted px-4 text-sm text-foreground choice data-checked:bg-foreground! data-checked:text-card!',
   },
   honey: {
     group: '-my-1 gap-x-2 gap-y-0',
