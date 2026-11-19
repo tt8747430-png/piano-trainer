@@ -10,11 +10,11 @@ import {
 } from '@/entities/page-layout'
 import { resetEveryLayout, resetPageLayout, restoreLayouts } from '@/features/arrange-page-layout'
 import { isOneOf } from '@/shared/lib'
-import { GroupAction, GroupRow, say, SettingsGroup } from '@/shared/ui'
+import { GroupAction, say, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
 /** How many changes a row names before "+ n more". */
-const NAMED = 2
+const NAMED = 1
 const isPanel = isOneOf(panelsOf('chord-player'))
 
 /**
@@ -52,8 +52,13 @@ export function PageLayoutsPage() {
           const shown = changes.slice(0, NAMED).map(said).join(', ')
           const more = changes.length - NAMED
           return (
-            <GroupRow key={page} label={name}>
-              <span className="min-w-0 truncate text-[15px] text-muted-foreground">
+            // The board's _LAYROW: the page's name, what changed after it, quiet and cut first.
+            <div key={page} className="flex min-h-14 items-center gap-3 py-1.5 pr-2 pl-4 text-base">
+              <span className="shrink-0">{name}</span>
+              <span
+                title={changes.map(said).join(', ')}
+                className="min-w-0 flex-1 truncate text-right text-[15px] text-muted-foreground"
+              >
                 {changes.length === 0
                   ? t('layouts.asCame')
                   : more > 0
@@ -67,12 +72,12 @@ export function PageLayoutsPage() {
                   onClick={() =>
                     say(t('layouts.pageReset', { page: name }), undo(resetPageLayout(store, page)))
                   }
-                  className="-my-1 -mr-2 h-11 shrink-0 rounded-control px-3 font-semibold text-link transition-colors duration-150 ease-out hover:bg-muted"
+                  className="h-11 shrink-0 rounded-control px-3 font-semibold text-link transition-colors duration-150 ease-out hover:bg-muted"
                 >
                   {t('layouts.reset')}
                 </button>
               ) : null}
-            </GroupRow>
+            </div>
           )
         })}
       </SettingsGroup>

@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Minus } from 'lucide-react'
+import { ChevronDown, ChevronUp, Minus, Play, Square } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ARRANGER_NUMBERS, MAINS, mainOf, SECTION } from '@/shared/lib/arrangement'
@@ -25,7 +25,7 @@ function Lamp({
   onClick,
 }: {
   on: boolean
-  label: string
+  label: ReactNode
   spoken?: string
   className?: string
   /** No arranger connected: nothing to press. */
@@ -169,17 +169,20 @@ export function ArrangerStrip({
     />
   ))
   if (size === 'minimized') {
-    const named = main ? t('chordPlayer.arranger.main', { main }) : device
+    // With no section chosen yet the pill names the arranger alone.
+    const named = main
+      ? t('chordPlayer.arranger.pill', { device, main: t('chordPlayer.arranger.main', { main }) })
+      : device
     return (
       <div className="relative w-fit">
         <button
           type="button"
-          aria-label={t('chordPlayer.arranger.pillLabel', { main: named })}
+          aria-label={t('chordPlayer.arranger.pillLabel', { name: named })}
           onClick={() => onSize('full')}
           className="flex h-11 items-center gap-2 rounded-pill glass pr-3 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-150 ease-out hover:bg-muted [&_svg]:size-[18px]"
         >
           {dot}
-          {t('chordPlayer.arranger.pill', { main: named })}
+          {named}
           <ChevronUp aria-hidden />
         </button>
         {children}
@@ -196,19 +199,28 @@ export function ArrangerStrip({
           flat ? FLAT_CARD : CARD,
         )}
       >
-        {dot}
-        {startStop}
+        {/* A phone's 341 holds Main A–D at 44 only with Start/Stop as its glyph; its lamp says it runs. */}
+        <Lamp
+          disabled={off}
+          on={follow.running}
+          label={follow.running ? <Square aria-hidden /> : <Play aria-hidden />}
+          spoken={t('chordPlayer.arranger.startStop')}
+          className="grid w-11 shrink-0 place-items-center [&_svg]:size-5"
+          onClick={follow.toggle}
+        />
         <div
           role="group"
           aria-label={t('chordPlayer.arranger.mainLabel')}
-          className="grid min-w-0 flex-1 grid-cols-4 gap-1"
+          className="grid min-w-0 flex-1 grid-cols-4 gap-1 sm:max-w-80"
         >
           {mainLamps}
         </div>
-        <HeadButton label={t('chordPlayer.arranger.full')} onClick={() => onSize('full')}>
-          <ChevronUp aria-hidden />
-        </HeadButton>
-        {minimize}
+        <div className="ml-auto flex shrink-0">
+          <HeadButton label={t('chordPlayer.arranger.full')} onClick={() => onSize('full')}>
+            <ChevronUp aria-hidden />
+          </HeadButton>
+          {minimize}
+        </div>
         {children}
       </div>
     )

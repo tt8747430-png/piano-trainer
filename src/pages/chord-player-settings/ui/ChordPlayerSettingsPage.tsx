@@ -18,6 +18,7 @@ import { relayMeter, SHEET_METERS, type SheetMeter } from '@/shared/lib/arrangem
 import { useServices } from '@/shared/lib/services'
 import {
   BackButton,
+  GroupAction,
   RowButton,
   RowLink,
   say,
@@ -221,8 +222,8 @@ export function ChordPlayerSettingsPage() {
             </div>
           </SettingsGroup>
           <SettingsGroup flush title={t('chordPlayer.settings.layout')}>
-            <RowButton
-              title={t('chordPlayer.layout.edit')}
+            <GroupAction
+              label={t('chordPlayer.layout.edit')}
               onClick={() =>
                 void navigate({
                   to: '/practice/chord-player',
@@ -230,8 +231,8 @@ export function ChordPlayerSettingsPage() {
                 })
               }
             />
-            <RowButton
-              title={t('chordPlayer.layout.resetLayout')}
+            <GroupAction
+              label={t('chordPlayer.layout.resetLayout')}
               disabled={!layoutChanged}
               onClick={resetLayout}
             />
