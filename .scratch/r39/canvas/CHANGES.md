@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · Groups: signed out says playlists, no Join with a link while signed out, no second New group with none (the + and the laptop's New) · Groups,GroupsLaptop · pending
 ## Changes
 
 - 2026-11-19 · 9d413f93 · the takes: rows 64 (were 80, content-box), the Play glyph 20, the app's dates (Nov 9, 2026, 6:41 PM; a take recorded November 9) · Takes,TakesLaptop,Take,TakeLaptop · v633

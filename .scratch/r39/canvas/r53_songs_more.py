@@ -239,7 +239,7 @@ GR_JS = js(r'''
       rmOn: st.sheet === 'rm', rmT: 'Remove ' + (st.who ?? '') + '?', doRm: () => S({ gone: [...(st.gone ?? []), st.who], sheet: null }),
       askDel: () => S({ sheet: 'del' }), delOn: st.sheet === 'del', doDel: () => { S({ sheet: null, page: null }); toast('Choir accompanists deleted'); },
       askStop: () => S({ sheet: 'stop' }), stopOn: st.sheet === 'stop', doStop: () => { S({ sheet: null, page: null }); toast('Hymns is no longer shared'); },
-      joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists'); }, signedOut: demo === 'Signed out', canNew: demo !== 'Signed out' && demo !== 'Offline', empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
+      joinGroup: () => { S({ page: 'group' }); toast('You joined Choir accompanists'); }, signedOut: demo === 'Signed out', joinOk: demo !== 'Signed out', canNew: !demo, empty: demo === 'No groups', offline: demo === 'Offline', listAny: !demo, demo: demoOf(['No groups', 'Signed out', 'Offline'], demo, 'demo'),
       esortL: st.esort ?? 'Newest', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px',
       esorts: ['Newest', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'Newest'), mark: l === (st.esort ?? 'Newest') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: false, undo: () => S({ toast: null }) };''')
@@ -247,7 +247,7 @@ GROW = lambda name, sub, act, c, folder=False, faces=None: (lambda h: h.replace(
 GLIST = (IF('listAny', SEC(CAPS('Your groups'), BOXG(GROW('Choir accompanists', '4 members · 2 folders · Owner', 'goGroup', LILAC, faces='AME'), GROW('Piano class, Tuesday', '12 members · 3 folders', 'goGroup', SKY, faces='IRS')))
                        + SEC(CAPS('Shared with me'), BOXG(GROW('Choir hymns', '12 songs · Shared by Maria Ionescu · Choir accompanists', 'goFolder', HONEY, True))), 'true')
          + EMPTY('empty', '◎', 'No groups yet', 'Create a group for your class or choir, or join one with an invite link.', f'{BTN("Join with a link", "openJoin", "", "quiet", 48, False)}{BTN("New group", "openNew", "", "primary", 48, False)}')
-         + EMPTY('signedOut', '◎', 'Share folders with a group', 'Create a group for your class, choir or band and share folders with its members. Sign in to get started.', f'{BTN("Sign in", "", "SignIn.dc.html", "primary", 48, False)}')
+         + EMPTY('signedOut', '◎', 'Share playlists with a group', 'Create a group for your class, choir or band and share playlists with its members. Sign in to get started.', f'{BTN("Sign in", "", "SignIn.dc.html", "primary", 48, False)}')
          + EMPTY('offline', '⌁', 'You’re offline.', 'Groups need the internet. Your own songs are all here.'))
 MEMROW = (f'<div style="min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 6px 4px 6px 16px; box-shadow: inset 0 -1px 0 {FILL}"><span style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: #E9D8C4; font-size: 15px; display: flex; align-items: center; justify-content: center">{{{{m.init}}}}</span><span style="flex: 1; font-size: 16px">{{{{m.n}}}}</span>'
           f'<sc-if value="{{{{m.owner}}}}" hint-placeholder-val="{{{{false}}}}"><span style="padding-right: 12px; font-size: 14px; color: {SOFT}">Owner</span></sc-if><sc-if value="{{{{m.other}}}}" hint-placeholder-val="{{{{true}}}}"><button type="button" aria-label="Options for {{{{m.n}}}}" onClick="{{{{m.ask}}}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{MORE}</button></sc-if></div>')
@@ -271,7 +271,7 @@ GR_SHEETS = (NEWNAME('newOn', 'New group', 'Group name', 'ngName', 'typeNG', 'ma
              + ASK('rmOn', '{{rmT}}', 'They will lose access to the folders shared with this group.', 'Remove', 'doRm')
              + ASK('delOn', 'Delete Choir accompanists?', 'Members will lose access to every folder shared with this group. Your own folders are not affected.', 'Delete', 'doDel')
              + ASK('stopOn', 'Stop sharing Choir hymns?', 'Members of Choir accompanists will no longer see this folder. The folder stays in your library.', 'Stop sharing', 'doStop'))
-grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IB('Join with a link', LINKI, 'openJoin'), 'Songs')
+grph = (IF('isList', TOP('Songs.dc.html', 'Groups', IF('joinOk', IB('Join with a link', LINKI, 'openJoin'), 'true'), 'Songs')
                    + NARROW(GLIST) + STRIP() + IF('canNew', NEWFAB('New group', 'openNew', 32)) + f'<div style="height: 30px; flex: none"></div>', 'true')
         + IF('isGroup', TOP('', '', '', 'Groups', IB('Groups', CHEV_L, 'back')) + NARROW(GPAGE))
         + IF('isFolder', TOP('', '', '', 'Shared with me', IB('Shared with me', CHEV_L, 'back')) + NARROW(FPAGE))
@@ -283,7 +283,7 @@ _GSPLIT = GPAGE.rindex('<section', 0, GPAGE.index(CAPS('Members')))
 GPAGE_L = (f'<div style="display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 40px; align-items: start">'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[:_GSPLIT]}</div>'
            f'<div style="display: flex; flex-direction: column; gap: 16px">{GPAGE[_GSPLIT:]}</div></div>')
-grlm = (IF('isList', LTITLEBAR('Groups', f'<button type="button" onClick="{{{{openJoin}}}}" style="{TBST}">Join with a link</button><span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880) + STRIP(), 'true')
+grlm = (IF('isList', LTITLEBAR('Groups', IF('joinOk', f'<button type="button" onClick="{{{{openJoin}}}}" style="{TBST}">Join with a link</button>', 'true') + IF('canNew', f'<span style="width: 8px"></span>{BTN("New group", "openNew", "", "primary", 44, False)}', 'true'), back='SongsLaptop.dc.html') + LCOL(GLIST_L.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880) + STRIP(), 'true')
         + IF('isGroup', PAGEHEAD_L('back', 'Groups', '') + WIDE(GPAGE_L, 1180))
         + IF('isFolder', PAGEHEAD_L('back', 'Shared with me') + WIDE(FPAGE.replace('Song.dc.html', 'SongLaptop.dc.html'), 704))
         + IF('isJoin', PAGEHEAD_L('back', 'Groups') + WIDE(JPAGE, 480)) + TOASTL)

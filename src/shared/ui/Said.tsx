@@ -16,6 +16,7 @@ export function Said({
   action,
   primary = false,
   quiet = false,
+  pair = false,
 }: {
   icon: LucideIcon
   title: string
@@ -25,6 +26,8 @@ export function Said({
   primary?: boolean
   /** …or a quiet sand pill, the board's quiet BTN at 48 (Clear search, Join with a link). */
   quiet?: boolean
+  /** …or two buttons that carry their own looks, the quiet one then the honey one (Join with a link · New group). */
+  pair?: boolean
 }) {
   return (
     <div className="flex flex-col items-center gap-2 px-5 py-14 text-center">
@@ -44,11 +47,13 @@ export function Said({
         <div
           className={cn(
             'mt-2 flex flex-wrap justify-center gap-3',
-            primary
-              ? '*:h-12.5 *:rounded-pill *:border-0 *:bg-primary *:px-5 *:font-bold *:text-primary-foreground *:hover:brightness-95'
-              : quiet
-                ? '*:h-12 *:rounded-pill *:border-0 *:bg-muted *:px-5 *:text-base *:font-bold *:text-foreground *:hover:brightness-95'
-                : '*:min-h-11 *:border-0 *:bg-transparent *:px-2 *:text-base *:font-semibold *:text-link *:shadow-none *:hover:bg-transparent *:hover:underline',
+            pair
+              ? ''
+              : primary
+                ? '*:h-12.5 *:rounded-pill *:border-0 *:bg-primary *:px-5 *:font-bold *:text-primary-foreground *:hover:brightness-95'
+                : quiet
+                  ? '*:h-12 *:rounded-pill *:border-0 *:bg-muted *:px-5 *:text-base *:font-bold *:text-foreground *:hover:brightness-95'
+                  : '*:min-h-11 *:border-0 *:bg-transparent *:px-2 *:text-base *:font-semibold *:text-link *:shadow-none *:hover:bg-transparent *:hover:underline',
           )}
         >
           {action}
