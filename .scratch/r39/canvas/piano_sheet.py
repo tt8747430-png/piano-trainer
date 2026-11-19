@@ -18,7 +18,7 @@ Every measure is on the 4 scale: groups 12 round with rows of 48 and 8 by 16 pad
 its picture 8 round (concentric); segments 44 high in an 11-round track; blocks 12 16 16 with 8 between."""
 
 INK, SOFT, FILL, LINE, SHEET = '#332921', '#685E56', '#EEE9E2', '#DAD1C8', '#FEFDFB'
-CARD = f'border-radius: 12px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px rgba(51,41,33,.07)'
+CARD = f'border-radius: 14px; background: {SHEET}; overflow: hidden; box-shadow: 0 0 0 1px {LINE}'
 ROW = f'min-height: 48px; box-sizing: border-box; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 16px; color: {INK}'
 SEP = 'box-shadow: inset 0 1px 0 #E9E2D8'
 HONEY_SEP = 'box-shadow: inset 0 1px 0 rgba(176,122,42,.3)'

@@ -8,7 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-(none)
+- 2026-11-19 · (this commit) · one list card on a sheet: hand-copied 12 lists to the kit's 14 ringed card; Chords' post-build patch gone · ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,Exercise,ExerciseLaptop,Intervals,IntervalsLaptop,Metronome,MetronomeLaptop,Pattern,PatternLaptop,Progression,ProgressionLaptop,Scales,ScalesLaptop,Takes,TakesLaptop · **pending**
 
 ## Changes
 
