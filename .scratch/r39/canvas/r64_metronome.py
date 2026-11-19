@@ -19,7 +19,7 @@ ME64 = ME.replace("    return { ...common(st, set), setOn:", """    const states
     return { ...common(st, set), states, setOn:""", 1).replace("startL: st.playing ? 'Stop' : 'Start' };", "startL: st.playing ? 'Stop' : 'Start', playing: !!st.playing, notPlaying: !st.playing, togglePlay: () => set({ playing: !st.playing }), meFlOn: !!st.fl, meFlT: () => set({ fl: !st.fl }), meVolL: (st.vol ?? 100) + '%', meVolDn: () => set({ vol: Math.max(10, (st.vol ?? 100) - 10) }), meVolUp: () => set({ vol: Math.min(100, (st.vol ?? 100) + 10) }) };")
 assert ME64 != ME, 'Metronome return not found'
 ph64 = (TOP64 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
-        + SHOWSTATES() + TEMPO(72) + BEATS(110) + ME_ROWS + '</main>' + BAR64('left: 12px; right: 12px; bottom: 30px'))
+        + SHOWSTATES() + TEMPO(72) + BEATS(110) + ME_ROWS + '</main>' + BAR64('left: 12px; right: 12px; bottom: 34px'))
 lm64 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">'
         + LPAD(TOP64).replace('Main.dc.html', 'Laptop.dc.html')
         # one centred column, the tool first and its settings under it (owner, 2026-11-16: "the page has one focus")

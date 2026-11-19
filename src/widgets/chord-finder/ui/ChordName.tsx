@@ -1,12 +1,7 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import {
-  printedNote,
-  printedSymbol,
-  type FoundChord,
-  type Midi,
-} from '@/shared/lib/music'
+import { printedNote, printedSymbol, type FoundChord, type Midi } from '@/shared/lib/music'
 import { GroupChips } from '@/shared/ui'
 import { readingAt, toneOfKey, type Finding } from '../model/finding'
 import { chordLabel, useChordAbout } from './use-chord-about'
@@ -27,7 +22,9 @@ function Named({ name, line, quiet = false }: { name: ReactNode; line?: string; 
         {name}
       </h2>
       {line ? (
-        <p className="ms-0.5 text-[0.9375rem] text-pretty text-muted-foreground">{line}</p>
+        <p className="ms-0.5 text-[0.9375rem] leading-[normal] text-pretty text-muted-foreground">
+          {line}
+        </p>
       ) : null}
     </div>
   )

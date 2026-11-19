@@ -22,7 +22,7 @@ SCALESP = (f'<a href="Scales.dc.html" aria-label="Open in Scales and keys" style
            f'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{SCALESI}<span style="font-size: 12px; font-weight: 600">Scales</span></a>')
 BAR67 = lambda pos: f'<div role="toolbar" aria-label="Play the chords and open in Scales and keys" style="position: absolute; {pos}; z-index: 40; display: flex; justify-content: center; align-items: center; gap: 12px; pointer-events: none">{PLAY67}{SCALESP}</div>'
 ph67 = (TOP67 + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 24px 16px 120px; display: flex; flex-direction: column; justify-content: center">'
-        + WHEEL67(370, 22) + '</main>' + BAR67('left: 12px; right: 12px; bottom: 30px'))
+        + WHEEL67(370, 22) + '</main>' + BAR67('left: 12px; right: 12px; bottom: 34px'))
 lm67 = (f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP67).replace('Main.dc.html', 'Laptop.dc.html')
         + f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 8px 40px 112px">'
         + WHEEL67(640, 36) + '</div>' + BAR67('left: 50%; translate: -50% 0; bottom: 24px') + '</div>')

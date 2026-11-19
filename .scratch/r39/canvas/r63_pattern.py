@@ -67,8 +67,8 @@ def PMENU63(pos):
 SHEETS63 = BSHEET('moreOn', '{{name}}', PA_MORE) + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS63 = POPOVER('moreOn', '{{name}}', LPA(PA_MORE), 'right: 40px; top: 64px', 320) + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 90px; top: 64px')
 DELETED63 = IF('deleted', EMPTY('deleted', '♪', 'Pattern deleted', 'It left your patterns and the Player’s list. Undo brings it back.'))
-ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 4px -16px 0">{KB60("kbE", 150)}</div>'
-        + TITLE63 + HIDDEN63 + MUSIC63 + PRACT63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 30px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
+ph63 = (IF('isPattern', TOP63 + DELETED63 + IF('notDeleted', f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px 120px; display: flex; flex-direction: column; gap: 16px"><div style="flex: none; margin: 8px -16px 0">{KB60("kbE", 150)}</div>'
+        + TITLE63 + HIDDEN63 + MUSIC63 + PRACT63 + USED63 + '</main>' + BAR63('left: 12px; right: 12px; bottom: 34px') + PMENU63('left: 50%; translate: -50% 0; bottom: 104px')), 'true')
         + IF('notPattern', TOP('', '{{pageT}}', '', 'Back', IB('Back', CHEV_L, 'back')) + NARROW(IF('isEditor', PATED) + IF('isPublish', PATPUB))) + TOASTS)
 lm63 = (IF('isPattern', f'<div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">' + LPAD(TOP63).replace('Accompaniment.dc.html', 'AccompanimentLaptop.dc.html')
         + DELETED63 + IF('notDeleted', f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; padding: 8px 40px 120px 40px">'

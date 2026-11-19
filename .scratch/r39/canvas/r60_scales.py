@@ -104,9 +104,9 @@ SC_KEYS60 = PS.PIANO_SHEET_2D()  # the one Piano sheet, its 2D part
 SHEETS60 = SC_SHEETS + BSHEET('keysOn', 'Piano', SC_KEYS60)
 POPS60 = SC_POPS + POPOVER('keysOn', 'Piano', SC_KEYS60, 'right: 40px; top: 70px')
 
-ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 4px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
+ph60 = (TOP60 + KBPAGE_OPEN + f'<div style="flex: none; margin: 8px 0 0">{KB60("kbE", 150)}</div><main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 120px; display: flex; flex-direction: column; gap: 16px">'
         + TITLE60 + VIEW60(4) + PRACT60 + '</main></div>' + KBPAGE_CSS
-        + BAR60('left: 12px; right: 12px; bottom: 30px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
+        + BAR60('left: 12px; right: 12px; bottom: 34px') + MENU60('playMenu', 'Play', 'dirs', 'left: 50%; translate: -50% 0; bottom: 104px', OCTROW) + MENU60('handsMenu', 'Hands', 'handItems', 'right: 16px; bottom: 104px') + TEMPOPOP('left: 16px; bottom: 104px'))
 # One focus (owner, 2026-11-16: "the floating controls … should be centerd by the main focus content … the practices on
 # the right robs the focus"): on a laptop the scale leads one centred column, the key's rows and Practise follow it in
 # that column, and the floating bar is centred on it.
