@@ -262,10 +262,11 @@ export function AppNav() {
       data-away={away ? '' : undefined}
       className="group/nav pointer-events-none fixed inset-x-0 bottom-0 z-30 print:hidden px-4 pb-(--tab-bar-foot) lg:border-border lg:pointer-events-auto lg:bg-card lg:px-0 lg:inset-y-0 lg:right-auto lg:flex lg:w-62 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18 lg:data-[sidebar=focus]:hidden"
     >
-      <div className="hidden h-20 shrink-0 items-center gap-0.5 px-4 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
+      <div className="mt-6 hidden h-11 shrink-0 items-center gap-0.5 px-4 lg:flex lg:group-data-[sidebar=collapsed]/nav:h-auto lg:group-data-[sidebar=collapsed]/nav:flex-col lg:group-data-[sidebar=collapsed]/nav:py-4">
+        {/* The boards' name is 24 in a narrower serif; the app's at 20 takes the same width beside the capsule, never cut. */}
         <p
           aria-hidden
-          className="min-w-0 flex-1 truncate pl-3 font-display text-[1.5rem] leading-tight font-normal group-data-[sidebar=collapsed]/nav:hidden"
+          className="min-w-0 flex-1 truncate pl-3 font-display text-xl leading-tight font-normal group-data-[sidebar=collapsed]/nav:hidden"
         >
           {t('appName')}
         </p>
@@ -293,11 +294,11 @@ export function AppNav() {
         </div>
       </div>
       {sidebarShown ? (
-        <div className="flex px-4 pb-3 group-data-[sidebar=collapsed]/nav:justify-center">
+        <div className="flex px-4 pt-4 pb-4 group-data-[sidebar=collapsed]/nav:justify-center">
           <SidebarSearch collapsed={collapsed} combo={SEARCH_KEY} />
         </div>
       ) : null}
-      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-[1.625rem] lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:px-4 lg:pt-0">
+      <ul className="pointer-events-auto mx-auto flex h-16 max-w-md gap-0.5 rounded-[2rem] p-1.5 glass landscape-phone:h-13 landscape-phone:w-110 landscape-phone:p-1 landscape-phone:rounded-[1.625rem] lg:h-auto lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-filter-none lg:mx-0 lg:max-w-none lg:flex-col lg:gap-1.5 lg:px-4 lg:pt-0">
         {(sidebarShown ? PLACES.filter((place) => place !== PROFILE) : PLACES).map((place) => {
           // Songs' places under Songs while it is current (the board's SONGS_SUB); the one shown
           // wears the wash, Songs then only bold.
@@ -317,7 +318,7 @@ export function AppNav() {
         })}
       </ul>
       {sidebarShown ? (
-        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-4 pb-4">
+        <div className="flex min-h-0 flex-1 flex-col justify-between gap-3 px-4 pb-6">
           {collapsed ? <span /> : <SidebarRecents />}
           <SidebarAccount collapsed={collapsed} />
         </div>

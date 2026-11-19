@@ -14,7 +14,9 @@ bd=next((l for l in reversed(out) if l.startswith('[')),'[]')
 A={r[0]:r for r in json.loads(app)}; B={r[0]:r for r in json.loads(bd)}
 common=[k for k in B if k in A]
 if not common: print('no common text'); sys.exit()
-anchor=common[0]; dx=A[anchor][1]-B[anchor][1]; dy=A[anchor][2]-B[anchor][2]
+from collections import Counter
+dx,dy=Counter((A[k][1]-B[k][1],A[k][2]-B[k][2]) for k in common).most_common(1)[0][0]
+anchor=next(k for k in common if (A[k][1]-B[k][1],A[k][2]-B[k][2])==(dx,dy))
 print(f'anchor "{anchor}" offset {dx},{dy}; common {len(common)}, board only {len([k for k in B if k not in A])}, app only {len([k for k in A if k not in B])}')
 for k in B:
     if k not in A: print('BOARD ONLY:',k, B[k][1:5]); continue

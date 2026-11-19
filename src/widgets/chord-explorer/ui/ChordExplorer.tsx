@@ -164,8 +164,8 @@ export function ChordExplorer({
   return (
     <div className="flex flex-col gap-4">
       <ChordStage chord={chord} shown={shown} />
-      {/* The body under the stage, 820 wide at most on a laptop, as the board's column. */}
-      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[51.25rem]">
+      {/* The body under the stage, 880 wide at most on a laptop, as the board's column. */}
+      <div className="flex flex-col gap-4 md:mx-auto md:w-full md:max-w-[55rem]">
         <h2 className="sr-only">{printedSymbol(symbol)}</h2>
         <ChordName chord={chord} tones={built.tones} quality={quality} onChange={change} />
         <section className="flex flex-col gap-3 rounded-card bg-card px-3 py-4 ring-1 ring-border">
