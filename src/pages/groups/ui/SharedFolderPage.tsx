@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Folder, Heart, HeartOff, Lock, PencilLine, Play } from 'lucide-react'
+import { Folder, Heart, HeartOff, Lock, PencilLine, Play, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FOLDER_PAINTS, useLibrary, useLibraryStoreApi } from '@/entities/library'
@@ -15,11 +15,13 @@ import { useGroups } from '@/shared/lib/groups'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
 import {
   BackButton,
+  ButtonLink,
   ConfirmDialog,
   DangerGroup,
   DangerRow,
   RowButton,
   RowLink,
+  Said,
   ScreenHeader,
   SettingsGroup,
   type RowAction,
@@ -54,12 +56,23 @@ export function SharedFolderPage() {
     data.kind === 'ready' ? data.groups.find((each) => each.id === folder?.groupId) : undefined
   if (!folder)
     return (
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+      <div className="flex w-full flex-col gap-2 pb-8 lg:gap-8 [&>*:not([data-slot=screen-bar])]:max-w-220">
         <ScreenHeader title={t('groups.sharedWithMe')} back={<BackButton />} />
+        {/* The SharedFolder board's states: the kit's one empty state, worded for a playlist. */}
         {data.kind === 'loading' ? (
           <RowsLoading label={t('groups.loading')} />
         ) : data.kind === 'ready' ? (
-          <p className="text-muted-foreground">{t('groups.notFound')}</p>
+          <Said icon={Users} title={t('groups.notFound')} />
+        ) : data.kind === 'guest' ? (
+          <Said
+            icon={Users}
+            title={t('groups.sharedGuestTitle')}
+            description={t('groups.sharedGuestLine')}
+            primary
+            action={
+              <ButtonLink render={<Link to="/account/sign-in" />}>{t('groups.signIn')}</ButtonLink>
+            }
+          />
         ) : (
           <GroupsState data={data} onRetry={reload} />
         )}

@@ -124,6 +124,8 @@ export const songs = {
     stopTitle: 'Stop sharing {{name}}?',
     stopBody:
       'Members of {{group}} will no longer see this playlist. The playlist stays in your library.',
+    sharedGuestTitle: 'Sign in to see this playlist',
+    sharedGuestLine: 'A playlist shared with you in a group opens once you sign in.',
     notFound: 'This playlist is no longer shared with you.',
     groupGone: 'This group no longer exists, or you are no longer a member.',
   },

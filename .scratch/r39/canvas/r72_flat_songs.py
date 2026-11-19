@@ -21,14 +21,14 @@ _ROWS = [{'t': t, 's': s, 'v': v, 'when': w, 'add': a, 'pic': INCIPIT(INC.get(t,
 
 FL_JS = r'''
     const S = (o) => set(o), q = (st.q ?? '').trim().toLowerCase(), sort = st.sort ?? 'Last played', dir = st.dir ?? 'Descending';
-    const selOn = !!st.sel, picked = st.picked ?? [], demo = st.demo ?? null, bare = demo === 'bare';
+    const selOn = !!st.sel, picked = st.picked ?? [], demo = st.demo ?? null, bare = demo === 'bare', guestOn = demo === 'out';
     const order = { 'Last played': (r) => -ROWS.indexOf(r), 'Title': (r) => r.t, 'Composer': (r) => r.s, 'Added': (r) => r.add };
     let list = ROWS.filter((r) => !q || (r.t + ' ' + r.s).toLowerCase().includes(q));
     list = [...list].sort((a, b) => { const x = order[sort](a), y = order[sort](b); return (x > y ? 1 : x < y ? -1 : 0) * (dir === 'Ascending' ? 1 : -1); });
     const rows = list.map((r) => { const on = picked.includes(r.t); return { ...r, on, ckBg: on ? '#332921' : 'transparent', ckLine: on ? '#332921' : '#BFB3A7', ckMark: on ? 1 : 0,
       tap: () => selOn ? S({ picked: on ? picked.filter((x) => x !== r.t) : [...picked, r.t] }) : null, more: (e) => S({ sheet: 'row', row: r.t, menuPos: ANCHOR(e, 300) }) }; });
     const menu = (L, cur, key) => L.map((l) => ({ l, on: l === cur, mark: l === cur ? 1 : 0, pick: () => S({ [key]: l, sheet: null }) }));
-    return { ...common(st, set), rows, count: bare ? '0 songs' : list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
+    return { ...common(st, set), rows, guestOn, notGuest: !guestOn, count: bare ? '0 songs' : list.length + (list.length === 1 ? ' song' : ' songs'), sortL: sort,
       sortOn: st.sheet === 'sort', openSort: (e) => S({ sheet: 'sort', menuPos: ANCHOR(e, 280) }), sorts: ['Last played', 'Title', 'Composer', 'Added'].map((l) => ({ l, on: l === sort, mark: l === sort ? 1 : 0, pick: () => S({ sort: l, dir: l === 'Title' || l === 'Composer' ? 'Ascending' : 'Descending', sheet: null }) })), dirs: menu(['Ascending', 'Descending'], dir, 'dir'),
       rowOn: st.sheet === 'row', menuPos: st.menuPos ?? 'right: 16px; top: 120px', rowT: st.row ?? 'Amazing Grace', q: st.q ?? '', typed: (e) => S({ q: e.target.value }),
       none: list.length === 0 && !bare, noneT: 'No songs match “' + (st.q ?? '') + '”', clear: () => S({ q: '' }), some: list.length > 0 && !bare, bare, notBare: !bare, canSel: !selOn && list.length > 0 && !bare,
@@ -50,9 +50,9 @@ FL_JS = r'''
       hasQ: !!q && !bare, noQ: !q, fold: FOLD.filter(([t]) => q && t.toLowerCase().includes(q)).map(([t, n, c]) => ({ t, n, c })), anyFold: !!q && FOLD.some(([t]) => t.toLowerCase().includes(q)), someQ: !!q && list.length > 0,
       noneQ: !!q && list.length === 0 && !FOLD.some(([t]) => t.toLowerCase().includes(q)), exQ: 'Search Explore for “' + (st.q ?? '').trim() + '”',
       moreOn: st.sheet === 'more', openMore: (e) => S({ sheet: 'more', menuPos: ANCHOR(e, 200) }),
-      states: [['bare', BARE_L], ['search', 'No results']].map(([k, l]) => ({ l, bg: (k === 'search' ? q === 'chopin' : demo === k) ? '#332921' : '#EEE9E2', pick: () => k === 'search' ? S({ q: q === 'chopin' ? '' : 'Chopin' }) : S({ demo: demo === k ? null : k }) })) };'''
-def FLJS(rows, bare_l='A new learner'):
-    return js('    const ROWS = ' + json.dumps(rows, ensure_ascii=False) + '; const FOLD = ' + json.dumps([[t, n, c] for t, n, c, k in FOLDERS_ALL if k != 'shared'], ensure_ascii=False) + '; const BARE_L = ' + json.dumps(bare_l) + ';' + FL_JS)
+      states: (GUEST ? [['out', 'Signed out']] : [['bare', BARE_L], ['search', 'No results']]).map(([k, l]) => ({ l, bg: (k === 'search' ? q === 'chopin' : demo === k) ? '#332921' : '#EEE9E2', pick: () => k === 'search' ? S({ q: q === 'chopin' ? '' : 'Chopin' }) : S({ demo: demo === k ? null : k }) })) };'''
+def FLJS(rows, bare_l='A new learner', guest=False):
+    return js('    const GUEST = ' + ('true' if guest else 'false') + '; const ROWS = ' + json.dumps(rows, ensure_ascii=False) + '; const FOLD = ' + json.dumps([[t, n, c] for t, n, c, k in FOLDERS_ALL if k != 'shared'], ensure_ascii=False) + '; const BARE_L = ' + json.dumps(bare_l) + ';' + FL_JS)
 
 HEART_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="#B84A3E" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg>'
 SHARED_T = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#2F5A35" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"></path></svg>'
@@ -316,9 +316,10 @@ _SHHEAD = lambda w: (f'<div style="display: flex; align-items: center; gap: 16px
                      f'<span style="font-size: 15px; color: {SOFT}">Shared by Maria Ionescu in Choir accompanists</span><span style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: {SOFT}">{LOCK}View only · 4 songs</span></span></div>')
 # The playlist's name stands in the bar, as every playlist's does (edge-lines 8: an empty bar is a hole); the head
 # under it is the cover and who shared it.
-shph = (f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
-        f'{_SHHEAD(112)}{SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="4"><div style="position: relative">{SONGROW("Song.dc.html")}</div></sc-for>')}</main>{TABBAR("Songs")}')
-shlm = (f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 32px">'
-        f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All songs"', 'aria-label="Choir hymns"', 1)}</main>')
-detail('SharedFolder', 'Choir hymns', FLJS([{'t': a, 's': b, 'v': c, 'when': d, 'add': 0, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d in CHOIR]), shph, shlm, '', ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('.dc.html')), ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('Laptop.dc.html')), 'Songs')
+_SHOUT = EMPTY('guestOn', '◎', 'Sign in to see this playlist', 'A playlist shared with you in a group opens once you sign in.', f'{BTN("Sign in", "", "SignIn.dc.html", "primary", 48, False)}')  # signed out: the kit's one empty state, the app's words
+shph = (IF('guestOn', TOP('Songs.dc.html', 'Shared with me', '', 'Songs') + NARROW(_SHOUT)) + IF('notGuest', f'{TOP("Songs.dc.html", "Choir hymns", "", "Songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 120px; display: flex; flex-direction: column; gap: 20px">'
+        f'{_SHHEAD(112)}{SONGLIST(f'<sc-for list="{{{{rows}}}}" as="r" hint-placeholder-count="4"><div style="position: relative">{SONGROW("Song.dc.html")}</div></sc-for>')}</main>', 'true') + SHOWSTATES())  # a playlist is opened from Songs: no tab bar, as every page off the four places
+shlm = (IF('guestOn', LTITLEBAR('Shared with me', '', 'SongsLaptop.dc.html') + LCOL(_SHOUT.replace('SignIn.dc.html', 'SignInLaptop.dc.html'), 880)) + IF('notGuest', f'{LPLACEBAR("Choir hymns", "4 songs")}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 32px">'
+        f'{_SHHEAD(160)}{LTABLE.replace('aria-label="All songs"', 'aria-label="Choir hymns"', 1)}</main>', 'true') + SHOWSTATES())
+detail('SharedFolder', 'Choir hymns', FLJS([{'t': a, 's': b, 'v': c, 'when': d, 'add': 0, 'pic': INCIPIT(INC.get(a, (2, 4)))} for a, b, c, d in CHOIR], guest=True), shph, shlm, '', ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('.dc.html')), ROWMENU('rowOn', '{{rowT}}', VIEWITEMS('Laptop.dc.html')), 'Songs')
 print('flat songs ok')

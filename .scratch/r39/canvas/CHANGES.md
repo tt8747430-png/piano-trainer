@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · a shared playlist: a Signed out state in the app's words, no tab bar off the four places · SharedFolder,SharedFolderLaptop · pending
 - 2026-11-19 · (this commit) · Groups: signed out says playlists, no Join with a link while signed out, no second New group with none (the + and the laptop's New) · Groups,GroupsLaptop · pending
 ## Changes
 
