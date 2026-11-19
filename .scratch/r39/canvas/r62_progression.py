@@ -58,7 +58,7 @@ SONGS62 = (f'<section style="flex: none; display: flex; flex-direction: column; 
 # the floating bar, as Scales': Loop on the left, Play with what it plays, Practise in the Player on the right
 LOOPI = f'<svg viewBox="0 0 24 24" width="20" height="20" {I}><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>'
 LOOPP = f'<button type="button" aria-label="Loop" aria-pressed="{{{{loop}}}}" onClick="{{{{toggleLoop}}}}" style="pointer-events: auto; justify-self: end; flex: none; min-width: 56px; padding: 0 12px; border: 0; {GLASSGRP}; background: {{{{loopTint}}}}; color: {{{{loopInk}}}}; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.05">{LOOPI}<span style="font-size: 12px; font-weight: 600">Loop</span></button>'
-PLAYPR = PLAYSC.replace('<span>Play scale</span>', '<span>Play</span>').replace('aria-label="Play: up, down, octaves"', 'aria-label="What it plays"').replace('width: 184px', 'width: 152px')
+PLAYPR = PLAYSC.replace('<span>Play scale</span>', '<span>Play</span>').replace('aria-label="Play: up, down, octaves"', 'aria-label="What it plays"')
 BAR62 = lambda pos: f'<div role="toolbar" aria-label="Loop and play" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">{LOOPP}{PLAYPR}<span></span></div>'
 def PMENU62(pos):
     head = lambda t: f'<p style="margin: 6px 12px 4px; font-size: 13px; font-weight: 600; color: {SOFT}">{t}</p>'

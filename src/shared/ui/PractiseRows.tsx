@@ -62,12 +62,12 @@ export function PlayRow({
               <Play aria-hidden className="size-3.5 fill-current" />
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="text-base font-semibold">{title}</span>
+              <span className="text-base leading-[normal] font-semibold">{title}</span>
               <span
                 className={
                   here
                     ? 'text-sm leading-snug text-pretty text-muted-foreground'
-                    : 'truncate text-sm text-muted-foreground'
+                    : 'truncate text-sm leading-[normal] text-muted-foreground'
                 }
               >
                 {detail}

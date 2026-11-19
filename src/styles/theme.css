@@ -1049,9 +1049,9 @@
   }
 }
 
-/* What is docked beside the sidebar starts where the screen does. */
+/* What is docked beside the sidebar starts where the screen does: at its 248 (15.5rem), as `pl-sidebar`. */
 @utility left-sidebar {
-  left: --spacing(64);
+  left: --spacing(62);
 }
 @utility left-sidebar-collapsed {
   left: --spacing(18);

@@ -311,6 +311,7 @@ export function RowPlay({
           <FloatingPiece
             label={t('player:loop')}
             caption={t('player:loop')}
+            round
             aria-pressed={looping}
             onClick={toggleLoop}
             className="aria-pressed:bg-foreground aria-pressed:text-background aria-pressed:hover:bg-foreground"
@@ -333,8 +334,8 @@ export function RowPlay({
               <KeysIcon aria-hidden />
             </FloatingPieceLink>
           ) : (
-            // With no Practise its place stays empty, so Play keeps the centre (the board's BAR62).
-            <span aria-hidden className="w-18 shrink-0" />
+            // With no Practise its place stays empty (the board's BAR62).
+            <span aria-hidden />
           )}
         </FloatingPieces>
       </FloatingActions>

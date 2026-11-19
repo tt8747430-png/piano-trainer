@@ -300,7 +300,9 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
       </div>
       <FloatingActions>
         <FloatingPieces label={t('practice:transport')}>
-          {exercise.options.oneKey ? null : (
+          {exercise.options.oneKey ? (
+            <span aria-hidden />
+          ) : (
             <KeyPicker
               label={t('practice:exercisePage.key')}
               value={musicKey}

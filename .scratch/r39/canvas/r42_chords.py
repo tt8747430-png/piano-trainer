@@ -891,18 +891,29 @@ def SWROW(html, on, act):
 B_PIANO = PS.PIANO_SHEET(True, 3, 5)
 PIANOBTN = lambda: GLASSBTN('Piano', KEYSI, 'openKeys')
 # content never shows through the bar: the page fades out under it (the tab bar's rule, v24)
-DOCK_A_PHONE = ''  # no band behind the floating buttons
-DOCK_A_LAPTOP = ''
+# The floating bar (owner R42 v52-v72: Play centred and honey, its choice of how in one split; Hands a menu button by
+# Play; the voicing a piece of its own): Scales' BAR60 shape, glass pieces either side of the honey split, no band behind
+VDOTSI = '<svg viewBox="0 0 24 22" width="24" height="22" aria-hidden="true"><path d="M2 3.5H22M2 7.5H22M2 11.5H22M2 15.5H22M2 19.5H22" stroke="currentColor" stroke-opacity=".28" stroke-width="1"></path><sc-for list="{{vDots}}" as="d" hint-placeholder-count="4"><ellipse cx="{{d.cx}}" cy="{{d.cy}}" rx="2.9" ry="2.05" transform="rotate(-18 {{d.cx}} {{d.cy}})" fill="currentColor"></ellipse></sc-for></svg>'
+VOICEP = PIECE('Voicing: {{voicingName}}', '{{voicingName}}', VDOTSI, 'aria-haspopup="dialog" onClick="{{openVMenu}}"')
+HANDSP = PIECE('Hands: {{handsLabel}}', 'Hands', HANDSI, 'aria-haspopup="menu" onClick="{{openHandsMenu}}"')
+PLAYCH = (f'<div role="group" aria-label="Play" style="pointer-events: auto; flex: none; min-width: 176px; {TINTGRP}; display: flex; align-items: center">'
+          f'<button type="button" aria-pressed="{{{{playing}}}}" onClick="{{{{playMain}}}}" style="flex: 1; min-width: 0; height: 100%; padding: 0 0 0 16px; border: 0; background: transparent; color: #332921; font: inherit; font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; white-space: nowrap">'
+          f'<sc-if value="{{{{notPlaying}}}}" hint-placeholder-val="{{{{true}}}}">{PLAYI}<span>{{{{playWord}}}}</span></sc-if><sc-if value="{{{{playing}}}}" hint-placeholder-val="{{{{false}}}}">{STOPI}<span>Stop</span></sc-if></button>'
+          f'<span aria-hidden="true" style="width: 1px; height: 28px; background: rgba(51,41,33,.22)"></span><button type="button" aria-label="Play as" aria-haspopup="menu" onClick="{{{{openPlayAs}}}}" style="flex: none; width: 48px; height: 100%; border: 0; background: transparent; color: #332921; display: flex; align-items: center; justify-content: center">{CHEV_D}</button></div>')
+BARCH = lambda pos: (f'<div role="toolbar" aria-label="Voicing, play and hands" style="position: absolute; {pos}; z-index: 40; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; pointer-events: none">'
+                     f'<span style="display: flex; justify-content: flex-end">{VOICEP}</span>{PLAYCH}<span style="display: flex; justify-content: flex-start">{HANDSP}</span></div>')
+DOCK_A_PHONE = BARCH('left: 12px; right: 12px; bottom: 34px')
+DOCK_A_LAPTOP = BARCH('left: 50%; translate: -50% 0; bottom: 24px; width: 560px')
 def LAYERS(phone_like, concept):
-    out = (CTOAST if phone_like else CTOAST_L) + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('96px' if phone_like else '92px'))
+    out = (CTOAST if phone_like else CTOAST_L) + PLAYASMENU('left: 50%; transform: translateX(-50%); bottom: ' + ('104px' if phone_like else '100px'))
     if phone_like:
-        out += HANDSMENU('right: 12px; bottom: 96px' if concept == 'A' else 'right: 12px; bottom: 150px')
+        out += HANDSMENU('right: 16px; bottom: 104px' if concept == 'A' else 'right: 12px; bottom: 150px')
         for cond, title, body in (('isKeys', 'Piano', B_PIANO), ('isNext', '{{nextTitle}}', B_NEXT), ('isTr', 'Key', B_TR), ('isVMenu', 'Voicing', VLIST)):
             out += BSHEET(cond, title, body)
         out += DRAWERS(True)
     else:
-        out += HANDSMENU('left: calc(50% + 80px); bottom: 92px')
-        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: min(calc(50% + 420px), calc(100% - 416px)); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 92px')):
+        out += HANDSMENU('left: calc(50% + 160px); bottom: 100px')
+        for cond, title, body, pos in (('isKeys', 'Piano', B_PIANO, 'right: 24px; top: 76px'), ('isNext', '{{nextTitle}}', B_NEXT, 'left: min(calc(50% + 420px), calc(100% - 416px)); top: 330px'), ('isTr', 'Key', B_TR, 'right: calc(50% + 426px); top: 300px'), ('isVMenu', 'Voicing', VLIST, 'left: calc(50% - 400px); bottom: 100px')):
             out += POPOVER(cond, title, body, pos, 400)
         out += DRAWERS(False)
     return out

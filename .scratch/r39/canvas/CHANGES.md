@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-19 · (this commit) · the Practice pages' floating bar: Chords' bar back (Voicing · Play chord ⌄ · Hands, lost with its fade), the honey Play one piece (176 growing to its words, word 16 in; was 152, 168, 184) · Chords,ChordsLaptop,Scales,ScalesLaptop,Intervals,IntervalsLaptop,Progression,ProgressionLaptop,Pattern,PatternLaptop,Exercise,ExerciseLaptop · **pending**
+
 ## Changes
 
 - 2026-11-19 · 9d4524ac · one laptop sub-page bar: LTITLEBAR the 56 (was 88), Back 40 in, the title 12 after it, the content 24 under · AdminLaptop,AppLayersLaptop,ArchiveLaptop,ExploreLaptop,GroupsLaptop,LearnLaptop,LearnYoursLaptop,LegalLaptop,PatternLaptop,PatternNewLaptop,ProfileLaptop,ProgressionEditLaptop,SectionLaptop,SettingsLaptop,SharedFolderLaptop,SongSettingsLaptop,TakesLaptop,TrashLaptop · v635

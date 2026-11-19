@@ -162,7 +162,7 @@ export function ToolPage({
         <FloatingActions>
           {dial}
           {play ? (
-            <FloatingPieces label={title}>
+            <FloatingPieces label={title} tool>
               {bar}
               <FloatingPlayPiece
                 label={play.label}

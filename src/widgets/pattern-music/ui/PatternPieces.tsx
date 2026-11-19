@@ -69,9 +69,9 @@ export function PatternPieces({
           menuLabel={menuLabel}
           menu={menu}
         />
-        {/* Practised by the page's rows, never a third piece: its room kept, so Play stays centred
-            (the board's BAR63: Loop · Play · an empty span). */}
-        <span aria-hidden className="w-18 shrink-0" />
+        {/* Practised by the page's rows, never a third piece: its place kept empty (the board's
+            BAR63: Loop · Play · an empty span). */}
+        <span aria-hidden />
       </FloatingPieces>
     </FloatingActions>
   )
