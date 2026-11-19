@@ -1,6 +1,7 @@
 import { Play, Square } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import { INTERVALS, spanInterval } from '@/shared/lib/music'
 import type { notate } from '@/shared/lib/notation'
 import { InfoTip, LazyScoreView } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -35,7 +36,17 @@ export function IntervalHero({
   if (songs?.down)
     facts.push({ label: t('intervals.songsDown'), value: songs.down[locale].join(' · ') })
   if (inverse) facts.push({ label: t('intervals.inverts'), value: said(inverse).title })
-  const heard = songs?.up[locale][0]
+  // A compound interval sounds as its simple one an octave wider, as the board says it (r41_practice).
+  const { semitones } = INTERVALS[name]
+  const heard =
+    songs?.up[locale][0] ??
+    (semitones === 24
+      ? t('intervals.twoOctaves')
+      : semitones > 12
+        ? t('intervals.octaveWider', {
+            name: said(spanInterval(semitones - 12)).title.toLocaleLowerCase(locale),
+          })
+        : undefined)
   return (
     <section aria-labelledby="interval-chosen" className="flex flex-col gap-2 lg:gap-3">
       <div className="flex items-center gap-0.5">

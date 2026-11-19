@@ -58,7 +58,7 @@ export function IntervalExplorer({
   const { order, speed } = useSettings(selectIntervals)
   const playback = usePlayback<RowInterval | 'all'>()
   const root = noteFromParam(view.root)
-  // An interval no letter writes over this root (the A9 over E♯) falls back to the 5th.
+  // An interval no letter writes over this root (past a double sharp or flat) falls back to the 5th.
   const chosen: RowInterval = writesInterval(root, view.iv) ? view.iv : 'P5'
   const example = useMemo(() => intervalExample(root, chosen), [root, chosen])
   const score = useMemo(

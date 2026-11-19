@@ -11,7 +11,21 @@ describe('the Intervals page’s rows', () => {
   })
 
   it('lists past the octave the degrees a chord symbol writes', () => {
-    expect(INTERVAL_ROWS.compound).toEqual(['m9', 'M9', 'A9', 'P11', 'A11', 'm13', 'M13'])
+    expect(INTERVAL_ROWS.compound).toEqual([
+      'm9',
+      'M9',
+      'm10',
+      'M10',
+      'P11',
+      'A11',
+      'd12',
+      'P12',
+      'm13',
+      'M13',
+      'm14',
+      'M14',
+      'P15',
+    ])
   })
 
   it('plays every interval in turn for Play all, each the way chosen', () => {

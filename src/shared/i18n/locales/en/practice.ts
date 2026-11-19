@@ -210,8 +210,13 @@ export const practice = {
     from: 'From',
     // The chosen interval: what it sounds like, and its facts behind its ⓘ (canvas 170).
     soundsLike: 'Sounds like',
+    // A compound interval's Sounds like: its simple interval an octave wider.
+    octaveWider: 'A {{name}}, an octave wider',
+    twoOctaves: 'The same note, two octaves apart',
     inverts: 'Inverts to',
     chosen: 'Interval',
+    // The musician's two groups over the tiles (r61_intervals.py, GRID61).
+    group: { simple: 'Simple', compound: 'Compound' },
     written: 'The interval written',
     // How every row plays its interval, as ear-training apps and exam syllabi name it (R29-P12).
     playAs: 'Play as',
@@ -236,10 +241,17 @@ export const practice = {
       m9: 'A minor 2nd an octave higher: the ♭9 of a dominant chord.',
       M9: 'A major 2nd an octave higher: the 9th of a chord.',
       A9: 'An augmented 2nd an octave higher: the #9 of a blues dominant.',
+      m10: 'A minor 3rd an octave higher: a minor chord spread wide.',
+      M10: 'A major 3rd an octave higher: the left hand’s stride tenth.',
       P11: 'A 4th an octave higher: the 11th of a chord.',
       A11: 'An augmented 4th an octave higher: the #11 of a Lydian chord.',
+      d12: 'A diminished 5th an octave higher: the tritone spread wide.',
+      P12: 'A 5th an octave higher: the third harmonic of the bass.',
       m13: 'A minor 6th an octave higher: the ♭13 of a dominant chord.',
       M13: 'A major 6th an octave higher: the 13th of a chord.',
+      m14: 'A minor 7th an octave higher: a dominant 7th spread wide.',
+      M14: 'A major 7th an octave higher: a major 7th spread wide.',
+      P15: 'The same note two octaves higher.',
     },
 
     playAll: 'Play all',
