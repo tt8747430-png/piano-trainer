@@ -11,6 +11,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Changes
 
+- 2026-11-19 · dad864f5 · Chord finder laptop: the keys 8 under the bar, the name 16 under them (were 24 inside the bar) · ChordFinderLaptop · pending
+
 - 2026-11-19 · 5e3c908e · Exercise: the keys 8 under the bar, as its siblings (its generator kept 4) · Exercise · v618
 
 - 2026-11-19 · 5d55594e · the Practice libraries' laptop head as LTITLEBAR (88, Back 44 in) and their column on the 56 every other laptop board keeps (was 40, its own head) · AccompanimentLaptop,FingerTechniqueLaptop,JazzVocabularyLaptop,ProgressionsLaptop · v617
