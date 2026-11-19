@@ -1,3 +1,5 @@
+import { mergeProps } from '@base-ui/react/merge-props'
+import { useRender } from '@base-ui/react/use-render'
 import { Check, ChevronRight } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
@@ -105,8 +107,8 @@ export function GroupSegmented<V extends OptionValue>({
 }
 
 /**
- * A row that opens its choice (a sheet of options, a page, a picker's list): its name, its value in
- * Soft Ink, and a chevron. Given as a picker's `trigger`, the picker opens it.
+ * A row that opens what it names, its value in Soft Ink and a chevron at its end: a sheet by default,
+ * or with `render` a link to a page (a progression's songs and its other ways, the board's GROUP link).
  */
 export function GroupLink({
   label,
@@ -114,6 +116,7 @@ export function GroupLink({
   mark,
   setting,
   className,
+  render,
   ...button
 }: {
   label: string
@@ -121,31 +124,41 @@ export function GroupLink({
   /** The value's glyph before it, in Soft Ink (a swipe slot's act, the board's P_SWIPE). */
   mark?: ReactNode
   setting?: string
+  /** The page it opens, a link in place of the button (the row is then no sheet's trigger, nor a setting's home). */
+  render?: useRender.RenderProp
 } & Omit<ComponentProps<'button'>, 'value' | 'children'>) {
-  return (
-    <button
-      type="button"
-      data-setting={setting}
-      aria-haspopup="dialog"
-      {...button}
-      className={cn(
-        ROW,
-        'text-left transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
-        className,
-      )}
-    >
-      <span className="shrink-0">{label}</span>
-      {mark ? (
-        <span className="flex min-w-0 flex-1 items-center justify-end gap-3 text-muted-foreground">
-          {mark}
-          <span className="truncate">{value}</span>
-        </span>
-      ) : (
-        <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">{value}</span>
-      )}
-      <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-    </button>
-  )
+  return useRender({
+    defaultTagName: 'button',
+    render: render ?? <button type="button" aria-haspopup="dialog" data-setting={setting} />,
+    props: mergeProps<'button'>(
+      {
+        ...button,
+        className: cn(
+          ROW,
+          'text-left text-foreground no-underline transition-colors hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.06] focus-visible:outline-none',
+          className,
+        ),
+      },
+      {
+        children: (
+          <>
+            <span className="shrink-0">{label}</span>
+            {mark ? (
+              <span className="flex min-w-0 flex-1 items-center justify-end gap-3 text-muted-foreground">
+                {mark}
+                <span className="truncate">{value}</span>
+              </span>
+            ) : (
+              <span className="min-w-0 flex-1 truncate text-end text-muted-foreground">
+                {value}
+              </span>
+            )}
+            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+          </>
+        ),
+      },
+    ),
+  })
 }
 
 /**

@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Play } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectProgressions, useSettings } from '@/entities/settings'
@@ -23,7 +22,7 @@ import {
   LEAD_INS,
   CHORD_SIZES,
 } from '@/shared/lib/music'
-import { ActionMenu, KeyPicker, RowLink } from '@/shared/ui'
+import { ActionMenu, GroupLink, GroupRows, KeyPicker } from '@/shared/ui'
 import {
   changedView,
   playedNumerals,
@@ -177,18 +176,23 @@ export function ProgressionExplorer({
             musicKey={key}
             onShow={setShown}
           />
-          <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined}>
-            {/* The Chord player plays the same chords in a style: each page opens the other. */}
-            <li>
-              <RowLink
-                title={t('practice:progressions.inChordPlayer')}
-                detail={t('practice:progressions.inChordPlayerLine')}
-                icon={Play}
-                paint="lilac"
-                render={<Link to="/practice/chord-player" search={{ p: view.p, key: view.key }} />}
+          <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined} />
+          {/* The Chord player is not a song: its own card under the songs, with the way to a line of
+              the learner's own from this one (the board's SONGS62). */}
+          <GroupRows surface="sheet">
+            <GroupLink
+              label={t('practice:progressions.inChordPlayer')}
+              render={<Link to="/practice/chord-player" search={{ p: view.p, key: view.key }} />}
+            />
+            {typed ? null : (
+              <GroupLink
+                label={t('practice:patterns.makeOwn')}
+                render={
+                  <Link to="/practice/progressions/line" search={{ p: view.p, key: view.key }} />
+                }
               />
-            </li>
-          </ProgressionSongs>
+            )}
+          </GroupRows>
         </div>
       </div>
     </div>
