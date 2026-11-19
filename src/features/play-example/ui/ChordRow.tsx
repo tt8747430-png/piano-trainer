@@ -230,7 +230,7 @@ export function RowRoles() {
   const { t } = useTranslation('music')
   const { chords, sounding, playChord } = useRow()
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4 lg:gap-5">
       <RoleTiles label={t('harmony.roles')}>
         {chords.map(({ chord, caption, symbol, role }, place) => {
           if (!role) return null

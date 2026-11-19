@@ -43,7 +43,7 @@ export function RoleTile({
 }) {
   const look = PAINT[ROLE_PAINT[role.role]]
   return (
-    <li className="flex min-w-0 flex-col items-center gap-1.5">
+    <li className="flex min-w-0 flex-col items-center gap-2">
       <button
         type="button"
         aria-label={label}
@@ -64,7 +64,7 @@ export function RoleTile({
           {printedSymbol(chord)}
         </span>
       </button>
-      <span className="max-w-full truncate text-xs text-muted-foreground">{move}</span>
+      <span className="max-w-full truncate text-xs leading-3.5 text-muted-foreground">{move}</span>
     </li>
   )
 }
@@ -76,10 +76,10 @@ export function RoleTile({
 export function RoleLegend() {
   const { t } = useTranslation('music')
   return (
-    <div className="flex flex-wrap items-center gap-y-1 text-[0.8125rem] text-muted-foreground">
-      <span className="flex flex-wrap items-center gap-x-3.5">
+    <div className="flex flex-wrap items-center gap-y-1 text-[0.8125rem] leading-[normal] text-muted-foreground">
+      <span className="flex flex-wrap items-center gap-x-4">
         {(['home', 'away', 'tension'] as const).map((role) => (
-          <span key={role} className="flex items-center gap-1.5">
+          <span key={role} className="flex items-center gap-2">
             <span
               aria-hidden
               className={cn(

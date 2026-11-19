@@ -78,7 +78,7 @@ export function ProgressionExplorer({
   const [shown, setShown] = useShownKeys(context, firstChordShown(row, rowPosition(settings)))
   const lead = view.lead ?? 'none'
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:gap-7">
       <PinnedKeyboard shown={shown} place="top" least={PROGRESSION_KEYS} />
       <div className="flex flex-col gap-4 lg:mx-auto lg:w-full lg:max-w-220 lg:gap-6">
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
