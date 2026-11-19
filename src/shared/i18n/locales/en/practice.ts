@@ -834,6 +834,7 @@ export const practice = {
       menu: 'Chord sheets',
       open: 'Chord sheet: {{name}}. Open another',
       new: 'New sheet',
+      inHand: 'Unsaved sheet',
       all: 'All chord sheets',
     },
     shareMenu: 'Share…',

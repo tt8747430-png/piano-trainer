@@ -807,6 +807,7 @@ export const practice: LocaleResources['practice'] = {
       menu: 'Гармонические сетки',
       open: 'Гармоническая сетка: {{name}}. Открыть другую',
       new: 'Новая сетка',
+      inHand: 'Несохранённая сетка',
       all: 'Все гармонические сетки',
     },
     shareMenu: 'Поделиться…',

@@ -5,13 +5,12 @@ import { ActionMenu, type MenuAction } from '@/shared/ui'
 
 /**
  * The sheet's name over the chart, a menu of the recent sheets (canvas R76's SHEETS76): those opened
- * last, the latest first, the one open checked, the sheet in hand by its name; then New sheet and All
+ * last, the latest first, the one open checked, the sheet in hand as Unsaved sheet; then New sheet and All
  * chord sheets. The Chord player opens on the sheet last open, so the first is where it was left.
  */
 export function SheetsMenu({
   name,
   sheetId,
-  untitled,
   onOpen,
   onNew,
   onAll,
@@ -20,8 +19,6 @@ export function SheetsMenu({
   name: string
   /** One of My chord sheets open, or the sheet in hand (none). */
   sheetId: string | undefined
-  /** The sheet in hand's name. */
-  untitled: string
   onOpen(id: string | undefined): void
   onNew(): void
   onAll(): void
@@ -32,7 +29,11 @@ export function SheetsMenu({
   const open = sheetId ?? IN_HAND
   // The open sheet leads until it is marked opened; a recent sheet since deleted is left out.
   const listed = [open, ...recent.filter((each) => each !== open)].flatMap((each): MenuAction[] => {
-    const named = each === IN_HAND ? untitled : mine.find((sheet) => sheet.id === each)?.name
+    // The sheet in hand is named for what it is, so it never reads as New sheet beside it.
+    const named =
+      each === IN_HAND
+        ? t('chordPlayer.sheets.inHand')
+        : mine.find((sheet) => sheet.id === each)?.name
     if (named === undefined) return []
     return [
       {

@@ -9,7 +9,7 @@ import {
   type PanelChange,
 } from '@/entities/page-layout'
 import { resetEveryLayout, resetPageLayout, restoreLayouts } from '@/features/arrange-page-layout'
-import { isOneOf } from '@/shared/lib'
+import { cn, isOneOf } from '@/shared/lib'
 import { GroupAction, say, SettingsGroup } from '@/shared/ui'
 import { SettingsScreen } from '@/widgets/settings-screen'
 
@@ -53,7 +53,13 @@ export function PageLayoutsPage() {
           const more = changes.length - NAMED
           return (
             // The board's _LAYROW: the page's name, what changed after it, quiet and cut first.
-            <div key={page} className="flex min-h-14 items-center gap-3 py-1.5 pr-2 pl-4 text-base">
+            <div
+              key={page}
+              className={cn(
+                'flex min-h-14 items-center gap-3 py-1.5 pl-4 text-base',
+                changes.length > 0 ? 'pr-2' : 'pr-4',
+              )}
+            >
               <span className="shrink-0">{name}</span>
               <span
                 title={changes.map(said).join(', ')}

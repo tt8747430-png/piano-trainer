@@ -23,7 +23,6 @@ export function ChordPlayerPage() {
           hand={hand}
           sheetId={page.sheetId}
           name={page.name}
-          untitled={t('chordPlayer.untitled')}
           routes={page.routes}
           editing={page.editing}
           onEditing={page.setEditing}

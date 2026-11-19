@@ -182,7 +182,6 @@ export function ChordPlayer({
   hand,
   sheetId,
   name,
-  untitled,
   routes,
   more,
   settings,
@@ -195,8 +194,6 @@ export function ChordPlayer({
   sheetId: string | undefined
   /** Its name: a saved sheet's, or "New chord sheet". */
   name: string
-  /** The sheet in hand's name, among the recent sheets. */
-  untitled: string
   routes: ChordPlayerRoutes
   /** The page's own acts on the sheet's file (Save as my chord sheet…, Share…), in ⋯. */
   more: readonly MenuAction[]
@@ -707,7 +704,6 @@ export function ChordPlayer({
                   <SheetsMenu
                     name={name}
                     sheetId={sheetId}
-                    untitled={untitled}
                     onOpen={routes.openSheet}
                     onNew={onNew}
                     onAll={() => setLibrary(true)}
