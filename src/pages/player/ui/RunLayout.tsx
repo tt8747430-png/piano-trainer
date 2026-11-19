@@ -1,6 +1,7 @@
 import { Gauge, SlidersHorizontal, SlidersVertical, X } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { selectDays, streak, useProgress } from '@/entities/progress'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -15,6 +16,8 @@ import {
   nameMark,
   RoundButton,
   ScreenHeader,
+  Labelled,
+  Segmented,
   Sheet,
   SheetContent,
   Stepper,
@@ -22,8 +25,11 @@ import {
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Progress } from '@/shared/ui/primitives/progress'
+import { useToday } from '@/widgets/practice-days'
 import {
+  PlayedThrough,
   usePlayerShortcuts,
+  WaitLine,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
@@ -129,6 +135,16 @@ export function RunLayout({
     ],
     acts: [],
   }
+  // Played through, as the song Player's: opened as a Wait pass reaches the run's end.
+  const finished = player.feedback?.kind === 'finished' ? player.feedback : null
+  const isFinished = finished !== null
+  const [doneOpen, setDoneOpen] = useState(false)
+  useEffect(() => {
+    if (isFinished) setDoneOpen(true)
+  }, [isFinished])
+  const days = useProgress(selectDays)
+  const today = useToday()
+  const waits = view.mode === 'wait'
   const start = () => {
     setSetupOpen(false)
     practice.play()
@@ -139,8 +155,16 @@ export function RunLayout({
         title={title}
         back={<RoundButton label={t('common:close')} icon={X} onClick={onClose} />}
         settings={
-          <div className="flex items-center rounded-pill glass">
-            <SettingsExtrasContext value={extras}>{settings}</SettingsExtrasContext>
+          <div className="flex items-center gap-2">
+            {/* Wait mode said in the bar while it is on (the chord run's board, `RS_RUNVIEW`). */}
+            {waits ? (
+              <span className="flex h-8 items-center rounded-pill bg-muted px-3 text-[0.8125rem] font-semibold whitespace-nowrap">
+                {t('player:modes.wait.name')}
+              </span>
+            ) : null}
+            <div className="flex items-center rounded-pill glass">
+              <SettingsExtrasContext value={extras}>{settings}</SettingsExtrasContext>
+            </div>
           </div>
         }
       />
@@ -160,6 +184,7 @@ export function RunLayout({
                 {shown.length > 4 ? <RunStaff chords={shown.slice(4)} cell={76} end /> : null}
               </>
             ))}
+          {waits ? <WaitLine feedback={player.feedback} /> : null}
           {place === null ? null : (
             <div className="flex items-center gap-3">
               <Progress
@@ -218,6 +243,22 @@ export function RunLayout({
           <Gauge aria-hidden />
         </FloatingPiece>
       </div>
+      {finished ? (
+        <PlayedThrough
+          open={doneOpen}
+          onOpenChange={setDoneOpen}
+          pass={finished}
+          hands={t(`common:hands.${view.hands}`)}
+          bestBefore={null}
+          tempo={player.tempo}
+          ownTempo={player.ownTempo}
+          streak={streak(days, today)}
+          onPractise={player.setLoop}
+          onLoopBars={player.setLoop}
+          onAgain={practice.play}
+          onTryPlay={() => player.listenAt(player.tempo)}
+        />
+      ) : null}
       <Sheet
         swipeDirection={laptop ? 'right' : 'down'}
         modal={!laptop}
@@ -226,6 +267,19 @@ export function RunLayout({
       >
         <SheetContent title={t('player:setup')} rising dismiss="close">
           <div className="flex flex-col gap-6">
+            <Labelled label={t('player:pace.title')}>
+              <Segmented
+                label={t('player:pace.title')}
+                value={view.mode}
+                options={[
+                  { value: 'listen', label: t('player:practiceSheet.play') },
+                  { value: 'wait', label: t('player:modes.wait.name') },
+                ]}
+                onChange={(mode) =>
+                  mode === 'wait' ? player.setMode('wait') : player.listenAt(player.tempo)
+                }
+              />
+            </Labelled>
             {setup}
             <GroupRows>
               <GroupRow
