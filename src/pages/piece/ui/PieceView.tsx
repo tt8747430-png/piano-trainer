@@ -69,18 +69,19 @@ export function PieceView({ piece }: { piece: Piece }) {
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12 xl:grid-cols-[minmax(0,32.5rem)_minmax(0,1fr)]">
         <section aria-label={t('piece:song')} className="flex min-w-0 flex-col gap-5">
           <PieceFirstPage piece={piece} />
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-1">
+            {/* The title with Edit 8 after its words, a 44 glass circle with the icon in ink (the Song board's EDITB). */}
+            <div className="flex items-center gap-2">
               <p
                 aria-hidden
-                className="min-w-0 font-sans text-[1.75rem]/tight font-bold tracking-[-0.01em] text-balance break-words"
+                className="min-w-0 font-sans text-[1.75rem]/[1.15] font-bold tracking-[-0.01em] text-balance break-words"
               >
                 {entryTitles(piece, locale).primary}
               </p>
               <ButtonLink
                 variant="ghost"
                 size="icon"
-                className="rounded-pill text-muted-foreground"
+                className="shrink-0 rounded-pill glass text-foreground hover:bg-glass"
                 aria-label={t('piece:editScore')}
                 title={t('piece:editScore')}
                 render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
