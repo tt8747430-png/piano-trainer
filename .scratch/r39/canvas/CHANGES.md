@@ -8,10 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-19 · (this commit) · laptop sidebar 16 in (was 14), account email line 8 × 12 · every laptop board (52) · **pending**
+(none)
 
 ## Changes
 
+- 2026-11-19 · 23d09364 · laptop sidebar 16 in (was 14), account email line 8 × 12 · every laptop board (52) · v609
 - 2026-11-19 · e08c7c81 · the kit's CARD pads 16 all round (was 14 × 16); Settings' Paused card and folds on the scale · AppLayers,AppLayersLaptop,Check,CheckLaptop,Exercise,ExerciseLaptop,Explore,ExploreLaptop,Learn,LearnLaptop,Pattern,PatternLaptop,PatternNew,PatternNewLaptop,Profile,ProfileLaptop,ProgressionEdit,ProgressionEditLaptop,Section,SectionLaptop,Settings,SettingsLaptop,SongSettings,SongSettingsLaptop · v608
 - 2026-11-19 · 5eced71f · the public song's chart: card 14, bar cells 8/12 · Explore, ExploreLaptop · v607
 - 2026-11-19 · b6b52a84 · one switch knob: paper face, ink shadow in the kit's TOGGLE, Piano sheet and Player; Chords' patch gone · Admin,AdminLaptop,AllSongs,AllSongsLaptop,Archive,ArchiveLaptop,ChordFinder,ChordFinderLaptop,ChordPlayer,ChordPlayerLaptop,Chords,ChordsLaptop,Folder,FolderLaptop,Groups,GroupsLaptop,Metronome,MetronomeLaptop,PlayChromatic,PlayChromaticLaptop,PlayExercise,PlayExerciseLaptop,PlayProgression,PlayProgressionLaptop,PlayWalk,PlayWalkLaptop,PlayerApp,PlayerDesk,Settings,SettingsLaptop,Songs,SongsLaptop,Takes,TakesLaptop,Trash,TrashLaptop · v606
