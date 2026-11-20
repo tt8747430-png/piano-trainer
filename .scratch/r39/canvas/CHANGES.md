@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · (this commit) · Chords' laptop board opens on Cmaj7 as the app; its staff's lines, barlines and ledgers at an engraver's thickness (1.3, 1.4, 1.4 in its 10-unit space) · Chords,ChordsLaptop · pending
 
 
 ## Changes
 
+- 2026-11-20 · f0763037 · Chords' laptop board opens on Cmaj7 as the app; its staff's lines, barlines and ledgers at an engraver's thickness (1.3, 1.4, 1.4 in its 10-unit space) · Chords,ChordsLaptop · v690
 - 2026-11-20 · 8dbdb8af · rows border-box with min-height raised by their padding (no visible change) · Accompaniment,AllSongs,AllSongsLaptop,AppLayers,AppLayersLaptop,Archive,ArchiveLaptop,Chords,ChordsLaptop,Course,CourseLaptop,EditorDraft,EditorDraftLaptop,FingerTechnique,Folder,FolderLaptop,Groups,GroupsLaptop,JazzVocabulary,Learn,LearnCourses,LearnCoursesLaptop,LearnLaptop,LearnYours,LearnYoursLaptop,Lesson,LessonLaptop,Main,Pattern,PatternLaptop,Profile,ProfileLaptop,Progression,ProgressionLaptop,Progressions,Scales,ScalesLaptop,Songs,SongsLaptop,Trash,TrashLaptop · v689
 - 2026-11-20 · dfb004f5 · the Chord player's keys light the hands as the app (bass G2–F♯3 lilac, tones above it brick, F2–A4 fixed, C names), its + Lucide's · ChordPlayer,ChordPlayerLaptop · v688
 - 2026-11-20 · e8414d08 · Scales' left hand an octave under as the app engraves it; Bravura's sharp, flat, natural and 4/4 on the scale's staff · Scales,ScalesLaptop · v687
