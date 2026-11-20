@@ -16,11 +16,11 @@ import {
   Sheet,
   SheetContent,
   SwitchRow,
+  TransportPopover,
 } from '@/shared/ui'
 import { cn, LAPTOP, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { beatsPerBar, tempoWord } from '@/shared/lib/music'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { BETWEENS, type Between } from '../model/practice-view'
 import { PlayAlongIcon } from './PlayAlongIcon'
 import { DOCK_CAPTIONED } from './dock-sizes'
@@ -310,20 +310,15 @@ export function PracticeSheet({
   // title at its left and no Done; on a phone the sheet.
   if (laptop)
     return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger render={button} />
-        <PopoverContent
-          side="top"
-          sideOffset={12}
-          aria-label={t('practiceSheet.title')}
-          className="max-h-(--available-height) w-105 gap-3 overflow-y-auto rounded-2xl p-3"
-        >
-          <h2 className="px-1 font-sans text-[1.0625rem]/[normal] font-semibold">
-            {t('practiceSheet.title')}
-          </h2>
-          {body}
-        </PopoverContent>
-      </Popover>
+      <TransportPopover
+        title={t('practiceSheet.title')}
+        open={open}
+        onOpenChange={setOpen}
+        trigger={button}
+        className="w-105"
+      >
+        {body}
+      </TransportPopover>
     )
   return (
     <Sheet open={open} onOpenChange={setOpen}>

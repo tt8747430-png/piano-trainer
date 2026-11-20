@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useState, type ReactNode } from 'react'
+import { useState, type ReactElement } from 'react'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
 import {
@@ -7,6 +7,8 @@ import {
   CHORD_LABELS,
   type CameraAngle,
   type ChordLabels,
+  LAPTOP,
+  useMediaQuery,
   useOnline,
 } from '@/shared/lib'
 import { printedKeyName, type Midi } from '@/shared/lib/music'
@@ -21,7 +23,9 @@ import {
   Sheet,
   Segmented,
   SheetContent,
+  SheetTrigger,
   SwitchRow,
+  TransportPopover,
 } from '@/shared/ui'
 
 /** The canvas's BLOCK: a card, 12 round, 12 16 16 inside, its name over its choice, 8 apart. */
@@ -35,7 +39,9 @@ export type PianoShown = 'hands' | 'keys'
  * opened by the screen's own button (`trigger`): Show the piano, then the 3D piano (the hands at the
  * keys) or the 2D keys as two cards, choosing one shows it; then Labels (a chord's own where the
  * screen offers them, else Note names | None, every on-screen piano's); then the Sound and the MIDI
- * keyboard, each a row to its home with its value now.
+ * keyboard, each a row to its home with its value now. On a laptop it is the boards' card: over its
+ * button where that is the transport's (`anchored`, PlayerDesk's, 380 wide), else hung at the bar's
+ * right (Chords' and the Practice pages').
  */
 export function PianoSheet<R extends string>({
   keys,
@@ -43,6 +49,7 @@ export function PianoSheet<R extends string>({
   onKeys,
   onHands,
   trigger,
+  anchored = false,
   labels,
   range,
   stage,
@@ -56,8 +63,10 @@ export function PianoSheet<R extends string>({
    */
   hands?: boolean
   onHands?: (shown: boolean) => void
-  /** The screen's button that opens it, given how to open it. */
-  trigger: (open: () => void) => ReactNode
+  /** The screen's button that opens it (and, over a laptop's transport, closes it). */
+  trigger: ReactElement
+  /** Opened from the transport: on a laptop a popover over its button, as PlayerDesk's Piano. */
+  anchored?: boolean
   /** What the keys carry, where the screen offers a choice (Chords): the canvas's Labels. */
   labels?: { readonly value: ChordLabels; readonly onChange: (labels: ChordLabels) => void }
   /** How many keys it shows and which, where the screen offers a choice (Chords): the canvas's Range. */
@@ -86,128 +95,140 @@ export function PianoSheet<R extends string>({
   const online = useOnline()
   const store = useSettingsStoreApi()
   const named = useSettings((state) => selectKeyboard(state).namedKeys !== 'none')
+  const laptop = useMediaQuery(LAPTOP)
   const shown: PianoShown = hands ? 'hands' : 'keys'
-  return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      {trigger(() => setOpen(true))}
-      <SheetContent title={t('pianoSheet.title')}>
-        <div className="flex flex-col gap-2">
-          <SettingsGroup flush>
-            <SwitchRow label={t('pianoSheet.show')} checked={keys} onCheckedChange={onKeys} />
-          </SettingsGroup>
-          {onHands ? (
-            <RadioCards
-              label={t('pianoSheet.view')}
-              value={shown}
-              disabled={!keys}
-              cards={[
-                {
-                  value: 'hands',
-                  label: t('pianoSheet.hands'),
-                  picture: <Piano3DPicture />,
-                  children: stage ? (
-                    <>
-                      {/* The canvas's rows in the chosen card, a honey hairline over each. */}
-                      <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
-                        <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
-                        <div className="w-42 flex-none">
-                          <Segmented
-                            label={t('pianoSheet.angle')}
-                            value={stage.angle}
-                            options={CAMERA_ANGLES.map((each) => ({
-                              value: each,
-                              label: t(`pianoSheet.angles.${each}`),
-                            }))}
-                            onChange={stage.onAngle}
-                          />
-                        </div>
-                      </div>
-                      <SwitchRow
-                        label={t('pianoSheet.handsOnKeys')}
-                        checked={stage.handsOnKeys}
-                        onCheckedChange={stage.onHandsOnKeys}
-                        className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
+  const body = (
+    <div className="flex flex-col gap-2">
+      <SettingsGroup flush>
+        <SwitchRow label={t('pianoSheet.show')} checked={keys} onCheckedChange={onKeys} />
+      </SettingsGroup>
+      {onHands ? (
+        <RadioCards
+          label={t('pianoSheet.view')}
+          value={shown}
+          disabled={!keys}
+          cards={[
+            {
+              value: 'hands',
+              label: t('pianoSheet.hands'),
+              picture: <Piano3DPicture />,
+              children: stage ? (
+                <>
+                  {/* The canvas's rows in the chosen card, a honey hairline over each. */}
+                  <div className="flex min-h-12 items-center justify-between gap-3 px-4 py-2 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]">
+                    <span className="text-base text-foreground">{t('pianoSheet.angle')}</span>
+                    <div className="w-42 flex-none">
+                      <Segmented
+                        label={t('pianoSheet.angle')}
+                        value={stage.angle}
+                        options={CAMERA_ANGLES.map((each) => ({
+                          value: each,
+                          label: t(`pianoSheet.angles.${each}`),
+                        }))}
+                        onChange={stage.onAngle}
                       />
-                    </>
-                  ) : undefined,
-                },
-                { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
-              ]}
-              onChange={(next) => onHands(next === 'hands')}
-            />
-          ) : null}
-          {range ? (
-            <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-base text-foreground">{t('pianoSheet.range')}</span>
-                <span className="text-sm text-muted-foreground tabular-nums">
-                  {printedKeyName(range.low)} – {printedKeyName(range.high)}
-                </span>
-              </div>
-              <KeyStrip
-                low={range.low}
-                high={range.high}
-                label={t('pianoSheet.rangeShown', {
-                  from: printedKeyName(range.low),
-                  to: printedKeyName(range.high),
-                })}
-                {...(range.move ? { move: range.move } : {})}
-              />
-              <Segmented
-                label={t('pianoSheet.range')}
-                value={range.value}
-                options={range.options}
-                onChange={range.onChange}
-              />
-            </div>
-          ) : null}
-          {labels ? (
-            <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
-              <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
-              <Segmented
-                label={t('pianoSheet.labels')}
-                value={labels.value}
-                options={CHORD_LABELS.map((each) => ({
-                  value: each,
-                  label: t(`pianoSheet.label.${each}`),
-                }))}
-                onChange={labels.onChange}
-              />
-            </div>
-          ) : (
-            <div
-              data-setting="keyboard.namedKeys"
-              className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}
-            >
-              <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
-              <Segmented
-                label={t('pianoSheet.labels')}
-                value={named ? 'names' : 'none'}
-                options={(['names', 'none'] as const).map((each) => ({
-                  value: each,
-                  label: t(`pianoSheet.label.${each}`),
-                }))}
-                onChange={(each) =>
-                  setKeyboard(store, { namedKeys: each === 'names' ? 'c' : 'none' })
-                }
-              />
-            </div>
-          )}
-          <SettingsGroup flush>
-            <RowLink
-              title={t('pianoSheet.sound')}
-              value={t('pianoSheet.grand')}
-              detail={online ? undefined : t('pianoSheet.offline')}
-              render={<Link to="/settings/storage" />}
-            />
-            <RowLink
-              title={t('pianoSheet.midi')}
-              value={midi}
-              render={<Link to="/settings/connect-piano" />}
-            />
-          </SettingsGroup>
+                    </div>
+                  </div>
+                  <SwitchRow
+                    label={t('pianoSheet.handsOnKeys')}
+                    checked={stage.handsOnKeys}
+                    onCheckedChange={stage.onHandsOnKeys}
+                    className="px-4 shadow-[inset_0_1px_0_rgb(176_122_42/0.3)]"
+                  />
+                </>
+              ) : undefined,
+            },
+            { value: 'keys', label: t('pianoSheet.keys'), picture: <Piano2DPicture /> },
+          ]}
+          onChange={(next) => onHands(next === 'hands')}
+        />
+      ) : null}
+      {range ? (
+        <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-base text-foreground">{t('pianoSheet.range')}</span>
+            <span className="text-sm text-muted-foreground tabular-nums">
+              {printedKeyName(range.low)} – {printedKeyName(range.high)}
+            </span>
+          </div>
+          <KeyStrip
+            low={range.low}
+            high={range.high}
+            label={t('pianoSheet.rangeShown', {
+              from: printedKeyName(range.low),
+              to: printedKeyName(range.high),
+            })}
+            {...(range.move ? { move: range.move } : {})}
+          />
+          <Segmented
+            label={t('pianoSheet.range')}
+            value={range.value}
+            options={range.options}
+            onChange={range.onChange}
+          />
         </div>
-      </SheetContent>
+      ) : null}
+      {labels ? (
+        <div className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}>
+          <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
+          <Segmented
+            label={t('pianoSheet.labels')}
+            value={labels.value}
+            options={CHORD_LABELS.map((each) => ({
+              value: each,
+              label: t(`pianoSheet.label.${each}`),
+            }))}
+            onChange={labels.onChange}
+          />
+        </div>
+      ) : (
+        <div
+          data-setting="keyboard.namedKeys"
+          className={`${BLOCK} ${keys ? '' : 'pointer-events-none opacity-45'}`}
+        >
+          <span className="text-base text-foreground">{t('pianoSheet.labels')}</span>
+          <Segmented
+            label={t('pianoSheet.labels')}
+            value={named ? 'names' : 'none'}
+            options={(['names', 'none'] as const).map((each) => ({
+              value: each,
+              label: t(`pianoSheet.label.${each}`),
+            }))}
+            onChange={(each) => setKeyboard(store, { namedKeys: each === 'names' ? 'c' : 'none' })}
+          />
+        </div>
+      )}
+      <SettingsGroup flush>
+        <RowLink
+          title={t('pianoSheet.sound')}
+          value={t('pianoSheet.grand')}
+          detail={online ? undefined : t('pianoSheet.offline')}
+          render={<Link to="/settings/storage" />}
+        />
+        <RowLink
+          title={t('pianoSheet.midi')}
+          value={midi}
+          render={<Link to="/settings/connect-piano" />}
+        />
+      </SettingsGroup>
+    </div>
+  )
+  if (laptop && anchored)
+    return (
+      <TransportPopover
+        title={t('pianoSheet.title')}
+        open={open}
+        onOpenChange={setOpen}
+        trigger={trigger}
+        className="w-95"
+      >
+        {body}
+      </TransportPopover>
+    )
+  return (
+    <Sheet open={open} onOpenChange={setOpen} swipeDirection={laptop ? 'right' : 'down'}>
+      <SheetTrigger render={trigger} />
+      <SheetContent title={t('pianoSheet.title')}>{body}</SheetContent>
     </Sheet>
   )
 }

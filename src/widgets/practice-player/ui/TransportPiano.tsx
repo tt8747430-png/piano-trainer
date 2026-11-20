@@ -56,18 +56,18 @@ export function TransportPiano({
         onChange: range.onChange,
       }}
       midi={midi}
-      trigger={(open) => (
+      anchored
+      trigger={
         <FloatingBarButton
           label={t('common:keyboardTools.keyboard')}
           caption={t(`common:keyboardTools.short.${keys ? (hands ? 'hands' : 'keys') : 'off'}`)}
           aria-haspopup="dialog"
           className={DOCK_CAPTIONED}
-          onClick={open}
         >
           {/* One glyph whatever is shown (the boards' Keyboard): its caption says 3D, 2D or Off. */}
           <KeysIcon aria-hidden />
         </FloatingBarButton>
-      )}
+      }
     />
   )
 }

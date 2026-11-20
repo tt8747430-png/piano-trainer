@@ -70,14 +70,13 @@ export function ChordsPage() {
                   }),
               },
             }}
-            trigger={(open) => (
+            trigger={
               <RoundButton
                 label={t('player:pianoSheet.title')}
                 icon={KeysIcon}
                 aria-haspopup="dialog"
-                onClick={open}
               />
-            )}
+            }
           />
         }
       />
