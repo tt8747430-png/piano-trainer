@@ -18,6 +18,18 @@ between states need one save per state or a screen recording (asked of the owner
 - Pane: section heads 15px at 520; each setting a row of its title (14) over a soft description, its switch
   (36×20, blue on) at the right; rows parted by a hairline; inputs 28 tall, 8 round, a 5% fill, no border.
 
+## claude.ai's Settings, second save (English, Account open)
+- The same 1024×800 dialog, 16 round, 40% black backdrop; header 44: "Settings" 15 at 520 at the left, × 28 at the right.
+- Nav column 211 wide, 12 16 16 inside, 12 between its search (32 tall, 5% fill, a magnifier) and the list.
+- Nav rows 179×32, 8 round, an icon 16 then the label 12 after it, 14 at 435; the chosen a 10% fill. Groups are
+  parted by a hairline 8 in from each side, not labelled (Account · Billing · Usage / Appearance … Wellbeing /
+  Customize · Code). A quiet link pinned at the nav's foot: "API keys ↗", 13, ink 60%, 28 tall.
+- Pane 16 in: the section's title 14; each row a title (14) over a soft description (14, ink 60%) with its control at
+  the right edge: a field 224×28 (5% fill, 8 round), a choice as its value and a chevron, a 28-tall outlined button;
+  rows parted by hairlines. A table's head 13 at 435, ink 60%.
+- The sidebar under it: New · Search · Projects · Artifacts · Scheduled · Design · Customize, each an icon and its word;
+  then "Pinned ⌄" and "Recents ⌄" (12, ink 60%, each folds its list); the account at the foot with a menu chevron.
+
 ## Motion seen in its CSS
 - Enters ease-out (cubic-bezier(.215,.61,.355,1)), 160–200ms for inline cards and notifications (8px slide + fade),
   fades 180ms; every animation off under reduced motion.
