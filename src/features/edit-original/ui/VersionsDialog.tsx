@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
+import { Problem, RowsLoading } from '@/shared/ui'
 import { formatLocale } from '@/shared/lib'
 
 type Listed =
@@ -67,17 +68,17 @@ export function VersionsDialog({
           <AlertDialogDescription>{t('original.versionsBody')}</AlertDialogDescription>
         </AlertDialogHeader>
         {listed.state === 'loading' ? (
-          <p className="text-sm text-muted-foreground">{t('original.versionsLoading')}</p>
+          <RowsLoading label={t('original.versionsLoading')} rows={2} />
         ) : listed.state === 'failed' ? (
-          <p role="alert" className="text-sm">
+          <Problem>
             {t(listed.offline ? 'original.actionOffline' : 'original.actionFailed')}
-          </p>
+          </Problem>
         ) : listed.versions.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t('original.versionsNone')}</p>
         ) : (
           <ul className="flex max-h-72 flex-col rows-hairline overflow-y-auto">
             {listed.versions.map((kept, index) => (
-              <li key={kept.version} className="flex items-center gap-3 py-2">
+              <li key={kept.version} className="flex min-h-14 items-center gap-3 py-1.5">
                 <span className="min-w-0 flex-1 text-sm">
                   {t('original.publishedOn', { date: date.format(new Date(kept.publishedAt)) })}
                 </span>
@@ -86,7 +87,7 @@ export function VersionsDialog({
                 ) : (
                   <Button
                     variant="soft"
-                    className="h-9"
+                    className="min-h-11"
                     disabled={busy}
                     onClick={() => onRestore(kept.version)}
                   >
