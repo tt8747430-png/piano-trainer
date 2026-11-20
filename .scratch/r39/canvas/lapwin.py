@@ -67,7 +67,15 @@ _LAPJS = ('\n{ const R = Component.prototype.renderVals; Component.prototype.ren
 # signed in, Profile, Settings, Language, Help, then Sign out apart. Nothing else sits at the foot (no gear).
 _ACCT_OLD = re.compile(r'<a href="ProfileLaptop\.dc\.html"( aria-current="page")? style="min-height: 52px; border-radius: 10px[^"]*">(<span aria-hidden="true" style="width: 32px[^>]*>[^<]*</span>)<span style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 600">([^<]*)</span><span[^>]*>[^<]*</span></span></a>')
 _UPDOWN = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>'
-_MI = 'min-height: 40px; box-sizing: border-box; padding: 0 12px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #332921; text-decoration: none; font-size: 15px'
+_MI = 'min-height: 40px; box-sizing: border-box; padding: 0 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px; color: #332921; text-decoration: none; font-size: 15px'
+# Each item leads with its Lucide picture (16, ink), 12 before its word, as Claude's account menu (the owner's saved
+# claude.ai, 2026-11-20): the eye finds Settings or Sign out by its shape; a value (English) stands at the end.
+def _mic(d):
+    return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none">' + d + '</svg>'
+_I_USER = _mic('<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>')
+_I_GEAR = _mic('<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>')
+_I_GLOBE = _mic('<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>')
+_I_OUT = _mic('<path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>')
 def _acct(m):
     cur, pic, name = m.group(1) or '', m.group(2), m.group(3)
     row = ('<button type="button" data-acct aria-haspopup="menu" aria-expanded="{{lapAcctAria}}" onClick="{{lapAcctT}}" style="width: 100%; min-height: 52px; border: 0; border-radius: 10px; '
@@ -78,11 +86,11 @@ def _acct(m):
             '<div role="menu" data-acctmenu aria-label="' + name + '" style="position: absolute; left: 12px; right: 12px; bottom: 76px; z-index: 71; '
             'display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px; background: rgba(254,253,251,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)">'
             '<div style="padding: 8px 12px; font-size: 13px; color: #685E56; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ana@example.com</div>'
-            '<a role="menuitem" href="ProfileLaptop.dc.html" style="' + _MI + '">Profile</a>'
-            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Settings</a>'
-            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">Language<span style="color: #6B6259">English</span></a>'
+            '<a role="menuitem" href="ProfileLaptop.dc.html" style="' + _MI + '">' + _I_USER + 'Profile</a>'
+            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">' + _I_GEAR + 'Settings</a>'
+            '<a role="menuitem" href="SettingsLaptop.dc.html" style="' + _MI + '">' + _I_GLOBE + '<span style="flex: 1">Language</span><span style="color: #6B6259">English</span></a>'
             '<div style="height: 1px; margin: 4px 12px; background: #DAD1C8"></div>'
-            '<a role="menuitem" href="SignInLaptop.dc.html" style="' + _MI + '">Sign out</a></div></sc-if>')
+            '<a role="menuitem" href="SignInLaptop.dc.html" style="' + _MI + '">' + _I_OUT + 'Sign out</a></div></sc-if>')
     return '<div data-acctwrap' + (' data-current' if cur else '') + ' style="position: relative">' + row + '</div>' + menu
 
 

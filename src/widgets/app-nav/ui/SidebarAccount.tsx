@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { ChevronsUpDown, UserRound } from 'lucide-react'
+import { ChevronsUpDown, Globe, LogIn, LogOut, Settings, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
@@ -14,9 +14,12 @@ import {
 } from '@/shared/ui/primitives/dropdown-menu'
 import { Tipped } from './Tipped'
 
-/** A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink. */
-const ITEM =
-  'min-h-10 pointer-coarse:min-h-11 justify-between gap-3 rounded-[8px] px-3 text-[0.9375rem]'
+/**
+ * A row of the account menu (lapwin.py's _MI): 40 tall, 12 in, the board's 15px ink, led by its
+ * Lucide picture (16, ink) 12 before its word, as Claude's account menu.
+ */
+const ITEM = 'min-h-10 pointer-coarse:min-h-11 gap-3 rounded-[8px] px-3 text-[0.9375rem]'
+const ICON = 'size-4 text-foreground'
 
 /**
  * The sidebar's foot as Claude's (canvas v392; owner: "the side bar is not done like the for example
@@ -85,22 +88,26 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
           </div>
           {account ? (
             <DropdownMenuItem className={ITEM} render={<Link to="/profile" state={OPEN_PLAINLY} />}>
+              <UserRound aria-hidden className={ICON} />
               {t('nav.profile')}
             </DropdownMenuItem>
           ) : null}
           <DropdownMenuItem className={ITEM} render={<Link to="/settings" state={OPEN_PLAINLY} />}>
+            <Settings aria-hidden className={ICON} />
             {t('nav.settings')}
           </DropdownMenuItem>
           <DropdownMenuItem
             className={ITEM}
             render={<Link to="/settings/general" state={OPEN_PLAINLY} />}
           >
-            {t('settings:language.label')}
+            <Globe aria-hidden className={ICON} />
+            <span className="flex-1">{t('settings:language.label')}</span>
             <span className="text-muted-foreground">{t(`settings:language.${language}`)}</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="mx-3 my-1" />
           {account ? (
             <DropdownMenuItem className={ITEM} onClick={() => setAsking(true)}>
+              <LogOut aria-hidden className={ICON} />
               {t('settings:accountPage.signOut')}
             </DropdownMenuItem>
           ) : (
@@ -108,6 +115,7 @@ export function SidebarAccount({ collapsed }: { collapsed: boolean }) {
               className={ITEM}
               render={<Link to="/account/sign-in" state={OPEN_PLAINLY} />}
             >
+              <LogIn aria-hidden className={ICON} />
               {t('nav.signIn')}
             </DropdownMenuItem>
           )}
