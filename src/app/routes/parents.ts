@@ -271,16 +271,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
       ? up({ to: '/practice/progressions' })
       : up({ to: '/practice/progressions/$progressionId', params: { progressionId } })
   },
-  '/shell/practice/progressions/$progressionId/settings': (from) =>
-    up({
-      to: '/practice/progressions/$progressionId/edit',
-      params: { progressionId: param(from, 'progressionId') },
-    }),
-  '/shell/practice/progressions/$progressionId/publish': (from) =>
-    up({
-      to: '/practice/progressions/$progressionId/settings',
-      params: { progressionId: param(from, 'progressionId') },
-    }),
   '/shell/practice/chord-finder': toPractice,
   '/shell/practice/metronome': toPractice,
   '/shell/practice/circle-of-fifths': toPractice,

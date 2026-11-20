@@ -20,7 +20,7 @@ import { deleteSong, duplicateSong } from '@/features/edit-piece'
 import { useLibraryActs, useSongActions } from '@/features/manage-library'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { SongExportSheet } from '@/features/song-files'
-import { useForgetScreens } from '@/shared/lib'
+import { useForgetScreens, type SettingsWindowState } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
   ActionRow,
@@ -52,11 +52,9 @@ export function SongSettingsWindow({
   piece,
   open,
   onOpenChange,
-}: {
-  piece: Piece
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}) {
+  page,
+  onPage,
+}: { piece: Piece } & SettingsWindowState) {
   const { t } = useTranslation(['piece', 'songs', 'editor'])
   const { account } = useAccount()
   const own = isOwnSongId(piece.id) ? piece.id : null
@@ -70,8 +68,7 @@ export function SongSettingsWindow({
   const [exporting, setExporting] = useState(false)
   const [asking, setAsking] = useState(false)
   // The window's page: its Settings, or Publish inside it with Back to them (the SongSettings boards).
-  const [page, setPage] = useState<'settings' | 'publish'>('settings')
-  const toPublish = <button type="button" onClick={() => setPage('publish')} />
+  const toPublish = <button type="button" onClick={() => onPage('publish')} />
   const piecesStore = usePiecesStoreApi()
   const navigate = useNavigate()
   const copyable = !isDegreePiece(piece)
@@ -127,14 +124,11 @@ export function SongSettingsWindow({
   return (
     <SettingsWindow
       open={open}
-      onOpenChange={(next) => {
-        onOpenChange(next)
-        if (!next) setPage('settings')
-      }}
+      onOpenChange={onOpenChange}
       title={t(page === 'publish' ? 'editor:publishPage.title' : 'settings.title')}
       back={
         page === 'publish' ? (
-          <BackButton label={t('settings.title')} onClick={() => setPage('settings')} />
+          <BackButton label={t('settings.title')} onClick={() => onPage('settings')} />
         ) : undefined
       }
     >

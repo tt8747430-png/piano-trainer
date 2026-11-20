@@ -20,7 +20,13 @@ export {
 export { foldText, matchesQuery, WORD_BREAK } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
-export { OPEN_SETTINGS, useSettingsWindow, type SettingsWindowState } from './open-settings'
+export {
+  OPEN_PUBLISH,
+  OPEN_SETTINGS,
+  useSettingsWindow,
+  type SettingsWindowPage,
+  type SettingsWindowState,
+} from './open-settings'
 export { isOneOf } from './is-one-of'
 export {
   CAMERA_ANGLES,

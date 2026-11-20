@@ -20,7 +20,7 @@ export function OwnLessonSettings({
   lesson,
   open,
   onOpenChange,
-}: { lesson: OwnLesson } & SettingsWindowState) {
+}: { lesson: OwnLesson } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const navigate = useNavigate()

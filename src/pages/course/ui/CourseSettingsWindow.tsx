@@ -24,7 +24,7 @@ export function CourseSettingsWindow({
   courseId,
   open,
   onOpenChange,
-}: { courseId: string } & SettingsWindowState) {
+}: { courseId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { account } = useAccount()

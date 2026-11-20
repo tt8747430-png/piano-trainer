@@ -20,6 +20,7 @@ import {
   useOriginalDraft,
 } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
+import { OPEN_PUBLISH } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -56,6 +57,17 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const draft = useOriginalDraft(piece)
   const navigate = useNavigate()
   const { load, save } = draft
+  // Its Publish (R29 B6), a page in the song's Settings' window, the rights ticked there each time:
+  // the song's page opens with the window turned to it.
+  const toPublish = {
+    to: '/songs/$pieceId',
+    params: { pieceId: piece.id },
+    state: OPEN_PUBLISH,
+  } as const
+  const publishPage = {
+    link: <Link {...toPublish} />,
+    open: () => void draft.flush().then(() => navigate(toPublish)),
+  }
   // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
   const target = useMemo(() => {
     if (load.state !== 'ready') return null
@@ -100,16 +112,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            // Its Publish page (R29 B6), the rights ticked there each time.
-            publishPage={{
-              link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
-              open: () =>
-                void draft
-                  .flush()
-                  .then(() =>
-                    navigate({ to: '/songs/$pieceId/publish', params: { pieceId: piece.id } }),
-                  ),
-            }}
+            publishPage={publishPage}
           />
         ),
         rows: (
@@ -119,16 +122,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
             title={entryTitles(piece, locale).primary}
             unreadable={t('original.unreadable')}
             onReset={draft.reopen}
-            // Its Publish page (R29 B6), the rights ticked there each time.
-            publishPage={{
-              link: <Link to="/songs/$pieceId/publish" params={{ pieceId: piece.id }} />,
-              open: () =>
-                void draft
-                  .flush()
-                  .then(() =>
-                    navigate({ to: '/songs/$pieceId/publish', params: { pieceId: piece.id } }),
-                  ),
-            }}
+            publishPage={publishPage}
           />
         ),
       }}

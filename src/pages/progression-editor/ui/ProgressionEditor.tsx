@@ -1,4 +1,3 @@
-import { Link, useNavigate } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,17 +5,18 @@ import { PROGRESSION_STYLES, type LibraryProgression } from '@/entities/progress
 import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
-import { cn } from '@/shared/lib'
+import { cn, useSettingsWindow } from '@/shared/lib'
 import {
   ChoiceChips,
   FormField,
   Labelled,
   NameField,
   Problem,
-  RoundLink,
+  RoundButton,
   SettingsGroup,
 } from '@/shared/ui'
 import { DraftScreen } from '@/widgets/content-editor'
+import { ProgressionSettingsWindow } from './ProgressionSettingsWindow'
 
 /** A line of numerals as the field holds it: none where it is empty. */
 const lineOf = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
@@ -165,42 +165,46 @@ export function ProgressionEditor({
   // The language written: the interface's to start with, switched in the bar.
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useProgressionDraft(progression)
-  const navigate = useNavigate()
-  const params = { progressionId: progression.id }
+  const settingsWindow = useSettingsWindow()
   // A new progression's name is its draft's: the device has none of it.
   const opened = draft.load.state === 'ready' ? draft.load.value : progression
   const title = localText(opened.name, shown) || opened.id
   return (
-    <DraftScreen
-      draft={draft}
-      heading={t('progressions.edit.bar')}
-      form
-      title={title}
-      back={back}
-      backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
-      editorsOnly={t('progressions.edit.editorsOnly')}
-      editorsWhy={t('progressions.edit.editorsWhy')}
-      unreadable={t('progressions.edit.unreadable')}
-      language={{ value: locale, onChange: setLocale }}
-      // Its Publish page and its Settings (R29 B6): every item's acts in the same places.
-      publishPage={{
-        link: <Link to="/practice/progressions/$progressionId/publish" params={params} />,
-        open: () =>
-          void draft
-            .flush()
-            .then(() => navigate({ to: '/practice/progressions/$progressionId/publish', params })),
-      }}
-      settings={
-        <RoundLink
-          label={t('learn:settings.title')}
-          icon={Settings}
-          render={<Link to="/practice/progressions/$progressionId/settings" params={params} />}
-        />
-      }
-    >
-      {(initial) => (
-        <ProgressionDocument key={locale} initial={initial} locale={locale} onChange={draft.save} />
-      )}
-    </DraftScreen>
+    <>
+      <DraftScreen
+        draft={draft}
+        heading={t('progressions.edit.bar')}
+        form
+        title={title}
+        back={back}
+        backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
+        editorsOnly={t('progressions.edit.editorsOnly')}
+        editorsWhy={t('progressions.edit.editorsWhy')}
+        unreadable={t('progressions.edit.unreadable')}
+        language={{ value: locale, onChange: setLocale }}
+        // Its Settings, a window over the editor, and Publish a page inside it (the ProgressionEdit boards).
+        publishPage={{
+          link: <button type="button" onClick={() => settingsWindow.openAt('publish')} />,
+          open: () => void draft.flush().then(() => settingsWindow.openAt('publish')),
+        }}
+        settings={
+          <RoundButton
+            label={t('learn:settings.title')}
+            icon={Settings}
+            onClick={() => settingsWindow.openAt('settings')}
+          />
+        }
+      >
+        {(initial) => (
+          <ProgressionDocument
+            key={locale}
+            initial={initial}
+            locale={locale}
+            onChange={draft.save}
+          />
+        )}
+      </DraftScreen>
+      <ProgressionSettingsWindow progression={opened} {...settingsWindow} />
+    </>
   )
 }

@@ -35,7 +35,7 @@ type Where =
 export function LessonSettingsWindow({
   lessonId,
   ...win
-}: { lessonId: string } & SettingsWindowState) {
+}: { lessonId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
   const locale = useLocale()
   const own = useOwnLessons(selectOwnLesson(lessonId))
   if (own) return <OwnLessonSettings key={lessonId} lesson={own} {...win} />
@@ -69,7 +69,7 @@ export function CourseLessonSettingsWindow({
   courseId,
   lessonId,
   ...win
-}: { courseId: string; lessonId: string } & SettingsWindowState) {
+}: { courseId: string; lessonId: string } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
   const locale = useLocale()
   const place = courseLesson(courseId, lessonId)
   // The route finds no lesson its course does not have.
@@ -106,7 +106,7 @@ function LessonSettings({
   where,
   open,
   onOpenChange,
-}: SettingsWindowState & {
+}: Pick<SettingsWindowState, 'open' | 'onOpenChange'> & {
   lesson: Lesson
   /** Its id in the database (a course's as `<course>/<lesson>`). */
   id: string

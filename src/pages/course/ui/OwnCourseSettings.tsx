@@ -29,7 +29,7 @@ export function OwnCourseSettings({
   course,
   open,
   onOpenChange,
-}: { course: OwnCourse } & SettingsWindowState) {
+}: { course: OwnCourse } & Pick<SettingsWindowState, 'open' | 'onOpenChange'>) {
   const { t } = useTranslation('learn')
   const navigate = useNavigate()
   const progress = useProgressStoreApi()

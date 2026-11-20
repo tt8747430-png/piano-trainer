@@ -27,44 +27,44 @@ C = a laptop card hung under the gear, F = a laptop popover at its control.
 
 ### App Settings (Profile › Settings, the sidebar's account menu, ⌘,)
 
-| Place | Route today | Phone | Laptop | Address on a laptop | To do |
-| --- | --- | --- | --- | --- | --- |
-| General (and Page layouts) | `/settings/general`, `/settings/general/layouts` | P | D | page's own (fixed 2026-11-20; was `?settings=`) | — |
-| Appearance | `/settings/appearance` | P | D | page's own | — |
-| Storage and backup | `/settings/storage` | P | D | page's own | — |
-| MIDI devices (Log, Timing) | `/settings/connect-piano`, `…/log`, `…/timing` | P | D | page's own | — |
-| Selection toolbar | `/settings/select-toolbar` | P | D | page's own | — |
-| Swipe actions | `/settings/swipe-actions` | P | D | page's own | — |
-| User guide | `/settings/how-to-use` | P | D | page's own | — |
-| Report a problem | `/settings/feedback` | P | D | page's own | — |
-| About | `/settings/about` | P | D | page's own | — |
-| Account (Profile, Email, Password), Privacy | `/settings/account…`, `/settings/privacy` | P | D | page's own | — |
-| Administration and its sections | `/admin`, `/admin/$section`, `/admin/groups/$group` | P | D | page's own | — |
+| Place                                       | Route today                                         | Phone | Laptop | Address on a laptop                             | To do |
+| ------------------------------------------- | --------------------------------------------------- | ----- | ------ | ----------------------------------------------- | ----- |
+| General (and Page layouts)                  | `/settings/general`, `/settings/general/layouts`    | P     | D      | page's own (fixed 2026-11-20; was `?settings=`) | —     |
+| Appearance                                  | `/settings/appearance`                              | P     | D      | page's own                                      | —     |
+| Storage and backup                          | `/settings/storage`                                 | P     | D      | page's own                                      | —     |
+| MIDI devices (Log, Timing)                  | `/settings/connect-piano`, `…/log`, `…/timing`      | P     | D      | page's own                                      | —     |
+| Selection toolbar                           | `/settings/select-toolbar`                          | P     | D      | page's own                                      | —     |
+| Swipe actions                               | `/settings/swipe-actions`                           | P     | D      | page's own                                      | —     |
+| User guide                                  | `/settings/how-to-use`                              | P     | D      | page's own                                      | —     |
+| Report a problem                            | `/settings/feedback`                                | P     | D      | page's own                                      | —     |
+| About                                       | `/settings/about`                                   | P     | D      | page's own                                      | —     |
+| Account (Profile, Email, Password), Privacy | `/settings/account…`, `/settings/privacy`           | P     | D      | page's own                                      | —     |
+| Administration and its sections             | `/admin`, `/admin/$section`, `/admin/groups/$group` | P     | D      | page's own                                      | —     |
 
 ### A thing's own Settings (ruling 2)
 
-| Thing | Opened from | Route today | Phone | Laptop | Board | To do |
-| --- | --- | --- | --- | --- | --- | --- |
-| A song | song page ··· › Settings (`SongMore`), a library row's ··· | none (was `/songs/$pieceId/settings`) | S | D | SongSettings, SongSettingsLaptop | done 2026-11-20 (`SettingsWindow`), Publish a page inside it (`/songs/$pieceId/publish` gone) |
-| A lesson (built-in or yours) | lesson bar gear (`LessonLayout`) | none (were `/lessons/$lessonId/settings`, `/courses/$courseId/$lessonId/settings`) | S | D | Lesson, LessonLaptop, YourLessonSettings, YourLessonSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`) |
-| A course (built-in or yours) | course bar gear (`CoursePage`, `OwnCoursePage`) | none (was `/courses/$courseId/settings`) | S | D | Course, CourseLaptop, YourCourseSettings, YourCourseSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`) |
-| A progression (an editor's draft) | editor bar gear (`ProgressionEditor`) | `/practice/progressions/$progressionId/settings` | P | P | ProgressionEdit, ProgressionEditLaptop | canvas done 2026-11-20 (THINGWIN, Publish inside); port next |
-| A folder or playlist | the library's ··· | none: its menu and sheets | S | F | Folder, FolderLaptop | — |
+| Thing                             | Opened from                                                | Route today                                                                        | Phone | Laptop | Board                                                              | To do                                                                                         |
+| --------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----- | ------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| A song                            | song page ··· › Settings (`SongMore`), a library row's ··· | none (was `/songs/$pieceId/settings`)                                              | S     | D      | SongSettings, SongSettingsLaptop                                   | done 2026-11-20 (`SettingsWindow`), Publish a page inside it (`/songs/$pieceId/publish` gone) |
+| A lesson (built-in or yours)      | lesson bar gear (`LessonLayout`)                           | none (were `/lessons/$lessonId/settings`, `/courses/$courseId/$lessonId/settings`) | S     | D      | Lesson, LessonLaptop, YourLessonSettings, YourLessonSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`)                                                  |
+| A course (built-in or yours)      | course bar gear (`CoursePage`, `OwnCoursePage`)            | none (was `/courses/$courseId/settings`)                                           | S     | D      | Course, CourseLaptop, YourCourseSettings, YourCourseSettingsLaptop | done 2026-11-20 (THINGWIN, `SettingsWindow`)                                                  |
+| A progression (an editor's draft) | editor bar gear and its Publish (`ProgressionEditor`)      | none (were `/practice/progressions/$progressionId/settings`, `…/publish`)          | S     | D      | ProgressionEdit, ProgressionEditLaptop                             | done 2026-11-20 (THINGWIN, `SettingsWindow`, Publish a page inside)                           |
+| A folder or playlist              | the library's ···                                          | none: its menu and sheets                                                          | S     | F      | Folder, FolderLaptop                                               | —                                                                                             |
 
 ### A screen's own settings, in place (already sheets and cards; no address)
 
-| Screen | Gear | Phone | Laptop | Pages inside |
-| --- | --- | --- | --- | --- |
-| The Player | `SettingsSheet` (ScoreBar) | S | C (score bar) | Piano, Pattern, view, Sections… |
-| The score editor | `EditorGear` | S | C (score bar) | Score settings pages |
-| A run (walk, chromatic, progression, exercise) | `RunLayout` | S | C | Setup rises from the bar |
-| Chord player | `ChordPlayerSettings` | S | C | Count-in, Volume, Time |
-| Scales | `ScaleLayout` | S | C | On the staff |
-| Intervals, a progression, Chord finder | `SettingsGear` | S | C | — |
-| Metronome, Tuner, Circle of fifths | `ToolPage` | S | C | Sound, Speed trainer, Silent bars |
-| Exercise, Pattern | the bar's Piano button (`PianoButton`) | S | C | — |
-| The piano (any screen with keys) | `PianoSheet` | S | C | Sound, Range, Labels |
-| Keyboard shortcuts | `ShortcutsHelp` | S | C | — |
+| Screen                                         | Gear                                   | Phone | Laptop        | Pages inside                      |
+| ---------------------------------------------- | -------------------------------------- | ----- | ------------- | --------------------------------- |
+| The Player                                     | `SettingsSheet` (ScoreBar)             | S     | C (score bar) | Piano, Pattern, view, Sections…   |
+| The score editor                               | `EditorGear`                           | S     | C (score bar) | Score settings pages              |
+| A run (walk, chromatic, progression, exercise) | `RunLayout`                            | S     | C             | Setup rises from the bar          |
+| Chord player                                   | `ChordPlayerSettings`                  | S     | C             | Count-in, Volume, Time            |
+| Scales                                         | `ScaleLayout`                          | S     | C             | On the staff                      |
+| Intervals, a progression, Chord finder         | `SettingsGear`                         | S     | C             | —                                 |
+| Metronome, Tuner, Circle of fifths             | `ToolPage`                             | S     | C             | Sound, Speed trainer, Silent bars |
+| Exercise, Pattern                              | the bar's Piano button (`PianoButton`) | S     | C             | —                                 |
+| The piano (any screen with keys)               | `PianoSheet`                           | S     | C             | Sound, Range, Labels              |
+| Keyboard shortcuts                             | `ShortcutsHelp`                        | S     | C             | —                                 |
 
 ## Check before calling it done
 
