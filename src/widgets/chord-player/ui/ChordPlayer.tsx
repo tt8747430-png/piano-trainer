@@ -2,20 +2,11 @@ import {
   closestCenter,
   DndContext,
   DragOverlay,
-  KeyboardSensor,
-  MouseSensor,
   pointerWithin,
-  TouchSensor,
-  useSensor,
-  useSensors,
   type CollisionDetection,
   type DragEndEvent,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useNavigate } from '@tanstack/react-router'
 import { Plus, Undo2 } from 'lucide-react'
 import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
@@ -31,7 +22,15 @@ import { libraryParam, progressionMode } from '@/entities/progression-library'
 import { selectChordPlayer, useSettings } from '@/entities/settings'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { localText, useKeyName, useLocale } from '@/shared/i18n'
-import { cn, LAPTOP, REDUCED_MOTION, useMediaQuery, useRootSize, WIDE } from '@/shared/lib'
+import {
+  cn,
+  LAPTOP,
+  REDUCED_MOTION,
+  useDragSensors,
+  useMediaQuery,
+  useRootSize,
+  WIDE,
+} from '@/shared/lib'
 import {
   barCount,
   duplicateSection,
@@ -343,14 +342,7 @@ export function ChordPlayer({
     },
   ])
 
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-      keyboardCodes: { start: ['Space'], cancel: ['Escape'], end: ['Space', 'Enter'] },
-    }),
-  )
+  const sensors = useDragSensors({ start: ['Space'], cancel: ['Escape'], end: ['Space', 'Enter'] })
   const sectionIds = shown.sections.map((_, i) => sectionDragId(i))
   const tiles = keyChords(shown.key)
   /** A style chosen: its tempo with it, the sheet laid out again in its time where that differs. */

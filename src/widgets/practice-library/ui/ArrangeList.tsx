@@ -5,20 +5,10 @@ import {
   closestCenter,
   DndContext,
   DragOverlay,
-  KeyboardSensor,
-  MouseSensor,
   pointerWithin,
-  TouchSensor,
-  useSensor,
-  useSensors,
   type CollisionDetection,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, Eye, EyeOff, GripVertical, PencilLine, Trash2 } from 'lucide-react'
 import { createContext, useContext, useState, type ReactNode } from 'react'
@@ -33,7 +23,7 @@ import {
   type ArrangedPlace,
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
-import { cn, REDUCED_MOTION, useMediaQuery } from '@/shared/lib'
+import { cn, REDUCED_MOTION, useDragSensors, useMediaQuery } from '@/shared/lib'
 import { ActionMenu, confirm, FoldSection, GROUPED_LIST } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -283,11 +273,7 @@ export function ArrangeList({
   const store = usePracticeLibraryStoreApi()
   const reduced = useMediaQuery(REDUCED_MOTION)
   const [inHand, setInHand] = useState<string | null>(null)
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const sensors = useDragSensors()
   const rowsOf = (place: string) =>
     items.filter((item) => item.group === place).map((item) => item.id)
   const change = (apply: Parameters<typeof arrangeLibrary>[2]) => arrangeLibrary(store, kind, apply)

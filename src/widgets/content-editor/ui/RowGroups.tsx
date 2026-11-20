@@ -1,29 +1,19 @@
 import {
   closestCorners,
   DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
   useDroppable,
-  useSensor,
-  useSensors,
   type DragEndEvent,
   type DragOverEvent,
   type UniqueIdentifier,
 } from '@dnd-kit/core'
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, GripVertical, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
+import { cn, useDragSensors } from '@/shared/lib'
 import { ActionMenu, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { rowPlace, withGroupAt, withRowAt, withRowRemoved, type RowOrder } from '../model/row-order'
@@ -252,11 +242,7 @@ export function RowGroups({
   fixed?: boolean
 }) {
   const { t } = useTranslation('learn')
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const sensors = useDragSensors()
   const given: RowOrder = groups.map((group) => ({
     key: group.key,
     rows: group.rows.map((row) => row.key),

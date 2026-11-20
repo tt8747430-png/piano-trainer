@@ -2,13 +2,8 @@ import {
   closestCenter,
   DndContext,
   DragOverlay,
-  KeyboardSensor,
-  MouseSensor,
   pointerWithin,
   rectIntersection,
-  TouchSensor,
-  useSensor,
-  useSensors,
   type Announcements,
   type CollisionDetection,
   type DragCancelEvent,
@@ -16,10 +11,9 @@ import {
   type DragStartEvent,
   type UniqueIdentifier,
 } from '@dnd-kit/core'
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { REDUCED_MOTION, useMediaQuery } from '@/shared/lib'
+import { REDUCED_MOTION, useDragSensors, useMediaQuery } from '@/shared/lib'
 import {
   CARRY,
   DndContextOf,
@@ -63,11 +57,7 @@ export function LibraryDnd({
   children: ReactNode
 }) {
   const { t } = useTranslation('songs')
-  const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  )
+  const sensors = useDragSensors()
   const reduced = useMediaQuery(REDUCED_MOTION)
   const lists = useRef(new Map<string, () => SortedList>())
   const [carrying, setCarrying] = useState<readonly string[] | null>(null)
