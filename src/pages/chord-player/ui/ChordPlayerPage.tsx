@@ -1,11 +1,10 @@
-import { Link } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SHEET_NAME_MAX } from '@/entities/chord-sheet'
 import { ShareChordSheet } from '@/features/share-chord-sheet'
-import { NewSheet, RoundLink } from '@/shared/ui'
+import { NewSheet } from '@/shared/ui'
 import { ChordPlayer } from '@/widgets/chord-player'
 import { useChordPlayerPage } from '../model/use-chord-player-page'
+import { ChordPlayerSettings } from './ChordPlayerSettings'
 
 /**
  * The Chord player (`/practice/chord-player`, canvas R76): the widget's bar, chart and panels, given
@@ -40,15 +39,9 @@ export function ChordPlayerPage() {
             { key: 'share', label: t('chordPlayer.shareMenu'), onSelect: page.share },
           ]}
           settings={
-            <RoundLink
-              label={t('settings.open', { page: t('pages.chordPlayer') })}
-              icon={Settings}
-              render={
-                <Link
-                  to="/practice/chord-player/settings"
-                  search={page.sheetId === undefined ? {} : { sheet: page.sheetId }}
-                />
-              }
+            <ChordPlayerSettings
+              sheetId={page.sheetId}
+              onEditLayout={() => page.setEditing(true)}
             />
           }
         />

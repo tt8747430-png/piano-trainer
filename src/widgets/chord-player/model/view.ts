@@ -14,8 +14,3 @@ export interface ChordPlayerView {
   /** Edit layout on (R76): each panel outlined with its tag, the bar's Reset and Done. */
   readonly layout?: 'edit' | undefined
 }
-
-/** The Chord player's Settings: whose sheet it sets. */
-export interface ChordPlayerSettingsView {
-  readonly sheet?: string | undefined
-}

@@ -1,5 +1,5 @@
 import { keyParam } from '@/shared/lib/music'
-import type { ChordPlayerSettingsView, ChordPlayerView } from '@/widgets/chord-player'
+import type { ChordPlayerView } from '@/widgets/chord-player'
 import { readKey, readNumerals, routeSearch, type Raw } from './read-search'
 
 // The Chord player (R29 CP1, CP5): a saved sheet by its id; on arrival a progression or a shared
@@ -23,8 +23,3 @@ export function readChordPlayerSearch(raw: Raw): ChordPlayerView {
   }
 }
 export const chordPlayerSearch = routeSearch(readChordPlayerSearch, {})
-
-const readChordPlayerSettingsSearch = (raw: Raw): ChordPlayerSettingsView => ({
-  sheet: sheetOf(raw.sheet),
-})
-export const chordPlayerSettingsSearch = routeSearch(readChordPlayerSettingsSearch, {})

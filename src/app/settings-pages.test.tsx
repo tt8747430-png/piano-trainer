@@ -22,7 +22,7 @@ const PAGES: readonly (readonly [SettingsPageId, string, ...RegExp[]])[] = [
   ['score-editor', '/edit/bz5', /^Recording/],
   ['intervals', '/practice/intervals', /^Interval settings$/],
   ['progressions', '/practice/progressions/doo-wop', /^Progression settings$/],
-  ['chord-player', '/practice/chord-player/settings'],
+  ['chord-player', '/practice/chord-player', /^Chord player settings$/],
   ['metronome', '/practice/metronome'],
   ['tuner', '/practice/tuner'],
   ['chord-finder', '/practice/chord-finder', /^Chord finder settings$/],

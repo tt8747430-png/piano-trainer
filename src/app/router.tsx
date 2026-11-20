@@ -93,11 +93,7 @@ import {
   circleSearch,
   readChordFinderSearch,
 } from './routes/tool-search'
-import {
-  chordPlayerSearch,
-  chordPlayerSettingsSearch,
-  readChordPlayerSearch,
-} from './routes/chord-player-search'
+import { chordPlayerSearch, readChordPlayerSearch } from './routes/chord-player-search'
 import { ShellLayout } from './ShellLayout'
 
 // Each screen module becomes one chunk, loaded when one of its routes is first matched. A route
@@ -771,12 +767,6 @@ const chordPlayerRoute = createRoute({
   ...remembered(readChordPlayerSearch, [], ['sheet']),
   component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerPage'),
 })
-const chordPlayerSettingsRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/chord-player/settings',
-  ...chordPlayerSettingsSearch,
-  component: lazyRouteComponent(chordPlayerScreens, 'ChordPlayerSettingsPage'),
-})
 
 // The Metronome (ADR 0052): a steady beat at any tempo, its choices saved in pt-settings.
 const metronomeRoute = createRoute({
@@ -1185,7 +1175,6 @@ const routeTree = rootRoute.addChildren([
     circleOfFifthsRoute,
     tunerRoute,
     chordPlayerRoute,
-    chordPlayerSettingsRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,

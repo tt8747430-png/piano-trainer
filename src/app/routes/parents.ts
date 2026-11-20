@@ -306,10 +306,6 @@ export const PARENTS: Readonly<Record<ScreenRouteId, Parent>> = {
   '/shell/practice/circle-of-fifths': toPractice,
   '/shell/practice/tuner': toPractice,
   '/shell/practice/chord-player': toPractice,
-  '/shell/practice/chord-player/settings': ({ search }) => {
-    const sheet = text(search.sheet)
-    return up({ to: '/practice/chord-player', search: sheet === undefined ? {} : { sheet } })
-  },
   '/shell/practice/trainer/$trainerId': toPractice,
   '/shell/practice/exercises': toPractice,
   // An exercise's page: up to its shelf, where it has one; a scale's or a chord's to Practice.
