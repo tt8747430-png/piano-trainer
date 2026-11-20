@@ -47,12 +47,7 @@ export function NewPasswordPage() {
               />
             </>
             <ProblemLine problem={problem} />
-            <Button
-              type="submit"
-              size="lg"
-              className="h-12.5 rounded-full font-bold"
-              disabled={!online || busy}
-            >
+            <Button type="submit" size="lg" disabled={!online || busy}>
               {t('newPassword.submit')}
             </Button>
           </form>

@@ -74,7 +74,7 @@ export function PatternFilterPage({
         >
           {t('player:patternSheet.reset')}
         </Button>
-        <Button onClick={onDone} className="h-12.5 min-w-0 flex-1 rounded-pill font-bold">
+        <Button onClick={onDone} size="lg" className="min-w-0 flex-1">
           {kept > 0
             ? t('practice:library.kinds.accompaniment.show', { count: kept })
             : t('practice:library.showNone')}

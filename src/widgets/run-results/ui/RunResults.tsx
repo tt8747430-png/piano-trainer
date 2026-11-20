@@ -117,26 +117,15 @@ export function RunResults({
     <div className="grid gap-2">
       {mistakes ? (
         <>
-          <Button
-            className="h-12.5 rounded-full text-base font-bold"
-            onClick={() => onMistakes(mistakes)}
-          >
+          <Button size="lg" onClick={() => onMistakes(mistakes)}>
             {t(`${r}.mistakes`)}
           </Button>
           <div className="flex gap-2">
-            <Button
-              variant="quiet"
-              className="h-12.5 flex-1 rounded-full text-base font-bold"
-              onClick={() => onRetry(run.tempo)}
-            >
+            <Button variant="quiet" size="lg" className="flex-1" onClick={() => onRetry(run.tempo)}>
               {t(`${r}.retry`)}
             </Button>
             {done ? (
-              <Button
-                variant="quiet"
-                className="h-12.5 flex-1 rounded-full text-base font-bold"
-                onClick={done}
-              >
+              <Button variant="quiet" size="lg" className="flex-1" onClick={done}>
                 {t(`${r}.done`)}
               </Button>
             ) : null}
@@ -144,18 +133,11 @@ export function RunResults({
         </>
       ) : (
         <>
-          <Button
-            className="h-12.5 rounded-full text-base font-bold"
-            onClick={() => onRetry(perfect ? run.tempo + FASTER : run.tempo)}
-          >
+          <Button size="lg" onClick={() => onRetry(perfect ? run.tempo + FASTER : run.tempo)}>
             {perfect ? t(`${r}.retryAt`, { tempo: run.tempo + FASTER }) : t(`${r}.retry`)}
           </Button>
           {done ? (
-            <Button
-              variant="quiet"
-              className="h-12.5 rounded-full text-base font-bold"
-              onClick={done}
-            >
+            <Button variant="quiet" size="lg" onClick={done}>
               {t(`${r}.done`)}
             </Button>
           ) : null}

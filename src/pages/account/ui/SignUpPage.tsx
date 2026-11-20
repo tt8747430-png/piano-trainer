@@ -83,21 +83,22 @@ export function SignUpPage() {
           />
         </>
         <ProblemLine problem={problem} />
-        <Button
-          type="submit"
-          size="lg"
-          className="h-12.5 rounded-full font-bold"
-          disabled={!online || busy}
-        >
+        <Button type="submit" size="lg" disabled={!online || busy}>
           {t('signUp.submit')}
         </Button>
         <p className="text-center text-sm leading-[1.45] text-pretty text-muted-foreground">
           {t('signUp.agree')}{' '}
-          <Link to="/legal/terms" className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline">
+          <Link
+            to="/legal/terms"
+            className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline"
+          >
             {t('signUp.terms')}
           </Link>{' '}
           {t('signUp.and')}{' '}
-          <Link to="/legal/privacy" className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline">
+          <Link
+            to="/legal/privacy"
+            className="relative font-semibold text-link before:absolute before:-inset-x-1 before:-inset-y-3.25 before:content-[''] hover:underline"
+          >
             {t('signUp.privacy')}
           </Link>
           .

@@ -56,7 +56,7 @@ export function FeedbackPage() {
           type="submit"
           size="lg"
           // The board's: a 50-tall pill, sand with soft ink until there is something to send.
-          className="mt-2.5 h-12.5 rounded-pill disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+          className="mt-2.5 disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
           disabled={!online || text.trim() === ''}
         >
           {t('report.send')}

@@ -89,14 +89,10 @@ export function CheckResult({
         </>
       ) : null}
       <div className="flex gap-2">
-        <Button
-          variant="quiet"
-          className="h-12.5 flex-1 rounded-full text-base font-bold"
-          onClick={onAgain}
-        >
+        <Button variant="quiet" size="lg" className="flex-1" onClick={onAgain}>
           {t('again')}
         </Button>
-        <Button className="h-12.5 flex-1 rounded-full text-base font-bold" onClick={onDone}>
+        <Button size="lg" className="flex-1" onClick={onDone}>
           {t('done')}
         </Button>
       </div>

@@ -6,9 +6,6 @@ import { selectSongPlay, useProgress } from '@/entities/progress'
 import { cn, OPEN_PLAINLY } from '@/shared/lib'
 import { ButtonLink } from '@/shared/ui'
 
-/** The board's buttons: 50 tall, 20 inside, a pill, 16 bold. */
-const BUTTON = 'h-12.5 min-w-0 rounded-pill px-5 text-base font-bold whitespace-nowrap'
-
 /**
  * Where the learner is in a song (canvas 125), once the Player has played it: Continue from the bar
  * it stopped at in honey and From the start beside it, or From the start alone once it was played to
@@ -24,7 +21,8 @@ export function SongPlace({ piece, bars }: { piece: Piece; bars: number }) {
     return (
       <div className="flex">
         <ButtonLink
-          className={cn(BUTTON, 'flex-1 [&_svg]:size-4.5')}
+          size="lg"
+          className="min-w-0 flex-1 [&_svg]:size-4.5"
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
         >
           <Play aria-hidden className="fill-current" />
@@ -47,15 +45,20 @@ export function SongPlace({ piece, bars }: { piece: Piece; bars: number }) {
     <div className="flex flex-col gap-3">
       <div className="flex gap-2.5">
         {goesOn ? (
-          <ButtonLink className={cn(BUTTON, 'flex-1 [&_svg]:size-4.5')} render={from(play.at + 1)}>
+          <ButtonLink
+            size="lg"
+            className="min-w-0 flex-1 [&_svg]:size-4.5"
+            render={from(play.at + 1)}
+          >
             <Play aria-hidden className="fill-current" />
             {t('place.continue', { bar: play.at + 1 })}
           </ButtonLink>
         ) : null}
         <ButtonLink
+          size="lg"
           variant={goesOn ? 'ghost' : 'default'}
           className={cn(
-            BUTTON,
+            'min-w-0',
             goesOn
               ? 'flex-none bg-muted hover:bg-muted hover:brightness-95'
               : 'flex-1 [&_svg]:size-4.5',
