@@ -199,9 +199,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
         <div className="flex min-w-0 flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-0.5">
-              <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance">
-                {name}
-              </h2>
+              <h2 className="subject-title">{name}</h2>
               <FavouriteButton pattern={pattern} />
             </div>
             <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">

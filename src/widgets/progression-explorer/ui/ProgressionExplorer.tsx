@@ -85,9 +85,7 @@ export function ProgressionExplorer({
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-0.5">
-                <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance">
-                  {name}
-                </h2>
+                <h2 className="subject-title">{name}</h2>
                 {favourite}
               </div>
               {about ? (

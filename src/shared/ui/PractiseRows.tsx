@@ -10,7 +10,7 @@ import type { ReactNode } from 'react'
 export function PractiseRows({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="flex flex-col gap-2">
-      <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">{title}</h3>
+      <h3 className="section-head">{title}</h3>
       <ul className="card overflow-hidden">{children}</ul>
     </section>
   )

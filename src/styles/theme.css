@@ -405,6 +405,25 @@
   color: var(--color-muted-foreground);
 }
 
+/* A Practice page's subject (the interval, the progression, the pattern, the exercise): 36 in the display face, bold, 1.1, tightened 1%. */
+@utility subject-title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* The head over a card of rows on a page (Practise, Options, How to play): 14 semibold in ink. */
+@utility section-head {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: normal;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
 /* DESIGN's card: lighter paper than the page, a soft 1px line round it, 14px corners. */
 /*
  * The laptop Settings dialog's pane (the board's SETCSS): every group a sentence-case heading, 16

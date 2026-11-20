@@ -66,10 +66,7 @@ export function IntervalHero({
   return (
     <section aria-labelledby="interval-chosen" className="flex flex-col gap-2 lg:gap-3">
       <div className="flex items-center gap-0.5">
-        <h2
-          id="interval-chosen"
-          className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance"
-        >
+        <h2 id="interval-chosen" className="subject-title">
           {title}
         </h2>
         <InfoTip name={title} className="ms-2 [&_svg]:size-5">

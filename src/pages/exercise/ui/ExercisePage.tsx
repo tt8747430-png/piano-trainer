@@ -141,9 +141,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         <div className="flex flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-0.5">
-              <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance">
-                {name}
-              </h2>
+              <h2 className="subject-title">{name}</h2>
               <PracticeFavouriteButton kind="exercises" id={exercise.id} />
             </div>
             <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">{source}</p>
@@ -180,9 +178,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         </div>
         <div className="mt-2 flex flex-col gap-6 lg:mt-0">
           <section className="flex min-w-0 flex-col gap-2">
-            <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">
-              {t('practice:exercisePage.options')}
-            </h3>
+            <h3 className="section-head">{t('practice:exercisePage.options')}</h3>
             <GroupRows surface="sheet">
               {exercise.fields.hanon ? (
                 <GroupRow label={t('practice:exercisePage.number')}>
@@ -290,9 +286,7 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
             </GroupRows>
           </section>
           <section className="flex flex-col gap-2">
-            <h3 className="font-sans text-sm leading-[normal] font-semibold text-foreground">
-              {t('practice:exercisePage.how')}
-            </h3>
+            <h3 className="section-head">{t('practice:exercisePage.how')}</h3>
             <p className="card p-4 text-[0.9375rem] leading-[1.45] text-pretty">
               {localText(exercise.how, locale)}
             </p>
