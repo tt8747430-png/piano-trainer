@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · Songs' See all at 15, as every other board's (it was 16) · Songs · **pending**
 - 2026-11-20 · 3373f717 · a page's name one shape: a lesson's and a course's serif name tightened -0.01em, as a level's (30 on a phone, 36 on a laptop) · Lesson, LessonLaptop, Course, CourseLaptop · **pending**
 - 2026-11-20 · a4b4e45d · Settings › Appearance on a phone: no caps "Appearance" head under its own bar title; the three screens 8 under the bar · Settings · **pending**
 - 2026-11-20 · 302b3e3b · a lesson's reading bar: Edit and the gear to its Settings, as the app and its Edit bar (the ··· sheet of Settings ›, Share link, Reset progress repeated what Settings holds) · Lesson, LessonLaptop · **pending**

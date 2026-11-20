@@ -63,7 +63,7 @@ def FTILE(c, kind, w=56):
     if kind == 'heart': return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {c}; display: flex; align-items: center; justify-content: center">{HEART_T}</span>'
     if kind == 'shared': return f'<span aria-hidden="true" style="flex: none; width: {w}px; height: {w}px; border-radius: 12px; background: {c}; display: flex; align-items: center; justify-content: center">{SHARED_T}</span>'
     return TILE56(STACK(c).replace('url("', "url('").replace('")', "')"), w)
-SEEALL = lambda href, n='': f'<a href="{href}" style="min-height: 44px; margin: -12px 0; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 16px; font-weight: 600">See all{n}</a>'
+SEEALL = lambda href, n='': f'<a href="{href}" style="min-height: 44px; margin: -12px 0; display: flex; align-items: center; color: {LINK}; text-decoration: none; font-size: 15px; font-weight: 600">See all{n}</a>'
 SECH = lambda t, right='': f'<div style="display: flex; align-items: center; justify-content: space-between"><h2 style="margin: 0; font-size: 20px; font-weight: 700">{t}</h2>{right}</div>'
 CARDROW = f'border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}'
 
