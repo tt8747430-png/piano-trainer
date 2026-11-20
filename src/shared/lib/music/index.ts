@@ -281,7 +281,6 @@ export {
   ROMAN_NUMERALS,
   SIZE_NOTES,
   STACK_SIZES,
-  sizeOfNotes,
   scaleChordAt,
   scaleChords,
   scaleChordHolds,

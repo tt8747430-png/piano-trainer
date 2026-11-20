@@ -33,10 +33,6 @@ export const SIZE_NOTES: Readonly<Record<ChordSize, 3 | 4 | 5>> = {
   ninths: 5,
 }
 
-/** The chord size nearest a stack's notes: 9ths for anything larger. */
-export const sizeOfNotes = (notes: ChordNotes): ChordSize =>
-  notes === 3 ? 'triads' : notes === 4 ? 'sevenths' : 'ninths'
-
 /** A chord of a scale: its notes stacked in thirds from one degree. */
 export interface ScaleChord {
   /** 0 the tonic … 6. */
