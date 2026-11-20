@@ -16,7 +16,7 @@ def score_svg(w, sel=None, played=None, size=1.0):
         out.append('<path d="' + ''.join(f'M4 {top + i * sp:.1f}H{w - 4}' for i in range(5)) + f'" stroke="{INK}" stroke-width="0.9"></path>')
         out.append(f'<path d="M4 {top:.1f}V{base:.1f}M{w - 4} {top:.1f}V{base:.1f}" stroke="{INK}" stroke-width="1"></path>')
         out.append(f'<text x="8" y="{base + 7 * size:.1f}" font-size="{50 * size:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
-        out.append(f'<text x="{40 * size:.1f}" y="{top + 1.6 * sp:.1f}" font-size="{20 * size:.0f}" font-family="Noto Music, serif" fill="{INK}">♯</text>')
+        out.append(f'<text x="{40 * size:.1f}" y="{top + 0.6 * sp:.1f}" font-size="{20 * size:.0f}" font-family="Noto Music, serif" fill="{INK}">♯</text>')
         x0 = 58 * size
         if si == 0:
             out.append(f'<text x="{x0:.1f}" y="{top + 2 * sp - 1:.1f}" font-size="{19 * size:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">3</text><text x="{x0:.1f}" y="{base - 1:.1f}" font-size="{19 * size:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">4</text>')
@@ -65,6 +65,135 @@ def score_svg(w, sel=None, played=None, size=1.0):
         gy = base + 40 * size; H = gy
     return f'<svg viewBox="0 0 {w} {H:.0f}" width="100%" role="img" aria-label="Amazing Grace, bars 1 to 7" style="display: block">' + ''.join(out) + '</svg>'
 
+
+
+# ── the score as the app engraves it: Melody with chords and words, then the Piano's treble and bass ──
+# Amazing Grace's two staves (its Instruments: Voice, Piano) with the r2 accompaniment the arranger writes under the
+# chart: the bass on the beat, the chord on beats two and three, pitch for pitch as Verovio prints them in the editor.
+# A melody event: (pitch, beats, syllable, dotted); a piano bar: (right-hand chord or None, bass) — None in the pickup.
+GBARS = [
+    ('', [('D4', 1, 'A-')], None),
+    ('G', [('G4', 2, 'ma-'), ('B4', .5, 'zing_'), ('G4', .5, '')], (['G3', 'B3', 'D4'], 'G1')),
+    ('G⁷', [('B4', 2, 'grace!'), ('A4', 1, 'How')], (['G3', 'B3', 'D4', 'F4♮'], 'G1')),
+    ('C', [('G4', 2, 'sweet'), ('E4', 1, 'the')], (['G3', 'C4', 'E4'], 'C2')),
+    ('G', [('D4', 2, 'sound,'), ('D4', 1, 'That')], (['G3', 'B3', 'D4'], 'G1')),
+    ('G', [('G4', 2, 'saved'), ('B4', .5, 'a_'), ('G4', .5, '')], (['G3', 'B3', 'D4'], 'G1')),
+    ('G', [('B4', 2, 'wretch'), ('A4', 1, 'like')], (['G3', 'B3', 'D4'], 'G1')),
+    ('D', [('D5', 3, 'me!', 'tie')], (['F3', 'A3', 'D4'], 'D2')),
+    ('D⁷', [('D5', 1, ''), ('r', 1, ''), ('B4', 1, 'I')], (['F3', 'A3', 'C4', 'D4'], 'D2')),
+    ('G', [('D5', 1.5, 'once_'), ('B4', .5, ''), ('D5', .5, 'was_'), ('B4', .5, '')], (['G3', 'B3', 'D4'], 'G1')),
+    ('G⁷', [('G4', 2, 'lost,'), ('D4', 1, 'but')], (['G3', 'B3', 'D4', 'F4♮'], 'G1')),
+    ('C', [('E4', 1.5, 'now_'), ('G4', .5, ''), ('G4', .5, 'am_'), ('E4', .5, '')], (['G3', 'C4', 'E4'], 'C2')),
+    ('G', [('D4', 2, 'found.'), ('D4', 1, 'Was')], (['G3', 'B3', 'D4'], 'G1')),
+]
+def _step(p, clef):  # staff steps above the bottom line: E4 in the treble, G2 in the bass
+    n = 'CDEFGAB'.index(p[0]) + 7 * int(p[1])
+    return n - (('CDEFGAB'.index('E') + 28) if clef == 't' else ('CDEFGAB'.index('G') + 14))
+def score_grand(w, systems, sel=None, size=1.0):
+    """The song's systems, each Melody over the Piano's grand staff. systems: lists of bar indexes; sel: (bar, event)."""
+    s = size; sp = 8 * s; out = []; gy = 0; H = 0
+    ln = lambda d, sw=0.9, c=INK: out.append(f'<path d="{d}" stroke="{c}" stroke-width="{sw}" fill="none"></path>')
+    def staff(top, x0, x1): ln(''.join(f'M{x0:.1f} {top + i * sp:.1f}H{x1:.1f}' for i in range(5)))
+    def head(x, y, hollow, col):
+        out.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{5.6 * s:.1f}" ry="{4 * s:.1f}" transform="rotate(-20 {x:.1f} {y:.1f})" fill="{"none" if hollow else col}" stroke="{col}" stroke-width="{1.8 if hollow else 0}"></ellipse>')
+    def ledgers(x, st, base, w2=9):
+        for k in range(-2, st - 1, -2): ln(f'M{x - w2 * s:.1f} {base - k * sp / 2:.1f}H{x + w2 * s:.1f}')
+        for k in range(10, st + 1, 2): ln(f'M{x - w2 * s:.1f} {base - k * sp / 2:.1f}H{x + w2 * s:.1f}')
+    def qrest(x, top): out.append(f'<text x="{x - 5 * s:.1f}" y="{top + 2.9 * sp:.1f}" font-size="{30 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄽</text>')
+    for si, bars in enumerate(systems):
+        first = si == 0
+        mtop = gy + 34 * s; mbase = mtop + 4 * sp; ttop = mbase + 46 * s; tbase = ttop + 4 * sp; btop = tbase + 36 * s; bbase = btop + 4 * sp
+        x0 = (66 if first else 14) * s; x1 = w - 4
+        for t in (mtop, ttop, btop): staff(t, x0, x1)
+        ln(f'M{x0:.1f} {mtop:.1f}V{bbase:.1f}', 1.1)
+        # the brace before the piano's two staves
+        bx = x0 - 9 * s; my = (ttop + bbase) / 2
+        out.append(f'<path d="M{bx + 6 * s:.1f} {ttop:.1f}C{bx - 1 * s:.1f} {ttop + 10 * s:.1f} {bx + 5 * s:.1f} {my - 14 * s:.1f} {bx - 2 * s:.1f} {my:.1f}C{bx + 5 * s:.1f} {my + 14 * s:.1f} {bx - 1 * s:.1f} {bbase - 10 * s:.1f} {bx + 6 * s:.1f} {bbase:.1f}" stroke="{INK}" stroke-width="{2.2 * s:.1f}" fill="none"></path>')
+        if first:
+            out.append(f'<text x="{x0 - 8 * s:.1f}" y="{mtop + 2 * sp + 5 * s:.1f}" text-anchor="end" font-size="{14 * s:.0f}" font-style="italic" font-family="{SERIF}" fill="{INK}">Melody</text>')
+            out.append(f'<text x="{x0 - 15 * s:.1f}" y="{my + 5 * s:.1f}" text-anchor="end" font-size="{14 * s:.0f}" font-family="{SERIF}" fill="{INK}">Piano</text>')
+        else:
+            out.append(f'<text x="{x0:.1f}" y="{mtop - 22 * s:.1f}" font-size="{11 * s:.0f}" fill="{SOFT}">{bars[0] + 1}</text>')
+        x = x0 + 4 * s
+        for top, clef in ((mtop, 't'), (ttop, 't'), (btop, 'b')):
+            if clef == 't': out.append(f'<text x="{x:.1f}" y="{top + 3 * sp:.1f}" font-size="{32 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄞</text>')
+            else: out.append(f'<text x="{x:.1f}" y="{top + 3 * sp:.1f}" font-size="{32 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">𝄢</text>')
+            out.append(f'<text x="{x + 30 * s:.1f}" y="{top + (0.6 if clef == "t" else 1.6) * sp:.1f}" font-size="{20 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">♯</text>')
+            if first:
+                out.append(f'<text x="{x + 46 * s:.1f}" y="{top + 2 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">3</text><text x="{x + 46 * s:.1f}" y="{top + 4 * sp - 1:.1f}" font-size="{19 * s:.0f}" font-weight="700" font-family="Georgia, serif" fill="{INK}">4</text>')
+        x += (68 if first else 46) * s
+        # each bar's width: its beats, widened where its words need the room
+        beats = [sum(e[1] for e in GBARS[b][1]) for b in bars]
+        need = [sum(max(len(e[2]) * 7.4 * s + 12 * s, e[1] * 26 * s) for e in GBARS[b][1]) + 26 * s for b in bars]
+        unit = (x1 - x) / sum(beats); widths = [max(beats[i] * unit, need[i]) for i in range(len(bars))]
+        k = (x1 - x) / sum(widths); widths = [v * k for v in widths]
+        for bi, b in enumerate(bars):
+            ch, mel, pno = GBARS[b]; bw = widths[bi]; nb = beats[bi]; lead = 16 * s; span = bw - lead - 10 * s
+            at = lambda t: x + lead + t / nb * span
+            if ch: out.append(f'<text x="{at(0) - 5 * s:.1f}" y="{mtop - 10 * s:.1f}" font-size="{15 * s:.0f}" font-weight="700" fill="{INK}">{ch}</text>')
+            t = 0; evx = []
+            for ei, e in enumerate(mel):
+                p, d, syl = e[0], e[1], e[2]; ex = at(t); on = sel == (b, ei); col = '#8C6418' if on else INK
+                if p == 'r': qrest(ex, mtop); t += d; evx.append(None); continue
+                st = _step(p, 't'); y = mbase - st * sp / 2
+                if on:
+                    su = st < 4; y1 = (y - 3.5 * sp - 5 * s) if su else (y - 7 * s); y2 = (y + 7 * s) if su else (y + 3.5 * sp + 5 * s)
+                    out.append(f'<rect x="{ex - 10 * s:.1f}" y="{y1:.1f}" width="{21 * s:.1f}" height="{y2 - y1:.1f}" rx="{6 * s:.1f}" fill="{ACCENT}" opacity=".55"></rect>')
+                ledgers(ex, st, mbase)
+                head(ex, y, d >= 2, col)
+                if d in (1.5, 3): out.append(f'<circle cx="{ex + 10 * s:.1f}" cy="{y - (sp / 2 if st % 2 == 0 else 0):.1f}" r="{1.6 * s:.1f}" fill="{col}"></circle>')
+                evx.append((ex, y, st, d, col))
+                if syl.strip('-_'):
+                    out.append(f'<text x="{ex:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" fill="{col}">{syl.strip("-_")}</text>')
+                    nx = at(t + d) if ei + 1 < len(mel) else x + bw + lead
+                    half = len(syl.strip('-_')) * 3.9 * s
+                    if syl.endswith('-'): out.append(f'<text x="{(ex + nx) / 2:.1f}" y="{mbase + 26 * s:.1f}" text-anchor="middle" font-size="{14 * s:.0f}" fill="{INK}">-</text>')
+                    if syl.endswith('_'): ln(f'M{ex + half + 2:.1f} {mbase + 27 * s:.1f}H{at(t + d) + 5 * s if ei + 1 < len(mel) else ex + half + 20 * s:.1f}', 1)
+                if len(e) > 3 and bi + 1 < len(bars):  # the held "me!" tied over the barline
+                    nx2 = x + bw + lead + 16 * s
+                    out.append(f'<path d="M{ex + 4 * s:.1f} {y - 7 * s:.1f}Q{(ex + nx2) / 2:.1f} {y - 16 * s:.1f} {nx2 - 4 * s:.1f} {y - 7 * s:.1f}" stroke="{INK}" stroke-width="1.3" fill="none"></path>')
+                t += d
+            # stems: an eighth pair beamed, a lone eighth flagged, the rest by where the head sits
+            i = 0
+            while i < len(mel):
+                v = evx[i]
+                if v is None: i += 1; continue
+                ex, y, st, d, col = v
+                if d == .5 and i + 1 < len(mel) and mel[i + 1][1] == .5 and (i == 0 or mel[i - 1][1] != .5 or (i >= 2 and mel[i - 2][1] == .5)):
+                    a, c = evx[i], evx[i + 1]; up = (a[2] + c[2]) / 2 < 4
+                    if up:
+                        ty = min(a[1], c[1]) - 3.5 * sp; xs = (a[0] + 5.2 * s, c[0] + 5.2 * s)
+                    else:
+                        ty = max(a[1], c[1]) + 3.5 * sp; xs = (a[0] - 5.2 * s, c[0] - 5.2 * s)
+                    for (hx, hy, *_), sx in zip((a, c), xs): ln(f'M{sx:.1f} {hy:.1f}V{ty:.1f}', 1.2, a[4])
+                    out.append(f'<path d="M{xs[0]:.1f} {ty + (1.5 if up else -1.5) * s:.1f}H{xs[1]:.1f}" stroke="{a[4]}" stroke-width="{3.2 * s:.1f}"></path>')
+                    i += 2; continue
+                if d < 4:
+                    up = st < 4; sx = ex + (5.2 if up else -5.2) * s; ty = y + (-3.5 if up else 3.5) * sp
+                    ln(f'M{sx:.1f} {y:.1f}V{ty:.1f}', 1.2, col)
+                    if d == .5: out.append(f'<path d="M{sx:.1f} {ty:.1f}q{5 * s:.1f} {(6 if up else -6) * s:.1f} {4 * s:.1f} {(14 if up else -14) * s:.1f}" stroke="{col}" stroke-width="{1.6 * s:.1f}" fill="none"></path>')
+                i += 1
+            if pno:
+                rh, bass = pno
+                qrest(at(0), ttop)
+                for tt in (1, 2):
+                    cx = at(tt); steps = []
+                    for n in rh:
+                        st = _step(n[:2], 't'); steps.append(st)
+                        if n.endswith('♮') and tt == 1: out.append(f'<text x="{cx - 15 * s:.1f}" y="{tbase - st * sp / 2 + 5 * s:.1f}" font-size="{15 * s:.0f}" font-family="Noto Music, serif" fill="{INK}">♮</text>')
+                    ledgers(cx, min(steps), tbase)
+                    for j, st in enumerate(steps):
+                        shift = j > 0 and st - steps[j - 1] == 1
+                        head(cx + (10.4 * s if shift else 0), tbase - st * sp / 2, False, INK)
+                    ln(f'M{cx + 5.2 * s:.1f} {tbase - min(steps) * sp / 2:.1f}V{tbase - max(steps) * sp / 2 - 3.5 * sp:.1f}', 1.2)
+                bx2 = at(0); st = _step(bass, 'b'); y = bbase - st * sp / 2
+                ledgers(bx2, st, bbase); head(bx2, y, False, INK); ln(f'M{bx2 + 5.2 * s:.1f} {y:.1f}V{y - 3.5 * sp:.1f}', 1.2)
+                out.append(f'<rect x="{at(1.5) - 5 * s:.1f}" y="{btop + 1.5 * sp:.1f}" width="{10 * s:.1f}" height="{sp / 2:.1f}" fill="{INK}"></rect>')
+            x += bw
+            end = bi == len(bars) - 1
+            ln(f'M{x:.1f} {mtop:.1f}V{mbase:.1f}M{x:.1f} {ttop:.1f}V{bbase:.1f}', 1.1 if end else 0.9)
+        gy = bbase + 3.6 * sp + 22 * s; H = gy
+    return f'<svg viewBox="0 0 {w} {H:.0f}" width="100%" role="img" aria-label="Amazing Grace, Melody and Piano" style="display: block">' + ''.join(out) + '</svg>'
 
 # --- hanon
 def hanon(w, shift=0):  # shift: the figure's start a step higher, as Hanon's next two bars climb
