@@ -14,7 +14,7 @@ import {
   type ShelvedFolder,
 } from '@/entities/library'
 import { cn } from '@/shared/lib'
-import { Sheet, SheetContent } from '@/shared/ui'
+import { say, Sheet, SheetContent } from '@/shared/ui'
 import type { Moving } from '../move-to'
 import { FolderSheet } from './FolderSheet'
 import { useLibraryActs } from './use-library-acts'
@@ -250,10 +250,11 @@ function PlaceRow({
     <div className="flex items-center" style={{ paddingLeft: `${Math.min(depth, 4) * 1.25}rem` }}>
       <button
         type="button"
-        // Here is no move, and a folder into itself none: both stay in sight, neither acts.
+        // Here is no move, and a folder into itself none: both stay in sight, neither moves; a barred
+        // one says why when tapped, a phone having no hover for its title.
         aria-disabled={here || barred !== null || undefined}
         title={barred ?? undefined}
-        onClick={here || barred ? undefined : onPick}
+        onClick={here ? undefined : barred ? () => say(barred) : onPick}
         className={cn(
           ROW,
           here && 'cursor-default hover:bg-transparent',

@@ -579,6 +579,9 @@ owner's, typos fixed.
   not (Publish on one of the app's songs) shows Settings. Back steps through the window's pages in history, Create
   goes back to Settings with Undo in its toast. Publish's why ⓘ sits by its standing inside the window.
 
+- **A barred place in Move to says why when tapped (2026-11-20):** a built-in playlist, or a playlist into itself, stays
+  in sight greyed; its reason was a hover title alone, so on a phone a tap did nothing. A tap now says it in a toast.
+
 ## Learn and the editors
 - **One laptop sub-page bar, measured (loop, the board-to-app port, 2026-11-20):** a large title after Back (Your lessons, Courses, a level, a course) kept the main's 16 above its bar on a laptop, so its Back stood at 22 where every sub-page board's stands at 6, Back 4 further in and the title 8 after it where the kit's LTITLEBAR draws 40 and 12; a lesson's bar stood 8 low. All now the one 56 bar flush at the top, content 24 under it. The Courses and level boards still drew the old 88 head with Back 44 in (a drifted LBACK); they now call LTITLEBAR. Your lessons' sort was a boxed ⇅ Recent ⇕ behind a divider where its board draws the word in ink by a chevron; it is `SortMenu`'s field face now (`SortChoice` gone), and its table head reads on its own line height. Learn is marked in the sidebar on Your lessons and a level's page, as on Courses and a lesson.
 - **A lesson's links and question as the boards (loop, the board-to-app port, 2026-11-20):** a link stood in a card with the small solid tile; the board draws it on the paper, a 60 row from the column's edge with its 44 tile on its paint's wash (Layers on sky, List checks on lilac). Show the answer was the ringed white pill; it is the board's pill on the sand wash. The answer's keys named F♯ as "F#"; they print the musician's sharp.
