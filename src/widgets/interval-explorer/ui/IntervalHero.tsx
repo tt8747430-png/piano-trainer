@@ -68,7 +68,7 @@ export function IntervalHero({
       <div className="flex items-center gap-0.5">
         <h2
           id="interval-chosen"
-          className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance"
+          className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance"
         >
           {title}
         </h2>

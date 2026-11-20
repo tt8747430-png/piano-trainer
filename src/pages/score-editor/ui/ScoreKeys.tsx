@@ -102,7 +102,7 @@ function NumeralKey() {
       tool="numeral"
       onClick={() => actions.dispatch({ type: 'numeral' })}
     >
-      <span aria-hidden className="font-serif text-lg font-semibold leading-none">
+      <span aria-hidden className="font-display text-lg font-semibold leading-none">
         IV<sup className="text-[0.6em]">6</sup>
       </span>
     </PaletteKey>

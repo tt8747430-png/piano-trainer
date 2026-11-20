@@ -292,8 +292,8 @@ const CATEGORY_SIGN: Record<
 
 const FACE = {
   music: 'font-music text-[1.625rem]',
-  term: 'font-serif text-lg font-bold italic',
-  serif: 'font-serif text-lg font-bold',
+  term: 'font-display text-lg font-bold italic',
+  serif: 'font-display text-lg font-bold',
   sans: 'font-sans text-[0.9375rem] font-semibold',
 } as const
 

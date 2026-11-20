@@ -275,7 +275,7 @@ export function NewSongSheet({
                   onClick={() => setMeter(each)}
                   className={cn(
                     TILE,
-                    'flex h-15 flex-col items-center justify-center font-serif text-[1.1875rem]/[0.95] font-bold',
+                    'flex h-15 flex-col items-center justify-center font-display text-[1.1875rem]/[0.95] font-bold',
                   )}
                 >
                   <span>{count}</span>

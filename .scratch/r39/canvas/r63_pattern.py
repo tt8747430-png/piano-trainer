@@ -19,32 +19,39 @@ TITLE63 = (SHOWSTATES() + f'<div style="flex: none; display: flex; flex-directio
            f'<div style="display: flex; align-items: center; gap: 2px"><h2 style="margin: 0; font-family: {SERIF}; font-size: 36px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance">{{{{name}}}}</h2>'
            f'<button type="button" aria-label="Favourite" aria-pressed="{{{{favOn}}}}" onClick="{{{{toggleFav}}}}" style="flex: none; width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{HEARTI}</button></div>'
            f'<p style="margin: 0 0 0 2px; font-size: 15px; color: {SOFT}">{IF("builtIn", "Called to Play", "true")}{IF("own", "Your pattern · from Broken chords")}</p></div>')
+from bravura_glyphs import BRAVURA
+
 def _staff63():
-    y = lambda d: 58 - d * 3.5          # treble: d=0 is E4 on the bottom line
-    yb = lambda d: 112 - d * 3.5        # bass: d=0 is G2 on the bottom line
-    s = ''.join(f'<path d="M24 {30 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    s += ''.join(f'<path d="M24 {84 + i * 7}H270" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
-    s += f'<path d="M24 30V112" stroke="{INK}" stroke-width="1.2"></path><path d="M270 30V112" stroke="{INK}" stroke-width="1"></path>'
-    s += f'<text x="27" y="58" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="28" y="112" font-size="31" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
-    s += f'<text x="62" y="16" font-size="13" font-weight="700" fill="{INK}">C</text>'
+    """The bar as the app engraves it (PatternStaff: a 254-unit view at 7 units a space, measured at 370): the brace,
+    both clefs at four spaces, Bravura's 4/4, the staves six spaces apart, the 8ths where Verovio spaces them, the
+    chord's name on the bar's band over it in the app's display face at its own 14px."""
+    y = lambda d: 49 - d * 3.5          # treble: d=0 is E4 on the bottom line
+    yb = lambda d: 119 - d * 3.5        # bass: d=0 is G2 on the bottom line
+    s = ''.join(f'<path d="M43.5 {21 + i * 7}H273.5" stroke="{INK}" stroke-width=".9"></path><path d="M43.5 {91 + i * 7}H273.5" stroke="{INK}" stroke-width=".9"></path>' for i in range(5))
+    s += f'<path d="M43.5 21V119" stroke="{INK}" stroke-width="1.4"></path><path d="M273.5 21V119" stroke="{INK}" stroke-width="1"></path>'
+    s += f'<path d="M40.5 21C32.5 29 40.5 61 33.5 70C40.5 79 32.5 111 40.5 119" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>'
+    s += f'<text x="48" y="49" font-size="28" font-family="Noto Music, serif" fill="{INK}">𝄞</text><text x="48" y="119" font-size="31" font-family="Noto Music, serif" fill="{INK}">𝄢</text>'
+    s += ''.join(f'<path transform="translate(74.5 {v}) scale(.028 -.028)" d="{BRAVURA["t4"][0]}" fill="{INK}"></path>' for v in (28, 42, 98, 112))
     # the right hand rocks in eighths, as the app plays M2: the upper notes together (E4 G4), then the lowest
-    # alone (C4, on a ledger line below the staff), four times
+    # alone (C4, on a ledger line below the staff), four times; stems up to a flat beam over the staff
     steps = [(0, 2), (-2,)] * 4
-    xs = [80 + i * 23 for i in range(8)]
-    for i, (x, ds) in enumerate(zip(xs, steps)):
+    xs = [round(103.0 + i * 21.83, 2) for i in range(8)]
+    for x, ds in zip(xs, steps):
         for d in ds:
             cy = y(d)
-            s += f'<ellipse cx="{x}" cy="{cy:.1f}" rx="5.2" ry="3.8" transform="rotate(-20 {x} {cy:.1f})" fill="{INK}"></ellipse>'
-        s += f'<path d="M{x + 4.6} {y(min(ds)):.1f}V{y(9):.1f}" stroke="{INK}" stroke-width="1.1"></path>'
-        if min(ds) <= -2: s += f'<path d="M{x - 9} {y(-2):.1f}H{x + 9}" stroke="{INK}" stroke-width="1"></path>'
+            s += f'<path transform="translate({x - 4.13:.2f} {cy:.1f}) scale(.028 -.028)" d="{BRAVURA["black"][0]}" fill="{INK}"></path>'
+        s += f'<path d="M{x + 3.7:.2f} {y(min(ds)):.1f}V20.3" stroke="{INK}" stroke-width=".9"></path>'
+        if min(ds) <= -2: s += f'<path d="M{x - 7.7} 56H{x + 7.7}" stroke="{INK}" stroke-width="1"></path>'
     for a, b in ((0, 3), (4, 7)):
-        s += f'<path d="M{xs[a] + 4.6} {y(9):.1f}L{xs[b] + 4.6} {y(9):.1f}" stroke="{INK}" stroke-width="4"></path>'
+        s += f'<path d="M{xs[a] + 3.35} 19.6H{xs[b] + 4.25}V23.1H{xs[a] + 3.35}Z" fill="{INK}"></path>'
     # the left hand: an octave, C2 and C3, a whole note
     for d in (-4, 3):
         cy = yb(d)
-        s += f'<ellipse cx="96" cy="{cy:.1f}" rx="6.4" ry="4.2" transform="rotate(-20 96 {cy:.1f})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
-    s += f'<path d="M86 {yb(-2):.1f}H106M86 {yb(-4):.1f}H106" stroke="{INK}" stroke-width="1"></path>'
-    return f'<svg viewBox="20 0 254 132" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; max-width: 560px; margin: 0 auto">{s}</svg>'
+        s += f'<path transform="translate(99 {cy:.1f}) scale(.028 -.028)" d="{BRAVURA["whole"][0]}" fill="{INK}"></path>'
+    s += f'<path d="M97.2 126H112.6M97.2 133H112.6" stroke="{INK}" stroke-width="1"></path>'
+    svg = f'<svg viewBox="20 0 254 141" width="100%" role="img" aria-label="Broken chords over a bar of C major" style="display: block; overflow: visible">{s}</svg>'
+    return (f'<div style="position: relative; width: 100%; max-width: 560px; margin: 0 auto">{svg}'
+            f'<span style="position: absolute; left: calc(9.24% + 4px); top: 0; height: 24px; font-family: {SERIF}; font-size: 14px; font-weight: 600; color: {INK}">C</span></div>')
 # the pattern at reading size (10 a space on a phone), framed to its bar, on the paper: no card round the page's own
 # music (laws, "The page's subject is its largest thing")
 MUSIC63 = (f'<figure style="flex: none; margin: 0; display: flex; flex-direction: column; gap: 12px">' + _staff63() + f'<figcaption style="margin: 0 4px; max-width: 65ch; font-size: 15px; line-height: 1.4; color: {SOFT}; text-wrap: pretty">Over a held octave, the right hand rocks between the chord’s upper notes and its lowest note.</figcaption></figure>')

@@ -43,11 +43,11 @@ export function PublicCover({
           symbol={first}
           className={cn(
             '[&_*]:text-current',
-            cell ? 'font-serif text-[0.8125rem] font-bold' : 'text-xl font-semibold',
+            cell ? 'font-display text-[0.8125rem] font-bold' : 'text-xl font-semibold',
           )}
         />
       ) : (
-        <span className="flex max-w-full items-center gap-3 font-serif text-[1.375rem] font-semibold">
+        <span className="flex max-w-full items-center gap-3 font-display text-[1.375rem] font-semibold">
           {bars.map((bar, index) => (
             <span key={index} className="flex items-center gap-3">
               {index > 0 ? <span className="h-7 w-px bg-current opacity-30" /> : null}

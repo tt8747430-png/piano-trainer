@@ -54,10 +54,10 @@ const PLACES = {
  */
 const FACES = {
   chord: 'w-36 font-display font-semibold',
-  lyrics: 'w-32 font-serif',
+  lyrics: 'w-32 font-display',
   fingering: 'w-24 text-center font-display font-semibold tabular-nums',
-  text: 'w-44 font-serif italic',
-  staffName: 'w-44 font-serif',
+  text: 'w-44 font-display italic',
+  staffName: 'w-44 font-display',
 } as const satisfies Readonly<Record<Kind, string>>
 
 /** What a phone's own keyboard offers for each field as it opens: digits for the fingers. */

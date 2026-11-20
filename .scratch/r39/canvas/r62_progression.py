@@ -21,7 +21,7 @@ PR62 = PR.replace("toggleLoop: () => set({ loop: !loop }) };", r'''toggleLoop: (
         P.forEach((n, i) => { const rpc = (key + DEG[n]) % 12, l0 = L.indexOf(NN[rpc].charAt(0)), x = X[i];
           V[n].forEach(([tone, m0]) => { const m = m0 + shift, li = (l0 + { R: 0, '3': 2, '5': 4 }[tone]) % 7, oct = Math.round((m - NAT[li]) / 12) - 1, d = oct * 7 + li;
             const k = m - 12 * (oct + 1) - NAT[li], lh = m < 60, y = lh ? 108.5 - (d - 21) * 3.5 : 56 - (d - 28) * 3.5;
-            notes.push({ x, cy: y, ax: x - 15, ay: y + 5, a1: k === 1, a2: k === -1 });
+            notes.push({ x, hx: x - 5.9, cy: y, ax: x - 15, ay: y + 5, a1: k === 1, a2: k === -1 });
             if (!lh && d <= 28) led.push({ d: 'M' + (x - 7.7) + ' 56H' + (x + 7.7) }); if (!lh && d >= 40) led.push({ d: 'M' + (x - 7.7) + ' 14H' + (x + 7.7) });
             if (lh && d >= 28) led.push({ d: 'M' + (x - 7.7) + ' 84H' + (x + 7.7) }); if (lh && d <= 16) led.push({ d: 'M' + (x - 7.7) + ' 126H' + (x + 7.7) }); }); });
         return { notes, led }; })(),
@@ -49,7 +49,7 @@ STAFF62 = (f'<svg viewBox="20 0 247 140" width="100%" role="img" aria-label="The
            + f'<path d="M43.5 21V119" stroke="{INK}" stroke-width="1.4"></path>' + ''.join(f'<path d="M{x} 21V119" stroke="{INK}" stroke-width="1"></path>' for x in (133.7, 178.2, 222.8, 267))
            + f'<path d="M40.5 21C32.5 29 40.5 61 33.5 70C40.5 79 32.5 111 40.5 119" fill="none" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>'
            + f'<sc-for list="{{{{staff.led}}}}" as="l" hint-placeholder-count="3"><path d="{{{{l.d}}}}" stroke="{INK}" stroke-width="1"></path></sc-for>'
-           + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="16"><ellipse cx="{{{{z.x}}}}" cy="{{{{z.cy}}}}" rx="5.6" ry="3.7" transform="rotate(-20 {{{{z.x}}}} {{{{z.cy}}}})" fill="none" stroke="{INK}" stroke-width="1.8"></ellipse>'
+           + f'<sc-for list="{{{{staff.notes}}}}" as="z" hint-placeholder-count="16"><path transform="translate({{{{z.hx}}}} {{{{z.cy}}}}) scale(.028 -.028)" d="{BRAVURA['whole'][0]}" fill="{INK}"></path>'
            + f'''<sc-if value="{{{{z.a1}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate(1 -5) scale(.028 -.028)" d="{BRAVURA['sharp'][0]}" fill="{INK}"></path></sc-if><sc-if value="{{{{z.a2}}}}" hint-placeholder-val="{{{{false}}}}"><path transform="translate({{{{z.ax}}}} {{{{z.ay}}}}) translate(1 -5) scale(.028 -.028)" d="{BRAVURA['flat'][0]}" fill="{INK}"></path></sc-if></sc-for></svg>''')
 # the chords on the staff at reading size (10 a space on a phone), framed to its four bars, on the paper: no card round
 # the page's own music (laws, "The page's subject is its largest thing")

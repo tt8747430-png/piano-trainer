@@ -141,12 +141,12 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         <div className="flex flex-col gap-4 lg:gap-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-0.5">
-              <h2 className="font-serif text-[2.25rem] leading-[1.1] font-bold tracking-[-0.02em] text-balance">
+              <h2 className="font-display text-[2.25rem] leading-[1.1] font-bold tracking-[-0.01em] text-balance">
                 {name}
               </h2>
               <PracticeFavouriteButton kind="exercises" id={exercise.id} />
             </div>
-            <p className="ms-0.5 text-[0.9375rem] text-muted-foreground">{source}</p>
+            <p className="ms-0.5 text-[0.9375rem]/[normal] text-muted-foreground">{source}</p>
           </div>
           <figure className="mt-1 flex flex-col gap-2">
             {/* Each system spans the column, its staff the board's size (12.3 a space at 370, 13 at 880). */}

@@ -12,7 +12,7 @@ import { LineKeys } from './LineKeys'
 /** A glyph of the music font (Noto Music), at a key's size. */
 const MUSIC = 'font-music text-3xl leading-none'
 /** Words as a score prints them: a serif's bold italic. */
-const PRINTED = 'font-serif text-lg font-bold italic leading-none'
+const PRINTED = 'font-display text-lg font-bold italic leading-none'
 /** A black notehead with its mark above it, as a score draws an articulation. */
 function OnHead({ mark }: { mark: string }) {
   return (
@@ -121,7 +121,7 @@ export function ArticulationKeys() {
         </span>
       </MarkKey>
       <MarkKey mark={{ kind: 'articulation', articulation: 'breath' }} label={t('marks.breath')}>
-        <span aria-hidden className="font-serif text-3xl font-bold leading-none">
+        <span aria-hidden className="font-display text-3xl font-bold leading-none">
           ’
         </span>
       </MarkKey>
@@ -299,7 +299,7 @@ export function DynamicKeys() {
     <>
       {DYNAMICS.map((dynamic) => (
         <MarkKey key={dynamic} mark={{ kind: 'dynamic', dynamic }} label={t(`marks.${dynamic}`)}>
-          <span aria-hidden className="font-serif text-xl font-bold italic leading-none">
+          <span aria-hidden className="font-display text-xl font-bold italic leading-none">
             {dynamic}
           </span>
         </MarkKey>

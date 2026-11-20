@@ -8,6 +8,8 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · pending · a pattern's bar engraved as the app (brace, Bravura 4/4, Verovio's spacing, the band's C); Bravura's black and whole noteheads on the pattern and progression staves · Pattern,PatternLaptop,Progression,ProgressionLaptop · pending
+
 
 
 ## Changes

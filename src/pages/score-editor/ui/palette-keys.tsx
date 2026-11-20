@@ -221,7 +221,7 @@ export function Printed({ text, music = false }: { text: string; music?: boolean
         'text-center',
         music
           ? 'font-music text-3xl leading-none'
-          : 'font-serif text-sm leading-tight font-semibold italic',
+          : 'font-display text-sm leading-tight font-semibold italic',
       )}
     >
       {text}
