@@ -8,12 +8,12 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · 50da51eb · a song's New playlist (from Move to) is a page of its Settings window: a name and Create, Back to Move to; Create goes back to Settings with Undo · SongSettings, SongSettingsLaptop, Section, SectionLaptop · **pending**
-- 2026-11-20 · fdd724fb · a song's Export and Move to are pages inside its Settings window, Back to Settings (a sheet never holds a sheet) · SongSettings, SongSettingsLaptop, Section, SectionLaptop · **pending**
-- 2026-11-20 · b7b924d2 · a thing's laptop window sets its title on its content's edge, 32 in (was 24, the body 32) · SongSettingsLaptop, LessonLaptop, CourseLaptop, ProgressionEditLaptop, YourLessonSettingsLaptop, YourCourseSettingsLaptop · **pending**
 
 ## Changes
 
+- 2026-11-20 · 50da51eb · a song's New playlist (from Move to) is a page of its Settings window: a name and Create, Back to Move to; Create goes back to Settings with Undo · SongSettings, SongSettingsLaptop, Section, SectionLaptop · v713
+- 2026-11-20 · fdd724fb · a song's Export and Move to are pages inside its Settings window, Back to Settings (a sheet never holds a sheet) · SongSettings, SongSettingsLaptop, Section, SectionLaptop · v713
+- 2026-11-20 · b7b924d2 · a thing's laptop window sets its title on its content's edge, 32 in (was 24, the body 32) · SongSettingsLaptop, LessonLaptop, CourseLaptop, ProgressionEditLaptop, YourLessonSettingsLaptop, YourCourseSettingsLaptop · v713
 - 2026-11-20 · a8660c3f · the laptop takes a page over the full-screen editor, in its frame with no sidebar, as the app · TakesLaptop · v712
 - 2026-11-20 · 57ca4d6b · a progression's Settings and its Publish (the editor's gear and Publish) open over the editor as the window (THINGWIN), Publish a page inside it with Back to Settings; the editor stays behind as it is · ProgressionEdit, ProgressionEditLaptop · v711
 - 2026-11-20 · 9920a564 · a lesson's and a course's Settings (the app's and the learner's own) open over their page as the song's do: the kit's one THINGWIN, on a laptop the app Settings' window (centred on the window, 720, the page dimmed, Settings and ×), on a phone a tall sheet with Done; the lesson's or course's page behind as it is; the own lesson's Rename and In courses over the window, dimming it · Lesson, LessonLaptop, Course, CourseLaptop, YourLessonSettings, YourLessonSettingsLaptop, YourCourseSettings, YourCourseSettingsLaptop · v711
