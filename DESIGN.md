@@ -330,6 +330,10 @@ Sizes are in rem, so they follow the reader's text size. A screen's title steps 
 - **Body** (Instrument Sans 400, 16px, 1.5): everything else; prose at most 65ch.
 - **Label** (Instrument Sans 500, 14px or 12px): row details, a field's name in soft ink, bar numbers.
 - **Key label** (Instrument Sans 700, 14px or 12px): a mark's degree or finger; a note name, tabular.
+- **Subject** (`subject-title`: display face 700, 36px, 1.1, -0.01em): the one thing a Practice page is about (the
+  interval, the progression, the pattern, the exercise).
+- **Section head** (`section-head`: 600, 14px, ink): the head over a card of rows on a page (Practise, Options).
+- **Caps** (`caps`: 600, 13px, 1rem, +0.04em, uppercase, soft ink): a field's or a group's caption.
 
 ### Named Rules
 
