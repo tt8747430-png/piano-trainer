@@ -232,6 +232,24 @@ def BSHEET(cond, title, body, done='Done', tall=False, back='', maxh=''):
     if tall:
         t = t.replace('max-height: 86%;', 'height: 86%; box-sizing: border-box;', 1)
     return re.sub(r'<button[^>]*>' + '</button>', '', t, count=1) if done is None else t
+# A thing's Settings over its page, never a page of its own (owner, 2026-11-20: "why dont we do such things like the
+# app settings in such popup window"): on a laptop the app Settings' window (centred on the window, 720 wide, 48 under
+# its top, 22 round, the page dimmed, a 56 bar with Back on a page inside, the title and ×, one column scrolling under
+# it); on a phone a tall sheet (BSHEET's 86%, the grabber, Back, the title, Done). on/close: the state's names; title:
+# its markup's text ({{pageT}}); back: the Back of a page inside, shown by its own condition, or ''.
+_WXI = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>'
+def THINGWIN(lap, on, close, title, body, back='', pad='24', shown='true'):
+    if not lap:
+        return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
+                f'<section role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; height: 86%; box-sizing: border-box; border-radius: 22px 22px 0 0; background: {PAGE}; display: flex; flex-direction: column">'
+                f'<div style="flex: none; padding: 6px 16px 8px; display: flex; flex-direction: column; gap: 10px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
+                f'<div style="display: grid; grid-template-columns: minmax(56px, 1fr) auto minmax(56px, 1fr); align-items: center; min-height: 44px"><div>{back}</div><span style="font-size: 17px; font-weight: 600">{title}</span><button type="button" onClick="{{{{{close}}}}}" style="justify-self: end; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div></div>'
+                f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{body}</div></section></sc-if>')
+    return (f'<sc-if value="{{{{{on}}}}}" hint-placeholder-val="{{{{{shown}}}}}"><div onClick="{{{{{close}}}}}" style="position: absolute; top: 0; bottom: 0; left: -248px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32)"></div>'
+            f'<div role="dialog" aria-modal="true" aria-label="{title}" style="position: absolute; z-index: 61; left: 50%; top: 48px; transform: translateX(calc(-50% - 124px)); width: 720px; max-height: calc(100% - 96px); border-radius: 22px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
+            f'<header style="flex: none; height: 56px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 {pad}px; box-shadow: inset 0 -1px 0 {LINE}">{back}<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{title}</h1>'
+            f'<button type="button" onClick="{{{{{close}}}}}" aria-label="Close" data-tip="Close" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; color: {INK}">{_WXI}</button></header>'
+            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px">{body}</main></div></sc-if>')
 # A row's ··· menu (owner, 2026-11-17: "what kind of nonsense is to put this delete in this cnetered popup with doen
 # button"; Apple HIG, Pull-down buttons and Menus; Material 3, Menus): a ··· opens a menu at its button, on a phone as
 # on a laptop, never a sheet or a dialog centred on the screen, never a title over it and never Done in it. Glass, 6

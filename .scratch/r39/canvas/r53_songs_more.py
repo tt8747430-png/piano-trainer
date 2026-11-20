@@ -512,19 +512,8 @@ def _SGBODY(src):
     return src.split(R41PRE + '\n', 1)[1].rsplit('\n  }\n}\n', 1)[0]
 SETWIN_JS = js('    const __sg = (() => {\n' + _SGBODY(SONG_SG) + '\n    })();\n' + SM_SRC.replace('__ROOT__', "'settings'").replace('return { ...common(st, set),', "const winOn = st.win ?? true;\n    return { ...__sg, ...common(st, set), winOn, closeWin: () => S({ win: false, page: 'settings' }), openWin: () => S({ win: true, page: 'settings' }),", 1))
 _WBACK = IF('isPublish', IB('Settings', CHEV_L, 'back'))
-_WTITLE = '<span style="font-size: 17px; font-weight: 600">{{pageT}}</span>'
-def SETWIN_P(body):
-    return (f'<sc-if value="{{{{winOn}}}}" hint-placeholder-val="{{{{true}}}}"><div onClick="{{{{closeWin}}}}" style="position: absolute; inset: 0; z-index: 60; background: rgba(51,41,33,.32)"></div>'
-            f'<section role="dialog" aria-modal="true" aria-label="{{{{pageT}}}}" style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; height: 86%; box-sizing: border-box; border-radius: 22px 22px 0 0; background: {PAGE}; display: flex; flex-direction: column">'
-            f'<div style="flex: none; padding: 6px 16px 8px; display: flex; flex-direction: column; gap: 10px"><div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'
-            f'<div style="display: grid; grid-template-columns: minmax(56px, 1fr) auto minmax(56px, 1fr); align-items: center; min-height: 44px"><div>{_WBACK}</div>{_WTITLE}<button type="button" onClick="{{{{closeWin}}}}" style="justify-self: end; height: 44px; padding: 0 4px; border: 0; background: transparent; color: {LINK}; font: inherit; font-size: 17px; font-weight: 600">Done</button></div></div>'
-            f'<div class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 4px 16px 40px; display: flex; flex-direction: column; gap: 16px">{body}</div></section></sc-if>')
-def SETWIN_L(body):
-    return (f'<sc-if value="{{{{winOn}}}}" hint-placeholder-val="{{{{true}}}}"><div onClick="{{{{closeWin}}}}" style="position: absolute; top: 0; bottom: 0; left: -248px; right: 0; z-index: 60; background: rgba(51, 41, 33, 0.32)"></div>'
-            f'<div role="dialog" aria-modal="true" aria-label="{{{{pageT}}}}" style="position: absolute; z-index: 61; left: 50%; top: 48px; transform: translateX(calc(-50% - 124px)); width: 720px; max-height: calc(100% - 96px); border-radius: 22px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, 0 24px 64px rgba(51, 41, 33, 0.28); display: flex; flex-direction: column; overflow: hidden">'
-            f'<header style="flex: none; height: 56px; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 {{{{winPad}}}}px; box-shadow: inset 0 -1px 0 {LINE}">{_WBACK}<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 600">{{{{pageT}}}}</h1>'
-            f'<button type="button" onClick="{{{{closeWin}}}}" aria-label="Close" data-tip="Close" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; display: flex; align-items: center; justify-content: center; color: {INK}">{_XI}</button></header>'
-            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px">{body}</main></div></sc-if>')
+SETWIN_P = lambda body: THINGWIN(False, 'winOn', 'closeWin', '{{pageT}}', body, _WBACK)
+SETWIN_L = lambda body: THINGWIN(True, 'winOn', 'closeWin', '{{pageT}}', body, _WBACK, '{{winPad}}')
 SETWIN_JS = SETWIN_JS.replace('winOn, closeWin', "winPad: page === 'publish' ? 12 : 24, winOn, closeWin", 1)
 # the pane holds one column: Settings' groups, or Publish's form over its preview (the window is 720, never two columns)
 _SWBODY = SHOWSTATES() + IF('isSettings', SSET, 'true') + IF('isPublish', SPUB)

@@ -82,11 +82,8 @@ CSET = THINGSET(THINGHEAD(COURSEPIC, 'Intro to Music Reading', 'Course · 7 less
                 THINGSEC(CAPS('The course'), GROUP(('link', 'Shelf', 'Beginner', 'LearnCoursesLaptop.dc.html'), bg=SHEET)), 'course')
 CNEW = (f'{NAMEFIELD('Lesson name')}'
         f'<div style="display: flex">{BTN("Create", "create", "", "primary", 50)}</div>')
-def CPAGE(lap):
-    pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
-    return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">' + ('' if lap else '<div style="height: 54px; flex: none"></div>')
-            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the course" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0 0 0 {-4 if not lap else 0}px; font-size: {30 if lap else 17}px; font-weight: {700 if lap else 600}{"; letter-spacing: -0.01em" if lap else ""}">{{{{pageT}}}}</h1></header>'
-            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; {pad}"><div style="{"width: min(1180px, 100%); " if lap else ""}display: flex; flex-direction: column; gap: 16px"><sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{CSET}</sc-if></div></main></div></sc-if>')
+# its Settings a window over the course (THINGWIN), never a page of its own (owner, 2026-11-20)
+CPAGE = lambda lap: THINGWIN(lap, 'onPage', 'closePage', '{{pageT}}', '<sc-if value="{{isSet}}" hint-placeholder-val="{{true}}">' + (CSET) + '</sc-if>', shown='false')
 CASKS = (ASK('delOn', 'Delete Intro to Music Reading?', 'Learners lose it the next time the app starts, with its unpublished changes and every saved version.', 'Delete course', 'closeSheet'))
 cph = (f'<sc-if value="{{{{reading}}}}" hint-placeholder-val="{{{{true}}}}">{TOP("LearnCourses.dc.html", "", CBAR_R, "Back to Courses")}</sc-if><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}">{TOP("LearnCourses.dc.html", "", CEDIT_R, "Back to Courses")}</sc-if>'
        f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 16px 60px; display: flex; flex-direction: column; gap: 16px">{CBODY(False)}</main>{TOAST(40, 'undoRemove')}{CPAGE(False)}{CASKS}')

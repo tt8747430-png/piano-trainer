@@ -150,7 +150,7 @@ OSET_JS = js(r'''
 NAMEBODY = lambda v, label: (f'<div style="display: flex; flex-direction: column; gap: 8px">{CAPS("Name")}<input {KB["title"]} aria-label="Name" value="{v}" style="height: 48px; box-sizing: border-box; border: 0; border-radius: 12px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; padding: 0 12px; font: inherit; font-size: 16px; color: {INK}"></div>'
                              f'<div style="display: flex">{BTN(label, "rename", "", "primary", 50)}</div>')
 INSBODY = GROUP(('raw', f'<sc-for list="{{{{inCourses}}}}" as="k" hint-placeholder-count="2"><button type="button" role="checkbox" aria-checked="{{{{k.on}}}}" onClick="{{{{k.pick}}}}" style="width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px; padding: 4px 16px; border: 0; background: transparent; color: {INK}; font: inherit; font-size: 16px; text-align: left; box-shadow: inset 0 -1px 0 {LINE}"><span style="flex: 1">{{{{k.c}}}}</span><span style="font-weight: 700; color: #44684A">{{{{k.mark}}}}</span></button></sc-for>'), bg=SHEET)
-def SETTINGS(lesson, lap):
+def SETTINGS(lesson, lap, win=False):
     name = 'Warm-up before church' if lesson else 'Sunday service set'
     # one shape for every Settings page of a lesson or course (a level's lesson, a course: CPAGE), on both sizes
     head = LTOP(("LessonLaptop" if lesson else "CourseLaptop") + ".dc.html", '', 'Settings') if lap else TOP(("Lesson" if lesson else "Course") + ".dc.html", 'Settings')
@@ -171,12 +171,23 @@ def SETTINGS(lesson, lap):
     # one column on both sizes, in the phone's order: what it is, then its progress, the loss last and apart (loop round 63:
     # in two columns Delete stood at the laptop's top right, the first thing seen)
     body = sub + rows + rest
+    if win: return f'<div style="display: flex; flex-direction: column; gap: 24px">{body}</div>'
     pad = 'padding: 24px 56px 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
     return (f'{head}<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; {pad}; display: flex; flex-direction: column"><div style="{"width: min(1180px, 100%); " if lap else ""}display: flex; flex-direction: column; gap: 24px">{body}</div></main>'
             + (TOAST(28, laptop=True, always=True) if lap else TOAST(40, always=True)))
 for lesson in (True, False):
     stem, nm = ('YourLessonSettings', 'Warm-up before church') if lesson else ('YourCourseSettings', 'Sunday service set')
     sh = BSHEET('nameOn', 'Rename', NAMEBODY(nm, 'Rename')) + (BSHEET('insOn', 'In courses', INSBODY) if lesson else '')
-    pp = sh.replace('<div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'.replace('{LINE}', LINE), '').replace('position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 440px; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px')
-    detail(stem, 'Settings · ' + nm, OSET_JS.replace('const cs =', 'const isLesson = %s, cs =' % ('true' if lesson else 'false'), 1), SHOWSTATES() + SETTINGS(lesson, False), SHOWSTATES() + SETTINGS(lesson, True), '', sh, pp, 'Learn')
+    pp = sh.replace('<div style="align-self: center; width: 36px; height: 5px; border-radius: 3px; background: {LINE}"></div>'.replace('{LINE}', LINE), '').replace('position: absolute; left: 0; right: 0; bottom: 0; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px 22px 0 0', 'position: absolute; left: 50%; top: 50%; transform: translate(calc(-50% - 124px), -50%); width: 440px; z-index: 61; max-height: 86%; overflow-y: auto; border-radius: 22px; box-shadow: 0 0 0 1px #DAD1C8, 0 1px 3px rgba(51,41,33,.12), 0 6px 14px -4px rgba(51,41,33,.14), 0 14px 28px -8px rgba(51,41,33,.14)').replace('padding: 6px 16px 40px', 'padding: 20px')
+    # its Settings a window over its page (THINGWIN; owner, 2026-11-20: "why dont we do such things like the app
+    # settings in such popup window"): the lesson's or the course's page behind as it is, its own script beside the
+    # Settings' in a scope of its own, as a song's Settings over the song (r53, SETWIN)
+    pgjs, pph, plm = (LESSON_JS, lph, llm) if lesson else (COURSE_JS, cph, clm)
+    osjs = OSET_JS.replace('const cs =', 'const isLesson = %s, cs =' % ('true' if lesson else 'false'), 1)
+    wjs = js('    const __pg = (() => {\n' + _SGBODY(pgjs) + '\n    })();\n' + _SGBODY(osjs).replace('return { ...common(st, set),', "const winOn = st.win ?? true;\n    return { ...__pg, ...common(st, set), winOn, closeWin: () => set({ win: false, sheet: null }), openSettings: () => set({ win: true }), onPage: false,", 1))
+    wph = SHOWSTATES() + pph + THINGWIN(False, 'winOn', 'closeWin', 'Settings', SETTINGS(lesson, False, True)) + TOAST(40, always=True)
+    wlm = SHOWSTATES() + plm + THINGWIN(True, 'winOn', 'closeWin', 'Settings', SETTINGS(lesson, True, True)) + TOAST(28, laptop=True, always=True)
+    # its sheets (Rename, In courses) stand over the window, dimming it as a sheet dims the page
+    up = lambda x: x.replace('z-index: 60;', 'z-index: 70;').replace('z-index: 61;', 'z-index: 71;')
+    detail(stem, 'Settings · ' + nm, wjs, wph, wlm, '', up(sh), up(pp), 'Learn')
 print('r57 yours ok')

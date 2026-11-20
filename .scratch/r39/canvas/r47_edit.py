@@ -276,14 +276,8 @@ def SPLIT2(page, first, second):
     col = '<div style="min-width: 0; display: flex; flex-direction: column; gap: 16px">'
     return page[:a] + '<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start">' + col + page[a:b] + '</div>' + col + page[b:] + '</div></div>'
 SETPAGE_L = SETPAGE  # one column on a laptop too, as the learner's own settings: the loss last, never top right
-def PAGEOVER(lap):
-    pad = 'padding: 24px 0 60px; align-items: center' if lap else 'padding: 8px 16px 40px'
-    inner_w = 'width: min(1180px, 100%); ' if lap else ''
-    return (f'<sc-if value="{{{{onPage}}}}" hint-placeholder-val="{{{{false}}}}"><div style="position: absolute; inset: 0; z-index: 45; background: {PAGE}; display: flex; flex-direction: column">'
-            + (f'<div style="height: {54 if not lap else 0}px; flex: none"></div>' if not lap else '')
-            + f'<header style="flex: none; min-height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 16px{" 0 44px" if lap else ""}"><button type="button" aria-label="Back to the lesson" onClick="{{{{closePage}}}}" style="{GLASSST}; margin-left: -4px">{CHEV_L}</button><h1 style="margin: 0 0 0 {-4 if not lap else 0}px; font-size: {30 if lap else 17}px; font-weight: {700 if lap else 600}{"; letter-spacing: -0.01em" if lap else ""}">{{{{pageT}}}}</h1></header>'
-            f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; {pad}"><div style="{inner_w}display: flex; flex-direction: column; gap: 16px">'
-            f'<sc-if value="{{{{isSet}}}}" hint-placeholder-val="{{{{true}}}}">{SETPAGE_L if lap else SETPAGE}</sc-if></div></main></div></sc-if>')
+# its Settings a window over the lesson (THINGWIN), never a page of its own (owner, 2026-11-20)
+PAGEOVER = lambda lap: THINGWIN(lap, 'onPage', 'closePage', '{{pageT}}', '<sc-if value="{{isSet}}" hint-placeholder-val="{{true}}">' + (SETPAGE_L if lap else SETPAGE) + '</sc-if>', shown='false')
 lph = SHOWSTATES() + lph.replace('<main class="nos"', '<main class="nos" onScroll="{{secScroll}}"') + PAGEOVER(False) + ASKS
 llm = SHOWSTATES() + llm.replace('<main class="nos"', '<main class="nos" onScroll="{{secScroll}}"') + PAGEOVER(True) + ASKS
 lsh = lsh + BSHEET('verOn', 'Versions of How major scales work', VERBODY) + BSHEET('styleOn', 'Style: Scale', STYLEBODY)
