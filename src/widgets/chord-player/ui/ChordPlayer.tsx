@@ -85,7 +85,7 @@ import { SHEET_PLAYS, SHEET_TEMPO, TRANSPOSE_RANGE } from '@/entities/chord-shee
 import type { BoxPlace } from '../model/engine'
 import type { ChordSheetInHand } from '../model/use-chord-sheet'
 import { keyChords } from '../model/key-chords'
-import { CHORD_PLAYER_KEYS, litKeys } from '../model/lit-keys'
+import { CHORD_PLAYER_KEYS, CHORD_PLAYER_LAPTOP_KEYS, litKeys } from '../model/lit-keys'
 import { useArrangerFollow } from '../model/use-arranger-follow'
 import { useChordLayout, useResetChordLayout, type ChordPanel } from '../model/use-chord-layout'
 import { LayoutEditContext, useLayoutEdit } from '../model/use-layout-edit'
@@ -573,7 +573,7 @@ export function ChordPlayer({
   const keys = (top: boolean) => (
     <PinnedKeyboard
       shown={litKeys(lit ? chordAt(lit)?.chord : undefined)}
-      range={CHORD_PLAYER_KEYS}
+      range={laptop ? CHORD_PLAYER_LAPTOP_KEYS : CHORD_PLAYER_KEYS}
       fitInView
       sized={keysPx[keysSize] ?? keysPx.medium}
       place={top ? 'top' : undefined}

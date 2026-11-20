@@ -23,7 +23,7 @@ KEYCSS = ('<style data-keys>'
   ' background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(51,41,33,.3)) }'
   '.pk-w > *, .pk-b > * { position: relative; z-index: 1 }'
   '</style>')
-LIST = r'\{\{[\w.]*?(?:\.|\b)(whites|blacks|kbw|kbb)\}\}'
+LIST = r'\{\{[\w.]*?(?:\.|\b)(whites|blacks|kbw|kbb)L?\}\}'  # kbwL, kbbL: a laptop's wider keys
 FELT = re.compile(r'<div style="position: absolute; left: 0; right: 0; top: 0; height: [34]px; background: #(?:7C302C|5A2422)"></div>')
 def keyface(h):
     if 'data-keys' in h or not re.search(LIST, h): return h

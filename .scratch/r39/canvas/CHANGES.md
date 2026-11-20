@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · PENDING · the Chord player's laptop keys C2 to C7 with faces; a chord's raised part as the app's on the key tiles (B°, never Dm's m) · ChordPlayer,ChordPlayerLaptop · pending
 
 
 ## Changes

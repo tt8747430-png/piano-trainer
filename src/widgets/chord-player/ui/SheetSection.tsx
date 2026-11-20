@@ -80,7 +80,8 @@ export function SheetSection({
   const name = t(`chordPlayer.sections.${section.kind}`)
   const bars = sectionBars(section, meter)
   const perBar = beatsPerBar(meter)
-  const columns = perBar * (useMediaQuery(WIDE) ? 4 : 2)
+  const wide = useMediaQuery(WIDE)
+  const columns = perBar * (wide ? 4 : 2)
   const chords = sectionChords(section)
   const {
     attributes,
@@ -187,7 +188,7 @@ export function SheetSection({
       <SortableContext items={ids} strategy={STILL}>
         <ol
           aria-label={t('chordPlayer.chordsOf', { name })}
-          className="grid gap-1 lg:gap-1.5"
+          className="grid gap-2 lg:gap-1.5"
           style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         >
           {bars.flatMap((bar, at) =>
@@ -229,7 +230,7 @@ export function SheetSection({
           <li
             ref={end.setNodeRef}
             className="flex min-w-11"
-            style={{ gridColumn: `span ${Math.min(2, columns)}` }}
+            style={{ gridColumn: `span ${wide ? 1 : 2}` }}
           >
             <button
               type="button"

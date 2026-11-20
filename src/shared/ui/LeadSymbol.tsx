@@ -14,7 +14,9 @@ export function LeadSymbol({ text }: { text: string }) {
   return (
     <>
       {root}
-      {raised ? <span className="relative -top-[0.55em] ml-px text-[0.58em]">{raised}</span> : null}
+      {raised ? (
+        <span className="relative -top-[0.55em] ml-px text-[max(12px,0.6em)]">{raised}</span>
+      ) : null}
       {bass}
     </>
   )
