@@ -21,7 +21,7 @@ export function CoursesPage() {
     <ScreenHeader
       title={t('courses')}
       large
-      back={editing ? undefined : <BackButton />}
+      back={<BackButton />}
       tools={
         <>
           {actions}
