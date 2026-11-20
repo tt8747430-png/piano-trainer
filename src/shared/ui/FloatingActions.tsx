@@ -52,8 +52,8 @@ const CONTROLS =
  * are docked on a screen wide for its height (`aside`), they stand in a column at its side instead,
  * so the little height left stays the page's. The page pads clear of them by the room they take,
  * which the host measures (`--floating-block`, `--floating-inline`; `theme.css` says which counts).
- * A tap on the page (on no control and on no key) folds them away out of the reading's way, and the
- * next brings them back; a new `screen` brings them back too.
+ * A finger's tap on the page (on no control and on no key) folds them away out of the reading's way,
+ * and the next brings them back; a new `screen` brings them back too. A mouse's click folds nothing.
  */
 export function FloatingHost({
   screen,
@@ -74,6 +74,12 @@ export function FloatingHost({
   // A tap on the screen's page, heard at the document: the page's own markup stays as it is.
   useEffect(() => {
     const tap = (event: MouseEvent) => {
+      // A finger's tap only: a mouse's click on the page is a reader's, and hides nothing.
+      if (
+        !(event instanceof PointerEvent) ||
+        (event.pointerType !== 'touch' && event.pointerType !== 'pen')
+      )
+        return
       const target = event.target
       if (!(target instanceof Element) || !target.closest('main') || target.closest(CONTROLS))
         return
