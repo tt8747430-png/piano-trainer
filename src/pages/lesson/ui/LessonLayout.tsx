@@ -1,4 +1,3 @@
-import { PianoButton } from '@/widgets/practice-pages'
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { Settings } from 'lucide-react'
 import { type ReactElement, type ReactNode } from 'react'
@@ -82,11 +81,10 @@ export function LessonLayout({
       <ScreenHeader
         title={title}
         back={back}
-        tools={<PianoButton />}
         settings={<RoundLink label={t('settings.open')} icon={Settings} render={settings} />}
         edit={edit}
         // A document: its title large on the page, as the lesson editor shows it (Edit looks as it
-        // reads); the bar keeps it for a screen reader and its room for the tools.
+        // reads); the bar keeps it for a screen reader.
         titleOnPage
       />
       <LessonView

@@ -82,20 +82,26 @@ the courses, its title in the bar.
   Delete happen at once, the toast's Undo putting back the progress, or the lesson in its place in Your
   lessons and in each course (R38); every lesson's and course's Reset progress works the same way. No Share link:
   sharing them is drawn later. Search finds them.
-- **A lesson is a worksheet**: prose, steps and notes, and examples that play in place on the lesson's keys: chords
+- **A lesson is a worksheet**: prose, steps and notes, and examples that play in place: chords
   as the lesson writes them (on a staff, each bar's band printing its chord's name, a lone chord's too), one quality on twelve roots, a scale, an interval, a line of notes on its staff,
   voicings written hand by hand, a progression's row, and a pattern heard over its piece's first line (a pattern is
-  only ever heard on chords). A question is answered on the keys, a chord's notes in any octave. Links name what they
+  only ever heard on chords). A scale, an interval, a quality on twelve roots and voicings each show on their own
+  keys under them (`ExampleKeys`: a tenth and more on a phone, 96 tall; three octaves on a laptop, 150 tall; the dark
+  frame, 20 corners), a scale named key by key in the Scales page's colours, its tonic its own; the rest show on their
+  staff or row and sound. A question stands open on its own keys: its ask, "Choose on the keys", the keys, then
+  "n of 7 notes" or Correct with Again and Show the answer; a chord's notes count in any octave, and the section
+  being read takes the MIDI keyboard's keys. Links name what they
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route. No card round an example or a
   question (the board's blocks, loop 63): each stands on the paper, its name 17 bold on a 44 row with its acts (ⓘ,
-  Play) at its end, its music under it; the keys they play on are the lesson's own, across the page's width.
+  Play) at its end, its music under it. No keyboard is shared by the page and none is pinned: the computer's letters
+  play none of a lesson's keys.
 - **A lesson's page** is a document, as its editor shows it: where it stands (its level or course, "Lesson 3 of 11"),
   its title in the serif (30, 36 on a laptop), what it teaches and After:, then its sections 32 apart, each its
   heading 22 bold, its words 17 on 1.55 at most 65ch, its steps a numbered list (indented 8, the muted numbers
   right-aligned in a 28 column, 6 apart), its examples and its In short under them on the honey wash. It reads in
   one column 760 wide at most, centred on a laptop (Obsidian's readable line), always as one page. The bar holds
-  Back, the keys' fold and the gear, with Edit where it may be edited; no Learned and no Tools. The foot's glass bar
-  (on a laptop centred on the column, over the keys) holds "Section n of N" with the section's name, opening the
+  Back, Share link and the gear, with Edit where it may be edited; no Learned and no Tools. The foot's glass bar
+  (on a laptop centred on the column) holds "Section n of N" with the section's name, opening the
   contents and what it is part of, and the honey Next lesson, which goes on and marks the lesson learned, Undo in
   its toast. No Previous and Next at the end: After: is the way back.
 - **A lesson's and a course's Settings** (`/lessons/$lessonId/settings`, `/courses/$courseId/settings`,

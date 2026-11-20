@@ -4,26 +4,14 @@ import {
   useEffect,
   useEffectEvent,
   useMemo,
-  useReducer,
   useState,
   type ReactElement,
   type ReactNode,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Lesson, LessonAnswer } from '@/entities/lesson'
-import { useMidiKeyDown } from '@/features/connect-midi'
-import { PinnedKeyboard } from '@/features/live-keyboard'
+import type { Lesson } from '@/entities/lesson'
 import { localText, useLocale } from '@/shared/i18n'
-import type { Midi } from '@/shared/lib/music'
-import { usePlay } from '@/shared/lib/services'
-import {
-  answerSounds,
-  chosenOf,
-  questionAnswers,
-  questionKeys,
-  questionReducer,
-  type QuestionKeys,
-} from '../model/lesson-question'
+import { questionAnswers } from '../model/lesson-question'
 import { LessonBlock, StyledBlock } from './LessonBlock'
 import { SectionHeading, Takeaway } from './SectionParts'
 import { QuestionBlock } from './QuestionBlock'
@@ -32,26 +20,14 @@ import {
   ButtonLink,
   FloatingActions,
   FloatingBar,
-  NO_KEYS,
   Sheet,
   SheetContent,
   SheetTrigger,
-  type ShownKeys,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** Where a lesson's section is, for a link to it: `section-1` for the first. */
 const sectionId = (index: number) => `section-${index + 1}`
-
-/** Each question of a lesson by its place, `section.block`, with its answer as the lesson says it. */
-const lessonAnswers = (lesson: Lesson): ReadonlyMap<string, LessonAnswer> =>
-  new Map(
-    lesson.sections.flatMap((section, s) =>
-      section.blocks.flatMap((block, b) =>
-        block.kind === 'question' ? [[`${s}.${b}`, block.answer] as const] : [],
-      ),
-    ),
-  )
 
 /** Where a lesson leads up to, a router `Link`: what it is part of, by name. */
 export interface UpLink {
@@ -190,11 +166,10 @@ function LessonBar({
 }
 
 /**
- * A lesson over the page's keys: they show the example played last, or the open question, whose
- * answer the learner chooses on them. It reads in one column, 760 at most and centred on a laptop
+ * A lesson, each example and question on its own keys (the Lesson boards). It reads in one column, 760 at most and centred on a laptop
  * (Obsidian's readable line), its head 32 above its sections and the sections 32 apart; its foot's
- * bar shares the column's centre (`LessonBar`). A jump lands its heading clear of pinned keys by the
- * page's scroll padding (`theme.css`).
+ * bar shares the column's centre (`LessonBar`). The section being read takes the MIDI keyboard's
+ * keys for its question.
  */
 export function LessonView({
   lesson,
@@ -211,8 +186,6 @@ export function LessonView({
   /** A section read, by its place: its page shown, or scrolled to the reading line. */
   onRead?: (section: number) => void
 }) {
-  const play = usePlay()
-  const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const scrolled = useReadingSection(lesson.sections.map((_, s) => sectionId(s)))
   const scrolledTo = lesson.sections.findIndex((_, s) => sectionId(s) === scrolled)
   const read = scrolledTo < 0 ? null : scrolledTo
@@ -221,40 +194,10 @@ export function LessonView({
   useEffect(() => {
     if (read !== null) heard(read)
   }, [read])
-  const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
-  const saidAnswers = useMemo(() => lessonAnswers(lesson), [lesson])
-  const answer = question ? answers.get(question.id) : undefined
-  const keys: QuestionKeys = question && answer ? questionKeys(question, answer) : shown
-  const choosing = question !== null && question.stage !== 'answer'
-  // A key chosen for the open question; the answer heard once it is right.
-  const choose = (key: Midi, said: LessonAnswer) => {
-    if (!question || !answer) return
-    const event = { type: 'toggle', key, answer } as const
-    const next = questionReducer(question, event)
-    dispatch(event)
-    if (next?.stage === 'right') play(answerSounds(said, next.chosen))
-  }
-  const openAnswer = question ? saidAnswers.get(question.id) : undefined
-  // The open question is answered on the MIDI keyboard as on the screen's keys.
-  useMidiKeyDown((key) => {
-    if (choosing && openAnswer) choose(key, openAnswer)
-  })
-  // An example played closes the open question: the keys show the example. A line playing on to
-  // its next bar is no new example: the keys follow it without closing the question.
-  const show = (next: ShownKeys) => {
-    dispatch({ type: 'close' })
-    setShown(next)
-  }
   return (
     <div className="mx-auto flex w-full max-w-190 min-w-0 flex-col gap-8">
       {head}
-      <PinnedKeyboard
-        shown={keys}
-        selected={keys.selected}
-        wrong={keys.wrong}
-        onKeyPress={choosing && openAnswer ? (key) => choose(key, openAnswer) : undefined}
-      />
       {lesson.sections.map((section, s) => (
         <section
           key={section.heading.en}
@@ -266,22 +209,16 @@ export function LessonView({
           <SectionHeading text={section.heading} style={section.style} />
           {section.blocks.map((block, b) => {
             const id = `${s}.${b}`
-            if (block.kind !== 'question')
-              return <LessonBlock key={id} block={block} onShow={show} onFollow={setShown} />
-            const open = question?.id === id ? question : null
-            const answerKeys = answers.get(id) ?? { ...NO_KEYS, inOrder: false }
+            if (block.kind !== 'question') return <LessonBlock key={id} block={block} />
+            const answer = answers.get(id)
+            if (!answer) throw new RangeError(`A lesson's question at ${id} has no answer`)
             const asked = (
               <QuestionBlock
                 key={id}
                 ask={block.ask}
-                stage={open ? open.stage : 'closed'}
-                count={chosenOf(open?.chosen ?? [], answerKeys)}
-                onOpen={() => dispatch({ type: 'open', id })}
-                onReveal={() => {
-                  dispatch({ type: 'reveal' })
-                  play(answerSounds(block.answer, answerKeys.keys))
-                }}
-                onRetry={() => dispatch({ type: 'retry' })}
+                said={block.answer}
+                answer={answer}
+                listening={s === at}
               />
             )
             return block.style ? (

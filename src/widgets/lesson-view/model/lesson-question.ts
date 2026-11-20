@@ -130,43 +130,41 @@ export function chosenOf(
     : { chosen: pitchClasses(chosen).size, total: pitchClasses(answer.keys).size }
 }
 
-/** The one open question of a lesson: its keys chosen, and where it stands. */
-export type QuestionState = {
-  readonly id: string
+/** A question's keys chosen, and where it stands. */
+export interface QuestionState {
   readonly chosen: readonly Midi[]
   readonly stage: 'choosing' | 'right' | 'wrong' | 'answer'
-} | null
+}
+
+/** A question as it opens: nothing chosen. */
+export const FRESH_QUESTION: QuestionState = { chosen: [], stage: 'choosing' }
 
 type QuestionEvent =
-  | { readonly type: 'open'; readonly id: string }
   | { readonly type: 'toggle'; readonly key: Midi; readonly answer: QuestionAnswer }
   | { readonly type: 'reveal' }
   | { readonly type: 'retry' }
-  | { readonly type: 'close' }
 
 /**
- * One question open at a time. A key chosen or let go chooses again, and the keys are judged as soon
- * as they are as many notes as the answer's: no Check to press.
+ * Each question on its own keys. A key chosen or let go chooses again, and the keys are judged as
+ * soon as they are as many notes as the answer's: no Check to press.
  */
 export function questionReducer(state: QuestionState, event: QuestionEvent): QuestionState {
-  if (event.type === 'open') return { id: event.id, chosen: [], stage: 'choosing' }
-  if (event.type === 'close' || !state) return null
   switch (event.type) {
     case 'toggle': {
       if (state.stage === 'answer') return state
       const chosen = toggled(state.chosen, event.key)
       const { chosen: count, total } = chosenOf(chosen, event.answer)
       const stage = count < total ? 'choosing' : isRight(chosen, event.answer) ? 'right' : 'wrong'
-      return { ...state, chosen, stage }
+      return { chosen, stage }
     }
     case 'reveal':
       return { ...state, stage: 'answer' }
     case 'retry':
-      return { ...state, chosen: [], stage: 'choosing' }
+      return FRESH_QUESTION
   }
 }
 
-/** What the lesson's keyboard shows for its open question. */
+/** What a question's keys show. */
 export interface QuestionKeys {
   readonly keys: readonly Midi[]
   readonly marks: ReadonlyMap<Midi, KeyMark>
@@ -202,10 +200,7 @@ function placedKeys(
  * chord's lowest key wrong unless it is the bass. The answer
  * shown: the answer.
  */
-export function questionKeys(
-  state: NonNullable<QuestionState>,
-  answer: QuestionAnswer,
-): QuestionKeys {
+export function questionKeys(state: QuestionState, answer: QuestionAnswer): QuestionKeys {
   switch (state.stage) {
     case 'choosing':
       return { keys: state.chosen, marks: new Map(), selected: new Set(state.chosen) }

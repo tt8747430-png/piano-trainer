@@ -10,7 +10,9 @@ import {
   type LessonVariant,
 } from '@/entities/lesson'
 import { pieceById } from '@/entities/piece'
+import { ExampleKeys } from '@/features/live-keyboard'
 import {
+  intervalExample,
   IntervalCard,
   NotesExample,
   ChordRow,
@@ -23,14 +25,41 @@ import {
   VoicingsExample,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { C_MAJOR, keyParam, noteParam, numeralsParam } from '@/shared/lib/music'
+import { C_MAJOR, keyParam, noteFromParam, noteParam, numeralsParam } from '@/shared/lib/music'
 import { styleVars, type BlockStyle } from '@/shared/lib/style'
 import { isProgressionRow } from '../model/chord-example'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
-import { ButtonLink, ChoiceChips, Segmented, type ShownKeys } from '@/shared/ui'
+import { ButtonLink, ChoiceChips, NO_KEYS, Segmented, type ShownKeys } from '@/shared/ui'
+
+/**
+ * An example that sounds and shows no keys of its own: its staff or its row is its picture (the
+ * Lesson boards draw keys under a scale, an interval, a chord on every root, voicings and a question
+ * alone).
+ */
+const SOUNDS_ONLY: (shown: ShownKeys) => void = () => {}
+
+/**
+ * An example over its own keys (the Lesson boards' PKEYS under it): they show what it played last,
+ * `first` until it has played.
+ */
+function OwnKeys({
+  first = NO_KEYS,
+  children,
+}: {
+  first?: ShownKeys
+  children: (onShow: (shown: ShownKeys) => void) => ReactNode
+}) {
+  const [shown, setShown] = useState(first)
+  return (
+    <div className="flex flex-col gap-3">
+      {children(setShown)}
+      <ExampleKeys shown={shown} />
+    </div>
+  )
+}
 
 /** One link on its card, as a lesson's rows are. */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {
@@ -48,15 +77,7 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
  * more. Choosing one redraws the example, its chips and its caption in place; the caption names the
  * version's shape, a line under it says more.
  */
-function VariantsBlock({
-  variants,
-  onShow,
-  onFollow,
-}: {
-  variants: readonly LessonVariant[]
-  onShow: (shown: ShownKeys) => void
-  onFollow: (shown: ShownKeys) => void
-}) {
+function VariantsBlock({ variants }: { variants: readonly LessonVariant[] }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const [chosen, setChosen] = useState(0)
@@ -72,7 +93,7 @@ function VariantsBlock({
   return (
     <div className="flex flex-col gap-3">
       {/* A new version is a new example: what the last one played stops with it. */}
-      <LessonBlock key={chosen} block={variant.example} onShow={onShow} onFollow={onFollow} />
+      <LessonBlock key={chosen} block={variant.example} />
       {choice}
       <p aria-live="polite" className="flex flex-col text-base">
         <span className="font-semibold">{localText(variant.caption, locale)}</span>
@@ -107,31 +128,18 @@ function ImageBlock({ src, alt }: { src: string; alt: string }) {
 /**
  * One block of a lesson in its own style where it has one (R29 B9): see `BlockBody`.
  */
-export function LessonBlock(props: {
-  block: Exclude<Block, { kind: 'question' }>
-  onShow: (shown: ShownKeys) => void
-  onFollow?: (shown: ShownKeys) => void
-}) {
+export function LessonBlock(props: { block: Exclude<Block, { kind: 'question' }> }) {
   const body = <BlockBody {...props} />
   return props.block.style ? <StyledBlock style={props.block.style}>{body}</StyledBlock> : body
 }
 
 /**
- * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example that
- * plays on the lesson's keys (a pattern over its piece, a progression as Progressions' row, beside a
- * way into Progressions), or a link
- * into an explorer, a tool or the Player. A question is the view's, which keeps its state. What a
- * line of notes shows as it plays on goes to `onFollow`, `onShow` unless given.
+ * One block of a lesson: prose with its bold lead, numbered steps, a note on sand, an example (a
+ * scale, an interval, a chord on every root or voicings over their own keys; a pattern over its
+ * piece, a progression as Progressions' row beside a way into Progressions), or a link into an
+ * explorer, a tool or the Player. A question is the view's.
  */
-function BlockBody({
-  block,
-  onShow,
-  onFollow = onShow,
-}: {
-  block: Exclude<Block, { kind: 'question' }>
-  onShow: (shown: ShownKeys) => void
-  onFollow?: (shown: ShownKeys) => void
-}) {
+function BlockBody({ block }: { block: Exclude<Block, { kind: 'question' }> }) {
   const { t } = useTranslation(['learn', 'music'])
   const locale = useLocale()
   switch (block.kind) {
@@ -170,22 +178,32 @@ function BlockBody({
         <p className="rounded-card bg-muted p-4">{localText(block.text, locale)}</p>
       )
     case 'variants':
-      return <VariantsBlock variants={block.variants} onShow={onShow} onFollow={onFollow} />
+      return <VariantsBlock variants={block.variants} />
     case 'chords':
       return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
-        <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
+        <ChordRow chords={symbolsRow(block.symbols)} onShow={SOUNDS_ONLY}>
           <RowStaff />
           <RowPlay variant="soft" />
         </ChordRow>
       ) : (
-        <ChordExamples symbols={block.symbols} melody={block.melody} onShow={onShow} />
+        <ChordExamples symbols={block.symbols} melody={block.melody} onShow={SOUNDS_ONLY} />
       )
     case 'grid':
-      return <ChordExamples symbols={gridSymbols(block.quality)} onShow={onShow} />
+      return (
+        <OwnKeys>
+          {(onShow) => <ChordExamples symbols={gridSymbols(block.quality)} onShow={onShow} />}
+        </OwnKeys>
+      )
     case 'scale':
-      return <ScaleExample root={noteParam(block.root)} kind={block.scale} onShow={onShow} />
-    case 'interval':
-      return <IntervalCard root={noteParam(block.root)} name={block.interval} onShow={onShow} />
+      return <ScaleExample root={noteParam(block.root)} kind={block.scale} />
+    case 'interval': {
+      const root = noteParam(block.root)
+      return (
+        <OwnKeys first={intervalExample(noteFromParam(root), block.interval).shown}>
+          {(onShow) => <IntervalCard root={root} name={block.interval} onShow={onShow} />}
+        </OwnKeys>
+      )
+    }
     case 'notes':
       return (
         <NotesExample
@@ -194,30 +212,32 @@ function BlockBody({
           clef={block.clef}
           meter={block.meter ?? '4/4'}
           keyParam={keyParam(block.key ?? C_MAJOR)}
-          onShow={onShow}
-          onFollow={onFollow}
+          onShow={SOUNDS_ONLY}
         />
       )
     case 'voicings':
       return (
-        <VoicingsExample
-          voicings={block.voicings}
-          musicKey={block.key}
-          satb={block.satb === true}
-          onShow={onShow}
-          onFollow={onFollow}
-        />
+        <OwnKeys>
+          {(onShow) => (
+            <VoicingsExample
+              voicings={block.voicings}
+              musicKey={block.key}
+              satb={block.satb === true}
+              onShow={onShow}
+            />
+          )}
+        </OwnKeys>
       )
     case 'pattern': {
       const piece = pieceById(block.piece)
       if (!piece) throw new RangeError(`A lesson plays a pattern over "${block.piece}": no piece`)
-      return <PatternExample pattern={block.pattern} piece={piece} onShow={onShow} />
+      return <PatternExample pattern={block.pattern} piece={piece} onShow={SOUNDS_ONLY} />
     }
     case 'progression': {
       const { numerals, key, size } = readProgression(block)
       const motion = block.show === 'motion'
       return (
-        <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
+        <ChordRow chords={progressionRow(numerals, key, size)} onShow={SOUNDS_ONLY}>
           <RowStaff />
           <RowRoles />
           {/* Play here, and the same row in Progressions to take further: in any key, walked. */}

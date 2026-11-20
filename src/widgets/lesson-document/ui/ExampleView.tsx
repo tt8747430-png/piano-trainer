@@ -49,8 +49,6 @@ import { blockActions } from './menus'
 import { OpenScore } from './open-score'
 import { StyleBlock } from './style-block'
 
-const nothing = () => undefined
-
 /** An example drawn as the lesson shows it; where it cannot be drawn, nothing (its fields say why). */
 class Drawn extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
   override state = { failed: false }
@@ -613,7 +611,7 @@ export function ExampleView({
               {t('edit.doc.imageEmpty')}
             </p>
           ) : (
-            <Shown block={shown as Exclude<LessonBlock, { kind: 'question' }>} onShow={nothing} />
+            <Shown block={shown as Exclude<LessonBlock, { kind: 'question' }>} />
           )}
         </Drawn>
       ) : (
