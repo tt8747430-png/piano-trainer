@@ -10,7 +10,7 @@ import { insertActions } from './menus'
 
 /**
  * Insert (the board's INSLIST, Notion's / menu and Craft's +): the toolbar's accent opens a sheet
- * titled Insert, on a laptop the card 420 wide hung under the bar, with nothing dimmed behind it. At
+ * titled Insert, on a laptop a popover 420 wide over the Insert button of the floating toolbar. At
  * its head a search that keeps the kinds whose name holds what is typed; then each group, its name
  * small over a card of rows, each kind's glyph on its tile and its name. A tap adds the block and
  * closes the sheet; a search that keeps nothing says so.
@@ -41,7 +41,7 @@ export function InsertSheet({ editor, locale }: { editor: Editor; locale: Locale
         {t('edit.doc.insert')}
       </Button>
       <Sheet
-        hung="header"
+        at={{ side: 'top', width: 'w-105' }}
         open={open}
         onOpenChange={(next) => {
           setOpen(next)
