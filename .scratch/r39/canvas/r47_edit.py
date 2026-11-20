@@ -101,12 +101,14 @@ def NOTESVG(treble, bass=''):
     def staff(notes, top, clef):
         ref = 30 if clef == 'treble' else 18          # the bottom line: E4, G2, as diatonic steps from C0
         bottom, mid = top + 32, top + 16
-        g = ''.join(f'<line x1="0" x2="370" y1="{top + 8 * k}" y2="{top + 8 * k}" stroke="#332921" stroke-width="1"></line>' for k in range(5))
+        g = ''.join(f'<line x1="0" x2="366" y1="{top + 8 * k}" y2="{top + 8 * k}" stroke="#332921" stroke-width="1"></line>' for k in range(5))
         g += (f'<text x="2" y="{top + 26}" font-size="34" fill="#332921" style="font-family: Noto Music, serif">𝄞</text>' if clef == 'treble'
               else f'<text x="4" y="{top + 16}" font-size="30" fill="#332921" style="font-family: Noto Music, serif">𝄢</text>')
+        # its time, 4/4, after the clef, as the app engraves it (Verovio)
+        g += ''.join(f'<text x="44" y="{top + o}" font-size="21" font-weight="700" text-anchor="middle" fill="#332921" style="font-family: Literata, serif">4</text>' for o in (15, 31))
         for n, name in enumerate(notes.split()):
             step = _STEP[name[0]] + 7 * int(name[-1]) - ref
-            x, y = 64 + n * 38, bottom - 4 * step
+            x, y = 76 + n * 34 + (14 if n >= 4 else 0), bottom - 4 * step
             g += HEADG('black', x, y, 8, '#332921')
             g += (f'<line x1="{x + 5.4}" x2="{x + 5.4}" y1="{y - 1}" y2="{y - 28}" stroke="#332921" stroke-width="1.3"></line>' if y > mid
                   else f'<line x1="{x - 5.4}" x2="{x - 5.4}" y1="{y + 1}" y2="{y + 28}" stroke="#332921" stroke-width="1.3"></line>')
@@ -114,7 +116,11 @@ def NOTESVG(treble, bass=''):
             for ly in range(top - 8, y - 1, -8): g += f'<line x1="{x - 10}" x2="{x + 10}" y1="{ly}" y2="{ly}" stroke="#332921" stroke-width="1"></line>'
         return g
     h = 168 if bass else 96
-    body = staff(treble, 24, 'treble') + (staff(bass, 104, 'bass') + '<line x1="0.5" x2="0.5" y1="24" y2="136" stroke="#332921" stroke-width="1"></line>' if bass else '')
+    low = 136 if bass else 56
+    # the barlines through both staves, the bar numbers over the top one, as the app engraves a line of two bars
+    bars = (f'<line x1="200" x2="200" y1="24" y2="{low}" stroke="#332921" stroke-width="1"></line><line x1="366" x2="366" y1="24" y2="{low}" stroke="#332921" stroke-width="1"></line>'
+            + ''.join(f'<text x="{x}" y="14" font-size="11" font-weight="700" fill="#685E56" style="font-family: Onest, sans-serif">{t}</text>' for x, t in ((2, 1), (202, 2))))
+    body = staff(treble, 24, 'treble') + (staff(bass, 104, 'bass') + '<line x1="0.5" x2="0.5" y1="24" y2="136" stroke="#332921" stroke-width="1"></line>' if bass else '') + bars
     label = ' '.join(n[0] for n in treble.split())
     return f'<svg viewBox="0 0 370 {h}" preserveAspectRatio="xMinYMid meet" role="img" aria-label="{label} on the staff" style="width: 100%; max-width: 370px; height: {h}px">{body}</svg>'
 def DOC(lap=False):
