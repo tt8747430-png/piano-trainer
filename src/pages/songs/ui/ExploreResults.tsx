@@ -15,7 +15,7 @@ import { EXPLORE_COLUMNS, ExploreFeedCard } from '@/widgets/song-preview'
 import { EXPLORE_SHELVES, type SongsHome } from '../model/explore-view'
 import { useExploreBrowse } from '../model/use-explore-browse'
 import { ExplorePeople } from './ExplorePeople'
-import { CardsLoading, ExploreEmpty, ExploreFailed } from './ExploreStates'
+import { ExploreEmpty, ExploreLoading, ExploreFailed } from './ExploreStates'
 
 /** What Explore shows for its URL: the feed read, and the entries left once one person's are chosen. */
 export function useExploreFeed(home: SongsHome) {
@@ -95,7 +95,7 @@ export function ExploreSort({
 /**
  * Explore's feed (the Explore board): a picture card per item, two across on a phone and as many as
  * fit from 16rem on a laptop; one person's alone where People opened them (`by`). People lists who
- * publishes. While asked, grey cards; a search with no match says so, with Clear; nothing
+ * publishes. While asked, its grey rows in the loaded shape; a search with no match says so, with Clear; nothing
  * published, how to publish.
  */
 export function ExploreResults({
@@ -112,10 +112,25 @@ export function ExploreResults({
   const { browse, retry, entries } = feed
   const patterns = home.kind !== 'people' && home.cat === 'patterns'
   const query = home.q.trim()
+  // The table's head, the same over the rows and over their grey shapes while Explore is asked.
+  const head = (
+    <div role="row" className={`${EXPLORE_COLUMNS} h-10 border-b border-border`}>
+      {(['title', 'composer', 'type', 'sharedBy', 'saves'] as const).map((column) => (
+        <span
+          key={column}
+          role="columnheader"
+          className="text-[0.8125rem] font-semibold text-muted-foreground"
+        >
+          {t(`table.${column}`)}
+        </span>
+      ))}
+      <span role="columnheader" aria-hidden />
+    </div>
+  )
   return (
     <section className="flex flex-col gap-3">
       {browse.kind === 'loading' ? (
-        <CardsLoading count={8} />
+        <ExploreLoading head={laptop ? head : undefined} rows={laptop ? 8 : 6} />
       ) : browse.kind === 'failed' ? (
         <ExploreFailed reason={browse.reason} onRetry={retry} />
       ) : home.kind === 'people' ? (
@@ -139,18 +154,7 @@ export function ExploreResults({
           aria-label={t('explore.views.explore')}
           className="border-t border-border"
         >
-          <div role="row" className={`${EXPLORE_COLUMNS} h-10 border-b border-border`}>
-            {(['title', 'composer', 'type', 'sharedBy', 'saves'] as const).map((column) => (
-              <span
-                key={column}
-                role="columnheader"
-                className="text-[0.8125rem] font-semibold text-muted-foreground"
-              >
-                {t(`table.${column}`)}
-              </span>
-            ))}
-            <span role="columnheader" aria-hidden />
-          </div>
+          {head}
           {entries.map((entry) => (
             <ExploreFeedCard key={entry.id} entry={entry} table />
           ))}

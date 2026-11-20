@@ -56,7 +56,7 @@ EX_JS = js('const PUB = ' + json.dumps(PUB, ensure_ascii=False) + '; const INC =
       openReport: () => S({ sheet: 'report', reason: null }), reportOn: st.sheet === 'report', reasons: chipsOf(['Not theirs to share', 'Offensive', 'Spam', 'Doesn’t play'], st.reason, (x) => S({ reason: x })),
       sendReport: () => { if (st.reason) { S({ sheet: null }); toast('Thanks: the song is reported'); } }, repBg: st.reason ? '#B3261E' : '#EEE9E2', repInk: st.reason ? '#FFFFFF' : '#9A9089', repNot: !st.reason,
       sharedAdd: () => toast('Added to your library'), sharedBad: !!st.bad, sharedOk: !st.bad, toggleBad: () => S({ bad: !st.bad, page: st.bad ? (st.page ?? null) : 'shared' }),
-      esortL: st.esort ?? 'Newest', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length + (pick.length === 1 ? ' song' : ' songs'),
+      esortL: st.esort ?? 'Newest', esortOn: st.sheet === 'esort', openEsort: (e) => S({ sheet: 'esort', menuPos: ANCHOR(e, 160) }), menuPos: st.menuPos ?? 'right: 56px; top: 140px', countT: pick.length > 0 && !demo ? pick.length + (pick.length === 1 ? ' song' : ' songs') : '', sortOn: pick.length > 0 && !demo,
       esorts: ['Newest', 'Most saved', 'Top rated'].map((l) => ({ l, on: l === (st.esort ?? 'Newest'), mark: l === (st.esort ?? 'Newest') ? 1 : 0, pick: () => S({ esort: l, sheet: null }) })),
       closeSheet: () => S({ sheet: null }), toastOn: !!st.toast, toastT: st.toast || '', toastUndo: !!st.toastUndo, undo: () => S({ toast: null, inLib: false }) };''')
 _STAFF = INCIPIT((0, 2, 4, 3, 5, 4)).replace('url("', "url('").replace('")', "')")
@@ -137,10 +137,19 @@ EXSORTMENU = lambda pos: (f'<sc-if value="{{{{esortOn}}}}" hint-placeholder-val=
                           + MENUITEM('esorts') + '</div></sc-if>')
 _EXFIELD = (SEARCHBOX(True) + f'<input {KB["search"]} value="{{{{q}}}}" onInput="{{{{setQ}}}}" placeholder="Search songs and people" aria-label="Search songs and people" style="flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 16px; color: {INK}"></label>')
 EXTOOLS_PH = (_EXFIELD.replace('flex: 1; min-width: 0; height: 44px', 'flex: none; height: 44px') + SEGC('kinds', 44, 14)
-              + IF('isSongs', KCHIPS('cats') + f'<div style="display: flex; justify-content: flex-end; margin: -4px 0 -8px">{EXSORTB}</div>', 'true'))
-EXTOOLS_L = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0; display: flex">{_EXFIELD}</div>' + IF('isSongs', EXSORTB, 'true') + '</div>')
+              + IF('isSongs', KCHIPS('cats') + IF('sortOn', f'<div style="display: flex; justify-content: flex-end; margin: -4px 0 -8px">{EXSORTB}</div>'), 'true'))
+EXTOOLS_L = (f'<div style="display: flex; align-items: center; gap: 24px"><div style="flex: 1; min-width: 0; display: flex">{_EXFIELD}</div>' + IF('isSongs', IF('sortOn', EXSORTB, 'true'), 'true') + '</div>')
+# Loading is the loaded list's shape (AppLayers: the page's shape in sand rows, fading): on a phone the one card of
+# rows (the 56 tile, the title and its line, the hairline from the title's edge), on a laptop the table's head and its
+# 60 rows (the 40 tile, the title and the composer); never blocks of an older layout.
+_SKB = lambda w, h: f'<span style="width: {w}; height: {h}px; border-radius: 999px; background: {FILL}"></span>'
+EXLOAD = lambda wide: (f'<div role="status" aria-label="Loading songs" style="animation: lib-pulse 1.4s ease-in-out infinite alternate">'
+    + (f'<div style="border-top: 1px solid {LINE}">{XHEAD}' + ''.join(f'<div style="{_XCOLS}; padding: 0 8px 0 12px; height: 60px; border-bottom: 1px solid {LINE}"><span style="display: flex; align-items: center; gap: 16px"><span style="flex: none; width: 40px; height: 40px; border-radius: 9px; background: {FILL}"></span>{_SKB("55%", 14)}</span>{_SKB("60%", 14)}{_SKB("88px", 28).replace("999px", "8px")}{_SKB("70%", 14)}{_SKB("36px", 14)}<span></span></div>' for _ in range(8)) + '</div>'
+       if wide else
+       f'<div style="border-radius: 14px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}; overflow: hidden">' + ''.join(f'<div style="{_FEEDBOX(False) if i else ""}; display: flex; align-items: center; gap: 16px; padding: 12px 4px 12px 12px; height: 88px; box-sizing: border-box"><span style="flex: none; width: 56px; height: 56px; border-radius: 12px; background: {FILL}"></span><span style="flex: 1; display: flex; flex-direction: column; gap: 8px">{_SKB("60%", 16)}{_SKB("40%", 14)}</span></div>' for i in range(6)) + '</div>')
+    + '<style>@keyframes lib-pulse { from { opacity: .9 } to { opacity: .4 } } @media (prefers-reduced-motion: reduce) { [role=status] { animation: none !important } }</style></div>')
 EXBODY = lambda tools, grid, pgrid, wide=False: (tools + IF('any', FEED(grid, pgrid, wide), 'true')
-          + IF('loading', ''.join(f'<span style="height: {h}px; border-radius: 16px; background: {FILL}"></span>' for h in (28, 210, 28, 210)))
+          + IF('loading', EXLOAD(wide))
           + EMPTY('offline', '⌁', 'You’re offline', 'Explore needs the internet. Your own songs are all here.', f'{BTN("My songs", "", "Songs.dc.html", "primary", 48, False)}')
           + EMPTY('failed', '!', 'Explore didn’t load.', 'Try again in a moment.', f'{BTN("Try again", "clearQ", "", "primary", 48, False)}')
           + EMPTY('empty', '♪', 'Nothing published yet.', 'Publish one of your songs from its Settings: Publish in library.')
@@ -213,7 +222,7 @@ exph = (IF('isMain', IF('isList', TOP('Songs.dc.html', 'Explore', '', 'Songs')
 # Explore stands on the places' one frame (LPLACEBAR): its name and count, the search at the trailing edge; its pane
 # became one row under the bar, Songs | People, the kinds as chips, the order at the right (owner, 2026-11-17)
 EXROW_L = (f'<div style="flex: none; display: flex; align-items: center; gap: 16px"><div style="width: 220px; flex: none">{SEGC("kinds", 44, 14)}</div>'
-           + IF('isSongs', f'<div style="flex: 1; min-width: 0">' + CHIPS('cats', bleed=False) + '</div>' + EXSORTB.replace(f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{countT}}}}</span>', ''), 'true') + '</div>')
+           + IF('isSongs', f'<div style="flex: 1; min-width: 0">' + CHIPS('cats', bleed=False) + '</div>' + IF('sortOn', EXSORTB.replace(f'<span style="font-size: 15px; font-weight: 600; color: {SOFT}; font-variant-numeric: tabular-nums">{{{{countT}}}}</span>', ''), 'true'), 'true') + '</div>')
 exlm = (IF('isMain', IF('isList', LPLACEBAR('Explore', '{{countT}}', '', PSEARCH('Search songs and people', 'q', 'setQ'))
                      + f'<main class="nos" style="flex: 1; min-height: 0; overflow-y: auto; padding: 0 56px 48px; display: flex; flex-direction: column; gap: 20px">' + EXROW_L
                      + EXBODY('', 'display: flex; flex-direction: column; gap: 8px', 'display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px', True).replace('Songs.dc.html', 'SongsLaptop.dc.html') + '</main>' + STRIP() + EXSORTMENU('{{menuPos}}'), 'true')
