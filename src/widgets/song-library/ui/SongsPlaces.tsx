@@ -13,7 +13,7 @@ const isFolderPaint = isOneOf(FOLDER_PAINTS)
 
 /** A sub-item (the board's SONGS_SUB `item`): 40 tall, its words on the Songs label's edge (44). */
 const ITEM =
-  'choice flex h-10 items-center pointer-coarse:h-11 gap-2 rounded-[10px] pr-3 text-[0.9375rem] font-medium text-foreground aria-[current=page]:font-semibold focus-visible:-outline-offset-3'
+  'choice flex h-10 items-center pointer-coarse:h-11 gap-2 rounded-[10px] pr-3 text-[0.9375rem] font-medium text-nav-foreground aria-[current=page]:font-semibold aria-[current=page]:text-nav-current-foreground focus-visible:-outline-offset-3'
 
 /** What a sub-item's link carries: its shape (a playlist's further in, for its paint) and its mark. */
 const item = (current: boolean, swatch = false) => ({

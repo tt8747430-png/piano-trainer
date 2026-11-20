@@ -359,7 +359,7 @@ on a phone, 24px from 640px, 40px beside the sidebar.
 - **The shell:** four places in a bar docked at the foot of a phone, a rail down the left of a phone on its side, a
   256px sidebar from 1024px (72px collapsed), as Claude's: the name and its toggle, Search as a field, Learn, Songs
   and Practice, Recents (the songs opened last), and at its foot one account row (picture, name and ⌃⌄) opening a
-  menu above it: the email, Profile, Settings, Language, Help, then Sign out apart. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
+  menu above it: the email, Profile, Settings, Language, Help, then Sign out apart. Its rows, places and Songs' places alike, are `nav-foreground` (#4A433C, 500); the current one `nav-current-foreground` (#1A1612, 600) on the `nav-current` wash (#EAE2D7), as the account row while its menu is open. The phone's bar keeps the Profile as its last tab. The phone's bar shows on the places
   alone; what a place opens has the whole height.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.

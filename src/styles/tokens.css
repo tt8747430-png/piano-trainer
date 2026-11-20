@@ -148,6 +148,9 @@
      deepest ink, so the rail reads quieter than the page's own ink yet never as faint as a caption. */
   --nav-foreground: #4a433c;
   --nav-current-foreground: #1a1612;
+  /* The current place's wash in the sidebar (calm_kit's side rail, #EAE2D7): a step under the page's
+     chosen fill, so the rail's one current row reads without weighing on the page. */
+  --nav-current: #eae2d7;
   /*
    * The one selected fill (R15): a segment, a chip, a tab, a place, a tool, a picker's cell. A step
    * darker than the hover's muted sand, so hover never looks chosen; neutral, as the chosen is.
@@ -325,6 +328,7 @@
     --foreground: var(--p-dusk-ink);
     --nav-foreground: var(--p-dusk-muted);
     --nav-current-foreground: var(--p-dusk-ink);
+    --nav-current: var(--p-dusk-800);
     --card: var(--p-dusk-900);
     --card-foreground: var(--p-dusk-ink);
     --popover: var(--p-dusk-900);

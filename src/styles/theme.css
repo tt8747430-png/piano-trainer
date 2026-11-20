@@ -44,6 +44,7 @@
   --color-selected: var(--selected);
   --color-nav-foreground: var(--nav-foreground);
   --color-nav-current-foreground: var(--nav-current-foreground);
+  --color-nav-current: var(--nav-current);
   --color-selected-foreground: var(--selected-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
