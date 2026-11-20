@@ -8,6 +8,7 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
+- 2026-11-20 · (this commit) · a lesson's scale keys in the Scales page's colours (the tonic its own, the rest the scale's wash); the W/H ⓘ legend gone, as the app · Lesson,LessonLaptop · pending
 - 2026-11-20 · (this commit) · the Lesson boards read the app's real lesson (major-scales.ts): its five sections block for block, each scale on its own keys, a line of notes and the fingering's grand staff in Bravura, a Note, the question on D major's seven notes, the two links; no invented In short, After or versions · Lesson,LessonLaptop · pending
 
 

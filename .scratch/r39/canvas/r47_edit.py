@@ -42,13 +42,13 @@ LESSON_JS = js('const LS = ' + json.dumps(LESSON, ensure_ascii=False) + ', INS =
     const secs = LS.secs.map((s, i) => ({ n: String(i + 1), menu: () => set({ sheet: 'block', blk: i }), navBg: i === (st.secAt ?? 0) ? '#EEE9E2' : 'transparent', navFw: i === (st.secAt ?? 0) ? 600 : 400, navDot: i === (st.secAt ?? 0) ? '#FEFDFB' : '#EEE9E2', go: (e) => { e && e.preventDefault && e.preventDefault(); goSec(i); }, h: T(s, 'h') }));
     // each section's blocks as the lesson writes them: words, a scale on its keys, a line of notes, a note, steps, the question, links
     const SCALES = { C: [60, ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'], 'До мажор'], G: [55, ['G', 'A', 'B', 'C', 'D', 'E', 'F♯', 'G'], 'Соль мажор'], F: [53, ['F', 'G', 'A', 'B♭', 'C', 'D', 'E', 'F'], 'Фа мажор'] };
-    const marksOf = (r) => { const [root, names] = SCALES[r], m = {}; [0, 2, 4, 5, 7, 9, 11, 12].forEach((o, k) => { m[root + o] = [k === 2 || k === 6 ? '#E8C67D' : '#9BC093', names[k]]; }); return m; };
+    const marksOf = (r) => { const [root, names] = SCALES[r], m = {}; [0, 2, 4, 5, 7, 9, 11, 12].forEach((o, k) => { m[root + o] = [k === 0 || k === 7 ? '#E19E8C' : '#F3D9A8', names[k]]; }); return m; };
     const BL = {};
     LS.secs.forEach((s, i) => {
       const o = { h: T(s, 'h'), pick: () => editing && set({ sel: i }), ring: editing && st.sel === i ? '#C9932E' : 'transparent' };
       s.blocks.forEach((b, j) => {
         if (b[0] === 'text') { o['l' + j] = ru ? b[3] : b[1]; o['t' + j] = ru ? b[4] : b[2]; }
-        else if (b[0] === 'scale') { const root = SCALES[b[1]][0], m = marksOf(b[1]), lk = 'lg' + i + '_' + j; o['n' + j] = ru ? SCALES[b[1]][2] : b[1] + ' major'; o['k' + j] = calmKeys(root, root + 16, m, 370, 96); o['kL' + j] = calmKeys(root - 12, root + 23, m, 1382, 150); o['g' + j] = !!st[lk]; o['tg' + j] = () => set({ [lk]: !st[lk] }); }
+        else if (b[0] === 'scale') { const root = SCALES[b[1]][0], m = marksOf(b[1]); o['n' + j] = ru ? SCALES[b[1]][2] : b[1] + ' major'; o['k' + j] = calmKeys(root, root + 16, m, 370, 96); o['kL' + j] = calmKeys(root - 12, root + 23, m, 1382, 150); }
         else if (b[0] === 'steps') o['s' + j] = (ru ? b[2] : b[1]).map((x) => ({ x }));
         else if (b[0] === 'note' || b[0] === 'question' || b[0] === 'link') o['t' + j] = ru ? b[2] : b[1];
       });
@@ -122,11 +122,10 @@ def DOC(lap=False):
     handle = ''
     ex = (f'<sc-if value="{{{{s.isScale}}}}" hint-placeholder-val="{{{{true}}}}"><figure style="position: relative; margin: 8px 0 0; display: flex; flex-direction: column; gap: 12px">'
           f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span style="flex: 1; font-size: 17px; font-weight: 700">{{{{verName}}}}</span>'
-          f'<button type="button" aria-label="The colours" aria-expanded="{{{{legendOn}}}}" data-tip="The colours" onClick="{{{{toggleLegend}}}}" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: {SOFT}; display: flex; align-items: center; justify-content: center">{ICON(INFOI, 20)}</button>'
+          f''
           f'<button type="button" aria-label="Play" style="width: 44px; height: 44px; border: 0; border-radius: 22px; background: {FILL}; color: {INK}; display: flex; align-items: center; justify-content: center">{PLAY.replace('width="22" height="22"', 'width="20" height="20"')}</button>'
           f'<sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
-          f'{KEYSOF(kbn, kh)}<sc-if value="{{{{legendOn}}}}" hint-placeholder-val="{{{{false}}}}"><div role="dialog" aria-label="The colours" style="position: absolute; right: 8px; top: 60px; z-index: 20; width: 248px; box-sizing: border-box; padding: 12px 16px; border-radius: 16px; background: {SHEET}; box-shadow: 0 0 0 1px {LINE}, {SHADOW}">'
-          f'<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px"><li style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 18px; height: 28px; border-radius: 0 0 4px 4px; background: #9BC093; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12)"></span><span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Whole step · W</span><span style="font-size: 13px; color: {SOFT}">two half steps: C–D</span></span></li><li style="display: flex; align-items: center; gap: 12px"><span style="flex: none; width: 18px; height: 28px; border-radius: 0 0 4px 4px; background: #E8C67D; box-shadow: inset 0 0 0 1px rgba(51,41,33,.12)"></span><span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 600">Half step · H</span><span style="font-size: 13px; color: {SOFT}">the very next key: E–F, B–C</span></span></li></ul></div></sc-if></figure></sc-if>'
+          f'{KEYSOF(kbn, kh)}</figure></sc-if>'
           f'<sc-if value="{{{{s.isQ}}}}" hint-placeholder-val="{{{{false}}}}"><figure style="margin: 8px 0 0; display: flex; flex-direction: column; gap: 12px">'
           f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: -8px"><span data-q style="flex: 1; min-height: 44px; display: flex; align-items: center; font-size: 17px; font-weight: 700">Play the D major scale</span><sc-if value="{{{{editing}}}}" hint-placeholder-val="{{{{false}}}}"><button type="button" onClick="{{{{openEx}}}}" style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: {INK}; color: {SHEET}; font: inherit; font-size: 15px; font-weight: 700">Edit</button></sc-if></div>'
           f'<span style="font-size: 14px; color: {SOFT}">Choose on the keys</span>{KEYSOF(qn, kh)}<div style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; font-size: 14px; font-weight: 600; color: {{{{qInk}}}}">{{{{qLine}}}}</span>'
@@ -153,7 +152,7 @@ def DOC(lap=False):
                 body += f'<p contenteditable="{{{{editing}}}}" style="margin: 0; max-width: 65ch; font-size: 17px; line-height: 1.55; text-wrap: pretty; outline: none">{lead}{{{{{S}.t{j}}}}}</p>'
             elif k == 'scale':
                 body += (SCALEX.replace('<sc-if value="{{s.isScale}}" hint-placeholder-val="{{true}}">', '', 1)[:-len('</sc-if>')]
-                         .replace('{{verName}}', f'{{{{{S}.n{j}}}}}').replace('{{legendOn}}', f'{{{{{S}.g{j}}}}}').replace('{{toggleLegend}}', f'{{{{{S}.tg{j}}}}}')
+                         .replace('{{verName}}', f'{{{{{S}.n{j}}}}}')
                          .replace('{{' + kbn + '.', f'{{{{{S}.{"kL" if lap else "k"}{j}.'))
             elif k == 'notes':
                 letters = ' '.join(n[0] for n in b[1].split())
