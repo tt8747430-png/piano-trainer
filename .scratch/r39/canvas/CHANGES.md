@@ -6,7 +6,7 @@ before the turn moves on, so the record outlives a compaction: `.claude/hooks/ca
 into the compaction and back into the context after it. A publish that is refused marks its line **pending**;
 the next publish sends every pending board and the lines get the new version.
 
-## Pending
+
 
 ## Changes
 
