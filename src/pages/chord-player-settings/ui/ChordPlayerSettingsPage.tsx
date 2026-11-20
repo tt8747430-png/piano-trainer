@@ -21,7 +21,7 @@ import {
   GroupAction,
   RowButton,
   RowLink,
-  say,
+  sayUndo,
   ScreenHeader,
   Segmented,
   SettingField,
@@ -294,10 +294,7 @@ export function ChordPlayerSettingsPage() {
               onChange={(meter: SheetMeter) => {
                 if (meter === hand.sheet.meter) return
                 hand.edit((sheet) => relayMeter(sheet, meter))
-                say(t('chordPlayer.settings.relaid', { meter }), {
-                  label: t('chordPlayer.undo'),
-                  onClick: hand.undo,
-                })
+                sayUndo(t('chordPlayer.settings.relaid', { meter }), hand.undo)
               }}
             />
           </SheetContent>

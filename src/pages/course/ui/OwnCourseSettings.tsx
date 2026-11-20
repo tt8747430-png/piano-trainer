@@ -17,7 +17,7 @@ import {
 } from '@/features/manage-own-lessons'
 import { LookFields } from '@/features/manage-library'
 import { ResetStepsRow } from '@/features/reset-progress'
-import { BackButton, say, ScreenHeader, SettingsGroup, ThingHead } from '@/shared/ui'
+import { BackButton, say, sayUndo, ScreenHeader, SettingsGroup, ThingHead } from '@/shared/ui'
 import { OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 import { CourseMark } from './CourseMark'
 
@@ -80,10 +80,9 @@ export function OwnCourseSettings({ course }: { course: OwnCourse }) {
             void navigate({ to: '/your-lessons', replace: true })
             const deleted = deleteOwnCourse(store, course.id)
             if (!deleted) return
-            say(t('own.deleted', { title: course.title }), {
-              label: t('settings.undo'),
-              onClick: () => restoreOwnCourse(store, deleted),
-            })
+            sayUndo(t('own.deleted', { title: course.title }), () =>
+              restoreOwnCourse(store, deleted),
+            )
           }}
         />
       </div>

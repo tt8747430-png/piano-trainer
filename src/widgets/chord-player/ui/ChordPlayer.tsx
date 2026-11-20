@@ -70,6 +70,7 @@ import {
   MoreMenu,
   RoundButton,
   say,
+  sayUndo,
   ScreenHeader,
   Sheet,
   SheetContent,
@@ -294,8 +295,7 @@ export function ChordPlayer({
   }
 
   /** A change made at once, said in its toast with Undo (a loss that can be undone, CLAUDE.md). */
-  const undoable = (message: string) =>
-    say(message, { label: t('chordPlayer.undo'), onClick: hand.undo })
+  const undoable = (message: string) => sayUndo(message, hand.undo)
   const randomize = () => {
     hand.edit((sheet) => randomSheet(sheet, Math.random))
     undoable(t('chordPlayer.randomized', { key: keyName(shown.key) }))
@@ -564,10 +564,10 @@ export function ChordPlayer({
       onSelect: () => {
         if (sheetId === undefined) return
         const kept = discardDraft(sheets, sheetId)
-        say(t('chordPlayer.draft.discarded'), {
-          label: t('chordPlayer.undo'),
-          onClick: () => kept !== null && restoreDraft(sheets, sheetId, kept),
-        })
+        sayUndo(
+          t('chordPlayer.draft.discarded'),
+          () => kept !== null && restoreDraft(sheets, sheetId, kept),
+        )
       },
     },
     ...more,

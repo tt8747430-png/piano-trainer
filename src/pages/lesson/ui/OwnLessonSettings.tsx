@@ -12,7 +12,7 @@ import {
 } from '@/features/manage-own-lessons'
 import { ResetStepsRow, resetSteps, restoreSteps } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, say, ScreenHeader, ThingHead } from '@/shared/ui'
+import { BackButton, say, sayUndo, ScreenHeader, ThingHead } from '@/shared/ui'
 import { InCoursesRow, OwnDeleteGroup, OwnItemRows } from '@/widgets/curriculum'
 
 /**
@@ -71,12 +71,9 @@ export function OwnLessonSettings({ lesson }: { lesson: OwnLesson }) {
             const deleted = deleteOwnLesson(store, lesson.id)
             if (!deleted) return
             const forgotten = resetSteps(progress, [step])
-            say(t('own.deleted', { title }), {
-              label: t('settings.undo'),
-              onClick: () => {
-                restoreOwnLesson(store, deleted)
-                restoreSteps(progress, forgotten)
-              },
+            sayUndo(t('own.deleted', { title }), () => {
+              restoreOwnLesson(store, deleted)
+              restoreSteps(progress, forgotten)
             })
           }}
         />

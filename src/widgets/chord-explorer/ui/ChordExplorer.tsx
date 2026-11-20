@@ -13,7 +13,7 @@ import {
   FloatingPieces,
   FloatingPlaySplit,
   HandsPicture,
-  say,
+  sayUndo,
   usePlayKey,
 } from '@/shared/ui'
 import {
@@ -99,10 +99,9 @@ export function ChordExplorer({
     const gone = sheet[next.editing]?.symbol ?? ''
     setNext(null)
     onChange(removedChord(chord, next.editing))
-    say(t('practice:chords.next.removed', { chord: printedSymbol(gone) }), {
-      label: t('practice:chords.next.undo'),
-      onClick: () => onChange(before),
-    })
+    sayUndo(t('practice:chords.next.removed', { chord: printedSymbol(gone) }), () =>
+      onChange(before),
+    )
   }
   const pick = (i: number) => {
     const view = i === chosenAt ? chord : choseChord(chord, i)

@@ -4,7 +4,7 @@ import { quantise, type Take } from '@/entities/take'
 import { barAt, type TakeInto } from '@/features/score-editor'
 import { MIDDLE_C, type Midi } from '@/shared/lib/music'
 import { notate, singleStaff } from '@/shared/lib/notation'
-import { Dropdown, Labelled, say, Segmented, SettingsGroup, SwitchRow } from '@/shared/ui'
+import { Dropdown, Labelled, sayUndo, Segmented, SettingsGroup, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScoreView } from '@/shared/ui/score'
 import { TakeRoll } from '@/widgets/take-roll'
@@ -139,7 +139,7 @@ export function RecordReview({ take }: { take: Take }) {
           onClick={() => {
             const undo = takes.remove(take.id)
             takes.show(TAKES_PAGE)
-            say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+            sayUndo(t('recorder.deleted'), undo)
           }}
         >
           {t('review.discard')}

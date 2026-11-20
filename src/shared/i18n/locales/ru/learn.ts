@@ -385,7 +385,6 @@ export const learn: LocaleResources['learn'] = {
       createChapter: 'Создать главу',
       remove: 'Убрать',
       removed: 'Убрано: {{title}}',
-      undo: 'Отменить',
       unpublished: 'Ещё не опубликован',
       addLesson: 'Добавить урок',
       addChapter: 'Добавить главу',

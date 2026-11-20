@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { selectChordFinder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
 import { setChordFinder } from '@/features/set-preference'
-import { GroupAction, GroupLink, GroupRows, GroupSwitch, say } from '@/shared/ui'
+import { GroupAction, GroupLink, GroupRows, GroupSwitch, sayUndo } from '@/shared/ui'
 
 /**
  * Chord finder settings, as ChordFinderLaptop draws them (`CF_SET66`): one group of what each
@@ -55,10 +55,7 @@ export function ChordFinderSettings({
           disabled={!canForget}
           onClick={() => {
             const undo = onForget()
-            say(t('practice:chordFinder.forgotten'), {
-              label: t('practice:chordFinder.undo'),
-              onClick: undo,
-            })
+            sayUndo(t('practice:chordFinder.forgotten'), undo)
           }}
         />
       </GroupRows>

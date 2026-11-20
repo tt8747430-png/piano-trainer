@@ -12,7 +12,7 @@ import {
   type ArrangedPlace,
 } from '@/entities/practice-library'
 import { arrangeLibrary } from '@/features/manage-practice-library'
-import { say } from '@/shared/ui'
+import { sayUndo } from '@/shared/ui'
 import { HIDDEN, MINE, type LibraryGroup, type LibraryItem } from './library-view'
 import type { LibraryKind } from './library-words'
 
@@ -101,11 +101,9 @@ export function useArrangedLibrary({
     const setHidden = (hidden: boolean) => {
       if (item.hide) item.hide.toggle()
       else change((each) => setItemHidden(each, item.id, hidden))
-      say(t(hidden ? 'library.edit.hidden' : 'library.edit.shown', { name: item.name }), {
-        label: t('library.edit.undo'),
-        onClick: () =>
-          item.hide ? item.hide.toggle() : change((each) => setItemHidden(each, item.id, !hidden)),
-      })
+      sayUndo(t(hidden ? 'library.edit.hidden' : 'library.edit.shown', { name: item.name }), () =>
+        item.hide ? item.hide.toggle() : change((each) => setItemHidden(each, item.id, !hidden)),
+      )
     }
     return {
       ...item,
@@ -174,10 +172,8 @@ export function useMoveItem(kind: LibraryKind) {
   return (item: { id: string; name: string; home: string }, to: ArrangedPlace) => {
     const before = store.getState().arrangements[kind].placed[item.id] ?? item.home
     arrangeLibrary(store, kind, (each) => moveItem(each, item.id, to.id, item.home))
-    say(t('library.edit.moved', { name: item.name, place: to.name }), {
-      label: t('library.edit.undo'),
-      onClick: () =>
-        arrangeLibrary(store, kind, (each) => moveItem(each, item.id, before, item.home)),
-    })
+    sayUndo(t('library.edit.moved', { name: item.name, place: to.name }), () =>
+      arrangeLibrary(store, kind, (each) => moveItem(each, item.id, before, item.home)),
+    )
   }
 }

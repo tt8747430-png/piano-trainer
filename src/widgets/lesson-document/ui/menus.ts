@@ -25,7 +25,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { Locale } from '@/shared/i18n'
-import { say, type MenuAction } from '@/shared/ui'
+import { sayUndo, type MenuAction } from '@/shared/ui'
 import { blockTurn, fixedBlocks, TURN_INTO, type TurnInto } from '../model/doc-blocks'
 import { insertableName, nodeName } from './block-names'
 import {
@@ -165,10 +165,7 @@ export function blockActions(
       onSelect: () => {
         const name = node ? nodeName(node, t) : ''
         if (!actOnBlock(editor, index, 'remove')) return
-        say(t('edit.doc.removed', { name }), {
-          label: t('edit.order.undo'),
-          onClick: () => editor.commands.undo(),
-        })
+        sayUndo(t('edit.doc.removed', { name }), () => editor.commands.undo())
       },
     },
   ]

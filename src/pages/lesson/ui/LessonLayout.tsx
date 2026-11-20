@@ -8,7 +8,7 @@ import { selectIsLearned, useProgress, useProgressStoreApi } from '@/entities/pr
 import { markLearned, unmarkLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { RoundLink, say, ScreenHeader, type EditAction } from '@/shared/ui'
+import { RoundLink, sayUndo, ScreenHeader, type EditAction } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -71,10 +71,7 @@ export function LessonLayout({
   const goOn = () => {
     if (learned) return
     markLearned(progress, step, new Date())
-    say(t('lessonLearned', { title }), {
-      label: t('settings.undo'),
-      onClick: () => unmarkLearned(progress, step),
-    })
+    sayUndo(t('lessonLearned', { title }), () => unmarkLearned(progress, step))
   }
   return (
     <div className="flex w-full flex-col gap-2 pb-36 lg:gap-6">

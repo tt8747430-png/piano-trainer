@@ -4,7 +4,7 @@ import { useMediaQuery } from '@/shared/lib/use-media-query'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { selectRoomLeft, selectTake, selectTakesOf, useTakes, type TakeId } from '@/entities/take'
-import { BackButton, say, ScreenHeader } from '@/shared/ui'
+import { BackButton, sayUndo, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { SelectAct, SelectDock } from '@/widgets/song-library'
 import { useScoreEditorContext } from '../model/editor-context'
@@ -59,11 +59,8 @@ export function TakesPage() {
     // Undone last first, so each take goes back into its own place.
     const undos = acting.map((take) => takes.remove(take.id)).reverse()
     setPicked(null)
-    say(t('recorder.deletedMany', { count: acting.length }), {
-      label: t('undo'),
-      onClick: () => {
-        for (const undo of undos) undo()
-      },
+    sayUndo(t('recorder.deletedMany', { count: acting.length }), () => {
+      for (const undo of undos) undo()
     })
   }
   const title =

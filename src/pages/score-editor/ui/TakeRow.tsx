@@ -3,7 +3,7 @@ import { Download, Ellipsis, NotebookPen, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Take } from '@/entities/take'
-import { ActionMenu, CheckMark, PlayButton, say } from '@/shared/ui'
+import { ActionMenu, CheckMark, PlayButton, sayUndo } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { cn } from '@/shared/lib/cn'
 import { useScoreEditorContext } from '../model/editor-context'
@@ -137,7 +137,7 @@ export function TakeRow({
             destructive: true,
             onSelect: () => {
               const undo = takes.remove(take.id)
-              say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+              sayUndo(t('recorder.deleted'), undo)
             },
           },
         ]}

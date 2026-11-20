@@ -34,12 +34,12 @@ import {
   ActionMenu,
   BackButton,
   ButtonLink,
+  MoreMenu,
+  NameHeart,
+  NotFound,
   PractiseRow,
   PractiseRows,
-  MoreMenu,
-  NotFound,
-  NameHeart,
-  say,
+  sayUndo,
   ScreenHeader,
   type MenuAction,
 } from '@/shared/ui'
@@ -92,10 +92,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
     }).then(() => {
       const deleted = deleteOwnPattern(store, id)
       if (!deleted) return
-      say(t('patterns.deleted', { name }), {
-        label: t('patterns.undo'),
-        onClick: () => restoreOwnPattern(store, deleted),
-      })
+      sayUndo(t('patterns.deleted', { name }), () => restoreOwnPattern(store, deleted))
     })
   }
   const actions: MenuAction[] =

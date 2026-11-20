@@ -26,8 +26,8 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   BackButton,
-  ChoiceChips,
   CheckMark,
+  ChoiceChips,
   FloatingActions,
   LessonIcon,
   NewDial,
@@ -35,6 +35,7 @@ import {
   RowMore,
   Said,
   say,
+  sayUndo,
   ScreenHeader,
   SearchField,
   SortMenu,
@@ -188,12 +189,9 @@ function OwnLessonItem({
         const deleted = deleteOwnLesson(store, lesson.id)
         if (!deleted) return
         const forgotten = resetSteps(progress, [step])
-        say(t('own.deleted', { title }), {
-          label: t('settings.undo'),
-          onClick: () => {
-            restoreOwnLesson(store, deleted)
-            restoreSteps(progress, forgotten)
-          },
+        sayUndo(t('own.deleted', { title }), () => {
+          restoreOwnLesson(store, deleted)
+          restoreSteps(progress, forgotten)
         })
       },
     },
@@ -294,10 +292,7 @@ function OwnCourseItem({
       onSelect: () => {
         const deleted = deleteOwnCourse(store, course.id)
         if (!deleted) return
-        say(t('own.deleted', { title: course.title }), {
-          label: t('settings.undo'),
-          onClick: () => restoreOwnCourse(store, deleted),
-        })
+        sayUndo(t('own.deleted', { title: course.title }), () => restoreOwnCourse(store, deleted))
       },
     },
   ]
@@ -480,16 +475,13 @@ export function OwnLibrary() {
     const only =
       goneCourses[0]?.course.title ??
       (goneLessons[0] ? lessonName(goneLessons[0].lesson) : undefined)
-    say(
+    sayUndo(
       total === 1 && only !== undefined
         ? t('own.deleted', { title: only })
         : t('own.deletedMany', { things: counted(goneLessons.length, goneCourses.length) }),
-      {
-        label: t('settings.undo'),
-        onClick: () => {
-          for (const lesson of goneLessons) restoreOwnLesson(store, lesson)
-          for (const course of goneCourses) restoreOwnCourse(store, course)
-        },
+      () => {
+        for (const lesson of goneLessons) restoreOwnLesson(store, lesson)
+        for (const course of goneCourses) restoreOwnCourse(store, course)
       },
     )
   }

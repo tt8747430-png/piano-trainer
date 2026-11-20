@@ -24,18 +24,18 @@ import { SongExportSheet } from '@/features/song-files'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import {
+  ActionRow,
   BackButton,
   ButtonLink,
-  NotFound,
   DangerGroup,
-  ActionRow,
   DangerRow,
+  NotFound,
   RowButton,
   RowLink,
+  sayUndo,
   ScreenHeader,
   SettingsGroup,
   ThingHead,
-  say,
 } from '@/shared/ui'
 import { PublishRow } from '@/widgets/content-editor'
 import { useSongByline } from '../model/use-song-byline'
@@ -87,10 +87,9 @@ function SongSettings({ piece }: { piece: Piece }) {
     if (isDegreePiece(piece)) return
     const copy = t('settings.copyTitle', { title })
     const id = duplicateSong(piecesStore, piece, copy)
-    say(t('settings.duplicated', { title: copy }), {
-      label: t('songs:library.undo'),
-      onClick: () => deleteSong(piecesStore, takesStore, id),
-    })
+    sayUndo(t('settings.duplicated', { title: copy }), () =>
+      deleteSong(piecesStore, takesStore, id),
+    )
   }
   const acts = useLibraryActs()
   const forget = useForgetScreens()

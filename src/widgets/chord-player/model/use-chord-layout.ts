@@ -14,7 +14,7 @@ import {
   type Place,
 } from '@/entities/page-layout'
 import { resetPageLayout, restoreLayouts, setPanel } from '@/features/arrange-page-layout'
-import { say } from '@/shared/ui'
+import { sayUndo } from '@/shared/ui'
 
 /** The Chord player's page in the layouts. */
 export const CHORD_PLAYER_PAGE = 'chord-player'
@@ -65,9 +65,6 @@ export function useResetChordLayout(): () => void {
   const store = usePageLayoutsStoreApi()
   return () => {
     const before = resetPageLayout(store, CHORD_PLAYER_PAGE)
-    say(t('chordPlayer.layout.wasReset'), {
-      label: t('chordPlayer.undo'),
-      onClick: () => restoreLayouts(store, before),
-    })
+    sayUndo(t('chordPlayer.layout.wasReset'), () => restoreLayouts(store, before))
   }
 }

@@ -12,7 +12,7 @@ import {
 import { localText, useLocale } from '@/shared/i18n'
 import { useForgetScreens } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, MoreMenu, RoundButton, RoundLink, say, ScreenHeader } from '@/shared/ui'
+import { BackButton, MoreMenu, RoundButton, RoundLink, sayUndo, ScreenHeader } from '@/shared/ui'
 import { PianoButton, SettingsGear } from '@/widgets/practice-pages'
 import {
   KeepProgressionSheet,
@@ -61,10 +61,9 @@ export function ProgressionScreen({
     }).then(() => {
       const deleted = deleteProgression(store, progression.id)
       if (!deleted) return
-      say(t('progressions.mine.deleted', { name: progression.name }), {
-        label: t('progressions.mine.undo'),
-        onClick: () => restoreProgression(store, deleted),
-      })
+      sayUndo(t('progressions.mine.deleted', { name: progression.name }), () =>
+        restoreProgression(store, deleted),
+      )
     })
   }
   const store = usePracticeLibraryStoreApi()

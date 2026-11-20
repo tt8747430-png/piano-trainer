@@ -11,7 +11,7 @@ import {
   DangerRow,
   NotFound,
   RoundButton,
-  say,
+  sayUndo,
   ScreenHeader,
 } from '@/shared/ui'
 import { useLocale, type Locale } from '@/shared/i18n'
@@ -61,7 +61,7 @@ function TakeView({ take }: { take: Take }) {
   const remove = () =>
     void navigate({ ...takes, replace: true }).then(() => {
       const undo = deleteTake(store, take.id)
-      say(t('recorder.deleted'), { label: t('undo'), onClick: undo })
+      sayUndo(t('recorder.deleted'), undo)
     })
   return (
     <div className="flex flex-col gap-2 pb-8 lg:gap-6">

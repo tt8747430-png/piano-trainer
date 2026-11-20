@@ -74,7 +74,6 @@ export const practice = {
       all: 'All chords',
       remove: 'Remove {{chord}}',
       removed: '{{chord}} removed',
-      undo: 'Undo',
     },
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
     playAs: {
@@ -320,7 +319,6 @@ export const practice = {
       more: 'More',
       delete: 'Delete',
       deleted: '“{{name}}” deleted',
-      undo: 'Undo',
     },
     // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
     mode: {
@@ -396,7 +394,6 @@ export const practice = {
     edit: 'Edit',
     delete: 'Delete',
     deleted: '“{{name}}” deleted',
-    undo: 'Undo',
     editor: {
       newTitle: 'New pattern',
       editTitle: 'Edit pattern',
@@ -472,7 +469,6 @@ export const practice = {
     bassDegree: '{{degree}} · bass',
     forget: 'Forget the chords played',
     forgotten: 'Chords played forgotten',
-    undo: 'Undo',
     played: 'Played',
     remember: 'Remember the chords played',
     rememberDetail:
@@ -659,7 +655,6 @@ export const practice = {
       shown: '“{{name}}” shown',
       moved: '“{{name}}” moved to {{place}}',
       made: 'Folder “{{name}}” created',
-      undo: 'Undo',
       places: 'Places',
       movePlace: 'Reorder {{name}}',
       moveRow: 'Reorder {{name}}',

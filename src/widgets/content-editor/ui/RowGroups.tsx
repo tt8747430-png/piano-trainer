@@ -14,7 +14,7 @@ import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
 import { cn, useDragSensors } from '@/shared/lib'
-import { ActionMenu, say } from '@/shared/ui'
+import { ActionMenu, sayUndo } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { rowPlace, withGroupAt, withRowAt, withRowRemoved, type RowOrder } from '../model/row-order'
 
@@ -288,10 +288,7 @@ export function RowGroups({
   }
   const remove = (row: DocRow) => {
     onChange(withRowRemoved(given, row.key))
-    say(t('edit.order.removed', { title: row.title }), {
-      label: t('edit.order.undo'),
-      onClick: () => onChange(given),
-    })
+    sayUndo(t('edit.order.removed', { title: row.title }), () => onChange(given))
   }
   // Rows numbered through the document, group after group.
   const firsts = order.map((_, g) =>

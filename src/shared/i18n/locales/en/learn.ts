@@ -388,7 +388,6 @@ export const learn = {
       createChapter: 'Create chapter',
       remove: 'Remove',
       removed: 'Removed: {{title}}',
-      undo: 'Undo',
       unpublished: 'Not published yet',
       addLesson: 'Add lesson',
       addChapter: 'Add chapter',

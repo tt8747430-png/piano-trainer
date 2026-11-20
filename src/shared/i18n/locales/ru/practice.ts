@@ -71,7 +71,6 @@ export const practice: LocaleResources['practice'] = {
       all: 'Все аккорды',
       remove: 'Убрать {{chord}}',
       removed: '{{chord}} убран',
-      undo: 'Отменить',
     },
     // Play's menu on the Chords page (R42): the chord's notes together, or one after another.
     playAs: {
@@ -300,7 +299,6 @@ export const practice: LocaleResources['practice'] = {
       more: 'Ещё',
       delete: 'Удалить',
       deleted: '«{{name}}» удалена',
-      undo: 'Отменить',
     },
     mode: {
       label: 'Лад',
@@ -372,7 +370,6 @@ export const practice: LocaleResources['practice'] = {
     edit: 'Изменить',
     delete: 'Удалить',
     deleted: '«{{name}}» удалена',
-    undo: 'Отменить',
     editor: {
       newTitle: 'Новая фактура',
       editTitle: 'Изменить фактуру',
@@ -449,7 +446,6 @@ export const practice: LocaleResources['practice'] = {
     bassDegree: '{{degree}} · бас',
     forget: 'Забыть сыгранные аккорды',
     forgotten: 'Сыгранные аккорды забыты',
-    undo: 'Отменить',
     played: 'Сыграно',
     remember: 'Запоминать сыгранные аккорды',
     rememberDetail:
@@ -623,7 +619,6 @@ export const practice: LocaleResources['practice'] = {
       shown: '«{{name}}» снова показано',
       moved: '«{{name}}» перемещено: {{place}}',
       made: 'Папка «{{name}}» создана',
-      undo: 'Отменить',
       places: 'Разделы',
       movePlace: 'Переставить: {{name}}',
       moveRow: 'Переставить: {{name}}',

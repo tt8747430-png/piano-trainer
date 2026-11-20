@@ -1,3 +1,4 @@
+import { i18n } from '@/shared/i18n'
 import { toast } from './primitives/toast'
 
 /** How long a toast stays: long enough to reach its Undo, short enough to be gone by the next act. */
@@ -27,4 +28,9 @@ export function say(line: string, action?: { label: string; onClick: () => void 
         }
       : {}),
   })
+}
+
+/** Says what was just done, with Undo, the one word every such toast carries, taking it back. */
+export function sayUndo(line: string, undo: () => void): void {
+  say(line, { label: i18n.t('common:undo'), onClick: undo })
 }

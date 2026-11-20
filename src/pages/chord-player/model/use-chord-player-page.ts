@@ -20,7 +20,7 @@ import {
   type Numeral,
 } from '@/shared/lib/music'
 import { useSetSearch } from '@/shared/lib'
-import { confirm, say } from '@/shared/ui'
+import { confirm, say, sayUndo } from '@/shared/ui'
 import { useChordSheet, type ChordPlayerRoutes, type ChordPlayerView } from '@/widgets/chord-player'
 
 /**
@@ -54,10 +54,7 @@ export function useChordPlayerPage() {
   const hold = (entry: ChordSheetEntry, said: string) => {
     const before = holdSheet(store, entry)
     openSheet(undefined)
-    say(t('chordPlayer.opened', { name: said }), {
-      label: t('chordPlayer.undo'),
-      onClick: () => void holdSheet(store, before),
-    })
+    sayUndo(t('chordPlayer.opened', { name: said }), () => void holdSheet(store, before))
   }
 
   // A progression in the URL is put in hand once; a shared sheet's link opens it among My chord sheets.

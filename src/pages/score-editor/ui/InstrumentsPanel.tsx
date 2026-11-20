@@ -16,7 +16,7 @@ import {
 } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
 import { singleStaff } from '@/shared/lib/notation'
-import { ActionMenu, say, type MenuAction } from '@/shared/ui'
+import { ActionMenu, sayUndo, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { StaffList, type StaffRow } from '@/widgets/instrument-list'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -152,16 +152,13 @@ export function InstrumentsPanel() {
       actions.dispatch({ type: 'removeStaff', place: target.place })
       setStaves(movedStaves(staves, target.place, null))
     }
-    say(
+    sayUndo(
       'piano' in target
         ? t('instruments.pianoHidden')
         : t('instruments.deleted', { staff: target.name }),
-      {
-        label: t('undo'),
-        onClick: () => {
-          actions.dispatch({ type: 'undo' })
-          setStaves(before)
-        },
+      () => {
+        actions.dispatch({ type: 'undo' })
+        setStaves(before)
       },
     )
   }
