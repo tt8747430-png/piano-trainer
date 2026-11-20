@@ -8,11 +8,11 @@ the next publish sends every pending board and the lines get the new version.
 
 ## Pending
 
-- 2026-11-20 · PENDING · a Practice library's search 8 under its large bar, as Songs' and the app · Progressions,Accompaniment,FingerTechnique,JazzVocabulary · pending
 
 
 ## Changes
 
+- 2026-11-20 · dd36063b · a Practice library's search 8 under its large bar, as Songs' and the app · Progressions,Accompaniment,FingerTechnique,JazzVocabulary · v700
 - 2026-11-20 · 92a95e30 · the Chord player's laptop keys C2 to C7 with faces; a chord's raised part as the app's on the key tiles (B°, never Dm's m) · ChordPlayer,ChordPlayerLaptop · v699
 - 2026-11-20 · 42394555 · the Circle of fifths opens on C major, as the app · CircleOfFifths,CircleOfFifthsLaptop · v698
 - 2026-11-20 · 44acb58f · every board's noteheads Bravura's (the kit's HEADG; the half head added): song page, editor, Hanon figure, lesson staff, takes · Song,SongLaptop,Editor,EditorLaptop,EditorDraft,EditorDraftLaptop,Lesson,LessonLaptop,Takes,TakesLaptop · v697
