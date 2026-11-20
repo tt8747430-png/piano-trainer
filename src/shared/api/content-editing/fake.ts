@@ -1,9 +1,7 @@
 import { contentHash } from '@/shared/lib'
 import { isContentKind, type ContentKind } from '../content'
-import { netResult } from '../network'
+import { netResult, statusError } from '../network'
 import type { ContentDraft, ContentEditingPort, KeptVersion } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 403 })
 
 interface Item {
   readonly kind: ContentKind
@@ -51,7 +49,7 @@ export function createFakeContentEditing({
   const ask = <T>(run: () => Promise<T>) =>
     netResult(
       async () => {
-        if (!editor()) throw refused('editors only')
+        if (!editor()) throw statusError('editors only', 403)
         return run()
       },
       { online },
@@ -61,13 +59,13 @@ export function createFakeContentEditing({
     published: (kind, id) =>
       ask(async () => {
         const item = published.get(name(kind, id))
-        if (!item) throw refused('no such item')
+        if (!item) throw statusError('no such item', 403)
         return item.body
       }),
     create: (kind, id, { body, meta }) =>
       ask(async () => {
         if (published.has(name(kind, id)) || unpublished.has(name(kind, id)))
-          throw refused('already there')
+          throw statusError('already there', 403)
         unpublished.add(name(kind, id))
         drafts.set(name(kind, id), { body, meta, updatedAt: now() })
       }),
@@ -105,7 +103,7 @@ export function createFakeContentEditing({
     publish: (kind, id) =>
       ask(async () => {
         const draft = drafts.get(name(kind, id))
-        if (!draft) throw refused('nothing to publish')
+        if (!draft) throw statusError('nothing to publish', 403)
         keep({ kind, id, body: draft.body, meta: draft.meta })
         unpublished.delete(name(kind, id))
         drafts.delete(name(kind, id))
@@ -123,13 +121,13 @@ export function createFakeContentEditing({
     restore: (kind, id, version) =>
       ask(async () => {
         const found = kept.get(name(kind, id))?.find((each) => each.version === version)
-        if (!found) throw refused('nothing to publish')
+        if (!found) throw statusError('nothing to publish', 403)
         published.set(name(kind, id), found)
       }),
     unpublish: (kind, id) =>
       ask(async () => {
         const item = published.get(name(kind, id))
-        if (!item) throw refused('no such item')
+        if (!item) throw statusError('no such item', 403)
         if (!drafts.has(name(kind, id)))
           drafts.set(name(kind, id), { body: item.body, meta: item.meta, updatedAt: now() })
         published.delete(name(kind, id))

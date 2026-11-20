@@ -1,9 +1,6 @@
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import type { Backend, PianoClient } from '../supabase'
 import type { ChordSharePort, LivePlace, OnlineSheet, SheetLine } from './types'
-
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
 
 const isPlace = (value: unknown): value is LivePlace =>
   typeof value === 'object' &&
@@ -28,7 +25,7 @@ export function createSupabaseChordShare(
     share: (sheetKey, name, { body, style, tempo }, canEdit) =>
       ask(async (client) => {
         const { data: session } = await client.auth.getSession()
-        if (!session.session) throw thrown({ message: 'Not signed in' }, 401)
+        if (!session.session) throw statusError('Not signed in', 401)
         const { data, error, status } = await client
           .from('shared_chord_sheets')
           .upsert(
@@ -37,7 +34,7 @@ export function createSupabaseChordShare(
           )
           .select('id')
           .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.id
       }),
     setAccess: (id, canEdit) =>
@@ -46,12 +43,12 @@ export function createSupabaseChordShare(
           .from('shared_chord_sheets')
           .update({ can_edit: canEdit })
           .eq('id', id)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
       }),
     read: (id) =>
       ask(async (client): Promise<OnlineSheet | null> => {
         const { data, error, status } = await client.rpc('read_shared_chord_sheet', { p_id: id })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         const [row] = data
         return row
           ? {
@@ -73,7 +70,7 @@ export function createSupabaseChordShare(
           p_style: style,
           p_tempo: tempo,
         })
-        if (error) throw thrown(error, status === 200 ? 403 : status)
+        if (error) throw statusError(error.message, status === 200 ? 403 : status)
         return data
       }),
     open(id, { onChanged, onPlaying }): SheetLine {

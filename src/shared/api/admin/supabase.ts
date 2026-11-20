@@ -1,10 +1,7 @@
 import type { AccountRole } from '../auth'
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import type { AdminAccount, AdminPort, FeaturesPort, Report } from './types'
-
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
 
 /** An Edge Function's error, with the status its response had: a 4xx is a refusal. */
 async function functionError(error: unknown): Promise<Error> {
@@ -38,7 +35,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
     if (admin) await client.from('admin_log').insert({ admin_id: admin, action, target, detail })
   }
   const check = ({ error, status }: { error: { message: string } | null; status: number }) => {
-    if (error) throw thrown(error, status)
+    if (error) throw statusError(error.message, status)
   }
   return {
     accounts: (query) =>
@@ -56,7 +53,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
           .from('groups')
           .select('id, name, group_members(user_id)')
           .order('name')
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map((group) => ({
           id: group.id,
           name: group.name,
@@ -70,7 +67,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
           .insert({ name })
           .select('id, name')
           .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         await note('create-group', name)
         return { ...data, members: [] }
       }),
@@ -100,7 +97,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
           .from('feature_switches')
           .select('key, label, state, groups')
           .order('key')
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map((row) => ({
           key: row.key,
           label: row.label,
@@ -124,7 +121,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
             'item_id, reporter_id, reason, note, reported_at, public_items(title, author_id, author_name, hidden)',
           )
           .order('reported_at', { ascending: false })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.flatMap((row): Report[] =>
           row.public_items
             ? [
@@ -175,7 +172,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
           .select('at, admin_id, action, target')
           .order('at', { ascending: false })
           .limit(100)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map(({ at, admin_id, action, target }) => ({
           at,
           adminId: admin_id,
@@ -190,7 +187,7 @@ export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {
           .select('at, message, stack, path, build')
           .order('at', { ascending: false })
           .limit(100)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data
       }),
   }
@@ -207,7 +204,7 @@ export function createSupabaseFeatures(
         async () => {
           const client = await backend()
           const { data, error, status } = await client.rpc('my_features')
-          if (error) throw thrown(error, status)
+          if (error) throw statusError(error.message, status)
           return data
         },
         online ? { online } : {},

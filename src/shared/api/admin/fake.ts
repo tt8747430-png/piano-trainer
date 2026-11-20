@@ -1,5 +1,5 @@
 import type { AccountRole } from '../auth'
-import { netResult } from '../network'
+import { netResult, statusError } from '../network'
 import type {
   AdminAccount,
   AdminPort,
@@ -10,8 +10,6 @@ import type {
   LogEntry,
   Report,
 } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 400 })
 
 /**
  * The admin's tools in memory for tests, behaving as the server does: `accounts`, `reports` to
@@ -58,16 +56,17 @@ export function createFakeAdmin({
     setRole: (userId, role: AccountRole) =>
       ask(async () => {
         const account = people.get(userId)
-        if (!account) throw refused('not_found')
+        if (!account) throw statusError('not_found', 400)
         if (userId === self && role !== 'admin')
-          throw refused('An admin cannot take away their own role')
+          throw statusError('An admin cannot take away their own role', 400)
         people.set(userId, { ...account, role })
         note('set-role', userId)
       }),
     groups: () => ask(async () => [...groups.values()]),
     createGroup: (name) =>
       ask(async () => {
-        if ([...groups.values()].some((group) => group.name === name)) throw refused('duplicate')
+        if ([...groups.values()].some((group) => group.name === name))
+          throw statusError('duplicate', 400)
         const group: Group = { id: `group-${next++}`, name, members: [] }
         groups.set(group.id, group)
         note('create-group', name)
@@ -81,7 +80,7 @@ export function createFakeAdmin({
     setMember: (groupId, userId, member) =>
       ask(async () => {
         const group = groups.get(groupId)
-        if (!group) throw refused('not_found')
+        if (!group) throw statusError('not_found', 400)
         const others = group.members.filter((each) => each !== userId)
         groups.set(groupId, { ...group, members: member ? [...others, userId] : others })
         note(member ? 'add-member' : 'remove-member', `${groupId} ${userId}`)

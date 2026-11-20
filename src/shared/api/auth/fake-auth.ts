@@ -1,7 +1,5 @@
-import { netResult, type NetResult } from '../network'
+import { netResult, type NetResult, statusError } from '../network'
 import type { Account, AccountRole, AuthGateway, KnownAccount } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 400 })
 
 const GRACE_MS = 30 * 24 * 60 * 60 * 1000
 
@@ -35,7 +33,7 @@ export function createFakeAuth({
   }
   const accountOf = (email: string): Account => {
     const found = known.get(email)
-    if (!found) throw refused('Unknown account')
+    if (!found) throw statusError('Unknown account', 400)
     return { id: `fake-${email}`, email, name: found.name, role: found.role }
   }
 
@@ -43,7 +41,7 @@ export function createFakeAuth({
     current: async () => current,
     signUp: (input) =>
       ask(async () => {
-        if (known.has(input.email)) throw refused('User already registered')
+        if (known.has(input.email)) throw statusError('User already registered', 400)
         known.set(input.email, { name: input.name, password: input.password, role: 'learner' })
         const account = accountOf(input.email)
         become(account)
@@ -51,7 +49,8 @@ export function createFakeAuth({
       }),
     signIn: (email, password) =>
       ask(async () => {
-        if (known.get(email)?.password !== password) throw refused('Invalid login credentials')
+        if (known.get(email)?.password !== password)
+          throw statusError('Invalid login credentials', 400)
         const account = accountOf(email)
         become(account)
         return account
@@ -59,7 +58,7 @@ export function createFakeAuth({
     signInWith: () => ask(async () => undefined),
     completeRedirect: () =>
       ask(async () => {
-        if (!current) throw refused('No sign-in to complete')
+        if (!current) throw statusError('No sign-in to complete', 400)
         return current
       }),
     // As the server: it never says whether an email has an account.
@@ -67,19 +66,19 @@ export function createFakeAuth({
     updatePassword: (password) =>
       ask(async () => {
         const found = current && known.get(current.email)
-        if (!found) throw refused('Not signed in')
+        if (!found) throw statusError('Not signed in', 400)
         found.password = password
       }),
     updateEmail: (email) =>
       ask(async () => {
-        if (!current) throw refused('Not signed in')
+        if (!current) throw statusError('Not signed in', 400)
         // The server sends a link to the new address; the email changes once it is followed.
-        if (!/^[^@\s]+@[^@\s]+$/.test(email)) throw refused('Not an email')
+        if (!/^[^@\s]+@[^@\s]+$/.test(email)) throw statusError('Not an email', 400)
       }),
     updateName: (name) =>
       ask(async () => {
         const found = current && known.get(current.email)
-        if (!current || !found) throw refused('Not signed in')
+        if (!current || !found) throw statusError('Not signed in', 400)
         found.name = name
         const account = accountOf(current.email)
         become(account)
@@ -87,7 +86,7 @@ export function createFakeAuth({
       }),
     requestDeletion: () =>
       ask(async () => {
-        if (!current) throw refused('Not signed in')
+        if (!current) throw statusError('Not signed in', 400)
         const purgeAfter = new Date(now() + GRACE_MS).toISOString()
         deletions.set(current.email, purgeAfter)
         become(null)
@@ -95,12 +94,12 @@ export function createFakeAuth({
       }),
     pendingDeletion: () =>
       ask(async () => {
-        if (!current) throw refused('Not signed in')
+        if (!current) throw statusError('Not signed in', 400)
         return deletions.get(current.email) ?? null
       }),
     cancelDeletion: () =>
       ask(async () => {
-        if (!current) throw refused('Not signed in')
+        if (!current) throw statusError('Not signed in', 400)
         deletions.delete(current.email)
       }),
     signOut: async () => become(null),

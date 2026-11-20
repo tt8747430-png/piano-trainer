@@ -1,13 +1,10 @@
 import { contentHash, isRecord } from '@/shared/lib'
 import { isContentKind } from '../content'
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import { toJson, type Backend, type PianoClient } from '../supabase'
 import type { ContentEditingPort } from './types'
 
 // `publish_content`'s own refusals come back as 4xx: editors only a 403, nothing to publish a 404.
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
-
 /** Editing the built-in content on Supabase (ADR 0116, round 6): the drafts table and `publish_content`. */
 export function createSupabaseContentEditing(
   backend: Backend,
@@ -16,7 +13,7 @@ export function createSupabaseContentEditing(
   const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
     netResult(async () => run(await backend()), online ? { online } : {})
   const check = ({ error, status }: { error: { message: string } | null; status: number }) => {
-    if (error) throw thrown(error, status)
+    if (error) throw statusError(error.message, status)
   }
   return {
     published: (kind, id) =>
@@ -27,7 +24,7 @@ export function createSupabaseContentEditing(
           .eq('kind', kind)
           .eq('id', id)
           .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.body
       }),
     create: (kind, id, { body, meta }) =>
@@ -58,7 +55,7 @@ export function createSupabaseContentEditing(
           .from('content_drafts')
           .select('kind, id, meta, updated_at, content_items(status)')
           .order('updated_at', { ascending: false })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.flatMap((row) =>
           isContentKind(row.kind)
             ? [
@@ -81,7 +78,7 @@ export function createSupabaseContentEditing(
           .eq('kind', kind)
           .eq('id', id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data
           ? {
               body: data.body,
@@ -131,7 +128,7 @@ export function createSupabaseContentEditing(
           .eq('kind', kind)
           .eq('id', id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         if (!data) throw Object.assign(new Error('nothing to publish'), { status: 404 })
         // The version is the body's hash as the database gives it back, as every learner will read it.
         const version = contentHash(JSON.stringify(data.body))
@@ -153,7 +150,7 @@ export function createSupabaseContentEditing(
           .eq('kind', kind)
           .eq('id', id)
           .order('published_at', { ascending: false })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map((row) => ({ version: row.version, publishedAt: row.published_at }))
       }),
     restore: (kind, id, version) =>
@@ -179,7 +176,7 @@ export function createSupabaseContentEditing(
           .eq('kind', kind)
           .eq('id', id)
           .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         // Its body kept as its draft where it has none: the editor goes on from what learners had.
         check(
           await client

@@ -1,4 +1,4 @@
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import type { Backend, PianoClient } from '../supabase'
 import type { LearnerProfile, ProfilePort } from './types'
 
@@ -12,9 +12,6 @@ interface Row {
   readonly public: boolean
   readonly created_at: string
 }
-
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
 
 /** An uploaded picture is a path in the private `avatars` bucket: `${userId}/…`. */
 const isUploaded = (avatar: string | null): avatar is string => !!avatar && avatar.includes('/')
@@ -30,7 +27,7 @@ export function createSupabaseProfile(backend: Backend, { online }: NetOptions =
         const client = await backend()
         const { data } = await client.auth.getSession()
         const me = data.session?.user.id
-        if (!me) throw thrown({ message: 'Not signed in' }, 401)
+        if (!me) throw statusError('Not signed in', 401)
         return run(client, me)
       },
       online ? { online } : {},
@@ -57,7 +54,7 @@ export function createSupabaseProfile(backend: Backend, { online }: NetOptions =
       .eq('id', me)
       .select(FIELDS)
       .single()
-    if (error) throw thrown(error, status)
+    if (error) throw statusError(error.message, status)
     return profileOf(client, data)
   }
   return {
@@ -68,7 +65,7 @@ export function createSupabaseProfile(backend: Backend, { online }: NetOptions =
           .select(FIELDS)
           .eq('id', me)
           .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return profileOf(client, data)
       }),
     save: (patch) =>
@@ -85,7 +82,7 @@ export function createSupabaseProfile(backend: Backend, { online }: NetOptions =
     handleAvailable: (handle) =>
       ask(async (client) => {
         const { data, error, status } = await client.rpc('handle_available', { wanted: handle })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data
       }),
     uploadAvatar: (picture) =>
@@ -94,7 +91,7 @@ export function createSupabaseProfile(backend: Backend, { online }: NetOptions =
         const { error } = await client.storage
           .from('avatars')
           .upload(path, picture, { contentType: picture.type || 'image/webp', upsert: true })
-        if (error) throw thrown(error, 400)
+        if (error) throw statusError(error.message, 400)
         return write(client, me, { avatar: path })
       }),
     removeAvatar: () => ask((client, me) => write(client, me, { avatar: null })),

@@ -1,5 +1,5 @@
 import { WORD_BREAK } from '@/shared/lib'
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import { toJson, type Json, type Backend, type PianoClient } from '../supabase'
 import {
   DESCRIPTION_MAX,
@@ -88,10 +88,6 @@ function entryOf(row: EntryRow, { authors, ratings }: Around): PublicEntry {
   }
 }
 
-/** A Postgres error thrown with its response's status, so `netResult` reads a 4xx as refused. */
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
-
 /** A word as an `ilike` pattern inside an `or` filter: its wildcards escaped, quoted for its commas. */
 const likeOf = (word: string) =>
   `"%${word.replace(/[\\%_]/g, (char) => `\\${char}`).replaceAll('"', '\\"')}%"`
@@ -126,8 +122,8 @@ export function createSupabasePublicLibrary(
           rows.map((row) => row.id),
         ),
     ])
-    if (authors.error) throw thrown(authors.error, authors.status)
-    if (ratings.error) throw thrown(ratings.error, ratings.status)
+    if (authors.error) throw statusError(authors.error.message, authors.status)
+    if (ratings.error) throw statusError(ratings.error.message, ratings.status)
     return {
       authors: new Map(
         authors.data.flatMap((row) =>
@@ -165,7 +161,7 @@ export function createSupabasePublicLibrary(
         const { data, error, status } = await filtered()
           .order(sort === 'saved' ? 'saves' : 'published_at', { ascending: false })
           .limit(LIMIT)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         if (sort !== 'rated') {
           const known = await around(client, data)
           return data.map((row) => entryOf(row, known))
@@ -177,13 +173,13 @@ export function createSupabasePublicLibrary(
           .gte('count', RATED_MIN)
           .order('average', { ascending: false })
           .limit(LIMIT)
-        if (best.error) throw thrown(best.error, best.status)
+        if (best.error) throw statusError(best.error.message, best.status)
         const bestIds = best.data.flatMap((row) => (row.item_id ? [row.item_id] : []))
         const rated =
           bestIds.length === 0
             ? { data: [], error: null, status: 200 }
             : await filtered().in('id', bestIds)
-        if (rated.error) throw thrown(rated.error, rated.status)
+        if (rated.error) throw statusError(rated.error.message, rated.status)
         const rows = [...rated.data, ...data.filter((row) => !bestIds.includes(row.id))]
         const known = await around(client, rows)
         const score = (row: EntryRow) => {
@@ -202,7 +198,7 @@ export function createSupabasePublicLibrary(
           .select(`${ENTRY}, body`)
           .eq('id', id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         if (!data) return null
         const known = await around(client, [data])
         const entry = entryOf(data, known)
@@ -229,7 +225,7 @@ export function createSupabasePublicLibrary(
           .eq('author_id', author)
           .eq('source_id', sourceId)
           .maybeSingle()
-        if (readError) throw thrown(readError, readStatus)
+        if (readError) throw statusError(readError.message, readStatus)
         // An update names only what an author may change: never who wrote it, or whether it is hidden.
         const { data, error, status } = held
           ? await client.from('public_items').update(fields).eq('id', held.id).select('id').single()
@@ -238,7 +234,7 @@ export function createSupabasePublicLibrary(
               .insert({ ...fields, kind, source_id: sourceId })
               .select('id')
               .single()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return { sourceId, id: data.id, version }
       }),
     unpublish: (sourceId) =>
@@ -249,7 +245,7 @@ export function createSupabasePublicLibrary(
           .delete()
           .eq('author_id', author)
           .eq('source_id', sourceId)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
       }),
     mine: () =>
       ask(async (client) => {
@@ -258,7 +254,7 @@ export function createSupabasePublicLibrary(
           .from('public_items')
           .select('id, source_id, version')
           .eq('author_id', author)
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data.map((row): Published => ({
           sourceId: row.source_id,
           id: row.id,
@@ -268,7 +264,7 @@ export function createSupabasePublicLibrary(
     save: (id) =>
       ask(async (client) => {
         const { data, error, status } = await client.rpc('save_public_item', { p_item: id })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data
       }),
     report: (id, reason, note) =>
@@ -279,7 +275,7 @@ export function createSupabasePublicLibrary(
             { item_id: id, reason, note },
             { onConflict: 'item_id,reporter_id', ignoreDuplicates: true },
           )
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
       }),
     rate: (id, stars) =>
       ask(async (client) => {
@@ -287,9 +283,9 @@ export function createSupabasePublicLibrary(
           p_item: id,
           p_stars: stars,
         })
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         const [rating] = data
-        if (!rating) throw thrown({ message: 'Not found' }, 404)
+        if (!rating) throw statusError('Not found', 404)
         return { average: rating.average, count: rating.count }
       }),
     myRating: (id) =>
@@ -302,7 +298,7 @@ export function createSupabasePublicLibrary(
           .eq('item_id', id)
           .eq('user_id', session.session.user.id)
           .maybeSingle()
-        if (error) throw thrown(error, status)
+        if (error) throw statusError(error.message, status)
         return data?.stars ?? null
       }),
   }

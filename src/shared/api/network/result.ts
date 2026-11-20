@@ -19,6 +19,10 @@ export interface NetOptions {
 
 const browserOnline = () => navigator.onLine
 
+/** An error carrying the status a server (or its fake) answered with, which `failureOf` reads. */
+export const statusError = (message: string, status: number): Error & { status: number } =>
+  Object.assign(new Error(message), { status })
+
 const statusOf = (error: unknown): number | undefined =>
   error instanceof Object && 'status' in error && typeof error.status === 'number'
     ? error.status

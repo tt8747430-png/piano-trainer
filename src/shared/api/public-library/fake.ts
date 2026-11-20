@@ -1,5 +1,5 @@
 import { matchesQuery } from '@/shared/lib'
-import { netResult } from '../network'
+import { netResult, statusError } from '../network'
 import {
   RATED_MIN,
   type PublicEntry,
@@ -7,8 +7,6 @@ import {
   type PublicRating,
   type Published,
 } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 403 })
 
 interface Held extends Omit<PublicEntry, 'rating' | 'opening'> {
   readonly sourceId: string
@@ -85,7 +83,7 @@ export function createFakePublicLibrary({
   const ask = <T>(run: () => Promise<T>) => netResult(run, { online })
   const signedIn = () => {
     const who = author()
-    if (!who) throw refused('Not signed in')
+    if (!who) throw statusError('Not signed in', 403)
     return who
   }
   const ratingOf = (id: string): PublicRating | null => {
@@ -186,7 +184,8 @@ export function createFakePublicLibrary({
     rate: (id, stars) =>
       ask(async () => {
         const who = signedIn()
-        if (!Number.isInteger(stars) || stars < 1 || stars > 5) throw refused('1 to 5 stars')
+        if (!Number.isInteger(stars) || stars < 1 || stars > 5)
+          throw statusError('1 to 5 stars', 403)
         if (!held.has(id)) throw Object.assign(new Error('Not found'), { status: 404 })
         const given = ratings.get(id) ?? new Map<string, number>()
         given.set(who.id, stars)

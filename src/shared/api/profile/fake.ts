@@ -1,7 +1,5 @@
-import { netResult } from '../network'
+import { netResult, statusError } from '../network'
 import { HANDLE, type LearnerProfile, type ProfilePort } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 403 })
 
 /**
  * The profile in memory for tests, as the server keeps it: `who()` is who is signed in (null for no
@@ -30,7 +28,7 @@ export function createFakeProfile({
   const uploads: Blob[] = []
   const ask = <T>(run: () => Promise<T>) => netResult(run, { online })
   const signedIn = () => {
-    if (!who()) throw refused('Not signed in')
+    if (!who()) throw statusError('Not signed in', 403)
   }
   return {
     uploads,
@@ -43,7 +41,7 @@ export function createFakeProfile({
       ask(async () => {
         signedIn()
         if (patch.handle && (!HANDLE.test(patch.handle) || taken.includes(patch.handle)))
-          throw refused('Handle taken')
+          throw statusError('Handle taken', 403)
         profile = { ...profile, ...patch }
         return profile
       }),

@@ -1,9 +1,6 @@
-import { netResult, type NetOptions } from '../network'
+import { type NetOptions, netResult, statusError } from '../network'
 import type { Backend, PianoClient } from '../supabase'
 import type { GroupMember, GroupsPort, LearnerGroup, SharedFolder } from './types'
-
-const thrown = (error: { message: string }, status: number) =>
-  Object.assign(new Error(error.message), { status })
 
 /** A query's answer, its error thrown with its status so the network result can say what failed. */
 const answered = <T>({
@@ -15,12 +12,12 @@ const answered = <T>({
   error: { message: string } | null
   status: number
 }) => {
-  if (error) throw thrown(error, status)
-  if (data === null) throw thrown({ message: 'No answer' }, status)
+  if (error) throw statusError(error.message, status)
+  if (data === null) throw statusError('No answer', status)
   return data
 }
 const done = ({ error, status }: { error: { message: string } | null; status: number }) => {
-  if (error) throw thrown(error, status)
+  if (error) throw statusError(error.message, status)
 }
 
 // Its members' ids, counted here: an embedded `count` is an aggregate, which PostgREST refuses unless
@@ -40,7 +37,7 @@ export function createSupabaseGroups(backend: Backend, { online }: NetOptions = 
         const client = await backend()
         const { data } = await client.auth.getSession()
         const me = data.session?.user.id
-        if (!me) throw thrown({ message: 'Not signed in' }, 401)
+        if (!me) throw statusError('Not signed in', 401)
         return run(client, me)
       },
       online ? { online } : {},

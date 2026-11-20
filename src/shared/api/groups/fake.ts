@@ -1,8 +1,6 @@
-import { netResult } from '../network'
+import { netResult, statusError } from '../network'
 import type { Json } from '../supabase'
 import type { FolderShare, GroupMember, GroupsPort, LearnerGroup, SharedFolder } from './types'
-
-const refused = (message: string) => Object.assign(new Error(message), { status: 403 })
 
 interface Stored {
   id: string
@@ -43,7 +41,7 @@ export function createFakeGroups({
     netResult(
       async () => {
         const me = who()
-        if (!me) throw refused('Not signed in')
+        if (!me) throw statusError('Not signed in', 403)
         return run(me)
       },
       { online },
@@ -51,12 +49,12 @@ export function createFakeGroups({
   const member = (group: Stored, me: string) => group.members.some((each) => each.userId === me)
   const groupOf = (id: string, me: string) => {
     const group = store.groups.find((each) => each.id === id)
-    if (!group || !member(group, me)) throw refused('Not a member')
+    if (!group || !member(group, me)) throw statusError('Not a member', 403)
     return group
   }
   const owned = (id: string, me: string) => {
     const group = groupOf(id, me)
-    if (group.owner !== me) throw refused('Not its owner')
+    if (group.owner !== me) throw statusError('Not its owner', 403)
     return group
   }
   const view = (group: Stored, me: string): LearnerGroup => ({
@@ -114,7 +112,7 @@ export function createFakeGroups({
     leave: (groupId) =>
       ask((me) => {
         const group = groupOf(groupId, me)
-        if (group.owner === me) throw refused('The owner deletes the group')
+        if (group.owner === me) throw statusError('The owner deletes the group', 403)
         group.members = group.members.filter((each) => each.userId !== me)
       }),
     removeMember: (groupId, userId) =>
@@ -187,7 +185,7 @@ export function createFakeGroups({
         const share = store.shares.find((each) => each.id === sharedId)
         const group = share && store.groups.find((each) => each.id === share.groupId)
         if (!share || !group || !member(group, me) || !(share.owner === me || share.canEdit))
-          throw refused('Not yours to write')
+          throw statusError('Not yours to write', 403)
         share.songs = [...songs]
         share.updatedAt = new Date().toISOString()
       }),
