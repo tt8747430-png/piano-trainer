@@ -141,7 +141,7 @@ export function NextChordSheet({
                         what: what(each),
                       })}
                       onClick={() => onPick(each.step)}
-                      className="flex h-18 flex-col items-center justify-center gap-0.5 rounded-[14px] bg-card text-foreground ring-1 ring-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-18 flex-col items-center justify-center gap-0.5 card text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <span
                         className={`font-display font-bold whitespace-nowrap ${way === 'diatonic' ? 'text-[1.375rem]' : 'text-xl'}`}
@@ -157,7 +157,7 @@ export function NextChordSheet({
             <button
               type="button"
               onClick={() => setAll(true)}
-              className="flex min-h-12 items-center justify-between gap-3 rounded-xl bg-card px-4 text-base text-foreground ring-1 ring-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex min-h-12 items-center justify-between gap-3 card px-4 text-base text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {t('chords.next.all')}
               <ChevronRight aria-hidden className="size-4.5 text-muted-foreground" />
@@ -166,7 +166,7 @@ export function NextChordSheet({
               <button
                 type="button"
                 onClick={onRemove}
-                className="flex h-12 items-center gap-2.5 rounded-[14px] bg-card px-4 text-base font-semibold text-destructive ring-1 ring-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-12 items-center gap-2.5 card px-4 text-base font-semibold text-destructive outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Trash2 aria-hidden className="size-5" />
                 {t('chords.next.remove', { chord: symbolOf(changing) })}

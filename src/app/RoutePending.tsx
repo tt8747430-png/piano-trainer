@@ -15,7 +15,7 @@ export function RoutePending() {
   return (
     <div role="status" aria-label={t('loading')} className="flex flex-col gap-3 py-2">
       {BLOCKS.map(({ height, opacity }, index) => (
-        <span key={index} className="rounded-[14px] bg-muted" style={{ height, opacity }} />
+        <span key={index} className="rounded-card bg-muted" style={{ height, opacity }} />
       ))}
     </div>
   )

@@ -44,7 +44,7 @@ export function PieceFirstPage({ piece }: { piece: Piece }) {
     <figure
       role="img"
       aria-label={t('firstPage')}
-      className="card flex flex-col gap-1 rounded-[14px] p-4 shadow-[0_0_0_1px_var(--color-border),0_14px_30px_-18px_rgb(51_41_33/0.45)]"
+      className="card flex flex-col gap-1 p-4 shadow-[0_0_0_1px_var(--color-border),0_14px_30px_-18px_rgb(51_41_33/0.45)]"
     >
       <div aria-hidden className="flex flex-col gap-0.5">
         <span className="text-center font-display text-[1.0625rem]">

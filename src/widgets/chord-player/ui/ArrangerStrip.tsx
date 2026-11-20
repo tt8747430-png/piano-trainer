@@ -12,9 +12,8 @@ const ROMAN = { 1: 'I', 2: 'II', 3: 'III' } as const
 export type GenosSize = 'full' | 'compact' | 'minimized'
 
 /** The card the panel is drawn on, 14 round: floating over the page, or flat in a laptop's column. */
-const CARD =
-  'rounded-[14px] bg-card layer-shadow'
-const FLAT_CARD = 'rounded-[14px] bg-card shadow-[0_0_0_1px_var(--color-border)]'
+const CARD = 'rounded-card bg-card layer-shadow'
+const FLAT_CARD = 'card'
 
 /** A panel button and its lamp, as the Genos lights it: on (chosen), or off. */
 function Lamp({
